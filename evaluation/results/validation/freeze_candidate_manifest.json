@@ -2,7 +2,7 @@
   "label": "v5.0.0-draft.1-smoke-passed",
   "benchmark_version": "5.0.0-draft.1",
   "file_count": 204,
-  "content_manifest_sha256": "7f13022d01135e51ce726f9e4f1d898160693dcbf52161558fdf6af6754cdbc1",
+  "content_manifest_sha256": "29a6682612a708234f057fdb391f3437f4d7284682b5c7a99e234b6e922df358",
   "files": [
     {
       "path": "README.md",
@@ -21,8 +21,8 @@
     },
     {
       "path": "audit/v4_2_audit.md",
-      "bytes": 3151,
-      "sha256": "78c74320214ecdbb248749dc6a4345c1a9dfeb68d46424fc02ec9a18188d83f4"
+      "bytes": 3147,
+      "sha256": "c9bf55a5740cc0565abf271c2d88f907111e8b3c289e7c91153d7bf88f67f158"
     },
     {
       "path": "docs/known_limitations.md",
