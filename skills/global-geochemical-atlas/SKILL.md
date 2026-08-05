@@ -166,6 +166,12 @@ python scripts/run_workflow.py \
 
 交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
 
+地图默认保持“全部数据”视图。KPI 统计测定记录；全元素地图按 `source_id + sample_id + medium + coordinates` 折叠为样品级符号，没有 `sample_id` 时不得仅凭坐标推测去重。默认按介质分类着色；只有筛选结果同时满足单一元素、单一介质、单一 measurement basis、单一已知方法组和单一标准单位时，才启用稳健对数浓度色阶。即使启用色阶，也提示用户点击记录核对方法、来源和 QC。
+
+使用内置 Natural Earth 1:110m 公有领域陆地轮廓生成离线底图，并在页面和 `run_summary.json.map_report` 中保留版本、比例尺、许可和来源归档 SHA-256。地图页签直接展示 D1 来源 manifest、D2 置信度/QC/异常产物；D3 不重新计算这些科学结论。
+
+完整 D1/D2 输入、显示层去叠加、色阶门、失败边界和独立 CLI 见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
+
 ## 8. 验证与失败关闭
 
 执行：

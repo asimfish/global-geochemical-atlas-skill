@@ -105,9 +105,25 @@
       "properties": {
         "map_version": {"type": "string"},
         "mapped_record_count": {"type": "integer", "minimum": 0},
+        "display_sample_count": {"type": "integer", "minimum": 0},
+        "unmappable_record_count": {"type": "integer", "minimum": 0},
         "candidate_record_count": {"type": "integer", "minimum": 0},
+        "default_view": {"const": "all_data_sample_deduplicated"},
         "external_assets": {"const": 0},
-        "interpolation": {"const": false}
+        "interpolation": {"const": false},
+        "html_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000},
+        "samples_geojson_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000},
+        "basemap": {
+          "type": "object",
+          "required": ["asset_version", "scale", "license", "embedded"],
+          "properties": {
+            "asset_version": {"const": "ai4s-natural-earth-land-v1"},
+            "scale": {"const": "1:110m"},
+            "license": {"const": "public domain"},
+            "embedded": {"const": true}
+          },
+          "additionalProperties": true
+        }
       }
     }
   }

@@ -32,6 +32,7 @@ SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
+BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
 
 
 class ContractError(AssertionError):
@@ -897,10 +898,61 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 map exposes element, medium, confidence and anomaly filters",
         checks,
     )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'id="geology"',
+                'id="method"',
+                'id="source"',
+                "GEOCHEM ATLAS",
+                "ALL DATA",
+            )
+        ),
+        "D3 map exposes global, geological, method and source exploration controls",
+        checks,
+    )
+    require(
+        "全部元素按样品标识去重显示" in html
+        and "不跨元素、介质或单位比较浓度" in html,
+        "D3 defaults to a scientifically valid all-data sample overview",
+        checks,
+    )
+    require(
+        "Natural Earth 1:110m" in html
+        and "ai4s-natural-earth-land-v1" in html
+        and "public domain" in html,
+        "D3 embeds a pinned offline basemap with visible provenance",
+        checks,
+    )
     require("候选异常不代表污染" in html, "D3 map communicates the scientific interpretation boundary", checks)
     summary = json_value(output_dir / "run_summary.json")
     require(summary.get("status") == "success", "D3 run summary reports successful integration", checks)
     require(set(summary.get("outputs", {}).values()) == required_outputs - {"run_summary.json"}, "D3 summary names every reusable artifact", checks)
+    map_report = summary.get("map_report", {})
+    require(
+        map_report.get("map_version") == "d3-interactive-atlas-v2"
+        and map_report.get("default_view") == "all_data_sample_deduplicated"
+        and map_report.get("external_assets") == 0
+        and map_report.get("interpolation") is False,
+        "D3 run summary declares the reusable map contract and default view",
+        checks,
+    )
+    require(
+        0 < map_report.get("html_bytes", 0) <= 100_000_000
+        and 0 < map_report.get("samples_geojson_bytes", 0) <= 100_000_000,
+        "D3 reports and enforces the competition single-file size ceiling",
+        checks,
+    )
+    basemap = json_value(BASEMAP)
+    require(
+        basemap.get("license") == "public domain"
+        and basemap.get("archive_sha256")
+        == "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de"
+        and basemap.get("point_count") == 5_133,
+        "D3 basemap provenance, source archive hash and geometry count are pinned",
+        checks,
+    )
     return checks
 
 

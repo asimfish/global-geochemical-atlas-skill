@@ -469,6 +469,18 @@ def run_suite() -> dict[str, Any]:
         html = (first / "interactive_map.html").read_text(encoding="utf-8")
         require("<script src=" not in html.casefold(), "map has an external script dependency")
         require("候选异常不代表污染" in html, "map omits interpretation boundary")
+        require("d3-interactive-atlas-v2" in html, "map version is missing")
+        require("ALL DATA" in html, "map does not default to the complete overview")
+        require("Natural Earth 1:110m" in html, "map omits the offline land basemap")
+        require(
+            "全部元素按样品标识去重显示" in html,
+            "map does not explain measurement-to-sample deduplication",
+        )
+        require(
+            summary["map_report"]["display_sample_count"] == 17
+            and summary["map_report"]["unmappable_record_count"] == 1,
+            "map report does not reconcile sample-level display and coordinate failures",
+        )
         require("\\u003c/script\\u003e" in __import__("build_interactive_map").safe_embedded_json("</script>"), "unsafe JSON embedding")
 
         limited = first / "limited"

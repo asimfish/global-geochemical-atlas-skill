@@ -202,7 +202,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     map_path = args.output_dir / "interactive_map.html"
     try:
         map_report = map_builder.build_map(
-            outputs["database"], outputs["anomalies"], map_path, samples_path, max_points=args.max_records
+            outputs["database"],
+            outputs["anomalies"],
+            map_path,
+            samples_path,
+            max_points=args.max_records,
+            qc_report_path=outputs["qc_report"],
+            confidence_report_path=outputs["confidence_report"],
+            source_manifest_path=source_manifest_path,
+            anomaly_report_path=outputs["anomaly_report"],
         )
     except (map_builder.MapBuildError, OSError) as exc:
         raise WorkflowError("incomplete_retrieval", f"map generation failed: {exc}") from exc

@@ -25,6 +25,12 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 - `interactive_map.html`：无 CDN 的自包含交互地图；
 - `run_summary.json`：稳定输出清单、状态和限制。
 
+地图首页默认展示全部可上图测定，并按 `source_id + sample_id + medium + coordinates`
+折叠为样品级符号；没有 `sample_id` 的记录不做推测性去重。颜色默认表示介质，只有筛选结果
+收敛到同一元素、介质、measurement basis、方法组和标准单位时才启用浓度对数色阶。
+页面同时提供来源与置信度、候选异常、QC 与覆盖边界页签，全部直接消费 D1/D2 公共产物，
+不在可视化层重算标准值、置信度或异常。
+
 然后运行自检：
 
 ```bash
@@ -41,7 +47,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
   --max-records 50000
 ```
 
-`standardize_geochemistry.py` 的最低分析列为 `element_or_analyte,value,unit,medium`；要运行并交付完整 `run_workflow.py`，还必须提供非空 `source_id,source_locator,license`，否则证据打包会失败关闭。正式科学运行还应提供 `source_tier`、样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限和文件哈希。完整契约见 `skills/global-geochemical-atlas/references/`。
+`standardize_geochemistry.py` 的最低分析列为 `element_or_analyte,value,unit,medium`；要运行并交付完整 `run_workflow.py`，还必须提供非空 `source_id,source_locator,license`，否则证据打包会失败关闭。正式科学运行还应提供 `source_tier`、样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限和文件哈希。完整契约见 `skills/global-geochemical-atlas/references/`；D3 消费层详见 [可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md)。
 
 ## 科学边界
 
@@ -59,6 +65,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 skills/
 └── global-geochemical-atlas/
     ├── SKILL.md
+    ├── assets/natural-earth-110m-land.json
     ├── fixtures/demo_input.csv
     ├── references/
     └── scripts/
