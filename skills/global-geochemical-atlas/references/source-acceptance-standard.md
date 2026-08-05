@@ -1,6 +1,7 @@
 # D1 数据源准入标准
 
-版本：`geochemical-source-acceptance-v1`  
+版本：`geochemical-source-acceptance-v1`
+
 核对日期：2026-08-05
 
 ## 目的

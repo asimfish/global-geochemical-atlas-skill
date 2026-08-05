@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+"""Build a conservative, reproducible coverage matrix from the D1 source catalog."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from collections.abc import Mapping, Sequence
+from pathlib import Path
+from typing import Any
+
+import source_adapters
+import source_router
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+SKILL_DIR = SCRIPT_DIR.parent
+DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
+DEFAULT_REQUEST = SKILL_DIR / "fixtures" / "source-routing" / "global-all-media-request.json"
+
+COVERAGE_VERSION = "geochemical-coverage-matrix-v1"
+
+
+def _read_json(path: Path, label: str) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise ValueError(f"{label} does not exist: {path}") from exc
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{label} is not valid UTF-8 JSON: {path}") from exc
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} must be a JSON object")
+    return value
+
+
+def build_matrix(
+    catalog: Mapping[str, Any],
+    request: Mapping[str, Any],
+    registry: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Summarize route coverage while keeping unverified dimensions unknown."""
+
+    route = source_router.route_sources(request, catalog, registry)
+    cells: dict[str, Any] = {}
+    for medium in route["request"]["media"]:
+        routed = route["coverage"][medium]
+        approved = routed["approved_sources"]
+        candidates = routed["candidate_sources"]
+        if len(approved) == 1:
+            independence = "single_source_dependency"
+        elif len(approved) > 1:
+            independence = "multiple_sources_lineage_not_yet_deduplicated"
+        else:
+            independence = "no_approved_source"
+        source_scopes = {
+            source_id: catalog["sources"][source_id]["coverage"]["extent_class"]
+            for source_id in [*approved, *candidates]
+        }
+        cells[medium] = {
+            "status": routed["status"],
+            "requested_analytes": list(route["request"]["elements"]),
+            "analyte_coverage": "unknown",
+            "approved_sources": approved,
+            "candidate_sources": candidates,
+            "source_scopes": source_scopes,
+            "source_independence": independence,
+            "method_metadata_coverage": "not_yet_audited",
+            "spatial_density_coverage": "not_yet_audited",
+            "temporal_coverage": "not_yet_audited",
+            "note": routed["note"],
+        }
+    coverage_states = {cell["status"] for cell in cells.values()}
+    if coverage_states == {"covered"}:
+        overall = "covered"
+    elif "partial" in coverage_states:
+        overall = "partial"
+    elif coverage_states == {"uncovered"}:
+        overall = "uncovered"
+    else:
+        overall = "unknown"
+    return {
+        "coverage_version": COVERAGE_VERSION,
+        "as_of": catalog["reviewed_at"],
+        "overall_status": overall,
+        "request": route["request"],
+        "discovery": catalog["discovery_state"],
+        "cells": cells,
+        "route_status": route["status"],
+        "limitations": [
+            *route["limitations"],
+            "Analyte, method, time and spatial-density coverage remain unknown until source-level inventories are audited.",
+            "Record count alone is not evidence of representative global coverage.",
+        ],
+        "claim_boundary": (
+            "Coverage states describe the current approved source system and its documented candidates. "
+            "They do not imply uniform sampling, method comparability, or absence of undiscovered sources."
+        ),
+    }
+
+
+def render_markdown(matrix: Mapping[str, Any]) -> str:
+    """Render the coverage matrix as an auditable human-readable report."""
+
+    lines = [
+        "# D1 数据源覆盖报告",
+        "",
+        f"核对时间：`{matrix['as_of']}`",
+        "",
+        f"整体状态：`{matrix['overall_status']}`",
+        "",
+        f"发现轮次：`{matrix['discovery']['round']}`，饱和状态：`{str(matrix['discovery']['saturated']).lower()}`",
+        "",
+        "## 当前目标",
+        "",
+        f"- 地区：`{json.dumps(matrix['request']['region'], ensure_ascii=False)}`",
+        f"- 介质：`{', '.join(matrix['request']['media'])}`",
+        f"- 分析物：`{', '.join(matrix['request']['elements'])}`",
+        f"- 许可策略：`{matrix['request']['license_policy']}`",
+        "",
+        "## 覆盖矩阵",
+        "",
+        "| 介质 | 状态 | 已批准来源 | 待复核候选 | 来源独立性 | 分析物/方法/密度 |",
+        "|---|---|---|---|---|---|",
+    ]
+    for medium, cell in matrix["cells"].items():
+        approved = ", ".join(cell["approved_sources"]) or "无"
+        candidates = ", ".join(cell["candidate_sources"]) or "无"
+        unknowns = "/".join(
+            (cell["analyte_coverage"], cell["method_metadata_coverage"], cell["spatial_density_coverage"])
+        )
+        lines.append(
+            f"| {medium} | `{cell['status']}` | {approved} | {candidates} | "
+            f"`{cell['source_independence']}` | `{unknowns}` |"
+        )
+    lines.extend(
+        [
+            "",
+            "## 当前判断",
+            "",
+            "- 岩石与土壤只有局部批准来源，因此仍是 `partial`，不能写成全球完整覆盖；",
+            "- 沉积物与水体虽有候选来源，但尚未通过生产质量门，因此保持 `unknown`；",
+            "- 每个介质的分析物、方法、时间和空间密度仍需在 M6–M8 的逐源审计中补齐；",
+            "- 聚合平台不计作独立证据，必须追溯并去重其上游数据集。",
+            "",
+            "## 限制",
+            "",
+        ]
+    )
+    lines.extend(f"- {item}" for item in matrix["limitations"])
+    lines.extend(["", "## 结论边界", "", matrix["claim_boundary"], ""])
+    return "\n".join(lines)
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
+    parser.add_argument("--request", type=Path, default=DEFAULT_REQUEST)
+    parser.add_argument("--json-output", type=Path)
+    parser.add_argument("--markdown-output", type=Path)
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    try:
+        catalog = source_router.load_catalog(args.catalog)
+        request = _read_json(args.request, "request")
+        registry = source_adapters.load_source_registry()
+        matrix = build_matrix(catalog, request, registry)
+        rendered_json = json.dumps(matrix, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        rendered_markdown = render_markdown(matrix)
+        if args.json_output:
+            args.json_output.parent.mkdir(parents=True, exist_ok=True)
+            args.json_output.write_text(rendered_json, encoding="utf-8")
+        if args.markdown_output:
+            args.markdown_output.parent.mkdir(parents=True, exist_ok=True)
+            args.markdown_output.write_text(rendered_markdown, encoding="utf-8")
+        print(rendered_json, end="")
+        return 0
+    except (OSError, ValueError, source_adapters.SourceAdapterError) as exc:
+        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

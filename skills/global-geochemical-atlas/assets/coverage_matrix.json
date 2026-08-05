@@ -1,0 +1,155 @@
+{
+  "as_of": "2026-08-05T00:00:00Z",
+  "cells": {
+    "rock": {
+      "analyte_coverage": "unknown",
+      "approved_sources": [
+        "georoc-archaean"
+      ],
+      "candidate_sources": [
+        "earthchem-portal",
+        "georoc-database",
+        "usgs-ngdb"
+      ],
+      "method_metadata_coverage": "not_yet_audited",
+      "note": "At least one approved source is routable, but geographic, temporal and method completeness remain bounded by its declared scope.",
+      "requested_analytes": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
+      "source_independence": "single_source_dependency",
+      "source_scopes": {
+        "earthchem-portal": "global_partial",
+        "georoc-archaean": "global_partial",
+        "georoc-database": "global_partial",
+        "usgs-ngdb": "national_partial"
+      },
+      "spatial_density_coverage": "not_yet_audited",
+      "status": "partial",
+      "temporal_coverage": "not_yet_audited"
+    },
+    "sediment": {
+      "analyte_coverage": "unknown",
+      "approved_sources": [],
+      "candidate_sources": [
+        "earthchem-portal",
+        "usgs-ngdb"
+      ],
+      "method_metadata_coverage": "not_yet_audited",
+      "note": "Relevant candidates exist but none has passed the production quality gates.",
+      "requested_analytes": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
+      "source_independence": "no_approved_source",
+      "source_scopes": {
+        "earthchem-portal": "global_partial",
+        "usgs-ngdb": "national_partial"
+      },
+      "spatial_density_coverage": "not_yet_audited",
+      "status": "unknown",
+      "temporal_coverage": "not_yet_audited"
+    },
+    "soil": {
+      "analyte_coverage": "unknown",
+      "approved_sources": [
+        "usgs-conus-soil"
+      ],
+      "candidate_sources": [
+        "gemas-europe",
+        "usgs-ngdb",
+        "wosis"
+      ],
+      "method_metadata_coverage": "not_yet_audited",
+      "note": "At least one approved source is routable, but geographic, temporal and method completeness remain bounded by its declared scope.",
+      "requested_analytes": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
+      "source_independence": "single_source_dependency",
+      "source_scopes": {
+        "gemas-europe": "regional_partial",
+        "usgs-conus-soil": "national_partial",
+        "usgs-ngdb": "national_partial",
+        "wosis": "global_partial"
+      },
+      "spatial_density_coverage": "not_yet_audited",
+      "status": "partial",
+      "temporal_coverage": "not_yet_audited"
+    },
+    "water": {
+      "analyte_coverage": "unknown",
+      "approved_sources": [],
+      "candidate_sources": [
+        "gemstat-open-archive"
+      ],
+      "method_metadata_coverage": "not_yet_audited",
+      "note": "Relevant candidates exist but none has passed the production quality gates.",
+      "requested_analytes": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
+      "source_independence": "no_approved_source",
+      "source_scopes": {
+        "gemstat-open-archive": "global_partial"
+      },
+      "spatial_density_coverage": "not_yet_audited",
+      "status": "unknown",
+      "temporal_coverage": "not_yet_audited"
+    }
+  },
+  "claim_boundary": "Coverage states describe the current approved source system and its documented candidates. They do not imply uniform sampling, method comparability, or absence of undiscovered sources.",
+  "coverage_version": "geochemical-coverage-matrix-v1",
+  "discovery": {
+    "channels_checked": [
+      "official_global_or_disciplinary_portals",
+      "official_international_programs",
+      "official_national_agencies"
+    ],
+    "remaining_channels": [
+      "regional_and_national_surveys",
+      "trusted_doi_repositories",
+      "publication_linked_datasets",
+      "upstream_sources_of_aggregators"
+    ],
+    "round": 1,
+    "saturated": false,
+    "status": "in_progress"
+  },
+  "limitations": [
+    "Catalog routing identifies possible sources; analyte availability and record-level comparability still require source queries and D2 review.",
+    "A partial route must not be presented as complete global coverage.",
+    "Source discovery is still in progress; absence from this route is not proof that no source exists.",
+    "Analyte, method, time and spatial-density coverage remain unknown until source-level inventories are audited.",
+    "Record count alone is not evidence of representative global coverage."
+  ],
+  "overall_status": "partial",
+  "request": {
+    "elements": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "license_policy": "open_only",
+    "max_records": 50000,
+    "media": [
+      "rock",
+      "soil",
+      "sediment",
+      "water"
+    ],
+    "offline": false,
+    "region": "global",
+    "sources": "auto"
+  },
+  "route_status": "partial"
+}

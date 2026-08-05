@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import coverage_report
 import download_data as downloader
 import source_adapters as source_contracts
 import source_audit
@@ -196,6 +197,35 @@ def check_d1(output_dir: Path) -> list[str]:
             if entry["source_id"] == "georoc-archaean"
         ),
         "D1 router automatically downgrades a source when its version changes",
+        checks,
+    )
+    discovery_records = [
+        json.loads(line)
+        for line in (SKILL_DIR / "assets" / "source_discovery_log.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        {record["source_id"] for record in discovery_records} == set(catalog["sources"])
+        and all(
+            record["round"] == 1 and record["evidence_url"].startswith("https://")
+            for record in discovery_records
+        ),
+        "D1 discovery log accounts for every initial catalog source with official evidence",
+        checks,
+    )
+    coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
+    matrix = coverage_report.build_matrix(catalog, coverage_request, registry)
+    require(
+        matrix == json_value(SKILL_DIR / "assets" / "coverage_matrix.json"),
+        "D1 checked-in coverage matrix is reproducible from the catalog and request",
+        checks,
+    )
+    require(
+        matrix["overall_status"] == "partial"
+        and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
+        and matrix["cells"]["water"]["analyte_coverage"] == "unknown",
+        "D1 coverage matrix reports partial, single-source and unaudited dimensions conservatively",
         checks,
     )
     source_record_id = source_contracts.stable_source_record_id(

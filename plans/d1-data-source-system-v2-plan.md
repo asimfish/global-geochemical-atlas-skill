@@ -5,7 +5,7 @@
 | 项目 | 内容 |
 |---|---|
 | 负责人 | 李明伟 |
-| 状态 | 已批准，执行中（M3） |
+| 状态 | 已批准，执行中（M4） |
 | 计划版本 | V2 approved 1 |
 | 预计周期 | 核心体系约 12–16 个工作日；全介质信源普查和接入持续分批推进，以信源发现趋于饱和且质量门通过作为阶段完成标准 |
 | 建议分支 | `d1/source-system-v2` |
@@ -301,13 +301,13 @@ D2 科学标准化与分析 → D3 地图与最终 Skill
 
 ### C 阶段交付
 
-- [ ] `assets/coverage_matrix.json`；
-- [ ] `references/coverage-report.md`；
-- [ ] `coverage_report.py`；
-- [ ] 当前需求的覆盖状态和缺口输出；
-- [ ] `source_discovery_log.jsonl` 和每个未覆盖单元的发现渠道证据；
-- [ ] 聚合来源与原始来源的血缘、重复数据和单一来源依赖报告；
-- [ ] 下一批数据源候选的覆盖收益、接入成本和风险对比。
+- [x] `assets/coverage_matrix.json`；
+- [x] `references/coverage-report.md`；
+- [x] `coverage_report.py`；
+- [x] 当前需求的覆盖状态和缺口输出；
+- [x] `source_discovery_log.jsonl` 和当前发现轮次的渠道证据；
+- [x] 聚合来源与原始来源的血缘、重复数据和单一来源依赖报告；
+- [x] 下一批数据源候选的覆盖收益、接入成本和风险对比。
 
 ## 七、工作流 D：数据如何统一成可查询、可归档的 schema
 
@@ -559,6 +559,8 @@ skills/global-geochemical-atlas/
     source-verification-report.md
     source-conflicts.jsonl
     coverage-report.md
+    source-lineage-report.md
+    source-priority-report.md
     data-model.md
     schema-mapping.md
     dataset-source.schema.json
