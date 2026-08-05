@@ -5,7 +5,7 @@
 | 项目 | 内容 |
 |---|---|
 | 负责人 | 李明伟 |
-| 状态 | 已批准，执行中（M4） |
+| 状态 | 已批准，执行中（M5） |
 | 计划版本 | V2 approved 1 |
 | 预计周期 | 核心体系约 12–16 个工作日；全介质信源普查和接入持续分批推进，以信源发现趋于饱和且质量门通过作为阶段完成标准 |
 | 建议分支 | `d1/source-system-v2` |
@@ -415,13 +415,13 @@ V2 只借鉴这些标准的核心概念，不直接实现完整 OGC/ISO 模型�
 
 ### D 阶段交付
 
-- [ ] `references/data-model.md`：实体关系、字段字典、P0/P1/P2 和 D1/D2 边界；
-- [ ] 数据集、出版物、采样事件、样品、测定、方法、来源证据和获取运行的 JSON Schema；
-- [ ] `references/schema-mapping.md`：GEOROC、USGS 和 D2 schema 的逐字段映射；
-- [ ] `assets/vocabulary_registry.json`：词汇来源、URI、版本和未映射术语；
+- [x] `references/data-model.md`：实体关系、字段字典、P0/P1/P2 和 D1/D2 边界；
+- [x] 数据集、出版物、采样事件、样品、测定、方法、来源证据和获取运行的 JSON Schema；
+- [x] `references/schema-mapping.md`：GEOROC、USGS 和 D2 schema 的逐字段映射；
+- [x] `assets/vocabulary_registry.json`：词汇来源、URI、版本和未映射术语；
 - [ ] `references/sqlite-schema.sql`：归档表、索引和四个查询视图；
-- [ ] schema 验证、关系完整性、版本迁移和查询 fixture 测试；
-- [ ] 一个“同一样品、多元素、多方法、父子样和删失值”的最小示例包。
+- [x] schema 验证、关系完整性和 fixture 测试；版本迁移与查询测试在 M5 随 SQLite 契约完成；
+- [x] 一个“同一样品、多元素、多方法、父子样和删失值”的最小示例包。
 
 ## 八、工作流 E：是否够快，存成什么
 

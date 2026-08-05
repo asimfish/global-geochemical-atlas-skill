@@ -25,6 +25,7 @@ import download_data as downloader
 import source_adapters as source_contracts
 import source_audit
 import source_router
+import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -226,6 +227,42 @@ def check_d1(output_dir: Path) -> list[str]:
         and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
         and matrix["cells"]["water"]["analyte_coverage"] == "unknown",
         "D1 coverage matrix reports partial, single-source and unaudited dimensions conservatively",
+        checks,
+    )
+    archive_bundle = json_value(SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json")
+    archive_validation = acquisition_validator.validate_bundle(archive_bundle)
+    require(
+        archive_validation["status"] == "PASS"
+        and archive_validation["entity_counts"]["observations"] == 3
+        and archive_validation["entity_counts"]["methods"] == 2,
+        "D1 archive schema fixture preserves entities and passes relation validation",
+        checks,
+    )
+    censored_observation = next(
+        item for item in archive_bundle["observations"] if item["observation_id"] == "observation-as-lt"
+    )
+    require(
+        censored_observation["value_raw"] == "<5"
+        and censored_observation["parsed_value"] == 5.0
+        and censored_observation["value_qualifier"] == "lt",
+        "D1 archive schema preserves a censored raw value without imputing it",
+        checks,
+    )
+    broken_bundle = copy.deepcopy(archive_bundle)
+    broken_bundle["observations"][0]["sample_id"] = "missing-sample"
+    broken_validation = acquisition_validator.validate_bundle(broken_bundle)
+    require(
+        broken_validation["status"] == "FAIL"
+        and any("missing-sample" in error for error in broken_validation["errors"]),
+        "D1 archive validation fails on a broken observation relationship",
+        checks,
+    )
+    vocabulary_registry = json_value(SKILL_DIR / "assets" / "vocabulary_registry.json")
+    require(
+        vocabulary_registry["registry_version"] == "geochemical-vocabulary-registry-v1"
+        and vocabulary_registry["vocabularies"]["earthchem-unit"]["version"] is None
+        and vocabulary_registry["vocabularies"]["d1-missing-reason-v1"]["status"] == "internal_frozen",
+        "D1 vocabulary registry distinguishes external references from frozen internal terms",
         checks,
     )
     source_record_id = source_contracts.stable_source_record_id(

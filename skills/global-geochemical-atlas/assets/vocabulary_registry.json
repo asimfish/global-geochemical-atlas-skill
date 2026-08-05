@@ -1,0 +1,66 @@
+{
+  "registry_version": "geochemical-vocabulary-registry-v1",
+  "reviewed_at": "2026-08-05T00:00:00Z",
+  "vocabularies": {
+    "earthchem-parameter": {
+      "categories": ["analyte", "parameter"],
+      "uri": "https://earthchem.org/ecl/vocabularies",
+      "version": null,
+      "status": "reference_only_needs_snapshot",
+      "usage": "D2 analyte mapping candidate; D1 always retains analyte_reported."
+    },
+    "earthchem-unit": {
+      "categories": ["unit"],
+      "uri": "https://earthchem.org/ecl/vocabularies",
+      "version": null,
+      "status": "reference_only_needs_snapshot",
+      "usage": "D2 unit mapping candidate; D1 always retains unit_raw."
+    },
+    "earthchem-technique": {
+      "categories": ["analytical_technique"],
+      "uri": "https://earthchem.org/ecl/vocabularies",
+      "version": null,
+      "status": "reference_only_needs_snapshot",
+      "usage": "Method mapping candidate; original method text remains authoritative evidence."
+    },
+    "earthchem-mineral": {
+      "categories": ["mineral"],
+      "uri": "https://earthchem.org/ecl/vocabularies",
+      "version": null,
+      "status": "reference_only_needs_snapshot",
+      "usage": "Mineral name mapping candidate."
+    },
+    "datacite-igsn": {
+      "categories": ["sample_identifier", "sample_relation"],
+      "uri": "https://support.datacite.org/docs/igsn-id-metadata-recommendations",
+      "version": "reviewed-2026-08-05",
+      "status": "active_reference",
+      "usage": "Persistent sample IDs, alternate local IDs, collection dates, locations and parent/child relations."
+    },
+    "d1-medium-v1": {
+      "categories": ["medium"],
+      "uri": "urn:ai4s:vocabulary:d1-medium:v1",
+      "version": "1.0.0",
+      "status": "internal_frozen",
+      "terms": ["rock", "soil", "sediment", "water", "mineral", "concentrate", "unknown"],
+      "usage": "Routing vocabulary only; source-native medium_raw is retained."
+    },
+    "d1-missing-reason-v1": {
+      "categories": ["missing_reason"],
+      "uri": "urn:ai4s:vocabulary:d1-missing-reason:v1",
+      "version": "1.0.0",
+      "status": "internal_frozen",
+      "terms": ["not_reported", "not_applicable", "not_available", "redacted", "parse_failed"],
+      "usage": "Distinguishes why a nullable source field is absent."
+    },
+    "d1-value-qualifier-v1": {
+      "categories": ["value_qualifier"],
+      "uri": "urn:ai4s:vocabulary:d1-value-qualifier:v1",
+      "version": "1.0.0",
+      "status": "internal_frozen",
+      "terms": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "nd", "unknown"],
+      "usage": "Preserves source censoring and qualifier semantics without imputation."
+    }
+  },
+  "claim_boundary": "External vocabularies without a pinned version are references, not frozen lookup tables. Unmapped source terms remain preserved until reviewed."
+}
