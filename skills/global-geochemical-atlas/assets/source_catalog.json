@@ -1,0 +1,435 @@
+{
+  "catalog_version": "geochemical-source-catalog-v1",
+  "reviewed_at": "2026-08-05T00:00:00Z",
+  "claim_boundary": "This catalog records discovered sources and interface facts. Only entries with production_eligible=true may be selected automatically; catalog inclusion is not scientific endorsement.",
+  "discovery_state": {
+    "round": 1,
+    "status": "in_progress",
+    "saturated": false,
+    "channels_checked": [
+      "official_global_or_disciplinary_portals",
+      "official_international_programs",
+      "official_national_agencies"
+    ],
+    "remaining_channels": [
+      "regional_and_national_surveys",
+      "trusted_doi_repositories",
+      "publication_linked_datasets",
+      "upstream_sources_of_aggregators"
+    ]
+  },
+  "sources": {
+    "georoc-archaean": {
+      "title": "GEOROC Compilation: Archaean Cratons",
+      "publisher": "DIGIS Team, Goettingen University",
+      "source_kind": "disciplinary_repository",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["rock"],
+      "coverage": {
+        "extent_class": "global_partial",
+        "regions": ["global-archaean-cratons"],
+        "notes": "Global distribution of Archaean cratons only; not representative of all rock geochemistry."
+      },
+      "identifiers": {
+        "dataset_doi": "10.25625/1KRR1P"
+      },
+      "landing_page": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2F1KRR1P",
+      "interfaces": [
+        {
+          "kind": "metadata_api",
+          "url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/1KRR1P&version=12.0",
+          "format": "json",
+          "access": "open",
+          "server_filters": ["dataset_version"]
+        },
+        {
+          "kind": "bulk_download",
+          "url": "https://data.goettingen-research-online.de/api/access/dataset/:persistentId/?persistentId=doi:10.25625/1KRR1P&format=original",
+          "format": "zip_csv",
+          "access": "open",
+          "server_filters": ["dataset_doi"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-SA-4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "notes": "Retain GEOROC and original publication citations."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "12.0",
+        "release_date": "2026-06-11"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "georoc_dataverse"
+      },
+      "evidence_urls": [
+        "https://georoc.eu/georoc/precompiled/",
+        "https://georoc.eu/georoc/cite.asp"
+      ],
+      "limitations": [
+        "Precompiled selected values are not an unfiltered set of every replicate determination."
+      ]
+    },
+    "usgs-conus-soil": {
+      "title": "Geochemical and mineralogical data for soils of the conterminous United States",
+      "publisher": "U.S. Geological Survey",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["conterminous-united-states"],
+        "notes": "Three sampled soil layers in CONUS; not global soil coverage."
+      },
+      "identifiers": {
+        "dataset_doi": "10.3133/ds801"
+      },
+      "landing_page": "https://pubs.usgs.gov/ds/801/",
+      "interfaces": [
+        {
+          "kind": "bulk_download",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/",
+          "format": "tab_delimited_text",
+          "access": "open",
+          "server_filters": []
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "LicenseRef-USGS-Public-Domain",
+        "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
+        "notes": "USGS-produced data are public domain; credit and dataset citation are retained."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "Data Series 801, 2013 release",
+        "release_date": "2013"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "usgs_static_txt"
+      },
+      "evidence_urls": [
+        "https://pubs.usgs.gov/ds/801/"
+      ],
+      "limitations": [
+        "Soil layers and legacy qualifier encodings must remain distinct."
+      ]
+    },
+    "georoc-database": {
+      "title": "GEOROC Database",
+      "publisher": "DIGIS Project, Goettingen University",
+      "source_kind": "disciplinary_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock", "mineral"],
+      "coverage": {
+        "extent_class": "global_partial",
+        "regions": ["global"],
+        "notes": "Published igneous and metamorphic rocks, glasses, minerals and inclusions; coverage follows available literature."
+      },
+      "identifiers": {},
+      "landing_page": "https://georoc.eu/",
+      "interfaces": [
+        {
+          "kind": "query_api_documentation",
+          "url": "https://api-test.georoc.eu/api/v1/docs/index.html",
+          "format": "json_csv_geojson",
+          "access": "open_test_endpoint",
+          "server_filters": ["location", "material", "rock_type", "element", "sample_id"]
+        },
+        {
+          "kind": "precompiled_downloads",
+          "url": "https://georoc.eu/georoc/precompiled/",
+          "format": "versioned_doi_datasets",
+          "access": "open",
+          "server_filters": ["dataset_theme"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-SA-4.0",
+        "url": "https://georoc.eu/georoc/cite.asp",
+        "notes": "Database query data require GEOROC and original source citation; repository datasets may have separate terms."
+      },
+      "version": {
+        "status": "dynamic",
+        "value": null,
+        "release_date": null
+      },
+      "adapter": {
+        "status": "not_implemented",
+        "name": null
+      },
+      "evidence_urls": [
+        "https://georoc.eu/georoc/precompiled/",
+        "https://georoc.eu/georoc/cite.asp",
+        "https://api-test.georoc.eu/api/v1/docs/index.html"
+      ],
+      "limitations": [
+        "Only a test API endpoint has been documented in this discovery round; production endpoint and response version must be verified.",
+        "Aggregated records must retain every original publication reference."
+      ]
+    },
+    "usgs-ngdb": {
+      "title": "U.S. Geological Survey National Geochemical Database",
+      "publisher": "U.S. Geological Survey",
+      "source_kind": "official_national_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock", "soil", "sediment", "mineral", "concentrate"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["united-states-and-territories"],
+        "notes": "Primarily inorganic elemental concentrations for US and Alaska geologic samples."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.usgs.gov/centers/gggsc/science/national-geochemical-database",
+      "interfaces": [
+        {
+          "kind": "web_portal_and_downloads",
+          "url": "https://www.usgs.gov/centers/gggsc/science/national-geochemical-database",
+          "format": "dataset_specific",
+          "access": "open",
+          "server_filters": ["media", "region", "dataset"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "LicenseRef-USGS-Public-Domain",
+        "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
+        "notes": "Individual releases and non-USGS contributions still require dataset-level review."
+      },
+      "version": {
+        "status": "dataset_specific",
+        "value": null,
+        "release_date": null
+      },
+      "adapter": {
+        "status": "not_implemented",
+        "name": null
+      },
+      "evidence_urls": [
+        "https://www.usgs.gov/centers/gggsc/science/national-geochemical-database",
+        "https://www.usgs.gov/centers/gggsc/data"
+      ],
+      "limitations": [
+        "Historical databases contain heterogeneous methods, qualifiers and reporting units.",
+        "A specific immutable data release must be selected before production use."
+      ]
+    },
+    "gemstat-open-archive": {
+      "title": "GEMStat Global Freshwater Quality Database open archive",
+      "publisher": "UNEP GEMS/Water Programme and International Centre for Water Resources and Global Change",
+      "source_kind": "official_international_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["water"],
+      "coverage": {
+        "extent_class": "global_partial",
+        "regions": ["global"],
+        "notes": "Ground and surface water observations voluntarily provided by participating countries; spatial and temporal coverage is uneven."
+      },
+      "identifiers": {
+        "dataset_doi": "10.5281/zenodo.13881899"
+      },
+      "landing_page": "https://gemstat.org/data-gemstat/data-portal/",
+      "interfaces": [
+        {
+          "kind": "versioned_open_archive",
+          "url": "https://doi.org/10.5281/zenodo.13881899",
+          "format": "repository_files",
+          "access": "open_batches_only",
+          "server_filters": ["version"]
+        },
+        {
+          "kind": "interactive_portal",
+          "url": "https://gemstat.org/data-gemstat/data-portal/",
+          "format": "portal_export",
+          "access": "form_or_station_limit",
+          "server_filters": ["station", "country", "catchment", "parameter", "date"]
+        }
+      ],
+      "license": {
+        "status": "mixed_record_or_batch",
+        "id": null,
+        "url": "https://gemstat.org/data-gemstat/data-submission/",
+        "notes": "Only batches explicitly released as CC BY 4.0 or equivalent may enter open production outputs."
+      },
+      "version": {
+        "status": "annual_repository_versions",
+        "value": null,
+        "release_date": null
+      },
+      "adapter": {
+        "status": "not_implemented",
+        "name": null
+      },
+      "evidence_urls": [
+        "https://gemstat.org/data-gemstat/data-portal/",
+        "https://gemstat.org/about/data-availability/",
+        "https://gemstat.org/data-gemstat/data-submission/"
+      ],
+      "limitations": [
+        "Provider-specific access policies must be preserved.",
+        "Portal requests are limited and must not be automated around contact or station restrictions.",
+        "A concrete Zenodo version, file inventory and checksum set must be pinned."
+      ]
+    },
+    "wosis": {
+      "title": "World Soil Information Service (WoSIS)",
+      "publisher": "ISRIC - World Soil Information",
+      "source_kind": "official_international_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "global_partial",
+        "regions": ["global"],
+        "notes": "Quality-assessed and standardised soil profile data shared by many providers; coverage and property availability vary."
+      },
+      "identifiers": {
+        "dataset_doi": "10.17027/isric-wdcsoils-20231130"
+      },
+      "landing_page": "https://docs.isric.org/globaldata/wosis/",
+      "interfaces": [
+        {
+          "kind": "wfs",
+          "url": "http://maps.isric.org/mapserv?map=/map/wosis_latest.map",
+          "format": "ogc_wfs",
+          "access": "open_mixed_license_records",
+          "server_filters": ["layer", "property", "bbox"]
+        },
+        {
+          "kind": "snapshot_download",
+          "url": "https://files.isric.org/public/wosis_snapshot/WoSIS_2023_December.zip",
+          "format": "zip_tsv",
+          "access": "open_mixed_license_records",
+          "server_filters": ["snapshot"]
+        }
+      ],
+      "license": {
+        "status": "mixed_record_or_batch",
+        "id": null,
+        "url": "https://docs.isric.org/globaldata/wosis/faq-wosis.html",
+        "notes": "Public records can include CC BY and CC BY-NC; license must be retained and filtered at record level."
+      },
+      "version": {
+        "status": "snapshot_available",
+        "value": "2023-12 snapshot",
+        "release_date": "2024-09-02"
+      },
+      "adapter": {
+        "status": "not_implemented",
+        "name": null
+      },
+      "evidence_urls": [
+        "https://docs.isric.org/globaldata/wosis/faq-wosis.html",
+        "https://files.isric.org/public/wosis_snapshot/"
+      ],
+      "limitations": [
+        "WoSIS contains standardised soil properties, not a single uniform total-element geochemistry program.",
+        "Dynamic WFS and immutable DOI snapshot are separate acquisition modes.",
+        "Non-commercial license records are not eligible under open-only production policy."
+      ]
+    },
+    "earthchem-portal": {
+      "title": "EarthChem Portal",
+      "publisher": "EarthChem",
+      "source_kind": "aggregator",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["rock", "sediment", "mineral"],
+      "coverage": {
+        "extent_class": "global_partial",
+        "regions": ["global"],
+        "notes": "Federated discovery across participating solid-earth geochemistry databases."
+      },
+      "identifiers": {},
+      "landing_page": "https://earthchem.org/portal",
+      "interfaces": [
+        {
+          "kind": "federated_search",
+          "url": "https://earthchem.org/portal",
+          "format": "portal_and_documented_services",
+          "access": "open",
+          "server_filters": ["location", "material", "parameter", "database"]
+        }
+      ],
+      "license": {
+        "status": "upstream_specific",
+        "id": null,
+        "url": "https://earthchem.org/",
+        "notes": "Retain the original database, dataset and publication terms for every record."
+      },
+      "version": {
+        "status": "dynamic",
+        "value": null,
+        "release_date": null
+      },
+      "adapter": {
+        "status": "discovery_only",
+        "name": null
+      },
+      "evidence_urls": [
+        "https://earthchem.org/portal",
+        "https://earthchem.org/ecl/templates",
+        "https://earthchem.org/ecl/vocabularies"
+      ],
+      "limitations": [
+        "Aggregator results are discovery leads, not independent corroborating sources.",
+        "Production records must resolve to an upstream database or DOI dataset."
+      ]
+    },
+    "gemas-europe": {
+      "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)",
+      "publisher": "EuroGeoSurveys Geochemistry Expert Group",
+      "source_kind": "official_regional_program",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["europe"],
+        "notes": "Harmonised agricultural and grazing land soil survey for Europe."
+      },
+      "identifiers": {},
+      "landing_page": "https://gemas.eurogeosurveys.org/",
+      "interfaces": [
+        {
+          "kind": "wms_and_product_links",
+          "url": "https://gemas.eurogeosurveys.org/Links_GEMAS.htm",
+          "format": "wms_or_dataset_specific",
+          "access": "metadata_open_data_terms_to_verify",
+          "server_filters": ["map_layer"]
+        }
+      ],
+      "license": {
+        "status": "unresolved",
+        "id": null,
+        "url": null,
+        "notes": "Numeric data redistribution and dataset-level license require verification."
+      },
+      "version": {
+        "status": "unresolved",
+        "value": null,
+        "release_date": null
+      },
+      "adapter": {
+        "status": "not_implemented",
+        "name": null
+      },
+      "evidence_urls": [
+        "https://gemas.eurogeosurveys.org/Links_GEMAS.htm"
+      ],
+      "limitations": [
+        "Current discovery evidence identifies map services and project links but not a verified open bulk numeric release."
+      ]
+    }
+  }
+}

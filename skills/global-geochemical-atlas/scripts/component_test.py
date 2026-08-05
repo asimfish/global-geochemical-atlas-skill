@@ -21,6 +21,7 @@ from typing import Any
 import build_evidence_bundle as evidence_builder
 import download_data as downloader
 import source_adapters as source_contracts
+import source_router
 import validate_outputs as output_validator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -103,6 +104,55 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         len(usgs.registry_entry["download"]["files"]) == 3,
         "D1 USGS candidate keeps the three soil layers distinct",
+        checks,
+    )
+    catalog = source_router.load_catalog()
+    require(
+        set(catalog["sources"][source_id]["status"] for source_id in ("georoc-archaean", "usgs-conus-soil"))
+        == {"approved"}
+        and {
+            source_id
+            for source_id, entry in catalog["sources"].items()
+            if entry["production_eligible"]
+        }
+        == {"georoc-archaean", "usgs-conus-soil"},
+        "D1 catalog separates approved production sources from discovery candidates",
+        checks,
+    )
+    require(
+        {"rock", "soil", "sediment", "water"}
+        <= {medium for entry in catalog["sources"].values() for medium in entry["media"]},
+        "D1 catalog has initial discovery coverage for all four required media",
+        checks,
+    )
+    route = source_router.route_sources(
+        {
+            "elements": ["As", "Cu", "Ni", "Zn"],
+            "region": "global",
+            "media": ["rock", "soil", "sediment", "water"],
+            "sources": "auto",
+            "license_policy": "open_only",
+        },
+        catalog,
+    )
+    require(
+        {entry["source_id"] for entry in route["selected_sources"]}
+        == {"georoc-archaean", "usgs-conus-soil"},
+        "D1 router selects only approved open sources",
+        checks,
+    )
+    require(
+        route["coverage"]["rock"]["status"] == "partial"
+        and route["coverage"]["soil"]["status"] == "partial"
+        and route["coverage"]["sediment"]["status"] == "unknown"
+        and route["coverage"]["water"]["status"] == "unknown",
+        "D1 router does not overclaim incomplete or unapproved coverage",
+        checks,
+    )
+    require(
+        {"gemstat-open-archive", "usgs-ngdb"}
+        <= {entry["source_id"] for entry in route["review_sources"]},
+        "D1 router exposes relevant candidates and their review blockers",
         checks,
     )
     source_record_id = source_contracts.stable_source_record_id(

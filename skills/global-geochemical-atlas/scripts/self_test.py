@@ -67,6 +67,8 @@ def run_suite() -> dict[str, Any]:
         "geochemistry-record.schema.json",
         "source-manifest.schema.json",
         "confidence-report.schema.json",
+        "source-catalog.schema.json",
+        "source-route-result.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
