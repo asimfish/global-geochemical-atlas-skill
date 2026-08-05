@@ -55,11 +55,6 @@ python skills/global-geochemical-atlas/scripts/component_test.py --component d1
 - 拒绝 ZIP 路径穿越；
 - 证据包与 D2 输入 hash、置信度报告 hash 保持绑定。
 
-### 尚待补充
-
-- 429/502/503/504 有限重试的本地 HTTP 故障注入记录；
-- 超时、Content-Length 超限、流式大小超限、HTML 伪文件和 checksum 不一致的完整自动化矩阵。
-
 ## 2026-08-05 14:22 CST
 
 ### USGS 适配器
@@ -78,3 +73,33 @@ python skills/global-geochemical-atlas/scripts/component_test.py --component d1
 - 解析得到 33,745 条源记录，28 个成员均包含记录；
 - 缓存模式重新验证 ZIP hash、成员集合、成员 MD5 和字段，结果为 `cache_hit`；
 - CR 行结束符和 CSV 后附引用文本均已正确处理，引用文本不会被误判为测量记录。
+
+## 2026-08-05 14:39 CST
+
+### 自动化失败注入矩阵
+
+执行：
+
+```bash
+python skills/global-geochemical-atlas/scripts/component_test.py --component d1
+```
+
+使用临时目录、内存响应和可注入下载器完成以下验证，不依赖外部网络：
+
+| 故障 | 预期行为 | 结果 |
+|---|---|---|
+| 离线且缓存缺失 | 退出码 2，manifest 为 `network_unavailable` | 通过 |
+| 缓存 SHA-256 不一致 | 拒绝缓存 | 通过 |
+| 缓存数据集版本不一致 | 拒绝缓存 | 通过 |
+| HTML/XHTML 响应 | 写正式文件前拒绝 | 通过 |
+| 声明体积超限 | 写正式文件前拒绝 | 通过 |
+| 无可信 Content-Length 且流量超限 | 流式读取时中止 | 通过 |
+| 连续两次超时后恢复 | 退避 1 秒、2 秒，第三次成功 | 通过 |
+| HTTP 403 | 第一次即停止，返回 `source_not_accessible` | 通过 |
+| HTTP 502 / 500 | 502 可重试；500 不重试 | 通过 |
+| ZIP 必要成员缺失 | 报告缺失成员，不发布目录 | 通过 |
+| 必要字段缺失 | 报告字段差异并停止 | 通过 |
+| ZIP 损坏 | 拒绝并清理临时目录 | 通过 |
+| ZIP 路径穿越 | 拒绝且目标目录外无文件 | 通过 |
+
+D1 当前共 46 项契约检查通过。完整降级规则见 `failures.md`。

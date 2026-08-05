@@ -19,7 +19,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import zipfile
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -31,6 +31,33 @@ RETRYABLE_HTTP_STATUS = {429, 502, 503, 504}
 
 class DownloadError(RuntimeError):
     """Raised when a download cannot be completed safely."""
+
+    def __init__(self, message: str, status: str = "incomplete_retrieval") -> None:
+        super().__init__(message)
+        self.status = status
+
+
+def failure_from_exception(exc: Exception) -> DownloadError:
+    """Map transport and filesystem failures to the public workflow status contract."""
+
+    if isinstance(exc, DownloadError):
+        return exc
+    if isinstance(exc, urllib.error.HTTPError):
+        status = "source_not_accessible" if exc.code in {401, 403} else "incomplete_retrieval"
+        return DownloadError(f"HTTP {exc.code}: {exc.reason}", status=status)
+    if isinstance(exc, (urllib.error.URLError, TimeoutError)):
+        return DownloadError(str(exc), status="network_unavailable")
+    return DownloadError(str(exc), status="incomplete_retrieval")
+
+
+def is_retryable_error(exc: Exception) -> bool:
+    """Return whether one failed attempt may be retried without changing the request."""
+
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code in RETRYABLE_HTTP_STATUS
+    if isinstance(exc, DownloadError):
+        return False
+    return isinstance(exc, (urllib.error.URLError, TimeoutError))
 
 
 def utc_now() -> str:
@@ -59,30 +86,45 @@ def validate_sha256(value: str | None) -> str | None:
         return None
     normalized = value.casefold().strip()
     if len(normalized) != 64 or any(char not in "0123456789abcdef" for char in normalized):
-        raise DownloadError("--expected-sha256 must contain exactly 64 hexadecimal characters")
+        raise DownloadError(
+            "--expected-sha256 must contain exactly 64 hexadecimal characters",
+            status="invalid_input",
+        )
     return normalized
 
 
 def validate_public_https_url(url: str) -> None:
     parsed = urllib.parse.urlparse(url)
     if parsed.scheme.casefold() != "https":
-        raise DownloadError("only explicit HTTPS data URLs are accepted")
+        raise DownloadError("only explicit HTTPS data URLs are accepted", status="invalid_input")
     if not parsed.hostname or parsed.username or parsed.password:
-        raise DownloadError("URL must contain a public hostname and no embedded credentials")
+        raise DownloadError(
+            "URL must contain a public hostname and no embedded credentials",
+            status="invalid_input",
+        )
     query_names = [name.casefold() for name, _ in urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)]
     if any(term in name for name in query_names for term in SENSITIVE_QUERY_TERMS):
-        raise DownloadError("URL query appears to contain a credential or signed secret; do not persist it")
+        raise DownloadError(
+            "URL query appears to contain a credential or signed secret; do not persist it",
+            status="invalid_input",
+        )
 
     try:
         addresses = {item[4][0] for item in socket.getaddrinfo(parsed.hostname, parsed.port or 443)}
     except socket.gaierror as exc:
-        raise DownloadError(f"hostname resolution failed for {parsed.hostname}") from exc
+        raise DownloadError(
+            f"hostname resolution failed for {parsed.hostname}",
+            status="network_unavailable",
+        ) from exc
     if not addresses:
-        raise DownloadError("hostname did not resolve to an address")
+        raise DownloadError("hostname did not resolve to an address", status="network_unavailable")
     for address in addresses:
         ip = ipaddress.ip_address(address)
         if not ip.is_global:
-            raise DownloadError("private, loopback, link-local, multicast, and reserved destinations are rejected")
+            raise DownloadError(
+                "private, loopback, link-local, multicast, and reserved destinations are rejected",
+                status="invalid_input",
+            )
 
 
 class SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
@@ -107,7 +149,7 @@ def existing_verified_cache(
     dataset_version: str | None = None,
 ) -> dict[str, Any]:
     if not output.is_file():
-        raise DownloadError("offline cache file does not exist")
+        raise DownloadError("offline cache file does not exist", status="network_unavailable")
     recorded_hash = expected_sha256
     prior_manifest: dict[str, Any] = {}
     if manifest_path.is_file():
@@ -137,6 +179,38 @@ def existing_verified_cache(
     }
 
 
+def validate_response_metadata(content_type: str, declared_length: str | None, max_bytes: int) -> None:
+    """Reject error pages and declared responses that exceed the download budget."""
+
+    normalized_type = content_type.casefold().split(";", maxsplit=1)[0].strip()
+    if normalized_type in {"text/html", "application/xhtml+xml"}:
+        raise DownloadError("server returned HTML rather than a data file")
+    if declared_length:
+        try:
+            declared_bytes = int(declared_length)
+        except ValueError:
+            return
+        if declared_bytes > max_bytes:
+            raise DownloadError("declared Content-Length exceeds --max-bytes")
+
+
+def copy_response_bounded(source: Any, destination: Any, max_bytes: int) -> tuple[int, str]:
+    """Copy a response while enforcing the limit even when Content-Length is absent or false."""
+
+    digest = hashlib.sha256()
+    total = 0
+    while True:
+        chunk = source.read(min(1024 * 1024, max_bytes - total + 1))
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > max_bytes:
+            raise DownloadError("download exceeded --max-bytes")
+        digest.update(chunk)
+        destination.write(chunk)
+    return total, digest.hexdigest()
+
+
 def download_once(
     url: str,
     output: Path,
@@ -154,19 +228,9 @@ def download_once(
             resolved_url = response.geturl()
             validate_public_https_url(resolved_url)
             content_type = response.headers.get_content_type().casefold()
-            if content_type in {"text/html", "application/xhtml+xml"}:
-                raise DownloadError("server returned HTML rather than a data file")
             declared_length = response.headers.get("Content-Length")
-            if declared_length:
-                try:
-                    declared_bytes = int(declared_length)
-                except ValueError:
-                    declared_bytes = None
-                if declared_bytes is not None and declared_bytes > max_bytes:
-                    raise DownloadError("declared Content-Length exceeds --max-bytes")
+            validate_response_metadata(content_type, declared_length, max_bytes)
 
-            digest = hashlib.sha256()
-            total = 0
             with tempfile.NamedTemporaryFile(
                 "wb",
                 prefix=f".{output.name}.",
@@ -175,18 +239,9 @@ def download_once(
                 delete=False,
             ) as handle:
                 temporary_path = Path(handle.name)
-                while True:
-                    chunk = response.read(min(1024 * 1024, max_bytes - total + 1))
-                    if not chunk:
-                        break
-                    total += len(chunk)
-                    if total > max_bytes:
-                        raise DownloadError("download exceeded --max-bytes")
-                    digest.update(chunk)
-                    handle.write(chunk)
+                total, observed = copy_response_bounded(response, handle, max_bytes)
             if total == 0:
                 raise DownloadError("server returned an empty file")
-            observed = digest.hexdigest()
             if expected_sha256 and observed != expected_sha256:
                 raise DownloadError("downloaded file SHA-256 does not match --expected-sha256")
             os.replace(temporary_path, output)
@@ -208,6 +263,31 @@ def download_once(
     finally:
         if temporary_path is not None:
             temporary_path.unlink(missing_ok=True)
+
+
+def download_with_retries(
+    url: str,
+    output: Path,
+    timeout: float,
+    max_bytes: int,
+    expected_sha256: str | None,
+    retries: int,
+    *,
+    downloader: Callable[[str, Path, float, int, str | None], dict[str, Any]] = download_once,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> dict[str, Any]:
+    """Run a bounded download loop; dependencies are injectable for deterministic failure tests."""
+
+    for attempt in range(retries + 1):
+        try:
+            result = downloader(url, output, timeout, max_bytes, expected_sha256)
+            result["attempts"] = attempt + 1
+            return result
+        except (DownloadError, urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+            if attempt >= retries or not is_retryable_error(exc):
+                raise failure_from_exception(exc) from exc
+            sleeper(min(2**attempt, 4))
+    raise DownloadError("download failed")
 
 
 def _safe_member_name(name: str) -> PurePosixPath:
@@ -307,6 +387,8 @@ def safe_extract_zip(
                                 raise DownloadError("ZIP extraction exceeded --max-extracted-bytes")
                             output.write(chunk)
                     extracted.append(target)
+        except DownloadError:
+            raise
         except (zipfile.BadZipFile, RuntimeError) as exc:
             raise DownloadError("downloaded file is not a valid ZIP archive") from exc
 
@@ -336,18 +418,27 @@ def safe_extract_zip(
 def run(args: argparse.Namespace) -> dict[str, Any]:
     expected_sha256 = validate_sha256(args.expected_sha256)
     if args.max_bytes < 1 or args.max_bytes > 500_000_000:
-        raise DownloadError("--max-bytes must be between 1 and 500000000")
+        raise DownloadError("--max-bytes must be between 1 and 500000000", status="invalid_input")
     if args.timeout <= 0 or args.timeout > 120:
-        raise DownloadError("--timeout must be greater than 0 and at most 120 seconds")
+        raise DownloadError(
+            "--timeout must be greater than 0 and at most 120 seconds",
+            status="invalid_input",
+        )
     if args.retries < 0 or args.retries > 3:
-        raise DownloadError("--retries must be between 0 and 3")
+        raise DownloadError("--retries must be between 0 and 3", status="invalid_input")
     if not args.license.strip():
-        raise DownloadError("--license is required; use 'unresolved' only when manual review is explicit")
+        raise DownloadError(
+            "--license is required; use 'unresolved' only when manual review is explicit",
+            status="invalid_input",
+        )
 
     if args.max_extracted_bytes < 1 or args.max_extracted_bytes > 2_000_000_000:
-        raise DownloadError("--max-extracted-bytes must be between 1 and 2000000000")
+        raise DownloadError(
+            "--max-extracted-bytes must be between 1 and 2000000000",
+            status="invalid_input",
+        )
     if args.max_members < 1 or args.max_members > 10000:
-        raise DownloadError("--max-members must be between 1 and 10000")
+        raise DownloadError("--max-members must be between 1 and 10000", status="invalid_input")
 
     if args.offline:
         result = existing_verified_cache(
@@ -371,24 +462,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             except DownloadError:
                 result = {}
         if not result:
-            last_error: Exception | None = None
-            for attempt in range(args.retries + 1):
-                try:
-                    result = download_once(args.url, args.output, args.timeout, args.max_bytes, expected_sha256)
-                    result["attempts"] = attempt + 1
-                    break
-                except (DownloadError, urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
-                    last_error = exc
-                    retryable = isinstance(exc, (urllib.error.URLError, TimeoutError, OSError))
-                    if isinstance(exc, urllib.error.HTTPError):
-                        retryable = exc.code in RETRYABLE_HTTP_STATUS
-                    if isinstance(exc, DownloadError):
-                        retryable = False
-                    if attempt >= args.retries or not retryable:
-                        raise DownloadError(str(exc)) from exc
-                    time.sleep(min(2**attempt, 4))
-            if not result:
-                raise DownloadError(str(last_error or "download failed"))
+            result = download_with_retries(
+                args.url,
+                args.output,
+                args.timeout,
+                args.max_bytes,
+                expected_sha256,
+                args.retries,
+            )
 
     if args.required_field and args.output.suffix.casefold() != ".zip":
         _read_delimited_header(args.output, args.required_field)
@@ -471,7 +552,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except DownloadError as exc:
         failure = {
             "manifest_version": "geochemical-download-v1",
-            "status": "network_unavailable" if not args.offline else "incomplete_retrieval",
+            "status": exc.status,
             "source_url": args.url,
             "output_filename": args.output.name,
             "license": args.license,

@@ -6,10 +6,12 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import io
 import json
 import subprocess
 import sys
 import tempfile
+import urllib.error
 import zipfile
 from collections import Counter
 from collections.abc import Callable, Sequence
@@ -214,6 +216,7 @@ def check_d1(output_dir: Path) -> list[str]:
         checks.append("D1 rejects a mismatched D2 confidence input hash")
 
         unsafe_output = Path(evidence_temp) / "unsafe.csv"
+        unsafe_manifest = Path(evidence_temp) / "unsafe-download.json"
         run_command(
             [
                 sys.executable,
@@ -223,7 +226,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 "--output",
                 str(unsafe_output),
                 "--manifest",
-                str(Path(evidence_temp) / "unsafe-download.json"),
+                str(unsafe_manifest),
                 "--license",
                 "unresolved",
                 "--retries",
@@ -232,6 +235,11 @@ def check_d1(output_dir: Path) -> list[str]:
             expected_code=2,
         )
         require(not unsafe_output.exists(), "D1 downloader fails closed on unsafe URLs", checks)
+        require(
+            json_value(unsafe_manifest).get("status") == "invalid_input",
+            "D1 downloader returns a structured invalid_input status",
+            checks,
+        )
 
         cached_file = Path(evidence_temp) / "cached.csv"
         cached_file.write_text("SiteID\tLatitude\tLongitude\nA\t1\t2\n", encoding="utf-8")
@@ -257,6 +265,133 @@ def check_d1(output_dir: Path) -> list[str]:
         )
         require(cache_result["status"] == "cache_hit", "D1 reuses only a hash-verified versioned cache", checks)
 
+        offline_manifest = Path(evidence_temp) / "offline-miss.json"
+        run_command(
+            [
+                sys.executable,
+                str(DOWNLOADER),
+                "--url",
+                "https://example.org/public/missing.csv",
+                "--output",
+                str(Path(evidence_temp) / "missing.csv"),
+                "--manifest",
+                str(offline_manifest),
+                "--license",
+                "unresolved",
+                "--offline",
+            ],
+            expected_code=2,
+        )
+        require(
+            json_value(offline_manifest).get("status") == "network_unavailable",
+            "D1 offline cache miss returns a structured network_unavailable status",
+            checks,
+        )
+
+        for expected_hash, version, expected_message in (
+            ("0" * 64, "v1", "SHA-256 mismatch"),
+            (cached_hash, "v2", "dataset version"),
+        ):
+            try:
+                downloader.existing_verified_cache(
+                    cached_file,
+                    cached_manifest,
+                    cached_url,
+                    expected_hash,
+                    version,
+                )
+            except downloader.DownloadError as exc:
+                require(
+                    expected_message in str(exc),
+                    f"D1 rejects cached data on {expected_message}",
+                    checks,
+                )
+            else:
+                raise ContractError(f"D1 must reject cached data on {expected_message}")
+
+        for content_type, declared_length, expected_message in (
+            ("text/html; charset=utf-8", None, "HTML"),
+            ("text/plain", "1001", "Content-Length"),
+        ):
+            try:
+                downloader.validate_response_metadata(content_type, declared_length, max_bytes=1000)
+            except downloader.DownloadError as exc:
+                require(
+                    expected_message in str(exc),
+                    f"D1 rejects {expected_message} response metadata",
+                    checks,
+                )
+            else:
+                raise ContractError(f"D1 must reject {expected_message} response metadata")
+
+        try:
+            downloader.copy_response_bounded(io.BytesIO(b"x" * 1001), io.BytesIO(), max_bytes=1000)
+        except downloader.DownloadError as exc:
+            require(
+                "download exceeded" in str(exc),
+                "D1 enforces the streaming size limit without trusting Content-Length",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must enforce the streaming response size limit")
+
+        attempts: list[int] = []
+        delays: list[float] = []
+
+        def transient_download(*_args: Any) -> dict[str, Any]:
+            attempts.append(len(attempts) + 1)
+            if len(attempts) < 3:
+                raise TimeoutError("injected timeout")
+            return {"status": "downloaded"}
+
+        retry_result = downloader.download_with_retries(
+            cached_url,
+            Path(evidence_temp) / "retry.csv",
+            1,
+            1000,
+            None,
+            2,
+            downloader=transient_download,
+            sleeper=delays.append,
+        )
+        require(
+            retry_result.get("attempts") == 3 and attempts == [1, 2, 3] and delays == [1, 2],
+            "D1 retries transient timeouts only within the configured bound",
+            checks,
+        )
+
+        forbidden_attempts: list[int] = []
+
+        def forbidden_download(*_args: Any) -> dict[str, Any]:
+            forbidden_attempts.append(1)
+            raise urllib.error.HTTPError(cached_url, 403, "Forbidden", None, None)
+
+        try:
+            downloader.download_with_retries(
+                cached_url,
+                Path(evidence_temp) / "forbidden.csv",
+                1,
+                1000,
+                None,
+                3,
+                downloader=forbidden_download,
+                sleeper=delays.append,
+            )
+        except downloader.DownloadError as exc:
+            require(
+                exc.status == "source_not_accessible" and len(forbidden_attempts) == 1,
+                "D1 stops on HTTP 403 without retry or access-control bypass",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must stop on HTTP 403")
+        require(
+            downloader.is_retryable_error(urllib.error.HTTPError(cached_url, 502, "Bad Gateway", None, None))
+            and not downloader.is_retryable_error(urllib.error.HTTPError(cached_url, 500, "Error", None, None)),
+            "D1 HTTP retry policy is limited to the declared transient statuses",
+            checks,
+        )
+
         valid_zip = Path(evidence_temp) / "valid.zip"
         with zipfile.ZipFile(valid_zip, "w") as archive:
             archive.writestr("dataset/data.csv", "SiteID,Latitude,Longitude\nA,1,2\n")
@@ -274,6 +409,60 @@ def check_d1(output_dir: Path) -> list[str]:
             "D1 validates required ZIP members and fields before publishing extraction",
             checks,
         )
+
+        missing_member_zip = Path(evidence_temp) / "missing-member.zip"
+        with zipfile.ZipFile(missing_member_zip, "w") as archive:
+            archive.writestr("dataset/other.csv", "SiteID,Latitude,Longitude\nA,1,2\n")
+        try:
+            downloader.safe_extract_zip(
+                missing_member_zip,
+                Path(evidence_temp) / "must-not-publish-missing-member",
+                max_members=5,
+                max_extracted_bytes=1000,
+                required_members=["dataset/data.csv"],
+                required_fields=[],
+            )
+        except downloader.DownloadError as exc:
+            require(
+                "lacks required members" in str(exc),
+                "D1 rejects archives with missing required members",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must reject archives with missing required members")
+
+        missing_field_file = Path(evidence_temp) / "missing-fields.csv"
+        missing_field_file.write_text("SiteID,Value\nA,1\n", encoding="utf-8")
+        try:
+            downloader._read_delimited_header(missing_field_file, ["Latitude", "Longitude"])
+        except downloader.DownloadError as exc:
+            require(
+                "required delimited fields not found" in str(exc),
+                "D1 reports missing required source fields",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must reject files with missing required fields")
+
+        corrupt_zip = Path(evidence_temp) / "corrupt.zip"
+        corrupt_zip.write_bytes(b"not-a-zip")
+        try:
+            downloader.safe_extract_zip(
+                corrupt_zip,
+                Path(evidence_temp) / "must-not-publish-corrupt",
+                max_members=5,
+                max_extracted_bytes=1000,
+                required_members=[],
+                required_fields=[],
+            )
+        except downloader.DownloadError as exc:
+            require(
+                "not a valid ZIP archive" in str(exc),
+                "D1 rejects corrupt ZIP archives",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must reject corrupt ZIP archives")
 
         unsafe_zip = Path(evidence_temp) / "unsafe.zip"
         with zipfile.ZipFile(unsafe_zip, "w") as archive:
