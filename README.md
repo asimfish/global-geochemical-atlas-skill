@@ -4,6 +4,8 @@
 
 本仓库只包含一个正式 Skill：`skills/global-geochemical-atlas/`。正文采用 Agent Skills、OpenCode 与 Codex 可共同读取的最小公共格式。
 
+根目录的 `evaluation/` 是团队开发期科学 benchmark，不是主办方官方题库、不是 Skill 运行依赖，也不进入最终 Skill 提交包。Public Q01–Q08 只用于接口诊断；没有真实 B0/S0 三次运行和隔离隐藏集时，不得把 gold smoke 宣称为正式 uplift。
+
 ## 30 秒离线复现
 
 要求：Python 3.11+；不需要第三方依赖、网络、密钥或 GPU。
