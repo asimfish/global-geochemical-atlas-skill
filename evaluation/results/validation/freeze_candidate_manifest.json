@@ -1,18 +1,23 @@
 {
   "label": "v5.0.0-draft.1-smoke-passed",
   "benchmark_version": "5.0.0-draft.1",
-  "file_count": 204,
-  "content_manifest_sha256": "29a6682612a708234f057fdb391f3437f4d7284682b5c7a99e234b6e922df358",
+  "file_count": 205,
+  "content_manifest_sha256": "7dea711d8d9754160875a08671e072ed676abf693b2420cbf7d5ac42993253b8",
   "files": [
     {
       "path": "README.md",
-      "bytes": 2709,
-      "sha256": "7906a49e3e6a7b8ad5dd0b964563b7b69a14d899f00de02d7327e67f7f0f3fea"
+      "bytes": 3120,
+      "sha256": "9c9ef29bf259d43964f5503eba15a1303725e883af5d844618d80e3cb1c0191d"
     },
     {
       "path": "README_public.md",
       "bytes": 771,
       "sha256": "63f3dde6fd9c9b51976c5565c9e9691b943ca1f3088585536135f046879f7d69"
+    },
+    {
+      "path": "RUNBOOK.md",
+      "bytes": 20166,
+      "sha256": "89e93881b972b7e1707d39120b179ecb11973b7d388588f22d10543936967bc8"
     },
     {
       "path": "VERSION",
@@ -981,8 +986,8 @@
     },
     {
       "path": "results/raw_runs_template.jsonl",
-      "bytes": 496,
-      "sha256": "9af44cfc97cb8aa1f00b9350b3cb3986a04516abf141071c5a27854808963458"
+      "bytes": 609,
+      "sha256": "6f77c8b0446952319a31abd71039e5cba207ecde0fc51bf875b5a8d76f1eec42"
     },
     {
       "path": "results/scientific_acceptance_report_template.md",

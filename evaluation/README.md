@@ -20,7 +20,8 @@
 ## 目录边界
 
 ```text
-benchmark_rebuild_v5/
+evaluation/
+├── RUNBOOK.md                     # 评测人员从执行到验收的完整操作指南
 ├── audit/                         # 对旧版本的只读审计
 ├── docs/                          # 矩阵、评分、红线、隔离和来源依据
 ├── release/public/                # 可交付给设计组的公开题 Q01-Q08
@@ -44,12 +45,14 @@ benchmark_rebuild_v5/
 
 ## 运行方式
 
-待任务资产完成后：
+完整执行流程、隔离要求、bare/skill 对照、LLM 判分、重复运行和验收步骤见 [`RUNBOOK.md`](RUNBOOK.md)。最小静态检查与单题客观判分命令：
 
 ```bash
 python3 tools/validate_package.py .
 python3 tools/grade_task.py <task_dir> <submission_dir> --output <report.json>
 ```
+
+当前仓库不包含绑定具体模型平台的 runner；上述第二条命令对已经生成好的 submission 评分，不能代替裸模型/挂载 Skill 的真实运行。
 
 ## 官方评审对齐
 
