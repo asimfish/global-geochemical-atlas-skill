@@ -22,7 +22,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 - `qc_report.json` 与 `confidence_report.json`：QC 和运行级置信度；
 - `anomalies.geojson` 与 `anomaly_report.json`：候选异常及背景组统计；
 - `samples.geojson`：地图样点图层；
-- `interactive_map.html`：无 CDN 的自包含交互地图；
+- `interactive_map.html`：无 CDN 的自包含交互图谱，含区域 bbox、分布图、样点密度热力图、介质/元素/可比浓度着色、元素组合与富集/亏损候选区域；
 - `run_summary.json`：稳定输出清单、状态和限制。
 
 地图首页默认展示全部可上图测定，并按 `source_id + sample_id + medium + coordinates`

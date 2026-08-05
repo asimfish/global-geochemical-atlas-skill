@@ -164,13 +164,17 @@ python scripts/run_workflow.py \
 - `interactive_map.html`；
 - `run_summary.json`。
 
-交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
+交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、置信度、候选异常以及全球/美国/中国/上海等显式 bbox 与自定义范围筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。零记录区域必须显示“覆盖缺口”，不可解释为元素不存在或没有异常。热力图只统计物理样点密度并展示覆盖空洞；不要用浓度插值把无数据区伪装成连续覆盖。
 
-地图默认保持“全部数据”视图。KPI 统计测定记录；全元素地图按 `source_id + sample_id + medium + coordinates` 折叠为样品级符号，没有 `sample_id` 时不得仅凭坐标推测去重。默认按介质分类着色；只有筛选结果同时满足单一元素、单一介质、单一 measurement basis、单一已知方法组和单一标准单位时，才启用稳健对数浓度色阶。即使启用色阶，也提示用户点击记录核对方法、来源和 QC。
+地图默认保持“全部数据”视图。KPI 分开统计测定记录、物理采样点与地图符号；全元素介质总览按 `source_id + sample_id + medium + coordinates` 折叠为样品级符号，没有 `sample_id` 时不得仅凭坐标推测去重。颜色模式必须明确标注为介质、元素或可比浓度；按元素总览使用“采样身份 + 元素”符号。只有用户选择浓度且筛选结果同时满足单一元素、单一介质、单一 measurement basis、单一已知方法组和单一标准单位时，才启用稳健对数色阶，否则明确回退为分类色。即使启用色阶，也提示用户点击记录核对方法、来源和 QC。
+
+元素组合页必须按同一样品、同介质、同 basis、同方法组和各元素唯一单位构造最大可比子组；重复测定、删失值、缺样品 ID 和非正值不进入 log 散点。少于 8 对或秩方差为零时不报告 Spearman ρ。共测矩阵只表达同一采样身份中同时出现，不把共测伪装成相关或因果。
+
+异常区域只能把 D2 high/low 候选点聚合到固定 1°/2°/5° 经纬网格，状态为 `visual_aggregation_only`。D3 不重算阈值或方向；红色表示富集/high 候选，蓝色表示亏损/low 候选，网格不代表地质、矿体、污染或行政边界。
 
 使用内置 Natural Earth 1:110m 公有领域陆地轮廓生成离线底图，并在页面和 `run_summary.json.map_report` 中保留版本、比例尺、许可和来源归档 SHA-256。地图页签直接展示 D1 来源 manifest、D2 置信度/QC/异常产物；D3 不重新计算这些科学结论。
 
-完整 D1/D2 输入、显示层去叠加、色阶门、失败边界和独立 CLI 见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
+完整 D1/D2 输入、区域 bbox、显示层去叠加、热力图、元素组合、异常区域、色阶门、失败边界和独立 CLI 见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 
 ## 8. 验证与失败关闭
 

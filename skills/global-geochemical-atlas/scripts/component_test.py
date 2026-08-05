@@ -902,6 +902,35 @@ def check_d3(output_dir: Path) -> list[str]:
         all(
             marker in html
             for marker in (
+                'id="region"',
+                'id="customBounds"',
+                'id="mapMode"',
+                'id="colorMode"',
+                'id="basis"',
+                'id="anomalyGrid"',
+            )
+        ),
+        "D3 map exposes region, bbox, distribution/heat and color-mode controls",
+        checks,
+    )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'id="comboX"',
+                'id="comboY"',
+                'id="comboMatrix"',
+                "visual_aggregation_only",
+                "样点密度热力图",
+            )
+        ),
+        "D3 implements element combinations, density heatmap and display-only anomaly regions",
+        checks,
+    )
+    require(
+        all(
+            marker in html
+            for marker in (
                 'id="geology"',
                 'id="method"',
                 'id="source"',
@@ -931,8 +960,16 @@ def check_d3(output_dir: Path) -> list[str]:
     require(set(summary.get("outputs", {}).values()) == required_outputs - {"run_summary.json"}, "D3 summary names every reusable artifact", checks)
     map_report = summary.get("map_report", {})
     require(
-        map_report.get("map_version") == "d3-interactive-atlas-v2"
+        map_report.get("map_version") == "d3-interactive-atlas-v3"
         and map_report.get("default_view") == "all_data_sample_deduplicated"
+        and map_report.get("embedded_payload_schema") == "d3-compact-payload-v1"
+        and set(map_report.get("visualization_modes", []))
+        == {
+            "distribution_points",
+            "sample_density_heatmap",
+            "element_pair_comparison",
+            "candidate_anomaly_region_aggregation",
+        }
         and map_report.get("external_assets") == 0
         and map_report.get("interpolation") is False,
         "D3 run summary declares the reusable map contract and default view",
@@ -942,6 +979,20 @@ def check_d3(output_dir: Path) -> list[str]:
         0 < map_report.get("html_bytes", 0) <= 100_000_000
         and 0 < map_report.get("samples_geojson_bytes", 0) <= 100_000_000,
         "D3 reports and enforces the competition single-file size ceiling",
+        checks,
+    )
+    coverage = map_report.get("region_coverage", {})
+    require(
+        coverage.get("global", {}).get("record_count")
+        == map_report.get("mapped_record_count")
+        and coverage.get("global", {}).get("sample_count")
+        == map_report.get("display_sample_count")
+        and all(
+            item.get("administrative_clip") is False
+            for item in coverage.values()
+            if isinstance(item, dict)
+        ),
+        "D3 region coverage reconciles the global total and labels bbox semantics",
         checks,
     )
     basemap = json_value(BASEMAP)

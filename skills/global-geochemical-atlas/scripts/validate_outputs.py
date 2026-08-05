@@ -232,10 +232,21 @@ def validate_html(path: Path, errors: list[str]) -> None:
         errors.append("interactive_map.html contains an external stylesheet dependency")
     if "候选异常不代表污染" not in text:
         errors.append("interactive_map.html omits the causal interpretation boundary")
-    if "d3-interactive-atlas-v2" not in text or "ALL DATA" not in text:
+    if "d3-interactive-atlas-v3" not in text or "ALL DATA" not in text:
         errors.append("interactive_map.html omits the D3 map version or all-data default view")
     if "Natural Earth 1:110m" not in text or "public domain" not in text:
         errors.append("interactive_map.html omits offline basemap provenance")
+    for marker in (
+        'id="region"',
+        'id="mapMode"',
+        'id="colorMode"',
+        'id="comboX"',
+        'id="comboY"',
+        "visual_aggregation_only",
+        "样点密度热力图",
+    ):
+        if marker not in text:
+            errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")
 
 
 def validate_dir(output_dir: Path) -> dict[str, Any]:

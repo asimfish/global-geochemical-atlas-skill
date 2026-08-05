@@ -109,6 +109,41 @@
         "unmappable_record_count": {"type": "integer", "minimum": 0},
         "candidate_record_count": {"type": "integer", "minimum": 0},
         "default_view": {"const": "all_data_sample_deduplicated"},
+        "embedded_payload_schema": {"const": "d3-compact-payload-v1"},
+        "visualization_modes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "distribution_points",
+              "sample_density_heatmap",
+              "element_pair_comparison",
+              "candidate_anomaly_region_aggregation"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "region_presets": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "region_coverage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["label", "bounds", "record_count", "sample_count", "elements", "media", "administrative_clip"],
+            "properties": {
+              "label": {"type": "string"},
+              "bounds": {"type": "object"},
+              "record_count": {"type": "integer", "minimum": 0},
+              "sample_count": {"type": "integer", "minimum": 0},
+              "elements": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "media": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "administrative_clip": {"const": false}
+            },
+            "additionalProperties": false
+          }
+        },
         "external_assets": {"const": 0},
         "interpolation": {"const": false},
         "html_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000},
