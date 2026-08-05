@@ -1,0 +1,113 @@
+{
+  "scope_version": "geochemical-source-discovery-scope-v1",
+  "as_of": "2026-08-05T10:05:00Z",
+  "round": 3,
+  "status": "in_progress",
+  "saturated": false,
+  "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
+  "areas": {
+    "global-disciplinary-and-repositories": {
+      "status": "in_progress",
+      "catalogued_sources": [
+        "earthchem-library",
+        "earthchem-portal",
+        "gemstat-open-archive",
+        "georoc-archaean",
+        "georoc-database",
+        "glorich",
+        "pangaea-repository",
+        "petdb",
+        "wosis"
+      ],
+      "remaining_work": [
+        "Run publication-linked DOI searches by medium and target analyte.",
+        "Resolve each aggregator result to its upstream dataset and publication."
+      ]
+    },
+    "africa": {
+      "status": "in_progress",
+      "catalogued_sources": ["soils4africa"],
+      "remaining_work": [
+        "Search national geological surveys and water-quality portals beyond the continental soil program.",
+        "Add African rock, sediment and water sources with official evidence."
+      ]
+    },
+    "asia": {
+      "status": "in_progress",
+      "catalogued_sources": ["jamstec-darwin"],
+      "remaining_work": [
+        "Search additional East, South, Southeast, Central and West Asian national geological surveys.",
+        "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI."
+      ]
+    },
+    "europe": {
+      "status": "in_progress",
+      "catalogued_sources": [
+        "bgs-gbase",
+        "eea-waterbase",
+        "emodnet-chemistry",
+        "finland-gtk-geochemistry",
+        "foregs-europe",
+        "gemas-europe",
+        "ireland-tellus",
+        "norway-marchem",
+        "norway-ngu-lito",
+        "sweden-sgu-geochemical-atlas"
+      ],
+      "remaining_work": [
+        "Search the remaining national geological surveys and regional marine or freshwater networks.",
+        "Trace FOREGS, GEMAS, EEA and EMODnet records back to national or project-level upstream releases."
+      ]
+    },
+    "north-america": {
+      "status": "in_progress",
+      "catalogued_sources": [
+        "canada-cdogs",
+        "us-water-quality-portal",
+        "usgs-conus-soil",
+        "usgs-ngdb"
+      ],
+      "remaining_work": [
+        "Search state, provincial, territorial and Mexican geological-survey releases.",
+        "Resolve WQP records to NWIS, WQX and the original monitoring organization."
+      ]
+    },
+    "south-america": {
+      "status": "in_progress",
+      "catalogued_sources": ["brazil-sgb-geochemistry"],
+      "remaining_work": [
+        "Search the remaining national geological surveys, beginning with Andean and Southern Cone portals.",
+        "Add water-quality and publication-linked sources outside Brazil."
+      ]
+    },
+    "oceania": {
+      "status": "in_progress",
+      "catalogued_sources": [
+        "australia-ngsa",
+        "australia-ozchem",
+        "nz-petlab"
+      ],
+      "remaining_work": [
+        "Search Australian state surveys and Pacific-island national or regional repositories.",
+        "Resolve OZCHEM's current official numerical endpoint."
+      ]
+    },
+    "marine-lacustrine-and-polar": {
+      "status": "in_progress",
+      "catalogued_sources": [
+        "emodnet-chemistry",
+        "geotraces-idp2025",
+        "iodp-data-systems",
+        "jamstec-darwin",
+        "noaa-ncei-marine-geology",
+        "norway-marchem",
+        "pangaea-repository"
+      ],
+      "remaining_work": [
+        "Search additional oceanographic data centres and lake-sediment archives.",
+        "Separate sample inventories from downloadable numerical measurements and resolve all contributing programs."
+      ]
+    }
+  },
+  "completion_rule": "Discovery can only become saturated after every area has documented searches across official agency, disciplinary repository, program archive and publication-linked channels, followed by two consecutive rounds with no new high-relevance source."
+}

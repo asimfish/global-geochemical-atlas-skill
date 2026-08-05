@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-source-discovery-scope:v1",
+  "title": "D1 source discovery scope tracker",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scope_version",
+    "as_of",
+    "round",
+    "status",
+    "saturated",
+    "claim_boundary",
+    "areas",
+    "completion_rule"
+  ],
+  "properties": {
+    "scope_version": {"const": "geochemical-source-discovery-scope-v1"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "round": {"type": "integer", "minimum": 1},
+    "status": {"type": "string", "enum": ["in_progress", "review", "complete"]},
+    "saturated": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "areas": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["status", "catalogued_sources", "remaining_work"],
+        "properties": {
+          "status": {"type": "string", "enum": ["not_started", "in_progress", "review", "complete"]},
+          "catalogued_sources": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "remaining_work": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "completion_rule": {"type": "string", "minLength": 1}
+  }
+}

@@ -28,6 +28,16 @@
 | `geotraces-idp2025` | 协调国际数据产品 | 汇合各航次和实验室，经项目内校准/QC | 项目级产品可作为一套协调数据；仍保留航次、实验室和原贡献者 |
 | `glorich` | 全球河流数据汇编 | 汇集多个国家/研究数据集 | 与 GEMStat、WQP、Waterbase 等可能重叠；按原提供者/站点/日期去重 |
 | `eea-waterbase` | 区域报告聚合库 | 各欧洲国家向 EEA 报送 | EEA 分发不增加独立性；按国家提供者、监测站和计划计算 |
+| `noaa-ncei-marine-geology` | 海洋/湖泊长期档案与样品目录 | 汇集多机构、航次、IODP legacy 数据及实物样品库元数据 | IMLGS 只作发现；数值必须回到具体档案文件、项目和原始引用，与 IODP/PANGAEA 镜像去重 |
+| `pangaea-repository` | DOI 数据仓库 | 保存作者、项目和数据中心提交的数据；包含 `glorich` 及部分 IODP 数据 | 仓库不算独立来源；按 DOI 背后的原项目、样品和论文判定，并与 EarthChem Library 等仓库镜像去重 |
+| `iodp-data-systems` | 国际协调钻探计划的多系统档案 | 同一航次数据可同时出现在运营方 LIMS、SEDIS、PANGAEA 和 NCEI | 按航次/站位/孔/样品/分析记录合并血缘，不按分发系统数量增加独立性 |
+| `emodnet-chemistry` | 欧洲海洋化学聚合与协调产品 | CDI 来自国家数据中心，ERDDAP/webODV 是其中不受限记录的标准化汇编 | 与 EEA、SeaDataNet 和国家发布按提供者、站位、样品与时间去重；派生产品不是第二来源 |
+| `jamstec-darwin` | 航次、潜次与样品发现系统 | JAMSTEC 航次数据及岩石/沉积物样品目录；可能关联 legacy GANSEKI | 当前不把样品目录当数值证据；GANSEKI 未解析到当前端点前不另计来源 |
+| `ireland-tellus` | 国家协调地球化学调查 | 多批 Tellus 地区调查和可能的后续国家发布 | 独立性按原采样批次和样品计算；区域重发、地图产品及向其他门户供数不重复计数 |
+| `sweden-sgu-geochemical-atlas` | 国家地球化学图集数据 | 原始 till 下载及相关方法/统计表 | 原始观测只计一次；统计表、地图和 CSV/API 表达不构成额外证据 |
+| `finland-gtk-geochemistry` | 国家数据产品和多套调查服务 | Hakku 岩石产品、区域/详细 till 与河流沉积物 ArcGIS 图层 | 每套原调查分别建血缘；同一记录在 Hakku、地图服务和下载文件之间去重 |
+| `norway-ngu-lito` | 国家协调岩石调查 | NGU LITO 采样、实验室分析及版本化 XLSX | 作为一个调查体系；旧静态页面与 2026 新发布不算两套独立数据 |
+| `norway-marchem` | 国家海洋沉积物数据库 | MAREANO 及 NGU/IMR 其他监测项目，另在 NMDC 发布 DOI | 按原监测项目、站位、样品和 DOI 版本去重；MarChem、NMDC 与 EMODnet 镜像只算一次 |
 
 ## 当前单一来源依赖
 

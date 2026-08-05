@@ -223,6 +223,30 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 discovery log accounts for every catalog source through the current official-evidence round",
         checks,
     )
+    discovery_scope = json_value(SKILL_DIR / "assets" / "source_discovery_scope.json")
+    scoped_source_ids = {
+        source_id
+        for area in discovery_scope["areas"].values()
+        for source_id in area["catalogued_sources"]
+    }
+    require(
+        discovery_scope["round"] == catalog["discovery_state"]["round"]
+        and discovery_scope["as_of"] == catalog["reviewed_at"]
+        and discovery_scope["saturated"] is False
+        and scoped_source_ids == set(catalog["sources"])
+        and {
+            "africa",
+            "asia",
+            "europe",
+            "north-america",
+            "south-america",
+            "oceania",
+            "marine-lacustrine-and-polar",
+        }
+        <= set(discovery_scope["areas"]),
+        "D1 discovery scope tracks regional and marine search gaps without claiming saturation",
+        checks,
+    )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
     matrix = coverage_report.build_matrix(catalog, coverage_request, registry)
     require(

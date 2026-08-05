@@ -544,9 +544,10 @@ M6 的范围不是固定几个来源，而是所有能够发现的相关信源�
 
 | 时间（Asia/Shanghai） | 里程碑 | 结果 | 下一步 |
 |---|---|---|---|
+| 2026-08-05 18:05 | M6 第三轮发现 | 候选目录由 22 个扩展到 32 个；新增 NOAA、PANGAEA、IODP、EMODnet 及爱尔兰、瑞典、芬兰、挪威、日本入口；建立分区域 discovery scope；发现状态仍为 `in_progress`、`saturated=false` | 继续补亚洲、非洲、南美、墨西哥、州/省级地调和论文 DOI 渠道；并行启动 `geotraces-idp2025`、`norway-marchem` 的首批逐源准入复核 |
 | 2026-08-05 18:01 | M6 第二轮发现 | 候选目录由 8 个扩展到 22 个；新增 14 个官方/DOI 入口，覆盖四介质的全球、洲际和国家渠道；发现状态仍为 `in_progress`、`saturated=false` | 继续查 marine/lacustrine archive、更多国家地调、聚合库上游和论文关联数据；优先审计 `geotraces-idp2025`、`foregs-europe`、`canada-cdogs` |
 
-第二轮只是扩大“去哪里查”的可审计目录，并未新增生产批准来源。当前仍只有两个 approved 来源；沉积物和水体仍为 `unknown`，不能因为候选数量增加而写成已经覆盖。
+第二、三轮只是扩大“去哪里查”的可审计目录，并未新增生产批准来源。当前仍只有两个 approved 来源；沉积物和水体仍为 `unknown`，不能因为候选数量增加而写成已经覆盖。区域 scope 也明确保留了未搜索完的地区，目录不能标成完整。
 
 ## 十、完整交付物
 
@@ -558,6 +559,7 @@ skills/global-geochemical-atlas/
   assets/
     source_catalog.json
     source_discovery_log.jsonl
+    source_discovery_scope.json
     source_manifest.json
     coverage_matrix.json
     vocabulary_registry.json
@@ -579,6 +581,9 @@ skills/global-geochemical-atlas/
     analytical-method.schema.json
     provenance.schema.json
     acquisition-run.schema.json
+    source-catalog.schema.json
+    source-discovery-record.schema.json
+    source-discovery-scope.schema.json
     sqlite-schema.sql
     storage-and-performance.md
   scripts/

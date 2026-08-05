@@ -114,6 +114,30 @@
 - `glorich` 很大但带 NC 限制，`bgs-gbase` 原始点数据需单独授权；两者保留用于覆盖判断，不参与 open-only 自动路由；
 - `earthchem-library` 和 Water Quality Portal 是发现/聚合入口，生产数据必须保留并去重上游数据集与提供者。
 
+## M6 第三轮新增候选
+
+本轮新增 10 个入口，候选目录由 22 个增至 32 个，重点补海洋/湖泊档案和欧洲、亚洲国家机构。生产批准来源仍只有两个。
+
+| 来源 | 介质 | 范围 | 当前可见接口 | 当前判断与主要阻断项 |
+|---|---|---|---|---|
+| `noaa-ncei-marine-geology` | 岩石、沉积物 | 全球海洋与湖床馆藏 | NCEI 检索/地图/服务、IMLGS ERDDAP | 档案含数值文件，但 IMLGS 本身主要是样品目录；必须逐原始数据集接入 |
+| `pangaea-repository` | 四类介质发现 | 全球 DOI 仓库 | 高级检索、DOI 元数据和逐数据集文件 | 逐 DOI 核对许可、schema、hash、方法和上游项目，仓库不算独立证据 |
+| `iodp-data-systems` | 岩石、沉积物、孔隙水 | 全球大洋钻探站点 | SEDIS、各科学运营方系统、LIMS 报表 | 系统和 schema 分散；需按航次、站位、孔、深度及解禁状态固定版本 |
+| `emodnet-chemistry` | 海水、海洋沉积物 | 欧洲海域 | ERDDAP、CDI、webODV | ERDDAP 是不受限记录的协调产品，CDI 含受限记录；均需保留数据提供者血缘 |
+| `jamstec-darwin` | 岩石、沉积物 | JAMSTEC 航次区域 | 航次、潜次和样品搜索 | 当前只确认到样品与观测发现；未把 legacy GANSEKI 或样品目录误写为统一数值库 |
+| `ireland-tellus` | 土壤、沉积物、水 | 爱尔兰 | 官方地理数据下载 | 多介质、方法文档较完整；本轮官网临时下线，需重新固定具体文件和许可通知 |
+| `sweden-sgu-geochemical-atlas` | 冰碛物 | 瑞典 | 官方 CSV/API、方法与检出限表 | 已核实原始下载是 till；土壤比较表不是原始土壤观测；许可仍需固定 |
+| `finland-gtk-geochemistry` | 岩石、冰碛物、河流沉积物 | 芬兰 | Hakku、ArcGIS REST | 国家岩石产品与多套沉积物调查不能共用方法假设；逐产品核对许可和版本 |
+| `norway-ngu-lito` | 岩石 | 挪威 | 2026-06 初步 XLSX | NGU 明示最终岩性命名与批次校正尚未完成，暂不能批准 |
+| `norway-marchem` | 海洋沉积物 | 挪威海域 | 检索下载、NMDC DOI | 明示 CC BY 4.0 与 NLOD，最接近接入门；仍要固定一个 DOI 版本、文件和方法 |
+
+### 第三轮的边界判断
+
+- 样品目录和数值测定已经拆开：IMLGS、DARWIN 只承担发现，不能直接满足分析请求；
+- PANGAEA、NOAA、IODP、EMODnet 与国家数据库可能发布同一航次或项目，来源独立性按原项目和原样品计算；
+- 新增候选提升的是“去哪里找”的全面性，不改变沉积物、水体仍无 approved 来源的事实；
+- `source_discovery_scope.json` 按区域记录尚未完成的检索，亚洲、非洲、南美及州/省级调查仍是明显缺口；发现状态继续为 `in_progress`、`saturated=false`。
+
 ## 路由示例
 
 ```bash

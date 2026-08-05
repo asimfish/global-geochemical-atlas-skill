@@ -79,7 +79,18 @@
           "properties": {
             "extent_class": {
               "type": "string",
-              "enum": ["global", "global_partial", "regional_partial", "national_partial", "local_partial", "unknown"]
+              "enum": [
+                "global",
+                "global_partial",
+                "global_collection",
+                "global_ocean_partial",
+                "continental_partial",
+                "regional_partial",
+                "national_partial",
+                "national_plus_selected_global",
+                "local_partial",
+                "unknown"
+              ]
             },
             "regions": {"$ref": "#/$defs/uniqueStrings"},
             "notes": {"type": "string", "minLength": 1}
@@ -116,7 +127,19 @@
           "properties": {
             "status": {
               "type": "string",
-              "enum": ["open", "mixed_record_or_batch", "upstream_specific", "unresolved", "restricted"]
+              "enum": [
+                "open",
+                "mixed_record_or_batch",
+                "upstream_specific",
+                "dataset_specific",
+                "dataset_specific_open_government",
+                "open_reuse_terms",
+                "open_site_terms_product_review",
+                "open_with_privacy_and_aggregation_conditions",
+                "citation_and_copyright_terms",
+                "unresolved",
+                "restricted"
+              ]
             },
             "id": {"$ref": "#/$defs/nullableString"},
             "url": {"$ref": "#/$defs/nullableString"},
