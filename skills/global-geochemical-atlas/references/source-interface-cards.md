@@ -14,7 +14,7 @@
 
 ## V3 A 级样板来源
 
-V3 当前把四项来源评为 A 级 `normalized_analysis`；30 条人工复核尚未完成，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
+V3 当前把五项来源评为 A 级 `normalized_analysis`；其中水体由 GEOTRACES 海水和 GEMStat 淡水互补。30 条人工复核尚未完成，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
 
 ### `georoc-archaean`
 
@@ -50,7 +50,16 @@ V3 当前把四项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 - 接口与快照：官方 WebODV IDP2025 子集，固定请求、903,710-byte ZIP、242 个成员和全部 hash；
 - 对账：69,704 个样品深度行、39,327 条 dissolved Cu/Ni/Zn 观测，覆盖 46 个含目标值航次和 0–7,167 m；
 - 边界：`nmol/kg` 保持原单位，SeaDataNet QC 原样保留；官方变量表无 As；
-- 剩余：30 条具名人工签署、贡献者/方法完整率和另一个含 As 的水体来源。
+- 剩余：30 条具名人工签署和贡献者/方法完整率；As 由 GEMStat 淡水路由补充，但两种水体背景保持隔离。
+
+### `gemstat-open-archive`
+
+- 介质与范围：33 个贡献国家的河流、湖泊、地下水、水库和湿地砷观测，空间与时间覆盖不均；
+- 接口与版本：Zenodo v3，版本 DOI `10.5281/zenodo.18459694`，CC BY 4.0；
+- 获取与校验：官方 201 MB ZIP 不整包镜像，按精确 byte range 取得 As 和四个元数据成员，并逐项验证压缩 SHA-256、ZIP header、CRC、展开大小和展开 SHA-256；
+- 对账：492,999 条 As 观测、15,621 个站点、33 国、三种分相、两种单位、五类水体站；
+- 边界：449,714 条使用未定义方法代码 0；删失、质量标签、5,655 条额外精确重复和 Pending review 极端值全部保留，演示只选 Good/Fair 且方法明确的记录；
+- 剩余：30 条具名人工签署、原始 data provider 血缘深化和第二个独立淡水来源。
 
 ## 待复核生产候选
 
@@ -70,15 +79,6 @@ V3 当前把四项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 - 许可：USGS 来源通常为美国公有领域，但逐数据发布核对非 USGS 内容和引用；
 - 待办：选择不可变的具体数据发布，核对下载文件、版本、字段字典、方法和 qualifier；
 - 风险：历史系统合并导致方法、单位和编码高度异质。
-
-### `gemstat-open-archive`
-
-- 介质与范围：全球河流、湖泊、水库、湿地和地下水，覆盖不均；
-- 已发现接口：Data Portal、年度 Zenodo 开放批次 `10.5281/zenodo.13881899`；
-- 可用过滤：站点、国家、流域、参数和日期；门户下载有站点数与表单限制；
-- 许可：逐提交批次可以是 Open、Limited 或 Restricted；生产只允许明确开放批次；
-- 待办：固定具体 Zenodo 版本、文件清单、checksum、字段和数据提供者署名；
-- 红线：不绕过联系表单、站点上限或 Restricted 数据策略。
 
 ### `wosis`
 

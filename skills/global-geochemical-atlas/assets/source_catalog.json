@@ -1,6 +1,6 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-05T13:41:55Z",
+  "reviewed_at": "2026-08-05T14:41:20Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
     "round": 3,
@@ -230,8 +230,8 @@
       ]
     },
     "gemstat-open-archive": {
-      "title": "GEMStat Global Freshwater Quality Database open archive",
-      "publisher": "UNEP GEMS/Water Programme and International Centre for Water Resources and Global Change",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive v3",
+      "publisher": "UNEP GEMS/Water Programme, GEMS/Water Data Centre and German Federal Institute of Hydrology",
       "source_kind": "official_international_database",
       "status": "needs_human_review",
       "production_eligible": false,
@@ -239,19 +239,20 @@
       "coverage": {
         "extent_class": "global_partial",
         "regions": ["global"],
-        "notes": "Ground and surface water observations voluntarily provided by participating countries; spatial and temporal coverage is uneven."
+        "notes": "The v3 archive describes 42 contributing countries. The audited arsenic subset contains 492,999 observations at 15,621 stations in 33 countries across river, lake, groundwater, reservoir and wetland station types; spatial and temporal coverage is uneven."
       },
       "identifiers": {
-        "dataset_doi": "10.5281/zenodo.13881899"
+        "dataset_doi": "10.5281/zenodo.18459694",
+        "concept_doi": "10.5281/zenodo.13881899"
       },
-      "landing_page": "https://gemstat.org/data-gemstat/data-portal/",
+      "landing_page": "https://zenodo.org/records/18459694",
       "interfaces": [
         {
-          "kind": "versioned_open_archive",
-          "url": "https://doi.org/10.5281/zenodo.13881899",
-          "format": "repository_files",
-          "access": "open_batches_only",
-          "server_filters": ["version"]
+          "kind": "pinned_open_archive",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1",
+          "format": "zip_csv",
+          "access": "open",
+          "server_filters": ["version", "http_byte_range"]
         },
         {
           "kind": "interactive_portal",
@@ -262,29 +263,34 @@
         }
       ],
       "license": {
-        "status": "mixed_record_or_batch",
-        "id": null,
-        "url": "https://gemstat.org/data-gemstat/data-submission/",
-        "notes": "Only batches explicitly released as CC BY 4.0 or equivalent may enter open production outputs."
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "The v3 Zenodo record and included README identify CC BY 4.0; retain archive citation and record DOI."
       },
       "version": {
-        "status": "annual_repository_versions",
-        "value": null,
-        "release_date": null
+        "status": "pinned",
+        "value": "v3",
+        "release_date": "2026-02-02"
       },
       "adapter": {
-        "status": "not_implemented",
-        "name": null
+        "status": "implemented",
+        "name": "gemstat_v3_arsenic_range"
       },
       "evidence_urls": [
+        "https://zenodo.org/records/18459694",
         "https://gemstat.org/data-gemstat/data-portal/",
         "https://gemstat.org/about/data-availability/",
         "https://gemstat.org/data-gemstat/data-submission/"
       ],
       "limitations": [
-        "Provider-specific access policies must be preserved.",
-        "Portal requests are limited and must not be automated around contact or station restrictions.",
-        "A concrete Zenodo version, file inventory and checksum set must be pinned."
+        "The audited arsenic subset covers 33 voluntarily contributing countries and is not a uniform global freshwater grid.",
+        "Dissolved, suspended and total arsenic fractions must remain separate.",
+        "Most arsenic observations use undefined analysis method code 0, so method-comparable subsets are substantially smaller.",
+        "The source contains censoring, 5,655 extra exact duplicate observations, and Pending review/Suspect values that must remain traceable and filtered according to use.",
+        "Three -999.999 sentinels and 78 values at or above 1000 mg/l are Pending review and cannot support anomaly claims.",
+        "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 rows and 621 parameters.",
+        "Only five required ZIP members were locally range-verified; the complete 201 MB publisher archive MD5 is recorded but was not independently recomputed."
       ]
     },
     "wosis": {

@@ -11,7 +11,7 @@
 | USGS National Geochemical Database | rock/soil/sediment/mineral/concentrate | `https://www.usgs.gov/centers/gggsc/science/national-geochemical-database` | 政府来源；具体数据发布可能用不同 legacy qualifier 编码，逐数据集读取元数据 |
 | EarthChem Portal | rock 与文献汇编 | `https://earthchem.org/portal` | 联邦检索 PetDB、GEOROC 等；保留原数据库、样品和文献引用；不要把聚合站当唯一证据 |
 | EarthChem developer resources | 结构化服务 | `https://earthchem.org/resources/developers` | 使用文档化 WFS/XML；验证 schema、计数和服务版本 |
-| GEMStat open archive | water | `https://doi.org/10.5281/zenodo.13881899` | 只使用明确开放批次；通常 CC BY 4.0，并按数据提供者要求署名；大文件先按范围设计本地过滤 |
+| GEMStat open archive | water | `https://doi.org/10.5281/zenodo.18459694` | 已冻结 v3/CC BY 4.0；按 ZIP byte range 只取得 As 和必需元数据，保留贡献者、分相、方法、质量和删失语义 |
 | GEMStat portal | water | `https://gemstat.org/data-gemstat/data-portal/` | 门户下载可能要求联系信息或限制站点数；不要自动绕过表单；受限批次不再分发 |
 | Macrostrat | 地质背景 | `https://macrostrat.org/` | 数据通常 CC BY 4.0；同时引用 API 返回的原始地图来源和 source ID；记录比例尺与边界不确定性 |
 | Macrostrat API docs | 点位地质匹配 | `https://dev.macrostrat.org/docs` | API 版本快速演进；固定实际路由和响应字段，不凭记忆构造端点 |
@@ -52,6 +52,17 @@
 - 当前快照：只选择深度和 dissolved Cu/Ni/Zn；69,704 个样品深度行、39,327 条非空目标观测；
 - 校验：验证 903,710-byte ZIP 的 SHA-256、242 个成员和主 ODV 文件 hash；`scripts/audit_geotraces_snapshot.py` 重算行数、变量、QC 和空间/深度覆盖；
 - 科学边界：`nmol/kg` 原样保留，不与 `ug/L` 静默换算；航次点不是规则全球覆盖；变量表没有 As，水体 As 请求必须路由到其他来源。
+
+### `gemstat-open-archive`
+
+- 数据集：UNEP GEMS/Water Global Freshwater Quality Archive v3；
+- DOI：版本 DOI `10.5281/zenodo.18459694`，概念 DOI `10.5281/zenodo.13881899`；
+- 许可：CC BY 4.0，保留 archive 引用和版本 DOI；
+- 获取：`scripts/acquire_gemstat_arsenic.py --accept-cc-by` 使用官方 ZIP 的精确 HTTP byte range，只物化 `Arsenic.csv`、站点、参数、方法和 README 五个成员；
+- 校验：每个 range 校验压缩字节 SHA-256、本地 ZIP header、解压 CRC、展开大小和展开内容 SHA-256；完整 201,278,791-byte ZIP 的发布方 MD5 只记录为发布方声明，不冒充本机完整校验；
+- 对账：492,999 条 As 观测、15,621 个站点、33 个国家，覆盖 dissolved/suspended/total 三种分相和河流、湖泊、地下水、水库、湿地五类站点；
+- 质量边界：保留 `<`/`>`、Good/Fair/Unknown/Pending review/Suspect、5,655 条额外精确重复观测和所有源行定位；演示排除方法代码 0、Pending review、Suspect、负哨兵和极端值；
+- 覆盖边界：它是各国自愿提交的不均匀淡水汇编，不是规则全球网格。As 与 GEOTRACES 的海水 Cu/Ni/Zn 共同补齐登记目标，但不能把淡水和海水静默合并为同一背景。
 
 ## D1 适配器和稳定 ID
 

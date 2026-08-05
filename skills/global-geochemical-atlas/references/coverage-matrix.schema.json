@@ -31,6 +31,12 @@
           "status",
           "requested_analytes",
           "analyte_coverage",
+          "audited_analytes",
+          "missing_analytes",
+          "source_target_analytes",
+          "analyte_source_counts",
+          "analytes_with_single_source",
+          "analytes_with_multiple_sources",
           "selected_sources",
           "candidate_sources",
           "source_scopes",
@@ -46,6 +52,18 @@
           "status": {"type": "string", "enum": ["covered", "partial", "uncovered", "unknown"]},
           "requested_analytes": {"$ref": "#/$defs/uniqueStrings"},
           "analyte_coverage": {"type": "string"},
+          "audited_analytes": {"$ref": "#/$defs/uniqueStrings"},
+          "missing_analytes": {"$ref": "#/$defs/uniqueStrings"},
+          "source_target_analytes": {
+            "type": "object",
+            "additionalProperties": {"$ref": "#/$defs/uniqueStrings"}
+          },
+          "analyte_source_counts": {
+            "type": "object",
+            "additionalProperties": {"type": "integer", "minimum": 0}
+          },
+          "analytes_with_single_source": {"$ref": "#/$defs/uniqueStrings"},
+          "analytes_with_multiple_sources": {"$ref": "#/$defs/uniqueStrings"},
           "selected_sources": {"$ref": "#/$defs/uniqueStrings"},
           "candidate_sources": {"$ref": "#/$defs/uniqueStrings"},
           "source_scopes": {"type": "object", "additionalProperties": {"type": "string"}},

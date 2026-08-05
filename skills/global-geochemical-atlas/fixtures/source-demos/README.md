@@ -46,6 +46,16 @@
 - 单位边界：原始 `nmol/kg` 保持不变；没有明确元素原子量和海水密度时不换算为 `ug/L`；
 - 覆盖边界：样点来自海洋航次，不是规则全球网格；官方离散海水变量表没有 As，必须用其他水体来源补齐。
 
+## GEMStat demo
+
+目录：`gemstat-open-archive/`。
+
+- 来源：UNEP GEMS/Water Global Freshwater Quality Archive v3，版本 DOI `10.5281/zenodo.18459694`；
+- 许可：CC BY 4.0，保留 archive 引用；
+- 内容：只从 Good/Fair、方法代码明确、非负且非极端的记录中选择 dissolved、suspended、total As 各 16 条；在来源具备时平衡 `mg/l`/`µg/l`、湖泊/河流和 `<` 删失值；
+- 质量边界：原始 492,999 条观测中的方法代码 0、Pending review、Suspect、重复和异常哨兵仍保留在全量适配器与审计报告中，但不进入演示；
+- 覆盖边界：As 子集只涉及 33 个贡献国家，不是规则全球淡水网格，也不能与 GEOTRACES 海水背景直接混算。
+
 ## 确定性再生成
 
 先按 `references/data-sources.md` 下载并验证来源。完整第三方文件留在仓库外缓存，然后在仓库根目录运行：
@@ -83,6 +93,14 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --mode cached \
   --observations 48 \
   --generated-at 2026-08-05T13:41:55Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source gemstat-open-archive \
+  --cache-dir .cache/data \
+  --output-dir /tmp/gemstat-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-05T14:41:20Z
 ```
 
 使用相同注册表版本、验证缓存/快照和 `--generated-at` 时，每个来源的三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。

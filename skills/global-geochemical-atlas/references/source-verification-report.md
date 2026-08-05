@@ -2,18 +2,19 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-05 22:05（Asia/Shanghai）
+更新时间：2026-08-05 22:41（Asia/Shanghai）
 
 ## 当前结论
 
-四个介质样板均已完成 canonical 适配、真实来源对账和端到端 fixture，当前都是 85 分、A 级、`normalized_analysis`。四份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；水体有海水与淡水两条互补路由，因此共五个来源，当前都是 85 分、A 级、`normalized_analysis`。五份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
 | `georoc-archaean` | DOI v12.0、28 个固定成员及校验、33,745 条源记录解析、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖太古宙克拉通专题 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
 | `usgs-conus-soil` | USGS 固定发布、三层文件及 hash、14,571 条源记录解析、48 条 fixture 地图运行、跨三层 30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖美国本土 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
-| `geotraces-idp2025` | 官方 DOI/IDP2025、CC BY 4.0/Fair Data Use、WebODV 冻结快照、242 个成员及 hash、69,704 行/39,327 条 Cu/Ni/Zn 观测对账、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；贡献者/方法完整率仍需审计；官方海水变量表没有 As | A 级 `normalized_analysis`，尚未达到 `benchmark_ready`；另需含 As 的水体来源 |
+| `geotraces-idp2025` | 官方 DOI/IDP2025、CC BY 4.0/Fair Data Use、WebODV 冻结快照、242 个成员及 hash、69,704 行/39,327 条 Cu/Ni/Zn 观测对账、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；贡献者/方法完整率仍需审计；官方海水变量表没有 As | A 级 `normalized_analysis`，尚未达到 `benchmark_ready`；As 由 GEMStat 淡水路由补充且保持背景隔离 |
 | `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash、完整成员清单、canonical 适配器、1,070 行对账和地图运行 | 30 条人工回看尚待完成 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
+| `gemstat-open-archive` | v3 版本 DOI、CC BY 4.0、五个精确 ZIP range、492,999 条 As 观测、站点/参数/方法连接、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；大量方法代码 0；33 国覆盖不均；重复、删失和 Pending review 值需分层使用 | A 级 `normalized_analysis`，补齐登记中的水体 As，但尚未达到 `benchmark_ready` |
 
 ## `georoc-archaean` 与 `usgs-conus-soil` 复核准备
 
@@ -177,8 +178,49 @@ SeaDataNet QC 码按原值保留：1=good、2=probably good、3=probably bad、4
 - fixture 平衡选择 Cu/Ni/Zn 各 16 条，共 48 条 QC 1/2 观测；标准化流程保留 `nmol/kg`，48/48 坐标有效并成功生成交互地图；
 - 证据评分为 85/A/`normalized_analysis`，人工复核维度为 0 分，未虚增为 `benchmark_ready`。
 
-剩余工作是完成 30 条具名人工签署、审计贡献者/方法/原始文献字段完整率，并接入至少一个含 As 的水体来源。
+剩余工作是完成 30 条具名人工签署、审计贡献者/方法/原始文献字段完整率，并继续增加独立海水来源。水体 As 已由 GEMStat 淡水路由补入，但不能与海水背景混算。
+
+## `gemstat-open-archive` 复核
+
+### 1. 版本、许可与选择性获取
+
+- 产品：UNEP GEMS/Water Global Freshwater Quality Archive v3；
+- 版本 DOI：`10.5281/zenodo.18459694`；概念 DOI：`10.5281/zenodo.13881899`；
+- 发布日期：2026-02-02；许可：CC BY 4.0；
+- 官方文件：`GFQA_v3.zip`，201,278,791 bytes，发布方 MD5 `00f3ea19ce529753977eb3aeb08fbc47`，84 个 ZIP 成员。
+
+本轮没有把完整第三方归档提交到仓库，也没有把发布方 MD5 写成本机重算结果。`scripts/acquire_gemstat_arsenic.py` 用五段精确 HTTP Range 取得 `Arsenic.csv`、方法、参数、站点和 README；对每段分别验证压缩字节 SHA-256、本地 ZIP header、raw-deflate 解压、CRC、展开大小和展开 SHA-256。完整 ZIP 的大小和 MD5 只保留为发布方声明，`locally_full_archive_verified=false`。
+
+### 2. 观测、分相与覆盖对账
+
+| 项目 | 结果 |
+|---|---:|
+| As 观测总数 | 492,999 |
+| As-Dis / As-Sus / As-Tot | 188,961 / 5,439 / 298,599 |
+| As 站点 / 国家 | 15,621 / 33 |
+| mg/l / µg/l | 453,413 / 39,586 |
+| reported / `<` / `>` | 289,636 / 203,344 / 19 |
+| 河流 / 湖泊 / 地下水 / 水库 / 湿地 | 402,080 / 43,253 / 30,671 / 13,886 / 3,109 |
+| 采样日期 | 1975-04-28 至 2023-12-29 |
+| 深度 | 0–500 m |
+| 包围盒 | `[-139.78, -34.252553, 92.60805556, 81.9356]` |
+
+包围盒和国家数只描述已提交站点，不能外推为包围盒内连续覆盖。`As-Dis`、`As-Sus`、`As-Tot` 分别表示溶解、悬浮和总量操作性分相，不能静默合并。
+
+### 3. 方法、质量与源数据缺陷
+
+- 24 个实际使用的参数—方法—单位组合全部能连接到方法元数据，但 449,714 条观测使用未定义方法代码 `0`；
+- Data Quality 为 Fair 466,710、Unknown 19,789、Good 4,557、Pending review 1,649、Suspect 294；
+- 发现 5,655 条额外精确重复观测，分布在 5,513 个重复组，最大重复倍数为 6；适配器不静默删除；
+- 三条 `-999.999 µg/l` 负哨兵和 78 条 `>=1000 mg/l` 极端值均为 Pending review；保留用于审计，但不进入演示或异常结论；
+- 站点元数据有 22,981 行、22,946 个唯一 ID 和 35 条内容完全相同的重复行；发布页称 22,982 个站点。参数元数据有 621 行，发布页称 622 个参数。这两个差 1 的矛盾保持显式。
+
+### 4. 复核样本与端到端结果
+
+30 条复核单覆盖三种分相、两种单位、五类水体、所有质量标签、定义/未定义方法、删失符号、空间/深度边界、精确重复和 Pending review 异常；机器检查 30/30 通过，人工字段为空。48 条 demo 则只选择 Good/Fair、方法明确、非负且非极端的观测，三种分相各 16 条，保留 12 条 `<` 删失值；48/48 完成 `ug/L` 标准化或同类质量/体积换算、坐标 QC、候选异常筛查和交互地图生成。
+
+证据评分为 85/A/`normalized_analysis`。人工复核未签署只损失对应证据分，不阻断科研路由；它不能升级为 `benchmark_ready`。
 
 ## 复核边界
 
-本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质均已有一个 `normalized_analysis` 样板，但各自仍是专题、国家、区域或航次覆盖，全部保持 `partial`。水体对已登记目标元素的覆盖还明确缺 As。
+本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质都有 `normalized_analysis` 路由，但仍是专题、国家、区域、航次或自愿提交覆盖，全部保持 `partial`。水体登记目标元素现已齐全，但 As、Cu、Ni、Zn 各自仍只有一个来源，海水与淡水也必须隔离比较。

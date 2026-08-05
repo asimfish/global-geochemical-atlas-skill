@@ -50,12 +50,6 @@ def build_matrix(
         routed = route["coverage"][medium]
         selected = routed["selected_sources"]
         candidates = routed["candidate_sources"]
-        if len(selected) == 1:
-            independence = "single_source_dependency"
-        elif len(selected) > 1:
-            independence = "multiple_sources_lineage_not_yet_deduplicated"
-        else:
-            independence = "no_current_analysis_source"
         source_scopes = {
             source_id: catalog["sources"][source_id]["coverage"]["extent_class"]
             for source_id in [*selected, *candidates]
@@ -73,6 +67,24 @@ def build_matrix(
             }
         )
         requested_analytes = list(route["request"]["elements"])
+        analyte_source_counts = {
+            analyte: sum(analyte in analytes for analytes in source_target_analytes.values())
+            for analyte in requested_analytes
+        }
+        analytes_with_single_source = sorted(
+            analyte for analyte, count in analyte_source_counts.items() if count == 1
+        )
+        analytes_with_multiple_sources = sorted(
+            analyte for analyte, count in analyte_source_counts.items() if count > 1
+        )
+        if len(selected) == 1:
+            independence = "single_source_dependency"
+        elif len(selected) > 1 and analytes_with_single_source:
+            independence = "multiple_sources_but_single_source_per_analyte"
+        elif len(selected) > 1:
+            independence = "multiple_sources_lineage_not_yet_deduplicated"
+        else:
+            independence = "no_current_analysis_source"
         missing_analytes = sorted(set(requested_analytes) - set(audited_analytes))
         if not source_target_analytes:
             analyte_coverage = "unknown"
@@ -89,6 +101,9 @@ def build_matrix(
             "audited_analytes": audited_analytes,
             "missing_analytes": missing_analytes,
             "source_target_analytes": source_target_analytes,
+            "analyte_source_counts": analyte_source_counts,
+            "analytes_with_single_source": analytes_with_single_source,
+            "analytes_with_multiple_sources": analytes_with_multiple_sources,
             "selected_sources": selected,
             "candidate_sources": candidates,
             "source_scopes": source_scopes,
@@ -176,7 +191,7 @@ def render_markdown(matrix: Mapping[str, Any]) -> str:
             "",
             "- 岩石与土壤各有一个满足当前 `normalized_analysis` 条件的局部来源，因此仍是 `partial`；",
             "- 沉积物已有一个满足 `normalized_analysis` 的 MarChem 挪威海域样板，但仍是单一国家来源，因此为 `partial`；",
-            "- 水体已有 GEOTRACES IDP2025 离散海水样板，可用于 Cu、Ni、Zn；As 明确缺失，仍需另一水体来源补齐；",
+            "- 水体已由 GEOTRACES IDP2025 补 Cu、Ni、Zn，GEMStat v3 补 As；目标分析物在登记范围内齐全，但每个分析物仍只有一个来源，且海水与淡水不可直接混为同一背景；",
             "- 岩石、土壤和沉积物样板的 As、Cu、Ni、Zn 目标字段已登记；方法、时间和空间密度仍需逐源审计；",
             "- 聚合平台不计作独立证据，必须追溯并去重其上游数据集。",
             "",

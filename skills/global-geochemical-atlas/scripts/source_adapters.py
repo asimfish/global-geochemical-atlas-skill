@@ -761,6 +761,164 @@ class MarchemSnapshotAdapter(RegistryAdapter):
         return records
 
 
+class GemstatOpenArchiveAdapter(RegistryAdapter):
+    """Pinned GEMStat v3 arsenic observations plus station and method metadata."""
+
+    source_id = "gemstat-open-archive"
+    FRACTIONS = {"As-Dis": "dissolved", "As-Sus": "suspended", "As-Tot": "total"}
+
+    @staticmethod
+    def _csv_rows(path: Path, required_fields: Sequence[str]) -> Iterable[tuple[int, dict[str, str]]]:
+        try:
+            handle = path.open("r", encoding="cp1252", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"GEMStat member is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.DictReader(handle)
+            fieldnames = [str(value or "").strip() for value in (reader.fieldnames or [])]
+            missing = sorted(set(required_fields) - set(fieldnames))
+            if missing:
+                raise SourceAdapterError(f"GEMStat member {path.name} lacks fields: {', '.join(missing)}")
+            for row in reader:
+                yield reader.line_num, {
+                    str(key): str(value or "").strip()
+                    for key, value in row.items()
+                    if key is not None
+                }
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("GEMStat adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in GEMStat demo directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        entries = candidate.registry_entry["download"]["selected_members"]
+        if any(not (root / "members" / entry["filename"]).is_file() for entry in entries):
+            action = "Run acquire_gemstat_arsenic.py first" if mode == "online" else "Populate the verified cache"
+            raise SourceAdapterError(f"{action}; the pinned GEMStat v3 arsenic subset is incomplete at {root}")
+        files: list[DownloadedFile] = []
+        for entry in entries:
+            path = root / "members" / entry["filename"]
+            if path.stat().st_size != entry["bytes"] or downloader.sha256_file(path) != entry["expected_sha256"]:
+                raise SourceAdapterError(f"GEMStat selected member changed: {entry['filename']}")
+            files.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=entry["file_id"],
+                    path=path,
+                    source_url=candidate.registry_entry["download"]["archive_url"],
+                    sha256=entry["expected_sha256"],
+                    bytes=entry["bytes"],
+                    cache_status="cache_verified",
+                    retrieved_at=candidate.registry_entry["download"]["observed_at"],
+                )
+            )
+        return files
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        expected_ids = {"arsenic-observations", "methods", "parameters", "stations", "readme"}
+        if set(by_id) != expected_ids:
+            raise SourceAdapterError(f"GEMStat adapter requires five selected members; received={sorted(by_id)}")
+
+        station_rows = list(
+            self._csv_rows(by_id["stations"].path, self.candidate.registry_entry["station_required_fields"])
+        )
+        expected_counts = self.candidate.registry_entry["expected_counts"]
+        if len(station_rows) != expected_counts["station_metadata_rows"]:
+            raise SourceAdapterError("GEMStat station metadata row count changed")
+        stations: dict[str, dict[str, Any]] = {}
+        duplicate_station_rows = 0
+        for line_number, values in station_rows:
+            station_id = values.get("GEMS Station Number", "")
+            if not station_id:
+                raise SourceAdapterError("GEMStat station ID is missing")
+            locator = f"{by_id['stations'].path.name}#row={line_number}"
+            prior = stations.get(station_id)
+            if prior is None:
+                stations[station_id] = {**values, "_metadata_source_locators": [locator]}
+                continue
+            comparable = {key: value for key, value in prior.items() if key != "_metadata_source_locators"}
+            if comparable != values:
+                raise SourceAdapterError(f"GEMStat station ID has conflicting metadata: {station_id}")
+            prior["_metadata_source_locators"].append(locator)
+            duplicate_station_rows += 1
+        if (
+            len(stations) != expected_counts["station_metadata_unique_ids"]
+            or duplicate_station_rows != expected_counts["station_metadata_exact_duplicate_rows"]
+        ):
+            raise SourceAdapterError("GEMStat station duplicate reconciliation changed")
+
+        methods: dict[tuple[str, str, str], dict[str, str]] = {}
+        method_rows = list(
+            self._csv_rows(by_id["methods"].path, self.candidate.registry_entry["method_required_fields"])
+        )
+        for line_number, values in method_rows:
+            key = (values["Parameter Code"], values["Analysis Method Code"], values["Unit"])
+            if key in methods:
+                raise SourceAdapterError(f"GEMStat method key is duplicated at row {line_number}: {key}")
+            methods[key] = {**values, "_metadata_source_locator": f"{by_id['methods'].path.name}#row={line_number}"}
+        if len(methods) != self.candidate.registry_entry["expected_counts"]["method_metadata_rows"]:
+            raise SourceAdapterError("GEMStat method metadata row count changed")
+
+        parameter_rows = list(self._csv_rows(by_id["parameters"].path, ("Parameter Code", "Parameter Long Name")))
+        if len(parameter_rows) != self.candidate.registry_entry["expected_counts"]["parameter_metadata_rows"]:
+            raise SourceAdapterError("GEMStat parameter metadata row count changed")
+        parameter_codes = {values["Parameter Code"] for _, values in parameter_rows}
+        if set(self.FRACTIONS) - parameter_codes:
+            raise SourceAdapterError("GEMStat parameter metadata no longer defines all arsenic fractions")
+
+        emitted = 0
+        for line_number, values in self._csv_rows(
+            by_id["arsenic-observations"].path,
+            self.candidate.registry_entry["required_fields"],
+        ):
+            parameter_code = values.get("Parameter Code", "")
+            if parameter_code not in self.FRACTIONS:
+                raise SourceAdapterError(f"unexpected parameter in Arsenic.csv: {parameter_code}")
+            station_id = values.get("GEMS Station Number", "")
+            station = stations.get(station_id)
+            if station is None:
+                raise SourceAdapterError(f"GEMStat observation has no station metadata: {station_id}")
+            method_key = (parameter_code, values.get("Analysis Method Code", ""), values.get("Unit", ""))
+            method = methods.get(method_key)
+            if method is None:
+                raise SourceAdapterError(f"GEMStat observation has no method metadata: {method_key}")
+            source_locator = f"{by_id['arsenic-observations'].path.name}#row={line_number}"
+            native_id = "|".join(
+                values.get(field, "")
+                for field in (
+                    "GEMS Station Number",
+                    "Sample Date",
+                    "Sample Time",
+                    "Depth",
+                    "Parameter Code",
+                    "Analysis Method Code",
+                )
+            )
+            emitted += 1
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "_station_metadata": station,
+                    "_method_metadata": method,
+                    "_water_fraction": self.FRACTIONS[parameter_code],
+                    "_source_file": by_id["arsenic-observations"].path.name,
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        if emitted != self.candidate.registry_entry["expected_counts"]["arsenic_observations"]:
+            raise SourceAdapterError(f"GEMStat arsenic row count changed: {emitted}")
+
+
 class GeotracesIdp2025Adapter(RegistryAdapter):
     """Content-addressed webODV export of the IDP2025 discrete seawater collection."""
 
@@ -913,6 +1071,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
     MarchemSnapshotAdapter.source_id: MarchemSnapshotAdapter,
+    GemstatOpenArchiveAdapter.source_id: GemstatOpenArchiveAdapter,
     GeotracesIdp2025Adapter.source_id: GeotracesIdp2025Adapter,
 }
 

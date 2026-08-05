@@ -1,8 +1,21 @@
 {
-  "as_of": "2026-08-05T13:41:55Z",
+  "as_of": "2026-08-05T14:41:20Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
+      "analyte_source_counts": {
+        "As": 1,
+        "Cu": 1,
+        "Ni": 1,
+        "Zn": 1
+      },
+      "analytes_with_multiple_sources": [],
+      "analytes_with_single_source": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "audited_analytes": [
         "As",
         "Cu",
@@ -103,6 +116,19 @@
     },
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
+      "analyte_source_counts": {
+        "As": 1,
+        "Cu": 1,
+        "Ni": 1,
+        "Zn": 1
+      },
+      "analytes_with_multiple_sources": [],
+      "analytes_with_single_source": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "audited_analytes": [
         "As",
         "Cu",
@@ -227,6 +253,19 @@
     },
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
+      "analyte_source_counts": {
+        "As": 1,
+        "Cu": 1,
+        "Ni": 1,
+        "Zn": 1
+      },
+      "analytes_with_multiple_sources": [],
+      "analytes_with_single_source": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "audited_analytes": [
         "As",
         "Cu",
@@ -310,8 +349,22 @@
       "temporal_coverage": "not_yet_audited"
     },
     "water": {
-      "analyte_coverage": "partial",
+      "analyte_coverage": "complete_for_registered_targets",
+      "analyte_source_counts": {
+        "As": 1,
+        "Cu": 1,
+        "Ni": 1,
+        "Zn": 1
+      },
+      "analytes_with_multiple_sources": [],
+      "analytes_with_single_source": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "audited_analytes": [
+        "As",
         "Cu",
         "Ni",
         "Zn"
@@ -324,7 +377,6 @@
         "eea-waterbase",
         "emodnet-chemistry",
         "foregs-europe",
-        "gemstat-open-archive",
         "glorich",
         "iodp-data-systems",
         "ireland-tellus",
@@ -332,9 +384,7 @@
         "us-water-quality-portal"
       ],
       "method_metadata_coverage": "not_yet_audited",
-      "missing_analytes": [
-        "As"
-      ],
+      "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
@@ -343,6 +393,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "gemstat-open-archive",
         "geotraces-idp2025"
       ],
       "source_evidence_tiers": {
@@ -353,7 +404,7 @@
         "eea-waterbase": "D",
         "emodnet-chemistry": "D",
         "foregs-europe": "D",
-        "gemstat-open-archive": "D",
+        "gemstat-open-archive": "A",
         "geotraces-idp2025": "A",
         "glorich": "D",
         "iodp-data-systems": "D",
@@ -361,7 +412,7 @@
         "pangaea-repository": "D",
         "us-water-quality-portal": "D"
       },
-      "source_independence": "single_source_dependency",
+      "source_independence": "multiple_sources_but_single_source_per_analyte",
       "source_scopes": {
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
@@ -379,6 +430,9 @@
         "us-water-quality-portal": "national_partial"
       },
       "source_target_analytes": {
+        "gemstat-open-archive": [
+          "As"
+        ],
         "geotraces-idp2025": [
           "Cu",
           "Ni",
@@ -393,7 +447,7 @@
         "eea-waterbase": "discovery",
         "emodnet-chemistry": "discovery",
         "foregs-europe": "discovery",
-        "gemstat-open-archive": "discovery",
+        "gemstat-open-archive": "normalized_analysis",
         "geotraces-idp2025": "normalized_analysis",
         "glorich": "discovery",
         "iodp-data-systems": "discovery",

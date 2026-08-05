@@ -13,7 +13,7 @@ import re
 import sys
 import tempfile
 from collections import Counter
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
@@ -610,6 +610,144 @@ def geotraces_demo(
     return rows, evidence_rows, len(selected_source_rows)
 
 
+def gemstat_demo(
+    records: Iterable[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    if observation_limit != 48:
+        raise DemoError("GEMStat demo is fixed at 48 observations for balanced fraction/unit coverage")
+    observation_file = files.get("Arsenic.csv")
+    if observation_file is None:
+        raise DemoError("GEMStat arsenic member is missing")
+    bucket_targets = {
+        ("As-Dis", "mg/l"): 8,
+        ("As-Dis", "µg/l"): 8,
+        ("As-Sus", "Lake station"): 8,
+        ("As-Sus", "River station"): 8,
+        ("As-Tot", "mg/l"): 8,
+        ("As-Tot", "µg/l"): 8,
+    }
+    buckets: dict[tuple[str, str], dict[str, list[RawRecord]]] = {
+        key: {"censored": [], "reported": []} for key in bucket_targets
+    }
+    for record in records:
+        fields = record.fields
+        station = fields.get("_station_metadata")
+        if not isinstance(station, Mapping):
+            raise DemoError(f"GEMStat station join is missing: {record.source_locator}")
+        value = _reported_float(fields.get("Value"))
+        if (
+            value is None
+            or value < 0
+            or fields.get("Data Quality") not in {"Good", "Fair"}
+            or fields.get("Analysis Method Code") == "0"
+            or (fields.get("Unit") == "mg/l" and value >= 1000)
+        ):
+            continue
+        parameter = str(fields.get("Parameter Code") or "")
+        dimension = str(station.get("Water Type") if parameter == "As-Sus" else fields.get("Unit") or "")
+        key = (parameter, dimension)
+        if key not in buckets:
+            continue
+        qualifier_bucket = "censored" if fields.get("Value Flags") == "<" else "reported"
+        capacity = 2 if qualifier_bucket == "censored" else bucket_targets[key]
+        if len(buckets[key][qualifier_bucket]) < capacity:
+            buckets[key][qualifier_bucket].append(record)
+
+    selected: list[RawRecord] = []
+    for key, target in bucket_targets.items():
+        censored = buckets[key]["censored"][:2]
+        reported = buckets[key]["reported"][: target - len(censored)]
+        cell = [*censored, *reported]
+        if len(cell) != target:
+            raise DemoError(f"GEMStat demo bucket {key} produced {len(cell)} rows, expected {target}")
+        selected.extend(cell)
+    selected.sort(key=lambda item: int(item.source_locator.partition("#row=")[2]))
+
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    for record in selected:
+        fields = record.fields
+        station = fields["_station_metadata"]
+        method = fields["_method_metadata"]
+        raw_value = str(fields["Value"])
+        unit = str(fields["Unit"])
+        qualifier = str(fields["Value Flags"])
+        fraction = str(fields["_water_fraction"])
+        depth = str(fields["Depth"])
+        sampled_at = str(fields["Sample Date"])
+        if fields.get("Sample Time"):
+            sampled_at += "T" + str(fields["Sample Time"])
+        sample_id = "|".join(
+            (str(fields["GEMS Station Number"]), sampled_at, depth, str(fields["Parameter Code"]))
+        )
+        record_id = stable_record_id(
+            record.source_id, record.source_record_id, "As", raw_value, unit
+        )
+        method_name = str(method.get("Method Name") or method.get("Method Description") or "")
+        rows.append(
+            {
+                "record_id": record_id,
+                "source_record_id": record.source_record_id,
+                "sample_id": sample_id,
+                "element_or_analyte": "As",
+                "value": raw_value,
+                "unit": unit,
+                "medium": "water",
+                "measurement_basis": f"freshwater_{fraction}_fraction",
+                "value_qualifier": qualifier,
+                "detection_limit": raw_value if qualifier == "<" else "",
+                "detection_limit_unit": unit if qualifier == "<" else "",
+                "latitude": str(station["Latitude"]),
+                "longitude": str(station["Longitude"]),
+                "source_crs": "EPSG:4326",
+                "coordinate_uncertainty_m": "",
+                "geologic_unit": "",
+                "analytical_method": method_name,
+                "digestion_or_extraction": f"GEMStat {fraction} operational fraction",
+                "laboratory": "",
+                "license": candidate.license_id,
+                "source_tier": "official_international",
+                "source_id": record.source_id,
+                "source_locator": record.source_locator,
+                "sampled_at": sampled_at,
+                "sample_depth_min_m": depth,
+                "sample_depth_max_m": depth,
+                "grain_fraction": "",
+            }
+        )
+        entry = _base_evidence(record, observation_file, candidate, record_id, "As")
+        entry.update(
+            {
+                "article_citations": [candidate.registry_entry["citation"]],
+                "article_dois": [candidate.dataset_doi],
+                "selection_rule": (
+                    "Good/Fair source quality; defined method; nonnegative and nonextreme; balanced dissolved/suspended/total, "
+                    "mg/l and µg/l where available, lake/river suspended fraction, and up to two censored values per cell"
+                ),
+                "station_id": fields["GEMS Station Number"],
+                "country": station["Country Name"],
+                "water_type": station["Water Type"],
+                "sample_depth_m": depth,
+                "water_fraction": fraction,
+                "parameter_code": fields["Parameter Code"],
+                "analysis_method_code": fields["Analysis Method Code"],
+                "analysis_method_name": method_name,
+                "method_source_locator": method.get("_metadata_source_locator"),
+                "station_source_locators": station.get("_metadata_source_locators"),
+                "source_value_flag": qualifier,
+                "source_data_quality": fields["Data Quality"],
+                "scientific_note": (
+                    "Dissolved, suspended and total arsenic fractions are not interchangeable. Censored values retain their limits."
+                ),
+            }
+        )
+        evidence_rows.append(entry)
+    return rows, evidence_rows, len({record.source_record_id for record in selected})
+
+
 @contextmanager
 def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[DownloadedFile]]]:
     adapter = get_adapter(args.source)
@@ -649,7 +787,8 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
 
     with acquired_source(args) as (candidate, downloaded):
         adapter = get_adapter(args.source)
-        raw_records = list(adapter.parse(downloaded))
+        raw_records: Sequence[RawRecord] | Iterable[RawRecord]
+        raw_records = adapter.parse(downloaded) if args.source == "gemstat-open-archive" else list(adapter.parse(downloaded))
         files = {item.path.name: item for item in downloaded}
         if args.source == "georoc-archaean":
             references = {item.path.name: _georoc_reference_map(item.path) for item in downloaded}
@@ -666,6 +805,10 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             )
         elif args.source == "geotraces-idp2025":
             rows, evidence, selected_source_rows = geotraces_demo(
+                raw_records, files, candidate, args.observations
+            )
+        elif args.source == "gemstat-open-archive":
+            rows, evidence, selected_source_rows = gemstat_demo(
                 raw_records, files, candidate, args.observations
             )
         else:
@@ -697,7 +840,11 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         },
         "generation_request": {
             "observations": args.observations,
-            "analytes": list(("Cu", "Ni", "Zn") if args.source == "geotraces-idp2025" else ANALYTES),
+            "analytes": list(
+                ("Cu", "Ni", "Zn") if args.source == "geotraces-idp2025"
+                else ("As",) if args.source == "gemstat-open-archive"
+                else ANALYTES
+            ),
             "mode": args.mode,
         },
         "source_files": [
@@ -711,7 +858,11 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             for item in downloaded
         ],
         "record_counts": {
-            "raw_source_rows": len(raw_records),
+            "raw_source_rows": (
+                candidate.registry_entry["expected_counts"]["arsenic_observations"]
+                if args.source == "gemstat-open-archive"
+                else len(raw_records)
+            ),
             "selected_source_rows": selected_source_rows,
             "emitted_observations": len(rows),
         },
@@ -725,6 +876,15 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                     "Accreditation status varies by batch and remains attached to observation evidence.",
                 ]
                 if args.source == "norway-marchem"
+                else []
+            ),
+            *(
+                [
+                    "GEMStat v3 arsenic covers 33 contributing countries unevenly and is not a uniform global freshwater grid.",
+                    "Dissolved, suspended and total arsenic fractions remain separate; this demo uses only rows with a defined method and Good/Fair source quality.",
+                    "Censored observations retain their source limits; Pending review, Suspect, negative sentinel and extreme mg/l rows are excluded.",
+                ]
+                if args.source == "gemstat-open-archive"
                 else []
             ),
             *(
@@ -748,7 +908,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--source",
         required=True,
-        choices=("georoc-archaean", "usgs-conus-soil", "norway-marchem", "geotraces-idp2025"),
+        choices=(
+            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
+            "geotraces-idp2025", "gemstat-open-archive",
+        ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)

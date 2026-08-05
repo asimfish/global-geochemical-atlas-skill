@@ -46,7 +46,8 @@ source_evidence_score = 100 × Σ awarded_points / Σ applicable_weights
 | `georoc-archaean` | 85 / A | `normalized_analysis` | 30 条人工复核、方法/QC 完整率审计 |
 | `usgs-conus-soil` | 85 / A | `normalized_analysis` | 跨三土层 30 条人工复核、方法/QC 完整率审计 |
 | `norway-marchem` | 85 / A | `normalized_analysis` | 30 条人工复核 |
-| `geotraces-idp2025` | 85 / A | `normalized_analysis` | 30 条人工复核、贡献者/方法完整率审计；水体 As 需另一来源 |
+| `geotraces-idp2025` | 85 / A | `normalized_analysis` | 30 条人工复核、贡献者/方法完整率审计；As 由 GEMStat 淡水路由补充但背景必须隔离 |
+| `gemstat-open-archive` | 85 / A | `normalized_analysis` | 30 条人工复核；大量方法代码 0，需按方法完备性限制可比较子集 |
 
 机器基线保存在 `assets/source_evidence_scores.json`，必须能由评分命令逐字重建。
 

@@ -128,14 +128,14 @@ def derive_access_status(entry: Mapping[str, Any]) -> str:
         if isinstance(item, Mapping)
     ]
     combined = " ".join(accesses)
+    if any(token in combined for token in ("open", "free_download", "public")):
+        return "open"
     if "point_data_on_request" in combined:
         return "restricted"
     if "account" in combined or "login" in combined:
         return "account_required"
     if any(token in combined for token in ("acceptance", "registration", "moratorium", "form_or_station_limit")):
         return "application_required"
-    if any(token in combined for token in ("open", "free_download", "public")):
-        return "open"
     return "unavailable"
 
 
@@ -183,6 +183,27 @@ def _registry_integrity(registry_entry: Mapping[str, Any] | None) -> dict[str, A
             "Every registered file has a pinned SHA-256."
             if valid
             else "One or more registered files lack a pinned SHA-256.",
+        )
+    selected_members = download.get("selected_members")
+    if isinstance(selected_members, list) and selected_members:
+        valid = all(
+            isinstance(item, Mapping)
+            and isinstance(item.get("bytes"), int)
+            and isinstance(item.get("expected_sha256"), str)
+            and len(item["expected_sha256"]) == 64
+            and isinstance(item.get("range_start"), int)
+            and isinstance(item.get("range_end"), int)
+            and item["range_end"] >= item["range_start"]
+            and isinstance(item.get("range_sha256"), str)
+            and len(item["range_sha256"]) == 64
+            for item in selected_members
+        )
+        return _dimension(
+            "verified" if valid else "conflict",
+            weight,
+            "Every selected ZIP member is pinned by byte range plus compressed and decoded SHA-256."
+            if valid
+            else "One or more selected ZIP members lack a valid range or SHA-256 contract.",
         )
     members = download.get("members")
     if isinstance(members, list) and members:

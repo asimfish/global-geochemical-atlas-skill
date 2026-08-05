@@ -482,6 +482,182 @@
         "This dataset version is a project content-addressed dynamic snapshot, not a publisher DOI or immutable publisher release."
       ]
     },
+    "gemstat-open-archive": {
+      "adapter": "gemstat_v3_arsenic_range",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 arsenic subset",
+      "publisher": "UNEP GEMS/Water Programme, GEMS/Water Data Centre and German Federal Institute of Hydrology",
+      "dataset_doi": "10.5281/zenodo.18459694",
+      "concept_doi": "10.5281/zenodo.13881899",
+      "dataset_version": "v3",
+      "release_date": "2026-02-02",
+      "landing_page": "https://zenodo.org/records/18459694",
+      "metadata_url": "https://zenodo.org/api/records/18459694",
+      "media": [
+        "water"
+      ],
+      "geographic_scope": "global-freshwater-partial",
+      "download": {
+        "mode": "pinned-zip-member-byte-ranges",
+        "archive_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1",
+        "archive_filename": "GFQA_v3.zip",
+        "archive_bytes": 201278791,
+        "publisher_checksum": {
+          "algorithm": "md5",
+          "value": "00f3ea19ce529753977eb3aeb08fbc47"
+        },
+        "observed_at": "2026-08-05T14:41:20Z",
+        "zip_member_count": 84,
+        "selected_members": [
+          {
+            "file_id": "arsenic-observations",
+            "filename": "Arsenic.csv",
+            "range_start": 3033466,
+            "range_end": 5138990,
+            "range_sha256": "64d67a154816b58c06569c38d74c5d1c1cf3fe4a265a7127f6248a0a06b2386f",
+            "bytes": 30585144,
+            "expected_sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+          },
+          {
+            "file_id": "methods",
+            "filename": "GEMStat_methods_metadata.csv",
+            "range_start": 37150286,
+            "range_end": 37236391,
+            "range_sha256": "b57e5a891c86df10467bf0a4292411646e465c42829b6a6812b752bd23b52eea",
+            "bytes": 521959,
+            "expected_sha256": "fba3a0903228811def4cd7910298ccd1965b64b76fbdca90445988eec08ffbb3"
+          },
+          {
+            "file_id": "parameters",
+            "filename": "GEMStat_parameter_metadata.csv",
+            "range_start": 37236392,
+            "range_end": 37279436,
+            "range_sha256": "b65ea5a45a0439b53a95694986e30df2ea7f0b4dca0c78c01302f6d3cfb85df5",
+            "bytes": 146762,
+            "expected_sha256": "46f9ddc6ed181a8a3a685fe590143d847e20960e67f20aa7dd9f4347f2c9b518"
+          },
+          {
+            "file_id": "stations",
+            "filename": "GEMStat_station_metadata.csv",
+            "range_start": 37279437,
+            "range_end": 37914330,
+            "range_sha256": "aed790aa81b1801bfe16da00e1b1a4455d938829d885d374a3bd0b5612a33520",
+            "bytes": 3571887,
+            "expected_sha256": "978d3682d4fc702e1dd9c9e4e148ca586899002b551018dbfc3e40c9f7e1695d"
+          },
+          {
+            "file_id": "readme",
+            "filename": "README_output_format.txt",
+            "range_start": 171533195,
+            "range_end": 171536953,
+            "range_sha256": "4849149f512a9ef8a5c0c32a64821c59a3f1132e73412efe7568aeb00525609f",
+            "bytes": 16727,
+            "expected_sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d"
+          }
+        ],
+        "acquisition_script": "scripts/acquire_gemstat_arsenic.py",
+        "snapshot_manifest": "fixtures/four-media/water/gemstat-open-archive/snapshot_manifest.json"
+      },
+      "required_fields": [
+        "GEMS Station Number",
+        "Sample Date",
+        "Sample Time",
+        "Depth",
+        "Parameter Code",
+        "Analysis Method Code",
+        "Value Flags",
+        "Value",
+        "Unit",
+        "Data Quality"
+      ],
+      "station_required_fields": [
+        "GEMS Station Number",
+        "Country Name",
+        "Water Type",
+        "Latitude",
+        "Longitude"
+      ],
+      "method_required_fields": [
+        "Parameter Code",
+        "Analysis Method Code",
+        "Unit",
+        "Parameter Long Name",
+        "Method Name",
+        "Method Type",
+        "Method Number",
+        "Method Source",
+        "Method Description"
+      ],
+      "target_analytes": {
+        "As": [
+          "As-Dis",
+          "As-Sus",
+          "As-Tot"
+        ]
+      },
+      "expected_counts": {
+        "arsenic_observations": 492999,
+        "arsenic_station_count": 15621,
+        "arsenic_country_count": 33,
+        "arsenic_parameter_counts": {
+          "As-Dis": 188961,
+          "As-Sus": 5439,
+          "As-Tot": 298599
+        },
+        "unit_counts": {
+          "mg/l": 453413,
+          "µg/l": 39586
+        },
+        "value_flag_counts": {
+          "": 289636,
+          "<": 203344,
+          ">": 19
+        },
+        "data_quality_counts": {
+          "Fair": 466710,
+          "Good": 4557,
+          "Pending review": 1649,
+          "Suspect": 294,
+          "Unknown": 19789
+        },
+        "water_type_counts": {
+          "Groundwater station": 30671,
+          "Lake station": 43253,
+          "Reservoir station": 13886,
+          "River station": 402080,
+          "Wetland station": 3109
+        },
+        "method_combinations_used": 24,
+        "undefined_method_observations": 449714,
+        "unmatched_method_rows": 0,
+        "unmatched_station_rows": 0,
+        "exact_duplicate_extra_observations": 5655,
+        "exact_duplicate_groups": 5513,
+        "maximum_exact_duplicate_multiplicity": 6,
+        "pending_review_negative_sentinels": 3,
+        "pending_review_extreme_mg_l": 78,
+        "station_metadata_rows": 22981,
+        "station_metadata_unique_ids": 22946,
+        "station_metadata_exact_duplicate_rows": 35,
+        "parameter_metadata_rows": 621,
+        "method_metadata_rows": 2228
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Heinle, M., Lisniak, D., and Saile, P. (2026). UNEP GEMS/Water Global Freshwater Quality Archive, v3. Zenodo. https://doi.org/10.5281/zenodo.18459694",
+      "redistribution": "Use for attributed research analysis. The complete third-party archive remains outside Git; this project materializes only a verified arsenic and metadata subset.",
+      "scientific_notes": [
+        "As-Dis, As-Sus and As-Tot are distinct dissolved, suspended and total fractions and must not be merged silently.",
+        "The arsenic subset contains both mg/l and µg/l and preserves less-than and greater-than censoring flags.",
+        "Most arsenic rows use undefined analysis method code 0; method completeness therefore remains a material comparison limitation.",
+        "Three -999.999 and 78 values at or above 1000 mg/l are marked Pending review and must not enter normalized demos or anomaly claims.",
+        "Station metadata contain 35 exact duplicate rows across 35 IDs; the adapter preserves both source locators but uses one identical station fact set.",
+        "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 station rows and 621 parameter rows; the one-record differences remain explicit.",
+        "GEMStat is voluntarily contributed and geographically uneven; the arsenic subset covers 33 countries and is not uniform global freshwater coverage."
+      ]
+    },
     "geotraces-idp2025": {
       "adapter": "geotraces_webodv_snapshot",
       "title": "GEOTRACES Intermediate Data Product 2025: discrete seawater",

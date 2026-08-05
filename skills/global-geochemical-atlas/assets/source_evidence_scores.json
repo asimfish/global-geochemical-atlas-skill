@@ -13,7 +13,7 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-05T13:41:55Z",
+  "scored_at": "2026-08-05T14:41:20Z",
   "source_count": 32,
   "sources": {
     "australia-ngsa": {
@@ -193,7 +193,7 @@
       ]
     },
     "bgs-gbase": {
-      "access_status": "restricted",
+      "access_status": "open",
       "attribution_note": "Derived grids are OGL; underpinning survey point observations require a separate BGS licence and are not open-only production data.",
       "conflicts": [],
       "evidence_tier": "D",
@@ -275,7 +275,6 @@
       "source_id": "bgs-gbase",
       "use_mode": "discovery",
       "use_mode_limitations": [
-        "access_status=restricted",
         "research_use_status=permission_required"
       ]
     },
@@ -717,7 +716,7 @@
       ]
     },
     "emodnet-chemistry": {
-      "access_status": "application_required",
+      "access_status": "open",
       "attribution_note": "CDI records include both freely downloadable and restricted data; harmonised ERDDAP collections are compiled from unrestricted measurements but still require originator lineage.",
       "conflicts": [],
       "evidence_tier": "D",
@@ -800,7 +799,6 @@
       "source_id": "emodnet-chemistry",
       "use_mode": "discovery",
       "use_mode_limitations": [
-        "access_status=application_required",
         "research_use_status=permission_required"
       ]
     },
@@ -1064,45 +1062,46 @@
       ]
     },
     "gemstat-open-archive": {
-      "access_status": "application_required",
-      "attribution_note": "Only batches explicitly released as CC BY 4.0 or equivalent may enter open production outputs.",
+      "access_status": "open",
+      "attribution_note": "The v3 Zenodo record and included README identify CC BY 4.0; retain archive citation and record DOI.",
       "conflicts": [],
-      "evidence_tier": "D",
+      "evidence_tier": "A",
       "missing_dimensions": [
-        "file_record_integrity",
-        "schema_semantics",
-        "method_qc_metadata",
-        "adapter_reproducibility",
         "human_review"
       ],
-      "research_use_status": "permission_required",
+      "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
       "source_evidence_dimensions": {
         "adapter_reproducibility": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No callable adapter and frozen parsing contract are registered.",
-          "status": "missing",
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
-          "awarded_points": 0.0,
+          "awarded_points": 15.0,
           "evidence": [],
-          "note": "No frozen file or archive inventory is registered.",
-          "status": "missing",
+          "note": "Every selected ZIP member is pinned by byte range plus compressed and decoded SHA-256.",
+          "status": "verified",
           "weight": 15
         },
         "human_review": {
           "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
+          "evidence": [
+            "fixtures/four-media/water/gemstat-open-archive/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
           "status": "missing",
           "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
           "evidence": [
+            "https://zenodo.org/records/18459694",
             "https://gemstat.org/data-gemstat/data-portal/",
             "https://gemstat.org/about/data-availability/",
             "https://gemstat.org/data-gemstat/data-submission/"
@@ -1112,45 +1111,49 @@
           "weight": 10
         },
         "method_qc_metadata": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified record-level method or QC inventory is available.",
-          "status": "missing",
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
           "weight": 10
         },
         "provenance": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [
+            "https://zenodo.org/records/18459694",
             "https://gemstat.org/data-gemstat/data-portal/",
             "https://gemstat.org/about/data-availability/",
             "https://gemstat.org/data-gemstat/data-submission/",
-            "doi:10.5281/zenodo.13881899"
+            "doi:10.5281/zenodo.18459694"
           ],
-          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
-          "status": "partial",
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
           "weight": 15
         },
         "schema_semantics": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified field mapping to the canonical schema is recorded.",
-          "status": "missing",
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
           "weight": 15
         },
         "version_snapshot": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [],
-          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
-          "status": "partial",
+          "note": "A concrete publisher version is pinned: v3",
+          "status": "verified",
           "weight": 15
         }
       },
-      "source_evidence_score": 25.0,
+      "source_evidence_score": 85.0,
       "source_id": "gemstat-open-archive",
-      "use_mode": "discovery",
+      "use_mode": "normalized_analysis",
       "use_mode_limitations": [
-        "access_status=application_required",
-        "research_use_status=permission_required"
+        "30-record human review is incomplete"
       ]
     },
     "georoc-archaean": {
@@ -1512,7 +1515,7 @@
       ]
     },
     "iodp-data-systems": {
-      "access_status": "application_required",
+      "access_status": "open",
       "attribution_note": "Data access, moratorium status, citations and policies vary by program, science operator, expedition and derived publication.",
       "conflicts": [],
       "evidence_tier": "D",
@@ -1593,7 +1596,6 @@
       "source_id": "iodp-data-systems",
       "use_mode": "discovery",
       "use_mode_limitations": [
-        "access_status=application_required",
         "research_use_status=permission_required"
       ]
     },
@@ -2042,7 +2044,7 @@
       ]
     },
     "nz-petlab": {
-      "access_status": "account_required",
+      "access_status": "open",
       "attribution_note": "A free account is required for export; download and redistribution terms need review.",
       "conflicts": [],
       "evidence_tier": "D",
@@ -2124,7 +2126,6 @@
       "source_id": "nz-petlab",
       "use_mode": "discovery",
       "use_mode_limitations": [
-        "access_status=account_required",
         "research_use_status=unknown"
       ]
     },
@@ -2825,16 +2826,16 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 4,
+      "A": 5,
       "B": 0,
       "C": 0,
-      "D": 28,
+      "D": 27,
       "U": 0
     },
     "use_modes": {
       "benchmark_ready": 0,
-      "discovery": 28,
-      "normalized_analysis": 4,
+      "discovery": 27,
+      "normalized_analysis": 5,
       "raw_observation": 0
     }
   }

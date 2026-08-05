@@ -4,23 +4,27 @@
 from __future__ import annotations
 
 import argparse
+import binascii
 import copy
 import csv
 import hashlib
 import io
 import json
 import sqlite3
+import struct
 import subprocess
 import sys
 import tempfile
 import urllib.error
 import zipfile
+import zlib
 from collections import Counter
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import acquire_gemstat_arsenic as gemstat_acquisition
 import build_index as index_builder
 import benchmark_index
 import cache_control
@@ -104,14 +108,26 @@ def check_d1(output_dir: Path) -> list[str]:
     registry = source_contracts.load_source_registry()
     require(
         set(registry["sources"])
-        == {"georoc-archaean", "usgs-conus-soil", "norway-marchem", "geotraces-idp2025"},
-        "D1 registry freezes one operational reference source for each required medium",
+        == {
+            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
+            "geotraces-idp2025", "gemstat-open-archive",
+        },
+        "D1 registry freezes four-media references plus a complementary freshwater arsenic route",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
     require(
         georoc.version == "12.0" and georoc.license_id == "CC-BY-SA-4.0",
         "D1 GEOROC candidate binds the verified version and license",
+        checks,
+    )
+    gemstat = source_contracts.registry_candidate("gemstat-open-archive")
+    require(
+        gemstat.version == "v3"
+        and set(gemstat.registry_entry["target_analytes"]) == {"As"}
+        and gemstat.registry_entry["expected_counts"]["arsenic_observations"] == 492999
+        and len(gemstat.registry_entry["download"]["selected_members"]) == 5,
+        "D1 GEMStat candidate pins the official v3 arsenic and metadata member subset",
         checks,
     )
     usgs = source_contracts.registry_candidate("usgs-conus-soil")
@@ -159,8 +175,11 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         {entry["source_id"] for entry in route["selected_sources"]}
-        == {"georoc-archaean", "usgs-conus-soil", "norway-marchem", "geotraces-idp2025"},
-        "D1 V3 router selects one normalized-analysis source for each required medium",
+        == {
+            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
+            "geotraces-idp2025", "gemstat-open-archive",
+        },
+        "D1 V3 router selects normalized-analysis routes for all media and water target analytes",
         checks,
     )
     require(
@@ -172,8 +191,8 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        {"gemstat-open-archive", "usgs-ngdb"}
-        <= {entry["source_id"] for entry in route["review_sources"]},
+        "usgs-ngdb" in {entry["source_id"] for entry in route["review_sources"]}
+        and "gemstat-open-archive" not in {entry["source_id"] for entry in route["review_sources"]},
         "D1 router exposes relevant candidates and their review blockers",
         checks,
     )
@@ -220,12 +239,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 4, "B": 0, "C": 0, "D": len(catalog["sources"]) - 4, "U": 0},
+            "evidence_tiers": {"A": 5, "B": 0, "C": 0, "D": len(catalog["sources"]) - 5, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 4,
+                "normalized_analysis": 5,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 4,
+                "discovery": len(catalog["sources"]) - 5,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -238,6 +257,61 @@ def check_d1(output_dir: Path) -> list[str]:
         and evidence["sources"]["georoc-archaean"]["source_evidence_dimensions"]["human_review"]["status"]
         == "missing",
         "D1 scores GEOROC highly without falsely marking the pending human review complete",
+        checks,
+    )
+    require(
+        evidence["sources"]["gemstat-open-archive"]["source_evidence_score"] == 85
+        and evidence["sources"]["gemstat-open-archive"]["evidence_tier"] == "A"
+        and evidence["sources"]["gemstat-open-archive"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["gemstat-open-archive"]["source_evidence_dimensions"]["human_review"]["status"]
+        == "missing",
+        "D1 credits the range-verified GEMStat adapter without treating unsigned review as a hard rejection",
+        checks,
+    )
+    decoded_fixture = b"station,value\nA,1\n"
+    compressor = zlib.compressobj(level=9, wbits=-15)
+    compressed_fixture = compressor.compress(decoded_fixture) + compressor.flush()
+    member_name = b"test.csv"
+    fixture_crc = binascii.crc32(decoded_fixture) & 0xFFFFFFFF
+    range_fixture = struct.pack(
+        "<IHHHHHIIIHH",
+        0x04034B50,
+        0,
+        0,
+        8,
+        0,
+        0,
+        fixture_crc,
+        len(compressed_fixture),
+        len(decoded_fixture),
+        len(member_name),
+        0,
+    ) + member_name + compressed_fixture
+    range_specification = {
+        "name": "test.csv",
+        "range_start": 0,
+        "range_end": len(range_fixture) - 1,
+        "range_sha256": hashlib.sha256(range_fixture).hexdigest(),
+        "compressed_bytes": len(compressed_fixture),
+        "uncompressed_bytes": len(decoded_fixture),
+        "crc32": f"{fixture_crc:08x}",
+        "sha256": hashlib.sha256(decoded_fixture).hexdigest(),
+    }
+    original_fetch = gemstat_acquisition.fetch
+    original_sleep = gemstat_acquisition.time.sleep
+    partial_then_complete = iter((range_fixture[:-2], range_fixture))
+    gemstat_acquisition.fetch = lambda *args, **kwargs: next(partial_then_complete)
+    gemstat_acquisition.time.sleep = lambda _: None
+    try:
+        fetched_range, decoded_range = gemstat_acquisition.fetch_verified_range(
+            range_specification, timeout=1, retries=2
+        )
+    finally:
+        gemstat_acquisition.fetch = original_fetch
+        gemstat_acquisition.time.sleep = original_sleep
+    require(
+        fetched_range == range_fixture and decoded_range == decoded_fixture,
+        "D1 GEMStat acquisition retries a truncated HTTP range until content verification passes",
         checks,
     )
     require(
@@ -262,8 +336,8 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         audit["status"] == "PASS"
         and audit["summary"]["evidence_tiers"] == evidence["summary"]["evidence_tiers"]
-        and audit["sources"]["gemstat-open-archive"]["operational_status"] == "restricted"
-        and audit["sources"]["gemstat-open-archive"]["evidence_tier"] == "D",
+        and audit["sources"]["gemstat-open-archive"]["operational_status"] == "available"
+        and audit["sources"]["gemstat-open-archive"]["evidence_tier"] == "A",
         "D1 audit separates operational research-use restrictions from progressive evidence tier",
         checks,
     )
@@ -510,6 +584,9 @@ def check_d1(output_dir: Path) -> list[str]:
         "geotraces-idp2025": json_value(
             SKILL_DIR / "fixtures" / "four-media" / "water" / "geotraces-idp2025" / "human_review.json"
         ),
+        "gemstat-open-archive": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "water" / "gemstat-open-archive" / "human_review.json"
+        ),
     }
     require(
         all(
@@ -520,7 +597,7 @@ def check_d1(output_dir: Path) -> list[str]:
             and all(record["automated_status"] == "PASS" for record in review["records"])
             for review in prepared_reference_reviews.values()
         ),
-        "D1 prepares 30 passing GEOROC, USGS and GEOTRACES comparisons without auto-signing them",
+        "D1 prepares 30 passing reference comparisons without auto-signing them",
         checks,
     )
     require(
@@ -544,8 +621,20 @@ def check_d1(output_dir: Path) -> list[str]:
         )
         > 0
         and {item["quality_flag"] for record in prepared_reference_reviews["geotraces-idp2025"]["records"] for item in record["adapter_observations"]}
-        == {"1", "2", "3", "4", "5", "6"},
-        "D1 review selection spans GEOROC members, all soil layers, missing values and GEOTRACES QC edges",
+        == {"1", "2", "3", "4", "5", "6"}
+        and {
+            item["water_fraction"]
+            for record in prepared_reference_reviews["gemstat-open-archive"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"dissolved", "suspended", "total"}
+        and {
+            item["data_quality"]
+            for record in prepared_reference_reviews["gemstat-open-archive"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"Fair", "Good", "Pending review", "Suspect", "Unknown"},
+        "D1 review selection spans source members, layers, missing values, QC and GEMStat fraction/quality edges",
         checks,
     )
     require(
@@ -570,9 +659,13 @@ def check_d1(output_dir: Path) -> list[str]:
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
         and matrix["cells"]["rock"]["analyte_coverage"] == "complete_for_registered_targets"
-        and matrix["cells"]["water"]["analyte_coverage"] == "partial"
-        and matrix["cells"]["water"]["missing_analytes"] == ["As"],
-        "D1 coverage matrix reports complete registered targets and the explicit water arsenic gap",
+        and matrix["cells"]["water"]["analyte_coverage"] == "complete_for_registered_targets"
+        and matrix["cells"]["water"]["missing_analytes"] == []
+        and matrix["cells"]["water"]["source_independence"]
+        == "multiple_sources_but_single_source_per_analyte"
+        and matrix["cells"]["water"]["analyte_source_counts"]
+        == {"As": 1, "Cu": 1, "Ni": 1, "Zn": 1},
+        "D1 coverage matrix closes the registered water analyte gap without overclaiming independent replication",
         checks,
     )
     archive_bundle = json_value(SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json")
@@ -776,6 +869,7 @@ def check_d1(output_dir: Path) -> list[str]:
         "usgs-conus-soil": 48,
         "norway-marchem": 112,
         "geotraces-idp2025": 48,
+        "gemstat-open-archive": 48,
     }
     for source_id, expected_demo_count in expected_demo_counts.items():
         demo_dir = SOURCE_DEMOS / source_id
@@ -810,7 +904,11 @@ def check_d1(output_dir: Path) -> list[str]:
             f"D1 {source_id} fixture preserves record-level evidence linkage",
             checks,
         )
-        demo_analytes = ("Cu", "Ni", "Zn") if source_id == "geotraces-idp2025" else ("As", "Cu", "Ni", "Zn")
+        demo_analytes = (
+            ("Cu", "Ni", "Zn") if source_id == "geotraces-idp2025"
+            else ("As",) if source_id == "gemstat-open-archive"
+            else ("As", "Cu", "Ni", "Zn")
+        )
         per_analyte_count = expected_demo_count // len(demo_analytes)
         require(
             Counter(row["element_or_analyte"] for row in demo_rows)
@@ -825,6 +923,27 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         all(item.get("article_citations") for item in georoc_evidence),
         "D1 GEOROC fixture resolves citation IDs to original reference text",
+        checks,
+    )
+    gemstat_demo_rows = csv_rows(SOURCE_DEMOS / "gemstat-open-archive" / "demo_input.csv")
+    gemstat_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "gemstat-open-archive" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        Counter(row["measurement_basis"] for row in gemstat_demo_rows)
+        == Counter(
+            {
+                "freshwater_dissolved_fraction": 16,
+                "freshwater_suspended_fraction": 16,
+                "freshwater_total_fraction": 16,
+            }
+        )
+        and {row["unit"] for row in gemstat_demo_rows} == {"mg/l", "µg/l"}
+        and {row["value_qualifier"] for row in gemstat_demo_rows} == {"", "<"}
+        and {item["source_data_quality"] for item in gemstat_evidence} <= {"Good", "Fair"}
+        and all(item["analysis_method_code"] != "0" for item in gemstat_evidence),
+        "D1 GEMStat demo balances fractions while excluding undefined-method and low-quality records",
         checks,
     )
     usgs_evidence = [
