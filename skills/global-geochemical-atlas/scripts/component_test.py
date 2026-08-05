@@ -481,6 +481,60 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 review sheet awaits a named reviewer and includes missing and censored edge cases",
         checks,
     )
+    prepared_reference_reviews = {
+        "georoc-archaean": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "rock" / "georoc-archaean" / "human_review.json"
+        ),
+        "usgs-conus-soil": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "usgs-conus-soil" / "human_review.json"
+        ),
+    }
+    require(
+        all(
+            review["status"] == "prepared"
+            and review["prepared_record_count"] == 30
+            and review["automated_pass_count"] == 30
+            and review["completed_record_count"] == 0
+            and all(record["automated_status"] == "PASS" for record in review["records"])
+            for review in prepared_reference_reviews.values()
+        ),
+        "D1 prepares 30 passing GEOROC and USGS comparisons without auto-signing either source",
+        checks,
+    )
+    require(
+        len(
+            {
+                record["source_locator"].split("#", 1)[0]
+                for record in prepared_reference_reviews["georoc-archaean"]["records"]
+            }
+        )
+        == 27
+        and {
+            reason
+            for record in prepared_reference_reviews["usgs-conus-soil"]["records"]
+            for reason in record["selection_reasons"]
+            if reason.startswith("soil_layer=")
+        }
+        == {"soil_layer=top-0-5cm", "soil_layer=a-horizon", "soil_layer=c-horizon"}
+        and sum(
+            not all(record["published_target_raw_values"].values())
+            for record in prepared_reference_reviews["georoc-archaean"]["records"]
+        )
+        > 0,
+        "D1 review selection spans 27 GEOROC members, all soil layers and GEOROC missing-value cases",
+        checks,
+    )
+    require(
+        all(
+            evidence["sources"][source_id]["source_evidence_score"] == 85.0
+            and evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["status"] == "missing"
+            and "30-record review sample is prepared"
+            in evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["note"]
+            for source_id in prepared_reference_reviews
+        ),
+        "D1 records prepared GEOROC and USGS reviews without granting unsigned evidence points",
+        checks,
+    )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
     matrix = coverage_report.build_matrix(catalog, coverage_request, registry)
     require(

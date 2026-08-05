@@ -1181,8 +1181,10 @@
         },
         "human_review": {
           "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
+          "evidence": [
+            "fixtures/four-media/rock/georoc-archaean/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
           "status": "missing",
           "weight": 10
         },
@@ -1882,7 +1884,9 @@
         },
         "human_review": {
           "awarded_points": 0.0,
-          "evidence": [],
+          "evidence": [
+            "fixtures/four-media/sediment/norway-marchem/human_review.json"
+          ],
           "note": "A 30-record review sample is prepared but no completed review is recorded.",
           "status": "missing",
           "weight": 10
@@ -2582,8 +2586,10 @@
         },
         "human_review": {
           "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
+          "evidence": [
+            "fixtures/four-media/soil/usgs-conus-soil/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
           "status": "missing",
           "weight": 10
         },

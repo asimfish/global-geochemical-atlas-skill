@@ -65,16 +65,15 @@ def load_candidate_evidence(
 ) -> dict[str, dict[str, Any]]:
     """Load checked-in candidate evidence, keeping the newest file per source."""
 
-    if not directory.exists():
-        return {}
     evidence: dict[str, dict[str, Any]] = {}
-    for path in sorted(directory.glob("*.json")):
-        value = _read_json(path, "candidate evidence")
-        source_id = value.get("source_id")
-        if isinstance(source_id, str) and source_id:
-            value = dict(value)
-            value["_evidence_path"] = str(path.relative_to(SKILL_DIR))
-            evidence[source_id] = value
+    if directory.exists():
+        for path in sorted(directory.glob("*.json")):
+            value = _read_json(path, "candidate evidence")
+            source_id = value.get("source_id")
+            if isinstance(source_id, str) and source_id:
+                value = dict(value)
+                value["_evidence_path"] = str(path.relative_to(SKILL_DIR))
+                evidence[source_id] = value
     if snapshot_root.exists():
         for path in sorted(snapshot_root.rglob("snapshot_manifest.json")):
             snapshot = _read_json(path, "snapshot manifest")
@@ -83,6 +82,13 @@ def load_candidate_evidence(
                 entry = evidence.setdefault(source_id, {"source_id": source_id})
                 entry["_snapshot_manifest"] = snapshot
                 entry["_snapshot_manifest_path"] = str(path.relative_to(SKILL_DIR))
+        for path in sorted(snapshot_root.rglob("human_review.json")):
+            review = _read_json(path, "human review")
+            source_id = review.get("source_id")
+            if isinstance(source_id, str) and source_id:
+                entry = evidence.setdefault(source_id, {"source_id": source_id})
+                entry["human_review"] = review
+                entry["_human_review_path"] = str(path.relative_to(SKILL_DIR))
     return evidence
 
 
@@ -201,6 +207,7 @@ def _registry_integrity(registry_entry: Mapping[str, Any] | None) -> dict[str, A
 def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, Any]:
     weight = DIMENSION_WEIGHTS["human_review"]
     review = candidate.get("human_review") if isinstance(candidate, Mapping) else None
+    evidence = [candidate.get("_human_review_path", "")] if isinstance(candidate, Mapping) else []
     if not isinstance(review, Mapping):
         return _dimension("missing", weight, "No checked-in human review record is available.")
     completed = review.get("completed_record_count", 0)
@@ -209,15 +216,31 @@ def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, An
     if not isinstance(completed, int) or completed < 0:
         return _dimension("conflict", weight, "Human review count is invalid.")
     if review.get("status") == "conflict":
-        return _dimension("conflict", weight, "Human review found an unresolved systematic mapping error.")
+        return _dimension(
+            "conflict", weight, "Human review found an unresolved systematic mapping error.", evidence
+        )
     if completed >= 30 or (
         review.get("all_records_reviewed") is True and review.get("status") in {"complete", "passed"}
     ):
-        return _dimension("verified", weight, f"{completed} stratified records were reviewed and passed.")
+        return _dimension(
+            "verified", weight, f"{completed} stratified records were reviewed and passed.", evidence
+        )
     if completed >= 10:
-        return _dimension("partial", weight, f"{completed} records were reviewed; 30 are required for full credit.", awarded_points=5)
+        return _dimension(
+            "partial",
+            weight,
+            f"{completed} records were reviewed; 30 are required for full credit.",
+            evidence,
+            awarded_points=5,
+        )
     if completed >= 1:
-        return _dimension("partial", weight, f"{completed} records were reviewed; 30 are required for full credit.", awarded_points=2)
+        return _dimension(
+            "partial",
+            weight,
+            f"{completed} records were reviewed; 30 are required for full credit.",
+            evidence,
+            awarded_points=2,
+        )
     prepared = review.get("prepared_record_count", 0)
     return _dimension(
         "missing",
@@ -225,6 +248,7 @@ def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, An
         f"A {prepared}-record review sample is prepared but no completed review is recorded."
         if prepared
         else "Human review has not started.",
+        evidence,
     )
 
 

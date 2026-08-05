@@ -2,16 +2,26 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-05 20:50（Asia/Shanghai）
+更新时间：2026-08-05 21:13（Asia/Shanghai）
 
 ## 当前结论
 
-首批复核已进入 V3 渐进评分：`norway-marchem` 已完成 canonical 适配、全量对账和端到端 fixture，当前为 85 分、A 级、`normalized_analysis`；`geotraces-idp2025` 当前为 32.5 分、D 级、`discovery`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+首批复核已进入 V3 渐进评分：`georoc-archaean`、`usgs-conus-soil` 和 `norway-marchem` 均已完成 canonical 适配、真实来源对账和端到端 fixture，当前均为 85 分、A 级、`normalized_analysis`；三者的 30 条人工复核单已准备但尚未签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。`geotraces-idp2025` 当前为 32.5 分、D 级、`discovery`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
+| `georoc-archaean` | DOI v12.0、28 个固定成员及校验、33,745 条源记录解析、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖太古宙克拉通专题 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
+| `usgs-conus-soil` | USGS 固定发布、三层文件及 hash、14,571 条源记录解析、48 条 fixture 地图运行、跨三层 30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖美国本土 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
 | `geotraces-idp2025` | 官方身份、不可变 DOI/IDP2025、CC BY 4.0、产品级 QC 描述 | BODC 归档仍在异步准备，未取得实际文件清单、成员 hash、变量表；未做适配器和人工抽查 | D 级 `discovery`，保留全部发现证据 |
 | `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash、完整成员清单、canonical 适配器、1,070 行对账和地图运行 | 30 条人工回看尚待完成 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
+
+## `georoc-archaean` 与 `usgs-conus-soil` 复核准备
+
+GEOROC 复核单从完整 33,745 条缓存源记录中选择 30 个源行，覆盖 27 个归档成员、目标元素缺失案例、多引用案例和空间边界，共对应 63 条非缺失 As/Cu/Ni/Zn 观测。每条机器检查均确认成员 hash、样品 ID、精确点坐标、whole-rock 介质、未插补目标值、引用解析和稳定观测 ID。
+
+USGS 复核单从三个各 4,857 行的土层文件中分别选择 10 行，共 30 行、120 条 As/Cu/Ni/Zn 观测。每条机器检查均确认文件 hash、样品 ID、坐标、土层、四元素原值与单位、深度语义和稳定观测 ID。
+
+两份复核单均为 `status=prepared`、`automated_pass_count=30`、`completed_record_count=0`。自动通过只证明待检查内容与 hash 固定的源文件和适配器一致；人工签署前，人工复核维度仍为 `missing`、0 分。相关文件位于 `fixtures/four-media/rock/georoc-archaean/human_review.json` 和 `fixtures/four-media/soil/usgs-conus-soil/human_review.json`。
 
 ## `norway-marchem` 复核
 

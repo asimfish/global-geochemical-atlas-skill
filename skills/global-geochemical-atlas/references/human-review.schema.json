@@ -39,7 +39,6 @@
           "source_locator",
           "source_record_id",
           "sample_id",
-          "batch_code",
           "selection_reasons",
           "published_target_raw_values",
           "adapter_observations",
