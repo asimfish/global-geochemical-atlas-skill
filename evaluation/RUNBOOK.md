@@ -1,4 +1,160 @@
+---
+title: "Global Geochemical Atlas Benchmark v5 测试执行指南"
+audience: "首次运行评测的执行人员"
+version: "5.0.0-draft.1"
+exports: ["md"]
+---
+
 # Global Geochemical Atlas Benchmark v5 测试执行指南
+
+## 先看这里：这个 benchmark 到底怎么用
+
+这套 benchmark **不会自己调用模型**。它做两件事：
+
+1. 给模型一份题目和固定输入，要求模型把结果写成指定文件；
+2. 模型完成后，用本仓库的 checker 和 rubric 给这些文件判分。
+
+因此，一次评测永远分成两个动作：
+
+| 动作 | 谁执行 | 输入 | 输出 |
+|---|---|---|---|
+| 做题 | 被测模型或 Agent | `task.md`、安全的 `task.json`、`inputs/` | `submission/` 中的要求文件 |
+| 判分 | 评测人员 | 题目目录和模型的 `submission/` | 客观分、LLM 分、红线和验收结论 |
+
+最重要的一点是：**模型不是在聊天窗口里回答一道问答题，而是读取文件并把结果文件写入 `submission/`。** `task.json.required_outputs` 是必须生成的文件清单，评分只读取这些实际文件。
+
+如果你第一次接触本项目，先按下面的 Public Q01 示例走一遍。Public 用来学习接口，不计入正式盲测。能完成这个示例以后，再阅读后面的 Shadow、Final、bare/skill 和科学验收规则。
+
+### 五分钟跑通一题 Public
+
+以下命令都从仓库根目录开始：
+
+```bash
+cd evaluation
+python3 tools/validate_package.py . \
+  --report results/validation/package_validation.json
+```
+
+看到 `status: PASS`，表示题库和 checker 自身完整；这还不是模型得分。
+
+选择 Q01，并为这一次模型运行创建独立目录：
+
+```bash
+task_dir="release/public/Q01"
+run_dir="$(mktemp -d -p /tmp gga-q01.XXXXXX)"
+
+mkdir "$run_dir/model_input"
+mkdir "$run_dir/submission"
+cp "$task_dir/task.md" "$run_dir/model_input/"
+cp "$task_dir/task.json" "$run_dir/model_input/"
+cp -R "$task_dir/inputs" "$run_dir/model_input/inputs"
+```
+
+现在有两个目录：
+
+```text
+<run_dir>/
+├── model_input/       # 只读地提供给模型
+│   ├── task.md
+│   ├── task.json
+│   └── inputs/
+└── submission/        # 初始为空，只允许模型向这里写结果
+```
+
+接下来，用你的模型平台、Agent CLI 或 API 启动一次**全新会话**。本仓库尚未绑定某个模型平台，所以这里没有通用的 `run_model.py` 命令。无论使用什么平台，都要做到：模型只能读取 `model_input/`，只能把结果写入 `submission/`，不能把整个 `evaluation/` 作为模型工作目录。
+
+如果所用模型只能返回聊天文本、不能直接写文件，外部适配器必须把模型返回的每个要求产物保存到 `submission/`。不要把整段聊天记录直接当作 submission。
+
+把下面这段任务说明交给模型，并将其中两个路径替换为刚创建的真实路径：
+
+```text
+你正在执行一个隔离的文件产物评测任务。
+
+输入目录：<run_dir>/model_input
+输出目录：<run_dir>/submission
+
+请执行以下步骤：
+1. 阅读输入目录中的 task.md 和 task.json。
+2. 只使用输入目录中的 inputs/ 以及本次明确允许的工具或 Skill。
+3. 查看 task.json.required_outputs，并把其中列出的每个文件直接写入输出目录。
+4. 不要只在聊天中描述答案；最终评分只读取输出目录中的文件。
+5. 不要修改输入，不要读取其他任务、gold、checker、rubric 或以前的运行结果。
+6. 如果输入损坏、证据不足或科学条件不满足，按题面输出明确的拒绝或部分成功结果，不得编造数据。
+7. 完成后列出已经生成的文件。
+```
+
+模型运行结束后，先检查它是否真的生成了文件：
+
+```bash
+find "$run_dir/submission" -maxdepth 1 -type f -print
+python3 -m json.tool "$task_dir/task.json"
+```
+
+然后对这次 submission 做 0–80 分客观判分：
+
+```bash
+python3 tools/grade_task.py \
+  "$task_dir" \
+  "$run_dir/submission" \
+  --output "$run_dir/objective_report.json"
+```
+
+查看结果：
+
+```bash
+python3 -m json.tool "$run_dir/objective_report.json"
+```
+
+报告中最先看三个字段：
+
+- `objective_score`：模型本题的客观得分，范围 0–80；
+- `checks`：每个检查项是否通过，以及对应证据；
+- `redline_events`：是否触发科学红线。
+
+Public 调试时，可以对照该题的 `gold/` 和 `checker/` 找接口问题。正式 Shadow/Final 时，被测模型和设计组不能看到这些内容。
+
+### 跑通 Public 后，正式评测还要做什么
+
+正式结果不是只运行一次 Q01，而是完成下面这条链路：
+
+```text
+冻结 benchmark、模型、Skill 和沙箱
+        ↓
+对每道 Shadow/Final 分别运行 bare 和 skill
+        ↓
+每次运行保存独立 submission、stdout 和 stderr
+        ↓
+grade_task.py 给出 0–80 分客观结果
+        ↓
+独立 LLM grader 按 rubric 给出 0–20 分
+        ↓
+落实红线封顶或验收失败
+        ↓
+重复运行并汇总 bare、skill 和 uplift
+        ↓
+出具科学验收报告
+```
+
+第一次使用时可以按需求跳转：
+
+- 只想跑一个 Public 示例：读到这里即可开始；
+- 要接入自己的模型平台：继续读“第七步：执行 bare 与 skill 条件”；
+- 已经有 submission，只想判分：直接读“第四步：客观判分”；
+- 要做正式盲测：从“隔离规则”开始完整阅读后文；
+- 要出最终报告：重点读“运行完整性检查”“汇总分数与 uplift”和“科学验收”。
+
+### 当前缺少什么
+
+本仓库已经提供题目、输入输出契约、客观 checker、LLM rubric、聚合脚本和报告模板，但还缺少绑定具体模型平台的通用 runner。因此：
+
+- “如何把题交给模型”已经规定清楚；
+- “调用哪个模型 API/CLI”需要赛事平台提供适配器；
+- `grade_task.py` 只能给已经生成好的 submission 判分，不能代替模型运行；
+- 在 runner、LLM grader 调用器和最终红线计分器补齐前，完整流程仍是半自动的。
+
+下面是正式评测的详细操作规程。首次跑 Public 时不需要一次性读完。
+
+## 详细规程
 
 本文面向独立评测人员，说明如何用本评测包组织一次可复核的 Global Geochemical Atlas Skill 测试。它覆盖题库自检、单题执行、客观判分、LLM rubric、重复运行、结果汇总、科学红线和验收报告。
 
@@ -83,7 +239,7 @@ Public Q01–Q08 可把 gold 和 checker 提供给开发者作接口自测，但
 
 ## 4. 环境准备
 
-工具只依赖 Python 标准库。以下命令从仓库根目录开始：
+工具只依赖 Python 标准库。以下命令从仓库根目录开始；如果已经按照前面的 Public 示例进入 `evaluation/`，无需再次执行 `cd evaluation`：
 
 ```bash
 cd evaluation
@@ -530,3 +686,7 @@ Public 不并入 blind score。负 uplift 不截断为零。
 - 如果当前 Final 已被设计组看到，轮换并私下冻结新的 Final Holdout。
 
 只有真实模型运行、日志、判分、重复统计和验收报告全部完成后，任务状态才能从 `SMOKE_PASSED`/`FROZEN` 标为 `EXECUTED`。
+
+## Changelog
+
+- 2026-08-05：在同一份指南开头增加面向首次使用者的 Public Q01 快速路径，明确模型输入、submission 输出、客观判分命令、平台 runner 边界和正式评测后续步骤；原有详细规程保留为审计与正式盲测依据。

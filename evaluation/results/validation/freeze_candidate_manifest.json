@@ -2,7 +2,7 @@
   "label": "v5.0.0-draft.1-smoke-passed",
   "benchmark_version": "5.0.0-draft.1",
   "file_count": 205,
-  "content_manifest_sha256": "7dea711d8d9754160875a08671e072ed676abf693b2420cbf7d5ac42993253b8",
+  "content_manifest_sha256": "2528523d18c002269b8ba5cc4d8fd16b4851563164e377d395b9a15afc862657",
   "files": [
     {
       "path": "README.md",
@@ -16,8 +16,8 @@
     },
     {
       "path": "RUNBOOK.md",
-      "bytes": 20166,
-      "sha256": "89e93881b972b7e1707d39120b179ecb11973b7d388588f22d10543936967bc8"
+      "bytes": 26679,
+      "sha256": "42b772ca053909938a27f5c5824571255d3dcaef8e7c299e9eee8c306b47f6cc"
     },
     {
       "path": "VERSION",
