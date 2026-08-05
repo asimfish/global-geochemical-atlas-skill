@@ -1,8 +1,14 @@
 {
-  "as_of": "2026-08-05T10:05:00Z",
+  "as_of": "2026-08-05T13:41:55Z",
   "cells": {
     "rock": {
-      "analyte_coverage": "unknown",
+      "analyte_coverage": "complete_for_registered_targets",
+      "audited_analytes": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "candidate_sources": [
         "australia-ozchem",
         "brazil-sgb-geochemistry",
@@ -20,6 +26,7 @@
         "usgs-ngdb"
       ],
       "method_metadata_coverage": "not_yet_audited",
+      "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
@@ -65,6 +72,14 @@
         "petdb": "global_partial",
         "usgs-ngdb": "national_partial"
       },
+      "source_target_analytes": {
+        "georoc-archaean": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
+        ]
+      },
       "source_use_modes": {
         "australia-ozchem": "discovery",
         "brazil-sgb-geochemistry": "discovery",
@@ -87,7 +102,13 @@
       "temporal_coverage": "not_yet_audited"
     },
     "sediment": {
-      "analyte_coverage": "unknown",
+      "analyte_coverage": "complete_for_registered_targets",
+      "audited_analytes": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "candidate_sources": [
         "australia-ngsa",
         "australia-ozchem",
@@ -111,6 +132,7 @@
         "usgs-ngdb"
       ],
       "method_metadata_coverage": "not_yet_audited",
+      "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
@@ -168,6 +190,14 @@
         "us-water-quality-portal": "national_partial",
         "usgs-ngdb": "national_partial"
       },
+      "source_target_analytes": {
+        "norway-marchem": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
+        ]
+      },
       "source_use_modes": {
         "australia-ngsa": "discovery",
         "australia-ozchem": "discovery",
@@ -196,7 +226,13 @@
       "temporal_coverage": "not_yet_audited"
     },
     "soil": {
-      "analyte_coverage": "unknown",
+      "analyte_coverage": "complete_for_registered_targets",
+      "audited_analytes": [
+        "As",
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "candidate_sources": [
         "bgs-gbase",
         "brazil-sgb-geochemistry",
@@ -210,6 +246,7 @@
         "wosis"
       ],
       "method_metadata_coverage": "not_yet_audited",
+      "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
@@ -247,6 +284,14 @@
         "usgs-ngdb": "national_partial",
         "wosis": "global_partial"
       },
+      "source_target_analytes": {
+        "usgs-conus-soil": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
+        ]
+      },
       "source_use_modes": {
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
@@ -265,7 +310,12 @@
       "temporal_coverage": "not_yet_audited"
     },
     "water": {
-      "analyte_coverage": "unknown",
+      "analyte_coverage": "partial",
+      "audited_analytes": [
+        "Cu",
+        "Ni",
+        "Zn"
+      ],
       "candidate_sources": [
         "bgs-gbase",
         "brazil-sgb-geochemistry",
@@ -275,7 +325,6 @@
         "emodnet-chemistry",
         "foregs-europe",
         "gemstat-open-archive",
-        "geotraces-idp2025",
         "glorich",
         "iodp-data-systems",
         "ireland-tellus",
@@ -283,14 +332,19 @@
         "us-water-quality-portal"
       ],
       "method_metadata_coverage": "not_yet_audited",
-      "note": "Relevant candidates exist, but none currently meets the requested evidence, research-use and use-mode conditions.",
+      "missing_analytes": [
+        "As"
+      ],
+      "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
-      "selected_sources": [],
+      "selected_sources": [
+        "geotraces-idp2025"
+      ],
       "source_evidence_tiers": {
         "bgs-gbase": "D",
         "brazil-sgb-geochemistry": "D",
@@ -300,14 +354,14 @@
         "emodnet-chemistry": "D",
         "foregs-europe": "D",
         "gemstat-open-archive": "D",
-        "geotraces-idp2025": "D",
+        "geotraces-idp2025": "A",
         "glorich": "D",
         "iodp-data-systems": "D",
         "ireland-tellus": "D",
         "pangaea-repository": "D",
         "us-water-quality-portal": "D"
       },
-      "source_independence": "no_current_analysis_source",
+      "source_independence": "single_source_dependency",
       "source_scopes": {
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
@@ -324,6 +378,13 @@
         "pangaea-repository": "global_collection",
         "us-water-quality-portal": "national_partial"
       },
+      "source_target_analytes": {
+        "geotraces-idp2025": [
+          "Cu",
+          "Ni",
+          "Zn"
+        ]
+      },
       "source_use_modes": {
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
@@ -333,7 +394,7 @@
         "emodnet-chemistry": "discovery",
         "foregs-europe": "discovery",
         "gemstat-open-archive": "discovery",
-        "geotraces-idp2025": "discovery",
+        "geotraces-idp2025": "normalized_analysis",
         "glorich": "discovery",
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
@@ -341,7 +402,7 @@
         "us-water-quality-portal": "discovery"
       },
       "spatial_density_coverage": "not_yet_audited",
-      "status": "unknown",
+      "status": "partial",
       "temporal_coverage": "not_yet_audited"
     }
   },
@@ -373,7 +434,7 @@
     "Catalog routing identifies possible sources; evidence tier is not a truth probability, and analyte availability plus record-level comparability still require source queries and D2 review.",
     "A partial route must not be presented as complete global coverage.",
     "Source discovery is still in progress; absence from this route is not proof that no source exists.",
-    "Analyte, method, time and spatial-density coverage remain unknown until source-level inventories are audited.",
+    "Analyte coverage is credited only for explicit target mappings in the production registry; method, time and spatial-density coverage still require separate audits.",
     "Record count alone is not evidence of representative global coverage."
   ],
   "overall_status": "partial",

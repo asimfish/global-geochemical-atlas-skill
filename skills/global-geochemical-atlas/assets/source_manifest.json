@@ -294,6 +294,12 @@
         "ROCK NAME",
         "MATERIAL"
       ],
+      "target_analytes": {
+        "As": "AS(PPM)",
+        "Cu": "CU(PPM)",
+        "Ni": "NI(PPM)",
+        "Zn": "ZN(PPM)"
+      },
       "license": {
         "spdx": "CC-BY-SA-4.0",
         "name": "Creative Commons Attribution-ShareAlike 4.0 International",
@@ -363,6 +369,12 @@
         "Latitude",
         "Longitude"
       ],
+      "target_analytes": {
+        "As": ["Top5_As", "A_As", "C_As"],
+        "Cu": ["Top5_Cu", "A_Cu", "C_Cu"],
+        "Ni": ["Top5_Ni", "A_Ni", "C_Ni"],
+        "Zn": ["Top5_Zn", "A_Zn", "C_Zn"]
+      },
       "license": {
         "spdx": "LicenseRef-USGS-Public-Domain",
         "name": "U.S. public domain; credit requested",
@@ -468,6 +480,148 @@
         "The export contains 1,070 physical rows for 880 distinct sample codes because 190 samples occur in two parameter-group rows.",
         "Batch-level method metadata include accredited and not-accredited analyses and must be retained per observation.",
         "This dataset version is a project content-addressed dynamic snapshot, not a publisher DOI or immutable publisher release."
+      ]
+    },
+    "geotraces-idp2025": {
+      "adapter": "geotraces_webodv_snapshot",
+      "title": "GEOTRACES Intermediate Data Product 2025: discrete seawater",
+      "publisher": "GEOTRACES Intermediate Data Product Group and NERC EDS British Oceanographic Data Centre",
+      "dataset_doi": "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "dataset_version": "IDP2025",
+      "release_date": "2025-11-20",
+      "landing_page": "https://www.bodc.ac.uk/geotraces/data/dp/",
+      "metadata_url": "https://www.bodc.ac.uk/data/published_data_library/api/doi/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "media": [
+        "water"
+      ],
+      "geographic_scope": "global-ocean-cruise-tracks",
+      "download": {
+        "mode": "content-addressed-webodv-export",
+        "exporter_landing_page": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV",
+        "metadata_api": "https://www.bodc.ac.uk/data/published_data_library/api/doi/42c92148-8d03-8be6-e063-7086abc09f0c",
+        "observed_at": "2026-08-05T13:41:55Z",
+        "archive_filename": "geotraces-idp2025-seawater-depth-cu-ni-zn.zip",
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "max_bytes": 5000000,
+        "files": [
+          {
+            "file_id": "webodv-export-archive",
+            "filename": "geotraces-idp2025-seawater-depth-cu-ni-zn.zip",
+            "url": "https://geotraces.webodv.awi.de/",
+            "bytes": 903710,
+            "expected_sha256": "a61f441e5ae269f6c5514a9279393728f464859d970ca6be19207f7e601e5677",
+            "sha256_basis": "observed_official_webodv_export_2026-08-05T13:41:55Z"
+          }
+        ],
+        "expected_member_count": 242,
+        "expected_uncompressed_bytes": 29049057,
+        "members": [
+          {
+            "file_id": "seawater-depth-cu-ni-zn",
+            "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+            "bytes": 28760915,
+            "expected_sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44"
+          }
+        ],
+        "selection": {
+          "dataset_path": "IDP2025>seawater>GEOTRACES_IDP2025_Seawater",
+          "format": "ODV Spreadsheet V4.8",
+          "logic": "stations_with_one_or_more_selected_target_variables",
+          "geographic_bounds": [
+            -243,
+            117,
+            -90,
+            90
+          ],
+          "date_bounds": [
+            "1850-01-01",
+            "2026-12-31"
+          ],
+          "output_variable_ids_one_based": [
+            1,
+            62,
+            81,
+            88
+          ],
+          "required_variable_ids_zero_based": [
+            61,
+            80,
+            87
+          ]
+        },
+        "snapshot_manifest": "fixtures/four-media/water/geotraces-idp2025/snapshot_manifest.json"
+      },
+      "required_fields": [
+        "Cruise",
+        "Station",
+        "yyyy-mm-ddThh:mm:ss.sss",
+        "Longitude [degrees_east]",
+        "Latitude [degrees_north]",
+        "Sampling Devices",
+        "Cruise Information Link",
+        "DEPTH [m]",
+        "Cu_D_CONC [nmol/kg]",
+        "Ni_D_CONC [nmol/kg]",
+        "Zn_D_CONC [nmol/kg]"
+      ],
+      "target_analytes": {
+        "Cu": "Cu_D_CONC [nmol/kg]",
+        "Ni": "Ni_D_CONC [nmol/kg]",
+        "Zn": "Zn_D_CONC [nmol/kg]"
+      },
+      "quality_schema": {
+        "name": "SEADATANET",
+        "accepted_for_demo": [
+          "1",
+          "2"
+        ],
+        "flag_meanings": {
+          "0": "no quality control",
+          "1": "good value",
+          "2": "probably good value",
+          "3": "probably bad value",
+          "4": "bad value",
+          "5": "changed value",
+          "6": "value below detection",
+          "7": "value in excess",
+          "8": "interpolated value",
+          "9": "missing value",
+          "A": "value phenomenon uncertain",
+          "B": "nominal value",
+          "Q": "value below limit of quantification"
+        }
+      },
+      "expected_counts": {
+        "collection_station_count": 4094,
+        "collection_cruise_count": 82,
+        "collection_data_variable_count": 418,
+        "physical_rows": 69704,
+        "target_bearing_rows": 19186,
+        "target_observations": 39327,
+        "selected_cruises": 46,
+        "selected_cruise_station_pairs": 1550,
+        "target_value_counts": {
+          "Cu": 6275,
+          "Ni": 17035,
+          "Zn": 16017
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International with IDP2025 Fair Data Use expectations",
+        "url": "https://www.bodc.ac.uk/geotraces/data/idp2025/documents/IDP2025_FairDataUseStatement.pdf"
+      },
+      "citation": "GEOTRACES Intermediate Data Product Group (2025). The GEOTRACES Intermediate Data Product 2025 (IDP2025). NERC EDS British Oceanographic Data Centre NOC. https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "redistribution": "Use with attribution and the IDP2025 Fair Data Use statement; retain original contributor citations. The complete export remains outside Git.",
+      "scientific_notes": [
+        "This source covers discrete seawater along cruise tracks, not a regular global grid.",
+        "The registered target subset contains dissolved Cu, Ni and Zn in nmol/kg; arsenic is absent from the official IDP2025 seawater variable inventory.",
+        "Dissolved, dissolved-labile and particulate fractions are distinct and must not be combined.",
+        "SeaDataNet quality flags and contributor-level method/citation links must remain attached to observations.",
+        "Molar-per-mass values must not be silently converted to mass-per-volume without element atomic mass and an explicit seawater-density assumption."
       ]
     }
   }

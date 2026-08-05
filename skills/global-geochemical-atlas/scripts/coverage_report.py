@@ -40,7 +40,8 @@ def build_matrix(
 ) -> dict[str, Any]:
     """Summarize route coverage while keeping unverified dimensions unknown."""
 
-    route = source_router.route_sources(request, catalog, registry)
+    resolved_registry = dict(registry) if registry is not None else source_adapters.load_source_registry()
+    route = source_router.route_sources(request, catalog, resolved_registry)
     routed_sources = {
         item["source_id"]: item for item in [*route["selected_sources"], *route["review_sources"]]
     }
@@ -59,10 +60,35 @@ def build_matrix(
             source_id: catalog["sources"][source_id]["coverage"]["extent_class"]
             for source_id in [*selected, *candidates]
         }
+        source_target_analytes = {
+            source_id: sorted(resolved_registry["sources"][source_id].get("target_analytes", {}))
+            for source_id in selected
+            if source_id in resolved_registry.get("sources", {})
+        }
+        audited_analytes = sorted(
+            {
+                analyte
+                for analytes in source_target_analytes.values()
+                for analyte in analytes
+            }
+        )
+        requested_analytes = list(route["request"]["elements"])
+        missing_analytes = sorted(set(requested_analytes) - set(audited_analytes))
+        if not source_target_analytes:
+            analyte_coverage = "unknown"
+        elif not missing_analytes:
+            analyte_coverage = "complete_for_registered_targets"
+        elif set(audited_analytes).intersection(requested_analytes):
+            analyte_coverage = "partial"
+        else:
+            analyte_coverage = "none"
         cells[medium] = {
             "status": routed["status"],
-            "requested_analytes": list(route["request"]["elements"]),
-            "analyte_coverage": "unknown",
+            "requested_analytes": requested_analytes,
+            "analyte_coverage": analyte_coverage,
+            "audited_analytes": audited_analytes,
+            "missing_analytes": missing_analytes,
+            "source_target_analytes": source_target_analytes,
             "selected_sources": selected,
             "candidate_sources": candidates,
             "source_scopes": source_scopes,
@@ -97,7 +123,7 @@ def build_matrix(
         "route_status": route["status"],
         "limitations": [
             *route["limitations"],
-            "Analyte, method, time and spatial-density coverage remain unknown until source-level inventories are audited.",
+            "Analyte coverage is credited only for explicit target mappings in the production registry; method, time and spatial-density coverage still require separate audits.",
             "Record count alone is not evidence of representative global coverage.",
         ],
         "claim_boundary": (
@@ -150,8 +176,8 @@ def render_markdown(matrix: Mapping[str, Any]) -> str:
             "",
             "- 岩石与土壤各有一个满足当前 `normalized_analysis` 条件的局部来源，因此仍是 `partial`；",
             "- 沉积物已有一个满足 `normalized_analysis` 的 MarChem 挪威海域样板，但仍是单一国家来源，因此为 `partial`；",
-            "- 水体来源当前仍为发现级，GEOTRACES 文件、字段和适配器证据尚未补齐；",
-            "- 每个介质的分析物、方法、时间和空间密度仍需逐源审计；",
+            "- 水体已有 GEOTRACES IDP2025 离散海水样板，可用于 Cu、Ni、Zn；As 明确缺失，仍需另一水体来源补齐；",
+            "- 岩石、土壤和沉积物样板的 As、Cu、Ni、Zn 目标字段已登记；方法、时间和空间密度仍需逐源审计；",
             "- 聚合平台不计作独立证据，必须追溯并去重其上游数据集。",
             "",
             "## 限制",

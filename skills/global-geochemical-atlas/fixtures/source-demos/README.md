@@ -36,6 +36,16 @@
 - 方法边界：所有值均为干重 `mg/kg` 的部分硝酸消解结果，不代表总含量；批次认可状态和 LLQ 按观测保留；
 - 关系边界：完整快照的 1,070 行对应 880 个样品，fixture 不把第二参数组产生的附加行误算成新样品。
 
+## GEOTRACES demo
+
+目录：`geotraces-idp2025/`。
+
+- 来源：GEOTRACES IDP2025 官方 WebODV 离散海水快照 `geotraces-idp2025:IDP2025:a61f441e5ae2`；
+- 许可：CC BY 4.0，并遵守 Fair Data Use 的数据集和原贡献者引用要求；
+- 内容：从 QC 1/2、坐标和深度有效的 dissolved 观测中平衡选择 Cu、Ni、Zn 各 16 条，共 48 条；
+- 单位边界：原始 `nmol/kg` 保持不变；没有明确元素原子量和海水密度时不换算为 `ug/L`；
+- 覆盖边界：样点来自海洋航次，不是规则全球网格；官方离散海水变量表没有 As，必须用其他水体来源补齐。
+
 ## 确定性再生成
 
 先按 `references/data-sources.md` 下载并验证来源。完整第三方文件留在仓库外缓存，然后在仓库根目录运行：
@@ -65,6 +75,14 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --mode cached \
   --observations 112 \
   --generated-at 2026-08-05T12:50:00Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source geotraces-idp2025 \
+  --cache-dir .cache/data \
+  --output-dir /tmp/geotraces-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-05T13:41:55Z
 ```
 
 使用相同注册表版本、验证缓存/快照和 `--generated-at` 时，每个来源的三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。

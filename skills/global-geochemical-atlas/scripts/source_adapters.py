@@ -761,10 +761,159 @@ class MarchemSnapshotAdapter(RegistryAdapter):
         return records
 
 
+class GeotracesIdp2025Adapter(RegistryAdapter):
+    """Content-addressed webODV export of the IDP2025 discrete seawater collection."""
+
+    source_id = "geotraces-idp2025"
+
+    def files_from_archive(
+        self,
+        archive_path: Path,
+        extract_dir: Path,
+        *,
+        cache_status: str = "verified_local_snapshot",
+    ) -> list[DownloadedFile]:
+        """Verify and safely extract the registered webODV export."""
+
+        download_entry = self.candidate.registry_entry["download"]
+        archive_entry = download_entry["files"][0]
+        member_entry = download_entry["members"][0]
+        if not archive_path.is_file():
+            raise SourceAdapterError(f"GEOTRACES export archive does not exist: {archive_path}")
+        if archive_path.stat().st_size != archive_entry["bytes"]:
+            raise SourceAdapterError("GEOTRACES export archive size does not match the registry")
+        if downloader.sha256_file(archive_path) != archive_entry["expected_sha256"]:
+            raise SourceAdapterError("GEOTRACES export archive SHA-256 does not match the registry")
+        if not extract_dir.exists():
+            try:
+                downloader.safe_extract_zip(
+                    archive_path,
+                    extract_dir,
+                    max_members=int(download_entry["expected_member_count"]),
+                    max_extracted_bytes=int(download_entry["expected_uncompressed_bytes"]),
+                    required_members=[member_entry["filename"]],
+                    required_fields=(),
+                )
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(f"GEOTRACES safe extraction failed: {exc}") from exc
+        member_path = extract_dir / member_entry["filename"]
+        if member_path.stat().st_size != member_entry["bytes"]:
+            raise SourceAdapterError("GEOTRACES export member size does not match the registry")
+        observed_sha256 = downloader.sha256_file(member_path)
+        if observed_sha256 != member_entry["expected_sha256"]:
+            raise SourceAdapterError("GEOTRACES export member SHA-256 does not match the registry")
+        return [
+            DownloadedFile(
+                source_id=self.source_id,
+                file_id=member_entry["file_id"],
+                path=member_path,
+                source_url=download_entry["exporter_landing_page"],
+                sha256=observed_sha256,
+                bytes=member_path.stat().st_size,
+                cache_status=cache_status,
+                retrieved_at=download_entry["observed_at"],
+            )
+        ]
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("GEOTRACES adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use a checked-in synthetic ODV fixture directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        archive_path = root / candidate.registry_entry["download"]["archive_filename"]
+        if not archive_path.is_file():
+            action = "Run acquire_geotraces_idp2025.py first" if mode == "online" else "Populate the verified cache"
+            raise SourceAdapterError(
+                f"{action}; the official webODV exporter creates a session-specific URL and the pinned archive "
+                f"is not present at {archive_path}"
+            )
+        return self.files_from_archive(archive_path, root / "members", cache_status="cache_verified")
+
+    def _rows(self, path: Path) -> Iterable[tuple[int, dict[str, Any]]]:
+        target_fields: Mapping[str, str] = self.candidate.registry_entry["target_analytes"]
+        required = set(self.candidate.registry_entry["required_fields"])
+        expected_rows = int(self.candidate.registry_entry["expected_counts"]["physical_rows"])
+        try:
+            handle = path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"GEOTRACES export is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.reader(handle, delimiter="\t")
+            header: list[str] | None = None
+            indices: dict[str, int] = {}
+            target_indices: dict[str, int] = {}
+            emitted = 0
+            for row in reader:
+                if not row or str(row[0]).startswith("//"):
+                    continue
+                if header is None:
+                    header = [str(value).strip() for value in row]
+                    missing = sorted(required - set(header))
+                    if missing:
+                        raise SourceAdapterError(
+                            f"GEOTRACES export lacks required fields: {', '.join(missing)}"
+                        )
+                    indices = {name: header.index(name) for name in required}
+                    target_indices = {analyte: header.index(field) for analyte, field in target_fields.items()}
+                    continue
+                padded = [str(value).strip() for value in row] + [""] * max(0, len(header) - len(row))
+                fields: dict[str, Any] = {name: padded[index] for name, index in indices.items()}
+                observations: dict[str, dict[str, str]] = {}
+                for analyte, value_index in target_indices.items():
+                    field_name = target_fields[analyte]
+                    observations[analyte] = {
+                        "field": field_name,
+                        "value": padded[value_index],
+                        "standard_deviation": padded[value_index + 1],
+                        "quality_flag": padded[value_index + 2],
+                        "quality_schema": "SEADATANET",
+                        "unit": "nmol/kg",
+                    }
+                    fields[field_name] = padded[value_index]
+                    fields[f"{field_name}_STANDARD_DEV"] = padded[value_index + 1]
+                    fields[f"{field_name}_QC"] = padded[value_index + 2]
+                fields["_target_observations"] = observations
+                fields["_source_file"] = path.name
+                fields["_dataset_version"] = self.candidate.version
+                emitted += 1
+                yield reader.line_num, fields
+            if header is None:
+                raise SourceAdapterError("GEOTRACES export has no tabular header")
+            if emitted != expected_rows:
+                raise SourceAdapterError(
+                    f"GEOTRACES physical-row count changed: {emitted} != {expected_rows}"
+                )
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "seawater-depth-cu-ni-zn":
+            raise SourceAdapterError("GEOTRACES adapter requires the registered seawater export member")
+        downloaded = files[0]
+        for line_number, values in self._rows(downloaded.path):
+            source_locator = f"{downloaded.path.name}#row={line_number}"
+            native_id = "|".join(
+                str(values.get(field) or "")
+                for field in ("Cruise", "Station", "yyyy-mm-ddThh:mm:ss.sss", "DEPTH [m]")
+            )
+            source_record_id = stable_source_record_id(self.source_id, native_id, source_locator)
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=source_record_id,
+                source_locator=source_locator,
+                fields=values,
+            )
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
     MarchemSnapshotAdapter.source_id: MarchemSnapshotAdapter,
+    GeotracesIdp2025Adapter.source_id: GeotracesIdp2025Adapter,
 }
 
 

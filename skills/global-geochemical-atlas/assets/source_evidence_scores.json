@@ -13,7 +13,7 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-05T10:05:00Z",
+  "scored_at": "2026-08-05T13:41:55Z",
   "source_count": 32,
   "sources": {
     "australia-ngsa": {
@@ -1335,12 +1335,8 @@
       "access_status": "open",
       "attribution_note": "Fair Use Agreement requires IDP and original data-contributor citations.",
       "conflicts": [],
-      "evidence_tier": "D",
+      "evidence_tier": "A",
       "missing_dimensions": [
-        "file_record_integrity",
-        "schema_semantics",
-        "method_qc_metadata",
-        "adapter_reproducibility",
         "human_review"
       ],
       "research_use_status": "attribution_required",
@@ -1348,23 +1344,30 @@
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
       "source_evidence_dimensions": {
         "adapter_reproducibility": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No callable adapter and frozen parsing contract are registered.",
-          "status": "missing",
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/geotraces-idp2025-seawater-20260805T134155Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No frozen file or archive inventory is registered.",
-          "status": "missing",
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/water/geotraces-idp2025/snapshot_manifest.json",
+            "fixtures/candidate-audits/geotraces-idp2025-seawater-20260805T134155Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
           "weight": 15
         },
         "human_review": {
           "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
+          "evidence": [
+            "fixtures/four-media/water/geotraces-idp2025/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
           "status": "missing",
           "weight": 10
         },
@@ -1380,29 +1383,33 @@
           "weight": 10
         },
         "method_qc_metadata": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified record-level method or QC inventory is available.",
-          "status": "missing",
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/geotraces-idp2025-seawater-20260805T134155Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
           "weight": 10
         },
         "provenance": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [
             "https://www.geotraces.org/idp2025/",
             "https://www.bodc.ac.uk/geotraces/data/idp2025/",
             "https://www.bodc.ac.uk/data/published_data_library/catalogue/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c/",
             "doi:10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
           ],
-          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
-          "status": "partial",
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
           "weight": 15
         },
         "schema_semantics": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified field mapping to the canonical schema is recorded.",
-          "status": "missing",
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/geotraces-idp2025-seawater-20260805T134155Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
           "weight": 15
         },
         "version_snapshot": {
@@ -1413,11 +1420,11 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 32.5,
+      "source_evidence_score": 85.0,
       "source_id": "geotraces-idp2025",
-      "use_mode": "discovery",
+      "use_mode": "normalized_analysis",
       "use_mode_limitations": [
-        "record integrity or schema semantics are not sufficiently evidenced"
+        "30-record human review is incomplete"
       ]
     },
     "glorich": {
@@ -2818,16 +2825,16 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 3,
+      "A": 4,
       "B": 0,
       "C": 0,
-      "D": 29,
+      "D": 28,
       "U": 0
     },
     "use_modes": {
       "benchmark_ready": 0,
-      "discovery": 29,
-      "normalized_analysis": 3,
+      "discovery": 28,
+      "normalized_analysis": 4,
       "raw_observation": 0
     }
   }

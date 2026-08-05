@@ -19,7 +19,7 @@ import source_adapters
 
 REVIEW_VERSION = "geochemical-human-review-v1"
 ANALYTES = ("As", "Cu", "Ni", "Zn")
-SUPPORTED_SOURCES = ("georoc-archaean", "usgs-conus-soil")
+SUPPORTED_SOURCES = ("georoc-archaean", "usgs-conus-soil", "geotraces-idp2025")
 
 
 class ReviewPreparationError(RuntimeError):
@@ -292,6 +292,158 @@ def _usgs_review(
     return output
 
 
+def _geotraces_target_observations(record: source_adapters.RawRecord) -> Mapping[str, Mapping[str, str]]:
+    observations = record.fields.get("_target_observations")
+    if not isinstance(observations, Mapping):
+        raise ReviewPreparationError(f"GEOTRACES target mapping is missing: {record.source_locator}")
+    return {
+        str(analyte): values
+        for analyte, values in observations.items()
+        if isinstance(values, Mapping) and str(values.get("value") or "").strip()
+    }
+
+
+def _geotraces_selection(
+    records: Sequence[source_adapters.RawRecord],
+) -> list[tuple[source_adapters.RawRecord, list[str]]]:
+    eligible = [record for record in records if _geotraces_target_observations(record)]
+    selected: dict[str, tuple[source_adapters.RawRecord, set[str]]] = {}
+
+    def add(record: source_adapters.RawRecord, reason: str) -> None:
+        if record.source_record_id in selected:
+            selected[record.source_record_id][1].add(reason)
+        elif len(selected) < 30:
+            selected[record.source_record_id] = (record, {reason})
+
+    for analyte in ("Cu", "Ni", "Zn"):
+        for quality_flag in ("1", "2", "3", "4", "5", "6"):
+            match = next(
+                (
+                    record
+                    for record in eligible
+                    if _geotraces_target_observations(record).get(analyte, {}).get("quality_flag")
+                    == quality_flag
+                ),
+                None,
+            )
+            if match is not None:
+                add(match, f"{analyte}_seadatanet_qc={quality_flag}")
+    numeric_records = [
+        record
+        for record in eligible
+        if all(
+            demos._reported_float(record.fields.get(field)) is not None
+            for field in ("Longitude [degrees_east]", "Latitude [degrees_north]", "DEPTH [m]")
+        )
+    ]
+    boundary_orders = {
+        "longitude_min_boundary": ("Longitude [degrees_east]", False),
+        "longitude_max_boundary": ("Longitude [degrees_east]", True),
+        "latitude_min_boundary": ("Latitude [degrees_north]", False),
+        "latitude_max_boundary": ("Latitude [degrees_north]", True),
+        "depth_min_boundary": ("DEPTH [m]", False),
+        "depth_max_boundary": ("DEPTH [m]", True),
+    }
+    for reason, (field, reverse) in boundary_orders.items():
+        ordered = sorted(numeric_records, key=lambda item: float(item.fields[field]), reverse=reverse)
+        if ordered:
+            add(ordered[0], reason)
+    multi_analyte = [record for record in eligible if len(_geotraces_target_observations(record)) >= 2]
+    if multi_analyte:
+        add(multi_analyte[0], "multiple_target_analytes_on_sample")
+    for position in _even_positions(len(eligible), 30):
+        add(eligible[position], "evenly_spaced_target_bearing_fill")
+        if len(selected) == 30:
+            break
+    if len(selected) != 30:
+        raise ReviewPreparationError(f"GEOTRACES selection produced {len(selected)} rows, expected 30")
+    return [(record, sorted(reasons)) for record, reasons in selected.values()]
+
+
+def _geotraces_review(
+    records: Sequence[source_adapters.RawRecord],
+    files: Mapping[str, source_adapters.DownloadedFile],
+    candidate: source_adapters.DatasetCandidate,
+) -> list[dict[str, Any]]:
+    downloaded = next(iter(files.values()))
+    known_qc = set(candidate.registry_entry["quality_schema"]["flag_meanings"])
+    output: list[dict[str, Any]] = []
+    for position, (record, reasons) in enumerate(_geotraces_selection(records), start=1):
+        targets = _geotraces_target_observations(record)
+        cruise = str(record.fields.get("Cruise") or "").strip()
+        station = str(record.fields.get("Station") or "").strip()
+        depth = str(record.fields.get("DEPTH [m]") or "").strip()
+        sample_id = f"{cruise}|{station}|{depth}m"
+        observations = []
+        for analyte, values in targets.items():
+            raw_value = str(values.get("value") or "").strip()
+            unit = str(values.get("unit") or "").strip()
+            observations.append(
+                {
+                    "analyte": analyte,
+                    "raw_value": raw_value,
+                    "unit": unit,
+                    "medium": "water",
+                    "water_fraction": "dissolved",
+                    "sample_id": sample_id,
+                    "cruise": cruise,
+                    "station": station,
+                    "sample_depth_m": depth,
+                    "sampled_at": str(record.fields.get("yyyy-mm-ddThh:mm:ss.sss") or ""),
+                    "latitude": str(record.fields.get("Latitude [degrees_north]") or ""),
+                    "longitude": str(record.fields.get("Longitude [degrees_east]") or ""),
+                    "sampling_devices": str(record.fields.get("Sampling Devices") or ""),
+                    "standard_deviation": str(values.get("standard_deviation") or ""),
+                    "quality_schema": str(values.get("quality_schema") or ""),
+                    "quality_flag": str(values.get("quality_flag") or ""),
+                    "record_id": source_adapters.stable_record_id(
+                        record.source_id,
+                        record.source_record_id,
+                        analyte,
+                        raw_value,
+                        unit,
+                    ),
+                }
+            )
+        checks = {
+            "registered_member_hash_matches": downloaded.sha256 == demos.sha256_file(downloaded.path),
+            "sample_identity_preserved": bool(cruise and station and depth),
+            "coordinates_preserved": all(
+                demos._reported_float(record.fields.get(field)) is not None
+                for field in ("Latitude [degrees_north]", "Longitude [degrees_east]")
+            ),
+            "sample_depth_preserved": demos._reported_float(depth) is not None,
+            "target_values_preserved_without_imputation": len(observations) == len(targets),
+            "dissolved_fraction_and_unit_preserved": all(
+                item["water_fraction"] == "dissolved" and item["unit"] == "nmol/kg"
+                for item in observations
+            ),
+            "seadatanet_quality_flags_preserved": all(
+                item["quality_schema"] == "SEADATANET" and item["quality_flag"] in known_qc
+                for item in observations
+            ),
+            "stable_observation_ids_unique": len({item["record_id"] for item in observations})
+            == len(observations),
+        }
+        output.append(
+            {
+                "review_id": f"geotraces-idp2025-review-{position:02d}",
+                "source_locator": record.source_locator,
+                "source_record_id": record.source_record_id,
+                "sample_id": sample_id,
+                "selection_reasons": reasons,
+                "published_target_raw_values": {
+                    analyte: str(values.get("value") or "") for analyte, values in targets.items()
+                },
+                "adapter_observations": observations,
+                "automated_checks": checks,
+                "automated_status": "PASS" if all(checks.values()) else "FAIL",
+                "reviewer": _unsigned_reviewer(),
+            }
+        )
+    return output
+
+
 def prepare(source_id: str, cache_dir: Path) -> dict[str, Any]:
     adapter = source_adapters.get_adapter(source_id)
     candidate = adapter.discover({"sources": [source_id]})[0]
@@ -306,6 +458,13 @@ def prepare(source_id: str, cache_dir: Path) -> dict[str, Any]:
         review_records = _usgs_review(records, files, candidate)
         strategy = "Ten spatially distributed source rows from each of 0-5 cm, A-horizon and C-horizon tables."
         snapshot_id = f"doi:{candidate.dataset_doi}@{candidate.version}"
+    elif source_id == "geotraces-idp2025":
+        review_records = _geotraces_review(records, files, candidate)
+        strategy = (
+            "Thirty target-bearing seawater rows spanning Cu/Ni/Zn, SeaDataNet QC edge flags, "
+            "geographic/depth boundaries and evenly spaced source order."
+        )
+        snapshot_id = f"doi:{candidate.dataset_doi}@{candidate.version}#sha256:{downloaded[0].sha256}"
     else:
         raise ReviewPreparationError(f"unsupported source: {source_id}")
     pass_count = sum(record["automated_status"] == "PASS" for record in review_records)

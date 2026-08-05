@@ -97,7 +97,7 @@ python scripts/standardize_geochemistry.py \
 严格执行 [references/scientific-rules.md](references/scientific-rules.md)：
 
 - 新增标准字段，不覆盖原值；
-- 固体质量比统一到 `mg/kg`；水体质量/体积统一到 `ug/L`；
+- 固体质量比统一到 `mg/kg`；水体质量/体积统一到 `ug/L`；水体 `nmol/kg` 等摩尔/质量单位在无显式转换依据时保留原单位并隔离比较；
 - 水体 `ppm`、`ppb` 或裸 `%` 在缺少密度/basis 时拒绝换算；
 - 删失值的 `normalized_value` 置空，只保留可换算的 censoring limit；
 - 可能交换的经纬度只加 flag，不静默交换；

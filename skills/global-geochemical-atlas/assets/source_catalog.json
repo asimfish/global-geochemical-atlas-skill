@@ -1,7 +1,7 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-05T10:05:00Z",
-  "claim_boundary": "This catalog records discovered sources and interface facts. Only entries with production_eligible=true may be selected automatically; catalog inclusion is not scientific endorsement.",
+  "reviewed_at": "2026-08-05T13:41:55Z",
+  "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
     "round": 3,
     "status": "in_progress",
@@ -898,7 +898,7 @@
       "coverage": {
         "extent_class": "global_ocean_partial",
         "regions": ["global-ocean"],
-        "notes": "Quality-controlled trace-element, isotope and hydrographic data from 123 cruises and 4,097 stations across all ocean basins."
+        "notes": "The full IDP2025 product reports 123 cruises and 4,097 stations across all packages. The verified discrete-seawater collection exposes 4,094 stations and 82 cruise labels; the Cu/Ni/Zn OR-filtered export contains target-bearing samples from 46 cruises and 1,550 cruise-station pairs."
       },
       "identifiers": {"dataset_doi": "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"},
       "landing_page": "https://www.geotraces.org/idp2025/",
@@ -932,7 +932,7 @@
         "notes": "Fair Use Agreement requires IDP and original data-contributor citations."
       },
       "version": {"status": "pinned", "value": "IDP2025", "release_date": "2025-11-20"},
-      "adapter": {"status": "not_implemented", "name": null},
+      "adapter": {"status": "implemented", "name": "geotraces_webodv_snapshot"},
       "evidence_urls": [
         "https://www.geotraces.org/idp2025/",
         "https://www.bodc.ac.uk/geotraces/data/idp2025/",
@@ -941,7 +941,10 @@
       "limitations": [
         "Cruise-track ocean sampling is not uniform global surface-water coverage.",
         "Dissolved, particulate and other fractions plus quality flags and contributor citations must remain distinct.",
-        "The official archive was still being prepared during the 2026-08-05 verification, so the member inventory, hashes and variable-level mapping remain unverified."
+        "The official IDP2025 seawater parameter inventory contains dissolved Cu, Ni and Zn but no arsenic variable; another water source is required for As.",
+        "The frozen webODV export preserves nmol/kg. It must not be mixed with ug/L without an explicit element-specific atomic-mass and seawater-density conversion.",
+        "SeaDataNet flags 3 and 4 identify probably-bad and bad values; they remain traceable raw records but are excluded from the demonstration slice.",
+        "The adapter and 30-row review sheet are prepared, but named human review is still incomplete."
       ]
     },
     "glorich": {

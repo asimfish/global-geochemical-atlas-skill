@@ -327,6 +327,8 @@ def conversion_for(medium: str, original_unit: Any, flags: list[str]) -> tuple[f
     unit = canonicalize_unit(original_unit)
     if medium in SOLID_MEDIA and unit in SOLID_FACTORS:
         return SOLID_FACTORS[unit], "mg/kg"
+    if medium == "water" and unit == "nmol/kg":
+        return 1.0, "nmol/kg"
     if medium == "water" and unit in WATER_FACTORS:
         return WATER_FACTORS[unit], "ug/L"
     if medium == "water" and unit in AQUEOUS_AMBIGUOUS_UNITS:

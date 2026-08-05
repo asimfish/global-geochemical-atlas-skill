@@ -43,6 +43,16 @@
 - 校验：注册表中的 SHA-256 是 2026-08-05 从官方 URL 观测所得，不冒充发布方 checksum；每次下载仍记录响应元数据和实际 SHA-256；
 - 科学边界：三种土层不得静默合并；legacy qualifier 和单位必须按该数据集自己的元数据解码。
 
+### `geotraces-idp2025`
+
+- 数据集：GEOTRACES Intermediate Data Product 2025，离散海水集合；
+- DOI：`10.5285/42c92148-8d03-8be6-e063-7086abc09f0c`；
+- 许可：CC BY 4.0，并遵守 Fair Data Use 的数据集、贡献者和原始文献引用要求；
+- 获取：官方 WebODV 提取服务；运行 `scripts/acquire_geotraces_idp2025.py --accept-fair-use`，冻结选择参数、cookies/CSRF 会话内的响应、归档 hash 和全部成员；
+- 当前快照：只选择深度和 dissolved Cu/Ni/Zn；69,704 个样品深度行、39,327 条非空目标观测；
+- 校验：验证 903,710-byte ZIP 的 SHA-256、242 个成员和主 ODV 文件 hash；`scripts/audit_geotraces_snapshot.py` 重算行数、变量、QC 和空间/深度覆盖；
+- 科学边界：`nmol/kg` 原样保留，不与 `ug/L` 静默换算；航次点不是规则全球覆盖；变量表没有 As，水体 As 请求必须路由到其他来源。
+
 ## D1 适配器和稳定 ID
 
 `scripts/source_adapters.py` 冻结以下接口：

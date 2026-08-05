@@ -501,6 +501,115 @@ def marchem_demo(
     return rows, evidence_rows, len(selected_source_rows)
 
 
+def geotraces_demo(
+    records: Sequence[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    analytes = ("Cu", "Ni", "Zn")
+    if observation_limit % len(analytes) != 0:
+        raise DemoError("GEOTRACES observation limit must be divisible by 3")
+    per_analyte_limit = observation_limit // len(analytes)
+    selected_per_analyte: Counter[str] = Counter()
+    accepted_qc = set(candidate.registry_entry["quality_schema"]["accepted_for_demo"])
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    selected_source_rows: set[str] = set()
+    for record in records:
+        if all(selected_per_analyte[item] >= per_analyte_limit for item in analytes):
+            break
+        observations = record.fields.get("_target_observations")
+        if not isinstance(observations, Mapping):
+            raise DemoError(f"GEOTRACES target mapping is missing: {record.source_locator}")
+        latitude = str(record.fields.get("Latitude [degrees_north]") or "").strip()
+        longitude = str(record.fields.get("Longitude [degrees_east]") or "").strip()
+        depth = str(record.fields.get("DEPTH [m]") or "").strip()
+        if any(_reported_float(value) is None for value in (latitude, longitude, depth)):
+            continue
+        filename = str(record.fields.get("_source_file") or "")
+        downloaded = files.get(filename)
+        if downloaded is None:
+            raise DemoError(f"GEOTRACES record references an unknown file: {record.source_locator}")
+        cruise = str(record.fields.get("Cruise") or "").strip()
+        station = str(record.fields.get("Station") or "").strip()
+        sample_id = f"{cruise}|{station}|{depth}m"
+        for analyte in analytes:
+            if selected_per_analyte[analyte] >= per_analyte_limit:
+                continue
+            values = observations.get(analyte)
+            if not isinstance(values, Mapping):
+                continue
+            raw_value = str(values.get("value") or "").strip()
+            quality_flag = str(values.get("quality_flag") or "").strip()
+            unit = str(values.get("unit") or "").strip()
+            if _reported_float(raw_value) is None or quality_flag not in accepted_qc or unit != "nmol/kg":
+                continue
+            record_id = stable_record_id(
+                record.source_id,
+                record.source_record_id,
+                analyte,
+                raw_value,
+                unit,
+            )
+            rows.append(
+                {
+                    "record_id": record_id,
+                    "source_record_id": record.source_record_id,
+                    "sample_id": sample_id,
+                    "element_or_analyte": analyte,
+                    "value": raw_value,
+                    "unit": unit,
+                    "medium": "water",
+                    "measurement_basis": "dissolved_seawater_molar_per_mass",
+                    "value_qualifier": "reported",
+                    "detection_limit": "",
+                    "detection_limit_unit": "",
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "source_crs": "EPSG:4326",
+                    "coordinate_uncertainty_m": "",
+                    "geologic_unit": "global_ocean_cruise_track",
+                    "analytical_method": "",
+                    "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+                    "laboratory": "",
+                    "license": candidate.license_id,
+                    "source_tier": "official_curated",
+                    "source_id": record.source_id,
+                    "source_locator": record.source_locator,
+                    "sampled_at": str(record.fields.get("yyyy-mm-ddThh:mm:ss.sss") or ""),
+                    "sample_depth_min_m": depth,
+                    "sample_depth_max_m": depth,
+                    "grain_fraction": "",
+                }
+            )
+            entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+            entry.update(
+                {
+                    "article_citations": [candidate.registry_entry["citation"]],
+                    "article_dois": [candidate.dataset_doi],
+                    "selection_rule": "dissolved Cu/Ni/Zn; SeaDataNet QC 1 or 2; valid coordinates and depth; balanced source order",
+                    "cruise": cruise,
+                    "station": station,
+                    "sample_depth_m": depth,
+                    "sampling_devices": str(record.fields.get("Sampling Devices") or ""),
+                    "cruise_information_link": str(record.fields.get("Cruise Information Link") or ""),
+                    "seadatanet_quality_flag": quality_flag,
+                    "standard_deviation": str(values.get("standard_deviation") or ""),
+                    "water_fraction": "dissolved",
+                    "scientific_note": (
+                        "nmol/kg is preserved. Do not mix with ug/L without an explicit atomic-mass and seawater-density conversion."
+                    ),
+                }
+            )
+            evidence_rows.append(entry)
+            selected_source_rows.add(record.source_record_id)
+            selected_per_analyte[analyte] += 1
+    if len(rows) != observation_limit:
+        raise DemoError(f"GEOTRACES produced {len(rows)} observations, expected {observation_limit}")
+    return rows, evidence_rows, len(selected_source_rows)
+
+
 @contextmanager
 def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[DownloadedFile]]]:
     adapter = get_adapter(args.source)
@@ -555,6 +664,10 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             rows, evidence, selected_source_rows = marchem_demo(
                 raw_records, files, candidate, args.observations
             )
+        elif args.source == "geotraces-idp2025":
+            rows, evidence, selected_source_rows = geotraces_demo(
+                raw_records, files, candidate, args.observations
+            )
         else:
             raise DemoError(f"unsupported source: {args.source}")
 
@@ -584,7 +697,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         },
         "generation_request": {
             "observations": args.observations,
-            "analytes": list(ANALYTES),
+            "analytes": list(("Cu", "Ni", "Zn") if args.source == "geotraces-idp2025" else ANALYTES),
             "mode": args.mode,
         },
         "source_files": [
@@ -614,6 +727,15 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 if args.source == "norway-marchem"
                 else []
             ),
+            *(
+                [
+                    "GEOTRACES IDP2025 seawater has no arsenic variable; a separate water source is required for As.",
+                    "Values remain in nmol/kg because mass-per-volume conversion requires explicit atomic-mass and seawater-density assumptions.",
+                    "Only SeaDataNet QC 1 and 2 values are included in this demo; all source flags remain available in the raw adapter.",
+                ]
+                if args.source == "geotraces-idp2025"
+                else []
+            ),
         ],
         "failures": [],
     }
@@ -626,7 +748,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--source",
         required=True,
-        choices=("georoc-archaean", "usgs-conus-soil", "norway-marchem"),
+        choices=("georoc-archaean", "usgs-conus-soil", "norway-marchem", "geotraces-idp2025"),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)

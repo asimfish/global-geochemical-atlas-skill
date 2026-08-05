@@ -2,17 +2,17 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-05 21:13（Asia/Shanghai）
+更新时间：2026-08-05 22:05（Asia/Shanghai）
 
 ## 当前结论
 
-首批复核已进入 V3 渐进评分：`georoc-archaean`、`usgs-conus-soil` 和 `norway-marchem` 均已完成 canonical 适配、真实来源对账和端到端 fixture，当前均为 85 分、A 级、`normalized_analysis`；三者的 30 条人工复核单已准备但尚未签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。`geotraces-idp2025` 当前为 32.5 分、D 级、`discovery`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+四个介质样板均已完成 canonical 适配、真实来源对账和端到端 fixture，当前都是 85 分、A 级、`normalized_analysis`。四份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
 | `georoc-archaean` | DOI v12.0、28 个固定成员及校验、33,745 条源记录解析、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖太古宙克拉通专题 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
 | `usgs-conus-soil` | USGS 固定发布、三层文件及 hash、14,571 条源记录解析、48 条 fixture 地图运行、跨三层 30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖美国本土 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
-| `geotraces-idp2025` | 官方身份、不可变 DOI/IDP2025、CC BY 4.0、产品级 QC 描述 | BODC 归档仍在异步准备，未取得实际文件清单、成员 hash、变量表；未做适配器和人工抽查 | D 级 `discovery`，保留全部发现证据 |
+| `geotraces-idp2025` | 官方 DOI/IDP2025、CC BY 4.0/Fair Data Use、WebODV 冻结快照、242 个成员及 hash、69,704 行/39,327 条 Cu/Ni/Zn 观测对账、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；贡献者/方法完整率仍需审计；官方海水变量表没有 As | A 级 `normalized_analysis`，尚未达到 `benchmark_ready`；另需含 As 的水体来源 |
 | `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash、完整成员清单、canonical 适配器、1,070 行对账和地图运行 | 30 条人工回看尚待完成 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
 
 ## `georoc-archaean` 与 `usgs-conus-soil` 复核准备
@@ -115,40 +115,70 @@ canonical 适配器已处理合并批次表达式 `2021-0031 2023-0120`，并完
 
 ## `geotraces-idp2025` 复核
 
-### 1. 已固定的产品事实
+### 1. 产品与集合边界
 
-- 产品：GEOTRACES Intermediate Data Product 2025，第四次中间数据产品发布；
-- DOI：`10.5285/42c92148-8d03-8be6-e063-7086abc09f0c`；
-- BODC 元数据发布日期：2025-11-17，更新日期：2026-01-19；GEOTRACES 发布页标示 2025-11-20 发布；
+- 产品：GEOTRACES Intermediate Data Product 2025，DOI `10.5285/42c92148-8d03-8be6-e063-7086abc09f0c`；
 - 许可：CC BY 4.0，并适用 Fair Data Use Agreement；
-- 覆盖：2005-01-10 至 2023-01-24，所有主要海盆；
-- 规模：123 个航次、4,097 个站位；
-- 五个数据包：离散海水、气溶胶、降水、冰冻圈、海水传感器；
-- 格式：ASCII、netCDF、ODV，带 QC flags 和可用时的 1-sigma 误差；
-- 元数据声称可关联贡献者、分析方法和原始出版物。
+- 完整产品元数据报告 123 个航次、4,097 个站位，包含离散海水、气溶胶、降水、冰冻圈和海水传感器五个包；
+- 本轮只接入官方 WebODV 的 `GEOTRACES_IDP2025_Seawater` 离散海水集合。该集合元数据列出 4,094 个站位、82 个航次标签、28 个元数据变量和 418 个数据变量；
+- 本轮进一步以“Cu、Ni、Zn 任一有值”为条件选择站位，因此快照内含目标观测的范围是 46 个航次和 1,550 个航次—站位组合，不能把产品、集合和本次快照三个层级的数量混写。
 
-产品级引用不能替代记录级贡献者引用。Fair Data Use Agreement 要求使用相关原始出版物；后续证据链必须保留航次、参数、数据贡献者和原始文献，不能只写 GEOTRACES DOI。
+产品 DOI 不能替代记录级贡献者引用。Fair Data Use Agreement 要求引用相关原始出版物；适配器已经保留航次信息链接和随导出提供的引用字段，后续还要量化贡献者、方法和原始文献的完整率。
 
-### 2. 下载状态与阻断项
+### 2. 冻结请求、文件与完整性
 
-BODC Published Data Library 提供官方元数据 API：
+官方提取端点：
 
 ```text
-GET  https://www.bodc.ac.uk/data/published_data_library/api/doi/42c92148-8d03-8be6-e063-7086abc09f0c
-POST https://www.bodc.ac.uk/data/published_data_library/api/download/prepare/42c92148-8d03-8be6-e063-7086abc09f0c
-POST https://www.bodc.ac.uk/data/published_data_library/api/download/check/42c92148-8d03-8be6-e063-7086abc09f0c
+POST https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV
 ```
 
-截至 2026-08-05 18:34（Asia/Shanghai），下载检查仍返回 `{"status":"notready","filename":null}`。因此本轮没有猜测下载文件名，也没有把网页摘要当作变量表或文件证据。
+本轮冻结深度以及 `Cu_D_CONC`、`Ni_D_CONC`、`Zn_D_CONC`，并用三个目标变量的 OR 条件选择站位。生成时间为 `2026-08-05T13:41:55Z`。完整第三方文件只进入本地缓存，Git 保存成员 manifest、对账和最小 fixture。
 
-剩余工作：
+- 快照 ID：`geotraces-idp2025:IDP2025:a61f441e5ae2`；
+- 归档：903,710 bytes，SHA-256 `a61f441e5ae269f6c5514a9279393728f464859d970ca6be19207f7e601e5677`；
+- 归档成员：242 个，总展开大小 29,049,057 bytes；
+- 主 ODV 文件：28,760,915 bytes，SHA-256 `c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44`；
+- snapshot manifest 固定每个成员的路径、大小和 SHA-256；适配器在解析前验证归档、主文件、成员路径和预期物理行数。
 
-1. 取得准备完成的官方归档，记录归档及全部成员文件名、大小、发布方 checksum 或本项目观测 hash；
-2. 只选择与本任务介质一致的离散海水包，气溶胶、降水、冰冻圈和传感器包不能默认混入；
-3. 核对 As/Cu/Ni/Zn 的具体参数、溶解/颗粒分相、采样系统、单位、QC flags、误差和检出限；
-4. 冻结航次—站位—采样深度—样品—参数—贡献者—文献的映射；
-5. 实现最小适配器并完成全量对账和 30 条分层人工回看。
+可用 `scripts/acquire_geotraces_idp2025.py --accept-fair-use` 重新执行官方提取，也可用 `scripts/audit_geotraces_snapshot.py` 对缓存快照重算全部证据。重新下载会产生新快照，不覆盖本轮 hash。
+
+### 3. 行、观测与覆盖对账
+
+| 项目 | 结果 |
+|---|---:|
+| 物理样品深度行 | 69,704 |
+| 至少含一个目标值的行 | 19,186 |
+| 目标观测总数 | 39,327 |
+| Cu / Ni / Zn 非空观测 | 6,275 / 17,035 / 16,017 |
+| 含目标值的航次 | 46 |
+| 航次—站位组合 | 1,550 |
+| 深度范围 | 0–7,167 m |
+| 采样日期范围 | 2005-01-10 至 2021-01-07 |
+
+经纬度包围盒为 `[-179.990997, -77.7015, 180.0, 89.990501]`。它只表示航次采样点的外包范围，不代表包围盒内部或全球海洋连续覆盖。
+
+### 4. 参数、单位和 QC
+
+| 元素 | WebODV 变量 | 单位 | 非空观测 |
+|---|---|---|---:|
+| Cu | `Cu_D_CONC` | `nmol/kg` | 6,275 |
+| Ni | `Ni_D_CONC` | `nmol/kg` | 17,035 |
+| Zn | `Zn_D_CONC` | `nmol/kg` | 16,017 |
+
+`nmol/kg` 是溶解态海水摩尔质量比。适配器原样保存；没有显式的元素原子量和海水密度转换时，不与 `ug/L` 静默混合。官方离散海水变量表没有 As 命中，因此本来源不能满足水体 As，请求 As 时必须转向另一个水体来源。
+
+SeaDataNet QC 码按原值保留：1=good、2=probably good、3=probably bad、4=bad、5=changed、6=below detection。全量对账包含 3/4/5/6，不删除有问题的原始事实；最小 demo 只选择 QC 1/2。30 条复核样本特意覆盖 QC 1–6、地理和深度边界、多元素行及源文件顺序。
+
+### 5. 端到端结果与剩余工作
+
+- 适配器输出保留航次、站位、时间、经纬度、深度、dissolved 分相、标准差、QC、采样装置、航次链接、数据集 DOI 和源行定位；
+- 30 条复核单机器检查 30/30 通过，共比较 65 个目标观测，覆盖 17 个航次；具名人工决定仍为空；
+- fixture 平衡选择 Cu/Ni/Zn 各 16 条，共 48 条 QC 1/2 观测；标准化流程保留 `nmol/kg`，48/48 坐标有效并成功生成交互地图；
+- 证据评分为 85/A/`normalized_analysis`，人工复核维度为 0 分，未虚增为 `benchmark_ready`。
+
+剩余工作是完成 30 条具名人工签署、审计贡献者/方法/原始文献字段完整率，并接入至少一个含 As 的水体来源。
 
 ## 复核边界
 
-本报告证明的是官方接口、下载响应、文件结构和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；MarChem 现在可以参与 `normalized_analysis`，但只覆盖挪威海域，沉积物仍是 `partial` 而不是全球完整覆盖。
+本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质均已有一个 `normalized_analysis` 样板，但各自仍是专题、国家、区域或航次覆盖，全部保持 `partial`。水体对已登记目标元素的覆盖还明确缺 As。

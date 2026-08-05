@@ -32,6 +32,7 @@ import score_source_evidence
 import snapshot_source
 import source_router
 import query_source
+import standardize_geochemistry as standardizer
 import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
 import verify_marchem_candidate
@@ -102,8 +103,9 @@ def check_d1(output_dir: Path) -> list[str]:
 
     registry = source_contracts.load_source_registry()
     require(
-        set(registry["sources"]) == {"georoc-archaean", "usgs-conus-soil", "norway-marchem"},
-        "D1 registry freezes the rock, soil and sediment reference sources",
+        set(registry["sources"])
+        == {"georoc-archaean", "usgs-conus-soil", "norway-marchem", "geotraces-idp2025"},
+        "D1 registry freezes one operational reference source for each required medium",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -116,6 +118,14 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         len(usgs.registry_entry["download"]["files"]) == 3,
         "D1 USGS candidate keeps the three soil layers distinct",
+        checks,
+    )
+    geotraces = source_contracts.registry_candidate("geotraces-idp2025")
+    require(
+        geotraces.version == "IDP2025"
+        and set(geotraces.registry_entry["target_analytes"]) == {"Cu", "Ni", "Zn"}
+        and geotraces.registry_entry["expected_counts"]["target_observations"] == 39327,
+        "D1 GEOTRACES candidate pins the seawater export and its explicit arsenic gap",
         checks,
     )
     catalog = source_router.load_catalog()
@@ -149,15 +159,15 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         {entry["source_id"] for entry in route["selected_sources"]}
-        == {"georoc-archaean", "usgs-conus-soil", "norway-marchem"},
-        "D1 V3 router selects the three sources that currently support normalized analysis",
+        == {"georoc-archaean", "usgs-conus-soil", "norway-marchem", "geotraces-idp2025"},
+        "D1 V3 router selects one normalized-analysis source for each required medium",
         checks,
     )
     require(
         route["coverage"]["rock"]["status"] == "partial"
         and route["coverage"]["soil"]["status"] == "partial"
         and route["coverage"]["sediment"]["status"] == "partial"
-        and route["coverage"]["water"]["status"] == "unknown",
+        and route["coverage"]["water"]["status"] == "partial",
         "D1 router does not overclaim incomplete coverage below the requested use mode",
         checks,
     )
@@ -210,12 +220,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 3, "B": 0, "C": 0, "D": len(catalog["sources"]) - 3, "U": 0},
+            "evidence_tiers": {"A": 4, "B": 0, "C": 0, "D": len(catalog["sources"]) - 4, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 3,
+                "normalized_analysis": 4,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 3,
+                "discovery": len(catalog["sources"]) - 4,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -237,6 +247,15 @@ def check_d1(output_dir: Path) -> list[str]:
         and evidence["sources"]["norway-marchem"]["source_evidence_dimensions"]["version_snapshot"]["status"]
         == "verified",
         "D1 credits the frozen MarChem adapter while retaining its pending human-review limitation",
+        checks,
+    )
+    require(
+        evidence["sources"]["geotraces-idp2025"]["source_evidence_score"] == 85
+        and evidence["sources"]["geotraces-idp2025"]["evidence_tier"] == "A"
+        and evidence["sources"]["geotraces-idp2025"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["geotraces-idp2025"]["source_evidence_dimensions"]["human_review"]["status"]
+        == "missing",
+        "D1 credits the pinned GEOTRACES adapter without pretending the prepared review is signed",
         checks,
     )
     audit = source_audit.audit_catalog(catalog, registry, candidate_evidence)
@@ -488,6 +507,9 @@ def check_d1(output_dir: Path) -> list[str]:
         "usgs-conus-soil": json_value(
             SKILL_DIR / "fixtures" / "four-media" / "soil" / "usgs-conus-soil" / "human_review.json"
         ),
+        "geotraces-idp2025": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "water" / "geotraces-idp2025" / "human_review.json"
+        ),
     }
     require(
         all(
@@ -498,7 +520,7 @@ def check_d1(output_dir: Path) -> list[str]:
             and all(record["automated_status"] == "PASS" for record in review["records"])
             for review in prepared_reference_reviews.values()
         ),
-        "D1 prepares 30 passing GEOROC and USGS comparisons without auto-signing either source",
+        "D1 prepares 30 passing GEOROC, USGS and GEOTRACES comparisons without auto-signing them",
         checks,
     )
     require(
@@ -520,8 +542,10 @@ def check_d1(output_dir: Path) -> list[str]:
             not all(record["published_target_raw_values"].values())
             for record in prepared_reference_reviews["georoc-archaean"]["records"]
         )
-        > 0,
-        "D1 review selection spans 27 GEOROC members, all soil layers and GEOROC missing-value cases",
+        > 0
+        and {item["quality_flag"] for record in prepared_reference_reviews["geotraces-idp2025"]["records"] for item in record["adapter_observations"]}
+        == {"1", "2", "3", "4", "5", "6"},
+        "D1 review selection spans GEOROC members, all soil layers, missing values and GEOTRACES QC edges",
         checks,
     )
     require(
@@ -532,7 +556,7 @@ def check_d1(output_dir: Path) -> list[str]:
             in evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["note"]
             for source_id in prepared_reference_reviews
         ),
-        "D1 records prepared GEOROC and USGS reviews without granting unsigned evidence points",
+        "D1 records all prepared reviews without granting unsigned evidence points",
         checks,
     )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
@@ -545,8 +569,10 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
-        and matrix["cells"]["water"]["analyte_coverage"] == "unknown",
-        "D1 coverage matrix reports partial, single-source and unaudited dimensions conservatively",
+        and matrix["cells"]["rock"]["analyte_coverage"] == "complete_for_registered_targets"
+        and matrix["cells"]["water"]["analyte_coverage"] == "partial"
+        and matrix["cells"]["water"]["missing_analytes"] == ["As"],
+        "D1 coverage matrix reports complete registered targets and the explicit water arsenic gap",
         checks,
     )
     archive_bundle = json_value(SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json")
@@ -749,6 +775,7 @@ def check_d1(output_dir: Path) -> list[str]:
         "georoc-archaean": 48,
         "usgs-conus-soil": 48,
         "norway-marchem": 112,
+        "geotraces-idp2025": 48,
     }
     for source_id, expected_demo_count in expected_demo_counts.items():
         demo_dir = SOURCE_DEMOS / source_id
@@ -783,18 +810,12 @@ def check_d1(output_dir: Path) -> list[str]:
             f"D1 {source_id} fixture preserves record-level evidence linkage",
             checks,
         )
-        per_analyte_count = expected_demo_count // 4
+        demo_analytes = ("Cu", "Ni", "Zn") if source_id == "geotraces-idp2025" else ("As", "Cu", "Ni", "Zn")
+        per_analyte_count = expected_demo_count // len(demo_analytes)
         require(
             Counter(row["element_or_analyte"] for row in demo_rows)
-            == Counter(
-                {
-                    "As": per_analyte_count,
-                    "Cu": per_analyte_count,
-                    "Ni": per_analyte_count,
-                    "Zn": per_analyte_count,
-                }
-            ),
-            f"D1 {source_id} fixture keeps the four analytes balanced",
+            == Counter({analyte: per_analyte_count for analyte in demo_analytes}),
+            f"D1 {source_id} fixture keeps its registered analytes balanced",
             checks,
         )
     georoc_evidence = [
@@ -827,6 +848,17 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"accredited", "not_accredited"}
         and all(item.get("metadata_source_locator") for item in marchem_evidence),
         "D1 MarChem fixture retains per-observation method and accreditation evidence",
+        checks,
+    )
+    geotraces_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "geotraces-idp2025" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        {item.get("seadatanet_quality_flag") for item in geotraces_evidence} <= {"1", "2"}
+        and {item.get("water_fraction") for item in geotraces_evidence} == {"dissolved"}
+        and all(item.get("sample_depth_m") for item in geotraces_evidence),
+        "D1 GEOTRACES fixture retains dissolved fraction, depth and accepted source QC",
         checks,
     )
 
@@ -1203,6 +1235,13 @@ def check_d2(output_dir: Path) -> list[str]:
     require(len(rows) == 19, "D2 canonical database preserves all demo records", checks)
     indexed = {row["record_id"]: row for row in rows}
     require(float(indexed["rock-fe-001"]["normalized_value"]) == 25_000, "D2 solid unit conversion is stable", checks)
+    molar_flags: list[str] = []
+    require(
+        standardizer.conversion_for("water", "nmol/kg", molar_flags) == (1.0, "nmol/kg")
+        and not molar_flags,
+        "D2 preserves seawater molar-per-mass values without an unstated density conversion",
+        checks,
+    )
     require(indexed["soil-as-013"]["normalized_value"] == "", "D2 censored values are not imputed", checks)
     require(
         "AMBIGUOUS_AQUEOUS_RATIO_UNIT" in indexed["water-as-ambiguous"]["qc_flags"],
