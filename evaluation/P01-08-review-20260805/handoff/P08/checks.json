@@ -1,0 +1,32 @@
+{
+  "schema_version": "p08.handoff-checks.v1",
+  "eval_version": "1.0.0",
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "overall": "AUDIT_COMPLETE_NOT_READY",
+  "ready": false,
+  "tasks": [
+    {"id": "P08-01", "status": "PASS", "evidence": ["reports/evidence-index.schema.json", "reports/engineering-acceptance.md"]},
+    {"id": "P08-02", "status": "PASS_FIXTURE", "evidence": ["reports/reproduction-runbook.md", "handoff/P08/run_reproduction.py"]},
+    {"id": "P08-03", "status": "PASS_WITH_FINDINGS", "evidence": ["handoff/P08/acceptance-observation.json"]},
+    {"id": "P08-04", "status": "PASS_FRAMEWORK_DATA_MISSING", "evidence": ["handoff/P08/build_evidence_index.py", "handoff/P08/test_acceptance.py"]},
+    {"id": "P08-05", "status": "PASS_P01_P07_INDEXED_FORMAL_MISSING", "evidence": ["reports/evidence-index.json", "reports/evidence-index.md", "handoff/P08/acceptance-observation.json"]},
+    {"id": "P08-06", "status": "PARTIAL", "evidence": ["reports/repo-size.json", "handoff/P08/acceptance-observation.json"]},
+    {"id": "P08-07", "status": "PASS_FIXTURE", "evidence": ["reports/opencode-codex-compatibility.md", "handoff/P06/e2e-report.json"]},
+    {"id": "P08-08", "status": "PASS_SYNTHETIC_BLOCKED_OFFICIAL", "evidence": ["eval/statistics/fixtures/known-cohort/statistics.json", "handoff/P08/test_acceptance.py", "handoff/P08/defect-register.md"]},
+    {"id": "P08-09", "status": "PASS_CURRENT_FAIL_CLOSED", "evidence": ["handoff/P08/reproduction-observation.json"]},
+    {"id": "P08-10", "status": "PASS", "evidence": ["handoff/P08/reproduction-observation.json"]},
+    {"id": "P08-11", "status": "PASS", "evidence": ["handoff/P08/reproduction-evidence/p06-archive.json", "handoff/P08/reproduction-evidence/logs/events.ndjson", "handoff/P08/reproduction-evidence/score/checks.json"]},
+    {"id": "P08-12", "status": "BLOCKED_P07", "evidence": ["reports/evidence-index.json"]},
+    {"id": "P08-13", "status": "FAIL_FINDINGS_OPEN", "evidence": ["handoff/P08/acceptance-observation.json", "handoff/P08/defect-register.md"]},
+    {"id": "P08-14", "status": "BLOCKED_EXTERNAL_SIGNATURES", "evidence": ["handoff/P01/manifest.json", "handoff/P08/defect-register.md"]}
+  ],
+  "verification": {
+    "p08_unit_tests": "9 passed",
+    "p07_statistics_regression": "13 passed; synthetic-only, not official evidence",
+    "upstream_sha_manifests": "P01-P07 pass; P07 formal statistics/READY remain missing",
+    "required_artifacts_opened": 10,
+    "clean_fixture_integrated_exit": 74,
+    "known_failure_check": "provenance.chain",
+    "report_rule_scan": "pass"
+  }
+}

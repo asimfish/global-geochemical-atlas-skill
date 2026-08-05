@@ -1,0 +1,530 @@
+{
+  "active_rules": {
+    "candidate_wall_seconds": 43200,
+    "repository_bytes": "<250000000"
+  },
+  "blocking_findings": [
+    "Evidence index schema/path/hash validation failed",
+    "P07 numeric report→aggregate→score→raw sampling is unavailable",
+    "One or more P01-P07 SHA manifests are missing or fail",
+    "D3 production integrity and E2 isolation signatures are missing",
+    "Sensitive-content or credential-file candidates require resolution",
+    "Absolute personal paths remain in delivery evidence",
+    "Root dependency manifest/lock is missing",
+    "Root license/notice file is missing",
+    "Root reviewer README and Demo link are missing"
+  ],
+  "compatibility_consistency": {
+    "limitation_preserved": "native Codex runtime certification unavailable",
+    "report": "reports/opencode-codex-compatibility.md",
+    "smoke_evidence": "handoff/P06/e2e-report.json",
+    "status": "pass"
+  },
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "delivery_metadata": {
+    "demo_links": [],
+    "dependency_paths": [],
+    "download_instructions": {
+      "exists": true,
+      "path": "eval/download/README.md"
+    },
+    "git_worktree": false,
+    "license_paths": [],
+    "root_dependency_manifest_or_lock": false,
+    "root_license_or_notice": false,
+    "root_readme": false
+  },
+  "evidence_index": {
+    "errors": [
+      "P03.reliability: evidence hash/size drift: handoff/P04/P01-08缺陷台账.md",
+      "P05.scoring: evidence hash/size drift: handoff/P04/P01-08缺陷台账.md",
+      "P07.statistics: evidence hash/size drift: handoff/P07/manifest.json",
+      "P07.statistics: evidence hash/size drift: handoff/P07/checks.json",
+      "P07.statistics: evidence hash/size drift: reports/ablation.md"
+    ],
+    "path": "reports/evidence-index.json",
+    "sha256": "ff8b879d20fc82f95a48b787a130acb48a6665a243a6d85a86b67ad68c888561"
+  },
+  "external_signatures": {
+    "d3_production_manifest": "missing",
+    "d3_signature": "missing",
+    "e1_named_owner_signature": "missing",
+    "e2_signature": "missing",
+    "official_run_authorized": false
+  },
+  "generated_at": "2026-08-05T12:37:12.951391Z",
+  "handoff_sha_manifests": [
+    {
+      "checked": 31,
+      "failures": [],
+      "path": "handoff/P01/SHA256SUMS",
+      "status": "pass"
+    },
+    {
+      "checked": 25,
+      "failures": [],
+      "path": "handoff/P02/SHA256SUMS",
+      "status": "pass"
+    },
+    {
+      "checked": 23,
+      "failures": [],
+      "path": "handoff/P03/SHA256SUMS",
+      "status": "pass"
+    },
+    {
+      "checked": 679,
+      "failures": [],
+      "path": "handoff/P04/SHA256SUMS",
+      "status": "pass"
+    },
+    {
+      "checked": 313,
+      "failures": [],
+      "path": "handoff/P05/SHA256SUMS",
+      "status": "pass"
+    },
+    {
+      "checked": 27,
+      "failures": [],
+      "path": "handoff/P06/SHA256SUMS",
+      "status": "pass"
+    },
+    {
+      "checked": 110,
+      "failures": [
+        "line 1: hash drift: eval/configs/official/README.md",
+        "line 3: hash drift: eval/configs/official/g5-inputs.template.json",
+        "line 5: hash drift: eval/configs/official/preregistration-input.template.json",
+        "line 7: hash drift: eval/statistics/aggregate.py",
+        "line 9: hash drift: eval/statistics/cli.py",
+        "line 10: hash drift: eval/statistics/common.py",
+        "line 11: hash drift: eval/statistics/execute.py",
+        "line 42: hash drift: eval/statistics/fixtures/known-input.json",
+        "line 43: hash drift: eval/statistics/gate.py",
+        "line 45: hash drift: eval/statistics/preregister.py",
+        "line 52: hash drift: eval/statistics/test_preregister.py"
+      ],
+      "path": "handoff/P07/SHA256SUMS",
+      "status": "fail"
+    }
+  ],
+  "hygiene_scan": {
+    "absolute_personal_path_findings": [
+      {
+        "classification": "unreviewed",
+        "line": 5,
+        "path": "Docker_Plan.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 14,
+        "path": "Docker_Plan.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 55,
+        "path": "Docker_Plan.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 58,
+        "path": "Docker_Plan.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 45,
+        "path": "eval/environment/docker/DEVELOPMENT_CHECKS.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 69,
+        "path": "eval/environment/docker/DEVELOPMENT_CHECKS.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 41,
+        "path": "eval/environment/docker/DEVELOPMENT_STATUS.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 88,
+        "path": "eval/environment/docker/DEVELOPMENT_STATUS.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 71,
+        "path": "eval/environment/docker/README.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 27,
+        "path": "handoff/P02/manifest.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 31,
+        "path": "handoff/P02/summary.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 32,
+        "path": "handoff/P02/summary.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 47,
+        "path": "handoff/P02/summary.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 56,
+        "path": "handoff/P02/summary.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 65,
+        "path": "handoff/P02/summary.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 43,
+        "path": "handoff/P04/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 62,
+        "path": "handoff/P04/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 81,
+        "path": "handoff/P04/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 44,
+        "path": "handoff/P07/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 45,
+        "path": "handoff/P07/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 48,
+        "path": "handoff/P07/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 58,
+        "path": "handoff/P07/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 102,
+        "path": "handoff/P07/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 145,
+        "path": "handoff/P07/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 146,
+        "path": "handoff/P07/checks.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 10,
+        "path": "handoff/P07/g5-audit.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 11,
+        "path": "handoff/P07/g5-audit.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 14,
+        "path": "handoff/P07/g5-audit.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 24,
+        "path": "handoff/P07/g5-audit.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 68,
+        "path": "handoff/P07/g5-audit.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 2,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/attempts/attempt-001/events.jsonl",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 5,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/attempts/attempt-001/status.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 23,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/attempts/attempt-001/status.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 25,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/attempts/attempt-001/status.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 27,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/attempts/attempt-001/status.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 2,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-plan.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 5,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-plan.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 7,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-plan.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 13,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-plan.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 7,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-report.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 25,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-report.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 27,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-report.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 29,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-report.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 111,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-report.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 179,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-report.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 181,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/execution-report.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 38,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/p06-archive.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 40,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/p06-archive.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 7,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/resolved_config.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 9,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/resolved_config.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 119,
+        "path": "handoff/P07/smoke-runs/public-case01-s0-r1/resolved_config.json",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "test_fixture",
+        "line": 140,
+        "path": "handoff/P08/test_acceptance.py",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 16,
+        "path": "reports/ablation.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 17,
+        "path": "reports/ablation.md",
+        "pattern": "absolute_personal_home"
+      },
+      {
+        "classification": "unreviewed",
+        "line": 149,
+        "path": "reports/repo-size.json",
+        "pattern": "absolute_personal_home"
+      }
+    ],
+    "secret_content_candidates": [
+      {
+        "classification": "test_fixture",
+        "line": 149,
+        "path": "eval/environment/docker/context/tests/test_container_smoke.py",
+        "pattern": "generic_secret_assignment"
+      },
+      {
+        "classification": "test_fixture",
+        "line": 302,
+        "path": "eval/runner/test_runner.py",
+        "pattern": "generic_secret_assignment"
+      },
+      {
+        "classification": "test_fixture",
+        "line": 113,
+        "path": "eval/tests/faults/mock_workload.py",
+        "pattern": "cookie_assignment"
+      },
+      {
+        "classification": "test_fixture",
+        "line": 115,
+        "path": "eval/tests/faults/mock_workload.py",
+        "pattern": "private_key"
+      },
+      {
+        "classification": "test_fixture",
+        "line": 270,
+        "path": "eval/tests/faults/test_supervisor.py",
+        "pattern": "openai_style_key"
+      },
+      {
+        "classification": "test_fixture",
+        "line": 270,
+        "path": "eval/tests/faults/test_supervisor.py",
+        "pattern": "generic_secret_assignment"
+      },
+      {
+        "classification": "test_fixture",
+        "line": 140,
+        "path": "handoff/P08/test_acceptance.py",
+        "pattern": "private_key"
+      }
+    ],
+    "sensitive_filename_candidates": [
+      {
+        "bytes": 866,
+        "path": "tmp/feishu_auth_qr.png",
+        "sha256": "34b6603a636599e39b3b28a657fecbba017ba4084ae57abb28451f54c833af1c"
+      }
+    ],
+    "shadow_or_gold_path_candidates": []
+  },
+  "numeric_traceability": {
+    "available_claims": 0,
+    "blocker": "P07 official statistics and reports/ablation.md are absent or not uniquely frozen.",
+    "chains": [],
+    "required_random_samples": 3,
+    "status": "missing"
+  },
+  "report_rule_scan": {
+    "findings": [],
+    "pass": true
+  },
+  "repository_size": {
+    "bytes": 15288784,
+    "extra_lower_limit_active": false,
+    "files": 1403,
+    "limit_bytes_exclusive": 250000000,
+    "p04_snapshot": {
+      "all_size_checks_pass": true,
+      "largest_file_is_diagnostic_only": {
+        "bytes": 8388712,
+        "path": "eval/tests/scorer/fixtures/oversized-html/artifacts/map.html",
+        "sha256": "f39c65bee948c0e13662eec4dc21e6474d386959cbed3dc4daeef7af418187a6"
+      },
+      "package_estimate_bytes": 1697984,
+      "path": "reports/repo-size.json",
+      "sha256": "7dd489425a4c4b8cc02eacbbcec473e873535c5113d9ea1bca614036a55ad084",
+      "worktree_bytes": 13244609
+    },
+    "pass": true
+  },
+  "schema_version": "p08.acceptance-observation.v1",
+  "status": "NOT_READY"
+}

@@ -1,0 +1,208 @@
+{
+  "commands": {
+    "compile": {
+      "command": [
+        "/opt/conda/bin/python3",
+        "-m",
+        "compileall",
+        "-q",
+        "eval/environment",
+        "eval/download",
+        "eval/fixtures/data"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "container_unit_tests": {
+      "command": [
+        "/opt/conda/bin/python3",
+        "-s",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "eval/environment/docker/context/tests",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "stderr": ".........\n----------------------------------------------------------------------\nRan 9 tests in 1.505s\n\nOK\n",
+      "stdout": ""
+    },
+    "fixture_smokes": [
+      {
+        "command": [
+          "/opt/conda/bin/python3",
+          "-s",
+          "-m",
+          "eval.download.acquire",
+          "--mode",
+          "fixture",
+          "--registry",
+          "/home/dataset-assist-0/gxr/hackthon/Hackathon/eval/fixtures/data/datasets.json",
+          "--dataset-id",
+          "user-csv-demo",
+          "--output-dir",
+          "/tmp/p04-acceptance-afzjnwg5/user-csv-demo"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"data_path\": \"/tmp/p04-acceptance-afzjnwg5/user-csv-demo/user-data.csv\", \"dataset_id\": \"user-csv-demo\", \"manifest_path\": \"/tmp/p04-acceptance-afzjnwg5/user-csv-demo/dataset-manifest.json\", \"mode\": \"fixture\", \"sha256\": \"71121d2c2706a7b8344949a273676cc1341501b40ce03c5363c9571bb9cb1d0b\", \"status\": \"ok\"}\n"
+      },
+      {
+        "command": [
+          "/opt/conda/bin/python3",
+          "-s",
+          "-m",
+          "eval.download.acquire",
+          "--mode",
+          "fixture",
+          "--registry",
+          "/home/dataset-assist-0/gxr/hackthon/Hackathon/eval/fixtures/data/datasets.json",
+          "--dataset-id",
+          "usgs-earthquakes",
+          "--output-dir",
+          "/tmp/p04-acceptance-afzjnwg5/usgs-earthquakes"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"data_path\": \"/tmp/p04-acceptance-afzjnwg5/usgs-earthquakes/usgs-earthquakes.geojson\", \"dataset_id\": \"usgs-earthquakes\", \"manifest_path\": \"/tmp/p04-acceptance-afzjnwg5/usgs-earthquakes/dataset-manifest.json\", \"mode\": \"fixture\", \"sha256\": \"3095765e081de2abeed4d020ed46df296220cb093ced577d037b2467552388c7\", \"status\": \"ok\"}\n"
+      },
+      {
+        "command": [
+          "/opt/conda/bin/python3",
+          "-s",
+          "-m",
+          "eval.download.acquire",
+          "--mode",
+          "fixture",
+          "--registry",
+          "/home/dataset-assist-0/gxr/hackthon/Hackathon/eval/fixtures/data/datasets.json",
+          "--dataset-id",
+          "gbif-occurrences",
+          "--output-dir",
+          "/tmp/p04-acceptance-afzjnwg5/gbif-occurrences"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"data_path\": \"/tmp/p04-acceptance-afzjnwg5/gbif-occurrences/gbif-occurrences.json\", \"dataset_id\": \"gbif-occurrences\", \"manifest_path\": \"/tmp/p04-acceptance-afzjnwg5/gbif-occurrences/dataset-manifest.json\", \"mode\": \"fixture\", \"sha256\": \"bd82dc8f9f6a017dc13fa86f3a22133f31acc2fc01059ee53d81b1565e8a5571\", \"status\": \"ok\"}\n"
+      }
+    ],
+    "repository_audit": {
+      "command": [
+        "/opt/conda/bin/python3",
+        "-s",
+        "eval/environment/audit.py",
+        "--root",
+        ".",
+        "--json",
+        "reports/repo-size.json",
+        "--markdown",
+        "reports/repo-size.md"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"checks\": {\"repository_worktree_limit\": true, \"submission_package_limit\": true}, \"status\": \"ok\"}\n"
+    },
+    "unit_tests": {
+      "command": [
+        "/opt/conda/bin/python3",
+        "-s",
+        "-m",
+        "unittest",
+        "eval.environment.test_audit",
+        "eval.download.test_core",
+        "eval.download.test_faults",
+        "eval.fixtures.data.test_fixtures"
+      ],
+      "exit_code": 0,
+      "stderr": "........................\n----------------------------------------------------------------------\nRan 24 tests in 6.117s\n\nOK\n",
+      "stdout": ""
+    }
+  },
+  "generated_at": "2026-08-05T11:43:27.076155+00:00",
+  "overall": "NOT_READY",
+  "readiness": {
+    "blockers": [
+      "The supplied Hackathon directory is not the production Git worktree, so Git object and tracked/untracked gates cannot be proven.",
+      "Production dependency manifests/lockfiles and the production Skill are absent, so their cold-start and license audit cannot be proven.",
+      "G0 network/resource approval is absent; real USGS/GBIF online smoke was intentionally not claimed.",
+      "Docker is unavailable and rootless Podman cannot create its user namespace here; image build/runtime smoke is not proven.",
+      "The bundled tmp/feishu_auth_qr.png requires owner review/removal before submission."
+    ],
+    "ready_for_integration": false
+  },
+  "schema_version": "p04-checks-v1",
+  "tasks": [
+    {
+      "evidence": [
+        "reports/repo-size.json",
+        "reports/repo-size.md"
+      ],
+      "id": "P04-01",
+      "note": "Worktree and package are checked against the strict 250,000,000-byte gate; largest-file size is diagnostic. Git objects and tracked/untracked coverage require the production Git worktree.",
+      "status": "PARTIAL"
+    },
+    {
+      "evidence": [
+        "reports/repo-size.json#dependencies"
+      ],
+      "id": "P04-02",
+      "note": "P04 is standard-library-only; production dependency and lock files are not present in this package.",
+      "status": "PARTIAL"
+    },
+    {
+      "evidence": [
+        "eval/download/safe_io.py",
+        "eval/download/cache.py",
+        "eval/download/test_core.py",
+        "eval/download/test_faults.py"
+      ],
+      "id": "P04-03",
+      "status": "PASS"
+    },
+    {
+      "evidence": [
+        "eval/download/acquire.py",
+        "eval/download/test_faults.py"
+      ],
+      "id": "P04-04",
+      "note": "Online is covered against an isolated HTTP server; live official-source smoke remains gated by G0.",
+      "status": "PASS"
+    },
+    {
+      "evidence": [
+        "eval/download/acquire.py",
+        "eval/fixtures/data/fixture-manifest.json"
+      ],
+      "id": "P04-05",
+      "status": "PASS"
+    },
+    {
+      "evidence": [
+        "eval/fixtures/data/datasets.json",
+        "eval/fixtures/data/SOURCES.md",
+        "eval/download/adapters.py"
+      ],
+      "id": "P04-06",
+      "status": "PASS"
+    },
+    {
+      "evidence": [
+        "eval/download/test_faults.py#test_cold_start_fixture_uses_no_user_home_or_project_dependencies"
+      ],
+      "id": "P04-07",
+      "status": "PASS"
+    },
+    {
+      "evidence": [
+        "eval/download/test_core.py",
+        "eval/download/test_faults.py",
+        "eval/fixtures/data/test_fixtures.py"
+      ],
+      "id": "P04-08",
+      "status": "PASS"
+    }
+  ]
+}

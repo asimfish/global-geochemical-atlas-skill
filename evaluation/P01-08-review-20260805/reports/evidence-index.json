@@ -1,0 +1,272 @@
+{
+  "claims": [
+    {
+      "claim_id": "P01.contract",
+      "claim_type": "contract",
+      "evidence": [
+        {
+          "bytes": 1936,
+          "path": "handoff/P01/manifest.json",
+          "role": "authoritative component evidence",
+          "sha256": "8a3f2bbde5098c330d8182b057699803707f0dbeac4300a85506b8ea8ae4ebb0"
+        },
+        {
+          "bytes": 3603,
+          "path": "handoff/P01/checks.json",
+          "role": "authoritative component evidence",
+          "sha256": "400ca662de0339df96b74c127385d7353fd03765bf742e7651b77903148ca7ea"
+        },
+        {
+          "bytes": 65,
+          "path": "eval/contracts/CONTRACT_SHA256",
+          "role": "authoritative component evidence",
+          "sha256": "1a9386c5ef77b69254637fd52f63a2a039138c2224b3895e35c12aa20a274170"
+        }
+      ],
+      "limitations": [
+        "P01 has no READY_FOR_INTEGRATION marker"
+      ],
+      "plan_id": "P01",
+      "readiness": "not_ready",
+      "statement": "The frozen mock contract and its outstanding signatures are indexed.",
+      "status": "limited"
+    },
+    {
+      "claim_id": "P02.runner",
+      "claim_type": "implementation",
+      "evidence": [
+        {
+          "bytes": 1305,
+          "path": "handoff/P02/manifest.json",
+          "role": "authoritative component evidence",
+          "sha256": "efbb79d31523825332ce2933edbaac2ab7f693dafbfc1a62086981ba900c4166"
+        },
+        {
+          "bytes": 1687,
+          "path": "handoff/P02/checks.json",
+          "role": "authoritative component evidence",
+          "sha256": "a0cf89d742e91af486baa416e867b8911d775181c2c60336bc48beede73b26a5"
+        }
+      ],
+      "limitations": [
+        "P02 has no READY_FOR_INTEGRATION marker"
+      ],
+      "plan_id": "P02",
+      "readiness": "not_ready",
+      "statement": "Runner/gateway fixture implementation and formal production blockers are indexed.",
+      "status": "limited"
+    },
+    {
+      "claim_id": "P03.reliability",
+      "claim_type": "reliability",
+      "evidence": [
+        {
+          "bytes": 1827,
+          "path": "handoff/P03/manifest.json",
+          "role": "authoritative component evidence",
+          "sha256": "de502343b43e84a6496d09aa28b140b86608b799b348ce4b40e85f68709c5c4c"
+        },
+        {
+          "bytes": 3257,
+          "path": "handoff/P03/checks.json",
+          "role": "authoritative component evidence",
+          "sha256": "7adad112b91ea2280a7b4dd3c5475850dea8f7ce45b9598e1c1d9bf219a7d02d"
+        },
+        {
+          "bytes": 130,
+          "path": "handoff/P03/READY_FOR_INTEGRATION",
+          "role": "authoritative component evidence",
+          "sha256": "a42fbe8416ff7f27b18c0b63420aff052006b4331e296c52cbea20e331830cc1"
+        },
+        {
+          "bytes": 32950,
+          "path": "handoff/P04/P01-08缺陷台账.md",
+          "role": "authoritative component evidence",
+          "sha256": "b21215e00bff433e8411335c58a6183a3229427d588b5d813658c2fd16d2d1d5"
+        }
+      ],
+      "limitations": [],
+      "plan_id": "P03",
+      "readiness": "ready",
+      "statement": "Supervisor evidence and recorded upstream P0 limitations are indexed.",
+      "status": "limited"
+    },
+    {
+      "claim_id": "P04.environment",
+      "claim_type": "environment",
+      "evidence": [
+        {
+          "bytes": 166282,
+          "path": "handoff/P04/manifest.json",
+          "role": "authoritative component evidence",
+          "sha256": "2e0749c9071611fb08fea1cdf905d22e6c04d543001a1458bd373bca6f56de0f"
+        },
+        {
+          "bytes": 7003,
+          "path": "handoff/P04/checks.json",
+          "role": "authoritative component evidence",
+          "sha256": "08ec8616b39d87d3307d2efdb811b2d550c062a4dd179e8697a2476dfb37db80"
+        },
+        {
+          "bytes": 6671,
+          "path": "reports/repo-size.json",
+          "role": "authoritative component evidence",
+          "sha256": "7dd489425a4c4b8cc02eacbbcec473e873535c5113d9ea1bca614036a55ad084"
+        }
+      ],
+      "limitations": [
+        "P04 has no READY_FOR_INTEGRATION marker"
+      ],
+      "plan_id": "P04",
+      "readiness": "not_ready",
+      "statement": "Environment, data and repository-size evidence are indexed.",
+      "status": "limited"
+    },
+    {
+      "claim_id": "P05.scoring",
+      "claim_type": "scoring",
+      "evidence": [
+        {
+          "bytes": 1086,
+          "path": "handoff/P05/manifest.json",
+          "role": "authoritative component evidence",
+          "sha256": "c61da77a7cf837ba870ec070b3dbb9bd26ed84cff86f765249b476852eb2cf99"
+        },
+        {
+          "bytes": 1367,
+          "path": "handoff/P05/checks.json",
+          "role": "authoritative component evidence",
+          "sha256": "848e99cbcc19688507d095a5c55c3640a0ba7e863c4f23dc6bf64763d785bfa7"
+        },
+        {
+          "bytes": 32950,
+          "path": "handoff/P04/P01-08缺陷台账.md",
+          "role": "authoritative component evidence",
+          "sha256": "b21215e00bff433e8411335c58a6183a3229427d588b5d813658c2fd16d2d1d5"
+        }
+      ],
+      "limitations": [
+        "P05 has no READY_FOR_INTEGRATION marker"
+      ],
+      "plan_id": "P05",
+      "readiness": "not_ready",
+      "statement": "Deterministic scorer evidence and missing official E2 rubric gate are indexed.",
+      "status": "limited"
+    },
+    {
+      "claim_id": "P06.integration",
+      "claim_type": "integration",
+      "evidence": [
+        {
+          "bytes": 1340,
+          "path": "handoff/P06/manifest.json",
+          "role": "authoritative component evidence",
+          "sha256": "00fa135919ecf8f25efc7123ea5cca5bde4353b658311720a698291b87869549"
+        },
+        {
+          "bytes": 4085,
+          "path": "handoff/P06/checks.json",
+          "role": "authoritative component evidence",
+          "sha256": "ce5f77abd593c8cc1f8e588830e312aa6a154c82bc05adda7e62895e04753b72"
+        },
+        {
+          "bytes": 2327,
+          "path": "handoff/P06/e2e-report.json",
+          "role": "authoritative component evidence",
+          "sha256": "be9719177cdb84c5781f743cc4c3df62ce3cfcdaa5218ec1970d268fde0aec62"
+        },
+        {
+          "bytes": 3221,
+          "path": "reports/opencode-codex-compatibility.md",
+          "role": "authoritative component evidence",
+          "sha256": "a44ceab35d8ff3f4d1b38711e048f86221fcc99cecf2092a747c9036264db994"
+        }
+      ],
+      "limitations": [
+        "P06 has no READY_FOR_INTEGRATION marker"
+      ],
+      "plan_id": "P06",
+      "readiness": "not_ready",
+      "statement": "Integrated fixture-chain evidence and formal blockers are indexed.",
+      "status": "limited"
+    },
+    {
+      "claim_id": "P07.statistics",
+      "claim_type": "statistics",
+      "evidence": [
+        {
+          "bytes": 22354,
+          "path": "handoff/P07/manifest.json",
+          "role": "required P07 statistical evidence",
+          "sha256": "52738493e77d06d0c2b70a47f6d7081f86a2b0cc11c0ced6c1af96eab2e860ca"
+        },
+        {
+          "bytes": 5934,
+          "path": "handoff/P07/checks.json",
+          "role": "required P07 statistical evidence",
+          "sha256": "50f86c88360e3d8ef1c180283d51ee724321e58efff12fa471199fc6cdf60047"
+        },
+        {
+          "bytes": 1129,
+          "path": "reports/ablation.md",
+          "role": "required P07 statistical evidence",
+          "sha256": "17b0bfa1f8333e4ffd326304ae62b5004f8de83cc4f22993d845d7ddf54087e5"
+        }
+      ],
+      "limitations": [
+        "P07 official statistics and reports/ablation.md are absent or not uniquely frozen."
+      ],
+      "plan_id": "P07",
+      "readiness": "not_ready",
+      "statement": "B0/S0 three-repeat aggregates and report claims are indexed only after P07 publishes them.",
+      "status": "limited"
+    },
+    {
+      "claim_id": "P08.acceptance",
+      "claim_type": "report",
+      "evidence": [
+        {
+          "bytes": 4489,
+          "path": "reports/reproduction-runbook.md",
+          "role": "authoritative component evidence",
+          "sha256": "cca677212464fa984f38789c7cf1888bb6b680a4ed43f95ddfc3d3c1d66d2435"
+        },
+        {
+          "bytes": 5503,
+          "path": "reports/engineering-acceptance.md",
+          "role": "authoritative component evidence",
+          "sha256": "b5e1f1e07823d2251891e0d863a68b04685c0a8fe2a7095607a61a9eb08d42f5"
+        },
+        {
+          "bytes": 4325,
+          "path": "handoff/P08/reproduction-observation.json",
+          "role": "authoritative component evidence",
+          "sha256": "c67991c59040bcc34d28e44b6649d72d872b7c3e848bde75a50522ff1d0275da"
+        }
+      ],
+      "limitations": [
+        "P08 has no READY_FOR_INTEGRATION marker"
+      ],
+      "plan_id": "P08",
+      "readiness": "not_ready",
+      "statement": "Independent reproduction and engineering acceptance conclusions are linked to machine observations.",
+      "status": "limited"
+    }
+  ],
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "eval_version": "1.0.0",
+  "generated_at": "2026-08-05T12:11:07.160427Z",
+  "limitations": [
+    "This index records current evidence, including failures; it does not convert fixture evidence into official proof.",
+    "D3/E2 signatures and P07 official statistical outputs are unavailable."
+  ],
+  "numeric_traceability": {
+    "available_claims": 0,
+    "blocker": "P07 official statistics and reports/ablation.md are absent or not uniquely frozen.",
+    "chains": [],
+    "required_random_samples": 3,
+    "status": "missing"
+  },
+  "overall_status": "NOT_READY",
+  "schema_version": "p08.evidence-index.v1"
+}
