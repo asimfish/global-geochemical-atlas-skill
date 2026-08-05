@@ -9,6 +9,7 @@ import csv
 import hashlib
 import io
 import json
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -20,11 +21,15 @@ from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import build_index as index_builder
+import benchmark_index
+import cache_control
 import coverage_report
 import download_data as downloader
 import source_adapters as source_contracts
 import source_audit
 import source_router
+import query_source
 import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
 
@@ -255,6 +260,139 @@ def check_d1(output_dir: Path) -> list[str]:
         broken_validation["status"] == "FAIL"
         and any("missing-sample" in error for error in broken_validation["errors"]),
         "D1 archive validation fails on a broken observation relationship",
+        checks,
+    )
+    with tempfile.TemporaryDirectory(prefix="d1-sqlite-contract-") as index_temp:
+        index_root = Path(index_temp)
+        first_index = index_root / "first.sqlite"
+        second_index = index_root / "second.sqlite"
+        archive_path = SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json"
+        first_build = index_builder.build_index(archive_path, first_index)
+        second_build = index_builder.build_index(archive_path, second_index)
+        require(
+            first_build["status"] == "PASS"
+            and first_build["counts"]["observations"] == 3
+            and first_build["counts"]["dataset_files"] == 1
+            and first_build["sha256"] == second_build["sha256"],
+            "D1 builds a deterministic integrity-checked SQLite index from the archive bundle",
+            checks,
+        )
+        try:
+            index_builder.build_index(archive_path, first_index)
+        except ValueError as exc:
+            require("refusing to overwrite" in str(exc), "D1 index creation refuses implicit overwrite", checks)
+        else:
+            raise ContractError("D1 index builder must refuse implicit overwrite")
+
+        arsenic = query_source.query_index(
+            first_index,
+            analytes=["As"],
+            media=["soil"],
+            source_ids=["fixture-source"],
+            license_ids=["CC0-1.0"],
+            bbox=[-106, 38, -104, 40],
+            text="Synthetic",
+        )
+        require(
+            arsenic["record_count"] == 1
+            and arsenic["records"][0]["value_raw"] == "<5"
+            and arsenic["records"][0]["value_qualifier"] == "lt",
+            "D1 indexed query combines analyte, medium, source, license, RTree bbox and FTS filters",
+            checks,
+        )
+        require(
+            query_source.query_index(first_index, bbox=[0, 0, 1, 1])["record_count"] == 0,
+            "D1 RTree query excludes observations outside the requested bbox",
+            checks,
+        )
+        require(
+            query_source.query_index(first_index, methods=["XRF"])["record_count"] == 1,
+            "D1 indexed query filters exact source-native analytical techniques",
+            checks,
+        )
+        with sqlite3.connect(first_index) as connection:
+            trace = connection.execute(
+                "SELECT source_file, source_row, adapter_version, acquisition_run_id "
+                "FROM provenance_trace WHERE observation_id = ?",
+                ("observation-as-lt",),
+            ).fetchone()
+            view_counts = {
+                view: connection.execute(f"SELECT COUNT(*) FROM {view}").fetchone()[0]
+                for view in ("observation_search", "sample_summary", "source_coverage", "provenance_trace")
+            }
+        require(
+            trace == ("fixture.csv", 2, "1.0.0", "run-fixture-v1"),
+            "D1 provenance view traces an observation to source row, adapter and acquisition run",
+            checks,
+        )
+        require(
+            view_counts == {
+                "observation_search": 3,
+                "sample_summary": 2,
+                "source_coverage": 3,
+                "provenance_trace": 3,
+            },
+            "D1 SQLite contract exposes four populated query views",
+            checks,
+        )
+
+        request_one = {"media": ["soil"], "elements": ["As", "Cu"], "region": "global"}
+        request_reordered = {"region": "global", "elements": ["As", "Cu"], "media": ["soil"]}
+        request_changed = {"region": "global", "elements": ["Zn"], "media": ["soil"]}
+        key_one = cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_one)
+        require(
+            key_one
+            == cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_reordered)
+            and key_one != cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_changed),
+            "D1 derived-cache key is stable under JSON key order and changes with request parameters",
+            checks,
+        )
+        cache_root = index_root / "cache"
+        version_root = cache_root / "fixture-source" / "1.0.0"
+        version_root.mkdir(parents=True)
+        cached_data = version_root / "fixture.csv"
+        cached_data.write_text("a,b\n1,2\n", encoding="utf-8")
+        (version_root / "fixture.download.json").write_text(
+            json.dumps(
+                {
+                    "output_filename": cached_data.name,
+                    "sha256": sha256_file(cached_data),
+                    "dataset_version": "1.0.0",
+                }
+            ),
+            encoding="utf-8",
+        )
+        cache_status = cache_control.inspect_cache(
+            cache_root, "fixture-source", "1.0.0", request_one
+        )
+        require(
+            cache_status["status"] == "present"
+            and cache_status["verified_manifest_count"] == 1
+            and cache_status["request_cache_key"] == key_one,
+            "D1 cache status command verifies versioned files and reports the request key",
+            checks,
+        )
+        try:
+            cache_control.delete_cache(cache_root, "fixture-source", "1.0.0", "wrong")
+        except ValueError as exc:
+            require("confirmation must exactly equal" in str(exc), "D1 cache deletion requires an exact source@version confirmation", checks)
+        else:
+            raise ContractError("D1 cache deletion must reject an incorrect confirmation")
+        deleted = cache_control.delete_cache(
+            cache_root, "fixture-source", "1.0.0", "fixture-source@1.0.0"
+        )
+        require(
+            deleted["status"] == "deleted" and not version_root.exists(),
+            "D1 cache deletion affects only the explicitly named source version",
+            checks,
+        )
+
+    performance = benchmark_index.benchmark(100_000)
+    require(
+        performance["status"] == "PASS"
+        and performance["record_count"] == 100_000
+        and performance["combined_seconds"] < performance["target_seconds"],
+        "D1 synthetic 100k parse/index/filter benchmark stays below the 10-second target",
         checks,
     )
     vocabulary_registry = json_value(SKILL_DIR / "assets" / "vocabulary_registry.json")
