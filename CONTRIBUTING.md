@@ -6,7 +6,7 @@
 
 | 角色 | 主要路径 | 负责的稳定接口 | 不直接决定 |
 |---|---|---|---|
-| D1 数据源、证据链与数据工程 | `source_router.py`、`source_audit.py`、`coverage_report.py`、`download_data.py`、`build_evidence_bundle.py`、`validate_acquisition.py`、`build_index.py`、`query_source.py`、`assets/source_catalog.json`、`fixtures/`、D1 来源与归档 Schema | 候选与生产来源分离、准入审计、保守路由与覆盖、下载缓存与降级、原值归档和派生索引、demo 切片、`source_manifest.json`；校验并原样打包 D2 的 `confidence_report.json` | 异常阈值、置信度公式、最终 `SKILL.md` |
+| D1 数据源、证据链与数据工程 | `score_source_evidence.py`、`snapshot_source.py`、`source_router.py`、`source_audit.py`、`coverage_report.py`、`download_data.py`、`build_evidence_bundle.py`、`validate_acquisition.py`、`build_index.py`、`query_source.py`、`assets/source_catalog.json`、`fixtures/`、D1 来源与归档 Schema | 候选发现、证据分级、科研使用门、动态快照、保守路由与覆盖、下载缓存与降级、原值归档和派生索引、demo 切片、`source_manifest.json`；校验并原样打包 D2 的 `confidence_report.json` | 异常阈值、置信度公式、最终 `SKILL.md` |
 | D2 地球化学标准化与分析 | `standardize_geochemistry.py`、`references/scientific-rules.md`、`references/geochemistry-record.schema.json`、`references/confidence-report.schema.json`、`references/schema-map.schema.json`、`references/platform-field-crosswalk.*` | `geochemistry.csv`、`qc_report.json`、`confidence_report.json`、`anomalies.geojson`、`anomaly_report.json`；专业平台语义映射与信息损失说明 | 最终 `SKILL.md`、地图表现和数据源许可判断 |
 | D3 Skill 架构、地图与 demo 总集成 | `SKILL.md`、`run_workflow.py`、`build_interactive_map.py`、`validate_outputs.py`、README、请求/结果 Schema、demo 指南 | `interactive_map.html`、`samples.geojson`、`run_summary.json`、稳定 CLI、唯一生产 Skill 和演示流程 | D2 的科学算法、D1 的来源许可结论 |
 | 共享契约测试 | `component_test.py`、`self_test.py`、`.github/workflows/ci.yml` | 防止任一角色破坏其他角色的输入输出 | 不承载新的科学业务逻辑 |
@@ -16,7 +16,7 @@
 ## 稳定数据流
 
 ```text
-D1 候选目录 ──准入审计/保守路由──► 已批准公开来源
+D1 候选目录 ──证据评分/科研使用门/保守路由──► 本次请求可执行来源
           │
           └──► 缓存/原值归档/demo CSV + record evidence + acquisition manifest
           │ 原值、来源、许可、坐标、方法、逐记录证据

@@ -29,6 +29,8 @@ import download_data as downloader
 import source_adapters as source_contracts
 import standardize_geochemistry as standardizer
 import source_audit
+import score_source_evidence
+import snapshot_source
 import source_router
 import query_source
 import validate_acquisition as acquisition_validator
@@ -137,6 +139,85 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 request Schema keeps global/named regions disjoint from bbox objects",
         checks,
     )
+    valid_request = {
+        "elements": ["As"],
+        "region": "global",
+        "media": ["soil"],
+    }
+    invalid_request_overrides = [
+        {"elements": ["As", "As"]},
+        {"measurement_basis": "dry weight"},
+        {"time_range": ["2020"]},
+        {"sources": ["usgs-conus-soil", "usgs-conus-soil"]},
+        {"output_formats": ["csv", "parquet"]},
+        {"target_crs": "EPSG:3857"},
+        {"max_records": True},
+        {"max_records": 200001},
+        {"offline": "false"},
+    ]
+    rejected_invalid_requests = 0
+    for override in invalid_request_overrides:
+        invalid_request = dict(valid_request)
+        invalid_request.update(override)
+        try:
+            source_router.validate_request(invalid_request, catalog)
+        except source_router.SourceRoutingError:
+            rejected_invalid_requests += 1
+    require(
+        rejected_invalid_requests == len(invalid_request_overrides),
+        "D1 router enforces every shared request field instead of bypassing its JSON Schema",
+        checks,
+    )
+    normalized_request = source_router.validate_request(valid_request, catalog)
+    require(
+        normalized_request
+        == {
+            "elements": ["As"],
+            "region": "global",
+            "media": ["soil"],
+            "measurement_basis": None,
+            "time_range": None,
+            "sources": "auto",
+            "output_formats": ["csv", "json", "geojson", "html_map"],
+            "target_crs": "EPSG:4326",
+            "license_policy": "open_only",
+            "research_use_policy": "permitted_research",
+            "minimum_evidence_tier": "D",
+            "minimum_use_mode": "normalized_analysis",
+            "max_records": 50000,
+            "offline": False,
+        },
+        "D1 router freezes and echoes every documented optional request default",
+        checks,
+    )
+    offline_route = source_router.route_sources(
+        {
+            "elements": ["As"],
+            "region": "global",
+            "media": ["rock", "soil"],
+            "offline": True,
+        },
+        catalog,
+    )
+    require(
+        offline_route["status"] == "needs_human_review"
+        and not offline_route["selected_sources"]
+        and {item["source_id"] for item in offline_route["review_sources"]}
+        >= {"georoc-archaean", "usgs-conus-soil"}
+        and all(
+            "offline_cache_not_verified" in item["reason"]
+            for item in offline_route["review_sources"]
+            if item["source_id"] in {"georoc-archaean", "usgs-conus-soil"}
+        ),
+        "D1 offline routing fails closed until a versioned hash-verified cache is checked",
+        checks,
+    )
+    require(
+        "production_eligible=true" not in offline_route["claim_boundary"]
+        and "V3 automatic selection" in offline_route["claim_boundary"],
+        "D1 route claim boundary describes V3 evidence and use gates instead of the legacy binary flag",
+        checks,
+    )
     catalog_schema = json_value(SKILL_DIR / "references" / "source-catalog.schema.json")
     allowed_identifier_fields = set(
         catalog_schema["$defs"]["source"]["properties"]["identifiers"]["properties"]
@@ -160,7 +241,7 @@ def check_d1(output_dir: Path) -> list[str]:
             if entry["production_eligible"]
         }
         == {"georoc-archaean", "usgs-conus-soil"},
-        "D1 catalog separates approved production sources from discovery candidates",
+        "D1 catalog preserves the two legacy production sources while V3 status is computed separately",
         checks,
     )
     require(
@@ -182,7 +263,7 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         {entry["source_id"] for entry in route["selected_sources"]}
         == {"georoc-archaean", "usgs-conus-soil"},
-        "D1 router selects only approved open sources",
+        "D1 V3 router selects the two sources that currently support normalized analysis",
         checks,
     )
     require(
@@ -190,7 +271,7 @@ def check_d1(output_dir: Path) -> list[str]:
         and route["coverage"]["soil"]["status"] == "partial"
         and route["coverage"]["sediment"]["status"] == "unknown"
         and route["coverage"]["water"]["status"] == "unknown",
-        "D1 router does not overclaim incomplete or unapproved coverage",
+        "D1 router does not overclaim incomplete coverage below the requested use mode",
         checks,
     )
     require(
@@ -199,27 +280,96 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 router exposes relevant candidates and their review blockers",
         checks,
     )
-    audit = source_audit.audit_catalog(catalog, registry)
+    raw_sediment_route = source_router.route_sources(
+        {
+            "elements": ["As", "Cu", "Ni", "Zn"],
+            "region": "global",
+            "media": ["sediment"],
+            "minimum_evidence_tier": "C",
+            "minimum_use_mode": "raw_observation",
+        },
+        catalog,
+    )
     require(
-        audit["status"] == "PASS"
-        and audit["summary"] == {"pass": 2, "review": len(catalog["sources"]) - 2, "fail": 0}
-        and not audit["invalid_production_sources"],
-        "D1 audit passes only the two production-approved sources",
+        {entry["source_id"] for entry in raw_sediment_route["selected_sources"]}
+        == {"norway-marchem"},
+        "D1 V3 router can select a lower-use MarChem snapshot without claiming normalized analysis",
+        checks,
+    )
+    benchmark_route = source_router.route_sources(
+        {
+            "elements": ["As"],
+            "region": "global",
+            "media": ["rock", "soil"],
+            "minimum_evidence_tier": "A",
+            "minimum_use_mode": "benchmark_ready",
+        },
+        catalog,
+    )
+    require(
+        not benchmark_route["selected_sources"]
+        and {entry["source_id"] for entry in benchmark_route["review_sources"]}
+        >= {"georoc-archaean", "usgs-conus-soil"},
+        "D1 keeps both A-tier sources below benchmark_ready until human review is complete",
+        checks,
+    )
+    candidate_evidence = score_source_evidence.load_candidate_evidence()
+    evidence = score_source_evidence.score_catalog(catalog, registry, candidate_evidence)
+    require(
+        evidence == json_value(SKILL_DIR / "assets" / "source_evidence_scores.json"),
+        "D1 checked-in V3 evidence report is reproducible from catalog, registry and candidate evidence",
         checks,
     )
     require(
-        audit["sources"]["gemstat-open-archive"]["audit_status"] == "review"
-        and "license" in audit["sources"]["gemstat-open-archive"]["blockers"],
-        "D1 audit preserves mixed-license candidates outside production",
+        evidence["summary"]
+        == {
+            "evidence_tiers": {"A": 2, "B": 0, "C": 1, "D": len(catalog["sources"]) - 3, "U": 0},
+            "use_modes": {
+                "benchmark_ready": 0,
+                "normalized_analysis": 2,
+                "raw_observation": 1,
+                "discovery": len(catalog["sources"]) - 3,
+            },
+        },
+        "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
+        checks,
+    )
+    require(
+        evidence["sources"]["georoc-archaean"]["source_evidence_score"] == 85
+        and evidence["sources"]["georoc-archaean"]["evidence_tier"] == "A"
+        and evidence["sources"]["georoc-archaean"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["georoc-archaean"]["source_evidence_dimensions"]["human_review"]["status"]
+        == "missing",
+        "D1 scores GEOROC highly without falsely marking the pending human review complete",
+        checks,
+    )
+    require(
+        evidence["sources"]["norway-marchem"]["source_evidence_score"] == 65
+        and evidence["sources"]["norway-marchem"]["evidence_tier"] == "C"
+        and evidence["sources"]["norway-marchem"]["use_mode"] == "raw_observation"
+        and evidence["sources"]["norway-marchem"]["source_evidence_dimensions"]["version_snapshot"]["status"]
+        == "verified",
+        "D1 credits the frozen MarChem snapshot while retaining its adapter and review limitations",
+        checks,
+    )
+    audit = source_audit.audit_catalog(catalog, registry, candidate_evidence)
+    require(
+        audit["status"] == "PASS"
+        and audit["summary"]["evidence_tiers"] == evidence["summary"]["evidence_tiers"]
+        and audit["sources"]["gemstat-open-archive"]["operational_status"] == "restricted"
+        and audit["sources"]["gemstat-open-archive"]["evidence_tier"] == "D",
+        "D1 audit separates operational research-use restrictions from progressive evidence tier",
         checks,
     )
     tampered_catalog = copy.deepcopy(catalog)
     tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "unresolved"
-    tampered_audit = source_audit.audit_catalog(tampered_catalog, registry)
+    tampered_audit = source_audit.audit_catalog(tampered_catalog, registry, candidate_evidence)
     require(
-        tampered_audit["status"] == "FAIL"
-        and tampered_audit["invalid_production_sources"] == ["georoc-archaean"],
-        "D1 audit fails closed when an approved source loses a hard gate",
+        tampered_audit["status"] == "PASS"
+        and tampered_audit["sources"]["georoc-archaean"]["research_use_status"] == "unknown"
+        and tampered_audit["sources"]["georoc-archaean"]["operational_status"] == "restricted"
+        and tampered_audit["sources"]["georoc-archaean"]["source_evidence_score"] == 85,
+        "D1 separates unresolved research-use conditions from unchanged scientific evidence completeness",
         checks,
     )
     tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "open"
@@ -231,13 +381,13 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         "georoc-archaean" not in {entry["source_id"] for entry in tampered_route["selected_sources"]}
-        and "version mismatch"
+        and "conflict=adapter_reproducibility"
         in next(
             entry["reason"]
             for entry in tampered_route["review_sources"]
             if entry["source_id"] == "georoc-archaean"
         ),
-        "D1 router automatically downgrades a source when its version changes",
+        "D1 router automatically limits a source when its frozen version conflicts",
         checks,
     )
     discovery_records = [
@@ -331,6 +481,56 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"required_record_count": 30, "prepared_record_count": 30, "status": "pending"}
         and verify_marchem_candidate.parse_value("<2.0") == ("censored_lt", 2.0),
         "D1 prepares but does not falsely mark the required MarChem human review as complete",
+        checks,
+    )
+    marchem_snapshot_path = (
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "sediment"
+        / "norway-marchem"
+        / "snapshot_manifest.json"
+    )
+    marchem_snapshot = snapshot_source.build_snapshot_from_paths(
+        SKILL_DIR
+        / "fixtures"
+        / "candidate-audits"
+        / "marchem-inorganic-20260805T102709Z.json"
+    )
+    require(
+        marchem_snapshot == json_value(marchem_snapshot_path)
+        and marchem_snapshot["snapshot_id"]
+        == "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e"
+        and marchem_snapshot["request"]["canonical_request_sha256"]
+        == "ae8fd044ad9a43c0fba34d18fdcbf677311f77da1cdb76094c6054c447eb3445"
+        and marchem_snapshot["counts"]["raw_records"] == 1070
+        and marchem_snapshot["counts"]["distinct_samples"] == 880,
+        "D1 builds the checked-in MarChem snapshot deterministically from exact request and content evidence",
+        checks,
+    )
+    require(
+        marchem_snapshot["response"]["http_status"] is None
+        and marchem_snapshot["response"]["http_status_evidence"]
+        == "missing_from_original_acquisition_manifest"
+        and marchem_snapshot["evidence"]["publisher_checksum_status"] == "missing",
+        "D1 snapshot preserves missing HTTP-status and publisher-checksum evidence instead of inventing it",
+        checks,
+    )
+    identical_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, copy.deepcopy(marchem_snapshot))
+    require(
+        identical_snapshot_diff["status"] == "identical"
+        and identical_snapshot_diff["requires_rescore"] is False,
+        "D1 snapshot diff recognizes an identical manifest without forcing rescore",
+        checks,
+    )
+    changed_snapshot = copy.deepcopy(marchem_snapshot)
+    changed_snapshot["response"]["sha256"] = "0" * 64
+    changed_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, changed_snapshot)
+    require(
+        changed_snapshot_diff["status"] == "changed"
+        and changed_snapshot_diff["requires_rescore"] is True
+        and changed_snapshot_diff["comparisons"]["response_changed"] is True,
+        "D1 snapshot diff forces rescore when a dynamic response hash changes",
         checks,
     )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")

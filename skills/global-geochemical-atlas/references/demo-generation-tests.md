@@ -32,4 +32,4 @@ python scripts/component_test.py --component all
 python scripts/self_test.py
 ```
 
-当前结果为 D1/D2/D3 共 95 项契约检查通过、self-test 68 项通过。D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。
+当前结果为 D1/D2/D3 共 144 项契约检查通过、self-test 68 项通过。D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。

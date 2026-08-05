@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect a MarChem inorganic export without treating it as an approved source.
+"""Inspect a MarChem inorganic export without treating it as analysis-ready.
 
 The script is deliberately source-specific: it records the raw archive inventory,
 profiles the four hackathon target analytes, checks the batch-level method table,

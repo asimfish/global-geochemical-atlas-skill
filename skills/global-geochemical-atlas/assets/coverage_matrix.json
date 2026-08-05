@@ -3,9 +3,6 @@
   "cells": {
     "rock": {
       "analyte_coverage": "unknown",
-      "approved_sources": [
-        "georoc-archaean"
-      ],
       "candidate_sources": [
         "australia-ozchem",
         "brazil-sgb-geochemistry",
@@ -23,13 +20,33 @@
         "usgs-ngdb"
       ],
       "method_metadata_coverage": "not_yet_audited",
-      "note": "At least one approved source is routable, but geographic, temporal and method completeness remain bounded by its declared scope.",
+      "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
+      "selected_sources": [
+        "georoc-archaean"
+      ],
+      "source_evidence_tiers": {
+        "australia-ozchem": "D",
+        "brazil-sgb-geochemistry": "D",
+        "earthchem-library": "D",
+        "earthchem-portal": "D",
+        "finland-gtk-geochemistry": "D",
+        "georoc-archaean": "A",
+        "georoc-database": "D",
+        "iodp-data-systems": "D",
+        "jamstec-darwin": "D",
+        "noaa-ncei-marine-geology": "D",
+        "norway-ngu-lito": "D",
+        "nz-petlab": "D",
+        "pangaea-repository": "D",
+        "petdb": "D",
+        "usgs-ngdb": "D"
+      },
       "source_independence": "single_source_dependency",
       "source_scopes": {
         "australia-ozchem": "national_partial",
@@ -48,13 +65,29 @@
         "petdb": "global_partial",
         "usgs-ngdb": "national_partial"
       },
+      "source_use_modes": {
+        "australia-ozchem": "discovery",
+        "brazil-sgb-geochemistry": "discovery",
+        "earthchem-library": "discovery",
+        "earthchem-portal": "discovery",
+        "finland-gtk-geochemistry": "discovery",
+        "georoc-archaean": "normalized_analysis",
+        "georoc-database": "discovery",
+        "iodp-data-systems": "discovery",
+        "jamstec-darwin": "discovery",
+        "noaa-ncei-marine-geology": "discovery",
+        "norway-ngu-lito": "discovery",
+        "nz-petlab": "discovery",
+        "pangaea-repository": "discovery",
+        "petdb": "discovery",
+        "usgs-ngdb": "discovery"
+      },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",
       "temporal_coverage": "not_yet_audited"
     },
     "sediment": {
       "analyte_coverage": "unknown",
-      "approved_sources": [],
       "candidate_sources": [
         "australia-ngsa",
         "australia-ozchem",
@@ -79,14 +112,38 @@
         "usgs-ngdb"
       ],
       "method_metadata_coverage": "not_yet_audited",
-      "note": "Relevant candidates exist but none has passed the production quality gates.",
+      "note": "Relevant candidates exist, but none currently meets the requested evidence, research-use and use-mode conditions.",
       "requested_analytes": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
-      "source_independence": "no_approved_source",
+      "selected_sources": [],
+      "source_evidence_tiers": {
+        "australia-ngsa": "D",
+        "australia-ozchem": "D",
+        "bgs-gbase": "D",
+        "brazil-sgb-geochemistry": "D",
+        "canada-cdogs": "D",
+        "earthchem-library": "D",
+        "earthchem-portal": "D",
+        "eea-waterbase": "D",
+        "emodnet-chemistry": "D",
+        "finland-gtk-geochemistry": "D",
+        "foregs-europe": "D",
+        "iodp-data-systems": "D",
+        "ireland-tellus": "D",
+        "jamstec-darwin": "D",
+        "noaa-ncei-marine-geology": "D",
+        "norway-marchem": "C",
+        "nz-petlab": "D",
+        "pangaea-repository": "D",
+        "sweden-sgu-geochemical-atlas": "D",
+        "us-water-quality-portal": "D",
+        "usgs-ngdb": "D"
+      },
+      "source_independence": "no_current_analysis_source",
       "source_scopes": {
         "australia-ngsa": "national_partial",
         "australia-ozchem": "national_partial",
@@ -110,15 +167,35 @@
         "us-water-quality-portal": "national_partial",
         "usgs-ngdb": "national_partial"
       },
+      "source_use_modes": {
+        "australia-ngsa": "discovery",
+        "australia-ozchem": "discovery",
+        "bgs-gbase": "discovery",
+        "brazil-sgb-geochemistry": "discovery",
+        "canada-cdogs": "discovery",
+        "earthchem-library": "discovery",
+        "earthchem-portal": "discovery",
+        "eea-waterbase": "discovery",
+        "emodnet-chemistry": "discovery",
+        "finland-gtk-geochemistry": "discovery",
+        "foregs-europe": "discovery",
+        "iodp-data-systems": "discovery",
+        "ireland-tellus": "discovery",
+        "jamstec-darwin": "discovery",
+        "noaa-ncei-marine-geology": "discovery",
+        "norway-marchem": "raw_observation",
+        "nz-petlab": "discovery",
+        "pangaea-repository": "discovery",
+        "sweden-sgu-geochemical-atlas": "discovery",
+        "us-water-quality-portal": "discovery",
+        "usgs-ngdb": "discovery"
+      },
       "spatial_density_coverage": "not_yet_audited",
       "status": "unknown",
       "temporal_coverage": "not_yet_audited"
     },
     "soil": {
       "analyte_coverage": "unknown",
-      "approved_sources": [
-        "usgs-conus-soil"
-      ],
       "candidate_sources": [
         "bgs-gbase",
         "brazil-sgb-geochemistry",
@@ -132,13 +209,29 @@
         "wosis"
       ],
       "method_metadata_coverage": "not_yet_audited",
-      "note": "At least one approved source is routable, but geographic, temporal and method completeness remain bounded by its declared scope.",
+      "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
+      "selected_sources": [
+        "usgs-conus-soil"
+      ],
+      "source_evidence_tiers": {
+        "bgs-gbase": "D",
+        "brazil-sgb-geochemistry": "D",
+        "earthchem-library": "D",
+        "foregs-europe": "D",
+        "gemas-europe": "D",
+        "ireland-tellus": "D",
+        "pangaea-repository": "D",
+        "soils4africa": "D",
+        "usgs-conus-soil": "A",
+        "usgs-ngdb": "D",
+        "wosis": "D"
+      },
       "source_independence": "single_source_dependency",
       "source_scopes": {
         "bgs-gbase": "national_partial",
@@ -153,13 +246,25 @@
         "usgs-ngdb": "national_partial",
         "wosis": "global_partial"
       },
+      "source_use_modes": {
+        "bgs-gbase": "discovery",
+        "brazil-sgb-geochemistry": "discovery",
+        "earthchem-library": "discovery",
+        "foregs-europe": "discovery",
+        "gemas-europe": "discovery",
+        "ireland-tellus": "discovery",
+        "pangaea-repository": "discovery",
+        "soils4africa": "discovery",
+        "usgs-conus-soil": "normalized_analysis",
+        "usgs-ngdb": "discovery",
+        "wosis": "discovery"
+      },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",
       "temporal_coverage": "not_yet_audited"
     },
     "water": {
       "analyte_coverage": "unknown",
-      "approved_sources": [],
       "candidate_sources": [
         "bgs-gbase",
         "brazil-sgb-geochemistry",
@@ -177,14 +282,31 @@
         "us-water-quality-portal"
       ],
       "method_metadata_coverage": "not_yet_audited",
-      "note": "Relevant candidates exist but none has passed the production quality gates.",
+      "note": "Relevant candidates exist, but none currently meets the requested evidence, research-use and use-mode conditions.",
       "requested_analytes": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
-      "source_independence": "no_approved_source",
+      "selected_sources": [],
+      "source_evidence_tiers": {
+        "bgs-gbase": "D",
+        "brazil-sgb-geochemistry": "D",
+        "canada-cdogs": "D",
+        "earthchem-library": "D",
+        "eea-waterbase": "D",
+        "emodnet-chemistry": "D",
+        "foregs-europe": "D",
+        "gemstat-open-archive": "D",
+        "geotraces-idp2025": "D",
+        "glorich": "D",
+        "iodp-data-systems": "D",
+        "ireland-tellus": "D",
+        "pangaea-repository": "D",
+        "us-water-quality-portal": "D"
+      },
+      "source_independence": "no_current_analysis_source",
       "source_scopes": {
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
@@ -201,13 +323,29 @@
         "pangaea-repository": "global_collection",
         "us-water-quality-portal": "national_partial"
       },
+      "source_use_modes": {
+        "bgs-gbase": "discovery",
+        "brazil-sgb-geochemistry": "discovery",
+        "canada-cdogs": "discovery",
+        "earthchem-library": "discovery",
+        "eea-waterbase": "discovery",
+        "emodnet-chemistry": "discovery",
+        "foregs-europe": "discovery",
+        "gemstat-open-archive": "discovery",
+        "geotraces-idp2025": "discovery",
+        "glorich": "discovery",
+        "iodp-data-systems": "discovery",
+        "ireland-tellus": "discovery",
+        "pangaea-repository": "discovery",
+        "us-water-quality-portal": "discovery"
+      },
       "spatial_density_coverage": "not_yet_audited",
       "status": "unknown",
       "temporal_coverage": "not_yet_audited"
     }
   },
-  "claim_boundary": "Coverage states describe the current approved source system and its documented candidates. They do not imply uniform sampling, method comparability, or absence of undiscovered sources.",
-  "coverage_version": "geochemical-coverage-matrix-v1",
+  "claim_boundary": "Coverage states describe sources that meet the requested evidence/use mode and documented lower-use candidates. They do not imply uniform sampling, method comparability, or absence of undiscovered sources.",
+  "coverage_version": "geochemical-coverage-matrix-v3",
   "discovery": {
     "channels_checked": [
       "official_global_or_disciplinary_portals",
@@ -231,7 +369,7 @@
     "status": "in_progress"
   },
   "limitations": [
-    "Catalog routing identifies possible sources; analyte availability and record-level comparability still require source queries and D2 review.",
+    "Catalog routing identifies possible sources; evidence tier is not a truth probability, and analyte availability plus record-level comparability still require source queries and D2 review.",
     "A partial route must not be presented as complete global coverage.",
     "Source discovery is still in progress; absence from this route is not proof that no source exists.",
     "Analyte, method, time and spatial-density coverage remain unknown until source-level inventories are audited.",
@@ -247,15 +385,27 @@
     ],
     "license_policy": "open_only",
     "max_records": 50000,
+    "measurement_basis": null,
     "media": [
       "rock",
       "soil",
       "sediment",
       "water"
     ],
+    "minimum_evidence_tier": "D",
+    "minimum_use_mode": "normalized_analysis",
     "offline": false,
+    "output_formats": [
+      "csv",
+      "json",
+      "geojson",
+      "html_map"
+    ],
     "region": "global",
-    "sources": "auto"
+    "research_use_policy": "permitted_research",
+    "sources": "auto",
+    "target_crs": "EPSG:4326",
+    "time_range": null
   },
   "route_status": "partial"
 }

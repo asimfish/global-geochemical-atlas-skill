@@ -45,9 +45,10 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 
 ## 真实来源预检与 D1 原值索引
 
-对真实请求先执行来源准入审计、保守路由和覆盖矩阵。以下固定 fixture 覆盖 rock、soil、sediment、water 与 As/Cu/Ni/Zn，可离线复现：
+对真实请求先生成渐进式来源证据评分，再执行准入审计、保守路由和覆盖矩阵。以下固定 fixture 覆盖 rock、soil、sediment、water 与 As/Cu/Ni/Zn，可离线复现：
 
 ```bash
+python skills/global-geochemical-atlas/scripts/score_source_evidence.py
 python skills/global-geochemical-atlas/scripts/source_audit.py
 python skills/global-geochemical-atlas/scripts/source_router.py \
   --request skills/global-geochemical-atlas/fixtures/source-routing/global-all-media-request.json
@@ -55,7 +56,7 @@ python skills/global-geochemical-atlas/scripts/coverage_report.py \
   --request skills/global-geochemical-atlas/fixtures/source-routing/global-all-media-request.json
 ```
 
-`source_catalog.json` 中的候选不等于可自动使用的生产来源；路由器只选择通过版本、许可、适配器、完整性和注册表一致性门的来源。需要保存 D1 分层原值归档并查询时，先运行 `validate_acquisition.py`，再用 `build_index.py` 构建可重建的 SQLite 索引。索引不执行 D2 的单位换算、QC、置信度或异常分析，最终标准化数据库仍是 `geochemistry.csv`。
+`source_catalog.json` 中的候选不等于本次请求可执行的来源。证据分数衡量八类证据的完整度，不是真值概率；路由器再按访问状态、科研使用条件、最低证据等级和 use mode 选择来源。`offline=true` 时，在调用方另行验证版本化缓存及 SHA-256 前不会选中任何在线来源。动态 API 还需用 `snapshot_source.py` 固定请求、响应哈希和成员清单。需要保存 D1 分层原值归档并查询时，先运行 `validate_acquisition.py`，再用 `build_index.py` 构建可重建的 SQLite 索引。索引不执行 D2 的单位换算、QC、置信度或异常分析，最终标准化数据库仍是 `geochemistry.csv`。
 
 ## 科学边界
 

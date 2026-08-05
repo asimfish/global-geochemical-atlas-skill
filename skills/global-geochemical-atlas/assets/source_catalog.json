@@ -1,7 +1,7 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
   "reviewed_at": "2026-08-05T10:05:00Z",
-  "claim_boundary": "This catalog records discovered sources and interface facts. Only entries with production_eligible=true may be selected automatically; catalog inclusion is not scientific endorsement.",
+  "claim_boundary": "This catalog records discovered sources and interface facts. V3 automatic selection is determined separately by access status, research-use status, evidence tier, use mode, and execution context; catalog inclusion is not scientific endorsement.",
   "discovery_state": {
     "round": 3,
     "status": "in_progress",

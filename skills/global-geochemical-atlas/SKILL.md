@@ -25,11 +25,14 @@ sources: auto | [string]
 output_formats: [csv, json, geojson, html_map]
 target_crs: EPSG:4326
 license_policy: open_only
+research_use_policy: permitted_research
+minimum_evidence_tier: D
+minimum_use_mode: normalized_analysis
 max_records: integer
 offline: boolean
 ```
 
-若元素、区域或介质会实质改变检索但未给出，只询问一个最关键问题。否则采用可逆默认值：`sources=auto`、`target_crs=EPSG:4326`、`license_policy=open_only`、`max_records=50000`、`offline=false`。不要默认用户要求穷尽全球数据。
+若元素、区域或介质会实质改变检索但未给出，只询问一个最关键问题。否则采用可逆默认值：`sources=auto`、`target_crs=EPSG:4326`、`research_use_policy=permitted_research`、`minimum_evidence_tier=D`、`minimum_use_mode=normalized_analysis`、`max_records=50000`、`offline=false`。`license_policy=open_only` 只作为 V1 兼容字段。不要默认用户要求穷尽全球数据。
 
 完整字段和输出文件契约见 [references/request-output-contract.md](references/request-output-contract.md)。
 
@@ -39,16 +42,18 @@ offline: boolean
 
 1. 用户给出现成 CSV：直接验证字段并运行本地流水线。
 2. 用户要求可复现演示或网络不可用：使用 `fixtures/demo_input.csv`，明确标为合成数据。
-3. 用户要求真实公开数据：读取 [references/data-sources.md](references/data-sources.md) 和 [references/licenses-and-citations.md](references/licenses-and-citations.md)，先执行 D1 来源路由、覆盖检查和许可判断，再下载有限数据。
-4. 来源需要登录、人工表单或许可不明：输出 `source_not_accessible` 或 `needs_human_review`，不要绕过限制。
+3. 用户要求真实公开数据：读取 [references/data-sources.md](references/data-sources.md) 和 [references/licenses-and-citations.md](references/licenses-and-citations.md)，先按科研使用条件、最低证据等级和 use mode 执行 D1 评分、审计、路由与覆盖检查，再下载有限数据。
+4. 来源需要登录、人工表单或科研使用条件不明：保留为 `discovery`，输出 `source_not_accessible` 或 `needs_human_review` 及具体限制，不要绕过限制。
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
 ## 3. 建立来源与下载证据
 
-先区分“已发现候选”和“已批准生产来源”。候选目录位于 [assets/source_catalog.json](assets/source_catalog.json)，但只有 `production_eligible=true` 且审计通过的来源才能自动下载；准入门见 [references/source-acceptance-standard.md](references/source-acceptance-standard.md)，逐源边界见 [references/source-interface-cards.md](references/source-interface-cards.md)。把冻结后的请求保存为 `request.json`，依次执行：
+先区分“已发现候选”“证据完整度”和“本次请求可执行性”。候选目录位于 [assets/source_catalog.json](assets/source_catalog.json)；先按 [references/source-evidence-standard-v3.md](references/source-evidence-standard-v3.md) 生成八维证据评分，再结合访问状态、科研使用条件、最低证据等级和 use mode 判断本次动作。`production_eligible` 和旧 `status` 仅为兼容字段，不能替代当前路由。准入规则见 [references/source-acceptance-standard.md](references/source-acceptance-standard.md)，逐源边界见 [references/source-interface-cards.md](references/source-interface-cards.md)。把冻结后的请求保存为 `request.json`，依次执行：
 
 ```bash
+python scripts/score_source_evidence.py \
+  --output OUTPUT_DIR/source_evidence_scores.json
 python scripts/source_audit.py --output OUTPUT_DIR/source_audit.json
 python scripts/source_router.py \
   --request request.json \
@@ -59,9 +64,11 @@ python scripts/coverage_report.py \
   --markdown-output OUTPUT_DIR/coverage.md
 ```
 
-审计、路由和覆盖输出分别受 [references/source-audit.schema.json](references/source-audit.schema.json)、[references/source-route-result.schema.json](references/source-route-result.schema.json) 与 [references/coverage-matrix.schema.json](references/coverage-matrix.schema.json) 约束。`PASS` 只证明生产元数据、适配器、版本、许可和完整性门内部一致，不证明单条测量是真值；`review_sources` 只能作为发现线索，不能自动进入 D2。
+评分、审计、路由和覆盖输出分别受 [references/source-evidence-report.schema.json](references/source-evidence-report.schema.json)、[references/source-audit.schema.json](references/source-audit.schema.json)、[references/source-route-result.schema.json](references/source-route-result.schema.json) 与 [references/coverage-matrix.schema.json](references/coverage-matrix.schema.json) 约束。评分表示证据完整度，不是真值概率；`PASS` 表示审计已完成并显式暴露边界，不表示所有来源同等可靠或均可进入 D2。只有路由选中且满足当前 `use_mode` 的来源才能执行相应动作。
 
-已批准来源的机器可读生产注册表位于 [assets/source_manifest.json](assets/source_manifest.json)，结构由 [references/source-registry.schema.json](references/source-registry.schema.json) 定义。先检查来源，不要凭名称猜可用范围：
+`offline=true` 时，路由器无法自行检查调用方的外部缓存，因此必须把原本可用的在线来源留在 `review_sources` 并标记 `offline_cache_not_verified`。调用方先用下方检查命令验证来源版本和 SHA-256；未得到验证缓存前不得把该来源视为当前可执行。
+
+当前已实现适配器的机器可读注册表位于 [assets/source_manifest.json](assets/source_manifest.json)，结构由 [references/source-registry.schema.json](references/source-registry.schema.json) 定义。注册表说明实现能力，不覆盖本次路由结论。先检查来源，不要凭名称猜可用范围：
 
 ```bash
 python scripts/inspect_source.py --source usgs-conus-soil --cache-dir .cache/data --mode cached
@@ -72,7 +79,7 @@ python scripts/inspect_source.py --source georoc-archaean --cache-dir .cache/dat
 
 - 数据集标题、发布机构和稳定标识符；
 - 下载 URL、查询参数、访问日期和版本日期；
-- 许可、署名要求和再分发限制；
+- 本次科研使用条件、署名要求和必要申请；
 - 服务端过滤与本地过滤；
 - 响应类型、字节数、记录数和 SHA-256；
 - 原字段到 canonical 字段的映射；
@@ -90,6 +97,20 @@ python scripts/download_data.py \
 ```
 
 优先提供 `--expected-sha256`。使用 `--offline` 时只接受哈希匹配的缓存。不要抓取需要交互同意或禁止自动访问的门户页面。
+
+动态官方 API 没有不可变发布版本时，按 [references/dynamic-snapshot-policy.md](references/dynamic-snapshot-policy.md) 固定精确请求、UTC 时间、响应 hash、成员清单和数量；清单与差异输出分别受 [references/snapshot-manifest.schema.json](references/snapshot-manifest.schema.json) 和 [references/snapshot-diff.schema.json](references/snapshot-diff.schema.json) 约束：
+
+```bash
+python scripts/snapshot_source.py create \
+  --candidate-evidence CANDIDATE_EVIDENCE.json \
+  --output SNAPSHOT_MANIFEST.json
+python scripts/snapshot_source.py diff \
+  --before PREVIOUS_SNAPSHOT.json \
+  --after SNAPSHOT_MANIFEST.json \
+  --output SNAPSHOT_DIFF.json
+```
+
+新响应不得覆盖旧快照。内容、成员、数量或科研使用条件变化时重新评分和复核。
 
 需要小型真实来源切片时，使用适配器而不是手工复制网页结果。`--elements` 与 `--bbox` 在验证下载后执行确定性本地过滤；不支持的元素或无法满足的配额必须失败关闭：
 
@@ -127,7 +148,7 @@ python scripts/query_source.py \
 
 ## 4. 验证并标准化记录
 
-要求一行表示一个“样品 × 分析物 × 测定”。独立标准化至少检查元素、值、单位和介质；完整工作流还必须有非空 `source_id`、`source_locator` 和 `license`，否则以 `conflicting_evidence` 失败关闭。正式分析还要检查 `source_tier`、measurement basis、分析方法、消解/提取、检出限、坐标、CRS 和文件哈希。
+要求一行表示一个“样品 × 分析物 × 测定”。独立标准化至少检查元素、值、单位和介质；完整工作流还必须有非空 `source_id`、`source_locator`、`license` 和可执行的科研使用条件，否则以 `conflicting_evidence` 或 `needs_human_review` 失败关闭。正式分析还要检查 `source_tier`、measurement basis、分析方法、消解/提取、检出限、坐标、CRS 和文件哈希。
 
 在 Skill 目录执行：
 
@@ -217,7 +238,7 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 - `incomplete_retrieval`：分页、计数、大小或字段验证不完整；
 - `conflicting_evidence`：来源、单位或方法冲突；
 - `insufficient_background`：异常背景样本不足或 MAD 为零；
-- `needs_human_review`：许可、CRS、方法可比性或科学解释需专家判断。
+- `needs_human_review`：科研使用条件、CRS、方法可比性或科学解释需专家判断。
 
 不要用推测补齐失败字段，不要把“未检索到”写成“不存在”。
 
@@ -228,5 +249,7 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 每个关键结论绑定 `source_id + source_locator`。把事实、脚本计算、模型推断、假设和未验证项分开。输出字段定义见 [references/result.schema.json](references/result.schema.json)，记录字段定义见 [references/geochemistry-record.schema.json](references/geochemistry-record.schema.json)。
 
 来源打包必须符合 [references/source-manifest.schema.json](references/source-manifest.schema.json)，置信度报告必须符合 [references/confidence-report.schema.json](references/confidence-report.schema.json)。置信度是 source、completeness、method、spatial 和 QC 的可审计 workflow usability 分数，不是正确概率；D2 公开权重、字段覆盖和惩罚，D1 只验证 sidecar/输入/报告哈希和 record ID 关联，不重新计算分数。
+
+来源筛选不能只看旧的 `approved`。先生成 `source_evidence_scores.json`，分别报告 `access_status`、`research_use_status`、八项证据维度、`evidence_tier` 和 `use_mode`。缺少软证据会降分但不删除来源；只有访问、科研使用、损坏/截断和来源无法识别等操作边界限制当前动作。完整规则见 [references/source-acceptance-standard.md](references/source-acceptance-standard.md)。
 
 需要快速复现时读取 [references/demo-guide.md](references/demo-guide.md)；失败关闭矩阵见 [references/failures.md](references/failures.md)，完整回归入口见 [references/demo-generation-tests.md](references/demo-generation-tests.md)。

@@ -1,18 +1,20 @@
 # D1 数据源接口卡片
 
-核对日期：2026-08-05。机器可读事实以 `../assets/source_catalog.json` 为准。本文件只作人工审阅入口；候选目录中的来源不等于已经批准用于生产。
+核对日期：2026-08-05。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
 
-## 状态说明
+## V1 兼容状态说明
 
 | 状态 | 含义 |
 |---|---|
-| `approved` | 版本、许可、来源链、字段、校验和适配器已经通过生产门 |
+| `approved` | V1 曾通过二元生产门；V3 仍需查看 evidence tier 与 use mode |
 | `conditional` | 只有满足记录级许可、地区、介质或字段条件时才能使用 |
 | `metadata_only` | 用于发现上游数据或说明覆盖，当前不提供生产数值 |
 | `needs_human_review` | 已发现相关数据，但版本、许可、接口、字段或适配器仍需复核 |
 | `rejected` | 已有证据表明不适合当前用途；仍保留排除理由 |
 
 ## 已批准来源
+
+V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核尚未完成，因此都不是 `benchmark_ready`。
 
 ### `georoc-archaean`
 
@@ -145,7 +147,7 @@
 - `norway-marchem` 的公开 API 已能稳定返回目标元素，但当前响应是带生成时间的动态 ZIP，不是已固定 DOI 的不可变发布；
 - MarChem 本次导出有 1,070 个物理数据行、880 个不同样品。190 个样品因两个参数组而重复出现，但每个样品只有一行含目标元素；适配器必须按参数和批次展开，不能按行计样品；
 - 四个目标元素均为干重 `mg/kg`，保留 `<` 删失值；方法是部分硝酸消解，不代表总量；目标方法元数据中同时存在 accredited 和 not-accredited 批次；
-- 已准备 30 条分层机器抽样，人工回看仍为 pending，因此没有把来源改为 approved；
+- 已准备 30 条分层机器抽样，人工回看仍为 pending，因此当前为 C 级 `raw_observation`，尚不是 `benchmark_ready`；
 - `geotraces-idp2025` 的 DOI、CC BY 4.0、产品范围、五个数据包和 QC 描述已核实；BODC 归档仍在准备，实际文件和变量级验收继续等待。
 
 ## 路由示例
@@ -156,4 +158,4 @@ python scripts/source_router.py \
   --output route_result.json
 ```
 
-路由器只会自动选择 `production_eligible=true` 的来源。其余匹配来源进入 `review_sources`，并显示阻断原因。只要目录发现尚未饱和，缺少来源就保持 `unknown`，不会提前写成 `uncovered`。
+V3 路由器按 `research_use_policy`、`minimum_evidence_tier` 和 `minimum_use_mode` 选择来源，不再只检查 `production_eligible=true`。其余匹配来源进入 `review_sources` 并显示当前较低的证据或使用级别。只要目录发现尚未饱和，缺少来源就保持 `unknown`，不会提前写成 `uncovered`。

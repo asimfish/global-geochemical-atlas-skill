@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Route a geochemical request to approved sources without overclaiming coverage."""
+"""Route a geochemical request by research-use, evidence tier and current use mode."""
 
 from __future__ import annotations
 
@@ -11,14 +11,16 @@ from pathlib import Path
 from typing import Any
 
 import source_adapters
+import score_source_evidence
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
 
 CATALOG_VERSION = "geochemical-source-catalog-v1"
-ROUTE_VERSION = "geochemical-source-route-v1"
+ROUTE_VERSION = "geochemical-source-route-v3"
 VALID_MEDIA = {"rock", "soil", "sediment", "water", "mineral", "concentrate"}
+VALID_OUTPUT_FORMATS = {"csv", "json", "geojson", "html_map"}
 VALID_SOURCE_STATUS = {"approved", "conditional", "metadata_only", "needs_human_review", "rejected"}
 ALLOWED_REQUEST_KEYS = {
     "elements",
@@ -30,6 +32,9 @@ ALLOWED_REQUEST_KEYS = {
     "output_formats",
     "target_crs",
     "license_policy",
+    "research_use_policy",
+    "minimum_evidence_tier",
+    "minimum_use_mode",
     "max_records",
     "offline",
 }
@@ -87,15 +92,8 @@ def load_catalog(path: Path = DEFAULT_CATALOG) -> dict[str, Any]:
         media = entry.get("media")
         if not isinstance(media, list) or not media or not set(media).issubset(VALID_MEDIA):
             raise SourceRoutingError(f"catalog source {source_id} has invalid media")
-        if entry.get("production_eligible"):
-            if status not in {"approved", "conditional"}:
-                raise SourceRoutingError(
-                    f"catalog source {source_id} cannot be production eligible with status {status}"
-                )
-            if entry.get("license", {}).get("status") != "open":
-                raise SourceRoutingError(f"catalog source {source_id} lacks an open production license")
-            if entry.get("adapter", {}).get("status") != "implemented":
-                raise SourceRoutingError(f"catalog source {source_id} lacks an implemented adapter")
+        if not isinstance(entry.get("production_eligible"), bool):
+            raise SourceRoutingError(f"catalog source {source_id} has invalid legacy production_eligible flag")
     discovery = catalog.get("discovery_state")
     if not isinstance(discovery, dict) or not isinstance(discovery.get("saturated"), bool):
         raise SourceRoutingError("source catalog has invalid discovery_state")
@@ -109,10 +107,20 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
     if unknown_keys:
         raise SourceRoutingError(f"request has unsupported keys: {', '.join(unknown_keys)}")
     elements = request.get("elements")
-    if not isinstance(elements, list) or not elements or not all(isinstance(item, str) and item.strip() for item in elements):
+    if (
+        not isinstance(elements, list)
+        or not elements
+        or not all(isinstance(item, str) and item.strip() for item in elements)
+        or len(elements) != len(set(elements))
+    ):
         raise SourceRoutingError("request elements must be a non-empty string array")
     media = request.get("media")
-    if not isinstance(media, list) or not media or len(media) != len(set(media)):
+    if (
+        not isinstance(media, list)
+        or not media
+        or not all(isinstance(item, str) for item in media)
+        or len(media) != len(set(media))
+    ):
         raise SourceRoutingError("request media must be a non-empty unique array")
     if not set(media).issubset(VALID_MEDIA):
         raise SourceRoutingError(f"request contains unsupported media: {sorted(set(media) - VALID_MEDIA)}")
@@ -129,52 +137,102 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
             raise SourceRoutingError("bbox coordinates are outside WGS84 bounds or latitude order is invalid")
     sources = request.get("sources", "auto")
     if sources != "auto":
-        if not isinstance(sources, list) or not sources or not all(isinstance(item, str) for item in sources):
+        if (
+            not isinstance(sources, list)
+            or not sources
+            or not all(isinstance(item, str) for item in sources)
+            or len(sources) != len(set(sources))
+        ):
             raise SourceRoutingError("request sources must be 'auto' or a non-empty string array")
         unknown_sources = sorted(set(sources) - set(catalog["sources"]))
         if unknown_sources:
             raise SourceRoutingError(f"request names unknown sources: {', '.join(unknown_sources)}")
+    measurement_basis = request.get("measurement_basis")
+    if measurement_basis is not None and (
+        not isinstance(measurement_basis, list)
+        or not all(isinstance(item, str) and item for item in measurement_basis)
+        or len(measurement_basis) != len(set(measurement_basis))
+    ):
+        raise SourceRoutingError("measurement_basis must be null or a unique string array")
+    time_range = request.get("time_range")
+    if time_range is not None and (
+        not isinstance(time_range, list)
+        or len(time_range) != 2
+        or not all(isinstance(item, str) for item in time_range)
+    ):
+        raise SourceRoutingError("time_range must be null or a two-string array")
+    output_formats = request.get("output_formats", ["csv", "json", "geojson", "html_map"])
+    if (
+        not isinstance(output_formats, list)
+        or not all(isinstance(item, str) for item in output_formats)
+        or len(output_formats) != len(set(output_formats))
+        or not set(output_formats).issubset(VALID_OUTPUT_FORMATS)
+    ):
+        raise SourceRoutingError("output_formats must be a unique array of supported formats")
+    if request.get("target_crs", "EPSG:4326") != "EPSG:4326":
+        raise SourceRoutingError("target_crs supports only EPSG:4326")
     if request.get("license_policy", "open_only") != "open_only":
-        raise SourceRoutingError("v1 source routing supports only license_policy=open_only")
+        raise SourceRoutingError("legacy license_policy supports only open_only; use research_use_policy in V3")
+    research_use_policy = request.get("research_use_policy", "permitted_research")
+    if research_use_policy not in {"permitted_research", "open_research_only", "include_permission_required"}:
+        raise SourceRoutingError("invalid research_use_policy")
+    minimum_evidence_tier = request.get("minimum_evidence_tier", "D")
+    if minimum_evidence_tier not in score_source_evidence.TIER_RANK:
+        raise SourceRoutingError("minimum_evidence_tier must be A, B, C, D or U")
+    minimum_use_mode = request.get("minimum_use_mode", "normalized_analysis")
+    if minimum_use_mode not in score_source_evidence.USE_MODE_RANK:
+        raise SourceRoutingError(
+            "minimum_use_mode must be discovery, raw_observation, normalized_analysis or benchmark_ready"
+        )
+    max_records = request.get("max_records", 50000)
+    if isinstance(max_records, bool) or not isinstance(max_records, int) or not 1 <= max_records <= 200000:
+        raise SourceRoutingError("max_records must be an integer from 1 to 200000")
+    if not isinstance(request.get("offline", False), bool):
+        raise SourceRoutingError("offline must be a boolean")
     normalized = dict(request)
+    normalized.setdefault("measurement_basis", None)
+    normalized.setdefault("time_range", None)
     normalized.setdefault("sources", "auto")
+    normalized.setdefault("output_formats", ["csv", "json", "geojson", "html_map"])
+    normalized.setdefault("target_crs", "EPSG:4326")
     normalized.setdefault("license_policy", "open_only")
+    normalized.setdefault("research_use_policy", "permitted_research")
+    normalized.setdefault("minimum_evidence_tier", "D")
+    normalized.setdefault("minimum_use_mode", "normalized_analysis")
+    normalized.setdefault("max_records", 50000)
     normalized.setdefault("offline", False)
     return normalized
 
 
-def _route_entry(source_id: str, entry: Mapping[str, Any], matching_media: list[str], reason: str) -> dict[str, Any]:
+def _route_entry(
+    source_id: str,
+    entry: Mapping[str, Any],
+    evidence: Mapping[str, Any],
+    matching_media: list[str],
+    reason: str,
+) -> dict[str, Any]:
     return {
         "source_id": source_id,
         "title": entry["title"],
         "status": entry["status"],
+        "access_status": evidence["access_status"],
+        "research_use_status": evidence["research_use_status"],
+        "evidence_tier": evidence["evidence_tier"],
+        "source_evidence_score": evidence["source_evidence_score"],
+        "use_mode": evidence["use_mode"],
+        "attribution_note": evidence["attribution_note"],
         "matching_media": matching_media,
         "coverage_extent": entry["coverage"]["extent_class"],
         "reason": reason,
     }
 
 
-def _production_alignment_blockers(
-    source_id: str,
-    entry: Mapping[str, Any],
-    registry: Mapping[str, Any],
-) -> list[str]:
-    registry_entry = registry.get("sources", {}).get(source_id)
-    if not isinstance(registry_entry, dict):
-        return ["missing production registry entry"]
-    blockers: list[str] = []
-    if entry.get("version", {}).get("value") != str(registry_entry.get("dataset_version")):
-        blockers.append("catalog/registry version mismatch")
-    if entry.get("license", {}).get("id") != registry_entry.get("license", {}).get("spdx"):
-        blockers.append("catalog/registry license mismatch")
-    try:
-        adapter = source_adapters.get_adapter(source_id)
-    except source_adapters.SourceAdapterError:
-        blockers.append("adapter is not callable")
-    else:
-        if adapter.candidate.version != str(registry_entry.get("dataset_version")):
-            blockers.append("adapter/registry version mismatch")
-    return blockers
+def _research_policy_allows(policy: str, status: str) -> bool:
+    if policy == "include_permission_required":
+        return status != "unknown"
+    if policy == "open_research_only":
+        return status == "open_research"
+    return status in {"open_research", "attribution_required", "noncommercial_research_only"}
 
 
 def route_sources(
@@ -182,11 +240,16 @@ def route_sources(
     catalog: Mapping[str, Any] | None = None,
     registry: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Return production routes, review candidates and conservative coverage states."""
+    """Return usable routes, lower-use candidates and conservative coverage states."""
 
     resolved_catalog = dict(catalog) if catalog is not None else load_catalog()
     resolved_registry = dict(registry) if registry is not None else source_adapters.load_source_registry()
     normalized = validate_request(request, resolved_catalog)
+    evidence_report = score_source_evidence.score_catalog(
+        resolved_catalog,
+        resolved_registry,
+        score_source_evidence.load_candidate_evidence(),
+    )
     requested_media = set(normalized["media"])
     explicit_sources = normalized["sources"]
     allowed_ids = set(resolved_catalog["sources"]) if explicit_sources == "auto" else set(explicit_sources)
@@ -198,38 +261,58 @@ def route_sources(
         matching_media = sorted(requested_media.intersection(entry["media"]))
         if not matching_media:
             continue
-        alignment_blockers = (
-            _production_alignment_blockers(source_id, entry, resolved_registry)
-            if entry["production_eligible"]
-            else []
+        evidence = evidence_report["sources"][source_id]
+        evidence_ok = (
+            score_source_evidence.TIER_RANK[evidence["evidence_tier"]]
+            >= score_source_evidence.TIER_RANK[normalized["minimum_evidence_tier"]]
         )
-        if entry["production_eligible"] and entry["license"]["status"] == "open" and not alignment_blockers:
+        use_mode_ok = (
+            score_source_evidence.USE_MODE_RANK[evidence["use_mode"]]
+            >= score_source_evidence.USE_MODE_RANK[normalized["minimum_use_mode"]]
+        )
+        research_ok = _research_policy_allows(
+            normalized["research_use_policy"], evidence["research_use_status"]
+        )
+        offline_ok = not normalized["offline"]
+        if evidence_ok and use_mode_ok and research_ok and offline_ok:
             selected.append(
                 _route_entry(
                     source_id,
                     entry,
+                    evidence,
                     matching_media,
-                    "approved source with an implemented adapter and open license",
+                    (
+                        f"meets minimum tier {normalized['minimum_evidence_tier']}, "
+                        f"use mode {normalized['minimum_use_mode']} and research-use policy"
+                    ),
                 )
             )
         else:
-            blockers = [f"status={entry['status']}", f"adapter={entry['adapter']['status']}"]
-            if entry["license"]["status"] != "open":
-                blockers.append(f"license={entry['license']['status']}")
-            blockers.extend(alignment_blockers)
-            review.append(_route_entry(source_id, entry, matching_media, "; ".join(blockers)))
+            blockers: list[str] = []
+            if not evidence_ok:
+                blockers.append(
+                    f"evidence_tier={evidence['evidence_tier']} below {normalized['minimum_evidence_tier']}"
+                )
+            if not use_mode_ok:
+                blockers.append(f"use_mode={evidence['use_mode']} below {normalized['minimum_use_mode']}")
+            if not research_ok:
+                blockers.append(f"research_use_status={evidence['research_use_status']}")
+            if not offline_ok:
+                blockers.append("offline_cache_not_verified")
+            blockers.extend(f"conflict={item}" for item in evidence["conflicts"])
+            review.append(_route_entry(source_id, entry, evidence, matching_media, "; ".join(blockers)))
 
     coverage: dict[str, Any] = {}
     saturated = bool(resolved_catalog["discovery_state"]["saturated"])
     for medium in normalized["media"]:
-        approved_ids = sorted(item["source_id"] for item in selected if medium in item["matching_media"])
+        selected_ids = sorted(item["source_id"] for item in selected if medium in item["matching_media"])
         candidate_ids = sorted(item["source_id"] for item in review if medium in item["matching_media"])
-        if approved_ids:
+        if selected_ids:
             coverage_status = "partial"
-            note = "At least one approved source is routable, but geographic, temporal and method completeness remain bounded by its declared scope."
+            note = "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope."
         elif candidate_ids:
             coverage_status = "unknown"
-            note = "Relevant candidates exist but none has passed the production quality gates."
+            note = "Relevant candidates exist, but none currently meets the requested evidence, research-use and use-mode conditions."
         elif saturated:
             coverage_status = "uncovered"
             note = "No relevant source remained after a discovery-saturated catalog review."
@@ -238,7 +321,7 @@ def route_sources(
             note = "No current candidate is recorded and source discovery is not saturated."
         coverage[medium] = {
             "status": coverage_status,
-            "approved_sources": approved_ids,
+            "selected_sources": selected_ids,
             "candidate_sources": candidate_ids,
             "note": note,
         }
@@ -250,11 +333,15 @@ def route_sources(
     else:
         status = "unsupported_scope"
     limitations = [
-        "Catalog routing identifies possible sources; analyte availability and record-level comparability still require source queries and D2 review.",
+        "Catalog routing identifies possible sources; evidence tier is not a truth probability, and analyte availability plus record-level comparability still require source queries and D2 review.",
         "A partial route must not be presented as complete global coverage.",
     ]
     if not saturated:
         limitations.append("Source discovery is still in progress; absence from this route is not proof that no source exists.")
+    if normalized["offline"]:
+        limitations.append(
+            "Offline routing cannot inspect an external cache, so it does not select any source until the caller separately verifies a versioned cache and SHA-256."
+        )
     return {
         "route_version": ROUTE_VERSION,
         "status": status,
