@@ -34,7 +34,9 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 ## D3 是可视化生成 Skill，不是一张固定网页
 
 `interactive-atlas-v3.html` 是 Skill 内部模板。Agent 应从用户问题生成
-`d3-visualization-profile-v1` 配置，再用一个目录级命令渲染，不能要求用户手改 HTML：
+`d3-visualization-profile-v2` 配置，再用一个目录级命令渲染，不能要求用户手改 HTML。全球任务复制
+`visualization-profile.template.json`；国家、城市或自定义 bbox 调研复制
+`visualization-profile.regional.template.json`，后者会把 HTML、异常显示和 `samples.geojson` 裁剪到区域：
 
 ```bash
 python skills/global-geochemical-atlas/scripts/render_visualization.py \

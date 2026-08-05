@@ -19,7 +19,8 @@ D3 只消费 D1/D2 结论：
 
 1. 读取用户问题，提取主要元素、区域、介质、地质单元和目标视图。
 2. 检查输入目录是否包含六个必需 D1/D2 文件；缺失时返回 `invalid_input`。
-3. 复制 `assets/visualization-profile.template.json`，只修改与用户问题有关的字段。
+3. 全球问题复制 `assets/visualization-profile.template.json`；国家、城市或 bbox 问题复制
+   `assets/visualization-profile.regional.template.json`。只修改与用户问题有关的字段。
 4. 运行 `scripts/render_visualization.py`；不要直接编辑 HTML 模板。
 5. 检查 `visualization_report.json.status`、`profile_warnings`、记录计数和文件大小。
 6. 打开生成的 HTML 做最小人工检查：首屏任务、空结果、图例、点击证据和来源链接。
@@ -44,12 +45,13 @@ anomaly_report.json
 
 ## 4. 任务配置模板
 
-配置使用 `d3-visualization-profile-v1`，完整约束见
+配置使用 `d3-visualization-profile-v2`，完整约束见
 [visualization-profile.schema.json](visualization-profile.schema.json)。关键字段：
 
 ```json
 {
   "story": "overview",
+  "spatial_scope": "global",
   "default_region": "global",
   "custom_region": null,
   "filters": {
@@ -71,6 +73,22 @@ anomaly_report.json
   }
 }
 ```
+
+先选择空间产物类型；这不是普通筛选项：
+
+| 调研范围 | `spatial_scope` | `default_region` | D3 输出行为 |
+|---|---|---|---|
+| 全球分布、跨洲总览 | `global` | 必须为 `global` | 生成世界图，嵌入全部可上图记录，可交互选择区域 |
+| 国家、城市、流域、矿区 | `regional` | 非 `global` 预设或 `custom` | 生成区域图，只嵌入 bbox 内记录并锁定区域入口 |
+
+区域预设支持 `usa`、`usa48`、`china`、`shanghai`、`europe`、`australia`。其他范围使用
+`default_region=custom`，并填写 WGS84 `custom_region.label` 与 `bounds={w,s,e,n}`。区域模式下：
+
+- `interactive_map.html` 的样点、异常候选、来源卡片和元素组合只来自 bbox 内记录；
+- `samples.geojson` 只含 bbox 内 feature，并声明 `spatial_scope.output_clipped=true`；
+- 页面不提供切回世界图的入口，URL 参数也不得突破区域范围；
+- `geochemistry.csv`、`anomalies.geojson` 等原始 D1/D2 证据文件仍原样保留，避免破坏来源追溯；
+- bbox 是显示裁剪，不宣称为精确行政或地质边界。
 
 按问题选择一个 `story`：
 
@@ -113,7 +131,7 @@ python scripts/render_visualization.py \
 核心 D3 输出：
 
 - `interactive_map.html`：任务配置驱动、离线、自包含的交互地图；
-- `samples.geojson`：一条 feature 对应一条合格坐标测定记录；
+- `samples.geojson`：一条 feature 对应一条当前空间产物内的合格坐标测定记录；区域模式只含 bbox 内记录；
 - `visualization_profile.json`：本次可复现任务配置；
 - `visualization_report.json`：输入哈希、配置、警告、地图计数和失败边界，结构见
   [visualization-report.schema.json](visualization-report.schema.json)。
@@ -124,6 +142,7 @@ python scripts/render_visualization.py \
 验收至少检查：
 
 - 首屏是否直接对应用户问题，而不是要求用户先理解所有控件；
+- 全球任务是否生成世界图，区域任务是否只生成并锁定区域图；
 - 元素、区域、地质单元、介质、来源和置信度筛选是否真实生效；
 - 分布、密度、元素组合和异常四类视图是否仍可切换；
 - 空区域是否显示“覆盖缺口”而不是零含量或不存在；

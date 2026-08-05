@@ -17,7 +17,7 @@ from typing import Any
 MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
-PROFILE_VERSION = "d3-visualization-profile-v1"
+PROFILE_VERSION = "d3-visualization-profile-v2"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 MAX_OUTPUT_BYTES = 100_000_000
 SKILL_DIR = Path(__file__).resolve().parent.parent
@@ -83,12 +83,22 @@ def parse_bool_cell(value: Any) -> bool:
     return str(value or "").strip().casefold() in {"1", "true", "yes"}
 
 
-def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int]:
+def coordinate_in_bounds(longitude: float, latitude: float, bounds: Mapping[str, float]) -> bool:
+    return (
+        bounds["w"] <= longitude <= bounds["e"]
+        and bounds["s"] <= latitude <= bounds["n"]
+    )
+
+
+def load_records(
+    path: Path, max_points: int, scope_bounds: Mapping[str, float]
+) -> tuple[list[dict[str, Any]], int, int]:
     """Consume, but never reinterpret, the public D2 canonical CSV."""
     if not path.is_file():
         raise MapBuildError(f"database does not exist: {path}")
     records: list[dict[str, Any]] = []
     total_records = 0
+    source_mappable_records = 0
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         required = {
@@ -114,6 +124,9 @@ def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int
             if latitude is None or longitude is None:
                 continue
             if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+                continue
+            source_mappable_records += 1
+            if not coordinate_in_bounds(longitude, latitude, scope_bounds):
                 continue
             confidence = parse_json_cell(row.get("operational_confidence"), {})
             qc_flags = parse_json_cell(row.get("qc_flags"), [])
@@ -162,9 +175,10 @@ def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int
             )
             if len(records) > max_points:
                 raise MapBuildError(
-                    f"valid map points exceed --max-points ({max_points}); filter the input first"
+                    f"valid map points within the configured scope exceed --max-points "
+                    f"({max_points}); filter the input first"
                 )
-    return records, total_records
+    return records, total_records, source_mappable_records
 
 
 def load_json_object(path: Path | None, label: str) -> dict[str, Any]:
@@ -212,6 +226,7 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         "subtitle",
         "story",
         "theme",
+        "spatial_scope",
         "default_region",
         "custom_region",
         "filters",
@@ -229,6 +244,13 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
     default_region = profile.get("default_region")
     if default_region not in {*REGION_PRESETS, "custom"}:
         raise MapBuildError("visualization profile default_region is unsupported")
+    spatial_scope = profile.get("spatial_scope")
+    if spatial_scope not in {"global", "regional"}:
+        raise MapBuildError("visualization profile spatial_scope must be global or regional")
+    if spatial_scope == "global" and default_region != "global":
+        raise MapBuildError("spatial_scope=global requires default_region=global")
+    if spatial_scope == "regional" and default_region == "global":
+        raise MapBuildError("spatial_scope=regional requires a non-global default_region")
 
     custom_region = profile.get("custom_region")
     if custom_region is not None:
@@ -263,6 +285,8 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         }
     if default_region == "custom" and custom_region is None:
         raise MapBuildError("default_region=custom requires custom_region")
+    if default_region != "custom" and custom_region is not None:
+        raise MapBuildError("custom_region must be null unless default_region=custom")
 
     filters = profile.get("filters")
     filter_keys = {"element", "medium", "basis", "geology", "method", "source", "confidence"}
@@ -312,12 +336,22 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         "subtitle": profile_text(profile.get("subtitle"), "subtitle", 500),
         "story": story,
         "theme": "evidence-dark",
+        "spatial_scope": spatial_scope,
         "default_region": default_region,
         "custom_region": custom_region,
         "filters": normalized_filters,
         "comparison": normalized_comparison,
         "display": {key: display[key] for key in sorted(display_keys)},
     }
+
+
+def selected_region(profile: Mapping[str, Any]) -> dict[str, Any]:
+    region = (
+        profile["custom_region"]
+        if profile["default_region"] == "custom"
+        else REGION_PRESETS[profile["default_region"]]
+    )
+    return {"label": str(region["label"]), "bounds": dict(region["bounds"])}
 
 
 def visualization_profile_warnings(
@@ -357,11 +391,7 @@ def visualization_profile_warnings(
     requested_medium = profile["comparison"].get("medium")
     if requested_medium and requested_medium not in available["medium"]:
         warnings.append(f"请求的组合介质在当前数据中未观测到：{requested_medium}")
-    region = (
-        profile["custom_region"]
-        if profile["default_region"] == "custom"
-        else REGION_PRESETS[profile["default_region"]]
-    )
+    region = selected_region(profile)
     bounds = region["bounds"]
     region_records = [
         record
@@ -488,7 +518,10 @@ def region_coverage(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
 
 
 def samples_geojson(
-    records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]
+    records: Sequence[Mapping[str, Any]],
+    anomaly_ids: set[str],
+    profile: Mapping[str, Any],
+    scope_region: Mapping[str, Any],
 ) -> dict[str, Any]:
     features = []
     for record in records:
@@ -510,6 +543,13 @@ def samples_geojson(
         "type": "FeatureCollection",
         "name": "standardized_geochemical_samples",
         "map_version": MAP_VERSION,
+        "spatial_scope": {
+            "mode": profile["spatial_scope"],
+            "region_key": profile["default_region"],
+            "region_label": scope_region["label"],
+            "bounds": dict(scope_region["bounds"]),
+            "output_clipped": profile["spatial_scope"] == "regional",
+        },
         "features": features,
     }
 
@@ -682,24 +722,45 @@ def build_map(
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
-    records, total_records = load_records(database, max_points)
+    profile = load_visualization_profile(visualization_profile_path)
+    scope_region = selected_region(profile)
+    records, total_records, source_mappable_records = load_records(
+        database, max_points, scope_region["bounds"]
+    )
     anomalies = load_anomalies(anomalies_path)
     basemap = load_basemap(basemap_path)
-    profile = load_visualization_profile(visualization_profile_path)
     anomaly_ids = {
         str(feature.get("properties", {}).get("record_id"))
         for feature in anomalies["features"]
         if feature.get("properties", {}).get("record_id") is not None
     }
+    scoped_record_ids = {str(record["record_id"]) for record in records}
+    scoped_anomalies = {
+        **anomalies,
+        "features": [
+            feature
+            for feature in anomalies["features"]
+            if str(feature.get("properties", {}).get("record_id")) in scoped_record_ids
+        ],
+    }
     profile_warnings = visualization_profile_warnings(profile, records, anomaly_ids)
-    geojson = samples_geojson(records, anomaly_ids)
+    geojson = samples_geojson(records, anomaly_ids, profile, scope_region)
     map_payload = compact_map_payload(records, anomaly_ids)
+    spatial_scope = {
+        "mode": profile["spatial_scope"],
+        "region_key": profile["default_region"],
+        "region_label": scope_region["label"],
+        "bounds": dict(scope_region["bounds"]),
+        "output_clipped": profile["spatial_scope"] == "regional",
+    }
     context = {
         "map_version": MAP_VERSION,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
+        "spatial_scope": spatial_scope,
         "total_record_count": total_records,
+        "source_mappable_record_count": source_mappable_records,
         "mappable_record_count": len(records),
         "region_presets": REGION_PRESETS,
         "qc_report": load_json_object(qc_report_path, "QC report"),
@@ -709,7 +770,7 @@ def build_map(
     }
     html = (
         load_html_template().replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
-        .replace("__ANOMALIES_JSON__", safe_embedded_json(anomalies))
+        .replace("__ANOMALIES_JSON__", safe_embedded_json(scoped_anomalies))
         .replace("__BASEMAP_JSON__", safe_embedded_json(basemap))
         .replace("__CONTEXT_JSON__", safe_embedded_json(context))
     )
@@ -728,24 +789,34 @@ def build_map(
     sample_keys = {sample_display_key(record) for record in records}
     all_data_overview = (
         profile["story"] == "overview"
+        and profile["spatial_scope"] == "global"
         and profile["default_region"] == "global"
         and not any(profile["filters"].values())
     )
     return {
         "map_version": MAP_VERSION,
         "mapped_record_count": len(records),
+        "source_mappable_record_count": source_mappable_records,
+        "scope_excluded_mappable_record_count": source_mappable_records - len(records),
         "display_sample_count": len(sample_keys),
-        "unmappable_record_count": total_records - len(records),
+        "unmappable_record_count": total_records - source_mappable_records,
         "candidate_record_count": sum(
             str(record["record_id"]) in anomaly_ids for record in records
         ),
         "default_view": (
-            "all_data_sample_deduplicated" if all_data_overview else "profile_driven_task_view"
+            "all_data_sample_deduplicated"
+            if all_data_overview
+            else (
+                "regional_scope_task_view"
+                if profile["spatial_scope"] == "regional"
+                else "profile_driven_task_view"
+            )
         ),
         "embedded_payload_schema": PAYLOAD_VERSION,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
+        "spatial_scope": spatial_scope,
         "visualization_modes": [
             "distribution_points",
             "sample_density_heatmap",
@@ -793,7 +864,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--profile",
         type=Path,
-        help="Optional d3-visualization-profile-v1 JSON; defaults to the bundled template",
+        help="Optional d3-visualization-profile-v2 JSON; defaults to the bundled template",
     )
     parser.add_argument(
         "--max-points", type=int, default=50_000, help="Fail if valid coordinate points exceed this"

@@ -105,18 +105,21 @@
       "properties": {
         "map_version": {"type": "string"},
         "mapped_record_count": {"type": "integer", "minimum": 0},
+        "source_mappable_record_count": {"type": "integer", "minimum": 0},
+        "scope_excluded_mappable_record_count": {"type": "integer", "minimum": 0},
         "display_sample_count": {"type": "integer", "minimum": 0},
         "unmappable_record_count": {"type": "integer", "minimum": 0},
         "candidate_record_count": {"type": "integer", "minimum": 0},
-        "default_view": {"enum": ["all_data_sample_deduplicated", "profile_driven_task_view"]},
+        "default_view": {"enum": ["all_data_sample_deduplicated", "profile_driven_task_view", "regional_scope_task_view"]},
         "embedded_payload_schema": {"const": "d3-compact-payload-v1"},
         "anomaly_region_render_mode": {"const": "zoom-adaptive-anomaly-bubbles-v1"},
         "visualization_profile": {
           "type": "object",
-          "required": ["schema_version", "story", "default_region", "filters", "comparison", "display"],
+          "required": ["schema_version", "story", "spatial_scope", "default_region", "filters", "comparison", "display"],
           "properties": {
-            "schema_version": {"const": "d3-visualization-profile-v1"},
+            "schema_version": {"const": "d3-visualization-profile-v2"},
             "story": {"enum": ["overview", "coverage", "anomaly", "comparison", "evidence"]},
+            "spatial_scope": {"enum": ["global", "regional"]},
             "default_region": {"type": "string"},
             "filters": {"type": "object"},
             "comparison": {"type": "object"},
@@ -127,6 +130,21 @@
         "visualization_profile_warnings": {
           "type": "array",
           "items": {"type": "string"}
+        },
+        "spatial_scope": {
+          "type": "object",
+          "required": ["mode", "region_key", "region_label", "bounds", "output_clipped"],
+          "properties": {
+            "mode": {"enum": ["global", "regional"]},
+            "region_key": {"type": "string"},
+            "region_label": {"type": "string"},
+            "bounds": {
+              "type": "object",
+              "required": ["w", "s", "e", "n"]
+            },
+            "output_clipped": {"type": "boolean"}
+          },
+          "additionalProperties": false
         },
         "visualization_modes": {
           "type": "array",

@@ -21,7 +21,7 @@
       },
       "additionalProperties": false
     },
-    "profile": {"$ref": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v1"},
+    "profile": {"$ref": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v2"},
     "profile_warnings": {"type": "array", "items": {"type": "string"}},
     "outputs": {"type": "object", "additionalProperties": {"type": "string"}},
     "output_sha256": {

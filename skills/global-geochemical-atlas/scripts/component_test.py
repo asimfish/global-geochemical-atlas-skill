@@ -35,6 +35,9 @@ GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 VISUALIZATION_RENDERER = SCRIPT_DIR / "render_visualization.py"
 BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
 VISUALIZATION_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
+REGIONAL_VISUALIZATION_PROFILE = (
+    SKILL_DIR / "assets" / "visualization-profile.regional.template.json"
+)
 VISUALIZATION_PROFILE_SCHEMA = SKILL_DIR / "references" / "visualization-profile.schema.json"
 VISUALIZATION_REPORT_SCHEMA = SKILL_DIR / "references" / "visualization-report.schema.json"
 
@@ -933,7 +936,7 @@ def check_d3(output_dir: Path) -> list[str]:
                 "layoutAnomalyBubbles",
                 "conic-gradient",
                 'id="storyPreset"',
-                "d3-visualization-profile-v1",
+                "d3-visualization-profile-v2",
             )
         ),
         "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
@@ -978,7 +981,10 @@ def check_d3(output_dir: Path) -> list[str]:
         and map_report.get("anomaly_region_render_mode")
         == "zoom-adaptive-anomaly-bubbles-v1"
         and map_report.get("visualization_profile", {}).get("schema_version")
-        == "d3-visualization-profile-v1"
+        == "d3-visualization-profile-v2"
+        and map_report.get("spatial_scope", {}).get("mode") == "global"
+        and map_report.get("spatial_scope", {}).get("output_clipped") is False
+        and map_report.get("scope_excluded_mappable_record_count") == 0
         and isinstance(map_report.get("visualization_profile_warnings"), list)
         and set(map_report.get("visualization_modes", []))
         == {
@@ -1022,12 +1028,16 @@ def check_d3(output_dir: Path) -> list[str]:
         checks,
     )
     profile = json_value(VISUALIZATION_PROFILE)
+    regional_profile = json_value(REGIONAL_VISUALIZATION_PROFILE)
     profile_schema = json_value(VISUALIZATION_PROFILE_SCHEMA)
     visualization_report_schema = json_value(VISUALIZATION_REPORT_SCHEMA)
     require(
-        profile.get("schema_version") == "d3-visualization-profile-v1"
+        profile.get("schema_version") == "d3-visualization-profile-v2"
+        and profile.get("spatial_scope") == "global"
         and profile_schema.get("properties", {}).get("schema_version", {}).get("const")
-        == "d3-visualization-profile-v1"
+        == "d3-visualization-profile-v2"
+        and set(profile_schema.get("properties", {}).get("spatial_scope", {}).get("enum", []))
+        == {"global", "regional"}
         and visualization_report_schema.get("properties", {})
         .get("interface_version", {})
         .get("const")
@@ -1035,12 +1045,21 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 publishes a versioned task profile template and Schema",
         checks,
     )
+    require(
+        regional_profile.get("schema_version") == "d3-visualization-profile-v2"
+        and regional_profile.get("spatial_scope") == "regional"
+        and regional_profile.get("default_region") == "shanghai"
+        and regional_profile.get("custom_region") is None,
+        "D3 publishes a distinct city-ready regional product template",
+        checks,
+    )
     with tempfile.TemporaryDirectory() as visualization_temp:
         visualization_root = Path(visualization_temp)
         task_profile = dict(profile)
-        task_profile["title"] = "As 土壤候选异常任务视图"
+        task_profile["title"] = "中国 As 土壤候选异常任务视图"
         task_profile["story"] = "anomaly"
-        task_profile["default_region"] = "usa48"
+        task_profile["spatial_scope"] = "regional"
+        task_profile["default_region"] = "china"
         task_profile["filters"] = {
             **profile["filters"],
             "element": "As",
@@ -1070,6 +1089,9 @@ def check_d3(output_dir: Path) -> list[str]:
         configured_html = (visualization_output / "interactive_map.html").read_text(
             encoding="utf-8"
         )
+        scoped_geojson = json_value(visualization_output / "samples.geojson")
+        scoped_features = scoped_geojson.get("features", [])
+        scoped_report = visualization_report.get("map_report", {}).get("spatial_scope", {})
         require(
             visualization_report.get("status") == "success"
             and visualization_report.get("interface_version")
@@ -1077,10 +1099,80 @@ def check_d3(output_dir: Path) -> list[str]:
             and visualization_report.get("profile", {}).get("story") == "anomaly"
             and visualization_report.get("profile", {}).get("filters", {}).get("element")
             == "As"
+            and visualization_report.get("profile", {}).get("spatial_scope") == "regional"
             and visualization_report.get("map_report", {}).get("default_view")
-            == "profile_driven_task_view"
-            and "As 土壤候选异常任务视图" in configured_html,
-            "D3 Agent entry point renders a task-configured map without editing HTML",
+            == "regional_scope_task_view"
+            and scoped_report.get("region_key") == "china"
+            and scoped_report.get("output_clipped") is True
+            and "中国 As 土壤候选异常任务视图" in configured_html
+            and "REGIONAL OUTPUT" in configured_html,
+            "D3 Agent entry point renders a locked regional task map without editing HTML",
+            checks,
+        )
+        require(
+            len(scoped_features)
+            == visualization_report.get("map_report", {}).get("mapped_record_count")
+            and scoped_geojson.get("spatial_scope", {}).get("mode") == "regional"
+            and scoped_geojson.get("spatial_scope", {}).get("output_clipped") is True
+            and all(
+                73 <= feature["geometry"]["coordinates"][0] <= 135
+                and 18 <= feature["geometry"]["coordinates"][1] <= 54
+                for feature in scoped_features
+            ),
+            "D3 regional GeoJSON contains only records inside the configured country bbox",
+            checks,
+        )
+        city_output = visualization_root / "city-bundle"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_RENDERER),
+                "--input-dir",
+                str(output_dir),
+                "--profile",
+                str(REGIONAL_VISUALIZATION_PROFILE),
+                "--output-dir",
+                str(city_output),
+            ]
+        )
+        city_report = json_value(city_output / "visualization_report.json")
+        city_geojson = json_value(city_output / "samples.geojson")
+        require(
+            city_report.get("map_report", {}).get("spatial_scope", {}).get("region_key")
+            == "shanghai"
+            and city_report.get("map_report", {}).get("mapped_record_count") == 0
+            and city_report.get("map_report", {}).get("scope_excluded_mappable_record_count")
+            == city_report.get("map_report", {}).get("source_mappable_record_count")
+            and city_geojson.get("features") == []
+            and any("覆盖缺口" in warning for warning in city_report.get("profile_warnings", [])),
+            "D3 city template keeps an empty regional result instead of falling back to a world map",
+            checks,
+        )
+        invalid_profile = dict(profile)
+        invalid_profile["spatial_scope"] = "regional"
+        invalid_profile_path = visualization_root / "invalid-profile.json"
+        invalid_profile_path.write_text(
+            json.dumps(invalid_profile, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        invalid_output = visualization_root / "invalid-bundle"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_RENDERER),
+                "--input-dir",
+                str(output_dir),
+                "--profile",
+                str(invalid_profile_path),
+                "--output-dir",
+                str(invalid_output),
+            ],
+            expected_code=2,
+        )
+        require(
+            json_value(invalid_output / "visualization_report.json").get("status")
+            == "invalid_input",
+            "D3 fails closed when regional scope is paired with the global region",
             checks,
         )
     return checks

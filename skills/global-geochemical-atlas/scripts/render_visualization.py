@@ -167,6 +167,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "limitations": [
             "D3 renders existing D1/D2 evidence and candidate anomalies; it does not recompute them.",
             "Blank areas indicate no included observations, not element absence or zero concentration.",
+            (
+                "Regional products clip the HTML payload, anomaly display, and samples GeoJSON to "
+                "the configured WGS84 bbox; copied D1/D2 evidence files remain complete."
+                if profile["spatial_scope"] == "regional"
+                else "This is a global product; regional views remain exploratory selections."
+            ),
         ],
         "next_actions": [
             "Open interactive_map.html at the configured task view.",
@@ -195,7 +201,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--profile",
         type=Path,
         default=map_builder.DEFAULT_PROFILE,
-        help="d3-visualization-profile-v1 JSON; defaults to the bundled template",
+        help="d3-visualization-profile-v2 JSON; defaults to the bundled template",
     )
     parser.add_argument(
         "--max-points", type=int, default=50_000, help="Fail closed above this mappable record count"

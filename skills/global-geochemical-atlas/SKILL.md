@@ -153,7 +153,12 @@ python scripts/run_workflow.py \
 
 若没有 sidecar，流程仍生成最小 `record_evidence.jsonl`，但来源只能标为 `source_declared_in_input`。只有 acquisition manifest 同时哈希绑定 CSV 与 sidecar 且 record ID 完全一致时，才可标为 `verified_record_evidence`。
 
-若已有 D1/D2 标准输出目录，不要重新运行标准化或异常判定。根据用户问题复制并填写 `assets/visualization-profile.template.json`：
+若已有 D1/D2 标准输出目录，不要重新运行标准化或异常判定。先判断空间产物类型，再复制配置：
+
+- 用户问全球分布或跨区域对比时，复制 `assets/visualization-profile.template.json`，保持 `spatial_scope=global` 与 `default_region=global`；
+- 用户问国家、城市、流域、矿区或任意 bbox 时，复制 `assets/visualization-profile.regional.template.json`，设置 `spatial_scope=regional` 和对应预设或自定义 bbox。区域产物必须只把区域内记录嵌入 HTML、异常显示和 `samples.geojson`，不得用世界全景代替区域图；原始 D1/D2 证据文件仍完整保留。
+
+然后根据用户问题填写任务视图：
 
 - 问“数据在哪里、有哪些介质”时选 `story=overview`；
 - 问“覆盖是否完整”时选 `story=coverage`；
