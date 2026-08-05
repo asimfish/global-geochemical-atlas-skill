@@ -905,10 +905,17 @@
       "interfaces": [
         {
           "kind": "versioned_bulk_download",
-          "url": "https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+          "url": "https://www.bodc.ac.uk/data/published_data_library/catalogue/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c/",
           "format": "ascii_netcdf_odv",
           "access": "open",
           "server_filters": ["version"]
+        },
+        {
+          "kind": "published_data_library_metadata_api",
+          "url": "https://www.bodc.ac.uk/data/published_data_library/api/doi/42c92148-8d03-8be6-e063-7086abc09f0c",
+          "format": "json",
+          "access": "open",
+          "server_filters": ["doi"]
         },
         {
           "kind": "online_subset",
@@ -921,18 +928,20 @@
       "license": {
         "status": "open",
         "id": "CC-BY-4.0",
-        "url": "https://www.geotraces.org/idp2025/",
+        "url": "https://www.bodc.ac.uk/geotraces/data/idp2025/documents/IDP2025_FairDataUseStatement.pdf",
         "notes": "Fair Use Agreement requires IDP and original data-contributor citations."
       },
       "version": {"status": "pinned", "value": "IDP2025", "release_date": "2025-11-20"},
       "adapter": {"status": "not_implemented", "name": null},
       "evidence_urls": [
         "https://www.geotraces.org/idp2025/",
-        "https://www.bodc.ac.uk/geotraces/data/"
+        "https://www.bodc.ac.uk/geotraces/data/idp2025/",
+        "https://www.bodc.ac.uk/data/published_data_library/catalogue/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c/"
       ],
       "limitations": [
         "Cruise-track ocean sampling is not uniform global surface-water coverage.",
-        "Dissolved, particulate and other fractions plus quality flags and contributor citations must remain distinct."
+        "Dissolved, particulate and other fractions plus quality flags and contributor citations must remain distinct.",
+        "The official archive was still being prepared during the 2026-08-05 verification, so the member inventory, hashes and variable-level mapping remain unverified."
       ]
     },
     "glorich": {
@@ -1416,11 +1425,30 @@
       "landing_page": "https://marchem-editor.hi.no/",
       "interfaces": [
         {
-          "kind": "database_search_and_download",
-          "url": "https://marchem-editor.hi.no/",
-          "format": "tabular_download_and_dataset_doi_links",
+          "kind": "published_data_export_api",
+          "url": "https://marchem-api.hi.no/export/published/dataByCriteria",
+          "format": "zip_semicolon_csv_and_metadata",
           "access": "open",
-          "server_filters": ["region", "station", "parameter", "program", "date"]
+          "server_filters": [
+            "fromYear",
+            "toYear",
+            "labParameterGroupIds",
+            "ownerIds",
+            "areaIds",
+            "projectIds",
+            "latitudeFrom",
+            "latitudeTo",
+            "longitudeFrom",
+            "longitudeTo",
+            "asExcel"
+          ]
+        },
+        {
+          "kind": "parameter_group_lookup_api",
+          "url": "https://marchem-api.hi.no/labParameterGroup/list",
+          "format": "json",
+          "access": "open",
+          "server_filters": ["published"]
         }
       ],
       "license": {
@@ -1429,14 +1457,17 @@
         "url": "https://marchem-editor.hi.no/",
         "notes": "The service states CC BY 4.0 and Norwegian Licence for Open Government Data; dataset landing-page citations and acknowledgements still apply."
       },
-      "version": {"status": "dataset_specific", "value": null, "release_date": null},
+      "version": {"status": "dynamic", "value": null, "release_date": null},
       "adapter": {"status": "not_implemented", "name": null},
       "evidence_urls": [
-        "https://marchem-editor.hi.no/"
+        "https://marchem-editor.hi.no/",
+        "https://marchem-api.hi.no/labParameterGroup/list"
       ],
       "limitations": [
         "The database contains natural elements and anthropogenic contaminants; target-analyte scope must be selected explicitly.",
-        "Each DOI release needs a fixed file inventory, checksum, methods and citation before production use."
+        "The verified public API export is dynamic and timestamped; the selected inorganic response has an observed project hash but no matching immutable DOI or publisher checksum yet.",
+        "The As, Cu, Ni and Zn measurements are reported on a dry-weight basis after partial nitric-acid digestion and must not be represented as total content.",
+        "Batch metadata mix accredited and not-accredited analyses, and the export can repeat a sample across parameter groups; both facts must survive record-level mapping."
       ]
     }
   }

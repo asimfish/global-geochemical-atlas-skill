@@ -102,7 +102,7 @@
 | `brazil-sgb-geochemistry` | 岩石、土壤、沉积物、水、精矿 | 巴西 | ArcGIS FeatureServer、项目 ZIP | 许可、字段、方法、重复关系 |
 | `nz-petlab` | 岩石、矿物、沉积物 | 新西兰及部分全球馆藏 | 开放查询、注册后导出 | 导出条款、动态版本、引用去重 |
 | `earthchem-library` | 全介质发现 | 全球 DOI 仓库 | 检索和原始文件下载 | 逐数据集许可/schema/hash，不是统一数据集 |
-| `geotraces-idp2025` | 海水 | 全球海洋航次 | DOI 批量包、WebODV 子集 | 文件清单、字段映射、贡献者引用；优先审计 |
+| `geotraces-idp2025` | 海水 | 全球海洋航次 | BODC PDL 元数据/异步归档、WebODV 子集 | DOI、许可和产品元数据已核实；归档仍未准备完成，文件清单、字段映射、贡献者引用待验收 |
 | `glorich` | 河水 | 全球河流 | PANGAEA DOI 批量包 | CC BY-NC-SA，不进入当前 open-only 生产 |
 | `eea-waterbase` | 水、沉积物 | 欧洲 | CSV 下载与筛选 | 动态版本、国家方法差异、具体许可标识 |
 
@@ -110,7 +110,7 @@
 
 - 沉积物候选从少数发现线索扩展到欧洲、加拿大、澳大利亚、英国、巴西、美国和 DOI 仓库入口，但仍无批准来源；
 - 水体已区分河流、一般水质、欧洲报告水体和全球海洋航次，不能把它们混成一种介质；
-- `geotraces-idp2025` 同时具备固定版本、DOI、CC BY 4.0、质量控制说明和批量下载，是当前水体来源中最接近准入门的候选；
+- `geotraces-idp2025` 同时具备固定版本、DOI、CC BY 4.0 和质量控制说明；BODC 异步归档在本轮仍为 `notready`，不能提前声称文件与变量已经验收；
 - `glorich` 很大但带 NC 限制，`bgs-gbase` 原始点数据需单独授权；两者保留用于覆盖判断，不参与 open-only 自动路由；
 - `earthchem-library` 和 Water Quality Portal 是发现/聚合入口，生产数据必须保留并去重上游数据集与提供者。
 
@@ -129,7 +129,7 @@
 | `sweden-sgu-geochemical-atlas` | 冰碛物 | 瑞典 | 官方 CSV/API、方法与检出限表 | 已核实原始下载是 till；土壤比较表不是原始土壤观测；许可仍需固定 |
 | `finland-gtk-geochemistry` | 岩石、冰碛物、河流沉积物 | 芬兰 | Hakku、ArcGIS REST | 国家岩石产品与多套沉积物调查不能共用方法假设；逐产品核对许可和版本 |
 | `norway-ngu-lito` | 岩石 | 挪威 | 2026-06 初步 XLSX | NGU 明示最终岩性命名与批次校正尚未完成，暂不能批准 |
-| `norway-marchem` | 海洋沉积物 | 挪威海域 | 检索下载、NMDC DOI | 明示 CC BY 4.0 与 NLOD，最接近接入门；仍要固定一个 DOI 版本、文件和方法 |
+| `norway-marchem` | 海洋沉积物 | 挪威海域 | 公开 JSON 列表 API、按条件导出 ZIP | 已验证 As/Cu/Ni/Zn、干重单位、批次方法和许可；动态导出无对应不可变 DOI，部分消解、认可状态和重复样品行需保留 |
 
 ### 第三轮的边界判断
 
@@ -137,6 +137,16 @@
 - PANGAEA、NOAA、IODP、EMODnet 与国家数据库可能发布同一航次或项目，来源独立性按原项目和原样品计算；
 - 新增候选提升的是“去哪里找”的全面性，不改变沉积物、水体仍无 approved 来源的事实；
 - `source_discovery_scope.json` 按区域记录尚未完成的检索，亚洲、非洲、南美及州/省级调查仍是明显缺口；发现状态继续为 `in_progress`、`saturated=false`。
+
+## M7 首批逐源复核
+
+详细证据、hash、记录对账和阻断项见 `source-verification-report.md`。
+
+- `norway-marchem` 的公开 API 已能稳定返回目标元素，但当前响应是带生成时间的动态 ZIP，不是已固定 DOI 的不可变发布；
+- MarChem 本次导出有 1,070 个物理数据行、880 个不同样品。190 个样品因两个参数组而重复出现，但每个样品只有一行含目标元素；适配器必须按参数和批次展开，不能按行计样品；
+- 四个目标元素均为干重 `mg/kg`，保留 `<` 删失值；方法是部分硝酸消解，不代表总量；目标方法元数据中同时存在 accredited 和 not-accredited 批次；
+- 已准备 30 条分层机器抽样，人工回看仍为 pending，因此没有把来源改为 approved；
+- `geotraces-idp2025` 的 DOI、CC BY 4.0、产品范围、五个数据包和 QC 描述已核实；BODC 归档仍在准备，实际文件和变量级验收继续等待。
 
 ## 路由示例
 

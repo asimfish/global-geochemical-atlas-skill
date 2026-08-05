@@ -32,6 +32,7 @@ import source_router
 import query_source
 import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
+import verify_marchem_candidate
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -245,6 +246,57 @@ def check_d1(output_dir: Path) -> list[str]:
         }
         <= set(discovery_scope["areas"]),
         "D1 discovery scope tracks regional and marine search gaps without claiming saturation",
+        checks,
+    )
+    marchem_verification = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "candidate-audits"
+        / "marchem-inorganic-20260805T102709Z.json"
+    )
+    marchem_data = marchem_verification["observed_data"]
+    require(
+        marchem_verification["verification_version"] == "marchem-candidate-verification-v1"
+        and marchem_verification["source_id"] == "norway-marchem"
+        and marchem_verification["archive"]["sha256"]
+        == "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6"
+        and len(marchem_verification["archive"]["members"]) == 3,
+        "D1 MarChem candidate evidence pins the observed dynamic archive and member inventory",
+        checks,
+    )
+    require(
+        marchem_data["data_record_count"] == 1070
+        and marchem_data["distinct_sample_code_count"] == 880
+        and marchem_data["duplicate_sample_code_count"] == 190
+        and marchem_data["target_bearing_row_count"] == 880
+        and marchem_data["sample_codes_with_target_count"] == 880
+        and marchem_data["sample_codes_without_target_count"] == 0
+        and marchem_data["sample_codes_with_multiple_target_rows_count"] == 0,
+        "D1 MarChem verification distinguishes export rows, repeated sample codes and target-bearing rows",
+        checks,
+    )
+    require(
+        all(
+            profile["record_count"] == 1070
+            and profile["present_count"] == 880
+            and profile["present_count"] + profile["missing_count"] == profile["record_count"]
+            and profile["invalid_count"] == 0
+            and profile["reported_unit"] == "mg/kg"
+            and profile["weight_basis"] == "dry"
+            for profile in marchem_data["target_analytes"].values()
+        )
+        and marchem_verification["observed_metadata"]["partial_digestion_disclosed"] is True
+        and marchem_verification["observed_metadata"]["not_total_content_disclosed"] is True
+        and marchem_verification["observed_metadata"]["accreditation_rows"]["not_accredited"] > 0,
+        "D1 MarChem evidence preserves target units, censoring context, partial digestion and accreditation limits",
+        checks,
+    )
+    require(
+        len(marchem_verification["prepared_human_review_sample"]) == 30
+        and marchem_verification["human_review"]
+        == {"required_record_count": 30, "prepared_record_count": 30, "status": "pending"}
+        and verify_marchem_candidate.parse_value("<2.0") == ("censored_lt", 2.0),
+        "D1 prepares but does not falsely mark the required MarChem human review as complete",
         checks,
     )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")

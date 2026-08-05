@@ -544,6 +544,7 @@ M6 的范围不是固定几个来源，而是所有能够发现的相关信源�
 
 | 时间（Asia/Shanghai） | 里程碑 | 结果 | 下一步 |
 |---|---|---|---|
+| 2026-08-05 18:34 | M7 首批逐源复核 | 验证 MarChem 无机公开 API、As/Cu/Ni/Zn 字段、1,070 行/880 样品对账、批次方法、许可和观测 hash；准备 30 条分层回看样本；核实 GEOTRACES DOI/许可/产品元数据，但 BODC 归档仍为 `notready`；两者均未放行生产 | 为 MarChem 固定不可变 DOI 或审阅动态快照政策，完成人工回看与适配器；GEOTRACES 归档就绪后立即核对文件、变量、QC 和贡献者引用 |
 | 2026-08-05 18:05 | M6 第三轮发现 | 候选目录由 22 个扩展到 32 个；新增 NOAA、PANGAEA、IODP、EMODnet 及爱尔兰、瑞典、芬兰、挪威、日本入口；建立分区域 discovery scope；发现状态仍为 `in_progress`、`saturated=false` | 继续补亚洲、非洲、南美、墨西哥、州/省级地调和论文 DOI 渠道；并行启动 `geotraces-idp2025`、`norway-marchem` 的首批逐源准入复核 |
 | 2026-08-05 18:01 | M6 第二轮发现 | 候选目录由 8 个扩展到 22 个；新增 14 个官方/DOI 入口，覆盖四介质的全球、洲际和国家渠道；发现状态仍为 `in_progress`、`saturated=false` | 继续查 marine/lacustrine archive、更多国家地调、聚合库上游和论文关联数据；优先审计 `geotraces-idp2025`、`foregs-europe`、`canada-cdogs` |
 
@@ -584,6 +585,7 @@ skills/global-geochemical-atlas/
     source-catalog.schema.json
     source-discovery-record.schema.json
     source-discovery-scope.schema.json
+    marchem-candidate-verification.schema.json
     sqlite-schema.sql
     storage-and-performance.md
   scripts/
@@ -593,6 +595,10 @@ skills/global-geochemical-atlas/
     query_source.py
     validate_acquisition.py
     build_index.py
+    verify_marchem_candidate.py
+  fixtures/
+    candidate-audits/
+      marchem-inorganic-20260805T102709Z.json
 ```
 
 现有的 `download_data.py`、`source_adapters.py`、`inspect_source.py` 和 `generate_demo_data.py` 优先复用，不重复搭建功能相同的脚本。
