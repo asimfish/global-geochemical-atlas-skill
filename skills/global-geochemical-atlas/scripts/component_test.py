@@ -724,7 +724,10 @@ def check_d2(output_dir: Path) -> list[str]:
     rows = csv_rows(output_dir / "geochemistry.csv")
     require(len(rows) == 19, "D2 canonical database preserves all demo records", checks)
     require(
-        {"source_record_id", "analyte_reported", "species_or_oxide", "censored", "missing_reason", "method_family", "file_sha256"}
+        {
+            "source_record_id", "analyte_reported", "species_or_oxide", "source_qualifier_raw",
+            "censored", "missing_reason", "method_family", "file_sha256",
+        }
         .issubset(rows[0]),
         "D2 v2 database exposes provenance, censoring and method-family fields",
         checks,
@@ -763,6 +766,22 @@ def check_d2(output_dir: Path) -> list[str]:
     require(abs(sum(confidence["weights"].values()) - 1.0) < 1e-12, "D2 confidence weights sum to one", checks)
     anomaly_report = json_value(output_dir / "anomaly_report.json")
     anomalies = json_value(output_dir / "anomalies.geojson")
+    require(
+        anomaly_report.get("interface_version") == "d2-interface-v2"
+        and anomalies.get("interface_version") == "d2-interface-v2",
+        "D2 anomaly outputs expose the stable interface version",
+        checks,
+    )
+    require(
+        anomaly_report.get("method_version") == "d2-robust-mad-v2"
+        and anomalies.get("method_version") == "d2-robust-mad-v2"
+        and all(
+            feature.get("properties", {}).get("method_version") == "d2-robust-mad-v2"
+            for feature in anomalies.get("features", [])
+        ),
+        "D2 anomaly outputs expose one validated method version",
+        checks,
+    )
     require(anomaly_report.get("scientific_status") == "screening_baseline_only", "D2 anomaly boundary is explicit", checks)
     require(
         anomaly_report.get("minimum_quantified_fraction") == 0.70,

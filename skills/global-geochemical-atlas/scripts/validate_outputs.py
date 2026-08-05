@@ -33,6 +33,7 @@ REQUIRED_DATABASE_COLUMNS = {
     "medium",
     "measurement_basis",
     "original_value_raw",
+    "source_qualifier_raw",
     "original_unit",
     "value_qualifier",
     "normalized_value",
@@ -359,6 +360,20 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     anomaly_report = parsed.get("anomaly_report")
     if not isinstance(anomaly_report, dict) or anomaly_report.get("scientific_status") != "screening_baseline_only":
         errors.append("anomaly_report.json must declare screening_baseline_only")
+    elif anomaly_report.get("interface_version") != "d2-interface-v2":
+        errors.append("anomaly_report.json has an unsupported interface_version")
+    elif anomaly_report.get("method_version") != "d2-robust-mad-v2":
+        errors.append("anomaly_report.json has an unsupported method_version")
+    anomalies = parsed.get("anomalies")
+    if isinstance(anomalies, dict):
+        if anomalies.get("interface_version") != "d2-interface-v2":
+            errors.append("anomalies.geojson has an unsupported interface_version")
+        if anomalies.get("method_version") != "d2-robust-mad-v2":
+            errors.append("anomalies.geojson has an unsupported method_version")
+        for index, feature in enumerate(anomalies.get("features", [])):
+            properties = feature.get("properties") if isinstance(feature, dict) else None
+            if not isinstance(properties, dict) or properties.get("method_version") != "d2-robust-mad-v2":
+                errors.append(f"anomalies.geojson feature {index} has an unsupported method_version")
 
     validate_html(paths["interactive_map"], errors)
     return {

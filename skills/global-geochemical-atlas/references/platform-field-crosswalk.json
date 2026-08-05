@@ -7,9 +7,9 @@
   },
   "reviewed_at": "2026-08-05",
   "scope": {
-    "canonical_field_count": 61,
+    "canonical_field_count": 62,
     "crosswalked_field_count": 36,
-    "non_core_field_count": 25,
+    "non_core_field_count": 26,
     "statement": "The crosswalk covers priority sample, observation, method, spatial and provenance semantics. It supports import/export design and gap analysis, but it does not certify conformance to EarthChem, USGS AGDB2, ODM2, IGSN or DataCite."
   },
   "mapping_type_definitions": {
@@ -552,7 +552,7 @@
   "non_core_fields": [
     {
       "classification": "local_extension",
-      "fields": ["record_id", "source_record_id", "original_value_raw", "conversion_factor", "conversion_formula", "original_latitude_raw", "original_longitude_raw", "coordinate_transform_method", "source_file", "source_row", "file_sha256", "source_tier", "qc_flags", "operational_confidence"],
+      "fields": ["record_id", "source_record_id", "original_value_raw", "source_qualifier_raw", "conversion_factor", "conversion_formula", "original_latitude_raw", "original_longitude_raw", "coordinate_transform_method", "source_file", "source_row", "file_sha256", "source_tier", "qc_flags", "operational_confidence"],
       "rationale": "Workflow audit, deterministic identity, transformation evidence and operational QC fields. They are deliberately retained as D2 extensions and must not be presented as native EarthChem, AGDB2, ODM2 or IGSN/DataCite fields."
     },
     {

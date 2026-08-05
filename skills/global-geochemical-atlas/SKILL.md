@@ -109,6 +109,7 @@ python scripts/standardize_geochemistry.py \
 - 固体质量比统一到 `mg/kg`；水体质量/体积统一到 `ug/L`；
 - 水体 `ppm`、`ppb` 或裸 `%` 在缺少密度/basis 时拒绝换算；
 - 删失值的 `normalized_value` 置空，只保留可换算的 censoring limit；
+- 来源限定符原词写入 `source_qualifier_raw`，同时输出 canonical `value_qualifier`；
 - 可能交换的经纬度只加 flag，不静默交换；
 - 非 WGS84 坐标在未重投影时不写入 canonical 经纬度；
 - 疑似重复记录全部保留并标记。
@@ -130,6 +131,8 @@ python scripts/standardize_geochemistry.py \
 先按元素、介质、材料/土层、measurement basis、地质单元、分析方法和消解/提取方法分组。只使用成功标准化、非删失、非重复、正的值。不得把 0–5 cm、A horizon 与 C horizon 静默合并为同一土壤背景。
 
 默认使用 `log10 + median/MAD modified z-score`：有效样本至少 8 条，`|z| >= 3.5` 标为候选；MAD 为 0 或样本不足时显式失败。阈值、样本量、排除数、中位数、MAD 和分组字段必须进入报告。
+
+`anomaly_report.json` 与 `anomalies.geojson` 必须同时声明 `interface_version=d2-interface-v2` 和 `method_version=d2-robust-mad-v2`；每个异常 feature 也保留相同方法版本，校验不一致时失败。
 
 只写 `candidate_anomaly` 和 high/low 方向。不要把高值直接解释成污染或矿化；列出自然背景、采样偏倚、分析方法和人为输入等竞争解释，并建议领域复核。
 

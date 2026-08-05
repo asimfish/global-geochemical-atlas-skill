@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -144,10 +145,65 @@ def run_suite() -> dict[str, Any]:
         validation = run_command([sys.executable, str(VALIDATOR), "--output-dir", str(first)])
         validation_report = json.loads(validation.stdout)
         require(validation_report["status"] == "valid", "output validator did not return valid")
+        tampered_interface = first / "tampered-interface"
+        tampered_interface.mkdir()
+        for filename in EXPECTED_OUTPUTS:
+            shutil.copy2(first / filename, tampered_interface / filename)
+        tampered_report_path = tampered_interface / "anomaly_report.json"
+        tampered_report = json_value(tampered_report_path)
+        tampered_report.pop("interface_version")
+        tampered_report_path.write_text(
+            json.dumps(tampered_report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        tampered_validation = run_command(
+            [sys.executable, str(VALIDATOR), "--output-dir", str(tampered_interface)],
+            expected_code=1,
+        )
+        require(
+            "unsupported interface_version" in tampered_validation.stdout,
+            "output validator accepted a missing D2 interface version",
+        )
+        tampered_method = first / "tampered-method"
+        tampered_method.mkdir()
+        for filename in EXPECTED_OUTPUTS:
+            shutil.copy2(first / filename, tampered_method / filename)
+        tampered_method_report_path = tampered_method / "anomaly_report.json"
+        tampered_method_report = json_value(tampered_method_report_path)
+        tampered_method_report["method_version"] = "tampered-method-v999"
+        tampered_method_report_path.write_text(
+            json.dumps(tampered_method_report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        tampered_anomalies_path = tampered_method / "anomalies.geojson"
+        tampered_anomalies = json_value(tampered_anomalies_path)
+        tampered_anomalies["method_version"] = "tampered-method-v999"
+        for feature in tampered_anomalies["features"]:
+            feature["properties"]["method_version"] = "tampered-method-v999"
+        tampered_anomalies_path.write_text(
+            json.dumps(tampered_anomalies, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        tampered_method_validation = run_command(
+            [sys.executable, str(VALIDATOR), "--output-dir", str(tampered_method)],
+            expected_code=1,
+        )
+        require(
+            "unsupported method_version" in tampered_method_validation.stdout,
+            "output validator accepted a tampered D2 anomaly method version",
+        )
 
         rows = read_csv(first / "geochemistry.csv")
         require(len(rows) == 19, "demo should contain 19 canonical records")
         require(float(by_id(rows, "rock-fe-001")["normalized_value"]) == 25_000, "wt% conversion failed")
+        spaced_weight_percent = standardizer.normalize_row(
+            complete_d2_row(value="1", unit="wt. %", medium="rock"),
+            2,
+        )
+        require(
+            spaced_weight_percent["normalized_value"] == 10_000,
+            "wt. % alias conversion failed",
+        )
         require(float(by_id(rows, "water-pb-001")["normalized_value"]) == 20, "water mg/L conversion failed")
         ambiguous = by_id(rows, "water-as-ambiguous")
         require(ambiguous["normalized_value"] == "", "ambiguous water ppm must not be converted")
@@ -162,6 +218,38 @@ def run_suite() -> dict[str, Any]:
         require(len(duplicates) == 2, "duplicate candidates should be retained and flagged")
         require(censored["censored"] == "true", "censored state was not serialized explicitly")
         require(by_id(rows, "soil-as-001")["method_family"] == "icp_ms", "method family normalization failed")
+        source_qualified = standardizer.normalize_row(
+            complete_d2_row(
+                value="0.6", value_qualifier="", source_qualifier_raw="<",
+                detection_limit="0.6", detection_limit_unit="mg/kg",
+            ),
+            2,
+        )
+        require(
+            source_qualified["source_qualifier_raw"] == "<"
+            and source_qualified["value_qualifier"] == "lt"
+            and source_qualified["normalized_value"] is None
+            and source_qualified["normalized_censoring_limit"] == 0.6,
+            "source qualifier was not preserved and canonicalized conservatively",
+        )
+        embedded_lt = standardizer.normalize_row(
+            complete_d2_row(value="<0.4", value_qualifier="", source_qualifier_raw=""),
+            2,
+        )
+        embedded_nd = standardizer.normalize_row(
+            complete_d2_row(
+                value="N", value_qualifier="", source_qualifier_raw="",
+                detection_limit="0.2", detection_limit_unit="mg/kg",
+            ),
+            2,
+        )
+        require(
+            embedded_lt["source_qualifier_raw"] == "<"
+            and embedded_lt["value_qualifier"] == "lt"
+            and embedded_nd["source_qualifier_raw"] == "N"
+            and embedded_nd["value_qualifier"] == "nd",
+            "qualifiers embedded in value were not retained in the dedicated raw field",
+        )
 
         record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
         normalized_record = standardizer.normalize_row(complete_d2_row(), 2)
@@ -350,6 +438,11 @@ def run_suite() -> dict[str, Any]:
 
         anomaly_report = json_value(first / "anomaly_report.json")
         anomalies = json_value(first / "anomalies.geojson")
+        require(
+            anomaly_report["interface_version"] == "d2-interface-v2"
+            and anomalies["interface_version"] == "d2-interface-v2",
+            "D2 anomaly interface version is missing",
+        )
         require(anomaly_report["candidate_count"] == 1, "demo should contain one anomaly candidate")
         require(anomalies["features"][0]["properties"]["record_id"] == "soil-as-012", "wrong anomaly")
         require(anomalies["features"][0]["properties"]["status"] == "candidate_anomaly", "causal overclaim")
@@ -426,7 +519,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 62,
+            "tests": 68,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

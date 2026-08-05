@@ -48,6 +48,7 @@
   "license": "source license or unresolved",
   "source_tier": "official_curated|government|peer_reviewed|institutional_repository|author_supplement|aggregator|unknown",
   "original_value_raw": "<0.1",
+  "source_qualifier_raw": "<",
   "original_unit": "mg/kg",
   "analytical_method": "ICP-MS",
   "qc_flags": ["CENSORED_VALUE"]

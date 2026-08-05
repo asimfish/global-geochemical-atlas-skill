@@ -7,6 +7,7 @@
     "enum": [
       "record_id", "source_record_id", "sample_id", "sample_identity_group", "replicate_group_id", "igsn",
       "element_or_analyte", "analyte_reported", "species_or_oxide", "value", "unit", "value_qualifier",
+      "source_qualifier_raw",
       "missing_reason", "medium", "material", "measurement_basis", "original_latitude_raw",
       "original_longitude_raw", "latitude", "longitude", "source_crs",
       "coordinate_transform_method", "coordinate_uncertainty_m", "sampled_at", "sample_depth_min_m",

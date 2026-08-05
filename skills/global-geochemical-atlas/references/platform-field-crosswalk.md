@@ -15,7 +15,7 @@ Library（ECL）、USGS Alaska Geochemical Database 2.0（AGDB2）、ODM2，以�
 交换标准。IGSN/DataCite 主要描述实体样品和持久标识符，不负责承载逐项分析结果。
 
 机器可读版本见 `platform-field-crosswalk.json`；其结构由
-`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 61 个 canonical 字段
+`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 62 个 canonical 字段
 完全分区，防止 Schema 改动后文档悄悄过期。
 
 ## 2. 映射类型
@@ -108,12 +108,12 @@ qualifier 与 conversion evidence，避免不可逆的数据“清洗”。
 | `source_locator` | landing page/DOI + 合法 record fragment | publication URL + table/key | `CitationLink` + namespaced DatasetID/ResultID | 注册 DOI URL 或有关系类型的 relatedIdentifier |
 | `license` | 数据集声明 license，不从“可下载”推断 | `Use_Constraints` + `Access_Constraints` | core reviewed surface 无直接字段 | `rightsList` 的 identifier/URI/text |
 
-## 5. 25 个非核心映射字段为什么仍然保留
+## 5. 26 个非核心映射字段为什么仍然保留
 
-Crosswalk 不会为了看起来“全覆盖”而制造虚假对应。当前 61 个 canonical 字段中，36 个进入优先互操作
-矩阵，另外 25 个被明确分成两类：
+Crosswalk 不会为了看起来“全覆盖”而制造虚假对应。当前 62 个 canonical 字段中，36 个进入优先互操作
+矩阵，另外 26 个被明确分成两类：
 
-- `local_extension`：`record_id`、`source_record_id`、raw value/coordinate、转换因子与公式、源文件与源行、
+- `local_extension`：`record_id`、`source_record_id`、raw value/qualifier/coordinate、转换因子与公式、源文件与源行、
   SHA-256、来源层级、QC flags 和 `operational_confidence`。这些是 D2 证据链与运行安全设计，不冒充平台原生字段。
 - `deferred_crosswalk`：样品身份/重复组、坐标不确定性、粒级，以及地质单元匹配与边界距离字段。它们有专业意义，
   但本轮资料不足以做可靠的一对一映射。后续应引入 GeoSciML/CGI 词表、明确空间不确定性模型及平台 extension

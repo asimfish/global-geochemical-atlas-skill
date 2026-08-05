@@ -22,6 +22,7 @@ from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+INTERFACE_VERSION = "d2-interface-v2"
 PIPELINE_VERSION = "d2-pipeline-v2"
 CONFIDENCE_VERSION = "d2-confidence-v2"
 ANOMALY_VERSION = "d2-robust-mad-v2"
@@ -65,6 +66,7 @@ SCHEMA_COLUMNS = (
     "material",
     "measurement_basis",
     "original_value_raw",
+    "source_qualifier_raw",
     "original_value",
     "original_unit",
     "value_qualifier",
@@ -118,6 +120,7 @@ SCHEMA_COLUMNS = (
 INPUT_FIELDS = {
     "record_id", "source_record_id", "sample_id", "sample_identity_group", "replicate_group_id", "igsn",
     "element_or_analyte", "analyte_reported", "species_or_oxide", "value", "unit", "value_qualifier",
+    "source_qualifier_raw",
     "missing_reason", "medium", "material", "measurement_basis", "original_latitude_raw",
     "original_longitude_raw", "latitude", "longitude", "source_crs",
     "coordinate_transform_method", "coordinate_uncertainty_m", "sampled_at", "sample_depth_min_m",
@@ -333,6 +336,22 @@ def blank_to_none(value: Any) -> str | None:
     return text if text else None
 
 
+def extract_source_qualifier_raw(row: Mapping[str, Any]) -> str | None:
+    explicit = blank_to_none(row.get("source_qualifier_raw")) or blank_to_none(row.get("value_qualifier"))
+    if explicit is not None:
+        return explicit
+    raw = blank_to_none(row.get("value"))
+    if raw is None:
+        return None
+    compact = raw.replace(",", "")
+    prefixed = PREFIXED_NUMBER_RE.fullmatch(compact)
+    if prefixed is not None and prefixed.group(1):
+        return prefixed.group(1)
+    if compact.casefold() in QUALIFIER_ALIASES:
+        return raw
+    return None
+
+
 def parse_optional_float(value: Any) -> float | None:
     text = blank_to_none(value)
     if text is None:
@@ -472,7 +491,7 @@ def canonicalize_unit(value: Any) -> str | None:
     unit = re.sub(r"l\^?-?1$", "/l", unit)
     unit = unit.replace("//", "/")
     aliases = {
-        "wtpercent": "wt%",
+        "wtpercent": "wt%", "wt.%": "wt%",
         "mgkg": "mg/kg", "ugkg": "ug/kg", "gkg": "g/kg",
         "ugg": "ug/g", "ngg": "ng/g", "mgg": "mg/g", "gt": "g/t",
         "ugl": "ug/l", "mgl": "mg/l", "ngl": "ng/l", "gl": "g/l",
@@ -484,7 +503,8 @@ def parse_measurement(
     row: Mapping[str, Any], flags: list[str]
 ) -> tuple[float | None, str, float | None, float | None, str | None]:
     raw = blank_to_none(row.get("value"))
-    explicit_qualifier = blank_to_none(row.get("value_qualifier"))
+    source_qualifier_raw = extract_source_qualifier_raw(row)
+    explicit_qualifier = blank_to_none(row.get("value_qualifier")) or source_qualifier_raw
     missing_reason = normalize_missing_reason(row.get("missing_reason"), flags)
     qualifier: str | None = None
     number: float | None = None
@@ -828,6 +848,7 @@ def normalize_row(
     elif file_sha256 is not None:
         file_sha256 = file_sha256.lower()
     original_unit = blank_to_none(row.get("unit"))
+    source_qualifier_raw = extract_source_qualifier_raw(row)
     record: dict[str, Any] = {
         "record_id": record_id,
         "source_record_id": blank_to_none(row.get("source_record_id")),
@@ -842,6 +863,7 @@ def normalize_row(
         "material": blank_to_none(row.get("material")),
         "measurement_basis": measurement_basis,
         "original_value_raw": blank_to_none(row.get("value")),
+        "source_qualifier_raw": source_qualifier_raw,
         "original_value": original_value,
         "original_unit": original_unit,
         "value_qualifier": qualifier,
@@ -1039,9 +1061,12 @@ def detect_anomalies(
     geojson = {
         "type": "FeatureCollection",
         "name": "geochemical_candidate_anomalies",
+        "interface_version": INTERFACE_VERSION,
+        "method_version": ANOMALY_VERSION,
         "features": features,
     }
     anomaly_report = {
+        "interface_version": INTERFACE_VERSION,
         "method_version": ANOMALY_VERSION,
         "method": "log10 median/MAD modified robust z-score",
         "group_by": list(group_by),

@@ -33,7 +33,7 @@
 ### 推荐列
 
 `record_id`、`source_record_id`、`sample_id`、`igsn`、`analyte_reported`、`species_or_oxide`、
-`measurement_basis`、`value_qualifier`、`missing_reason`、`detection_limit`、`detection_limit_unit`、
+`measurement_basis`、`value_qualifier`、`source_qualifier_raw`、`missing_reason`、`detection_limit`、`detection_limit_unit`、
 `original_latitude_raw`、`original_longitude_raw`、`latitude`、`longitude`、`source_crs`、
 `coordinate_transform_method`、`coordinate_uncertainty_m`、
 `geologic_unit`、`lithology`、`analytical_method`、`method_family`、`digestion_or_extraction`、
@@ -61,7 +61,7 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 | 原单位 | 乘数 |
 |---|---:|
 | `mg/kg`、`ppm`、`µg/g`、`g/t` | 1 |
-| `wt%` | 10,000 |
+| `wt%`、`wt.%`、`wt. %` | 10,000 |
 | `ppb`、`µg/kg`、`ng/g` | 0.001 |
 | `g/kg`、`mg/g` | 1,000 |
 
@@ -92,6 +92,7 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 
 ### 删失值
 
+- 将来源限定符原词写入 `source_qualifier_raw`；若旧输入只有 `value_qualifier` 或把限定符嵌在 `value`，从原表达无损提取限定符 token，再另行生成 canonical `value_qualifier`。
 - `<x`、`<=x`、`BDL`、`ND`、`N`、`L` 作为左删失或未检出；`trace` 表示检出但不可定量。
 - `>x`、`>=x` 作为右删失。
 - 删失记录的 `normalized_value` 必须为空；若检出限可换算，写入 `normalized_censoring_limit`。

@@ -19,6 +19,7 @@
     "material",
     "measurement_basis",
     "original_value_raw",
+    "source_qualifier_raw",
     "original_value",
     "original_unit",
     "value_qualifier",
@@ -85,6 +86,7 @@
     "material": {"type": ["string", "null"]},
     "measurement_basis": {"type": ["string", "null"]},
     "original_value_raw": {"type": ["string", "null"]},
+    "source_qualifier_raw": {"type": ["string", "null"]},
     "original_value": {"type": ["number", "null"]},
     "original_unit": {"type": ["string", "null"]},
     "value_qualifier": {
