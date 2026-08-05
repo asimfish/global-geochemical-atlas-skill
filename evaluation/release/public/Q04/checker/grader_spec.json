@@ -1,0 +1,17 @@
+{
+  "task_id": "GGA-NORM-002",
+  "objective_max": 80,
+  "checks": [
+    {"id": "output_exists", "type": "file_exists", "path": "element_database.csv", "points": 5},
+    {"id": "columns", "type": "csv_columns", "path": "element_database.csv", "required": ["sample_id", "analyte_reported", "reported_value", "reported_unit", "element", "normalized_value", "normalized_unit", "conversion_factor", "conversion_rule", "status"], "points": 10},
+    {"id": "row_count", "type": "csv_row_count", "path": "element_database.csv", "expected": 4, "points": 5},
+    {"id": "key_set", "type": "csv_key_set", "path": "element_database.csv", "columns": ["sample_id", "analyte_reported"], "expected": [["R01", "Fe2O3"], ["R02", "Fe2O3"], ["R03", "Fe"], ["R04", "FeO"]], "points": 10},
+    {"id": "r01_value", "type": "csv_cell", "path": "element_database.csv", "key": {"sample_id": "R01"}, "column": "normalized_value", "expected": 69943.076143, "tolerance": 0.02, "points": 12},
+    {"id": "r02_value", "type": "csv_cell", "path": "element_database.csv", "key": {"sample_id": "R02"}, "column": "normalized_value", "expected": 48960.1533, "tolerance": 0.02, "points": 12},
+    {"id": "r03_value", "type": "csv_cell", "path": "element_database.csv", "key": {"sample_id": "R03"}, "column": "normalized_value", "expected": 50000, "tolerance": 0.02, "points": 8},
+    {"id": "r04_status", "type": "csv_cell", "path": "element_database.csv", "key": {"sample_id": "R04"}, "column": "status", "expected": "not_requested", "points": 8},
+    {"id": "r04_value_empty", "type": "csv_cell", "path": "element_database.csv", "key": {"sample_id": "R04"}, "column": "normalized_value", "expected": null, "points": 5},
+    {"id": "factor", "type": "csv_cell", "path": "element_database.csv", "key": {"sample_id": "R01"}, "column": "conversion_factor", "expected": 0.6994307614270416, "tolerance": 0.00000001, "points": 5}
+  ],
+  "redlines": []
+}

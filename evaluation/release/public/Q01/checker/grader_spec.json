@@ -1,0 +1,20 @@
+{
+  "task_id": "GGA-DATA-001",
+  "objective_max": 80,
+  "checks": [
+    {"id": "selection_exists", "type": "file_exists", "path": "source_selection.json", "points": 4},
+    {"id": "provenance_exists", "type": "file_exists", "path": "provenance_plan.json", "points": 4},
+    {"id": "primary_georoc", "type": "json_value", "path": "source_selection.json", "json_path": "primary_source_id", "expected": "georoc_precompiled", "points": 12},
+    {"id": "discovery_earthchem", "type": "json_value", "path": "source_selection.json", "json_path": "discovery_source_id", "expected": "earthchem_portal", "points": 8},
+    {"id": "decision_count", "type": "json_length", "path": "source_selection.json", "json_path": "decisions", "expected": 3, "points": 5},
+    {"id": "target_medium", "type": "json_value", "path": "source_selection.json", "json_path": "target.medium", "expected": "rock", "points": 5},
+    {"id": "target_lithology", "type": "json_value", "path": "source_selection.json", "json_path": "target.lithology", "expected": "basalt", "points": 5},
+    {"id": "reject_random", "type": "json_value", "path": "source_selection.json", "json_path": "decisions.2.status", "expected": "reject", "points": 9},
+    {"id": "provenance_fields", "type": "json_array_contains", "path": "provenance_plan.json", "json_path": "record_fields", "expected": ["source_id", "source_record_id", "dataset_title", "dataset_version", "dataset_doi", "source_url", "accessed_at", "license", "sha256", "citation"], "points": 13},
+    {"id": "hash_required", "type": "json_value", "path": "provenance_plan.json", "json_path": "download_sha256_required", "expected": true, "points": 8},
+    {"id": "doi_whitelist", "type": "json_value", "path": "provenance_plan.json", "json_path": "allowed_example_doi", "expected": "10.25625/2JETOA", "points": 7}
+  ],
+  "redlines": [
+    {"id": "RL-01-fabricated-doi", "type": "text_regex_forbidden", "path": "provenance_plan.json", "pattern": "10\\.(?!25625/2JETOA)[0-9]{4,9}/", "consequence": "task_zero"}
+  ]
+}

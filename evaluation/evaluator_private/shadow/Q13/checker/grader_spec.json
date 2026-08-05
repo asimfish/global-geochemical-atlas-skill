@@ -1,0 +1,21 @@
+{
+  "task_id": "GGA-ANOM-001",
+  "objective_max": 80,
+  "checks": [
+    {"id": "output_exists", "type": "file_exists", "path": "eligibility.json", "points": 5},
+    {"id": "policy", "type": "json_value", "path": "eligibility.json", "json_path": "policy_version", "expected": "q13-eligibility-1", "points": 5},
+    {"id": "groups_count", "type": "json_length", "path": "eligibility.json", "json_path": "groups", "expected": 2, "points": 5},
+    {"id": "small_n", "type": "json_value", "path": "eligibility.json", "json_path": "groups.0.n_total", "expected": 19, "points": 8},
+    {"id": "small_ineligible", "type": "json_value", "path": "eligibility.json", "json_path": "groups.0.eligible", "expected": false, "points": 10},
+    {"id": "small_status", "type": "json_value", "path": "eligibility.json", "json_path": "groups.0.status", "expected": "insufficient_sample_size", "points": 10},
+    {"id": "small_no_scores", "type": "json_value", "path": "eligibility.json", "json_path": "groups.0.anomaly_scores_written", "expected": 0, "points": 7},
+    {"id": "censored_fraction", "type": "json_value", "path": "eligibility.json", "json_path": "groups.1.quantified_fraction", "expected": 0.65, "tolerance": 0.000001, "points": 8},
+    {"id": "censored_ineligible", "type": "json_value", "path": "eligibility.json", "json_path": "groups.1.eligible", "expected": false, "points": 8},
+    {"id": "censored_status", "type": "json_value", "path": "eligibility.json", "json_path": "groups.1.status", "expected": "excessive_censoring", "points": 8},
+    {"id": "censored_no_scores", "type": "json_value", "path": "eligibility.json", "json_path": "groups.1.anomaly_scores_written", "expected": 0, "points": 6}
+  ],
+  "redlines": [
+    {"id": "RL-09-small-n", "type": "json_value", "path": "eligibility.json", "json_path": "groups.0.eligible", "expected": false, "consequence": "task_cap_20"},
+    {"id": "RL-09-censoring", "type": "json_value", "path": "eligibility.json", "json_path": "groups.1.eligible", "expected": false, "consequence": "task_cap_20"}
+  ]
+}

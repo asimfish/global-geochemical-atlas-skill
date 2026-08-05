@@ -1,0 +1,17 @@
+{
+  "task_id": "GGA-NORM-004",
+  "objective_max": 80,
+  "checks": [
+    {"id": "output_exists", "type": "file_exists", "path": "nickel_elements.csv", "points": 5},
+    {"id": "columns", "type": "csv_columns", "path": "nickel_elements.csv", "required": ["record_id", "analyte_reported", "reported_value", "reported_unit", "element", "normalized_value", "normalized_unit", "conversion_factor", "conversion_rule", "status"], "points": 8},
+    {"id": "row_count", "type": "csv_row_count", "path": "nickel_elements.csv", "expected": 4, "points": 5},
+    {"id": "key_set", "type": "csv_key_set", "path": "nickel_elements.csv", "columns": ["record_id", "analyte_reported"], "expected": [["N01", "NiO"], ["N02", "NiO"], ["N03", "Ni"], ["N04", "Ni2O3"]], "points": 10},
+    {"id": "n01_value", "type": "csv_cell", "path": "nickel_elements.csv", "key": {"record_id": "N01"}, "column": "normalized_value", "expected": 157.16030011, "tolerance": 0.001, "points": 12},
+    {"id": "n02_value", "type": "csv_cell", "path": "nickel_elements.csv", "key": {"record_id": "N02"}, "column": "normalized_value", "expected": 392.90075028, "tolerance": 0.001, "points": 12},
+    {"id": "n03_value", "type": "csv_cell", "path": "nickel_elements.csv", "key": {"record_id": "N03"}, "column": "normalized_value", "expected": 200, "tolerance": 0.001, "points": 8},
+    {"id": "n04_status", "type": "csv_cell", "path": "nickel_elements.csv", "key": {"record_id": "N04"}, "column": "status", "expected": "not_requested", "points": 8},
+    {"id": "n04_empty", "type": "csv_cell", "path": "nickel_elements.csv", "key": {"record_id": "N04"}, "column": "normalized_value", "expected": null, "points": 5},
+    {"id": "factor", "type": "csv_cell", "path": "nickel_elements.csv", "key": {"record_id": "N01"}, "column": "conversion_factor", "expected": 0.7858015005542733, "tolerance": 0.00000001, "points": 7}
+  ],
+  "redlines": []
+}

@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-LICENSE-001",
+  "llm_points": 20,
+  "evidence_paths": ["redistribution_decisions.csv", "inputs/license_policy.json"],
+  "criteria": [
+    {"id": "open_conditions", "points": 7, "full_credit": "开放许可仍执行 attribution/share-alike 条件。"},
+    {"id": "restricted", "points": 7, "full_credit": "限制数据只输出 metadata/pointer，保留访问控制。"},
+    {"id": "unknown", "points": 6, "full_credit": "未知许可进入人工核验而不是默认开放。"}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "question_id": "Q22",
+  "task_id": "GGA-LICENSE-001",
+  "split": "final_holdout",
+  "title": "许可与再分发决策",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_policy_fixture",
+  "input_assets": ["sources.json", "license_policy.json"],
+  "required_outputs": ["redistribution_decisions.csv"],
+  "failure_tags": ["LICENSE_UNKNOWN_REDISTRIBUTED", "RESTRICTED_DATA_PACKAGED", "SHAREALIKE_OMITTED", "LICENSE_CONFIDENCE_PENALTY_MISSING"]
+}

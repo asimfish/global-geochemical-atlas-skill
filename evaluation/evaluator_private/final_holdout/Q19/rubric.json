@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-NORM-004",
+  "llm_points": 20,
+  "evidence_paths": ["nickel_elements.csv", "inputs/constants.json"],
+  "criteria": [
+    {"id": "new_factor", "points": 8, "full_credit": "根据 NiO 化学式重新计算，不复用 Fe2O3 因子。"},
+    {"id": "identity", "points": 8, "full_credit": "Ni、NiO、Ni2O3 身份和规则独立保留。"},
+    {"id": "precision", "points": 4, "full_credit": "使用冻结常数并在最终输出前保留足够精度。"}
+  ]
+}

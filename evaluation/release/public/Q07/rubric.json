@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-SPATIAL-001",
+  "llm_points": 20,
+  "evidence_paths": ["coordinate_qc.csv"],
+  "criteria": [
+    {"id": "non_destructive", "points": 8, "full_credit": "原坐标始终保留，possible swap 只是建议并进入人工确认。"},
+    {"id": "placeholder", "points": 5, "full_credit": "0,0 被视为疑似占位而非自动删除或自动接受。"},
+    {"id": "conflict", "points": 7, "full_credit": "同 sample_id 冲突不静默选一条，并说明需回查来源。"}
+  ]
+}

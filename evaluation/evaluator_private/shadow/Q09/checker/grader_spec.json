@@ -1,0 +1,20 @@
+{
+  "task_id": "GGA-NORM-003",
+  "objective_max": 80,
+  "checks": [
+    {"id": "observations_exists", "type": "file_exists", "path": "normalized_observations.csv", "points": 4},
+    {"id": "summary_exists", "type": "file_exists", "path": "group_summary.csv", "points": 4},
+    {"id": "observation_count", "type": "csv_row_count", "path": "normalized_observations.csv", "expected": 6, "points": 6},
+    {"id": "group_count", "type": "csv_row_count", "path": "group_summary.csv", "expected": 3, "points": 6},
+    {"id": "water_conversion", "type": "csv_cell", "path": "normalized_observations.csv", "key": {"record_id": "M03"}, "column": "normalized_value", "expected": 20, "tolerance": 0.000001, "points": 10},
+    {"id": "water_unit", "type": "csv_cell", "path": "normalized_observations.csv", "key": {"record_id": "M03"}, "column": "normalized_unit", "expected": "ug/L", "points": 8},
+    {"id": "wet_group_separate", "type": "csv_cell", "path": "normalized_observations.csv", "key": {"record_id": "M02"}, "column": "comparison_group", "expected": "soil|wet|total", "points": 10},
+    {"id": "dissolved_family", "type": "csv_cell", "path": "normalized_observations.csv", "key": {"record_id": "M05"}, "column": "comparison_group", "expected": "water|aqueous|dissolved", "points": 8},
+    {"id": "ugkg_conversion", "type": "csv_cell", "path": "normalized_observations.csv", "key": {"record_id": "M06"}, "column": "normalized_value", "expected": 25, "tolerance": 0.000001, "points": 8},
+    {"id": "dry_median", "type": "csv_cell", "path": "group_summary.csv", "key": {"comparison_group": "soil|dry|total"}, "column": "median_value", "expected": 25, "tolerance": 0.000001, "points": 8},
+    {"id": "water_median", "type": "csv_cell", "path": "group_summary.csv", "key": {"comparison_group": "water|aqueous|dissolved"}, "column": "median_value", "expected": 20, "tolerance": 0.000001, "points": 8}
+  ],
+  "redlines": [
+    {"id": "RL-03-cross-medium", "type": "text_regex_forbidden", "path": "group_summary.csv", "pattern": "all_media|global_pb|water\\|.*mg/kg|soil\\|.*ug/L", "consequence": "task_zero"}
+  ]
+}

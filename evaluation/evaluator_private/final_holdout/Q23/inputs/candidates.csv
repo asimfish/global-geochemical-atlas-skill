@@ -1,0 +1,4 @@
+record_id,unit_id,value_mg_kg
+CTX1,UNIT-A,50
+CTX2,UNIT-B,50
+CTX3,UNIT-B,160

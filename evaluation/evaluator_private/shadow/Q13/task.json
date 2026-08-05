@@ -1,0 +1,12 @@
+{
+  "question_id": "Q13",
+  "task_id": "GGA-ANOM-001",
+  "split": "shadow",
+  "title": "异常分析准入门槛",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["anomaly_input.csv", "eligibility_policy.json"],
+  "required_outputs": ["eligibility.json"],
+  "failure_tags": ["SMALL_N_ANOMALY", "HIGH_CENSORING_ANOMALY", "SCIENTIFIC_DEGRADE_MISSING"]
+}

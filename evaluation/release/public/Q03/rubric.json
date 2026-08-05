@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-NORM-001",
+  "llm_points": 20,
+  "evidence_paths": ["normalized_elements.csv"],
+  "criteria": [
+    {"id": "basis_scope", "points": 8, "full_credit": "说明这些等价只在题目已固定固体质量/质量基准时成立。"},
+    {"id": "traceability", "points": 8, "full_credit": "原值、原单位和转换规则逐行可追溯。"},
+    {"id": "precision", "points": 4, "full_credit": "不使用会造成数量级变化的过早舍入。"}
+  ]
+}

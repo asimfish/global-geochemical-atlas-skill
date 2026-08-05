@@ -1,0 +1,12 @@
+{
+  "question_id": "Q04",
+  "task_id": "GGA-NORM-002",
+  "split": "public",
+  "title": "Fe2O3 转 Fe 元素含量",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["rock_oxide.csv", "conversion_constants.json"],
+  "required_outputs": ["element_database.csv"],
+  "failure_tags": ["OXIDE_ELEMENT_CONFUSION", "WRONG_STOICHIOMETRIC_FACTOR", "ANALYTE_IDENTITY_LOST"]
+}

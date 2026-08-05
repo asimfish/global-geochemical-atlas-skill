@@ -1,0 +1,12 @@
+{
+  "question_id": "Q15",
+  "task_id": "GGA-MAP-001",
+  "split": "shadow",
+  "title": "可追溯观测点 GeoJSON",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["observations.csv"],
+  "required_outputs": ["points.geojson", "map_manifest.json"],
+  "failure_tags": ["GEOJSON_AXIS_ORDER", "INVALID_POINT_MAPPED", "MAP_PROVENANCE_MISSING"]
+}

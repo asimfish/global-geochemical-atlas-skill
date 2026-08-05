@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-NORM-003",
+  "llm_points": 20,
+  "evidence_paths": ["normalized_observations.csv", "group_summary.csv"],
+  "criteria": [
+    {"id": "media", "points": 8, "full_credit": "固体质量分数与水体质量浓度保持独立单位空间。"},
+    {"id": "basis", "points": 6, "full_credit": "湿基记录在无含水率时不伪装成干基。"},
+    {"id": "phase", "points": 6, "full_credit": "dissolved family 与 total 不混合，并保留原 phase。"}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "question_id": "Q06",
+  "task_id": "GGA-QC-001",
+  "split": "public",
+  "title": "LOD 与限定符语义解析",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["censored_values.csv"],
+  "required_outputs": ["parsed_values.csv"],
+  "failure_tags": ["CENSORED_AS_EXACT", "ND_AS_ZERO", "MISSING_SEMANTICS_COLLAPSED", "UPPER_BOUND_IGNORED"]
+}

@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-SPATIAL-003",
+  "llm_points": 20,
+  "evidence_paths": ["island_points.geojson", "spatial_manifest.json"],
+  "criteria": [
+    {"id": "minimal_span", "points": 8, "full_credit": "识别跨反经线表示，避免得到约 359.5° 的伪全球 bbox。"},
+    {"id": "axis", "points": 6, "full_credit": "GeoJSON 位置使用 longitude-latitude。"},
+    {"id": "invalid", "points": 6, "full_credit": "无效经度被排除且计入 manifest。"}
+  ]
+}

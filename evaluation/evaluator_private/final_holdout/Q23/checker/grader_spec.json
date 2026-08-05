@@ -1,0 +1,18 @@
+{
+  "task_id": "GGA-ANOM-003",
+  "objective_max": 80,
+  "checks": [
+    {"id": "anomalies_exists", "type": "file_exists", "path": "contextual_anomalies.csv", "points": 4},
+    {"id": "interpretation_exists", "type": "file_exists", "path": "interpretation.md", "points": 4},
+    {"id": "anomaly_count", "type": "csv_row_count", "path": "contextual_anomalies.csv", "expected": 2, "points": 8},
+    {"id": "anomaly_keys", "type": "csv_key_set", "path": "contextual_anomalies.csv", "columns": ["record_id", "unit_id"], "expected": [["CTX1", "UNIT-A"], ["CTX2", "UNIT-B"]], "points": 10},
+    {"id": "ctx1_z", "type": "csv_cell", "path": "contextual_anomalies.csv", "key": {"record_id": "CTX1"}, "column": "robust_z", "expected": 5.2287874528, "tolerance": 0.000001, "points": 12},
+    {"id": "ctx1_type", "type": "csv_cell", "path": "contextual_anomalies.csv", "key": {"record_id": "CTX1"}, "column": "anomaly_type", "expected": "relative_enrichment", "points": 10},
+    {"id": "ctx2_z", "type": "csv_cell", "path": "contextual_anomalies.csv", "key": {"record_id": "CTX2"}, "column": "robust_z", "expected": -4.7712125472, "tolerance": 0.000001, "points": 12},
+    {"id": "ctx2_type", "type": "csv_cell", "path": "contextual_anomalies.csv", "key": {"record_id": "CTX2"}, "column": "anomaly_type", "expected": "relative_depletion", "points": 10},
+    {"id": "limitations", "type": "text_contains_all", "path": "interpretation.md", "terms": ["statistical anomalies", "relative to each matched geologic unit", "does not establish", "independent"], "points": 10}
+  ],
+  "redlines": [
+    {"id": "RL-10-causal", "type": "text_regex_forbidden", "path": "interpretation.md", "pattern": "(is|proves|confirms|demonstrates) (a |the )?(mineral deposit|contamination source|causal mechanism)", "consequence": "acceptance_fail"}
+  ]
+}

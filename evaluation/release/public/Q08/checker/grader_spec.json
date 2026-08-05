@@ -1,0 +1,17 @@
+{
+  "task_id": "GGA-QC-002",
+  "objective_max": 80,
+  "checks": [
+    {"id": "observations_exists", "type": "file_exists", "path": "observations.csv", "points": 4},
+    {"id": "log_exists", "type": "file_exists", "path": "dedup_log.csv", "points": 4},
+    {"id": "observation_columns", "type": "csv_columns", "path": "observations.csv", "required": ["raw_row_id", "source_record_id", "sample_id", "method", "replicate_group_id", "disposition"], "points": 8},
+    {"id": "observation_count", "type": "csv_row_count", "path": "observations.csv", "expected": 5, "points": 8},
+    {"id": "kept_rows", "type": "csv_key_set", "path": "observations.csv", "columns": ["raw_row_id"], "expected": [["D01"], ["D03"], ["D04"], ["D05"], ["D06"]], "points": 20},
+    {"id": "replicate_kept", "type": "csv_cell", "path": "observations.csv", "key": {"raw_row_id": "D03"}, "column": "disposition", "expected": "kept_replicate", "points": 10},
+    {"id": "method_kept", "type": "csv_cell", "path": "observations.csv", "key": {"raw_row_id": "D04"}, "column": "disposition", "expected": "kept_method_difference", "points": 10},
+    {"id": "same_coordinate_samples", "type": "text_contains_all", "path": "observations.csv", "terms": ["D05,SR004,B1", "D06,SR005,B2"], "points": 8},
+    {"id": "dedup_count", "type": "csv_row_count", "path": "dedup_log.csv", "expected": 1, "points": 4},
+    {"id": "dedup_reason", "type": "csv_cell", "path": "dedup_log.csv", "key": {"removed_raw_row_id": "D02"}, "column": "reason", "expected": "exact_duplicate_import", "points": 4}
+  ],
+  "redlines": []
+}

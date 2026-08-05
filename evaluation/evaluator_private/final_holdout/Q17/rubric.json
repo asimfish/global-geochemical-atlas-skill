@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-PROV-002",
+  "llm_points": 20,
+  "evidence_paths": ["provenance_verdict.json", "inputs/identifier_registry.json"],
+  "criteria": [
+    {"id": "field_consistency", "points": 10, "full_credit": "不是只检查 DOI 字符串，而是同时核对 title、authority URL 和 medium。"},
+    {"id": "unknown_identifier", "points": 6, "full_credit": "注册表外标识符被拒绝而不是补写成真。"},
+    {"id": "scope_limit", "points": 4, "full_credit": "明确元数据一致性不证明数据值正确。"}
+  ]
+}

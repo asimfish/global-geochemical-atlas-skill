@@ -1,0 +1,19 @@
+{
+  "task_id": "GGA-NORM-001",
+  "objective_max": 80,
+  "checks": [
+    {"id": "output_exists", "type": "file_exists", "path": "normalized_elements.csv", "points": 5},
+    {"id": "columns", "type": "csv_columns", "path": "normalized_elements.csv", "required": ["sample_id", "element", "original_value", "original_unit", "normalized_value", "normalized_unit", "conversion_rule"], "points": 10},
+    {"id": "row_count", "type": "csv_row_count", "path": "normalized_elements.csv", "expected": 6, "points": 5},
+    {"id": "key_set", "type": "csv_key_set", "path": "normalized_elements.csv", "columns": ["sample_id", "element"], "expected": [["S01", "Ni"], ["S02", "Pb"], ["S03", "Zn"], ["S04", "Cu"], ["S05", "Co"], ["S06", "As"]], "points": 6},
+    {"id": "s01_value", "type": "csv_cell", "path": "normalized_elements.csv", "key": {"sample_id": "S01"}, "column": "normalized_value", "expected": 42, "tolerance": 0.000001, "points": 6},
+    {"id": "s02_value", "type": "csv_cell", "path": "normalized_elements.csv", "key": {"sample_id": "S02"}, "column": "normalized_value", "expected": 18, "tolerance": 0.000001, "points": 6},
+    {"id": "s03_value", "type": "csv_cell", "path": "normalized_elements.csv", "key": {"sample_id": "S03"}, "column": "normalized_value", "expected": 120, "tolerance": 0.000001, "points": 6},
+    {"id": "s04_value", "type": "csv_cell", "path": "normalized_elements.csv", "key": {"sample_id": "S04"}, "column": "normalized_value", "expected": 35, "tolerance": 0.000001, "points": 6},
+    {"id": "s05_value", "type": "csv_cell", "path": "normalized_elements.csv", "key": {"sample_id": "S05"}, "column": "normalized_value", "expected": 8, "tolerance": 0.000001, "points": 6},
+    {"id": "s06_value", "type": "csv_cell", "path": "normalized_elements.csv", "key": {"sample_id": "S06"}, "column": "normalized_value", "expected": 400, "tolerance": 0.000001, "points": 6},
+    {"id": "original_values", "type": "text_contains_all", "path": "normalized_elements.csv", "terms": ["S01,Ni,42,ppm", "S03,Zn,0.012,wt%", "S05,Co,8000,ppb"], "points": 10},
+    {"id": "conversion_rules", "type": "text_contains_all", "path": "normalized_elements.csv", "terms": ["ppm_mass_mass_to_mg_per_kg", "wt_percent_times_10000", "ppb_mass_mass_times_0.001"], "points": 8}
+  ],
+  "redlines": []
+}

@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-SPATIAL-002",
+  "llm_points": 20,
+  "evidence_paths": ["geologic_matches.csv", "inputs/match_policy.json"],
+  "criteria": [
+    {"id": "boundary", "points": 8, "full_credit": "共享边界与近边界是不同情形，均不应高置信。"},
+    {"id": "precision", "points": 6, "full_credit": "把点坐标精度纳入匹配置信度，而非只看算法命中。"},
+    {"id": "no_match", "points": 6, "full_credit": "无覆盖时保留 no_match，不使用最近单元强行填补。"}
+  ]
+}

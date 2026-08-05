@@ -1,0 +1,12 @@
+{
+  "question_id": "Q07",
+  "task_id": "GGA-SPATIAL-001",
+  "split": "public",
+  "title": "坐标质量控制与可地图化判定",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["coordinates.csv"],
+  "required_outputs": ["coordinate_qc.csv"],
+  "failure_tags": ["COORDINATE_RANGE", "SILENT_LAT_LON_SWAP", "ZERO_ZERO_PLACEHOLDER", "SAMPLE_COORDINATE_CONFLICT"]
+}

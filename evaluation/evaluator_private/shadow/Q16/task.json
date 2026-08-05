@@ -1,0 +1,12 @@
+{
+  "question_id": "Q16",
+  "task_id": "GGA-MAP-002",
+  "split": "shadow",
+  "title": "预聚合热力图与采样密度披露",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_cell_fixture",
+  "input_assets": ["cell_observations.csv", "visualization_policy.json"],
+  "required_outputs": ["cells.csv", "heatmap_config.json", "heatmap.html"],
+  "failure_tags": ["DENSITY_AS_CONCENTRATION", "CENSORED_IN_COLOR_SCALE", "UNFIXED_COLOR_DOMAIN", "CLIENT_AGGREGATION_DRIFT"]
+}

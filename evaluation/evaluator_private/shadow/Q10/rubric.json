@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-INGEST-001",
+  "llm_points": 20,
+  "evidence_paths": ["observations.csv", "inputs/field_mapping.json"],
+  "criteria": [
+    {"id": "mapping_driven", "points": 8, "full_credit": "字段适配来自显式 mapping，而不是对列位置或名字模糊猜测。"},
+    {"id": "stable_identity", "points": 7, "full_credit": "record_id 同时包含 source 与 native record identity。"},
+    {"id": "traceability", "points": 5, "full_credit": "reported value/unit 与 normalized value/unit 同时存在。"}
+  ]
+}

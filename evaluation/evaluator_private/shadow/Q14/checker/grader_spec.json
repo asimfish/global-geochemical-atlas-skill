@@ -1,0 +1,18 @@
+{
+  "task_id": "GGA-ANOM-002",
+  "objective_max": 80,
+  "checks": [
+    {"id": "stats_exists", "type": "file_exists", "path": "group_statistics.csv", "points": 4},
+    {"id": "anomalies_exists", "type": "file_exists", "path": "anomalies.csv", "points": 4},
+    {"id": "stats_count", "type": "csv_row_count", "path": "group_statistics.csv", "expected": 2, "points": 5},
+    {"id": "anomaly_count", "type": "csv_row_count", "path": "anomalies.csv", "expected": 1, "points": 7},
+    {"id": "variable_center", "type": "csv_cell", "path": "group_statistics.csv", "key": {"group_id": "VARIABLE"}, "column": "center_log10", "expected": 1.3010299957, "tolerance": 0.0000001, "points": 10},
+    {"id": "variable_scale", "type": "csv_cell", "path": "group_statistics.csv", "key": {"group_id": "VARIABLE"}, "column": "scale_log10", "expected": 0.1689324141, "tolerance": 0.0000001, "points": 10},
+    {"id": "variable_method", "type": "csv_cell", "path": "group_statistics.csv", "key": {"group_id": "VARIABLE"}, "column": "method", "expected": "robust_log10_mad", "points": 8},
+    {"id": "v21_only", "type": "csv_cell", "path": "anomalies.csv", "key": {"record_id": "V21"}, "column": "anomaly_type", "expected": "relative_enrichment", "points": 8},
+    {"id": "v21_z", "type": "csv_cell", "path": "anomalies.csv", "key": {"record_id": "V21"}, "column": "robust_z", "expected": 6.9619040556, "tolerance": 0.000001, "points": 10},
+    {"id": "constant_fallback", "type": "csv_cell", "path": "group_statistics.csv", "key": {"group_id": "CONSTANT"}, "column": "method", "expected": "empirical_quantile_fallback", "points": 8},
+    {"id": "constant_no_anomaly", "type": "csv_cell", "path": "group_statistics.csv", "key": {"group_id": "CONSTANT"}, "column": "anomaly_count", "expected": 0, "points": 6}
+  ],
+  "redlines": []
+}

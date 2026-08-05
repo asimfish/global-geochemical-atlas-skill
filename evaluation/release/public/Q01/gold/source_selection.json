@@ -1,0 +1,11 @@
+{
+  "task_id": "GGA-DATA-001",
+  "target": {"medium": "rock", "lithology": "basalt", "element": "Ni", "coverage": "global"},
+  "primary_source_id": "georoc_precompiled",
+  "discovery_source_id": "earthchem_portal",
+  "decisions": [
+    {"source_id": "georoc_precompiled", "status": "primary", "reason": "全球岩石数据库且预编译资产包含分析方法、坐标和原始来源元数据，可固定版本文件。"},
+    {"source_id": "earthchem_portal", "status": "discovery", "reason": "适合作为跨库发现入口，但查询结果仍需落到可版本化的数据集与记录来源。"},
+    {"source_id": "random_web_table", "status": "reject", "reason": "缺少可核验来源、版本、许可和记录级 provenance。"}
+  ]
+}

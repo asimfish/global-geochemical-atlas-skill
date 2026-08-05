@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-ANOM-003",
+  "llm_points": 20,
+  "evidence_paths": ["contextual_anomalies.csv", "interpretation.md", "inputs/backgrounds.json"],
+  "criteria": [
+    {"id": "context", "points": 8, "full_credit": "同一浓度在不同 unit 背景下方向不同，解释与 z 一致。"},
+    {"id": "statistical_scope", "points": 7, "full_credit": "只报告统计异常/相对富集亏损。"},
+    {"id": "validation_needs", "points": 5, "full_credit": "列出需要独立地质、采样、分析和过程证据。"}
+  ]
+}

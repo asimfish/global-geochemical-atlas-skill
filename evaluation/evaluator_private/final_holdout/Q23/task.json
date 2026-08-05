@@ -1,0 +1,12 @@
+{
+  "question_id": "Q23",
+  "task_id": "GGA-ANOM-003",
+  "split": "final_holdout",
+  "title": "地质背景条件化异常与解释红线",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_context_fixture",
+  "input_assets": ["backgrounds.json", "candidates.csv"],
+  "required_outputs": ["contextual_anomalies.csv", "interpretation.md"],
+  "failure_tags": ["GLOBAL_THRESHOLD_CONTEXT_LOSS", "ANOMALY_DIRECTION_WRONG", "ANOMALY_CAUSAL_OVERCLAIM"]
+}

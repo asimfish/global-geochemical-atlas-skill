@@ -1,0 +1,37 @@
+{
+  "task_id": "GGA-E2E-001",
+  "objective_max": 80,
+  "checks": [
+    {"id": "observations_exists", "type": "file_exists", "path": "observations.csv", "points": 1},
+    {"id": "qc_exists", "type": "file_exists", "path": "qc_report.json", "points": 1},
+    {"id": "sources_exists", "type": "file_exists", "path": "sources.jsonl", "points": 1},
+    {"id": "map_exists", "type": "file_exists", "path": "map.geojson", "points": 1},
+    {"id": "anomalies_exists", "type": "file_exists", "path": "anomalies.geojson", "points": 1},
+    {"id": "manifest_exists", "type": "file_exists", "path": "run_manifest.json", "points": 1},
+    {"id": "summary_exists", "type": "file_exists", "path": "summary.md", "points": 1},
+    {"id": "observation_count", "type": "csv_row_count", "path": "observations.csv", "expected": 24, "points": 4},
+    {"id": "source_count", "type": "jsonl_row_count", "path": "sources.jsonl", "expected": 2, "points": 3},
+    {"id": "map_count", "type": "json_length", "path": "map.geojson", "json_path": "features", "expected": 23, "points": 5},
+    {"id": "anomaly_count", "type": "json_length", "path": "anomalies.geojson", "json_path": "features", "expected": 1, "points": 4},
+    {"id": "e21_value", "type": "csv_cell", "path": "observations.csv", "key": {"record_id": "E21"}, "column": "normalized_value", "expected": 500, "points": 4},
+    {"id": "e22_censored", "type": "csv_cell", "path": "observations.csv", "key": {"record_id": "E22"}, "column": "censored", "expected": true, "points": 4},
+    {"id": "e23_not_mapped", "type": "csv_cell", "path": "observations.csv", "key": {"record_id": "E23"}, "column": "eligible_map", "expected": false, "points": 4},
+    {"id": "e25_unit", "type": "csv_cell", "path": "observations.csv", "key": {"record_id": "E25"}, "column": "normalized_unit", "expected": "ug/L", "points": 4},
+    {"id": "qc_raw", "type": "json_value", "path": "qc_report.json", "json_path": "raw_input_rows", "expected": 25, "points": 3},
+    {"id": "qc_accepted", "type": "json_value", "path": "qc_report.json", "json_path": "accepted_database_rows", "expected": 24, "points": 3},
+    {"id": "qc_integrity_excluded", "type": "json_value", "path": "qc_report.json", "json_path": "excluded_integrity_rows", "expected": 1, "points": 3},
+    {"id": "qc_mapped", "type": "json_value", "path": "qc_report.json", "json_path": "mapped_features", "expected": 23, "points": 3},
+    {"id": "qc_anomaly", "type": "json_value", "path": "qc_report.json", "json_path": "anomaly_features", "expected": 1, "points": 3},
+    {"id": "manifest_status", "type": "json_value", "path": "run_manifest.json", "json_path": "status", "expected": "partial_success", "points": 4},
+    {"id": "manifest_exit", "type": "json_value", "path": "run_manifest.json", "json_path": "exit_code", "expected": 2, "points": 2},
+    {"id": "map_traceability", "type": "json_object_has_keys", "path": "map.geojson", "json_path": "features.0.properties", "required": ["record_id", "source_id", "element", "normalized_value", "normalized_unit", "qualifier", "qc_flags"], "points": 5},
+    {"id": "anomaly_id", "type": "json_value", "path": "anomalies.geojson", "json_path": "features.0.id", "expected": "E21", "points": 3},
+    {"id": "anomaly_type", "type": "json_value", "path": "anomalies.geojson", "json_path": "features.0.properties.anomaly_type", "expected": "statistical_relative_enrichment", "points": 5},
+    {"id": "anomaly_z", "type": "json_value", "path": "anomalies.geojson", "json_path": "features.0.properties.robust_z", "expected": 10.4080919691, "tolerance": 0.000001, "points": 5},
+    {"id": "summary_evidence", "type": "text_contains_all", "path": "summary.md", "terms": ["partial success", "Source integrity", "censored", "invalid coordinate", "statistical relative enrichment", "does not establish"], "points": 2}
+  ],
+  "redlines": [
+    {"id": "RL-14-bad-source-used", "type": "text_regex_forbidden", "path": "sources.jsonl", "pattern": "SRC-B[^\\n]*\"downstream_used\"\\s*:\\s*true", "consequence": "acceptance_fail"},
+    {"id": "RL-10-causal", "type": "text_regex_forbidden", "path": "summary.md", "pattern": "(is|proves|confirms|demonstrates) (a |the )?(mineral deposit|contamination source|causal mechanism)", "consequence": "acceptance_fail"}
+  ]
+}

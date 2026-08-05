@@ -1,0 +1,7 @@
+record_id,reported_value_text,numeric_value,bound_value,qualifier,detection_limit,censored,missing_reason,eligible_log_analysis
+C01,<0.10,,0.10,<,0.10,true,below_detection_limit,false
+C02,ND,,,ND,0.20,true,not_detected,false
+C03,0,0,,=,0.05,false,,false
+C04,>1000,,1000,>,,true,above_upper_limit,false
+C05,,,,,,false,not_reported,false
+C06,BDL,,,BDL,,true,below_detection_limit_unknown_limit,false

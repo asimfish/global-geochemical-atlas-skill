@@ -1,0 +1,12 @@
+{
+  "question_id": "Q05",
+  "task_id": "GGA-PROV-001",
+  "split": "public",
+  "title": "下载资产完整性与媒体类型验证",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_local_download_responses",
+  "input_assets": ["download_manifest.json", "valid_data.csv", "html_as_csv.csv", "tampered.csv"],
+  "required_outputs": ["verification_report.json"],
+  "failure_tags": ["CHECKSUM_MISMATCH_IGNORED", "HTML_AS_DATA", "UNSAFE_DOWNSTREAM_USE"]
+}

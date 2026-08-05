@@ -1,0 +1,12 @@
+{
+  "question_id": "Q14",
+  "task_id": "GGA-ANOM-002",
+  "split": "shadow",
+  "title": "稳健对数 MAD 异常与零尺度回退",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["values.csv", "anomaly_policy.json"],
+  "required_outputs": ["group_statistics.csv", "anomalies.csv"],
+  "failure_tags": ["RAW_SCALE_MEAN", "MAD_ZERO_DIVISION", "ANOMALY_THRESHOLD_WRONG"]
+}

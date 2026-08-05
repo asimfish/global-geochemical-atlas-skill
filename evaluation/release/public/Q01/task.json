@@ -1,0 +1,12 @@
+{
+  "question_id": "Q01",
+  "task_id": "GGA-DATA-001",
+  "split": "public",
+  "title": "全球玄武岩 Ni 数据源选择",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "curated_offline_catalog_of_real_sources",
+  "input_assets": ["data_sources.json"],
+  "required_outputs": ["source_selection.json", "provenance_plan.json"],
+  "failure_tags": ["SOURCE_SCOPE_MISMATCH", "UNVERIFIED_WEB_SOURCE", "FABRICATED_IDENTIFIER", "PROVENANCE_INCOMPLETE"]
+}

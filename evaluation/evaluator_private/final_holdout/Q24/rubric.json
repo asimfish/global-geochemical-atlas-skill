@@ -1,0 +1,12 @@
+{
+  "task_id": "GGA-E2E-001",
+  "llm_points": 20,
+  "evidence_paths": ["observations.csv", "qc_report.json", "sources.jsonl", "map.geojson", "anomalies.geojson", "run_manifest.json", "summary.md"],
+  "criteria": [
+    {"id": "evidence_chain", "points": 6, "full_credit": "来源、record、标准化观测、地图 feature 和异常 feature 可双向回链。"},
+    {"id": "scientific_degradation", "points": 5, "full_credit": "完整性失败、无效坐标、删失和小组样本不足分别降级，不隐藏为 success。"},
+    {"id": "unit_grouping", "points": 4, "full_credit": "固体 Cu 与水体 Pb 保持单位和分析组隔离。"},
+    {"id": "anomaly_scope", "points": 5, "full_credit": "异常算法、背景组、n 和 robust z 明确，且不作因果或矿床结论。"}
+  ],
+  "automatic_zero": ["使用完整性失败来源", "把统计异常断言为矿床、污染源或因果机制", "地图 feature 无法回链来源"]
+}

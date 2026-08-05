@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-QC-002",
+  "llm_points": 20,
+  "evidence_paths": ["observations.csv", "dedup_log.csv"],
+  "criteria": [
+    {"id": "identity_model", "points": 8, "full_credit": "区分导入重复、实验室平行样、方法差异和样品身份。"},
+    {"id": "auditability", "points": 6, "full_credit": "每个被移除行都能在 dedup_log 回链到保留行。"},
+    {"id": "no_best_value_overreach", "points": 6, "full_credit": "未在没有来源特定规则时擅自选最佳分析值。"}
+  ]
+}

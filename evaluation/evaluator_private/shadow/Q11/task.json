@@ -1,0 +1,12 @@
+{
+  "question_id": "Q11",
+  "task_id": "GGA-SPATIAL-002",
+  "split": "shadow",
+  "title": "地质单元匹配与边界置信度",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_geojson_fixture",
+  "input_assets": ["units.geojson", "points.csv", "match_policy.json"],
+  "required_outputs": ["geologic_matches.csv"],
+  "failure_tags": ["BOUNDARY_OVERCONFIDENCE", "FORCED_SPATIAL_MATCH", "COORDINATE_PRECISION_IGNORED"]
+}

@@ -1,0 +1,5 @@
+sample_id,analyte_reported,reported_value,reported_unit,element,normalized_value,normalized_unit,conversion_factor,conversion_rule,status
+R01,Fe2O3,10,wt%,Fe,69943.076143,mg/kg,0.6994307614270416,fe2o3_wt_percent_to_fe_mg_per_kg,converted
+R02,Fe2O3,70000,mg/kg,Fe,48960.153300,mg/kg,0.6994307614270416,fe2o3_mg_per_kg_to_fe_mg_per_kg,converted
+R03,Fe,5,wt%,Fe,50000.000000,mg/kg,1.0,fe_wt_percent_to_fe_mg_per_kg,converted
+R04,FeO,8,wt%,Fe,,,0,not_applied_feo_requires_distinct_rule,not_requested

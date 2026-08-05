@@ -1,0 +1,10 @@
+{
+  "task_id": "GGA-NORM-002",
+  "llm_points": 20,
+  "evidence_paths": ["element_database.csv", "inputs/conversion_constants.json"],
+  "criteria": [
+    {"id": "stoichiometry", "points": 8, "full_credit": "解释质量分数因子来自化学计量，并引用冻结常数。"},
+    {"id": "identity", "points": 8, "full_credit": "明确 Fe2O3、Fe 和 FeO 的 analyte 身份不能丢失或共用同一规则。"},
+    {"id": "traceability", "points": 4, "full_credit": "输出可回溯 reported analyte/value/unit。"}
+  ]
+}

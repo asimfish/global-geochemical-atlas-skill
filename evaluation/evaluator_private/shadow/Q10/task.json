@@ -1,0 +1,12 @@
+{
+  "question_id": "Q10",
+  "task_id": "GGA-INGEST-001",
+  "split": "shadow",
+  "title": "双来源 Schema 漂移适配",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_schema_variants",
+  "input_assets": ["source_a.csv", "source_b.csv", "field_mapping.json"],
+  "required_outputs": ["observations.csv"],
+  "failure_tags": ["HARDCODED_SCHEMA", "FIELD_MAPPING_ERROR", "SOURCE_ID_LOST"]
+}

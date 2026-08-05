@@ -1,0 +1,12 @@
+{
+  "question_id": "Q03",
+  "task_id": "GGA-NORM-001",
+  "split": "public",
+  "title": "固体样品质量分数统一到 mg/kg",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["soil_elements.csv"],
+  "required_outputs": ["normalized_elements.csv"],
+  "failure_tags": ["UNIT_SCALE_ERROR", "ORIGINAL_VALUE_LOST", "BASIS_UNSTATED"]
+}

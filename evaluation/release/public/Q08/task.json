@@ -1,0 +1,12 @@
+{
+  "question_id": "Q08",
+  "task_id": "GGA-QC-002",
+  "split": "public",
+  "title": "重复、平行样和多方法记录处理",
+  "status": "SMOKE_PASSED",
+  "gold_version": "5.0.0-draft.1",
+  "fixture_type": "synthetic_adversarial_fixture",
+  "input_assets": ["duplicate_records.csv"],
+  "required_outputs": ["observations.csv", "dedup_log.csv"],
+  "failure_tags": ["OVER_DEDUPLICATION", "REPLICATE_LOST", "METHOD_CONFLICT_LOST", "DEDUP_NO_LOG"]
+}
