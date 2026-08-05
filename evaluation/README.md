@@ -10,7 +10,7 @@
 - 裸模型和挂载 Skill 分别记作 `B0`、`S0`，每题各跑三次；
 - Public 留在本仓库；Shadow/Final 位于工作区外的受控私有根目录。
 
-冻结接口见 [`contracts/benchmark-execution-contract.json`](contracts/benchmark-execution-contract.json)，人类可读说明见 [`docs/execution-contract-guide.md`](docs/execution-contract-guide.md)。
+冻结接口见 [`contracts/benchmark-execution-contract.json`](contracts/benchmark-execution-contract.json)，人类可读说明见 [`docs/execution-contract-guide.md`](docs/execution-contract-guide.md)。Docker 环境的连接、构建、测试和当前验收边界见 [`docs/docker_usage.md`](docs/docker_usage.md)。
 
 ## E1 交卷文件
 
