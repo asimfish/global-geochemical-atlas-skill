@@ -102,9 +102,29 @@ def run_suite() -> dict[str, Any]:
         "source-manifest.schema.json",
         "confidence-report.schema.json",
         "schema-map.schema.json",
+        "platform-field-crosswalk.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
+
+    record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+    crosswalk = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.json")
+    mapped_fields = [item["canonical_field"] for item in crosswalk["field_mappings"]]
+    non_core_fields = [field for group in crosswalk["non_core_fields"] for field in group["fields"]]
+    require(crosswalk["crosswalk_version"] == "d2-platform-crosswalk-v1", "bad D2 crosswalk version")
+    require(
+        len(mapped_fields) == len(set(mapped_fields)) and len(non_core_fields) == len(set(non_core_fields)),
+        "crosswalk contains duplicate canonical fields",
+    )
+    require(
+        set(mapped_fields).isdisjoint(non_core_fields)
+        and set(mapped_fields) | set(non_core_fields) == set(record_schema["properties"]),
+        "crosswalk drifted from the D2 record schema",
+    )
+    require(
+        all(source["url"].startswith("https://") for source in crosswalk["evidence_sources"]),
+        "crosswalk evidence must use stable HTTPS locators",
+    )
 
     with tempfile.TemporaryDirectory() as first_temp, tempfile.TemporaryDirectory() as second_temp:
         first = Path(first_temp)
@@ -350,7 +370,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 50,
+            "tests": 54,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

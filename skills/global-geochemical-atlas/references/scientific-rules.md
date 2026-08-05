@@ -47,6 +47,11 @@
 来源列名不同时可向 D2 CLI 提供 `--schema-map` JSON 对象；脚本只输出 canonical 字段，D1 仍应在
 source manifest 保存来源查询、许可、下载哈希和源列映射。
 
+专业平台字段的语义参照、转换类型和信息损失见 `platform-field-crosswalk.md`；机器可读版本为
+`platform-field-crosswalk.json`。Crosswalk 用于指导 D1 的显式 schema map 和未来 exporter 设计，
+不表示当前 CSV 已通过 EarthChem、USGS、ODM2、IGSN 或 DataCite 的原生格式认证。来源数据字典优先于
+通用列名相似度；`no_direct_equivalent` 字段不得由模型猜测补齐。
+
 ## 3. 单位与删失值
 
 ### 固体介质

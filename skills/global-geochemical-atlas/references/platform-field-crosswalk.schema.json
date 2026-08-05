@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:platform-field-crosswalk:d2-v1",
+  "title": "Professional geochemical platform field crosswalk",
+  "description": "Machine-checkable semantic alignment between the D2 canonical record and reviewed professional platform documentation. This is an interoperability aid, not a conformance certificate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "crosswalk_version",
+    "status",
+    "canonical_schema",
+    "reviewed_at",
+    "scope",
+    "mapping_type_definitions",
+    "evidence_sources",
+    "platforms",
+    "field_mappings",
+    "non_core_fields"
+  ],
+  "properties": {
+    "crosswalk_version": {"const": "d2-platform-crosswalk-v1"},
+    "status": {"const": "semantic_alignment_not_conformance_claim"},
+    "canonical_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schema_id"],
+      "properties": {
+        "path": {"const": "geochemistry-record.schema.json"},
+        "schema_id": {"const": "urn:ai4s:geochemistry-record:d2-v2"}
+      }
+    },
+    "reviewed_at": {"type": "string", "format": "date"},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_field_count",
+        "crosswalked_field_count",
+        "non_core_field_count",
+        "statement"
+      ],
+      "properties": {
+        "canonical_field_count": {"type": "integer", "minimum": 1},
+        "crosswalked_field_count": {"type": "integer", "minimum": 1},
+        "non_core_field_count": {"type": "integer", "minimum": 0},
+        "statement": {"type": "string", "minLength": 1}
+      }
+    },
+    "mapping_type_definitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exact",
+        "renamed",
+        "transformed",
+        "composite",
+        "local_extension",
+        "no_direct_equivalent"
+      ],
+      "properties": {
+        "exact": {"type": "string", "minLength": 1},
+        "renamed": {"type": "string", "minLength": 1},
+        "transformed": {"type": "string", "minLength": 1},
+        "composite": {"type": "string", "minLength": 1},
+        "local_extension": {"type": "string", "minLength": 1},
+        "no_direct_equivalent": {"type": "string", "minLength": 1}
+      }
+    },
+    "evidence_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "authority", "url", "role", "accessed_at"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "title": {"type": "string", "minLength": 1},
+          "authority": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "format": "uri"},
+          "role": {
+            "type": "string",
+            "enum": ["platform_documentation", "schema_source", "metadata_guidance", "informative_context"]
+          },
+          "accessed_at": {"type": "string", "format": "date"}
+        }
+      }
+    },
+    "platforms": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "layer", "scope_note", "evidence_ids"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "name": {"type": "string", "minLength": 1},
+          "layer": {"type": "string", "enum": ["geochemistry_repository", "dataset", "observation_model", "sample_pid_metadata"]},
+          "scope_note": {"type": "string", "minLength": 1},
+          "evidence_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string"}
+          }
+        }
+      }
+    },
+    "field_mappings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "canonical_field",
+          "semantic_group",
+          "canonical_definition",
+          "canonical_vocabulary",
+          "platform_mappings"
+        ],
+        "properties": {
+          "canonical_field": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "semantic_group": {
+            "type": "string",
+            "enum": ["identity", "sample_context", "measurement", "spatial", "method", "provenance"]
+          },
+          "canonical_definition": {"type": "string", "minLength": 1},
+          "canonical_vocabulary": {
+            "type": ["array", "null"],
+            "items": {"type": "string"},
+            "uniqueItems": true
+          },
+          "platform_mappings": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "platform_id",
+                "external_path",
+                "mapping_type",
+                "conversion_rule",
+                "controlled_vocabulary",
+                "information_loss",
+                "evidence_ids"
+              ],
+              "properties": {
+                "platform_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+                "external_path": {
+                  "type": "array",
+                  "items": {"type": "string", "minLength": 1},
+                  "uniqueItems": true
+                },
+                "mapping_type": {
+                  "type": "string",
+                  "enum": ["exact", "renamed", "transformed", "composite", "no_direct_equivalent"]
+                },
+                "conversion_rule": {"type": "string", "minLength": 1},
+                "controlled_vocabulary": {"type": ["string", "null"]},
+                "information_loss": {"type": "string", "minLength": 1},
+                "evidence_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "non_core_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["classification", "fields", "rationale"],
+        "properties": {
+          "classification": {"type": "string", "enum": ["local_extension", "deferred_crosswalk"]},
+          "fields": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+          },
+          "rationale": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@
 | 角色 | 主要路径 | 负责的稳定接口 | 不直接决定 |
 |---|---|---|---|
 | D1 数据源、证据链与数据工程 | `download_data.py`、`build_evidence_bundle.py`、`fixtures/`、`references/data-sources.md`、`references/source-manifest.schema.json` | 下载清单、缓存与降级、demo 切片、`source_manifest.json`；校验并原样打包 D2 的 `confidence_report.json` | 异常阈值、置信度公式、最终 `SKILL.md` |
-| D2 地球化学标准化与分析 | `standardize_geochemistry.py`、`references/scientific-rules.md`、`references/geochemistry-record.schema.json`、`references/confidence-report.schema.json`、`references/schema-map.schema.json` | `geochemistry.csv`、`qc_report.json`、`confidence_report.json`、`anomalies.geojson`、`anomaly_report.json` | 最终 `SKILL.md`、地图表现和数据源许可判断 |
+| D2 地球化学标准化与分析 | `standardize_geochemistry.py`、`references/scientific-rules.md`、`references/geochemistry-record.schema.json`、`references/confidence-report.schema.json`、`references/schema-map.schema.json`、`references/platform-field-crosswalk.*` | `geochemistry.csv`、`qc_report.json`、`confidence_report.json`、`anomalies.geojson`、`anomaly_report.json`；专业平台语义映射与信息损失说明 | 最终 `SKILL.md`、地图表现和数据源许可判断 |
 | D3 Skill 架构、地图与 demo 总集成 | `SKILL.md`、`run_workflow.py`、`build_interactive_map.py`、`validate_outputs.py`、README、请求/结果 Schema、demo 指南 | `interactive_map.html`、`samples.geojson`、`run_summary.json`、稳定 CLI、唯一生产 Skill 和演示流程 | D2 的科学算法、D1 的来源许可结论 |
 | 共享契约测试 | `component_test.py`、`self_test.py`、`.github/workflows/ci.yml` | 防止任一角色破坏其他角色的输入输出 | 不承载新的科学业务逻辑 |
 

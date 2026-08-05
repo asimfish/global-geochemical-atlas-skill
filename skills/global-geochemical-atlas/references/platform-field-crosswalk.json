@@ -1,0 +1,564 @@
+{
+  "crosswalk_version": "d2-platform-crosswalk-v1",
+  "status": "semantic_alignment_not_conformance_claim",
+  "canonical_schema": {
+    "path": "geochemistry-record.schema.json",
+    "schema_id": "urn:ai4s:geochemistry-record:d2-v2"
+  },
+  "reviewed_at": "2026-08-05",
+  "scope": {
+    "canonical_field_count": 61,
+    "crosswalked_field_count": 36,
+    "non_core_field_count": 25,
+    "statement": "The crosswalk covers priority sample, observation, method, spatial and provenance semantics. It supports import/export design and gap analysis, but it does not certify conformance to EarthChem, USGS AGDB2, ODM2, IGSN or DataCite."
+  },
+  "mapping_type_definitions": {
+    "exact": "The reviewed external field and canonical field have the same asserted meaning and require no semantic transformation.",
+    "renamed": "The meaning is aligned, but a field rename or lossless identifier normalization is required.",
+    "transformed": "A declared unit, vocabulary, date, qualifier or identifier transformation is required.",
+    "composite": "Several external fields, a relationship join or source metadata are needed to construct the canonical value.",
+    "local_extension": "The canonical field is intentionally maintained by this workflow for audit, QC or analysis and is not claimed as a platform field.",
+    "no_direct_equivalent": "No direct field was identified in the cited reviewed surface. The platform may still support the concept through extensions; absence here is not proof of impossibility."
+  },
+  "evidence_sources": [
+    {
+      "id": "earthchem_templates",
+      "title": "EarthChem Library Templates",
+      "authority": "EarthChem",
+      "url": "https://earthchem.org/ecl/templates",
+      "role": "platform_documentation",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "earthchem_developer_resources",
+      "title": "EarthChem Resources for Developers",
+      "authority": "EarthChem",
+      "url": "https://earthchem.org/resources/developers",
+      "role": "schema_source",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "earthchem_submission_guidelines",
+      "title": "EarthChem Library Submission Guidelines",
+      "authority": "EarthChem",
+      "url": "https://earthchem.org/ecl/submission-guidelines",
+      "role": "metadata_guidance",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "usgs_agdb2_metadata",
+      "title": "Alaska Geochemical Database Version 2.0 metadata",
+      "authority": "U.S. Geological Survey",
+      "url": "https://pubs.usgs.gov/ds/759/contents/AGDB2_DS759_metadata/AGDB2_MD.faq.html",
+      "role": "schema_source",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "odm2_overview",
+      "title": "Observations Data Model 2 overview",
+      "authority": "ODM2 community project",
+      "url": "https://www.odm2.org/",
+      "role": "platform_documentation",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "odm2_schema",
+      "title": "ODM2 DBWrench relational schema",
+      "authority": "ODM2 community project",
+      "url": "https://github.com/ODM2/ODM2/blob/master/schemas/ODM2_DBWrench_Schema.xml",
+      "role": "schema_source",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "igsn_metadata",
+      "title": "IGSN technical metadata guidance",
+      "authority": "IGSN",
+      "url": "https://igsn.github.io/metadata/",
+      "role": "metadata_guidance",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "datacite_igsn_recommendations",
+      "title": "IGSN ID Metadata Recommendations",
+      "authority": "DataCite",
+      "url": "https://support.datacite.org/docs/igsn-id-metadata-recommendations",
+      "role": "metadata_guidance",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "datacite_schema_4_6",
+      "title": "DataCite Metadata Schema 4.6",
+      "authority": "DataCite",
+      "url": "https://schema.datacite.org/meta/kernel-4.6/",
+      "role": "schema_source",
+      "accessed_at": "2026-08-05"
+    },
+    {
+      "id": "onegeochemistry_context",
+      "title": "OneGeochemistry initiative",
+      "authority": "OneGeochemistry community initiative",
+      "url": "https://onegeochemistry.github.io/",
+      "role": "informative_context",
+      "accessed_at": "2026-08-05"
+    }
+  ],
+  "platforms": [
+    {
+      "id": "earthchem_ecl",
+      "name": "EarthChem Library / EarthChem data model",
+      "layer": "geochemistry_repository",
+      "scope_note": "Repository templates and EarthChem schema concepts for samples, measured parameters, analytical metadata and data-source metadata.",
+      "evidence_ids": ["earthchem_templates", "earthchem_developer_resources", "earthchem_submission_guidelines"]
+    },
+    {
+      "id": "usgs_agdb2",
+      "name": "USGS Alaska Geochemical Database 2.0",
+      "layer": "dataset",
+      "scope_note": "A concrete government geochemical dataset schema. It is evidence for field practice, not a universal USGS interchange standard.",
+      "evidence_ids": ["usgs_agdb2_metadata"]
+    },
+    {
+      "id": "odm2",
+      "name": "Observations Data Model 2",
+      "layer": "observation_model",
+      "scope_note": "Relational observation model linking sampling features, actions, methods, variables, units, results, provenance and data quality.",
+      "evidence_ids": ["odm2_overview", "odm2_schema"]
+    },
+    {
+      "id": "igsn_datacite",
+      "name": "IGSN metadata encoded with DataCite Metadata Schema",
+      "layer": "sample_pid_metadata",
+      "scope_note": "Discovery and persistent-identifier metadata for physical samples; it is not an analytical-result schema.",
+      "evidence_ids": ["igsn_metadata", "datacite_igsn_recommendations", "datacite_schema_4_6"]
+    }
+  ],
+  "field_mappings": [
+    {
+      "canonical_field": "sample_id",
+      "semantic_group": "identity",
+      "canonical_definition": "Source-facing identifier for the sampled object or specimen.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata.Sample name"], "mapping_type": "renamed", "conversion_rule": "Trim surrounding whitespace; preserve case and punctuation.", "controlled_vocabulary": null, "information_loss": "None when one EarthChem sample name identifies one canonical sample.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.FIELD_ID", "Geol2.LAB_ID"], "mapping_type": "composite", "conversion_rule": "Prefer FIELD_ID as the collector-facing sample ID; retain LAB_ID separately in source provenance when both exist.", "controlled_vocabulary": null, "information_loss": "Choosing one identifier as sample_id loses the distinction between field and laboratory identities unless the second identifier is retained.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.SamplingFeatures.SamplingFeatureCode"], "mapping_type": "renamed", "conversion_rule": "Copy the code for the specimen or sampled feature represented by the result.", "controlled_vocabulary": null, "information_loss": "ODM2 sampling-feature hierarchy is not represented by this single field.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["alternateIdentifiers[].alternateIdentifier"], "mapping_type": "renamed", "conversion_rule": "Use the local sample identifier and record its alternateIdentifierType in source metadata.", "controlled_vocabulary": "DataCite alternateIdentifierType recommendation; local is the default for project identifiers.", "information_loss": "alternateIdentifierType is not retained in sample_id alone.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "igsn",
+      "semantic_group": "identity",
+      "canonical_definition": "Globally persistent IGSN identifier for a physical sample or feature of interest.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata.IGSN"], "mapping_type": "exact", "conversion_rule": "Copy the registered identifier; do not mint or infer one.", "controlled_vocabulary": null, "information_loss": "None for the identifier string.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Leave null unless a separate authoritative sample registry supplies an IGSN.", "controlled_vocabulary": null, "information_loss": "AGDB2 sample IDs must not be relabeled as IGSNs.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2ExternalIdentifiers.SamplingFeatureExternalIdentifiers", "ODM2ExternalIdentifiers.ExternalIdentifierSystems"], "mapping_type": "composite", "conversion_rule": "Select the sampling-feature external identifier whose system is IGSN.", "controlled_vocabulary": "External identifier system name/URI", "information_loss": "Resolver URI and identifier-system metadata are not retained in igsn alone.", "evidence_ids": ["odm2_overview", "odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["identifier.identifier", "identifier.identifierType"], "mapping_type": "transformed", "conversion_rule": "Accept the DOI-form IGSN identifier only when identifierType is DOI and the record is registered as an IGSN ID.", "controlled_vocabulary": "DataCite identifierType", "information_loss": "Registration state and repository metadata require the full DataCite record.", "evidence_ids": ["igsn_metadata", "datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "element_or_analyte",
+      "semantic_group": "measurement",
+      "canonical_definition": "Canonical target element or analyte used for grouping and comparison.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.Parameter(s)"], "mapping_type": "transformed", "conversion_rule": "Map the reported parameter through the audited analyte vocabulary; preserve the original label in analyte_reported.", "controlled_vocabulary": "EarthChem parameter vocabularies", "information_loss": "Speciation or oxide form can be lost unless species_or_oxide is also populated.", "evidence_ids": ["earthchem_templates", "earthchem_developer_resources"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Chem2.SPECIES", "BestValue.SPECIES"], "mapping_type": "transformed", "conversion_rule": "Resolve the AGDB2 species code and normalize only recognized element/analyte synonyms.", "controlled_vocabulary": "AGDB2 Chem2 species domain", "information_loss": "The source species code must also be retained in analyte_reported or species_or_oxide.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Variables.VariableNameCV", "ODM2Core.Variables.VariableCode"], "mapping_type": "transformed", "conversion_rule": "Use VariableNameCV semantics and retain VariableCode as the source-reported label.", "controlled_vocabulary": "ODM2 VariableName controlled vocabulary", "information_loss": "ODM2 variable type and speciation require other canonical fields.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Do not derive analytical variables from sample discovery metadata.", "controlled_vocabulary": null, "information_loss": "IGSN/DataCite describes the sample, not individual analytical determinations.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "analyte_reported",
+      "semantic_group": "measurement",
+      "canonical_definition": "Verbatim or minimally normalized source label for the measured parameter.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.Parameter(s)"], "mapping_type": "renamed", "conversion_rule": "Copy the submitted parameter label before canonical analyte normalization.", "controlled_vocabulary": "EarthChem parameter vocabularies", "information_loss": "None if the source label is preserved exactly.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Chem2.SPECIES", "BestValue.SPECIES"], "mapping_type": "renamed", "conversion_rule": "Copy the source species code or label.", "controlled_vocabulary": "AGDB2 Chem2 species domain", "information_loss": "A code needs the AGDB2 lookup table for its full definition.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Variables.VariableCode"], "mapping_type": "renamed", "conversion_rule": "Copy VariableCode; use VariableNameCV and SpeciationCV for interpretation.", "controlled_vocabulary": null, "information_loss": "VariableCode alone is not a complete ODM2 variable definition.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "species_or_oxide",
+      "semantic_group": "measurement",
+      "canonical_definition": "Reported chemical species, oxide or compound form when distinct from the target element.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.Parameter(s)"], "mapping_type": "transformed", "conversion_rule": "Parse only an explicit species or oxide label from the submitted parameter; do not infer from units.", "controlled_vocabulary": "EarthChem parameter vocabularies", "information_loss": "None when the parameter explicitly encodes species; otherwise remain null.", "evidence_ids": ["earthchem_templates", "earthchem_developer_resources"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Chem2.SPECIES"], "mapping_type": "renamed", "conversion_rule": "Copy a species/oxide code and resolve its source definition before conversion.", "controlled_vocabulary": "AGDB2 Chem2 species domain", "information_loss": "The short code is ambiguous without Chem2 metadata.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Variables.SpeciationCV"], "mapping_type": "renamed", "conversion_rule": "Copy the controlled speciation term associated with the variable.", "controlled_vocabulary": "ODM2 Speciation controlled vocabulary", "information_loss": "None when one controlled term fully describes the reported species.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "medium",
+      "semantic_group": "sample_context",
+      "canonical_definition": "High-level canonical sample medium: rock, soil, sediment, water, mineral, concentrate or unknown.",
+      "canonical_vocabulary": ["rock", "soil", "sediment", "water", "mineral", "concentrate", "unknown"],
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata.sample type/material", "Data.Analyzed Material"], "mapping_type": "composite", "conversion_rule": "Map the physical sample medium separately from the analyzed fraction; unmatched terms become unknown and remain in material.", "controlled_vocabulary": "EarthChem sample and analyzed-material vocabularies", "information_loss": "The seven-value canonical vocabulary is coarser than repository-specific sample classifications.", "evidence_ids": ["earthchem_templates", "earthchem_developer_resources"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.PRIMARY_CLASS"], "mapping_type": "transformed", "conversion_rule": "Map documented primary classes rock, sediment, soil, mineral and concentrate; preserve subclasses in material.", "controlled_vocabulary": "AGDB2 PRIMARY_CLASS enumerated domain", "information_loss": "Secondary and specific sample classification is lost unless material is populated.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2SamplingFeatures.Specimens.SpecimenMediumCV"], "mapping_type": "transformed", "conversion_rule": "Map the ODM2 medium term to the canonical seven-value vocabulary and preserve the original term in material when narrower.", "controlled_vocabulary": "ODM2 Medium controlled vocabulary", "information_loss": "ODM2 terms may be more specific than the canonical medium.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["subjects[].subject", "titles[].title", "resourceType.resourceType"], "mapping_type": "composite", "conversion_rule": "Use explicit material terms only; resourceTypeGeneral=PhysicalObject alone is insufficient.", "controlled_vocabulary": "DataCite resourceTypeGeneral and optional subject scheme", "information_loss": "Free-text title/subject parsing may be ambiguous and must fail to unknown.", "evidence_ids": ["datacite_igsn_recommendations", "datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "material",
+      "semantic_group": "sample_context",
+      "canonical_definition": "Source-specific material, fraction or sample-class description retained alongside medium.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.Analyzed Material", "Sample Metadata.Lithology"], "mapping_type": "composite", "conversion_rule": "Prefer analyzed material for the measured fraction and retain lithology separately.", "controlled_vocabulary": "EarthChem analyzed-material vocabularies", "information_loss": "Multiple fractions cannot be represented in one scalar field without a declared join rule.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.SECONDARY_CLASS", "Geol2.SPECIFIC_NAME"], "mapping_type": "composite", "conversion_rule": "Concatenate non-empty subclass and specific name with labeled components.", "controlled_vocabulary": "AGDB2 sample-class domains", "information_loss": "Hierarchy is flattened unless source fields are retained in provenance.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2SamplingFeatures.Specimens.SpecimenTypeCV", "ODM2SamplingFeatures.Specimens.SpecimenMediumCV"], "mapping_type": "composite", "conversion_rule": "Combine specimen type and medium only when both apply to the measured sampling feature.", "controlled_vocabulary": "ODM2 SpecimenType and Medium controlled vocabularies", "information_loss": "Sampling-feature hierarchy and subsample relationships are flattened.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["subjects[].subject", "titles[].title"], "mapping_type": "transformed", "conversion_rule": "Copy an explicit material term; retain the subject scheme when provided in source provenance.", "controlled_vocabulary": "Optional DataCite subjectScheme", "information_loss": "Subject scheme and multilingual titles are not represented in material alone.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "measurement_basis",
+      "semantic_group": "measurement",
+      "canonical_definition": "Basis on which concentration is reported, such as dry total, wet, dissolved or extractable.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.Analyzed Material", "Primary Analytical Metadata", "Data.Parameter(s)"], "mapping_type": "composite", "conversion_rule": "Construct only from explicit analyzed-material and method statements; do not infer dry/total from concentration units.", "controlled_vocabulary": "EarthChem analyzed-material and method vocabularies", "information_loss": "A scalar basis cannot preserve the full analytical procedure.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.ANALYTIC_METHOD", "AnalyticMethod", "Chem2.SPECIES"], "mapping_type": "composite", "conversion_rule": "Use the method definition and species to classify basis; method code alone is insufficient.", "controlled_vocabulary": "AGDB2 analytic-method and species domains", "information_loss": "Method details remain necessary to interpret partial versus total extraction.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Methods", "ODM2Core.Actions", "ODM2SamplingFeatures.Specimens", "ODM2Core.ProcessingLevels"], "mapping_type": "composite", "conversion_rule": "Derive from the specimen, action/method and processing level only when the workflow explicitly states the measurement basis.", "controlled_vocabulary": "ODM2 method, action and specimen controlled vocabularies", "information_loss": "The relational workflow is reduced to one label.", "evidence_ids": ["odm2_overview", "odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Do not infer analytical basis from sample PID metadata.", "controlled_vocabulary": null, "information_loss": "Analytical basis requires observation/method metadata outside the IGSN discovery record.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "original_value",
+      "semantic_group": "measurement",
+      "canonical_definition": "Numeric component of the source-reported analytical result before unit normalization.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.<Parameter value column>"], "mapping_type": "transformed", "conversion_rule": "Parse the numeric component while retaining qualifiers and raw text in their canonical audit fields.", "controlled_vocabulary": null, "information_loss": "Formatting and qualifier syntax are lost unless original_value_raw and value_qualifier are retained.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.DATA_VALUE"], "mapping_type": "exact", "conversion_rule": "Copy the numeric result after source-specific encoded-value rules are resolved.", "controlled_vocabulary": null, "information_loss": "Encoded detection-limit semantics require QUALIFIER and source metadata.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Results.MeasurementResultValues.DataValue"], "mapping_type": "exact", "conversion_rule": "Copy the measurement value linked to the relevant ResultID.", "controlled_vocabulary": null, "information_loss": "Value date/time and result relationships are not carried by this scalar field.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Do not place analytical result values in sample PID metadata fields.", "controlled_vocabulary": null, "information_loss": "Analytical values require a separate observation dataset.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "original_unit",
+      "semantic_group": "measurement",
+      "canonical_definition": "Unit string associated with the source-reported analytical value.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.<Parameter unit metadata>"], "mapping_type": "renamed", "conversion_rule": "Preserve the submitted unit before canonical unit parsing.", "controlled_vocabulary": "EarthChem unit vocabulary where supplied", "information_loss": "None when the source unit string is retained.", "evidence_ids": ["earthchem_templates", "earthchem_developer_resources"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.UNITS"], "mapping_type": "exact", "conversion_rule": "Copy the documented concentration or measurement unit.", "controlled_vocabulary": "AGDB2 UNITS enumerated domain", "information_loss": "None for the unit label; measurement basis remains separate.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Results.UnitsID", "ODM2Core.Units.UnitsAbbreviation"], "mapping_type": "composite", "conversion_rule": "Resolve Results.UnitsID and copy UnitsAbbreviation.", "controlled_vocabulary": "ODM2 Units table and UnitsTypeCV", "information_loss": "UnitsName, type and URI are not represented by the abbreviation alone.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "value_qualifier",
+      "semantic_group": "measurement",
+      "canonical_definition": "Canonical qualifier describing reported, approximate, inequality, non-detect, trace or unknown result semantics.",
+      "canonical_vocabulary": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "nd", "trace", "unknown"],
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Parse only explicit qualifier syntax in the submitted value; otherwise use reported.", "controlled_vocabulary": null, "information_loss": "The reviewed template overview does not establish a dedicated qualifier field.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.QUALIFIER"], "mapping_type": "transformed", "conversion_rule": "Map the documented source qualifier to the canonical vocabulary; never interpret undocumented negative or tail-digit codes globally.", "controlled_vocabulary": "AGDB2 QUALIFIER domain plus dataset metadata", "information_loss": "Source-specific qualifier distinctions may collapse to the smaller canonical vocabulary.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Results.MeasurementResults.CensorCodeCV"], "mapping_type": "transformed", "conversion_rule": "Map censor-code terms to lt/le/gt/ge/nd where semantics are exact; keep other terms unknown.", "controlled_vocabulary": "ODM2 CensorCode controlled vocabulary", "information_loss": "Approximate and trace semantics may require quality metadata or annotations beyond CensorCodeCV.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "censored",
+      "semantic_group": "measurement",
+      "canonical_definition": "Boolean indicating that the exact analytical value is bounded or not quantitatively reported.",
+      "canonical_vocabulary": ["true", "false"],
+      "platform_mappings": [
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.QUALIFIER", "BestValue.DATA_VALUE"], "mapping_type": "composite", "conversion_rule": "Set true only after the documented qualifier/encoding proves censoring.", "controlled_vocabulary": "AGDB2 QUALIFIER domain and dataset-specific encoding rules", "information_loss": "The boolean loses censor direction and limit, which must remain in value_qualifier and limit fields.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Results.MeasurementResults.CensorCodeCV"], "mapping_type": "transformed", "conversion_rule": "Set true for controlled censor terms and false for not censored.", "controlled_vocabulary": "ODM2 CensorCode controlled vocabulary", "information_loss": "The boolean does not retain the specific censor term.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Do not derive censoring from sample PID metadata.", "controlled_vocabulary": null, "information_loss": "Censoring belongs to analytical results, outside IGSN metadata scope.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "missing_reason",
+      "semantic_group": "measurement",
+      "canonical_definition": "Reason a value is absent, kept distinct from zero and censoring.",
+      "canonical_vocabulary": ["not_reported", "not_analyzed", "insufficient_sample", "invalid_value", "unknown"],
+      "platform_mappings": [
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.QUALIFIER", "BestValue.DATA_VALUE", "dataset encoding metadata"], "mapping_type": "composite", "conversion_rule": "Assign only when source metadata explicitly distinguishes missing, not analyzed or insufficient sample; otherwise unknown.", "controlled_vocabulary": "Dataset-specific AGDB2 qualifier/value encodings", "information_loss": "Historic source codes may not distinguish every canonical missing reason.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Variables.NoDataValue", "result-value presence", "Annotations"], "mapping_type": "composite", "conversion_rule": "Use NoDataValue to detect absence and annotations only when they explicitly state the reason.", "controlled_vocabulary": null, "information_loss": "ODM2 core NoDataValue does not itself encode the canonical reason categories.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "earthchem_ecl", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Leave null unless the submitted source explicitly states a missing reason.", "controlled_vocabulary": null, "information_loss": "Blank cells cannot safely distinguish not reported from not analyzed.", "evidence_ids": ["earthchem_templates"]}
+      ]
+    },
+    {
+      "canonical_field": "normalized_value",
+      "semantic_group": "measurement",
+      "canonical_definition": "Comparable concentration after an audited unit or stoichiometric conversion.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.<Parameter value column>", "Data.<Parameter unit metadata>"], "mapping_type": "transformed", "conversion_rule": "Import source value and unit, then apply only D2 scientific-rules conversions; on export, declare that the value is derived.", "controlled_vocabulary": "EarthChem parameter and unit vocabularies", "information_loss": "Exporting only normalized_value loses the reported value and conversion evidence.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.DATA_VALUE", "BestValue.UNITS", "Chem2.SPECIES"], "mapping_type": "transformed", "conversion_rule": "Normalize from the documented value, unit and species; do not overwrite the source measurement.", "controlled_vocabulary": "AGDB2 units and species domains", "information_loss": "The canonical target unit and analyte may be coarser than the source semantics.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Results", "ODM2Results.MeasurementResultValues", "ODM2Provenance.DerivationEquations"], "mapping_type": "composite", "conversion_rule": "Represent the normalized value as a derived Result related to the source Result and preserve the derivation equation.", "controlled_vocabulary": "ODM2 ResultType and processing-level vocabularies", "information_loss": "Flattening ODM2 source and derived Results into one row loses the relationship graph unless conversion_formula is retained.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "normalized_unit",
+      "semantic_group": "measurement",
+      "canonical_definition": "Target unit for comparable concentration: mg/kg for supported solids or ug/L for water.",
+      "canonical_vocabulary": ["mg/kg", "ug/L"],
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.<Parameter unit metadata>"], "mapping_type": "transformed", "conversion_rule": "Resolve the repository unit and convert only under D2 medium/basis rules.", "controlled_vocabulary": "EarthChem unit vocabulary", "information_loss": "Original unit and precision require original_unit and conversion evidence.", "evidence_ids": ["earthchem_templates", "earthchem_developer_resources"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.UNITS"], "mapping_type": "transformed", "conversion_rule": "Map documented mass-ratio or aqueous concentration units to the applicable canonical unit.", "controlled_vocabulary": "AGDB2 UNITS enumerated domain", "information_loss": "Unsupported or ambiguous units must remain unnormalized rather than be coerced.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Results.UnitsID", "ODM2Core.Units"], "mapping_type": "transformed", "conversion_rule": "Resolve the source unit, convert, and associate the derived result with the canonical unit.", "controlled_vocabulary": "ODM2 Units table", "information_loss": "Unit URI and type are not retained by the abbreviation alone.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "normalized_censoring_limit",
+      "semantic_group": "measurement",
+      "canonical_definition": "Detection or censoring bound expressed in normalized_unit without imputing a concentration.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Primary Analytical Metadata.Detection Limit", "Data.<Parameter unit metadata>"], "mapping_type": "transformed", "conversion_rule": "Convert an explicitly reported limit with the same audited rule used for the value; never use it as normalized_value.", "controlled_vocabulary": "EarthChem method and unit metadata", "information_loss": "Limit type and method context require the source method metadata.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.DATA_VALUE", "BestValue.QUALIFIER", "BestValue.UNITS"], "mapping_type": "composite", "conversion_rule": "Treat DATA_VALUE as a limit only when QUALIFIER and dataset metadata explicitly establish that meaning, then convert units.", "controlled_vocabulary": "AGDB2 qualifier and unit domains", "information_loss": "Historic encodings may conflate reporting and detection limits.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2DataQuality.DataQuality.DataQualityTypeCV", "ODM2DataQuality.DataQuality.DataQualityValue", "ODM2DataQuality.DataQuality.DataQualityValueUnitsID", "ODM2Results.MeasurementResults.CensorCodeCV"], "mapping_type": "composite", "conversion_rule": "Select an applicable detection/reporting-limit data-quality record, verify censor code, and convert the limit unit.", "controlled_vocabulary": "ODM2 DataQualityType and CensorCode controlled vocabularies", "information_loss": "The canonical field does not distinguish method detection limit from reporting level unless retained in method provenance.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "latitude",
+      "semantic_group": "spatial",
+      "canonical_definition": "Validated WGS84 latitude in decimal degrees.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata.Latitude"], "mapping_type": "transformed", "conversion_rule": "Parse decimal degrees and validate range; preserve source coordinate text separately.", "controlled_vocabulary": null, "information_loss": "Source precision and datum require additional fields.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.LATITUDE", "Geol2.DATUM", "Geol2.SPHEROID"], "mapping_type": "composite", "conversion_rule": "Transform to EPSG:4326 only when source datum is known; do not relabel NAD27 coordinates as WGS84.", "controlled_vocabulary": "AGDB2 DATUM/SPHEROID domains", "information_loss": "Variable source resolution is not represented in latitude alone.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2SamplingFeatures.Sites.Latitude", "ODM2SamplingFeatures.Sites.SpatialReferenceID"], "mapping_type": "composite", "conversion_rule": "Resolve the spatial reference and transform to EPSG:4326 when required.", "controlled_vocabulary": "ODM2 SpatialReferences", "information_loss": "Site geometry beyond the point coordinate is not retained.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["geoLocations[].geoLocationPoint.pointLatitude"], "mapping_type": "transformed", "conversion_rule": "Copy the point latitude when the geolocation describes the sampled feature and validate range.", "controlled_vocabulary": null, "information_loss": "Place, box and polygon context are not represented in one latitude.", "evidence_ids": ["datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "longitude",
+      "semantic_group": "spatial",
+      "canonical_definition": "Validated WGS84 longitude in decimal degrees.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata.Longitude"], "mapping_type": "transformed", "conversion_rule": "Parse decimal degrees, use negative for west and validate range; preserve source text separately.", "controlled_vocabulary": null, "information_loss": "Source precision and datum require additional fields.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.LONGITUDE", "Geol2.DATUM", "Geol2.SPHEROID"], "mapping_type": "composite", "conversion_rule": "Transform to EPSG:4326 only when source datum is known and preserve longitudes west of the International Date Line correctly.", "controlled_vocabulary": "AGDB2 DATUM/SPHEROID domains", "information_loss": "Variable source resolution is not represented in longitude alone.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2SamplingFeatures.Sites.Longitude", "ODM2SamplingFeatures.Sites.SpatialReferenceID"], "mapping_type": "composite", "conversion_rule": "Resolve the spatial reference and transform to EPSG:4326 when required.", "controlled_vocabulary": "ODM2 SpatialReferences", "information_loss": "Site geometry beyond the point coordinate is not retained.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["geoLocations[].geoLocationPoint.pointLongitude"], "mapping_type": "transformed", "conversion_rule": "Copy the point longitude when the geolocation describes the sampled feature and validate range.", "controlled_vocabulary": null, "information_loss": "Place, box and polygon context are not represented in one longitude.", "evidence_ids": ["datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "source_crs",
+      "semantic_group": "spatial",
+      "canonical_definition": "Declared coordinate reference system or source datum before canonical transformation.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata coordinate guidance"], "mapping_type": "transformed", "conversion_rule": "Use an explicitly declared CRS; the template recommendation for decimal degrees is not by itself proof of EPSG:4326.", "controlled_vocabulary": null, "information_loss": "The reviewed overview does not expose a dedicated CRS field.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.DATUM", "Geol2.SPHEROID"], "mapping_type": "composite", "conversion_rule": "Construct a resolvable CRS description from datum and spheroid; do not guess when absent.", "controlled_vocabulary": "AGDB2 DATUM/SPHEROID domains", "information_loss": "Projection and coordinate-operation details may still be unavailable.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2SamplingFeatures.SpatialReferences.SRSCode", "ODM2SamplingFeatures.SpatialReferences.SRSName"], "mapping_type": "renamed", "conversion_rule": "Prefer a resolvable SRSCode and retain SRSName in source metadata.", "controlled_vocabulary": null, "information_loss": "SRS description and external identifiers are not retained in one string.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Treat DataCite geolocation coordinates according to its schema guidance; do not invent a source CRS field.", "controlled_vocabulary": null, "information_loss": "A separate source record is needed to preserve non-DataCite coordinate provenance.", "evidence_ids": ["datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "sampled_at",
+      "semantic_group": "sample_context",
+      "canonical_definition": "Date or date-time when the sample was collected.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata collection date when supplied as an extra field"], "mapping_type": "renamed", "conversion_rule": "Copy an explicit collection date and normalize only unambiguous ISO-compatible dates.", "controlled_vocabulary": null, "information_loss": "The template permits extra fields but the reviewed overview does not require collection date.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.DATE_COLLECT"], "mapping_type": "transformed", "conversion_rule": "Parse the documented month/day/year source date and emit ISO 8601 when unambiguous.", "controlled_vocabulary": null, "information_loss": "Time of day and timezone are unavailable.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Actions.BeginDateTime", "ODM2Core.Actions.ActionTypeCV", "ODM2Core.FeatureActions"], "mapping_type": "composite", "conversion_rule": "Use BeginDateTime of the specimen-collection action linked to the sampling feature.", "controlled_vocabulary": "ODM2 ActionType controlled vocabulary", "information_loss": "Action timezone offset and end time need source provenance if relevant.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["dates[].date", "dates[].dateType"], "mapping_type": "composite", "conversion_rule": "Select only a date whose dateType is Collected.", "controlled_vocabulary": "DataCite dateType", "information_loss": "DateInformation and multiple collection intervals are flattened.", "evidence_ids": ["datacite_igsn_recommendations", "datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "sample_depth_min_m",
+      "semantic_group": "sample_context",
+      "canonical_definition": "Minimum sampling depth below the declared surface, in metres.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.DEPTH"], "mapping_type": "transformed", "conversion_rule": "Parse a lower bound only when value, unit and reference surface are explicit; convert to metres.", "controlled_vocabulary": null, "information_loss": "AGDB2 DEPTH may be a single value with submitter-specified units and may not define an interval.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["sampling-feature extension properties or specimen hierarchy"], "mapping_type": "composite", "conversion_rule": "Use a documented depth extension/property and its units; core site elevation is not sample depth.", "controlled_vocabulary": "Deployment-specific ODM2 extension vocabulary", "information_loss": "No portable core field was identified in the reviewed schema surface.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "earthchem_ecl", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Accept only an explicit submitted depth field and unit; do not infer from elevation.", "controlled_vocabulary": null, "information_loss": "The reviewed template overview does not establish a portable depth field.", "evidence_ids": ["earthchem_templates"]}
+      ]
+    },
+    {
+      "canonical_field": "sample_depth_max_m",
+      "semantic_group": "sample_context",
+      "canonical_definition": "Maximum sampling depth below the declared surface, in metres.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.DEPTH"], "mapping_type": "transformed", "conversion_rule": "Populate an upper bound only when the source explicitly encodes an interval; convert its unit to metres.", "controlled_vocabulary": null, "information_loss": "A single AGDB2 depth value must not be duplicated into both interval bounds without a declared convention.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["sampling-feature extension properties or specimen hierarchy"], "mapping_type": "composite", "conversion_rule": "Use a documented interval-depth extension and units.", "controlled_vocabulary": "Deployment-specific ODM2 extension vocabulary", "information_loss": "No portable core field was identified in the reviewed schema surface.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "earthchem_ecl", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Accept only an explicit submitted interval-depth field and unit.", "controlled_vocabulary": null, "information_loss": "The reviewed template overview does not establish a portable interval-depth field.", "evidence_ids": ["earthchem_templates"]}
+      ]
+    },
+    {
+      "canonical_field": "lithology",
+      "semantic_group": "sample_context",
+      "canonical_definition": "Reported or mapped lithologic description for the sampled material.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Sample Metadata.Lithology"], "mapping_type": "renamed", "conversion_rule": "Copy the submitted lithology and retain the vocabulary/ontology reference when available in provenance.", "controlled_vocabulary": "EarthChem lithology vocabulary", "information_loss": "Vocabulary identifier and hierarchy are not represented in the text field alone.", "evidence_ids": ["earthchem_templates", "earthchem_developer_resources"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Geol2.SPECIFIC_NAME", "Geol2 sample descriptive attributes"], "mapping_type": "composite", "conversion_rule": "Populate only when a source field explicitly describes rock or sediment lithology; PRIMARY_CLASS alone is too broad.", "controlled_vocabulary": "AGDB2 sample descriptive domains", "information_loss": "Free-text or sample-name interpretation may be less precise than a geologic ontology.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Extension.SamplingFeatureExtensionPropertyValues"], "mapping_type": "composite", "conversion_rule": "Select a documented lithology extension property linked to the sampling feature.", "controlled_vocabulary": "Extension-property vocabulary selected by the deployment", "information_loss": "ODM2 core does not mandate one lithology property.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["subjects[].subject", "titles[].title"], "mapping_type": "transformed", "conversion_rule": "Use an explicit lithologic material term and retain subjectScheme when available.", "controlled_vocabulary": "Optional DataCite subjectScheme", "information_loss": "Free-text discovery metadata may not distinguish observed lithology from a project keyword.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "analytical_method",
+      "semantic_group": "method",
+      "canonical_definition": "Source-reported analytical method, technique or method code.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data.Method Code(s)", "Primary Analytical Metadata.Method Code", "Primary Analytical Metadata.Technique", "Primary Analytical Metadata.Instrument"], "mapping_type": "composite", "conversion_rule": "Resolve the Data-tab method code to its analytical metadata and serialize code, technique and instrument without dropping the linkage.", "controlled_vocabulary": "EarthChem analytical technique vocabularies", "information_loss": "One text field flattens method code, technique and instrument.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.ANALYTIC_METHOD", "AnalyticMethod.ANALYTIC_METHOD"], "mapping_type": "renamed", "conversion_rule": "Resolve the short method name through the AnalyticMethod table and retain its definition/source.", "controlled_vocabulary": "AGDB2 AnalyticMethod enumerated domain", "information_loss": "Short code alone is insufficient without the lookup metadata.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.FeatureActions.ActionID", "ODM2Core.Actions.MethodID", "ODM2Core.Methods.MethodCode", "ODM2Core.Methods.MethodName"], "mapping_type": "composite", "conversion_rule": "Follow the result to its feature action and action, then resolve the linked method code/name.", "controlled_vocabulary": "ODM2 MethodType controlled vocabulary", "information_loss": "Method description, organization, link and action sequence are flattened.", "evidence_ids": ["odm2_overview", "odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Do not derive analytical method from sample PID metadata.", "controlled_vocabulary": null, "information_loss": "Methods belong to an observation or related resource, not the sample identifier itself.", "evidence_ids": ["datacite_igsn_recommendations"]}
+      ]
+    },
+    {
+      "canonical_field": "method_family",
+      "semantic_group": "method",
+      "canonical_definition": "Normalized high-level analytical method family used for comparability grouping.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Primary Analytical Metadata.Technique", "Primary Analytical Metadata.Instrument"], "mapping_type": "transformed", "conversion_rule": "Map only recognized technique/instrument combinations to the D2 method-family vocabulary.", "controlled_vocabulary": "EarthChem technique vocabulary", "information_loss": "Detailed method conditions are intentionally coarsened.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["AnalyticMethod method description and source"], "mapping_type": "transformed", "conversion_rule": "Classify from the resolved method definition, not from an element-specific result column name.", "controlled_vocabulary": "AGDB2 AnalyticMethod domain", "information_loss": "Different procedures can share a method family and remain analytically non-equivalent.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Methods.MethodTypeCV", "ODM2Core.Methods.MethodName"], "mapping_type": "transformed", "conversion_rule": "Map the controlled method type and name to the D2 family vocabulary.", "controlled_vocabulary": "ODM2 MethodType controlled vocabulary", "information_loss": "The canonical family is coarser than the ODM2 method record.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "digestion_or_extraction",
+      "semantic_group": "method",
+      "canonical_definition": "Sample digestion, leach, extraction or preparation relevant to analytical comparability.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Primary Analytical Metadata method description/comment"], "mapping_type": "transformed", "conversion_rule": "Extract only an explicit preparation/digestion statement and preserve the source method text.", "controlled_vocabulary": "Repository method vocabulary where present", "information_loss": "The reviewed template overview does not guarantee a dedicated digestion field.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["AnalyticMethod method definition and cited source"], "mapping_type": "transformed", "conversion_rule": "Classify digestion/extraction from the resolved method documentation; do not infer from instrument family alone.", "controlled_vocabulary": "AGDB2 AnalyticMethod domain", "information_loss": "Method documentation may omit exact reagent volumes or conditions.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.RelatedActions", "ODM2Core.Actions", "ODM2Core.Methods"], "mapping_type": "composite", "conversion_rule": "Follow specimen-preparation actions and linked methods that precede the lab-analysis action.", "controlled_vocabulary": "ODM2 ActionType, RelationshipType and MethodType controlled vocabularies", "information_loss": "The multi-step preparation graph is flattened to one label.", "evidence_ids": ["odm2_overview", "odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "laboratory",
+      "semantic_group": "method",
+      "canonical_definition": "Laboratory or organization responsible for the reported analysis.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Primary Analytical Metadata.Laboratory"], "mapping_type": "renamed", "conversion_rule": "Copy the laboratory name or code and retain its source definition when available.", "controlled_vocabulary": "EarthChem laboratory metadata", "information_loss": "Organization identifiers and address are not represented in a single name.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Do not reinterpret LAB_ID as a laboratory organization; use method/source metadata only when it explicitly names the lab.", "controlled_vocabulary": null, "information_loss": "LAB_ID identifies the submitted sample, not necessarily the performing laboratory.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Methods.OrganizationID", "ODM2Core.Organizations.OrganizationName"], "mapping_type": "composite", "conversion_rule": "Resolve the method organization and copy its name when it is the performing laboratory.", "controlled_vocabulary": "ODM2 OrganizationType controlled vocabulary", "information_loss": "Organization identifiers and role semantics are not retained in the text field.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "reference_material",
+      "semantic_group": "method",
+      "canonical_definition": "Reference material used for calibration or method quality assessment.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Primary Analytical Metadata.Reference Sample"], "mapping_type": "renamed", "conversion_rule": "Copy the explicitly reported reference-sample/material identifier.", "controlled_vocabulary": null, "information_loss": "Certificate, lot and accepted values require separate evidence.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Leave null unless linked analytical-method documentation explicitly identifies a reference material.", "controlled_vocabulary": null, "information_loss": "No record-level reference-material field was identified in the reviewed AGDB2 surface.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2DataQuality.ReferenceMaterials.ReferenceMaterialCode", "ODM2DataQuality.ReferenceMaterials.ReferenceMaterialLotCode", "ODM2DataQuality.ReferenceMaterialValues"], "mapping_type": "composite", "conversion_rule": "Resolve the reference material linked to the applicable calibration or quality action and preserve code plus lot when available.", "controlled_vocabulary": "ODM2 ReferenceMaterialMedium and related vocabularies", "information_loss": "Accepted values, certificate and organization are flattened unless retained in provenance.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "detection_limit",
+      "semantic_group": "method",
+      "canonical_definition": "Source-reported detection or reporting limit before unit normalization.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Primary Analytical Metadata.Detection Limit"], "mapping_type": "renamed", "conversion_rule": "Copy only an explicitly reported limit and retain the applicable parameter/method linkage.", "controlled_vocabulary": null, "information_loss": "Limit type is ambiguous unless stated in method metadata.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.DATA_VALUE", "BestValue.QUALIFIER", "dataset encoding metadata"], "mapping_type": "composite", "conversion_rule": "Use DATA_VALUE as a limit only when QUALIFIER and dataset metadata establish it as such.", "controlled_vocabulary": "AGDB2 qualifier/value encoding rules", "information_loss": "Method detection limit and reporting limit may not be distinguishable.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2DataQuality.DataQuality.DataQualityTypeCV", "ODM2DataQuality.DataQuality.DataQualityValue"], "mapping_type": "composite", "conversion_rule": "Select a DataQuality record whose type is the applicable detection/reporting limit.", "controlled_vocabulary": "ODM2 DataQualityType controlled vocabulary", "information_loss": "The canonical field does not retain data-quality type or supporting link.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "detection_limit_unit",
+      "semantic_group": "method",
+      "canonical_definition": "Unit in which detection_limit was reported.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Primary Analytical Metadata.Detection Limit unit"], "mapping_type": "renamed", "conversion_rule": "Copy the explicitly associated limit unit.", "controlled_vocabulary": "EarthChem unit vocabulary where supplied", "information_loss": "None when the unit is explicitly tied to the same limit.", "evidence_ids": ["earthchem_templates"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["BestValue.UNITS"], "mapping_type": "renamed", "conversion_rule": "Use the result unit only when the encoded limit is documented in the same unit.", "controlled_vocabulary": "AGDB2 UNITS domain", "information_loss": "A method-level limit in a different unit cannot be represented without additional metadata.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2DataQuality.DataQuality.DataQualityValueUnitsID", "ODM2Core.Units.UnitsAbbreviation"], "mapping_type": "composite", "conversion_rule": "Resolve the units linked to the selected DataQuality limit record.", "controlled_vocabulary": "ODM2 Units table", "information_loss": "Units name/type/URI are not retained in the abbreviation alone.", "evidence_ids": ["odm2_schema"]}
+      ]
+    },
+    {
+      "canonical_field": "source_id",
+      "semantic_group": "provenance",
+      "canonical_definition": "Stable identifier for the source dataset or collection within the workflow.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data Source persistent identifier or repository identifier"], "mapping_type": "transformed", "conversion_rule": "Prefer a persistent dataset identifier; otherwise use the repository accession and namespace it.", "controlled_vocabulary": null, "information_loss": "Identifier type and resolver require source metadata.", "evidence_ids": ["earthchem_submission_guidelines"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["USGS publication identifier ds/759"], "mapping_type": "transformed", "conversion_rule": "Use the USGS publication/catalog identifier for the dataset, not a sample LAB_ID.", "controlled_vocabulary": null, "information_loss": "Version and file identity remain separate.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Datasets.DatasetUUID", "ODM2Core.Datasets.DatasetCode"], "mapping_type": "transformed", "conversion_rule": "Prefer DatasetUUID; otherwise namespace DatasetCode by repository.", "controlled_vocabulary": null, "information_loss": "Dataset type and title remain separate.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["relatedIdentifiers[].relatedIdentifier", "relatedIdentifiers[].relationType"], "mapping_type": "composite", "conversion_rule": "Select a related dataset identifier only when relationType expresses the sample-to-dataset relationship.", "controlled_vocabulary": "DataCite relationType and relatedIdentifierType", "information_loss": "Multiple related datasets are reduced to one source_id per canonical record.", "evidence_ids": ["datacite_igsn_recommendations", "datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "dataset_title",
+      "semantic_group": "provenance",
+      "canonical_definition": "Human-readable title of the source dataset or collection.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data Source.Title"], "mapping_type": "renamed", "conversion_rule": "Copy the repository data-source title.", "controlled_vocabulary": null, "information_loss": "Alternate and translated titles are not represented.", "evidence_ids": ["earthchem_templates", "earthchem_submission_guidelines"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["dataset citation title"], "mapping_type": "renamed", "conversion_rule": "Copy the title from authoritative USGS dataset metadata.", "controlled_vocabulary": null, "information_loss": "Series and publication-number metadata remain separate.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Core.Datasets.DatasetTitle"], "mapping_type": "exact", "conversion_rule": "Copy DatasetTitle for the dataset linked to the Result.", "controlled_vocabulary": null, "information_loss": "Dataset abstract is not retained in this field.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["relatedIdentifiers[]", "related dataset metadata.titles[].title"], "mapping_type": "composite", "conversion_rule": "Resolve an explicitly related dataset identifier and copy its registered title; do not use the sample title as the dataset title.", "controlled_vocabulary": "DataCite relationType", "information_loss": "Requires dereferencing a related dataset record.", "evidence_ids": ["datacite_igsn_recommendations", "datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "dataset_doi",
+      "semantic_group": "provenance",
+      "canonical_definition": "DOI identifying the source dataset or associated data publication, not the sample IGSN unless they are explicitly the same resource.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["Data Source.DOI"], "mapping_type": "renamed", "conversion_rule": "Normalize an explicit DOI to a stable DOI string or URL without changing identity.", "controlled_vocabulary": null, "information_loss": "Relation type to the sample/result may need the full repository record.", "evidence_ids": ["earthchem_templates", "earthchem_submission_guidelines"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["dataset citation DOI when assigned"], "mapping_type": "renamed", "conversion_rule": "Copy only a DOI explicitly assigned to the dataset or publication; otherwise leave null and use source_locator.", "controlled_vocabulary": null, "information_loss": "Many USGS legacy releases use publication URLs rather than DOIs.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Provenance.DatasetCitations", "ODM2Provenance.Citations", "ODM2ExternalIdentifiers.CitationExternalIdentifiers"], "mapping_type": "composite", "conversion_rule": "Resolve a DOI external identifier for a citation related to the dataset.", "controlled_vocabulary": "ODM2 RelationshipType and external identifier system", "information_loss": "Citation relationship and bibliographic metadata are not retained in the DOI alone.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["relatedIdentifiers[].relatedIdentifier", "relatedIdentifiers[].relatedIdentifierType", "relatedIdentifiers[].relationType"], "mapping_type": "composite", "conversion_rule": "Select a DOI-typed related identifier that denotes an associated dataset; do not copy the sample identifier by default.", "controlled_vocabulary": "DataCite relatedIdentifierType and relationType", "information_loss": "Multiple related resources require one record per selected source dataset.", "evidence_ids": ["datacite_igsn_recommendations", "datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "dataset_version",
+      "semantic_group": "provenance",
+      "canonical_definition": "Version label of the exact source dataset release.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["repository release/version metadata"], "mapping_type": "renamed", "conversion_rule": "Copy an explicit repository version; do not substitute access date.", "controlled_vocabulary": null, "information_loss": "Repository revision history may contain more detail than one label.", "evidence_ids": ["earthchem_submission_guidelines"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["dataset edition/version in title and metadata"], "mapping_type": "transformed", "conversion_rule": "Copy the stated release version, such as 2.0, and retain publication identity separately.", "controlled_vocabulary": null, "information_loss": "File-level revisions may differ from dataset edition.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Provenance.RelatedDatasets.VersionCode", "ODM2Provenance.RelatedDatasets.RelationshipTypeCV"], "mapping_type": "composite", "conversion_rule": "Select VersionCode from an explicit version relationship for the dataset.", "controlled_vocabulary": "ODM2 RelationshipType controlled vocabulary", "information_loss": "Version lineage graph is reduced to one label.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["related dataset metadata.version"], "mapping_type": "renamed", "conversion_rule": "Resolve the related dataset DOI and copy its registered DataCite version; do not use the sample record version.", "controlled_vocabulary": null, "information_loss": "Requires dereferencing the related resource.", "evidence_ids": ["datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "source_locator",
+      "semantic_group": "provenance",
+      "canonical_definition": "Resolvable citation, URL, accession or row locator supporting trace-back to the source record.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["repository landing page", "Data Source.DOI"], "mapping_type": "composite", "conversion_rule": "Prefer a stable DOI or accession URL and append a record/sample fragment only when the platform defines it.", "controlled_vocabulary": null, "information_loss": "A single locator may not identify both dataset and exact source row.", "evidence_ids": ["earthchem_submission_guidelines"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["USGS publication URL", "table and LAB_ID/FIELD_ID locator"], "mapping_type": "composite", "conversion_rule": "Use the stable publication URL plus an explicit table/key locator in a documented syntax.", "controlled_vocabulary": null, "information_loss": "Legacy releases may not expose persistent row URLs.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": ["ODM2Provenance.Citations.CitationLink", "dataset/result identifiers"], "mapping_type": "composite", "conversion_rule": "Use CitationLink and the relevant DatasetID/ResultID namespace to construct a reproducible locator.", "controlled_vocabulary": null, "information_loss": "Internal numeric IDs are not globally resolvable without the hosting endpoint.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["identifier.identifier", "url", "relatedIdentifiers[]"], "mapping_type": "composite", "conversion_rule": "Use the registered DOI URL for the sample or explicitly related dataset, according to the record being traced.", "controlled_vocabulary": "DataCite relationType", "information_loss": "The locator alone does not encode which relation justified its selection.", "evidence_ids": ["datacite_igsn_recommendations", "datacite_schema_4_6"]}
+      ]
+    },
+    {
+      "canonical_field": "license",
+      "semantic_group": "provenance",
+      "canonical_definition": "Declared license or rights statement governing reuse of the source data.",
+      "canonical_vocabulary": null,
+      "platform_mappings": [
+        {"platform_id": "earthchem_ecl", "external_path": ["repository rights/license metadata and policy"], "mapping_type": "renamed", "conversion_rule": "Copy the dataset-specific declared license; do not infer a license from repository access alone.", "controlled_vocabulary": null, "information_loss": "Repository policy and dataset license may both be needed for legal interpretation.", "evidence_ids": ["earthchem_submission_guidelines"]},
+        {"platform_id": "usgs_agdb2", "external_path": ["Use_Constraints", "Access_Constraints"], "mapping_type": "composite", "conversion_rule": "Preserve the authoritative constraints text and map to an SPDX-style identifier only when equivalence is explicit.", "controlled_vocabulary": null, "information_loss": "A short identifier can omit attribution and disclaimer language.", "evidence_ids": ["usgs_agdb2_metadata"]},
+        {"platform_id": "odm2", "external_path": [], "mapping_type": "no_direct_equivalent", "conversion_rule": "Store dataset license in repository/provenance metadata; do not invent an ODM2 core license field.", "controlled_vocabulary": null, "information_loss": "The reviewed ODM2 core schema surface does not establish a dataset-rights field.", "evidence_ids": ["odm2_schema"]},
+        {"platform_id": "igsn_datacite", "external_path": ["rightsList[].rights", "rightsList[].rightsIdentifier", "rightsList[].rightsUri"], "mapping_type": "composite", "conversion_rule": "Prefer rightsIdentifier or rightsUri and retain the rights text in source provenance.", "controlled_vocabulary": "DataCite rightsIdentifierScheme", "information_loss": "Multiple rights statements are reduced to one canonical field.", "evidence_ids": ["datacite_schema_4_6"]}
+      ]
+    }
+  ],
+  "non_core_fields": [
+    {
+      "classification": "local_extension",
+      "fields": ["record_id", "source_record_id", "original_value_raw", "conversion_factor", "conversion_formula", "original_latitude_raw", "original_longitude_raw", "coordinate_transform_method", "source_file", "source_row", "file_sha256", "source_tier", "qc_flags", "operational_confidence"],
+      "rationale": "Workflow audit, deterministic identity, transformation evidence and operational QC fields. They are deliberately retained as D2 extensions and must not be presented as native EarthChem, AGDB2, ODM2 or IGSN/DataCite fields."
+    },
+    {
+      "classification": "deferred_crosswalk",
+      "fields": ["sample_identity_group", "replicate_group_id", "coordinate_uncertainty_m", "grain_fraction", "geologic_unit", "geologic_unit_id", "geologic_context_source", "geologic_context_version", "geologic_match_method", "distance_to_geologic_boundary_m", "geologic_match_confidence"],
+      "rationale": "Important duplicate-resolution, fraction and spatial-geology enrichment fields, but the reviewed sources do not establish a sufficiently portable one-to-one mapping. Future versions should add GeoSciML/CGI vocabularies, explicit uncertainty models and platform-specific extensions before claiming alignment."
+    }
+  ]
+}

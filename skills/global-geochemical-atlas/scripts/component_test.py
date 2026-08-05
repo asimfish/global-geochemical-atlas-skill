@@ -190,6 +190,84 @@ def check_d2(output_dir: Path) -> list[str]:
         "D1-to-D2 schema-map fields match the executable interface",
         checks,
     )
+    crosswalk_schema = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.schema.json")
+    require(
+        crosswalk_schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema",
+        "D2 professional-platform crosswalk has a versioned JSON Schema",
+        checks,
+    )
+    record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+    crosswalk = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.json")
+    require(
+        crosswalk.get("status") == "semantic_alignment_not_conformance_claim"
+        and crosswalk.get("canonical_schema", {}).get("schema_id") == record_schema.get("$id"),
+        "D2 crosswalk declares semantic alignment without a false conformance claim",
+        checks,
+    )
+    mapped_fields = [item["canonical_field"] for item in crosswalk["field_mappings"]]
+    non_core_fields = [
+        field
+        for group in crosswalk["non_core_fields"]
+        for field in group["fields"]
+    ]
+    canonical_fields = set(record_schema["properties"])
+    require(
+        len(mapped_fields) == len(set(mapped_fields))
+        and len(non_core_fields) == len(set(non_core_fields))
+        and set(mapped_fields).isdisjoint(non_core_fields),
+        "D2 crosswalk field partitions are unique and disjoint",
+        checks,
+    )
+    require(
+        set(mapped_fields) | set(non_core_fields) == canonical_fields,
+        "D2 crosswalk accounts for every canonical database field",
+        checks,
+    )
+    scope = crosswalk["scope"]
+    require(
+        scope.get("canonical_field_count") == len(canonical_fields)
+        and scope.get("crosswalked_field_count") == len(mapped_fields)
+        and scope.get("non_core_field_count") == len(non_core_fields),
+        "D2 crosswalk coverage counts match the executable record Schema",
+        checks,
+    )
+    evidence_ids = [item["id"] for item in crosswalk["evidence_sources"]]
+    platform_ids = [item["id"] for item in crosswalk["platforms"]]
+    require(
+        len(evidence_ids) == len(set(evidence_ids))
+        and len(platform_ids) == len(set(platform_ids))
+        and set(platform_ids) == {"earthchem_ecl", "usgs_agdb2", "odm2", "igsn_datacite"},
+        "D2 crosswalk platform and evidence registries are unique and explicit",
+        checks,
+    )
+    evidence_set = set(evidence_ids)
+    platform_set = set(platform_ids)
+    valid_mapping_types = {"exact", "renamed", "transformed", "composite", "no_direct_equivalent"}
+    mapping_rows = [
+        mapping
+        for field_mapping in crosswalk["field_mappings"]
+        for mapping in field_mapping["platform_mappings"]
+    ]
+    require(
+        all(
+            mapping["platform_id"] in platform_set
+            and mapping["mapping_type"] in valid_mapping_types
+            and set(mapping["evidence_ids"]) <= evidence_set
+            and (
+                (mapping["mapping_type"] == "no_direct_equivalent" and not mapping["external_path"])
+                or (mapping["mapping_type"] != "no_direct_equivalent" and bool(mapping["external_path"]))
+            )
+            for mapping in mapping_rows
+        )
+        and all(
+            len({mapping["platform_id"] for mapping in field_mapping["platform_mappings"]})
+            == len(field_mapping["platform_mappings"])
+            for field_mapping in crosswalk["field_mappings"]
+        )
+        and all(set(platform["evidence_ids"]) <= evidence_set for platform in crosswalk["platforms"]),
+        "D2 crosswalk mappings reference valid platforms, evidence and absence semantics",
+        checks,
+    )
     return checks
 
 
