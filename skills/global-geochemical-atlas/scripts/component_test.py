@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+from collections import Counter
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
@@ -24,6 +25,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 REPO_ROOT = SKILL_DIR.parents[1]
 DEMO_INPUT = SKILL_DIR / "fixtures" / "demo_input.csv"
+SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 
@@ -125,6 +127,65 @@ def check_d1(output_dir: Path) -> list[str]:
             "usgs-conus-soil", source_record_id, "As", "8.0", "mg/kg", occurrence=1
         ),
         "D1 observation IDs preserve repeated determinations",
+        checks,
+    )
+
+    for source_id in ("georoc-archaean", "usgs-conus-soil"):
+        demo_dir = SOURCE_DEMOS / source_id
+        demo_input = demo_dir / "demo_input.csv"
+        sources_path = demo_dir / "sources.jsonl"
+        generation_manifest = json_value(demo_dir / "run_manifest.json")
+        demo_rows = csv_rows(demo_input)
+        evidence_rows = [json.loads(line) for line in sources_path.read_text(encoding="utf-8").splitlines()]
+        require(
+            len(demo_rows) == 48 and len(evidence_rows) == 48,
+            f"D1 {source_id} fixture has one evidence record per observation",
+            checks,
+        )
+        require(
+            generation_manifest.get("data_mode") == "fixture"
+            and generation_manifest.get("not_for_scientific_interpretation") is True,
+            f"D1 {source_id} fixture declares the scientific claim boundary",
+            checks,
+        )
+        expected_hashes = {item["path"]: item["sha256"] for item in generation_manifest["outputs"]}
+        require(
+            expected_hashes == {
+                "demo_input.csv": sha256_file(demo_input),
+                "sources.jsonl": sha256_file(sources_path),
+            },
+            f"D1 {source_id} fixture manifest binds deterministic output hashes",
+            checks,
+        )
+        require(
+            {row["record_id"] for row in demo_rows} == {row["record_id"] for row in evidence_rows}
+            and {row["source_id"] for row in demo_rows} == {source_id},
+            f"D1 {source_id} fixture preserves record-level evidence linkage",
+            checks,
+        )
+        require(
+            Counter(row["element_or_analyte"] for row in demo_rows)
+            == Counter({"As": 12, "Cu": 12, "Ni": 12, "Zn": 12}),
+            f"D1 {source_id} fixture keeps the four analytes balanced",
+            checks,
+        )
+    georoc_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "georoc-archaean" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        all(item.get("article_citations") for item in georoc_evidence),
+        "D1 GEOROC fixture resolves citation IDs to original reference text",
+        checks,
+    )
+    usgs_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "usgs-conus-soil" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        {item.get("soil_layer") for item in usgs_evidence}
+        == {"top-0-5cm", "a-horizon", "c-horizon"},
+        "D1 USGS fixture keeps all three soil layers distinct",
         checks,
     )
 

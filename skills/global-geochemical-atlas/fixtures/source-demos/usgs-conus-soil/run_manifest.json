@@ -1,0 +1,69 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-05T06:25:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 16949,
+      "path": "demo_input.csv",
+      "sha256": "1a2334a32c25792b0dfc136221fc071dc486b1246ddfa0709cc13b7ad24e3763"
+    },
+    {
+      "bytes": 61392,
+      "path": "sources.jsonl",
+      "sha256": "df5b803264403256371eeabdbb9f005df3182e63a8ef2b51a3d360f555409e72"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 14571,
+    "selected_source_rows": 12
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.3133/ds801",
+    "dataset_version": "Data Series 801, 2013 release",
+    "license": "LicenseRef-USGS-Public-Domain",
+    "source_id": "usgs-conus-soil",
+    "title": "Geochemical and mineralogical data for soils of the conterminous United States"
+  },
+  "source_files": [
+    {
+      "bytes": 1450062,
+      "filename": "Appendix_2b_Top5_18Sept2013.txt",
+      "retrieved_at": "2026-08-05T06:21:01Z",
+      "sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894",
+      "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt"
+    },
+    {
+      "bytes": 1987189,
+      "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
+      "retrieved_at": "2026-08-05T06:21:03Z",
+      "sha256": "462821c1164b5b4c27905a3ea62a22fa3f6172da09125d8f80ec5b2f6a69a202",
+      "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt"
+    },
+    {
+      "bytes": 1996147,
+      "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
+      "retrieved_at": "2026-08-05T06:21:06Z",
+      "sha256": "4aa8080f81f690587f762300bada16e33e376eea0003243d5333b47c78b4c90c",
+      "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2."
+  ]
+}

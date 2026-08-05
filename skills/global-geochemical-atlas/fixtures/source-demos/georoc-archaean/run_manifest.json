@@ -1,0 +1,244 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-05T06:25:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 20669,
+      "path": "demo_input.csv",
+      "sha256": "75e76082fa18af6f3f1b79ed05d4984f34545d202873afed611b68b45e06b8cb"
+    },
+    {
+      "bytes": 66824,
+      "path": "sources.jsonl",
+      "sha256": "c73f495a50c1790d55320f0f3bd75118a44ac27afc470431a34ea18d7968aa45"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 33745,
+    "selected_source_rows": 36
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.25625/1KRR1P",
+    "dataset_version": "12.0",
+    "license": "CC-BY-SA-4.0",
+    "source_id": "georoc-archaean",
+    "title": "GEOROC Compilation: Archaean Cratons"
+  },
+  "source_files": [
+    {
+      "bytes": 321067,
+      "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "6959b5f1d1ce74ba6608d11847cf12e6427535040bc10b5854ec5ef336fcf6aa",
+      "source_url": "https://doi.org/10.25625/1KRR1P/OHZY0O"
+    },
+    {
+      "bytes": 950780,
+      "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "2123a1cba47aa354555582fecdfff7540a9aa8b1527e0ee0a705db8f11d30b57",
+      "source_url": "https://doi.org/10.25625/1KRR1P/0YSJJR"
+    },
+    {
+      "bytes": 4209880,
+      "filename": "2026-06-1KRR1P_BALTIC_SHIELD_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "4469526c02cbb473fae14e1f69525bf865bb0197387b6368bf99aefdcc055f98",
+      "source_url": "https://doi.org/10.25625/1KRR1P/Q8QGOY"
+    },
+    {
+      "bytes": 94925,
+      "filename": "2026-06-1KRR1P_BASTAR_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "0fd5dca7583c256a35e91ab81ef120e38bc1fe283dbc16407f9ae2fe73ed5d19",
+      "source_url": "https://doi.org/10.25625/1KRR1P/7U8BWC"
+    },
+    {
+      "bytes": 309858,
+      "filename": "2026-06-1KRR1P_BUNDELKHAND_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "013262ec45286f1aed276355e9a34b09159a0694dce6ddcd638ed8f1107c1679",
+      "source_url": "https://doi.org/10.25625/1KRR1P/NT9GC8"
+    },
+    {
+      "bytes": 263824,
+      "filename": "2026-06-1KRR1P_CHURCHILL_PROVINCE_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "fb3557f619a82676b2cc72fdc992180e2b233e3cad968aab95c65bb590d49df5",
+      "source_url": "https://doi.org/10.25625/1KRR1P/WGALT3"
+    },
+    {
+      "bytes": 362845,
+      "filename": "2026-06-1KRR1P_CONGO_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "1880b2971baa9e3c44e312f711a9d6a8da785739b6ec9504bc3d37c3d2d7efc2",
+      "source_url": "https://doi.org/10.25625/1KRR1P/4PATTX"
+    },
+    {
+      "bytes": 2407194,
+      "filename": "2026-06-1KRR1P_DHARWAR_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "43a5bd01d590f11313af717d6063dd60d83d110bf905c759737cedafb3e58f6f",
+      "source_url": "https://doi.org/10.25625/1KRR1P/AVUWEP"
+    },
+    {
+      "bytes": 93085,
+      "filename": "2026-06-1KRR1P_EAST_EUROPEAN_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "d6df9261119b85e9a3941ea8cc5d144eb82651ea687792a6d377afb59d5177e6",
+      "source_url": "https://doi.org/10.25625/1KRR1P/SSDC2V"
+    },
+    {
+      "bytes": 72890,
+      "filename": "2026-06-1KRR1P_GAWLER_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "88bee7dd6ee4ddafaaa918ab985ff56dcef2044ea900e7ae14cc9821dd318de4",
+      "source_url": "https://doi.org/10.25625/1KRR1P/YJOPAF"
+    },
+    {
+      "bytes": 3346850,
+      "filename": "2026-06-1KRR1P_KAAPVAAL_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "d3c433c1d82bd80417bd70bd5e8cbaf81ab3428fe14eb6a9113ee0ebbc2cb45d",
+      "source_url": "https://doi.org/10.25625/1KRR1P/NXSCT8"
+    },
+    {
+      "bytes": 45706,
+      "filename": "2026-06-1KRR1P_LIMPOPO_BELT.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "6bb6ca5ee6f8890e69116ebd15bcab8fcbe7e52bd615182c425bd6afbd08e99e",
+      "source_url": "https://doi.org/10.25625/1KRR1P/BFQKPU"
+    },
+    {
+      "bytes": 2407458,
+      "filename": "2026-06-1KRR1P_NORTH_ATLANTIC_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "c07811dd5f6133fccb531ce7932b17f171822270a750e0a84086d245ec476a0a",
+      "source_url": "https://doi.org/10.25625/1KRR1P/LDWEK2"
+    },
+    {
+      "bytes": 2505963,
+      "filename": "2026-06-1KRR1P_NORTH_CHINA_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "62961707fa44760fa930564c1a0128d8f7570912d6bbf9bcc7a92fec1832f350",
+      "source_url": "https://doi.org/10.25625/1KRR1P/YKDG9C"
+    },
+    {
+      "bytes": 6215,
+      "filename": "2026-06-1KRR1P_OKHOTSK-OMOLON_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "ce00f2a717de68801851a0df36bf17e2f1396d7f05e9925d81dd3f1bfdd545e8",
+      "source_url": "https://doi.org/10.25625/1KRR1P/PMFEC6"
+    },
+    {
+      "bytes": 5874,
+      "filename": "2026-06-1KRR1P_RAE_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "4daf6e0e7e2bdd72e7d4962b85be630db268f8cde23359182e8648dfbcd9f6bb",
+      "source_url": "https://doi.org/10.25625/1KRR1P/AUMPQZ"
+    },
+    {
+      "bytes": 768400,
+      "filename": "2026-06-1KRR1P_SAO_FRANCISCO_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "e5b7b7e6bca5c6a3be58891ac44c534616dc46de9f57a48acec8b97d811de676",
+      "source_url": "https://doi.org/10.25625/1KRR1P/PQ361E"
+    },
+    {
+      "bytes": 120031,
+      "filename": "2026-06-1KRR1P_SARMATIAN_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "c514561947a98942151f3f5f2a61aee1dd8b88f8036f7f62c334e0d0f62a4e3f",
+      "source_url": "https://doi.org/10.25625/1KRR1P/GKVOQ9"
+    },
+    {
+      "bytes": 110489,
+      "filename": "2026-06-1KRR1P_SIBERIAN_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "6a4d2dbdfc5a097b8f07ff0d73d2df106a98edfe9a4b82f0afbe663d1c3e8534",
+      "source_url": "https://doi.org/10.25625/1KRR1P/TG6QW9"
+    },
+    {
+      "bytes": 727334,
+      "filename": "2026-06-1KRR1P_SINGHBHUM_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "89406a328f89dc4e2f7796a059cf8d542ea31ca54664e35d466245fb20d5b331",
+      "source_url": "https://doi.org/10.25625/1KRR1P/RM6V7B"
+    },
+    {
+      "bytes": 350444,
+      "filename": "2026-06-1KRR1P_SLAVE_PROVINCE_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "b600a633281da3c4847944642856842b4c322165664ac443a642d00a4d9ca90a",
+      "source_url": "https://doi.org/10.25625/1KRR1P/TS527Q"
+    },
+    {
+      "bytes": 5921367,
+      "filename": "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "5bed283ed7a20e2d8c0b411e801c07df18fd50d2424f5127e074fff9faee6865",
+      "source_url": "https://doi.org/10.25625/1KRR1P/YCYFNY"
+    },
+    {
+      "bytes": 348082,
+      "filename": "2026-06-1KRR1P_TANZANIA_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "222db38a0846b9e4a5e8749f4569aeb009d116190c554d052ea9b4061a6e5f77",
+      "source_url": "https://doi.org/10.25625/1KRR1P/JC6ARO"
+    },
+    {
+      "bytes": 53291,
+      "filename": "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "2197377ae969c9e0245898d16e6c745dbeaef1f28313c19822f9059dec6a96ab",
+      "source_url": "https://doi.org/10.25625/1KRR1P/ZJ0HM6"
+    },
+    {
+      "bytes": 4953001,
+      "filename": "2026-06-1KRR1P_WEST_AUSTRALIAN_CRATON.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "b7c774985e0cc5a27e24733ee89f908fa7792aed86a6390ae0637c0bca103da8",
+      "source_url": "https://doi.org/10.25625/1KRR1P/ATBQZH"
+    },
+    {
+      "bytes": 259241,
+      "filename": "2026-06-1KRR1P_WYOMING_PROVINCE.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "9488675e5d00b5070a850e96ced7aea4dafea6497b55aa7f9d7d92ff412c7e7a",
+      "source_url": "https://doi.org/10.25625/1KRR1P/XKVOOV"
+    },
+    {
+      "bytes": 200350,
+      "filename": "2026-06-1KRR1P_YANGTZE_BLOCK.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "d91ef95f5f051901c9eb52294de4b6cf3c8aedeef8aa61473eff55b4c8e6c35c",
+      "source_url": "https://doi.org/10.25625/1KRR1P/IN53QT"
+    },
+    {
+      "bytes": 479724,
+      "filename": "2026-06-1KRR1P_ZIMBABWE_CRATON_ARCHEAN.csv",
+      "retrieved_at": "2026-08-05T06:21:51Z",
+      "sha256": "0a57dc6ad45fbfeec7f2fee395b0b43dd96d21c109718267058657e59a7701f2",
+      "source_url": "https://doi.org/10.25625/1KRR1P/0LBXI0"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2."
+  ]
+}
