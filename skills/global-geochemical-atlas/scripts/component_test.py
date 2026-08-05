@@ -925,9 +925,12 @@ def check_d3(output_dir: Path) -> list[str]:
                 "样点密度热力图",
                 "showAnomalyRegion",
                 "focusAnomalyRegion",
+                "zoom-adaptive-anomaly-bubbles-v1",
+                "layoutAnomalyBubbles",
+                "conic-gradient",
             )
         ),
-        "D3 implements element combinations, density heatmap and clickable anomaly regions",
+        "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
         checks,
     )
     require(
@@ -966,6 +969,8 @@ def check_d3(output_dir: Path) -> list[str]:
         map_report.get("map_version") == "d3-interactive-atlas-v3"
         and map_report.get("default_view") == "all_data_sample_deduplicated"
         and map_report.get("embedded_payload_schema") == "d3-compact-payload-v1"
+        and map_report.get("anomaly_region_render_mode")
+        == "zoom-adaptive-anomaly-bubbles-v1"
         and set(map_report.get("visualization_modes", []))
         == {
             "distribution_points",

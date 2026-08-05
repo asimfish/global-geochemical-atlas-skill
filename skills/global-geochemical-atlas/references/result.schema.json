@@ -110,6 +110,7 @@
         "candidate_record_count": {"type": "integer", "minimum": 0},
         "default_view": {"const": "all_data_sample_deduplicated"},
         "embedded_payload_schema": {"const": "d3-compact-payload-v1"},
+        "anomaly_region_render_mode": {"const": "zoom-adaptive-anomaly-bubbles-v1"},
         "visualization_modes": {
           "type": "array",
           "items": {

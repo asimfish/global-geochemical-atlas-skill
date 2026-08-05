@@ -16,6 +16,7 @@ from typing import Any
 
 MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
+ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 MAX_OUTPUT_BYTES = 100_000_000
 SKILL_DIR = Path(__file__).resolve().parent.parent
@@ -434,6 +435,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         "__CONTEXT_JSON__",
         MAP_VERSION,
         PAYLOAD_VERSION,
+        ANOMALY_RENDER_MODE,
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:
@@ -469,6 +471,7 @@ def build_map(
     map_payload = compact_map_payload(records, anomaly_ids)
     context = {
         "map_version": MAP_VERSION,
+        "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "total_record_count": total_records,
         "mappable_record_count": len(records),
         "region_presets": REGION_PRESETS,
@@ -506,6 +509,7 @@ def build_map(
         ),
         "default_view": "all_data_sample_deduplicated",
         "embedded_payload_schema": PAYLOAD_VERSION,
+        "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_modes": [
             "distribution_points",
             "sample_density_heatmap",
