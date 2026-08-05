@@ -29,6 +29,7 @@ import download_data as downloader
 import source_adapters as source_contracts
 import source_audit
 import score_source_evidence
+import snapshot_source
 import source_router
 import query_source
 import validate_acquisition as acquisition_validator
@@ -367,6 +368,56 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"required_record_count": 30, "prepared_record_count": 30, "status": "pending"}
         and verify_marchem_candidate.parse_value("<2.0") == ("censored_lt", 2.0),
         "D1 prepares but does not falsely mark the required MarChem human review as complete",
+        checks,
+    )
+    marchem_snapshot_path = (
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "sediment"
+        / "norway-marchem"
+        / "snapshot_manifest.json"
+    )
+    marchem_snapshot = snapshot_source.build_snapshot_from_paths(
+        SKILL_DIR
+        / "fixtures"
+        / "candidate-audits"
+        / "marchem-inorganic-20260805T102709Z.json"
+    )
+    require(
+        marchem_snapshot == json_value(marchem_snapshot_path)
+        and marchem_snapshot["snapshot_id"]
+        == "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e"
+        and marchem_snapshot["request"]["canonical_request_sha256"]
+        == "ae8fd044ad9a43c0fba34d18fdcbf677311f77da1cdb76094c6054c447eb3445"
+        and marchem_snapshot["counts"]["raw_records"] == 1070
+        and marchem_snapshot["counts"]["distinct_samples"] == 880,
+        "D1 builds the checked-in MarChem snapshot deterministically from exact request and content evidence",
+        checks,
+    )
+    require(
+        marchem_snapshot["response"]["http_status"] is None
+        and marchem_snapshot["response"]["http_status_evidence"]
+        == "missing_from_original_acquisition_manifest"
+        and marchem_snapshot["evidence"]["publisher_checksum_status"] == "missing",
+        "D1 snapshot preserves missing HTTP-status and publisher-checksum evidence instead of inventing it",
+        checks,
+    )
+    identical_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, copy.deepcopy(marchem_snapshot))
+    require(
+        identical_snapshot_diff["status"] == "identical"
+        and identical_snapshot_diff["requires_rescore"] is False,
+        "D1 snapshot diff recognizes an identical manifest without forcing rescore",
+        checks,
+    )
+    changed_snapshot = copy.deepcopy(marchem_snapshot)
+    changed_snapshot["response"]["sha256"] = "0" * 64
+    changed_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, changed_snapshot)
+    require(
+        changed_snapshot_diff["status"] == "changed"
+        and changed_snapshot_diff["requires_rescore"] is True
+        and changed_snapshot_diff["comparisons"]["response_changed"] is True,
+        "D1 snapshot diff forces rescore when a dynamic response hash changes",
         checks,
     )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")

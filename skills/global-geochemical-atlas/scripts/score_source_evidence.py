@@ -18,6 +18,7 @@ SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
 DEFAULT_REGISTRY = SKILL_DIR / "assets" / "source_manifest.json"
 DEFAULT_CANDIDATE_AUDITS = SKILL_DIR / "fixtures" / "candidate-audits"
+DEFAULT_SNAPSHOT_ROOT = SKILL_DIR / "fixtures" / "four-media"
 
 EVIDENCE_VERSION = "geochemical-source-evidence-v3"
 EvidenceStatus = Literal["verified", "partial", "missing", "conflict", "not_applicable"]
@@ -58,7 +59,10 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return value
 
 
-def load_candidate_evidence(directory: Path = DEFAULT_CANDIDATE_AUDITS) -> dict[str, dict[str, Any]]:
+def load_candidate_evidence(
+    directory: Path = DEFAULT_CANDIDATE_AUDITS,
+    snapshot_root: Path = DEFAULT_SNAPSHOT_ROOT,
+) -> dict[str, dict[str, Any]]:
     """Load checked-in candidate evidence, keeping the newest file per source."""
 
     if not directory.exists():
@@ -71,6 +75,14 @@ def load_candidate_evidence(directory: Path = DEFAULT_CANDIDATE_AUDITS) -> dict[
             value = dict(value)
             value["_evidence_path"] = str(path.relative_to(SKILL_DIR))
             evidence[source_id] = value
+    if snapshot_root.exists():
+        for path in sorted(snapshot_root.rglob("snapshot_manifest.json")):
+            snapshot = _read_json(path, "snapshot manifest")
+            source_id = snapshot.get("source_id")
+            if isinstance(source_id, str) and source_id:
+                entry = evidence.setdefault(source_id, {"source_id": source_id})
+                entry["_snapshot_manifest"] = snapshot
+                entry["_snapshot_manifest_path"] = str(path.relative_to(SKILL_DIR))
     return evidence
 
 
@@ -295,8 +307,19 @@ def score_source(
     }
 
     version = entry.get("version", {})
-    candidate_archive = candidate.get("archive") if isinstance(candidate, Mapping) else None
-    candidate_acquisition = candidate.get("acquisition") if isinstance(candidate, Mapping) else None
+    snapshot_manifest = candidate.get("_snapshot_manifest") if isinstance(candidate, Mapping) else None
+    if isinstance(snapshot_manifest, Mapping):
+        candidate_archive = {
+            "sha256": snapshot_manifest.get("response", {}).get("sha256"),
+            "members": snapshot_manifest.get("archive", {}).get("members"),
+        }
+        candidate_acquisition = {
+            "request_url": snapshot_manifest.get("request", {}).get("url"),
+            "observed_at": snapshot_manifest.get("observed_at"),
+        }
+    else:
+        candidate_archive = candidate.get("archive") if isinstance(candidate, Mapping) else None
+        candidate_acquisition = candidate.get("acquisition") if isinstance(candidate, Mapping) else None
     dynamic_snapshot = (
         isinstance(candidate_archive, Mapping)
         and isinstance(candidate_archive.get("sha256"), str)
@@ -316,7 +339,11 @@ def score_source(
             "verified",
             DIMENSION_WEIGHTS["version_snapshot"],
             "A dynamic API response is frozen by exact request, observation time and SHA-256.",
-            [candidate.get("_evidence_path", ""), candidate_acquisition.get("request_url", "")],
+            [
+                candidate.get("_snapshot_manifest_path", ""),
+                candidate.get("_evidence_path", ""),
+                candidate_acquisition.get("request_url", ""),
+            ],
         )
     elif version.get("status") in {"snapshot_available", "annual_repository_versions", "dataset_specific"}:
         version_dimension = _dimension(
@@ -348,7 +375,7 @@ def score_source(
             "The dynamic snapshot records archive hash and complete member hashes."
             if valid_members
             else "The dynamic snapshot hash exists but its member inventory is incomplete.",
-            [candidate.get("_evidence_path", "")],
+            [candidate.get("_snapshot_manifest_path", ""), candidate.get("_evidence_path", "")],
         )
     else:
         dimensions["file_record_integrity"] = _registry_integrity(registry_entry)

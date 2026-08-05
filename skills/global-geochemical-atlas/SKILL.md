@@ -72,6 +72,16 @@ python scripts/download_data.py \
 
 优先提供 `--expected-sha256`。使用 `--offline` 时只接受哈希匹配的缓存。不要抓取需要交互同意或禁止自动访问的门户页面。
 
+动态官方 API 没有不可变发布版本时，按 [references/dynamic-snapshot-policy.md](references/dynamic-snapshot-policy.md) 固定精确请求、UTC 时间、响应 hash、成员清单和数量：
+
+```bash
+python scripts/snapshot_source.py create \
+  --candidate-evidence CANDIDATE_EVIDENCE.json \
+  --output SNAPSHOT_MANIFEST.json
+```
+
+新响应不得覆盖旧快照；先运行 `snapshot_source.py diff`，内容、成员、数量或科研使用条件变化时重新评分和复核。
+
 ## 4. 验证并标准化记录
 
 要求一行表示一个“样品 × 分析物 × 测定”。至少检查元素、值、单位和介质；正式分析还要检查 measurement basis、分析方法、消解/提取、检出限、坐标、CRS、来源定位和科研使用条件。

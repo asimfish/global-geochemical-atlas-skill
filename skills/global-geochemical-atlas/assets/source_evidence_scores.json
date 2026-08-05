@@ -1873,6 +1873,7 @@
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
+            "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json",
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
           ],
           "note": "The dynamic snapshot records archive hash and complete member hashes.",
@@ -1927,6 +1928,7 @@
         "version_snapshot": {
           "awarded_points": 15.0,
           "evidence": [
+            "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json",
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json",
             "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false"
           ],
