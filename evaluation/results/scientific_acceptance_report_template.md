@@ -1,49 +1,46 @@
-# 科学验收报告
+# E1 六维科学验收报告
 
 ## 冻结信息
 
-- Benchmark version:
-- Benchmark private manifest SHA-256:
-- Skill commit/archive SHA-256:
-- Sandbox image:
-- Primary model and frozen parameters:
-- Supplementary model and frozen parameters:
-- Execution window:
+- Benchmark version：
+- E1 contract SHA-256：
+- Public/private manifest SHA-256：
+- Skill commit/archive SHA-256：
+- Sandbox image：
+- 模型与冻结参数：
+- 执行窗口：
 
 ## 完整性
 
-- Expected runs:
-- Completed runs:
-- Timeouts:
-- Missing/corrupt artifacts:
-- Invalidated task events:
+- 预期与完成运行数：
+- B0/S0 配对检查：
+- timeout/resource/cancelled：
+- 缺失或损坏产物：
+- `complete` / `partial` / `ineligible` 数量：
+- 作废事件：
 
-## 聚合结果
+## Split 汇总
 
-| 指标 | 裸模型 | 挂载 Skill | Uplift |
-|---|---:|---:|---:|
-| Shadow mean | | | |
-| Final mean | | | |
-| Blind weighted | | | |
+| Split | B0 E1 总分 | S0 E1 总分 | Uplift | 低置信度任务数 |
+|---|---:|---:|---:|---:|
+| Public（开发） | | | | |
+| Shadow | | | | |
+| Final | | | | |
 
-## 科学维度
+## E1 六维结果
 
-| 维度 | 分数/证据 | 主要失败标签 |
-|---|---|---|
-| 来源与 provenance | | |
-| 单位、元素形态和基准 | | |
-| LOD/LOQ 与 QC | | |
-| 坐标、空间与地图 | | |
-| 置信度 | | |
-| 异常与解释边界 | | |
+| 维度 | 权重 | B0 | S0 | Uplift | 主要证据/失败标签 |
+|---|---:|---:|---:|---:|---|
+| 科学可信性与证据链 | 25% | | | | |
+| 可完成性与工程质量 | 30% | | | | |
+| 平台 Skill 复用价值 | 14% | | | | |
+| 领域理解与问题定义 | 15% | | | | |
+| 创新性与生态价值 | 10% | | | | |
+| 开源潜力 | 6% | | | | |
 
-## 红线事件
+## 红线与不确定性
 
-逐项给出 run_id、task_id、输出路径、触发规则、复核结论和对分数/验收的影响。
-
-## 低置信度与争议项
-
-记录跨运行方差、LLM grader 分歧、资产异常、人工复核证据和最终处置。不得只写“人工判断通过”。
+逐项记录 run_id、task_id、证据路径、触发规则、人工复核结论和对硬门禁/维度分的影响。记录跨运行方差、grader 分歧和资产异常，不得只写“人工判断通过”。
 
 ## 验收结论
 
@@ -51,8 +48,8 @@
 - [ ] CONDITIONAL PASS
 - [ ] FAIL
 
-结论依据：
+依据：
 
-## 可向设计组反馈的聚合问题
+## 可公开反馈
 
-只列 capability、failure tag、频次和严重度；不得泄露 Shadow/Final 的具体样例、输入、gold 或 checker 条件。
+只列聚合 capability、failure tag、频次和严重度，不泄露 Shadow/Final 具体输入、gold、阈值或 checker 条件。

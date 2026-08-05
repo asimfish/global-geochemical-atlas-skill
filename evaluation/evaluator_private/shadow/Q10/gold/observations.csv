@@ -1,5 +1,0 @@
-record_id,source_id,source_record_id,sample_id,latitude,longitude,medium,element,reported_value,reported_unit,normalized_value,normalized_unit
-source_a:A-001:Cu,source_a,A-001,SA1,40,-110,soil,Cu,12,ppm,12,mg/kg
-source_a:A-002:Cu,source_a,A-002,SA2,41,-111,soil,Cu,25,ppm,25,mg/kg
-source_b:B-101:Cu,source_b,B-101,SB1,35,-100,sediment,Cu,30,mg/kg,30,mg/kg
-source_b:B-102:Cu,source_b,B-102,SB2,36,-101,sediment,Cu,45,mg/kg,45,mg/kg

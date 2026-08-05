@@ -1,1 +1,0 @@
-{"version":"q14-anomaly-1","transform":"log10","center":"median","scale":"1.4826*MAD","robust_z_threshold":3.5,"mad_zero_fallback":"strict empirical values above p97.5 or below p2.5; ties at threshold are not anomalies"}

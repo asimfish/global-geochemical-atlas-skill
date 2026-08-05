@@ -1,19 +1,163 @@
 {
-  "task_id": "GGA-QC-001",
-  "objective_max": 80,
   "checks": [
-    {"id": "output_exists", "type": "file_exists", "path": "parsed_values.csv", "points": 5},
-    {"id": "columns", "type": "csv_columns", "path": "parsed_values.csv", "required": ["record_id", "reported_value_text", "numeric_value", "bound_value", "qualifier", "detection_limit", "censored", "missing_reason", "eligible_log_analysis"], "points": 10},
-    {"id": "row_count", "type": "csv_row_count", "path": "parsed_values.csv", "expected": 6, "points": 5},
-    {"id": "c01_bound", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C01"}, "column": "bound_value", "expected": 0.1, "tolerance": 0.000001, "points": 7},
-    {"id": "c01_numeric_empty", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C01"}, "column": "numeric_value", "expected": null, "points": 7},
-    {"id": "c02_nd", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C02"}, "column": "qualifier", "expected": "ND", "points": 7},
-    {"id": "c02_dl", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C02"}, "column": "detection_limit", "expected": 0.2, "tolerance": 0.000001, "points": 7},
-    {"id": "c03_zero", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C03"}, "column": "numeric_value", "expected": 0, "points": 7},
-    {"id": "c03_not_censored", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C03"}, "column": "censored", "expected": false, "points": 7},
-    {"id": "c04_upper", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C04"}, "column": "missing_reason", "expected": "above_upper_limit", "points": 7},
-    {"id": "c05_missing", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C05"}, "column": "missing_reason", "expected": "not_reported", "points": 6},
-    {"id": "c06_unknown_dl", "type": "csv_cell", "path": "parsed_values.csv", "key": {"record_id": "C06"}, "column": "missing_reason", "expected": "below_detection_limit_unknown_limit", "points": 5}
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "output_exists",
+      "path": "parsed_values.csv",
+      "points": 5,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "columns",
+      "path": "parsed_values.csv",
+      "points": 10,
+      "required": [
+        "record_id",
+        "reported_value_text",
+        "numeric_value",
+        "bound_value",
+        "qualifier",
+        "detection_limit",
+        "censored",
+        "missing_reason",
+        "eligible_log_analysis"
+      ],
+      "type": "csv_columns"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 6,
+      "id": "row_count",
+      "path": "parsed_values.csv",
+      "points": 5,
+      "type": "csv_row_count"
+    },
+    {
+      "column": "bound_value",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0.1,
+      "id": "c01_bound",
+      "key": {
+        "record_id": "C01"
+      },
+      "path": "parsed_values.csv",
+      "points": 7,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "numeric_value",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": null,
+      "id": "c01_numeric_empty",
+      "key": {
+        "record_id": "C01"
+      },
+      "path": "parsed_values.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "qualifier",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "ND",
+      "id": "c02_nd",
+      "key": {
+        "record_id": "C02"
+      },
+      "path": "parsed_values.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "detection_limit",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0.2,
+      "id": "c02_dl",
+      "key": {
+        "record_id": "C02"
+      },
+      "path": "parsed_values.csv",
+      "points": 7,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "numeric_value",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0,
+      "id": "c03_zero",
+      "key": {
+        "record_id": "C03"
+      },
+      "path": "parsed_values.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "censored",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "c03_not_censored",
+      "key": {
+        "record_id": "C03"
+      },
+      "path": "parsed_values.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "missing_reason",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "above_upper_limit",
+      "id": "c04_upper",
+      "key": {
+        "record_id": "C04"
+      },
+      "path": "parsed_values.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "missing_reason",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "not_reported",
+      "id": "c05_missing",
+      "key": {
+        "record_id": "C05"
+      },
+      "path": "parsed_values.csv",
+      "points": 6,
+      "type": "csv_cell"
+    },
+    {
+      "column": "missing_reason",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "below_detection_limit_unknown_limit",
+      "id": "c06_unknown_dl",
+      "key": {
+        "record_id": "C06"
+      },
+      "path": "parsed_values.csv",
+      "points": 5,
+      "type": "csv_cell"
+    }
   ],
-  "redlines": []
+  "evidence_points": 80,
+  "redlines": [],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-QC-001"
 }

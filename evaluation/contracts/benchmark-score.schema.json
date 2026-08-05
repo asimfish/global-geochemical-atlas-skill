@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai4s.example/eval/contracts/1.0.0/score.schema.json",
+    "title": "Benchmark Score aligned to E1 contract 1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "eval_version",
+    "contract_sha256",
+    "run_id",
+    "scorer_version",
+    "rubric_sha256",
+    "candidate_status",
+    "score_status",
+    "hard_gate_passed",
+    "dimensions",
+    "total_score",
+    "checks_path",
+    "evidence",
+    "computed_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "eval_version": { "const": "1.0.0" },
+    "contract_sha256": { "$ref": "#/$defs/sha256" },
+    "run_id": { "$ref": "#/$defs/id" },
+    "scorer_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "rubric_sha256": { "$ref": "#/$defs/sha256" },
+    "candidate_status": { "enum": ["success", "partial_success", "failed", "timed_out", "resource_exceeded", "cancelled"] },
+    "score_status": { "enum": ["complete", "partial", "not_scored", "ineligible"] },
+    "hard_gate_passed": { "type": "boolean" },
+    "dimensions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/dimension" }
+    },
+    "total_score": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+    "checks_path": { "$ref": "#/$defs/relativePath" },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "computed_at": { "$ref": "#/$defs/utcTimestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "score_status": { "enum": ["complete", "partial"] } },
+        "required": ["score_status"]
+      },
+      "then": {
+        "properties": {
+          "hard_gate_passed": { "const": true },
+          "total_score": { "type": "number" },
+          "dimensions": {
+            "minItems": 6,
+            "maxItems": 6,
+            "allOf": [
+              { "contains": { "properties": { "dimension_id": { "const": "scientific_credibility" } }, "required": ["dimension_id"] }, "minContains": 1, "maxContains": 1 },
+              { "contains": { "properties": { "dimension_id": { "const": "engineering_quality" } }, "required": ["dimension_id"] }, "minContains": 1, "maxContains": 1 },
+              { "contains": { "properties": { "dimension_id": { "const": "platform_reusability" } }, "required": ["dimension_id"] }, "minContains": 1, "maxContains": 1 },
+              { "contains": { "properties": { "dimension_id": { "const": "domain_understanding" } }, "required": ["dimension_id"] }, "minContains": 1, "maxContains": 1 },
+              { "contains": { "properties": { "dimension_id": { "const": "innovation_ecosystem" } }, "required": ["dimension_id"] }, "minContains": 1, "maxContains": 1 },
+              { "contains": { "properties": { "dimension_id": { "const": "open_source_potential" } }, "required": ["dimension_id"] }, "minContains": 1, "maxContains": 1 }
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "total_score": { "type": "null" },
+          "dimensions": { "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "score_status": { "const": "ineligible" } },
+        "required": ["score_status"]
+      },
+      "then": { "properties": { "hard_gate_passed": { "const": false } } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "utcTimestamp": { "type": "string", "format": "date-time", "pattern": "Z$" },
+    "dimension": {
+      "oneOf": [
+        { "$ref": "#/$defs/scientific" },
+        { "$ref": "#/$defs/engineering" },
+        { "$ref": "#/$defs/reusability" },
+        { "$ref": "#/$defs/domain" },
+        { "$ref": "#/$defs/innovation" },
+        { "$ref": "#/$defs/openSource" }
+      ]
+    },
+    "dimensionBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimension_id", "direction", "weight", "score", "metrics"],
+      "properties": {
+        "dimension_id": { "type": "string" },
+        "direction": { "const": "higher_better" },
+        "weight": { "type": "number" },
+        "score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/metric" }
+        }
+      }
+    },
+    "scientific": {
+      "allOf": [
+        { "$ref": "#/$defs/dimensionBody" },
+        { "properties": { "dimension_id": { "const": "scientific_credibility" }, "weight": { "const": 0.25 } } }
+      ]
+    },
+    "engineering": {
+      "allOf": [
+        { "$ref": "#/$defs/dimensionBody" },
+        { "properties": { "dimension_id": { "const": "engineering_quality" }, "weight": { "const": 0.30 } } }
+      ]
+    },
+    "reusability": {
+      "allOf": [
+        { "$ref": "#/$defs/dimensionBody" },
+        { "properties": { "dimension_id": { "const": "platform_reusability" }, "weight": { "const": 0.14 } } }
+      ]
+    },
+    "domain": {
+      "allOf": [
+        { "$ref": "#/$defs/dimensionBody" },
+        { "properties": { "dimension_id": { "const": "domain_understanding" }, "weight": { "const": 0.15 } } }
+      ]
+    },
+    "innovation": {
+      "allOf": [
+        { "$ref": "#/$defs/dimensionBody" },
+        { "properties": { "dimension_id": { "const": "innovation_ecosystem" }, "weight": { "const": 0.10 } } }
+      ]
+    },
+    "openSource": {
+      "allOf": [
+        { "$ref": "#/$defs/dimensionBody" },
+        { "properties": { "dimension_id": { "const": "open_source_potential" }, "weight": { "const": 0.06 } } }
+      ]
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric_id", "direction", "weight", "status", "value", "expected", "normalized_score", "passed", "evidence", "reason"],
+      "properties": {
+        "metric_id": { "$ref": "#/$defs/id" },
+        "direction": { "enum": ["higher_better", "lower_better", "pass_fail"] },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": { "enum": ["scored", "not_scored"] },
+        "value": { "type": ["number", "integer", "string", "boolean", "null"] },
+        "expected": { "type": ["number", "integer", "string", "boolean", "null"] },
+        "normalized_score": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "passed": { "type": ["boolean", "null"] },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/relativePath" }
+        },
+        "reason": { "type": ["string", "null"], "maxLength": 1000 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "not_scored" } }, "required": ["status"] },
+          "then": {
+            "properties": {
+              "normalized_score": { "type": "null" },
+              "passed": { "type": "null" },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          },
+          "else": { "properties": { "normalized_score": { "type": "number" } } }
+        }
+      ]
+    }
+  }
+}

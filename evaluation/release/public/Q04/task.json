@@ -1,12 +1,37 @@
 {
-  "question_id": "Q04",
-  "task_id": "GGA-NORM-002",
-  "split": "public",
-  "title": "Fe2O3 转 Fe 元素含量",
-  "status": "SMOKE_PASSED",
-  "gold_version": "5.0.0-draft.1",
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "e1_eval_version": "1.0.0",
+  "failure_tags": [
+    "OXIDE_ELEMENT_CONFUSION",
+    "WRONG_STOICHIOMETRIC_FACTOR",
+    "ANALYTE_IDENTITY_LOST"
+  ],
   "fixture_type": "synthetic_adversarial_fixture",
-  "input_assets": ["rock_oxide.csv", "conversion_constants.json"],
-  "required_outputs": ["element_database.csv"],
-  "failure_tags": ["OXIDE_ELEMENT_CONFUSION", "WRONG_STOICHIOMETRIC_FACTOR", "ANALYTE_IDENTITY_LOST"]
+  "gold_version": "6.0.0-draft.1",
+  "input_assets": [
+    "rock_oxide.csv",
+    "conversion_constants.json"
+  ],
+  "legacy_logical_outputs": [
+    "element_database.csv"
+  ],
+  "question_id": "Q04",
+  "required_outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "split": "public",
+  "status": "ALIGNED_E1",
+  "task_id": "GGA-NORM-002",
+  "title": "Fe2O3 转 Fe 元素含量"
 }

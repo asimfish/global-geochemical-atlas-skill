@@ -1,0 +1,7 @@
+observation_id,element,medium,method,parameters_json,score,status,threshold,sample_count,censored_fraction
+obs-001,Au,soil,zscore,"{""ddof"":0,""group_by"":[""element"",""medium""]}",-0.747531930228,normal,2,6,0.000000000000
+obs-002,Au,soil,zscore,"{""ddof"":0,""group_by"":[""element"",""medium""]}",-0.592870151560,normal,2,6,0.000000000000
+obs-003,Au,soil,zscore,"{""ddof"":0,""group_by"":[""element"",""medium""]}",-0.438208372892,normal,2,6,0.000000000000
+obs-004,Au,soil,zscore,"{""ddof"":0,""group_by"":[""element"",""medium""]}",-0.283546594225,normal,2,6,0.000000000000
+obs-005,Au,soil,zscore,"{""ddof"":0,""group_by"":[""element"",""medium""]}",-0.128884815557,normal,2,6,0.000000000000
+obs-006,Au,soil,zscore,"{""ddof"":0,""group_by"":[""element"",""medium""]}",2.191041864462,anomaly,2,6,0.000000000000

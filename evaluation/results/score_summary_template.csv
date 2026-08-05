@@ -1,1 +1,1 @@
-task_id,split,condition,run_1,run_2,run_3,median,range,mad,low_confidence,redline_count,uplift
+task_id,split,variant,runs,median,range,mad,low_confidence,scored_runs,uplift

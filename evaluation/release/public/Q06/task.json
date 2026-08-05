@@ -1,12 +1,37 @@
 {
-  "question_id": "Q06",
-  "task_id": "GGA-QC-001",
-  "split": "public",
-  "title": "LOD 与限定符语义解析",
-  "status": "SMOKE_PASSED",
-  "gold_version": "5.0.0-draft.1",
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "e1_eval_version": "1.0.0",
+  "failure_tags": [
+    "CENSORED_AS_EXACT",
+    "ND_AS_ZERO",
+    "MISSING_SEMANTICS_COLLAPSED",
+    "UPPER_BOUND_IGNORED"
+  ],
   "fixture_type": "synthetic_adversarial_fixture",
-  "input_assets": ["censored_values.csv"],
-  "required_outputs": ["parsed_values.csv"],
-  "failure_tags": ["CENSORED_AS_EXACT", "ND_AS_ZERO", "MISSING_SEMANTICS_COLLAPSED", "UPPER_BOUND_IGNORED"]
+  "gold_version": "6.0.0-draft.1",
+  "input_assets": [
+    "censored_values.csv"
+  ],
+  "legacy_logical_outputs": [
+    "parsed_values.csv"
+  ],
+  "question_id": "Q06",
+  "required_outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "split": "public",
+  "status": "ALIGNED_E1",
+  "task_id": "GGA-QC-001",
+  "title": "LOD 与限定符语义解析"
 }

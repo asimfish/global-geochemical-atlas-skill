@@ -1,0 +1,148 @@
+{
+  "schema_version": "p01_08.audit.p05.v1",
+  "status": "pending_final_review",
+  "benchmark_version": "6.0.0-draft.1",
+  "source_eval_version": "1.0.0",
+  "source_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "alignment_contract": "evaluation/contracts/benchmark-execution-contract.json",
+  "alignment_contract_sha256": "d113eb7b9b5ee185e0a07bb00e4a5f16ee8ee1113fa84c33e305eb65797b275c",
+  "official_benchmark_result": false,
+  "scope": "external_validator_and_scorer_negative_testing",
+  "responsibility_alignment": {
+    "e2_external_gate": ["P05-D001"],
+    "e1_local_implementation": ["P05-D002", "P05-D005", "P05-D006", "P05-D007", "P05-D008", "P05-D009", "P05-D010", "P05-D011"],
+    "rule": "Missing E2 official rubric cannot excuse local false acceptance; E2 evidence metrics feed the E1 six-dimensional score and do not form a separate total."
+  },
+  "summary": {
+    "open_findings": 9,
+    "p0_or_gate": 8,
+    "p1": 1,
+    "conclusion": "not_ready"
+  },
+  "findings": [
+    {
+      "id": "P05-D001",
+      "severity": "P0_GATE",
+      "status": "WAITING_EXTERNAL",
+      "observed": "The E2 metric-level official rubric is unsigned; the current synthetic rubric can only produce a partial diagnostic score.",
+      "impact": "No score can be treated as an official acceptance result.",
+      "close_condition": "Bind a signed official rubric to the frozen contract and rerun formula, boundary, and determinism tests."
+    },
+    {
+      "id": "P05-D002",
+      "severity": "P1",
+      "status": "OPEN",
+      "observed": "The runner publishes raw success and COMPLETED before validator/scorer completion; integration can only fail closed afterward.",
+      "impact": "Different artifacts can report conflicting terminal states.",
+      "close_condition": "Validate and score before publishing success, then atomically bind result, score, manifest, archive, and marker."
+    },
+    {
+      "id": "P05-D005",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "Empty anomaly CSV and GeoJSON still passed the hard gate with no failed checks and a diagnostic score of 90.",
+      "impact": "Missing anomaly outputs can be accepted.",
+      "close_condition": "Require exactly one anomaly decision per valid observation and bidirectional consistency with GeoJSON."
+    },
+    {
+      "id": "P05-D006",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "SQLite observation values were changed to contradict CSV while preserving row count; validation still passed with a diagnostic score of 90.",
+      "impact": "Conflicting scientific records can be accepted.",
+      "close_condition": "Compare both stores bidirectionally by observation identity and all scientific fields."
+    },
+    {
+      "id": "P05-D007",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "Run, config, and contract identities in manifests were changed to different or invalid values; validation still passed with a diagnostic score of 90.",
+      "impact": "Results can be detached from their frozen inputs and contract.",
+      "close_condition": "Require equality across result, artifact manifest, run manifest, and resolved config, and recompute all declared hashes."
+    },
+    {
+      "id": "P05-D008",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "A source JSONL record containing a duplicate source_id key was silently accepted with a diagnostic score of 90.",
+      "impact": "Ambiguous provenance records can change meaning across parsers.",
+      "close_condition": "Use duplicate-key-rejecting JSON decoding for every line and test duplicate critical provenance fields."
+    },
+    {
+      "id": "P05-D009",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "A QC check explicitly set to fail still passed the scientific hard gate with a diagnostic score of 90.",
+      "impact": "Known scientific quality failures can be scored as acceptable.",
+      "close_condition": "Freeze fail/warn semantics so fail triggers a P0 gate and warn is consistent with partial status and limitation disclosure."
+    },
+    {
+      "id": "P05-D010",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "An H3 cell was replaced with 000000000000000; validation still passed with a diagnostic score of 90.",
+      "impact": "Invalid spatial indexing and map linkage can be accepted.",
+      "close_condition": "Validate index and resolution with an independent H3 implementation and recompute cells from coordinates."
+    },
+    {
+      "id": "P05-D011",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "A source row and referenced file/document were changed to nonexistent objects while retaining syntactically valid hashes; validation still passed with a diagnostic score of 90.",
+      "impact": "Fabricated or unresolvable provenance can be accepted.",
+      "close_condition": "Open and hash frozen source files and verify row, sample, version, document, and report bindings."
+    }
+  ],
+  "reproduced_false_positive_matrix": [
+    {
+      "case": "empty_anomaly_outputs",
+      "expected": "hard_gate_fail",
+      "observed_hard_gate_passed": true,
+      "observed_failed_checks": 0,
+      "observed_diagnostic_score": 90
+    },
+    {
+      "case": "sqlite_csv_divergence",
+      "expected": "hard_gate_fail",
+      "observed_hard_gate_passed": true,
+      "observed_failed_checks": 0,
+      "observed_diagnostic_score": 90
+    },
+    {
+      "case": "manifest_identity_drift",
+      "expected": "hard_gate_fail",
+      "observed_hard_gate_passed": true,
+      "observed_failed_checks": 0,
+      "observed_diagnostic_score": 90
+    },
+    {
+      "case": "duplicate_jsonl_key",
+      "expected": "hard_gate_fail",
+      "observed_hard_gate_passed": true,
+      "observed_failed_checks": 0,
+      "observed_diagnostic_score": 90
+    },
+    {
+      "case": "failed_qc",
+      "expected": "hard_gate_fail",
+      "observed_hard_gate_passed": true,
+      "observed_failed_checks": 0,
+      "observed_diagnostic_score": 90
+    },
+    {
+      "case": "invalid_h3",
+      "expected": "hard_gate_fail",
+      "observed_hard_gate_passed": true,
+      "observed_failed_checks": 0,
+      "observed_diagnostic_score": 90
+    },
+    {
+      "case": "unresolvable_provenance",
+      "expected": "hard_gate_fail",
+      "observed_hard_gate_passed": true,
+      "observed_failed_checks": 0,
+      "observed_diagnostic_score": 90
+    }
+  ],
+  "interpretation": "The value 90 is an external synthetic-rubric diagnostic emitted for intentionally corrupted fixtures. It is evidence of false acceptance, not a Benchmark v6 task score or an official E1 six-dimensional score."
+}

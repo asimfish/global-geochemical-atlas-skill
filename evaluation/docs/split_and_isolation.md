@@ -1,53 +1,43 @@
-# Split 与隔离协议
+# Public / Shadow / Final 隔离协议
 
-## Public：Q01-Q08
+## 三个集合
 
-- 可供 D1、D2、D3 自测；
-- 可公开题面、输入、public checker 和 public gold；
-- 只用于理解接口和常见科学边界，不计入最终盲测主分。
+- Public Q01–Q08：可公开题面、输入、gold、checker，用于接口自测；
+- Shadow Q09–Q16：评测侧持有，只反馈聚合失败模式；
+- Final Q17–Q24：Skill、模型和沙箱冻结后才执行，逐题内容不对设计组公开。
 
-## Shadow：Q09-Q16
+## 物理边界
 
-- 评测组持有；
-- 可在功能冻结前周期性执行；
-- 向设计组只反馈 capability、failure tag、频次和严重度；
-- 不反馈样品 ID、具体数值、完整输入行、gold、checker 条件或能反推出答案的截图。
-
-## Final holdout：Q17-Q24
-
-- 评测负责人独占；
-- 只有在 Skill 代码、依赖、默认参数和 prompt 冻结后执行；
-- 首次正式执行前计算冻结 manifest，执行后不得根据队伍表现改题或调权；
-- 如发现评测资产本身错误，整题作废或对所有版本统一重跑，并保留事件记录；
-- 不向设计组逐题反馈，只给聚合维度结果和红线计数。
-
-## 物理发布规则
-
-不得把整个 `benchmark_rebuild_v5` 目录复制给设计组。公开包应从白名单构建：
+Public 留在 `evaluation/release/public/`。Shadow 和 Final 必须位于 E1 工作区与本公开仓库之外的受控私有根目录，例如：
 
 ```text
-README_public.md
-release/public/**
-docs/public_interface.md
+/secure/e2-private-root/
+├── shadow/Q09-Q16/
+├── final_holdout/Q17-Q24/
+├── task_inventory_private.csv
+└── PRIVATE_STATUS.json
 ```
 
-以下路径永不进入被测 Skill 仓库、聊天附件或公开归档：
+私有根目录不得是符号链接，权限不得开放给 group/other。worker 只读挂载当前题所需的 `task.md`、安全任务元数据和 `inputs/`；gold、checker、rubric 只在评分侧可见。
 
-```text
-evaluator_private/**
-results/raw/**
-results/llm_grader_prompts/**
-freeze_manifest_private.json
+## 公开导出
+
+禁止手工打包整个 `evaluation/`。必须使用冻结白名单：
+
+```bash
+python3 tools/export_public_package.py . /tmp/gga-public
 ```
 
-## 泄漏审计
+随后检查：
 
-每次公开反馈前检查：
+```bash
+python3 tools/verify_isolation.py . /secure/e2-private-root
+```
 
-- 是否出现 Q09-Q24 的样品 ID、坐标、数值或文件名；
-- 是否出现隐藏 gold 的字段组合和阈值；
-- 是否粘贴隐藏 checker 日志；
-- 是否通过“例如”复述了唯一隐藏案例；
-- 是否共享包含 `evaluator_private` 的压缩包或 Git 历史。
+导出包只包含 alignment contract 明确允许的路径，并生成 `PUBLIC_MANIFEST.json`。`results/raw/`、评审 prompt、私有 manifest、Shadow 和 Final 都不得进入公开包。
 
-本目录目前只通过组织约定实现隔离；若工作区由多人共享，必须在文件系统权限、独立私有仓库或加密归档层再增加访问控制，不能把目录名当成真正的权限边界。
+## 泄漏与 holdout 资格
+
+公开反馈前必须检查是否出现隐藏样品 ID、坐标、数值、文件名、gold 字段组合、阈值或 checker 日志。通过“例如”改写唯一隐藏案例同样属于泄漏。
+
+当前旧版 Q17–Q24 曾存在于公开 Git 历史，因此已失去严格 holdout 资格。迁出只能防止继续混放，不能撤销历史暴露；正式比赛必须由独立评测负责人新建并私下签名一套 Final。

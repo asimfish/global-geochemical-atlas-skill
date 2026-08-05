@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a deterministic SHA-256 manifest for a benchmark freeze candidate."""
+"""Create a deterministic SHA-256 manifest for a public or private freeze root."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ def main() -> int:
     parser.add_argument("root", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--label", default="freeze-candidate")
+    parser.add_argument("--benchmark-version", help="Required when ROOT has no VERSION file")
     args = parser.parse_args()
     root = args.root.resolve()
     output = args.output.resolve()
@@ -32,9 +33,15 @@ def main() -> int:
         entries.append({"path": relative, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
 
     canonical = json.dumps(entries, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    version_path = root / "VERSION"
+    benchmark_version = args.benchmark_version or (
+        version_path.read_text(encoding="utf-8").strip() if version_path.is_file() else None
+    )
+    if not benchmark_version:
+        parser.error("--benchmark-version is required when ROOT has no VERSION file")
     manifest = {
         "label": args.label,
-        "benchmark_version": (root / "VERSION").read_text(encoding="utf-8").strip(),
+        "benchmark_version": benchmark_version,
         "file_count": len(entries),
         "content_manifest_sha256": hashlib.sha256(canonical).hexdigest(),
         "files": entries,

@@ -1,10 +1,29 @@
 {
-  "task_id": "GGA-PROV-001",
-  "llm_points": 20,
-  "evidence_paths": ["verification_report.json", "inputs/download_manifest.json"],
   "criteria": [
-    {"id": "integrity", "points": 8, "full_credit": "解释 hash 匹配验证的是固定字节内容，而不是科学正确性本身。"},
-    {"id": "media", "points": 7, "full_credit": "识别扩展名不能证明内容类型，HTML 错误页必须停止处理。"},
-    {"id": "failure_behavior", "points": 5, "full_credit": "对失败资产明确隔离并保留原因，不声称下载成功。"}
-  ]
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "解释 hash 匹配验证的是固定字节内容，而不是科学正确性本身。",
+      "id": "integrity",
+      "points": 8
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "识别扩展名不能证明内容类型，HTML 错误页必须停止处理。",
+      "id": "media",
+      "points": 7
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "full_credit": "对失败资产明确隔离并保留原因，不声称下载成功。",
+      "id": "failure_behavior",
+      "points": 5
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/verification_report.json",
+    "inputs/download_manifest.json"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-PROV-001"
 }

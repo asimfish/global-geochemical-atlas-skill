@@ -1,12 +1,36 @@
 {
-  "question_id": "Q03",
-  "task_id": "GGA-NORM-001",
-  "split": "public",
-  "title": "固体样品质量分数统一到 mg/kg",
-  "status": "SMOKE_PASSED",
-  "gold_version": "5.0.0-draft.1",
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "e1_eval_version": "1.0.0",
+  "failure_tags": [
+    "UNIT_SCALE_ERROR",
+    "ORIGINAL_VALUE_LOST",
+    "BASIS_UNSTATED"
+  ],
   "fixture_type": "synthetic_adversarial_fixture",
-  "input_assets": ["soil_elements.csv"],
-  "required_outputs": ["normalized_elements.csv"],
-  "failure_tags": ["UNIT_SCALE_ERROR", "ORIGINAL_VALUE_LOST", "BASIS_UNSTATED"]
+  "gold_version": "6.0.0-draft.1",
+  "input_assets": [
+    "soil_elements.csv"
+  ],
+  "legacy_logical_outputs": [
+    "normalized_elements.csv"
+  ],
+  "question_id": "Q03",
+  "required_outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "split": "public",
+  "status": "ALIGNED_E1",
+  "task_id": "GGA-NORM-001",
+  "title": "固体样品质量分数统一到 mg/kg"
 }

@@ -1,59 +1,65 @@
-# Global Geochemical Atlas Benchmark v5
+# Global Geochemical Atlas Benchmark v6（E1 对齐版）
 
-这是从 `global_geochemical_atlas_benchmark_v4_2_executable.md` 独立派生的评测工作区。原始文件只读，本目录不回写任何既有文件。
+本目录是 E2 领域 Benchmark。E2 负责提供地球化学任务、确定性检查和评审证据；交卷格式、最终六维评分和退出码全部以 E1 为准，不再另建一套规则。
 
-## 目标
+## 一句话理解
 
-本评测包用于判断 Global Geochemical Atlas Skill 是否能够在真实沙箱约束下，生成科学可靠、可追溯、可复核的数据库、质量控制结果、置信度说明、地图与异常结论。
+- 参赛程序只交 E1 规定的 `artifacts/` 下十个文件；
+- Q01–Q24 原有的题目专用结果写入 `artifacts/run_manifest.json.benchmark_evidence`，不再新增交卷文件；
+- checker 和 LLM 只产出归属于 E1 六维的证据，最终由 `finalize_score.py` 生成 E1 `score.json`；
+- 裸模型和挂载 Skill 分别记作 `B0`、`S0`，每题各跑三次；
+- Public 留在本仓库；Shadow/Final 位于工作区外的受控私有根目录。
 
-“可执行题”必须同时满足：
+冻结接口见 [`contracts/benchmark-execution-contract.json`](contracts/benchmark-execution-contract.json)，人类可读说明见 [`docs/execution-contract-guide.md`](docs/execution-contract-guide.md)。
 
-1. 题目引用的每个输入资产真实存在；
-2. 输入资产有固定内容、来源类型和完整性信息；
-3. 要求的输出路径和 schema 明确；
-4. 客观部分可由代码评分；
-5. 开放解释部分有锚定证据的 LLM rubric；
-6. 金标准可从固定输入复算；
-7. 科学红线能够触发任务封顶或验收失败；
-8. 至少通过一次 package validation 和 checker smoke test 后，才可标记为 executable。
+## E1 交卷文件
+
+每次运行的 submission 根目录必须且只能声明以下物理产物：
+
+```text
+artifacts/observations.csv
+artifacts/geochemical.sqlite
+artifacts/sources.jsonl
+artifacts/qc_report.json
+artifacts/anomaly_results.csv
+artifacts/anomalies.geojson
+artifacts/h3_cells.csv
+artifacts/map.png
+artifacts/map.html
+artifacts/run_manifest.json
+```
+
+题目专用逻辑证据放在最后一个文件的 `benchmark_evidence` 字段中。
 
 ## 目录边界
 
 ```text
 evaluation/
-├── RUNBOOK.md                     # 评测人员从执行到验收的完整操作指南
-├── audit/                         # 对旧版本的只读审计
-├── docs/                          # 矩阵、评分、红线、隔离和来源依据
-├── release/public/                # 可交付给设计组的公开题 Q01-Q08
-├── evaluator_private/shadow/      # 仅评测侧持有 Q09-Q16
-├── evaluator_private/final_holdout/ # 功能冻结后才运行 Q17-Q24
-├── tools/                         # 通用 checker 与包验证器
-└── results/                       # 原始运行和报告模板；不伪造实测结果
+├── contracts/                    # E1 对齐契约、E1 score schema、gold 模板
+├── docs/                         # 评分、接口和隔离规则
+├── release/public/Q01-Q08/       # 可公开开发题
+├── tools/                        # 校验、证据判分、最终计分、汇总和导出工具
+└── results/                      # 运行记录与报告模板，不包含伪造实测结果
 ```
 
-公开发布时只能导出 `release/public/` 与不泄题的聚合规范。`evaluator_private/` 不得复制到被测 Skill 仓库，也不得在给 D1、D2、D3 的问题反馈中出现输入值、金标准、文件哈希或逐题判分细节。
+Shadow/Final 不在本目录。正式执行时通过 `--private-root` 指向工作区外的私有根目录；当前从公开 Git 历史迁出的旧 Final 只能用于回归，不能恢复成严格 holdout。
 
-## 状态标签
+## 最小验证流程
 
-- `DESIGNED`：题意、输入和金标准已定义；
-- `VALIDATED`：资产和 schema 通过静态检查；
-- `SMOKE_PASSED`：金标准被通用 checker 实际评分并达到满分；
-- `FROZEN`：题面、输入、金标准、checker 和 rubric 已生成冻结清单；
-- `EXECUTED`：已按裸模型/挂载 Skill 协议完成真实运行。
-
-在没有真实模型运行日志前，本包不会把模板或金标准自检写成“盲测原始结果”。
-
-## 运行方式
-
-完整执行流程、隔离要求、bare/skill 对照、LLM 判分、重复运行和验收步骤见 [`RUNBOOK.md`](RUNBOOK.md)。最小静态检查与单题客观判分命令：
+从 `evaluation/` 目录执行：
 
 ```bash
-python3 tools/validate_package.py .
-python3 tools/grade_task.py <task_dir> <submission_dir> --output <report.json>
+python3 tools/validate_package.py . --public-only
+python3 tools/validate_package.py . --private-root /secure/e2-private-root
+python3 tools/verify_isolation.py . /secure/e2-private-root
+python3 tools/grade_task.py release/public/Q01 release/public/Q01/gold \
+  --output /tmp/q01-objective.json
+python3 tools/finalize_score.py \
+  --objective-report /tmp/q01-objective.json \
+  --rubric release/public/Q01/rubric.json \
+  --run-id demo-q01-s0-r1 \
+  --candidate-status success \
+  --output /tmp/q01-score.json
 ```
 
-当前仓库不包含绑定具体模型平台的 runner；上述第二条命令对已经生成好的 submission 评分，不能代替裸模型/挂载 Skill 的真实运行。
-
-## 官方评审对齐
-
-本包主要服务于官方 L2 沙箱实战，并提供科学验收证据。官方总评仍应按公开规则执行 L0 合规、L1 静态质量、L2 沙箱实战和 L3 六维加权。本包的领域任务分数不应冒充官方最终总分。
+`grade_task.py` 的点数只是证据覆盖量，不是独立总分。只有符合 E1 schema 的六维 `score.json` 才是单次运行分数。完整执行步骤见 [`RUNBOOK.md`](RUNBOOK.md)。

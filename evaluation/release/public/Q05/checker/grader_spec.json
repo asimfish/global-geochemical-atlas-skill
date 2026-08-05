@@ -1,20 +1,127 @@
 {
-  "task_id": "GGA-PROV-001",
-  "objective_max": 80,
   "checks": [
-    {"id": "output_exists", "type": "file_exists", "path": "verification_report.json", "points": 5},
-    {"id": "record_count", "type": "json_length", "path": "verification_report.json", "json_path": "records", "expected": 3, "points": 5},
-    {"id": "valid_safe", "type": "json_value", "path": "verification_report.json", "json_path": "records.0.safe_to_use", "expected": true, "points": 10},
-    {"id": "html_unsafe", "type": "json_value", "path": "verification_report.json", "json_path": "records.1.safe_to_use", "expected": false, "points": 10},
-    {"id": "tampered_unsafe", "type": "json_value", "path": "verification_report.json", "json_path": "records.2.safe_to_use", "expected": false, "points": 10},
-    {"id": "valid_hash_status", "type": "json_value", "path": "verification_report.json", "json_path": "records.0.sha256_status", "expected": "match", "points": 8},
-    {"id": "html_media_status", "type": "json_value", "path": "verification_report.json", "json_path": "records.1.media_type_status", "expected": "html_detected", "points": 8},
-    {"id": "tampered_hash_status", "type": "json_value", "path": "verification_report.json", "json_path": "records.2.sha256_status", "expected": "mismatch", "points": 8},
-    {"id": "valid_digest", "type": "json_value", "path": "verification_report.json", "json_path": "records.0.computed_sha256", "expected": "73b952b81b4e4f41c00968d242946a78e09e7e878fa42fb31d9bb7084477cca5", "points": 8},
-    {"id": "tampered_digest", "type": "json_value", "path": "verification_report.json", "json_path": "records.2.computed_sha256", "expected": "84efbab5cb3f1d35038167bff6bc1b21c8c093593639ec936a1de63525ae81b5", "points": 8}
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "output_exists",
+      "path": "verification_report.json",
+      "points": 5,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 3,
+      "id": "record_count",
+      "json_path": "records",
+      "path": "verification_report.json",
+      "points": 5,
+      "type": "json_length"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": true,
+      "id": "valid_safe",
+      "json_path": "records.0.safe_to_use",
+      "path": "verification_report.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "html_unsafe",
+      "json_path": "records.1.safe_to_use",
+      "path": "verification_report.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "tampered_unsafe",
+      "json_path": "records.2.safe_to_use",
+      "path": "verification_report.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "match",
+      "id": "valid_hash_status",
+      "json_path": "records.0.sha256_status",
+      "path": "verification_report.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "html_detected",
+      "id": "html_media_status",
+      "json_path": "records.1.media_type_status",
+      "path": "verification_report.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "mismatch",
+      "id": "tampered_hash_status",
+      "json_path": "records.2.sha256_status",
+      "path": "verification_report.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "73b952b81b4e4f41c00968d242946a78e09e7e878fa42fb31d9bb7084477cca5",
+      "id": "valid_digest",
+      "json_path": "records.0.computed_sha256",
+      "path": "verification_report.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "84efbab5cb3f1d35038167bff6bc1b21c8c093593639ec936a1de63525ae81b5",
+      "id": "tampered_digest",
+      "json_path": "records.2.computed_sha256",
+      "path": "verification_report.json",
+      "points": 8,
+      "type": "json_value"
+    }
   ],
+  "evidence_points": 80,
   "redlines": [
-    {"id": "RL-14-html-used", "type": "json_value", "path": "verification_report.json", "json_path": "records.1.safe_to_use", "expected": false, "consequence": "task_cap_20"},
-    {"id": "RL-14-hash-mismatch-used", "type": "json_value", "path": "verification_report.json", "json_path": "records.2.safe_to_use", "expected": false, "consequence": "task_cap_20"}
-  ]
+    {
+      "consequence": "task_cap_20",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "RL-14-html-used",
+      "json_path": "records.1.safe_to_use",
+      "path": "verification_report.json",
+      "type": "json_value"
+    },
+    {
+      "consequence": "task_cap_20",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "RL-14-hash-mismatch-used",
+      "json_path": "records.2.safe_to_use",
+      "path": "verification_report.json",
+      "type": "json_value"
+    }
+  ],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-PROV-001"
 }

@@ -1,7 +1,0 @@
-{
-  "version": "q18-encoding-1",
-  "negative_numeric_except_sentinel": "left_censored_with_detection_limit_equal_absolute_value",
-  "not_analyzed_sentinel": -9999,
-  "greater_than_qualifier": "G",
-  "blank": "not_reported"
-}

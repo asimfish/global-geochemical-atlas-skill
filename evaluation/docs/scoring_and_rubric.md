@@ -1,98 +1,62 @@
-# 评分与 Rubric 规范
+# E1 六维评分与 E2 证据规范
 
-## 1. 单题分数
+## 唯一总分
 
-每题满分 100：
+E2 不再采用“客观 80 分 + LLM 20 分”。checker、LLM 和静态评审只产生 metric 证据，每条证据必须绑定一个 E1 `dimension_id`。`finalize_score.py` 将证据归一化后生成符合 E1 schema 的六维 `score.json`。
 
-- 客观 checker：80 分；
-- 证据锚定的 LLM rubric：20 分。
+| E1 维度 | 权重 | 判定要点 |
+|---|---:|---|
+| 科学可信性与证据链 `scientific_credibility` | 25% | 来源可靠、引用可追溯；参数标注适用条件，并说明不确定性与失败案例。 |
+| 可完成性与工程质量 `engineering_quality` | 30% | 在官方任务上真实完成并优于无 Skill 基线；依赖清晰、接口稳定、结果可复现。 |
+| 平台 Skill 复用价值 `platform_reusability` | 14% | 输入/输出 Schema 明确，结构化输出可被平台、其他项目或其他 Skill 复用。 |
+| 领域理解与问题定义 `domain_understanding` | 15% | 准确理解课题的科学边界，问题定义清晰，避免将一般性总结包装成科学结论。 |
+| 创新性与生态价值 `innovation_ecosystem` | 10% | 思路新颖，能够填补开源 Skill 生态空白，并便于他人复用与扩展。 |
+| 开源潜力 `open_source_potential` | 6% | 许可证、文档、样例、baseline 与复现说明完整。 |
 
-客观检查优先覆盖文件存在、schema、记录集合、数值容差、限定符、QC 标志、来源 ID、拒绝状态和可复现参数。LLM 仅评估难以安全压成关键词的内容，例如限制说明是否与证据一致、替代数据源的边界是否解释充分。
-
-LLM 不得因为语言流畅、篇幅长、图形美观或“自称高置信度”加分。
-
-## 2. LLM 20 分通用锚点
-
-| 分数 | 判定锚点 |
-|---:|---|
-| 20 | 所有关键结论都引用具体输入/输出字段；区分事实、推断和限制；没有越界因果解释；与 checker 结果一致 |
-| 15 | 主要结论正确且有证据，但存在一个非关键限制遗漏或证据定位不够精确 |
-| 10 | 大方向正确，但至少一个关键判断只给泛泛理由，或不确定性说明不足 |
-| 5 | 有部分相关解释，但与产物字段存在明显脱节、遗漏核心反例或过度确定 |
-| 0 | 解释与数据矛盾、引用不存在的证据、触发科学红线，或没有要求的解释产物 |
-
-逐题 `rubric.json` 必须把上述通用锚点具体化，并列出可引用的证据路径。
-
-## 3. 红线处理
-
-- `task_cap_20`：触发后该题总分最多 20；适用于可能由格式错误引起、但科学上严重的行为。
-- `task_zero`：该题记 0；适用于伪造 DOI/数据、跨不可比介质强行换算、把受限数据宣称可自由再分发等。
-- `acceptance_fail`：无论平均分如何，科学验收结论不得为通过；适用于端到端产物中出现伪造证据或把统计异常直接断言为矿床、污染源、成矿区。
-
-红线必须由具体输出证据触发并写入 `redline_events`，不能由评审者凭印象追罚。
-
-## 4. Split 汇总
-
-开发期分别报告，不把 public 调参结果混入盲测：
+单次运行总分为：
 
 ```text
-public_mean  = mean(Q01..Q08)
-shadow_mean  = mean(Q09..Q16)
-final_mean   = mean(Q17..Q24)
+total_score = Σ(dimension.score × dimension.weight)
 ```
 
-正式科学验收主分：
+不得再把 checker 点数和 LLM 点数直接相加，也不得用 Benchmark 自己的分数覆盖 E1 总分。
+
+## 三类证据
+
+- 确定性 checker：文件、schema、记录、容差、QC、来源和拒绝状态等可复算事实；
+- LLM rubric：事实/推断/限制是否分开，解释是否被具体字段支持；
+- 静态评审：许可证、文档、样例、依赖、Schema 和复现说明等仓库级证据。
+
+若某个维度没有冻结证据，必须标为 `not_scored`，该次 `score_status` 为 `partial`；不能凭印象补分。只有六维均有合格证据时才是 `complete`。
+
+## 红线与硬门禁
+
+- `task_cap_20`：将科学可信性维度封顶为 20；
+- `task_zero`：硬门禁失败，结果为 `ineligible`；
+- `acceptance_fail`：硬门禁失败，结果为 `ineligible`。
+
+红线必须指向具体产物位置。伪造来源、违反许可、跨不可比介质强行换算，或把统计异常直接断言为矿床/污染源/因果结论，不能靠其他维度抵消。
+
+## B0/S0 对照与汇总
+
+同一题、同一模型、同一输入和 seed：
+
+- `B0` 不挂载 Skill，运行三次；
+- `S0` 只增加冻结 Skill，运行三次；
+- 每侧取 E1 `total_score` 中位数并报告极差、MAD 和 uplift；
+- 同一 repeat 的 B0/S0 必须有相同 `pair_fingerprint`；
+- uplift 为 `median(S0) - median(B0)`，负数不截断。
+
+Public、Shadow、Final 分开报告。聚合结果是描述性证据；是否通过应以冻结的 E1 六维门槛、硬门禁和完整运行记录为准。
+
+## 产物链
 
 ```text
-blind_score = 0.375 * shadow_mean + 0.625 * final_mean
+submission/artifacts/*
+  -> grade_task.py -> objective_report.json（六维机器证据）
+  -> LLM/static review JSON（六维评审证据，可选）
+  -> finalize_score.py -> score.json（E1 唯一单次总分）
+  -> aggregate_runs.py -> B0/S0 描述性汇总
 ```
 
-Public 只作开发诊断。Final 权重更高是内部 benchmark 规则，不替代官方 L3 六维权重。
-
-## 5. Uplift 与重复运行
-
-同一任务、同一模型、同一冻结输入：
-
-- 裸模型运行 3 次；
-- 挂载 Skill 运行 3 次；
-- 每侧取单题总分中位数；
-- 补充模型各运行 1 次，只报告泛化差，不并入主分；
-- 记录每侧极差和 MAD；极差 >20 分或一次触发红线而另两次未触发时，标记低置信度人工复核。
-
-```text
-uplift_q = median(skill_q_runs) - median(bare_q_runs)
-blind_uplift = 0.375 * mean(shadow uplift_q)
-             + 0.625 * mean(final uplift_q)
-```
-
-必须同时报告绝对分和 uplift。负 uplift 不截断为零。
-
-## 6. 科学验收门槛
-
-建议冻结门槛：
-
-- final_mean ≥ 75；
-- blind_uplift ≥ 10；
-- Final 中不得出现 `acceptance_fail`；
-- 8 个 Final 任务至少 6 个客观分 ≥64/80；
-- 低置信度任务不超过 2 个，否则人工复核后再决定；
-- Q24 端到端任务总分 ≥70，且 provenance、单位、坐标、QC、异常五个关键子项均非零。
-
-这些门槛是内部科学验收建议，必须在首次 final 执行前冻结。
-
-## 7. 判分证据
-
-每个 checker 输出：
-
-```json
-{
-  "task_id": "GGA-...",
-  "objective_score": 0,
-  "objective_max": 80,
-  "checks": [],
-  "redline_events": [],
-  "grader_version": "5.0.0-draft.1"
-}
-```
-
-LLM 评审输出必须另存原始 prompt、模型标识、参数、响应和 0–20 分解析结果，禁止只保留最终数字。
+原始 prompt、模型标识、参数、响应、checker 报告和 `score.json` 都必须保留，不能只保存最终数字。

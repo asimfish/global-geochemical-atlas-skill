@@ -1,19 +1,17 @@
-# Global Geochemical Atlas Benchmark v5 — Public Development Set
+# Global Geochemical Atlas Benchmark v6 — Public Development Set
 
-本公开包只包含 Q01-Q08，用于对齐输入/输出接口、科学术语和基础失败模式。它不包含 Shadow 或 Final Holdout 的题面、输入、gold、checker 或可反推答案的细节，也不计入正式盲测主分。
+本公开包只包含 Q01–Q08，用于理解 E1 交卷接口、地球化学科学边界和常见失败模式。Public 的题面、输入、gold 与 checker 都可见，因此 Public 结果只能用于开发诊断，不能证明对隐藏题的泛化能力。
 
-公开题覆盖：数据源范围匹配、provenance、固体质量分数单位、氧化物换算、文件完整性、LOD/限定符、坐标 QC、重复与多方法记录。
-
-每题目录：
+每题的 `task.json.required_outputs` 都是 E1 的十个固定 `artifacts/` 文件。题目原有的专用结构化结果保存在 `artifacts/run_manifest.json.benchmark_evidence`，具体逻辑键由题面说明。
 
 ```text
 Qxx/
 ├── task.json
 ├── task.md
 ├── inputs/
-├── gold/
-├── checker/grader_spec.json
-└── rubric.json
+├── gold/artifacts/               # E1 形状的公开自测答案
+├── checker/grader_spec.json       # 六维证据检查，不是另一套总分
+└── rubric.json                    # 证据标准及所属 E1 维度
 ```
 
-开发者可查看 public gold 和 checker；因此 public 成绩只能作为接口自测，不代表盲测泛化能力。
+最终评分只采用 E1 六维权重与 E1 `score.json`；退出码也只采用 E1 映射。
