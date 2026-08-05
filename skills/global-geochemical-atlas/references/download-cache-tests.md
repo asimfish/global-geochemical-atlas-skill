@@ -57,6 +57,24 @@ python skills/global-geochemical-atlas/scripts/component_test.py --component d1
 
 ### 尚待补充
 
-- GEOROC 真实 ZIP 的 28 个成员 MD5 校验和安全解压记录；
 - 429/502/503/504 有限重试的本地 HTTP 故障注入记录；
 - 超时、Content-Length 超限、流式大小超限、HTML 伪文件和 checksum 不一致的完整自动化矩阵。
+
+## 2026-08-05 14:22 CST
+
+### USGS 适配器
+
+- 在线获取三个官方 TXT，实际 SHA-256 与注册表全部一致；
+- 解析得到 14,571 条源记录：0–5 cm、A horizon、C horizon 各 4,857 条；
+- 缓存模式重新验证三个文件的 URL、版本和 SHA-256，结果全部为 `cache_hit`；
+- 解析结果保留土层、原字段、原单位、文件名和物理行号。
+
+### GEOROC 适配器
+
+- 在线获取 Dataverse 版本 12.0 的动态 ZIP；
+- 安全解压并验证 28 个注册成员，无缺失或额外 CSV；
+- 逐成员验证文件大小和发布方 MD5，并计算本次取得文件的 SHA-256；
+- 必要字段 `CITATIONS`、位置、坐标范围、样品、岩石名称和材料全部存在；
+- 解析得到 33,745 条源记录，28 个成员均包含记录；
+- 缓存模式重新验证 ZIP hash、成员集合、成员 MD5 和字段，结果为 `cache_hit`；
+- CR 行结束符和 CSV 后附引用文本均已正确处理，引用文本不会被误判为测量记录。

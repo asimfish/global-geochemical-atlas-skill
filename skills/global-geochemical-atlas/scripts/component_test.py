@@ -231,6 +231,72 @@ def check_d1(output_dir: Path) -> list[str]:
         else:
             raise ContractError("D1 must reject ZIP path traversal")
         require(not (Path(evidence_temp) / "escape.csv").exists(), "D1 rejects ZIP path traversal", checks)
+
+        usgs_native = Path(evidence_temp) / "Appendix_2b_Top5_18Sept2013.txt"
+        usgs_native.write_text(
+            "USGS synthetic parser fixture\n\n"
+            "Top5_LabID\tSiteID\tStateID\tLatitude\tLongitude\tTop5_As\n"
+            "\t\t\tDegrees\tDegrees\tmg/kg\n"
+            "LAB-1\tSITE-1\tCO\t39.0\t-105.0\t8.2\n",
+            encoding="utf-8",
+        )
+        usgs_adapter = source_contracts.UsgsSoilAdapter()
+        usgs_records = list(
+            usgs_adapter.parse(
+                [
+                    source_contracts.DownloadedFile(
+                        source_id="usgs-conus-soil",
+                        file_id="top-0-5cm",
+                        path=usgs_native,
+                        source_url="https://example.org/usgs.txt",
+                        sha256=sha256_file(usgs_native),
+                        bytes=usgs_native.stat().st_size,
+                        cache_status="fixture",
+                        retrieved_at=None,
+                    )
+                ]
+            )
+        )
+        require(
+            len(usgs_records) == 1
+            and usgs_records[0].fields["_soil_layer"] == "top-0-5cm"
+            and usgs_records[0].fields["_units"]["Top5_As"] == "mg/kg",
+            "D1 USGS adapter preserves source fields, layer and units",
+            checks,
+        )
+
+        georoc_native = Path(evidence_temp) / "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv"
+        georoc_native.write_text(
+            "CITATIONS,SAMPLE NAME,LOCATION,MATERIAL,NI(PPM)\r"
+            "[1],SAMPLE-1,Aldan,WR,42\r"
+            "\r"
+            "Abbreviations: WR: WHOLE ROCK\r",
+            encoding="latin-1",
+        )
+        georoc_adapter = source_contracts.GeorocArchaeanAdapter()
+        georoc_records = list(
+            georoc_adapter.parse(
+                [
+                    source_contracts.DownloadedFile(
+                        source_id="georoc-archaean",
+                        file_id="OHZY0O",
+                        path=georoc_native,
+                        source_url="https://example.org/georoc.csv",
+                        sha256=sha256_file(georoc_native),
+                        bytes=georoc_native.stat().st_size,
+                        cache_status="fixture",
+                        retrieved_at=None,
+                    )
+                ]
+            )
+        )
+        require(
+            len(georoc_records) == 1
+            and georoc_records[0].fields["SAMPLE NAME"] == "SAMPLE-1"
+            and georoc_records[0].fields["NI(PPM)"] == "42",
+            "D1 GEOROC adapter handles CR-delimited CSV and stops before reference text",
+            checks,
+        )
     return checks
 
 
