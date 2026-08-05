@@ -32,7 +32,11 @@ SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
+VISUALIZATION_RENDERER = SCRIPT_DIR / "render_visualization.py"
 BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
+VISUALIZATION_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
+VISUALIZATION_PROFILE_SCHEMA = SKILL_DIR / "references" / "visualization-profile.schema.json"
+VISUALIZATION_REPORT_SCHEMA = SKILL_DIR / "references" / "visualization-report.schema.json"
 
 
 class ContractError(AssertionError):
@@ -928,6 +932,8 @@ def check_d3(output_dir: Path) -> list[str]:
                 "zoom-adaptive-anomaly-bubbles-v1",
                 "layoutAnomalyBubbles",
                 "conic-gradient",
+                'id="storyPreset"',
+                "d3-visualization-profile-v1",
             )
         ),
         "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
@@ -971,6 +977,9 @@ def check_d3(output_dir: Path) -> list[str]:
         and map_report.get("embedded_payload_schema") == "d3-compact-payload-v1"
         and map_report.get("anomaly_region_render_mode")
         == "zoom-adaptive-anomaly-bubbles-v1"
+        and map_report.get("visualization_profile", {}).get("schema_version")
+        == "d3-visualization-profile-v1"
+        and isinstance(map_report.get("visualization_profile_warnings"), list)
         and set(map_report.get("visualization_modes", []))
         == {
             "distribution_points",
@@ -1012,6 +1021,68 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 basemap provenance, source archive hash and geometry count are pinned",
         checks,
     )
+    profile = json_value(VISUALIZATION_PROFILE)
+    profile_schema = json_value(VISUALIZATION_PROFILE_SCHEMA)
+    visualization_report_schema = json_value(VISUALIZATION_REPORT_SCHEMA)
+    require(
+        profile.get("schema_version") == "d3-visualization-profile-v1"
+        and profile_schema.get("properties", {}).get("schema_version", {}).get("const")
+        == "d3-visualization-profile-v1"
+        and visualization_report_schema.get("properties", {})
+        .get("interface_version", {})
+        .get("const")
+        == "d3-visualization-interface-v1",
+        "D3 publishes a versioned task profile template and Schema",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as visualization_temp:
+        visualization_root = Path(visualization_temp)
+        task_profile = dict(profile)
+        task_profile["title"] = "As 土壤候选异常任务视图"
+        task_profile["story"] = "anomaly"
+        task_profile["default_region"] = "usa48"
+        task_profile["filters"] = {
+            **profile["filters"],
+            "element": "As",
+            "medium": "soil",
+        }
+        task_profile_path = visualization_root / "task-profile.json"
+        task_profile_path.write_text(
+            json.dumps(task_profile, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        visualization_output = visualization_root / "bundle"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_RENDERER),
+                "--input-dir",
+                str(output_dir),
+                "--profile",
+                str(task_profile_path),
+                "--output-dir",
+                str(visualization_output),
+            ]
+        )
+        visualization_report = json_value(
+            visualization_output / "visualization_report.json"
+        )
+        configured_html = (visualization_output / "interactive_map.html").read_text(
+            encoding="utf-8"
+        )
+        require(
+            visualization_report.get("status") == "success"
+            and visualization_report.get("interface_version")
+            == "d3-visualization-interface-v1"
+            and visualization_report.get("profile", {}).get("story") == "anomaly"
+            and visualization_report.get("profile", {}).get("filters", {}).get("element")
+            == "As"
+            and visualization_report.get("map_report", {}).get("default_view")
+            == "profile_driven_task_view"
+            and "As 土壤候选异常任务视图" in configured_html,
+            "D3 Agent entry point renders a task-configured map without editing HTML",
+            checks,
+        )
     return checks
 
 

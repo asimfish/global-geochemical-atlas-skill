@@ -108,9 +108,26 @@
         "display_sample_count": {"type": "integer", "minimum": 0},
         "unmappable_record_count": {"type": "integer", "minimum": 0},
         "candidate_record_count": {"type": "integer", "minimum": 0},
-        "default_view": {"const": "all_data_sample_deduplicated"},
+        "default_view": {"enum": ["all_data_sample_deduplicated", "profile_driven_task_view"]},
         "embedded_payload_schema": {"const": "d3-compact-payload-v1"},
         "anomaly_region_render_mode": {"const": "zoom-adaptive-anomaly-bubbles-v1"},
+        "visualization_profile": {
+          "type": "object",
+          "required": ["schema_version", "story", "default_region", "filters", "comparison", "display"],
+          "properties": {
+            "schema_version": {"const": "d3-visualization-profile-v1"},
+            "story": {"enum": ["overview", "coverage", "anomaly", "comparison", "evidence"]},
+            "default_region": {"type": "string"},
+            "filters": {"type": "object"},
+            "comparison": {"type": "object"},
+            "display": {"type": "object"}
+          },
+          "additionalProperties": true
+        },
+        "visualization_profile_warnings": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
         "visualization_modes": {
           "type": "array",
           "items": {

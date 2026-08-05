@@ -17,11 +17,13 @@ from typing import Any
 MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
+PROFILE_VERSION = "d3-visualization-profile-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 MAX_OUTPUT_BYTES = 100_000_000
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
 DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "interactive-atlas-v3.html"
+DEFAULT_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
 REGION_PRESETS: dict[str, dict[str, Any]] = {
     "global": {
         "label": "全球",
@@ -177,6 +179,225 @@ def load_json_object(path: Path | None, label: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise MapBuildError(f"{label} must be a JSON object")
     return value
+
+
+def require_exact_keys(value: Mapping[str, Any], expected: set[str], label: str) -> None:
+    missing = sorted(expected - set(value))
+    unknown = sorted(set(value) - expected)
+    if missing or unknown:
+        details = []
+        if missing:
+            details.append("missing " + ", ".join(missing))
+        if unknown:
+            details.append("unknown " + ", ".join(unknown))
+        raise MapBuildError(f"{label} fields are invalid: {'; '.join(details)}")
+
+
+def profile_text(value: Any, label: str, maximum: int, nullable: bool = False) -> str | None:
+    if value is None and nullable:
+        return None
+    if not isinstance(value, str) or not value.strip():
+        raise MapBuildError(f"visualization profile {label} must be a non-empty string")
+    text = value.strip()
+    if len(text) > maximum:
+        raise MapBuildError(f"visualization profile {label} exceeds {maximum} characters")
+    return text
+
+
+def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
+    profile = load_json_object(path or DEFAULT_PROFILE, "visualization profile")
+    top_keys = {
+        "schema_version",
+        "title",
+        "subtitle",
+        "story",
+        "theme",
+        "default_region",
+        "custom_region",
+        "filters",
+        "comparison",
+        "display",
+    }
+    require_exact_keys(profile, top_keys, "visualization profile")
+    if profile.get("schema_version") != PROFILE_VERSION:
+        raise MapBuildError(f"visualization profile must use {PROFILE_VERSION}")
+    if profile.get("theme") != "evidence-dark":
+        raise MapBuildError("visualization profile theme must be evidence-dark")
+    story = profile.get("story")
+    if story not in {"overview", "coverage", "anomaly", "comparison", "evidence"}:
+        raise MapBuildError("visualization profile story is unsupported")
+    default_region = profile.get("default_region")
+    if default_region not in {*REGION_PRESETS, "custom"}:
+        raise MapBuildError("visualization profile default_region is unsupported")
+
+    custom_region = profile.get("custom_region")
+    if custom_region is not None:
+        if not isinstance(custom_region, dict):
+            raise MapBuildError("visualization profile custom_region must be null or an object")
+        require_exact_keys(custom_region, {"label", "bounds"}, "custom_region")
+        bounds = custom_region.get("bounds")
+        if not isinstance(bounds, dict):
+            raise MapBuildError("visualization profile custom_region.bounds must be an object")
+        require_exact_keys(bounds, {"w", "s", "e", "n"}, "custom_region.bounds")
+        numbers: dict[str, float] = {}
+        for key in ("w", "s", "e", "n"):
+            raw_value = bounds.get(key)
+            if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+                raise MapBuildError(
+                    f"visualization profile custom_region.bounds.{key} is invalid"
+                )
+            value = float(raw_value)
+            if not math.isfinite(value):
+                raise MapBuildError(
+                    f"visualization profile custom_region.bounds.{key} is invalid"
+                )
+            numbers[key] = value
+        if not (
+            -180 <= numbers["w"] < numbers["e"] <= 180
+            and -90 <= numbers["s"] < numbers["n"] <= 90
+        ):
+            raise MapBuildError("visualization profile custom bounds must satisfy W<E and S<N")
+        custom_region = {
+            "label": profile_text(custom_region.get("label"), "custom_region.label", 80),
+            "bounds": numbers,
+        }
+    if default_region == "custom" and custom_region is None:
+        raise MapBuildError("default_region=custom requires custom_region")
+
+    filters = profile.get("filters")
+    filter_keys = {"element", "medium", "basis", "geology", "method", "source", "confidence"}
+    if not isinstance(filters, dict):
+        raise MapBuildError("visualization profile filters must be an object")
+    require_exact_keys(filters, filter_keys, "visualization profile filters")
+    normalized_filters = {
+        key: profile_text(filters.get(key), f"filters.{key}", 160, nullable=True)
+        for key in sorted(filter_keys)
+    }
+
+    comparison = profile.get("comparison")
+    comparison_keys = {"x", "y", "medium"}
+    if not isinstance(comparison, dict):
+        raise MapBuildError("visualization profile comparison must be an object")
+    require_exact_keys(comparison, comparison_keys, "visualization profile comparison")
+    normalized_comparison = {
+        key: profile_text(comparison.get(key), f"comparison.{key}", 160, nullable=True)
+        for key in sorted(comparison_keys)
+    }
+
+    display = profile.get("display")
+    display_keys = {
+        "map_mode",
+        "color_by",
+        "anomaly_grid_degrees",
+        "show_anomaly_points",
+        "show_anomaly_regions",
+    }
+    if not isinstance(display, dict):
+        raise MapBuildError("visualization profile display must be an object")
+    require_exact_keys(display, display_keys, "visualization profile display")
+    if display.get("map_mode") not in {"distribution", "heat", "combined"}:
+        raise MapBuildError("visualization profile display.map_mode is unsupported")
+    if display.get("color_by") not in {"medium", "element", "value"}:
+        raise MapBuildError("visualization profile display.color_by is unsupported")
+    grid_degrees = display.get("anomaly_grid_degrees")
+    if isinstance(grid_degrees, bool) or grid_degrees not in {1, 2, 5}:
+        raise MapBuildError("visualization profile anomaly grid must be 1, 2, or 5 degrees")
+    for key in ("show_anomaly_points", "show_anomaly_regions"):
+        if not isinstance(display.get(key), bool):
+            raise MapBuildError(f"visualization profile display.{key} must be boolean")
+
+    return {
+        "schema_version": PROFILE_VERSION,
+        "title": profile_text(profile.get("title"), "title", 120),
+        "subtitle": profile_text(profile.get("subtitle"), "subtitle", 500),
+        "story": story,
+        "theme": "evidence-dark",
+        "default_region": default_region,
+        "custom_region": custom_region,
+        "filters": normalized_filters,
+        "comparison": normalized_comparison,
+        "display": {key: display[key] for key in sorted(display_keys)},
+    }
+
+
+def visualization_profile_warnings(
+    profile: Mapping[str, Any], records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]
+) -> list[str]:
+    method_values = {
+        str(record.get("method_family") or record.get("analytical_method") or "unknown")
+        for record in records
+    }
+    available = {
+        "element": {str(record.get("element")) for record in records if record.get("element")},
+        "medium": {str(record.get("medium")) for record in records if record.get("medium")},
+        "basis": {
+            str(record.get("measurement_basis"))
+            for record in records
+            if record.get("measurement_basis")
+        },
+        "geology": {
+            str(record.get("geologic_unit")) for record in records if record.get("geologic_unit")
+        },
+        "method": method_values,
+        "source": {str(record.get("source_id")) for record in records if record.get("source_id")},
+        "confidence": {
+            str(record.get("confidence_band"))
+            for record in records
+            if record.get("confidence_band")
+        },
+    }
+    warnings = []
+    for key, requested in profile["filters"].items():
+        if requested and requested not in available[key]:
+            warnings.append(f"请求筛选值在当前数据中未观测到：{key}={requested}")
+    for key in ("x", "y"):
+        requested = profile["comparison"].get(key)
+        if requested and requested not in available["element"]:
+            warnings.append(f"请求的组合元素在当前数据中未观测到：{key}={requested}")
+    requested_medium = profile["comparison"].get("medium")
+    if requested_medium and requested_medium not in available["medium"]:
+        warnings.append(f"请求的组合介质在当前数据中未观测到：{requested_medium}")
+    region = (
+        profile["custom_region"]
+        if profile["default_region"] == "custom"
+        else REGION_PRESETS[profile["default_region"]]
+    )
+    bounds = region["bounds"]
+    region_records = [
+        record
+        for record in records
+        if bounds["w"] <= float(record["longitude"]) <= bounds["e"]
+        and bounds["s"] <= float(record["latitude"]) <= bounds["n"]
+    ]
+    if not region_records:
+        warnings.append("默认区域没有可上图记录；页面将显示覆盖缺口")
+    filters = profile["filters"]
+    field_map = {
+        "element": "element",
+        "medium": "medium",
+        "basis": "measurement_basis",
+        "geology": "geologic_unit",
+        "source": "source_id",
+        "confidence": "confidence_band",
+    }
+
+    def matches_filters(record: Mapping[str, Any]) -> bool:
+        for profile_key, record_key in field_map.items():
+            requested = filters.get(profile_key)
+            if requested and record.get(record_key) != requested:
+                return False
+        requested_method = filters.get("method")
+        method = record.get("method_family") or record.get("analytical_method") or "unknown"
+        return not requested_method or method == requested_method
+
+    configured_records = [record for record in region_records if matches_filters(record)]
+    if region_records and not configured_records:
+        warnings.append("默认区域与筛选组合没有可上图记录")
+    if profile["story"] == "anomaly" and not any(
+        str(record.get("record_id")) in anomaly_ids for record in configured_records
+    ):
+        warnings.append("当前异常任务配置没有匹配的 D2 候选")
+    return warnings
 
 
 def load_anomalies(path: Path) -> dict[str, Any]:
@@ -436,6 +657,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         MAP_VERSION,
         PAYLOAD_VERSION,
         ANOMALY_RENDER_MODE,
+        PROFILE_VERSION,
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:
@@ -456,22 +678,27 @@ def build_map(
     source_manifest_path: Path | None = None,
     anomaly_report_path: Path | None = None,
     basemap_path: Path = DEFAULT_BASEMAP,
+    visualization_profile_path: Path | None = None,
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
     records, total_records = load_records(database, max_points)
     anomalies = load_anomalies(anomalies_path)
     basemap = load_basemap(basemap_path)
+    profile = load_visualization_profile(visualization_profile_path)
     anomaly_ids = {
         str(feature.get("properties", {}).get("record_id"))
         for feature in anomalies["features"]
         if feature.get("properties", {}).get("record_id") is not None
     }
+    profile_warnings = visualization_profile_warnings(profile, records, anomaly_ids)
     geojson = samples_geojson(records, anomaly_ids)
     map_payload = compact_map_payload(records, anomaly_ids)
     context = {
         "map_version": MAP_VERSION,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
+        "visualization_profile": profile,
+        "visualization_profile_warnings": profile_warnings,
         "total_record_count": total_records,
         "mappable_record_count": len(records),
         "region_presets": REGION_PRESETS,
@@ -499,6 +726,11 @@ def build_map(
     atomic_text(output_geojson, geojson_text)
     atomic_text(output_html, html)
     sample_keys = {sample_display_key(record) for record in records}
+    all_data_overview = (
+        profile["story"] == "overview"
+        and profile["default_region"] == "global"
+        and not any(profile["filters"].values())
+    )
     return {
         "map_version": MAP_VERSION,
         "mapped_record_count": len(records),
@@ -507,9 +739,13 @@ def build_map(
         "candidate_record_count": sum(
             str(record["record_id"]) in anomaly_ids for record in records
         ),
-        "default_view": "all_data_sample_deduplicated",
+        "default_view": (
+            "all_data_sample_deduplicated" if all_data_overview else "profile_driven_task_view"
+        ),
         "embedded_payload_schema": PAYLOAD_VERSION,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
+        "visualization_profile": profile,
+        "visualization_profile_warnings": profile_warnings,
         "visualization_modes": [
             "distribution_points",
             "sample_density_heatmap",
@@ -555,6 +791,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--basemap", type=Path, default=DEFAULT_BASEMAP, help="Pinned offline basemap asset"
     )
     parser.add_argument(
+        "--profile",
+        type=Path,
+        help="Optional d3-visualization-profile-v1 JSON; defaults to the bundled template",
+    )
+    parser.add_argument(
         "--max-points", type=int, default=50_000, help="Fail if valid coordinate points exceed this"
     )
     return parser
@@ -575,6 +816,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.source_manifest,
             args.anomaly_report,
             args.basemap,
+            args.profile,
         )
     except (MapBuildError, OSError) as exc:
         parser.error(str(exc))

@@ -1,153 +1,156 @@
-# D3 可视化消费层契约
+# D3 可视化生成契约
 
-## 责任边界
+## 1. 目标与边界
 
-D3 负责唯一生产 Skill、总工作流、地图、输出校验和 demo。D3 只消费 D1/D2 公共产物：
+D3 是 Agent 可重复执行的“可视化生成步骤”，不是一张固定网页。Agent 根据用户问题生成任务配置，
+再用确定性脚本把任意合规 D1/D2 目录渲染为地图。`assets/interactive-atlas-v3.html` 只是内部资产模板；
+不要要求用户或 Agent 手工修改 HTML、内嵌 JSON 或 Canvas 代码。
+
+D3 只消费 D1/D2 结论：
 
 - 不修改 `geochemistry.csv` 的标准值、单位、qualifier、QC 或置信度；
-- 不重算 `anomalies.geojson`、阈值、背景组或异常方向；
-- 不替 D1 判断来源许可或把声明来源升级为已验证证据；
-- 不把地图符号聚合写回记录级数据库或 GeoJSON。
+- 不重算 `anomalies.geojson` 的阈值、背景组或 high/low 方向；
+- 不替 D1 判断许可，也不把声明来源升级为已验证来源；
+- 不把显示聚合写回标准数据库或记录级 GeoJSON。
 
-## 输入
+## 2. Agent 状态机
 
-独立地图构建器的必需输入：
+按顺序执行，不能跳过配置与验证：
+
+1. 读取用户问题，提取主要元素、区域、介质、地质单元和目标视图。
+2. 检查输入目录是否包含六个必需 D1/D2 文件；缺失时返回 `invalid_input`。
+3. 复制 `assets/visualization-profile.template.json`，只修改与用户问题有关的字段。
+4. 运行 `scripts/render_visualization.py`；不要直接编辑 HTML 模板。
+5. 检查 `visualization_report.json.status`、`profile_warnings`、记录计数和文件大小。
+6. 打开生成的 HTML 做最小人工检查：首屏任务、空结果、图例、点击证据和来源链接。
+7. 返回产物路径、已应用配置、覆盖提示和解释边界。
+
+## 3. 输入目录
+
+必需文件：
 
 ```text
 geochemistry.csv
 anomalies.geojson
-```
-
-推荐同时提供：
-
-```text
 qc_report.json
 confidence_report.json
 source_manifest.json
 anomaly_report.json
 ```
 
-`geochemistry.csv` 至少包含 `record_id`、元素、介质、标准值/单位、坐标、QC、置信度、
-`source_id` 和 `source_locator`。坐标为空、非有限或超出 WGS84 范围的记录不进入地图，但保留在
-数据库和 QC 统计中。输入超过 `--max-points` 时失败关闭，不抽样冒充完整结果。
+若存在 `record_evidence.jsonl`，渲染包一并保留。`geochemistry.csv` 至少包含记录 ID、元素、介质、
+标准值/单位、坐标、QC、置信度、来源 ID 和来源定位。坐标为空、非有限或超出 WGS84 的记录不进入
+地图，但继续保留在数据库和 QC 报告。超过 `--max-points` 时失败关闭，不抽样冒充完整结果。
 
-## 输出
+## 4. 任务配置模板
 
-- `samples.geojson`：一条 feature 对应一条具有合格坐标的测定记录；
-- `interactive_map.html`：内嵌压缩样点载荷、候选异常、报告上下文和固定底图的单文件应用；
-- `run_summary.json.map_report`：记录地图版本、记录/样品/坐标失败计数、默认视图和底图来源。
+配置使用 `d3-visualization-profile-v1`，完整约束见
+[visualization-profile.schema.json](visualization-profile.schema.json)。关键字段：
 
-HTML 不依赖 CDN、外部脚本、远程字体或在线瓦片。`samples.geojson` 保持记录级粒度；地图首页的
-样品级去叠加只是显示行为。构建器在原子写出前计算 UTF-8 字节数；HTML 或 GeoJSON 任一超过
-100 MB 时失败关闭，要求按范围或来源拆分。HTML 使用 `d3-compact-payload-v1` 字符串池与定长数组，
-减少重复字段名；`samples.geojson` 仍是公开、记录级、标准 GeoJSON，不要求下游理解私有载荷。
-
-## 默认视图与色阶门
-
-首页选择全部元素、介质、地质单元、方法、来源和置信度。KPI 显示测定记录数，地图符号按：
-
-```text
-source_id + sample_id + medium + longitude + latitude
+```json
+{
+  "story": "overview",
+  "default_region": "global",
+  "custom_region": null,
+  "filters": {
+    "element": null,
+    "medium": null,
+    "basis": null,
+    "geology": null,
+    "method": null,
+    "source": null,
+    "confidence": null
+  },
+  "comparison": {"x": null, "y": null, "medium": null},
+  "display": {
+    "map_mode": "combined",
+    "color_by": "medium",
+    "anomaly_grid_degrees": 2,
+    "show_anomaly_points": false,
+    "show_anomaly_regions": true
+  }
+}
 ```
 
-折叠。缺少 `sample_id` 时改用 `record_id`，不得仅凭坐标合并记录。
+按问题选择一个 `story`：
 
-用户可明确选择“按介质”“按元素”或“按可比浓度”着色。全元素按元素着色时，显示粒度为
-`采样身份 + 元素`；按介质或默认总览仍按物理采样身份折叠。只有用户选择浓度且当前筛选同时为
-以下单一可比组时才显示浓度对数色阶：
+| 用户问题 | story | 推荐首屏 |
+|---|---|---|
+| 数据在哪里、有哪些介质 | `overview` | 分布点 + 密度，按介质着色 |
+| 哪些区域有数据或覆盖空洞 | `coverage` | 样点密度，关闭异常层 |
+| 哪里富集或亏损 | `anomaly` | 分布图 + 异常区域圆环 |
+| 两个元素是否共测或协变 | `comparison` | 元素组合页，并设置 X/Y |
+| 来源是否可靠 | `evidence` | 来源与置信度页 |
 
-1. 单一元素；
-2. 单一介质；
-3. 单一且已知的 measurement basis；
-4. 单一且已知的方法组；
-5. 单一且已知的标准单位。
+只把用户明确指定的元素、介质、地质单元等写入 `filters`。不要为了让地图“看起来有数据”而取消
+无匹配筛选；保留该值，使页面显示覆盖缺口，并在 `profile_warnings` 中报告。自定义区域必须写明
+WGS84 `W,S,E,N`；预设区域只是 bbox，不是假装精确行政裁切。
 
-色阶使用当前组 3%–97% 分位的稳健 `log10` 范围，仅用于描述性展示。异常判定仍完全来自 D2。
+## 5. 单命令生成
 
-## 区域选择与覆盖缺口
-
-内置全球、美国范围框、美国本土范围框、中国范围框、上海范围框、欧洲范围框和澳大利亚范围框，
-并允许输入 `W,S,E,N` 自定义 bbox。预设是显式经纬度框，不伪装成精确行政区裁切。区域同时约束
-测定、样点、热力图、元素组合和异常显示聚合；页面必须显示当前区域记录数。零记录时显示
-“覆盖缺口”，不得解释为元素不存在、含量为零或没有异常。
-
-## 地图层与证据
-
-- 分布图：普通定量值、删失值轮廓，以及明确的介质色或元素色；
-- 热力图：按当前区域的物理采样点在屏幕网格内计数，并把有数据网格画成圆形柔光；柔光半径只是减少方块感的显示符号，不编码地理覆盖范围，不做核密度或空间浓度插值；
-- 组合模式：同时画分布点和样点密度，让密集区可见但不掩盖单点证据；
-- 异常点：直接叠加 D2 high/low candidate；
-- 候选区域：将当前筛选的 D2 候选点放入用户选择的 1°、2° 或 5° 固定经纬网格；全景把邻近网格渲染为按屏幕距离聚合的红蓝圆环，缩放后自动展开，只有选中时显示实际 bbox；按钮显示候选点、网格位置和方向网格计数，圆环支持悬停、点击详情和从区域表定位回地图；
-- 记录面板：展示原值、标准值、basis、方法、QC、置信度、来源定位和许可；
-- 来源页：展示 D1 manifest 证据边界与来源统计；
-- 异常页：展示 D2 方法版本、阈值、背景组和候选表；
-- 质量页：展示 QC flags、坐标失败数和不可解释边界。
-
-拖动和缩放只重绘缓存的当前筛选，不重新扫描全部记录；异常方向通过 `record_id` 索引读取，
-不得在逐点绘制中对全部异常做线性搜索。
-
-## 元素组合
-
-元素组合页提供 X/Y 元素配对散点和元素共测样品矩阵。散点只接受：
-
-1. 同一 `source_id + sample_id`；
-2. 同介质、同 measurement basis、同方法组；
-3. X 与 Y 各恰好一条非删失正定量记录；
-4. X、Y 各自单位在所选层内唯一。
-
-存在多个可比层时只画样品对最多的一层，并报告未混合层数和被排除身份数。坐标轴使用 `log10`；
-样品对不少于 8 且秩方差非零时才报告 Spearman ρ。矩阵只表示共测身份，不声称浓度可比、相关、
-因果或地质成因。
-
-## 富集与亏损候选区域
-
-区域网格的科学状态固定为 `visual_aggregation_only`。D3 不重算 robust z、不合并背景组、不改变
-high/low 方向，也不输出新的记录级异常。表格必须列出 bbox、方向、候选点数、元素、介质和最大
-`|robust_z|`，并提示网格不是地质、矿体、污染或行政边界。
-
-地图使用 `zoom-adaptive-anomaly-bubbles-v1`：同一固定网格的 high/low 方向合成一个分段圆环，大范围
-视图再按屏幕距离合并邻近圆环以减少遮挡，缩放后自动拆分。红弧和蓝弧长度只编码聚合候选点比例，
-中心数字是候选点数；圆环大小是可点击视觉符号，不编码真实面积。只有选中圆环后才以金色虚线展示
-其实际固定网格边界。该显示层不得改变表格、GeoJSON 或 D2 判定。
-
-点击圆环时列出当前筛选下落入其固定网格且方向一致的候选记录，至少展示 `record_id`、元素、介质、
-标准值/单位、high/low、robust z 和来源；点击记录继续下钻到记录级证据。若当前区域或筛选为零候选，
-按钮和表格必须显式显示 `0`，不得呈现为无响应。
-
-## 离线底图
-
-`assets/natural-earth-110m-land.json` 是固定的 Natural Earth 1:110m 公有领域陆地轮廓。构建时
-验证资产版本、许可、坐标范围和点数上限，再嵌入 HTML。底图只提供地理上下文，不参与地质匹配、
-异常分析或覆盖推断。
-
-## 复现
-
-从 Skill 目录运行完整流程：
+从 Skill 目录执行：
 
 ```bash
-python scripts/run_workflow.py \
-  --input fixtures/demo_input.csv \
-  --output-dir demo_output
+python scripts/render_visualization.py \
+  --input-dir D1_D2_OUTPUT \
+  --profile TASK_PROFILE.json \
+  --output-dir VISUALIZATION_OUTPUT
 ```
 
-只消费已存在的 D2 产物：
+默认配置可直接用于全局总览：
 
 ```bash
-python scripts/build_interactive_map.py \
-  --database OUTPUT/geochemistry.csv \
-  --anomalies OUTPUT/anomalies.geojson \
-  --qc-report OUTPUT/qc_report.json \
-  --confidence-report OUTPUT/confidence_report.json \
-  --source-manifest OUTPUT/source_manifest.json \
-  --anomaly-report OUTPUT/anomaly_report.json \
-  --output-html OUTPUT/interactive_map.html \
-  --output-geojson OUTPUT/samples.geojson
+python scripts/render_visualization.py \
+  --input-dir D1_D2_OUTPUT \
+  --output-dir VISUALIZATION_OUTPUT
 ```
 
-验收：
+脚本负责解析模板、嵌入数据、复制页面引用的证据文件并生成报告。已有生成文件时不静默覆盖；确需
+替换时显式传 `--force`。
 
-```bash
-python scripts/component_test.py --component d3
-python scripts/self_test.py
-python scripts/validate_outputs.py --output-dir demo_output
-```
+## 6. 输出与验收
+
+核心 D3 输出：
+
+- `interactive_map.html`：任务配置驱动、离线、自包含的交互地图；
+- `samples.geojson`：一条 feature 对应一条合格坐标测定记录；
+- `visualization_profile.json`：本次可复现任务配置；
+- `visualization_report.json`：输入哈希、配置、警告、地图计数和失败边界，结构见
+  [visualization-report.schema.json](visualization-report.schema.json)。
+
+输出目录同时保留页面引用的标准数据库、来源、置信度和异常文件。HTML 不依赖 CDN、远程字体、
+在线瓦片或浏览器扩展；HTML 或 GeoJSON 单文件超过 100 MB 时失败关闭。
+
+验收至少检查：
+
+- 首屏是否直接对应用户问题，而不是要求用户先理解所有控件；
+- 元素、区域、地质单元、介质、来源和置信度筛选是否真实生效；
+- 分布、密度、元素组合和异常四类视图是否仍可切换；
+- 空区域是否显示“覆盖缺口”而不是零含量或不存在；
+- 点、异常区域和来源卡片是否能下钻到记录证据；
+- `visualization_report.json` 是否为 `success`，警告是否被向用户说明。
+
+## 7. 科学显示规则
+
+默认全元素总览按 `source_id + sample_id + medium + coordinates` 折叠为物理采样符号；缺少
+`sample_id` 时使用 `record_id`，不得只凭坐标去重。按元素着色时使用“采样身份 + 元素”。
+
+只有当前筛选同时满足单一元素、单一介质、单一已知 measurement basis、单一已知方法组和单一
+标准单位时，才允许使用浓度 `log10` 色阶；否则明确回退为分类色。密度图统计屏幕网格中的物理
+采样点，并用圆形柔光显示；这不是核密度估计，也不是浓度插值。
+
+元素组合只接受同一来源与样品、同介质、同 basis、同方法组、各元素唯一单位、非删失正值。
+存在多个可比层时只画样品对最多的一层并报告排除数；少于 8 对或秩方差为零时不报告 Spearman。
+
+异常区域状态固定为 `visual_aggregation_only`。固定 1°/2°/5° 网格只聚合 D2 high/low 候选点；
+全球视图可把相邻网格画成缩放自适应红蓝圆环，选中时再展示真实 bbox。圆环面积不表示真实范围，
+异常候选也不等于污染、矿化或成因结论。
+
+## 8. 失败状态
+
+- `invalid_input`：目录、必需文件、配置字段或 JSON 无效；
+- `unsupported_scope`：记录数或文件大小超过安全范围；
+- `incomplete_retrieval`：输入计数或证据产物不完整；
+- `needs_human_review`：CRS、许可、方法可比性或解释需专家判断。
+
+失败时仍写 `visualization_report.json`，保留失败位置与下一步；不要生成看似完整但缺少证据的网页。

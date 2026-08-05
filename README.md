@@ -31,6 +31,21 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 页面同时提供来源与置信度、候选异常、QC 与覆盖边界页签，全部直接消费 D1/D2 公共产物，
 不在可视化层重算标准值、置信度或异常。
 
+## D3 是可视化生成 Skill，不是一张固定网页
+
+`interactive-atlas-v3.html` 是 Skill 内部模板。Agent 应从用户问题生成
+`d3-visualization-profile-v1` 配置，再用一个目录级命令渲染，不能要求用户手改 HTML：
+
+```bash
+python skills/global-geochemical-atlas/scripts/render_visualization.py \
+  --input-dir demo_output \
+  --profile skills/global-geochemical-atlas/assets/visualization-profile.template.json \
+  --output-dir visualization_output
+```
+
+配置决定首屏任务、区域、元素、介质、地质单元、元素组合和图层；结果同时输出配置与
+`visualization_report.json`，便于 Agent 和评测系统核验复现性及覆盖提示。
+
 然后运行自检：
 
 ```bash

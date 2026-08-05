@@ -16,6 +16,20 @@ python scripts/validate_outputs.py --output-dir demo_output
 python scripts/component_test.py --component all
 ```
 
+单独演示 D3 时，不修改 HTML。先复制任务配置，再从标准输出目录生成新的可视化包：
+
+```bash
+cp assets/visualization-profile.template.json /tmp/task-profile.json
+python scripts/render_visualization.py \
+  --input-dir demo_output \
+  --profile /tmp/task-profile.json \
+  --output-dir visualization_output
+```
+
+按演示问题修改 `/tmp/task-profile.json` 的 `story`、默认区域、元素、介质或 X/Y；打开
+`visualization_output/interactive_map.html` 时应直接进入该任务视图。检查
+`visualization_report.json`，不要隐藏 `profile_warnings`。
+
 ## 真实来源证据链 demo
 
 仓库还包含两个合法的小型真实来源 fixture，均明确标记为 `not_for_scientific_interpretation`。推荐用 USGS demo 展示完整地图、方法、删失值和来源证据：
@@ -47,10 +61,10 @@ GEOROC fixture 的 datum 尚无足够证据，故 48 条记录保留 reported co
 
 ## 三分钟演示顺序
 
-1. 展示请求和输入来源说明。
-2. 运行一键命令并展示稳定文件清单。
+1. 展示用户问题和由 Agent 生成的 `visualization_profile.json`，说明 HTML 是内部模板而非参赛主体。
+2. 运行一键命令并展示标准数据库、证据报告、异常结果和任务可视化清单。
 3. 对比原值、标准值、qualifier、QC 和置信度。
-4. 打开地图，先展示全球全部元素的样品级介质分类总览，再切换“按元素”颜色，明确两种图例的区别。
+4. 打开地图，首屏直接进入配置指定的问题视图；使用“任务视图”下拉切换总览、覆盖、异常、元素组合和证据链。
 5. 切换美国或上海范围框：美国显示区域记录；上海若为 0 则展示“覆盖缺口，不是元素不存在”的失败可见化。
 6. 在“分布图 / 热力图 / 组合”之间切换，强调热力底色只统计物理样点密度，不插值浓度。
 7. 筛选 As/soil 并选择“按可比浓度”；只有 basis、方法组和单位收敛后才出现浓度对数色阶。
