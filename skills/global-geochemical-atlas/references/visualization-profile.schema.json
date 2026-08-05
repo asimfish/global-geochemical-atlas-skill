@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v1",
+  "title": "D3 visualization profile",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "title",
+    "subtitle",
+    "story",
+    "theme",
+    "default_region",
+    "custom_region",
+    "filters",
+    "comparison",
+    "display"
+  ],
+  "properties": {
+    "schema_version": {"const": "d3-visualization-profile-v1"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 120},
+    "subtitle": {"type": "string", "minLength": 1, "maxLength": 500},
+    "story": {
+      "enum": ["overview", "coverage", "anomaly", "comparison", "evidence"]
+    },
+    "theme": {"const": "evidence-dark"},
+    "default_region": {
+      "enum": ["global", "usa", "usa48", "china", "shanghai", "europe", "australia", "custom"]
+    },
+    "custom_region": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["label", "bounds"],
+          "properties": {
+            "label": {"type": "string", "minLength": 1, "maxLength": 80},
+            "bounds": {
+              "type": "object",
+              "required": ["w", "s", "e", "n"],
+              "properties": {
+                "w": {"type": "number", "minimum": -180, "maximum": 180},
+                "s": {"type": "number", "minimum": -90, "maximum": 90},
+                "e": {"type": "number", "minimum": -180, "maximum": 180},
+                "n": {"type": "number", "minimum": -90, "maximum": 90}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "filters": {
+      "type": "object",
+      "required": ["element", "medium", "basis", "geology", "method", "source", "confidence"],
+      "properties": {
+        "element": {"type": ["string", "null"]},
+        "medium": {"type": ["string", "null"]},
+        "basis": {"type": ["string", "null"]},
+        "geology": {"type": ["string", "null"]},
+        "method": {"type": ["string", "null"]},
+        "source": {"type": ["string", "null"]},
+        "confidence": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "comparison": {
+      "type": "object",
+      "required": ["x", "y", "medium"],
+      "properties": {
+        "x": {"type": ["string", "null"]},
+        "y": {"type": ["string", "null"]},
+        "medium": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "display": {
+      "type": "object",
+      "required": ["map_mode", "color_by", "anomaly_grid_degrees", "show_anomaly_points", "show_anomaly_regions"],
+      "properties": {
+        "map_mode": {"enum": ["distribution", "heat", "combined"]},
+        "color_by": {"enum": ["medium", "element", "value"]},
+        "anomaly_grid_degrees": {"enum": [1, 2, 5]},
+        "show_anomaly_points": {"type": "boolean"},
+        "show_anomaly_regions": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

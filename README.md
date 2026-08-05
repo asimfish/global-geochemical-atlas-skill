@@ -22,8 +22,31 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 - `qc_report.json` 与 `confidence_report.json`：QC 和运行级置信度；
 - `anomalies.geojson` 与 `anomaly_report.json`：候选异常及背景组统计；
 - `samples.geojson`：地图样点图层；
-- `interactive_map.html`：无 CDN 的自包含交互地图；
+- `interactive_map.html`：无 CDN 的自包含交互图谱，含区域 bbox、分布图、样点密度热力图、介质/元素/可比浓度着色、元素组合与富集/亏损候选区域；
 - `run_summary.json`：稳定输出清单、状态和限制。
+
+地图首页默认展示全部可上图测定，并按 `source_id + sample_id + medium + coordinates`
+折叠为样品级符号；没有 `sample_id` 的记录不做推测性去重。颜色默认表示介质，只有筛选结果
+收敛到同一元素、介质、measurement basis、方法组和标准单位时才启用浓度对数色阶。
+页面同时提供来源与置信度、候选异常、QC 与覆盖边界页签，全部直接消费 D1/D2 公共产物，
+不在可视化层重算标准值、置信度或异常。
+
+## D3 是可视化生成 Skill，不是一张固定网页
+
+`interactive-atlas-v3.html` 是 Skill 内部模板。Agent 应从用户问题生成
+`d3-visualization-profile-v1` 配置，再用一个目录级命令渲染，不能要求用户手改 HTML：
+
+```bash
+python skills/global-geochemical-atlas/scripts/render_visualization.py \
+  --input-dir demo_output \
+  --profile skills/global-geochemical-atlas/assets/visualization-profile.template.json \
+  --output-dir visualization_output
+python skills/global-geochemical-atlas/scripts/validate_visualization.py \
+  --output-dir visualization_output
+```
+
+配置决定首屏任务、区域、元素、介质、地质单元、元素组合和图层；结果同时输出配置与
+`visualization_report.json`，便于 Agent 和评测系统核验复现性及覆盖提示。
 
 然后运行自检：
 
@@ -41,7 +64,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
   --max-records 50000
 ```
 
-`standardize_geochemistry.py` 的最低分析列为 `element_or_analyte,value,unit,medium`；要运行并交付完整 `run_workflow.py`，还必须提供非空 `source_id,source_locator,license`，否则证据打包会失败关闭。正式科学运行还应提供 `source_tier`、样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限和文件哈希。完整契约见 `skills/global-geochemical-atlas/references/`。
+`standardize_geochemistry.py` 的最低分析列为 `element_or_analyte,value,unit,medium`；要运行并交付完整 `run_workflow.py`，还必须提供非空 `source_id,source_locator,license`，否则证据打包会失败关闭。正式科学运行还应提供 `source_tier`、样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限和文件哈希。完整契约见 `skills/global-geochemical-atlas/references/`；D3 消费层详见 [可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md)。
 
 ## 真实来源预检与 D1 原值索引
 
@@ -74,6 +97,7 @@ python skills/global-geochemical-atlas/scripts/coverage_report.py \
 skills/
 └── global-geochemical-atlas/
     ├── SKILL.md
+    ├── assets/natural-earth-110m-land.json
     ├── fixtures/demo_input.csv
     ├── references/
     └── scripts/

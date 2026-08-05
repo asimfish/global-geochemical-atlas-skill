@@ -105,9 +105,78 @@
       "properties": {
         "map_version": {"type": "string"},
         "mapped_record_count": {"type": "integer", "minimum": 0},
+        "display_sample_count": {"type": "integer", "minimum": 0},
+        "unmappable_record_count": {"type": "integer", "minimum": 0},
         "candidate_record_count": {"type": "integer", "minimum": 0},
+        "default_view": {"enum": ["all_data_sample_deduplicated", "profile_driven_task_view"]},
+        "embedded_payload_schema": {"const": "d3-compact-payload-v1"},
+        "anomaly_region_render_mode": {"const": "zoom-adaptive-anomaly-bubbles-v1"},
+        "visualization_profile": {
+          "type": "object",
+          "required": ["schema_version", "story", "default_region", "filters", "comparison", "display"],
+          "properties": {
+            "schema_version": {"const": "d3-visualization-profile-v1"},
+            "story": {"enum": ["overview", "coverage", "anomaly", "comparison", "evidence"]},
+            "default_region": {"type": "string"},
+            "filters": {"type": "object"},
+            "comparison": {"type": "object"},
+            "display": {"type": "object"}
+          },
+          "additionalProperties": true
+        },
+        "visualization_profile_warnings": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "visualization_modes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "distribution_points",
+              "sample_density_heatmap",
+              "element_pair_comparison",
+              "candidate_anomaly_region_aggregation"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "region_presets": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "region_coverage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["label", "bounds", "record_count", "sample_count", "elements", "media", "administrative_clip"],
+            "properties": {
+              "label": {"type": "string"},
+              "bounds": {"type": "object"},
+              "record_count": {"type": "integer", "minimum": 0},
+              "sample_count": {"type": "integer", "minimum": 0},
+              "elements": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "media": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "administrative_clip": {"const": false}
+            },
+            "additionalProperties": false
+          }
+        },
         "external_assets": {"const": 0},
-        "interpolation": {"const": false}
+        "interpolation": {"const": false},
+        "html_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000},
+        "samples_geojson_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000},
+        "basemap": {
+          "type": "object",
+          "required": ["asset_version", "scale", "license", "embedded"],
+          "properties": {
+            "asset_version": {"const": "ai4s-natural-earth-land-v1"},
+            "scale": {"const": "1:110m"},
+            "license": {"const": "public domain"},
+            "embedded": {"const": true}
+          },
+          "additionalProperties": true
+        }
       }
     }
   }

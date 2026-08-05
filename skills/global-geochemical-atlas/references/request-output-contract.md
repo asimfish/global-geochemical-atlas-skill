@@ -35,7 +35,7 @@
 | `anomalies.geojson` | 候选异常点；允许 null geometry |
 | `anomaly_report.json` | 背景组、阈值、排除和失败状态 |
 | `samples.geojson` | 可地图化的标准样点，不含无效坐标 |
-| `interactive_map.html` | 自包含交互地图，不依赖 CDN |
+| `interactive_map.html` | 自包含交互地图；内嵌固定底图与 D1/D2 报告，不依赖 CDN，不在 D3 重算科学结果 |
 | `run_summary.json` | 整体状态、请求摘要、产物、coverage 与限制 |
 
 ## 证据链
@@ -59,6 +59,10 @@
 ```
 
 `operational_confidence` 只表示记录对当前流程的可用性，不是测量准确度、统计置信水平或事实为真的概率。
+
+地图的默认全元素视图按有证据的样品标识折叠符号，KPI 仍统计测定记录；这只是显示层去叠加，
+不删除或合并 `geochemistry.csv`/`samples.geojson` 记录。浓度色阶的启用条件固定为单一元素、
+介质、measurement basis、已知方法组和标准单位，否则使用介质分类色。
 
 证据等级分三层：只有 CSV 声明时为 `source_declared_in_input`；sidecar 通过字段与 record ID 校验时为 `validated_record_evidence`；`run_manifest.json` 同时绑定 CSV 与 sidecar SHA-256 时才是 `verified_record_evidence`。哈希和定位证明可追溯性，不证明测量真实、方法可比或异常成因。
 

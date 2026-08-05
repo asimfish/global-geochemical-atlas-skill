@@ -47,3 +47,15 @@
 - 后续真实来源 demo 必须从许可允许的来源确定性生成，并记录生成脚本、输入版本、筛选步骤和 hash；
 - fixture 输出必须标明仅用于流水线演示，不得用于科学解释；
 - 不兼容许可的数据不合并发布为一个统一开放数据包。
+
+## Natural Earth 离线底图
+
+- 标题：Natural Earth 1:110m Land；
+- 冻结版本：4.1.0；
+- 来源：<https://www.naturalearthdata.com/downloads/110m-physical-vectors/>；
+- 使用条款：Natural Earth 数据为 public domain；
+- 源 ZIP SHA-256：`1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de`；
+- 仓库资产：`../assets/natural-earth-110m-land.json`，128 个 polygon rings、5,133 个点，坐标四舍五入到 4 位小数。
+
+该底图只提供地图上下文，不参与地质单元匹配、异常推断或覆盖完整性判断。页面显示来源、比例尺、
+许可和 WGS84 语义；构建器在嵌入前验证资产版本、许可、坐标范围和点数安全上限。

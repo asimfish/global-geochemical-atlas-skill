@@ -223,12 +223,32 @@ def validate_html(path: Path, errors: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     if '<script id="samples-data" type="application/json">' not in text:
         errors.append("interactive_map.html does not embed the samples data block")
+    for block_id in ("anomalies-data", "basemap-data", "context-data"):
+        if f'<script id="{block_id}" type="application/json">' not in text:
+            errors.append(f"interactive_map.html does not embed the {block_id} block")
     if re.search(r"<script\b[^>]*\bsrc\s*=", text, re.IGNORECASE):
         errors.append("interactive_map.html contains an external script dependency")
     if re.search(r"<link\b[^>]*\bhref\s*=\s*['\"]https?://", text, re.IGNORECASE):
         errors.append("interactive_map.html contains an external stylesheet dependency")
     if "候选异常不代表污染" not in text:
         errors.append("interactive_map.html omits the causal interpretation boundary")
+    if "d3-interactive-atlas-v3" not in text or "ALL DATA" not in text:
+        errors.append("interactive_map.html omits the D3 map version or all-data default view")
+    if "Natural Earth 1:110m" not in text or "public domain" not in text:
+        errors.append("interactive_map.html omits offline basemap provenance")
+    for marker in (
+        'id="region"',
+        'id="mapMode"',
+        'id="colorMode"',
+        'id="comboX"',
+        'id="comboY"',
+        'id="openAnomalyRegions"',
+        "visual_aggregation_only",
+        "样点密度热力图",
+        "showAnomalyRegion",
+    ):
+        if marker not in text:
+            errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")
 
 
 def validate_dir(output_dir: Path) -> dict[str, Any]:
@@ -241,7 +261,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         elif path.stat().st_size == 0:
             errors.append(f"required output is empty: {path.name}")
         elif path.stat().st_size > 100_000_000:
-            errors.append(f"output exceeds 100 MB safety limit: {path.name}")
+            errors.append(f"output exceeds the 100 MB runtime safety limit: {path.name}")
     if errors:
         return {"status": "invalid", "errors": errors, "warnings": warnings, "metrics": {}}
 
