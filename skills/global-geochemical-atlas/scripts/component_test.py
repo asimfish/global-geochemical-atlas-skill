@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import source_adapters as source_contracts
 import validate_outputs as output_validator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -79,6 +80,51 @@ def check_d1(output_dir: Path) -> list[str]:
     binding = manifest.get("confidence_report", {})
     require(binding.get("sha256") == sha256_file(confidence_path), "D1 packages the unchanged D2 confidence hash", checks)
     require(binding.get("not_a_probability") is True, "D1 preserves the confidence interpretation boundary", checks)
+
+    registry = source_contracts.load_source_registry()
+    require(
+        set(registry["sources"]) == {"georoc-archaean", "usgs-conus-soil"},
+        "D1 registry freezes the two MVP public sources",
+        checks,
+    )
+    georoc = source_contracts.registry_candidate("georoc-archaean")
+    require(
+        georoc.version == "12.0" and georoc.license_id == "CC-BY-SA-4.0",
+        "D1 GEOROC candidate binds the verified version and license",
+        checks,
+    )
+    usgs = source_contracts.registry_candidate("usgs-conus-soil")
+    require(
+        len(usgs.registry_entry["download"]["files"]) == 3,
+        "D1 USGS candidate keeps the three soil layers distinct",
+        checks,
+    )
+    source_record_id = source_contracts.stable_source_record_id(
+        "usgs-conus-soil",
+        "CO-123",
+        "Appendix_2b_Top5_18Sept2013.txt#row=42",
+    )
+    require(
+        source_record_id
+        == source_contracts.stable_source_record_id(
+            "usgs-conus-soil",
+            "CO-123",
+            "Appendix_2b_Top5_18Sept2013.txt#row=42",
+        ),
+        "D1 source record IDs are deterministic",
+        checks,
+    )
+    record_id = source_contracts.stable_record_id(
+        "usgs-conus-soil", source_record_id, "As", "8.0", "mg/kg"
+    )
+    require(
+        record_id
+        != source_contracts.stable_record_id(
+            "usgs-conus-soil", source_record_id, "As", "8.0", "mg/kg", occurrence=1
+        ),
+        "D1 observation IDs preserve repeated determinations",
+        checks,
+    )
 
     with tempfile.TemporaryDirectory() as evidence_temp:
         standalone = Path(evidence_temp) / "source_manifest.json"

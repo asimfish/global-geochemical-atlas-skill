@@ -1,0 +1,379 @@
+{
+  "registry_version": "geochemical-source-registry-v1",
+  "verified_at": "2026-08-05T06:04:00Z",
+  "sources": {
+    "georoc-archaean": {
+      "adapter": "georoc_dataverse",
+      "title": "GEOROC Compilation: Archaean Cratons",
+      "publisher": "DIGIS Team, Göttingen University",
+      "dataset_doi": "10.25625/1KRR1P",
+      "dataset_version": "12.0",
+      "release_date": "2026-06-11",
+      "data_generated_at": "2026-06-01",
+      "landing_page": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2F1KRR1P",
+      "metadata_url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/1KRR1P&version=12.0",
+      "media": [
+        "rock"
+      ],
+      "geographic_scope": "global-archaean-cratons",
+      "download": {
+        "mode": "versioned-dataverse-zip",
+        "url": "https://data.goettingen-research-online.de/api/access/dataset/:persistentId/?persistentId=doi:10.25625/1KRR1P&format=original",
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "max_bytes": 50000000,
+        "expected_member_count": 28,
+        "expected_uncompressed_bytes": 31696168,
+        "bundle_sha256": null,
+        "bundle_hash_basis": "dynamic_archive_not_pinned; validate publisher member MD5 then record observed SHA-256",
+        "members": [
+          {
+            "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
+            "bytes": 321067,
+            "persistent_id": "doi:10.25625/1KRR1P/OHZY0O",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "6a3872307c40113edc1a3744d4ce31ca"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv",
+            "bytes": 950780,
+            "persistent_id": "doi:10.25625/1KRR1P/0YSJJR",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "03cc712328578109cdb2befc88a07d74"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_BALTIC_SHIELD_ARCHEAN.csv",
+            "bytes": 4209880,
+            "persistent_id": "doi:10.25625/1KRR1P/Q8QGOY",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "7e30b5e12ebd40c18101e09103f420d5"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_BASTAR_CRATON.csv",
+            "bytes": 94925,
+            "persistent_id": "doi:10.25625/1KRR1P/7U8BWC",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "2c8adfbeb0ef859e242a9293251e859a"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_BUNDELKHAND_CRATON.csv",
+            "bytes": 309858,
+            "persistent_id": "doi:10.25625/1KRR1P/NT9GC8",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "5bb9af754e4d638cbd3f5bf38063f84d"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_CHURCHILL_PROVINCE_ARCHEAN.csv",
+            "bytes": 263824,
+            "persistent_id": "doi:10.25625/1KRR1P/WGALT3",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "cd3a8f9071ea837e7b4fb42bd0ade804"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_CONGO_CRATON.csv",
+            "bytes": 362845,
+            "persistent_id": "doi:10.25625/1KRR1P/4PATTX",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "8722d34488b2f5d6ee628012780b8ebe"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_DHARWAR_CRATON_ARCHEAN.csv",
+            "bytes": 2407194,
+            "persistent_id": "doi:10.25625/1KRR1P/AVUWEP",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "61978c5870d77531650f549fcc34d0cb"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_EAST_EUROPEAN_CRATON.csv",
+            "bytes": 93085,
+            "persistent_id": "doi:10.25625/1KRR1P/SSDC2V",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "52943c2de72d6ff48d1f16bdd5a4c236"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_GAWLER_CRATON.csv",
+            "bytes": 72890,
+            "persistent_id": "doi:10.25625/1KRR1P/YJOPAF",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "42631af108f982512771a00ae3e06916"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_KAAPVAAL_CRATON_ARCHEAN.csv",
+            "bytes": 3346850,
+            "persistent_id": "doi:10.25625/1KRR1P/NXSCT8",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "fcda73f42be730d0f5057c9d3d236ca1"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_LIMPOPO_BELT.csv",
+            "bytes": 45706,
+            "persistent_id": "doi:10.25625/1KRR1P/BFQKPU",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "edc29eff973a05b7075c63760f2212df"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_NORTH_ATLANTIC_CRATON_ARCHEAN.csv",
+            "bytes": 2407458,
+            "persistent_id": "doi:10.25625/1KRR1P/LDWEK2",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "4f22c117d8ada08a8273f4ac7e56aa8a"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_NORTH_CHINA_CRATON.csv",
+            "bytes": 2505963,
+            "persistent_id": "doi:10.25625/1KRR1P/YKDG9C",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "da7a380cf67473a0a07b37bee9fcf543"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_OKHOTSK-OMOLON_CRATON.csv",
+            "bytes": 6215,
+            "persistent_id": "doi:10.25625/1KRR1P/PMFEC6",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "60a15265ac1b7b7e22869e40e2e387c3"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_RAE_CRATON.csv",
+            "bytes": 5874,
+            "persistent_id": "doi:10.25625/1KRR1P/AUMPQZ",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "6560bd2dd7d11a22b62c438f87f93493"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_SAO_FRANCISCO_CRATON_ARCHEAN.csv",
+            "bytes": 768400,
+            "persistent_id": "doi:10.25625/1KRR1P/PQ361E",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "fa2e67832d9ddf21730ed2aa4939aef3"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_SARMATIAN_CRATON.csv",
+            "bytes": 120031,
+            "persistent_id": "doi:10.25625/1KRR1P/GKVOQ9",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "14a625645d902e1c81708a4de21acac8"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_SIBERIAN_CRATON_ARCHEAN.csv",
+            "bytes": 110489,
+            "persistent_id": "doi:10.25625/1KRR1P/TG6QW9",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "bf211dfa174a27432ddbd86bf85f7ca6"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_SINGHBHUM_CRATON_ARCHEAN.csv",
+            "bytes": 727334,
+            "persistent_id": "doi:10.25625/1KRR1P/RM6V7B",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "05624780b4dc8770b8c251f0e00fe626"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_SLAVE_PROVINCE_ARCHEAN.csv",
+            "bytes": 350444,
+            "persistent_id": "doi:10.25625/1KRR1P/TS527Q",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "79788055c9dad2a7114d212e5a008f01"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv",
+            "bytes": 5921367,
+            "persistent_id": "doi:10.25625/1KRR1P/YCYFNY",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "128766b3b8e8b1c8ecc28d44e7f66fe7"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_TANZANIA_CRATON_ARCHEAN.csv",
+            "bytes": 348082,
+            "persistent_id": "doi:10.25625/1KRR1P/JC6ARO",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "dfccbe5e1f66bf74191e2c3ee18c8103"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv",
+            "bytes": 53291,
+            "persistent_id": "doi:10.25625/1KRR1P/ZJ0HM6",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "e2a041bea14b7c17b068d18a5324d71b"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_WEST_AUSTRALIAN_CRATON.csv",
+            "bytes": 4953001,
+            "persistent_id": "doi:10.25625/1KRR1P/ATBQZH",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "3a045b971584f75b7ef9b9c85619d4a7"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_WYOMING_PROVINCE.csv",
+            "bytes": 259241,
+            "persistent_id": "doi:10.25625/1KRR1P/XKVOOV",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "63f029c9351772bca41b675c061cedba"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_YANGTZE_BLOCK.csv",
+            "bytes": 200350,
+            "persistent_id": "doi:10.25625/1KRR1P/IN53QT",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "2fbb54d4560b81b9ca139baac500c2c3"
+            }
+          },
+          {
+            "filename": "2026-06-1KRR1P_ZIMBABWE_CRATON_ARCHEAN.csv",
+            "bytes": 479724,
+            "persistent_id": "doi:10.25625/1KRR1P/0LBXI0",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "dc503f47b7543892bce5fb4d7f6e26dc"
+            }
+          }
+        ]
+      },
+      "required_fields": [
+        "CITATIONS",
+        "LOCATION",
+        "LATITUDE MIN",
+        "LATITUDE MAX",
+        "LONGITUDE MIN",
+        "LONGITUDE MAX",
+        "SAMPLE NAME",
+        "ROCK NAME",
+        "MATERIAL"
+      ],
+      "license": {
+        "spdx": "CC-BY-SA-4.0",
+        "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "citation": "DIGIS Team (2026). GEOROC Compilation: Archaean Cratons, Version 12.0. GRO.data. https://doi.org/10.25625/1KRR1P",
+      "redistribution": "ShareAlike and attribution required; retain dataset and original publication citations.",
+      "scientific_notes": [
+        "The files are GEOROC precompiled selected values, not an unfiltered collection of every replicate analysis.",
+        "Results are grouped by craton; member-level provenance and citations must be retained."
+      ]
+    },
+    "usgs-conus-soil": {
+      "adapter": "usgs_static_txt",
+      "title": "Geochemical and mineralogical data for soils of the conterminous United States",
+      "publisher": "U.S. Geological Survey",
+      "dataset_doi": "10.3133/ds801",
+      "dataset_version": "Data Series 801, 2013 release",
+      "release_date": "2013-10-25",
+      "landing_page": "https://pubs.usgs.gov/publication/ds801",
+      "metadata_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_5_Metadata.pdf",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "conterminous-united-states",
+      "site_count": 4857,
+      "download": {
+        "mode": "static-text-files",
+        "accepted_content_types": [
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "max_bytes_per_file": 10000000,
+        "files": [
+          {
+            "file_id": "top-0-5cm",
+            "filename": "Appendix_2b_Top5_18Sept2013.txt",
+            "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt",
+            "bytes": 1450062,
+            "expected_sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894",
+            "sha256_basis": "observed_from_official_url_2026-08-05",
+            "header_prefix": "Top5_"
+          },
+          {
+            "file_id": "a-horizon",
+            "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
+            "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt",
+            "bytes": 1987189,
+            "expected_sha256": "462821c1164b5b4c27905a3ea62a22fa3f6172da09125d8f80ec5b2f6a69a202",
+            "sha256_basis": "observed_from_official_url_2026-08-05",
+            "header_prefix": "A_"
+          },
+          {
+            "file_id": "c-horizon",
+            "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
+            "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt",
+            "bytes": 1996147,
+            "expected_sha256": "4aa8080f81f690587f762300bada16e33e376eea0003243d5333b47c78b4c90c",
+            "sha256_basis": "observed_from_official_url_2026-08-05",
+            "header_prefix": "C_"
+          }
+        ]
+      },
+      "required_fields": [
+        "SiteID",
+        "StateID",
+        "Latitude",
+        "Longitude"
+      ],
+      "license": {
+        "spdx": "LicenseRef-USGS-Public-Domain",
+        "name": "U.S. public domain; credit requested",
+        "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+      },
+      "citation": "Smith, D.B., Cannon, W.F., Woodruff, L.G., Solano, F., Kilburn, J.E., and Fey, D.L. (2013). Geochemical and mineralogical data for soils of the conterminous United States. U.S. Geological Survey Data Series 801. https://doi.org/10.3133/ds801",
+      "redistribution": "USGS-authored data are public domain; preserve the suggested citation and dataset metadata.",
+      "scientific_notes": [
+        "The three files represent 0-5 cm, A-horizon, and C-horizon/deep samples and must remain distinguishable.",
+        "Legacy qualifiers and units must be decoded from this dataset's own metadata before D2 normalization."
+      ]
+    }
+  }
+}

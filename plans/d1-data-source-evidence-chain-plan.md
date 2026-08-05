@@ -9,7 +9,7 @@
 | 优先级 | P0（MVP 必需） |
 | 启动日期 | 2026-08-05 |
 | 目标完成日期 | 2026-08-13（7 个工作日） |
-| 最近更新 | 2026-08-05 14:04 CST |
+| 最近更新 | 2026-08-05 14:11 CST |
 | 跟踪方式 | 本文件任务勾选状态 + Git 提交记录 |
 | 工作分支 | `d1/data-source-engineering` |
 | 生产目录 | `skills/global-geochemical-atlas/` |
@@ -50,9 +50,9 @@
 
 | 里程碑 | 日期 | 状态 | 完成标准 |
 |---|---|---|---|
-| M0：范围和接口冻结 | 2026-08-05 | 进行中 | 数据源、字段边界、CLI 和输出路径达成一致 |
-| M1：数据源注册完成 | 2026-08-06 | 未开始 | 两个数据源的版本、许可、引用和校验规则完整 |
-| M2：下载与缓存框架完成 | 2026-08-07 | 未开始 | online/cached 可运行，具备超时、重试、校验和安全写入 |
+| M0：范围和接口冻结 | 2026-08-05 | 已完成 | 数据源、字段边界、CLI 和输出路径达成一致 |
+| M1：数据源注册完成 | 2026-08-06 | 已完成 | 两个数据源的版本、许可、引用和校验规则完整 |
+| M2：下载与缓存框架完成 | 2026-08-07 | 进行中 | online/cached 可运行，具备超时、重试、校验和安全写入 |
 | M3：两个适配器可运行 | 2026-08-10 | 未开始 | GEOROC、USGS 均可下载、校验并解析原始记录 |
 | M4：Demo 与证据链完成 | 2026-08-11 | 未开始 | fixture 可离线运行，逐条来源和运行清单完整 |
 | M5：失败模式测试完成 | 2026-08-12 | 未开始 | 关键异常均有明确错误或降级路径 |
@@ -65,8 +65,8 @@
 ### 阶段 0：冻结范围和接口
 
 - [x] 确认 MVP 数据源为 GEOROC Archaean Cratons 和 USGS CONUS 土壤数据。
-- [ ] 定义统一的 `DataSourceAdapter` 接口：`discover`、`download`、`parse`、`provenance`。
-- [ ] 定义 `source_id`、`record_id`、`source_record_id` 的稳定生成规则。
+- [x] 定义统一的 `DataSourceAdapter` 接口：`discover`、`download`、`parse`、`provenance`。
+- [x] 定义 `source_id`、`record_id`、`source_record_id` 的稳定生成规则。
 - [x] 与 D2 确认原始字段、单位字段和置信度来源分量的交接格式。
 - [x] 与 D3 确认 CLI 参数、运行返回码、文件位置和输出文件名。
 - [x] 与 E1 确认下载、离线和故障注入测试的运行入口。
@@ -85,14 +85,14 @@ python skills/global-geochemical-atlas/scripts/download_data.py \
 
 ### 阶段 1：数据源注册与许可梳理
 
-- [ ] 创建 `assets/source_manifest.json`。
-- [ ] 登记 GEOROC 的标题、DOI、版本、下载地址、文件类型、许可和标准引用。
-- [ ] 登记 USGS 的标题、官方地址、版本、文件类型、许可和标准引用。
-- [ ] 记录每个数据源的必要文件、必要字段和预期校验规则。
-- [ ] 明确 demo 切片是否允许随仓库再分发。
-- [ ] 区分项目代码许可和第三方数据许可。
-- [ ] 在文档中标注 GEOROC 预编译值的选择机制及其科学限制。
-- [ ] 创建 `references/data-sources.md` 和 `references/licenses-and-citations.md`。
+- [x] 创建 `assets/source_manifest.json`。
+- [x] 登记 GEOROC 的标题、DOI、版本、下载地址、文件类型、许可和标准引用。
+- [x] 登记 USGS 的标题、官方地址、版本、文件类型、许可和标准引用。
+- [x] 记录每个数据源的必要文件、必要字段和预期校验规则。
+- [x] 明确 demo 切片是否允许随仓库再分发。
+- [x] 区分项目代码许可和第三方数据许可。
+- [x] 在文档中标注 GEOROC 预编译值的选择机制及其科学限制。
+- [x] 创建 `references/data-sources.md` 和 `references/licenses-and-citations.md`。
 
 ### 阶段 2：下载和缓存框架
 
@@ -266,6 +266,15 @@ MVP 验收后，再按优先级处理：
 ## 十、进展更新日志
 
 每次有实质进展时，在本节顶部追加一条记录，时间精确到分钟，并在同一次 Git 提交中同步更新对应任务和里程碑状态。
+
+### 2026-08-05 14:11 CST
+
+- 完成 `DataSourceAdapter`、`DatasetCandidate`、`DownloadedFile`、`RawRecord` 接口契约。
+- 冻结不依赖本地路径和下载时间的 `source_record_id`、`record_id` 生成规则。
+- 建立 GEOROC 12.0 与 USGS Data Series 801 的机器可读注册表，包含官方入口、许可、引用、必要字段和校验规则。
+- 新增独立许可与引用说明；区分仓库 MIT、GEOROC CC BY-SA 4.0、USGS public domain 和 fixture CC0。
+- D1 组件测试由 11 项扩展到 16 项并全部通过。
+- 当前下一步：完成 M2 下载、缓存和安全解压增强。
 
 ### 2026-08-05 14:04 CST
 
