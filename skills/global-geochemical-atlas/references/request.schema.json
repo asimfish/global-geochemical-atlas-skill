@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:request:v1",
+  "title": "Global geochemical atlas request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["elements", "region", "media"],
+  "properties": {
+    "elements": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "region": {
+      "oneOf": [
+        {"const": "global"},
+        {"type": "string", "minLength": 1},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["bbox"],
+          "properties": {
+            "bbox": {
+              "type": "array",
+              "prefixItems": [
+                {"type": "number", "minimum": -180, "maximum": 180},
+                {"type": "number", "minimum": -90, "maximum": 90},
+                {"type": "number", "minimum": -180, "maximum": 180},
+                {"type": "number", "minimum": -90, "maximum": 90}
+              ],
+              "minItems": 4,
+              "maxItems": 4
+            }
+          }
+        }
+      ]
+    },
+    "media": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["rock", "soil", "sediment", "water", "mineral", "concentrate"]
+      }
+    },
+    "measurement_basis": {
+      "type": ["array", "null"],
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "time_range": {
+      "type": ["array", "null"],
+      "prefixItems": [{"type": "string"}, {"type": "string"}],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "sources": {
+      "oneOf": [
+        {"const": "auto"},
+        {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      ],
+      "default": "auto"
+    },
+    "output_formats": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "enum": ["csv", "json", "geojson", "html_map"]},
+      "default": ["csv", "json", "geojson", "html_map"]
+    },
+    "target_crs": {"const": "EPSG:4326", "default": "EPSG:4326"},
+    "license_policy": {"const": "open_only", "default": "open_only"},
+    "max_records": {"type": "integer", "minimum": 1, "maximum": 200000, "default": 50000},
+    "offline": {"type": "boolean", "default": false}
+  }
+}

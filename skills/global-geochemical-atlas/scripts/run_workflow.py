@@ -1,0 +1,366 @@
+#!/usr/bin/env python3
+"""Run the offline-capable global geochemical atlas MVP end to end."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import math
+import os
+import sys
+import tempfile
+from collections import defaultdict
+from collections.abc import Mapping, Sequence
+from pathlib import Path
+from typing import Any
+
+import build_interactive_map as map_builder
+import standardize_geochemistry as standardizer
+import validate_outputs as output_validator
+
+SUMMARY_VERSION = "global-geochemical-atlas-result-v1"
+MAX_INPUT_BYTES = 200_000_000
+
+
+class WorkflowError(RuntimeError):
+    """Raised with a stable failure status."""
+
+    def __init__(self, status: str, message: str) -> None:
+        super().__init__(message)
+        self.status = status
+
+
+def atomic_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+        json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        handle.write("\n")
+        temporary = Path(handle.name)
+    os.replace(temporary, path)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def count_input_rows(path: Path, max_records: int) -> int:
+    if not path.is_file():
+        raise WorkflowError("invalid_input", f"input CSV does not exist: {path}")
+    if path.stat().st_size > MAX_INPUT_BYTES:
+        raise WorkflowError("unsupported_scope", f"input exceeds {MAX_INPUT_BYTES} byte safety limit")
+    try:
+        with path.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.reader(handle)
+            header = next(reader, None)
+            if not header:
+                raise WorkflowError("invalid_input", "input CSV has no header")
+            count = 0
+            for _ in reader:
+                count += 1
+                if count > max_records:
+                    raise WorkflowError(
+                        "unsupported_scope",
+                        f"input has more than --max-records ({max_records}); filter or split the request",
+                    )
+    except UnicodeError as exc:
+        raise WorkflowError("invalid_input", "input CSV is not valid UTF-8") from exc
+    if count == 0:
+        raise WorkflowError("invalid_input", "input CSV has no data rows")
+    return count
+
+
+def json_file(path: Path) -> dict[str, Any]:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise WorkflowError("incomplete_retrieval", f"expected JSON object in {path.name}")
+    return value
+
+
+def canonical_rows(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def create_source_manifest(
+    input_path: Path,
+    input_hash: str,
+    rows: Sequence[Mapping[str, str]],
+) -> tuple[dict[str, Any], bool]:
+    grouped: dict[str, list[Mapping[str, str]]] = defaultdict(list)
+    for row in rows:
+        grouped[(row.get("source_id") or "unknown").strip() or "unknown"].append(row)
+    sources: list[dict[str, Any]] = []
+    synthetic_present = False
+    for source_id in sorted(grouped):
+        source_rows = grouped[source_id]
+        locators = sorted({row.get("source_locator") for row in source_rows if row.get("source_locator")})
+        licenses = sorted({row.get("license") for row in source_rows if row.get("license")})
+        tiers = sorted({row.get("source_tier") for row in source_rows if row.get("source_tier")})
+        is_synthetic = source_id.casefold().startswith("synthetic")
+        synthetic_present = synthetic_present or is_synthetic
+        sources.append(
+            {
+                "source_id": source_id,
+                "record_count": len(source_rows),
+                "source_tiers": tiers,
+                "licenses": licenses,
+                "locator_count": len(locators),
+                "example_locators": locators[:5],
+                "all_records_located": len(locators) > 0 and all(row.get("source_locator") for row in source_rows),
+                "evidence_type": "synthetic_demo" if is_synthetic else "source_declared_in_input",
+                "license_review": "demo_cc0" if is_synthetic and "CC0-1.0" in licenses else "verify_source_terms",
+            }
+        )
+    manifest = {
+        "manifest_version": "geochemical-source-manifest-v1",
+        "input": {
+            "filename": input_path.name,
+            "sha256": input_hash,
+            "bytes": input_path.stat().st_size,
+            "record_count": len(rows),
+        },
+        "source_count": len(sources),
+        "sources": sources,
+        "synthetic_data_present": synthetic_present,
+        "claim_boundary": (
+            "Source fields are preserved from the input. A locator is not independently verified unless a download "
+            "manifest or source-specific audit says so."
+        ),
+    }
+    return manifest, synthetic_present
+
+
+def coverage_from_rows(rows: Sequence[Mapping[str, str]], qc_report: Mapping[str, Any]) -> dict[str, Any]:
+    elements = sorted({row.get("element_or_analyte") for row in rows if row.get("element_or_analyte")})
+    media = sorted({row.get("medium") for row in rows if row.get("medium")})
+    coordinates: list[tuple[float, float]] = []
+    for row in rows:
+        try:
+            latitude = float(row["latitude"])
+            longitude = float(row["longitude"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if math.isfinite(latitude) and math.isfinite(longitude):
+            coordinates.append((longitude, latitude))
+    bbox = None
+    if coordinates:
+        bbox = [
+            min(point[0] for point in coordinates),
+            min(point[1] for point in coordinates),
+            max(point[0] for point in coordinates),
+            max(point[1] for point in coordinates),
+        ]
+    record_count = int(qc_report.get("record_count", 0))
+    valid_coordinate_count = int(qc_report.get("valid_coordinate_count", 0))
+    return {
+        "elements": elements,
+        "media": media,
+        "coordinate_rate": round(valid_coordinate_count / record_count, 6) if record_count else 0.0,
+        "standardization_rate": float(qc_report.get("standardization_rate", 0.0)),
+        "bbox": bbox,
+        "interpolation": False,
+        "coverage_claim": "Observed sample locations only; blank regions are not inferred as absence.",
+    }
+
+
+def summary_outputs() -> dict[str, str]:
+    return {
+        "database": "geochemistry.csv",
+        "source_manifest": "source_manifest.json",
+        "qc_report": "qc_report.json",
+        "confidence_report": "confidence_report.json",
+        "anomalies": "anomalies.geojson",
+        "anomaly_report": "anomaly_report.json",
+        "samples": "samples.geojson",
+        "interactive_map": "interactive_map.html",
+    }
+
+
+def failure_summary(status: str, message: str, input_path: Path, args: argparse.Namespace) -> dict[str, Any]:
+    return {
+        "schema_version": SUMMARY_VERSION,
+        "status": status,
+        "quality_status": "not_evaluated",
+        "request_summary": {
+            "region_bbox": list(args.region_bbox) if args.region_bbox else None,
+            "max_records": args.max_records,
+            "group_by": [field.strip() for field in args.group_by.split(",") if field.strip()],
+            "minimum_group_size": args.min_group_size,
+            "robust_z_threshold": args.robust_z_threshold,
+        },
+        "input": {
+            "filename": input_path.name,
+            "sha256": sha256_file(input_path) if input_path.is_file() else "0" * 64,
+            "record_count": 0,
+            "synthetic_demo": False,
+        },
+        "outputs": {},
+        "metrics": {
+            "record_count": 0,
+            "standardized_record_count": 0,
+            "valid_coordinate_count": 0,
+            "censored_record_count": 0,
+            "candidate_anomaly_count": 0,
+        },
+        "coverage": {
+            "elements": [],
+            "media": [],
+            "coordinate_rate": 0.0,
+            "standardization_rate": 0.0,
+            "bbox": None,
+            "interpolation": False,
+        },
+        "limitations": [message],
+        "next_actions": ["Correct the reported failure and rerun; do not infer missing scientific fields."],
+    }
+
+
+def run(args: argparse.Namespace) -> dict[str, Any]:
+    if args.max_records < 1 or args.max_records > 200_000:
+        raise WorkflowError("unsupported_scope", "--max-records must be between 1 and 200000")
+    count_input_rows(args.input, args.max_records)
+    group_by = tuple(field.strip() for field in args.group_by.split(",") if field.strip())
+    if not group_by:
+        raise WorkflowError("invalid_input", "--group-by must contain at least one canonical field")
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        outputs = standardizer.run_pipeline(
+            args.input,
+            args.output_dir,
+            group_by=group_by,
+            min_group_size=args.min_group_size,
+            robust_z_threshold=args.robust_z_threshold,
+            region_bbox=args.region_bbox,
+        )
+    except standardizer.PipelineError as exc:
+        raise WorkflowError("invalid_input", str(exc)) from exc
+    except OSError as exc:
+        raise WorkflowError("incomplete_retrieval", str(exc)) from exc
+
+    rows = canonical_rows(outputs["database"])
+    input_hash = sha256_file(args.input)
+    manifest, synthetic_present = create_source_manifest(args.input, input_hash, rows)
+    source_manifest_path = args.output_dir / "source_manifest.json"
+    atomic_json(source_manifest_path, manifest)
+
+    samples_path = args.output_dir / "samples.geojson"
+    map_path = args.output_dir / "interactive_map.html"
+    try:
+        map_report = map_builder.build_map(
+            outputs["database"], outputs["anomalies"], map_path, samples_path, max_points=args.max_records
+        )
+    except (map_builder.MapBuildError, OSError) as exc:
+        raise WorkflowError("incomplete_retrieval", f"map generation failed: {exc}") from exc
+
+    qc_report = json_file(outputs["qc_report"])
+    anomaly_report = json_file(outputs["anomaly_report"])
+    coverage = coverage_from_rows(rows, qc_report)
+    severity_counts = qc_report.get("severity_counts", {})
+    quality_status = "issues_detected" if sum(int(value) for value in severity_counts.values()) else "no_flags"
+    limitations = [
+        "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
+        "Map density uses observed points only; no interpolation is performed across unsampled areas.",
+    ]
+    if synthetic_present:
+        limitations.insert(0, "The bundled demo is synthetic CC0 validation data and supports no real-world claim.")
+    if int(severity_counts.get("error", 0)):
+        limitations.append("Some records have error-level QC flags and are capped at low operational confidence.")
+    failed_groups = sum(group.get("status") != "analyzed" for group in anomaly_report.get("groups", []))
+    if failed_groups:
+        limitations.append(f"{failed_groups} anomaly background group(s) were not analyzed due to explicit failure states.")
+
+    metrics = {
+        "record_count": int(qc_report.get("record_count", 0)),
+        "standardized_record_count": int(qc_report.get("standardized_record_count", 0)),
+        "valid_coordinate_count": int(qc_report.get("valid_coordinate_count", 0)),
+        "censored_record_count": int(qc_report.get("censored_record_count", 0)),
+        "candidate_anomaly_count": int(anomaly_report.get("candidate_count", 0)),
+    }
+    summary = {
+        "schema_version": SUMMARY_VERSION,
+        "status": "success",
+        "quality_status": quality_status,
+        "request_summary": {
+            "region_bbox": list(args.region_bbox) if args.region_bbox else None,
+            "max_records": args.max_records,
+            "group_by": list(group_by),
+            "minimum_group_size": args.min_group_size,
+            "robust_z_threshold": args.robust_z_threshold,
+        },
+        "input": {
+            "filename": args.input.name,
+            "sha256": input_hash,
+            "record_count": len(rows),
+            "synthetic_demo": synthetic_present,
+        },
+        "outputs": summary_outputs(),
+        "metrics": metrics,
+        "coverage": coverage,
+        "limitations": limitations,
+        "next_actions": [
+            "Inspect source_manifest.json and record-level source locators before scientific reuse.",
+            "Review low-confidence records and failed anomaly groups with a geochemist.",
+            "Add source-specific field mappings rather than guessing legacy qualifier semantics.",
+        ],
+        "map_report": map_report,
+    }
+    summary_path = args.output_dir / "run_summary.json"
+    atomic_json(summary_path, summary)
+
+    validation = output_validator.validate_dir(args.output_dir)
+    if validation["status"] != "valid":
+        summary["status"] = "incomplete_retrieval"
+        summary["limitations"].append("Output validation failed: " + "; ".join(validation["errors"]))
+        atomic_json(summary_path, summary)
+        raise WorkflowError("incomplete_retrieval", "output validation failed")
+    return summary
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Standardize geochemical CSV data, screen candidate anomalies, and build auditable map outputs."
+    )
+    parser.add_argument("--input", required=True, type=Path, help="UTF-8 CSV; one row per sample-analyte determination")
+    parser.add_argument("--output-dir", required=True, type=Path, help="Destination directory for stable outputs")
+    parser.add_argument(
+        "--region-bbox", type=standardizer.parse_bbox, metavar="W,S,E,N",
+        help="Optional WGS84 requested region, used for coordinate QC (dateline crossing supported)",
+    )
+    parser.add_argument("--max-records", type=int, default=50_000, help="Fail closed above this input count")
+    parser.add_argument(
+        "--group-by", default=",".join(standardizer.DEFAULT_GROUP_BY),
+        help="Comma-separated comparable background fields for anomaly screening",
+    )
+    parser.add_argument("--min-group-size", type=int, default=8, help="Minimum usable records per anomaly group")
+    parser.add_argument("--robust-z-threshold", type=float, default=3.5, help="Absolute modified z-score threshold")
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    try:
+        summary = run(args)
+    except WorkflowError as exc:
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        summary = failure_summary(exc.status, str(exc), args.input, args)
+        atomic_json(args.output_dir / "run_summary.json", summary)
+        print(f"run_workflow: {exc}", file=sys.stderr)
+        return 2
+    print(
+        json.dumps(
+            {"status": summary["status"], "output_dir": str(args.output_dir), "metrics": summary["metrics"]},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

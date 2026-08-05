@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:result:v1",
+  "title": "Global geochemical atlas run summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "quality_status",
+    "request_summary",
+    "input",
+    "outputs",
+    "metrics",
+    "coverage",
+    "limitations",
+    "next_actions"
+  ],
+  "properties": {
+    "schema_version": {"const": "global-geochemical-atlas-result-v1"},
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial_success",
+        "invalid_input",
+        "unsupported_scope",
+        "network_unavailable",
+        "source_not_accessible",
+        "incomplete_retrieval",
+        "conflicting_evidence",
+        "insufficient_background",
+        "needs_human_review"
+      ]
+    },
+    "quality_status": {"type": "string", "enum": ["no_flags", "issues_detected", "not_evaluated"]},
+    "request_summary": {
+      "type": "object",
+      "required": ["region_bbox", "max_records", "group_by", "minimum_group_size", "robust_z_threshold"],
+      "properties": {
+        "region_bbox": {"type": ["array", "null"]},
+        "max_records": {"type": "integer"},
+        "group_by": {"type": "array", "items": {"type": "string"}},
+        "minimum_group_size": {"type": "integer"},
+        "robust_z_threshold": {"type": "number"}
+      },
+      "additionalProperties": true
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "sha256", "record_count", "synthetic_demo"],
+      "properties": {
+        "filename": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "record_count": {"type": "integer", "minimum": 0},
+        "synthetic_demo": {"type": "boolean"}
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_count",
+        "standardized_record_count",
+        "valid_coordinate_count",
+        "censored_record_count",
+        "candidate_anomaly_count"
+      ],
+      "properties": {
+        "record_count": {"type": "integer", "minimum": 0},
+        "standardized_record_count": {"type": "integer", "minimum": 0},
+        "valid_coordinate_count": {"type": "integer", "minimum": 0},
+        "censored_record_count": {"type": "integer", "minimum": 0},
+        "candidate_anomaly_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["elements", "media", "coordinate_rate", "standardization_rate", "bbox", "interpolation"],
+      "properties": {
+        "elements": {"type": "array", "items": {"type": "string"}},
+        "media": {"type": "array", "items": {"type": "string"}},
+        "coordinate_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "standardization_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "bbox": {"type": ["array", "null"]},
+        "interpolation": {"const": false}
+      },
+      "additionalProperties": true
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "next_actions": {"type": "array", "items": {"type": "string"}},
+    "map_report": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "map_version": {"type": "string"},
+        "mapped_record_count": {"type": "integer", "minimum": 0},
+        "candidate_record_count": {"type": "integer", "minimum": 0},
+        "external_assets": {"const": 0},
+        "interpolation": {"const": false}
+      }
+    }
+  }
+}
