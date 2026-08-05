@@ -12,12 +12,15 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+import standardize_geochemistry as standardizer
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEMO_INPUT = SKILL_DIR / "fixtures" / "demo_input.csv"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 VALIDATOR = SCRIPT_DIR / "validate_outputs.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
+STANDARDIZER = SCRIPT_DIR / "standardize_geochemistry.py"
 
 EXPECTED_OUTPUTS = {
     "geochemistry.csv",
@@ -59,6 +62,37 @@ def json_value(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def complete_d2_row(**overrides: str) -> dict[str, str]:
+    row = {
+        "record_id": "d2-test-1",
+        "source_record_id": "source-row-1",
+        "sample_id": "sample-1",
+        "element_or_analyte": "As",
+        "value": "10",
+        "unit": "mg/kg",
+        "medium": "soil",
+        "measurement_basis": "dry_total",
+        "latitude": "35",
+        "longitude": "103",
+        "source_crs": "EPSG:4326",
+        "coordinate_uncertainty_m": "25",
+        "geologic_unit": "granite",
+        "analytical_method": "ICP-MS",
+        "digestion_or_extraction": "four_acid",
+        "license": "CC-BY-4.0",
+        "source_tier": "government",
+        "source_id": "dataset-1",
+        "dataset_title": "Synthetic contract test",
+        "dataset_version": "v1",
+        "source_file": "synthetic.csv",
+        "source_row": "2",
+        "file_sha256": "0" * 64,
+        "source_locator": "https://example.invalid/dataset#row=2",
+    }
+    row.update(overrides)
+    return row
+
+
 def run_suite() -> dict[str, Any]:
     require(DEMO_INPUT.is_file(), "bundled demo_input.csv is missing")
     for schema_name in (
@@ -67,6 +101,7 @@ def run_suite() -> dict[str, Any]:
         "geochemistry-record.schema.json",
         "source-manifest.schema.json",
         "confidence-report.schema.json",
+        "schema-map.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
@@ -101,6 +136,171 @@ def run_suite() -> dict[str, Any]:
         require("POSSIBLE_COORDINATE_SWAP" in swapped["qc_flags"], "coordinate swap flag missing")
         duplicates = [row for row in rows if "DUPLICATE_CANDIDATE" in row["qc_flags"]]
         require(len(duplicates) == 2, "duplicate candidates should be retained and flagged")
+        require(censored["censored"] == "true", "censored state was not serialized explicitly")
+        require(by_id(rows, "soil-as-001")["method_family"] == "icp_ms", "method family normalization failed")
+
+        record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+        normalized_record = standardizer.normalize_row(complete_d2_row(), 2)
+        require(set(normalized_record) == set(record_schema["required"]), "D2 record keys drifted from required schema")
+        require(set(normalized_record) == set(record_schema["properties"]), "D2 record keys drifted from schema properties")
+        require(
+            normalized_record["operational_confidence"]["version"] == "d2-confidence-v2",
+            "D2 confidence version did not advance with the schema",
+        )
+
+        oxide = standardizer.normalize_row(
+            complete_d2_row(
+                element_or_analyte="Ni", analyte_reported="NiO", species_or_oxide="NiO",
+                value="0.018", unit="wt%", medium="rock",
+            ),
+            3,
+        )
+        expected_ni = 0.018 * 10_000 * 58.6934 / (58.6934 + 15.999)
+        require(abs(oxide["normalized_value"] - expected_ni) < 1e-9, "audited NiO-to-Ni conversion failed")
+        require("d2-atomic-weights-v1" in oxide["conversion_formula"], "oxide conversion lacks version evidence")
+        unsupported_species = standardizer.normalize_row(
+            complete_d2_row(element_or_analyte="Fe2O3T", value="1", unit="wt%"),
+            4,
+        )
+        require(unsupported_species["normalized_value"] is None, "ambiguous total-iron conversion did not fail closed")
+        require(
+            "UNSUPPORTED_SPECIES_CONVERSION" in unsupported_species["qc_flags"],
+            "ambiguous species conversion flag is missing",
+        )
+        require(
+            unsupported_species["operational_confidence"]["band"] == "low"
+            and unsupported_species["operational_confidence"]["overall"] <= 0.59,
+            "error-level species ambiguity escaped the confidence gate",
+        )
+        oxide_mismatch = standardizer.normalize_row(
+            complete_d2_row(element_or_analyte="Fe", species_or_oxide="NiO", value="1", unit="wt%"),
+            5,
+        )
+        require(oxide_mismatch["normalized_value"] is None, "oxide-element mismatch was converted")
+        require("OXIDE_ELEMENT_MISMATCH" in oxide_mismatch["qc_flags"], "oxide-element mismatch flag is missing")
+
+        trace = standardizer.normalize_row(complete_d2_row(value="trace"), 6)
+        not_analyzed = standardizer.normalize_row(complete_d2_row(value="N/A"), 7)
+        require(trace["censored"] is True and trace["value_qualifier"] == "trace", "trace semantics were lost")
+        require("UNQUANTIFIED_TRACE" in trace["qc_flags"], "trace quality flag is missing")
+        require(
+            not_analyzed["censored"] is False and not_analyzed["missing_reason"] == "not_analyzed",
+            "missing reason was conflated with censoring",
+        )
+        bad_limit = standardizer.normalize_row(
+            complete_d2_row(value="ND", detection_limit="-0.1", detection_limit_unit="mg/kg"),
+            8,
+        )
+        require(bad_limit["normalized_censoring_limit"] is None, "invalid detection limit was normalized")
+        require("INVALID_DETECTION_LIMIT" in bad_limit["qc_flags"], "invalid detection-limit flag is missing")
+
+        projected = standardizer.normalize_row(complete_d2_row(source_crs="EPSG:3857"), 9)
+        transformed = standardizer.normalize_row(
+            complete_d2_row(
+                original_latitude_raw="4163881.144",
+                original_longitude_raw="11465907.552",
+                source_crs="EPSG:3857",
+                coordinate_transform_method="pyproj EPSG:3857 to EPSG:4326; always_xy=true",
+            ),
+            10,
+        )
+        require(projected["latitude"] is None and projected["longitude"] is None, "projected CRS was mislabeled WGS84")
+        require("UNSUPPORTED_SOURCE_CRS" in projected["qc_flags"], "missing coordinate-transform evidence was not flagged")
+        require(transformed["latitude"] == 35 and transformed["longitude"] == 103, "declared coordinate transform was rejected")
+        require(
+            transformed["original_latitude_raw"] == "4163881.144"
+            and transformed["original_longitude_raw"] == "11465907.552",
+            "source-coordinate evidence was not preserved after transformation",
+        )
+
+        duplicate_records = standardizer.process_rows([
+            complete_d2_row(record_id="duplicate-1", source_record_id="source-row-1"),
+            complete_d2_row(record_id="duplicate-2", source_record_id="source-row-2"),
+        ])
+        require(
+            all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in duplicate_records),
+            "unique provenance row IDs masked duplicate measurement candidates",
+        )
+
+        low_fraction_values = ["8", "9", "10", "11", "12", "13", "500", "<1", "<1", "ND", "trace"]
+        low_fraction_records = [
+            standardizer.normalize_row(
+                complete_d2_row(
+                    record_id=f"fraction-{index}", source_record_id=f"source-{index}",
+                    sample_id=f"sample-{index}", value=value,
+                ),
+                index + 10,
+            )
+            for index, value in enumerate(low_fraction_values)
+        ]
+        low_geojson, low_report = standardizer.detect_anomalies(
+            low_fraction_records, min_group_size=3, min_quantified_fraction=0.70
+        )
+        require(not low_geojson["features"], "low quantified fraction still produced an anomaly")
+        require(
+            low_report["groups"][0]["status"] == "insufficient_quantified_fraction",
+            "low quantified fraction did not produce an explicit failure state",
+        )
+
+        small_records = [
+            standardizer.normalize_row(
+                complete_d2_row(
+                    record_id=f"small-{index}", source_record_id=f"small-source-{index}",
+                    sample_id=f"small-sample-{index}", value=str(10 + index),
+                ),
+                index + 30,
+            )
+            for index in range(4)
+        ]
+        _, small_report = standardizer.detect_anomalies(small_records)
+        require(
+            small_report["groups"][0]["status"] == "insufficient_group_size",
+            "small background group did not fail closed",
+        )
+        flat_records = [
+            standardizer.normalize_row(
+                complete_d2_row(
+                    record_id=f"flat-{index}", source_record_id=f"flat-source-{index}",
+                    sample_id=f"flat-sample-{index}", value="10",
+                ),
+                index + 40,
+            )
+            for index in range(8)
+        ]
+        _, flat_report = standardizer.detect_anomalies(flat_records)
+        require(flat_report["groups"][0]["status"] == "zero_dispersion", "zero-MAD group was force-scored")
+
+        with tempfile.TemporaryDirectory() as mapped_temp:
+            mapped_root = Path(mapped_temp)
+            mapped_input = mapped_root / "mapped.csv"
+            mapped_input.write_text("Analyte,Result,Units,Matrix\nAs,10,mg/kg,soil\n", encoding="utf-8")
+            schema_map_path = mapped_root / "schema-map.json"
+            schema_map_path.write_text(
+                json.dumps({
+                    "element_or_analyte": "Analyte", "value": "Result", "unit": "Units", "medium": "Matrix"
+                }),
+                encoding="utf-8",
+            )
+            mapped_outputs = standardizer.run_pipeline(
+                mapped_input, mapped_root / "outputs", schema_map_path=schema_map_path, min_group_size=3
+            )
+            mapped_rows = read_csv(mapped_outputs["database"])
+            require(mapped_rows[0]["element_or_analyte"] == "As", "D1-to-D2 schema map was not applied")
+            mapped_confidence = json_value(mapped_outputs["confidence_report"])
+            require(
+                mapped_confidence["run_metadata"]["schema_map_sha256"] is not None,
+                "schema-map evidence hash was not recorded",
+            )
+            bad_map = mapped_root / "bad-schema-map.json"
+            bad_map.write_text('{"invented_field":"Analyte"}', encoding="utf-8")
+            run_command(
+                [
+                    sys.executable, str(STANDARDIZER), "--input", str(mapped_input),
+                    "--output-dir", str(mapped_root / "bad-outputs"), "--schema-map", str(bad_map),
+                ],
+                expected_code=2,
+            )
+            require(not (mapped_root / "bad-outputs").exists(), "invalid schema map produced partial outputs")
 
         anomaly_report = json_value(first / "anomaly_report.json")
         anomalies = json_value(first / "anomalies.geojson")
@@ -150,7 +350,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 22,
+            "tests": 50,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

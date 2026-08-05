@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -138,9 +139,17 @@ def check_d2(output_dir: Path) -> list[str]:
     require(all((output_dir / name).is_file() for name in expected), "D2 publishes all five analytical artifacts", checks)
     rows = csv_rows(output_dir / "geochemistry.csv")
     require(len(rows) == 19, "D2 canonical database preserves all demo records", checks)
+    require(
+        {"source_record_id", "analyte_reported", "species_or_oxide", "censored", "missing_reason", "method_family", "file_sha256"}
+        .issubset(rows[0]),
+        "D2 v2 database exposes provenance, censoring and method-family fields",
+        checks,
+    )
     indexed = {row["record_id"]: row for row in rows}
     require(float(indexed["rock-fe-001"]["normalized_value"]) == 25_000, "D2 solid unit conversion is stable", checks)
     require(indexed["soil-as-013"]["normalized_value"] == "", "D2 censored values are not imputed", checks)
+    require(indexed["soil-as-013"]["censored"] == "true", "D2 serializes censoring state explicitly", checks)
+    require(indexed["soil-as-001"]["method_family"] == "icp_ms", "D2 normalizes analytical method families", checks)
     require(
         "AMBIGUOUS_AQUEOUS_RATIO_UNIT" in indexed["water-as-ambiguous"]["qc_flags"],
         "D2 ambiguous aqueous units fail closed",
@@ -154,7 +163,7 @@ def check_d2(output_dir: Path) -> list[str]:
     duplicates = [row for row in rows if "DUPLICATE_CANDIDATE" in row["qc_flags"]]
     require(len(duplicates) == 2, "D2 retains and flags duplicate candidates", checks)
     confidence = json_value(output_dir / "confidence_report.json")
-    require(confidence.get("confidence_version") == "d2-confidence-v1", "D2 confidence version is explicit", checks)
+    require(confidence.get("confidence_version") == "d2-confidence-v2", "D2 confidence version is explicit", checks)
     require(
         set(confidence.get("weights", {})) == {"source", "completeness", "method", "spatial", "qc"},
         "D2 confidence component contract is complete",
@@ -164,10 +173,21 @@ def check_d2(output_dir: Path) -> list[str]:
     anomaly_report = json_value(output_dir / "anomaly_report.json")
     anomalies = json_value(output_dir / "anomalies.geojson")
     require(anomaly_report.get("scientific_status") == "screening_baseline_only", "D2 anomaly boundary is explicit", checks)
+    require(
+        anomaly_report.get("minimum_quantified_fraction") == 0.70,
+        "D2 anomaly screening declares the quantified-fraction gate",
+        checks,
+    )
     require(anomaly_report.get("candidate_count") == 1, "D2 demo anomaly result is stable", checks)
     require(
         anomalies["features"][0]["properties"].get("status") == "candidate_anomaly",
         "D2 does not turn a screening candidate into a causal conclusion",
+        checks,
+    )
+    schema_map = json_value(SKILL_DIR / "references" / "schema-map.schema.json")
+    require(
+        set(schema_map["propertyNames"]["enum"]) == standardizer.INPUT_FIELDS,
+        "D1-to-D2 schema-map fields match the executable interface",
         checks,
     )
     return checks
