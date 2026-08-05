@@ -103,3 +103,22 @@ python skills/global-geochemical-atlas/scripts/component_test.py --component d1
 | ZIP 路径穿越 | 拒绝且目标目录外无文件 | 通过 |
 
 D1 当前共 46 项契约检查通过。完整降级规则见 `failures.md`。
+
+## 2026-08-05 14:45 CST
+
+### 干净检出验收
+
+从 `d1/data-source-engineering` 创建新的本地临时 Git 检出。执行时使用 `env -i` 清空继承环境变量，只保留系统 Python 3、标准系统路径、UTF-8 locale 和禁止写入 bytecode 的设置。
+
+结果：
+
+- D1/D2/D3 组件契约：67/67 通过；
+- 确定性回归：22/22 通过；
+- GEOROC fixture 完整工作流：48 条输入、48 条标准化、48 个有效坐标，状态 `success`；
+- USGS fixture 完整工作流：48 条输入、48 条标准化、48 个有效坐标，状态 `success`；
+- GEOROC 验证缓存：28 个成员全部 `cache_hit` 并通过大小、MD5、SHA-256、成员和字段校验；
+- USGS 验证缓存：三个土层全部 `cache_hit` 并通过版本和 SHA-256 校验；
+- 两套 demo 使用固定参数重新生成，`demo_input.csv`、`sources.jsonl`、`run_manifest.json` 六个文件全部逐字节一致；
+- 仓库内未发现超过 1 MB 的 D1 交付文件，完整第三方数据和缓存未进入 Git。
+
+该结果证明提交内容不依赖开发工作区中的未提交文件。独立 E1 人员仍需在其自己的环境复核并登记签字。
