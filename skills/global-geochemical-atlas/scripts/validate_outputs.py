@@ -242,8 +242,10 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="colorMode"',
         'id="comboX"',
         'id="comboY"',
+        'id="openAnomalyRegions"',
         "visual_aggregation_only",
         "样点密度热力图",
+        "showAnomalyRegion",
     ):
         if marker not in text:
             errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")

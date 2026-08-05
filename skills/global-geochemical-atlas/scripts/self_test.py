@@ -485,7 +485,10 @@ def run_suite() -> dict[str, Any]:
                     'id="colorMode"',
                     'id="comboX"',
                     'id="comboY"',
+                    'id="openAnomalyRegions"',
                     "visual_aggregation_only",
+                    "showAnomalyRegion",
+                    "focusAnomalyRegion",
                 )
             ),
             "map omits D3 v3 region, heatmap, combination or anomaly-region controls",

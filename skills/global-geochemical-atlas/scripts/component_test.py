@@ -920,11 +920,14 @@ def check_d3(output_dir: Path) -> list[str]:
                 'id="comboX"',
                 'id="comboY"',
                 'id="comboMatrix"',
+                'id="openAnomalyRegions"',
                 "visual_aggregation_only",
                 "样点密度热力图",
+                "showAnomalyRegion",
+                "focusAnomalyRegion",
             )
         ),
-        "D3 implements element combinations, density heatmap and display-only anomaly regions",
+        "D3 implements element combinations, density heatmap and clickable anomaly regions",
         checks,
     )
     require(
