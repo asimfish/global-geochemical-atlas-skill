@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-source-evidence:v3",
+  "title": "D1 progressive source evidence report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_version",
+    "catalog_version",
+    "registry_version",
+    "scored_at",
+    "source_count",
+    "dimension_weights",
+    "summary",
+    "sources",
+    "claim_boundary"
+  ],
+  "properties": {
+    "evidence_version": {"const": "geochemical-source-evidence-v3"},
+    "catalog_version": {"const": "geochemical-source-catalog-v1"},
+    "registry_version": {"const": "geochemical-source-registry-v1"},
+    "scored_at": {"type": "string", "format": "date-time"},
+    "source_count": {"type": "integer", "minimum": 1},
+    "dimension_weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_publisher",
+        "version_snapshot",
+        "file_record_integrity",
+        "provenance",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "properties": {
+        "identity_publisher": {"const": 10},
+        "version_snapshot": {"const": 15},
+        "file_record_integrity": {"const": 15},
+        "provenance": {"const": 15},
+        "schema_semantics": {"const": 15},
+        "method_qc_metadata": {"const": 10},
+        "adapter_reproducibility": {"const": 10},
+        "human_review": {"const": 10}
+      }
+    },
+    "summary": {"$ref": "#/$defs/summary"},
+    "sources": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/sourceEvidence"}
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "countMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_tiers", "use_modes"],
+      "properties": {
+        "evidence_tiers": {"$ref": "#/$defs/countMap"},
+        "use_modes": {"$ref": "#/$defs/countMap"}
+      }
+    },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "weight", "awarded_points", "note", "evidence"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["verified", "partial", "missing", "conflict", "not_applicable"]
+        },
+        "weight": {"type": "integer", "minimum": 1, "maximum": 100},
+        "awarded_points": {"type": "number", "minimum": 0, "maximum": 100},
+        "note": {"type": "string", "minLength": 1},
+        "evidence": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_publisher",
+        "version_snapshot",
+        "file_record_integrity",
+        "provenance",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "properties": {
+        "identity_publisher": {"$ref": "#/$defs/dimension"},
+        "version_snapshot": {"$ref": "#/$defs/dimension"},
+        "file_record_integrity": {"$ref": "#/$defs/dimension"},
+        "provenance": {"$ref": "#/$defs/dimension"},
+        "schema_semantics": {"$ref": "#/$defs/dimension"},
+        "method_qc_metadata": {"$ref": "#/$defs/dimension"},
+        "adapter_reproducibility": {"$ref": "#/$defs/dimension"},
+        "human_review": {"$ref": "#/$defs/dimension"}
+      }
+    },
+    "sourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "access_status",
+        "research_use_status",
+        "attribution_note",
+        "source_evidence_dimensions",
+        "source_evidence_score",
+        "score_denominator",
+        "evidence_tier",
+        "use_mode",
+        "use_mode_limitations",
+        "conflicts",
+        "missing_dimensions",
+        "score_interpretation"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "access_status": {
+          "type": "string",
+          "enum": ["open", "account_required", "application_required", "restricted", "unavailable"]
+        },
+        "research_use_status": {
+          "type": "string",
+          "enum": ["open_research", "attribution_required", "noncommercial_research_only", "permission_required", "unknown"]
+        },
+        "attribution_note": {"type": "string"},
+        "source_evidence_dimensions": {"$ref": "#/$defs/dimensions"},
+        "source_evidence_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "score_denominator": {"type": "number", "exclusiveMinimum": 0, "maximum": 100},
+        "evidence_tier": {"type": "string", "enum": ["A", "B", "C", "D", "U"]},
+        "use_mode": {
+          "type": "string",
+          "enum": ["discovery", "raw_observation", "normalized_analysis", "benchmark_ready"]
+        },
+        "use_mode_limitations": {"$ref": "#/$defs/uniqueStrings"},
+        "conflicts": {"$ref": "#/$defs/uniqueStrings"},
+        "missing_dimensions": {"$ref": "#/$defs/uniqueStrings"},
+        "score_interpretation": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

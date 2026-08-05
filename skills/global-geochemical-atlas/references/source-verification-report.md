@@ -1,17 +1,17 @@
 # D1 候选来源逐源复核报告
 
-复核标准：`geochemical-source-acceptance-v1`
+复核标准：`geochemical-source-evidence-v3`
 
 更新时间：2026-08-05 18:34（Asia/Shanghai）
 
 ## 当前结论
 
-首批复核没有新增生产来源。`geotraces-idp2025` 和 `norway-marchem` 继续保持 `needs_human_review`、`production_eligible=false`。这不是数据不可用，而是证据链还没有同时满足固定版本、完整文件清单、字段映射、适配器和 30 条人工回看的全部硬门。
+首批复核已进入 V3 渐进评分：`norway-marchem` 当前为 65 分、C 级、`raw_observation`；`geotraces-idp2025` 当前为 32.5 分、D 级、`discovery`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
-| `geotraces-idp2025` | 官方身份、不可变 DOI/IDP2025、CC BY 4.0、产品级 QC 描述 | BODC 归档仍在异步准备，未取得实际文件清单、成员 hash、变量表；未做适配器和人工抽查 | 保留候选，不进入生产 |
-| `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash 和完整成员清单 | 当前是动态导出而非不可变 DOI 发布；部分消解与批次认可状态需进入逐观测映射；适配器和 30 条人工回看未完成 | 保留候选，不进入生产 |
+| `geotraces-idp2025` | 官方身份、不可变 DOI/IDP2025、CC BY 4.0、产品级 QC 描述 | BODC 归档仍在异步准备，未取得实际文件清单、成员 hash、变量表；未做适配器和人工抽查 | D 级 `discovery`，保留全部发现证据 |
+| `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash 和完整成员清单 | 部分消解与批次认可状态需进入逐观测映射；适配器和 30 条人工回看未完成 | C 级 `raw_observation`，可以进入适配器开发 |
 
 ## `norway-marchem` 复核
 
@@ -136,4 +136,4 @@ POST https://www.bodc.ac.uk/data/published_data_library/api/download/check/42c92
 
 ## 复核边界
 
-本报告证明的是官方接口、下载响应、文件结构和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。只要两项来源仍有未通过硬门，覆盖矩阵中的水体和沉积物就继续保持 `unknown`，不得提前改成 `covered` 或 `partial`。
+本报告证明的是官方接口、下载响应、文件结构和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；MarChem 即使已有 `raw_observation`，在请求 `normalized_analysis` 时沉积物仍保持 `unknown`。

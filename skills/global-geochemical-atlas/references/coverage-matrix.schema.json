@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:geochemical-coverage-matrix:v1",
-  "title": "D1 source coverage matrix",
+  "$id": "urn:ai4s:geochemical-coverage-matrix:v3",
+  "title": "D1 evidence-aware source coverage matrix",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,7 +16,7 @@
     "claim_boundary"
   ],
   "properties": {
-    "coverage_version": {"const": "geochemical-coverage-matrix-v1"},
+    "coverage_version": {"const": "geochemical-coverage-matrix-v3"},
     "as_of": {"type": "string", "format": "date-time"},
     "overall_status": {"type": "string", "enum": ["covered", "partial", "uncovered", "unknown"]},
     "request": {"type": "object"},
@@ -31,9 +31,11 @@
           "status",
           "requested_analytes",
           "analyte_coverage",
-          "approved_sources",
+          "selected_sources",
           "candidate_sources",
           "source_scopes",
+          "source_evidence_tiers",
+          "source_use_modes",
           "source_independence",
           "method_metadata_coverage",
           "spatial_density_coverage",
@@ -44,9 +46,20 @@
           "status": {"type": "string", "enum": ["covered", "partial", "uncovered", "unknown"]},
           "requested_analytes": {"$ref": "#/$defs/uniqueStrings"},
           "analyte_coverage": {"type": "string"},
-          "approved_sources": {"$ref": "#/$defs/uniqueStrings"},
+          "selected_sources": {"$ref": "#/$defs/uniqueStrings"},
           "candidate_sources": {"$ref": "#/$defs/uniqueStrings"},
           "source_scopes": {"type": "object", "additionalProperties": {"type": "string"}},
+          "source_evidence_tiers": {
+            "type": "object",
+            "additionalProperties": {"type": "string", "enum": ["A", "B", "C", "D", "U"]}
+          },
+          "source_use_modes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "enum": ["discovery", "raw_observation", "normalized_analysis", "benchmark_ready"]
+            }
+          },
           "source_independence": {"type": "string"},
           "method_metadata_coverage": {"type": "string"},
           "spatial_density_coverage": {"type": "string"},

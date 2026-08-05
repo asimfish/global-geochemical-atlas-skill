@@ -70,6 +70,7 @@ def run_suite() -> dict[str, Any]:
         "source-catalog.schema.json",
         "source-route-result.schema.json",
         "source-audit.schema.json",
+        "source-evidence-report.schema.json",
         "coverage-matrix.schema.json",
         "source-discovery-record.schema.json",
         "source-discovery-scope.schema.json",

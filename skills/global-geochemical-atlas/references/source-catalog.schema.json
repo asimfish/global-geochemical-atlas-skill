@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:ai4s:geochemical-source-catalog:v1",
   "title": "D1 discovered geochemical source catalog",
+  "$comment": "V1 status and production_eligible are retained as discovery-catalog compatibility fields. V3 access, research-use, evidence tier and use mode are computed in source_evidence_scores.json.",
   "type": "object",
   "additionalProperties": false,
   "required": ["catalog_version", "reviewed_at", "claim_boundary", "discovery_state", "sources"],
@@ -62,7 +63,10 @@
           "type": "string",
           "enum": ["approved", "conditional", "metadata_only", "needs_human_review", "rejected"]
         },
-        "production_eligible": {"type": "boolean"},
+        "production_eligible": {
+          "type": "boolean",
+          "description": "Legacy V1 flag; V3 routing uses independently computed research-use, evidence-tier and use-mode states."
+        },
         "media": {
           "type": "array",
           "minItems": 1,

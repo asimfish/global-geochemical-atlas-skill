@@ -25,11 +25,14 @@ sources: auto | [string]
 output_formats: [csv, json, geojson, html_map]
 target_crs: EPSG:4326
 license_policy: open_only
+research_use_policy: permitted_research
+minimum_evidence_tier: D
+minimum_use_mode: normalized_analysis
 max_records: integer
 offline: boolean
 ```
 
-若元素、区域或介质会实质改变检索但未给出，只询问一个最关键问题。否则采用可逆默认值：`sources=auto`、`target_crs=EPSG:4326`、`license_policy=open_only`、`max_records=50000`、`offline=false`。不要默认用户要求穷尽全球数据。
+若元素、区域或介质会实质改变检索但未给出，只询问一个最关键问题。否则采用可逆默认值：`sources=auto`、`target_crs=EPSG:4326`、`research_use_policy=permitted_research`、`minimum_evidence_tier=D`、`minimum_use_mode=normalized_analysis`、`max_records=50000`、`offline=false`。`license_policy=open_only` 只作为 V1 兼容字段。不要默认用户要求穷尽全球数据。
 
 完整字段和输出文件契约见 [references/request-output-contract.md](references/request-output-contract.md)。
 
@@ -39,8 +42,8 @@ offline: boolean
 
 1. 用户给出现成 CSV：直接验证字段并运行本地流水线。
 2. 用户要求可复现演示或网络不可用：使用 `fixtures/demo_input.csv`，明确标为合成数据。
-3. 用户要求真实公开数据：读取 [references/data-sources.md](references/data-sources.md)，先建立检索计划和许可判断，再下载有限数据。
-4. 来源需要登录、人工表单或许可不明：输出 `source_not_accessible` 或 `needs_human_review`，不要绕过限制。
+3. 用户要求真实公开数据：先运行 `scripts/source_router.py`，按科研使用条件、最低证据等级和 use mode 选源，再下载有限数据。
+4. 来源需要登录、人工表单或科研使用条件不明：保留为 `discovery`，输出访问/使用限制，不要绕过限制。
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
@@ -50,7 +53,7 @@ offline: boolean
 
 - 数据集标题、发布机构和稳定标识符；
 - 下载 URL、查询参数、访问日期和版本日期；
-- 许可、署名要求和再分发限制；
+- 本次科研使用条件、署名要求和必要申请；
 - 服务端过滤与本地过滤；
 - 响应类型、字节数、记录数和 SHA-256；
 - 原字段到 canonical 字段的映射；
@@ -71,7 +74,7 @@ python scripts/download_data.py \
 
 ## 4. 验证并标准化记录
 
-要求一行表示一个“样品 × 分析物 × 测定”。至少检查元素、值、单位和介质；正式分析还要检查 measurement basis、分析方法、消解/提取、检出限、坐标、CRS、来源定位和许可。
+要求一行表示一个“样品 × 分析物 × 测定”。至少检查元素、值、单位和介质；正式分析还要检查 measurement basis、分析方法、消解/提取、检出限、坐标、CRS、来源定位和科研使用条件。
 
 在 Skill 目录执行：
 
@@ -149,7 +152,7 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 - `incomplete_retrieval`：分页、计数、大小或字段验证不完整；
 - `conflicting_evidence`：来源、单位或方法冲突；
 - `insufficient_background`：异常背景样本不足或 MAD 为零；
-- `needs_human_review`：许可、CRS、方法可比性或科学解释需专家判断。
+- `needs_human_review`：科研使用条件、CRS、方法可比性或科学解释需专家判断。
 
 不要用推测补齐失败字段，不要把“未检索到”写成“不存在”。
 
@@ -160,5 +163,7 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 每个关键结论绑定 `source_id + source_locator`。把事实、脚本计算、模型推断、假设和未验证项分开。输出字段定义见 [references/result.schema.json](references/result.schema.json)，记录字段定义见 [references/geochemistry-record.schema.json](references/geochemistry-record.schema.json)。
 
 来源打包必须符合 [references/source-manifest.schema.json](references/source-manifest.schema.json)，置信度报告必须符合 [references/confidence-report.schema.json](references/confidence-report.schema.json)。保留二者的输入哈希与报告哈希绑定，不要在证据链阶段重新计算置信度。
+
+来源筛选不能只看旧的 `approved`。先生成 `source_evidence_scores.json`，分别报告 `access_status`、`research_use_status`、八项证据维度、`evidence_tier` 和 `use_mode`。缺少软证据会降分但不删除来源；只有访问、科研使用、损坏/截断和来源无法识别等操作边界限制当前动作。完整规则见 [references/source-acceptance-standard.md](references/source-acceptance-standard.md)。
 
 需要快速复现时读取 [references/demo-guide.md](references/demo-guide.md)。
