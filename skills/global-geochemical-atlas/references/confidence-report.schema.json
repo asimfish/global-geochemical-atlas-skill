@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:geochemistry-confidence-report:d2-v1",
-  "title": "D2 operational confidence report",
+  "$id": "urn:ai4s:geochemistry-confidence-report:d2-v2",
+  "title": "D2 v2 operational confidence report",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,7 +17,7 @@
     "band_counts"
   ],
   "properties": {
-    "confidence_version": {"const": "d2-confidence-v1"},
+    "confidence_version": {"const": "d2-confidence-v2"},
     "name": {"const": "operational_confidence"},
     "not_a_probability": {"const": true},
     "meaning": {"type": "string", "minLength": 1},

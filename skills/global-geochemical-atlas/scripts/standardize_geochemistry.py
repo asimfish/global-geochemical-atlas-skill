@@ -22,9 +22,10 @@ from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-PIPELINE_VERSION = "d2-pipeline-v1"
-CONFIDENCE_VERSION = "d2-confidence-v1"
-ANOMALY_VERSION = "d2-robust-mad-v1"
+PIPELINE_VERSION = "d2-pipeline-v2"
+CONFIDENCE_VERSION = "d2-confidence-v2"
+ANOMALY_VERSION = "d2-robust-mad-v2"
+ATOMIC_WEIGHT_VERSION = "d2-atomic-weights-v1"
 
 MINIMUM_INPUT_COLUMNS = {"element_or_analyte", "value", "unit", "medium"}
 DEFAULT_GROUP_BY = (
@@ -32,7 +33,7 @@ DEFAULT_GROUP_BY = (
     "medium",
     "measurement_basis",
     "geologic_unit",
-    "analytical_method",
+    "method_family",
     "digestion_or_extraction",
 )
 GROUPABLE_FIELDS = {
@@ -41,6 +42,7 @@ GROUPABLE_FIELDS = {
     "measurement_basis",
     "geologic_unit",
     "analytical_method",
+    "method_family",
     "digestion_or_extraction",
     "source_id",
     "source_tier",
@@ -49,14 +51,23 @@ GROUPABLE_FIELDS = {
 
 SCHEMA_COLUMNS = (
     "record_id",
+    "source_record_id",
     "sample_id",
+    "sample_identity_group",
+    "replicate_group_id",
+    "igsn",
     "element_or_analyte",
+    "analyte_reported",
+    "species_or_oxide",
     "medium",
+    "material",
     "measurement_basis",
     "original_value_raw",
     "original_value",
     "original_unit",
     "value_qualifier",
+    "censored",
+    "missing_reason",
     "normalized_value",
     "normalized_unit",
     "normalized_censoring_limit",
@@ -67,39 +78,81 @@ SCHEMA_COLUMNS = (
     "latitude",
     "longitude",
     "source_crs",
+    "coordinate_transform_method",
     "coordinate_uncertainty_m",
     "sampled_at",
     "sample_depth_min_m",
     "sample_depth_max_m",
     "grain_fraction",
+    "lithology",
     "geologic_unit",
+    "geologic_unit_id",
+    "geologic_context_source",
+    "geologic_context_version",
+    "geologic_match_method",
+    "distance_to_geologic_boundary_m",
+    "geologic_match_confidence",
     "analytical_method",
+    "method_family",
     "digestion_or_extraction",
     "laboratory",
+    "reference_material",
     "detection_limit",
     "detection_limit_unit",
     "source_id",
+    "dataset_title",
+    "dataset_doi",
+    "dataset_version",
+    "source_file",
+    "source_row",
     "source_locator",
+    "file_sha256",
     "license",
     "source_tier",
     "qc_flags",
     "operational_confidence",
 )
 
+INPUT_FIELDS = {
+    "record_id", "source_record_id", "sample_id", "sample_identity_group", "replicate_group_id", "igsn",
+    "element_or_analyte", "analyte_reported", "species_or_oxide", "value", "unit", "value_qualifier",
+    "missing_reason", "medium", "material", "measurement_basis", "original_latitude_raw",
+    "original_longitude_raw", "latitude", "longitude", "source_crs",
+    "coordinate_transform_method", "coordinate_uncertainty_m", "sampled_at", "sample_depth_min_m",
+    "sample_depth_max_m", "grain_fraction", "lithology", "geologic_unit", "geologic_unit_id",
+    "geologic_context_source", "geologic_context_version", "geologic_match_method",
+    "distance_to_geologic_boundary_m", "geologic_match_confidence", "analytical_method", "method_family",
+    "digestion_or_extraction", "laboratory", "reference_material", "detection_limit", "detection_limit_unit",
+    "source_id", "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row",
+    "source_locator", "file_sha256", "license", "source_tier",
+}
+RECOMMENDED_INPUT_COLUMNS = {
+    "record_id", "source_record_id", "sample_id", "measurement_basis", "source_id", "source_locator",
+    "dataset_title", "dataset_version", "source_file", "source_row", "latitude", "longitude", "source_crs",
+    "coordinate_uncertainty_m", "analytical_method", "method_family", "digestion_or_extraction", "license",
+    "source_tier",
+}
+
 FLAG_SEVERITY = {
     "MISSING_VALUE": "error",
     "INVALID_NUMERIC_VALUE": "error",
+    "INVALID_MISSING_REASON": "error",
     "INVALID_DETECTION_LIMIT": "error",
     "NEGATIVE_CONCENTRATION": "error",
     "UNSUPPORTED_UNIT": "error",
+    "UNSUPPORTED_SPECIES_CONVERSION": "error",
+    "OXIDE_ELEMENT_MISMATCH": "error",
     "AMBIGUOUS_AQUEOUS_RATIO_UNIT": "error",
     "INVALID_COORDINATE": "error",
     "UNSUPPORTED_SOURCE_CRS": "error",
     "DEPTH_RANGE_INVALID": "error",
+    "INVALID_GEOLOGIC_DISTANCE": "error",
     "CENSORED_VALUE": "info",
+    "INFERRED_ELEMENT_FROM_OXIDE": "info",
     "GENERATED_RECORD_ID": "info",
     "DUPLICATE_CANDIDATE": "warning",
     "NONDETECT_WITHOUT_LIMIT": "warning",
+    "UNQUANTIFIED_TRACE": "warning",
     "MISSING_MEASUREMENT_BASIS": "warning",
     "MISSING_ANALYTICAL_METHOD": "warning",
     "MISSING_DIGESTION_OR_EXTRACTION": "warning",
@@ -117,6 +170,8 @@ FLAG_SEVERITY = {
     "MISSING_LICENSE": "warning",
     "UNKNOWN_SOURCE_TIER": "warning",
     "MISSING_SAMPLE_ID": "warning",
+    "INVALID_FILE_SHA256": "warning",
+    "INVALID_GEOLOGIC_MATCH_CONFIDENCE": "warning",
 }
 
 ELEMENT_SYMBOLS = {
@@ -148,6 +203,44 @@ ELEMENT_NAMES = {
     "zinc": "Zn", "zirconium": "Zr",
     "砷": "As", "铅": "Pb", "镉": "Cd", "汞": "Hg", "铜": "Cu", "锌": "Zn", "铁": "Fe",
     "锰": "Mn", "铬": "Cr", "镍": "Ni", "钴": "Co", "金": "Au", "银": "Ag", "铀": "U",
+}
+
+# Fixed conventional atomic weights for a deliberately small, auditable oxide whitelist.
+ATOMIC_WEIGHTS = {
+    "O": 15.999,
+    "Na": 22.98976928,
+    "Mg": 24.305,
+    "Al": 26.9815385,
+    "Si": 28.085,
+    "P": 30.973761998,
+    "K": 39.0983,
+    "Ca": 40.078,
+    "Ti": 47.867,
+    "Cr": 51.9961,
+    "Mn": 54.938044,
+    "Fe": 55.845,
+    "Co": 58.933194,
+    "Ni": 58.6934,
+    "Cu": 63.546,
+    "Zn": 65.38,
+}
+OXIDE_RULES: dict[str, tuple[str, str, dict[str, int]]] = {
+    "SIO2": ("SiO2", "Si", {"Si": 1, "O": 2}),
+    "TIO2": ("TiO2", "Ti", {"Ti": 1, "O": 2}),
+    "AL2O3": ("Al2O3", "Al", {"Al": 2, "O": 3}),
+    "FEO": ("FeO", "Fe", {"Fe": 1, "O": 1}),
+    "FE2O3": ("Fe2O3", "Fe", {"Fe": 2, "O": 3}),
+    "MNO": ("MnO", "Mn", {"Mn": 1, "O": 1}),
+    "MGO": ("MgO", "Mg", {"Mg": 1, "O": 1}),
+    "CAO": ("CaO", "Ca", {"Ca": 1, "O": 1}),
+    "NA2O": ("Na2O", "Na", {"Na": 2, "O": 1}),
+    "K2O": ("K2O", "K", {"K": 2, "O": 1}),
+    "P2O5": ("P2O5", "P", {"P": 2, "O": 5}),
+    "CR2O3": ("Cr2O3", "Cr", {"Cr": 2, "O": 3}),
+    "COO": ("CoO", "Co", {"Co": 1, "O": 1}),
+    "NIO": ("NiO", "Ni", {"Ni": 1, "O": 1}),
+    "CUO": ("CuO", "Cu", {"Cu": 1, "O": 1}),
+    "ZNO": ("ZnO", "Zn", {"Zn": 1, "O": 1}),
 }
 
 MEDIUM_ALIASES = {
@@ -200,9 +293,28 @@ QUALIFIER_ALIASES = {
     "bdl": "bdl", "below detection limit": "bdl", "l": "bdl",
     "g": "gt",
     "nd": "nd", "n.d.": "nd", "not detected": "nd", "n": "nd",
+    "trace": "trace", "tr": "trace",
 }
-CENSORED_QUALIFIERS = {"lt", "le", "gt", "ge", "bdl", "nd"}
+CENSORED_QUALIFIERS = {"lt", "le", "gt", "ge", "bdl", "nd", "trace"}
+MISSING_REASON_ALIASES = {
+    "not_reported": "not_reported", "not reported": "not_reported", "nr": "not_reported",
+    "not_analyzed": "not_analyzed", "not analysed": "not_analyzed", "not analyzed": "not_analyzed",
+    "na": "not_analyzed", "n/a": "not_analyzed",
+    "insufficient_sample": "insufficient_sample", "insufficient sample": "insufficient_sample", "ins": "insufficient_sample",
+    "invalid_value": "invalid_value", "invalid value": "invalid_value",
+    "unknown": "unknown",
+}
+METHOD_FAMILY_PATTERNS = (
+    ("icp_ms", ("icp-ms", "icp ms", "icpms")),
+    ("icp_oes", ("icp-oes", "icp oes", "icp-aes", "icp aes")),
+    ("xrf", ("xrf", "x-ray fluorescence", "x ray fluorescence")),
+    ("aas", ("aas", "atomic absorption")),
+    ("inaa", ("inaa", "neutron activation")),
+    ("idms", ("idms", "isotope dilution")),
+    ("ion_chromatography", ("ion chromatography",)),
+)
 WGS84_CRS_ALIASES = {"epsg:4326", "4326", "wgs84", "wgs 84", "ogc:crs84", "crs84"}
+SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 NUMBER_RE = re.compile(r"^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$")
 PREFIXED_NUMBER_RE = re.compile(r"^(<=|>=|<|>|≤|≥|~)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)$")
 
@@ -242,12 +354,100 @@ def normalize_analyte(value: Any) -> tuple[str, bool]:
     return text, False
 
 
+def canonical_species_key(value: Any) -> str | None:
+    text = blank_to_none(value)
+    if text is None:
+        return None
+    translated = text.translate(str.maketrans("₀₁₂₃₄₅₆₇₈₉", "0123456789"))
+    return re.sub(r"[^A-Za-z0-9]", "", translated).upper() or None
+
+
+def resolve_analyte(row: Mapping[str, Any], flags: list[str]) -> tuple[str, bool, str | None, str | None]:
+    reported = blank_to_none(row.get("analyte_reported")) or blank_to_none(row.get("element_or_analyte"))
+    explicit_species = blank_to_none(row.get("species_or_oxide"))
+    species_key = canonical_species_key(explicit_species)
+    reported_key = canonical_species_key(reported)
+
+    if explicit_species is None and reported_key in OXIDE_RULES:
+        formula, element, _ = OXIDE_RULES[reported_key]
+        add_flag(flags, "INFERRED_ELEMENT_FROM_OXIDE")
+        return element, True, reported, formula
+
+    # Preserve compound-like reported analytes as species evidence so unsupported
+    # forms such as total-iron encodings fail closed instead of looking elemental.
+    if (
+        explicit_species is None
+        and reported_key is not None
+        and "O" in reported_key
+        and any(character.isdigit() for character in reported_key)
+    ):
+        analyte, recognized = normalize_analyte(row.get("element_or_analyte"))
+        return analyte, recognized, reported, reported
+
+    analyte, recognized = normalize_analyte(row.get("element_or_analyte"))
+    if species_key in OXIDE_RULES:
+        formula, oxide_element, _ = OXIDE_RULES[species_key]
+        if not recognized and reported_key == species_key:
+            analyte, recognized = oxide_element, True
+            add_flag(flags, "INFERRED_ELEMENT_FROM_OXIDE")
+        return analyte, recognized, reported, formula
+    return analyte, recognized, reported, explicit_species
+
+
+def species_conversion_factor(
+    species_or_oxide: str | None, analyte: str, flags: list[str]
+) -> tuple[float | None, str | None]:
+    species_key = canonical_species_key(species_or_oxide)
+    if species_key is None or (species_key == analyte.upper() and analyte in ELEMENT_SYMBOLS):
+        return 1.0, None
+    rule = OXIDE_RULES.get(species_key)
+    if rule is None:
+        add_flag(flags, "UNSUPPORTED_SPECIES_CONVERSION")
+        return None, None
+    formula, expected_element, composition = rule
+    if analyte != expected_element:
+        add_flag(flags, "OXIDE_ELEMENT_MISMATCH")
+        return None, None
+    molecular_mass = sum(ATOMIC_WEIGHTS[element] * count for element, count in composition.items())
+    element_mass = ATOMIC_WEIGHTS[expected_element] * composition[expected_element]
+    fraction = element_mass / molecular_mass
+    formula_text = (
+        f"{formula}_to_{expected_element}; fraction={fraction:.12g}; atomic_weights={ATOMIC_WEIGHT_VERSION}"
+    )
+    return fraction, formula_text
+
+
 def normalize_medium(value: Any) -> tuple[str, bool]:
     text = blank_to_none(value)
     if text is None:
         return "unknown", False
     canonical = MEDIUM_ALIASES.get(text.casefold())
     return (canonical, True) if canonical else ("unknown", False)
+
+
+def normalize_method_family(value: Any, analytical_method: str | None) -> str | None:
+    explicit = blank_to_none(value)
+    if explicit is not None:
+        return re.sub(r"[^a-z0-9]+", "_", explicit.casefold()).strip("_") or None
+    if analytical_method is None:
+        return None
+    method_text = analytical_method.casefold()
+    for family, patterns in METHOD_FAMILY_PATTERNS:
+        if any(pattern in method_text for pattern in patterns):
+            return family
+    slug = re.sub(r"[^a-z0-9]+", "_", method_text).strip("_")
+    return f"other_{slug}" if slug else None
+
+
+def normalize_missing_reason(value: Any, flags: list[str]) -> str | None:
+    text = blank_to_none(value)
+    if text is None:
+        return None
+    reason = MISSING_REASON_ALIASES.get(text.casefold())
+    if reason is None:
+        add_flag(flags, "INVALID_MISSING_REASON")
+        return "unknown"
+    return reason
 
 
 def canonicalize_unit(value: Any) -> str | None:
@@ -279,16 +479,22 @@ def canonicalize_unit(value: Any) -> str | None:
 
 def parse_measurement(
     row: Mapping[str, Any], flags: list[str]
-) -> tuple[float | None, str, float | None, float | None]:
+) -> tuple[float | None, str, float | None, float | None, str | None]:
     raw = blank_to_none(row.get("value"))
     explicit_qualifier = blank_to_none(row.get("value_qualifier"))
+    missing_reason = normalize_missing_reason(row.get("missing_reason"), flags)
     qualifier: str | None = None
     number: float | None = None
 
     if raw is not None:
         compact = raw.strip().replace(",", "")
+        raw_missing_reason = MISSING_REASON_ALIASES.get(compact.casefold())
         match = PREFIXED_NUMBER_RE.fullmatch(compact)
-        if match:
+        if raw_missing_reason is not None:
+            missing_reason = missing_reason or raw_missing_reason
+            qualifier = "unknown"
+            flags.append("MISSING_VALUE")
+        elif match:
             qualifier = QUALIFIER_ALIASES.get((match.group(1) or "").casefold(), "reported")
             number = float(match.group(2))
         else:
@@ -296,8 +502,10 @@ def parse_measurement(
             if qualifier is None:
                 flags.append("INVALID_NUMERIC_VALUE")
                 qualifier = "unknown"
+                missing_reason = missing_reason or "invalid_value"
     else:
         flags.append("MISSING_VALUE")
+        missing_reason = missing_reason or "not_reported"
 
     if explicit_qualifier is not None:
         explicit = QUALIFIER_ALIASES.get(explicit_qualifier.casefold())
@@ -307,6 +515,9 @@ def parse_measurement(
             qualifier = explicit
 
     qualifier = qualifier or "unknown"
+    if number is not None and missing_reason is not None:
+        add_flag(flags, "INVALID_MISSING_REASON")
+        missing_reason = None
     detection_limit_raw = blank_to_none(row.get("detection_limit"))
     detection_limit = parse_optional_float(detection_limit_raw)
     if detection_limit_raw is not None and (detection_limit is None or detection_limit < 0):
@@ -316,11 +527,13 @@ def parse_measurement(
 
     if qualifier in CENSORED_QUALIFIERS:
         flags.append("CENSORED_VALUE")
-        if censoring_limit is None:
+        if qualifier == "trace":
+            flags.append("UNQUANTIFIED_TRACE")
+        elif censoring_limit is None:
             flags.append("NONDETECT_WITHOUT_LIMIT")
     if number is not None and number < 0:
         flags.append("NEGATIVE_CONCENTRATION")
-    return number, qualifier, censoring_limit, detection_limit
+    return number, qualifier, censoring_limit, detection_limit, missing_reason
 
 
 def conversion_for(medium: str, original_unit: Any, flags: list[str]) -> tuple[float | None, str | None]:
@@ -348,24 +561,29 @@ def is_wgs84_crs(value: str) -> bool:
 def normalize_coordinates(
     row: Mapping[str, Any], flags: list[str], region_bbox: tuple[float, float, float, float] | None
 ) -> tuple[str | None, str | None, float | None, float | None]:
-    lat_raw = blank_to_none(row.get("latitude"))
-    lon_raw = blank_to_none(row.get("longitude"))
-    lat = parse_optional_float(lat_raw)
-    lon = parse_optional_float(lon_raw)
+    canonical_lat_raw = blank_to_none(row.get("latitude"))
+    canonical_lon_raw = blank_to_none(row.get("longitude"))
+    original_lat_raw = blank_to_none(row.get("original_latitude_raw")) or canonical_lat_raw
+    original_lon_raw = blank_to_none(row.get("original_longitude_raw")) or canonical_lon_raw
+    lat = parse_optional_float(canonical_lat_raw)
+    lon = parse_optional_float(canonical_lon_raw)
 
-    if lat_raw is None and lon_raw is None:
-        return None, None, None, None
-    if lat_raw is None or lon_raw is None or lat is None or lon is None:
+    if canonical_lat_raw is None and canonical_lon_raw is None:
+        if original_lat_raw is not None or original_lon_raw is not None:
+            add_flag(flags, "INCOMPLETE_COORDINATE")
+            add_flag(flags, "INVALID_COORDINATE")
+        return original_lat_raw, original_lon_raw, None, None
+    if canonical_lat_raw is None or canonical_lon_raw is None or lat is None or lon is None:
         add_flag(flags, "INCOMPLETE_COORDINATE")
         add_flag(flags, "INVALID_COORDINATE")
-        return lat_raw, lon_raw, None, None
+        return original_lat_raw, original_lon_raw, None, None
 
     valid = -90 <= lat <= 90 and -180 <= lon <= 180
     if not valid:
         add_flag(flags, "INVALID_COORDINATE")
         if -90 <= lon <= 90 and -180 <= lat <= 180:
             add_flag(flags, "POSSIBLE_COORDINATE_SWAP")
-        return lat_raw, lon_raw, None, None
+        return original_lat_raw, original_lon_raw, None, None
 
     if lat == 0 and lon == 0:
         add_flag(flags, "ZERO_ISLAND_COORDINATE")
@@ -374,7 +592,7 @@ def normalize_coordinates(
         longitude_inside = west <= lon <= east if west <= east else lon >= west or lon <= east
         if not (longitude_inside and south <= lat <= north):
             add_flag(flags, "OUTSIDE_REQUEST_REGION")
-    return lat_raw, lon_raw, lat, lon
+    return original_lat_raw, original_lon_raw, lat, lon
 
 
 def normalize_source_tier(value: Any, flags: list[str]) -> str:
@@ -404,6 +622,7 @@ def normalize_depth(row: Mapping[str, Any], flags: list[str]) -> tuple[float | N
 def stable_record_id(row: Mapping[str, Any], row_number: int) -> str:
     payload = {
         "source_id": blank_to_none(row.get("source_id")),
+        "source_record_id": blank_to_none(row.get("source_record_id")),
         "sample_id": blank_to_none(row.get("sample_id")),
         "analyte": blank_to_none(row.get("element_or_analyte")),
         "value": blank_to_none(row.get("value")),
@@ -424,11 +643,16 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, float | str]:
         source -= 0.25
     if record["license"] is None:
         source -= 0.10
+    if record["source_file"] is not None and (
+        record["file_sha256"] is None or "INVALID_FILE_SHA256" in flags
+    ):
+        source -= 0.05
     source = max(0.0, min(1.0, source))
 
     completeness_fields = (
-        "sample_id", "element_or_analyte", "medium", "measurement_basis", "original_unit",
-        "source_id", "source_locator", "analytical_method", "digestion_or_extraction", "license",
+        "sample_id", "element_or_analyte", "analyte_reported", "medium", "measurement_basis", "original_unit",
+        "source_id", "source_locator", "dataset_title", "dataset_version", "source_file", "source_row",
+        "analytical_method", "method_family", "digestion_or_extraction", "license",
     )
     present = sum(record[field] not in (None, "", "unknown") for field in completeness_fields)
     present += int(record["latitude"] is not None and record["longitude"] is not None)
@@ -436,7 +660,7 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, float | str]:
 
     method = statistics.fmean(
         float(record[field] not in (None, ""))
-        for field in ("measurement_basis", "analytical_method", "digestion_or_extraction")
+        for field in ("measurement_basis", "analytical_method", "method_family", "digestion_or_extraction")
     )
 
     if record["latitude"] is None or record["longitude"] is None:
@@ -485,7 +709,7 @@ def normalize_row(
     row: Mapping[str, Any], row_number: int, region_bbox: tuple[float, float, float, float] | None = None
 ) -> dict[str, Any]:
     flags: list[str] = []
-    analyte, analyte_recognized = normalize_analyte(row.get("element_or_analyte"))
+    analyte, analyte_recognized, analyte_reported, species_or_oxide = resolve_analyte(row, flags)
     if not analyte_recognized:
         add_flag(flags, "UNRECOGNIZED_ANALYTE")
     medium, medium_recognized = normalize_medium(row.get("medium"))
@@ -509,6 +733,7 @@ def normalize_row(
     digestion = blank_to_none(row.get("digestion_or_extraction"))
     if digestion is None:
         add_flag(flags, "MISSING_DIGESTION_OR_EXTRACTION")
+    method_family = normalize_method_family(row.get("method_family"), analytical_method)
 
     source_id = blank_to_none(row.get("source_id"))
     if source_id is None:
@@ -521,8 +746,15 @@ def normalize_row(
         add_flag(flags, "MISSING_LICENSE")
     source_tier = normalize_source_tier(row.get("source_tier"), flags)
 
-    original_value, qualifier, censoring_limit, detection_limit = parse_measurement(row, flags)
-    factor, normalized_unit = conversion_for(medium, row.get("unit"), flags)
+    original_value, qualifier, censoring_limit, detection_limit, missing_reason = parse_measurement(row, flags)
+    unit_factor, normalized_unit = conversion_for(medium, row.get("unit"), flags)
+    species_factor, species_formula = species_conversion_factor(species_or_oxide, analyte, flags)
+    factor = unit_factor * species_factor if unit_factor is not None and species_factor is not None else None
+    conversion_formula = None
+    if factor is not None:
+        conversion_formula = f"normalized = original * {unit_factor:g}"
+        if species_formula is not None:
+            conversion_formula += f" * {species_factor:.12g}; {species_formula}"
     normalized_value: float | None = None
     normalized_censoring_limit: float | None = None
     if factor is not None:
@@ -533,8 +765,8 @@ def normalize_row(
             if qualifier in {"bdl", "nd"} and limit_unit is not None:
                 limit_flags: list[str] = []
                 limit_factor, limit_target = conversion_for(medium, limit_unit, limit_flags)
-                if limit_factor is not None and limit_target == normalized_unit:
-                    normalized_censoring_limit = censoring_limit * limit_factor
+                if limit_factor is not None and limit_target == normalized_unit and species_factor is not None:
+                    normalized_censoring_limit = censoring_limit * limit_factor * species_factor
                 else:
                     for flag in limit_flags:
                         add_flag(flags, flag)
@@ -543,9 +775,14 @@ def normalize_row(
 
     lat_raw, lon_raw, latitude, longitude = normalize_coordinates(row, flags, region_bbox)
     source_crs = blank_to_none(row.get("source_crs"))
+    coordinate_transform_method = blank_to_none(row.get("coordinate_transform_method"))
     if source_crs is None:
         add_flag(flags, "MISSING_SOURCE_CRS")
-    elif (lat_raw is not None or lon_raw is not None) and not is_wgs84_crs(source_crs):
+    elif (
+        (lat_raw is not None or lon_raw is not None)
+        and not is_wgs84_crs(source_crs)
+        and coordinate_transform_method is None
+    ):
         add_flag(flags, "UNSUPPORTED_SOURCE_CRS")
         latitude = None
         longitude = None
@@ -558,42 +795,83 @@ def normalize_row(
         add_flag(flags, "INVALID_COORDINATE_UNCERTAINTY")
 
     depth_min, depth_max = normalize_depth(row, flags)
+    boundary_distance = parse_optional_float(row.get("distance_to_geologic_boundary_m"))
+    boundary_distance_raw = blank_to_none(row.get("distance_to_geologic_boundary_m"))
+    if boundary_distance_raw is not None and (boundary_distance is None or boundary_distance < 0):
+        boundary_distance = None
+        add_flag(flags, "INVALID_GEOLOGIC_DISTANCE")
+    geologic_match_confidence = blank_to_none(row.get("geologic_match_confidence"))
+    if geologic_match_confidence is not None:
+        geologic_match_confidence = geologic_match_confidence.casefold()
+        if geologic_match_confidence not in {"high", "medium", "low", "unknown"}:
+            geologic_match_confidence = "unknown"
+            add_flag(flags, "INVALID_GEOLOGIC_MATCH_CONFIDENCE")
+    file_sha256 = blank_to_none(row.get("file_sha256"))
+    if file_sha256 is not None and not SHA256_RE.fullmatch(file_sha256):
+        add_flag(flags, "INVALID_FILE_SHA256")
+    elif file_sha256 is not None:
+        file_sha256 = file_sha256.lower()
     original_unit = blank_to_none(row.get("unit"))
     record: dict[str, Any] = {
         "record_id": record_id,
+        "source_record_id": blank_to_none(row.get("source_record_id")),
         "sample_id": sample_id,
+        "sample_identity_group": blank_to_none(row.get("sample_identity_group")),
+        "replicate_group_id": blank_to_none(row.get("replicate_group_id")),
+        "igsn": blank_to_none(row.get("igsn")),
         "element_or_analyte": analyte,
+        "analyte_reported": analyte_reported,
+        "species_or_oxide": species_or_oxide,
         "medium": medium,
+        "material": blank_to_none(row.get("material")),
         "measurement_basis": measurement_basis,
         "original_value_raw": blank_to_none(row.get("value")),
         "original_value": original_value,
         "original_unit": original_unit,
         "value_qualifier": qualifier,
+        "censored": qualifier in CENSORED_QUALIFIERS,
+        "missing_reason": missing_reason,
         "normalized_value": round(normalized_value, 12) if normalized_value is not None else None,
         "normalized_unit": normalized_unit,
         "normalized_censoring_limit": (
             round(normalized_censoring_limit, 12) if normalized_censoring_limit is not None else None
         ),
         "conversion_factor": factor,
-        "conversion_formula": f"normalized = original * {factor:g}" if factor is not None else None,
+        "conversion_formula": conversion_formula,
         "original_latitude_raw": lat_raw,
         "original_longitude_raw": lon_raw,
         "latitude": latitude,
         "longitude": longitude,
         "source_crs": source_crs,
+        "coordinate_transform_method": coordinate_transform_method,
         "coordinate_uncertainty_m": coordinate_uncertainty,
         "sampled_at": blank_to_none(row.get("sampled_at")),
         "sample_depth_min_m": depth_min,
         "sample_depth_max_m": depth_max,
         "grain_fraction": blank_to_none(row.get("grain_fraction")),
+        "lithology": blank_to_none(row.get("lithology")),
         "geologic_unit": blank_to_none(row.get("geologic_unit")),
+        "geologic_unit_id": blank_to_none(row.get("geologic_unit_id")),
+        "geologic_context_source": blank_to_none(row.get("geologic_context_source")),
+        "geologic_context_version": blank_to_none(row.get("geologic_context_version")),
+        "geologic_match_method": blank_to_none(row.get("geologic_match_method")),
+        "distance_to_geologic_boundary_m": boundary_distance,
+        "geologic_match_confidence": geologic_match_confidence,
         "analytical_method": analytical_method,
+        "method_family": method_family,
         "digestion_or_extraction": digestion,
         "laboratory": blank_to_none(row.get("laboratory")),
+        "reference_material": blank_to_none(row.get("reference_material")),
         "detection_limit": detection_limit,
         "detection_limit_unit": blank_to_none(row.get("detection_limit_unit")),
         "source_id": source_id,
+        "dataset_title": blank_to_none(row.get("dataset_title")),
+        "dataset_doi": blank_to_none(row.get("dataset_doi")),
+        "dataset_version": blank_to_none(row.get("dataset_version")),
+        "source_file": blank_to_none(row.get("source_file")),
+        "source_row": blank_to_none(row.get("source_row")),
         "source_locator": source_locator,
+        "file_sha256": file_sha256,
         "license": license_value,
         "source_tier": source_tier,
         "qc_flags": flags,
@@ -603,9 +881,11 @@ def normalize_row(
 
 
 def duplicate_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
+    sample_identity = record["sample_identity_group"] or record["sample_id"] or record["source_record_id"]
     return (
-        record["source_id"], record["sample_id"], record["element_or_analyte"], record["original_value_raw"],
-        record["original_unit"], record["analytical_method"], record["measurement_basis"],
+        record["source_id"], sample_identity, record["element_or_analyte"],
+        record["species_or_oxide"], record["original_value_raw"], record["original_unit"],
+        record["method_family"], record["analytical_method"], record["measurement_basis"],
         record["original_latitude_raw"], record["original_longitude_raw"],
     )
 
@@ -638,7 +918,7 @@ def group_identifier(group_by: Sequence[str], key: Sequence[Any]) -> str:
 
 def detect_anomalies(
     records: Sequence[Mapping[str, Any]], group_by: Sequence[str] = DEFAULT_GROUP_BY,
-    min_group_size: int = 8, robust_z_threshold: float = 3.5,
+    min_group_size: int = 8, robust_z_threshold: float = 3.5, min_quantified_fraction: float = 0.70,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     grouped: dict[tuple[Any, ...], list[Mapping[str, Any]]] = defaultdict(list)
     for record in records:
@@ -664,6 +944,9 @@ def detect_anomalies(
                 usable.append(record)
 
         group_id = group_identifier(group_by, key)
+        independent_total = len(group_records) - exclusions["duplicate_candidate"]
+        quantified_fraction = len(usable) / independent_total if independent_total else 0.0
+        censored_fraction = exclusions["censored"] / independent_total if independent_total else 0.0
         report: dict[str, Any] = {
             "group_id": group_id,
             "group": dict(zip(group_by, key, strict=True)),
@@ -671,11 +954,18 @@ def detect_anomalies(
             "records_used": len(usable),
             "records_excluded": len(group_records) - len(usable),
             "exclusion_reasons": dict(sorted(exclusions.items())),
+            "independent_record_count": independent_total,
+            "quantified_fraction": round(quantified_fraction, 6),
+            "censored_fraction": round(censored_fraction, 6),
             "status": "insufficient_group_size",
             "log10_median": None,
             "log10_mad": None,
             "candidate_count": 0,
         }
+        if quantified_fraction < min_quantified_fraction:
+            report["status"] = "insufficient_quantified_fraction"
+            group_reports.append(report)
+            continue
         if len(usable) < min_group_size:
             group_reports.append(report)
             continue
@@ -713,8 +1003,12 @@ def detect_anomalies(
                         "medium": record["medium"],
                         "measurement_basis": record["measurement_basis"],
                         "geologic_unit": record["geologic_unit"],
+                        "method_family": record["method_family"],
                         "normalized_value": record["normalized_value"],
                         "normalized_unit": record["normalized_unit"],
+                        "operational_confidence_band": record["operational_confidence"]["band"],
+                        "source_id": record["source_id"],
+                        "source_locator": record["source_locator"],
                         "group_id": group_id,
                         "robust_z": round(robust_z, 6),
                         "direction": "high" if robust_z > 0 else "low",
@@ -736,6 +1030,7 @@ def detect_anomalies(
         "method": "log10 median/MAD modified robust z-score",
         "group_by": list(group_by),
         "minimum_group_size": min_group_size,
+        "minimum_quantified_fraction": min_quantified_fraction,
         "robust_z_threshold": robust_z_threshold,
         "scientific_status": "screening_baseline_only",
         "caveat": (
@@ -758,6 +1053,12 @@ def build_qc_report(records: Sequence[Mapping[str, Any]], run_metadata: Mapping[
         record["normalized_value"] is not None or record["normalized_censoring_limit"] is not None
         for record in records
     )
+    flagged = sum(bool(record["qc_flags"]) for record in records)
+    error_flagged = sum(
+        any(FLAG_SEVERITY.get(flag, "warning") == "error" for flag in record["qc_flags"])
+        for record in records
+    )
+    missing_reasons = Counter(record["missing_reason"] for record in records if record["missing_reason"] is not None)
     return {
         "pipeline_version": PIPELINE_VERSION,
         "run_metadata": dict(run_metadata),
@@ -767,10 +1068,19 @@ def build_qc_report(records: Sequence[Mapping[str, Any]], run_metadata: Mapping[
             "records_are_not_dropped": True,
         },
         "record_count": len(records),
+        "record_counts": {
+            "raw": len(records),
+            "parsed": len(records),
+            "standardized_or_censoring_limit": standardized,
+            "flagged": flagged,
+            "error_flagged": error_flagged,
+            "rejected": 0,
+        },
         "records_with_numeric_value_or_limit": numeric_or_limit,
         "standardized_record_count": standardized,
         "standardization_rate": round(standardized / len(records), 6) if records else 0.0,
-        "censored_record_count": sum(record["value_qualifier"] in CENSORED_QUALIFIERS for record in records),
+        "censored_record_count": sum(bool(record["censored"]) for record in records),
+        "missing_reason_counts": dict(sorted(missing_reasons.items())),
         "valid_coordinate_count": sum(
             record["latitude"] is not None and record["longitude"] is not None for record in records
         ),
@@ -817,25 +1127,56 @@ def parse_bbox(value: str) -> tuple[float, float, float, float]:
     return west, south, east, north
 
 
-def load_csv(path: Path) -> tuple[list[dict[str, str]], list[str]]:
+def load_schema_map(path: Path | None) -> tuple[dict[str, str], str | None]:
+    if path is None:
+        return {}, None
+    if not path.is_file():
+        raise PipelineError(f"schema map does not exist: {path}")
+    raw = path.read_bytes()
+    try:
+        value = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PipelineError(f"schema map is not valid UTF-8 JSON: {path}") from exc
+    if not isinstance(value, dict):
+        raise PipelineError("schema map must be a JSON object of canonical_field -> source_column")
+    mapping: dict[str, str] = {}
+    for canonical, source_column in value.items():
+        if canonical not in INPUT_FIELDS:
+            raise PipelineError(f"schema map contains unknown canonical field: {canonical}")
+        if not isinstance(source_column, str) or not source_column.strip():
+            raise PipelineError(f"schema map source column for {canonical} must be a non-empty string")
+        mapping[canonical] = source_column.strip()
+    return mapping, hashlib.sha256(raw).hexdigest()
+
+
+def load_csv(path: Path, schema_map: Mapping[str, str] | None = None) -> tuple[list[dict[str, str]], list[str]]:
     if not path.is_file():
         raise PipelineError(f"input CSV does not exist: {path}")
+    mapping = dict(schema_map or {})
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         if reader.fieldnames is None:
             raise PipelineError("input CSV has no header")
         headers = [header.strip() for header in reader.fieldnames]
-        missing = sorted(MINIMUM_INPUT_COLUMNS - set(headers))
+        if len(headers) != len(set(headers)):
+            raise PipelineError("input CSV contains duplicate column names after trimming whitespace")
+        missing_source_columns = sorted(set(mapping.values()) - set(headers))
+        if missing_source_columns:
+            raise PipelineError(f"schema map references missing source columns: {', '.join(missing_source_columns)}")
+        available_canonical = set(headers) | set(mapping)
+        missing = sorted(MINIMUM_INPUT_COLUMNS - available_canonical)
         if missing:
             raise PipelineError(f"input CSV missing minimum columns: {', '.join(missing)}")
-        rows = [dict(row) for row in reader]
+        rows: list[dict[str, str]] = []
+        for raw_row in reader:
+            trimmed_row = {header.strip(): value for header, value in raw_row.items() if header is not None}
+            canonical_row = dict(trimmed_row)
+            for canonical, source_column in mapping.items():
+                canonical_row[canonical] = trimmed_row.get(source_column, "")
+            rows.append(canonical_row)
     if not rows:
         raise PipelineError("input CSV has no data rows")
-    recommended = {
-        "record_id", "sample_id", "measurement_basis", "source_id", "source_locator", "latitude", "longitude",
-        "source_crs", "coordinate_uncertainty_m", "analytical_method", "digestion_or_extraction", "license", "source_tier",
-    }
-    return rows, sorted(recommended - set(headers))
+    return rows, sorted(RECOMMENDED_INPUT_COLUMNS - available_canonical)
 
 
 def atomic_write_text(path: Path, content: str) -> None:
@@ -853,6 +1194,7 @@ def write_csv(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
         writer.writeheader()
         for record in records:
             row = dict(record)
+            row["censored"] = "true" if row["censored"] else "false"
             row["qc_flags"] = json.dumps(row["qc_flags"], ensure_ascii=False, separators=(",", ":"))
             row["operational_confidence"] = json.dumps(
                 row["operational_confidence"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
@@ -869,6 +1211,7 @@ def json_text(value: Any) -> str:
 def run_pipeline(
     input_path: Path, output_dir: Path, group_by: Sequence[str] = DEFAULT_GROUP_BY, min_group_size: int = 8,
     robust_z_threshold: float = 3.5, region_bbox: tuple[float, float, float, float] | None = None,
+    schema_map_path: Path | None = None, min_quantified_fraction: float = 0.70,
 ) -> dict[str, Path]:
     unknown_group_fields = sorted(set(group_by) - GROUPABLE_FIELDS)
     if unknown_group_fields:
@@ -877,15 +1220,20 @@ def run_pipeline(
         raise PipelineError("--min-group-size must be at least 3")
     if not math.isfinite(robust_z_threshold) or robust_z_threshold <= 0:
         raise PipelineError("--robust-z-threshold must be positive")
+    if not math.isfinite(min_quantified_fraction) or not 0 <= min_quantified_fraction <= 1:
+        raise PipelineError("--min-quantified-fraction must be between 0 and 1")
 
     input_bytes = input_path.read_bytes() if input_path.is_file() else b""
-    rows, missing_recommended_columns = load_csv(input_path)
+    schema_map, schema_map_hash = load_schema_map(schema_map_path)
+    rows, missing_recommended_columns = load_csv(input_path, schema_map)
     records = process_rows(rows, region_bbox)
     config = {
         "group_by": list(group_by),
         "minimum_group_size": min_group_size,
         "robust_z_threshold": robust_z_threshold,
+        "minimum_quantified_fraction": min_quantified_fraction,
         "region_bbox": list(region_bbox) if region_bbox else None,
+        "schema_map": dict(sorted(schema_map.items())),
     }
     input_hash = hashlib.sha256(input_bytes).hexdigest()
     run_id = hashlib.sha256(
@@ -895,10 +1243,13 @@ def run_pipeline(
         "run_id": run_id,
         "input_sha256": input_hash,
         "input_row_count": len(rows),
+        "schema_map_sha256": schema_map_hash,
         "missing_recommended_input_columns": missing_recommended_columns,
         "configuration": config,
     }
-    geojson, anomaly_report = detect_anomalies(records, group_by, min_group_size, robust_z_threshold)
+    geojson, anomaly_report = detect_anomalies(
+        records, group_by, min_group_size, robust_z_threshold, min_quantified_fraction
+    )
     anomaly_report["run_metadata"] = run_metadata
     qc_report = build_qc_report(records, run_metadata)
     confidence_report = build_confidence_report(records, run_metadata)
@@ -925,10 +1276,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--input", required=True, type=Path, help="Input CSV from the D1 acquisition/provenance stage")
     parser.add_argument("--output-dir", required=True, type=Path, help="Directory for five deterministic D2 outputs")
     parser.add_argument(
+        "--schema-map", type=Path,
+        help="Optional JSON object mapping canonical D2 input fields to source CSV column names",
+    )
+    parser.add_argument(
         "--group-by", default=",".join(DEFAULT_GROUP_BY),
-        help="Comma-separated canonical background fields (default: analyte, medium, basis, geologic unit)",
+        help="Comma-separated canonical background fields (default also separates method family and extraction)",
     )
     parser.add_argument("--min-group-size", type=int, default=8, help="Minimum positive uncensored records per group")
+    parser.add_argument(
+        "--min-quantified-fraction", type=float, default=0.70,
+        help="Minimum usable noncensored fraction per independent background group (default: 0.70)",
+    )
     parser.add_argument("--robust-z-threshold", type=float, default=3.5, help="Absolute modified z threshold")
     parser.add_argument(
         "--region-bbox", type=parse_bbox, metavar="W,S,E,N",
@@ -945,7 +1304,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--group-by must contain at least one field")
     try:
         outputs = run_pipeline(
-            args.input, args.output_dir, group_by, args.min_group_size, args.robust_z_threshold, args.region_bbox
+            input_path=args.input,
+            output_dir=args.output_dir,
+            group_by=group_by,
+            min_group_size=args.min_group_size,
+            robust_z_threshold=args.robust_z_threshold,
+            region_bbox=args.region_bbox,
+            schema_map_path=args.schema_map,
+            min_quantified_fraction=args.min_quantified_fraction,
         )
     except (PipelineError, OSError) as exc:
         parser.error(str(exc))

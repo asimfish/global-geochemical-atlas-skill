@@ -21,6 +21,7 @@ from typing import Any
 import build_evidence_bundle as evidence_builder
 import download_data as downloader
 import source_adapters as source_contracts
+import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -562,9 +563,17 @@ def check_d2(output_dir: Path) -> list[str]:
     require(all((output_dir / name).is_file() for name in expected), "D2 publishes all five analytical artifacts", checks)
     rows = csv_rows(output_dir / "geochemistry.csv")
     require(len(rows) == 19, "D2 canonical database preserves all demo records", checks)
+    require(
+        {"source_record_id", "analyte_reported", "species_or_oxide", "censored", "missing_reason", "method_family", "file_sha256"}
+        .issubset(rows[0]),
+        "D2 v2 database exposes provenance, censoring and method-family fields",
+        checks,
+    )
     indexed = {row["record_id"]: row for row in rows}
     require(float(indexed["rock-fe-001"]["normalized_value"]) == 25_000, "D2 solid unit conversion is stable", checks)
     require(indexed["soil-as-013"]["normalized_value"] == "", "D2 censored values are not imputed", checks)
+    require(indexed["soil-as-013"]["censored"] == "true", "D2 serializes censoring state explicitly", checks)
+    require(indexed["soil-as-001"]["method_family"] == "icp_ms", "D2 normalizes analytical method families", checks)
     require(
         "AMBIGUOUS_AQUEOUS_RATIO_UNIT" in indexed["water-as-ambiguous"]["qc_flags"],
         "D2 ambiguous aqueous units fail closed",
@@ -578,7 +587,7 @@ def check_d2(output_dir: Path) -> list[str]:
     duplicates = [row for row in rows if "DUPLICATE_CANDIDATE" in row["qc_flags"]]
     require(len(duplicates) == 2, "D2 retains and flags duplicate candidates", checks)
     confidence = json_value(output_dir / "confidence_report.json")
-    require(confidence.get("confidence_version") == "d2-confidence-v1", "D2 confidence version is explicit", checks)
+    require(confidence.get("confidence_version") == "d2-confidence-v2", "D2 confidence version is explicit", checks)
     require(
         set(confidence.get("weights", {})) == {"source", "completeness", "method", "spatial", "qc"},
         "D2 confidence component contract is complete",
@@ -588,10 +597,99 @@ def check_d2(output_dir: Path) -> list[str]:
     anomaly_report = json_value(output_dir / "anomaly_report.json")
     anomalies = json_value(output_dir / "anomalies.geojson")
     require(anomaly_report.get("scientific_status") == "screening_baseline_only", "D2 anomaly boundary is explicit", checks)
+    require(
+        anomaly_report.get("minimum_quantified_fraction") == 0.70,
+        "D2 anomaly screening declares the quantified-fraction gate",
+        checks,
+    )
     require(anomaly_report.get("candidate_count") == 1, "D2 demo anomaly result is stable", checks)
     require(
         anomalies["features"][0]["properties"].get("status") == "candidate_anomaly",
         "D2 does not turn a screening candidate into a causal conclusion",
+        checks,
+    )
+    schema_map = json_value(SKILL_DIR / "references" / "schema-map.schema.json")
+    require(
+        set(schema_map["propertyNames"]["enum"]) == standardizer.INPUT_FIELDS,
+        "D1-to-D2 schema-map fields match the executable interface",
+        checks,
+    )
+    crosswalk_schema = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.schema.json")
+    require(
+        crosswalk_schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema",
+        "D2 professional-platform crosswalk has a versioned JSON Schema",
+        checks,
+    )
+    record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+    crosswalk = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.json")
+    require(
+        crosswalk.get("status") == "semantic_alignment_not_conformance_claim"
+        and crosswalk.get("canonical_schema", {}).get("schema_id") == record_schema.get("$id"),
+        "D2 crosswalk declares semantic alignment without a false conformance claim",
+        checks,
+    )
+    mapped_fields = [item["canonical_field"] for item in crosswalk["field_mappings"]]
+    non_core_fields = [
+        field
+        for group in crosswalk["non_core_fields"]
+        for field in group["fields"]
+    ]
+    canonical_fields = set(record_schema["properties"])
+    require(
+        len(mapped_fields) == len(set(mapped_fields))
+        and len(non_core_fields) == len(set(non_core_fields))
+        and set(mapped_fields).isdisjoint(non_core_fields),
+        "D2 crosswalk field partitions are unique and disjoint",
+        checks,
+    )
+    require(
+        set(mapped_fields) | set(non_core_fields) == canonical_fields,
+        "D2 crosswalk accounts for every canonical database field",
+        checks,
+    )
+    scope = crosswalk["scope"]
+    require(
+        scope.get("canonical_field_count") == len(canonical_fields)
+        and scope.get("crosswalked_field_count") == len(mapped_fields)
+        and scope.get("non_core_field_count") == len(non_core_fields),
+        "D2 crosswalk coverage counts match the executable record Schema",
+        checks,
+    )
+    evidence_ids = [item["id"] for item in crosswalk["evidence_sources"]]
+    platform_ids = [item["id"] for item in crosswalk["platforms"]]
+    require(
+        len(evidence_ids) == len(set(evidence_ids))
+        and len(platform_ids) == len(set(platform_ids))
+        and set(platform_ids) == {"earthchem_ecl", "usgs_agdb2", "odm2", "igsn_datacite"},
+        "D2 crosswalk platform and evidence registries are unique and explicit",
+        checks,
+    )
+    evidence_set = set(evidence_ids)
+    platform_set = set(platform_ids)
+    valid_mapping_types = {"exact", "renamed", "transformed", "composite", "no_direct_equivalent"}
+    mapping_rows = [
+        mapping
+        for field_mapping in crosswalk["field_mappings"]
+        for mapping in field_mapping["platform_mappings"]
+    ]
+    require(
+        all(
+            mapping["platform_id"] in platform_set
+            and mapping["mapping_type"] in valid_mapping_types
+            and set(mapping["evidence_ids"]) <= evidence_set
+            and (
+                (mapping["mapping_type"] == "no_direct_equivalent" and not mapping["external_path"])
+                or (mapping["mapping_type"] != "no_direct_equivalent" and bool(mapping["external_path"]))
+            )
+            for mapping in mapping_rows
+        )
+        and all(
+            len({mapping["platform_id"] for mapping in field_mapping["platform_mappings"]})
+            == len(field_mapping["platform_mappings"])
+            for field_mapping in crosswalk["field_mappings"]
+        )
+        and all(set(platform["evidence_ids"]) <= evidence_set for platform in crosswalk["platforms"]),
+        "D2 crosswalk mappings reference valid platforms, evidence and absence semantics",
         checks,
     )
     return checks
