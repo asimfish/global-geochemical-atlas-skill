@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemistry-confidence-report:d2-v1",
+  "title": "D2 operational confidence report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "confidence_version",
+    "name",
+    "not_a_probability",
+    "meaning",
+    "run_metadata",
+    "weights",
+    "band_thresholds",
+    "gates",
+    "component_means",
+    "band_counts"
+  ],
+  "properties": {
+    "confidence_version": {"const": "d2-confidence-v1"},
+    "name": {"const": "operational_confidence"},
+    "not_a_probability": {"const": true},
+    "meaning": {"type": "string", "minLength": 1},
+    "run_metadata": {
+      "type": "object",
+      "required": ["run_id", "input_sha256", "input_row_count", "configuration"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1},
+        "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "input_row_count": {"type": "integer", "minimum": 1},
+        "configuration": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "completeness", "method", "spatial", "qc"],
+      "properties": {
+        "source": {"type": "number", "minimum": 0, "maximum": 1},
+        "completeness": {"type": "number", "minimum": 0, "maximum": 1},
+        "method": {"type": "number", "minimum": 0, "maximum": 1},
+        "spatial": {"type": "number", "minimum": 0, "maximum": 1},
+        "qc": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "band_thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["high", "medium", "low"],
+      "properties": {
+        "high": {"type": "string"},
+        "medium": {"type": "string"},
+        "low": {"type": "string"}
+      }
+    },
+    "gates": {"type": "object", "additionalProperties": {"type": "string"}},
+    "component_means": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "completeness", "method", "spatial", "qc", "overall"],
+      "properties": {
+        "source": {"type": "number", "minimum": 0, "maximum": 1},
+        "completeness": {"type": "number", "minimum": 0, "maximum": 1},
+        "method": {"type": "number", "minimum": 0, "maximum": 1},
+        "spatial": {"type": "number", "minimum": 0, "maximum": 1},
+        "qc": {"type": "number", "minimum": 0, "maximum": 1},
+        "overall": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "band_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["high", "medium", "low"],
+      "properties": {
+        "high": {"type": "integer", "minimum": 0},
+        "medium": {"type": "integer", "minimum": 0},
+        "low": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

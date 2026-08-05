@@ -1,0 +1,30 @@
+name: skill-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate D1 D2 D3 contracts
+        run: python skills/global-geochemical-atlas/scripts/component_test.py --component all
+      - name: Run deterministic regression suite
+        run: python skills/global-geochemical-atlas/scripts/self_test.py
+      - name: Check every script interface
+        shell: bash
+        run: |
+          set -euo pipefail
+          for script in skills/global-geochemical-atlas/scripts/*.py; do
+            python "$script" --help >/dev/null
+          done

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import re
@@ -52,6 +53,14 @@ def strict_json(path: Path) -> Any:
         raise ValueError(f"non-finite JSON constant: {value}")
 
     return json.loads(path.read_text(encoding="utf-8"), parse_constant=reject_constant)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def valid_coordinate_pair(coordinates: Any) -> bool:
@@ -213,6 +222,28 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     confidence = parsed.get("confidence_report")
     if not isinstance(confidence, dict) or confidence.get("not_a_probability") is not True:
         errors.append("confidence_report.json must state that operational confidence is not a probability")
+    if isinstance(manifest, dict) and isinstance(confidence, dict):
+        if manifest.get("manifest_version") != "geochemical-source-manifest-v1":
+            errors.append("source_manifest.json has an unsupported manifest_version")
+        manifest_input = manifest.get("input")
+        summary_input = summary.get("input") if isinstance(summary, dict) else None
+        if not isinstance(manifest_input, dict) or not isinstance(summary_input, dict):
+            errors.append("source manifest and run summary must contain input objects")
+        elif manifest_input.get("sha256") != summary_input.get("sha256"):
+            errors.append("source manifest input hash does not match run summary")
+        binding = manifest.get("confidence_report")
+        if not isinstance(binding, dict):
+            errors.append("source_manifest.json must bind confidence_report.json")
+        else:
+            if binding.get("sha256") != sha256_file(paths["confidence_report"]):
+                errors.append("source manifest confidence hash does not match confidence_report.json")
+            if binding.get("not_a_probability") is not True:
+                errors.append("source manifest must preserve the confidence interpretation boundary")
+            if binding.get("confidence_version") != confidence.get("confidence_version"):
+                errors.append("source manifest confidence_version does not match confidence_report.json")
+            run_metadata = confidence.get("run_metadata")
+            if not isinstance(run_metadata, dict) or binding.get("input_sha256") != run_metadata.get("input_sha256"):
+                errors.append("source manifest confidence input hash does not match D2 run metadata")
     anomaly_report = parsed.get("anomaly_report")
     if not isinstance(anomaly_report, dict) or anomaly_report.get("scientific_status") != "screening_baseline_only":
         errors.append("anomaly_report.json must declare screening_baseline_only")

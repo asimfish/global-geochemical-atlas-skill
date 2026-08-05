@@ -32,6 +32,18 @@
 - 压缩包先检查成员路径、总展开大小和成员数，避免路径穿越和压缩炸弹。
 - 下载后记录服务端过滤、本地过滤、预期记录数、实际记录数和任何截断。
 
+完成 D2 标准化后，用证据打包器生成来源清单并绑定置信度报告：
+
+```bash
+python scripts/build_evidence_bundle.py \
+  --input INPUT.csv \
+  --database OUTPUT/geochemistry.csv \
+  --confidence-report OUTPUT/confidence_report.json \
+  --output OUTPUT/source_manifest.json
+```
+
+该步骤只验证并打包置信度版本、输入哈希和报告哈希，不改变 D2 的置信度算法或数值。
+
 ## 许可边界
 
 MIT 只覆盖本仓库原创代码和文档，不覆盖外部数据。对许可不明、仅限研究或禁止再分发的数据，只保存公开元数据与检索说明；不得打包原始记录。

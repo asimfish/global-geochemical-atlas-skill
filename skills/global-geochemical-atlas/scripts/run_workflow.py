@@ -5,17 +5,16 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
 import sys
 import tempfile
-from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+import build_evidence_bundle as evidence_builder
 import build_interactive_map as map_builder
 import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
@@ -39,14 +38,6 @@ def atomic_json(path: Path, value: Any) -> None:
         handle.write("\n")
         temporary = Path(handle.name)
     os.replace(temporary, path)
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def count_input_rows(path: Path, max_records: int) -> int:
@@ -80,60 +71,6 @@ def json_file(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise WorkflowError("incomplete_retrieval", f"expected JSON object in {path.name}")
     return value
-
-
-def canonical_rows(path: Path) -> list[dict[str, str]]:
-    with path.open("r", encoding="utf-8", newline="") as handle:
-        return list(csv.DictReader(handle))
-
-
-def create_source_manifest(
-    input_path: Path,
-    input_hash: str,
-    rows: Sequence[Mapping[str, str]],
-) -> tuple[dict[str, Any], bool]:
-    grouped: dict[str, list[Mapping[str, str]]] = defaultdict(list)
-    for row in rows:
-        grouped[(row.get("source_id") or "unknown").strip() or "unknown"].append(row)
-    sources: list[dict[str, Any]] = []
-    synthetic_present = False
-    for source_id in sorted(grouped):
-        source_rows = grouped[source_id]
-        locators = sorted({row.get("source_locator") for row in source_rows if row.get("source_locator")})
-        licenses = sorted({row.get("license") for row in source_rows if row.get("license")})
-        tiers = sorted({row.get("source_tier") for row in source_rows if row.get("source_tier")})
-        is_synthetic = source_id.casefold().startswith("synthetic")
-        synthetic_present = synthetic_present or is_synthetic
-        sources.append(
-            {
-                "source_id": source_id,
-                "record_count": len(source_rows),
-                "source_tiers": tiers,
-                "licenses": licenses,
-                "locator_count": len(locators),
-                "example_locators": locators[:5],
-                "all_records_located": len(locators) > 0 and all(row.get("source_locator") for row in source_rows),
-                "evidence_type": "synthetic_demo" if is_synthetic else "source_declared_in_input",
-                "license_review": "demo_cc0" if is_synthetic and "CC0-1.0" in licenses else "verify_source_terms",
-            }
-        )
-    manifest = {
-        "manifest_version": "geochemical-source-manifest-v1",
-        "input": {
-            "filename": input_path.name,
-            "sha256": input_hash,
-            "bytes": input_path.stat().st_size,
-            "record_count": len(rows),
-        },
-        "source_count": len(sources),
-        "sources": sources,
-        "synthetic_data_present": synthetic_present,
-        "claim_boundary": (
-            "Source fields are preserved from the input. A locator is not independently verified unless a download "
-            "manifest or source-specific audit says so."
-        ),
-    }
-    return manifest, synthetic_present
 
 
 def coverage_from_rows(rows: Sequence[Mapping[str, str]], qc_report: Mapping[str, Any]) -> dict[str, Any]:
@@ -196,7 +133,7 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
         },
         "input": {
             "filename": input_path.name,
-            "sha256": sha256_file(input_path) if input_path.is_file() else "0" * 64,
+            "sha256": evidence_builder.sha256_file(input_path) if input_path.is_file() else "0" * 64,
             "record_count": 0,
             "synthetic_demo": False,
         },
@@ -243,11 +180,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     except OSError as exc:
         raise WorkflowError("incomplete_retrieval", str(exc)) from exc
 
-    rows = canonical_rows(outputs["database"])
-    input_hash = sha256_file(args.input)
-    manifest, synthetic_present = create_source_manifest(args.input, input_hash, rows)
+    rows = evidence_builder.canonical_rows(outputs["database"])
+    input_hash = evidence_builder.sha256_file(args.input)
     source_manifest_path = args.output_dir / "source_manifest.json"
-    atomic_json(source_manifest_path, manifest)
+    try:
+        _, synthetic_present = evidence_builder.package_evidence(
+            args.input, outputs["database"], outputs["confidence_report"], source_manifest_path
+        )
+    except evidence_builder.EvidenceError as exc:
+        raise WorkflowError("conflicting_evidence", f"evidence packaging failed: {exc}") from exc
 
     samples_path = args.output_dir / "samples.geojson"
     map_path = args.output_dir / "interactive_map.html"

@@ -13,6 +13,7 @@ python scripts/run_workflow.py \
   --input fixtures/demo_input.csv \
   --output-dir demo_output
 python scripts/validate_outputs.py --output-dir demo_output
+python scripts/component_test.py --component all
 ```
 
 ## 预期结果

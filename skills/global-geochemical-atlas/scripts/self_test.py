@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import subprocess
 import sys
@@ -60,7 +61,13 @@ def json_value(path: Path) -> Any:
 
 def run_suite() -> dict[str, Any]:
     require(DEMO_INPUT.is_file(), "bundled demo_input.csv is missing")
-    for schema_name in ("request.schema.json", "result.schema.json", "geochemistry-record.schema.json"):
+    for schema_name in (
+        "request.schema.json",
+        "result.schema.json",
+        "geochemistry-record.schema.json",
+        "source-manifest.schema.json",
+        "confidence-report.schema.json",
+    ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
 
@@ -103,6 +110,10 @@ def run_suite() -> dict[str, Any]:
         summary = json_value(first / "run_summary.json")
         require(summary["input"]["synthetic_demo"] is True, "demo must be labeled synthetic")
         require(summary["coverage"]["interpolation"] is False, "demo must not interpolate blank areas")
+        manifest = json_value(first / "source_manifest.json")
+        confidence_hash = hashlib.sha256((first / "confidence_report.json").read_bytes()).hexdigest()
+        require(manifest["confidence_report"]["sha256"] == confidence_hash, "confidence evidence hash mismatch")
+        require(manifest["coverage"]["source_locator_rate"] == 1.0, "demo provenance coverage should be complete")
 
         html = (first / "interactive_map.html").read_text(encoding="utf-8")
         require("<script src=" not in html.casefold(), "map has an external script dependency")
@@ -139,7 +150,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 18,
+            "tests": 22,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

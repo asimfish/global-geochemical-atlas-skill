@@ -159,4 +159,6 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 
 每个关键结论绑定 `source_id + source_locator`。把事实、脚本计算、模型推断、假设和未验证项分开。输出字段定义见 [references/result.schema.json](references/result.schema.json)，记录字段定义见 [references/geochemistry-record.schema.json](references/geochemistry-record.schema.json)。
 
+来源打包必须符合 [references/source-manifest.schema.json](references/source-manifest.schema.json)，置信度报告必须符合 [references/confidence-report.schema.json](references/confidence-report.schema.json)。保留二者的输入哈希与报告哈希绑定，不要在证据链阶段重新计算置信度。
+
 需要快速复现时读取 [references/demo-guide.md](references/demo-guide.md)。

@@ -17,7 +17,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 生成：
 
 - `geochemistry.csv`：标准化地球化学数据库；
-- `source_manifest.json`：记录级来源、许可和输入哈希摘要；
+- `source_manifest.json`：记录级来源、许可、输入哈希及置信度报告哈希绑定；
 - `qc_report.json` 与 `confidence_report.json`：QC 和运行级置信度；
 - `anomalies.geojson` 与 `anomaly_report.json`：候选异常及背景组统计；
 - `samples.geojson`：地图样点图层；
@@ -63,6 +63,24 @@ skills/
 ```
 
 没有 `requirements.txt`：运行脚本只使用 Python 标准库。完整数据不进入仓库；可使用受控下载脚本获取公开文件，并保存 URL、时间、许可和 SHA-256。
+
+## 三人协作
+
+仓库仍然只有一个生产 Skill，但内部按稳定接口拆为三个责任域：
+
+- D1 维护下载、缓存、demo 数据和证据打包，负责 **数据来源与置信度说明**；
+- D2 维护标准化、QC、置信度算法和异常分析，负责 **标准化地球化学数据库** 与 **异常区域识别结果**；
+- D3 维护唯一 `SKILL.md`、总工作流、地图和 demo，负责 **可交互元素分布地图** 与 **可复用 Skill 文档**。
+
+各角色可独立运行最小契约测试：
+
+```bash
+python skills/global-geochemical-atlas/scripts/component_test.py --component d1
+python skills/global-geochemical-atlas/scripts/component_test.py --component d2
+python skills/global-geochemical-atlas/scripts/component_test.py --component d3
+```
+
+合并前运行 `--component all` 和 `self_test.py`。完整路径归属、接口冻结规则、分支约定和完成定义见仓库根目录 `CONTRIBUTING.md`；该文件服务开发协作，不属于运行时 Skill。
 
 ## Skill 加载
 

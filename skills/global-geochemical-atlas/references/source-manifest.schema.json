@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemistry-source-manifest:d1-v1",
+  "title": "D1 geochemical source and evidence manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "input",
+    "source_count",
+    "coverage",
+    "sources",
+    "confidence_report",
+    "synthetic_data_present",
+    "claim_boundary"
+  ],
+  "properties": {
+    "manifest_version": {"const": "geochemical-source-manifest-v1"},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "sha256", "bytes", "record_count"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "record_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "source_count": {"type": "integer", "minimum": 1},
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "records_with_source_locator",
+        "records_with_declared_license",
+        "source_locator_rate",
+        "declared_license_rate"
+      ],
+      "properties": {
+        "records_with_source_locator": {"type": "integer", "minimum": 0},
+        "records_with_declared_license": {"type": "integer", "minimum": 0},
+        "source_locator_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "declared_license_rate": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "record_count",
+          "source_tiers",
+          "licenses",
+          "located_record_count",
+          "locator_count",
+          "example_locators",
+          "all_records_located",
+          "all_records_license_declared",
+          "evidence_type",
+          "license_review"
+        ],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "record_count": {"type": "integer", "minimum": 1},
+          "source_tiers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "licenses": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "located_record_count": {"type": "integer", "minimum": 0},
+          "locator_count": {"type": "integer", "minimum": 0},
+          "example_locators": {"type": "array", "maxItems": 5, "items": {"type": "string"}},
+          "all_records_located": {"type": "boolean"},
+          "all_records_license_declared": {"type": "boolean"},
+          "evidence_type": {"type": "string", "enum": ["synthetic_demo", "source_declared_in_input"]},
+          "license_review": {"type": "string", "enum": ["demo_cc0", "verify_source_terms", "unresolved"]}
+        }
+      }
+    },
+    "confidence_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filename",
+        "sha256",
+        "confidence_version",
+        "run_id",
+        "input_sha256",
+        "not_a_probability",
+        "contract"
+      ],
+      "properties": {
+        "filename": {"const": "confidence_report.json"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "confidence_version": {"type": "string", "minLength": 1},
+        "run_id": {"type": ["string", "null"]},
+        "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "not_a_probability": {"const": true},
+        "contract": {"type": "string", "minLength": 1}
+      }
+    },
+    "synthetic_data_present": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 1}
+  }
+}

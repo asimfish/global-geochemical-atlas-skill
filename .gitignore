@@ -7,5 +7,6 @@ __pycache__/
 .cache/
 output/
 demo_output/
+dist/
 *.zip
 *.log

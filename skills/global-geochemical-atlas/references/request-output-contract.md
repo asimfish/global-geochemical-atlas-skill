@@ -25,7 +25,7 @@
 | 文件 | 核心用途 |
 |---|---|
 | `geochemistry.csv` | 一行一个样品 × 分析物测定，保留原值与 canonical 值 |
-| `source_manifest.json` | 输入哈希、来源、定位、许可、记录数与限制 |
+| `source_manifest.json` | 输入哈希、来源、定位、许可、记录数、覆盖率及置信度报告哈希绑定 |
 | `qc_report.json` | 标准化率、删失、坐标和 flags 汇总 |
 | `confidence_report.json` | 运行级置信度公式、分量和 band 分布 |
 | `anomalies.geojson` | 候选异常点；允许 null geometry |
