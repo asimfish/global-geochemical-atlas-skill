@@ -26,9 +26,19 @@
 - 内容：0–5 cm、A horizon、C horizon 各选择 4 个源样品，每个样品保留 As、Cu、Ni、Zn；
 - 边界：三个土层保持可区分，legacy qualifier 和科学标准化由 D2 处理。
 
+## MarChem demo
+
+目录：`norway-marchem/`。
+
+- 来源：MarChem 挪威海域沉积物动态 API 快照 `norway-marchem:2026-08-05T10:27:11Z:be888784ee2e`；
+- 许可：CC BY 4.0，保留来源署名；
+- 内容：从已经准备的 30 条分层复核记录中保留 28 条含目标元素的源行，生成 As、Cu、Ni、Zn 各 28 条，共 112 条观测；
+- 方法边界：所有值均为干重 `mg/kg` 的部分硝酸消解结果，不代表总含量；批次认可状态和 LLQ 按观测保留；
+- 关系边界：完整快照的 1,070 行对应 880 个样品，fixture 不把第二参数组产生的附加行误算成新样品。
+
 ## 确定性再生成
 
-先按 `references/data-sources.md` 下载并验证两个完整来源，然后在 Skill 目录的上级仓库根目录运行：
+先按 `references/data-sources.md` 下载并验证来源。完整第三方文件留在仓库外缓存，然后在仓库根目录运行：
 
 ```bash
 python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
@@ -46,6 +56,15 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --mode cached \
   --observations 48 \
   --generated-at 2026-08-05T06:25:00Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source norway-marchem \
+  --cache-dir .cache/data \
+  --archive /path/to/marchem-inorganic-2003-2024.zip \
+  --output-dir /tmp/marchem-demo \
+  --mode cached \
+  --observations 112 \
+  --generated-at 2026-08-05T12:50:00Z
 ```
 
-使用相同注册表版本、验证缓存和 `--generated-at` 时，三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。
+使用相同注册表版本、验证缓存/快照和 `--generated-at` 时，每个来源的三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。

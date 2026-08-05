@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemistry-human-review:v1",
+  "title": "D1 stratified source-record human review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_version",
+    "source_id",
+    "dataset_version",
+    "snapshot_id",
+    "status",
+    "required_record_count",
+    "prepared_record_count",
+    "automated_pass_count",
+    "completed_record_count",
+    "selection_strategy",
+    "records",
+    "claim_boundary"
+  ],
+  "properties": {
+    "review_version": {"const": "geochemical-human-review-v1"},
+    "source_id": {"type": "string", "minLength": 1},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["prepared", "in_progress", "passed", "failed", "conflict"]},
+    "required_record_count": {"type": "integer", "minimum": 1},
+    "prepared_record_count": {"type": "integer", "minimum": 0},
+    "automated_pass_count": {"type": "integer", "minimum": 0},
+    "completed_record_count": {"type": "integer", "minimum": 0},
+    "selection_strategy": {"type": "string", "minLength": 1},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "review_id",
+          "source_locator",
+          "source_record_id",
+          "sample_id",
+          "batch_code",
+          "selection_reasons",
+          "published_target_raw_values",
+          "adapter_observations",
+          "automated_checks",
+          "automated_status",
+          "reviewer"
+        ],
+        "properties": {
+          "review_id": {"type": "string", "minLength": 1},
+          "source_locator": {"type": "string", "minLength": 1},
+          "source_record_id": {"type": "string", "minLength": 1},
+          "sample_id": {"type": "string", "minLength": 1},
+          "batch_code": {"type": "string", "minLength": 1},
+          "selection_reasons": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "published_target_raw_values": {"type": "object"},
+          "adapter_observations": {"type": "array", "items": {"type": "object"}},
+          "automated_checks": {
+            "type": "object",
+            "additionalProperties": {"type": "boolean"}
+          },
+          "automated_status": {"type": "string", "enum": ["PASS", "FAIL"]},
+          "reviewer": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["decision", "reviewer", "reviewed_at", "notes"],
+            "properties": {
+              "decision": {"type": ["string", "null"], "enum": ["pass", "fail", null]},
+              "reviewer": {"type": ["string", "null"]},
+              "reviewed_at": {"type": ["string", "null"]},
+              "notes": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  }
+}

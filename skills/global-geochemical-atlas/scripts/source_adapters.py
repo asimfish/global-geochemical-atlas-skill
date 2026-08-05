@@ -506,9 +506,265 @@ class GeorocArchaeanAdapter(RegistryAdapter):
                 )
 
 
+class MarchemSnapshotAdapter(RegistryAdapter):
+    """Content-addressed MarChem ZIP with semicolon data and method tables."""
+
+    source_id = "norway-marchem"
+    BATCH_CODE_RE = re.compile(r"\b\d{4}-\d{4}\b")
+
+    @staticmethod
+    def _semicolon_rows(path: Path, required_fields: Sequence[str]) -> list[tuple[int, dict[str, str]]]:
+        try:
+            handle = path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"MarChem member is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.DictReader(handle, delimiter=";")
+            fieldnames = [str(value or "").strip() for value in (reader.fieldnames or [])]
+            missing = sorted(set(required_fields) - set(fieldnames))
+            if missing:
+                raise SourceAdapterError(
+                    f"MarChem member {path.name} lacks required fields: {', '.join(missing)}"
+                )
+            rows: list[tuple[int, dict[str, str]]] = []
+            for row in reader:
+                values = {str(key): str(value or "").strip() for key, value in row.items() if key}
+                if any(values.values()):
+                    rows.append((reader.line_num, values))
+            return rows
+
+    def _verified_members(
+        self,
+        extract_dir: Path,
+        cache_status: str,
+        retrieved_at: str | None,
+    ) -> list[DownloadedFile]:
+        download_entry = self.candidate.registry_entry["download"]
+        expected = {item["filename"]: item for item in download_entry["members"]}
+        actual = {
+            str(path.relative_to(extract_dir))
+            for path in extract_dir.rglob("*")
+            if path.is_file()
+        }
+        if actual != set(expected):
+            raise SourceAdapterError(
+                "MarChem member set changed; "
+                f"missing={sorted(set(expected) - actual)}, unexpected={sorted(actual - set(expected))}"
+            )
+        verified: list[DownloadedFile] = []
+        for relative_name, entry in expected.items():
+            path = extract_dir / relative_name
+            if path.stat().st_size != entry["bytes"]:
+                raise SourceAdapterError(f"MarChem member size changed: {relative_name}")
+            observed = downloader.sha256_file(path)
+            if observed != entry["expected_sha256"]:
+                raise SourceAdapterError(f"MarChem member SHA-256 changed: {relative_name}")
+            verified.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=entry["file_id"],
+                    path=path,
+                    source_url=f"{download_entry['url']}#member={relative_name}",
+                    sha256=observed,
+                    bytes=path.stat().st_size,
+                    cache_status=cache_status,
+                    retrieved_at=retrieved_at,
+                )
+            )
+        return verified
+
+    def files_from_archive(
+        self,
+        archive_path: Path,
+        extract_dir: Path,
+        *,
+        cache_status: str = "verified_local_snapshot",
+    ) -> list[DownloadedFile]:
+        """Verify and safely extract an explicitly supplied copy of the frozen snapshot."""
+
+        download_entry = self.candidate.registry_entry["download"]
+        if not archive_path.is_file():
+            raise SourceAdapterError(f"MarChem snapshot archive does not exist: {archive_path}")
+        if archive_path.stat().st_size != download_entry["expected_bytes"]:
+            raise SourceAdapterError("MarChem snapshot archive size does not match the registry")
+        if downloader.sha256_file(archive_path) != download_entry["expected_sha256"]:
+            raise SourceAdapterError("MarChem snapshot archive SHA-256 does not match the registry")
+        try:
+            downloader.safe_extract_zip(
+                archive_path,
+                extract_dir,
+                max_members=int(download_entry["expected_member_count"]),
+                max_extracted_bytes=int(download_entry["expected_uncompressed_bytes"]),
+                required_members=[item["filename"] for item in download_entry["members"]],
+                required_fields=(),
+            )
+        except (downloader.DownloadError, OSError) as exc:
+            raise SourceAdapterError(f"MarChem safe extraction failed: {exc}") from exc
+        return self._verified_members(extract_dir, cache_status, "2026-08-05T10:27:11Z")
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("MarChem adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use a checked-in source-native fixture directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        archive_path = root / download_entry["archive_filename"]
+        manifest_path = root / "snapshot.download.json"
+        args = _download_args(
+            url=download_entry["url"],
+            output=archive_path,
+            manifest=manifest_path,
+            license_id=candidate.license_id,
+            expected_sha256=download_entry["expected_sha256"],
+            max_bytes=int(download_entry["max_bytes"]),
+            dataset_doi=candidate.dataset_doi,
+            dataset_version=candidate.version,
+            offline=mode == "cached",
+        )
+        try:
+            result = downloader.run(args)
+        except (downloader.DownloadError, OSError) as exc:
+            raise SourceAdapterError(f"MarChem snapshot download failed: {exc}") from exc
+        content_type = result.get("content_type")
+        if content_type and content_type not in set(download_entry["accepted_content_types"]):
+            raise SourceAdapterError(f"MarChem returned unexpected content type: {content_type}")
+        extract_dir = root / "members"
+        if not extract_dir.exists():
+            try:
+                downloader.safe_extract_zip(
+                    archive_path,
+                    extract_dir,
+                    max_members=int(download_entry["expected_member_count"]),
+                    max_extracted_bytes=int(download_entry["expected_uncompressed_bytes"]),
+                    required_members=[item["filename"] for item in download_entry["members"]],
+                    required_fields=(),
+                )
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(f"MarChem safe extraction failed: {exc}") from exc
+        return self._verified_members(
+            extract_dir,
+            result["status"],
+            result.get("accessed_at") or result.get("cache_verified_at"),
+        )
+
+    def _metadata_index(self, metadata_path: Path) -> dict[tuple[str, str], dict[str, str]]:
+        rows = self._semicolon_rows(
+            metadata_path,
+            self.candidate.registry_entry["metadata_required_fields"],
+        )
+        target_parameters = {
+            self._parameter_code(field_name)
+            for field_name in self.candidate.registry_entry["target_analytes"].values()
+        }
+        index: dict[tuple[str, str], dict[str, str]] = {}
+        for line_number, values in rows:
+            parameter = values.get("Lab_parameter_code", "")
+            if not parameter or parameter not in target_parameters:
+                continue
+            batch_codes = self.BATCH_CODE_RE.findall(values.get("Batch", ""))
+            for batch_code in batch_codes:
+                key = (batch_code, parameter)
+                candidate = {
+                    **values,
+                    "_metadata_source_locator": f"{metadata_path.name}#row={line_number}",
+                    "_metadata_batch_expression": values.get("Batch", ""),
+                }
+                prior = index.get(key)
+                if prior is not None and prior != candidate:
+                    raise SourceAdapterError(
+                        f"MarChem metadata has conflicting rows for batch={batch_code}, parameter={parameter}"
+                    )
+                index[key] = candidate
+        return index
+
+    @staticmethod
+    def _parameter_code(field_name: str) -> str | None:
+        match = re.fullmatch(r"(.+)_((?:mg|ug|ng)/kg)", field_name)
+        return match.group(1) if match else None
+
+    @staticmethod
+    def _accreditation_status(comment: str) -> str:
+        normalized = comment.strip().casefold()
+        if normalized.startswith("not accredited"):
+            return "not_accredited"
+        if normalized.startswith("accredited"):
+            return "accredited"
+        return "unknown"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        if set(by_id) != {"data", "metadata", "info"}:
+            raise SourceAdapterError(
+                f"MarChem adapter requires data, metadata and info members; received={sorted(by_id)}"
+            )
+        metadata = self._metadata_index(by_id["metadata"].path)
+        data_rows = self._semicolon_rows(
+            by_id["data"].path,
+            self.candidate.registry_entry["required_fields"],
+        )
+        expected_counts = self.candidate.registry_entry["expected_counts"]
+        if len(data_rows) != expected_counts["physical_rows"]:
+            raise SourceAdapterError(
+                f"MarChem physical-row count changed: {len(data_rows)} != {expected_counts['physical_rows']}"
+            )
+        target_fields = set(self.candidate.registry_entry["target_analytes"].values())
+        records: list[RawRecord] = []
+        for line_number, values in data_rows:
+            batch_code = values.get("Batch_code", "")
+            parameter_metadata: dict[str, dict[str, str]] = {}
+            for field_name, raw_value in values.items():
+                if not raw_value:
+                    continue
+                parameter_code = self._parameter_code(field_name)
+                if parameter_code is None:
+                    continue
+                method = metadata.get((batch_code, parameter_code))
+                if method is None:
+                    if field_name in target_fields:
+                        raise SourceAdapterError(
+                            f"MarChem target metadata missing at data row {line_number}: "
+                            f"batch={batch_code}, parameter={parameter_code}"
+                        )
+                    continue
+                parameter_metadata[field_name] = {
+                    **method,
+                    "_accreditation_status": self._accreditation_status(method.get("Comment", "")),
+                }
+            source_locator = f"{by_id['data'].path.name}#row={line_number}"
+            native_id = values.get("Sample_code") or None
+            source_record_id = stable_source_record_id(
+                self.source_id,
+                native_id,
+                source_locator,
+            )
+            records.append(
+                RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=source_record_id,
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_lab_parameters": parameter_metadata,
+                        "_source_file": by_id["data"].path.name,
+                        "_metadata_file": by_id["metadata"].path.name,
+                        "_dataset_version": self.candidate.version,
+                        "_snapshot_id": self.candidate.version,
+                    },
+                )
+            )
+        return records
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
+    MarchemSnapshotAdapter.source_id: MarchemSnapshotAdapter,
 }
 
 

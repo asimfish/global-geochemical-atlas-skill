@@ -2,16 +2,16 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-05 18:34（Asia/Shanghai）
+更新时间：2026-08-05 20:50（Asia/Shanghai）
 
 ## 当前结论
 
-首批复核已进入 V3 渐进评分：`norway-marchem` 当前为 65 分、C 级、`raw_observation`；`geotraces-idp2025` 当前为 32.5 分、D 级、`discovery`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+首批复核已进入 V3 渐进评分：`norway-marchem` 已完成 canonical 适配、全量对账和端到端 fixture，当前为 85 分、A 级、`normalized_analysis`；`geotraces-idp2025` 当前为 32.5 分、D 级、`discovery`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
 | `geotraces-idp2025` | 官方身份、不可变 DOI/IDP2025、CC BY 4.0、产品级 QC 描述 | BODC 归档仍在异步准备，未取得实际文件清单、成员 hash、变量表；未做适配器和人工抽查 | D 级 `discovery`，保留全部发现证据 |
-| `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash 和完整成员清单 | 部分消解与批次认可状态需进入逐观测映射；适配器和 30 条人工回看未完成 | C 级 `raw_observation`，可以进入适配器开发 |
+| `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash、完整成员清单、canonical 适配器、1,070 行对账和地图运行 | 30 条人工回看尚待完成 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
 
 ## `norway-marchem` 复核
 
@@ -90,13 +90,18 @@ python scripts/verify_marchem_candidate.py \
 - 原始删失符号和值；
 - 超出测量范围或不在认可范围内的批次备注。
 
-### 5. 剩余准入门
+### 5. 适配结果与剩余工作
 
-1. 向官方/NMDC 固定一个与无机导出对应的 DOI 发布，或定义并审阅“动态服务 + 本地不可变快照”的版本政策；
-2. 冻结样品、批次、方法和观测的字段映射，特别处理两个参数组产生的重复样品行；
-3. 实现只解析来源事实的最小适配器，并对 1,070 行做零静默丢失对账；
-4. 完成已经准备好的 30 条人工回看，覆盖正常、缺失、删失、早期未认可批次、极值和坐标边界；
-5. 对同一样品不同深度切片与同站位不同样品建立稳定 ID，不在 D1 合并成均值。
+canonical 适配器已处理合并批次表达式 `2021-0031 2023-0120`，并完成以下对账：
+
+- 1,070 个物理行、880 个不同样品、190 个重复样品附加行；
+- As/Cu/Ni/Zn 各 880 条，共 3,520 条目标观测；
+- 3,520 条观测全部连接到批次级方法元数据，零漏连；
+- `<` 删失值共 45 条，保持原始符号和阈值；
+- 1,808 条目标观测连接到认可批次，1,712 条连接到未认可批次；
+- 干重 `mg/kg`、部分硝酸消解和“非总含量”边界全部保留。
+
+机器对账见 `fixtures/four-media/sediment/norway-marchem/adapter_reconciliation.json`。剩余工作是完成已经准备好的 30 条人工回看；在此之前保持 `normalized_analysis`，不标记为 `benchmark_ready`。
 
 ## `geotraces-idp2025` 复核
 
@@ -136,4 +141,4 @@ POST https://www.bodc.ac.uk/data/published_data_library/api/download/check/42c92
 
 ## 复核边界
 
-本报告证明的是官方接口、下载响应、文件结构和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；MarChem 即使已有 `raw_observation`，在请求 `normalized_analysis` 时沉积物仍保持 `unknown`。
+本报告证明的是官方接口、下载响应、文件结构和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；MarChem 现在可以参与 `normalized_analysis`，但只覆盖挪威海域，沉积物仍是 `partial` 而不是全球完整覆盖。

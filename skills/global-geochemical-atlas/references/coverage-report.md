@@ -21,13 +21,13 @@
 |---|---|---|---|---|---|
 | rock | `partial` | georoc-archaean | australia-ozchem, brazil-sgb-geochemistry, earthchem-library, earthchem-portal, finland-gtk-geochemistry, georoc-database, iodp-data-systems, jamstec-darwin, noaa-ncei-marine-geology, norway-ngu-lito, nz-petlab, pangaea-repository, petdb, usgs-ngdb | `single_source_dependency` | `unknown/not_yet_audited/not_yet_audited` |
 | soil | `partial` | usgs-conus-soil | bgs-gbase, brazil-sgb-geochemistry, earthchem-library, foregs-europe, gemas-europe, ireland-tellus, pangaea-repository, soils4africa, usgs-ngdb, wosis | `single_source_dependency` | `unknown/not_yet_audited/not_yet_audited` |
-| sediment | `unknown` | 无 | australia-ngsa, australia-ozchem, bgs-gbase, brazil-sgb-geochemistry, canada-cdogs, earthchem-library, earthchem-portal, eea-waterbase, emodnet-chemistry, finland-gtk-geochemistry, foregs-europe, iodp-data-systems, ireland-tellus, jamstec-darwin, noaa-ncei-marine-geology, norway-marchem, nz-petlab, pangaea-repository, sweden-sgu-geochemical-atlas, us-water-quality-portal, usgs-ngdb | `no_current_analysis_source` | `unknown/not_yet_audited/not_yet_audited` |
+| sediment | `partial` | norway-marchem | australia-ngsa, australia-ozchem, bgs-gbase, brazil-sgb-geochemistry, canada-cdogs, earthchem-library, earthchem-portal, eea-waterbase, emodnet-chemistry, finland-gtk-geochemistry, foregs-europe, iodp-data-systems, ireland-tellus, jamstec-darwin, noaa-ncei-marine-geology, nz-petlab, pangaea-repository, sweden-sgu-geochemical-atlas, us-water-quality-portal, usgs-ngdb | `single_source_dependency` | `unknown/not_yet_audited/not_yet_audited` |
 | water | `unknown` | 无 | bgs-gbase, brazil-sgb-geochemistry, canada-cdogs, earthchem-library, eea-waterbase, emodnet-chemistry, foregs-europe, gemstat-open-archive, geotraces-idp2025, glorich, iodp-data-systems, ireland-tellus, pangaea-repository, us-water-quality-portal | `no_current_analysis_source` | `unknown/not_yet_audited/not_yet_audited` |
 
 ## 当前判断
 
 - 岩石与土壤各有一个满足当前 `normalized_analysis` 条件的局部来源，因此仍是 `partial`；
-- 沉积物已有 MarChem `raw_observation` 样板，但未达到当前请求的分析级别，因此保持 `unknown`；
+- 沉积物已有一个满足 `normalized_analysis` 的 MarChem 挪威海域样板，但仍是单一国家来源，因此为 `partial`；
 - 水体来源当前仍为发现级，GEOTRACES 文件、字段和适配器证据尚未补齐；
 - 每个介质的分析物、方法、时间和空间密度仍需逐源审计；
 - 聚合平台不计作独立证据，必须追溯并去重其上游数据集。

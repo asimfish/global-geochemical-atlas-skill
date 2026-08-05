@@ -1,6 +1,6 @@
 {
   "registry_version": "geochemical-source-registry-v1",
-  "verified_at": "2026-08-05T06:04:00Z",
+  "verified_at": "2026-08-05T12:50:00Z",
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -373,6 +373,101 @@
       "scientific_notes": [
         "The three files represent 0-5 cm, A-horizon, and C-horizon/deep samples and must remain distinguishable.",
         "Legacy qualifiers and units must be decoded from this dataset's own metadata before D2 normalization."
+      ]
+    },
+    "norway-marchem": {
+      "adapter": "marchem_dynamic_snapshot",
+      "title": "MarChem marine chemistry database for Norwegian waters",
+      "publisher": "Institute of Marine Research and Geological Survey of Norway",
+      "dataset_doi": null,
+      "dataset_version": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+      "release_date": null,
+      "data_generated_at": "2026-08-05T10:27:09Z",
+      "landing_page": "https://marchem-editor.hi.no/",
+      "metadata_url": "https://marchem-api.hi.no/labParameterGroup/list",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "norwegian-marine-waters",
+      "download": {
+        "mode": "content-addressed-dynamic-api-snapshot",
+        "url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false",
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "max_bytes": 10000000,
+        "archive_filename": "marchem-inorganic-2003-2024.zip",
+        "expected_sha256": "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6",
+        "expected_bytes": 81598,
+        "expected_member_count": 3,
+        "expected_uncompressed_bytes": 619072,
+        "members": [
+          {
+            "file_id": "metadata",
+            "filename": "MetaData/MarChem_Inorganic_LabParameter_20260805T102709Z.csv",
+            "bytes": 320402,
+            "expected_sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d"
+          },
+          {
+            "file_id": "data",
+            "filename": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+            "bytes": 295287,
+            "expected_sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
+          },
+          {
+            "file_id": "info",
+            "filename": "MarChem_Info_20260805T102709Z",
+            "bytes": 3383,
+            "expected_sha256": "93e4db2dd0c726751f21557caa28a8da4275da87745369d0a506e8fbd84e584f"
+          }
+        ],
+        "snapshot_manifest": "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json"
+      },
+      "required_fields": [
+        "Sample_code",
+        "Cruise_year",
+        "Station_event_code",
+        "Longitude",
+        "Latitude",
+        "Batch_code"
+      ],
+      "metadata_required_fields": [
+        "Batch",
+        "Lab_parameter_code",
+        "Unit",
+        "Wet_or_dry_weight",
+        "Analysis_method",
+        "LLQ",
+        "Laboratory",
+        "Comment",
+        "Sample_preparation_method"
+      ],
+      "target_analytes": {
+        "As": "As_ICPOES_mg/kg",
+        "Cu": "Cu_ICPOES_mg/kg",
+        "Ni": "Ni_ICPOES_mg/kg",
+        "Zn": "Zn_ICPOES_mg/kg"
+      },
+      "expected_counts": {
+        "physical_rows": 1070,
+        "distinct_samples": 880,
+        "duplicate_sample_codes": 190,
+        "target_bearing_rows": 880,
+        "target_observations": 3520
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Institute of Marine Research and Geological Survey of Norway. MarChem marine chemistry database, content-addressed API snapshot observed 2026-08-05T10:27:11Z.",
+      "redistribution": "Use for attributed research analysis; the complete third-party snapshot remains outside Git and is not republished by this project.",
+      "scientific_notes": [
+        "As, Cu, Ni and Zn are reported as dry-weight mg/kg after partial nitric-acid digestion and are not total concentrations.",
+        "The export contains 1,070 physical rows for 880 distinct sample codes because 190 samples occur in two parameter-group rows.",
+        "Batch-level method metadata include accredited and not-accredited analyses and must be retained per observation.",
+        "This dataset version is a project content-addressed dynamic snapshot, not a publisher DOI or immutable publisher release."
       ]
     }
   }

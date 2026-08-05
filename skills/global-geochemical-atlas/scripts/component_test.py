@@ -102,8 +102,8 @@ def check_d1(output_dir: Path) -> list[str]:
 
     registry = source_contracts.load_source_registry()
     require(
-        set(registry["sources"]) == {"georoc-archaean", "usgs-conus-soil"},
-        "D1 registry freezes the two MVP public sources",
+        set(registry["sources"]) == {"georoc-archaean", "usgs-conus-soil", "norway-marchem"},
+        "D1 registry freezes the rock, soil and sediment reference sources",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -149,14 +149,14 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         {entry["source_id"] for entry in route["selected_sources"]}
-        == {"georoc-archaean", "usgs-conus-soil"},
-        "D1 V3 router selects the two sources that currently support normalized analysis",
+        == {"georoc-archaean", "usgs-conus-soil", "norway-marchem"},
+        "D1 V3 router selects the three sources that currently support normalized analysis",
         checks,
     )
     require(
         route["coverage"]["rock"]["status"] == "partial"
         and route["coverage"]["soil"]["status"] == "partial"
-        and route["coverage"]["sediment"]["status"] == "unknown"
+        and route["coverage"]["sediment"]["status"] == "partial"
         and route["coverage"]["water"]["status"] == "unknown",
         "D1 router does not overclaim incomplete coverage below the requested use mode",
         checks,
@@ -180,7 +180,7 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         {entry["source_id"] for entry in raw_sediment_route["selected_sources"]}
         == {"norway-marchem"},
-        "D1 V3 router can select a lower-use MarChem snapshot without claiming normalized analysis",
+        "D1 V3 router can select the normalized MarChem snapshot for a raw-observation request",
         checks,
     )
     benchmark_route = source_router.route_sources(
@@ -210,11 +210,11 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 2, "B": 0, "C": 1, "D": len(catalog["sources"]) - 3, "U": 0},
+            "evidence_tiers": {"A": 3, "B": 0, "C": 0, "D": len(catalog["sources"]) - 3, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 2,
-                "raw_observation": 1,
+                "normalized_analysis": 3,
+                "raw_observation": 0,
                 "discovery": len(catalog["sources"]) - 3,
             },
         },
@@ -231,12 +231,12 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        evidence["sources"]["norway-marchem"]["source_evidence_score"] == 65
-        and evidence["sources"]["norway-marchem"]["evidence_tier"] == "C"
-        and evidence["sources"]["norway-marchem"]["use_mode"] == "raw_observation"
+        evidence["sources"]["norway-marchem"]["source_evidence_score"] == 85
+        and evidence["sources"]["norway-marchem"]["evidence_tier"] == "A"
+        and evidence["sources"]["norway-marchem"]["use_mode"] == "normalized_analysis"
         and evidence["sources"]["norway-marchem"]["source_evidence_dimensions"]["version_snapshot"]["status"]
         == "verified",
-        "D1 credits the frozen MarChem snapshot while retaining its adapter and review limitations",
+        "D1 credits the frozen MarChem adapter while retaining its pending human-review limitation",
         checks,
     )
     audit = source_audit.audit_catalog(catalog, registry, candidate_evidence)
@@ -418,6 +418,67 @@ def check_d1(output_dir: Path) -> list[str]:
         and changed_snapshot_diff["requires_rescore"] is True
         and changed_snapshot_diff["comparisons"]["response_changed"] is True,
         "D1 snapshot diff forces rescore when a dynamic response hash changes",
+        checks,
+    )
+    marchem_reconciliation = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "sediment"
+        / "norway-marchem"
+        / "adapter_reconciliation.json"
+    )
+    require(
+        marchem_reconciliation["status"] == "PASS"
+        and marchem_reconciliation["snapshot_id"] == marchem_snapshot["snapshot_id"]
+        and marchem_reconciliation["snapshot_response_sha256"] == marchem_snapshot["response"]["sha256"]
+        and marchem_reconciliation["counts"]["physical_rows"] == 1070
+        and marchem_reconciliation["counts"]["distinct_samples"] == 880
+        and marchem_reconciliation["counts"]["target_observations"] == 3520
+        and marchem_reconciliation["counts"]["missing_target_method_links"] == 0,
+        "D1 MarChem adapter reconciles every snapshot row, sample and target method link",
+        checks,
+    )
+    require(
+        marchem_reconciliation["counts"]["target_censored_counts"]
+        == {"As": 20, "Cu": 18, "Ni": 2, "Zn": 5}
+        and marchem_reconciliation["measurement_semantics"]["units"] == ["mg/kg"]
+        and marchem_reconciliation["measurement_semantics"]["weight_bases"] == ["Dry weight"]
+        and marchem_reconciliation["checks"]["partial_digestion_boundary_preserved"] is True
+        and marchem_reconciliation["checks"]["accreditation_variation_preserved"] is True,
+        "D1 MarChem reconciliation preserves censoring, dry weight, partial digestion and accreditation",
+        checks,
+    )
+    marchem_human_review = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "sediment"
+        / "norway-marchem"
+        / "human_review.json"
+    )
+    require(
+        marchem_human_review["review_version"] == "geochemical-human-review-v1"
+        and marchem_human_review["status"] == "prepared"
+        and marchem_human_review["prepared_record_count"] == 30
+        and marchem_human_review["automated_pass_count"] == 30
+        and marchem_human_review["completed_record_count"] == 0
+        and all(record["automated_status"] == "PASS" for record in marchem_human_review["records"]),
+        "D1 prepares 30 passing MarChem comparisons without claiming human completion",
+        checks,
+    )
+    require(
+        all(
+            record["reviewer"]
+            == {"decision": None, "reviewer": None, "reviewed_at": None, "notes": None}
+            for record in marchem_human_review["records"]
+        )
+        and any(not record["adapter_observations"] for record in marchem_human_review["records"])
+        and any(
+            any(str(value).startswith("<") for value in record["published_target_raw_values"].values())
+            for record in marchem_human_review["records"]
+        ),
+        "D1 review sheet awaits a named reviewer and includes missing and censored edge cases",
         checks,
     )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
@@ -630,7 +691,12 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
 
-    for source_id in ("georoc-archaean", "usgs-conus-soil"):
+    expected_demo_counts = {
+        "georoc-archaean": 48,
+        "usgs-conus-soil": 48,
+        "norway-marchem": 112,
+    }
+    for source_id, expected_demo_count in expected_demo_counts.items():
         demo_dir = SOURCE_DEMOS / source_id
         demo_input = demo_dir / "demo_input.csv"
         sources_path = demo_dir / "sources.jsonl"
@@ -638,7 +704,7 @@ def check_d1(output_dir: Path) -> list[str]:
         demo_rows = csv_rows(demo_input)
         evidence_rows = [json.loads(line) for line in sources_path.read_text(encoding="utf-8").splitlines()]
         require(
-            len(demo_rows) == 48 and len(evidence_rows) == 48,
+            len(demo_rows) == expected_demo_count and len(evidence_rows) == expected_demo_count,
             f"D1 {source_id} fixture has one evidence record per observation",
             checks,
         )
@@ -663,9 +729,17 @@ def check_d1(output_dir: Path) -> list[str]:
             f"D1 {source_id} fixture preserves record-level evidence linkage",
             checks,
         )
+        per_analyte_count = expected_demo_count // 4
         require(
             Counter(row["element_or_analyte"] for row in demo_rows)
-            == Counter({"As": 12, "Cu": 12, "Ni": 12, "Zn": 12}),
+            == Counter(
+                {
+                    "As": per_analyte_count,
+                    "Cu": per_analyte_count,
+                    "Ni": per_analyte_count,
+                    "Zn": per_analyte_count,
+                }
+            ),
             f"D1 {source_id} fixture keeps the four analytes balanced",
             checks,
         )
@@ -686,6 +760,19 @@ def check_d1(output_dir: Path) -> list[str]:
         {item.get("soil_layer") for item in usgs_evidence}
         == {"top-0-5cm", "a-horizon", "c-horizon"},
         "D1 USGS fixture keeps all three soil layers distinct",
+        checks,
+    )
+    marchem_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "norway-marchem" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        {item.get("digestion_scope") for item in marchem_evidence} == {"partial"}
+        and {item.get("wet_or_dry_weight") for item in marchem_evidence} == {"Dry weight"}
+        and {item.get("accreditation_status") for item in marchem_evidence}
+        == {"accredited", "not_accredited"}
+        and all(item.get("metadata_source_locator") for item in marchem_evidence),
+        "D1 MarChem fixture retains per-observation method and accreditation evidence",
         checks,
     )
 

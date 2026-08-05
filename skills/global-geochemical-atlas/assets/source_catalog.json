@@ -1457,8 +1457,12 @@
         "url": "https://marchem-editor.hi.no/",
         "notes": "The service states CC BY 4.0 and Norwegian Licence for Open Government Data; dataset landing-page citations and acknowledgements still apply."
       },
-      "version": {"status": "dynamic", "value": null, "release_date": null},
-      "adapter": {"status": "not_implemented", "name": null},
+      "version": {
+        "status": "content_addressed_snapshot",
+        "value": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+        "release_date": "2026-08-05T10:27:11Z"
+      },
+      "adapter": {"status": "implemented", "name": "marchem_dynamic_snapshot"},
       "evidence_urls": [
         "https://marchem-editor.hi.no/",
         "https://marchem-api.hi.no/labParameterGroup/list"

@@ -104,7 +104,6 @@
         "ireland-tellus",
         "jamstec-darwin",
         "noaa-ncei-marine-geology",
-        "norway-marchem",
         "nz-petlab",
         "pangaea-repository",
         "sweden-sgu-geochemical-atlas",
@@ -112,14 +111,16 @@
         "usgs-ngdb"
       ],
       "method_metadata_coverage": "not_yet_audited",
-      "note": "Relevant candidates exist, but none currently meets the requested evidence, research-use and use-mode conditions.",
+      "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
       "requested_analytes": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
-      "selected_sources": [],
+      "selected_sources": [
+        "norway-marchem"
+      ],
       "source_evidence_tiers": {
         "australia-ngsa": "D",
         "australia-ozchem": "D",
@@ -136,14 +137,14 @@
         "ireland-tellus": "D",
         "jamstec-darwin": "D",
         "noaa-ncei-marine-geology": "D",
-        "norway-marchem": "C",
+        "norway-marchem": "A",
         "nz-petlab": "D",
         "pangaea-repository": "D",
         "sweden-sgu-geochemical-atlas": "D",
         "us-water-quality-portal": "D",
         "usgs-ngdb": "D"
       },
-      "source_independence": "no_current_analysis_source",
+      "source_independence": "single_source_dependency",
       "source_scopes": {
         "australia-ngsa": "national_partial",
         "australia-ozchem": "national_partial",
@@ -183,7 +184,7 @@
         "ireland-tellus": "discovery",
         "jamstec-darwin": "discovery",
         "noaa-ncei-marine-geology": "discovery",
-        "norway-marchem": "raw_observation",
+        "norway-marchem": "normalized_analysis",
         "nz-petlab": "discovery",
         "pangaea-repository": "discovery",
         "sweden-sgu-geochemical-atlas": "discovery",
@@ -191,7 +192,7 @@
         "usgs-ngdb": "discovery"
       },
       "spatial_density_coverage": "not_yet_audited",
-      "status": "unknown",
+      "status": "partial",
       "temporal_coverage": "not_yet_audited"
     },
     "soil": {

@@ -1853,7 +1853,7 @@
       "access_status": "open",
       "attribution_note": "The service states CC BY 4.0 and Norwegian Licence for Open Government Data; dataset landing-page citations and acknowledgements still apply.",
       "conflicts": [],
-      "evidence_tier": "C",
+      "evidence_tier": "A",
       "missing_dimensions": [
         "human_review"
       ],
@@ -1862,12 +1862,12 @@
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
       "source_evidence_dimensions": {
         "adapter_reproducibility": {
-          "awarded_points": 5.0,
+          "awarded_points": 10.0,
           "evidence": [
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
           ],
-          "note": "A reproducible candidate verifier exists, but no canonical production adapter is implemented.",
-          "status": "partial",
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
@@ -1907,22 +1907,22 @@
           "weight": 10
         },
         "provenance": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [
             "https://marchem-editor.hi.no/",
             "https://marchem-api.hi.no/labParameterGroup/list"
           ],
-          "note": "Dataset and API snapshot provenance are recorded; adapter-level row locators are still pending.",
-          "status": "partial",
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
           "weight": 15
         },
         "schema_semantics": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
           ],
-          "note": "Core analyte, value, unit and coordinate fields were inspected; canonical adapter mapping is pending.",
-          "status": "partial",
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
           "weight": 15
         },
         "version_snapshot": {
@@ -1937,11 +1937,11 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 65.0,
+      "source_evidence_score": 85.0,
       "source_id": "norway-marchem",
-      "use_mode": "raw_observation",
+      "use_mode": "normalized_analysis",
       "use_mode_limitations": [
-        "a production adapter is not yet verified"
+        "30-record human review is incomplete"
       ]
     },
     "norway-ngu-lito": {
@@ -2812,17 +2812,17 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 2,
+      "A": 3,
       "B": 0,
-      "C": 1,
+      "C": 0,
       "D": 29,
       "U": 0
     },
     "use_modes": {
       "benchmark_ready": 0,
       "discovery": 29,
-      "normalized_analysis": 2,
-      "raw_observation": 1
+      "normalized_analysis": 3,
+      "raw_observation": 0
     }
   }
 }
