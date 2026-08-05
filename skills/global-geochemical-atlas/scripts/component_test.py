@@ -25,6 +25,7 @@ from typing import Any
 
 import build_evidence_bundle as evidence_builder
 import acquire_gemstat_arsenic as gemstat_acquisition
+import build_four_media_demo
 import build_index as index_builder
 import benchmark_index
 import cache_control
@@ -46,6 +47,7 @@ SKILL_DIR = SCRIPT_DIR.parent
 REPO_ROOT = SKILL_DIR.parents[1]
 DEMO_INPUT = SKILL_DIR / "fixtures" / "demo_input.csv"
 SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
+COMBINED_DEMO = SKILL_DIR / "fixtures" / "four-media" / "combined-v3"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 
@@ -980,6 +982,94 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 GEOTRACES fixture retains dissolved fraction, depth and accepted source QC",
         checks,
     )
+
+    combined_manifest = json_value(COMBINED_DEMO / "run_manifest.json")
+    combined_rows = csv_rows(COMBINED_DEMO / "demo_input.csv")
+    combined_evidence = [
+        json.loads(line)
+        for line in (COMBINED_DEMO / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 304
+        and combined_manifest["record_counts"]["by_medium"]
+        == {"rock": 48, "sediment": 112, "soil": 48, "water": 96}
+        and combined_manifest["record_counts"]["by_source"]
+        == {
+            "gemstat-open-archive": 48,
+            "georoc-archaean": 48,
+            "geotraces-idp2025": 48,
+            "norway-marchem": 112,
+            "usgs-conus-soil": 48,
+        },
+        "D1 combined fixture binds all five routes to one 304-observation four-media request",
+        checks,
+    )
+    require(
+        combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
+        and combined_manifest["comparison_isolation"]["partition_count"] == 34
+        and combined_manifest["comparison_isolation"]["water_partition_count"] == 13,
+        "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
+        checks,
+    )
+    combined_output = COMBINED_DEMO / "expected-output"
+    combined_summary = json_value(combined_output / "run_summary.json")
+    combined_qc = json_value(combined_output / "qc_report.json")
+    combined_anomaly = json_value(combined_output / "anomaly_report.json")
+    combined_database = csv_rows(combined_output / "geochemistry.csv")
+    grouped_sources: dict[tuple[str, ...], set[str]] = {}
+    for row in combined_database:
+        key = tuple(str(row.get(field) or "") for field in standardizer.DEFAULT_GROUP_BY)
+        grouped_sources.setdefault(key, set()).add(row["source_id"])
+    require(
+        output_validator.validate_dir(combined_output)["status"] == "valid"
+        and combined_summary["status"] == "success"
+        and combined_summary["metrics"]["record_count"] == 304
+        and combined_summary["metrics"]["standardized_record_count"] == 304
+        and combined_summary["metrics"]["valid_coordinate_count"] == 304
+        and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
+        and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
+        and len(combined_anomaly["groups"]) == 34
+        and all(len(sources) == 1 for sources in grouped_sources.values()),
+        "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as combined_temp:
+        temporary_root = Path(combined_temp)
+        rebuilt_dir = temporary_root / "combined"
+        build_four_media_demo.build(
+            COMBINED_DEMO / "request.json",
+            SOURCE_DEMOS,
+            rebuilt_dir,
+            "2026-08-05T15:20:00Z",
+            False,
+        )
+        require(
+            all(
+                (rebuilt_dir / filename).read_bytes() == (COMBINED_DEMO / filename).read_bytes()
+                for filename in ("demo_input.csv", "sources.jsonl", "run_manifest.json")
+            ),
+            "D1 combined fixture rebuilds byte-for-byte from the five checked-in source demos",
+            checks,
+        )
+        rebuilt_output = temporary_root / "output"
+        run_command(
+            [
+                sys.executable,
+                str(WORKFLOW),
+                "--input",
+                str(rebuilt_dir / "demo_input.csv"),
+                "--output-dir",
+                str(rebuilt_output),
+            ]
+        )
+        require(
+            all(
+                (rebuilt_output / filename).read_bytes() == (combined_output / filename).read_bytes()
+                for filename in output_validator.REQUIRED_FILES.values()
+            ),
+            "D1 combined nine-file output package rebuilds byte-for-byte",
+            checks,
+        )
 
     with tempfile.TemporaryDirectory() as evidence_temp:
         standalone = Path(evidence_temp) / "source_manifest.json"

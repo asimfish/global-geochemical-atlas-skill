@@ -104,3 +104,9 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 ```
 
 使用相同注册表版本、验证缓存/快照和 `--generated-at` 时，每个来源的三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。
+
+## 四介质联合 fixture
+
+`fixtures/four-media/combined-v3/` 将以上五个来源合并到同一个 `sources=auto` 请求：304 条观测包括 rock 48、soil 48、sediment 112、water 96。`run_manifest.json` 绑定五个输入 fixture 的 hash、来源证据等级、路由结果和 34 个 D2 比较分区；`expected-output/` 是可字节级重建的九文件工作流结果。
+
+这只是接口联合测试。34 个背景组按元素、介质、measurement basis、地质单元、方法和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 10 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。

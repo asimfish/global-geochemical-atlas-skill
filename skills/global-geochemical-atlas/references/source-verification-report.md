@@ -2,7 +2,7 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-05 22:41（Asia/Shanghai）
+更新时间：2026-08-05 23:41（Asia/Shanghai）
 
 ## 当前结论
 
@@ -220,6 +220,23 @@ SeaDataNet QC 码按原值保留：1=good、2=probably good、3=probably bad、4
 30 条复核单覆盖三种分相、两种单位、五类水体、所有质量标签、定义/未定义方法、删失符号、空间/深度边界、精确重复和 Pending review 异常；机器检查 30/30 通过，人工字段为空。48 条 demo 则只选择 Good/Fair、方法明确、非负且非极端的观测，三种分相各 16 条，保留 12 条 `<` 删失值；48/48 完成 `ug/L` 标准化或同类质量/体积换算、坐标 QC、候选异常筛查和交互地图生成。
 
 证据评分为 85/A/`normalized_analysis`。人工复核未签署只损失对应证据分，不阻断科研路由；它不能升级为 `benchmark_ready`。
+
+## 四介质联合运行
+
+`fixtures/four-media/combined-v3/request.json` 以 `sources=auto` 请求 As/Cu/Ni/Zn 和 rock/soil/sediment/water。路由选择五个 A 级 `normalized_analysis` 来源，`scripts/build_four_media_demo.py` 验证每个来源 fixture 的 manifest hash 和逐观测证据后再合并：
+
+| 介质/来源 | 观测数 |
+|---|---:|
+| rock / GEOROC | 48 |
+| soil / USGS | 48 |
+| sediment / MarChem | 112 |
+| water / GEOTRACES | 48 |
+| water / GEMStat | 48 |
+| 合计 | 304 |
+
+联合流程得到 304/304 标准化、304/304 有效坐标、20 条删失记录和完整九文件输出。D2 的默认背景键形成 34 个组：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源，GEOTRACES 海水 `nmol/kg`、GEMStat 三种淡水 As 分相、MarChem 部分消解、USGS 土层和 GEOROC 预编译值没有跨边界合并。
+
+筛查产生 10 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从五个来源 fixture 字节级重建。
 
 ## 复核边界
 

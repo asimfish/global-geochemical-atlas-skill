@@ -1,0 +1,144 @@
+{
+  "claim_boundary": "Source fields are preserved from the input. A locator is not independently verified unless a download manifest or source-specific audit says so. Declared licenses still require source-specific review.",
+  "confidence_report": {
+    "confidence_version": "d2-confidence-v1",
+    "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
+    "filename": "confidence_report.json",
+    "input_sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "not_a_probability": true,
+    "run_id": "9d3f753cdb7cf11c",
+    "sha256": "40a1c3f94ee57ddf922998323d4136453624929b5d95e2aa8d9088cc20cdc819"
+  },
+  "coverage": {
+    "declared_license_rate": 1.0,
+    "records_with_declared_license": 304,
+    "records_with_source_locator": 304,
+    "source_locator_rate": 1.0
+  },
+  "input": {
+    "bytes": 147303,
+    "filename": "demo_input.csv",
+    "record_count": 304,
+    "sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d"
+  },
+  "manifest_version": "geochemical-source-manifest-v1",
+  "source_count": 5,
+  "sources": [
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "Arsenic.csv#row=25632",
+        "Arsenic.csv#row=25633",
+        "Arsenic.csv#row=25634",
+        "Arsenic.csv#row=25635",
+        "Arsenic.csv#row=25636"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 48,
+      "record_count": 48,
+      "source_id": "gemstat-open-archive",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=10",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=11",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=12",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=13",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=172"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-SA-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 36,
+      "record_count": 48,
+      "source_id": "georoc-archaean",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=125",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=144",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=154",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=168",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=182"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 33,
+      "record_count": 48,
+      "source_id": "geotraces-idp2025",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1006",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1014",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1015",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1071",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=113"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 112,
+      "locator_count": 28,
+      "record_count": 112,
+      "source_id": "norway-marchem",
+      "source_tiers": [
+        "government"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "Appendix_2b_Top5_18Sept2013.txt#row=15",
+        "Appendix_2b_Top5_18Sept2013.txt#row=16",
+        "Appendix_2b_Top5_18Sept2013.txt#row=17",
+        "Appendix_2b_Top5_18Sept2013.txt#row=18",
+        "Appendix_3b_Ahorizon_18Sept2013.txt#row=15"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-USGS-Public-Domain"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_id": "usgs-conus-soil",
+      "source_tiers": [
+        "government"
+      ]
+    }
+  ],
+  "synthetic_data_present": false
+}

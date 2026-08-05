@@ -35,3 +35,19 @@ python scripts/component_test.py --component all
 4. 打开地图，筛选 As/soil，点击 500 mg/kg 候选点查看证据。
 5. 展示异常报告中的背景组、样本量、MAD 和解释边界。
 6. 展示水体 ppm、坐标交换与小样本组的失败关闭。
+
+## 真实来源四介质演示
+
+需要展示赛题要求的岩石、土壤、沉积物和水体时，从 Skill 目录执行：
+
+```bash
+python scripts/build_four_media_demo.py \
+  --output-dir /tmp/four-media-demo \
+  --generated-at 2026-08-05T15:20:00Z
+
+python scripts/run_workflow.py \
+  --input /tmp/four-media-demo/demo_input.csv \
+  --output-dir /tmp/four-media-output
+```
+
+预期为 304 条真实来源最小观测、四介质、五来源、304/304 标准化和有效坐标、20 条删失值、34 个隔离背景组及完整九文件输出。演示时先展示覆盖空白和来源范围，再展示地图；10 个候选异常只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。

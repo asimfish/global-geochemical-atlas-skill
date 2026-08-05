@@ -1,0 +1,43 @@
+{
+  "censored_record_count": 20,
+  "definitions": {
+    "coordinate_valid": "both canonical latitude and longitude are present and range-valid",
+    "records_are_not_dropped": true,
+    "standardized_record": "normalized_value or normalized_censoring_limit is available"
+  },
+  "flag_counts": {
+    "CENSORED_VALUE": 20,
+    "MISSING_ANALYTICAL_METHOD": 144,
+    "MISSING_COORDINATE_UNCERTAINTY": 304,
+    "MISSING_DIGESTION_OR_EXTRACTION": 96
+  },
+  "pipeline_version": "d2-pipeline-v1",
+  "record_count": 304,
+  "records_with_numeric_value_or_limit": 304,
+  "run_metadata": {
+    "configuration": {
+      "group_by": [
+        "element_or_analyte",
+        "medium",
+        "measurement_basis",
+        "geologic_unit",
+        "analytical_method",
+        "digestion_or_extraction"
+      ],
+      "minimum_group_size": 8,
+      "region_bbox": null,
+      "robust_z_threshold": 3.5
+    },
+    "input_row_count": 304,
+    "input_sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "missing_recommended_input_columns": [],
+    "run_id": "9d3f753cdb7cf11c"
+  },
+  "severity_counts": {
+    "info": 20,
+    "warning": 544
+  },
+  "standardization_rate": 1.0,
+  "standardized_record_count": 304,
+  "valid_coordinate_count": 304
+}

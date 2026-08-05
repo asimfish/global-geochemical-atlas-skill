@@ -851,7 +851,9 @@ def atomic_write_text(path: Path, content: str) -> None:
 def write_csv(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
-        writer = csv.DictWriter(handle, fieldnames=SCHEMA_COLUMNS, extrasaction="ignore")
+        writer = csv.DictWriter(
+            handle, fieldnames=SCHEMA_COLUMNS, extrasaction="ignore", lineterminator="\n"
+        )
         writer.writeheader()
         for record in records:
             row = dict(record)

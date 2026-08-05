@@ -709,7 +709,7 @@ def gemstat_demo(
                 "digestion_or_extraction": f"GEMStat {fraction} operational fraction",
                 "laboratory": "",
                 "license": candidate.license_id,
-                "source_tier": "official_international",
+                "source_tier": "official_curated",
                 "source_id": record.source_id,
                 "source_locator": record.source_locator,
                 "sampled_at": sampled_at,

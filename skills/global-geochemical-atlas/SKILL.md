@@ -47,6 +47,20 @@ offline: boolean
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
+需要离线展示真实四介质接口时，使用已经 hash 固定的五来源最小切片：
+
+```bash
+python scripts/build_four_media_demo.py \
+  --output-dir /tmp/four-media-demo \
+  --generated-at 2026-08-05T15:20:00Z
+
+python scripts/run_workflow.py \
+  --input /tmp/four-media-demo/demo_input.csv \
+  --output-dir /tmp/four-media-output
+```
+
+联合 manifest 必须显示来源、介质、分析物和比较分区。共同进入一张地图不表示记录可以混为同一背景；异常分组仍按元素、介质、measurement basis、地质单元、方法和消解/提取隔离。
+
 ## 3. 建立来源与下载证据
 
 为每个数据源记录：

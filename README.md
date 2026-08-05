@@ -30,6 +30,22 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 python skills/global-geochemical-atlas/scripts/self_test.py
 ```
 
+## 真实来源四介质离线复现
+
+仓库还提供五条已验证真实来源的最小切片：GEOROC 岩石、USGS 土壤、MarChem 沉积物、GEOTRACES 海水和 GEMStat 淡水。它们可合成一个 304 条观测的四介质输入，并生成统一地图包：
+
+```bash
+python skills/global-geochemical-atlas/scripts/build_four_media_demo.py \
+  --output-dir /tmp/four-media-demo \
+  --generated-at 2026-08-05T15:20:00Z
+
+python skills/global-geochemical-atlas/scripts/run_workflow.py \
+  --input /tmp/four-media-demo/demo_input.csv \
+  --output-dir /tmp/four-media-output
+```
+
+这套 fixture 用于证明真实数据的接口、证据链和比较隔离可以共同运行，不代表全球空间完整。海水/淡水、三种砷分相、部分消解沉积物、土层和岩石预编译值仍是不同背景组。
+
 ## 使用自己的 CSV
 
 ```bash
@@ -49,7 +65,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 - `<LOD`、`BDL`、`ND` 不替换为 0 或 LOD/2。
 - 不静默交换经纬度，不把未知 CRS 冒充 WGS84。
 - 异常是相对已声明背景组的筛查候选，不等于污染、矿床或成因结论。
-- demo 是 CC0 合成验收数据，只用于工程复现，不支持真实区域科学结论。
+- 合成 demo 和真实来源最小 fixture 都只用于工程复现；后者保留各数据集许可与引用，也不支持全球或区域代表性结论。
 
 ## 仓库结构
 

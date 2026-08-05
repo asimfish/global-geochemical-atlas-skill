@@ -1,0 +1,708 @@
+{
+  "candidate_count": 10,
+  "caveat": "Candidates are relative to the declared background group and do not establish pollution, mineralization, provenance, or cause.",
+  "group_by": [
+    "element_or_analyte",
+    "medium",
+    "measurement_basis",
+    "geologic_unit",
+    "analytical_method",
+    "digestion_or_extraction"
+  ],
+  "groups": [
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "As",
+        "geologic_unit": "AMAZONIAN CRATON / CARAJAS PROVINCE / CARAJAS TRANSITION ZONE / SELVA GREENSTONE BELT",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-c3be87d38862",
+      "log10_mad": 0.264136888584,
+      "log10_median": 0.161109647367,
+      "records_excluded": 0,
+      "records_total": 10,
+      "records_used": 10,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "non_positive": 2
+      },
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "As",
+        "geologic_unit": "AMAZONIAN CRATON / CARAJAS PROVINCE / RIO MARIA DOMAIN / SERINGA GREENSTONE BELT",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-575fd83da3e7",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Metoden anvendes på analyseløsninger fremstilt ved ekstraksjon med 7 M HNO3 i autoklav i samsvar med Norsk Standard - NS 4770",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-604850de6270",
+      "log10_mad": 0.30691217789,
+      "log10_median": 1.041392685158,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 2,
+      "exclusion_reasons": {
+        "censored": 3
+      },
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Prøveframstilling følger prosedyre i LABdok_P03: Framstilling av analyseløsninger etter partiell oppslutning i salpetersyre iht. NS-4770.",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-c94e08c0d50d",
+      "log10_mad": 0.174981664199,
+      "log10_median": 1.216067578879,
+      "records_excluded": 3,
+      "records_total": 17,
+      "records_used": 14,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "total_or_near_total_<2mm",
+        "medium": "soil"
+      },
+      "group_id": "grp-311a5512887c",
+      "log10_mad": 0.169974030847,
+      "log10_median": 0.376791529446,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 1
+      },
+      "group": {
+        "analytical_method": "Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-299565ccb984",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 1,
+      "records_total": 4,
+      "records_used": 3,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-8c7d527e31ea",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 8,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 1
+      },
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-502d1f2945dd",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 1,
+      "records_total": 4,
+      "records_used": 3,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 4
+      },
+      "group": {
+        "analytical_method": "Extractable elements in acid preserved samples are analyzed by ICP-MS.",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-e01918b824a9",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 4,
+      "records_total": 9,
+      "records_used": 5,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Extractable metals by inductively coupled plasma-collision/reaction cell-mass spectrometry",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-1ab20c2d847c",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 1,
+      "records_used": 1,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-da9950f9659f",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 1
+      },
+      "group": {
+        "analytical_method": "Determination of total arsenic, antimony and selenium by inductively coupled argon plasma",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_total_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-03c5405175c5",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 1,
+      "records_total": 3,
+      "records_used": 2,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 1
+      },
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_total_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-1a897f7c4542",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 1,
+      "records_total": 4,
+      "records_used": 3,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Inductively-Coupled Plasma Sector Field Mass Spectrometry with Closed Vessel Digestion",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_total_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-5e20824180f6",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 1,
+      "records_used": 1,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "freshwater_total_fraction",
+        "medium": "water"
+      },
+      "group_id": "grp-5c2309094b5c",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 8,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Cu",
+        "geologic_unit": "ALDAN SHIELD - ARCHEAN / OLEKMA GRANITE-GREENSTONE TERRANE / OLONDO GREENSTONE BELT",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-5294e364912b",
+      "log10_mad": 0.350535177726,
+      "log10_median": 1.74945275089,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 3,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Metoden anvendes på analyseløsninger fremstilt ved ekstraksjon med 7 M HNO3 i autoklav i samsvar med Norsk Standard - NS 4770",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-17c64ac0ce68",
+      "log10_mad": 0.060415922472,
+      "log10_median": 1.187520720836,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Prøveframstilling følger prosedyre i LABdok_P03: Framstilling av analyseløsninger etter partiell oppslutning i salpetersyre iht. NS-4770.",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-fa6ed3b0cc4c",
+      "log10_mad": 0.144143442056,
+      "log10_median": 1.117271295656,
+      "records_excluded": 2,
+      "records_total": 17,
+      "records_used": 15,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "total_or_near_total_<2mm",
+        "medium": "soil"
+      },
+      "group_id": "grp-dfaa43fa8a44",
+      "log10_mad": 0.100967467817,
+      "log10_median": 1.020873935862,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+        "element_or_analyte": "Cu",
+        "geologic_unit": "global_ocean_cruise_track",
+        "measurement_basis": "dissolved_seawater_molar_per_mass",
+        "medium": "water"
+      },
+      "group_id": "grp-9dd6d9a1f4f9",
+      "log10_mad": 0.029600516951,
+      "log10_median": 0.08182454288,
+      "records_excluded": 0,
+      "records_total": 16,
+      "records_used": 16,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
+        "geologic_unit": "ALDAN SHIELD - ARCHEAN / OLEKMA GRANITE-GREENSTONE TERRANE / OLONDO GREENSTONE BELT / EASTERN KOMATIITIC METABASALTS",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-7f9039f2641a",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 4,
+      "records_used": 4,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
+        "geologic_unit": "ALDAN SHIELD - ARCHEAN / OLEKMA GRANITE-GREENSTONE TERRANE / OLONDO GREENSTONE BELT / NORTHERN THOLEIITIC METABASALTS",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-2ec987d42ffd",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 1,
+      "records_used": 1,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
+        "geologic_unit": "ALDAN SHIELD - ARCHEAN / OLEKMA GRANITE-GREENSTONE TERRANE / OLONDO GREENSTONE BELT / WESTERN KOMATIITES",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-02f2ed2c047a",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 3,
+      "records_used": 3,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
+        "geologic_unit": "ALDAN SHIELD - ARCHEAN / OLEKMA GRANITE-GREENSTONE TERRANE / OLONDO GREENSTONE BELT / WESTERN THOLEIITIC METABASALTS AND GABBROIDS",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-b897ab6b77b9",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 2,
+      "records_used": 2,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
+        "geologic_unit": "ALDAN SHIELD - ARCHEAN / OLEKMA GRANITE-GREENSTONE TERRANE / TOKKO-KHANI GREENSTONE BELT",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-61c024e1c4e6",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 2,
+      "records_used": 2,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 2,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Metoden anvendes på analyseløsninger fremstilt ved ekstraksjon med 7 M HNO3 i autoklav i samsvar med Norsk Standard - NS 4770",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-df551b966aa1",
+      "log10_mad": 0.068426499689,
+      "log10_median": 1.466867620354,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 1,
+      "exclusion_reasons": {
+        "censored": 1
+      },
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Prøveframstilling følger prosedyre i LABdok_P03: Framstilling av analyseløsninger etter partiell oppslutning i salpetersyre iht. NS-4770.",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-4c59854fe955",
+      "log10_mad": 0.13475896851,
+      "log10_median": 1.415768525101,
+      "records_excluded": 1,
+      "records_total": 17,
+      "records_used": 16,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "total_or_near_total_<2mm",
+        "medium": "soil"
+      },
+      "group_id": "grp-dcdad1abbc84",
+      "log10_mad": 0.218724274978,
+      "log10_median": 0.846070804683,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+        "element_or_analyte": "Ni",
+        "geologic_unit": "global_ocean_cruise_track",
+        "measurement_basis": "dissolved_seawater_molar_per_mass",
+        "medium": "water"
+      },
+      "group_id": "grp-b57af878b329",
+      "log10_mad": 0.098118884321,
+      "log10_median": 0.534228007878,
+      "records_excluded": 0,
+      "records_total": 16,
+      "records_used": 16,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Zn",
+        "geologic_unit": "ALDAN SHIELD - ARCHEAN / OLEKMA GRANITE-GREENSTONE TERRANE / OLONDO GREENSTONE BELT",
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock"
+      },
+      "group_id": "grp-e606d238ad73",
+      "log10_mad": 0.069385330975,
+      "log10_median": 2.021130203345,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 2,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Metoden anvendes på analyseløsninger fremstilt ved ekstraksjon med 7 M HNO3 i autoklav i samsvar med Norsk Standard - NS 4770",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-4953626e8b37",
+      "log10_mad": 0.078195333066,
+      "log10_median": 1.847572659142,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+        "digestion_or_extraction": "Prøveframstilling følger prosedyre i LABdok_P03: Framstilling av analyseløsninger etter partiell oppslutning i salpetersyre iht. NS-4770.",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment"
+      },
+      "group_id": "grp-b72043556600",
+      "log10_mad": 0.176717494899,
+      "log10_median": 1.841359470455,
+      "records_excluded": 2,
+      "records_total": 17,
+      "records_used": 15,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "total_or_near_total_<2mm",
+        "medium": "soil"
+      },
+      "group_id": "grp-73072467310f",
+      "log10_mad": 0.124395188788,
+      "log10_median": 1.300486447843,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+        "element_or_analyte": "Zn",
+        "geologic_unit": "global_ocean_cruise_track",
+        "measurement_basis": "dissolved_seawater_molar_per_mass",
+        "medium": "water"
+      },
+      "group_id": "grp-e8c4a475bf52",
+      "log10_mad": 0.328301682081,
+      "log10_median": 0.128376601752,
+      "records_excluded": 0,
+      "records_total": 16,
+      "records_used": 16,
+      "status": "analyzed"
+    }
+  ],
+  "method": "log10 median/MAD modified robust z-score",
+  "method_version": "d2-robust-mad-v1",
+  "minimum_group_size": 8,
+  "robust_z_threshold": 3.5,
+  "run_metadata": {
+    "configuration": {
+      "group_by": [
+        "element_or_analyte",
+        "medium",
+        "measurement_basis",
+        "geologic_unit",
+        "analytical_method",
+        "digestion_or_extraction"
+      ],
+      "minimum_group_size": 8,
+      "region_bbox": null,
+      "robust_z_threshold": 3.5
+    },
+    "input_row_count": 304,
+    "input_sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "missing_recommended_input_columns": [],
+    "run_id": "9d3f753cdb7cf11c"
+  },
+  "scientific_status": "screening_baseline_only"
+}

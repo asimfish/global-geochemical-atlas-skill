@@ -1,0 +1,53 @@
+{
+  "band_counts": {
+    "high": 208,
+    "low": 0,
+    "medium": 96
+  },
+  "band_thresholds": {
+    "high": ">=0.80",
+    "low": "<0.60",
+    "medium": ">=0.60 and <0.80"
+  },
+  "component_means": {
+    "completeness": 0.92823,
+    "method": 0.736842,
+    "overall": 0.873449,
+    "qc": 0.855526,
+    "source": 0.973684,
+    "spatial": 0.8
+  },
+  "confidence_version": "d2-confidence-v1",
+  "gates": {
+    "any_error_flag": "overall capped at 0.59 (low)"
+  },
+  "meaning": "Record usability for this workflow; not truth probability, statistical confidence, or accuracy.",
+  "name": "operational_confidence",
+  "not_a_probability": true,
+  "run_metadata": {
+    "configuration": {
+      "group_by": [
+        "element_or_analyte",
+        "medium",
+        "measurement_basis",
+        "geologic_unit",
+        "analytical_method",
+        "digestion_or_extraction"
+      ],
+      "minimum_group_size": 8,
+      "region_bbox": null,
+      "robust_z_threshold": 3.5
+    },
+    "input_row_count": 304,
+    "input_sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "missing_recommended_input_columns": [],
+    "run_id": "9d3f753cdb7cf11c"
+  },
+  "weights": {
+    "completeness": 0.2,
+    "method": 0.2,
+    "qc": 0.15,
+    "source": 0.3,
+    "spatial": 0.15
+  }
+}

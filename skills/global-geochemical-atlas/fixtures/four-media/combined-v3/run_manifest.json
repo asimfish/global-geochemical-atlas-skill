@@ -1,0 +1,270 @@
+{
+  "claim_boundary": "The combined package binds five already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
+  "combined_demo_version": "d1-four-media-combined-v1",
+  "comparison_isolation": {
+    "explicit_boundaries": [
+      "GEOTRACES seawater nmol/kg is not mixed with GEMStat freshwater mass-per-volume arsenic.",
+      "GEMStat dissolved, suspended and total arsenic remain separate comparison groups.",
+      "MarChem partial nitric-acid sediment is not interpreted as total content.",
+      "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases."
+    ],
+    "group_fields": [
+      "element_or_analyte",
+      "medium",
+      "measurement_basis",
+      "geologic_unit",
+      "analytical_method",
+      "digestion_or_extraction"
+    ],
+    "partition_count": 34,
+    "water_partition_count": 13,
+    "water_partitions": {
+      "[\"As\", \"water\", \"freshwater_dissolved_fraction\", \"\", \"Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma\", \"GEMStat dissolved operational fraction\"]": 4,
+      "[\"As\", \"water\", \"freshwater_dissolved_fraction\", \"\", \"Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS\", \"GEMStat dissolved operational fraction\"]": 8,
+      "[\"As\", \"water\", \"freshwater_dissolved_fraction\", \"\", \"Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion\", \"GEMStat dissolved operational fraction\"]": 4,
+      "[\"As\", \"water\", \"freshwater_suspended_fraction\", \"\", \"Extractable elements in acid preserved samples are analyzed by ICP-MS.\", \"GEMStat suspended operational fraction\"]": 9,
+      "[\"As\", \"water\", \"freshwater_suspended_fraction\", \"\", \"Extractable metals by inductively coupled plasma-collision/reaction cell-mass spectrometry\", \"GEMStat suspended operational fraction\"]": 1,
+      "[\"As\", \"water\", \"freshwater_suspended_fraction\", \"\", \"Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)\", \"GEMStat suspended operational fraction\"]": 6,
+      "[\"As\", \"water\", \"freshwater_total_fraction\", \"\", \"Determination of total arsenic, antimony and selenium by inductively coupled argon plasma\", \"GEMStat total operational fraction\"]": 3,
+      "[\"As\", \"water\", \"freshwater_total_fraction\", \"\", \"Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion\", \"GEMStat total operational fraction\"]": 4,
+      "[\"As\", \"water\", \"freshwater_total_fraction\", \"\", \"Inductively-Coupled Plasma Sector Field Mass Spectrometry with Closed Vessel Digestion\", \"GEMStat total operational fraction\"]": 1,
+      "[\"As\", \"water\", \"freshwater_total_fraction\", \"\", \"Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer\", \"GEMStat total operational fraction\"]": 8,
+      "[\"Cu\", \"water\", \"dissolved_seawater_molar_per_mass\", \"global_ocean_cruise_track\", \"\", \"dissolved_fraction; contributor-specific protocol\"]": 16,
+      "[\"Ni\", \"water\", \"dissolved_seawater_molar_per_mass\", \"global_ocean_cruise_track\", \"\", \"dissolved_fraction; contributor-specific protocol\"]": 16,
+      "[\"Zn\", \"water\", \"dissolved_seawater_molar_per_mass\", \"global_ocean_cruise_track\", \"\", \"dissolved_fraction; contributor-specific protocol\"]": 16
+    }
+  },
+  "data_mode": "fixture",
+  "fixture_inputs": [
+    {
+      "evidence_path": "fixtures/source-demos/georoc-archaean/sources.jsonl",
+      "evidence_sha256": "c73f495a50c1790d55320f0f3bd75118a44ac27afc470431a34ea18d7968aa45",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/georoc-archaean/demo_input.csv",
+      "input_sha256": "75e76082fa18af6f3f1b79ed05d4984f34545d202873afed611b68b45e06b8cb",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "georoc-archaean",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/usgs-conus-soil/sources.jsonl",
+      "evidence_sha256": "df5b803264403256371eeabdbb9f005df3182e63a8ef2b51a3d360f555409e72",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/usgs-conus-soil/demo_input.csv",
+      "input_sha256": "1a2334a32c25792b0dfc136221fc071dc486b1246ddfa0709cc13b7ad24e3763",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "usgs-conus-soil",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/norway-marchem/sources.jsonl",
+      "evidence_sha256": "65938d4f927a4739a3ff00aa506558532fcf414f2234a7c81184d1d240cfcf93",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/norway-marchem/demo_input.csv",
+      "input_sha256": "7ae5180c7167946d01ae48e4ff980c6531ad8aaafb54a655cb2d0d4ebb150b3b",
+      "record_count": 112,
+      "source_evidence_score": 85.0,
+      "source_id": "norway-marchem",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/geotraces-idp2025/sources.jsonl",
+      "evidence_sha256": "9c17eb16f44005aba88da55daaf0108986a6075e408d0bf74ae205e6102de163",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/geotraces-idp2025/demo_input.csv",
+      "input_sha256": "4dc33f58d9cbb47c464e655e9e1f2bbf43507ba5883a62962eb641b128b2afb8",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "geotraces-idp2025",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/gemstat-open-archive/sources.jsonl",
+      "evidence_sha256": "7aa963e5e6dcef44a4fae0f7e45b82d23039cd192717746c8c0da9facd294d49",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/gemstat-open-archive/demo_input.csv",
+      "input_sha256": "54dc5916f764ba7d31384054c90da86502d2821ff0a96fd543ff69d6e6233a22",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "gemstat-open-archive",
+      "use_mode": "normalized_analysis"
+    }
+  ],
+  "generated_at": "2026-08-05T15:20:00Z",
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 147303,
+      "path": "demo_input.csv",
+      "sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d"
+    },
+    {
+      "bytes": 505778,
+      "path": "sources.jsonl",
+      "sha256": "398d2d6443976a3cb2c86454218ccf94e900d6a11795f1741f4fcd440d1bc691"
+    }
+  ],
+  "record_counts": {
+    "by_analyte": {
+      "As": 100,
+      "Cu": 68,
+      "Ni": 68,
+      "Zn": 68
+    },
+    "by_medium": {
+      "rock": 48,
+      "sediment": 112,
+      "soil": 48,
+      "water": 96
+    },
+    "by_source": {
+      "gemstat-open-archive": 48,
+      "georoc-archaean": 48,
+      "geotraces-idp2025": 48,
+      "norway-marchem": 112,
+      "usgs-conus-soil": 48
+    },
+    "total": 304
+  },
+  "request": {
+    "elements": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "license_policy": "open_only",
+    "max_records": 50000,
+    "media": [
+      "rock",
+      "soil",
+      "sediment",
+      "water"
+    ],
+    "minimum_evidence_tier": "D",
+    "minimum_use_mode": "normalized_analysis",
+    "offline": true,
+    "output_formats": [
+      "csv",
+      "json",
+      "geojson",
+      "html_map"
+    ],
+    "region": "global",
+    "research_use_policy": "permitted_research",
+    "sources": "auto"
+  },
+  "route": {
+    "coverage": {
+      "rock": {
+        "candidate_sources": [
+          "australia-ozchem",
+          "brazil-sgb-geochemistry",
+          "earthchem-library",
+          "earthchem-portal",
+          "finland-gtk-geochemistry",
+          "georoc-database",
+          "iodp-data-systems",
+          "jamstec-darwin",
+          "noaa-ncei-marine-geology",
+          "norway-ngu-lito",
+          "nz-petlab",
+          "pangaea-repository",
+          "petdb",
+          "usgs-ngdb"
+        ],
+        "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
+        "selected_sources": [
+          "georoc-archaean"
+        ],
+        "status": "partial"
+      },
+      "sediment": {
+        "candidate_sources": [
+          "australia-ngsa",
+          "australia-ozchem",
+          "bgs-gbase",
+          "brazil-sgb-geochemistry",
+          "canada-cdogs",
+          "earthchem-library",
+          "earthchem-portal",
+          "eea-waterbase",
+          "emodnet-chemistry",
+          "finland-gtk-geochemistry",
+          "foregs-europe",
+          "iodp-data-systems",
+          "ireland-tellus",
+          "jamstec-darwin",
+          "noaa-ncei-marine-geology",
+          "nz-petlab",
+          "pangaea-repository",
+          "sweden-sgu-geochemical-atlas",
+          "us-water-quality-portal",
+          "usgs-ngdb"
+        ],
+        "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
+        "selected_sources": [
+          "norway-marchem"
+        ],
+        "status": "partial"
+      },
+      "soil": {
+        "candidate_sources": [
+          "bgs-gbase",
+          "brazil-sgb-geochemistry",
+          "earthchem-library",
+          "foregs-europe",
+          "gemas-europe",
+          "ireland-tellus",
+          "pangaea-repository",
+          "soils4africa",
+          "usgs-ngdb",
+          "wosis"
+        ],
+        "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
+        "selected_sources": [
+          "usgs-conus-soil"
+        ],
+        "status": "partial"
+      },
+      "water": {
+        "candidate_sources": [
+          "bgs-gbase",
+          "brazil-sgb-geochemistry",
+          "canada-cdogs",
+          "earthchem-library",
+          "eea-waterbase",
+          "emodnet-chemistry",
+          "foregs-europe",
+          "glorich",
+          "iodp-data-systems",
+          "ireland-tellus",
+          "pangaea-repository",
+          "us-water-quality-portal"
+        ],
+        "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
+        "selected_sources": [
+          "gemstat-open-archive",
+          "geotraces-idp2025"
+        ],
+        "status": "partial"
+      }
+    },
+    "selected_sources": [
+      "gemstat-open-archive",
+      "georoc-archaean",
+      "geotraces-idp2025",
+      "norway-marchem",
+      "usgs-conus-soil"
+    ],
+    "status": "partial"
+  },
+  "scientific_scope": "five verified source demos combined to exercise one four-media workflow",
+  "warnings": [
+    "This combined fixture proves interface compatibility, not representative global coverage.",
+    "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",
+    "Anomalies produced from fixture groups are pipeline candidates only and cannot support pollution or depletion claims."
+  ]
+}
