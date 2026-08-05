@@ -1,21 +1,24 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-05T00:00:00Z",
+  "reviewed_at": "2026-08-05T10:01:00Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. Only entries with production_eligible=true may be selected automatically; catalog inclusion is not scientific endorsement.",
   "discovery_state": {
-    "round": 1,
+    "round": 2,
     "status": "in_progress",
     "saturated": false,
     "channels_checked": [
       "official_global_or_disciplinary_portals",
       "official_international_programs",
-      "official_national_agencies"
-    ],
-    "remaining_channels": [
+      "official_national_agencies",
       "regional_and_national_surveys",
       "trusted_doi_repositories",
+      "official_water_quality_portals"
+    ],
+    "remaining_channels": [
       "publication_linked_datasets",
-      "upstream_sources_of_aggregators"
+      "upstream_sources_of_aggregators",
+      "additional_country_geological_surveys",
+      "marine_and_lacustrine_archives"
     ]
   },
   "sources": {
@@ -429,6 +432,581 @@
       ],
       "limitations": [
         "Current discovery evidence identifies map services and project links but not a verified open bulk numeric release."
+      ]
+    },
+    "petdb": {
+      "title": "PetDB EarthChem Data Synthesis",
+      "publisher": "EarthChem / Lamont-Doherty Earth Observatory",
+      "source_kind": "disciplinary_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock", "mineral"],
+      "coverage": {
+        "extent_class": "global_partial",
+        "regions": ["global-ocean-floor-and-selected-terrestrial-settings"],
+        "notes": "Published igneous and metamorphic rock, glass, inclusion and mineral chemistry, concentrated on ocean-floor and mantle settings."
+      },
+      "identifiers": {},
+      "landing_page": "https://search.earthchem.org/about",
+      "interfaces": [
+        {
+          "kind": "web_query_and_export",
+          "url": "https://search.earthchem.org/",
+          "format": "portal_export",
+          "access": "open_query_export_terms_to_verify",
+          "server_filters": ["location", "material", "rock_type", "chemistry", "reference"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-SA-4.0",
+        "url": "https://search.earthchem.org/about",
+        "notes": "Site license is CC BY-SA 4.0; every record must also retain its original publication and contributing-dataset citation."
+      },
+      "version": {
+        "status": "dynamic",
+        "value": null,
+        "release_date": null
+      },
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://search.earthchem.org/about",
+        "https://earthchem.org/resources/support"
+      ],
+      "limitations": [
+        "Dynamic holdings require a query timestamp, exported record inventory and upstream-reference deduplication.",
+        "Database aggregation is not independent corroboration of GEOROC or original publications."
+      ]
+    },
+    "foregs-europe": {
+      "title": "FOREGS-EuroGeoSurveys Geochemical Atlas of Europe baseline data",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "source_kind": "official_regional_program",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil", "sediment", "water"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["europe"],
+        "notes": "Harmonised low-density European baseline survey of topsoil, subsoil, humus, stream/floodplain sediment and stream water."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "interfaces": [
+        {
+          "kind": "bulk_download_catalog",
+          "url": "https://www.globalgeochemicalbaselines.eu/content/91/publications-/",
+          "format": "zip_xls_and_atlas_files",
+          "access": "free_download_citation_terms",
+          "server_filters": ["country_code", "sample_medium"]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": null,
+        "url": "https://www.globalgeochemicalbaselines.eu/content/91/publications-/",
+        "notes": "Pages state that the database is freely downloadable and prescribe atlas citation/copyright; machine-readable redistribution terms still need legal review."
+      },
+      "version": {"status": "snapshot_available", "value": null, "release_date": "2005"},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+        "https://www.globalgeochemicalbaselines.eu/content/91/publications-/"
+      ],
+      "limitations": [
+        "Very low continental sampling density is not local coverage.",
+        "Multiple techniques and laboratories must remain explicit even though sampling was harmonised."
+      ]
+    },
+    "canada-cdogs": {
+      "title": "Canadian Database of Geochemical Surveys (CDoGS)",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "source_kind": "official_national_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment", "water", "concentrate"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["canada"],
+        "notes": "Catalogue of more than 1,300 Canadian regional geochemical surveys; standardized raw downloads are available for a subset."
+      },
+      "identifiers": {},
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/main/home_en.htm",
+      "interfaces": [
+        {
+          "kind": "survey_catalog_and_downloads",
+          "url": "https://geochem.nrcan.gc.ca/cdogs/content/main/home_en.htm",
+          "format": "survey_specific_excel_csv_and_reports",
+          "access": "open_survey_specific",
+          "server_filters": ["survey", "map_sheet", "sample_type", "publication"]
+        }
+      ],
+      "license": {
+        "status": "dataset_specific_open_government",
+        "id": null,
+        "url": "https://open.canada.ca/en/open-government-licence-canada",
+        "notes": "Federal and provincial releases can use different Open Government licences; pin and retain the licence of each selected release."
+      },
+      "version": {"status": "dataset_specific", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://geochem.nrcan.gc.ca/cdogs/content/main/home_en.htm",
+        "https://natural-resources.canada.ca/science-data/science-research/earth-sciences-tools-applications"
+      ],
+      "limitations": [
+        "Only a subset of catalogued surveys currently has standardized raw downloads.",
+        "Reanalysis and republication histories can create related records that must not be counted as independent samples."
+      ]
+    },
+    "australia-ngsa": {
+      "title": "National Geochemical Survey of Australia",
+      "publisher": "Geoscience Australia and Australian state/territory geological surveys",
+      "source_kind": "official_national_program",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["australia"],
+        "notes": "Ultra-low-density catchment-outlet transported regolith survey covering more than 90 percent of Australia; useful nationally, not locally."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
+      "interfaces": [
+        {
+          "kind": "project_data_and_atlas",
+          "url": "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
+          "format": "dataset_specific_downloads_and_atlas",
+          "access": "open_products",
+          "server_filters": ["element", "product"]
+        }
+      ],
+      "license": {
+        "status": "open_site_terms_product_review",
+        "id": "CC-BY-4.0",
+        "url": "https://www.ga.gov.au/copyright",
+        "notes": "Geoscience Australia material is generally CC BY 4.0, but each selected data product must be checked for third-party exceptions."
+      },
+      "version": {"status": "dataset_specific", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
+        "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
+        "https://www.ga.gov.au/copyright"
+      ],
+      "limitations": [
+        "Catchment-outlet transported regolith is not interchangeable with in-situ topsoil or stream sediment.",
+        "The sampling density is designed for national-scale patterns, not site-scale prediction."
+      ]
+    },
+    "australia-ozchem": {
+      "title": "OZCHEM National Whole Rock and Stream Sediment Geochemistry Database",
+      "publisher": "Geoscience Australia",
+      "source_kind": "official_national_database",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["rock", "sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["australia"],
+        "notes": "National compilation of located whole-rock and stream-sediment analyses from Geoscience Australia and other surveys."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.ga.gov.au/bigobj/GA8096.pdf",
+      "interfaces": [
+        {
+          "kind": "legacy_product_documentation",
+          "url": "https://www.ga.gov.au/bigobj/GA8096.pdf",
+          "format": "legacy_database_and_ascii",
+          "access": "current_numeric_endpoint_unresolved",
+          "server_filters": []
+        }
+      ],
+      "license": {
+        "status": "open_site_terms_product_review",
+        "id": "CC-BY-4.0",
+        "url": "https://www.ga.gov.au/copyright",
+        "notes": "Current product-specific licensing and any contributed state data exceptions need confirmation."
+      },
+      "version": {"status": "unresolved", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.ga.gov.au/bigobj/GA8096.pdf",
+        "https://www.ga.gov.au/copyright"
+      ],
+      "limitations": [
+        "Discovery located official legacy documentation but not a verified current bulk numeric endpoint.",
+        "Contributed state-survey records may overlap upstream releases."
+      ]
+    },
+    "us-water-quality-portal": {
+      "title": "Water Quality Portal",
+      "publisher": "U.S. Geological Survey, U.S. Environmental Protection Agency and National Water Quality Monitoring Council",
+      "source_kind": "official_national_aggregator",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["water", "sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["united-states-and-territories"],
+        "notes": "Programmatic access to WQX and NWIS water-quality records from many organizations and sample media."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.waterqualitydata.us/",
+      "interfaces": [
+        {
+          "kind": "query_web_services",
+          "url": "https://www.waterqualitydata.us/webservices_documentation/",
+          "format": "csv_tsv_json_geojson",
+          "access": "open",
+          "server_filters": ["bbox", "site", "organization", "sample_media", "characteristic", "date"]
+        }
+      ],
+      "license": {
+        "status": "upstream_specific",
+        "id": null,
+        "url": "https://www.waterqualitydata.us/portal_userguide/",
+        "notes": "Federal records may be public domain, but WQX contains many contributor organizations; retain provider and dataset terms per record."
+      },
+      "version": {"status": "dynamic", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.waterqualitydata.us/webservices_documentation/",
+        "https://www.waterqualitydata.us/portal_userguide/"
+      ],
+      "limitations": [
+        "Portal aggregation is not an independent source from NWIS or WQX providers.",
+        "Characteristic names, sample fractions, detection limits, qualifiers and organization methods are highly heterogeneous."
+      ]
+    },
+    "soils4africa": {
+      "title": "Soils4Africa soil point data",
+      "publisher": "Soils4Africa consortium, hosted by ISRIC",
+      "source_kind": "official_regional_program",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "continental_partial",
+        "regions": ["african-agricultural-land"],
+        "notes": "Harmonised 2022-2024 point observations and laboratory chemical properties across sampled African agricultural land."
+      },
+      "identifiers": {"project_doi": "10.3030/862900"},
+      "landing_page": "https://africasis.isric.org/",
+      "interfaces": [
+        {
+          "kind": "bulk_point_download",
+          "url": "https://africasis.isric.org/download.html",
+          "format": "csv_and_geopackage",
+          "access": "licence_acceptance",
+          "server_filters": ["depth_layer", "property_group"]
+        }
+      ],
+      "license": {
+        "status": "open_with_privacy_and_aggregation_conditions",
+        "id": "CC-BY-4.0",
+        "url": "https://africasis.isric.org/res/files/Soils4Africa_licence_agreement_v20240926.pdf",
+        "notes": "CC BY 4.0 use is accompanied by anti-identification and reporting/aggregation conditions that must be implemented before production."
+      },
+      "version": {"status": "snapshot_available", "value": "licence-v20240926", "release_date": "2024-09-26"},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://africasis.isric.org/download.html",
+        "https://africasis.isric.org/documents.html",
+        "https://africasis.isric.org/res/files/Soils4Africa_licence_agreement_v20240926.pdf"
+      ],
+      "limitations": [
+        "The licence warns that points are not representative of local or field conditions.",
+        "The exact elemental analyte inventory and privacy-safe output policy require audit before routing."
+      ]
+    },
+    "bgs-gbase": {
+      "title": "Geochemical Baseline Survey of the Environment (G-BASE)",
+      "publisher": "British Geological Survey",
+      "source_kind": "official_national_program",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["soil", "sediment", "water", "concentrate"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["great-britain-and-northern-ireland"],
+        "notes": "Long-running baseline survey of soil, stream sediment, stream water and panned concentrates across the UK."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/g-base/",
+      "interfaces": [
+        {
+          "kind": "open_derived_grids_and_licensed_points",
+          "url": "https://www.bgs.ac.uk/datasets/uk-stream-sediment-geochemistry/",
+          "format": "ascii_grid_png_and_licensed_tables",
+          "access": "mixed_open_derived_and_point_data_on_request",
+          "server_filters": ["element", "region", "product"]
+        }
+      ],
+      "license": {
+        "status": "restricted",
+        "id": null,
+        "url": "https://www.bgs.ac.uk/datasets/uk-stream-sediment-geochemistry/",
+        "notes": "Derived grids are OGL; underpinning survey point observations require a separate BGS licence and are not open-only production data."
+      },
+      "version": {"status": "dataset_specific", "value": null, "release_date": null},
+      "adapter": {"status": "discovery_only", "name": null},
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/g-base/",
+        "https://www.bgs.ac.uk/datasets/uk-stream-sediment-geochemistry/"
+      ],
+      "limitations": [
+        "Open interpolated grids are derived products and cannot substitute for source point observations.",
+        "Point data cannot enter the open-only production route without a compatible explicit licence."
+      ]
+    },
+    "brazil-sgb-geochemistry": {
+      "title": "GeoSGB integrated geochemical samples",
+      "publisher": "Serviço Geológico do Brasil (SGB-CPRM)",
+      "source_kind": "official_national_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock", "soil", "sediment", "water", "concentrate"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["brazil"],
+        "notes": "National geochemical sample service and project releases spanning several sample media and survey periods."
+      },
+      "identifiers": {},
+      "landing_page": "https://geosgb.sgb.gov.br/geosgb/index_en.html",
+      "interfaces": [
+        {
+          "kind": "arcgis_feature_service",
+          "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada_all/FeatureServer",
+          "format": "json_geojson_pbf",
+          "access": "open_query_terms_to_verify",
+          "server_filters": ["bbox", "attributes", "pagination", "statistics"]
+        },
+        {
+          "kind": "repository_project_downloads",
+          "url": "https://rigeo.sgb.gov.br/items/5adc5a2e-78ca-4da4-990c-c932658481a7",
+          "format": "project_zip_spreadsheets",
+          "access": "open_item",
+          "server_filters": ["project"]
+        }
+      ],
+      "license": {
+        "status": "unresolved",
+        "id": null,
+        "url": null,
+        "notes": "Open access is stated for repository items, but reuse/redistribution terms for the integrated service need verification."
+      },
+      "version": {"status": "dynamic", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://geosgb.sgb.gov.br/geosgb/about_geosgb_en.html",
+        "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada_all/FeatureServer",
+        "https://rigeo.sgb.gov.br/items/5adc5a2e-78ca-4da4-990c-c932658481a7"
+      ],
+      "limitations": [
+        "Integrated points and project ZIP releases may duplicate each other.",
+        "Field definitions, sample-medium codes, analytical methods and licence need source-level verification."
+      ]
+    },
+    "nz-petlab": {
+      "title": "Petlab: New Zealand national rock, mineral and geoanalytical database",
+      "publisher": "GNS Science",
+      "source_kind": "official_national_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock", "mineral", "sediment"],
+      "coverage": {
+        "extent_class": "national_plus_selected_global",
+        "regions": ["new-zealand", "antarctica", "selected-global-collections"],
+        "notes": "National curated sample and analytical database with contributed university collections and selected offshore/global material."
+      },
+      "identifiers": {"dataset_doi": "10.21420/9DJH-RP34"},
+      "landing_page": "https://pet.gns.cri.nz/",
+      "interfaces": [
+        {
+          "kind": "web_query_registered_export",
+          "url": "https://pet.gns.cri.nz/",
+          "format": "portal_export",
+          "access": "query_open_download_requires_free_account",
+          "server_filters": ["location", "collection", "rock_type", "analysis", "reference"]
+        }
+      ],
+      "license": {
+        "status": "unresolved",
+        "id": null,
+        "url": null,
+        "notes": "A free account is required for export; download and redistribution terms need review."
+      },
+      "version": {"status": "dynamic", "value": "5.0.1", "release_date": "2026-07-14"},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": ["https://pet.gns.cri.nz/"],
+      "limitations": [
+        "Dynamic database version and export inventory must be recorded for reproducibility.",
+        "Published, thesis and collection data require original-reference retention and duplicate review."
+      ]
+    },
+    "earthchem-library": {
+      "title": "EarthChem Library",
+      "publisher": "EarthChem / Interdisciplinary Earth Data Alliance",
+      "source_kind": "trusted_doi_repository",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["rock", "soil", "sediment", "water", "mineral"],
+      "coverage": {
+        "extent_class": "global_collection",
+        "regions": ["global"],
+        "notes": "Curated DOI repository for contributed Earth and planetary science datasets; each deposited dataset has its own scope and licence."
+      },
+      "identifiers": {},
+      "landing_page": "https://ecl.earthchem.org/home.php",
+      "interfaces": [
+        {
+          "kind": "repository_search_and_dataset_download",
+          "url": "https://ecl.earthchem.org/search.php",
+          "format": "repository_metadata_and_original_files",
+          "access": "open_mixed_dataset_licenses",
+          "server_filters": ["author", "title", "keyword", "location", "release_date"]
+        }
+      ],
+      "license": {
+        "status": "dataset_specific",
+        "id": null,
+        "url": "https://www.earthchem.org/page_category/submit-data/",
+        "notes": "Depositors choose among CC0, CC BY, CC BY-SA and non-commercial Creative Commons licences; filter at dataset level."
+      },
+      "version": {"status": "dynamic", "value": null, "release_date": null},
+      "adapter": {"status": "discovery_only", "name": null},
+      "evidence_urls": [
+        "https://ecl.earthchem.org/home.php",
+        "https://www.earthchem.org/page_category/submit-data/"
+      ],
+      "limitations": [
+        "Repository inclusion is not uniform geochemical coverage or method comparability.",
+        "Each DOI dataset must pass its own licence, schema, hash, citation and duplicate checks before use."
+      ]
+    },
+    "geotraces-idp2025": {
+      "title": "GEOTRACES Intermediate Data Product 2025",
+      "publisher": "GEOTRACES International Project Office and NERC EDS British Oceanographic Data Centre",
+      "source_kind": "official_international_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["water"],
+      "coverage": {
+        "extent_class": "global_ocean_partial",
+        "regions": ["global-ocean"],
+        "notes": "Quality-controlled trace-element, isotope and hydrographic data from 123 cruises and 4,097 stations across all ocean basins."
+      },
+      "identifiers": {"dataset_doi": "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"},
+      "landing_page": "https://www.geotraces.org/idp2025/",
+      "interfaces": [
+        {
+          "kind": "versioned_bulk_download",
+          "url": "https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+          "format": "ascii_netcdf_odv",
+          "access": "open",
+          "server_filters": ["version"]
+        },
+        {
+          "kind": "online_subset",
+          "url": "https://geotraces.webodv.awi.de/",
+          "format": "webodv_export",
+          "access": "open",
+          "server_filters": ["variable", "region", "cruise", "depth"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://www.geotraces.org/idp2025/",
+        "notes": "Fair Use Agreement requires IDP and original data-contributor citations."
+      },
+      "version": {"status": "pinned", "value": "IDP2025", "release_date": "2025-11-20"},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.geotraces.org/idp2025/",
+        "https://www.bodc.ac.uk/geotraces/data/"
+      ],
+      "limitations": [
+        "Cruise-track ocean sampling is not uniform global surface-water coverage.",
+        "Dissolved, particulate and other fractions plus quality flags and contributor citations must remain distinct."
+      ]
+    },
+    "glorich": {
+      "title": "GLORICH Global River Chemistry Database",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_dataset",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["water"],
+      "coverage": {
+        "extent_class": "global_partial",
+        "regions": ["global-rivers"],
+        "notes": "Compilation of more than 1.27 million samples from more than 18,000 river sampling locations, focused on major compounds, nutrients and carbon."
+      },
+      "identifiers": {"dataset_doi": "10.1594/PANGAEA.902360"},
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.902360",
+      "interfaces": [
+        {
+          "kind": "versioned_repository_download",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.902360",
+          "format": "csv_shapefile_documentation",
+          "access": "open_noncommercial",
+          "server_filters": ["dataset_file"]
+        }
+      ],
+      "license": {
+        "status": "restricted",
+        "id": "CC-BY-NC-SA-4.0",
+        "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "notes": "Non-commercial restriction excludes this dataset from the current open-only production route."
+      },
+      "version": {"status": "pinned", "value": "PANGAEA.902360", "release_date": "2019-06-07"},
+      "adapter": {"status": "discovery_only", "name": null},
+      "evidence_urls": ["https://doi.pangaea.de/10.1594/PANGAEA.902360"],
+      "limitations": [
+        "Compilation inherits heterogeneous source methods and possible overlap with national/international portals.",
+        "Focus is major compounds and nutrients rather than comprehensive trace-element coverage."
+      ]
+    },
+    "eea-waterbase": {
+      "title": "Waterbase water quality data",
+      "publisher": "European Environment Agency",
+      "source_kind": "official_regional_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["water", "sediment"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["europe"],
+        "notes": "European reporting database for rivers, lakes, groundwater, transitional, coastal and marine waters, including chemical-quality observations."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.eea.europa.eu/data-and-maps/data/waterbase-water-quality-icm-2",
+      "interfaces": [
+        {
+          "kind": "dataset_download_and_filter",
+          "url": "https://www.eea.europa.eu/data-and-maps/data/waterbase-water-quality-icm-2",
+          "format": "csv",
+          "access": "open_reuse_terms",
+          "server_filters": ["country", "water_body", "monitoring_site", "determinant", "year"]
+        }
+      ],
+      "license": {
+        "status": "open_reuse_terms",
+        "id": null,
+        "url": "https://www.eea.europa.eu/en/about/contact-us/faqs/can-i-use-eea-content-in-my-work-or-in-my-organisations-products",
+        "notes": "EEA permits commercial and non-commercial reuse with attribution, subject to dataset-specific third-party notices; exact machine-readable licence needs pinning."
+      },
+      "version": {"status": "dynamic", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.eea.europa.eu/data-and-maps/data/waterbase-water-quality-icm-2",
+        "https://www.eea.europa.eu/en/about/contact-us/faqs/can-i-use-eea-content-in-my-work-or-in-my-organisations-products"
+      ],
+      "limitations": [
+        "National reporting coverage, determinands and methods vary by country and year.",
+        "Water, sediment and biota results must be separated by matrix and fraction."
       ]
     }
   }

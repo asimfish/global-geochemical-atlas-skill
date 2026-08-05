@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-05T00:00:00Z",
+  "as_of": "2026-08-05T10:01:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "unknown",
@@ -7,8 +7,13 @@
         "georoc-archaean"
       ],
       "candidate_sources": [
+        "australia-ozchem",
+        "brazil-sgb-geochemistry",
+        "earthchem-library",
         "earthchem-portal",
         "georoc-database",
+        "nz-petlab",
+        "petdb",
         "usgs-ngdb"
       ],
       "method_metadata_coverage": "not_yet_audited",
@@ -21,9 +26,14 @@
       ],
       "source_independence": "single_source_dependency",
       "source_scopes": {
+        "australia-ozchem": "national_partial",
+        "brazil-sgb-geochemistry": "national_partial",
+        "earthchem-library": "global_collection",
         "earthchem-portal": "global_partial",
         "georoc-archaean": "global_partial",
         "georoc-database": "global_partial",
+        "nz-petlab": "national_plus_selected_global",
+        "petdb": "global_partial",
         "usgs-ngdb": "national_partial"
       },
       "spatial_density_coverage": "not_yet_audited",
@@ -34,7 +44,17 @@
       "analyte_coverage": "unknown",
       "approved_sources": [],
       "candidate_sources": [
+        "australia-ngsa",
+        "australia-ozchem",
+        "bgs-gbase",
+        "brazil-sgb-geochemistry",
+        "canada-cdogs",
+        "earthchem-library",
         "earthchem-portal",
+        "eea-waterbase",
+        "foregs-europe",
+        "nz-petlab",
+        "us-water-quality-portal",
         "usgs-ngdb"
       ],
       "method_metadata_coverage": "not_yet_audited",
@@ -47,7 +67,17 @@
       ],
       "source_independence": "no_approved_source",
       "source_scopes": {
+        "australia-ngsa": "national_partial",
+        "australia-ozchem": "national_partial",
+        "bgs-gbase": "national_partial",
+        "brazil-sgb-geochemistry": "national_partial",
+        "canada-cdogs": "national_partial",
+        "earthchem-library": "global_collection",
         "earthchem-portal": "global_partial",
+        "eea-waterbase": "regional_partial",
+        "foregs-europe": "regional_partial",
+        "nz-petlab": "national_plus_selected_global",
+        "us-water-quality-portal": "national_partial",
         "usgs-ngdb": "national_partial"
       },
       "spatial_density_coverage": "not_yet_audited",
@@ -60,7 +90,12 @@
         "usgs-conus-soil"
       ],
       "candidate_sources": [
+        "bgs-gbase",
+        "brazil-sgb-geochemistry",
+        "earthchem-library",
+        "foregs-europe",
         "gemas-europe",
+        "soils4africa",
         "usgs-ngdb",
         "wosis"
       ],
@@ -74,7 +109,12 @@
       ],
       "source_independence": "single_source_dependency",
       "source_scopes": {
+        "bgs-gbase": "national_partial",
+        "brazil-sgb-geochemistry": "national_partial",
+        "earthchem-library": "global_collection",
+        "foregs-europe": "regional_partial",
         "gemas-europe": "regional_partial",
+        "soils4africa": "continental_partial",
         "usgs-conus-soil": "national_partial",
         "usgs-ngdb": "national_partial",
         "wosis": "global_partial"
@@ -87,7 +127,16 @@
       "analyte_coverage": "unknown",
       "approved_sources": [],
       "candidate_sources": [
-        "gemstat-open-archive"
+        "bgs-gbase",
+        "brazil-sgb-geochemistry",
+        "canada-cdogs",
+        "earthchem-library",
+        "eea-waterbase",
+        "foregs-europe",
+        "gemstat-open-archive",
+        "geotraces-idp2025",
+        "glorich",
+        "us-water-quality-portal"
       ],
       "method_metadata_coverage": "not_yet_audited",
       "note": "Relevant candidates exist but none has passed the production quality gates.",
@@ -99,7 +148,16 @@
       ],
       "source_independence": "no_approved_source",
       "source_scopes": {
-        "gemstat-open-archive": "global_partial"
+        "bgs-gbase": "national_partial",
+        "brazil-sgb-geochemistry": "national_partial",
+        "canada-cdogs": "national_partial",
+        "earthchem-library": "global_collection",
+        "eea-waterbase": "regional_partial",
+        "foregs-europe": "regional_partial",
+        "gemstat-open-archive": "global_partial",
+        "geotraces-idp2025": "global_ocean_partial",
+        "glorich": "global_partial",
+        "us-water-quality-portal": "national_partial"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "unknown",
@@ -112,15 +170,18 @@
     "channels_checked": [
       "official_global_or_disciplinary_portals",
       "official_international_programs",
-      "official_national_agencies"
-    ],
-    "remaining_channels": [
+      "official_national_agencies",
       "regional_and_national_surveys",
       "trusted_doi_repositories",
-      "publication_linked_datasets",
-      "upstream_sources_of_aggregators"
+      "official_water_quality_portals"
     ],
-    "round": 1,
+    "remaining_channels": [
+      "publication_linked_datasets",
+      "upstream_sources_of_aggregators",
+      "additional_country_geological_surveys",
+      "marine_and_lacustrine_archives"
+    ],
+    "round": 2,
     "saturated": false,
     "status": "in_progress"
   },

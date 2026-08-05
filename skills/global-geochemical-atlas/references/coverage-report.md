@@ -1,10 +1,10 @@
 # D1 数据源覆盖报告
 
-核对时间：`2026-08-05T00:00:00Z`
+核对时间：`2026-08-05T10:01:00Z`
 
 整体状态：`partial`
 
-发现轮次：`1`，饱和状态：`false`
+发现轮次：`2`，饱和状态：`false`
 
 ## 当前目标
 
@@ -17,10 +17,10 @@
 
 | 介质 | 状态 | 已批准来源 | 待复核候选 | 来源独立性 | 分析物/方法/密度 |
 |---|---|---|---|---|---|
-| rock | `partial` | georoc-archaean | earthchem-portal, georoc-database, usgs-ngdb | `single_source_dependency` | `unknown/not_yet_audited/not_yet_audited` |
-| soil | `partial` | usgs-conus-soil | gemas-europe, usgs-ngdb, wosis | `single_source_dependency` | `unknown/not_yet_audited/not_yet_audited` |
-| sediment | `unknown` | 无 | earthchem-portal, usgs-ngdb | `no_approved_source` | `unknown/not_yet_audited/not_yet_audited` |
-| water | `unknown` | 无 | gemstat-open-archive | `no_approved_source` | `unknown/not_yet_audited/not_yet_audited` |
+| rock | `partial` | georoc-archaean | australia-ozchem, brazil-sgb-geochemistry, earthchem-library, earthchem-portal, georoc-database, nz-petlab, petdb, usgs-ngdb | `single_source_dependency` | `unknown/not_yet_audited/not_yet_audited` |
+| soil | `partial` | usgs-conus-soil | bgs-gbase, brazil-sgb-geochemistry, earthchem-library, foregs-europe, gemas-europe, soils4africa, usgs-ngdb, wosis | `single_source_dependency` | `unknown/not_yet_audited/not_yet_audited` |
+| sediment | `unknown` | 无 | australia-ngsa, australia-ozchem, bgs-gbase, brazil-sgb-geochemistry, canada-cdogs, earthchem-library, earthchem-portal, eea-waterbase, foregs-europe, nz-petlab, us-water-quality-portal, usgs-ngdb | `no_approved_source` | `unknown/not_yet_audited/not_yet_audited` |
+| water | `unknown` | 无 | bgs-gbase, brazil-sgb-geochemistry, canada-cdogs, earthchem-library, eea-waterbase, foregs-europe, gemstat-open-archive, geotraces-idp2025, glorich, us-water-quality-portal | `no_approved_source` | `unknown/not_yet_audited/not_yet_audited` |
 
 ## 当前判断
 

@@ -214,10 +214,13 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         {record["source_id"] for record in discovery_records} == set(catalog["sources"])
         and all(
-            record["round"] == 1 and record["evidence_url"].startswith("https://")
+            isinstance(record["round"], int)
+            and 1 <= record["round"] <= catalog["discovery_state"]["round"]
+            and record["evidence_url"].startswith("https://")
             for record in discovery_records
-        ),
-        "D1 discovery log accounts for every initial catalog source with official evidence",
+        )
+        and max(record["round"] for record in discovery_records) == catalog["discovery_state"]["round"],
+        "D1 discovery log accounts for every catalog source through the current official-evidence round",
         checks,
     )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
