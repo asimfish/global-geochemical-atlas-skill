@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import csv
 import hashlib
 import io
@@ -21,6 +22,7 @@ from typing import Any
 import build_evidence_bundle as evidence_builder
 import download_data as downloader
 import source_adapters as source_contracts
+import source_audit
 import source_router
 import validate_outputs as output_validator
 
@@ -153,6 +155,47 @@ def check_d1(output_dir: Path) -> list[str]:
         {"gemstat-open-archive", "usgs-ngdb"}
         <= {entry["source_id"] for entry in route["review_sources"]},
         "D1 router exposes relevant candidates and their review blockers",
+        checks,
+    )
+    audit = source_audit.audit_catalog(catalog, registry)
+    require(
+        audit["status"] == "PASS"
+        and audit["summary"] == {"pass": 2, "review": len(catalog["sources"]) - 2, "fail": 0}
+        and not audit["invalid_production_sources"],
+        "D1 audit passes only the two production-approved sources",
+        checks,
+    )
+    require(
+        audit["sources"]["gemstat-open-archive"]["audit_status"] == "review"
+        and "license" in audit["sources"]["gemstat-open-archive"]["blockers"],
+        "D1 audit preserves mixed-license candidates outside production",
+        checks,
+    )
+    tampered_catalog = copy.deepcopy(catalog)
+    tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "unresolved"
+    tampered_audit = source_audit.audit_catalog(tampered_catalog, registry)
+    require(
+        tampered_audit["status"] == "FAIL"
+        and tampered_audit["invalid_production_sources"] == ["georoc-archaean"],
+        "D1 audit fails closed when an approved source loses a hard gate",
+        checks,
+    )
+    tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "open"
+    tampered_catalog["sources"]["georoc-archaean"]["version"]["value"] = "unreviewed-new-version"
+    tampered_route = source_router.route_sources(
+        {"elements": ["As"], "region": "global", "media": ["rock"]},
+        tampered_catalog,
+        registry,
+    )
+    require(
+        "georoc-archaean" not in {entry["source_id"] for entry in tampered_route["selected_sources"]}
+        and "version mismatch"
+        in next(
+            entry["reason"]
+            for entry in tampered_route["review_sources"]
+            if entry["source_id"] == "georoc-archaean"
+        ),
+        "D1 router automatically downgrades a source when its version changes",
         checks,
     )
     source_record_id = source_contracts.stable_source_record_id(

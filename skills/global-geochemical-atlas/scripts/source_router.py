@@ -10,6 +10,8 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+import source_adapters
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
@@ -152,10 +154,38 @@ def _route_entry(source_id: str, entry: Mapping[str, Any], matching_media: list[
     }
 
 
-def route_sources(request: Mapping[str, Any], catalog: Mapping[str, Any] | None = None) -> dict[str, Any]:
+def _production_alignment_blockers(
+    source_id: str,
+    entry: Mapping[str, Any],
+    registry: Mapping[str, Any],
+) -> list[str]:
+    registry_entry = registry.get("sources", {}).get(source_id)
+    if not isinstance(registry_entry, dict):
+        return ["missing production registry entry"]
+    blockers: list[str] = []
+    if entry.get("version", {}).get("value") != str(registry_entry.get("dataset_version")):
+        blockers.append("catalog/registry version mismatch")
+    if entry.get("license", {}).get("id") != registry_entry.get("license", {}).get("spdx"):
+        blockers.append("catalog/registry license mismatch")
+    try:
+        adapter = source_adapters.get_adapter(source_id)
+    except source_adapters.SourceAdapterError:
+        blockers.append("adapter is not callable")
+    else:
+        if adapter.candidate.version != str(registry_entry.get("dataset_version")):
+            blockers.append("adapter/registry version mismatch")
+    return blockers
+
+
+def route_sources(
+    request: Mapping[str, Any],
+    catalog: Mapping[str, Any] | None = None,
+    registry: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Return production routes, review candidates and conservative coverage states."""
 
     resolved_catalog = dict(catalog) if catalog is not None else load_catalog()
+    resolved_registry = dict(registry) if registry is not None else source_adapters.load_source_registry()
     normalized = validate_request(request, resolved_catalog)
     requested_media = set(normalized["media"])
     explicit_sources = normalized["sources"]
@@ -168,7 +198,12 @@ def route_sources(request: Mapping[str, Any], catalog: Mapping[str, Any] | None 
         matching_media = sorted(requested_media.intersection(entry["media"]))
         if not matching_media:
             continue
-        if entry["production_eligible"] and entry["license"]["status"] == "open":
+        alignment_blockers = (
+            _production_alignment_blockers(source_id, entry, resolved_registry)
+            if entry["production_eligible"]
+            else []
+        )
+        if entry["production_eligible"] and entry["license"]["status"] == "open" and not alignment_blockers:
             selected.append(
                 _route_entry(
                     source_id,
@@ -181,6 +216,7 @@ def route_sources(request: Mapping[str, Any], catalog: Mapping[str, Any] | None 
             blockers = [f"status={entry['status']}", f"adapter={entry['adapter']['status']}"]
             if entry["license"]["status"] != "open":
                 blockers.append(f"license={entry['license']['status']}")
+            blockers.extend(alignment_blockers)
             review.append(_route_entry(source_id, entry, matching_media, "; ".join(blockers)))
 
     coverage: dict[str, Any] = {}

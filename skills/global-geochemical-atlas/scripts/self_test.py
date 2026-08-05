@@ -69,6 +69,7 @@ def run_suite() -> dict[str, Any]:
         "confidence-report.schema.json",
         "source-catalog.schema.json",
         "source-route-result.schema.json",
+        "source-audit.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
