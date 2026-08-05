@@ -4,24 +4,29 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import ipaddress
 import json
 import os
+import shutil
 import socket
+import stat
 import sys
 import tempfile
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import zipfile
 from collections.abc import Sequence
 from datetime import UTC, datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 USER_AGENT = "GlobalGeochemicalAtlasSkill/1.0 (public scientific data retrieval)"
 SENSITIVE_QUERY_TERMS = ("token", "key", "auth", "signature", "credential", "password", "secret")
+RETRYABLE_HTTP_STATUS = {429, 502, 503, 504}
 
 
 class DownloadError(RuntimeError):
@@ -95,7 +100,11 @@ class SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
 
 
 def existing_verified_cache(
-    output: Path, manifest_path: Path, url: str, expected_sha256: str | None
+    output: Path,
+    manifest_path: Path,
+    url: str,
+    expected_sha256: str | None,
+    dataset_version: str | None = None,
 ) -> dict[str, Any]:
     if not output.is_file():
         raise DownloadError("offline cache file does not exist")
@@ -108,6 +117,8 @@ def existing_verified_cache(
             raise DownloadError("offline manifest is unreadable") from exc
         if prior_manifest.get("source_url") != url:
             raise DownloadError("offline manifest source URL does not match the requested URL")
+        if dataset_version and prior_manifest.get("dataset_version") != dataset_version:
+            raise DownloadError("offline manifest dataset version does not match the requested version")
         recorded_hash = recorded_hash or prior_manifest.get("sha256")
     if not recorded_hash:
         raise DownloadError("offline mode requires --expected-sha256 or a prior manifest hash")
@@ -156,7 +167,13 @@ def download_once(
 
             digest = hashlib.sha256()
             total = 0
-            with tempfile.NamedTemporaryFile("wb", dir=output.parent, delete=False) as handle:
+            with tempfile.NamedTemporaryFile(
+                "wb",
+                prefix=f".{output.name}.",
+                suffix=".part",
+                dir=output.parent,
+                delete=False,
+            ) as handle:
                 temporary_path = Path(handle.name)
                 while True:
                     chunk = response.read(min(1024 * 1024, max_bytes - total + 1))
@@ -184,10 +201,136 @@ def download_once(
                 "sha256_basis": "expected" if expected_sha256 else "observed_not_publisher_verified",
                 "accessed_at": utc_now(),
                 "http_status": getattr(response, "status", 200),
+                "etag": response.headers.get("ETag"),
+                "last_modified": response.headers.get("Last-Modified"),
+                "content_disposition": response.headers.get("Content-Disposition"),
             }
     finally:
         if temporary_path is not None:
             temporary_path.unlink(missing_ok=True)
+
+
+def _safe_member_name(name: str) -> PurePosixPath:
+    if "\x00" in name:
+        raise DownloadError("ZIP member contains a NUL byte")
+    normalized = PurePosixPath(name.replace("\\", "/"))
+    if normalized.is_absolute() or ".." in normalized.parts or not normalized.parts:
+        raise DownloadError(f"unsafe ZIP member path: {name}")
+    return normalized
+
+
+def _validate_zip_members(
+    archive: zipfile.ZipFile,
+    max_members: int,
+    max_extracted_bytes: int,
+    required_members: Sequence[str],
+) -> list[zipfile.ZipInfo]:
+    members = [info for info in archive.infolist() if not info.is_dir()]
+    if not members:
+        raise DownloadError("ZIP archive contains no files")
+    if len(members) > max_members:
+        raise DownloadError("ZIP member count exceeds --max-members")
+    total = sum(info.file_size for info in members)
+    if total > max_extracted_bytes:
+        raise DownloadError("ZIP expanded size exceeds --max-extracted-bytes")
+    available: set[str] = set()
+    for info in members:
+        normalized = _safe_member_name(info.filename)
+        available.add(str(normalized))
+        unix_mode = info.external_attr >> 16
+        if unix_mode and stat.S_ISLNK(unix_mode):
+            raise DownloadError(f"ZIP symlink members are rejected: {info.filename}")
+    missing = sorted(set(required_members) - available)
+    if missing:
+        raise DownloadError(f"ZIP archive lacks required members: {', '.join(missing)}")
+    return members
+
+
+def _read_delimited_header(path: Path, required_fields: Sequence[str]) -> None:
+    if not required_fields:
+        return
+    delimiter = "\t" if path.suffix.casefold() in {".txt", ".tsv"} else ","
+    last_error: Exception | None = None
+    for encoding in ("utf-8-sig", "latin-1"):
+        try:
+            with path.open("r", encoding=encoding, newline="") as handle:
+                reader = csv.reader(handle, delimiter=delimiter)
+                for index, row in enumerate(reader):
+                    fields = {value.strip() for value in row}
+                    if set(required_fields).issubset(fields):
+                        return
+                    if index >= 49:
+                        break
+        except (UnicodeError, csv.Error, OSError) as exc:
+            last_error = exc
+            continue
+    suffix = f": {last_error}" if last_error else ""
+    raise DownloadError(f"required delimited fields not found in {path.name}{suffix}")
+
+
+def safe_extract_zip(
+    archive_path: Path,
+    destination: Path,
+    max_members: int,
+    max_extracted_bytes: int,
+    required_members: Sequence[str],
+    required_fields: Sequence[str],
+) -> list[dict[str, Any]]:
+    """Extract to a temporary sibling directory and publish only after validation."""
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.exists():
+        raise DownloadError(f"extract destination already exists: {destination}")
+    temporary = Path(tempfile.mkdtemp(prefix=f".{destination.name}.", suffix=".part", dir=destination.parent))
+    extracted: list[Path] = []
+    try:
+        try:
+            with zipfile.ZipFile(archive_path) as archive:
+                members = _validate_zip_members(
+                    archive,
+                    max_members=max_members,
+                    max_extracted_bytes=max_extracted_bytes,
+                    required_members=required_members,
+                )
+                total = 0
+                for info in members:
+                    relative = _safe_member_name(info.filename)
+                    target = temporary.joinpath(*relative.parts)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    with archive.open(info) as source, target.open("wb") as output:
+                        while True:
+                            chunk = source.read(1024 * 1024)
+                            if not chunk:
+                                break
+                            total += len(chunk)
+                            if total > max_extracted_bytes:
+                                raise DownloadError("ZIP extraction exceeded --max-extracted-bytes")
+                            output.write(chunk)
+                    extracted.append(target)
+        except (zipfile.BadZipFile, RuntimeError) as exc:
+            raise DownloadError("downloaded file is not a valid ZIP archive") from exc
+
+        data_files = [path for path in extracted if path.suffix.casefold() in {".csv", ".txt", ".tsv"}]
+        if required_fields and not data_files:
+            raise DownloadError("ZIP archive has no delimited data file for required-field validation")
+        for path in data_files:
+            if path.name.casefold().startswith("manifest"):
+                continue
+            _read_delimited_header(path, required_fields)
+
+        records = [
+            {
+                "path": str(path.relative_to(temporary)),
+                "bytes": path.stat().st_size,
+                "sha256": sha256_file(path),
+            }
+            for path in sorted(extracted)
+        ]
+        os.replace(temporary, destination)
+        return records
+    finally:
+        if temporary.exists():
+            shutil.rmtree(temporary)
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
@@ -201,26 +344,66 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     if not args.license.strip():
         raise DownloadError("--license is required; use 'unresolved' only when manual review is explicit")
 
+    if args.max_extracted_bytes < 1 or args.max_extracted_bytes > 2_000_000_000:
+        raise DownloadError("--max-extracted-bytes must be between 1 and 2000000000")
+    if args.max_members < 1 or args.max_members > 10000:
+        raise DownloadError("--max-members must be between 1 and 10000")
+
     if args.offline:
-        result = existing_verified_cache(args.output, args.manifest, args.url, expected_sha256)
+        result = existing_verified_cache(
+            args.output,
+            args.manifest,
+            args.url,
+            expected_sha256,
+            args.dataset_version,
+        )
     else:
-        last_error: Exception | None = None
-        result = {}
-        for attempt in range(args.retries + 1):
+        result: dict[str, Any] = {}
+        if not args.refresh and args.output.is_file() and args.manifest.is_file():
             try:
-                result = download_once(args.url, args.output, args.timeout, args.max_bytes, expected_sha256)
-                result["attempts"] = attempt + 1
-                break
-            except (DownloadError, urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
-                last_error = exc
-                retryable = not isinstance(exc, DownloadError)
-                if isinstance(exc, urllib.error.HTTPError):
-                    retryable = exc.code == 429 or 500 <= exc.code <= 599
-                if attempt >= args.retries or not retryable:
-                    raise DownloadError(str(exc)) from exc
-                time.sleep(min(2**attempt, 4))
+                result = existing_verified_cache(
+                    args.output,
+                    args.manifest,
+                    args.url,
+                    expected_sha256,
+                    args.dataset_version,
+                )
+            except DownloadError:
+                result = {}
         if not result:
-            raise DownloadError(str(last_error or "download failed"))
+            last_error: Exception | None = None
+            for attempt in range(args.retries + 1):
+                try:
+                    result = download_once(args.url, args.output, args.timeout, args.max_bytes, expected_sha256)
+                    result["attempts"] = attempt + 1
+                    break
+                except (DownloadError, urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+                    last_error = exc
+                    retryable = isinstance(exc, (urllib.error.URLError, TimeoutError, OSError))
+                    if isinstance(exc, urllib.error.HTTPError):
+                        retryable = exc.code in RETRYABLE_HTTP_STATUS
+                    if isinstance(exc, DownloadError):
+                        retryable = False
+                    if attempt >= args.retries or not retryable:
+                        raise DownloadError(str(exc)) from exc
+                    time.sleep(min(2**attempt, 4))
+            if not result:
+                raise DownloadError(str(last_error or "download failed"))
+
+    if args.required_field and args.output.suffix.casefold() != ".zip":
+        _read_delimited_header(args.output, args.required_field)
+    if args.extract_dir:
+        if args.output.suffix.casefold() != ".zip":
+            raise DownloadError("--extract-dir requires a .zip output file")
+        result["extracted_files"] = safe_extract_zip(
+            args.output,
+            args.extract_dir,
+            max_members=args.max_members,
+            max_extracted_bytes=args.max_extracted_bytes,
+            required_members=args.required_member,
+            required_fields=args.required_field,
+        )
+        result["extract_dir"] = args.extract_dir.name
 
     result.update(
         {
@@ -228,6 +411,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "license": args.license.strip(),
             "output_filename": args.output.name,
             "offline": bool(args.offline),
+            "dataset_doi": args.dataset_doi,
+            "dataset_version": args.dataset_version,
         }
     )
     atomic_json(args.manifest, result)
@@ -245,8 +430,36 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-sha256", help="Publisher or previously verified SHA-256")
     parser.add_argument("--max-bytes", type=int, default=50_000_000, help="Hard response limit (default: 50 MB)")
     parser.add_argument("--timeout", type=float, default=30.0, help="Per-request timeout in seconds (max: 120)")
-    parser.add_argument("--retries", type=int, default=2, help="Bounded retries for 429/5xx/network errors (max: 3)")
+    parser.add_argument(
+        "--retries",
+        type=int,
+        default=2,
+        help="Bounded retries for 429/502/503/504 and transient network errors (max: 3)",
+    )
     parser.add_argument("--offline", action="store_true", help="Use only a hash-verified existing cache file")
+    parser.add_argument("--refresh", action="store_true", help="Ignore a valid online cache and download again")
+    parser.add_argument("--dataset-doi", help="Stable dataset DOI to record in the download manifest")
+    parser.add_argument("--dataset-version", help="Dataset version to bind to cache reuse")
+    parser.add_argument("--extract-dir", type=Path, help="Optional destination for safe ZIP extraction")
+    parser.add_argument(
+        "--max-extracted-bytes",
+        type=int,
+        default=200_000_000,
+        help="Hard expanded ZIP limit (default: 200 MB)",
+    )
+    parser.add_argument("--max-members", type=int, default=1000, help="Hard ZIP member-count limit")
+    parser.add_argument(
+        "--required-member",
+        action="append",
+        default=[],
+        help="Required ZIP member path; repeat for multiple members",
+    )
+    parser.add_argument(
+        "--required-field",
+        action="append",
+        default=[],
+        help="Required delimited-file header field; repeat for multiple fields",
+    )
     return parser
 
 

@@ -10,11 +10,13 @@ import json
 import subprocess
 import sys
 import tempfile
+import zipfile
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import download_data as downloader
 import source_adapters as source_contracts
 import validate_outputs as output_validator
 
@@ -169,6 +171,66 @@ def check_d1(output_dir: Path) -> list[str]:
             expected_code=2,
         )
         require(not unsafe_output.exists(), "D1 downloader fails closed on unsafe URLs", checks)
+
+        cached_file = Path(evidence_temp) / "cached.csv"
+        cached_file.write_text("SiteID\tLatitude\tLongitude\nA\t1\t2\n", encoding="utf-8")
+        cached_url = "https://example.org/public/cached.csv"
+        cached_hash = sha256_file(cached_file)
+        cached_manifest = Path(evidence_temp) / "cached-download.json"
+        cached_manifest.write_text(
+            json.dumps(
+                {
+                    "source_url": cached_url,
+                    "sha256": cached_hash,
+                    "dataset_version": "v1",
+                }
+            ),
+            encoding="utf-8",
+        )
+        cache_result = downloader.existing_verified_cache(
+            cached_file,
+            cached_manifest,
+            cached_url,
+            cached_hash,
+            "v1",
+        )
+        require(cache_result["status"] == "cache_hit", "D1 reuses only a hash-verified versioned cache", checks)
+
+        valid_zip = Path(evidence_temp) / "valid.zip"
+        with zipfile.ZipFile(valid_zip, "w") as archive:
+            archive.writestr("dataset/data.csv", "SiteID,Latitude,Longitude\nA,1,2\n")
+        extract_dir = Path(evidence_temp) / "extracted"
+        extracted = downloader.safe_extract_zip(
+            valid_zip,
+            extract_dir,
+            max_members=5,
+            max_extracted_bytes=1000,
+            required_members=["dataset/data.csv"],
+            required_fields=["SiteID", "Latitude", "Longitude"],
+        )
+        require(
+            len(extracted) == 1 and (extract_dir / "dataset" / "data.csv").is_file(),
+            "D1 validates required ZIP members and fields before publishing extraction",
+            checks,
+        )
+
+        unsafe_zip = Path(evidence_temp) / "unsafe.zip"
+        with zipfile.ZipFile(unsafe_zip, "w") as archive:
+            archive.writestr("../escape.csv", "value\n1\n")
+        try:
+            downloader.safe_extract_zip(
+                unsafe_zip,
+                Path(evidence_temp) / "must-not-extract",
+                max_members=5,
+                max_extracted_bytes=1000,
+                required_members=[],
+                required_fields=[],
+            )
+        except downloader.DownloadError:
+            pass
+        else:
+            raise ContractError("D1 must reject ZIP path traversal")
+        require(not (Path(evidence_temp) / "escape.csv").exists(), "D1 rejects ZIP path traversal", checks)
     return checks
 
 
