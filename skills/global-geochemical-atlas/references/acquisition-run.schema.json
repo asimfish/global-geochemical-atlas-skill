@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d1-acquisition-run:v1",
+  "title": "D1 acquisition run archive entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "acquisition_run_id", "request", "dataset_ids", "schema_versions", "vocabulary_versions", "started_at", "finished_at", "status", "cache_status", "counts", "outputs"],
+  "properties": {
+    "schema_version": {"const": "d1-acquisition-run-v1"},
+    "acquisition_run_id": {"type": "string", "minLength": 1},
+    "request": {"type": "object"},
+    "dataset_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "schema_versions": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}},
+    "vocabulary_versions": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "status": {"type": "string", "enum": ["success", "partial_success", "invalid_input", "network_unavailable", "source_not_accessible", "incomplete_retrieval", "needs_human_review"]},
+    "cache_status": {"type": "string", "enum": ["downloaded", "cache_hit", "mixed", "not_applicable"]},
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_records", "observations", "rejected_records", "failed_records"],
+      "properties": {
+        "source_records": {"type": "integer", "minimum": 0},
+        "observations": {"type": "integer", "minimum": 0},
+        "rejected_records": {"type": "integer", "minimum": 0},
+        "failed_records": {"type": "integer", "minimum": 0}
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "bytes"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  }
+}

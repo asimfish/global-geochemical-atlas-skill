@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-source-audit:v1",
+  "title": "D1 source acceptance audit report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_version",
+    "status",
+    "catalog_version",
+    "registry_version",
+    "audited_at",
+    "source_count",
+    "summary",
+    "invalid_production_sources",
+    "sources",
+    "claim_boundary"
+  ],
+  "properties": {
+    "audit_version": {"const": "geochemical-source-audit-v1"},
+    "status": {"type": "string", "enum": ["PASS", "FAIL"]},
+    "catalog_version": {"const": "geochemical-source-catalog-v1"},
+    "registry_version": {"const": "geochemical-source-registry-v1"},
+    "audited_at": {"type": "string", "format": "date-time"},
+    "source_count": {"type": "integer", "minimum": 1},
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pass", "review", "fail"],
+      "properties": {
+        "pass": {"type": "integer", "minimum": 0},
+        "review": {"type": "integer", "minimum": 0},
+        "fail": {"type": "integer", "minimum": 0}
+      }
+    },
+    "invalid_production_sources": {"$ref": "#/$defs/uniqueStrings"},
+    "sources": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["declared_status", "production_eligible", "audit_status", "blockers", "gates"],
+        "properties": {
+          "declared_status": {"type": "string"},
+          "production_eligible": {"type": "boolean"},
+          "audit_status": {"type": "string", "enum": ["pass", "review", "fail"]},
+          "blockers": {"$ref": "#/$defs/uniqueStrings"},
+          "gates": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {"$ref": "#/$defs/gate"}
+          }
+        }
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "note", "evidence"],
+      "properties": {
+        "status": {"type": "string", "enum": ["pass", "review", "fail"]},
+        "note": {"type": "string", "minLength": 1},
+        "evidence": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    }
+  }
+}

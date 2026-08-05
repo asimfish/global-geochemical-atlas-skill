@@ -43,6 +43,20 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 
 `standardize_geochemistry.py` 的最低分析列为 `element_or_analyte,value,unit,medium`；要运行并交付完整 `run_workflow.py`，还必须提供非空 `source_id,source_locator,license`，否则证据打包会失败关闭。正式科学运行还应提供 `source_tier`、样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限和文件哈希。完整契约见 `skills/global-geochemical-atlas/references/`。
 
+## 真实来源预检与 D1 原值索引
+
+对真实请求先执行来源准入审计、保守路由和覆盖矩阵。以下固定 fixture 覆盖 rock、soil、sediment、water 与 As/Cu/Ni/Zn，可离线复现：
+
+```bash
+python skills/global-geochemical-atlas/scripts/source_audit.py
+python skills/global-geochemical-atlas/scripts/source_router.py \
+  --request skills/global-geochemical-atlas/fixtures/source-routing/global-all-media-request.json
+python skills/global-geochemical-atlas/scripts/coverage_report.py \
+  --request skills/global-geochemical-atlas/fixtures/source-routing/global-all-media-request.json
+```
+
+`source_catalog.json` 中的候选不等于可自动使用的生产来源；路由器只选择通过版本、许可、适配器、完整性和注册表一致性门的来源。需要保存 D1 分层原值归档并查询时，先运行 `validate_acquisition.py`，再用 `build_index.py` 构建可重建的 SQLite 索引。索引不执行 D2 的单位换算、QC、置信度或异常分析，最终标准化数据库仍是 `geochemistry.csv`。
+
 ## 科学边界
 
 - 保留原值、原单位、qualifier 和原始坐标表达；无法证明的转换失败关闭。
@@ -70,7 +84,7 @@ skills/
 
 仓库仍然只有一个生产 Skill，但内部按稳定接口拆为三个责任域：
 
-- D1 维护下载、缓存、demo 数据和证据打包，负责 **数据来源与置信度说明**；
+- D1 维护来源目录、准入审计、路由与覆盖、下载缓存、原值归档索引、demo 数据和证据打包，负责 **数据来源与置信度说明**；
 - D2 维护标准化、QC、置信度算法和异常分析，负责 **标准化地球化学数据库** 与 **异常区域识别结果**；
 - D3 维护唯一 `SKILL.md`、总工作流、地图和 demo，负责 **可交互元素分布地图** 与 **可复用 Skill 文档**。
 

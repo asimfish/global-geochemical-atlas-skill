@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import csv
 import hashlib
 import io
 import json
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -19,10 +21,19 @@ from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import build_index as index_builder
+import benchmark_index
+import cache_control
+import coverage_report
 import download_data as downloader
 import source_adapters as source_contracts
 import standardize_geochemistry as standardizer
+import source_audit
+import source_router
+import query_source
+import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
+import verify_marchem_candidate
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -115,6 +126,403 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         len(usgs.registry_entry["download"]["files"]) == 3,
         "D1 USGS candidate keeps the three soil layers distinct",
+        checks,
+    )
+    catalog = source_router.load_catalog()
+    request_schema = json_value(SKILL_DIR / "references" / "request.schema.json")
+    region_branches = request_schema["properties"]["region"]["oneOf"]
+    require(
+        len(region_branches) == 2
+        and {branch.get("type") for branch in region_branches} == {"string", "object"},
+        "D1 request Schema keeps global/named regions disjoint from bbox objects",
+        checks,
+    )
+    catalog_schema = json_value(SKILL_DIR / "references" / "source-catalog.schema.json")
+    allowed_identifier_fields = set(
+        catalog_schema["$defs"]["source"]["properties"]["identifiers"]["properties"]
+    )
+    observed_identifier_fields = {
+        field
+        for entry in catalog["sources"].values()
+        for field in entry["identifiers"]
+    }
+    require(
+        observed_identifier_fields <= allowed_identifier_fields,
+        "D1 catalog identifier fields remain aligned with its published JSON Schema",
+        checks,
+    )
+    require(
+        set(catalog["sources"][source_id]["status"] for source_id in ("georoc-archaean", "usgs-conus-soil"))
+        == {"approved"}
+        and {
+            source_id
+            for source_id, entry in catalog["sources"].items()
+            if entry["production_eligible"]
+        }
+        == {"georoc-archaean", "usgs-conus-soil"},
+        "D1 catalog separates approved production sources from discovery candidates",
+        checks,
+    )
+    require(
+        {"rock", "soil", "sediment", "water"}
+        <= {medium for entry in catalog["sources"].values() for medium in entry["media"]},
+        "D1 catalog has initial discovery coverage for all four required media",
+        checks,
+    )
+    route = source_router.route_sources(
+        {
+            "elements": ["As", "Cu", "Ni", "Zn"],
+            "region": "global",
+            "media": ["rock", "soil", "sediment", "water"],
+            "sources": "auto",
+            "license_policy": "open_only",
+        },
+        catalog,
+    )
+    require(
+        {entry["source_id"] for entry in route["selected_sources"]}
+        == {"georoc-archaean", "usgs-conus-soil"},
+        "D1 router selects only approved open sources",
+        checks,
+    )
+    require(
+        route["coverage"]["rock"]["status"] == "partial"
+        and route["coverage"]["soil"]["status"] == "partial"
+        and route["coverage"]["sediment"]["status"] == "unknown"
+        and route["coverage"]["water"]["status"] == "unknown",
+        "D1 router does not overclaim incomplete or unapproved coverage",
+        checks,
+    )
+    require(
+        {"gemstat-open-archive", "usgs-ngdb"}
+        <= {entry["source_id"] for entry in route["review_sources"]},
+        "D1 router exposes relevant candidates and their review blockers",
+        checks,
+    )
+    audit = source_audit.audit_catalog(catalog, registry)
+    require(
+        audit["status"] == "PASS"
+        and audit["summary"] == {"pass": 2, "review": len(catalog["sources"]) - 2, "fail": 0}
+        and not audit["invalid_production_sources"],
+        "D1 audit passes only the two production-approved sources",
+        checks,
+    )
+    require(
+        audit["sources"]["gemstat-open-archive"]["audit_status"] == "review"
+        and "license" in audit["sources"]["gemstat-open-archive"]["blockers"],
+        "D1 audit preserves mixed-license candidates outside production",
+        checks,
+    )
+    tampered_catalog = copy.deepcopy(catalog)
+    tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "unresolved"
+    tampered_audit = source_audit.audit_catalog(tampered_catalog, registry)
+    require(
+        tampered_audit["status"] == "FAIL"
+        and tampered_audit["invalid_production_sources"] == ["georoc-archaean"],
+        "D1 audit fails closed when an approved source loses a hard gate",
+        checks,
+    )
+    tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "open"
+    tampered_catalog["sources"]["georoc-archaean"]["version"]["value"] = "unreviewed-new-version"
+    tampered_route = source_router.route_sources(
+        {"elements": ["As"], "region": "global", "media": ["rock"]},
+        tampered_catalog,
+        registry,
+    )
+    require(
+        "georoc-archaean" not in {entry["source_id"] for entry in tampered_route["selected_sources"]}
+        and "version mismatch"
+        in next(
+            entry["reason"]
+            for entry in tampered_route["review_sources"]
+            if entry["source_id"] == "georoc-archaean"
+        ),
+        "D1 router automatically downgrades a source when its version changes",
+        checks,
+    )
+    discovery_records = [
+        json.loads(line)
+        for line in (SKILL_DIR / "assets" / "source_discovery_log.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        {record["source_id"] for record in discovery_records} == set(catalog["sources"])
+        and all(
+            isinstance(record["round"], int)
+            and 1 <= record["round"] <= catalog["discovery_state"]["round"]
+            and record["evidence_url"].startswith("https://")
+            for record in discovery_records
+        )
+        and max(record["round"] for record in discovery_records) == catalog["discovery_state"]["round"],
+        "D1 discovery log accounts for every catalog source through the current official-evidence round",
+        checks,
+    )
+    discovery_scope = json_value(SKILL_DIR / "assets" / "source_discovery_scope.json")
+    scoped_source_ids = {
+        source_id
+        for area in discovery_scope["areas"].values()
+        for source_id in area["catalogued_sources"]
+    }
+    require(
+        discovery_scope["round"] == catalog["discovery_state"]["round"]
+        and discovery_scope["as_of"] == catalog["reviewed_at"]
+        and discovery_scope["saturated"] is False
+        and scoped_source_ids == set(catalog["sources"])
+        and {
+            "africa",
+            "asia",
+            "europe",
+            "north-america",
+            "south-america",
+            "oceania",
+            "marine-lacustrine-and-polar",
+        }
+        <= set(discovery_scope["areas"]),
+        "D1 discovery scope tracks regional and marine search gaps without claiming saturation",
+        checks,
+    )
+    marchem_verification = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "candidate-audits"
+        / "marchem-inorganic-20260805T102709Z.json"
+    )
+    marchem_data = marchem_verification["observed_data"]
+    require(
+        marchem_verification["verification_version"] == "marchem-candidate-verification-v1"
+        and marchem_verification["source_id"] == "norway-marchem"
+        and marchem_verification["archive"]["sha256"]
+        == "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6"
+        and len(marchem_verification["archive"]["members"]) == 3,
+        "D1 MarChem candidate evidence pins the observed dynamic archive and member inventory",
+        checks,
+    )
+    require(
+        marchem_data["data_record_count"] == 1070
+        and marchem_data["distinct_sample_code_count"] == 880
+        and marchem_data["duplicate_sample_code_count"] == 190
+        and marchem_data["target_bearing_row_count"] == 880
+        and marchem_data["sample_codes_with_target_count"] == 880
+        and marchem_data["sample_codes_without_target_count"] == 0
+        and marchem_data["sample_codes_with_multiple_target_rows_count"] == 0,
+        "D1 MarChem verification distinguishes export rows, repeated sample codes and target-bearing rows",
+        checks,
+    )
+    require(
+        all(
+            profile["record_count"] == 1070
+            and profile["present_count"] == 880
+            and profile["present_count"] + profile["missing_count"] == profile["record_count"]
+            and profile["invalid_count"] == 0
+            and profile["reported_unit"] == "mg/kg"
+            and profile["weight_basis"] == "dry"
+            for profile in marchem_data["target_analytes"].values()
+        )
+        and marchem_verification["observed_metadata"]["partial_digestion_disclosed"] is True
+        and marchem_verification["observed_metadata"]["not_total_content_disclosed"] is True
+        and marchem_verification["observed_metadata"]["accreditation_rows"]["not_accredited"] > 0,
+        "D1 MarChem evidence preserves target units, censoring context, partial digestion and accreditation limits",
+        checks,
+    )
+    require(
+        len(marchem_verification["prepared_human_review_sample"]) == 30
+        and marchem_verification["human_review"]
+        == {"required_record_count": 30, "prepared_record_count": 30, "status": "pending"}
+        and verify_marchem_candidate.parse_value("<2.0") == ("censored_lt", 2.0),
+        "D1 prepares but does not falsely mark the required MarChem human review as complete",
+        checks,
+    )
+    coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
+    matrix = coverage_report.build_matrix(catalog, coverage_request, registry)
+    require(
+        matrix == json_value(SKILL_DIR / "assets" / "coverage_matrix.json"),
+        "D1 checked-in coverage matrix is reproducible from the catalog and request",
+        checks,
+    )
+    require(
+        matrix["overall_status"] == "partial"
+        and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
+        and matrix["cells"]["water"]["analyte_coverage"] == "unknown",
+        "D1 coverage matrix reports partial, single-source and unaudited dimensions conservatively",
+        checks,
+    )
+    archive_bundle = json_value(SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json")
+    archive_validation = acquisition_validator.validate_bundle(archive_bundle)
+    require(
+        archive_validation["status"] == "PASS"
+        and archive_validation["entity_counts"]["observations"] == 3
+        and archive_validation["entity_counts"]["methods"] == 2,
+        "D1 archive schema fixture preserves entities and passes relation validation",
+        checks,
+    )
+    censored_observation = next(
+        item for item in archive_bundle["observations"] if item["observation_id"] == "observation-as-lt"
+    )
+    require(
+        censored_observation["value_raw"] == "<5"
+        and censored_observation["parsed_value"] == 5.0
+        and censored_observation["value_qualifier"] == "lt",
+        "D1 archive schema preserves a censored raw value without imputing it",
+        checks,
+    )
+    broken_bundle = copy.deepcopy(archive_bundle)
+    broken_bundle["observations"][0]["sample_id"] = "missing-sample"
+    broken_validation = acquisition_validator.validate_bundle(broken_bundle)
+    require(
+        broken_validation["status"] == "FAIL"
+        and any("missing-sample" in error for error in broken_validation["errors"]),
+        "D1 archive validation fails on a broken observation relationship",
+        checks,
+    )
+    schema_invalid_bundle = copy.deepcopy(archive_bundle)
+    del schema_invalid_bundle["datasets"][0]["title"]
+    schema_invalid_validation = acquisition_validator.validate_bundle(schema_invalid_bundle)
+    require(
+        schema_invalid_validation["status"] == "FAIL"
+        and any("missing required field: title" in error for error in schema_invalid_validation["errors"]),
+        "D1 archive validation enforces entity JSON Schemas before indexing",
+        checks,
+    )
+    with tempfile.TemporaryDirectory(prefix="d1-sqlite-contract-") as index_temp:
+        index_root = Path(index_temp)
+        first_index = index_root / "first.sqlite"
+        second_index = index_root / "second.sqlite"
+        archive_path = SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json"
+        first_build = index_builder.build_index(archive_path, first_index)
+        second_build = index_builder.build_index(archive_path, second_index)
+        require(
+            first_build["status"] == "PASS"
+            and first_build["counts"]["observations"] == 3
+            and first_build["counts"]["dataset_files"] == 1
+            and first_build["sha256"] == second_build["sha256"],
+            "D1 builds a deterministic integrity-checked SQLite index from the archive bundle",
+            checks,
+        )
+        try:
+            index_builder.build_index(archive_path, first_index)
+        except ValueError as exc:
+            require("refusing to overwrite" in str(exc), "D1 index creation refuses implicit overwrite", checks)
+        else:
+            raise ContractError("D1 index builder must refuse implicit overwrite")
+
+        arsenic = query_source.query_index(
+            first_index,
+            analytes=["As"],
+            media=["soil"],
+            source_ids=["fixture-source"],
+            license_ids=["CC0-1.0"],
+            bbox=[-106, 38, -104, 40],
+            text="Synthetic",
+        )
+        require(
+            arsenic["record_count"] == 1
+            and arsenic["records"][0]["value_raw"] == "<5"
+            and arsenic["records"][0]["value_qualifier"] == "lt",
+            "D1 indexed query combines analyte, medium, source, license, RTree bbox and FTS filters",
+            checks,
+        )
+        require(
+            query_source.query_index(first_index, bbox=[0, 0, 1, 1])["record_count"] == 0,
+            "D1 RTree query excludes observations outside the requested bbox",
+            checks,
+        )
+        require(
+            query_source.query_index(first_index, methods=["XRF"])["record_count"] == 1,
+            "D1 indexed query filters exact source-native analytical techniques",
+            checks,
+        )
+        with sqlite3.connect(first_index) as connection:
+            trace = connection.execute(
+                "SELECT source_file, source_row, adapter_version, acquisition_run_id "
+                "FROM provenance_trace WHERE observation_id = ?",
+                ("observation-as-lt",),
+            ).fetchone()
+            view_counts = {
+                view: connection.execute(f"SELECT COUNT(*) FROM {view}").fetchone()[0]
+                for view in ("observation_search", "sample_summary", "source_coverage", "provenance_trace")
+            }
+        require(
+            trace == ("fixture.csv", 2, "1.0.0", "run-fixture-v1"),
+            "D1 provenance view traces an observation to source row, adapter and acquisition run",
+            checks,
+        )
+        require(
+            view_counts == {
+                "observation_search": 3,
+                "sample_summary": 2,
+                "source_coverage": 3,
+                "provenance_trace": 3,
+            },
+            "D1 SQLite contract exposes four populated query views",
+            checks,
+        )
+
+        request_one = {"media": ["soil"], "elements": ["As", "Cu"], "region": "global"}
+        request_reordered = {"region": "global", "elements": ["As", "Cu"], "media": ["soil"]}
+        request_changed = {"region": "global", "elements": ["Zn"], "media": ["soil"]}
+        key_one = cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_one)
+        require(
+            key_one
+            == cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_reordered)
+            and key_one != cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_changed),
+            "D1 derived-cache key is stable under JSON key order and changes with request parameters",
+            checks,
+        )
+        cache_root = index_root / "cache"
+        version_root = cache_root / "fixture-source" / "1.0.0"
+        version_root.mkdir(parents=True)
+        cached_data = version_root / "fixture.csv"
+        cached_data.write_text("a,b\n1,2\n", encoding="utf-8")
+        (version_root / "fixture.download.json").write_text(
+            json.dumps(
+                {
+                    "output_filename": cached_data.name,
+                    "sha256": sha256_file(cached_data),
+                    "dataset_version": "1.0.0",
+                }
+            ),
+            encoding="utf-8",
+        )
+        cache_status = cache_control.inspect_cache(
+            cache_root, "fixture-source", "1.0.0", request_one
+        )
+        require(
+            cache_status["status"] == "present"
+            and cache_status["verified_manifest_count"] == 1
+            and cache_status["request_cache_key"] == key_one,
+            "D1 cache status command verifies versioned files and reports the request key",
+            checks,
+        )
+        try:
+            cache_control.delete_cache(cache_root, "fixture-source", "1.0.0", "wrong")
+        except ValueError as exc:
+            require("confirmation must exactly equal" in str(exc), "D1 cache deletion requires an exact source@version confirmation", checks)
+        else:
+            raise ContractError("D1 cache deletion must reject an incorrect confirmation")
+        deleted = cache_control.delete_cache(
+            cache_root, "fixture-source", "1.0.0", "fixture-source@1.0.0"
+        )
+        require(
+            deleted["status"] == "deleted" and not version_root.exists(),
+            "D1 cache deletion affects only the explicitly named source version",
+            checks,
+        )
+
+    performance = benchmark_index.benchmark(100_000)
+    require(
+        performance["status"] == "PASS"
+        and performance["record_count"] == 100_000
+        and performance["combined_seconds"] < performance["target_seconds"],
+        "D1 synthetic 100k parse/index/filter benchmark stays below the 10-second target",
+        checks,
+    )
+    vocabulary_registry = json_value(SKILL_DIR / "assets" / "vocabulary_registry.json")
+    require(
+        vocabulary_registry["registry_version"] == "geochemical-vocabulary-registry-v1"
+        and vocabulary_registry["vocabularies"]["earthchem-unit"]["version"] is None
+        and vocabulary_registry["vocabularies"]["d1-missing-reason-v1"]["status"] == "internal_frozen",
+        "D1 vocabulary registry distinguishes external references from frozen internal terms",
         checks,
     )
     source_record_id = source_contracts.stable_source_record_id(

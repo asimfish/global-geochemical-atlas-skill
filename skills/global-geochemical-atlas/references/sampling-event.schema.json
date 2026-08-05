@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d1-sampling-event:v1",
+  "title": "D1 sampling event archive entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sampling_event_id", "dataset_id", "site_id", "sampled_at_raw", "collection_method_raw", "location", "missing_reasons"],
+  "properties": {
+    "schema_version": {"const": "d1-sampling-event-v1"},
+    "sampling_event_id": {"type": "string", "minLength": 1},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "site_id": {"type": ["string", "null"]},
+    "sampled_at_raw": {"type": ["string", "null"]},
+    "collection_method_raw": {"type": ["string", "null"]},
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["latitude_raw", "longitude_raw", "source_crs", "latitude", "longitude", "coordinate_uncertainty_m", "elevation_m", "depth_min_m", "depth_max_m", "place_raw"],
+      "properties": {
+        "latitude_raw": {"type": ["string", "null"]},
+        "longitude_raw": {"type": ["string", "null"]},
+        "source_crs": {"type": ["string", "null"]},
+        "latitude": {"type": ["number", "null"], "minimum": -90, "maximum": 90},
+        "longitude": {"type": ["number", "null"], "minimum": -180, "maximum": 180},
+        "coordinate_uncertainty_m": {"type": ["number", "null"], "minimum": 0},
+        "elevation_m": {"type": ["number", "null"]},
+        "depth_min_m": {"type": ["number", "null"], "minimum": 0},
+        "depth_max_m": {"type": ["number", "null"], "minimum": 0},
+        "place_raw": {"type": ["string", "null"]}
+      }
+    },
+    "missing_reasons": {"$ref": "#/$defs/missingReasons"}
+  },
+  "$defs": {
+    "missingReasons": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "enum": ["not_reported", "not_applicable", "not_available", "redacted", "parse_failed"]}
+    }
+  }
+}

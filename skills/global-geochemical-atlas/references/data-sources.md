@@ -9,7 +9,7 @@
 | 来源 | 适合介质 | 入口 | 使用条件与限制 |
 |---|---|---|---|
 | USGS National Geochemical Database | rock/soil/sediment/mineral/concentrate | `https://www.usgs.gov/centers/gggsc/science/national-geochemical-database` | 政府来源；具体数据发布可能用不同 legacy qualifier 编码，逐数据集读取元数据 |
-| EarthChem Portal | rock 与文献汇编 | `https://earthchem.org/portal` | 联邦检索 PetDB、GEOROC 等；保留原数据库、样品和文献引用；不要把聚合站当唯一证据 |
+| EarthChem Portal | rock 与文献汇编 | `https://earthchem.org/data-access/overview` | 联邦检索 PetDB、GEOROC 等；保留原数据库、样品和文献引用；不要把聚合站当唯一证据 |
 | EarthChem developer resources | 结构化服务 | `https://earthchem.org/resources/developers` | 使用文档化 WFS/XML；验证 schema、计数和服务版本 |
 | GEMStat open archive | water | `https://doi.org/10.5281/zenodo.13881899` | 只使用明确开放批次；通常 CC BY 4.0，并按数据提供者要求署名；大文件先按范围设计本地过滤 |
 | GEMStat portal | water | `https://gemstat.org/data-gemstat/data-portal/` | 门户下载可能要求联系信息或限制站点数；不要自动绕过表单；受限批次不再分发 |

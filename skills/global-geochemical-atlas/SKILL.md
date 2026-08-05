@@ -39,14 +39,29 @@ offline: boolean
 
 1. 用户给出现成 CSV：直接验证字段并运行本地流水线。
 2. 用户要求可复现演示或网络不可用：使用 `fixtures/demo_input.csv`，明确标为合成数据。
-3. 用户要求真实公开数据：读取 [references/data-sources.md](references/data-sources.md) 和 [references/licenses-and-citations.md](references/licenses-and-citations.md)，先建立检索计划和许可判断，再下载有限数据。
+3. 用户要求真实公开数据：读取 [references/data-sources.md](references/data-sources.md) 和 [references/licenses-and-citations.md](references/licenses-and-citations.md)，先执行 D1 来源路由、覆盖检查和许可判断，再下载有限数据。
 4. 来源需要登录、人工表单或许可不明：输出 `source_not_accessible` 或 `needs_human_review`，不要绕过限制。
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
 ## 3. 建立来源与下载证据
 
-机器可读注册表位于 [assets/source_manifest.json](assets/source_manifest.json)，结构由 [references/source-registry.schema.json](references/source-registry.schema.json) 定义。先检查候选来源，不要凭名称猜可用范围：
+先区分“已发现候选”和“已批准生产来源”。候选目录位于 [assets/source_catalog.json](assets/source_catalog.json)，但只有 `production_eligible=true` 且审计通过的来源才能自动下载；准入门见 [references/source-acceptance-standard.md](references/source-acceptance-standard.md)，逐源边界见 [references/source-interface-cards.md](references/source-interface-cards.md)。把冻结后的请求保存为 `request.json`，依次执行：
+
+```bash
+python scripts/source_audit.py --output OUTPUT_DIR/source_audit.json
+python scripts/source_router.py \
+  --request request.json \
+  --output OUTPUT_DIR/source_route.json
+python scripts/coverage_report.py \
+  --request request.json \
+  --json-output OUTPUT_DIR/coverage.json \
+  --markdown-output OUTPUT_DIR/coverage.md
+```
+
+审计、路由和覆盖输出分别受 [references/source-audit.schema.json](references/source-audit.schema.json)、[references/source-route-result.schema.json](references/source-route-result.schema.json) 与 [references/coverage-matrix.schema.json](references/coverage-matrix.schema.json) 约束。`PASS` 只证明生产元数据、适配器、版本、许可和完整性门内部一致，不证明单条测量是真值；`review_sources` 只能作为发现线索，不能自动进入 D2。
+
+已批准来源的机器可读生产注册表位于 [assets/source_manifest.json](assets/source_manifest.json)，结构由 [references/source-registry.schema.json](references/source-registry.schema.json) 定义。先检查来源，不要凭名称猜可用范围：
 
 ```bash
 python scripts/inspect_source.py --source usgs-conus-soil --cache-dir .cache/data --mode cached
@@ -90,6 +105,25 @@ python scripts/generate_demo_data.py \
 ```
 
 生成的 `sources.jsonl` 是逐记录证据 sidecar，`run_manifest.json` 绑定输入、sidecar 和源文件哈希；二者分别受 [references/record-evidence.schema.json](references/record-evidence.schema.json) 与 [references/acquisition-run-manifest.schema.json](references/acquisition-run-manifest.schema.json) 约束。
+
+### 可选：归档和查询大批量 D1 原值
+
+需要保存样品、采样事件、方法、文献与逐记录证据关系时，按 [references/data-model.md](references/data-model.md) 建立 D1 归档包，并按 [references/schema-mapping.md](references/schema-mapping.md) 展开成一行一个 observation 的 D2 交换长表。先验证关系与实体 Schema，再构建可删除重建的只读查询索引：
+
+```bash
+python scripts/validate_acquisition.py --bundle ARCHIVE_BUNDLE.json
+python scripts/build_index.py \
+  --bundle ARCHIVE_BUNDLE.json \
+  --output OUTPUT_DIR/d1-index.sqlite
+python scripts/query_source.py \
+  --index OUTPUT_DIR/d1-index.sqlite \
+  --analyte As \
+  --medium soil \
+  --limit 1000 \
+  --output OUTPUT_DIR/d1-query.json
+```
+
+存储、缓存、参数化查询和性能边界见 [references/storage-and-performance.md](references/storage-and-performance.md)。SQLite 只是从原值归档派生的检索索引，不是标准化地球化学数据库，也不执行单位换算、QC、置信度或异常判断；最终 canonical 数据库仍由 D2 输出为 `geochemistry.csv`。
 
 ## 4. 验证并标准化记录
 

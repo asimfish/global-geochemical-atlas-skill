@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-coverage-matrix:v1",
+  "title": "D1 source coverage matrix",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "coverage_version",
+    "as_of",
+    "overall_status",
+    "request",
+    "discovery",
+    "cells",
+    "route_status",
+    "limitations",
+    "claim_boundary"
+  ],
+  "properties": {
+    "coverage_version": {"const": "geochemical-coverage-matrix-v1"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "overall_status": {"type": "string", "enum": ["covered", "partial", "uncovered", "unknown"]},
+    "request": {"type": "object"},
+    "discovery": {"type": "object"},
+    "cells": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "requested_analytes",
+          "analyte_coverage",
+          "approved_sources",
+          "candidate_sources",
+          "source_scopes",
+          "source_independence",
+          "method_metadata_coverage",
+          "spatial_density_coverage",
+          "temporal_coverage",
+          "note"
+        ],
+        "properties": {
+          "status": {"type": "string", "enum": ["covered", "partial", "uncovered", "unknown"]},
+          "requested_analytes": {"$ref": "#/$defs/uniqueStrings"},
+          "analyte_coverage": {"type": "string"},
+          "approved_sources": {"$ref": "#/$defs/uniqueStrings"},
+          "candidate_sources": {"$ref": "#/$defs/uniqueStrings"},
+          "source_scopes": {"type": "object", "additionalProperties": {"type": "string"}},
+          "source_independence": {"type": "string"},
+          "method_metadata_coverage": {"type": "string"},
+          "spatial_density_coverage": {"type": "string"},
+          "temporal_coverage": {"type": "string"},
+          "note": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "route_status": {"type": "string"},
+    "limitations": {"$ref": "#/$defs/uniqueStrings"},
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}
