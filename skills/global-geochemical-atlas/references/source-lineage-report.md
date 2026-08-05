@@ -38,6 +38,14 @@
 | `finland-gtk-geochemistry` | 国家数据产品和多套调查服务 | Hakku 岩石产品、区域/详细 till 与河流沉积物 ArcGIS 图层 | 每套原调查分别建血缘；同一记录在 Hakku、地图服务和下载文件之间去重 |
 | `norway-ngu-lito` | 国家协调岩石调查 | NGU LITO 采样、实验室分析及版本化 XLSX | 作为一个调查体系；旧静态页面与 2026 新发布不算两套独立数据 |
 | `norway-marchem` | 国家海洋沉积物数据库 | MAREANO 及 NGU/IMR 其他监测项目，另在 NMDC 发布 DOI | 按原监测项目、站位、样品和 DOI 版本去重；MarChem、NMDC 与 EMODnet 镜像只算一次 |
+| `mexico-sgm-geochemical-cartography` | 国家派生地球化学图层 | 由 SGM 活性河流沉积物分析生成的 1:250,000 SHP/KML 图层 | 派生地图不能作为第二份观测证据；必须找到样点表并按原样品/图幅与后续 1:50,000 异常层去重 |
+| `canada-bc-rgs` | 省级多调查汇编 | 汇入 BCGS、GSC、Geoscience BC 的 116 个原始来源 | 独立性按原调查、样品和分析批次计算；RGS 2020 汇编、CDoGS 和原报告重叠时只算一次 |
+| `alaska-dggs-webgeochem` | 州级多机构汇编与发布系统 | 汇入 DGGS、USGS、BLM、BOM 及扫描历史报告；DGGS 新数据另有 DOI publication package | WebGeochem 导出与单独 DGGS/USGS 发布按 publication/sample/analysis 去重；门户本身不增加独立性 |
+| `chile-sernageomin-geochemistry` | 国家协调计划和逐图幅发布 | 同一样品可出现在官方 viewer、ArcGIS 服务、Excel 产品和图幅报告 | 按图幅/项目、采样点、样品和分析记录合并；全国计划统计不能按产品数扩张证据数 |
+| `argentina-segemar-geochemistry` | 国家历史与现代调查发布系统 | SIGAM 汇合 1960–1980 年代档案样品、1990 年代以后 SEGEMAR 采样和逐图幅报告 | 按原项目、图幅、样品和分析批次去重；GeoNetwork、viewer、repository PDF 和产品表不是独立来源 |
+| `india-gsi-ngcm` | 国家协调地球化学计划 | NGCM 按统一 2×2 km 单元设计；数据可在 Atlas、专题报告或活动分发中出现 | 整个计划按调查体系处理；同一 toposheet 的 Atlas、Excel 和报告不重复计数，未公开单元不推断为已覆盖 |
+| `japan-gsj-geochemical-map` | 国家陆海地球化学调查与派生地图服务 | 河流沉积物、海洋沉积物、精密区域和后续表层土壤由样点数据库派生 WMS/WMTS/3D 地图 | 按调查代际、介质和样品去重；点表是观测，Shapefile/WMS/WMTS/3D 地图不各算一份来源 |
+| `south-africa-cgs-geochemistry` | 国家门户中的逐图幅产品集合 | 多个 geochemistry FeatureServer/MapServer 图层对应不同地图幅和出版物 | 按地图幅、原调查和样品计算；同一图层的 Feature/Map service 表达只算一次，门户不代表连续全国覆盖 |
 
 ## 当前单一来源依赖
 

@@ -1,9 +1,9 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-05T14:41:20Z",
+  "reviewed_at": "2026-08-05T15:54:04Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
-    "round": 3,
+    "round": 4,
     "status": "in_progress",
     "saturated": false,
     "channels_checked": [
@@ -15,13 +15,17 @@
       "official_water_quality_portals",
       "marine_and_lacustrine_archives",
       "upstream_sources_of_aggregators",
-      "additional_country_geological_surveys_round_1"
-    ],
-    "remaining_channels": [
-      "publication_linked_datasets",
+      "additional_country_geological_surveys_round_1",
       "additional_country_geological_surveys_round_2",
       "southern_hemisphere_and_asian_national_portals",
       "state_and_provincial_geological_surveys"
+    ],
+    "remaining_channels": [
+      "publication_linked_datasets",
+      "additional_country_geological_surveys_round_3",
+      "african_country_surveys_round_2",
+      "pacific_island_and_oceania_state_surveys",
+      "additional_us_state_and_canadian_provincial_surveys"
     ]
   },
   "sources": {
@@ -1481,6 +1485,390 @@
         "The verified public API export is dynamic and timestamped; the selected inorganic response has an observed project hash but no matching immutable DOI or publisher checksum yet.",
         "The As, Cu, Ni and Zn measurements are reported on a dry-weight basis after partial nitric-acid digestion and must not be represented as total content.",
         "Batch metadata mix accredited and not-accredited analyses, and the export can repeat a sample across parameter groups; both facts must survive record-level mapping."
+      ]
+    },
+    "mexico-sgm-geochemical-cartography": {
+      "title": "Cartografía geoquímica de México, escala 1:250,000",
+      "publisher": "Servicio Geológico Mexicano",
+      "source_kind": "official_national_geochemical_map",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["mexico"],
+        "notes": "National 1:250,000 geochemical cartography generated from active stream-sediment analyses collected in the 1995–2005 mapping program; the published layer is an interpreted map product, not yet verified as a row-level measurement table."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.datos.gob.mx/dataset/cartografia-geoquimica",
+      "interfaces": [
+        {
+          "kind": "national_shapefile_and_kml_download",
+          "url": "https://www.sgm.gob.mx/GeoInfoMexGobMx/",
+          "format": "shp_kml",
+          "access": "open_download_with_attribution_and_noncommercial_notice",
+          "server_filters": ["map_sheet", "theme"]
+        }
+      ],
+      "license": {
+        "status": "unresolved",
+        "id": null,
+        "url": "https://www.datos.gob.mx/dataset/cartografia-geoquimica",
+        "notes": "The federal open-data catalogue labels the dataset CC BY 4.0, while GeoInfoMex also reserves copyright and prohibits for-profit reproduction without prior permission. Research access is plausible, but the exact file-level notice and attribution contract must be preserved and reconciled."
+      },
+      "version": {"status": "map_product_updated", "value": "1:250,000 national layer", "release_date": "2026-02-25"},
+      "adapter": {"status": "discovery_only", "name": null},
+      "evidence_urls": [
+        "https://www.datos.gob.mx/dataset/cartografia-geoquimica",
+        "https://www.sgm.gob.mx/GeoInfoMexGobMx/"
+      ],
+      "limitations": [
+        "The verified public product is described as an interpretation layer derived from active stream-sediment analyses; raw sample values, methods and detection limits are not yet confirmed.",
+        "The federal catalogue and GeoInfoMex notices are not yet reconciled at the downloaded-file level.",
+        "Map sheets using different geodetic reference frames can contain gaps or overlaps."
+      ]
+    },
+    "canada-bc-rgs": {
+      "title": "British Columbia Regional Geochemical Survey database",
+      "publisher": "British Columbia Geological Survey",
+      "source_kind": "official_provincial_geochemical_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment", "water", "concentrate"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["british-columbia-canada"],
+        "notes": "Province-wide compilation of stream and lake sediment, drainage-water, heavy-mineral-concentrate and related survey media; the 2020 release reports 65,000 samples and about five million determinations from 116 original sources."
+      },
+      "identifiers": {},
+      "landing_page": "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/geology/regional-geochemical-survey",
+      "interfaces": [
+        {
+          "kind": "versioned_spreadsheet_release",
+          "url": "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/publications/digital-geoscience-data",
+          "format": "xls_pdf",
+          "access": "open_public_download",
+          "server_filters": ["release"]
+        },
+        {
+          "kind": "sample_site_arcgis_layer",
+          "url": "https://delivery.maps.gov.bc.ca/arcgis/rest/services/whse/bcgw_pub_whse_mineral_tenure/MapServer/30",
+          "format": "arcgis_rest_json_geojson",
+          "access": "open_public_query",
+          "server_filters": ["bbox", "sample_site_id"]
+        }
+      ],
+      "license": {
+        "status": "dataset_specific_open_government",
+        "id": null,
+        "url": "https://www2.gov.bc.ca/gov/content/data/open-data/open-government-licence-bc",
+        "notes": "The release is publicly downloadable through the provincial site; the exact Open Government Licence notice and any third-party conditions from the 116 original sources must be bound to the selected files before use."
+      },
+      "version": {"status": "pinned_release_available", "value": "2020-05-01", "release_date": "2020-05-01"},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/geology/regional-geochemical-survey",
+        "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/publications/digital-geoscience-data",
+        "https://delivery.maps.gov.bc.ca/arcgis/rest/services/whse/bcgw_pub_whse_mineral_tenure/MapServer/30"
+      ],
+      "limitations": [
+        "The compilation integrates 116 original releases, so independence and duplicate handling must follow the original survey and sample identifiers.",
+        "Eighteen analytical methods and laboratories cannot be combined without record-level method mapping.",
+        "Vegetation and moss-mat observations fall outside the current four-media production contract and require separate medium terms."
+      ]
+    },
+    "alaska-dggs-webgeochem": {
+      "title": "Alaska Geochemistry Database (WebGeochem)",
+      "publisher": "Alaska Division of Geological & Geophysical Surveys",
+      "source_kind": "official_state_geochemical_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock", "soil", "sediment", "concentrate"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["alaska-united-states"],
+        "notes": "Ongoing Alaska database combining DGGS, USGS, BLM and former U.S. Bureau of Mines records, including modern laboratory spreadsheets and legacy reports."
+      },
+      "identifiers": {},
+      "landing_page": "https://dggs.alaska.gov/pubs/project/307",
+      "interfaces": [
+        {
+          "kind": "interactive_query_and_bulk_export",
+          "url": "https://dggs.alaska.gov/webgeochem/",
+          "format": "tabular_download_with_methods_and_detection_limits",
+          "access": "open_public_database",
+          "server_filters": ["sample", "analysis", "element", "publication", "all_records_wildcard"]
+        },
+        {
+          "kind": "immutable_publication_packages",
+          "url": "https://dggs.alaska.gov/pubs/id/31692",
+          "format": "csv_ascii_metadata_pdf",
+          "access": "open_end_user_licence",
+          "server_filters": ["publication_id"]
+        }
+      ],
+      "license": {
+        "status": "mixed_record_or_batch",
+        "id": null,
+        "url": "https://dggs.alaska.gov/pubs/id/31692",
+        "notes": "Recent DGGS raw-data releases state an open end-user licence, while the integrated database also contains federal and legacy sources. Acceptance must occur per publication or upstream contributor."
+      },
+      "version": {"status": "dynamic_with_pinned_publication_releases", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://dggs.alaska.gov/pubs/project/307",
+        "https://dggs.alaska.gov/minerals/akgeology-info.html",
+        "https://dggs.alaska.gov/webpubs/metadata/RDF2025-17.faq.html"
+      ],
+      "limitations": [
+        "The database mixes scanned legacy reports, federal databases and direct laboratory imports; original publication and analytical lineage must remain record-level facts.",
+        "The dynamic all-record export is not itself an immutable version; prefer pinned DGGS publication packages for the first adapter.",
+        "Coordinate datums and method packages vary between releases."
+      ]
+    },
+    "chile-sernageomin-geochemistry": {
+      "title": "Programa de Cartografía Geoquímica de Chile",
+      "publisher": "Servicio Nacional de Geología y Minería de Chile",
+      "source_kind": "official_national_geochemical_program",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["chile"],
+        "notes": "Regional drainage-sediment mapping program; an official 2025 report states more than 10,000 samples over more than 230,000 square kilometres, with up to 66 elements per sample."
+      },
+      "identifiers": {},
+      "landing_page": "https://www.sernageomin.cl/geologia-general/",
+      "interfaces": [
+        {
+          "kind": "official_geochemical_map_viewer",
+          "url": "https://www.sernageomin.cl/visores-mineros/",
+          "format": "web_map_and_arcgis_rest_layers",
+          "access": "open_public_map_service",
+          "server_filters": ["map_sheet", "element", "sample"]
+        },
+        {
+          "kind": "map_sheet_database_catalog",
+          "url": "https://tiendadigital.sernageomin.cl/en/geochemistry/1265-2016-base-de-datos-de-geoquimica-de-sedimentos-de-la-hoja-la-serena-region-de-coquimbo.html",
+          "format": "dataset_specific_excel",
+          "access": "public_product_catalog",
+          "server_filters": ["map_sheet", "publication"]
+        }
+      ],
+      "license": {
+        "status": "unresolved",
+        "id": null,
+        "url": null,
+        "notes": "Public viewers and product pages are available, but access price, research-use terms, attribution and downloadable-file rights must be checked for each map-sheet database."
+      },
+      "version": {"status": "map_sheet_specific", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.sernageomin.cl/geologia-general/",
+        "https://www.sernageomin.cl/visores-mineros/",
+        "https://tiendadigital.sernageomin.cl/en/geochemistry/1265-2016-base-de-datos-de-geoquimica-de-sedimentos-de-la-hoja-la-serena-region-de-coquimbo.html"
+      ],
+      "limitations": [
+        "Coverage is a set of regional sheets and river-basin products, not a continuous national grid.",
+        "The program total cannot substitute for per-sheet file, schema, method, detection-limit and licence verification.",
+        "Viewer layers and downloadable Excel products may be alternate representations of the same samples and must be deduplicated."
+      ]
+    },
+    "argentina-segemar-geochemistry": {
+      "title": "SIGAM multielement geochemical sample data",
+      "publisher": "Servicio Geológico Minero Argentino",
+      "source_kind": "official_national_geochemical_catalog",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil", "sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["argentina"],
+        "notes": "SIGAM exposes multielement chemistry and locations for stream-sediment and soil samples; SEGEMAR annual reports describe more than 40,000 stream-sediment records."
+      },
+      "identifiers": {},
+      "landing_page": "https://sigam.segemar.gov.ar/geonetwork39/srv/search",
+      "interfaces": [
+        {
+          "kind": "open_geospatial_catalog_and_viewer",
+          "url": "https://sigam.segemar.gov.ar/geonetwork39/srv/search?type=dataset",
+          "format": "geonetwork_ogc_and_dataset_downloads",
+          "access": "open_public_catalog_and_viewer",
+          "server_filters": ["theme", "map_sheet", "bbox", "dataset"]
+        },
+        {
+          "kind": "map_product_detail",
+          "url": "https://sigam.segemar.gov.ar/mapstore/mapa_428.html",
+          "format": "interactive_map_and_linked_products",
+          "access": "open_public_viewer",
+          "server_filters": ["element", "map_sheet"]
+        }
+      ],
+      "license": {
+        "status": "unresolved",
+        "id": null,
+        "url": "https://sigam.segemar.gov.ar/geonetwork39/srv/search",
+        "notes": "The service identifies itself as an open geospatial data catalogue, but the exact research-use, download and attribution notice must be captured from each selected metadata record."
+      },
+      "version": {"status": "dynamic_catalog_with_publication_specific_releases", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://sigam.segemar.gov.ar/geonetwork39/srv/search",
+        "https://sigam.segemar.gov.ar/mapstore/mapa_428.html",
+        "https://repositorio.segemar.gov.ar/bitstream/handle/308849217/4351/INFORME%20DE%20GESTION%202023.pdf?isAllowed=y&sequence=4"
+      ],
+      "limitations": [
+        "The stated total spans historical archive samples and newer SEGEMAR sampling; date, method and coordinate uncertainty differ by project.",
+        "The 54-element map description is a regional cartographic product and does not prove identical analyte coverage for every record.",
+        "Repository PDFs, SIGAM layers and sheet products can repeat the same survey samples."
+      ]
+    },
+    "india-gsi-ngcm": {
+      "title": "Geological Survey of India National Geochemical Mapping Programme",
+      "publisher": "Geological Survey of India",
+      "source_kind": "official_national_geochemical_program",
+      "status": "metadata_only",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["india"],
+        "notes": "National program based primarily on stream-sediment sampling in 2 by 2 kilometre cells, with official program documents describing analysis for 66 elements and a target 1:50,000 seamless map."
+      },
+      "identifiers": {},
+      "landing_page": "https://gsi.gov.in/GeoChemicalAtlas/",
+      "interfaces": [
+        {
+          "kind": "official_geochemical_atlas",
+          "url": "https://gsi.gov.in/GeoChemicalAtlas/",
+          "format": "web_catalog",
+          "access": "public_currently_empty",
+          "server_filters": ["title"]
+        },
+        {
+          "kind": "hackathon_data_distribution",
+          "url": "https://hackathon.gsi.gov.in/login",
+          "format": "excel_and_pdf_by_toposheet",
+          "access": "registration_or_event_specific",
+          "server_filters": ["toposheet", "dataset_type"]
+        }
+      ],
+      "license": {
+        "status": "unresolved",
+        "id": null,
+        "url": null,
+        "notes": "The official atlas currently exposes no downloadable records and the located numerical distribution route is event/login specific; research-use terms and a durable public endpoint remain unresolved."
+      },
+      "version": {"status": "program_and_toposheet_specific", "value": null, "release_date": null},
+      "adapter": {"status": "discovery_only", "name": null},
+      "evidence_urls": [
+        "https://gsi.gov.in/GeoChemicalAtlas/",
+        "https://hackathon.gsi.gov.in/pdf/Hackathon-Document_17-7-2024.pdf",
+        "https://hackathon.gsi.gov.in/login"
+      ],
+      "limitations": [
+        "The official atlas returned zero records during this review, so the program cannot yet supply an automated production route.",
+        "Hackathon files cover selected toposheets and are not evidence of a stable national bulk release.",
+        "Program descriptions must not be used to infer that all planned cells, elements or metadata are publicly available."
+      ]
+    },
+    "japan-gsj-geochemical-map": {
+      "title": "Geochemical Map of Japan",
+      "publisher": "Geological Survey of Japan, AIST",
+      "source_kind": "official_national_geochemical_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil", "sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["japan-land-and-coastal-waters"],
+        "notes": "Official database built from about 3,000 river-sediment and 5,000 marine-sediment samples across Japan and its coastal zone, with later detailed regional maps and a surface-soil addition."
+      },
+      "identifiers": {},
+      "landing_page": "https://gbank.gsj.jp/geochemmap/",
+      "interfaces": [
+        {
+          "kind": "sample_and_concentration_database",
+          "url": "https://gbank.gsj.jp/geochemmap/",
+          "format": "web_database_and_shapefile",
+          "access": "open_public_database",
+          "server_filters": ["element", "sample_medium", "region"]
+        },
+        {
+          "kind": "wms_wmts_map_service",
+          "url": "https://gbank.gsj.jp/ows/geochemmap_en",
+          "format": "wms_1_1_1_1_3_0_wmts_1_0_0",
+          "access": "open_public_map_service",
+          "server_filters": ["element", "bbox", "crs", "scale"]
+        }
+      ],
+      "license": {
+        "status": "open_site_terms_product_review",
+        "id": null,
+        "url": "https://gbank.gsj.jp/geochemmap/",
+        "notes": "The database and map services are public and include a terms-of-use link; the exact downloadable point-data notice, attribution and research-use conditions must be pinned before adaptation."
+      },
+      "version": {"status": "site_snapshot", "value": "site last updated 2023-12-25", "release_date": "2023-12-25"},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://www.gsj.jp/information/overview/geochemical-map.html",
+        "https://gbank.gsj.jp/geochemmap/",
+        "https://gbank.gsj.jp/owscontents/contents/geochemmap.html"
+      ],
+      "limitations": [
+        "River sediment, marine sediment and later surface-soil products must remain separate media and survey generations.",
+        "WMS and WMTS are derived visual products; production observations must come from sample-level concentration data.",
+        "The current site version lacks a dataset DOI or publisher checksum in the reviewed pages."
+      ]
+    },
+    "south-africa-cgs-geochemistry": {
+      "title": "Council for Geoscience geochemistry map services",
+      "publisher": "Council for Geoscience, South Africa",
+      "source_kind": "official_national_geochemical_portal",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil", "sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["south-africa-selected-map-sheets"],
+        "notes": "National portal exposes multiple map-sheet geochemistry layers; a verified Alexander Bay point layer contains stream-sediment or fallback surface-soil samples with As, Cu, Ni, Zn and other elemental fields."
+      },
+      "identifiers": {},
+      "landing_page": "https://maps.geoscience.org.za/",
+      "interfaces": [
+        {
+          "kind": "arcgis_geochemistry_feature_layers",
+          "url": "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2",
+          "format": "arcgis_rest_json_geojson_pbf",
+          "access": "public_query_copyright_terms",
+          "server_filters": ["bbox", "sample", "map_sheet", "element"]
+        },
+        {
+          "kind": "data_portal",
+          "url": "https://maps.geoscience.org.za/",
+          "format": "map_sheet_downloads_and_services",
+          "access": "public_portal_product_specific",
+          "server_filters": ["geochemistry", "map_sheet", "data_type"]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": "LicenseRef-CGS-Product-Terms",
+        "url": "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2/iteminfo",
+        "notes": "CGS retains copyright and intellectual-property rights in the verified layer. The project may query it for research discovery, but adapter use must capture the complete product licence and any use restrictions before normal routing."
+      },
+      "version": {"status": "dynamic_map_sheet_services", "value": null, "release_date": null},
+      "adapter": {"status": "not_implemented", "name": null},
+      "evidence_urls": [
+        "https://maps.geoscience.org.za/",
+        "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2",
+        "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2/iteminfo"
+      ],
+      "limitations": [
+        "The portal is a collection of map-sheet products, not one proven continuous national measurement table.",
+        "The verified layer mixes preferred stream sediment with fallback surface soil; record-level medium identification is required.",
+        "Method, unit, detection-limit, version and full licence metadata have not yet been reconciled for the representative layer."
       ]
     }
   }

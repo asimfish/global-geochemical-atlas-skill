@@ -1,7 +1,7 @@
 {
   "scope_version": "geochemical-source-discovery-scope-v1",
-  "as_of": "2026-08-05T14:41:20Z",
-  "round": 3,
+  "as_of": "2026-08-05T15:54:04Z",
+  "round": 4,
   "status": "in_progress",
   "saturated": false,
   "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
@@ -26,17 +26,22 @@
     },
     "africa": {
       "status": "in_progress",
-      "catalogued_sources": ["soils4africa"],
+      "catalogued_sources": ["soils4africa", "south-africa-cgs-geochemistry"],
       "remaining_work": [
-        "Search national geological surveys and water-quality portals beyond the continental soil program.",
-        "Add African rock, sediment and water sources with official evidence."
+        "Search additional national geological surveys and water-quality portals beyond South Africa and the continental soil program.",
+        "Resolve more African rock and water sources, and determine whether CGS map-sheet services expose reusable methods and stable numerical releases."
       ]
     },
     "asia": {
       "status": "in_progress",
-      "catalogued_sources": ["jamstec-darwin"],
+      "catalogued_sources": [
+        "india-gsi-ngcm",
+        "jamstec-darwin",
+        "japan-gsj-geochemical-map"
+      ],
       "remaining_work": [
-        "Search additional East, South, Southeast, Central and West Asian national geological surveys.",
+        "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals.",
+        "Resolve stable numerical access and terms for India NGCM, plus the point-data download contract for the GSJ Geochemical Map.",
         "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI."
       ]
     },
@@ -62,22 +67,31 @@
     "north-america": {
       "status": "in_progress",
       "catalogued_sources": [
+        "alaska-dggs-webgeochem",
+        "canada-bc-rgs",
         "canada-cdogs",
+        "mexico-sgm-geochemical-cartography",
         "us-water-quality-portal",
         "usgs-conus-soil",
         "usgs-ngdb"
       ],
       "remaining_work": [
-        "Search state, provincial, territorial and Mexican geological-survey releases.",
+        "Search additional state, provincial and territorial geological-survey releases beyond Alaska and British Columbia.",
+        "Determine whether Mexico SGM exposes raw sample measurements behind the interpreted national layer and reconcile its two licence notices.",
         "Resolve WQP records to NWIS, WQX and the original monitoring organization."
       ]
     },
     "south-america": {
       "status": "in_progress",
-      "catalogued_sources": ["brazil-sgb-geochemistry"],
+      "catalogued_sources": [
+        "argentina-segemar-geochemistry",
+        "brazil-sgb-geochemistry",
+        "chile-sernageomin-geochemistry"
+      ],
       "remaining_work": [
-        "Search the remaining national geological surveys, beginning with Andean and Southern Cone portals.",
-        "Add water-quality and publication-linked sources outside Brazil."
+        "Search the remaining Andean and northern South American national geological surveys.",
+        "Pin numerical files, licences and methods for the Chile and Argentina discoveries.",
+        "Add water-quality and publication-linked sources outside Brazil, Chile and Argentina."
       ]
     },
     "oceania": {
@@ -99,12 +113,14 @@
         "geotraces-idp2025",
         "iodp-data-systems",
         "jamstec-darwin",
+        "japan-gsj-geochemical-map",
         "noaa-ncei-marine-geology",
         "norway-marchem",
         "pangaea-repository"
       ],
       "remaining_work": [
-        "Search additional oceanographic data centres and lake-sediment archives.",
+        "Search additional oceanographic data centres, lake-sediment archives and polar repositories.",
+        "Separate GSJ river and coastal-marine survey generations before using its national concentration database.",
         "Separate sample inventories from downloadable numerical measurements and resolve all contributing programs."
       ]
     }

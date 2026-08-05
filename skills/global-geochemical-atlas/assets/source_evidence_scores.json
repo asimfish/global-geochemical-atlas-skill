@@ -13,9 +13,185 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-05T14:41:20Z",
-  "source_count": 32,
+  "scored_at": "2026-08-05T15:54:04Z",
+  "source_count": 40,
   "sources": {
+    "alaska-dggs-webgeochem": {
+      "access_status": "open",
+      "attribution_note": "Recent DGGS raw-data releases state an open end-user licence, while the integrated database also contains federal and legacy sources. Acceptance must occur per publication or upstream contributor.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://dggs.alaska.gov/pubs/project/307",
+            "https://dggs.alaska.gov/minerals/akgeology-info.html",
+            "https://dggs.alaska.gov/webpubs/metadata/RDF2025-17.faq.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://dggs.alaska.gov/pubs/project/307",
+            "https://dggs.alaska.gov/minerals/akgeology-info.html",
+            "https://dggs.alaska.gov/webpubs/metadata/RDF2025-17.faq.html"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "alaska-dggs-webgeochem",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "argentina-segemar-geochemistry": {
+      "access_status": "open",
+      "attribution_note": "The service identifies itself as an open geospatial data catalogue, but the exact research-use, download and attribution notice must be captured from each selected metadata record.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://sigam.segemar.gov.ar/geonetwork39/srv/search",
+            "https://sigam.segemar.gov.ar/mapstore/mapa_428.html",
+            "https://repositorio.segemar.gov.ar/bitstream/handle/308849217/4351/INFORME%20DE%20GESTION%202023.pdf?isAllowed=y&sequence=4"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://sigam.segemar.gov.ar/geonetwork39/srv/search",
+            "https://sigam.segemar.gov.ar/mapstore/mapa_428.html",
+            "https://repositorio.segemar.gov.ar/bitstream/handle/308849217/4351/INFORME%20DE%20GESTION%202023.pdf?isAllowed=y&sequence=4"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "argentina-segemar-geochemistry",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
     "australia-ngsa": {
       "access_status": "open",
       "attribution_note": "Geoscience Australia material is generally CC BY 4.0, but each selected data product must be checked for third-party exceptions.",
@@ -368,6 +544,94 @@
         "research_use_status=unknown"
       ]
     },
+    "canada-bc-rgs": {
+      "access_status": "open",
+      "attribution_note": "The release is publicly downloadable through the provincial site; the exact Open Government Licence notice and any third-party conditions from the 116 original sources must be bound to the selected files before use.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/geology/regional-geochemical-survey",
+            "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/publications/digital-geoscience-data",
+            "https://delivery.maps.gov.bc.ca/arcgis/rest/services/whse/bcgw_pub_whse_mineral_tenure/MapServer/30"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/geology/regional-geochemical-survey",
+            "https://www2.gov.bc.ca/gov/content/industry/mineral-exploration-mining/british-columbia-geological-survey/publications/digital-geoscience-data",
+            "https://delivery.maps.gov.bc.ca/arcgis/rest/services/whse/bcgw_pub_whse_mineral_tenure/MapServer/30"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "canada-bc-rgs",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
     "canada-cdogs": {
       "access_status": "open",
       "attribution_note": "Federal and provincial releases can use different Open Government licences; pin and retain the licence of each selected release.",
@@ -452,6 +716,94 @@
       "use_mode": "discovery",
       "use_mode_limitations": [
         "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "chile-sernageomin-geochemistry": {
+      "access_status": "open",
+      "attribution_note": "Public viewers and product pages are available, but access price, research-use terms, attribution and downloadable-file rights must be checked for each map-sheet database.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.sernageomin.cl/geologia-general/",
+            "https://www.sernageomin.cl/visores-mineros/",
+            "https://tiendadigital.sernageomin.cl/en/geochemistry/1265-2016-base-de-datos-de-geoquimica-de-sedimentos-de-la-hoja-la-serena-region-de-coquimbo.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.sernageomin.cl/geologia-general/",
+            "https://www.sernageomin.cl/visores-mineros/",
+            "https://tiendadigital.sernageomin.cl/en/geochemistry/1265-2016-base-de-datos-de-geoquimica-de-sedimentos-de-la-hoja-la-serena-region-de-coquimbo.html"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "chile-sernageomin-geochemistry",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
       ]
     },
     "earthchem-library": {
@@ -1514,6 +1866,95 @@
         "research_use_status=permission_required"
       ]
     },
+    "india-gsi-ngcm": {
+      "access_status": "open",
+      "attribution_note": "The official atlas currently exposes no downloadable records and the located numerical distribution route is event/login specific; research-use terms and a durable public endpoint remain unresolved.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://gsi.gov.in/GeoChemicalAtlas/",
+            "https://hackathon.gsi.gov.in/pdf/Hackathon-Document_17-7-2024.pdf",
+            "https://hackathon.gsi.gov.in/login"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://gsi.gov.in/GeoChemicalAtlas/",
+            "https://hackathon.gsi.gov.in/pdf/Hackathon-Document_17-7-2024.pdf",
+            "https://hackathon.gsi.gov.in/login"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "india-gsi-ngcm",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
     "iodp-data-systems": {
       "access_status": "open",
       "attribution_note": "Data access, moratorium status, citations and policies vary by program, science operator, expedition and derived publication.",
@@ -1770,6 +2211,181 @@
       "use_mode": "discovery",
       "use_mode_limitations": [
         "research_use_status=permission_required"
+      ]
+    },
+    "japan-gsj-geochemical-map": {
+      "access_status": "open",
+      "attribution_note": "The database and map services are public and include a terms-of-use link; the exact downloadable point-data notice, attribution and research-use conditions must be pinned before adaptation.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://gbank.gsj.jp/geochemmap/",
+            "https://www.gsj.jp/information/overview/geochemical-map.html",
+            "https://gbank.gsj.jp/owscontents/contents/geochemmap.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://gbank.gsj.jp/geochemmap/",
+            "https://www.gsj.jp/information/overview/geochemical-map.html",
+            "https://gbank.gsj.jp/owscontents/contents/geochemmap.html"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "japan-gsj-geochemical-map",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
+    "mexico-sgm-geochemical-cartography": {
+      "access_status": "open",
+      "attribution_note": "The federal open-data catalogue labels the dataset CC BY 4.0, while GeoInfoMex also reserves copyright and prohibits for-profit reproduction without prior permission. Research access is plausible, but the exact file-level notice and attribution contract must be preserved and reconciled.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.datos.gob.mx/dataset/cartografia-geoquimica",
+            "https://www.sgm.gob.mx/GeoInfoMexGobMx/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.datos.gob.mx/dataset/cartografia-geoquimica",
+            "https://www.sgm.gob.mx/GeoInfoMexGobMx/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "mexico-sgm-geochemical-cartography",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
       ]
     },
     "noaa-ncei-marine-geology": {
@@ -2394,6 +3010,94 @@
         "research_use_status=permission_required"
       ]
     },
+    "south-africa-cgs-geochemistry": {
+      "access_status": "open",
+      "attribution_note": "CGS retains copyright and intellectual-property rights in the verified layer. The project may query it for research discovery, but adapter use must capture the complete product licence and any use restrictions before normal routing.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://maps.geoscience.org.za/",
+            "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2",
+            "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2/iteminfo"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://maps.geoscience.org.za/",
+            "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2",
+            "https://maps.geoscience.org.za/hosting/rest/services/RSA_GEOCHEMISTR_MIL1/MapServer/2/iteminfo"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "south-africa-cgs-geochemistry",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
     "sweden-sgu-geochemical-atlas": {
       "access_status": "open",
       "attribution_note": "The official data endpoint is public, but an exact reuse licence must be pinned before production.",
@@ -2829,12 +3533,12 @@
       "A": 5,
       "B": 0,
       "C": 0,
-      "D": 27,
+      "D": 35,
       "U": 0
     },
     "use_modes": {
       "benchmark_ready": 0,
-      "discovery": 27,
+      "discovery": 35,
       "normalized_analysis": 5,
       "raw_observation": 0
     }

@@ -156,6 +156,29 @@ V3 当前把五项来源评为 A 级 `normalized_analysis`；其中水体由 GEO
 - 新增候选提升的是“去哪里找”的全面性；当轮沉积物、水体尚无 V1 `approved`，后续已分别完成 MarChem 和 GEOTRACES V3 工程样板；
 - `source_discovery_scope.json` 按区域记录尚未完成的检索，亚洲、非洲、南美及州/省级调查仍是明显缺口；发现状态继续为 `in_progress`、`saturated=false`。
 
+## M7 第四轮新增候选
+
+本轮新增 8 个官方入口，目录由 32 个增至 40 个，补到墨西哥、加拿大省级、美国州级、智利、阿根廷、印度、日本和南非。新增的是“已找到并有官方证据的入口”，不是已经完成适配或达到生产置信度的来源。
+
+| 来源 | 介质 | 范围与可见规模 | 已验证接口 | 当前判断与下一步 |
+|---|---|---|---|---|
+| `mexico-sgm-geochemical-cartography` | 河流沉积物派生图层 | 墨西哥全国 1:250,000，源于 1995–2005 活性河流沉积物分析 | GeoInfoMex SHP/KML、联邦开放数据页 | 先确认下载文件是否包含样点原始数值；联邦 CC BY 4.0 与 GeoInfoMex 限制性告示需按文件核对 |
+| `canada-bc-rgs` | 沉积物、水、重矿物精矿 | BC 省；2020 版称 65,000 样品、约 500 万测定、116 个原始来源、18 种方法/实验室 | XLS/PDF 版本下载、样点 ArcGIS | 高价值多介质候选；先固定 2020 文件、hash、字段表、许可和原调查血缘 |
+| `alaska-dggs-webgeochem` | 岩石、土壤、沉积物、精矿 | 阿拉斯加；持续汇入 DGGS、USGS、BLM 和历史来源 | WebGeochem 查询/全量导出、具 DOI 的 DGGS 数据包 | 首个适配器优先选不可变 DGGS publication package，不直接冻结无版本全库 |
+| `chile-sernageomin-geochemistry` | 河流沉积物 | 智利区域图幅；官方称超过 10,000 样品、23 万平方公里、每样最多 66 元素 | 官方 viewer、ArcGIS、逐图幅 Excel 产品 | 产品和许可逐图幅核对；全国规模描述不能替代文件级验收 |
+| `argentina-segemar-geochemistry` | 河流沉积物、土壤 | 阿根廷；SIGAM 年报称超过 40,000 条沉积物记录 | GeoNetwork 开放目录、SIGAM viewer、逐图幅产品 | 先挑一个可下载图幅核对 54 元素字段、方法、坐标误差和许可 |
+| `india-gsi-ngcm` | 河流沉积物 | 印度 NGCM；2×2 km 单元、计划 66 元素、1:50,000 | 官方 Atlas、曾用于黑客松的 Excel/PDF 分发 | 当前 Atlas 返回 0 条，数值入口带登录/活动属性，暂只作发现 |
+| `japan-gsj-geochemical-map` | 河流/海洋沉积物、后续表层土壤 | 日本陆海；约 3,000 河流沉积物和 5,000 海洋沉积物 | 样点/浓度数据库、Shapefile、As/Cu/Ni/Zn WMS/WMTS | 本轮最接近第二套可运行沉积物来源；先固定点数据、介质、方法、条款和 hash，地图瓦片不当原始观测 |
+| `south-africa-cgs-geochemistry` | 河流沉积物、替代土壤 | 南非多个图幅；已验证 Alexander Bay 点层含 As/Cu/Ni/Zn 和坐标字段 | ArcGIS Feature/MapServer | 先完整读取产品许可、方法、单位和检出限；图幅集合不冒充连续全国库 |
+
+### 第四轮的边界判断
+
+- 目录现有 40 个来源，但只有 5 个 A 级 `normalized_analysis` 样板；新增 8 个仍全部处于 discovery use mode；
+- 日本 GSJ、BC RGS、阿拉斯加 WebGeochem 和阿根廷 SIGAM 已显示最强的下一步数值接入潜力；
+- 墨西哥目前证明的是派生图层，印度目前证明的是项目和有限分发路线，不能写成已获得原始全量数据；
+- 南非、BC 和阿拉斯加均含多来源或多图幅内容，独立来源数必须回到原调查、出版物和样品，而不是按门户计数；
+- 第四轮仍未解决非洲水体、亚洲更多国家、太平洋岛国和论文 DOI 长尾，发现状态保持 `in_progress`、`saturated=false`。
+
 ## M7 首批逐源复核
 
 详细证据、hash、记录对账和阻断项见 `source-verification-report.md`。

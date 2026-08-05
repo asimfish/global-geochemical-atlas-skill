@@ -7,6 +7,8 @@
 | 已接入 | `geotraces-idp2025` | 已补全球海洋航次 Cu/Ni/Zn normalized-analysis 样板；固定版本、DOI、QC、动态快照和全量关系已核实 | 已完成工程接入 | 航次覆盖不连续；无 As；30 条人工复核和贡献者/方法完整率尚未签署 | 与 GEMStat 淡水 As 保持背景隔离；继续补独立海水来源和人工签署 |
 | 已接入 | `gemstat-open-archive` | 已补淡水 As normalized-analysis 路由；v3 DOI、CC BY 4.0、五个精确 ZIP range、492,999 条观测和站点/方法连接已核实 | 已完成工程接入 | 33 国不均匀覆盖；大量方法代码 0；删失、重复和 Pending review 值需分层处理；人工复核未签署 | 扩大方法明确的可比子集，补独立淡水来源并完成具名复核 |
 | 已接入 | `norway-marchem` | 已补海洋沉积物 normalized-analysis 样板；公开 API、许可、目标元素、方法、动态快照和全量关系均已核实 | 已完成工程接入 | 只覆盖挪威海域；30 条人工复核尚未签署 | 完成 30 条逐条复核后升为 `benchmark_ready`；另补独立沉积物来源 |
+| 1 | `japan-gsj-geochemical-map` | 约 3,000 河流沉积物、5,000 海洋沉积物，公开点位/浓度数据库且目标四元素均有地图层，可直接补独立沉积物区域 | 中 | 点数据条款、介质代际、方法和不可变版本未固定；WMS 不是原始观测 | 下载并审计 Shapefile/点表，固定 As/Cu/Ni/Zn 字段、介质、方法、条款与 hash，准备 30 条复核 |
+| 2 | `canada-bc-rgs` / `argentina-segemar-geochemistry` / `alaska-dggs-webgeochem` | 同时补北美省/州级与南美覆盖；均已有数值下载或公开目录，且保留方法/出版物线索 | 中高 | 多原始调查、历史方法、重复发布和逐文件许可 | BC 固定 2020 版文件；Argentina 选一个开放图幅；Alaska 选一个具 DOI 的 DGGS 数据包，各自做字段/方法/hash 对账 |
 | 3 | `ireland-tellus` | 同时补土壤、沉积物和水，适合验证跨介质 schema | 中 | 官网临时下线、多个区域/国家 release、许可通知需重新固定 | 官网恢复后固定具体 ZIP、release note、方法表、许可和 checksum |
 | 4 | `foregs-europe` | 一个协调调查同时补土壤、沉积物和水体，可与 Tellus 做血缘/方法对照 | 中 | 再分发条款、旧 Excel 结构、多方法/实验室 | 固定下载文件清单，确认许可并盘点 As/Cu/Ni/Zn 字段与方法 |
 | 5 | `sweden-sgu-geochemical-atlas` / `finland-gtk-geochemistry` | 增加北欧沉积物和岩石的官方可查询数值 | 中 | 产品/图层许可和版本不同，介质及提取方法必须分开 | 瑞典先固定 till CSV 许可与 hash；芬兰先选一个岩石和一个沉积物产品复核 |
@@ -18,6 +20,8 @@
 | 11 | `pangaea-repository` / `earthchem-library` / `noaa-ncei-marine-geology` / `iodp-data-systems` | 扩大 DOI、海洋和论文数据发现范围 | 高 | 逐数据集 schema 与许可，样品目录和数值混杂，镜像重复 | 先实现发现与血缘解析，不把仓库、目录或分发系统当作独立生产来源 |
 
 `glorich` 与 `bgs-gbase` 原始点数据当前分别受非商业条款和单独授权限制，不排除于目录，但不进入 open-only 适配器排期。`australia-ozchem` 在找到当前官方数值端点前保持元数据状态。`jamstec-darwin` 与 NOAA IMLGS 当前只按样品/数据发现入口处理。
+
+第四轮新发现中，`chile-sernageomin-geochemistry` 与 `south-africa-cgs-geochemistry` 排在上述首批之后：二者均有数值图层潜力，但必须先固定产品许可、方法、单位和版本。`mexico-sgm-geochemical-cartography` 当前只证实派生图层且存在两套许可文字，`india-gsi-ngcm` 当前公开 Atlas 无记录，均保持 metadata/discovery，不进入近期适配器主线。
 
 ## 排序规则
 

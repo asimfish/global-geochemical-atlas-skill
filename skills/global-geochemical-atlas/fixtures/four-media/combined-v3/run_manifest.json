@@ -160,6 +160,7 @@
     "coverage": {
       "rock": {
         "candidate_sources": [
+          "alaska-dggs-webgeochem",
           "australia-ozchem",
           "brazil-sgb-geochemistry",
           "earthchem-library",
@@ -183,23 +184,31 @@
       },
       "sediment": {
         "candidate_sources": [
+          "alaska-dggs-webgeochem",
+          "argentina-segemar-geochemistry",
           "australia-ngsa",
           "australia-ozchem",
           "bgs-gbase",
           "brazil-sgb-geochemistry",
+          "canada-bc-rgs",
           "canada-cdogs",
+          "chile-sernageomin-geochemistry",
           "earthchem-library",
           "earthchem-portal",
           "eea-waterbase",
           "emodnet-chemistry",
           "finland-gtk-geochemistry",
           "foregs-europe",
+          "india-gsi-ngcm",
           "iodp-data-systems",
           "ireland-tellus",
           "jamstec-darwin",
+          "japan-gsj-geochemical-map",
+          "mexico-sgm-geochemical-cartography",
           "noaa-ncei-marine-geology",
           "nz-petlab",
           "pangaea-repository",
+          "south-africa-cgs-geochemistry",
           "sweden-sgu-geochemical-atlas",
           "us-water-quality-portal",
           "usgs-ngdb"
@@ -212,14 +221,18 @@
       },
       "soil": {
         "candidate_sources": [
+          "alaska-dggs-webgeochem",
+          "argentina-segemar-geochemistry",
           "bgs-gbase",
           "brazil-sgb-geochemistry",
           "earthchem-library",
           "foregs-europe",
           "gemas-europe",
           "ireland-tellus",
+          "japan-gsj-geochemical-map",
           "pangaea-repository",
           "soils4africa",
+          "south-africa-cgs-geochemistry",
           "usgs-ngdb",
           "wosis"
         ],
@@ -233,6 +246,7 @@
         "candidate_sources": [
           "bgs-gbase",
           "brazil-sgb-geochemistry",
+          "canada-bc-rgs",
           "canada-cdogs",
           "earthchem-library",
           "eea-waterbase",
