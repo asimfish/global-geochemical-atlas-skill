@@ -11,6 +11,8 @@
     "meaning",
     "run_metadata",
     "weights",
+    "component_definitions",
+    "source_scoring",
     "band_thresholds",
     "gates",
     "component_means",
@@ -42,6 +44,35 @@
         "method": {"type": "number", "minimum": 0, "maximum": 1},
         "spatial": {"type": "number", "minimum": 0, "maximum": 1},
         "qc": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "component_definitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "completeness", "method", "spatial", "qc", "overall"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "completeness": {"type": "string", "minLength": 1},
+        "method": {"type": "string", "minLength": 1},
+        "spatial": {"type": "string", "minLength": 1},
+        "qc": {"type": "string", "minLength": 1},
+        "overall": {"type": "string", "minLength": 1}
+      }
+    },
+    "source_scoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tier_scores", "penalties", "evidence_boundary"],
+      "properties": {
+        "tier_scores": {
+          "type": "object",
+          "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}
+        },
+        "penalties": {
+          "type": "object",
+          "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}
+        },
+        "evidence_boundary": {"type": "string", "minLength": 1}
       }
     },
     "band_thresholds": {

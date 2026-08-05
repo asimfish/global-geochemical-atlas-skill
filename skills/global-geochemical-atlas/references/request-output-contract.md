@@ -26,6 +26,7 @@
 |---|---|
 | `geochemistry.csv` | 一行一个样品 × 分析物测定，保留原值与 canonical 值 |
 | `source_manifest.json` | 输入哈希、来源、定位、许可、记录数、覆盖率及置信度报告哈希绑定 |
+| `record_evidence.jsonl` | 与 canonical `record_id` 一一对应的来源文件、源行、版本、哈希、引用及来源特有证据 |
 | `qc_report.json` | 标准化率、删失、坐标和 flags 汇总 |
 | `confidence_report.json` | 运行级置信度公式、分量和 band 分布 |
 | `anomalies.geojson` | 候选异常点；允许 null geometry |
@@ -35,6 +36,8 @@
 | `run_summary.json` | 整体状态、请求摘要、产物、coverage 与限制 |
 
 ## 证据链
+
+`standardize_geochemistry.py` 可在四个最低分析字段上输出 QC；完整 `run_workflow.py` 为保证任务要求的来源追溯，额外要求非空 `source_id`、`source_locator` 和 `license`。缺失时不得用 `unknown` 冒充已验证来源，应返回 `conflicting_evidence` 并提示补充 sidecar 或来源字段；`source_tier` 缺失可以保留为 `unknown`，但必须降低来源分量。
 
 每条关键记录至少保留：
 
@@ -52,6 +55,8 @@
 ```
 
 `operational_confidence` 只表示记录对当前流程的可用性，不是测量准确度、统计置信水平或事实为真的概率。
+
+证据等级分三层：只有 CSV 声明时为 `source_declared_in_input`；sidecar 通过字段与 record ID 校验时为 `validated_record_evidence`；`run_manifest.json` 同时绑定 CSV 与 sidecar SHA-256 时才是 `verified_record_evidence`。哈希和定位证明可追溯性，不证明测量真实、方法可比或异常成因。
 
 ## 失败状态
 

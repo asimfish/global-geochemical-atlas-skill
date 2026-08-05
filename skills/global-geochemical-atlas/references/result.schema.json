@@ -49,12 +49,17 @@
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["filename", "sha256", "record_count", "synthetic_demo"],
+      "required": [
+        "filename", "sha256", "record_count", "synthetic_demo", "data_mode",
+        "not_for_scientific_interpretation"
+      ],
       "properties": {
         "filename": {"type": "string"},
         "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "record_count": {"type": "integer", "minimum": 0},
-        "synthetic_demo": {"type": "boolean"}
+        "synthetic_demo": {"type": "boolean"},
+        "data_mode": {"enum": ["fixture", "online", "cached", "input", "synthetic_fixture", "not_evaluated"]},
+        "not_for_scientific_interpretation": {"type": "boolean"}
       }
     },
     "outputs": {

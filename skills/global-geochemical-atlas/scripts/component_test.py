@@ -31,6 +31,7 @@ DEMO_INPUT = SKILL_DIR / "fixtures" / "demo_input.csv"
 SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
+GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 
 
 class ContractError(AssertionError):
@@ -72,12 +73,22 @@ def check_d1(output_dir: Path) -> list[str]:
     confidence_path = output_dir / "confidence_report.json"
     manifest = json_value(manifest_path)
     input_hash = sha256_file(DEMO_INPUT)
-    require(manifest.get("manifest_version") == "geochemical-source-manifest-v1", "D1 manifest version is stable", checks)
+    require(manifest.get("manifest_version") == "geochemical-source-manifest-v2", "D1 manifest version is stable", checks)
     require(manifest.get("input", {}).get("sha256") == input_hash, "D1 manifest binds the acquired input hash", checks)
     require(manifest.get("input", {}).get("record_count") == 19, "D1 manifest preserves the record count", checks)
     coverage = manifest.get("coverage", {})
     require(coverage.get("source_locator_rate") == 1.0, "D1 demo provenance coverage is complete", checks)
     require(coverage.get("declared_license_rate") == 1.0, "D1 demo license declarations are complete", checks)
+    require(
+        coverage.get("verified_evidence_rate") == 0.0,
+        "D1 does not overstate verification when no acquisition manifest is supplied",
+        checks,
+    )
+    require(
+        manifest.get("record_evidence", {}).get("exact_record_id_match") is True,
+        "D1 emits a record-linked evidence sidecar even for direct input",
+        checks,
+    )
     sources = manifest.get("sources", [])
     require(
         len(sources) == 1 and sources[0].get("license_review") == "demo_cc0",
@@ -140,8 +151,10 @@ def check_d1(output_dir: Path) -> list[str]:
         generation_manifest = json_value(demo_dir / "run_manifest.json")
         demo_rows = csv_rows(demo_input)
         evidence_rows = [json.loads(line) for line in sources_path.read_text(encoding="utf-8").splitlines()]
+        expected_observations = 48 if source_id == "georoc-archaean" else 108
+        expected_per_analyte = expected_observations // 4
         require(
-            len(demo_rows) == 48 and len(evidence_rows) == 48,
+            len(demo_rows) == expected_observations and len(evidence_rows) == expected_observations,
             f"D1 {source_id} fixture has one evidence record per observation",
             checks,
         )
@@ -168,8 +181,13 @@ def check_d1(output_dir: Path) -> list[str]:
         )
         require(
             Counter(row["element_or_analyte"] for row in demo_rows)
-            == Counter({"As": 12, "Cu": 12, "Ni": 12, "Zn": 12}),
+            == Counter({item: expected_per_analyte for item in ("As", "Cu", "Ni", "Zn")}),
             f"D1 {source_id} fixture keeps the four analytes balanced",
+            checks,
+        )
+        require(
+            generation_manifest.get("demo_generation_version") == "d1-demo-slice-v2",
+            f"D1 {source_id} fixture uses the evidence-complete generator contract",
             checks,
         )
     georoc_evidence = [
@@ -177,8 +195,31 @@ def check_d1(output_dir: Path) -> list[str]:
         for line in (SOURCE_DEMOS / "georoc-archaean" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
     ]
     require(
-        all(item.get("article_citations") for item in georoc_evidence),
-        "D1 GEOROC fixture resolves citation IDs to original reference text",
+        all(item.get("article_citations") for item in georoc_evidence)
+        and not any(
+            "unresolved" in citation
+            for item in georoc_evidence
+            for citation in item["article_citations"]
+        ),
+        "D1 GEOROC fixture resolves every selected citation ID to original reference text",
+        checks,
+    )
+    georoc_rows = csv_rows(SOURCE_DEMOS / "georoc-archaean" / "demo_input.csv")
+    require(
+        all(
+            row["original_latitude_raw"]
+            and row["original_longitude_raw"]
+            and not row["latitude"]
+            and not row["longitude"]
+            and not row["source_crs"]
+            for row in georoc_rows
+        )
+        and all(
+            item.get("coordinate_evidence", {}).get("canonicalization_status")
+            == "withheld_pending_datum_verification"
+            for item in georoc_evidence
+        ),
+        "D1 GEOROC fixture retains reported coordinates without inventing WGS84",
         checks,
     )
     usgs_evidence = [
@@ -191,13 +232,132 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 USGS fixture keeps all three soil layers distinct",
         checks,
     )
+    usgs_rows = csv_rows(SOURCE_DEMOS / "usgs-conus-soil" / "demo_input.csv")
+    require(
+        all(row["analytical_method"] and row["method_family"] and row["digestion_or_extraction"] for row in usgs_rows),
+        "D1 USGS fixture decodes analyte-specific method and digestion metadata",
+        checks,
+    )
+    require(
+        sum(bool(row["value_qualifier"]) for row in usgs_rows) == 3
+        and all(row["detection_limit"] for row in usgs_rows if row["value_qualifier"]),
+        "D1 USGS fixture exercises source-reported censored values and limits",
+        checks,
+    )
+    require(
+        {row["material"] for row in usgs_rows}
+        == {"soil:top-0-5cm", "soil:a-horizon", "soil:c-horizon"}
+        and Counter(row["material"] for row in usgs_rows)
+        == Counter({"soil:top-0-5cm": 36, "soil:a-horizon": 36, "soil:c-horizon": 36}),
+        "D1 USGS fixture makes soil horizons explicit for D2 background grouping",
+        checks,
+    )
 
     with tempfile.TemporaryDirectory() as evidence_temp:
+        bbox_result = run_command(
+            [
+                sys.executable,
+                str(GENERATOR),
+                "--source",
+                "georoc-archaean",
+                "--cache-dir",
+                str(Path(evidence_temp) / "unused-cache"),
+                "--output-dir",
+                str(Path(evidence_temp) / "must-not-filter-georoc"),
+                "--mode",
+                "cached",
+                "--bbox",
+                "100,-10,120,10",
+                "--generated-at",
+                "2026-08-05T06:25:00Z",
+            ],
+            expected_code=2,
+        )
+        require(
+            "does not declare a datum" in bbox_result.stderr,
+            "D1 refuses WGS84 bbox filtering for GEOROC without datum evidence",
+            checks,
+        )
+
         standalone = Path(evidence_temp) / "source_manifest.json"
         evidence_builder.package_evidence(
             DEMO_INPUT, output_dir / "geochemistry.csv", confidence_path, standalone
         )
         require(standalone.read_bytes() == manifest_path.read_bytes(), "D1 standalone packaging matches D3 integration", checks)
+
+        verified_output = Path(evidence_temp) / "verified-source-workflow"
+        usgs_demo = SOURCE_DEMOS / "usgs-conus-soil"
+        run_command(
+            [
+                sys.executable,
+                str(WORKFLOW),
+                "--input",
+                str(usgs_demo / "demo_input.csv"),
+                "--evidence-jsonl",
+                str(usgs_demo / "sources.jsonl"),
+                "--acquisition-manifest",
+                str(usgs_demo / "run_manifest.json"),
+                "--output-dir",
+                str(verified_output),
+            ]
+        )
+        verified_manifest = json_value(verified_output / "source_manifest.json")
+        require(
+            verified_manifest["coverage"]["verified_evidence_rate"] == 1.0
+            and verified_manifest["record_evidence"]["evidence_level"] == "verified_record_evidence",
+            "D1 final manifest consumes and hash-binds the acquisition evidence sidecar",
+            checks,
+        )
+        verified_summary = json_value(verified_output / "run_summary.json")
+        require(
+            verified_summary["input"]["not_for_scientific_interpretation"] is True
+            and "not for scientific interpretation" in verified_summary["limitations"][0],
+            "D3 propagates the fixture claim boundary into the final result",
+            checks,
+        )
+
+        tampered_evidence_rows = [
+            json.loads(line) for line in (usgs_demo / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        tampered_evidence_rows[0]["record_id"] = "rec-not-in-canonical-database"
+        tampered_evidence = Path(evidence_temp) / "tampered-record-ids.jsonl"
+        tampered_evidence.write_text(
+            "".join(json.dumps(item, sort_keys=True, separators=(",", ":")) + "\n" for item in tampered_evidence_rows),
+            encoding="utf-8",
+        )
+        try:
+            evidence_builder.package_evidence(
+                usgs_demo / "demo_input.csv",
+                verified_output / "geochemistry.csv",
+                verified_output / "confidence_report.json",
+                Path(evidence_temp) / "must-not-package-record-ids.json",
+                tampered_evidence,
+                usgs_demo / "run_manifest.json",
+            )
+        except evidence_builder.EvidenceError:
+            pass
+        else:
+            raise ContractError("D1 must reject sidecar record IDs that differ from the canonical database")
+        checks.append("D1 rejects record-evidence additions, removals and record-ID substitutions")
+
+        tampered_acquisition = json_value(usgs_demo / "run_manifest.json")
+        tampered_acquisition["source_files"][0]["sha256"] = "0" * 64
+        tampered_acquisition_path = Path(evidence_temp) / "tampered-acquisition.json"
+        tampered_acquisition_path.write_text(json.dumps(tampered_acquisition), encoding="utf-8")
+        try:
+            evidence_builder.package_evidence(
+                usgs_demo / "demo_input.csv",
+                verified_output / "geochemistry.csv",
+                verified_output / "confidence_report.json",
+                Path(evidence_temp) / "must-not-package-source-hash.json",
+                usgs_demo / "sources.jsonl",
+                tampered_acquisition_path,
+            )
+        except evidence_builder.EvidenceError:
+            pass
+        else:
+            raise ContractError("D1 must reject source-file hashes not present in the acquisition manifest")
+        checks.append("D1 cross-checks every record source-file hash against acquired files")
 
         tampered_report = json_value(confidence_path)
         tampered_report["run_metadata"]["input_sha256"] = "0" * 64
@@ -593,6 +753,13 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 confidence component contract is complete",
         checks,
     )
+    require(
+        set(confidence.get("component_definitions", {}))
+        == {"source", "completeness", "method", "spatial", "qc", "overall"}
+        and confidence.get("source_scoring", {}).get("evidence_boundary"),
+        "D2 confidence report explains every component and the D1 verification boundary",
+        checks,
+    )
     require(abs(sum(confidence["weights"].values()) - 1.0) < 1e-12, "D2 confidence weights sum to one", checks)
     anomaly_report = json_value(output_dir / "anomaly_report.json")
     anomalies = json_value(output_dir / "anomalies.geojson")
@@ -701,7 +868,7 @@ def check_d3(output_dir: Path) -> list[str]:
     require(len(skill_dirs) == 1 and skill_dirs[0] == SKILL_DIR, "D3 keeps exactly one production Skill", checks)
     required_outputs = set(output_validator.REQUIRED_FILES.values())
     actual_outputs = {path.name for path in output_dir.iterdir() if path.is_file()}
-    require(actual_outputs == required_outputs, "D3 publishes the stable nine-file output set", checks)
+    require(actual_outputs == required_outputs, "D3 publishes the stable ten-file output set", checks)
     validation = output_validator.validate_dir(output_dir)
     require(validation.get("status") == "valid", "D3 integrated outputs pass the public validator", checks)
     html = (output_dir / "interactive_map.html").read_text(encoding="utf-8")

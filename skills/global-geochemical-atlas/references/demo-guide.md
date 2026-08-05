@@ -16,6 +16,23 @@ python scripts/validate_outputs.py --output-dir demo_output
 python scripts/component_test.py --component all
 ```
 
+## 真实来源证据链 demo
+
+仓库还包含两个合法的小型真实来源 fixture，均明确标记为 `not_for_scientific_interpretation`。推荐用 USGS demo 展示完整地图、方法、删失值和来源证据：
+
+```bash
+python scripts/run_workflow.py \
+  --input fixtures/source-demos/usgs-conus-soil/demo_input.csv \
+  --evidence-jsonl fixtures/source-demos/usgs-conus-soil/sources.jsonl \
+  --acquisition-manifest fixtures/source-demos/usgs-conus-soil/run_manifest.json \
+  --output-dir usgs_demo_output
+python scripts/validate_outputs.py --output-dir usgs_demo_output
+```
+
+预期得到 108 条标准化记录、108 条有效 WGS‑84 坐标、3 条来源报告的 As `<0.6 mg/kg` 删失记录，以及 `verified_evidence_rate=1.0`。0–5 cm、A 与 C horizon 各自形成独立背景组；候选异常仍只是确定性切片的筛查结果，不能外推 CONUS 分布。
+
+GEOROC fixture 的 datum 尚无足够证据，故 48 条记录保留 reported coordinates 而不进入地图；这是预期的失败关闭演示，不是坐标丢失 bug。
+
 ## 预期结果
 
 - 输入 19 条测定；

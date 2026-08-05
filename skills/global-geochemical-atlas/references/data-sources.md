@@ -31,6 +31,7 @@
 - 获取：GRO.data Dataverse 的 versioned dataset API；
 - 校验：动态 ZIP 本身不固定哈希，必须验证 28 个成员的文件名、大小和发布方 MD5，并为本次取得的 ZIP 和成员另算 SHA-256；
 - 科学边界：这是 GEOROC 预编译选择值，不是全部原始重复分析的无筛选拼接；结果必须保留数据集 DOI、版本、成员文件和 CITATIONS 字段。
+- 坐标边界：经审查的公开页面/元数据说明坐标采用十进制度，但未充分声明所有历史记录的统一 datum；D1 保留 reported coordinate，不能仅凭数值范围标记 EPSG:4326。缺 datum 时 canonical 坐标留空并等待人工核验，也不得对其执行 WGS84 bbox 筛选。
 
 ### `usgs-conus-soil`
 
@@ -42,6 +43,7 @@
 - 获取：USGS Publications Warehouse 的三个直接 HTTPS 文件；
 - 校验：注册表中的 SHA-256 是 2026-08-05 从官方 URL 观测所得，不冒充发布方 checksum；每次下载仍记录响应元数据和实际 SHA-256；
 - 科学边界：三种土层不得静默合并；legacy qualifier 和单位必须按该数据集自己的元数据解码。
+- 元数据解码：Appendix 5 声明坐标为 WGS 84；As 使用 HG-AAS（sodium peroxide + sodium hydroxide fusion），Cu/Ni/Zn 使用 ICP-AES（near-total HCl-HNO3-HClO4-HF digestion）。`<`/`<=` 必须同时保留原值、qualifier 和 detection limit，不能插补。
 
 ## D1 适配器和稳定 ID
 
@@ -83,10 +85,12 @@ python scripts/build_evidence_bundle.py \
   --input INPUT.csv \
   --database OUTPUT/geochemistry.csv \
   --confidence-report OUTPUT/confidence_report.json \
+  --evidence-jsonl sources.jsonl \
+  --acquisition-manifest run_manifest.json \
   --output OUTPUT/source_manifest.json
 ```
 
-该步骤只验证并打包置信度版本、输入哈希和报告哈希，不改变 D2 的置信度算法或数值。
+该步骤要求 sidecar 与 canonical `record_id` 集合完全一致，校验对应来源字段，并绑定 CSV、sidecar、acquisition manifest 与置信度报告哈希。该步骤不改变 D2 的置信度算法或数值。
 
 ## 许可边界
 

@@ -39,12 +39,19 @@ offline: boolean
 
 1. 用户给出现成 CSV：直接验证字段并运行本地流水线。
 2. 用户要求可复现演示或网络不可用：使用 `fixtures/demo_input.csv`，明确标为合成数据。
-3. 用户要求真实公开数据：读取 [references/data-sources.md](references/data-sources.md)，先建立检索计划和许可判断，再下载有限数据。
+3. 用户要求真实公开数据：读取 [references/data-sources.md](references/data-sources.md) 和 [references/licenses-and-citations.md](references/licenses-and-citations.md)，先建立检索计划和许可判断，再下载有限数据。
 4. 来源需要登录、人工表单或许可不明：输出 `source_not_accessible` 或 `needs_human_review`，不要绕过限制。
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
 ## 3. 建立来源与下载证据
+
+机器可读注册表位于 [assets/source_manifest.json](assets/source_manifest.json)，结构由 [references/source-registry.schema.json](references/source-registry.schema.json) 定义。先检查候选来源，不要凭名称猜可用范围：
+
+```bash
+python scripts/inspect_source.py --source usgs-conus-soil --cache-dir .cache/data --mode cached
+python scripts/inspect_source.py --source georoc-archaean --cache-dir .cache/data --mode cached
+```
 
 为每个数据源记录：
 
@@ -69,9 +76,24 @@ python scripts/download_data.py \
 
 优先提供 `--expected-sha256`。使用 `--offline` 时只接受哈希匹配的缓存。不要抓取需要交互同意或禁止自动访问的门户页面。
 
+需要小型真实来源切片时，使用适配器而不是手工复制网页结果。`--elements` 与 `--bbox` 在验证下载后执行确定性本地过滤；不支持的元素或无法满足的配额必须失败关闭：
+
+```bash
+python scripts/generate_demo_data.py \
+  --source usgs-conus-soil \
+  --cache-dir .cache/data \
+  --output-dir /tmp/usgs-demo \
+  --mode online \
+  --elements As,Cu,Ni,Zn \
+  --observations 108 \
+  --generated-at 2026-08-05T06:25:00Z
+```
+
+生成的 `sources.jsonl` 是逐记录证据 sidecar，`run_manifest.json` 绑定输入、sidecar 和源文件哈希；二者分别受 [references/record-evidence.schema.json](references/record-evidence.schema.json) 与 [references/acquisition-run-manifest.schema.json](references/acquisition-run-manifest.schema.json) 约束。
+
 ## 4. 验证并标准化记录
 
-要求一行表示一个“样品 × 分析物 × 测定”。至少检查元素、值、单位和介质；正式分析还要检查 measurement basis、分析方法、消解/提取、检出限、坐标、CRS、来源定位和许可。
+要求一行表示一个“样品 × 分析物 × 测定”。独立标准化至少检查元素、值、单位和介质；完整工作流还必须有非空 `source_id`、`source_locator` 和 `license`，否则以 `conflicting_evidence` 失败关闭。正式分析还要检查 `source_tier`、measurement basis、分析方法、消解/提取、检出限、坐标、CRS 和文件哈希。
 
 在 Skill 目录执行：
 
@@ -97,11 +119,15 @@ python scripts/standardize_geochemistry.py \
 
 只有在转换链可追溯时才写入 WGS84 坐标，并记录 source CRS、转换方法和坐标不确定性。地质空间匹配必须记录图层来源、原始 source ID、比例尺、空间谓词和边界不确定性。
 
+当前冻结来源的硬边界：USGS Data Series 801 的官方 Appendix 5 声明 WGS 84，并给出 As 的 HG-AAS/fusion 与 Cu/Ni/Zn 的 ICP-AES/four-acid 方法；可以保留这些元数据。经审查的 GEOROC 公开元数据仅说明十进制度坐标，未充分声明统一 datum，因此只写 `original_latitude_raw`/`original_longitude_raw`，canonical 经纬度与 `source_crs` 留空，标记 `COORDINATE_NOT_CANONICALIZED`。不要仅凭数值范围标成 EPSG:4326。
+
+因此当前 GEOROC 适配器不得执行 WGS84 bbox 筛选；若请求指定 bbox，应返回 `needs_human_review` 或改用具有 CRS 证据的来源。USGS bbox 可以执行，并在 manifest 中明确标记为下载后本地过滤。
+
 若没有可靠地质图层：保留原来源的 `geologic_unit`；若也没有，则置空并降低置信度。不要从附近地名或模型常识编造地质单元。
 
 ## 6. 计算候选异常
 
-先按元素、介质、measurement basis、地质单元、分析方法和消解/提取方法分组。只使用成功标准化、非删失、非重复、正的值。
+先按元素、介质、材料/土层、measurement basis、地质单元、分析方法和消解/提取方法分组。只使用成功标准化、非删失、非重复、正的值。不得把 0–5 cm、A horizon 与 C horizon 静默合并为同一土壤背景。
 
 默认使用 `log10 + median/MAD modified z-score`：有效样本至少 8 条，`|z| >= 3.5` 标为候选；MAD 为 0 或样本不足时显式失败。阈值、样本量、排除数、中位数、MAD 和分组字段必须进入报告。
 
@@ -114,14 +140,19 @@ python scripts/standardize_geochemistry.py \
 ```bash
 python scripts/run_workflow.py \
   --input INPUT.csv \
+  --evidence-jsonl sources.jsonl \
+  --acquisition-manifest run_manifest.json \
   --output-dir OUTPUT_DIR \
   --max-records 50000
 ```
+
+若没有 sidecar，流程仍生成最小 `record_evidence.jsonl`，但来源级别只能是 `source_declared_in_input`，不得表述为已验证。只有 acquisition manifest 同时哈希绑定 CSV 与 sidecar 且 record ID 完全一致时，才可标记 `verified_record_evidence`。
 
 必须生成并核验：
 
 - `geochemistry.csv`；
 - `source_manifest.json`；
+- `record_evidence.jsonl`；
 - `qc_report.json`；
 - `confidence_report.json`；
 - `anomalies.geojson`；
@@ -159,6 +190,6 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 
 每个关键结论绑定 `source_id + source_locator`。把事实、脚本计算、模型推断、假设和未验证项分开。输出字段定义见 [references/result.schema.json](references/result.schema.json)，记录字段定义见 [references/geochemistry-record.schema.json](references/geochemistry-record.schema.json)。
 
-来源打包必须符合 [references/source-manifest.schema.json](references/source-manifest.schema.json)，置信度报告必须符合 [references/confidence-report.schema.json](references/confidence-report.schema.json)。保留二者的输入哈希与报告哈希绑定，不要在证据链阶段重新计算置信度。
+来源打包必须符合 [references/source-manifest.schema.json](references/source-manifest.schema.json)，置信度报告必须符合 [references/confidence-report.schema.json](references/confidence-report.schema.json)。置信度是 source、completeness、method、spatial 和 QC 的可审计 workflow usability 分数，不是正确概率；D2 公开权重、字段覆盖和惩罚，D1 只验证 sidecar/输入/报告哈希和 record ID 关联，不重新计算分数。
 
-需要快速复现时读取 [references/demo-guide.md](references/demo-guide.md)。
+需要快速复现时读取 [references/demo-guide.md](references/demo-guide.md)；失败关闭矩阵见 [references/failures.md](references/failures.md)，完整回归入口见 [references/demo-generation-tests.md](references/demo-generation-tests.md)。

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemistry-acquisition-run-manifest:d1-v2",
+  "title": "D1 deterministic acquisition/demo run manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "demo_generation_version", "data_mode", "scientific_scope",
+    "not_for_scientific_interpretation", "generated_at", "source", "generation_request",
+    "source_files", "record_counts", "outputs", "warnings", "failures"
+  ],
+  "properties": {
+    "demo_generation_version": {"const": "d1-demo-slice-v2"},
+    "data_mode": {"enum": ["fixture", "online", "cached"]},
+    "scientific_scope": {"type": "string", "minLength": 1},
+    "not_for_scientific_interpretation": {"type": "boolean"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "source": {"type": "object", "additionalProperties": true},
+    "generation_request": {"type": "object", "additionalProperties": true},
+    "source_files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["filename", "source_url", "bytes", "sha256", "retrieved_at"],
+        "properties": {
+          "filename": {"type": "string", "minLength": 1},
+          "source_url": {"type": "string", "pattern": "^https://"},
+          "bytes": {"type": "integer", "minimum": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "retrieved_at": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "record_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "outputs": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["path", "bytes", "sha256"],
+        "properties": {
+          "path": {"enum": ["demo_input.csv", "sources.jsonl"]},
+          "bytes": {"type": "integer", "minimum": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "failures": {"type": "array"}
+  }
+}

@@ -25,6 +25,7 @@ STANDARDIZER = SCRIPT_DIR / "standardize_geochemistry.py"
 EXPECTED_OUTPUTS = {
     "geochemistry.csv",
     "source_manifest.json",
+    "record_evidence.jsonl",
     "qc_report.json",
     "confidence_report.json",
     "anomalies.geojson",
@@ -103,6 +104,9 @@ def run_suite() -> dict[str, Any]:
         "confidence-report.schema.json",
         "schema-map.schema.json",
         "platform-field-crosswalk.schema.json",
+        "record-evidence.schema.json",
+        "acquisition-run-manifest.schema.json",
+        "source-registry.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
@@ -232,6 +236,28 @@ def run_suite() -> dict[str, Any]:
             and transformed["original_longitude_raw"] == "11465907.552",
             "source-coordinate evidence was not preserved after transformation",
         )
+        reported_only = standardizer.normalize_row(
+            complete_d2_row(
+                latitude="", longitude="", source_crs="",
+                original_latitude_raw="35", original_longitude_raw="103",
+            ),
+            11,
+        )
+        require(
+            reported_only["latitude"] is None
+            and reported_only["longitude"] is None
+            and "COORDINATE_NOT_CANONICALIZED" in reported_only["qc_flags"]
+            and "INVALID_COORDINATE" not in reported_only["qc_flags"],
+            "valid reported coordinates without datum evidence are withheld rather than mislabeled invalid",
+        )
+        missing_crs = standardizer.normalize_row(complete_d2_row(source_crs=""), 12)
+        require(
+            missing_crs["latitude"] is None
+            and missing_crs["longitude"] is None
+            and "MISSING_SOURCE_CRS" in missing_crs["qc_flags"]
+            and "COORDINATE_NOT_CANONICALIZED" in missing_crs["qc_flags"],
+            "numeric coordinates without CRS evidence are withheld from canonical map fields",
+        )
 
         duplicate_records = standardizer.process_rows([
             complete_d2_row(record_id="duplicate-1", source_record_id="source-row-1"),
@@ -334,6 +360,18 @@ def run_suite() -> dict[str, Any]:
         confidence_hash = hashlib.sha256((first / "confidence_report.json").read_bytes()).hexdigest()
         require(manifest["confidence_report"]["sha256"] == confidence_hash, "confidence evidence hash mismatch")
         require(manifest["coverage"]["source_locator_rate"] == 1.0, "demo provenance coverage should be complete")
+        require(manifest["manifest_version"] == "geochemical-source-manifest-v2", "source manifest version drifted")
+        require(
+            manifest["record_evidence"]["sha256"]
+            == hashlib.sha256((first / "record_evidence.jsonl").read_bytes()).hexdigest(),
+            "record evidence hash mismatch",
+        )
+        confidence = json_value(first / "confidence_report.json")
+        require(
+            set(confidence["component_definitions"])
+            == {"source", "completeness", "method", "spatial", "qc", "overall"},
+            "confidence component definitions are incomplete",
+        )
 
         html = (first / "interactive_map.html").read_text(encoding="utf-8")
         require("<script src=" not in html.casefold(), "map has an external script dependency")
@@ -347,6 +385,24 @@ def run_suite() -> dict[str, Any]:
         )
         limited_summary = json_value(limited / "run_summary.json")
         require(limited_summary["status"] == "unsupported_scope", "record limit must fail closed")
+
+        no_provenance_input = first / "no-provenance.csv"
+        no_provenance_input.write_text(
+            "element_or_analyte,value,unit,medium\nAs,10,mg/kg,soil\n",
+            encoding="utf-8",
+        )
+        no_provenance_output = first / "no-provenance-output"
+        run_command(
+            [
+                sys.executable, str(WORKFLOW), "--input", str(no_provenance_input),
+                "--output-dir", str(no_provenance_output),
+            ],
+            expected_code=2,
+        )
+        require(
+            json_value(no_provenance_output / "run_summary.json")["status"] == "conflicting_evidence",
+            "full workflow must fail closed when core provenance is absent",
+        )
 
         bad_manifest = first / "bad-download.json"
         run_command(
@@ -370,7 +426,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 54,
+            "tests": 62,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

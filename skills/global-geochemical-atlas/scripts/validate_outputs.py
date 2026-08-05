@@ -16,6 +16,7 @@ from typing import Any
 REQUIRED_FILES = {
     "database": "geochemistry.csv",
     "source_manifest": "source_manifest.json",
+    "record_evidence": "record_evidence.jsonl",
     "qc_report": "qc_report.json",
     "confidence_report": "confidence_report.json",
     "anomalies": "anomalies.geojson",
@@ -116,6 +117,74 @@ def validate_database(path: Path, errors: list[str], warnings: list[str]) -> dic
     return metrics
 
 
+def database_evidence_index(path: Path) -> dict[str, dict[str, str]]:
+    fields = (
+        "source_record_id", "source_id", "source_locator", "license", "analyte_reported",
+        "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row", "file_sha256",
+    )
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return {
+            (row.get("record_id") or "").strip(): {field: (row.get(field) or "").strip() for field in fields}
+            for row in csv.DictReader(handle)
+            if (row.get("record_id") or "").strip()
+        }
+
+
+def validate_record_evidence(
+    path: Path, canonical: dict[str, dict[str, str]], errors: list[str]
+) -> int:
+    record_ids: set[str] = set()
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except UnicodeError as exc:
+        errors.append(f"record_evidence.jsonl is not valid UTF-8: {exc}")
+        return 0
+    for line_number, line in enumerate(lines, start=1):
+        if not line.strip():
+            continue
+        try:
+            value = json.loads(line)
+        except json.JSONDecodeError as exc:
+            errors.append(f"record_evidence.jsonl:{line_number} is invalid JSON: {exc}")
+            continue
+        if not isinstance(value, dict):
+            errors.append(f"record_evidence.jsonl:{line_number} must be an object")
+            continue
+        record_id = value.get("record_id")
+        if not isinstance(record_id, str) or not record_id:
+            errors.append(f"record_evidence.jsonl:{line_number} has no record_id")
+            continue
+        if record_id in record_ids:
+            errors.append(f"record_evidence.jsonl:{line_number} repeats record_id {record_id}")
+        record_ids.add(record_id)
+        for field in ("source_id", "source_locator", "license", "analyte_reported"):
+            if value.get(field) in (None, ""):
+                errors.append(f"record_evidence.jsonl:{line_number} lacks {field}")
+            elif record_id in canonical and str(value[field]).strip() != canonical[record_id][field]:
+                errors.append(f"record_evidence.jsonl:{line_number} conflicts with geochemistry.csv on {field}")
+        comparable = {
+            "source_record_id": "source_record_id", "dataset_title": "dataset_title",
+            "dataset_doi": "dataset_doi", "dataset_version": "dataset_version",
+            "source_file": "source_file", "source_row": "source_row", "source_file_sha256": "file_sha256",
+        }
+        for evidence_field, canonical_field in comparable.items():
+            evidence_value = value.get(evidence_field)
+            canonical_value = canonical.get(record_id, {}).get(canonical_field)
+            if evidence_value not in (None, "") and canonical_value and str(evidence_value).strip() != canonical_value:
+                errors.append(
+                    f"record_evidence.jsonl:{line_number} conflicts with geochemistry.csv on {evidence_field}"
+                )
+        file_hash = value.get("source_file_sha256")
+        if file_hash is not None and (not isinstance(file_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", file_hash)):
+            errors.append(f"record_evidence.jsonl:{line_number} has invalid source_file_sha256")
+        source_url = value.get("source_file_url")
+        if source_url is not None and (not isinstance(source_url, str) or not source_url.startswith("https://")):
+            errors.append(f"record_evidence.jsonl:{line_number} has invalid source_file_url")
+    if record_ids != set(canonical):
+        errors.append("record_evidence.jsonl record IDs do not exactly match geochemistry.csv")
+    return len(record_ids)
+
+
 def validate_feature_collection(
     value: Any,
     name: str,
@@ -176,6 +245,8 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         return {"status": "invalid", "errors": errors, "warnings": warnings, "metrics": {}}
 
     database_metrics = validate_database(paths["database"], errors, warnings)
+    canonical_evidence = database_evidence_index(paths["database"])
+    evidence_count = validate_record_evidence(paths["record_evidence"], canonical_evidence, errors)
     parsed: dict[str, Any] = {}
     for key in ("source_manifest", "qc_report", "confidence_report", "anomalies", "anomaly_report", "samples", "run_summary"):
         try:
@@ -223,7 +294,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     if not isinstance(confidence, dict) or confidence.get("not_a_probability") is not True:
         errors.append("confidence_report.json must state that operational confidence is not a probability")
     if isinstance(manifest, dict) and isinstance(confidence, dict):
-        if manifest.get("manifest_version") != "geochemical-source-manifest-v1":
+        if manifest.get("manifest_version") != "geochemical-source-manifest-v2":
             errors.append("source_manifest.json has an unsupported manifest_version")
         manifest_input = manifest.get("input")
         summary_input = summary.get("input") if isinstance(summary, dict) else None
@@ -231,6 +302,13 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors.append("source manifest and run summary must contain input objects")
         elif manifest_input.get("sha256") != summary_input.get("sha256"):
             errors.append("source manifest input hash does not match run summary")
+        if isinstance(summary_input, dict):
+            if manifest.get("data_mode") != summary_input.get("data_mode"):
+                errors.append("source manifest data_mode does not match run summary")
+            if manifest.get("not_for_scientific_interpretation") != summary_input.get(
+                "not_for_scientific_interpretation"
+            ):
+                errors.append("source manifest scientific-interpretation boundary does not match run summary")
         binding = manifest.get("confidence_report")
         if not isinstance(binding, dict):
             errors.append("source_manifest.json must bind confidence_report.json")
@@ -244,6 +322,40 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             run_metadata = confidence.get("run_metadata")
             if not isinstance(run_metadata, dict) or binding.get("input_sha256") != run_metadata.get("input_sha256"):
                 errors.append("source manifest confidence input hash does not match D2 run metadata")
+        evidence_binding = manifest.get("record_evidence")
+        if not isinstance(evidence_binding, dict):
+            errors.append("source_manifest.json must bind record_evidence.jsonl")
+        else:
+            if evidence_binding.get("filename") != paths["record_evidence"].name:
+                errors.append("source manifest record evidence filename is invalid")
+            if evidence_binding.get("sha256") != sha256_file(paths["record_evidence"]):
+                errors.append("source manifest record evidence hash does not match record_evidence.jsonl")
+            if evidence_binding.get("record_count") != evidence_count:
+                errors.append("source manifest record evidence count does not match record_evidence.jsonl")
+            if evidence_binding.get("exact_record_id_match") is not True:
+                errors.append("source manifest must declare exact record evidence linkage")
+            if evidence_binding.get("schema_version") != "geochemical-record-evidence-v1":
+                errors.append("source manifest has an unsupported record evidence schema_version")
+            evidence_level = evidence_binding.get("evidence_level")
+            if evidence_level not in {
+                "source_declared_in_input", "validated_record_evidence", "verified_record_evidence"
+            }:
+                errors.append("source manifest has an unsupported evidence_level")
+            coverage = manifest.get("coverage")
+            if not isinstance(coverage, dict):
+                errors.append("source manifest must contain evidence coverage")
+            elif evidence_level == "verified_record_evidence":
+                if (
+                    coverage.get("records_with_verified_evidence") != evidence_count
+                    or coverage.get("verified_evidence_rate") != 1.0
+                    or evidence_binding.get("acquisition_manifest") is None
+                ):
+                    errors.append("verified evidence coverage is inconsistent with the acquisition binding")
+            elif (
+                coverage.get("records_with_verified_evidence") != 0
+                or coverage.get("verified_evidence_rate") != 0.0
+            ):
+                errors.append("unverified evidence must not contribute to verified coverage")
     anomaly_report = parsed.get("anomaly_report")
     if not isinstance(anomaly_report, dict) or anomaly_report.get("scientific_status") != "screening_baseline_only":
         errors.append("anomaly_report.json must declare screening_baseline_only")
@@ -255,6 +367,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         "warnings": warnings,
         "metrics": {
             **database_metrics,
+            "record_evidence_count": evidence_count,
             "sample_feature_count": sample_count,
             "candidate_feature_count": anomaly_count,
         },

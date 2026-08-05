@@ -31,6 +31,7 @@ MINIMUM_INPUT_COLUMNS = {"element_or_analyte", "value", "unit", "medium"}
 DEFAULT_GROUP_BY = (
     "element_or_analyte",
     "medium",
+    "material",
     "measurement_basis",
     "geologic_unit",
     "method_family",
@@ -39,6 +40,7 @@ DEFAULT_GROUP_BY = (
 GROUPABLE_FIELDS = {
     "element_or_analyte",
     "medium",
+    "material",
     "measurement_basis",
     "geologic_unit",
     "analytical_method",
@@ -160,6 +162,7 @@ FLAG_SEVERITY = {
     "UNRECOGNIZED_MEDIUM": "warning",
     "POSSIBLE_COORDINATE_SWAP": "warning",
     "INCOMPLETE_COORDINATE": "warning",
+    "COORDINATE_NOT_CANONICALIZED": "warning",
     "ZERO_ISLAND_COORDINATE": "warning",
     "OUTSIDE_REQUEST_REGION": "warning",
     "MISSING_SOURCE_CRS": "warning",
@@ -569,7 +572,16 @@ def normalize_coordinates(
     lon = parse_optional_float(canonical_lon_raw)
 
     if canonical_lat_raw is None and canonical_lon_raw is None:
-        if original_lat_raw is not None or original_lon_raw is not None:
+        original_lat = parse_optional_float(original_lat_raw)
+        original_lon = parse_optional_float(original_lon_raw)
+        if (
+            original_lat is not None
+            and original_lon is not None
+            and -90 <= original_lat <= 90
+            and -180 <= original_lon <= 180
+        ):
+            add_flag(flags, "COORDINATE_NOT_CANONICALIZED")
+        elif original_lat_raw is not None or original_lon_raw is not None:
             add_flag(flags, "INCOMPLETE_COORDINATE")
             add_flag(flags, "INVALID_COORDINATE")
         return original_lat_raw, original_lon_raw, None, None
@@ -778,6 +790,10 @@ def normalize_row(
     coordinate_transform_method = blank_to_none(row.get("coordinate_transform_method"))
     if source_crs is None:
         add_flag(flags, "MISSING_SOURCE_CRS")
+        if latitude is not None or longitude is not None:
+            add_flag(flags, "COORDINATE_NOT_CANONICALIZED")
+            latitude = None
+            longitude = None
     elif (
         (lat_raw is not None or lon_raw is not None)
         and not is_wgs84_crs(source_crs)
@@ -1107,6 +1123,27 @@ def build_confidence_report(
         "meaning": "Record usability for this workflow; not truth probability, statistical confidence, or accuracy.",
         "run_metadata": dict(run_metadata),
         "weights": {"source": 0.30, "completeness": 0.20, "method": 0.20, "spatial": 0.15, "qc": 0.15},
+        "component_definitions": {
+            "source": "Registry tier score minus explicit penalties for missing source ID, locator, license, or invalid file hash.",
+            "completeness": "Fraction of required scientific, method, spatial, dataset, file and license fields present.",
+            "method": "Fraction present among measurement basis, analytical method, method family and digestion/extraction.",
+            "spatial": "Canonical coordinate availability plus declared CRS and coordinate uncertainty; original-only coordinates score zero.",
+            "qc": "Deterministic deduction from error, warning and information QC flags.",
+            "overall": "Weighted sum of source, completeness, method, spatial and QC, subject to declared gates.",
+        },
+        "source_scoring": {
+            "tier_scores": dict(SOURCE_TIER_SCORES),
+            "penalties": {
+                "missing_source_id": 0.15,
+                "missing_source_locator": 0.25,
+                "missing_license": 0.10,
+                "source_file_without_valid_sha256": 0.05,
+            },
+            "evidence_boundary": (
+                "D2 scores declared fields and hash syntax. D1 separately validates record-ID equality and, when an "
+                "acquisition manifest is supplied, binds the input and record-evidence hashes."
+            ),
+        },
         "band_thresholds": {"high": ">=0.80", "medium": ">=0.60 and <0.80", "low": "<0.60"},
         "gates": {"any_error_flag": "overall capped at 0.59 (low)"},
         "component_means": means,

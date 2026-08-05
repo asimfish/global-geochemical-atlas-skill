@@ -1,5 +1,7 @@
 # D1 下载与缓存测试记录
 
+> 本文件保留各时点的历史验收结果。当前科学口径与最新回归以 `demo-generation-tests.md` 为准：GEOROC 因 datum 证据不足为 0/48 canonical 坐标；USGS fixture 已扩展为 108 条并按三个土层独立分组。下文早期“GEOROC 坐标有效”和“USGS 48 条”结论已被后续复审取代。
+
 ## 2026-08-05 14:15 CST
 
 环境：macOS，Python 3.13.3。真实下载只写入 `/tmp/d1-usgs-cache/`，没有把第三方数据或缓存提交进仓库。
@@ -114,8 +116,8 @@ D1 当前共 46 项契约检查通过。完整降级规则见 `failures.md`。
 
 - D1/D2/D3 组件契约：67/67 通过；
 - 确定性回归：22/22 通过；
-- GEOROC fixture 完整工作流：48 条输入、48 条标准化、48 个有效坐标，状态 `success`；
-- USGS fixture 完整工作流：48 条输入、48 条标准化、48 个有效坐标，状态 `success`；
+- GEOROC fixture 完整工作流：当时报告 48 个有效坐标；该 CRS 断言已在后续科学复审中撤销，当前为 0/48 canonical 坐标；
+- USGS fixture 完整工作流：当时版本为 48 条输入、48 条标准化、48 个有效坐标；当前 fixture 已扩展为 108 条；
 - GEOROC 验证缓存：28 个成员全部 `cache_hit` 并通过大小、MD5、SHA-256、成员和字段校验；
 - USGS 验证缓存：三个土层全部 `cache_hit` 并通过版本和 SHA-256 校验；
 - 两套 demo 使用固定参数重新生成，`demo_input.csv`、`sources.jsonl`、`run_manifest.json` 六个文件全部逐字节一致；
@@ -143,8 +145,8 @@ D1 当前共 46 项契约检查通过。完整降级规则见 `failures.md`。
 
 - D1/D2/D3 契约检查：67/67 通过；
 - 确定性与科学边界回归：22/22 通过；
-- GEOROC 离线 fixture：48 条记录全部标准化且坐标有效，状态 `success`；
-- USGS 离线 fixture：48 条记录全部标准化且坐标有效，状态 `success`；
+- GEOROC 离线 fixture：当时报告坐标有效；该 CRS 断言已撤销，当前 48 条记录全部标准化但 canonical 坐标均留空；
+- USGS 离线 fixture：当时版本为 48 条记录；当前为 108 条记录，全部标准化且坐标有效；
 - 故障注入覆盖网络、HTTP 403/502、HTML、体积、checksum、版本、ZIP 和必要字段路径。
 
 E1 在线、缓存、离线和故障测试全部通过。

@@ -301,9 +301,15 @@
       },
       "citation": "DIGIS Team (2026). GEOROC Compilation: Archaean Cratons, Version 12.0. GRO.data. https://doi.org/10.25625/1KRR1P",
       "redistribution": "ShareAlike and attribution required; retain dataset and original publication citations.",
+      "coordinate_reference": {
+        "reported_format": "decimal latitude and longitude bounds",
+        "datum_status": "not_declared_in_reviewed_public_metadata",
+        "canonicalization_policy": "retain original coordinates; withhold canonical WGS84 coordinates until datum evidence is available"
+      },
       "scientific_notes": [
         "The files are GEOROC precompiled selected values, not an unfiltered collection of every replicate analysis.",
-        "Results are grouped by craton; member-level provenance and citations must be retained."
+        "Results are grouped by craton; member-level provenance and citations must be retained.",
+        "Decimal coordinates must not be labeled EPSG:4326 solely from their numeric format."
       ]
     },
     "usgs-conus-soil": {
@@ -370,6 +376,22 @@
       },
       "citation": "Smith, D.B., Cannon, W.F., Woodruff, L.G., Solano, F., Kilburn, J.E., and Fey, D.L. (2013). Geochemical and mineralogical data for soils of the conterminous United States. U.S. Geological Survey Data Series 801. https://doi.org/10.3133/ds801",
       "redistribution": "USGS-authored data are public domain; preserve the suggested citation and dataset metadata.",
+      "coordinate_reference": {
+        "source_crs": "EPSG:4326",
+        "source_statement": "WGS 84",
+        "evidence_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_5_Metadata.pdf"
+      },
+      "encoded_methods": {
+        "As": {
+          "method": "hydride-generation atomic absorption spectrometry (HG-AAS)",
+          "digestion_or_extraction": "sodium peroxide and sodium hydroxide fusion"
+        },
+        "Cu_Ni_Zn": {
+          "method": "inductively coupled plasma-atomic emission spectrometry (ICP-AES)",
+          "digestion_or_extraction": "near-total HCl-HNO3-HClO4-HF digestion"
+        },
+        "evidence_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_5_Metadata.pdf"
+      },
       "scientific_notes": [
         "The three files represent 0-5 cm, A-horizon, and C-horizon/deep samples and must remain distinguishable.",
         "Legacy qualifiers and units must be decoded from this dataset's own metadata before D2 normalization."

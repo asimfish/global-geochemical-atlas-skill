@@ -110,6 +110,7 @@ def summary_outputs() -> dict[str, str]:
     return {
         "database": "geochemistry.csv",
         "source_manifest": "source_manifest.json",
+        "record_evidence": "record_evidence.jsonl",
         "qc_report": "qc_report.json",
         "confidence_report": "confidence_report.json",
         "anomalies": "anomalies.geojson",
@@ -136,6 +137,8 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
             "sha256": evidence_builder.sha256_file(input_path) if input_path.is_file() else "0" * 64,
             "record_count": 0,
             "synthetic_demo": False,
+            "data_mode": "not_evaluated",
+            "not_for_scientific_interpretation": False,
         },
         "outputs": {},
         "metrics": {
@@ -184,8 +187,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     input_hash = evidence_builder.sha256_file(args.input)
     source_manifest_path = args.output_dir / "source_manifest.json"
     try:
-        _, synthetic_present = evidence_builder.package_evidence(
-            args.input, outputs["database"], outputs["confidence_report"], source_manifest_path
+        source_manifest, synthetic_present = evidence_builder.package_evidence(
+            args.input,
+            outputs["database"],
+            outputs["confidence_report"],
+            source_manifest_path,
+            args.evidence_jsonl,
+            args.acquisition_manifest,
         )
     except evidence_builder.EvidenceError as exc:
         raise WorkflowError("conflicting_evidence", f"evidence packaging failed: {exc}") from exc
@@ -210,6 +218,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     ]
     if synthetic_present:
         limitations.insert(0, "The bundled demo is synthetic CC0 validation data and supports no real-world claim.")
+    elif source_manifest.get("not_for_scientific_interpretation") is True:
+        limitations.insert(
+            0,
+            "This is a deterministic real-source fixture for pipeline demonstration, not a representative "
+            "scientific sample and not for scientific interpretation.",
+        )
     if int(severity_counts.get("error", 0)):
         limitations.append("Some records have error-level QC flags and are capped at low operational confidence.")
     failed_groups = sum(group.get("status") != "analyzed" for group in anomaly_report.get("groups", []))
@@ -239,6 +253,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "sha256": input_hash,
             "record_count": len(rows),
             "synthetic_demo": synthetic_present,
+            "data_mode": source_manifest.get("data_mode", "input"),
+            "not_for_scientific_interpretation": source_manifest.get(
+                "not_for_scientific_interpretation", False
+            ),
         },
         "outputs": summary_outputs(),
         "metrics": metrics,
@@ -269,6 +287,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--input", required=True, type=Path, help="UTF-8 CSV; one row per sample-analyte determination")
     parser.add_argument("--output-dir", required=True, type=Path, help="Destination directory for stable outputs")
+    parser.add_argument(
+        "--evidence-jsonl",
+        type=Path,
+        help="Optional D1 record evidence sidecar; copied and hash-bound as record_evidence.jsonl",
+    )
+    parser.add_argument(
+        "--acquisition-manifest",
+        type=Path,
+        help="Optional D1 run manifest that binds the input CSV and --evidence-jsonl hashes",
+    )
     parser.add_argument(
         "--region-bbox", type=standardizer.parse_bbox, metavar="W,S,E,N",
         help="Optional WGS84 requested region, used for coordinate QC (dateline crossing supported)",

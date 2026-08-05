@@ -9,7 +9,7 @@
 | 优先级 | P0（MVP 必需） |
 | 启动日期 | 2026-08-05 |
 | 目标完成日期 | 2026-08-13（7 个工作日） |
-| 最近更新 | 2026-08-05 15:41 CST |
+| 最近更新 | 2026-08-05 18:13 CST |
 | 跟踪方式 | 本文件任务勾选状态 + Git 提交记录 |
 | 工作分支 | `d1/data-source-engineering` |
 | 生产目录 | `skills/global-geochemical-atlas/` |
@@ -57,6 +57,7 @@
 | M4：Demo 与证据链完成 | 2026-08-11 | 已完成 | fixture 可离线运行，逐条来源和运行清单完整 |
 | M5：失败模式测试完成 | 2026-08-12 | 已完成 | 关键异常均有明确错误或降级路径 |
 | M6：联调与 MVP 验收 | 2026-08-13 | 已完成 | 通过 D2、D3、E1 联调及本文件验收清单 |
+| M7：阻断项复审与修复 | 2026-08-05 | 已完成 | sidecar 进入最终证据链；方法/CRS/土层背景边界修复；Schema、Skill 和端到端回归对齐 |
 
 状态统一使用：`未开始`、`进行中`、`已完成`、`阻塞`。
 
@@ -76,11 +77,14 @@
 建议 CLI：
 
 ```bash
-python skills/global-geochemical-atlas/scripts/download_data.py \
-  --source georoc_archaean_cratons \
-  --mode online \
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source usgs-conus-soil \
   --cache-dir .cache/data \
-  --output-dir outputs/data
+  --output-dir /tmp/usgs-demo \
+  --mode online \
+  --elements As,Cu,Ni,Zn \
+  --observations 108 \
+  --generated-at 2026-08-05T06:25:00Z
 ```
 
 ### 阶段 1：数据源注册与许可梳理
@@ -267,6 +271,22 @@ MVP 验收后，再按优先级处理：
 
 每次有实质进展时，在本节顶部追加一条记录，时间精确到分钟，并在同一次 Git 提交中同步更新对应任务和里程碑状态。
 
+### 2026-08-05 18:13 CST
+
+- 修复 USGS 异常背景把 0–5 cm、A horizon、C horizon 混合的问题：D1 将土层写入 `material`，D2 默认 `group_by` 纳入 `material`，12 个元素×土层背景组分别计算。
+- 将 USGS fixture 扩展为 108 条（每层 9 个样品、每样品 As/Cu/Ni/Zn），使每个土层背景组达到默认最小样本量；仍明确标记为不可用于科学解释。
+- 最新完整回归为 D1/D2/D3 共 93 项契约检查、self-test 62 项；USGS 输出 108 条记录、108 个地图点、3 条删失值和 5 个筛查候选，GEOROC 输出 48 条记录、0 个 canonical 地图点。
+- 两套完整十文件交付均通过 `validate_outputs.py`；USGS 与 GEOROC 的逐记录证据均与 acquisition manifest、源文件哈希和 canonical record ID 严格绑定。
+
+### 2026-08-05 17:58 CST
+
+- 修复 `sources.jsonl` 未进入最终输出的问题：新增 `record_evidence.jsonl`，严格校验 canonical record ID 与关键来源字段，并由 `run_manifest.json` 绑定 CSV/sidecar SHA-256；USGS demo 最终 `verified_evidence_rate=1.0`。
+- 按 USGS Appendix 5 补齐 WGS 84、As HG-AAS/fusion、Cu/Ni/Zn ICP-AES/four-acid、原始 `<0.6` qualifier 和 detection limit；当时 48 条记录均有完整方法字段，随后在 18:13 扩展为 108 条，仍包含 3 条真实删失记录。
+- 撤销 GEOROC 十进制度坐标即 EPSG:4326 的无证据假设：48 条均保留 reported coordinates，canonical 坐标置空并标记 `COORDINATE_NOT_CANONICALIZED`。
+- `run_summary.json` 现在继承 fixture 的 `not_for_scientific_interpretation`；输出契约从 9 个扩展为 10 个稳定文件。
+- 新增 source registry、record evidence、acquisition manifest Schema，升级 source manifest v2，并补齐 Skill 入口、失败边界和 demo 文档。
+- 当时新隔离分支中 D1/D2/D3 共 92 项契约检查、self-test 62 项、USGS 与 GEOROC 两套端到端输出校验全部通过；18:13 加入土层背景回归后更新为 93 项。
+
 ### 2026-08-05 15:41 CST
 
 - 在新的临时 Git 检出和清空继承环境变量的 E1 验收环境中执行全部测试。
@@ -274,14 +294,14 @@ MVP 验收后，再按优先级处理：
 - 使用相同缓存再次运行，三个文件全部返回 `cache_hit`，版本、URL 和 SHA-256 校验通过。
 - D1/D2/D3 共 67 项契约检查通过，包含超时、HTTP、HTML、大小、checksum、版本、ZIP 和字段故障注入。
 - `self_test.py` 22 项确定性与科学边界回归通过。
-- GEOROC 和 USGS 两套离线 fixture 工作流均 48/48 标准化、48/48 有效坐标并返回 `success`。
+- GEOROC 和 USGS 两套离线 fixture 工作流当时均被报告为 48/48 有效坐标；17:58 科学复审后判定 GEOROC datum 证据不足，该坐标结论已撤销。
 - E1、D2、D3 联调和 MVP 验收清单全部完成，计划状态更新为 `已完成`。
 
 ### 2026-08-05 14:45 CST
 
 - 从当前分支创建新的临时 Git 检出，并清空继承环境变量，仅保留 Python 标准库运行路径。
 - 干净检出中 D1/D2/D3 共 67 项契约检查通过，`self_test.py` 22 项回归通过。
-- 干净检出中 GEOROC 和 USGS 两套 fixture 均完整运行：48/48 标准化、48/48 有效坐标、状态 `success`。
+- 干净检出中两套 fixture 当时均被报告为 48/48 有效坐标；17:58 科学复审后，GEOROC 改为 0/48 canonical 坐标并显式失败关闭。
 - 使用验证缓存重新解析 GEOROC 28 个成员和 USGS 三个土层，全部返回 `cache_hit`。
 - 两套 demo 从缓存重新生成，六个交付文件与仓库版本逐字节一致。
 - 仓库内没有超过 1 MB 的 D1 交付文件，完整数据和下载缓存仍只位于仓库外临时目录。
@@ -300,11 +320,11 @@ MVP 验收后，再按优先级处理：
 ### 2026-08-05 14:31 CST
 
 - 新增确定性 `generate_demo_data.py`，从验证缓存生成真实来源最小切片。
-- 提交 GEOROC rock 和 USGS soil 两套 fixture，每套 48 条观测，As/Cu/Ni/Zn 各 12 条。
+- 当时提交 GEOROC rock 和 USGS soil 两套 fixture，每套 48 条观测，As/Cu/Ni/Zn 各 12 条；USGS fixture 已在 18:13 扩展为 108 条、各元素 27 条。
 - 两套 fixture 均包含 `demo_input.csv`、逐条 `sources.jsonl` 和 `run_manifest.json`。
 - GEOROC 证据链从 citation ID 解析到原始参考文献文本；USGS 保留三个土层和建议引用。
 - 使用相同参数在新目录重新生成，六个输出文件全部字节级一致。
-- 两套 demo 均跑通完整工作流：48/48 标准化、48/48 有效坐标，输出校验 0 errors。
+- 两套 demo 当时均跑通完整工作流并被报告为 48/48 有效坐标；17:58 已纠正 GEOROC 无 datum 的错误 CRS 断言。
 - D1 组件测试扩展到 33 项，全套 D1/D2/D3 契约共 54 项通过。
 - 当前下一步：完成 M5 故障注入矩阵和降级策略文档。
 

@@ -16,14 +16,14 @@
 ## 稳定数据流
 
 ```text
-D1 公开来源/缓存/demo CSV
-          │ 原值、来源、许可、坐标、方法
+D1 公开来源/缓存/demo CSV + record evidence + acquisition manifest
+          │ 原值、来源、许可、坐标、方法、逐记录证据
           ▼
 D2 标准化 + QC + 置信度算法 + 候选异常
           │ geochemistry / qc / confidence / anomalies
           ├──────────────► D1 证据打包与哈希绑定 ──► source_manifest
           ▼
-D3 工作流编排 + 地图 + 输出校验 ──► 九个稳定交付文件
+D3 工作流编排 + 地图 + 输出校验 ──► 十个稳定交付文件
 ```
 
 `run_workflow.py` 只负责调用顺序和最终状态，不复制 D1/D2 算法。D1 的证据模块只验证 D2 置信度报告的版本、输入哈希和文件哈希，不重新计算置信度。
@@ -32,8 +32,8 @@ D3 工作流编排 + 地图 + 输出校验 ──► 九个稳定交付文件
 
 - D1 → D2：CSV 至少提供 `element_or_analyte,value,unit,medium`；正式数据还应携带样品、basis、坐标、方法、来源定位与许可。
 - D2 → D1/D3：固定生成五个分析产物，记录结构以 `geochemistry-record.schema.json` 为准，置信度版本当前为 `d2-confidence-v2`；D1 非 canonical 列名可按 `schema-map.schema.json` 显式映射。
-- D1 → D3：固定生成 `source_manifest.json`，其中输入 SHA-256 必须与 D2 run metadata 相同，并绑定 `confidence_report.json` 的 SHA-256。
-- D3 → 用户：固定生成 README 所列九个文件；更名、删减或改变语义属于破坏性接口变更。
+- D1 → D3：固定生成 `source_manifest.json` 和 `record_evidence.jsonl`；输入 SHA-256 必须与 D2 run metadata 相同，sidecar 的 record ID 必须与 canonical database 完全一致，并绑定 acquisition manifest 与 `confidence_report.json` 的 SHA-256。
+- D3 → 用户：固定生成 README 所列十个文件；更名、删减或改变语义属于破坏性接口变更。
 - 任何 Schema、版本号、输出文件名或 CLI 参数变更，都要在同一 PR 中更新文档、组件测试和完整回归测试。
 
 ## 分支与 PR

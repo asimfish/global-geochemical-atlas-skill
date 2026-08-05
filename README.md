@@ -18,6 +18,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 
 - `geochemistry.csv`：标准化地球化学数据库；
 - `source_manifest.json`：记录级来源、许可、输入哈希及置信度报告哈希绑定；
+- `record_evidence.jsonl`：与数据库记录一一对应的来源文件、源行、版本、哈希和引用；
 - `qc_report.json` 与 `confidence_report.json`：QC 和运行级置信度；
 - `anomalies.geojson` 与 `anomaly_report.json`：候选异常及背景组统计；
 - `samples.geojson`：地图样点图层；
@@ -40,7 +41,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
   --max-records 50000
 ```
 
-最低输入列为 `element_or_analyte,value,unit,medium`。正式科学运行还应提供样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限、来源定位和许可。完整契约见 `skills/global-geochemical-atlas/references/`。
+`standardize_geochemistry.py` 的最低分析列为 `element_or_analyte,value,unit,medium`；要运行并交付完整 `run_workflow.py`，还必须提供非空 `source_id,source_locator,license`，否则证据打包会失败关闭。正式科学运行还应提供 `source_tier`、样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限和文件哈希。完整契约见 `skills/global-geochemical-atlas/references/`。
 
 ## 科学边界
 
@@ -50,6 +51,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 - 不静默交换经纬度，不把未知 CRS 冒充 WGS84。
 - 异常是相对已声明背景组的筛查候选，不等于污染、矿床或成因结论。
 - demo 是 CC0 合成验收数据，只用于工程复现，不支持真实区域科学结论。
+- 真实来源 fixture 也只用于流水线演示；其 `run_manifest.json` 会把该限制传到最终结果。
 
 ## 仓库结构
 

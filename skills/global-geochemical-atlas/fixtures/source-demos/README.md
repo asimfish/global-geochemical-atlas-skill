@@ -14,8 +14,8 @@
 
 - 来源：GEOROC Compilation: Archaean Cratons，DOI `10.25625/1KRR1P`，版本 12.0；
 - 许可：CC BY-SA 4.0；
-- 内容：按源文件顺序选择 whole-rock、精确点坐标记录，并平衡抽取 As、Cu、Ni、Zn 各 12 条；
-- 边界：数值是 GEOROC 预编译选择值，不代表全部重复测量。
+- 内容：按源文件顺序选择 whole-rock、reported point coordinates 记录，并平衡抽取 As、Cu、Ni、Zn 各 12 条；
+- 边界：数值是 GEOROC 预编译选择值，不代表全部重复测量；公开元数据未充分声明统一 datum，因此 reported coordinates 只写入原始字段，canonical 坐标与 CRS 留空，不进入地图。
 
 ## USGS demo
 
@@ -23,8 +23,8 @@
 
 - 来源：USGS Data Series 801，DOI `10.3133/ds801`；
 - 权利状态：USGS 制作的数据属于美国公有领域，仍保留建议引用；
-- 内容：0–5 cm、A horizon、C horizon 各选择 4 个源样品，每个样品保留 As、Cu、Ni、Zn；
-- 边界：三个土层保持可区分，legacy qualifier 和科学标准化由 D2 处理。
+- 内容：0–5 cm、A horizon、C horizon 各选择 9 个源样品，每个样品保留 As、Cu、Ni、Zn，并在每层确定性纳入一条删失记录；`material` 显式编码土层，避免异常背景混合；
+- 边界：三个土层保持可区分；D1 按 USGS Appendix 5 映射 WGS 84、分析方法、消解方式和原始 qualifier，D2 负责 canonical qualifier、单位标准化、QC 和置信度。
 
 ## 确定性再生成
 
@@ -36,6 +36,7 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --cache-dir .cache/data \
   --output-dir /tmp/georoc-demo \
   --mode cached \
+  --elements As,Cu,Ni,Zn \
   --observations 48 \
   --generated-at 2026-08-05T06:25:00Z
 
@@ -44,7 +45,8 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --cache-dir .cache/data \
   --output-dir /tmp/usgs-demo \
   --mode cached \
-  --observations 48 \
+  --elements As,Cu,Ni,Zn \
+  --observations 108 \
   --generated-at 2026-08-05T06:25:00Z
 ```
 
