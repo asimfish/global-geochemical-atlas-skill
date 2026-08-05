@@ -6,21 +6,28 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import io
 import json
 import subprocess
 import sys
 import tempfile
+import urllib.error
+import zipfile
+from collections import Counter
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import download_data as downloader
+import source_adapters as source_contracts
 import validate_outputs as output_validator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 REPO_ROOT = SKILL_DIR.parents[1]
 DEMO_INPUT = SKILL_DIR / "fixtures" / "demo_input.csv"
+SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 
@@ -80,6 +87,110 @@ def check_d1(output_dir: Path) -> list[str]:
     require(binding.get("sha256") == sha256_file(confidence_path), "D1 packages the unchanged D2 confidence hash", checks)
     require(binding.get("not_a_probability") is True, "D1 preserves the confidence interpretation boundary", checks)
 
+    registry = source_contracts.load_source_registry()
+    require(
+        set(registry["sources"]) == {"georoc-archaean", "usgs-conus-soil"},
+        "D1 registry freezes the two MVP public sources",
+        checks,
+    )
+    georoc = source_contracts.registry_candidate("georoc-archaean")
+    require(
+        georoc.version == "12.0" and georoc.license_id == "CC-BY-SA-4.0",
+        "D1 GEOROC candidate binds the verified version and license",
+        checks,
+    )
+    usgs = source_contracts.registry_candidate("usgs-conus-soil")
+    require(
+        len(usgs.registry_entry["download"]["files"]) == 3,
+        "D1 USGS candidate keeps the three soil layers distinct",
+        checks,
+    )
+    source_record_id = source_contracts.stable_source_record_id(
+        "usgs-conus-soil",
+        "CO-123",
+        "Appendix_2b_Top5_18Sept2013.txt#row=42",
+    )
+    require(
+        source_record_id
+        == source_contracts.stable_source_record_id(
+            "usgs-conus-soil",
+            "CO-123",
+            "Appendix_2b_Top5_18Sept2013.txt#row=42",
+        ),
+        "D1 source record IDs are deterministic",
+        checks,
+    )
+    record_id = source_contracts.stable_record_id(
+        "usgs-conus-soil", source_record_id, "As", "8.0", "mg/kg"
+    )
+    require(
+        record_id
+        != source_contracts.stable_record_id(
+            "usgs-conus-soil", source_record_id, "As", "8.0", "mg/kg", occurrence=1
+        ),
+        "D1 observation IDs preserve repeated determinations",
+        checks,
+    )
+
+    for source_id in ("georoc-archaean", "usgs-conus-soil"):
+        demo_dir = SOURCE_DEMOS / source_id
+        demo_input = demo_dir / "demo_input.csv"
+        sources_path = demo_dir / "sources.jsonl"
+        generation_manifest = json_value(demo_dir / "run_manifest.json")
+        demo_rows = csv_rows(demo_input)
+        evidence_rows = [json.loads(line) for line in sources_path.read_text(encoding="utf-8").splitlines()]
+        require(
+            len(demo_rows) == 48 and len(evidence_rows) == 48,
+            f"D1 {source_id} fixture has one evidence record per observation",
+            checks,
+        )
+        require(
+            generation_manifest.get("data_mode") == "fixture"
+            and generation_manifest.get("not_for_scientific_interpretation") is True,
+            f"D1 {source_id} fixture declares the scientific claim boundary",
+            checks,
+        )
+        expected_hashes = {item["path"]: item["sha256"] for item in generation_manifest["outputs"]}
+        require(
+            expected_hashes == {
+                "demo_input.csv": sha256_file(demo_input),
+                "sources.jsonl": sha256_file(sources_path),
+            },
+            f"D1 {source_id} fixture manifest binds deterministic output hashes",
+            checks,
+        )
+        require(
+            {row["record_id"] for row in demo_rows} == {row["record_id"] for row in evidence_rows}
+            and {row["source_id"] for row in demo_rows} == {source_id},
+            f"D1 {source_id} fixture preserves record-level evidence linkage",
+            checks,
+        )
+        require(
+            Counter(row["element_or_analyte"] for row in demo_rows)
+            == Counter({"As": 12, "Cu": 12, "Ni": 12, "Zn": 12}),
+            f"D1 {source_id} fixture keeps the four analytes balanced",
+            checks,
+        )
+    georoc_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "georoc-archaean" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        all(item.get("article_citations") for item in georoc_evidence),
+        "D1 GEOROC fixture resolves citation IDs to original reference text",
+        checks,
+    )
+    usgs_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "usgs-conus-soil" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        {item.get("soil_layer") for item in usgs_evidence}
+        == {"top-0-5cm", "a-horizon", "c-horizon"},
+        "D1 USGS fixture keeps all three soil layers distinct",
+        checks,
+    )
+
     with tempfile.TemporaryDirectory() as evidence_temp:
         standalone = Path(evidence_temp) / "source_manifest.json"
         evidence_builder.package_evidence(
@@ -105,6 +216,7 @@ def check_d1(output_dir: Path) -> list[str]:
         checks.append("D1 rejects a mismatched D2 confidence input hash")
 
         unsafe_output = Path(evidence_temp) / "unsafe.csv"
+        unsafe_manifest = Path(evidence_temp) / "unsafe-download.json"
         run_command(
             [
                 sys.executable,
@@ -114,7 +226,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 "--output",
                 str(unsafe_output),
                 "--manifest",
-                str(Path(evidence_temp) / "unsafe-download.json"),
+                str(unsafe_manifest),
                 "--license",
                 "unresolved",
                 "--retries",
@@ -123,6 +235,318 @@ def check_d1(output_dir: Path) -> list[str]:
             expected_code=2,
         )
         require(not unsafe_output.exists(), "D1 downloader fails closed on unsafe URLs", checks)
+        require(
+            json_value(unsafe_manifest).get("status") == "invalid_input",
+            "D1 downloader returns a structured invalid_input status",
+            checks,
+        )
+
+        cached_file = Path(evidence_temp) / "cached.csv"
+        cached_file.write_text("SiteID\tLatitude\tLongitude\nA\t1\t2\n", encoding="utf-8")
+        cached_url = "https://example.org/public/cached.csv"
+        cached_hash = sha256_file(cached_file)
+        cached_manifest = Path(evidence_temp) / "cached-download.json"
+        cached_manifest.write_text(
+            json.dumps(
+                {
+                    "source_url": cached_url,
+                    "sha256": cached_hash,
+                    "dataset_version": "v1",
+                }
+            ),
+            encoding="utf-8",
+        )
+        cache_result = downloader.existing_verified_cache(
+            cached_file,
+            cached_manifest,
+            cached_url,
+            cached_hash,
+            "v1",
+        )
+        require(cache_result["status"] == "cache_hit", "D1 reuses only a hash-verified versioned cache", checks)
+
+        offline_manifest = Path(evidence_temp) / "offline-miss.json"
+        run_command(
+            [
+                sys.executable,
+                str(DOWNLOADER),
+                "--url",
+                "https://example.org/public/missing.csv",
+                "--output",
+                str(Path(evidence_temp) / "missing.csv"),
+                "--manifest",
+                str(offline_manifest),
+                "--license",
+                "unresolved",
+                "--offline",
+            ],
+            expected_code=2,
+        )
+        require(
+            json_value(offline_manifest).get("status") == "network_unavailable",
+            "D1 offline cache miss returns a structured network_unavailable status",
+            checks,
+        )
+
+        for expected_hash, version, expected_message in (
+            ("0" * 64, "v1", "SHA-256 mismatch"),
+            (cached_hash, "v2", "dataset version"),
+        ):
+            try:
+                downloader.existing_verified_cache(
+                    cached_file,
+                    cached_manifest,
+                    cached_url,
+                    expected_hash,
+                    version,
+                )
+            except downloader.DownloadError as exc:
+                require(
+                    expected_message in str(exc),
+                    f"D1 rejects cached data on {expected_message}",
+                    checks,
+                )
+            else:
+                raise ContractError(f"D1 must reject cached data on {expected_message}")
+
+        for content_type, declared_length, expected_message in (
+            ("text/html; charset=utf-8", None, "HTML"),
+            ("text/plain", "1001", "Content-Length"),
+        ):
+            try:
+                downloader.validate_response_metadata(content_type, declared_length, max_bytes=1000)
+            except downloader.DownloadError as exc:
+                require(
+                    expected_message in str(exc),
+                    f"D1 rejects {expected_message} response metadata",
+                    checks,
+                )
+            else:
+                raise ContractError(f"D1 must reject {expected_message} response metadata")
+
+        try:
+            downloader.copy_response_bounded(io.BytesIO(b"x" * 1001), io.BytesIO(), max_bytes=1000)
+        except downloader.DownloadError as exc:
+            require(
+                "download exceeded" in str(exc),
+                "D1 enforces the streaming size limit without trusting Content-Length",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must enforce the streaming response size limit")
+
+        attempts: list[int] = []
+        delays: list[float] = []
+
+        def transient_download(*_args: Any) -> dict[str, Any]:
+            attempts.append(len(attempts) + 1)
+            if len(attempts) < 3:
+                raise TimeoutError("injected timeout")
+            return {"status": "downloaded"}
+
+        retry_result = downloader.download_with_retries(
+            cached_url,
+            Path(evidence_temp) / "retry.csv",
+            1,
+            1000,
+            None,
+            2,
+            downloader=transient_download,
+            sleeper=delays.append,
+        )
+        require(
+            retry_result.get("attempts") == 3 and attempts == [1, 2, 3] and delays == [1, 2],
+            "D1 retries transient timeouts only within the configured bound",
+            checks,
+        )
+
+        forbidden_attempts: list[int] = []
+
+        def forbidden_download(*_args: Any) -> dict[str, Any]:
+            forbidden_attempts.append(1)
+            raise urllib.error.HTTPError(cached_url, 403, "Forbidden", None, None)
+
+        try:
+            downloader.download_with_retries(
+                cached_url,
+                Path(evidence_temp) / "forbidden.csv",
+                1,
+                1000,
+                None,
+                3,
+                downloader=forbidden_download,
+                sleeper=delays.append,
+            )
+        except downloader.DownloadError as exc:
+            require(
+                exc.status == "source_not_accessible" and len(forbidden_attempts) == 1,
+                "D1 stops on HTTP 403 without retry or access-control bypass",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must stop on HTTP 403")
+        require(
+            downloader.is_retryable_error(urllib.error.HTTPError(cached_url, 502, "Bad Gateway", None, None))
+            and not downloader.is_retryable_error(urllib.error.HTTPError(cached_url, 500, "Error", None, None)),
+            "D1 HTTP retry policy is limited to the declared transient statuses",
+            checks,
+        )
+
+        valid_zip = Path(evidence_temp) / "valid.zip"
+        with zipfile.ZipFile(valid_zip, "w") as archive:
+            archive.writestr("dataset/data.csv", "SiteID,Latitude,Longitude\nA,1,2\n")
+        extract_dir = Path(evidence_temp) / "extracted"
+        extracted = downloader.safe_extract_zip(
+            valid_zip,
+            extract_dir,
+            max_members=5,
+            max_extracted_bytes=1000,
+            required_members=["dataset/data.csv"],
+            required_fields=["SiteID", "Latitude", "Longitude"],
+        )
+        require(
+            len(extracted) == 1 and (extract_dir / "dataset" / "data.csv").is_file(),
+            "D1 validates required ZIP members and fields before publishing extraction",
+            checks,
+        )
+
+        missing_member_zip = Path(evidence_temp) / "missing-member.zip"
+        with zipfile.ZipFile(missing_member_zip, "w") as archive:
+            archive.writestr("dataset/other.csv", "SiteID,Latitude,Longitude\nA,1,2\n")
+        try:
+            downloader.safe_extract_zip(
+                missing_member_zip,
+                Path(evidence_temp) / "must-not-publish-missing-member",
+                max_members=5,
+                max_extracted_bytes=1000,
+                required_members=["dataset/data.csv"],
+                required_fields=[],
+            )
+        except downloader.DownloadError as exc:
+            require(
+                "lacks required members" in str(exc),
+                "D1 rejects archives with missing required members",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must reject archives with missing required members")
+
+        missing_field_file = Path(evidence_temp) / "missing-fields.csv"
+        missing_field_file.write_text("SiteID,Value\nA,1\n", encoding="utf-8")
+        try:
+            downloader._read_delimited_header(missing_field_file, ["Latitude", "Longitude"])
+        except downloader.DownloadError as exc:
+            require(
+                "required delimited fields not found" in str(exc),
+                "D1 reports missing required source fields",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must reject files with missing required fields")
+
+        corrupt_zip = Path(evidence_temp) / "corrupt.zip"
+        corrupt_zip.write_bytes(b"not-a-zip")
+        try:
+            downloader.safe_extract_zip(
+                corrupt_zip,
+                Path(evidence_temp) / "must-not-publish-corrupt",
+                max_members=5,
+                max_extracted_bytes=1000,
+                required_members=[],
+                required_fields=[],
+            )
+        except downloader.DownloadError as exc:
+            require(
+                "not a valid ZIP archive" in str(exc),
+                "D1 rejects corrupt ZIP archives",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must reject corrupt ZIP archives")
+
+        unsafe_zip = Path(evidence_temp) / "unsafe.zip"
+        with zipfile.ZipFile(unsafe_zip, "w") as archive:
+            archive.writestr("../escape.csv", "value\n1\n")
+        try:
+            downloader.safe_extract_zip(
+                unsafe_zip,
+                Path(evidence_temp) / "must-not-extract",
+                max_members=5,
+                max_extracted_bytes=1000,
+                required_members=[],
+                required_fields=[],
+            )
+        except downloader.DownloadError:
+            pass
+        else:
+            raise ContractError("D1 must reject ZIP path traversal")
+        require(not (Path(evidence_temp) / "escape.csv").exists(), "D1 rejects ZIP path traversal", checks)
+
+        usgs_native = Path(evidence_temp) / "Appendix_2b_Top5_18Sept2013.txt"
+        usgs_native.write_text(
+            "USGS synthetic parser fixture\n\n"
+            "Top5_LabID\tSiteID\tStateID\tLatitude\tLongitude\tTop5_As\n"
+            "\t\t\tDegrees\tDegrees\tmg/kg\n"
+            "LAB-1\tSITE-1\tCO\t39.0\t-105.0\t8.2\n",
+            encoding="utf-8",
+        )
+        usgs_adapter = source_contracts.UsgsSoilAdapter()
+        usgs_records = list(
+            usgs_adapter.parse(
+                [
+                    source_contracts.DownloadedFile(
+                        source_id="usgs-conus-soil",
+                        file_id="top-0-5cm",
+                        path=usgs_native,
+                        source_url="https://example.org/usgs.txt",
+                        sha256=sha256_file(usgs_native),
+                        bytes=usgs_native.stat().st_size,
+                        cache_status="fixture",
+                        retrieved_at=None,
+                    )
+                ]
+            )
+        )
+        require(
+            len(usgs_records) == 1
+            and usgs_records[0].fields["_soil_layer"] == "top-0-5cm"
+            and usgs_records[0].fields["_units"]["Top5_As"] == "mg/kg",
+            "D1 USGS adapter preserves source fields, layer and units",
+            checks,
+        )
+
+        georoc_native = Path(evidence_temp) / "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv"
+        georoc_native.write_text(
+            "CITATIONS,SAMPLE NAME,LOCATION,MATERIAL,NI(PPM)\r"
+            "[1],SAMPLE-1,Aldan,WR,42\r"
+            "\r"
+            "Abbreviations: WR: WHOLE ROCK\r",
+            encoding="latin-1",
+        )
+        georoc_adapter = source_contracts.GeorocArchaeanAdapter()
+        georoc_records = list(
+            georoc_adapter.parse(
+                [
+                    source_contracts.DownloadedFile(
+                        source_id="georoc-archaean",
+                        file_id="OHZY0O",
+                        path=georoc_native,
+                        source_url="https://example.org/georoc.csv",
+                        sha256=sha256_file(georoc_native),
+                        bytes=georoc_native.stat().st_size,
+                        cache_status="fixture",
+                        retrieved_at=None,
+                    )
+                ]
+            )
+        )
+        require(
+            len(georoc_records) == 1
+            and georoc_records[0].fields["SAMPLE NAME"] == "SAMPLE-1"
+            and georoc_records[0].fields["NI(PPM)"] == "42",
+            "D1 GEOROC adapter handles CR-delimited CSV and stops before reference text",
+            checks,
+        )
     return checks
 
 

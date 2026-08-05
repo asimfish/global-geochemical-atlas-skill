@@ -16,6 +16,50 @@
 | Macrostrat | 地质背景 | `https://macrostrat.org/` | 数据通常 CC BY 4.0；同时引用 API 返回的原始地图来源和 source ID；记录比例尺与边界不确定性 |
 | Macrostrat API docs | 点位地质匹配 | `https://dev.macrostrat.org/docs` | API 版本快速演进；固定实际路由和响应字段，不凭记忆构造端点 |
 
+## MVP 冻结数据源
+
+机器可读的版本、文件、校验和、许可和引用信息位于
+`../assets/source_manifest.json`。这里的 `source_manifest.json` 是 D1 的**数据源注册表**；运行输出中的同名文件是记录级证据包，两者不得混用。
+
+### `georoc-archaean`
+
+- 数据集：GEOROC Compilation: Archaean Cratons；
+- DOI：`10.25625/1KRR1P`；
+- 当前冻结版本：12.0，发布时间 2026-06-11，数据生成日期 2026-06-01；
+- 内容：按克拉通分组的 28 个 CSV，总展开体积 31,696,168 字节；
+- 许可：CC BY-SA 4.0；
+- 获取：GRO.data Dataverse 的 versioned dataset API；
+- 校验：动态 ZIP 本身不固定哈希，必须验证 28 个成员的文件名、大小和发布方 MD5，并为本次取得的 ZIP 和成员另算 SHA-256；
+- 科学边界：这是 GEOROC 预编译选择值，不是全部原始重复分析的无筛选拼接；结果必须保留数据集 DOI、版本、成员文件和 CITATIONS 字段。
+
+### `usgs-conus-soil`
+
+- 数据集：Geochemical and mineralogical data for soils of the conterminous United States；
+- DOI：`10.3133/ds801`；
+- 当前冻结版本：Data Series 801，2013 release；
+- 内容：4,857 个站点，分别提供 0–5 cm、A horizon、C horizon/deep 三个制表符文本文件；
+- 许可：USGS 制作的数据属于美国公有领域，但仍保留建议引用；
+- 获取：USGS Publications Warehouse 的三个直接 HTTPS 文件；
+- 校验：注册表中的 SHA-256 是 2026-08-05 从官方 URL 观测所得，不冒充发布方 checksum；每次下载仍记录响应元数据和实际 SHA-256；
+- 科学边界：三种土层不得静默合并；legacy qualifier 和单位必须按该数据集自己的元数据解码。
+
+## D1 适配器和稳定 ID
+
+`scripts/source_adapters.py` 冻结以下接口：
+
+```text
+discover(request) -> list[DatasetCandidate]
+download(candidate, cache_dir, mode) -> list[DownloadedFile]
+parse(files) -> Iterable[RawRecord]
+provenance() -> SourceManifest entry
+```
+
+- `source_id` 使用注册表中的稳定短名，例如 `georoc-archaean`；
+- `source_record_id` 对 `source_id + native_id + source_locator` 做 canonical SHA-256；
+- `record_id` 对来源记录、原始分析物、原始值、原始单位和重复序号做 canonical SHA-256；
+- ID 不包含缓存路径、输出路径、下载时间或当前机器信息，因此重复运行保持稳定；
+- D1 只生成原始记录和来源定位，不在适配器里进行 D2 的单位标准化、异常判断或置信度计算。
+
 ## 来源选择门
 
 1. 先判断介质、区域、元素、时间和 measurement basis。
