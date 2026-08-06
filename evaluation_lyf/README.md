@@ -64,11 +64,13 @@ python3 evaluation_lyf/stage_benchmark/scripts/run_completion_reference.py \
 
 ## Qwen 有/无 Skill 测试
 
-用户只需创建两个空目录/会话并分别粘贴两份 canonical Prompt：
+主机直跑和 Docker 隔离两种方式都保留；每种方式各有纯 Qwen 与 Qwen + Skill 两个实验臂：
 
-- [无 Skill 组 Prompt](agent_uplift/QWEN_NO_SKILL_PROMPT.md)
-- [有 Skill 组 Prompt](agent_uplift/QWEN_WITH_SKILL_PROMPT.md)
+- [主机版：无 Skill](agent_uplift/QWEN_NO_SKILL_PROMPT.md)
+- [主机版：有 Skill](agent_uplift/QWEN_WITH_SKILL_PROMPT.md)
+- [Docker 版：无 Skill](agent_uplift/QWEN_NO_SKILL_DOCKER_PROMPT.md)
+- [Docker 版：有 Skill](agent_uplift/QWEN_WITH_SKILL_DOCKER_PROMPT.md)
 
-Prompt 会自行下载仓库和数据、准备 Docker、运行公开 scorer 并生成可回收 manifest。不要从 README 复制过期副本；完整协议、正式三次重复要求和 Docker 文件位置见 [`agent_uplift/DOCKER_UPLIFT.md`](agent_uplift/DOCKER_UPLIFT.md)。
+Prompt 会自行下载仓库和数据、运行公开 scorer 并生成可回收 manifest；Docker 版还会准备镜像。不要从 README 复制过期副本；完整协议、正式三次重复要求和 Docker 文件位置见 [`agent_uplift/DOCKER_UPLIFT.md`](agent_uplift/DOCKER_UPLIFT.md)。主机版与 Docker 版必须分别统计，不能混合计算中位数。
 
 Agent 只能看到 `agent_uplift/` 的公开任务；有 Skill 组额外看到一个 Skill。`stage_benchmark/`、`reference_implementation/`、gold 和历史结果必须隔离。单次联调不能宣称正式 uplift。

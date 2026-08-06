@@ -13,11 +13,13 @@
 ## 你实际要做的事
 
 1. 创建两个空目录，并分别把 Qwen Agent 启动在目录中；
-2. 无 Skill 目录原样粘贴 [`QWEN_NO_SKILL_PROMPT.md`](QWEN_NO_SKILL_PROMPT.md)；
-3. 有 Skill 目录原样粘贴 [`QWEN_WITH_SKILL_PROMPT.md`](QWEN_WITH_SKILL_PROMPT.md)；
+2. 无 Skill 目录原样粘贴 [`QWEN_NO_SKILL_DOCKER_PROMPT.md`](QWEN_NO_SKILL_DOCKER_PROMPT.md)；
+3. 有 Skill 目录原样粘贴 [`QWEN_WITH_SKILL_DOCKER_PROMPT.md`](QWEN_WITH_SKILL_DOCKER_PROMPT.md)；
 4. 回收两个目录的 `experiment_manifest.json`、`score.json` 和 submission。
 
 Prompt 会自行克隆固定 commit、构建或复用评测镜像、准备公开数据、完成任务、最多运行三轮公开 scorer，最后执行一次干净重建。用户无需预先下载仓库或 Skill。固定实验参数见 [`experiment_config.json`](experiment_config.json)。
+
+如果要保留原来的主机直跑方式，使用 [`QWEN_NO_SKILL_PROMPT.md`](QWEN_NO_SKILL_PROMPT.md) 和 [`QWEN_WITH_SKILL_PROMPT.md`](QWEN_WITH_SKILL_PROMPT.md)。主机结果与 Docker 结果属于不同 runtime profile，不能混在同一个三次中位数中。
 
 正式结果每个实验臂应开三个新的隔离会话，分别运行一次，并用三次最终分数的中位数比较。单次运行只适合联调。两个实验臂必须使用相同主机、模型服务版本、资源、网络和 commit；唯一自变量是 `global-geochemical-atlas` Skill 是否可见。
 
@@ -49,4 +51,4 @@ Docker runner 的标准构建、mock smoke、D1/D2/D3 stage 和正式 OpenCode c
 - scorer 最多运行三轮，每轮分数原样留存，不得修改 scorer；
 - `run.sh` 必须从保留的 `case_data/` 在新目录中重建全部产物，重建失败仍保留证据。
 
-CI 中的 `test_prompt_contract.py` 只检查两份 Prompt 的固定参数、隔离命令和文件入口没有漂移，不替代真实 Qwen 调用。
+CI 中的 `test_prompt_contract.py` 检查主机版与 Docker 版四份 Prompt 的固定参数、隔离命令和文件入口没有漂移，不替代真实 Qwen 调用。

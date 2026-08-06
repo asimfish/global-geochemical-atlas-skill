@@ -16,6 +16,13 @@ Q01–Q24 的可直接使用版本全部位于：
 
 工作目录必须设为 `evaluation/ai_visible_public/`，然后把 `AGENT_PROMPT.md` 的全文交给答题 AI。答题 AI 能看到的全部 Benchmark 材料只能来自这个目录：公共接口、Q01–Q24 的 `task.md`、`task.json` 和 `inputs/`；它只能写 `submissions/Qxx/`，不得读取父目录、checker、rubric、gold、评分 prompt 或评分工具。
 
+需要从两个空目录手工比较 Qwen B0/S0 时，使用两个显式启动入口：
+
+- [`prompts/QWEN_B0_NO_SKILL_PROMPT.md`](prompts/QWEN_B0_NO_SKILL_PROMPT.md)：只导出候选 bundle，禁止 Skill；
+- [`prompts/QWEN_S0_WITH_SKILL_PROMPT.md`](prompts/QWEN_S0_WITH_SKILL_PROMPT.md)：导出同一 bundle，只额外安装一个只读 Skill。
+
+这两个手工入口最后都执行同一 `AGENT_PROMPT.md`。正式 Docker campaign 不使用两套不同题面，而是向 B0/S0 注入相同核心 Prompt，并由 runner 决定是否挂载 Skill，避免提示词差异成为第二个自变量。
+
 评分侧 Q01–Q08 的完整源位于 `release/public/`，Q09–Q24 的完整源位于 `evaluator_private/`；两者都包含答题 AI 不应看到的 gold、checker 或 rubric。运行器不得把这些目录直接交给答题 AI，只能使用 `ai_visible_public/` 的白名单投影。
 
 如需单题运行，也必须从 `ai_visible_public/` 创建沙箱，并在答题 prompt 前提供本次沙箱内的路径：

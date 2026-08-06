@@ -5,6 +5,12 @@
   "model": "Qwen3.8-Max",
   "temperature": 0,
   "maximum_scorer_rounds": 3,
+  "prompt_files": {
+    "host_no_skill": "QWEN_NO_SKILL_PROMPT.md",
+    "host_with_skill": "QWEN_WITH_SKILL_PROMPT.md",
+    "docker_no_skill": "QWEN_NO_SKILL_DOCKER_PROMPT.md",
+    "docker_with_skill": "QWEN_WITH_SKILL_DOCKER_PROMPT.md"
+  },
   "docker": {
     "preferred_image": "global-geochemical-eval:local",
     "compatible_cached_image": "global-geochemical-eval:test",
