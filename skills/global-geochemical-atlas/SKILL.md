@@ -183,7 +183,8 @@ python scripts/query_source.py \
 ```bash
 python scripts/standardize_geochemistry.py \
   --input INPUT.csv \
-  --output-dir OUTPUT_DIR
+  --output-dir OUTPUT_DIR \
+  --analysis-profile production
 ```
 
 严格执行 [references/scientific-rules.md](references/scientific-rules.md)：
@@ -209,11 +210,33 @@ python scripts/standardize_geochemistry.py \
 
 若没有可靠地质图层：保留原来源的 `geologic_unit`；若也没有，则置空并降低置信度。不要从附近地名或模型常识编造地质单元。
 
+需要可复现的全球表层岩性筛查背景时，先下载并固定官方 GLiM 0.5° 栅格：
+
+```bash
+python scripts/download_data.py \
+  --url 'https://epic.awi.de/id/eprint/31092/1/hartmann-moosdorf_2012.zip' \
+  --output .cache/geology/pangaea-788537.zip \
+  --manifest .cache/geology/pangaea-788537.download.json \
+  --license CC-BY-3.0 \
+  --dataset-doi 10.1594/PANGAEA.788537 \
+  --dataset-version 'PANGAEA.788537; 0.5 degree raster' \
+  --expected-sha256 43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e
+
+python scripts/standardize_geochemistry.py \
+  --input INPUT.csv \
+  --output-dir OUTPUT_DIR \
+  --analysis-profile production \
+  --geology-grid .cache/geology/pangaea-788537.zip \
+  --geology-grid-sha256 43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e
+```
+
+D2 只给岩石、土壤和非海洋沉积物执行 GLiM point-in-cell；水体不赋陆地岩性。将网格 hash、版本、0.5° 比例、边界距离和坐标不确定性写入运行证据。GLiM 结果只是主导表层岩性筛查上下文，不能称为场地级地层或成因证据。
+
 ## 6. 计算候选异常
 
 先按元素、介质、材料/土层、measurement basis、地质单元、分析方法和消解/提取方法分组。只使用成功标准化、非删失、非重复、正的值。不得把 0–5 cm、A horizon 与 C horizon 静默合并为同一土壤背景。
 
-默认使用 `log10 + median/MAD modified z-score`：有效样本至少 8 条，`|z| >= 3.5` 标为候选；MAD 为 0 或样本不足时显式失败。阈值、样本量、排除数、中位数、MAD 和分组字段必须进入报告。
+默认使用 `log10 + median/MAD modified z-score`：`demo` profile 有效样本至少 8 条；正式任务使用 `--analysis-profile production`，默认并强制至少 20 条。`|z| >= 3.5` 标为候选；MAD 为 0 或样本不足时显式失败。阈值、profile、样本量、排除数、中位数、MAD 和分组字段必须进入报告。
 
 `anomaly_report.json` 与 `anomalies.geojson` 必须同时声明 `interface_version=d2-interface-v2` 和 `method_version=d2-robust-mad-v2`；每个异常 feature 也保留相同方法版本，校验不一致时失败。
 
@@ -229,7 +252,8 @@ python scripts/run_workflow.py \
   --evidence-jsonl sources.jsonl \
   --acquisition-manifest run_manifest.json \
   --output-dir OUTPUT_DIR \
-  --max-records 50000
+  --max-records 50000 \
+  --analysis-profile production
 ```
 
 若没有 sidecar，流程仍生成最小 `record_evidence.jsonl`，但来源只能标为 `source_declared_in_input`。只有 acquisition manifest 同时哈希绑定 CSV 与 sidecar 且 record ID 完全一致时，才可标为 `verified_record_evidence`。

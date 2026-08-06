@@ -15,6 +15,7 @@
 | GEMStat portal | water | `https://gemstat.org/data-gemstat/data-portal/` | 门户下载可能要求联系信息或限制站点数；不要自动绕过表单；受限批次不再分发 |
 | Macrostrat | 地质背景 | `https://macrostrat.org/` | 数据通常 CC BY 4.0；同时引用 API 返回的原始地图来源和 source ID；记录比例尺与边界不确定性 |
 | Macrostrat API docs | 点位地质匹配 | `https://dev.macrostrat.org/docs` | API 版本快速演进；固定实际路由和响应字段，不凭记忆构造端点 |
+| GLiM 0.5° raster | 全球表层岩性筛查 | `https://doi.org/10.1594/PANGAEA.788537` | CC BY 3.0；D2 可执行 hash 固定的 point-in-cell，必须标注 0.5° 粗分辨率且不得冒充场地级地层 |
 
 ## MVP 冻结数据源
 

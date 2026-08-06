@@ -144,7 +144,7 @@
     "original_unit": {"type": ["string", "null"]},
     "value_qualifier": {
       "type": "string",
-      "enum": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "nd", "trace", "unknown"]
+      "enum": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "loq", "nd", "trace", "unknown"]
     },
     "censored": {"type": "boolean"},
     "missing_reason": {

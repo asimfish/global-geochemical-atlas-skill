@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 from pathlib import Path
 from typing import Any
 
@@ -93,6 +94,25 @@ def complete_d2_row(**overrides: str) -> dict[str, str]:
     }
     row.update(overrides)
     return row
+
+
+def write_test_glim_grid(path: Path) -> str:
+    """Create a tiny-compressed, structurally complete GLiM-compatible test archive."""
+
+    header = (
+        "ncols 720\n"
+        "nrows 360\n"
+        "xllcorner -180\n"
+        "yllcorner -90\n"
+        "cellsize 0.5\n"
+        "NODATA_value -9999\n"
+    )
+    raster = header + (("1 " * 719 + "1\n") * 360)
+    classes = '"OBJECTID";"Value_";"Count_";"xx"\n1;1;259200;"su"\n'
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("Classnames.txt", classes)
+        archive.writestr("glim_wgs84_0point5deg.txt.asc", raster)
+    return standardizer.sha256_file(path)
 
 
 def run_suite() -> dict[str, Any]:
@@ -326,6 +346,27 @@ def run_suite() -> dict[str, Any]:
         require(bad_limit["normalized_censoring_limit"] is None, "invalid detection limit was normalized")
         require("INVALID_DETECTION_LIMIT" in bad_limit["qc_flags"], "invalid detection-limit flag is missing")
 
+        lod = standardizer.normalize_row(
+            complete_d2_row(value="<LOD", detection_limit="0.2", detection_limit_unit="mg/kg"), 9
+        )
+        loq = standardizer.normalize_row(
+            complete_d2_row(value="<LOQ", quantitation_limit="0.4", quantitation_limit_unit="mg/kg"), 10
+        )
+        require(
+            lod["censored"] is True
+            and lod["value_qualifier"] == "bdl"
+            and lod["normalized_value"] is None
+            and lod["normalized_censoring_limit"] == 0.2,
+            "literal <LOD was not preserved as a non-imputed detection-limit censor",
+        )
+        require(
+            loq["censored"] is True
+            and loq["value_qualifier"] == "loq"
+            and loq["normalized_value"] is None
+            and loq["normalized_censoring_limit"] == 0.4,
+            "literal <LOQ was not preserved with its quantitation limit",
+        )
+
         projected = standardizer.normalize_row(complete_d2_row(source_crs="EPSG:3857"), 9)
         transformed = standardizer.normalize_row(
             complete_d2_row(
@@ -375,6 +416,89 @@ def run_suite() -> dict[str, Any]:
             all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in duplicate_records),
             "unique provenance row IDs masked duplicate measurement candidates",
         )
+        duplicates_without_sample_ids = standardizer.process_rows([
+            complete_d2_row(record_id="duplicate-3", source_record_id="source-row-3", sample_id=""),
+            complete_d2_row(record_id="duplicate-4", source_record_id="source-row-4", sample_id=""),
+        ])
+        require(
+            all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in duplicates_without_sample_ids),
+            "distinct source row IDs masked duplicates when sample identifiers were absent",
+        )
+        distinct_sampling_times = standardizer.process_rows([
+            complete_d2_row(record_id="time-1", source_record_id="time-row-1", sample_id="", sampled_at="2020-01-01"),
+            complete_d2_row(record_id="time-2", source_record_id="time-row-2", sample_id="", sampled_at="2021-01-01"),
+        ])
+        require(
+            all("DUPLICATE_CANDIDATE" not in record["qc_flags"] for record in distinct_sampling_times),
+            "duplicate fallback collapsed measurements from distinct sampling times",
+        )
+
+        try:
+            standardizer.run_pipeline(
+                DEMO_INPUT,
+                Path(first_temp) / "invalid-production",
+                analysis_profile="production",
+                min_group_size=8,
+            )
+        except standardizer.PipelineError as exc:
+            require("at least 20" in str(exc), "production minimum-group failure is not actionable")
+        else:
+            raise AssertionError("production analysis accepted a background group threshold below 20")
+
+        with tempfile.TemporaryDirectory(prefix="d2-geology-") as geology_temp:
+            geology_root = Path(geology_temp)
+            geology_grid = geology_root / "glim-test.zip"
+            geology_hash = write_test_glim_grid(geology_grid)
+            geology_input = geology_root / "input.csv"
+            geology_rows = [
+                complete_d2_row(
+                    record_id="geo-soil", source_record_id="geo-source-soil",
+                    sample_id="geo-sample-soil", latitude="35.25", longitude="103.25",
+                ),
+                complete_d2_row(
+                    record_id="geo-water", source_record_id="geo-source-water",
+                    sample_id="geo-sample-water", medium="water", unit="ug/L",
+                    latitude="35.25", longitude="103.25",
+                ),
+            ]
+            with geology_input.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=list(geology_rows[0]))
+                writer.writeheader()
+                writer.writerows(geology_rows)
+            geology_outputs = standardizer.run_pipeline(
+                geology_input,
+                geology_root / "output",
+                min_group_size=3,
+                geology_grid_path=geology_grid,
+                geology_grid_sha256=geology_hash,
+            )
+            geology_database = {row["record_id"]: row for row in read_csv(geology_outputs["database"])}
+            geology_qc = json_value(geology_outputs["qc_report"])["geology_matching"]
+            require(
+                geology_database["geo-soil"]["matched_geologic_unit"] == "GLiM:1:su"
+                and geology_database["geo-soil"]["geology_map_source"] == standardizer.GLIM_SOURCE
+                and float(geology_database["geo-soil"]["boundary_distance_m"]) > 20_000,
+                "D2 GLiM point-in-cell did not populate versioned spatial geology evidence",
+            )
+            require(
+                geology_database["geo-water"]["matched_geologic_unit"] == ""
+                and geology_database["geo-water"]["geology_missing_reason"] == "not_applicable_water"
+                and geology_qc["water_records_with_assigned_land_unit"] == 0
+                and geology_qc["grid"]["sha256"] == geology_hash,
+                "D2 GLiM join assigned land geology to water or lost the grid hash",
+            )
+            try:
+                standardizer.run_pipeline(
+                    geology_input,
+                    geology_root / "hash-mismatch",
+                    min_group_size=3,
+                    geology_grid_path=geology_grid,
+                    geology_grid_sha256="0" * 64,
+                )
+            except standardizer.PipelineError as exc:
+                require("SHA-256" in str(exc), "geology hash mismatch error is not actionable")
+            else:
+                raise AssertionError("D2 accepted a geology grid whose SHA-256 did not match")
 
         low_fraction_values = ["8", "9", "10", "11", "12", "13", "500", "<1", "<1", "ND", "trace"]
         low_fraction_records = [
