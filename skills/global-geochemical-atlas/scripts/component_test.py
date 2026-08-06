@@ -2491,6 +2491,10 @@ def check_d3(output_dir: Path) -> list[str]:
             for marker in (
                 'id="comboX"',
                 'id="comboY"',
+                'id="comboRegionSelect"',
+                'id="comboCustomBounds"',
+                'id="applyComboBounds"',
+                "applyCustomBounds",
                 'id="comboMatrix"',
                 'id="openAnomalyRegions"',
                 "visual_aggregation_only",
@@ -2666,6 +2670,18 @@ def check_d3(output_dir: Path) -> list[str]:
         and map_report.get("capability_matrix", {})
         .get("interaction_design", {})
         .get("professional_navigation_labels")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("combination_region_selector")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("combination_custom_bbox")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("regional_combination_scope_lock_supported")
         is True
         and map_report.get("capability_matrix", {})
         .get("interaction_design", {})
