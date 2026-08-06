@@ -1,0 +1,2196 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS confirms correspondence with byte-pinned FOREGS members and the adapter. It is not human review; reviewer decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "prepared_at": "2026-08-06T08:00:00Z",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "2.5",
+          "record_id": "rec-b89fa5239c1f7abe0d7db6e0032f9b0fc4728f1feba3bec3c1ebcc7892a0f5c1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "26",
+          "record_id": "rec-cac3987b67375b6c0891439b013e78daa8f08357f98faac45e9c75a0934921d0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "13",
+          "record_id": "rec-2475e77533fced27b83eb69bf615076ae2238d34cd0a48c6f2e998c93ee0ba69",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "22",
+          "record_id": "rec-36e349518dc11ab45ec02981c916d5821c1253e9b82ffe48e6b741414f85629b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "12",
+          "record_id": "rec-8d7df566af24f08f287a6231b6f6065614fe99802d151272f8c5b904f9058aff",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "173",
+          "record_id": "rec-c5e3276b524da60ed73d49d35fbf7004597b5b1528a882d13c9b8aaa3e0c8b38",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.92424718",
+      "longitude": "-15.5555631",
+      "published_target_raw_values": {
+        "As": "2.5",
+        "Cr": "26",
+        "Cu": "13",
+        "Ni": "22",
+        "Pb": "12",
+        "Zn": "173"
+      },
+      "review_id": "foregs-stream-sediment-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10S1",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=4",
+      "source_record_id": "src-ca2335cc37c03b49b6fe2627ab0912cc8fe9ad4a71450d70b66374ee5ad9e496"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7",
+          "record_id": "rec-36bd686e2ffc34b97c44537ccfcf18a105d14230e811a9cafc6d4dc44f71c4e1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "16",
+          "record_id": "rec-0b3ce1619eb43e4b22184bbb9c23f396c217c743fe68b488f137297891880a14",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "23",
+          "record_id": "rec-3b978c5bec4b0d6d314fe97ef0bf40211f4147d828ee479b37d587c4e57153f0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "21",
+          "record_id": "rec-9067154998951591060dc863baaac3977dcf468457e4e30de64e4d5934e2cecb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "14",
+          "record_id": "rec-57b2a8257c8feffc945f4f2cd619644c93f2d582b42321bbb4ba0c46ece27776",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "38",
+          "record_id": "rec-c92793c9376670eec0c6312fb0a90c3f94f25b4702aee50b110082ffaa726848",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.495986822",
+      "longitude": "23.817733486",
+      "published_target_raw_values": {
+        "As": "7",
+        "Cr": "16",
+        "Cu": "23",
+        "Ni": "21",
+        "Pb": "14",
+        "Zn": "38"
+      },
+      "review_id": "foregs-stream-sediment-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14S1",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=5",
+      "source_record_id": "src-f9af039f9e4c9f75983a4d5e410a2a7a406c17453f14b4d2afe8ce0677c3e1cd"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.01284",
+          "record_id": "rec-dcb099a11f2f5ee10bbb3d074aa96938a55e12649e8826796302c745f2f32e5f",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.92424718",
+      "longitude": "-15.5555631",
+      "published_target_raw_values": {
+        "Hg": "0.01284"
+      },
+      "review_id": "foregs-stream-sediment-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10S1",
+      "selection_reasons": [
+        "member=S_Hg_data_2v5_30Nov06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_locator": "S_Hg_data_2v5_30Nov06.csv#row=4",
+      "source_record_id": "src-b4ee07a161d6770e41a96c87cd186685fcd536d50a807f1fe20d3226061f4532"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "0.5",
+          "record_id": "rec-c851b3ffcdfa59f6e33ee2dce05fc1d813ff9cebe032aa728d19f5d7bf0c90ca",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "68",
+          "record_id": "rec-63ac0c519d3ab9b1df4c190b969bf4ef3eb88dd00c01c93568d0d2131e709c2a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "21",
+          "record_id": "rec-8f83037e1e6497e0272aa79964541046c364c3719c16d3f8c991ffd8dad20ea7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "29",
+          "record_id": "rec-9a44d4cecc9fed335fc0a9062427842917c229e70c2c5e6945717fc9633cd7c7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "20",
+          "record_id": "rec-b2023baca8ff3d921d67ae6fba9fe6810a4bda10478ddaf836f608a1b37ffa1e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "258",
+          "record_id": "rec-da9bfa390d25faf57de551f75e8909a4590801c632a1fd9d2b7e402cd47d14d6",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.92424718",
+      "longitude": "-15.5555631",
+      "published_target_raw_values": {
+        "As": "0.5",
+        "Cr": "68",
+        "Cu": "21",
+        "Ni": "29",
+        "Pb": "20",
+        "Zn": "258"
+      },
+      "review_id": "foregs-stream-sediment-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10S1",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=4",
+      "source_record_id": "src-22caae00288bfa4110dd774e445e8e8d3a61f709d97503aae8672d51155b76e1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "8",
+          "record_id": "rec-4d3e48b54ed67e7bd35d53802151eff7792e0f1b9f4c422b423dea6fc5eb878a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "54",
+          "record_id": "rec-866cc2e705b38d4f4d62a54b87dd8cf57ebe79646a8ab0f09af5557696e3f0dc",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "22",
+          "record_id": "rec-0d913a872b0a3efe1ea949dc837f4083611a15ea4a3ed58caaecc873b2fa58b4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "23",
+          "record_id": "rec-705522aebb6020725ffa3b09484b782356123e301b277aa648c8d73314daf84f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "14",
+          "record_id": "rec-e05479772b05f419bd41b301417e069cae9e22cae375d6c04ee1e0757fe91d33",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "45",
+          "record_id": "rec-efd921979db8dff548b32545b2b1d18e34a6ff77376fa7c00d252714f6af0629",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.495986822",
+      "longitude": "23.817733486",
+      "published_target_raw_values": {
+        "As": "8",
+        "Cr": "54",
+        "Cu": "22",
+        "Ni": "23",
+        "Pb": "14",
+        "Zn": "45"
+      },
+      "review_id": "foregs-stream-sediment-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14S1",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=5",
+      "source_record_id": "src-b59fc6946ce3ab90b5e16582d51cf7cc71d6733e3f0bba7d07c501e5f2d9a551"
+    },
+    {
+      "adapter_observations": [],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.92424718",
+      "longitude": "-15.5555631",
+      "published_target_raw_values": {},
+      "review_id": "foregs-stream-sediment-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10S1",
+      "selection_reasons": [
+        "member=S_icp_data_2v6_30Nov06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_locator": "S_icp_data_2v6_30Nov06.csv#row=4",
+      "source_record_id": "src-0eb626597db89d0132d39c01ac73f18a19049a9229cfa8c6fba7244bc60885bf"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "8",
+          "record_id": "rec-bd45616974fa1a53cd7d23f749368fc6f9b472e31e1c8f754d9a415fd9a6897d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "40",
+          "record_id": "rec-9a31b804de41087111c83fefa546196d186bc26e25b4f3dcb14dfdb620882b81",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "19",
+          "record_id": "rec-153afa63443a9aa37db021a13485a07eb1cf22c178826fba9f90308b761f201e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "38",
+          "record_id": "rec-2c4cdeb6a53a4490414feb24c368a5fe4c1845c4ec5befea419ecb3e5dbf07b7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "14",
+          "record_id": "rec-4c58939fcead1b07df608b886888c2ac4bf7f1fa50999cbcf82c6f3a074fd608",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "38",
+          "record_id": "rec-8c85a22886055437f477e6cddaa88e35efff8bc110eb2b0ce5bb3d5e62767069",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.407982245",
+      "longitude": "24.676988778",
+      "published_target_raw_values": {
+        "As": "8",
+        "Cr": "40",
+        "Cu": "19",
+        "Ni": "38",
+        "Pb": "14",
+        "Zn": "38"
+      },
+      "review_id": "foregs-stream-sediment-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S2",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=6",
+      "source_record_id": "src-da9a06935ae1bebfd31b19746bd649b4d82c1266b57003cdaca9c59e27710458"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.022",
+          "record_id": "rec-5bd7c090f617c13429753d1dfb0cfa2b32992fc71dc6b0383cb2c0bac8d1d039",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.495986822",
+      "longitude": "23.817733486",
+      "published_target_raw_values": {
+        "Hg": "0.022"
+      },
+      "review_id": "foregs-stream-sediment-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14S1",
+      "selection_reasons": [
+        "member=S_Hg_data_2v5_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_locator": "S_Hg_data_2v5_30Nov06.csv#row=5",
+      "source_record_id": "src-607fb9b4a84f0932a4b99bc82d22d4b6207010bba70dcf3f9d8ca3aa724a14e8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "8",
+          "record_id": "rec-06a2af7662634cf75d6f51f47a9766d91399bd543edc8ee75f49ea326efe50db",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "100",
+          "record_id": "rec-c24490237ebaae560d772ad2aa7165e9bf8912b3f51524b1cbf4cd5e232521d4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "17",
+          "record_id": "rec-2a80e9df5d7fdfa91f25c6745b8b6feec90b33086b4ac4d8096b04863bd0f496",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "41",
+          "record_id": "rec-a3d51f9cf86050ef2e37f8467a0256a18d64f1cfc1e8d429a85d9ca67083da45",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "15",
+          "record_id": "rec-ddb36bd342f0cfc31525a49e3493a56d503cf8442622a1e01487c2277a39c883",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "40",
+          "record_id": "rec-d63f74209c4a8892b264887200a4895529f89cf51444a3fb827b9f163f21dafb",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.407982245",
+      "longitude": "24.676988778",
+      "published_target_raw_values": {
+        "As": "8",
+        "Cr": "100",
+        "Cu": "17",
+        "Ni": "41",
+        "Pb": "15",
+        "Zn": "40"
+      },
+      "review_id": "foregs-stream-sediment-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S2",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=6",
+      "source_record_id": "src-d01c50e8063edbf7446e77eb85684298684f83ecad03e899b970f3ce3d914029"
+    },
+    {
+      "adapter_observations": [],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.495986822",
+      "longitude": "23.817733486",
+      "published_target_raw_values": {},
+      "review_id": "foregs-stream-sediment-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14S1",
+      "selection_reasons": [
+        "member=S_icp_data_2v6_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_locator": "S_icp_data_2v6_30Nov06.csv#row=5",
+      "source_record_id": "src-b46d6147142b3377349613ab5fb59fb7f877a0f89cc7715de9d201dcc79635d1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "2.5",
+          "record_id": "rec-39eae665e80dc3e7fb2693b25141781e2d3f8f3e237baf37c3e530bc009de60d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "111",
+          "record_id": "rec-4ca920de4ee495def866eff0106be86248d2ac06d1e53f7c37175495c8dc6793",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "30",
+          "record_id": "rec-6edbdf28c02e1b7a2abbbdb8322decb992005cb8c7056529399a9222ef856c10",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "141",
+          "record_id": "rec-a5007fd49b1e2b3d79408301bd3e1634f0deadab38d785d20b9875889f17a5bc",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "11",
+          "record_id": "rec-db22d8cd53bbb64ce015da56ea1a24429246237b61c4af4444ecb744e42bcf7f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "57",
+          "record_id": "rec-0eb1d22eaa9170155f9c0676ed7f436f593d9539f1680eb5e463c7e9a7e9e019",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.041165538",
+      "longitude": "25.28155211",
+      "published_target_raw_values": {
+        "As": "2.5",
+        "Cr": "111",
+        "Cu": "30",
+        "Ni": "141",
+        "Pb": "11",
+        "Zn": "57"
+      },
+      "review_id": "foregs-stream-sediment-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S4",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=7",
+      "source_record_id": "src-77926025119cecfa42916b0d86b9169083bcee6c9dd5756d9096460212d8787c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.0494",
+          "record_id": "rec-4d6e0ff2c603738dd9ba91235a7446d5d919efe2e63a172a4ce5825109c8faf0",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.407982245",
+      "longitude": "24.676988778",
+      "published_target_raw_values": {
+        "Hg": "0.0494"
+      },
+      "review_id": "foregs-stream-sediment-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S2",
+      "selection_reasons": [
+        "member=S_Hg_data_2v5_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_locator": "S_Hg_data_2v5_30Nov06.csv#row=6",
+      "source_record_id": "src-883ba424a79fbb7ddd03e4cc0a222c5c35dab8a1044f352e02cdfb5de012dfc2"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5",
+          "record_id": "rec-88dc56e9a1831cb9f64d9455141d3e6c725c95f181f6f1724948236e9115844b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "398",
+          "record_id": "rec-1820232fbbc7515b43d6af098262bdddc4c20aa66400c2ab9be363fef995d464",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "28",
+          "record_id": "rec-914577b5278341e85fc9cc755cf0f53408e107c9d204c9c1ab661fbdbac035d0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "155",
+          "record_id": "rec-ec1d725834be14900f9060674ffc56fcb77ddc89a8b268bf55792d726bece787",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "11",
+          "record_id": "rec-0198f329cdda394c72a7a8ae34dff27029cabf45d56b3d357a17420ddf282579",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "61",
+          "record_id": "rec-a31d2c05ffe61c41af1304d142e92bdceba74ea088ade7f77dcdfd9303c15718",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.041165538",
+      "longitude": "25.28155211",
+      "published_target_raw_values": {
+        "As": "5",
+        "Cr": "398",
+        "Cu": "28",
+        "Ni": "155",
+        "Pb": "11",
+        "Zn": "61"
+      },
+      "review_id": "foregs-stream-sediment-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S4",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=7",
+      "source_record_id": "src-ece06e1056309af20c88b266fcf62d0ad337f2b9392960a9866668af38208df1"
+    },
+    {
+      "adapter_observations": [],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.407982245",
+      "longitude": "24.676988778",
+      "published_target_raw_values": {},
+      "review_id": "foregs-stream-sediment-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S2",
+      "selection_reasons": [
+        "member=S_icp_data_2v6_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_locator": "S_icp_data_2v6_30Nov06.csv#row=6",
+      "source_record_id": "src-c50ba7fc536231faf323dbcce3db1a77d0e8410035067376008cf8cf185a95c4"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-2ba771961356f87f063ad00826bafe16ace935df6142578b88ce968011f4194e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "50",
+          "record_id": "rec-0035c70ea8e402b359518961398fb3495eb8f158869718e0e2fdbbc9dc54b471",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "23",
+          "record_id": "rec-39e237a15a1c7295a2550c041019620060af5532dc34f5557c5ff16523da17dd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "63",
+          "record_id": "rec-0b36a8ca9e24e7a8a03d7456f04011a6737b1c01fbae095715c5473a34bf7e24",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "9",
+          "record_id": "rec-8ae0ee20a81c31306855d3d0af3e4a0af25c3e114db76424fadfda35708b28df",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "38",
+          "record_id": "rec-dc7e689907feec8a33a202736ffbd2c8faeb3cb8b1d6abce18eaa520d65f5275",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269049181",
+      "longitude": "25.198608917",
+      "published_target_raw_values": {
+        "As": "6",
+        "Cr": "50",
+        "Cu": "23",
+        "Ni": "63",
+        "Pb": "9",
+        "Zn": "38"
+      },
+      "review_id": "foregs-stream-sediment-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S5",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=8",
+      "source_record_id": "src-74d7b7074bffc244ce974e9cc0fdbe5e9856036a196e716004df922e3f9ca73d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.034",
+          "record_id": "rec-a33efe157e53988e3278cc8392b7b746e5001b5aeea89aa2b281fea5887a3b4b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.041165538",
+      "longitude": "25.28155211",
+      "published_target_raw_values": {
+        "Hg": "0.034"
+      },
+      "review_id": "foregs-stream-sediment-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S4",
+      "selection_reasons": [
+        "member=S_Hg_data_2v5_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_locator": "S_Hg_data_2v5_30Nov06.csv#row=7",
+      "source_record_id": "src-58734d0d83f1af8f670cc631b8d5ccf171f723329beb5007d2dde0e75f728669"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5",
+          "record_id": "rec-54c47f3cb3b6a62fbc7e254d474eb7756c2b0456a784e54f0ad3fac35865649f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "132",
+          "record_id": "rec-9ca86cedcf0d7bdbe5b2e419020ee132365bfee2934df2eddaf40946f32af2f5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "23",
+          "record_id": "rec-f8f150101fe2672822ee0d52526287e1575837ac4434019491ca91d31bf18bc1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "70",
+          "record_id": "rec-ed5221cfeb49c3a77f53330de57e5f6e83fe47938484cd9092de040052bfd0ed",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "10",
+          "record_id": "rec-5ba4a4df0cb3822105dd3ad0b09a1fcff77d30b3a8af8cb52d3d78e118706fbb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "42",
+          "record_id": "rec-07d658b80578fdd0e2685947ef4a77717600fedf0dafb16656d08df9a7644d2f",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269049181",
+      "longitude": "25.198608917",
+      "published_target_raw_values": {
+        "As": "5",
+        "Cr": "132",
+        "Cu": "23",
+        "Ni": "70",
+        "Pb": "10",
+        "Zn": "42"
+      },
+      "review_id": "foregs-stream-sediment-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S5",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=8",
+      "source_record_id": "src-2caf857125be1fbc652b8e1bb722cf06636b75c42722d4acad7ac3e2f00cdc02"
+    },
+    {
+      "adapter_observations": [],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.041165538",
+      "longitude": "25.28155211",
+      "published_target_raw_values": {},
+      "review_id": "foregs-stream-sediment-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S4",
+      "selection_reasons": [
+        "member=S_icp_data_2v6_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_locator": "S_icp_data_2v6_30Nov06.csv#row=7",
+      "source_record_id": "src-1fb223220ea6ef35167f6a193ae75de95c434b592593c029136cd741b0241afd"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-befa01ee97e42f391931a1c154bcdc50f471928a2af1cd7d18a6875dca106a7d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "27",
+          "record_id": "rec-2d67099e9069babe9bb4e16e6b2456b863255b6411bcc5b109587e0dfe426aac",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "27",
+          "record_id": "rec-f2399c88c5be029dd8b4624624a7cac23bbc95ccca5d48f004b92d847f13ffbe",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "31",
+          "record_id": "rec-dca68f553036c3418de0e210ac8be42e2f83983c039a606cc77bddd6624eec0b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "13",
+          "record_id": "rec-d19bc9582e011579f81e7904ce969e2ba1dea1c0e03e5a4204078833abf6cf07",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "56",
+          "record_id": "rec-ce5c1ee2c89ad1c5c23cea7c0136d4e740225a2bd3e538e134a99f8aafcf6d7c",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.187040776",
+      "longitude": "26.10189302",
+      "published_target_raw_values": {
+        "As": "6",
+        "Cr": "27",
+        "Cu": "27",
+        "Ni": "31",
+        "Pb": "13",
+        "Zn": "56"
+      },
+      "review_id": "foregs-stream-sediment-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E16S3",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=9",
+      "source_record_id": "src-234f65a41d20bcb64ec0907f46ca6c731fd2b4395efcc2d776388e11f29010fd"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.0244",
+          "record_id": "rec-f7a109c5ce91cee0cdbf3e42e82355f4551ff76f466d266415426c80a10a26b6",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269049181",
+      "longitude": "25.198608917",
+      "published_target_raw_values": {
+        "Hg": "0.0244"
+      },
+      "review_id": "foregs-stream-sediment-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S5",
+      "selection_reasons": [
+        "member=S_Hg_data_2v5_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_locator": "S_Hg_data_2v5_30Nov06.csv#row=8",
+      "source_record_id": "src-fd278280fa2a477574753d31cd0c90cac87ea5aceff2f52beebe1038da67e364"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7",
+          "record_id": "rec-06482b91f12a8c1f2ad20a98f2af3451f092667e7eaebed4850357078f365eae",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "65",
+          "record_id": "rec-38b98db3d3232047888ad9af912c97219d2c38f6045c1547e2080b8aac80b181",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "25",
+          "record_id": "rec-ab703b1e973ff81e98a323e07e3697414f502ef8a1e1f8bb6c4d0c8af5a5c4c8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "36",
+          "record_id": "rec-45d940dc1d447d8f01e01a35d234bf6d3b6199b3db2265b7791b25f874581332",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "14",
+          "record_id": "rec-d5c9acc6e598b9869f7129c1cac451582b2d30161cf9c21c4bcea4ef9a8d6c01",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "60",
+          "record_id": "rec-5e7d34c0497ac787390fb51714e8bd8b62e6dad0b5aa8fdd16a8d3285a8af344",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.187040776",
+      "longitude": "26.10189302",
+      "published_target_raw_values": {
+        "As": "7",
+        "Cr": "65",
+        "Cu": "25",
+        "Ni": "36",
+        "Pb": "14",
+        "Zn": "60"
+      },
+      "review_id": "foregs-stream-sediment-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E16S3",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=9",
+      "source_record_id": "src-8a62caca40f77b30744193ae069a0978c7c7a72887e82c3b05e67441b0acd987"
+    },
+    {
+      "adapter_observations": [],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269049181",
+      "longitude": "25.198608917",
+      "published_target_raw_values": {},
+      "review_id": "foregs-stream-sediment-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15S5",
+      "selection_reasons": [
+        "member=S_icp_data_2v6_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_locator": "S_icp_data_2v6_30Nov06.csv#row=8",
+      "source_record_id": "src-39243f2bb80a7504928caaf133f5e352c99ba63274fc135f610fcec4fa714d75"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-4af6e5cec3740315935e83ed0641da2fa6db8723214436298e8cafdf6a6879eb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "24",
+          "record_id": "rec-ecd0c92f9d7d19e4cadc5f980e04c5432e5dbeaa2d03d5529cca882375bbcefd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "18",
+          "record_id": "rec-07a01c5981e473800ac148d2e7473a5e49f828833881f8f47a45050349e3a0b0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "19",
+          "record_id": "rec-faf21d1929705600206b299b6a6cea217e48c530b6934174150f157b2b30ce5b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "10",
+          "record_id": "rec-32227ea14cc8d0ee4013ee0f700cb6f37257d553f0755fb31a76c0579cbe52c0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "50",
+          "record_id": "rec-925032cf8021d2011105fdda9d1b509ceea24c8780e5186ec1b7744ce1f8d523",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "37.48",
+      "longitude": "13.75",
+      "published_target_raw_values": {
+        "As": "6",
+        "Cr": "24",
+        "Cu": "18",
+        "Ni": "19",
+        "Pb": "10",
+        "Zn": "50"
+      },
+      "review_id": "foregs-stream-sediment-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N25E08S1",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=10",
+      "source_record_id": "src-cb5f849192dc6eb270ecd7822806bbd6b0c937e729545764dc5d631f42587b95"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.0276",
+          "record_id": "rec-a824fd9971088d4d483a2dc07882734ccad853b957408ab16c561e35b7df6ec8",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.187040776",
+      "longitude": "26.10189302",
+      "published_target_raw_values": {
+        "Hg": "0.0276"
+      },
+      "review_id": "foregs-stream-sediment-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E16S3",
+      "selection_reasons": [
+        "member=S_Hg_data_2v5_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_locator": "S_Hg_data_2v5_30Nov06.csv#row=9",
+      "source_record_id": "src-a7e83a8d54b9892c31ce19d73bee3a579d2108397ea5fd89ad99ae17c8f935d6"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7",
+          "record_id": "rec-8b6f0cc3a908745fecf998cc1f1d19ddab669b985be0ff1291e6e313f30a3d82",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "52",
+          "record_id": "rec-65c8f9906876f170310e6a8eff642e9060639868198e5d2efd17a48eb7164f83",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "18",
+          "record_id": "rec-daa901914dabcaa170409be897af46d0e20f41a8d75cfac99556ba72ed5fae5d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "24",
+          "record_id": "rec-0f781bca254f0a54746eaf0b76490eb05c41a2d61d52af24258c77a93d46eb8b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "17",
+          "record_id": "rec-76d375930645da4221b58407880fe22a6553fe2deb2d44bda28704767afcb073",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "58",
+          "record_id": "rec-c3af5c970806bdf023f4fdc5d29e625067c09fe8ecd2691444f80b0051b8be0a",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "37.48",
+      "longitude": "13.75",
+      "published_target_raw_values": {
+        "As": "7",
+        "Cr": "52",
+        "Cu": "18",
+        "Ni": "24",
+        "Pb": "17",
+        "Zn": "58"
+      },
+      "review_id": "foregs-stream-sediment-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N25E08S1",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=10",
+      "source_record_id": "src-2751f435db739070a4bcfc46d0b5867013368c8c37e31f0cbb83dddca4192d87"
+    },
+    {
+      "adapter_observations": [],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.187040776",
+      "longitude": "26.10189302",
+      "published_target_raw_values": {},
+      "review_id": "foregs-stream-sediment-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E16S3",
+      "selection_reasons": [
+        "member=S_icp_data_2v6_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_locator": "S_icp_data_2v6_30Nov06.csv#row=9",
+      "source_record_id": "src-45797fd1178ad9d2148b219717775ae88a9641d52e06b468a6ec75fc2577301d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7",
+          "record_id": "rec-9df405ec5e2a65ab71a0fa9afb31deda10c9250d2589276c4f0aa2a094efd6a9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "27",
+          "record_id": "rec-ef4f5ec71f99cf38eaea037582f251149e6ed87f4bb6fad849a10cdfd1607280",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "24",
+          "record_id": "rec-4660f7def5a1f7092c66ab4b78bed07e169ccb11cdefd006462a1de709d0f520",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "26",
+          "record_id": "rec-866fa8b94c6e0b901b990910be3684e3cd268cd428aed8cb65536055c7abd586",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "13",
+          "record_id": "rec-2db02743896dd5b216d8cba39229865b244294ba4251f24fd60bba9021eafc54",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "54",
+          "record_id": "rec-d4d07613c21edcc368e67b0f5393c403620249c1fa3efa0dd239dda3612c06e4",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "37.34",
+      "longitude": "14.69",
+      "published_target_raw_values": {
+        "As": "7",
+        "Cr": "27",
+        "Cu": "24",
+        "Ni": "26",
+        "Pb": "13",
+        "Zn": "54"
+      },
+      "review_id": "foregs-stream-sediment-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N25E09S1",
+      "selection_reasons": [
+        "member=S_AR_data_2v5_30Nov2006.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_locator": "S_AR_data_2v5_30Nov2006.csv#row=11",
+      "source_record_id": "src-36fec4fb1a069bc8de8ca73162d70458e30c06336b8834c26b7022619f1a7975"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.02126",
+          "record_id": "rec-cac99d76265b3aa96858e00a752c475954b9fa594969e2b7cd3765eea8341bb9",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "37.48",
+      "longitude": "13.75",
+      "published_target_raw_values": {
+        "Hg": "0.02126"
+      },
+      "review_id": "foregs-stream-sediment-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N25E08S1",
+      "selection_reasons": [
+        "member=S_Hg_data_2v5_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_locator": "S_Hg_data_2v5_30Nov06.csv#row=10",
+      "source_record_id": "src-4a9736cfdd2cbe088b20274f4f8a3f0b11202938c5160799fa9f8347409e4647"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-959e59f17e038bc1bdcaee7ff8db75d6fd7c6b0f56525560e6293c51a527e487",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "3",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "47",
+          "record_id": "rec-7021968123d2f593948811e9d4cfec27b05531e8e30a3fae4e5c37e99faa0499",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "25",
+          "record_id": "rec-c8a8d3540664468f4edc6cc3cd892cf77bb1c1df47610797f2d370ff55fa17f9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "30",
+          "record_id": "rec-ef537e699f535a3000d86e2de6d61c7ae7270224f92bacb05bbddb6b237c967d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "20",
+          "record_id": "rec-6154872c8d4e198131b7aa639cab2eded01ec829285e37773465b4e1d3cf3140",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "detection_limit": "1",
+          "digestion_or_extraction": "pressed powder pellet",
+          "measurement_basis": "total_selected_<150um_stream_sediment",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "59",
+          "record_id": "rec-3f6be8fbe8142043ba63998ac7d0a2a94713c353388627c87cc703097befee46",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "37.34",
+      "longitude": "14.69",
+      "published_target_raw_values": {
+        "As": "6",
+        "Cr": "47",
+        "Cu": "25",
+        "Ni": "30",
+        "Pb": "20",
+        "Zn": "59"
+      },
+      "review_id": "foregs-stream-sediment-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N25E09S1",
+      "selection_reasons": [
+        "member=S_XRF_data_2v9_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_locator": "S_XRF_data_2v9_30Nov06.csv#row=11",
+      "source_record_id": "src-2184d4341479be5546a74624aad658fd6beb5a54240f57c5445c82c3b0c44b46"
+    },
+    {
+      "adapter_observations": [],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "37.48",
+      "longitude": "13.75",
+      "published_target_raw_values": {},
+      "review_id": "foregs-stream-sediment-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N25E08S1",
+      "selection_reasons": [
+        "member=S_icp_data_2v6_30Nov06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_locator": "S_icp_data_2v6_30Nov06.csv#row=10",
+      "source_record_id": "src-673dbace1e65bfe0c46acc270c9b4715bb85935969d0d18f50f4b74da6a3dcf8"
+    }
+  ],
+  "review_version": "foregs-human-review-v1",
+  "source_id": "foregs-stream-sediment",
+  "status": "prepared"
+}

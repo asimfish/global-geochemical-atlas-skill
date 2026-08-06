@@ -1,0 +1,57 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-05T13:41:55Z",
+  "generation_request": {
+    "analytes": [
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 23332,
+      "path": "demo_input.csv",
+      "sha256": "4dc33f58d9cbb47c464e655e9e1f2bbf43507ba5883a62962eb641b128b2afb8"
+    },
+    {
+      "bytes": 84339,
+      "path": "sources.jsonl",
+      "sha256": "9c17eb16f44005aba88da55daaf0108986a6075e408d0bf74ae205e6102de163"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 69704,
+    "selected_source_rows": 33
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+    "dataset_version": "IDP2025",
+    "license": "CC-BY-4.0",
+    "source_id": "geotraces-idp2025",
+    "title": "GEOTRACES Intermediate Data Product 2025: discrete seawater"
+  },
+  "source_files": [
+    {
+      "bytes": 28760915,
+      "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+      "retrieved_at": "2026-08-05T13:41:55Z",
+      "sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44",
+      "source_url": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "GEOTRACES IDP2025 seawater has no arsenic variable; a separate water source is required for As.",
+    "Values remain in nmol/kg because mass-per-volume conversion requires explicit atomic-mass and seawater-density assumptions.",
+    "Only SeaDataNet QC 1 and 2 values are included in this demo; all source flags remain available in the raw adapter."
+  ]
+}

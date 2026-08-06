@@ -51,6 +51,20 @@ offline: boolean
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
+需要离线展示真实四介质接口时，使用已经 hash 固定的十三来源、748 条观测最小切片：
+
+```bash
+python scripts/build_four_media_demo.py \
+  --output-dir /tmp/four-media-demo \
+  --generated-at 2026-08-05T15:20:00Z
+
+python scripts/run_workflow.py \
+  --input /tmp/four-media-demo/demo_input.csv \
+  --output-dir /tmp/four-media-output
+```
+
+联合 manifest 必须显示来源、介质、分析物和比较分区。共同进入一张地图不表示记录可以混为同一背景；异常分组仍按元素、介质、measurement basis、地质单元、方法和消解/提取隔离。
+
 ## 3. 建立来源与下载证据
 
 先区分“已发现候选”“证据完整度”和“本次请求可执行性”。候选目录位于 [assets/source_catalog.json](assets/source_catalog.json)；先按 [references/source-evidence-standard-v3.md](references/source-evidence-standard-v3.md) 生成八维证据评分，再结合访问状态、科研使用条件、最低证据等级和 use mode 判断本次动作。`production_eligible` 和旧 `status` 仅为兼容字段，不能替代当前路由。准入规则见 [references/source-acceptance-standard.md](references/source-acceptance-standard.md)，逐源边界见 [references/source-interface-cards.md](references/source-interface-cards.md)。把冻结后的请求保存为 `request.json`，依次执行：
@@ -165,7 +179,7 @@ python scripts/standardize_geochemistry.py \
 严格执行 [references/scientific-rules.md](references/scientific-rules.md)：
 
 - 新增标准字段，不覆盖原值；
-- 固体质量比统一到 `mg/kg`；水体质量/体积统一到 `ug/L`；
+- 固体质量比统一到 `mg/kg`；水体质量/体积统一到 `ug/L`；水体 `nmol/kg` 等摩尔/质量单位在无显式转换依据时保留原单位并隔离比较；
 - 水体 `ppm`、`ppb` 或裸 `%` 在缺少密度/basis 时拒绝换算；
 - 删失值的 `normalized_value` 置空，只保留可换算的 censoring limit；
 - 来源限定符原词写入 `source_qualifier_raw`，同时输出 canonical `value_qualifier`；

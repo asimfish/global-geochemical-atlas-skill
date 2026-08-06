@@ -1,0 +1,2294 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS confirms correspondence with the two hash-verified files and occurrence-order adapter. It is not human review; decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "sample-2024-02-20_concentration-2007-01-10",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "14.0",
+          "record_id": "rec-21ed06b4109e5e259944a3dadd1e8be408eb2d98d7c1347606b29be73c774b2f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "51.928",
+          "record_id": "rec-9d5a3ad8c6f8485cfa4991abc6ad8351f7982b53e6a6e0631f9512c903eb386e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "38.419",
+          "record_id": "rec-e28eb4bd302489e1caae72d45c0d1194a7fd4d19d9e416e5f09bb830c0a8d1c4",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "80.0",
+          "record_id": "rec-36883f97e259c8accad502a36d98058be27f6cfe6943240074c19ed60351ff51",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "22.991",
+          "record_id": "rec-b5b93e3f23a43723d681de4375907a13bf88ed4d563ba6962eeefba6b48e070f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "57.202",
+          "record_id": "rec-ab44fa33480c3ca65484411066a18676fa8d012722384bf7e307fb356383315e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "179.048",
+          "record_id": "rec-00fa4475cd64304171a6e3183dad07955f57805029a4634598341d90b8ae7b0a",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2",
+      "latitude_jgd2000": "26.1292",
+      "longitude_jgd2000": "127.7603",
+      "map_sheet": "0那覇",
+      "reported_place": "沖縄県島尻郡具志頭村長毛",
+      "reported_river": "雄樋川",
+      "reported_sample_id": "1",
+      "review_id": "japan-gsj-geochemical-map-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2",
+      "selection_reasons": [
+        "minimum_緯度(JGD2000)",
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=2;noudo.csv#row=2",
+      "source_record_id": "src-3b5d4d792ddec1937781c7ecb204bfc8634c48ea7d618183fb4b7800c0031178"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "11.3",
+          "record_id": "rec-9f29f75db722207a46e14f89c1232ce7533a1cbb42a84234e1a3427742d0d522",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "86.277",
+          "record_id": "rec-1a1237d7c078e27de666840ca239b3416b48d2bb23da8d17abb77c87539e3a9a",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "48.938",
+          "record_id": "rec-d04f593701d8f99b5ac11936f52a05ad80e9a39d8833eb36c4f93f1e2e1642da",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "590.0",
+          "record_id": "rec-1cf7b9367bae310217b1ad4977f5260bd2d2f8f60d2afa3ed5ef1c390a8c7ea9",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "36.417",
+          "record_id": "rec-88bcacc4706b88a8e93cae159020efcf0a46c7a8fcfd638e89e9e2fb4f630484",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "56.717",
+          "record_id": "rec-cc6add9af8e00458e3b9668df41f7f9614261c046b0390ccce55685fc40b9bbd",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "213.480",
+          "record_id": "rec-befec849d09912a3a087c50ec3231d003e176cf9dda2304fee2f1b13f359e0b2",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=4",
+      "latitude_jgd2000": "26.2014",
+      "longitude_jgd2000": "127.6799",
+      "map_sheet": "0那覇",
+      "reported_place": "沖縄県那覇市壺川（那覇大橋の下）",
+      "reported_river": "国場川",
+      "reported_sample_id": "3",
+      "review_id": "japan-gsj-geochemical-map-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=4",
+      "selection_reasons": [
+        "minimum_経度(JGD2000)"
+      ],
+      "source_locator": "samplejoho.csv#row=4;noudo.csv#row=4",
+      "source_record_id": "src-4104c2a91dda668740bc3d9385a6057718b23621edff6944abe6be82512ffabb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "4.9",
+          "record_id": "rec-5b120a186a248ec89b4f2d9fea5a31ae39326221a39f10efd6988e1dd8ebb180",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "50.012",
+          "record_id": "rec-605dd1992fe5cb493dbfcb5b26ae54ee461add0b467c6acb5fcedca68ed882f9",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "20.433",
+          "record_id": "rec-804acf98e9b7e16ff4a0f210aacd1ce792b7c3470a236448ea1d21eabe9f8fd1",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "60.0",
+          "record_id": "rec-842b81dcb0a90f96ebe1845b0aa1cbbc6d8baf500523aa05d4d5027ef9e0077c",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "19.687",
+          "record_id": "rec-86eb8293c1d4be1acd2355e478a8ac34c667970eb94a416eeec9e9824c16c2b6",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "22.378",
+          "record_id": "rec-25648244db9a64481213f95ddfa0ef14cbaab209e58fe4cdabf39a2415ba5e86",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "84.648",
+          "record_id": "rec-40c7a1371417a3dda8ecbcbdc666d328c61db586d4f565d58872c26a3a3791cf",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=106",
+      "latitude_jgd2000": "31.9029",
+      "longitude_jgd2000": "131.4341",
+      "map_sheet": "3宮崎",
+      "reported_place": "宮崎県宮崎市出来島町",
+      "reported_river": "大淀川",
+      "reported_sample_id": "3029",
+      "review_id": "japan-gsj-geochemical-map-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=106",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=106;noudo.csv#row=106",
+      "source_record_id": "src-cc9cd020601d8d22a5a9cb18dc39b8ec8768dc1f3a9ef0c5499437bf11173c8a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "7.0",
+          "record_id": "rec-48366ffb0e997e4bee0b2f41c6019ed70af3e4658ee6e194170fb0b5de2d0908",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "45.371",
+          "record_id": "rec-ac2ca72d120d3e8a106ef599a520971d00e76c7c0707fdf47051f14ee3135249",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "13.115",
+          "record_id": "rec-b15ecd7cf8a0e69ed840d0a5f34401c0a8ae8389e4394d72ce72829977f61461",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "0.0",
+          "record_id": "rec-dbc5cff0a24975a07945acf7e76363903c90592cb67719e6737ced063daae454",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "17.665",
+          "record_id": "rec-951ca03c72df09e6aafe146ef63c63c45bc02b8672d271681759b7759ecc70ca",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "13.916",
+          "record_id": "rec-ca38b3290428987ff0a451e9c927986a35b11693cc6f1d3d4734bde4e55f45cf",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "48.367",
+          "record_id": "rec-176be77aa1f1ff8cb138b8eadf388df3fbc82742aae9b77fe657a155d50a1427",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=210",
+      "latitude_jgd2000": "32.8080",
+      "longitude_jgd2000": "130.3613",
+      "map_sheet": "熊本",
+      "reported_place": "長崎県島原市前浜町",
+      "reported_river": "中尾川",
+      "reported_sample_id": "8002",
+      "review_id": "japan-gsj-geochemical-map-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=210",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=210;noudo.csv#row=210",
+      "source_record_id": "src-bcecefe3c2fd0c6ea0fe35549ec75308f4f2aa61e2f8d42fc0cf9b70ebca9c92"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "12.0",
+          "record_id": "rec-200a09050cd22567113953a43f78fea3d46eaffa2df625f6f771d079d4df1b12",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "84.496",
+          "record_id": "rec-3c9f4f871dfbfa4c8b01a8509f45bb1e4c2153e6b528e28404f725b684604c6b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "30.566",
+          "record_id": "rec-2bd238bdecd0bf922f5712c890ef77d90dd0503d88ae74366e0cca0985a8b460",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "160.0",
+          "record_id": "rec-79922b48baae7489e64dbed802d041d2efe05f066c24a53703e991ac25a6e5c0",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "32.411",
+          "record_id": "rec-915efe44a4de2cc795c7b1189ffa184d5c5c6d17e09271afd67024b46105c721",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "19.027",
+          "record_id": "rec-73eb49f71f6eb57b616c962ec3c828abc409de9c6f12020756b91fed6ff2e7f1",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "87.681",
+          "record_id": "rec-ea499a0f344fa6812a3fdaad830045743ca30e39c9b3e8a65e8ad02fa9df0391",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=315",
+      "latitude_jgd2000": "33.2342",
+      "longitude_jgd2000": "131.7448",
+      "map_sheet": "9大分",
+      "reported_place": "大分県大分市",
+      "reported_river": "丹生川左岸",
+      "reported_sample_id": "9049",
+      "review_id": "japan-gsj-geochemical-map-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=315",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=315;noudo.csv#row=315",
+      "source_record_id": "src-86fba6e01b85489a0d8f3855311f77b85bf2ce0d5ff862c363e04e67ae8435f8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "4.5",
+          "record_id": "rec-06929527fdac70c60fb39a5b5ab463173668f0dd0e55dc21aa164bfc4e3e0ee5",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "230.473",
+          "record_id": "rec-7616c206aa3f6c5036d827662ff29bf50ea280cc3a4308ff78308a1c3e982520",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "105.936",
+          "record_id": "rec-a68fd8543adb4e28acf80d138f5b99511fe0bd366f2a04621d2bc6828e6f0685",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "150.0",
+          "record_id": "rec-c6ca28c989165583173b84144ecf2bdccf4c33ca79cb5f339b606319d6afc58a",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "92.268",
+          "record_id": "rec-2df86547305e9bd696df0c1c85d8b8e5b21ddc61bc2b6de03c1c52e25b126dff",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "19.717",
+          "record_id": "rec-2bece51006866392a3fdbe78296e42142dc66df38c609565e80fca5a2784e218",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "170.311",
+          "record_id": "rec-2c589d1900b059a62a2ecb604491f7a0bd239e683631f267caf35b193017636d",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=419",
+      "latitude_jgd2000": "33.4862",
+      "longitude_jgd2000": "132.6617",
+      "map_sheet": "15松山",
+      "reported_place": "愛媛県大洲市成能",
+      "reported_river": "小田川",
+      "reported_sample_id": "15003",
+      "review_id": "japan-gsj-geochemical-map-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=419",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=419;noudo.csv#row=419",
+      "source_record_id": "src-996a78766aab4a8a2577820da0f7fa68903c405457fb4b04fdda2e1feb0fe9bc"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "5.1",
+          "record_id": "rec-dae915dd4ecc84432e827afedcbf94286ad007380528cf1d5de90048694eac09",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "237.723",
+          "record_id": "rec-3c197a186bfbf154a84199122d749240c11dce113a2a93c1c99b25940ad42c6f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "69.336",
+          "record_id": "rec-57167fbf84049fe2c98b6097646f70d10863dc16ae6166dc342f0c718747b154",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "90.0",
+          "record_id": "rec-d3d3899a1a796f26315ae1facb3ed52ed8314341b875225a0e3dcd4a0600b77c",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "99.208",
+          "record_id": "rec-c4f19a3b594e6267b5e2412133f62dab142e19e309481d988209bd843b836d12",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "15.126",
+          "record_id": "rec-0e003b3566d28052fcb6fe361fac3c3c95985fb95250eaa0f743bd2ec45f0936",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "115.502",
+          "record_id": "rec-6b357c21e774d7abee09ea9689e145dca74aef0427a8a6e3ed49b9757cac5600",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=523",
+      "latitude_jgd2000": "33.9975",
+      "longitude_jgd2000": "134.3700",
+      "map_sheet": "17剣山",
+      "reported_place": "徳島県名西郡神山町",
+      "reported_river": "鮎喰川",
+      "reported_sample_id": "17024",
+      "review_id": "japan-gsj-geochemical-map-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=523",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=523;noudo.csv#row=523",
+      "source_record_id": "src-d9df9e99c7f615e14dd5e78811696152b9a8175b13e3d4fe85a4dcc223641ff8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "2.0",
+          "record_id": "rec-73712e631cb76078eda11c513d674d324a9991a746399e2f3579433fd66960b7",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "19.812",
+          "record_id": "rec-9b11e33de240aa023a8c05b6d54ed680cc70d830a737ab82dc09e3845c207a9b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "25.069",
+          "record_id": "rec-70bc56c53d6645e01f4c38613feb308b1f78df871a2fe5da605d0a55b92f7ba0",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "0.0",
+          "record_id": "rec-03f514ef746923d4259f7c9ee626cff3643bd9eff8f6bce50140c16505677051",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "7.506",
+          "record_id": "rec-72043976c291f0364772a3006e2ed94ac25ef3c86440f49aff524a252159bb27",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "28.040",
+          "record_id": "rec-8682a0df8ec34723558c1e82fc4b07d9c9c9529b28e07be7fa784721d3e875ac",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "88.678",
+          "record_id": "rec-7a22f9e78fde04fee27af0e389d59c4d623cd073434e7867e70b76f84eb53449",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=627",
+      "latitude_jgd2000": "34.6246",
+      "longitude_jgd2000": "132.3165",
+      "map_sheet": "22広島",
+      "reported_place": "広島県山県郡加計町",
+      "reported_river": "滝山川右岸",
+      "reported_sample_id": "22024",
+      "review_id": "japan-gsj-geochemical-map-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=627",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=627;noudo.csv#row=627",
+      "source_record_id": "src-512dfa83c487790bd1c796953d096c54f857a8d18b8011554f7647e5377dd0e8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "1.0",
+          "record_id": "rec-f6d57f7d1200023f2c9584e108995575d37ef2e5bb44790050e28e4dd715bb40",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "69.933",
+          "record_id": "rec-440bd6e05953d1e1295f822af71a2f4a000d49656ca2c2d91b9587d015c8f5a0",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "18.853",
+          "record_id": "rec-8e58ea42a0d1ba51294efac2deed217bddf43550b7b23c9dee728b4aaf8bfd6b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "50.0",
+          "record_id": "rec-82f5d773c6b1e747b4117a800b06bc3290740dfa6732b9df5a46b2b7b8b76d07",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "28.894",
+          "record_id": "rec-936bf2ef2d6b778199467839b026d6f61d657be6c2514c0279afba8bbe8dc000",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "32.393",
+          "record_id": "rec-d72621d5ece1dbf4766d1ecb89d58c7231fd16975b228fbb2fed829803cbc003",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "105.413",
+          "record_id": "rec-d4f7b93f503cf95c85c6130c7f0544f2d8a06c8e3882c72e77273d1a42b807f6",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=732",
+      "latitude_jgd2000": "34.6146",
+      "longitude_jgd2000": "136.0846",
+      "map_sheet": "26伊勢",
+      "reported_place": "三重県名張市",
+      "reported_river": "宇陀川左岸",
+      "reported_sample_id": "26022",
+      "review_id": "japan-gsj-geochemical-map-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=732",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=732;noudo.csv#row=732",
+      "source_record_id": "src-5ef6bf0b17d1c7c4dfd3a3509a65e13857d5398245883607969505a0cf101753"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "22.0",
+          "record_id": "rec-5368e387c5b80ff845631275f0fa9fc2b9527204af983f74367ad9475a4a2f15",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "110.408",
+          "record_id": "rec-e889f4c37e52c3e3b226d61297a9838b3d7f22bd81db71a244bf2b42e1f05cb2",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "42.683",
+          "record_id": "rec-a7c31cc98c329bc729f71879b65d5c02ccb3b060e31ded8315359815de48623d",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "50.0",
+          "record_id": "rec-33c1ac82d5fb6c8ba433ea1f5d51352762ce87acfb777cf3f0b38d39480a6c30",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "31.632",
+          "record_id": "rec-e03fabeae58c13e32902572fae5270aca95db651f5ebe349b64e19ae042b2747",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "31.249",
+          "record_id": "rec-fdc0bc6214bbc392475112e67a3b147466d9f3c04ebfc486c453e791c32df302",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "174.752",
+          "record_id": "rec-512549ebb819580c0c01f16b70e62a208ff8e650a86b871ec3f9350d1ecff53c",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=836",
+      "latitude_jgd2000": "34.9313",
+      "longitude_jgd2000": "134.1207",
+      "map_sheet": "32姫路",
+      "reported_place": "岡山県英田郡英田町奥",
+      "reported_river": "吉野川",
+      "reported_sample_id": "32012",
+      "review_id": "japan-gsj-geochemical-map-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=836",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=836;noudo.csv#row=836",
+      "source_record_id": "src-7f49bb09fd1ab4ddc9a215fd7de5e213daff249827b496ffd6a48bcda3c492f8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "1.0",
+          "record_id": "rec-91134c412848e1b74dc7930fb2d92efb13ed0c4d538b0c2350358df8e978bc80",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "30.144",
+          "record_id": "rec-177e23c411dc1f44ed25371ac7024a7523d3897fe83615bee8980bd7fad903d8",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "28.249",
+          "record_id": "rec-f0bd7878d98345fead8f8e69c2086af12f1b79dbaf14cb8a84ccdca9865453b8",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "60.0",
+          "record_id": "rec-aa1aea845a4e348adb55d7491a7845143e088510d1d95b97eea517014c570e15",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "14.144",
+          "record_id": "rec-801ecf72579b9a64c743d41c6d868feb5fe8c5de4075492dd0c3301234bf526a",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "25.250",
+          "record_id": "rec-4a6941ba841c555f69bbebabcdb41067f8e262e2413f2075554743e94125db90",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "114.787",
+          "record_id": "rec-336f88d9795105396b26fecfb0ca718307ec8013353f0ab543150b2f0b90b81b",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=940",
+      "latitude_jgd2000": "34.9515",
+      "longitude_jgd2000": "136.1498",
+      "map_sheet": "34名古屋",
+      "reported_place": "滋賀県甲賀郡水口町",
+      "reported_river": "杣川右岸",
+      "reported_sample_id": "34010",
+      "review_id": "japan-gsj-geochemical-map-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=940",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=940;noudo.csv#row=940",
+      "source_record_id": "src-cd83f6f1b4630af5a22b5d28e909ed509a2a10611f7408344de9e22702614da5"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "6.0",
+          "record_id": "rec-affe6e9167376010674e3c81604008108cffed36ba56e0ae97a03f3ab0df1d85",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "82.854",
+          "record_id": "rec-d0785f18e92427b97df67b14d0af68d73a7f21393d904a8dcf5d04388cce3d1f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "51.480",
+          "record_id": "rec-3316120e7635679588ae0962dc3d4f6e2bf1274c31ed73d4572c82b7645520ac",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "80.0",
+          "record_id": "rec-382b9bc181a5bc10bc2bfc66518512d17c4347b592879d6adf15f93d13c84745",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "56.119",
+          "record_id": "rec-3c2e68cdd42acdb9901ad30291d5aeb2e100453a09e95e695305e402f452f2f5",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "15.206",
+          "record_id": "rec-e2862bce35d344ae9134d9ce1c2e06af2fec4c3601b6b262469dbbd31ec6bfa6",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "87.271",
+          "record_id": "rec-70725439b6dc4f3c431ada8ed481a86231bc0e6ac5396177b11d4ca45360b3a7",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1044",
+      "latitude_jgd2000": "34.9357",
+      "longitude_jgd2000": "138.3917",
+      "map_sheet": "36静岡",
+      "reported_place": "静岡県静岡市",
+      "reported_river": "阿部川　最下流",
+      "reported_sample_id": "36101",
+      "review_id": "japan-gsj-geochemical-map-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1044",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1044;noudo.csv#row=1044",
+      "source_record_id": "src-32c4733a9aeb0677691fc2929ef9048e9565670d3dc877edaa5d3cb31aeadbed"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "19.0",
+          "record_id": "rec-07a3ed09875e876fc478b671459ca144354dd2ed579e0780d8838533e26aa833",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "57.728",
+          "record_id": "rec-319cfe8f84209e7198418a2a82ba1ecf9c11e0a512ef9caf9b6a6b13b717f80c",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "40.265",
+          "record_id": "rec-472e51c8a0520635d25f561cd154bbd02ccf6ec1b3a1e294add6230fa4365e6b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "0.0",
+          "record_id": "rec-c0239b68625aa127c64a4f7094f032a2ea133958d34171f1d4abae6dce6aa00d",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "27.249",
+          "record_id": "rec-b2d094f2c71efa77ba4dadecb32e61458c0a072162ba685b4b56e003c35daf4f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "21.537",
+          "record_id": "rec-01417fdbf7e05e6d1d0ba7596f264b7e24b724ecf33a0913d76c59512d64e84b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "73.615",
+          "record_id": "rec-246342e69ad0246730cf86be74d3c96d7a2a33ce6d712cd17f199c4ed1a11cf7",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1149",
+      "latitude_jgd2000": "35.6053",
+      "longitude_jgd2000": "135.9424",
+      "map_sheet": "42宮津",
+      "reported_place": "福井県三方郡美浜町河原市",
+      "reported_river": "耳川",
+      "reported_sample_id": "42016",
+      "review_id": "japan-gsj-geochemical-map-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1149",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1149;noudo.csv#row=1149",
+      "source_record_id": "src-925f811c07a6995e1c4c443a2deebc0382dd012f4ff8282794183cca2af95154"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "3.0",
+          "record_id": "rec-669711cfa7d2eb63d77eba447824ad2e7a770c95398196f36161b1a7e9c94348",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "150.135",
+          "record_id": "rec-cceae21d8fe77306b44ed8871ca7a45d0c1f49b366215af24bb2ed0fd0db8f0e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "187.330",
+          "record_id": "rec-a7ee77c16e44c2111ddc5ba9555823e4d1e8132e1e88628e08e6341c09b93a28",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "20.0",
+          "record_id": "rec-d12ae94fed685ceecfb19dd7e88756ad04ab05a6b42737a96db23147536270f3",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "90.298",
+          "record_id": "rec-552faf46130d3fe27bdb889811cb112b88dca58068c91481355db0cfa00e6cc4",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "13.330",
+          "record_id": "rec-00667bee8a4e4a8c8b146e45d8d133484e47e366e585f3354a2d2dd5d8a81864",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "239.601",
+          "record_id": "rec-1d3b4c2d0ae96d4266e21d535b766171e7b74eb620e84046b51fa61d637d4923",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1253",
+      "latitude_jgd2000": "35.5795",
+      "longitude_jgd2000": "138.9345",
+      "map_sheet": "45甲府",
+      "reported_place": "山梨県都留市",
+      "reported_river": "桂川中央",
+      "reported_sample_id": "45013",
+      "review_id": "japan-gsj-geochemical-map-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1253",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1253;noudo.csv#row=1253",
+      "source_record_id": "src-f497084bd29ec5a7ebe7afb1c653208720982f9cf910c26a1952fd7387e3f446"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "6.0",
+          "record_id": "rec-560b522a9bf96d94dcfa784e9d4322553bc49463334dfd98ccda099781d3a705",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "117.512",
+          "record_id": "rec-01cb5cf8c4968afadde05aa16afce9cbed8c93e82696d3bf57dec54b71e5ae78",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "29.034",
+          "record_id": "rec-4b8656ae1051c283832cdccb49033ea00956954c334f9d2d4ba3f3c7b512fd1e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "50.0",
+          "record_id": "rec-d3aa6787c8ca1360e6dbd368e58cc215b6d7bfab001ea1be1a8380a6c0d746bf",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "28.006",
+          "record_id": "rec-f0cc8e77c592c4aa6159821aff47174aaedfd6f35d5495b8d765edf7cb9cd6af",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "23.684",
+          "record_id": "rec-ec56264822a11c27e05287e0c7794fb370358bfad8d7d306087f18280aff4db5",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "145.534",
+          "record_id": "rec-75e24ef2582bfdc4805351f57adf45b9c03500fbbcc03a166075a37a729c2b9f",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1357",
+      "latitude_jgd2000": "36.0717",
+      "longitude_jgd2000": "136.1874",
+      "map_sheet": "48金沢",
+      "reported_place": "福井県福井市大瀬町",
+      "reported_river": "足羽川（左岸）",
+      "reported_sample_id": "48003",
+      "review_id": "japan-gsj-geochemical-map-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1357",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1357;noudo.csv#row=1357",
+      "source_record_id": "src-1cdc116b9f75c879383558b7720f7b406f9841167a1d334b6d4470ad2c1da36c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "2.0",
+          "record_id": "rec-70e922c2fadcf6800d697ea27a86190b75eed01b2b17824e9d8cafd6d43b2b99",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "13.240",
+          "record_id": "rec-e63407d8009d2f313375072986f57a0b3f310e0b444c1a1199f61ca07cee856e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "14.124",
+          "record_id": "rec-b5138bb73f2b867579adca72e107725ed71205f4eb2dd8d3f47e5c91295f09c4",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "20.0",
+          "record_id": "rec-e20c8a85c1076d72eabd7aa40f9efd996aec823bb73e6abb07fc41027609d81e",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "8.207",
+          "record_id": "rec-035d785e1f8e8739c81f09224bcc8978274d35407c77ceb67fab897be6ed7178",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "12.426",
+          "record_id": "rec-15ee71afb6f045cb023d6a16065daf1dd8af8d19db88e788970e9a7b0a1270ea",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "94.871",
+          "record_id": "rec-4a3b6203ed4c293ddcf5a5fce11efcf0ddeedc9e54b86f9a6c66860eebebd200",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1461",
+      "latitude_jgd2000": "36.5799",
+      "longitude_jgd2000": "137.4467",
+      "map_sheet": "49高山",
+      "reported_place": "富山県上新川郡大山町",
+      "reported_river": "常願寺（真）川　右岸",
+      "reported_sample_id": "49071",
+      "review_id": "japan-gsj-geochemical-map-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1461",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1461;noudo.csv#row=1461",
+      "source_record_id": "src-9798c75fb6a3ae4f8acf5762da3a019864e108edb5aeb4ab0a18d9ef59ebb413"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "3.0",
+          "record_id": "rec-86c9fb5834b9b39c16516aaff00ad53d08b51e096c25c9ece4d0d3f72ee73c10",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "24.838",
+          "record_id": "rec-a5bab7a9c8c5afc651a14935c089df4fe3a193fec42373484ac1ddfcae705db1",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "18.794",
+          "record_id": "rec-7a7f8cb661bd977159fff75ae13108cb6540fc38445cd560f0301575da9935da",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "20.0",
+          "record_id": "rec-21bf127bd7f6bbd7c6b999ae4a175e745497f4cec3be10c37a82a1cc9106d517",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "15.632",
+          "record_id": "rec-59461f498425aa57d66d4fad99562862529016760c8f99a37e9288cc3e72edea",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "21.258",
+          "record_id": "rec-e3d293d95251b4dfb85ce5359928a92a3e40f77872b9cae2221ff1f921d1e979",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "78.874",
+          "record_id": "rec-0bf6f350f45c0974728ed4279cdede381f25dd7c9827c83157b04ab9534dd297",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1566",
+      "latitude_jgd2000": "36.1617",
+      "longitude_jgd2000": "140.2599",
+      "map_sheet": "52水戸",
+      "reported_place": "茨城県新治郡千代田町",
+      "reported_river": "天の川",
+      "reported_sample_id": "52007",
+      "review_id": "japan-gsj-geochemical-map-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1566",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1566;noudo.csv#row=1566",
+      "source_record_id": "src-4bd06e8acd4bc1bb8379fb0b07f897f8e29abd0690415e529cb463d61b0cdc57"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "25.0",
+          "record_id": "rec-5c83905e4be4742ec18a0aeff0f0411edef9ad800fe32ee74eb819c04bc745a0",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "59.529",
+          "record_id": "rec-6771fd81d6f13409e52fe805a3ee343af10e549df49fc9904f8266341709fc2f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "34.725",
+          "record_id": "rec-6328e4860165e13ec59760b241c780938ca3d6db3f4c5bb4e29d988a050db539",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "10.0",
+          "record_id": "rec-aa4744d661f66d52707c0dab4a17f1a9a69f6b0698b0b822342cfb66b9bc83a9",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "21.404",
+          "record_id": "rec-dd2b225c842fa20abb3ae2935fb8f4f5ea70b1c9be7666bb90b5cdf696b12fef",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "21.968",
+          "record_id": "rec-0ace2a30f1eff62ddc526e95df3cb3eba9d3a5e7f1cd64ead6bc4308b6d1c7b2",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "120.854",
+          "record_id": "rec-cc9bb7edaca317f9568ef212e50ae0de14df2e132831b6e288898a383506697d",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1670",
+      "latitude_jgd2000": "36.8083",
+      "longitude_jgd2000": "138.6203",
+      "map_sheet": "55高田",
+      "reported_place": "長野県下水内郡栄村",
+      "reported_river": "魚野川（右岸）",
+      "reported_sample_id": "55008",
+      "review_id": "japan-gsj-geochemical-map-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1670",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1670;noudo.csv#row=1670",
+      "source_record_id": "src-78cd395a6f8128401fee4c456e22765c14cf0010928c9376e6d228bf6ef95d3c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "8.0",
+          "record_id": "rec-f670b81ad76ae83154e9afa3dbe2dd84598cd584c7a3ee7ae43c2a2c16af3f05",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "33.627",
+          "record_id": "rec-8caa432665ef477553ccdbbb0c84c9dfcfecb48a2bc6820ad710f7292b5d8541",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "12.377",
+          "record_id": "rec-c4c24313b0659d73981a36ae89464aa422fb7000b359a7d57a9a5f7e6485c1b8",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "10.0",
+          "record_id": "rec-2d0c1e6afbd335a85e99b45ba84151987195bfe97fd0550a43c696744f615711",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "12.756",
+          "record_id": "rec-d0f9d1c00e8b72aeae020f5fb0169a9c0f2028ebf29ecae41d6d86d1a1189598",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "14.948",
+          "record_id": "rec-0e2beecdb67abede0fd51c55c629ac10b13654e6bb702c3a1033d285a88d4d40",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "66.549",
+          "record_id": "rec-702d861453e76efa2742f170c0a5cd145edb89358d7c3d65274861224b69eedf",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1774",
+      "latitude_jgd2000": "37.1454",
+      "longitude_jgd2000": "140.9995",
+      "map_sheet": "57白河",
+      "reported_place": "福島県いわき市久之浜",
+      "reported_river": "大久川　中州",
+      "reported_sample_id": "57030",
+      "review_id": "japan-gsj-geochemical-map-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1774",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1774;noudo.csv#row=1774",
+      "source_record_id": "src-1a377d459bd22414d02608d956c81f5b162bb277cc2b66f5d882f9b0d3029db5"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "2.0",
+          "record_id": "rec-46b67660b87d2d42941b18116ae23f384ab6dc7050113fdaef85a0c8e1eeccb9",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "29.883",
+          "record_id": "rec-0f4add1a8e7324b58803a743f34025ecbcc571e9696b8e864f7ce6bdaf441d58",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "8.672",
+          "record_id": "rec-44f5aec1e7d22b12975d80aec14c668868492a77445df74aaaa1ceb3134fa9fd",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "0.0",
+          "record_id": "rec-c268ba2885a5e333cd5ba8ca7782561cd2d77af9af3b64231f1bc3a67480f751",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "10.296",
+          "record_id": "rec-e017b234c5be224c2b86b38b373edbc3eb38c84e4c602d62ceb64199908b3f9a",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "15.821",
+          "record_id": "rec-cbb78b3b2d99ee9acbc427eccb606ac662fc2e1a9cb90e64d66eca04866476b9",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "78.888",
+          "record_id": "rec-ad9070ac3cbc655da14f2762a7bb59249508929693cf8b7c017cde797ce3d2f6",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1878",
+      "latitude_jgd2000": "37.4859",
+      "longitude_jgd2000": "140.9979",
+      "map_sheet": "61福島",
+      "reported_place": "福島県双葉郡浪江町高瀬",
+      "reported_river": "高瀬川",
+      "reported_sample_id": "61010",
+      "review_id": "japan-gsj-geochemical-map-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1878",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1878;noudo.csv#row=1878",
+      "source_record_id": "src-4be2da12c935267626577a0336ecc07eaf7a1557dc51a71b4a4b387a0fe276a8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "9.0",
+          "record_id": "rec-2e84660abcf0cca5266748b2b776e55d850b02d110c6b58424a981880da14f45",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "43.983",
+          "record_id": "rec-26358b81d6785b571ede56566683a14aa358c93ff3286e44d82eb117d57a8c65",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "70.616",
+          "record_id": "rec-f415dfd6873454a1923c101c546465646b84de71936784ca38239ca6ecc80a1e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "40.0",
+          "record_id": "rec-2ce93f46f70f6575642d2090f63dbdccf6f2e3e57abc21b765fa2f9e4b7a7860",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "21.291",
+          "record_id": "rec-fffa28dace26d71cd0fdab53277f23a06923f5315f2b9bf2701a279fe9dac0d5",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "26.330",
+          "record_id": "rec-944996c92ba0d93f580ccae6cc17ecd2d1633e3a930fc6c4076021b18aa160d3",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "138.004",
+          "record_id": "rec-6479dfb7d80a124f63e1ff373cc51c70472fc9688f0061be989aaac2cac0738e",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=1983",
+      "latitude_jgd2000": "38.4362",
+      "longitude_jgd2000": "140.1187",
+      "map_sheet": "64仙台",
+      "reported_place": "山形県西村山郡西川町間沢",
+      "reported_river": "寒河江川",
+      "reported_sample_id": "64022",
+      "review_id": "japan-gsj-geochemical-map-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=1983",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=1983;noudo.csv#row=1983",
+      "source_record_id": "src-9cb269e4b8c4fc98d05ba9bdfecbb503a0b142c0ebf506fb200a1845dc26994a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "11.0",
+          "record_id": "rec-ae8ca558f72f201d40d84824c630f3896eaccc18fa786b5dde3e7c29ff207edb",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "27.516",
+          "record_id": "rec-a32daebfcd393a39e6a56adc3dae0a59ded0075270591b53cf00fe1d9f16921b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "31.831",
+          "record_id": "rec-99b76d81f8fd241f8dd59fafac802e99be2ce676c8df960630002abe969fe43b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "60.0",
+          "record_id": "rec-bfde7f7e3ba5fe306d2e9191a4701af355ab522cb344109b34f61a3ee4102954",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "9.662",
+          "record_id": "rec-1ecac070946fe3a21c6a1d2bebda974fa3cd93660876d84fcc141b8b797ddeaa",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "24.446",
+          "record_id": "rec-e3bf7b2f0c8dd4b0774ac81d6282f2de8d77c52c3ff7c2d4712fe8826a3b539d",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "183.179",
+          "record_id": "rec-4cf316094759168f0c1d91673fc60382fec8eb54ca099550dd7a977e8fb018a2",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2087",
+      "latitude_jgd2000": "39.3090",
+      "longitude_jgd2000": "140.9815",
+      "map_sheet": "67新庄",
+      "reported_place": "岩手県北上市",
+      "reported_river": "尻平川",
+      "reported_sample_id": "67043",
+      "review_id": "japan-gsj-geochemical-map-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2087",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=2087;noudo.csv#row=2087",
+      "source_record_id": "src-519c95f09a3f927b946e162d5aa614ec3465e8b3b9e13114a198bdac8618f850"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "16.0",
+          "record_id": "rec-b25df89bb02afd2d7ce3eefb20bce19987763507c6e1f3a375c1422218d57726",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "80.162",
+          "record_id": "rec-2286f18dc0b21d005f2ddc23fc2dc6370790e26d676eaa1d18fd439278f76952",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "35.861",
+          "record_id": "rec-128c3e276993c63eef82c05c9cfb8280718e71396b1f604ff9374daad10eca4e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "80.0",
+          "record_id": "rec-abdcecd9be484b69ca8ff54cfb861af8cfbae18658d42dac7a80d7a412724ec1",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "30.291",
+          "record_id": "rec-c1aad5afb79323d346780f87becfff46c7339e7ee0523b3a83001241857da781",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "15.482",
+          "record_id": "rec-f6130f9567d9975f783d542725e8c23bda3df09d4372b9b32e7e652ff7260603",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "91.693",
+          "record_id": "rec-46baa6df8b66cbd895216ddd3b8156796e465cd61f2b1b00a6485a7c90e357f7",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2191",
+      "latitude_jgd2000": "39.8377",
+      "longitude_jgd2000": "141.4108",
+      "map_sheet": "71盛岡",
+      "reported_place": "岩手県岩手郡玉山村",
+      "reported_river": "紫沢川",
+      "reported_sample_id": "71020",
+      "review_id": "japan-gsj-geochemical-map-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2191",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=2191;noudo.csv#row=2191",
+      "source_record_id": "src-a2653d2250a526f95e15db1648475fc42a0ac80402e4670b05aacd757cb7e484"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "6.0",
+          "record_id": "rec-d1640c1612122090c9a39882df4fb541f25365546e1bda9ad4118f356c1820b6",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "31.337",
+          "record_id": "rec-d970ae9e9fdf4471d9f6859644068b1caa952a6aa59ab902806409b5c51499e0",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "17.742",
+          "record_id": "rec-7972aa3be3f63adb1d84132bae6cf8e85d53ad8d3eaaad74947d8a9a2945843f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "20.0",
+          "record_id": "rec-89b9c28afb7bc8d900120a60079c5c8f4409e1cad00c6c00d94929c33a6e52d3",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "10.092",
+          "record_id": "rec-688f1f4a24e205665e56a12cee72f028982a53064b9798a1e84af3de1b30983b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "17.163",
+          "record_id": "rec-dd26d526a76a6db9b4663a6d9315db274cfb9b1d8fdf233c1731fd07e62cce90",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "122.474",
+          "record_id": "rec-eed22d35884753ae5116132a6340e5d939d74eb94565c656c4d182f17b4525f9",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2295",
+      "latitude_jgd2000": "40.6953",
+      "longitude_jgd2000": "140.5478",
+      "map_sheet": "75青森",
+      "reported_place": "青森県南津軽郡常盤村富柳",
+      "reported_river": "浪岡川",
+      "reported_sample_id": "75009",
+      "review_id": "japan-gsj-geochemical-map-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2295",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=2295;noudo.csv#row=2295",
+      "source_record_id": "src-2b1396dcef19111e4a07d270a9ed4078c943e6731980aadc116e03bd3a98463f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "10.0",
+          "record_id": "rec-6eafd59008f17501b07310e402880f6334a0ad059d1cd50e72776c95f26b5f1f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "60.602",
+          "record_id": "rec-78a8171ae426ec0e923d49d769aa23996a9ace4b29493b6932480dbf3a7f3c9e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "31.836",
+          "record_id": "rec-6a715cca44749b84849a378c5b3d86046dae16ced14676641f5c0fed94e2e920",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "20.0",
+          "record_id": "rec-cca4f0c78ce1bb733aed92fcbcc4c92c923ed0632d58c24ba4d04ad30f160e36",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "21.202",
+          "record_id": "rec-747112367cc7a6974a3fe2b94803d49fa938c4f83c7239c937a3f43a26f0b87d",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "23.716",
+          "record_id": "rec-51b6b41086f8d4abbd1df4a24cf74b9788eaf0d68aaa7fa40b5d94769f4f565b",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "206.662",
+          "record_id": "rec-5f30bbfdaf4c7d88a13164e304960ee6832607d9033d836a080fa8cbad9e8c13",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2341",
+      "latitude_jgd2000": "41.7945",
+      "longitude_jgd2000": "140.7478",
+      "map_sheet": "78函館",
+      "reported_place": "北海道函館市　梁川公園",
+      "reported_river": "亀田川",
+      "reported_sample_id": "78013",
+      "review_id": "japan-gsj-geochemical-map-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2341",
+      "selection_reasons": [
+        "duplicate_sample_78013_ordinal_join"
+      ],
+      "source_locator": "samplejoho.csv#row=2341;noudo.csv#row=2341",
+      "source_record_id": "src-7a121a174a1b98be2a4f1ee3955c429af01cb99cedfd6b2f802d0e7420fbe674"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "8.2",
+          "record_id": "rec-a7cf6ae571b1fc659c1323d92fad881b358f5de19587f93ebeadff605f72245e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "44.190",
+          "record_id": "rec-de5b8f87772976b09056063155061d4ce498fc192db2014051ed79ed2b7e6468",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "30.082",
+          "record_id": "rec-73436d83a39eede65ae2f94fa7f8ad82d694b12f53f4cd7be361985f2fe49873",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "50.0",
+          "record_id": "rec-b390ee5164c090e538f70ab0fae1d9da370695d7a4b7b20dc1bc1561930f2c45",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "15.847",
+          "record_id": "rec-5e427afbc19977be9f32a1d2230f560cfcbc1c516a0d1c5dd8bc3639d1aa00ff",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "24.180",
+          "record_id": "rec-580013ab0287ee8b30e0a2fdee150aebc4f4d8509db5d47e3373a189afd00551",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "159.484",
+          "record_id": "rec-ce3149ddedb2dfbd8e0727f2ea41c5feccdb91dcbb58bf32ac9534b17bd43dba",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2342",
+      "latitude_jgd2000": "41.8087",
+      "longitude_jgd2000": "140.7561",
+      "map_sheet": "79函館B",
+      "reported_place": "北海道函館市中道町",
+      "reported_river": "亀田川",
+      "reported_sample_id": "78013",
+      "review_id": "japan-gsj-geochemical-map-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 2,
+      "sample_source_locator": "samplejoho.csv#row=2342",
+      "selection_reasons": [
+        "duplicate_sample_78013_ordinal_join"
+      ],
+      "source_locator": "samplejoho.csv#row=2342;noudo.csv#row=2342",
+      "source_record_id": "src-e2517eb3f83726d396d7efb53146581faefc66cb14e9ce723a1d0e27bfb3233d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "10.0",
+          "record_id": "rec-18a07089fa1b8f5b8006d5f4cc891b0a4a4acf0e67c707b8ae446ac71f3317d0",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "37.678",
+          "record_id": "rec-a3d677992db30cf67a422ce88a279e93b873deebc208b391d57122c0e8e66340",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "23.488",
+          "record_id": "rec-d148e2d5a8688b26377d5ed941d07f2eaaad99230ac4fc9b6d87e4f9fb9fbe3f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "70.0",
+          "record_id": "rec-8f1bc464bdfc6e4c787e694b62f77a86f8130493bc4db86215779337c679ff4f",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "22.110",
+          "record_id": "rec-800fc36f014950741224a4a261bc57e0cfa0499d7e3c530fe7e84cf91552c423",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "15.665",
+          "record_id": "rec-d3b144af229a7d10b915ee225da79ac87fd841f412ceb39f4f97ad238a7ef257",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "88.045",
+          "record_id": "rec-8554f9ce595d44e0f80686d506075580e1f5ef43a75c57cf335f0005c45af060",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2400",
+      "latitude_jgd2000": "42.4890",
+      "longitude_jgd2000": "140.3568",
+      "map_sheet": "81室蘭",
+      "reported_place": "北海道山越郡長万部町平里",
+      "reported_river": "紋別川",
+      "reported_sample_id": "81022",
+      "review_id": "japan-gsj-geochemical-map-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2400",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=2400;noudo.csv#row=2400",
+      "source_record_id": "src-1be43b0469a4ae06727a8e1d36b0570abbdce3e3af924c4803196d23f95de0cd"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "2.0",
+          "record_id": "rec-f18e1fdcd8695f53f5e19c06dd0e97b45afec5c6ec6a926b60930f114aa70e1f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "92.274",
+          "record_id": "rec-5e9f053717d783a64d126ae97e9748937127fccb612b83fdba784c82f65bed3f",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "25.573",
+          "record_id": "rec-8a3c6f7e02ebc49a3ef63e6872477bf497b5ebf785cb64deda02967cc3efc705",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "10.0",
+          "record_id": "rec-0c817fd5c7a9b7f66ca1ed5d8ffea9d8e77608663e4d6756f6e0e6bddf8bf1d8",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "28.820",
+          "record_id": "rec-b44870f37ca4dd85e824b45bed8dfd3f2f8f26fb5c1bd409350924b137a33ae6",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "10.006",
+          "record_id": "rec-a3044cfd896ba3fa8f6b9f7292bf05019f630829e4a171d33f96bc0b9c0fbc5e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "97.827",
+          "record_id": "rec-a4acdf9e7d78387f0701f43333bc28a0d2c74176fd7a233176973b7b98b19181",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2504",
+      "latitude_jgd2000": "43.3446",
+      "longitude_jgd2000": "140.4618",
+      "map_sheet": "85岩内",
+      "reported_place": "北海道積丹郡積丹町野塚町",
+      "reported_river": "積丹川",
+      "reported_sample_id": "85026",
+      "review_id": "japan-gsj-geochemical-map-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2504",
+      "selection_reasons": [
+        "national_source_order_stratum"
+      ],
+      "source_locator": "samplejoho.csv#row=2504;noudo.csv#row=2504",
+      "source_record_id": "src-578f450f0baf0d7f1c1d7ed52fd542bf7311855fea62e7d842321b391d6b2bbe"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "2.0",
+          "record_id": "rec-0d37b594bcc7a7e32ed2843e3c66873c7e4666ae9ffb2e728d6a11126ce5359d",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "31.887",
+          "record_id": "rec-a41102378d4248016ede1d4d7cb9bd25fa5ddf49f99dad2411578ac337567161",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "133.758",
+          "record_id": "rec-b00f49bcf47ab554f90a3445330fcfe6a79e44022b31700135b28dfaa4af96d6",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "10.0",
+          "record_id": "rec-ef73f7fd6fe4c01d260b617fc15aadd22291b9d924677ef22b903e4bed82d3c5",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "12.936",
+          "record_id": "rec-f852efcbbd96e29e105ce4041e659e0c757adeefa5e5b156ae9381d9a6dbec58",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "28.762",
+          "record_id": "rec-bd015aec586e0ed99f066067b09676e690364200d2c73a61d2e2812dd22bf7d2",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "126.628",
+          "record_id": "rec-7116555b3f6acb010fb1372b4646b4097f93a0c9ad119415b74074f5b58cbd4f",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=2880",
+      "latitude_jgd2000": "43.3814",
+      "longitude_jgd2000": "145.7221",
+      "map_sheet": "95標津",
+      "reported_place": "北海道根室市豊里",
+      "reported_river": "サンコタン川",
+      "reported_sample_id": "95018",
+      "review_id": "japan-gsj-geochemical-map-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=2879",
+      "selection_reasons": [
+        "maximum_経度(JGD2000)"
+      ],
+      "source_locator": "samplejoho.csv#row=2879;noudo.csv#row=2880",
+      "source_record_id": "src-aa4142d29d5e43d8c6f062350b5c9cdde2477671be21c39cc258edbe2794ce49"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "raw_value": "3.0",
+          "record_id": "rec-99c3b6ddd64e8ee7eec91e0f0ab4cd3fa409c2d845297e271691ca9b11d062ef",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "raw_value": "65.258",
+          "record_id": "rec-fde9ec43f48d6bb8e84b973124eb50d5573e8f900e01f0720627db57dd15e3fa",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "14.630",
+          "record_id": "rec-a63ecf4fb6174bcbf78055805254d5cdadd7ff6efa995080fa313458803a0ded",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "raw_value": "30.0",
+          "record_id": "rec-20b2cb8cff1226ba41c02afdd0eb2dcda93f80ef95c5ddbac68b1ec5b9ab88c2",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "19.069",
+          "record_id": "rec-7fc81679935e23d7c7d39684bcf8987704c3d58539c6a6731e8d8735009e0c1e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "raw_value": "11.864",
+          "record_id": "rec-6e14d72e6c50817e2ae5dfb5b4d9b9da923248e78acbed4b41fc3f909f2d5ac3",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "74.625",
+          "record_id": "rec-7191e22996f5bbd1465f59d0657d224b4a1b1d4c21da1512c6e03b16136ab964",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "hg_ppb_and_other_ppm_units_preserved": true,
+        "jgd2000_coordinates_preserved": true,
+        "ordinal_sample_join_preserved": true,
+        "seven_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "two_registered_file_hashes_match": true
+      },
+      "automated_status": "PASS",
+      "concentration_source_locator": "noudo.csv#row=3023",
+      "latitude_jgd2000": "45.4518",
+      "longitude_jgd2000": "142.0051",
+      "map_sheet": "103稚内",
+      "reported_place": "北海道稚内市峰岡",
+      "reported_river": "時前川",
+      "reported_sample_id": "103005",
+      "review_id": "japan-gsj-geochemical-map-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id_occurrence": 1,
+      "sample_source_locator": "samplejoho.csv#row=3022",
+      "selection_reasons": [
+        "maximum_緯度(JGD2000)"
+      ],
+      "source_locator": "samplejoho.csv#row=3022;noudo.csv#row=3023",
+      "source_record_id": "src-5f8a33e495c004dcfa81bc54b671ef1743030d47f6e63e5d7e46adb16d39760f"
+    }
+  ],
+  "review_version": "geochemical-human-review-v1",
+  "source_id": "japan-gsj-geochemical-map",
+  "status": "prepared"
+}

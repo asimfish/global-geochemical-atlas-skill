@@ -1,0 +1,80 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-06T08:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 22206,
+      "path": "demo_input.csv",
+      "sha256": "59fd2c203464e751547da9bdc3a08ad7bfd3d4acdb46758d0f44665252f87097"
+    },
+    {
+      "bytes": 74445,
+      "path": "sources.jsonl",
+      "sha256": "8a0f97953f2ff8ab6d0538e0c25b663ae6d793487fef89462b8ccc072abd4c91"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 3393,
+    "selected_source_rows": 12
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+    "license": "LicenseRef-FOREGS-Research-Attribution-2005",
+    "source_id": "foregs-stream-sediment",
+    "title": "FOREGS Geochemical Atlas of Europe: stream sediment"
+  },
+  "source_files": [
+    {
+      "bytes": 82266,
+      "filename": "S_AR_data_2v5_30Nov2006.csv",
+      "retrieved_at": null,
+      "sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_AR_data_2v5_30Nov2006.csv"
+    },
+    {
+      "bytes": 40477,
+      "filename": "S_Hg_data_2v5_30Nov06.csv",
+      "retrieved_at": null,
+      "sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_Hg_data_2v5_30Nov06.csv"
+    },
+    {
+      "bytes": 132523,
+      "filename": "S_XRF_data_2v9_30Nov06.csv",
+      "retrieved_at": null,
+      "sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_XRF_data_2v9_30Nov06.csv"
+    },
+    {
+      "bytes": 132977,
+      "filename": "S_icp_data_2v6_30Nov06.csv",
+      "retrieved_at": null,
+      "sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_icp_data_2v6_30Nov06.csv"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "FOREGS is a low-density European continental baseline, not continuous or local coverage.",
+    "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases.",
+    "The publisher CSV lacks row-level less-than qualifiers; exact half-DL values are flagged only as possible upstream DL/2 substitutions.",
+    "Official coordinates were transformed from national systems for continental-scale presentation; source precision is not local survey accuracy."
+  ]
+}

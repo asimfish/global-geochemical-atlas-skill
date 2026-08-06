@@ -1,0 +1,374 @@
+{
+  "coverage": {
+    "bbox": [
+      -137.97,
+      17.02,
+      128.0647,
+      81.409639
+    ],
+    "coordinate_rate": 0.935829,
+    "coverage_claim": "Observed sample locations only; blank regions are not inferred as absence.",
+    "elements": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "interpolation": false,
+    "media": [
+      "rock",
+      "sediment",
+      "soil",
+      "water"
+    ],
+    "standardization_rate": 1.0
+  },
+  "input": {
+    "data_mode": "input",
+    "filename": "demo_input.csv",
+    "not_for_scientific_interpretation": false,
+    "record_count": 748,
+    "sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236",
+    "synthetic_demo": false
+  },
+  "limitations": [
+    "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
+    "Map density uses observed points only; no interpolation is performed across unsampled areas.",
+    "52 anomaly background group(s) were not analyzed due to explicit failure states."
+  ],
+  "map_report": {
+    "anomaly_region_render_mode": "zoom-adaptive-anomaly-bubbles-v1",
+    "basemap": {
+      "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
+      "asset_version": "ai4s-natural-earth-land-v1",
+      "embedded": true,
+      "license": "public domain",
+      "scale": "1:110m",
+      "title": "Natural Earth 1:110m Land"
+    },
+    "candidate_record_count": 16,
+    "capability_matrix": {
+      "deliverables": {
+        "anomaly_results_first_class_ui": true,
+        "confidence_and_sources_first_class_ui": true,
+        "interactive_map_first_class_ui": true,
+        "standardized_database_first_class_ui": true
+      },
+      "filter_dimensions": {
+        "element": true,
+        "geologic_unit": true,
+        "region": true,
+        "sample_type_medium": true
+      },
+      "outputs": {
+        "clickable_sample_density_heatmap": true,
+        "element_pair_comparison": true,
+        "enrichment_and_depletion_candidates": true,
+        "global_or_regional_distribution_map": true
+      },
+      "scientific_semantics": {
+        "anomaly_basis": "D2 robust z within declared comparable background groups",
+        "anomaly_region_semantics": "visual aggregation of D2 candidate points only",
+        "heatmap_encodes": "physical_sample_density",
+        "heatmap_interpolates_concentration": false
+      }
+    },
+    "country_boundaries": {
+      "asset_version": "ai4s-natural-earth-admin0-v1",
+      "country_count": 177,
+      "embedded": true,
+      "license": "public domain",
+      "point_count": 10654,
+      "scale": "1:110m",
+      "semantics": "Natural Earth de facto Admin-0 cartographic boundaries",
+      "source_sha256": "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f",
+      "title": "Natural Earth 1:110m Admin 0 Countries"
+    },
+    "data_coverage_diagnostics": {
+      "analysis_method_fields": [
+        "analytical_method",
+        "method_family"
+      ],
+      "by_medium": {
+        "sediment": {
+          "method_completeness_rate": 0.8125,
+          "method_missing_record_count": 48,
+          "record_count": 256,
+          "sample_count": 52
+        },
+        "soil": {
+          "method_completeness_rate": 1.0,
+          "method_missing_record_count": 0,
+          "record_count": 300,
+          "sample_count": 78
+        },
+        "water": {
+          "method_completeness_rate": 0.666667,
+          "method_missing_record_count": 48,
+          "record_count": 144,
+          "sample_count": 85
+        }
+      },
+      "geologic_unit_completeness_rate": 0.205714,
+      "geologic_unit_missing_record_count": 556,
+      "interpretation": "Sample type and analytical method are independent fields; media count imbalance describes input coverage, not concentration or anomaly prevalence.",
+      "method_completeness_rate": 0.862857,
+      "method_missing_record_count": 96,
+      "sample_type_field": "medium"
+    },
+    "default_view": "all_data_sample_deduplicated",
+    "display_sample_count": 215,
+    "embedded_payload_schema": "d3-compact-payload-v1",
+    "external_assets": 0,
+    "html_bytes": 690051,
+    "interpolation": false,
+    "map_version": "d3-interactive-atlas-v3",
+    "mapped_record_count": 700,
+    "region_coverage": {
+      "australia": {
+        "administrative_clip": true,
+        "bounds": {
+          "e": 154.0,
+          "n": -10.0,
+          "s": -44.0,
+          "w": 112.0
+        },
+        "clip_method": "country_polygon_and_bbox",
+        "elements": [],
+        "label": "澳大利亚（国家边界严格裁剪）",
+        "media": [],
+        "record_count": 0,
+        "sample_count": 0
+      },
+      "china": {
+        "administrative_clip": true,
+        "bounds": {
+          "e": 135.0,
+          "n": 54.0,
+          "s": 18.0,
+          "w": 73.0
+        },
+        "clip_method": "country_polygon_and_bbox",
+        "elements": [],
+        "label": "中国（国家边界严格裁剪）",
+        "media": [],
+        "record_count": 0,
+        "sample_count": 0
+      },
+      "europe": {
+        "administrative_clip": false,
+        "bounds": {
+          "e": 45.0,
+          "n": 72.0,
+          "s": 34.0,
+          "w": -25.0
+        },
+        "clip_method": "bbox",
+        "elements": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
+        ],
+        "label": "欧洲范围框",
+        "media": [
+          "sediment",
+          "soil",
+          "water"
+        ],
+        "record_count": 356,
+        "sample_count": 91
+      },
+      "global": {
+        "administrative_clip": false,
+        "bounds": {
+          "e": 180.0,
+          "n": 90.0,
+          "s": -90.0,
+          "w": -180.0
+        },
+        "clip_method": "bbox",
+        "elements": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
+        ],
+        "label": "全球",
+        "media": [
+          "sediment",
+          "soil",
+          "water"
+        ],
+        "record_count": 700,
+        "sample_count": 215
+      },
+      "shanghai": {
+        "administrative_clip": false,
+        "bounds": {
+          "e": 122.2,
+          "n": 31.9,
+          "s": 30.65,
+          "w": 120.85
+        },
+        "clip_method": "bbox",
+        "elements": [],
+        "label": "上海范围框",
+        "media": [],
+        "record_count": 0,
+        "sample_count": 0
+      },
+      "usa": {
+        "administrative_clip": true,
+        "bounds": {
+          "e": -66.0,
+          "n": 72.0,
+          "s": 18.0,
+          "w": -170.0
+        },
+        "clip_method": "country_polygon_and_bbox",
+        "elements": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
+        ],
+        "label": "美国（国家边界严格裁剪）",
+        "media": [
+          "soil"
+        ],
+        "record_count": 108,
+        "sample_count": 27
+      },
+      "usa48": {
+        "administrative_clip": true,
+        "bounds": {
+          "e": -66.0,
+          "n": 50.0,
+          "s": 24.0,
+          "w": -125.0
+        },
+        "clip_method": "country_polygon_and_bbox",
+        "elements": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
+        ],
+        "label": "美国本土（国界 + 范围框）",
+        "media": [
+          "soil"
+        ],
+        "record_count": 108,
+        "sample_count": 27
+      }
+    },
+    "region_presets": [
+      "global",
+      "usa",
+      "usa48",
+      "china",
+      "shanghai",
+      "europe",
+      "australia",
+      "custom_bbox"
+    ],
+    "samples_geojson_bytes": 816393,
+    "scope_excluded_mappable_record_count": 0,
+    "source_mappable_record_count": 700,
+    "spatial_scope": {
+      "bounds": {
+        "e": 180.0,
+        "n": 90.0,
+        "s": -90.0,
+        "w": -180.0
+      },
+      "clip_method": "bbox",
+      "country_code": null,
+      "mode": "global",
+      "output_clipped": false,
+      "region_key": "global",
+      "region_label": "全球"
+    },
+    "unmappable_record_count": 48,
+    "visualization_modes": [
+      "distribution_points",
+      "sample_density_heatmap",
+      "element_pair_comparison",
+      "candidate_anomaly_region_aggregation"
+    ],
+    "visualization_profile": {
+      "comparison": {
+        "medium": null,
+        "x": null,
+        "y": null
+      },
+      "custom_region": null,
+      "default_region": "global",
+      "display": {
+        "anomaly_grid_degrees": 2,
+        "color_by": "medium",
+        "map_mode": "combined",
+        "show_anomaly_points": false,
+        "show_anomaly_regions": true
+      },
+      "filters": {
+        "basis": null,
+        "confidence": null,
+        "element": null,
+        "geology": null,
+        "medium": null,
+        "method": null,
+        "source": null
+      },
+      "schema_version": "d3-visualization-profile-v2",
+      "spatial_scope": "global",
+      "story": "overview",
+      "subtitle": "从标准化记录进入分布、覆盖、元素组合和候选异常证据；空白表示当前数据覆盖缺口。",
+      "theme": "evidence-dark",
+      "title": "全球地球化学元素图谱"
+    },
+    "visualization_profile_warnings": []
+  },
+  "metrics": {
+    "candidate_anomaly_count": 16,
+    "censored_record_count": 23,
+    "record_count": 748,
+    "standardized_record_count": 748,
+    "valid_coordinate_count": 700
+  },
+  "next_actions": [
+    "Inspect source_manifest.json and record-level source locators before scientific reuse.",
+    "Review low-confidence records and failed anomaly groups with a geochemist.",
+    "Add source-specific field mappings rather than guessing legacy qualifier semantics."
+  ],
+  "outputs": {
+    "anomalies": "anomalies.geojson",
+    "anomaly_report": "anomaly_report.json",
+    "confidence_report": "confidence_report.json",
+    "database": "geochemistry.csv",
+    "interactive_map": "interactive_map.html",
+    "qc_report": "qc_report.json",
+    "record_evidence": "record_evidence.jsonl",
+    "samples": "samples.geojson",
+    "source_manifest": "source_manifest.json"
+  },
+  "quality_status": "issues_detected",
+  "request_summary": {
+    "group_by": [
+      "element_or_analyte",
+      "medium",
+      "material",
+      "measurement_basis",
+      "geologic_unit",
+      "method_family",
+      "digestion_or_extraction"
+    ],
+    "max_records": 50000,
+    "minimum_group_size": 8,
+    "region_bbox": null,
+    "robust_z_threshold": 3.5
+  },
+  "schema_version": "global-geochemical-atlas-result-v1",
+  "status": "success"
+}

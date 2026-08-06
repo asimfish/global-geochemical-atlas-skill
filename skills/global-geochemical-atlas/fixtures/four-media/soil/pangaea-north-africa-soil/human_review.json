@@ -1,0 +1,2451 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS confirms correspondence with the hash-verified source and adapter. It is not human review; decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "2022-10-25",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "14.84",
+          "record_id": "rec-a401738d9f03a42a8ac869956e369e42b441885e5ed9bb4420a46ad621aea485",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "151.2",
+          "record_id": "rec-b08b7f10f62a6a0c972c5173905837aada8c8f2c0d36690209718536b3beb610",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "49.47",
+          "record_id": "rec-aa4780b9baa05c3dc629fa5f3bd0e68fcd7f7bf983bbcf6eeb57efef7c4d4ead",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "74.24",
+          "record_id": "rec-eb03c751ea054a852e349682fa23a4bb7722fdf31179d608a2e68195fb22ba10",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "38.98",
+          "record_id": "rec-510946b5722d1c791d8b908e6665694c6ccfd5d1a4022b417d67e1236441b3f7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "162.8",
+          "record_id": "rec-66e5109cae539a634ec417ad2eeb218759901746d6dddd0bd752252ecba167e5",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-5",
+      "latitude": "30.6700",
+      "longitude": "11.7300",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Libya (Camp Derj)",
+      "review_id": "pangaea-north-africa-soil-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-5",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area",
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=115",
+      "source_record_id": "src-0e05c733f272d431420e373279147fd31c8c25ef84e142f983ab6b1bbad6e3b0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "12.87",
+          "record_id": "rec-a44da2e77de7ed53ee0ec826e6520d4028cae498f5eaa9fbd21f2d07ecadd32e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "120.7",
+          "record_id": "rec-1e2777710256604e8de48880b527d5e2b6918441723dc7da74b134f85fbcf8b6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "37.91",
+          "record_id": "rec-37696a31a1265b0538d458c22fcf35b1776fa5f7ade6518206ef7f5703f12a0f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "57.24",
+          "record_id": "rec-c2a62a2cf309b67d938f3e9bc7707ae4d30837eb6f1bdb9ef246a514395948a1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "39.46",
+          "record_id": "rec-24590d1ff58fec05fd90e964ab5ae67ea742ad1caaf15ee0a2987c3bac67b2dd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "131.3",
+          "record_id": "rec-c9c323b83abad0b270d681a3b7bb17c960e3359cd18e6da3e73312f7beba888f",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-7",
+      "latitude": "30.6700",
+      "longitude": "11.7300",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Libya (Camp Derj)",
+      "review_id": "pangaea-north-africa-soil-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-7",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=116",
+      "source_record_id": "src-8a9ae8099037da6db634b3676dd754259100ff2ecd671891397cbb6dfcbf2491"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "9.67",
+          "record_id": "rec-9c851ecb134350f5535ab5ded37e16b17aac9a60f34b8fd94970054b33586fb3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "95.9",
+          "record_id": "rec-babc0a7cbbf7d1ab38535915c2b243bcc4c9b3d455dc740637f2b5d77bebccf9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "30.51",
+          "record_id": "rec-7366d4ba564bd6529364238d5b1273c63c1c0ad1605c7f09d7342f1b3fe68f32",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "46.37",
+          "record_id": "rec-4595ed66d9402bcd4f794a4f676d457808eb523653afbcf343e0a2ade67b42df",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "30.92",
+          "record_id": "rec-6ba0dc9dd9de424cb766ae1c08b2a06299c02f0aac08ebcb39807addd64b7ff9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "103.1",
+          "record_id": "rec-686a02a7ecbe7cccba5469744b109a2e24f98cd74a5613d554d3f713c04c966b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-8",
+      "latitude": "30.6700",
+      "longitude": "11.7300",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Libya (Camp Derj)",
+      "review_id": "pangaea-north-africa-soil-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-8",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=117",
+      "source_record_id": "src-b4edd3f7269784683f202921b87ba6f9475734d83cc7c93bf3c09426cd7ec574"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "10.62",
+          "record_id": "rec-11a1d2d955630535b1b8c7b18b74fef7aed2ad2ba2c295aa70e325a21c62008c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "130.8",
+          "record_id": "rec-a8ee7d2d68b66a8536342aec44b46913e05cc17656875b39c88f0595a8f326bb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "30.67",
+          "record_id": "rec-9b6b9c80ca50e7142039b3d62ba08edc88fa70165f12731bca1144685aa1fefb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "56.07",
+          "record_id": "rec-efdb0eea45bc8f14dfa212620a6f0223bb4a876d36dce6c2edd8576e9daece4f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "31.08",
+          "record_id": "rec-c5fb1519baf3605318662518a6a7ce839add8d75a1de9a0da7f7d37f37204507",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "126.8",
+          "record_id": "rec-9980911b4cffdaf9e3264a489ceac0b900ebec721ec7ab06f177938ab462cc8e",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-21",
+      "latitude": "27.0100",
+      "longitude": "14.4600",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Libya (Sebha)",
+      "review_id": "pangaea-north-africa-soil-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-21",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=118",
+      "source_record_id": "src-67b051ea6d7859c813f7fcdb0df07d3019db2165ffa02fc82c2d98a4d022190e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "13.12",
+          "record_id": "rec-f83f07303af04e77fe3174dc9f7ec385dae2f6ce075caec1661fcf97ca41bfae",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "128.7",
+          "record_id": "rec-fb8875b6457ef552201d6739f517a3237c681ac0bc81ae1bb520f043c9867ec5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "27.36",
+          "record_id": "rec-9af6f43051e07ef58fccd88e131dcb993df2bb0a52bb89457fbc469737a19e5d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "53.22",
+          "record_id": "rec-1a17bf77d41241fae3d0ca490f4793dd5f3bcecd1ddcf1f00f36f4130cf79e0e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "25.14",
+          "record_id": "rec-62cff09254c340a1b1e8e518579884106823181d76100b471d37aca2ca083e97",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "100.6",
+          "record_id": "rec-1d8c12ff15bb7bdda00f36e5366c94bd1c8afc8220aecb738a808139b99706e5",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-24",
+      "latitude": "27.0100",
+      "longitude": "14.4600",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Libya (Sebha)",
+      "review_id": "pangaea-north-africa-soil-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-24",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=119",
+      "source_record_id": "src-ec2cfbcd1391ae7d824689330387951e4782d7db6433b39ef8d108a9d5973b73"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "8.84",
+          "record_id": "rec-bd539665884fd9340206acc0cec4942ce2b0285ee1707eff72ae1bc8623eecc9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "94.6",
+          "record_id": "rec-791c9748b8df926cc87d0ae59bd3df12e9dbc7879bad57880c812d8d1c5ae2b6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "36.36",
+          "record_id": "rec-fff31577d6ee6b080ea38f217c5259b2ed83dd9e11e9d65dd134a1a21a48ee32",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "48.84",
+          "record_id": "rec-979eed37b21e7f2072a7dc531dde427c17441d71d2f3bca62d9d0bfa0b54ef0a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "25.99",
+          "record_id": "rec-a14504224703d15286150051b6e5f0fce772fdbcb2063c6bb7e6a344dddf527f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "98.2",
+          "record_id": "rec-3491f52245b1e473a1bef745713d42ca9b8877db83745d2816c78e2f5418dea8",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-105",
+      "latitude": "23.9500",
+      "longitude": "5.4700",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Algeria South East (Tin Tekraouit)",
+      "review_id": "pangaea-north-africa-soil-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-105",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=120",
+      "source_record_id": "src-80132b3956154c4ea82a02790dee301413c481f7e89a2a7ed1a44a051a78d3d9"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "11.08",
+          "record_id": "rec-1d27f55addb231f5edcc8e70d94b1454108d16ca6f650c4805d86b538fd91fd9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "196.2",
+          "record_id": "rec-555b8b574268529fe857e28b796e97244797730c17fdd455831b6a5d8ff32152",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "52.85",
+          "record_id": "rec-937bbe5cc8077b3a0f72de78dcf7ed028771d7b682d5e986a0ea6c403ccb9480",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "90.45",
+          "record_id": "rec-2b36115e374fe9035fe14266d0f84012c1864f9ed40325be4e6666f2334e4bab",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "46.36",
+          "record_id": "rec-4fff522aec76460c927de4d54bd3693ac44394778bfa04b1a85d1cc0837dcf2d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "170.8",
+          "record_id": "rec-cabef6e5540ade7e8625c58ad92728d04870545aee15126e64a6776729f64ea4",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-56",
+      "latitude": "17.0200",
+      "longitude": "-3.0800",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Mali Center (Dar al beida)",
+      "review_id": "pangaea-north-africa-soil-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-56",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=121",
+      "source_record_id": "src-3f00f0474c8dd277e81e9158a50a1baf09987ab59949a32a2ddae8894f29d546"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "25.47",
+          "record_id": "rec-5794106122e1126675fd45e06588d74b6abaa4d2631afcd2822cf49bca80d2d5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "212.1",
+          "record_id": "rec-9ad683952878c918010e84f7fe99999bea09364d2168b1c9ecdc4957ef4bc3d5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "65.72",
+          "record_id": "rec-9208b4f86d88c562e276452d3468df2a3dfe850c812280ff271ff555cb2ce21f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "88.20",
+          "record_id": "rec-44d1ebedc94bf9c0c28007153781aadad17ee4564ef9fb08a62688a546284ab0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "53.49",
+          "record_id": "rec-94902673bc65d1bc50b4bf0ebe63544adcaed34491605d9b4f3a4141f76a70ae",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "185.0",
+          "record_id": "rec-e726df88186b26d40a06be1bf198cd6d14e23eedca918a5fc3b9b7b960da407c",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-71",
+      "latitude": "29.3000",
+      "longitude": "1.2200",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Central Algeria (Gand Erg Occidental)",
+      "review_id": "pangaea-north-africa-soil-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-71",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=122",
+      "source_record_id": "src-1c1bbf3df0dd94f53172eade59007eec2d699c94510eac68af0e067384639a71"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "11.33",
+          "record_id": "rec-fc5496b1b7f772201919e5c89554a84df0ad663041bd2ea63645f37f132c959b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "124.0",
+          "record_id": "rec-57eb628951e530cb826c6402ebf17663833ede851064fb5d07026a87fde52bcb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "42.85",
+          "record_id": "rec-4af15711aed1c9f88e1215bac3b37fa8d75be35d83d15ebb6bb5c62d98644a49",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "62.35",
+          "record_id": "rec-5562403cb1492357160c88c347ee989af421b58c3a09fd18212b45c40f4679ed",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "29.39",
+          "record_id": "rec-1f641124d9b9f3761a8aea7a018df142e74b400d70b881803182f03c25ad827b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "113.9",
+          "record_id": "rec-f141fa2ec2f3865e5a35595f13fc15660f384641df01c2104bfe88c340aca639",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-72",
+      "latitude": "24.2000",
+      "longitude": "0.6700",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Algeria/Mali border (Erg Chech)",
+      "review_id": "pangaea-north-africa-soil-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-72",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=123",
+      "source_record_id": "src-5f50cb916ac54a02fd6aeb8344388d6d94f9b2cfcaf590bdbfc2f037939ea300"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "8.01",
+          "record_id": "rec-f497f1dc2256b0b3b6eccd6ad818d648ae7cf379ba8d47aa4d61ef89f31da5d3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "135.7",
+          "record_id": "rec-db2cbe5b36a6e2c7c4dda93033ff2647837af738ab82f03ecdb89756a3873d84",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "44.48",
+          "record_id": "rec-753e89678b2f2b531ac04acc3ceb0a5afb2f0c0100382265b7b478374493a430",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "65.14",
+          "record_id": "rec-eb69593d9d34547bae29f010f8e6a29be980dbd20256d40d9463a18d18940145",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "27.39",
+          "record_id": "rec-6ef84ebab807143166dd60da89b1b0479f446cd90f55600dccd116e127d99a7a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "114.7",
+          "record_id": "rec-04cc1bd71f8f3eceeb4127f2e9f930b48c2c1827b925be832ad5975e11feb3cd",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-73",
+      "latitude": "22.2500",
+      "longitude": "1.1300",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Algeria/Mali border (Tanezrout)",
+      "review_id": "pangaea-north-africa-soil-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-73",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=124",
+      "source_record_id": "src-92665373c1d67d8be016031a99e1515c59f8e0e81621474a01e63ec1f7951dfd"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "7.52",
+          "record_id": "rec-2fc44538f7966b251dd8a58416ebf1005d182995c9edd4ee75babf43afc87f39",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "147.0",
+          "record_id": "rec-aa7ba51112cfda7b8c4d0a9dc6f1fd47e88219d5f3339f8625fe46165aa723e0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "56.56",
+          "record_id": "rec-07fe9f765c6e61aafa89ea75a9e34775a337ba5960321f5b95ad5df04212ae23",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "72.52",
+          "record_id": "rec-cb3c118259ef45b4aa80cd4bbd7aea54b26eff766b632482e53600b4268fe537",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "37.03",
+          "record_id": "rec-10ef18afbc1948830384f5015940fe6185a688f6bbf2f57a49c36fc09adab1c8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "157.2",
+          "record_id": "rec-88c26c533d39aa26b9c2f6a522c29398bff72ed9f9d13bf4b5b1e492c108d787",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-74",
+      "latitude": "20.0000",
+      "longitude": "0.9200",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Algeria/Mali border (Tessalit)",
+      "review_id": "pangaea-north-africa-soil-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-74",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=125",
+      "source_record_id": "src-4be7f101f5548762bb2ccbf1f8a9b494bce36f6e6be72e879e43559e7edc31b1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "5.92",
+          "record_id": "rec-00da0648e02e4464ace459e409b93a951017c59266332780cdfa0ab04beb4b80",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "129.9",
+          "record_id": "rec-b239f288be9a8757e11439d1f7628910809c053e949704fed31b0e8015284a21",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "52.05",
+          "record_id": "rec-53a9f1c1d2301b7b81cb24fdf43ea13e03dda1653b44330a89af3ee7078927dc",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "62.45",
+          "record_id": "rec-599561a93c4acb7d8be92c85ac15e5e87a81a387f7be10aa654186b18ddca294",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "34.83",
+          "record_id": "rec-fcd12de41266c371d49da95f1a932ccbc3db1ecac7e0a45b67fe49bd4afb1bab",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "137.1",
+          "record_id": "rec-767bc32c0dda5f461721eebf12a4fc7355433722453c0e2fa01e33782c786868",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-75",
+      "latitude": "19.8300",
+      "longitude": "0.9200",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Algeria/Mali border (Tessalit)",
+      "review_id": "pangaea-north-africa-soil-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-75",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=126",
+      "source_record_id": "src-eb6a513eea2f0b7fd08063d6efa36d303416e6acf4fa161f0cd6ca5c6eb4e1af"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "11.59",
+          "record_id": "rec-b3284e8c1953c64d072dcdc125aa7853778a3fd3d594f81a912c91db89571583",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "66.7",
+          "record_id": "rec-e3b14c0f6f3705e3dc7d0fc8dc9c21cf02ffef82760c591625c400a6dcb4f90a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "22.01",
+          "record_id": "rec-bf2cef655e3fbe2cb09bf780748727e4a7279914cd4f0ec8752904311ddde850",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "27.01",
+          "record_id": "rec-f9cf0e48cd9efe1e5b34ff648f45c5e08790384175474ee17dd920fa9d672e94",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "12.98",
+          "record_id": "rec-349a5f80493e6f9c6400936db1655dc26d8f8a77d3dd6a0c10d7ed93a514682f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "46.5",
+          "record_id": "rec-1d8fe32cbd383f13795d2c59fc844d4f8936f0f0a907965184c3c7d8ca6a580a",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LAM_SC-113",
+      "latitude": "31.8300",
+      "longitude": "6.9800",
+      "potential_source_area": "PSA LAM (Libya-Algeria-Mali)",
+      "reported_location": "Northern Algeria/ Tunisia (Hassi-Messaout)",
+      "review_id": "pangaea-north-africa-soil-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-113",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=127",
+      "source_record_id": "src-9aba7cff8cc511cc49b5139e33297f407219245be45281fe9ce26e63c4ff371f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "5.03",
+          "record_id": "rec-d6c5c8d8edd9ff9a7331ff0d7a2278dd5168420a7cae864a933be3eced10affe",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "121.0",
+          "record_id": "rec-bb2707f097d969df9e8d7441e197bd50635ca0709ba1b84c30c12a94794a574e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "24.36",
+          "record_id": "rec-975fc74667b62438e9120e3f3bbca1fe47cd9565a9ac1e2c0bdf643f9c385fd2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "54.73",
+          "record_id": "rec-1e60954086d72a595292b97e766c5ae4f414e8c9c943b3538dbbaec6451efe3e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "17.40",
+          "record_id": "rec-d45a8a897a785ff8081e8698084e7b4d1139832fd93a53be3df32cebfe89942a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "113.1",
+          "record_id": "rec-9b75bca213c68be8e5e8d11fee38bb1f11bd4a9231006148c98534cdfef85040",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LE_SC-31",
+      "latitude": "29.0000",
+      "longitude": "21.5000",
+      "potential_source_area": "PSA LE (Libya-Egypt)",
+      "reported_location": "Libya (Oase Gialo)",
+      "review_id": "pangaea-north-africa-soil-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-31",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area",
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=128",
+      "source_record_id": "src-2ebaf482f7fb52a8d34383cf15bb2e5b2ef92e0306c32319d216f6dd94ea9b06"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "6.43",
+          "record_id": "rec-7dd389307890e8c4a114725ead0dd932d5e104d5ae60f56fec170e7c628f1c15",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "127.0",
+          "record_id": "rec-ca30a50203483673f44078865ee2997633dc001bf58d177e2e32ca1f52463fa9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "63.12",
+          "record_id": "rec-12531daabf3362751bab447210b9c888fa4fa7edac3326667d68c160cab54102",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "88.73",
+          "record_id": "rec-e156e342fbde14e83977c2567d05c679a23f6f3d69ceb9b6420d54354e9a36dd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "178.55",
+          "record_id": "rec-4d18798202e7c44f2304d727c0ef14d7e227c511c54d9ba6a41897338d667298",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "426.3",
+          "record_id": "rec-43dbfc91e52e3ac41eb3f9a86f4977fe23a7dd1e66878203aba5c1b0ecd71521",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LE_SC-32",
+      "latitude": "29.0000",
+      "longitude": "21.5000",
+      "potential_source_area": "PSA LE (Libya-Egypt)",
+      "reported_location": "Libya (Oase Gialo)",
+      "review_id": "pangaea-north-africa-soil-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-32",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=129",
+      "source_record_id": "src-0de002bf6bbddb71816031ec0f618fd842c85156ad6ab6500164806a263e80b1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "6.78",
+          "record_id": "rec-5d616c1bca741ca46ff60dc25923b955c533a032838a6b45eb8be8c245a8bc3a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "75.4",
+          "record_id": "rec-97aaff292dd6e08aec4c9968e9e5d49bf9259075c62e94a8fb6a92f88aacb225",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "35.62",
+          "record_id": "rec-1f77ce12064b68800c9a56badf412026b234d975b6654c8b9e894ce628e95cac",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "40.70",
+          "record_id": "rec-a34f4be663d0803b97906f3ac13fea48cad1bc709a68f5a2d1b94547d92d0b8f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "32.65",
+          "record_id": "rec-58252de6a059d632f65c361958f6afd0ff9ac15f530060e8783d00e510e71cdc",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "127.6",
+          "record_id": "rec-d1f33d0a46346db302a70d63057bd4cb3170ae4a1ed80af0f41b12835f46c21b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LE_SC-99",
+      "latitude": "30.0000",
+      "longitude": "31.0000",
+      "potential_source_area": "PSA LE (Libya-Egypt)",
+      "reported_location": "Egypt (Gizeh)",
+      "review_id": "pangaea-north-africa-soil-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-99",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=130",
+      "source_record_id": "src-6bccd15f6fe30faeb96ff7e4942ff84652ec2bc3076ed4c86d4ae5691b3f8a55"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "2.82",
+          "record_id": "rec-b6214003a80b0ba30ca8f8e18a734636f0bcedbda435112870b7f2536198d0bc",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "69.4",
+          "record_id": "rec-fb6a1893f6ec6badbe92a6c0d700266ad0052b6e3cbf667d863e8c3363381cd8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "15.29",
+          "record_id": "rec-0cd64c7116fc9c03cef20f9ca82468929a7a6532003c1e95536f785ba50cec0d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "47.12",
+          "record_id": "rec-f5115224be3c2b2fb00ca75e7148703cf13efe0d5db99402318d73ae7e1bfdb8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "5.39",
+          "record_id": "rec-a768ded16814b1a2a3a727528a55fb03559aa7de6e12cc0d0ebcdf7b84290547",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "58.7",
+          "record_id": "rec-d124b632449a93cf24d30b1745242f228dd637d457bc93efc3f4116568387770",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LE_SC-100",
+      "latitude": "24.5000",
+      "longitude": "32.5000",
+      "potential_source_area": "PSA LE (Libya-Egypt)",
+      "reported_location": "Egypt (Theben-West)",
+      "review_id": "pangaea-north-africa-soil-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-100",
+      "selection_reasons": [
+        "maximum_longitude",
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=131",
+      "source_record_id": "src-0525e7a49b09354f17289be3cda8ec6bb325bcc5ce46c80d0daa904ae7ce4751"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "2.34",
+          "record_id": "rec-37dec69c52ec943d3fcd7944fa6dd06e031ef940baf790946e1f18d54dcb494c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "37.5",
+          "record_id": "rec-a1a57f92b46776e9738d73d7637749128168f5cb0ef9f138748b90053674a29a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "12.12",
+          "record_id": "rec-a75959fee3a8a5c4dee5e3394cd2035764e73b0def100c08ae019ba5016f937e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "15.20",
+          "record_id": "rec-7b4cb454f13e0c953fdaaabffb8b687fa9a7b6fcd4cc4e9ca9e37a063e635a7e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "6.62",
+          "record_id": "rec-d190cc1c1b83fca2f9961260ff488152864ed208d2bcc01583203eb6f05f7992",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "38.2",
+          "record_id": "rec-669b4a2a5097f1d8ec076924d31532fdc81005ea608f410f24e29490b7baa861",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_LE_SC-101",
+      "latitude": "29.0000",
+      "longitude": "31.0000",
+      "potential_source_area": "PSA LE (Libya-Egypt)",
+      "reported_location": "Egypt (Memphis)",
+      "review_id": "pangaea-north-africa-soil-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-101",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=132",
+      "source_record_id": "src-6ae059faa623913c923a44089917923c0b7d06c45f77e62602788d10aee6f249"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "4.12",
+          "record_id": "rec-7385c16f1978072f93431b079051d1af04c5094b333c6340636de2cf38a0f4bd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "80.0",
+          "record_id": "rec-c2658c431780761dd48de8fbdb40223cd32d5c3523555dad7a2eece5fcb694b3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "24.44",
+          "record_id": "rec-e8b22c8d2c8bd363f756f32251345204c3f5321ff035ee67e90128e425e72aff",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "45.35",
+          "record_id": "rec-80f9c43285081d5d32af19d21ec56b137a2e5a37a234bb0ebd89508c94859bc2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "18.45",
+          "record_id": "rec-5077c168d8114cf870c54eda9768c21c6d808ca20a45ebaa642814cca8fc1274",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "85.3",
+          "record_id": "rec-3f2086518a17f8c016a352684af83266568ab207b09c0f2dd86a6f94d713cd2d",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_BD_SC-127",
+      "latitude": "16.9200",
+      "longitude": "18.7200",
+      "potential_source_area": "PSA BD (Bodele Depression)",
+      "reported_location": "Chad (Faya Largeau)",
+      "review_id": "pangaea-north-africa-soil-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-127",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area",
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=133",
+      "source_record_id": "src-6bb20203f8397d0186012d73b6df56578ae2ff955fbc43faa8364bf581f57b23"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "1.25",
+          "record_id": "rec-c17b7e3d5f78aca5fcc74c6329055b2aaea271f4251059cf246f89b1db30c43a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "58.5",
+          "record_id": "rec-7e17c6e9e32de6d3a3edad1cfbac3b1b25d1130fd3d61a118d76134d66507dae",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "17.70",
+          "record_id": "rec-6f31f97a737f76494eb3f18f1372c11ba6f7092d6a3b89aa899e0e16109bdac6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "32.35",
+          "record_id": "rec-0096272a1b55a706b712cd612f6c104ebbca5aee6cfb29a8793e67d588660598",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "11.17",
+          "record_id": "rec-793eb1e57de02d400648b47551c035cd18515617f97e32776ac32a51dcd6d18e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "56.8",
+          "record_id": "rec-6ac76f52acf3c2086916d7f139b5c209665ea02f1548b4cd26ad218b459caec4",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_BD_SC-128",
+      "latitude": "16.2300",
+      "longitude": "18.6200",
+      "potential_source_area": "PSA BD (Bodele Depression)",
+      "reported_location": "Chad (Koro Toro)",
+      "review_id": "pangaea-north-africa-soil-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-128",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=134",
+      "source_record_id": "src-2034032608edd0132394a72c32d435f34bdb38248c711eb55962bd35522d93eb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "4.24",
+          "record_id": "rec-28cfb7dfa9b5f46f794a2fd221b0f1867e049fafbb200aa36de7f391f4b90b8c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "75.7",
+          "record_id": "rec-a556cee95fe9a82f3d65044447efac26f35cc58ca98f2f548849fe0671d66f06",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "25.03",
+          "record_id": "rec-e1c1e33bc19e50e2f5f5f44226cb6bbc0483d7ce8ced27ce770d27abd78c8c1c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "38.66",
+          "record_id": "rec-aa814b88a259cf1caf09795614fc23976cb9a0f13815b2294649a30db7c62b72",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "32.01",
+          "record_id": "rec-b163e82e5a938402b0bc154cc9c114da97ca871ba48c03fc002d8b267f946f94",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "114.6",
+          "record_id": "rec-f4b1fe2bcd8bc683d67af01f6bedd7ddfad572dbab88039e57cb4c7061a1abcf",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_BD_SC-41",
+      "latitude": "16.9900",
+      "longitude": "8.0800",
+      "potential_source_area": "PSA BD (Bodele Depression)",
+      "reported_location": "Niger (Agadez)",
+      "review_id": "pangaea-north-africa-soil-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-41",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=135",
+      "source_record_id": "src-19ce1599016562d40245845c8d8d78b575d95b71b6034eb6d30fc07d2890c44f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "1.81",
+          "record_id": "rec-bd0fc419bb5eda572d27ba313db0df40de8c03eb0b8bff98619ffad4badd4f00",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "60.2",
+          "record_id": "rec-736f562eb9f63d4b59a2614878e9bead2b965b936b19404e25f367cb8693e159",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "14.20",
+          "record_id": "rec-0dc770246828a01c4455ec8668a2c53e71390c6a20840e8bc47f6b4589709dcd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "24.29",
+          "record_id": "rec-9165b8efc8f8a5a6357b54928c4b005b3d5fc1860c257398fd301b5aa7d5b5ab",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "9.29",
+          "record_id": "rec-b842daa2f072b51d4543863bc46b110399382a9660efddfbeab6c24a3b15c233",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "25.3",
+          "record_id": "rec-2e533d5336d45663f55451d9d05d1a4b747f62bc77c4aaff43e4d0c06523496d",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_MC_SC-62",
+      "latitude": "16.3300",
+      "longitude": "-3.5700",
+      "potential_source_area": "PSA MC (Mali Center)",
+      "reported_location": "Mali Center (Goundam)",
+      "review_id": "pangaea-north-africa-soil-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-62",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area",
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=136",
+      "source_record_id": "src-264a689036c4330404a9d9ad60d8ec81ca7a6f030571d8814185cf30e4d362c2"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "4.58",
+          "record_id": "rec-c6bf590afd0b7708f0af3cd7b8d8cc5dcc457a3eecedfecd0f429d10afe21221",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "160.7",
+          "record_id": "rec-7ebf0bdc777ba3e52af7b724bc63c0a9337c17a0526f49316a8308fa598fbab4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "37.08",
+          "record_id": "rec-879e5e552cf4997be5df2cf85069f4b7d08f067fb8e963b4fe302f0902bbb56a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "63.86",
+          "record_id": "rec-db04db1842d2232cdefcbca76a9acd4d2b88b81af22a484698fbe96d0aeb167c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "24.90",
+          "record_id": "rec-b7be9c2ed1fb790e9d42dc4b2a8442edb02994eb359581c62fc821afc1152486",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "60.4",
+          "record_id": "rec-5721aa2cb26bf06d1e39694633f6c485bcd64ec5a439ebd9050ab85b3c165fcb",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_MC_SC-63",
+      "latitude": "16.3300",
+      "longitude": "-3.5700",
+      "potential_source_area": "PSA MC (Mali Center)",
+      "reported_location": "Mali Center (Goundam)",
+      "review_id": "pangaea-north-africa-soil-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-63",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=137",
+      "source_record_id": "src-30311c53f40e4a7156aa8eaeab85f65488adfc475e1f6b5fddcdaf06dc164fd2"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "25.52",
+          "record_id": "rec-1b9f5d7d9d3624746967a822a44409dc15131027f04aec13851a874e68e8a98c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "140.2",
+          "record_id": "rec-e6747f6406736d5a6c1af2a93ff5c71386964c41c9a389d5b1dfba5033feb82d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "44.27",
+          "record_id": "rec-ef4cba8f04c0ca224c4d2ce62c062d0b1dca8660d6464dce97c518f8997137f3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "62.04",
+          "record_id": "rec-552357a8e4795c4f2d222b0a46cc535ea1e93a19944bdd93b03fd0731bfa220c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "57.48",
+          "record_id": "rec-53fa2865a76bd70c7ec8e21283e2be83e7518e4f770a11ca5f506ce58e5917b5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "154.7",
+          "record_id": "rec-506de830f0d19304b27ec8ffef4063cb13e4a488fc5c7e07d7559fd8a6befc23",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_WAC_SC-134",
+      "latitude": "32.4800",
+      "longitude": "-2.0800",
+      "potential_source_area": "PSA WAC (West African Coast)",
+      "reported_location": "Morocco",
+      "review_id": "pangaea-north-africa-soil-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-134",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area",
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=138",
+      "source_record_id": "src-4ff5dd04aef88836026c028725e5a67e08e52f1129b33f4e45f3498bb693fe1d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "11.37",
+          "record_id": "rec-1096c5e50bdc84c284233005731305da7fd60b55ac32776ab31423f38d56ebb3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "94.4",
+          "record_id": "rec-a1799acd1cfc8e728508121f0c458b6df90bb6befa98ee67bca587dfc255fcaf",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "35.42",
+          "record_id": "rec-8e9a634bf770d836908afe9f49b9c5728a549db05ba5b94f41b75f35c8c5278f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "47.01",
+          "record_id": "rec-e4d9ae04eba17669d2c95cd31111f8ee96a7019c37a17c3ec52ca504d73f5b08",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "63.51",
+          "record_id": "rec-04bf064418173f534bd1c436d012af098309ab3ea2fbed29d39c71e2e6adc1f9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "140.1",
+          "record_id": "rec-cebb20e8a1ed05a08b921531e481ee011dd8d2a8f16c98f1f9d581a92e663263",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_WAC_SC-136",
+      "latitude": "32.3100",
+      "longitude": "-4.5300",
+      "potential_source_area": "PSA WAC (West African Coast)",
+      "reported_location": "Morocco (Errachidia)",
+      "review_id": "pangaea-north-africa-soil-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-136",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=139",
+      "source_record_id": "src-211531f23a5fbf2721a97a1a02ebc451f9751ea7d9f3b9f1aa0f35bc2cb35f99"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "1.70",
+          "record_id": "rec-15782093e6dcee33bcc44cffe6c0b8aebe606130f7c6666d5ccdeae979e4b583",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "15.6",
+          "record_id": "rec-f24113d346529c631063e7dc7e474d6c289e117600660bc71d2972bc18fc6c72",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "6.74",
+          "record_id": "rec-80de90a5343ed0da3bdfae7d6edd8abbe18378355797b93aec91c48bf83e452d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "8.10",
+          "record_id": "rec-f866f54fd3ef18f446d5bd0207b8cb1e0fa1db82f4651e82a21bcd59fc1d3f34",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "5.24",
+          "record_id": "rec-76a6a6042b15283a49acfa84a5bdec39cd25ecc838c9a837f211562afeb1ec06",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "23.4",
+          "record_id": "rec-d68a1280d9f8c1876140789aaffaec851e89d6be22dd4e5a3a8e6621f36ccddc",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_WAC_SC-137",
+      "latitude": "32.9800",
+      "longitude": "-4.1300",
+      "potential_source_area": "PSA WAC (West African Coast)",
+      "reported_location": "Morocco (Missour)",
+      "review_id": "pangaea-north-africa-soil-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-137",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "Table_S5.tab#row=140",
+      "source_record_id": "src-f31bbcb90fe211e571af9ac56c3341a39c89f477f48fe037c81187ee48f7f18f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "6.59",
+          "record_id": "rec-9790403f88c3a4c87d99833170faa7477fd67e0ec7f4ef3a58663270a91103ec",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "274.8",
+          "record_id": "rec-42356f51f7e50305e2aebb526a41009e58d957d0d45e9ffb684da4470a84ed48",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "72.33",
+          "record_id": "rec-ed8df1e997617c1831568e1a82510c7cd1a796e963fd2fd7107198372c076e6a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "97.31",
+          "record_id": "rec-18804b5539bd0c8c7a01e31f5f3cf458c582473444cf4d2d1ad3364d8e89c511",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "25.21",
+          "record_id": "rec-74f8c4491aef1f7f7fff610b4d408cc5acac4173f672d4d2c22648c15aebad8d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "84.8",
+          "record_id": "rec-7795c2cab5bf23d1a3d56b563c494d773d0f48dfade5b4f5b051f2f1f236c062",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_WAC_SC-49",
+      "latitude": "15.6700",
+      "longitude": "-13.2600",
+      "potential_source_area": "PSA WAC (West African Coast)",
+      "reported_location": "Senegal (Matam)",
+      "review_id": "pangaea-north-africa-soil-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-49",
+      "selection_reasons": [
+        "minimum_latitude",
+        "minimum_longitude"
+      ],
+      "source_locator": "Table_S5.tab#row=143",
+      "source_record_id": "src-846dc4b5434cd1e296bf7d25e52716a32d29774c42f0a6e57e4478642ef3e668"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "6.02",
+          "record_id": "rec-61fd736e4b29aa371faa5f53848ac0cb67407158883475acc05fafd25565c6c8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "134.1",
+          "record_id": "rec-6ffcf3e3aeb9035824b86d2ac1950cb9cffba363e981fda3232de62c9874b61d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "40.21",
+          "record_id": "rec-01633b31a87dddf117d55e162ed063dc01b5584852c89bdc3216db7eb4d2c6b9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "54.95",
+          "record_id": "rec-3e402cc396a77ee9c8a3c972e4df07ce5b771420295471945671bb32300a87a2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "48.99",
+          "record_id": "rec-2796f68b0f79e9dbbde7caab7776872131c9b7488dd5bab6ae301a033382f068",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "116.9",
+          "record_id": "rec-1d9c1f704e54943abb1be5264a8e36caef7f6f3228cb5442ee7828ba52bc76e0",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_Unassign_SC-65",
+      "latitude": "15.8200",
+      "longitude": "6.7600",
+      "potential_source_area": "Unassigned PSA",
+      "reported_location": "Niger (in Gal)",
+      "review_id": "pangaea-north-africa-soil-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-65",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area"
+      ],
+      "source_locator": "Table_S5.tab#row=150",
+      "source_record_id": "src-d2b3ca1b030855bc6dafd3b9ccfb6ff505992b70ef548bfea7d8264cc5ccba72"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "5.28",
+          "record_id": "rec-5383e2df793c94e119474a5133bcbb23d6df369e2518dadcd3d991ee336d61c8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "100.8",
+          "record_id": "rec-68b7f53e5e298d435c074c5a5119fe63ba84a12949b0fd9f8d07bb4d5338507b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "69.62",
+          "record_id": "rec-9ccd6062d8339ec87bb64d440cf31230f2d93b8d18eeed61a1f7365927838b24",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "54.52",
+          "record_id": "rec-eafeb571ce572b097de8fd548803a240d7093a23ec57cef73923d7e2429b5a9c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "48.16",
+          "record_id": "rec-11f51487d8c74f6996cb39b5570fb9136ceed6c37dd2c927ab10fe27aeec9ff2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "140.2",
+          "record_id": "rec-85be7cf63a0f0da50c101e4d8489327cf5404c9d97814c1ffbd640d8b0737a8a",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "PSA_Non_rep_SC-97",
+      "latitude": "16.9700",
+      "longitude": "7.9900",
+      "potential_source_area": "Non representative PSA (Hoggar and Niger)",
+      "reported_location": "Niger (Agadez)",
+      "review_id": "pangaea-north-africa-soil-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-97",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area"
+      ],
+      "source_locator": "Table_S5.tab#row=151",
+      "source_record_id": "src-39cb9502d136160e5bec40f8631c1864a2dc2ecaf82b3704aaf834bda4292854"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "field": "As [mg/kg]",
+          "medium": "soil",
+          "raw_value": "0.13",
+          "record_id": "rec-58d74884cfeda2f0e434e4cd765cbdc2543b1954accd27c01f42171ca997ec8e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "field": "Cr [mg/kg]",
+          "medium": "soil",
+          "raw_value": "0.5",
+          "record_id": "rec-113be269cc381ad9d848896f3313a86a33cba61b407d0c64f0ac36d4baccf22d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "field": "Cu [mg/kg]",
+          "medium": "soil",
+          "raw_value": "4.70",
+          "record_id": "rec-6a33497c37c1bf2993ae6d1603dbf0d145fd02d86ed22395b4bbaa54a1c2a59e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "field": "Ni [mg/kg]",
+          "medium": "soil",
+          "raw_value": "0.20",
+          "record_id": "rec-5e4ad82408de5aeb155f308a254dc389aacef0c5efbaa234b01c2c5da031893e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "field": "Pb [mg/kg]",
+          "medium": "soil",
+          "raw_value": "0.24",
+          "record_id": "rec-ad3a44bfa79abe1527e570295975ee3e9fe5abe47e3e7f81e1ed0e941421bfb4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "field": "Zn [mg/kg]",
+          "medium": "soil",
+          "raw_value": "0.8",
+          "record_id": "rec-1ca10f5836cb6ecc94d34ba67e1852f8eba2d811dc0e8abbbf160569ead0723f",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_and_digestion_attached": true,
+        "publisher_location_preserved_without_country_inference": true,
+        "registered_file_hash_matches": true,
+        "sample_identity_preserved": true,
+        "six_target_values_preserved_without_imputation": true,
+        "stable_observation_ids_unique": true,
+        "units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "Outl_SC-139",
+      "latitude": "33.8300",
+      "longitude": "9.0300",
+      "potential_source_area": "Outlier",
+      "reported_location": "Tunisia (Chott El Djerid)",
+      "review_id": "pangaea-north-africa-soil-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "SC-139",
+      "selection_reasons": [
+        "first_sample_per_potential_source_area",
+        "maximum_latitude"
+      ],
+      "source_locator": "Table_S5.tab#row=157",
+      "source_record_id": "src-ce1fbb24de7f468fdd682ef963b1c6279bdff9983944af84d741793fe68d2737"
+    }
+  ],
+  "review_version": "geochemical-human-review-v1",
+  "source_id": "pangaea-north-africa-soil",
+  "status": "prepared"
+}

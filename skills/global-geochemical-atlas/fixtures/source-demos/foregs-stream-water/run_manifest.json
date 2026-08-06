@@ -1,0 +1,59 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-06T08:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 23620,
+      "path": "demo_input.csv",
+      "sha256": "bb7a887e7688ff02b76a0c1988df2c7f86164a70143b1164a903c79373ae3554"
+    },
+    {
+      "bytes": 71400,
+      "path": "sources.jsonl",
+      "sha256": "d7010d0d74ea551a3d82316b530cfae033e410e48c4c9cb932b38ca243aefa5b"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 808,
+    "selected_source_rows": 12
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+    "license": "LicenseRef-FOREGS-Research-Attribution-2005",
+    "source_id": "foregs-stream-water",
+    "title": "FOREGS Geochemical Atlas of Europe: stream water"
+  },
+  "source_files": [
+    {
+      "bytes": 312446,
+      "filename": "W_all_data_2v8_17Sep07.csv",
+      "retrieved_at": null,
+      "sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip#member=W_all_data_2v8_17Sep07.csv"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "FOREGS is a low-density European continental baseline, not continuous or local coverage.",
+    "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases.",
+    "The publisher CSV lacks row-level less-than qualifiers; exact half-DL values are flagged only as possible upstream DL/2 substitutions.",
+    "Official coordinates were transformed from national systems for continental-scale presentation; source precision is not local survey accuracy."
+  ]
+}

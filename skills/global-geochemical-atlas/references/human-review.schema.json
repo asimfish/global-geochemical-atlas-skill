@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemistry-human-review:v1",
+  "title": "D1 prepared source-record human review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_version",
+    "source_id",
+    "dataset_version",
+    "status",
+    "prepared_record_count",
+    "automated_pass_count",
+    "completed_record_count",
+    "records",
+    "claim_boundary"
+  ],
+  "properties": {
+    "review_version": {
+      "type": "string",
+      "enum": ["geochemical-human-review-v1", "foregs-human-review-v1"]
+    },
+    "source_id": {"type": "string", "minLength": 1},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "prepared_at": {"type": "string", "format": "date-time"},
+    "status": {"type": "string", "enum": ["prepared", "in_progress", "passed", "failed", "conflict"]},
+    "required_record_count": {"type": "integer", "minimum": 1},
+    "prepared_record_count": {"type": "integer", "minimum": 0},
+    "automated_pass_count": {"type": "integer", "minimum": 0},
+    "completed_record_count": {"type": "integer", "minimum": 0},
+    "all_records_reviewed": {"type": "boolean"},
+    "selection_strategy": {"type": "string", "minLength": 1},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "review_id",
+          "source_locator",
+          "source_record_id",
+          "selection_reasons",
+          "adapter_observations",
+          "automated_checks",
+          "automated_status",
+          "reviewer"
+        ],
+        "properties": {
+          "review_id": {"type": "string", "minLength": 1},
+          "source_locator": {"type": "string", "minLength": 1},
+          "source_record_id": {"type": "string", "minLength": 1},
+          "sample_id": {"type": "string", "minLength": 1},
+          "batch_code": {"type": "string", "minLength": 1},
+          "concentration_source_locator": {"type": "string", "minLength": 1},
+          "event": {"type": "string", "minLength": 1},
+          "latitude": {"type": "string", "minLength": 1},
+          "latitude_jgd2000": {"type": "string", "minLength": 1},
+          "longitude": {"type": "string", "minLength": 1},
+          "longitude_jgd2000": {"type": "string", "minLength": 1},
+          "map_sheet": {"type": "string", "minLength": 1},
+          "potential_source_area": {"type": "string", "minLength": 1},
+          "reported_location": {"type": "string", "minLength": 1},
+          "reported_place": {"type": "string", "minLength": 1},
+          "reported_river": {"type": "string", "minLength": 1},
+          "reported_sample_id": {"type": "string", "minLength": 1},
+          "sample_id_occurrence": {"type": "integer", "minimum": 1},
+          "sample_source_locator": {"type": "string", "minLength": 1},
+          "source_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "selection_reasons": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "published_target_raw_values": {"type": "object"},
+          "adapter_observations": {"type": "array", "items": {"type": "object"}},
+          "automated_checks": {
+            "type": "object",
+            "additionalProperties": {"type": "boolean"}
+          },
+          "automated_status": {"type": "string", "enum": ["PASS", "FAIL"]},
+          "reviewer": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["decision", "reviewer", "reviewed_at", "notes"],
+            "properties": {
+              "decision": {"type": ["string", "null"], "enum": ["pass", "fail", null]},
+              "reviewer": {"type": ["string", "null"]},
+              "reviewed_at": {"type": ["string", "null"]},
+              "notes": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  }
+}
