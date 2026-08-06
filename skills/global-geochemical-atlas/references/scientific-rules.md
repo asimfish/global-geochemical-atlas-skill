@@ -95,7 +95,7 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 ### 删失值
 
 - 将来源限定符原词写入 `source_qualifier_raw`；若旧输入只有 `value_qualifier` 或把限定符嵌在 `value`，从原表达无损提取限定符 token，再另行生成 canonical `value_qualifier`。
-- `<x`、`<=x`、`BDL`、`ND`、`N`、`L` 作为左删失或未检出；`trace` 表示检出但不可定量。
+- `<x`、`<=x`、`<LOD`、`LOD`、`BDL`、`ND`、`N`、`L` 作为左删失或未检出；`<LOQ`、`LOQ`、`BQL` 使用显式 quantitation limit；`trace` 表示检出但不可定量。
 - `>x`、`>=x` 作为右删失。
 - 删失记录的 `normalized_value` 必须为空；若检出限可换算，写入 `normalized_censoring_limit`。
 - 不默认使用 0、LOD/2、LOD/√2 或随机值替代。
@@ -108,9 +108,10 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 
 关键 flags：
 
-- 值与单位：`MISSING_VALUE`、`INVALID_NUMERIC_VALUE`、`INVALID_MISSING_REASON`、`INVALID_DETECTION_LIMIT`、`NEGATIVE_CONCENTRATION`、`UNSUPPORTED_UNIT`、`AMBIGUOUS_AQUEOUS_RATIO_UNIT`、`UNSUPPORTED_SPECIES_CONVERSION`、`OXIDE_ELEMENT_MISMATCH`、`CENSORED_VALUE`、`NONDETECT_WITHOUT_LIMIT`、`UNQUANTIFIED_TRACE`。
+- 值与单位：`MISSING_VALUE`、`INVALID_NUMERIC_VALUE`、`INVALID_MISSING_REASON`、`INVALID_DETECTION_LIMIT`、`INVALID_QUANTITATION_LIMIT`、`NEGATIVE_CONCENTRATION`、`UNSUPPORTED_UNIT`、`AMBIGUOUS_AQUEOUS_RATIO_UNIT`、`UNSUPPORTED_SPECIES_CONVERSION`、`OXIDE_ELEMENT_MISMATCH`、`CENSORED_VALUE`、`NONDETECT_WITHOUT_LIMIT`、`UNQUANTIFIED_TRACE`。
 - 语义：`MISSING_MEASUREMENT_BASIS`、`MISSING_ANALYTICAL_METHOD`、`MISSING_DIGESTION_OR_EXTRACTION`、`UNRECOGNIZED_ANALYTE`。
 - 坐标：`INVALID_COORDINATE`、`INCOMPLETE_COORDINATE`、`COORDINATE_NOT_CANONICALIZED`、`POSSIBLE_COORDINATE_SWAP`、`ZERO_ISLAND_COORDINATE`、`OUTSIDE_REQUEST_REGION`、`MISSING_SOURCE_CRS`、`UNSUPPORTED_SOURCE_CRS`、`MISSING_COORDINATE_UNCERTAINTY`、`INVALID_COORDINATE_UNCERTAINTY`。
+- 地质匹配：`GEOLOGY_MATCH_NO_COVERAGE`、`GEOLOGY_BOUNDARY_UNCERTAIN`、`INVALID_GEOLOGIC_DISTANCE`、`INVALID_GEOLOGIC_MATCH_CONFIDENCE`。
 - 来源：`MISSING_SOURCE_ID`、`MISSING_SOURCE_LOCATOR`、`MISSING_LICENSE`、`UNKNOWN_SOURCE_TIER`。
 - 样品：`MISSING_SAMPLE_ID`、`DEPTH_RANGE_INVALID`、`DUPLICATE_CANDIDATE`。
 
@@ -142,13 +143,13 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 
 ## 6. 候选异常
 
-默认分组字段：`element_or_analyte`、`medium`、`material`、`measurement_basis`、`geologic_unit`、`method_family`、`digestion_or_extraction`。`material` 必须保留 soil horizon/层位，防止 0–5 cm、A horizon 与 C horizon 被静默合并；缺少方法字段的记录会落入显式 `null` 组并降低置信度，不同已知方法族默认不混合。
+默认分组字段：`element_or_analyte`、`medium`、`material`、`sample_type`、`soil_horizon`、`sediment_environment`、`water_fraction`、`grain_fraction`、`measurement_basis`、`geologic_unit_raw`、`matched_geologic_unit`、`analytical_method`、`method_family`、`method_scope`、`digestion_or_extraction`。该组合防止土层、水体分相、沉积环境、方法 scope 和空间地质背景被静默合并；缺少字段的记录进入显式 `null` 组并降低置信度。
 
 处理步骤：
 
 1. 只使用成功标准化、非删失、非重复候选、正的 `normalized_value`。
 2. 以去除重复候选后的独立记录为分母，可量化有效比例默认至少 70%；不足输出 `insufficient_quantified_fraction`。
-3. 每个背景组至少 8 条有效记录；不足输出 `insufficient_group_size`。该阈值为仓库 MVP/demo 的兼容默认值，正式研究应由 E2 按介质、尺度和 holdout 结果校准，推荐同时报告更保守的 20 条敏感性分析。
+3. `demo` profile 每个背景组默认至少 8 条有效记录；`production` profile 默认且强制至少 20 条，低于 20 时流程失败。两种阈值均需进入运行元数据；正式研究仍应由 E2 按介质、尺度和 holdout 结果校准。
 4. 对浓度取 `log10`。
 5. 计算中位数和原始 MAD。
 6. 计算 modified robust z-score：`0.67448975 * (x - median) / MAD`。
@@ -175,6 +176,12 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 - D2 → E2：`anomaly_report.json` 必须记录分组、最小样本量、最小可量化比例、modified z 阈值与
   `analyzed`、`insufficient_group_size`、`insufficient_quantified_fraction`、`zero_dispersion` 失败状态。
 - 相同输入字节、schema map 和参数应产生字节一致的五个 D2 产物；运行元数据记录输入与映射 SHA-256。
+
+### 可选 GLiM 空间匹配
+
+提供 `--geology-grid` 与对应 `--geology-grid-sha256` 时，D2 读取 PANGAEA.788537 的官方 GLiM 0.5° Arc/ASCII ZIP，按 WGS84 点位执行确定性 cell join。结果写入 `matched_geologic_unit`、`geology_map_source/version`、`match_method/scale`、`boundary_distance_m`、`match_uncertainty` 和 `geology_missing_reason`；输入的 `geologic_unit` 与 `geologic_unit_raw` 不被覆盖。网格 hash 和 join 版本进入所有运行元数据，汇总进入 `qc_report.json.geology_matching`。
+
+GLiM 只表示 0.5° 主导表层岩性筛查背景，不是场地级地层或构造单元。水体和明确的海洋沉积物不赋陆地岩性；无 canonical WGS84 坐标、NODATA 和靠近 cell 边界的记录保留显式处置状态。没有同时提供网格与 SHA-256 时失败关闭，不从模型常识补地质单元。
 
 ## 8. 科学依据与边界
 

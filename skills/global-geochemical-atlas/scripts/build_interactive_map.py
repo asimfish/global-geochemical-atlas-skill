@@ -146,7 +146,7 @@ def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int
                     "latitude": latitude,
                     "longitude": longitude,
                     "lithology": row.get("lithology") or None,
-                    "geologic_unit": row.get("geologic_unit") or None,
+                    "geologic_unit": row.get("matched_geologic_unit") or row.get("geologic_unit") or None,
                     "geologic_unit_raw": row.get("geologic_unit_raw") or None,
                     "matched_geologic_unit": row.get("matched_geologic_unit") or None,
                     "analytical_method": row.get("analytical_method") or None,

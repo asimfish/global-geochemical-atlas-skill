@@ -2297,6 +2297,30 @@ def check_d2(output_dir: Path) -> list[str]:
     )
     require(indexed["soil-as-013"]["normalized_value"] == "", "D2 censored values are not imputed", checks)
     require(indexed["soil-as-013"]["censored"] == "true", "D2 serializes censoring state explicitly", checks)
+    lod = standardizer.normalize_row(
+        {
+            "element_or_analyte": "As", "value": "<LOD", "unit": "mg/kg", "medium": "soil",
+            "detection_limit": "0.2", "detection_limit_unit": "mg/kg",
+        },
+        2,
+    )
+    loq = standardizer.normalize_row(
+        {
+            "element_or_analyte": "As", "value": "<LOQ", "unit": "mg/kg", "medium": "soil",
+            "quantitation_limit": "0.4", "quantitation_limit_unit": "mg/kg",
+        },
+        3,
+    )
+    require(
+        lod["value_qualifier"] == "bdl"
+        and lod["normalized_value"] is None
+        and lod["normalized_censoring_limit"] == 0.2
+        and loq["value_qualifier"] == "loq"
+        and loq["normalized_value"] is None
+        and loq["normalized_censoring_limit"] == 0.4,
+        "D2 preserves literal LOD and LOQ censoring without zero imputation",
+        checks,
+    )
     require(indexed["soil-as-001"]["method_family"] == "icp_ms", "D2 normalizes analytical method families", checks)
     require(
         "AMBIGUOUS_AQUEOUS_RATIO_UNIT" in indexed["water-as-ambiguous"]["qc_flags"],
@@ -2310,6 +2334,33 @@ def check_d2(output_dir: Path) -> list[str]:
     )
     duplicates = [row for row in rows if "DUPLICATE_CANDIDATE" in row["qc_flags"]]
     require(len(duplicates) == 2, "D2 retains and flags duplicate candidates", checks)
+    fallback_duplicates = standardizer.process_rows(
+        [
+            {
+                "record_id": "fallback-a", "source_record_id": "row-a", "sample_id": "",
+                "element_or_analyte": "As", "value": "10", "unit": "mg/kg", "medium": "soil",
+                "latitude": "35", "longitude": "103", "source_crs": "EPSG:4326",
+            },
+            {
+                "record_id": "fallback-b", "source_record_id": "row-b", "sample_id": "",
+                "element_or_analyte": "As", "value": "10", "unit": "mg/kg", "medium": "soil",
+                "latitude": "35", "longitude": "103", "source_crs": "EPSG:4326",
+            },
+        ]
+    )
+    require(
+        all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in fallback_duplicates),
+        "D2 source-row IDs do not mask duplicates when sample IDs are absent",
+        checks,
+    )
+    try:
+        standardizer.run_pipeline(
+            DEMO_INPUT, output_dir / "invalid-production", analysis_profile="production", min_group_size=8
+        )
+    except standardizer.PipelineError:
+        checks.append("D2 production profile enforces at least twenty usable records per group")
+    else:
+        raise ContractError("D2 production profile accepted --min-group-size below twenty")
     confidence = json_value(output_dir / "confidence_report.json")
     require(confidence.get("confidence_version") == "d2-confidence-v2", "D2 confidence version is explicit", checks)
     require(

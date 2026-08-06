@@ -120,6 +120,12 @@ def summary_outputs() -> dict[str, str]:
     }
 
 
+def resolved_minimum_group_size(args: argparse.Namespace) -> int:
+    if args.min_group_size is not None:
+        return int(args.min_group_size)
+    return 20 if args.analysis_profile == "production" else 8
+
+
 def failure_summary(status: str, message: str, input_path: Path, args: argparse.Namespace) -> dict[str, Any]:
     return {
         "schema_version": SUMMARY_VERSION,
@@ -129,7 +135,7 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
             "region_bbox": list(args.region_bbox) if args.region_bbox else None,
             "max_records": args.max_records,
             "group_by": [field.strip() for field in args.group_by.split(",") if field.strip()],
-            "minimum_group_size": args.min_group_size,
+            "minimum_group_size": resolved_minimum_group_size(args),
             "robust_z_threshold": args.robust_z_threshold,
         },
         "input": {
@@ -168,15 +174,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     group_by = tuple(field.strip() for field in args.group_by.split(",") if field.strip())
     if not group_by:
         raise WorkflowError("invalid_input", "--group-by must contain at least one canonical field")
+    minimum_group_size = resolved_minimum_group_size(args)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     try:
         outputs = standardizer.run_pipeline(
             args.input,
             args.output_dir,
             group_by=group_by,
-            min_group_size=args.min_group_size,
+            min_group_size=minimum_group_size,
             robust_z_threshold=args.robust_z_threshold,
             region_bbox=args.region_bbox,
+            analysis_profile=args.analysis_profile,
+            geology_grid_path=args.geology_grid,
+            geology_grid_sha256=args.geology_grid_sha256,
         )
     except standardizer.PipelineError as exc:
         raise WorkflowError("invalid_input", str(exc)) from exc
@@ -234,6 +244,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         )
     if int(severity_counts.get("error", 0)):
         limitations.append("Some records have error-level QC flags and are capped at low operational confidence.")
+    if args.geology_grid is not None:
+        limitations.append(
+            "GLiM 0.5 degree dominant surface lithology is coarse screening context, not site-scale geology."
+        )
     failed_groups = sum(group.get("status") != "analyzed" for group in anomaly_report.get("groups", []))
     if failed_groups:
         limitations.append(f"{failed_groups} anomaly background group(s) were not analyzed due to explicit failure states.")
@@ -253,7 +267,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "region_bbox": list(args.region_bbox) if args.region_bbox else None,
             "max_records": args.max_records,
             "group_by": list(group_by),
-            "minimum_group_size": args.min_group_size,
+            "minimum_group_size": minimum_group_size,
             "robust_z_threshold": args.robust_z_threshold,
         },
         "input": {
@@ -306,6 +320,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optional D1 run manifest that binds the input CSV and --evidence-jsonl hashes",
     )
     parser.add_argument(
+        "--geology-grid", type=Path,
+        help="Optional official PANGAEA.788537 GLiM 0.5 degree ZIP for D2 screening spatial matching",
+    )
+    parser.add_argument(
+        "--geology-grid-sha256",
+        help="Required SHA-256 pin when --geology-grid is supplied",
+    )
+    parser.add_argument(
+        "--analysis-profile", choices=("demo", "production"), default="demo",
+        help="Production enforces at least 20 usable records per anomaly background group",
+    )
+    parser.add_argument(
         "--region-bbox", type=standardizer.parse_bbox, metavar="W,S,E,N",
         help="Optional WGS84 requested region, used for coordinate QC (dateline crossing supported)",
     )
@@ -314,7 +340,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--group-by", default=",".join(standardizer.DEFAULT_GROUP_BY),
         help="Comma-separated comparable background fields for anomaly screening",
     )
-    parser.add_argument("--min-group-size", type=int, default=8, help="Minimum usable records per anomaly group")
+    parser.add_argument(
+        "--min-group-size", type=int,
+        help="Minimum usable records per anomaly group (default: demo=8, production=20)",
+    )
     parser.add_argument("--robust-z-threshold", type=float, default=3.5, help="Absolute modified z-score threshold")
     return parser
 
