@@ -71,6 +71,20 @@ python scripts/validate_outputs.py --output-dir /tmp/geochemical-atlas
 
 该 fixture 是 hash 固定的 USGS 真实切片，默认使用仓库内固定 GLiM 岩性图；它验证生产 `n≥20` 异常流程，不是代表性抽样。固定指标和许可见 [references/production-demo.md](references/production-demo.md)。
 
+需要证明岩石、土壤、沉积物、水体可以走通同一接口时，另跑十四来源、796 条真实来源最小观测的四介质演示：
+
+```bash
+python scripts/build_four_media_demo.py \
+  --output-dir /tmp/four-media-demo \
+  --generated-at 2026-08-06T10:05:00Z
+python scripts/run_workflow.py \
+  --input /tmp/four-media-demo/demo_input.csv \
+  --output-dir /tmp/four-media-output \
+  --analysis-profile demo --min-group-size 8
+```
+
+两个演示都只验证能力，不代表全球覆盖，也不允许跨介质共享异常背景。遇到“全球/完整/跨介质覆盖”，不得用 fixture 作分母；先运行 `python scripts/build_v4_full_profiles.py --check` 和 `python scripts/reconcile_v4_coordinate_claims.py --check`，再分别报告观测、样品、来源链、reported/canonical 坐标、可比观测和已观测网格。数值坐标不等于 CRS 已验证，已观测网格不等于插值覆盖。
+
 处理用户 CSV：
 
 ```bash
@@ -125,7 +139,9 @@ python scripts/coverage_report.py \
   --markdown-output OUTPUT_DIR/coverage.md
 ```
 
-读取 [references/source-evidence-standard-v3.md](references/source-evidence-standard-v3.md) 解释八维评分，读取 [references/source-interface-cards.md](references/source-interface-cards.md) 判断逐源接口和边界。证据分数衡量完整度，不是数据为真的概率；旧 `approved`/`production_eligible` 不覆盖当前路由。
+按目标区域、介质、岩性/环境和方法语义选择来源；发现型聚合站只有追溯到原始记录后才能作测量证据。按 [references/source-acceptance-standard.md](references/source-acceptance-standard.md) 区分可访问、科研可用和可再分发：许可未知时不得写“开放”；若禁止再分发，只输出元数据、引用和原始链接，不复制记录。
+
+用 [references/source-evidence-standard-v3.md](references/source-evidence-standard-v3.md) 解释八维评分，用 [references/source-interface-cards.md](references/source-interface-cards.md) 判断逐源边界。区分 `source_declared_in_input`、`validated_record_evidence`、`verified_record_evidence`；hash 只证明链路一致，标识符对账只验证书目信息，两者都不证明测量值真实。证据分数不是正确概率；旧 `approved`/`production_eligible` 不覆盖当前路由。
 
 每个来源至少保存：标题、机构、DOI/稳定 ID、版本、许可与科研使用条件、精确 URL/参数、获取时间、服务端及本地过滤、响应字节/记录数/SHA-256、字段映射、失败和未覆盖范围。逐记录 sidecar 必须以 `record_id` 绑定 `source_id + source_locator + source_record_id + source_file_sha256`；run manifest 再绑定输入和 sidecar hash。标准见 [references/record-evidence.schema.json](references/record-evidence.schema.json) 与 [references/acquisition-run-manifest.schema.json](references/acquisition-run-manifest.schema.json)。
 
@@ -145,6 +161,8 @@ python scripts/download_data.py \
 
 `offline=true` 只接受已验证缓存。路由器无法验证调用方外部缓存时保持 `offline_cache_not_verified`；执行器验证 fixture/manifest/hash 后可单独记录 `offline_fixture_hash_verified`，但不能改写实时路由事实。
 
+离线检索依次使用 `validate_acquisition.py`、`build_index.py`、`query_source.py`；SQLite 仅是 D1 派生索引。
+
 ## 4. D2：标准化、空间匹配与 QC
 
 一行表示一个“样品 × 分析物 × 测定”。非标准列名只能通过显式 schema map 对齐，不能语义猜测。canonical 数据库遵循 [references/geochemistry-record.schema.json](references/geochemistry-record.schema.json)；与 EarthChem、GEOROC、USGS、ODM2、Darwin Core/EML、OGC 的字段 crosswalk 见 [references/platform-field-crosswalk.md](references/platform-field-crosswalk.md)。crosswalk 用于交换与审计，不表示这些平台共同背书。
@@ -152,25 +170,28 @@ python scripts/download_data.py \
 严格执行 [references/scientific-rules.md](references/scientific-rules.md)：
 
 - 原值、原单位、原 qualifier 和原坐标表达始终保留，转换另写 `conversion_factor/formula`；
-- 固体质量比统一为 `mg/kg`，水体质量/体积统一为 `ug/L`；缺密度/basis 时不跨量纲换算；
-- 氧化物换算为元素必须使用固定化学计量规则并留公式；
+- 固体质量比统一为 `mg/kg`，其中 `1 wt%=10000 mg/kg`；水体质量/体积统一为 `ug/L`，其中 `1 mg/L=1000 ug/L`；缺密度/basis 时不跨量纲换算；
+- 氧化物换算为元素只能使用审核过的化学计量 registry 并留公式；不支持的氧化物保持未转换，不猜最相近分子式；
 - `<LOD`、`<LOQ`、`ND`、`BDL`、`trace` 等删失值不插补为 0 或 LOD/2；保留 qualifier/limit，标准浓度为空；
-- 可能经纬度交换、零岛、bbox 越界、日期变更线问题只标 flag，不静默纠正；
+- 非标准列只接受显式 schema map；`source_record_id` 不得用导入行号代替；
+- GeoJSON 遵循 RFC 7946 `[lon,lat]` 且不写旧式 `crs`；跨日期变更线 bbox 允许 `west>east`；可能经纬度交换、零岛或越界只标 flag，不静默纠正；
 - 未经证实或未重投影的非 WGS84 坐标不写入 canonical 经纬度；
-- 疑似重复保留并标记，不进入异常背景；
+- 只有完全重复导入可去重；现场/实验重复、不同方法复测及同坐标不同样品均保留。疑似重复标记且不进入异常背景；
 - 来源特有负数/特殊编码只按该数据集元数据解码，通用负浓度失败关闭。
 
-地质匹配使用 D1 已提供的 `geology_unit/method/confidence/distance_to_boundary`，或通过固定 raster/polygon 执行 point-in-cell/join。必须记录地质数据集、版本、hash、匹配方法、分辨率/边界距离和未匹配原因。无匹配不得填“unknown geology”后与已匹配记录混作同一背景。
+USGS DS801 可按元数据使用 WGS84；GEOROC datum 未证实时只保留原坐标，不做 WGS84 bbox 筛选。地质匹配使用上游 `geology_unit/method/confidence/distance_to_boundary` 或固定 raster/polygon join。GLiM 0.5° 只作岩石、土壤和非海洋沉积物的广域筛查；水体不附会陆地岩性，它也不是点位地层或因果证据。记录数据集版本/hash、方法、分辨率/边界距离及未匹配原因；不得混合匹配与未匹配背景。
 
-`d2-confidence-v3` 公开 source、completeness、method、spatial、QC 五分量、权重和扣分。额外门控：错误级 QC 或缺 canonical 坐标最高 low；缺坐标不确定度、关键方法语义，或陆地固体样品缺地质背景时最高 medium。报告 `gates_applied` 与计数。该分数是 workflow usability，不是正确概率。
+请求给出 CRM、空白和重复样批规则时必须逐条原样计算，全部通过才让该批进入异常背景；重复样 `RPD=|x1-x2|/((x1+x2)/2)*100%`。失败批次保留在数据库与 QC，不静默删除。
+
+`d2-confidence-v3` 按 [references/confidence-report.schema.json](references/confidence-report.schema.json) 公开 source、completeness、method、spatial、QC 五分量、权重和扣分。额外门控：错误级 QC 或缺 canonical 坐标最高 low；缺坐标不确定度、关键方法语义，或陆地固体样品缺地质背景时最高 medium。报告 `gates_applied` 与计数。该分数是 workflow usability，不是正确概率。
 
 ## 5. 候选异常
 
-仅对通过单位、坐标、删失值和重复门禁的可比记录，在 `log10` 正值上使用 median/MAD robust z-score，分别输出 `direction=high`（富集）和 `direction=low`（亏损）。
+仅对通过单位、坐标、删失值、重复和批次门禁的可比正值，在 `log10` 空间计算 `z=0.67448975*(log10(x)-median)/MAD`；以 `|z|≥3.5` 分别输出 `direction=high`（富集）和 `direction=low`（亏损）。禁止插补后参与计算。
 
-背景键至少隔离：元素、介质、material/sample type、层位/环境/分相/粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取。生产最小组 `n=20`；demo 可显式使用 `n=8`，但必须标 demo。MAD=0 或样本不足时返回 `insufficient_background`，不能降低阈值凑结果。
+背景键至少隔离：元素、介质、material/sample type、层位/环境/分相/粒级、measurement basis、地质、方法/方法族/method scope 和消解/提取。先检查总组数，再要求 quantified fraction `≥70%`；生产 `n≥20`，demo 可用 `n≥8` 并标明。MAD=0 绝不加 epsilon；只有任务冻结且扩展实现了经验分位数 fallback 时才使用，否则返回 `zero_dispersion`。样本不足返回 `insufficient_background`，不降低阈值。输出 `interface_version=d2-interface-v2`、`method_version=d2-robust-mad-v2`。
 
-`anomaly_report.json` 必须包含方向、robust z、组内 n、log10 median/MAD、阈值、分组键和排除原因；`anomalies.geojson` 的网格/范围仅用于展示聚合，不表示异常的真实地理边界。异常是 screening-only，需回看原记录、方法、QC、空间分辨率和独立来源。
+`anomaly_report.json` 必须包含方向、robust z、组内 n、quantified fraction、log10 median/MAD、阈值、分组键和排除原因；`anomalies.geojson` 的网格/范围仅用于展示聚合，不表示异常真实边界。异常是 screening-only；自然背景、采样偏差、方法差异和人为输入都是竞争解释，需回看原记录、QC、空间分辨率与独立来源后再研究，不能直接宣称成因。
 
 ## 6. D3：地图与研究视图
 
@@ -196,7 +217,11 @@ python scripts/render_visualization.py \
 python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 ```
 
-`story` 在 `overview/coverage/anomaly/comparison/database/evidence` 中按问题选择。区域产物只裁剪 HTML 内嵌记录和 `samples.geojson`，不改写完整 `geochemistry.csv`，并显示完整报告与当前预览的统计口径差异。元素组合只在同一物理样品和同一可比层内计算 log10 配对、Spearman ρ、四象限与共测覆盖；关联不等于因果。完整交互、术语和 profile 规则见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
+按问题选 `story`：`overview` 数据/介质，`coverage` 覆盖，`anomaly` 候选，`comparison` 组合，`database` 标准记录，`evidence` 证据链。全球请求保持 global；命名区域使用固定多边形，自定义 bbox 不冒充行政/地质边界。区域产物不得内嵌区外记录，只裁剪 HTML 与 `samples.geojson`，不改写完整 `geochemistry.csv`，并显示完整与预览口径差异。
+
+GeoJSON 必须是确定性排序的 RFC 7946 `[lon,lat]`。热力图只表示 `sample_count` 密度；删失记录计入密度与 censored fraction，但不计入浓度中位数，且禁止空间插值。数据库视图只允许输出非破坏性 `geochemistry-research-patch-v1`，不得覆盖 canonical 数据或证据。
+
+元素组合只在同一物理样品和可比层内计算 log10 配对、Spearman ρ、四象限与共测覆盖；正式结论须导出 profile 及输入/profile/输出 hash，瞬时 UI 状态不算复现。REE spider 仅在明确归一化参考与元素集时启用；ternary/CLR 仅在闭合组成和删失条件成立时启用。关联不等于因果。迭代项按 [references/iteration-backlog.schema.json](references/iteration-backlog.schema.json) 标 `scientific_limit`、`action_required` 或 `review_required`。完整规则见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 
 ## 7. 验证五项交付
 
@@ -216,11 +241,11 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 ```
 
-验证失败不得交付“部分看起来正常”的地图。`run_summary.json` 报告输入数、标准化率、坐标/地质覆盖、异常候选、置信度分布、排除项和 hash。每个关键结论绑定来源定位；事实、脚本计算、推断、假设和未验证项分开。
+该命令核验十一文件核心契约；第 6 节的 `validate_visualization.py` 独立核验 profile 驱动的 D3 区域裁剪、交互和 hash。验证失败不得交付“部分看起来正常”的地图。`run_summary.json` 报告输入数、标准化率、坐标/地质覆盖、异常候选、置信度分布、排除项和 hash。每个关键结论绑定来源定位；事实、计算、推断、假设和未验证项分开。
 
 ## 8. 失败关闭与人工门禁
 
-使用以下稳定状态：`invalid_input`、`unsupported_scope`、`network_unavailable`、`source_not_accessible`、`incomplete_retrieval`、`conflicting_evidence`、`insufficient_background`、`needs_human_review`。保留已经验证的事实、失败阶段、未覆盖范围和可执行下一步；不要把“未检索到”写成“不存在”。完整矩阵见 [references/failures.md](references/failures.md)。
+全部必需范围和验证通过才用 `success`；若冻结任务要求的来源、批次、空间记录或背景组被门禁排除，但已验证子集仍可交付，则用 `partial_success` 并列出缺口。阶段码使用 `invalid_input`、`unsupported_scope`、`network_unavailable`、`source_not_accessible`、`incomplete_retrieval`、`conflicting_evidence`、`insufficient_background`、`needs_human_review`。保留事实、失败阶段和下一步；“未检索到”不等于“不存在”。完整矩阵见 [references/failures.md](references/failures.md)。
 
 来源达到 A 级且适配器通过，仍不自动成为 `benchmark_ready`。30 条准备记录必须由具名人员逐条检查源定位、原值、单位、qualifier、方法和 canonical 映射：
 
@@ -234,6 +259,13 @@ python scripts/validate_human_review.py \
 
 ## 9. 最终回复
 
-先返回 `status` 和五项产物路径，再简要报告：冻结请求、实际来源与版本、输入/标准化记录数、坐标与地质匹配率、分析/不足背景组数、high/low 候选数、置信度分布、覆盖空洞、失败与限制、下一步人工复核。
+按 [references/result.schema.json](references/result.schema.json) 先返回 `status` 和五项产物路径，再简要报告：冻结请求、实际来源与版本、输入/标准化记录数、坐标与地质匹配率、分析/不足背景组数、high/low 候选数、置信度分布、覆盖空洞、失败与限制、下一步人工复核。
 
-需要演示脚本时读取 [references/demo-guide.md](references/demo-guide.md)；需要开发回归时读取 [references/demo-generation-tests.md](references/demo-generation-tests.md)。不要为当前任务加载无关参考文件。
+## 按需资源路由
+
+- 请求/输出：[请求契约](references/request-output-contract.md)、[结果 schema](references/result.schema.json)；
+- D1：[来源目录](references/data-sources.md)、[许可引用](references/licenses-and-citations.md)、[来源准入](references/source-acceptance-standard.md)；
+- D2：[科学规则](references/scientific-rules.md)、[数据模型](references/data-model.md)、[schema 映射](references/schema-mapping.md)、[平台 crosswalk](references/platform-field-crosswalk.md)；
+- D3：[可视化契约](references/d3-visualization-contract.md)、[profile schema](references/visualization-profile.schema.json)、[报告 schema](references/visualization-report.schema.json)、[迭代闭环](references/iteration-loop.md)。
+
+只读取当前阶段所需项。schema 是机器契约，本文门禁是执行顺序；冲突时失败关闭并报告版本，不猜测。
