@@ -38,6 +38,7 @@ import snapshot_source
 import source_router
 import query_source
 import export_archive_exchange
+import migrate_v4_source_demos
 import profile_source_completeness
 import standardize_geochemistry as standardizer
 import validate_acquisition as acquisition_validator
@@ -892,6 +893,16 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     require(
+        completeness_profile["sources"]["afsis-phase-i-wet-chemistry"]["demo_fixture"]
+        ["field_completeness"]["sample_type"]["rate"] == 1.0
+        and completeness_profile["sources"]["gemstat-open-archive"]["demo_fixture"]
+        ["field_completeness"]["water_fraction"]["rate"] == 1.0
+        and completeness_profile["sources"]["georoc-archaean"]["demo_fixture"]
+        ["field_completeness"]["method_scope"]["rate"] == 0.0,
+        "D1 V4 demo profile reports populated semantics and preserves explicit missing method scope",
+        checks,
+    )
+    require(
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
         and matrix["cells"]["rock"]["analyte_coverage"] == "complete_for_registered_targets"
@@ -1354,6 +1365,13 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
 
+    migration_check = migrate_v4_source_demos.migrate(SOURCE_DEMOS, check=True)
+    require(
+        migration_check["status"] == "PASS" and migration_check["source_count"] == 14,
+        "D1 V4 source-demo migration is byte-stable across all fourteen sources",
+        checks,
+    )
+
     combined_manifest = json_value(COMBINED_DEMO / "run_manifest.json")
     combined_rows = csv_rows(COMBINED_DEMO / "demo_input.csv")
     combined_evidence = [
@@ -1386,9 +1404,56 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
-        and combined_manifest["comparison_isolation"]["partition_count"] == 80
-        and combined_manifest["comparison_isolation"]["water_partition_count"] == 17,
+        and combined_manifest["comparison_isolation"]["partition_count"] == 93
+        and combined_manifest["comparison_isolation"]["water_partition_count"] == 18,
         "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
+        checks,
+    )
+    require(
+        all(
+            row["sample_type_raw"]
+            and row["sample_type"]
+            and row["sample_type_mapping_status"] in {"exact", "dataset_constant"}
+            for row in combined_rows
+        )
+        and all(not row["geologic_unit"] for row in combined_rows)
+        and sum(bool(row["geographic_context_raw"]) for row in combined_rows) == 192,
+        "D1 V4 classifies every demo sample and removes geography from legacy geologic_unit",
+        checks,
+    )
+    require(
+        all(
+            (row["analytical_method"] and row["method_scope"] and not row["method_missing_reason"])
+            or (not row["analytical_method"] and not row["method_scope"] and row["method_missing_reason"])
+            for row in combined_rows
+        )
+        and sum(bool(row["method_scope"]) for row in combined_rows) == 544
+        and sum(bool(row["method_missing_reason"]) for row in combined_rows) == 192,
+        "D1 V4 gives every present method a scope and every absent method a reason",
+        checks,
+    )
+    water_rows = [row for row in combined_rows if row["medium"] == "water"]
+    sediment_rows = [row for row in combined_rows if row["medium"] == "sediment"]
+    require(
+        len(water_rows) == 144
+        and all(row["water_body_type"] and row["water_fraction"] for row in water_rows)
+        and len(sediment_rows) == 256
+        and all(row["sediment_environment"] for row in sediment_rows)
+        and {row["water_fraction"] for row in water_rows} == {"dissolved", "suspended", "total"},
+        "D1 V4 carries water type/fraction and sediment environment into the exchange rows",
+        checks,
+    )
+    require(
+        all(
+            row["citation_scope"]
+            and row["citation_resolution_status"] == "resolved"
+            and row["access_status"] == "public_download"
+            and row["research_use_status"] == "permitted_research"
+            and row["license_url"]
+            for row in combined_rows
+        )
+        and {row["citation_scope"] for row in combined_rows} == {"dataset", "observation"},
+        "D1 V4 keeps citation scope, access, research use and license evidence distinct",
         checks,
     )
     combined_output = COMBINED_DEMO / "expected-output"
@@ -1408,7 +1473,7 @@ def check_d1(output_dir: Path) -> list[str]:
         and combined_summary["metrics"]["valid_coordinate_count"] == 736
         and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
         and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
-        and len(combined_anomaly["groups"]) == 80
+        and len(combined_anomaly["groups"]) == 93
         and all(len(sources) == 1 for sources in grouped_sources.values()),
         "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
         checks,

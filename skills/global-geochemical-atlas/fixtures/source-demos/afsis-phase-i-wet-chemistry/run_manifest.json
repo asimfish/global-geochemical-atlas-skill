@@ -1,6 +1,7 @@
 {
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
   "generated_at": "2026-08-06T10:05:00Z",
   "generation_request": {
@@ -16,9 +17,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 23162,
+      "bytes": 57337,
       "path": "demo_input.csv",
-      "sha256": "563f4e461892913088cbc6f65e74f31126210c4375dcf070596fd5c2ff974fe8"
+      "sha256": "7c86fdad0049bab0a6538060d7ac64409ac8753a6984b1dd1cc8a1ed24ced32b"
     },
     {
       "bytes": 120701,
@@ -62,6 +63,7 @@
       "source_url": "https://data.worldagroforestry.org/api/access/datafile/12234?format=original"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",

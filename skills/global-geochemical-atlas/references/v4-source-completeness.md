@@ -15,20 +15,20 @@
 
 | 来源 | 全量审计 | 全量目标测定 | demo 行 | 样品类型 demo 完整率 | 方法 scope demo 完整率 |
 |---|---|---:|---:|---:|---:|
-| `afsis-phase-i-wet-chemistry` | audited_snapshot | 12012 | 48 | 0.0% | 0.0% |
-| `foregs-floodplain-sediment` | audited_snapshot | 9672 | 48 | 0.0% | 0.0% |
-| `foregs-humus` | audited_snapshot | 1845 | 48 | 0.0% | 0.0% |
-| `foregs-stream-sediment` | audited_snapshot | 11030 | 48 | 0.0% | 0.0% |
-| `foregs-stream-water` | audited_snapshot | 4848 | 48 | 0.0% | 0.0% |
-| `foregs-subsoil` | audited_snapshot | 10201 | 48 | 0.0% | 0.0% |
-| `foregs-topsoil` | audited_snapshot | 10908 | 48 | 0.0% | 0.0% |
-| `gemstat-open-archive` | audited_snapshot | 492999 | 48 | 0.0% | 0.0% |
-| `georoc-archaean` | not_measured | not_measured | 48 | 0.0% | 0.0% |
-| `geotraces-idp2025` | audited_snapshot | 39327 | 48 | 0.0% | 0.0% |
-| `japan-gsj-geochemical-map` | audited_snapshot | 21168 | 48 | 0.0% | 0.0% |
-| `norway-marchem` | audited_snapshot | 3520 | 112 | 0.0% | 0.0% |
-| `pangaea-north-africa-soil` | audited_snapshot | 258 | 48 | 0.0% | 0.0% |
-| `usgs-conus-soil` | not_measured | not_measured | 48 | 0.0% | 0.0% |
+| `afsis-phase-i-wet-chemistry` | audited_snapshot | 12012 | 48 | 100.0% | 100.0% |
+| `foregs-floodplain-sediment` | audited_snapshot | 9672 | 48 | 100.0% | 100.0% |
+| `foregs-humus` | audited_snapshot | 1845 | 48 | 100.0% | 100.0% |
+| `foregs-stream-sediment` | audited_snapshot | 11030 | 48 | 100.0% | 100.0% |
+| `foregs-stream-water` | audited_snapshot | 4848 | 48 | 100.0% | 100.0% |
+| `foregs-subsoil` | audited_snapshot | 10201 | 48 | 100.0% | 100.0% |
+| `foregs-topsoil` | audited_snapshot | 10908 | 48 | 100.0% | 100.0% |
+| `gemstat-open-archive` | audited_snapshot | 492999 | 48 | 100.0% | 100.0% |
+| `georoc-archaean` | not_measured | not_measured | 48 | 100.0% | 0.0% |
+| `geotraces-idp2025` | audited_snapshot | 39327 | 48 | 100.0% | 0.0% |
+| `japan-gsj-geochemical-map` | audited_snapshot | 21168 | 48 | 100.0% | 0.0% |
+| `norway-marchem` | audited_snapshot | 3520 | 112 | 100.0% | 100.0% |
+| `pangaea-north-africa-soil` | audited_snapshot | 258 | 48 | 100.0% | 100.0% |
+| `usgs-conus-soil` | not_measured | not_measured | 48 | 100.0% | 0.0% |
 
 ## 当前阻塞
 

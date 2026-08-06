@@ -18,7 +18,15 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
 
-from source_adapters import DownloadedFile, RawRecord, SourceAdapterError, get_adapter, stable_record_id
+from source_adapters import (
+    DownloadedFile,
+    RawRecord,
+    SourceAdapterError,
+    get_adapter,
+    load_source_registry,
+    stable_record_id,
+)
+import v4_semantics
 
 DEMO_VERSION = "d1-demo-slice-v1"
 ANALYTES = ("As", "Cu", "Ni", "Zn")
@@ -1305,6 +1313,17 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         else:
             raise DemoError(f"unsupported source: {args.source}")
 
+    registry = load_source_registry()
+    rows = [
+        v4_semantics.enrich_row(
+            row,
+            evidence_row,
+            candidate.registry_entry,
+            str(registry.get("verified_at") or ""),
+        )
+        for row, evidence_row in zip(rows, evidence, strict=True)
+    ]
+
     atomic_text(output_paths["demo_input"], _csv_text(rows))
     atomic_text(output_paths["sources"], _jsonl_text(evidence))
     outputs = [
@@ -1318,6 +1337,8 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
     ]
     manifest = {
         "demo_generation_version": DEMO_VERSION,
+        "exchange_schema": "d1-v4-exchange-v1",
+        "v4_semantics_version": v4_semantics.SEMANTICS_VERSION,
         "data_mode": "fixture",
         "scientific_scope": "pipeline demonstration only",
         "not_for_scientific_interpretation": True,
@@ -1363,6 +1384,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         "warnings": [
             "This is a deterministic demonstration slice, not a statistically representative sample.",
             "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+            "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
             *(
                 [
                     "FOREGS is a low-density European continental baseline, not continuous or local coverage.",

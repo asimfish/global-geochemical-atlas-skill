@@ -32,10 +32,13 @@ python3 scripts/export_archive_exchange.py \
 python3 scripts/standardize_geochemistry.py \
   --input /tmp/v4-exchange.csv \
   --output-dir /tmp/v4-output
+python3 scripts/migrate_v4_source_demos.py --check
 ```
 
 `export_archive_exchange.py` 先验证实体关系，再把 sample/method/geology/citation scope 写入交换层。标准化输出、SQLite `observation_search`、GeoJSON 和交互地图随后保留这些字段。
 
-## 尚未迁移的内容
+## 十四来源迁移状态
 
-当前 14 个生产适配器的既有 source demo 仍是 V3 行语义；M2 需要逐来源回填 V4 字段和缺失原因。V4 schema 可用不代表这些来源的字段已经完整。
+十四个生产来源的 source demo 已完成 V4-M2 回填，映射集中定义在 `v4_semantics.py`，生成器与迁移检查共用同一契约。旧 V3 输入仍可读取，但新生成的 source demo 必须带 `exchange_schema=d1-v4-exchange-v1` 和语义版本。
+
+尚未完成的是全量来源统一逐字段 profile、四个来源的方法补齐和真正地质背景。demo 字段完整不代表 full population 完整。

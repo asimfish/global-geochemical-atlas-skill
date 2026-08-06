@@ -55,10 +55,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -73,7 +73,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -91,7 +91,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -103,16 +103,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -121,34 +121,34 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "source_locator": {
             "column_present": true,
@@ -169,21 +169,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "563f4e461892913088cbc6f65e74f31126210c4375dcf070596fd5c2ff974fe8",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "98cdd33c64fe1f8b4c7aa11ed2b1b2e87a966b51b657c099f403173fc1aac5c1",
+        "file_sha256": "7c86fdad0049bab0a6538060d7ac64409ac8753a6984b1dd1cc8a1ed24ced32b",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "533a02d41845aceff9e5890b124c99eb6e2c1573c0c2e6057327eb8a181dc967",
         "media": {
           "soil": 48
         },
@@ -245,10 +245,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -263,7 +263,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -281,7 +281,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -293,16 +293,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -311,31 +311,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -359,21 +359,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "82e767778a5e8fb0faf2e5241427866f18ee457d315400aa70ef3fe42625dad2",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "684da84638da61879b647c1ab7e9e36ee4933948bc5df267ac1788098a23da7d",
+        "file_sha256": "270215361238ada148ba8180b3b3c2fb83b9b57d1c325bd50ecd4f318691c738",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "f2023172e082265229a41ce1b0d1e041207cb4b44cad4440c22256a6dace3ecd",
         "media": {
           "sediment": 48
         },
@@ -434,10 +434,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -452,7 +452,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -470,7 +470,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -482,16 +482,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -500,31 +500,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -548,21 +548,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "38886457c87bcc27878c1c8581f1a38ea95dcdac91475229f2c66ab41b2bdfb5",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "e50420ea0c5768ac0bdc7b18e9eeac0e4c62f3835efee99d55e5a826ca0af634",
+        "file_sha256": "a6d38fdf1482239025877dc0cb87e695b914f205393f357563c76549bb8b3f8d",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "4a1d33a18bb65244809f4fcb54cd624fa70d27802923b945894f2e8759c4e6db",
         "media": {
           "soil": 48
         },
@@ -624,10 +624,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -642,7 +642,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -660,7 +660,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -672,16 +672,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -690,31 +690,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -738,21 +738,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "59fd2c203464e751547da9bdc3a08ad7bfd3d4acdb46758d0f44665252f87097",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "dd5fd138fb3e6f1b7135a280b9ba81db51f606eb615ddc99ee2464b8060bf79d",
+        "file_sha256": "e213c70a1ef1067474b3c67d2547511d52639f2f41972066ba8b3d03f2b26a43",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "535e1210f95dfb9ccb2dfa34de1c7ee971c99592ffee522e50f771b0680de848",
         "media": {
           "sediment": 48
         },
@@ -814,10 +814,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -832,7 +832,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -850,7 +850,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -862,16 +862,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -880,31 +880,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -928,21 +928,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           }
         },
-        "file_sha256": "bb7a887e7688ff02b76a0c1988df2c7f86164a70143b1164a903c79373ae3554",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "b7aee15c76a8ebcdfacaae43164854bff09e739168211493cd7c6b6bb95ec7a4",
+        "file_sha256": "6807f2282562c8a42b6af58020c8104fb136e328dc3a3fc1e3386157d7f621cc",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "735c19d040fa4ff6809361ca920657de781c236891eb13e7c785f2d4c049a598",
         "media": {
           "water": 48
         },
@@ -1004,10 +1004,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -1022,7 +1022,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1040,7 +1040,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1052,16 +1052,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -1070,31 +1070,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1118,21 +1118,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "196c056e57c26303df2fc270245bb344a2b53abc34992bde0c6909e6ee8d1286",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "94e9a82398afc5c350d5d09bcfd8f295e619c06773e6801f7a7a411fafd0f837",
+        "file_sha256": "e25c6965dd52225d51a38658437487b656892d96660318a5a2b95f8aa016ea84",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "be15876813351a87a3bc0d129803acc84255dd9ae8f6c1195482432fcf755771",
         "media": {
           "soil": 48
         },
@@ -1194,10 +1194,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -1212,7 +1212,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1230,7 +1230,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1242,16 +1242,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -1260,31 +1260,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1308,21 +1308,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "e45f573db608634a65453acaf2a724a46b7291e6a0ae11ad93af50878cf8dee1",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "8f17df071824a7929a380e96e244fca35d4d603ddfad59bca3c28d2cab90c19b",
+        "file_sha256": "dffd07585206ed21aee425a1a0041e2683e070c83d1e65058f0d87dad88aee81",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "a66906e1b50962e2469347ad25937f5a819fa0f9dc93c3fd23f40565787cf4d6",
         "media": {
           "soil": 48
         },
@@ -1381,10 +1381,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -1399,7 +1399,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1417,7 +1417,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1429,16 +1429,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -1447,31 +1447,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1495,21 +1495,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           }
         },
-        "file_sha256": "54dc5916f764ba7d31384054c90da86502d2821ff0a96fd543ff69d6e6233a22",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "875f948a26137b3686e6e2e430a515f29912868c27d3c815255df60b148e93d7",
+        "file_sha256": "74e1ae8eb15b533854b82dc63d888a071d48a96697007464d4223ec31c16633e",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "458ba22aac09b5f212940d893ba15f8ffcb269a496a0ee9bf502131d25e0841d",
         "media": {
           "water": 48
         },
@@ -1571,10 +1571,10 @@
             "rate": 0.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -1589,7 +1589,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1607,7 +1607,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1619,13 +1619,13 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1637,31 +1637,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1685,21 +1685,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "75e76082fa18af6f3f1b79ed05d4984f34545d202873afed611b68b45e06b8cb",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "536916dabc4a52a00f8e70c969a8c9dcdff15b99a5007a1805d5bc810ca51394",
+        "file_sha256": "b2263096573733eca702eff451bd50734b1dd8115a6d73c1b7cad5a12e442270",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "f68a93fb104b8806a9adfe5f9d2b1caa48ef321c62eaa22a0ce3fe37b58066ba",
         "media": {
           "rock": 48
         },
@@ -1756,10 +1756,10 @@
             "rate": 0.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -1774,7 +1774,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1792,7 +1792,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1804,13 +1804,13 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1822,31 +1822,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1870,21 +1870,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           }
         },
-        "file_sha256": "4dc33f58d9cbb47c464e655e9e1f2bbf43507ba5883a62962eb641b128b2afb8",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "998c675575219666b72d5482d62507fae3e7eed2e781f95bfb0979cfc414f500",
+        "file_sha256": "3494e80f1701074dd7cd5d75a7db182031eb1855806d08cab82e9a61b5a9fe8a",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "fd0512f2d241e3717fb336abfd7a7d786890bc3dc4831bb56757cb31d99edac2",
         "media": {
           "water": 48
         },
@@ -1946,10 +1946,10 @@
             "rate": 0.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -1964,7 +1964,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1982,7 +1982,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -1994,13 +1994,13 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2012,31 +2012,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2060,21 +2060,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "9cea2ca672bbe35d2a6b3546764cb350f437925fb470fa4be3dd78405784a872",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "020456454a7f355b7f078e41a75249d461a2f998e429e0cde310dd5a27e33b56",
+        "file_sha256": "aa30f125b833f57a42eac1ce27bce89840c3cc2c309aa759eede634fa2f09406",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "d414eb179f184a1658252ff79944743f883c247ef6884159962fd1b2843fcf21",
         "media": {
           "sediment": 48
         },
@@ -2136,10 +2136,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 112,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -2154,7 +2154,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
             "non_empty": 0,
             "rate": 0.0
@@ -2172,7 +2172,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
             "non_empty": 0,
             "rate": 0.0
@@ -2184,16 +2184,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 112,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 112,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -2202,31 +2202,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 112,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 112,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 112,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 112,
+            "rate": 1.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
             "non_empty": 0,
             "rate": 0.0
@@ -2250,21 +2250,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 112,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "7ae5180c7167946d01ae48e4ff980c6531ad8aaafb54a655cb2d0d4ebb150b3b",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "079a1b21f3784e744074df46bb05819826b9c891c752c1cab4a86fd4c213065a",
+        "file_sha256": "f0ac99040e008664ebb808103811c118a8a390fc09e24577a58f12337425186c",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "cbc9d8c576dc33044d2c35aa88e429a454e0f03b4e0ce407a9795f6f350aa7b8",
         "media": {
           "sediment": 112
         },
@@ -2326,10 +2326,10 @@
             "rate": 1.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -2344,7 +2344,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2362,7 +2362,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2374,16 +2374,16 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_id": {
             "column_present": true,
@@ -2392,31 +2392,31 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2440,21 +2440,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "f0c24b3eac42e595df8cce304b735529bdd29f91781d98a11d8724076f0dbb26",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "48f57f263c0313dae8952101ea9e7132f746838d81f371832633ebc989f51612",
+        "file_sha256": "6985d18e9b569227d40c6c1db675843c5e3f5fad3e49a25affd6b5a99912b864",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "6213151b26556059160eced608e5942cd9ee7e2a0351d59c732b058ed51732d1",
         "media": {
           "soil": 48
         },
@@ -2516,10 +2516,10 @@
             "rate": 0.0
           },
           "citation_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "coordinate_pair": {
             "column_present": true,
@@ -2534,7 +2534,7 @@
             "rate": 1.0
           },
           "geologic_unit_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2552,7 +2552,7 @@
             "rate": 1.0
           },
           "matched_geologic_unit": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2564,13 +2564,13 @@
             "rate": 1.0
           },
           "method_assignment_basis": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "method_scope": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
@@ -2582,34 +2582,34 @@
             "rate": 1.0
           },
           "sample_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_mapping_status": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sample_type_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "sediment_environment": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "soil_horizon_raw": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
-            "non_empty": 0,
-            "rate": 0.0
+            "non_empty": 48,
+            "rate": 1.0
           },
           "source_locator": {
             "column_present": true,
@@ -2630,21 +2630,21 @@
             "rate": 1.0
           },
           "water_body_type": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           },
           "water_fraction": {
-            "column_present": false,
+            "column_present": true,
             "denominator": 48,
             "non_empty": 0,
             "rate": 0.0
           }
         },
-        "file_sha256": "1a2334a32c25792b0dfc136221fc071dc486b1246ddfa0709cc13b7ad24e3763",
-        "header_sha256": "811b9de934d37ea1ee198e21545ed5eb98fc30782e50a02c5b1ab0aed0bb3ffb",
-        "manifest_sha256": "044726cf38b5f9ab19c976534ca49246af7b6a0e060cef3c2d74041520ee7c38",
+        "file_sha256": "451974619eca7e67e268bc62f8616dfd49a693cf5f016c03fd7244f8acd4a180",
+        "header_sha256": "bbe35a3aed1540a40128db5cc83e0767d536f43f1a861d6863b9b91e356227b0",
+        "manifest_sha256": "70b04cbf1e949c7f78d02f2731e0aef69ed4065b1f2abda26f30162b2bd3d276",
         "media": {
           "soil": 48
         },

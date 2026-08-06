@@ -1,6 +1,7 @@
 {
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
   "generated_at": "2026-08-06T08:00:00Z",
   "generation_request": {
@@ -15,9 +16,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 20514,
+      "bytes": 45571,
       "path": "demo_input.csv",
-      "sha256": "38886457c87bcc27878c1c8581f1a38ea95dcdac91475229f2c66ab41b2bdfb5"
+      "sha256": "a6d38fdf1482239025877dc0cb87e695b914f205393f357563c76549bb8b3f8d"
     },
     {
       "bytes": 71547,
@@ -61,6 +62,7 @@
       "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip#member=H_icpadd_data_2v0.csv"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",

@@ -1,6 +1,7 @@
 {
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
   "generated_at": "2026-08-06T08:00:00Z",
   "generation_request": {
@@ -16,9 +17,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 22206,
+      "bytes": 49009,
       "path": "demo_input.csv",
-      "sha256": "59fd2c203464e751547da9bdc3a08ad7bfd3d4acdb46758d0f44665252f87097"
+      "sha256": "e213c70a1ef1067474b3c67d2547511d52639f2f41972066ba8b3d03f2b26a43"
     },
     {
       "bytes": 74445,
@@ -69,6 +70,7 @@
       "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_icp_data_2v6_30Nov06.csv"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",

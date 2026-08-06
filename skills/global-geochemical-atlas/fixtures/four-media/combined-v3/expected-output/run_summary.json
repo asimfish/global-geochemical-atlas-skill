@@ -26,23 +26,23 @@
   "input": {
     "filename": "demo_input.csv",
     "record_count": 736,
-    "sha256": "4d71b236c94544db406b1c380a289830f02fdf64cf88345ee4463f4b8f35dd83",
+    "sha256": "05be5536f2d5072c56aaed2bde43bf056bd8ac538081760b9931a5430ae33e12",
     "synthetic_demo": false
   },
   "limitations": [
     "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
     "Map density uses observed points only; no interpolation is performed across unsampled areas.",
-    "42 anomaly background group(s) were not analyzed due to explicit failure states."
+    "63 anomaly background group(s) were not analyzed due to explicit failure states."
   ],
   "map_report": {
-    "candidate_record_count": 16,
+    "candidate_record_count": 11,
     "external_assets": 0,
     "interpolation": false,
     "map_version": "self-contained-svg-v1",
     "mapped_record_count": 736
   },
   "metrics": {
-    "candidate_anomaly_count": 16,
+    "candidate_anomaly_count": 11,
     "censored_record_count": 20,
     "record_count": 736,
     "standardized_record_count": 736,
