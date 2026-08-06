@@ -1,0 +1,3134 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS confirms correspondence with byte-pinned FOREGS members and the adapter. It is not human review; reviewer decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "prepared_at": "2026-08-06T08:00:00Z",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.88",
+          "record_id": "rec-e8d5c2b65aa20128f1db05e7b5f3ee0b71455bdc6c202d225e9d2c41b23ee3fe",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.12",
+          "record_id": "rec-c87bd599d2c4dd5d8672e501efd7c3955e63d6eae02840c725a0eb4e9cb185aa",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.29",
+          "record_id": "rec-ccf73c2e0cb6723e7f0bbffff0397fd8be4bfc019276296a4ec5c0d4e33200b4",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.55",
+          "record_id": "rec-70c691ecbdb5a5953a7e34d4b2d9a1042d4fc9ad03d31b6041358a88ec50c2cd",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "0.0025",
+          "record_id": "rec-0e8943407f034a9eb53f7860118ed2e50219f176836bb2a0aaff578e3c2668ab",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.09",
+          "record_id": "rec-5860d975d33b9a380a5508b986952fa28896aae02532ec91a9891f1c4b5b0f35",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "48.47",
+      "longitude": "10.6",
+      "published_target_raw_values": {
+        "As": "0.88",
+        "Cr": "0.12",
+        "Cu": "0.29",
+        "Ni": "2.55",
+        "Pb": "0.0025",
+        "Zn": "0.09"
+      },
+      "review_id": "foregs-stream-water-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N33E06W2",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=59",
+      "source_record_id": "src-f3eb02cff1973997dcb03997070ac74b51809d1c754ea6ccc3e214443d13863d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.12",
+          "record_id": "rec-e35c4059338022201891116802ed9077497d0ca5c6d80cd062eb4ab6c14122e9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.44",
+          "record_id": "rec-499c4e8ba2018f5e74caedb291f220c9b0d67400a4d82ba889d362c4f6465688",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.08",
+          "record_id": "rec-1817cd747b36e16a5e89011e921b87d4cd5ff23a858c05d28204a0bca3d084e2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.36",
+          "record_id": "rec-34436ad304982dce48ec48df5d09e906448c4effeb5cc6a325eaa574b08170eb",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.001",
+          "record_id": "rec-815ef298edc4d577c7e93c522077bf5faf7abf7896f9efe7eaee0f255ac3538b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.21",
+          "record_id": "rec-d5cef813e71a7bcff7e51532a45e6b0e5e3b09434e7e79c364fd6add51eab532",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "41.792",
+      "longitude": "20.065",
+      "published_target_raw_values": {
+        "As": "0.12",
+        "Cr": "1.44",
+        "Cu": "0.08",
+        "Ni": "2.36",
+        "Pb": "0.001",
+        "Zn": "0.21"
+      },
+      "review_id": "foregs-stream-water-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N28E11W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=4",
+      "source_record_id": "src-05507429edadae17bbb7758f6b1fc0f9f5eb02b24f99dc7fe674ea1c16d99666"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.22",
+          "record_id": "rec-7a90461c1b99ebfdfaffead4e9fab0f2355f4d63044c9132990222b112930dc3",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.72",
+          "record_id": "rec-ed974abdfea373df34b34521b901ea2db8db8d60fb34ecc42e95f36a8ec6ef3d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.22",
+          "record_id": "rec-7a3ae41654700b23223ef93cb582d1ab2e182ba7447b87b28afff65fbfd3fb2b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.53",
+          "record_id": "rec-4c10b09d914ca335fed44f6ba370fa664dc1dbaec68b27268c3be320cae6c2e2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.001",
+          "record_id": "rec-357b20ee27ec21a7106587175d4bef3ba941a6302beb10fd3561bd25c62da985",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.13",
+          "record_id": "rec-648bb39279bb94b549ce45714a54808d7066f3887ee402a1ac9cca18e1501b07",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "40.918",
+      "longitude": "20.182",
+      "published_target_raw_values": {
+        "As": "0.22",
+        "Cr": "3.72",
+        "Cu": "0.22",
+        "Ni": "2.53",
+        "Pb": "0.001",
+        "Zn": "0.13"
+      },
+      "review_id": "foregs-stream-water-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N28E11W4",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=5",
+      "source_record_id": "src-7f6033afeff4ff962fb9823ca87e3574af8e8bc4a719b3c14a1b3bf7e0745655"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.67",
+          "record_id": "rec-9d2a139e1530ef36ddf2316f18261fa15f7a611edad4b7b7d075dfa950ce4186",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.89",
+          "record_id": "rec-447b5ca1095a07f923d7a21dca629f080b719d4a9abfedde48b868a3500d69a4",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1",
+          "record_id": "rec-84daaef18f1fdcccc71580f423784a6e682c09ed507de4778468173630f74281",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.01",
+          "record_id": "rec-3d1aa7fe74ed5ff3cd4fad2dbe731d108429277fe1b8389ed74b2da37686b938",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.001",
+          "record_id": "rec-3f9f4c5f926e35683707442f8c8206497e73ee6b3000ac2aeadcb209a6e4dcc9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.3",
+          "record_id": "rec-aa5e88b70c04d0d059558ead67e9a232044ccca062f2451e61404e94556b060a",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "40.779",
+      "longitude": "19.722",
+      "published_target_raw_values": {
+        "As": "0.67",
+        "Cr": "1.89",
+        "Cu": "1",
+        "Ni": "3.01",
+        "Pb": "0.001",
+        "Zn": "0.3"
+      },
+      "review_id": "foregs-stream-water-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N28E11W5",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=6",
+      "source_record_id": "src-204f64ff3ecd52f1f28b307584022b76d851a4aaed7298aaf66357823221cb31"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.11",
+          "record_id": "rec-13f0649a15d4623391bbaccb50c7147b69a6b32dfa0d3889f5c4473d5b4d18f2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.12",
+          "record_id": "rec-0d0661f4c1af009f33ff700e1d94450bbefa143f2a5d3170de97e8252052ffa4",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.41",
+          "record_id": "rec-2c3f342d770a14e8ce111d4a3fac0414c16f968c50a1eff470b2a93238d8916e",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.69",
+          "record_id": "rec-fca3339cb85afbf76d1a980ed94a97e77bafd1894c22f80025146fb6d91a4e6a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.027",
+          "record_id": "rec-c714490c6b4e5a420c689277d33404111d6fc5fffab1be67a106b44e56ea61d6",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.16",
+          "record_id": "rec-81fa6c3ca33aefcb8da8eb3e6fdc7a83e7363de5f84a7662fa47c83c1de259e0",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.73",
+      "longitude": "11.56",
+      "published_target_raw_values": {
+        "As": "0.11",
+        "Cr": "0.12",
+        "Cu": "0.41",
+        "Ni": "1.69",
+        "Pb": "0.027",
+        "Zn": "2.16"
+      },
+      "review_id": "foregs-stream-water-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E06W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=7",
+      "source_record_id": "src-8ec2da8103fc34d6f6706d6e81ad0889d9d159a5f2eb6da7af4cf0acb474e199"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.1",
+          "record_id": "rec-b8401e5f601e9966f7491d2dd0fac1c78e987a5ebb0d5333f2a6ca1182b22904",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.1",
+          "record_id": "rec-b6f06e2d13e53b06d066b05ead1adec39796ab7b7c7a49704f57ce539a7ab9ad",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.29",
+          "record_id": "rec-08a25c33247d1563f2ae3858d6ff73466746fb474a0ddcf6c7e7652306c39d2d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.38",
+          "record_id": "rec-c02533d5ec8c20b6cd1f40a3c7fd73199fb6fae6533b8a6f0ea1744fdf9c79a1",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.034",
+          "record_id": "rec-21cdee008d4cf4c820d6e6a0f2402a30eaa885f7d8c4afd5b57275da0c1afe2a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.51",
+          "record_id": "rec-96998cfa54989e829037806bb73e4ac4defca61e2aea88fcad50e38ad926d4f0",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.44",
+      "longitude": "10.65",
+      "published_target_raw_values": {
+        "As": "0.1",
+        "Cr": "0.1",
+        "Cu": "0.29",
+        "Ni": "1.38",
+        "Pb": "0.034",
+        "Zn": "2.51"
+      },
+      "review_id": "foregs-stream-water-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E06W2",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=8",
+      "source_record_id": "src-d1e5395ad391a3a1577a0d8322287edc837a1ee9eb3ed1b3ea3783c808f0b7d0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.25",
+          "record_id": "rec-427da3999d7e051df2b5dcbf93031e8b3a1dd27315d008ad5add386b1fad0333",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.14",
+          "record_id": "rec-2cd40fa48d99cf25b6a220cbcdb3ae7bdd13bf6c53b1ff8f4457c33539a029cb",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.69",
+          "record_id": "rec-d9ae0f6bad4aaea8f66004b67097ebd87cc68e2faa00532511a7297c796fe13f",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.54",
+          "record_id": "rec-1e2be956a2e303ef70759706db8098127ce0c0a25ef2d2ed9450e3960c574511",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.044",
+          "record_id": "rec-953909e11279552ae2097f18528c76fdf87526dc7332b7a148e9af19ef18bd17",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.71",
+          "record_id": "rec-2d2eb3e26bef30a0a5f34fa022b747a67b386a47472d80fdd29c98032e7c56cf",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.23",
+      "longitude": "11.9",
+      "published_target_raw_values": {
+        "As": "3.25",
+        "Cr": "0.14",
+        "Cu": "0.69",
+        "Ni": "1.54",
+        "Pb": "0.044",
+        "Zn": "2.71"
+      },
+      "review_id": "foregs-stream-water-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E06W3",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=9",
+      "source_record_id": "src-578f1e11d4ca702796cc5e5d9f947b58555dcaf4c12857a96fc6120bed458d6e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1",
+          "record_id": "rec-783a5f564868496872f20eee535f87ee9a1ed239fab007805e1136cd8f59b82d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.21",
+          "record_id": "rec-641be853fb3b14324c116472329a21621cc21073ed2ff54eaa53c513365b9d67",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.42",
+          "record_id": "rec-b0eb84dd67db6ef0d57c5d76955d982c45c3b863d536dc9e09993a342aa9bcc3",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.04",
+          "record_id": "rec-6fa5ac2b0125a42eabea53d3346fb85f63c3c6cc7fe6f6efba6588506dc0cec4",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.056",
+          "record_id": "rec-6ab2662b46d594636394684005d22d5cb14cb029b9b40a4a8b1cd852e3b29759",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.54",
+          "record_id": "rec-59a6039a4ea7b05ea70ae4d5e4d0ebf6d84ea6d970fe832c79b832f1e13363c6",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.75",
+      "longitude": "11.73",
+      "published_target_raw_values": {
+        "As": "1",
+        "Cr": "0.21",
+        "Cu": "0.42",
+        "Ni": "1.04",
+        "Pb": "0.056",
+        "Zn": "1.54"
+      },
+      "review_id": "foregs-stream-water-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E06W4",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=10",
+      "source_record_id": "src-3bbaef79b7fb330d5821182508c6f944dedab1e5095965edfdcba1fb01b336ea"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.44",
+          "record_id": "rec-177dca8afaa9313e3a3c9784b9b84ffd0026840dd68004662e2f0cca28b50ac8",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.13",
+          "record_id": "rec-62fa24a959a84425081ff488de415a85c3d9bfc7d379b3367e558f1626439d7b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.36",
+          "record_id": "rec-496b71986e20e84db13c86d991c60aa7ce6634dfc9ac9df9a8b1a8c093cbf78e",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.28",
+          "record_id": "rec-d9edce7d32a5bbe7103bf372d129e747dc29fac4cded53bf4064526c3831890b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.042",
+          "record_id": "rec-1e4362e53f9eb28d23ab0982e140ba3dddbc13c42738d132b838a26df9977826",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.59",
+          "record_id": "rec-61e94b49235fca99717032c4b1d1b405dbf4e2fd29af57a89dc9f0825923cd6f",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.12",
+      "longitude": "10.25",
+      "published_target_raw_values": {
+        "As": "0.44",
+        "Cr": "0.13",
+        "Cu": "0.36",
+        "Ni": "1.28",
+        "Pb": "0.042",
+        "Zn": "2.59"
+      },
+      "review_id": "foregs-stream-water-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E06W5",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=11",
+      "source_record_id": "src-c18ecc2c93a2cdf3910a2d503a1bf4e646bbab2ee030c8cc6d89cb9bc1207630"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.28",
+          "record_id": "rec-092b1ef97f2854f2b3f404d42ffaa6675bcce1f32db16c17a32ace4f3a42537b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.12",
+          "record_id": "rec-7d8f5532c2feffbed83018e9922b13cb1b3dbd61fc3bee385cea8b857a6270d2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.21",
+          "record_id": "rec-b3343f3aafb31a5bbaeb998bd2bdaa145ba4ed52a59fcbf2c54a4601dea2d06a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.14",
+          "record_id": "rec-121215659371b1a0c32df32725e6cc4410eff702a3577944dea2f9ac74432aa5",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.021",
+          "record_id": "rec-e0534f51295cfecc8c59e644ad50e500c41336cbb9af8d4a234ab531a3d5bc07",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.29",
+          "record_id": "rec-aee9fa3b5a733dcda80ec2e4a65796f42e9bc7ef36dd1edf8501c06880c1597b",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.78",
+      "longitude": "13.75",
+      "published_target_raw_values": {
+        "As": "0.28",
+        "Cr": "0.12",
+        "Cu": "0.21",
+        "Ni": "1.14",
+        "Pb": "0.021",
+        "Zn": "1.29"
+      },
+      "review_id": "foregs-stream-water-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E07W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=12",
+      "source_record_id": "src-dee8dbd58547135796d8e3c2f0566422cbeb19ced7690d4de88747c3a2fb80b7"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.22",
+          "record_id": "rec-bf47995669b8b5b7a483ef6b9458744d82ddd8a5863a8b3ec7a03f830c53db76",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.22",
+          "record_id": "rec-0707d50ecf329448d0325eca21280b3e1574f6cea831d8ca8d7765ba09dd8c9a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.26",
+          "record_id": "rec-73500b880003d1a43a36a0bce849fa08589ff2a25bcf233ed263dfcbc426518c",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.13",
+          "record_id": "rec-57ddf003321502088dcdb831410e23871d050c6ed42f16644b3d3cd207dfe550",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.024",
+          "record_id": "rec-3cc5f65deccfdaf05d247406d6aae52c0fb29c32a835c9d7d2f3f82f7c4e3e3b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.36",
+          "record_id": "rec-f73cbde06144273b69541e5ddb5b23489ed4965c7e96966c8b56be72665fa8a4",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.74",
+      "longitude": "12.66",
+      "published_target_raw_values": {
+        "As": "0.22",
+        "Cr": "0.22",
+        "Cu": "0.26",
+        "Ni": "1.13",
+        "Pb": "0.024",
+        "Zn": "1.36"
+      },
+      "review_id": "foregs-stream-water-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E07W2",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=13",
+      "source_record_id": "src-457a6c3e12bf33aee4175e8b6902546805ab1550c228bc7fa22d13912c590e56"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.57",
+          "record_id": "rec-b6b3db44ea7e230bf4fac3e2e512d4bf878cf0b07c77701b5b21919417e8c6db",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.14",
+          "record_id": "rec-81896d3974253261f175f30b6ab57025b24d057f0c5d81cffb39536a663f28f6",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.48",
+          "record_id": "rec-349341fa8b0175acd7213614b783429bef5ddc8b9201a89f02cff07fd044595d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.35",
+          "record_id": "rec-0131fde9626d367617792e7eb1c1d16e594f8370bce08e6c88ecf2ec225873d4",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.048",
+          "record_id": "rec-681827d455c513ce1d03d08661afb06812813ad9526106e8f741a9ccd26d853d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "4.01",
+          "record_id": "rec-6764fb0d6095b5c763ea7063bd8ff049bdc1ba0e4f86c3ef6ed64fd79cfb39e7",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.93",
+      "longitude": "12.59",
+      "published_target_raw_values": {
+        "As": "0.57",
+        "Cr": "0.14",
+        "Cu": "0.48",
+        "Ni": "1.35",
+        "Pb": "0.048",
+        "Zn": "4.01"
+      },
+      "review_id": "foregs-stream-water-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E07W3",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=14",
+      "source_record_id": "src-4fbdfd2bfed347e5c16ce9f41c60e64d7e954a1c0652a70390c9984d9dda4dc7"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.14",
+          "record_id": "rec-79564bdaccef2c646acc4a94fa7332d2578e6e8e0609d910572a69893718e36d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.25",
+          "record_id": "rec-591eced2226a1624bd4989a509961509367a155389794d57f3c71bdb1d5867ff",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.35",
+          "record_id": "rec-d98f941073179e689a8181501a5079e1f52ec6028929748e0a1d10e82a8e1df6",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.21",
+          "record_id": "rec-81026c13aeb82351bcbcc2940b1ca5dc1237b608f481e123481226625da2ede5",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.043",
+          "record_id": "rec-e5df56599f87fbca0701922a8508d0bf710f4c0ab188fd0927d04c77f9ba8b7d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.26",
+          "record_id": "rec-94eed7f073e337f74b792a9432d6ee24de20bcb8607bcc756bee0ebb2a8472c9",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.59",
+      "longitude": "13.37",
+      "published_target_raw_values": {
+        "As": "0.14",
+        "Cr": "0.25",
+        "Cu": "0.35",
+        "Ni": "1.21",
+        "Pb": "0.043",
+        "Zn": "1.26"
+      },
+      "review_id": "foregs-stream-water-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E07W4",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=15",
+      "source_record_id": "src-508ccdede68fb8efe5128ff1c0c634e33ccd9fcca892bc2a85324f94a930a5f8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.11",
+          "record_id": "rec-3fba1b76c4c5c571a609ba26f834d2d0879e6dd4896e32200637bdf9051eab3d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.14",
+          "record_id": "rec-080d5b9bee235bd5d52545a35e48767a667f3648c9173c39a84b02ce398eac4b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.47",
+          "record_id": "rec-1a5b04de05ff0a5148c1ce932b2aff42ad76df070daa0d9ad002568dba24e5b1",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.2",
+          "record_id": "rec-15e43a91451e6a99962307c4dc5706699a93bf871f3775eec8c406ce14f52ba7",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.03",
+          "record_id": "rec-d8b53e2281303b6c059c4b0c2232b42a49243e3b261b7874cabdb08ce473fbe7",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.65",
+          "record_id": "rec-9f593c7845b109b9acc25fb1019ddde0edda1b51e39b47ef809c203cdb6b9ef6",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.44",
+      "longitude": "12.82",
+      "published_target_raw_values": {
+        "As": "0.11",
+        "Cr": "0.14",
+        "Cu": "0.47",
+        "Ni": "1.2",
+        "Pb": "0.03",
+        "Zn": "2.65"
+      },
+      "review_id": "foregs-stream-water-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E07W5",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=16",
+      "source_record_id": "src-c5297a182a44e0fe5c117594e33cd11303c78f2e76f87f912f6cb1d6654fa2cb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.63",
+          "record_id": "rec-5bf68d74a59ec2f8c6f3e24f8443fd6c0b95a9637bb209ba58bd0c62b1436831",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.16",
+          "record_id": "rec-23ffbc98c8ad68bbdbf9f68bb4418177ee2062383d2a3ce1f4b19b62d3e51394",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.66",
+          "record_id": "rec-77b414c1ae04b029a70525089b7f6054d39eafdaa840b88feefe030e0f91434b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.04",
+          "record_id": "rec-a23e5697245bad79e2aaa0ddac730732c6599c035a1b0ecb4863d197ebd99301",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.015",
+          "record_id": "rec-19f2b1bbbede51d9b1c96618ef536e05d4198c38056967c6f1520228342bf7e9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.31",
+          "record_id": "rec-12135ac43ad1029fd6b16eac3c4d95fdd8f1e9588042a4259f2fd6de03ac8c63",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.44",
+      "longitude": "15.9",
+      "published_target_raw_values": {
+        "As": "0.63",
+        "Cr": "0.16",
+        "Cu": "0.66",
+        "Ni": "1.04",
+        "Pb": "0.015",
+        "Zn": "2.31"
+      },
+      "review_id": "foregs-stream-water-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E08W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=17",
+      "source_record_id": "src-86a5abcd15c042f2e691bc35b0979bfeeb8591fd649980d69ec45974713d40b6"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.09",
+          "record_id": "rec-55a60bd0fb64fbdec0c6ced1a2e0bf961fa3db0cb7b88261722f02488e2348b1",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.14",
+          "record_id": "rec-5e33d9c50d693ad66889fd15db103cdc65d43847790c6e9a116cc24fa5d5ba2b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.25",
+          "record_id": "rec-95dd0ade041de8901734d3e71a67d78de0b951be61ff6c614d1d151409eb6041",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.16",
+          "record_id": "rec-fdb558dcab0be194fd90edd02e9876bf9cab0e9ea9fbb481a9b180089d1fc012",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.019",
+          "record_id": "rec-8071f9a88a93822cb8dd9d832ea30d673dedb20c78f56fd56902fa48c4847c24",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.56",
+          "record_id": "rec-49b05ba7f85d73e709a75734a436a7b68f625957aaab8b5fe89f2eba4beffe1d",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.67",
+      "longitude": "14.76",
+      "published_target_raw_values": {
+        "As": "0.09",
+        "Cr": "0.14",
+        "Cu": "0.25",
+        "Ni": "1.16",
+        "Pb": "0.019",
+        "Zn": "2.56"
+      },
+      "review_id": "foregs-stream-water-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E08W2",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=18",
+      "source_record_id": "src-e3605a3e5b331916d1431f1fc366d7b9391862271a872ab89a66ded4fe8caff3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.16",
+          "record_id": "rec-fcaac2cc18d2955ba0fec9cdeee5b44a5f75ac83fa37cc4ec88a07c98aa28ba1",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.28",
+          "record_id": "rec-3e82f7035ef84254f5b6d75ef05a6bffce7b365fb81c269162f5d76ae41feaae",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.96",
+          "record_id": "rec-0a3a27f33833d91916b4ce32a2bb3d68e137bb9129dde94392acf37416fa1d19",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.38",
+          "record_id": "rec-ab3c8fdf58596d0de2bffe5f836a4ab55282e159e09e494e6ffeb3f3f59ded2b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.048",
+          "record_id": "rec-432ee07c7009c1f4d8b57302f76084c8e874a8403472aa76789dabcba2e5278b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.62",
+          "record_id": "rec-59850f1069116cd0c56076c20de5433f08dd3df2cf5f2b8b939c8cb00679c015",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.87",
+      "longitude": "15.32",
+      "published_target_raw_values": {
+        "As": "0.16",
+        "Cr": "0.28",
+        "Cu": "0.96",
+        "Ni": "1.38",
+        "Pb": "0.048",
+        "Zn": "3.62"
+      },
+      "review_id": "foregs-stream-water-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E08W3",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=19",
+      "source_record_id": "src-99986c892dbf657fcd4c33748d9417e1fd1a33a3e434e4974a8edf5860b41323"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.65",
+          "record_id": "rec-2f056af918767ff1b32f086e2aad67f5ac5c4f7ae1887a2c8d33c29643b13ca5",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.19",
+          "record_id": "rec-9eca05c8dd13566f6d79af435453d90895c4fa27956899e1ce83e528bd44295a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.63",
+          "record_id": "rec-f4a5d7a8ed34c81cc857d75004771ac8c6062c4dfc7dcc0f430ee593acfa956e",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.82",
+          "record_id": "rec-b14c2fecb5c08e4897ff5157d5ebba2253d308ceace0db8c733ec6828efb5375",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.016",
+          "record_id": "rec-18194192ffdcbe2aba64ce36e00ae00e686c670a3ccdf6f0b24c7f5fa4f72f41",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.62",
+          "record_id": "rec-a158ba2dd3e6e14c0b8e30809657ff8b8f604c08b461eaaff56fd2731b27984e",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.1",
+      "longitude": "15.68",
+      "published_target_raw_values": {
+        "As": "0.65",
+        "Cr": "0.19",
+        "Cu": "0.63",
+        "Ni": "1.82",
+        "Pb": "0.016",
+        "Zn": "1.62"
+      },
+      "review_id": "foregs-stream-water-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E08W4",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=20",
+      "source_record_id": "src-dd3dbcdcb01be86ef9eb10dbee948f9dd39a51cd5218258e17840647ff37847d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.84",
+          "record_id": "rec-49ce230689316347bf1b20f654083ec2fba868e1f0aa14066b3238dff6b16567",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.32",
+          "record_id": "rec-1c43215fa3a4d4d40e8ba432d515889e8205742c3dfa0404ce4716c29912c42e",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.69",
+          "record_id": "rec-5d3861fd262afcb5cc9adae0af525110298927264d52387fb3ced03715c48e5e",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.68",
+          "record_id": "rec-306b23732f1dc599c3e869b05e5585267eb14832009af9174f6aa756ddd0cf69",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.064",
+          "record_id": "rec-8bd35790ed85c78d94ccdfd052879d64b12ee16a9742125ec0694847443f17dc",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.67",
+          "record_id": "rec-2f1ee72fd5bab374ec8b643d4deeef110baf67410e2d507b1c255a876e3def9b",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.98",
+      "longitude": "14.39",
+      "published_target_raw_values": {
+        "As": "0.84",
+        "Cr": "0.32",
+        "Cu": "0.69",
+        "Ni": "1.68",
+        "Pb": "0.064",
+        "Zn": "1.67"
+      },
+      "review_id": "foregs-stream-water-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E08W5",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=21",
+      "source_record_id": "src-245899baf63830538c5be76dfd1d9760ad2f9e57d2c8fbfd4ce040199fb766a6"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.77",
+          "record_id": "rec-57d8485cba327e7ebcc27a4658835fe6d2f8e171ec3e44fe43e4a0c9d0d43bc2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.32",
+          "record_id": "rec-a8852114ce6fc12d2b9ad7d262c4c678e8bc7221ad4e538314be23bac1dbcf63",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.4",
+          "record_id": "rec-94896a3a55ba46039513377611659b47ab712ee3bf1f8e9f1b3b0605c1c280ff",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.11",
+          "record_id": "rec-2d9edbf898635ac690dc51f9147ef286501392b89cd4f812c173abeabcd020ac",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.1",
+          "record_id": "rec-cc04956c3ea7c2c3cfc9bbabc92cc17f572bcf580e508b70a7881648efdfedee",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5.03",
+          "record_id": "rec-a1c4b9ed2a3f66381974ed7a29d9f0622502bd9429f25d48d160717d64befc28",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "48.94",
+      "longitude": "16.18",
+      "published_target_raw_values": {
+        "As": "2.77",
+        "Cr": "0.32",
+        "Cu": "1.4",
+        "Ni": "3.11",
+        "Pb": "0.1",
+        "Zn": "5.03"
+      },
+      "review_id": "foregs-stream-water-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N33E08W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=22",
+      "source_record_id": "src-40af9a8496d3a81b7a563f0b24a68957ff97aacf77c22c70693f612b5020e736"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.56",
+          "record_id": "rec-fd6d4fca654ba3a8384b54a2bbd90747d155bdd38c72c46547dc0fff2c9b1d99",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "9.06",
+          "record_id": "rec-e986edd4b4ec64a4dbd84e6281c02010a92bdac66d4da97e2c4f344d7c3d66f6",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.3",
+          "record_id": "rec-d4ce21cbe8b6ce42f6d1f1e59c454d8d3c23dd973482e9881702ca44c889781a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "4.37",
+          "record_id": "rec-d061072b5d1b91c8823cdcf5b2572f5d10ed993be5d6c949427a240ce6c75301",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.98",
+          "record_id": "rec-5e13b0a4f0cbe1fca7e3036c857a8552b040d4af130238b18e8f3d4cf7290bf2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.75",
+          "record_id": "rec-06276ae2a0ab083d09f9dfb352e0904e7befa41b092b68a7ec6b41e2194cc6c5",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "49.34",
+      "longitude": "15.72",
+      "published_target_raw_values": {
+        "As": "1.56",
+        "Cr": "9.06",
+        "Cu": "1.3",
+        "Ni": "4.37",
+        "Pb": "0.98",
+        "Zn": "2.75"
+      },
+      "review_id": "foregs-stream-water-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N33E08W2",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=23",
+      "source_record_id": "src-91412af2d64eaf270882cdc46aae7b2b8a372f0e97f6c12868444180d59f580f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.77",
+          "record_id": "rec-c2ee2099f342a20c26fa79e7352f22285ecaa8714067bd1e608f05fdaf3407c9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.27",
+          "record_id": "rec-a9d8fad8379ee024e794e6ccc791cdfebbcd189544baaf5775a0cf8b1861a2f9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.29",
+          "record_id": "rec-f08c5b0698198a89df6a0e734a2727ec9d2261b17c00a4c521b4c1475da59791",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.97",
+          "record_id": "rec-4811e7fcb16cba91e201cc02b37ffc720a08c73672e497ca2eafaf2c9e550ce9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.18",
+          "record_id": "rec-c0e8c970d86c6d3009ce55e65cb3fa977a0ebbf02f7931575f8f05d72e8cdd59",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.49",
+          "record_id": "rec-81391b32d390735ee6683bccc53620e090b13c218e01e758215ba94bb46a1831",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "48.89",
+      "longitude": "15.27",
+      "published_target_raw_values": {
+        "As": "0.77",
+        "Cr": "0.27",
+        "Cu": "1.29",
+        "Ni": "1.97",
+        "Pb": "0.18",
+        "Zn": "3.49"
+      },
+      "review_id": "foregs-stream-water-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N33E08W3",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=24",
+      "source_record_id": "src-cf1dc70962c6c6597401fa178b56c6f5dfef1ef5a265910cff17f32718c53c65"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.94",
+          "record_id": "rec-c8b7250b9a64902ceaf504b35d17bcc7389e4fc6fe001e57960e98cabb2301dc",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.25",
+          "record_id": "rec-6028c8f9b54612f925a2797d95ca74f620310e59c26f3bb16617eb5baa54493a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.56",
+          "record_id": "rec-a20b016499f235fa2747eb3d3d461f3473d76b0223ebe64b8d9ba73f41811acd",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.66",
+          "record_id": "rec-874c863c54c2172ccf11bccf6ce4e6bdfca53fc5243a450d6afa5cfb186f18c0",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.07",
+          "record_id": "rec-4e702d5676b76ec9ca7a61ae976613be6fb036f8f635dcf73a1b8096e75d66cd",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.79",
+          "record_id": "rec-862eecb5113384387d3eb4191afc4eb09811028ebbd29c16dd5e98e093ae7351",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "48.61",
+      "longitude": "15.94",
+      "published_target_raw_values": {
+        "As": "1.94",
+        "Cr": "0.25",
+        "Cu": "1.56",
+        "Ni": "3.66",
+        "Pb": "0.07",
+        "Zn": "3.79"
+      },
+      "review_id": "foregs-stream-water-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N33E08W4",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=25",
+      "source_record_id": "src-040c59fe2f9c03ebe25e6931dc8f45344c658c9f75ce5ea984926747908554f8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.39",
+          "record_id": "rec-8c158c0387b3a1ac465dfb0789551fed96195ff866953195f971cf32c0040129",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.18",
+          "record_id": "rec-69abaa7aeceb95bd10453a952f39bd63aab7b0d686a635382090884f86238789",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.89",
+          "record_id": "rec-7637a986e99f84e66d21561c5a07f1987566ef09d62cda4a9ab9830d04abf15a",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.27",
+          "record_id": "rec-3c67c22512e7ea624ce3b2d0837d032e6d13f501f5b9a26fdbdca0eb51f7eb98",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.028",
+          "record_id": "rec-61d33be989039cb759a76de3312a65a8591975c002b6392eb63306004507faed",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.55",
+          "record_id": "rec-f98c75daed036e57df23ca4cb1e7abded76301cf4f6a65cd134186afe073f7c0",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "48.06",
+      "longitude": "14.75",
+      "published_target_raw_values": {
+        "As": "0.39",
+        "Cr": "0.18",
+        "Cu": "0.89",
+        "Ni": "2.27",
+        "Pb": "0.028",
+        "Zn": "2.55"
+      },
+      "review_id": "foregs-stream-water-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N33E08W5",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=26",
+      "source_record_id": "src-3d5544e43b5c0c20d0a2164a224bb2a7e7571fa4e12fe97865be35a13c647eff"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.64",
+          "record_id": "rec-73bf11fd69bebf7c68bec4c066b23c666f73111899e3ec0c502f1dc42b384993",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.198",
+          "record_id": "rec-4ec24e73e22ab7df1cbe9f84883f928290cb0ef417f28bb0da0e2616aae7667d",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.8",
+          "record_id": "rec-b2afe5e9338e6e5df686ada623689d361dc23612a665f33ebfca87a7877175b3",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.93",
+          "record_id": "rec-9a700585d9ae573265745668b937fd03dfe08bb67899e6717d4bfab7026033a0",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.063",
+          "record_id": "rec-a5bfc31de83e7b4a30a319ea36b348a78ae1596ea19e9542e51c5efd2ebe083f",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.73",
+          "record_id": "rec-93e1498a21d743b0107f433181bd9d1cc9b7f458de48aa43fd05a84af6d3f1ac",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "50.37",
+      "longitude": "4.11",
+      "published_target_raw_values": {
+        "As": "2.64",
+        "Cr": "0.198",
+        "Cu": "0.8",
+        "Ni": "1.93",
+        "Pb": "0.063",
+        "Zn": "2.73"
+      },
+      "review_id": "foregs-stream-water-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N34E02W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=27",
+      "source_record_id": "src-74a55f3c7f5e4350483f723ad94c3666696c1520d6efc62f55b1e9952000aced"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.51",
+          "record_id": "rec-c229caa89d8b20435d6070b72fa59f516f35151e437de3bdabaca46ac3693585",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.53",
+          "record_id": "rec-233316d9e1e104ebee9ca73324497dd739ecf1739696b472fda8538bdd58a8d9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.28",
+          "record_id": "rec-9d353f6739a11e7374977e494426619de182f96a38f83a56c7ea6157c78d0ece",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.53",
+          "record_id": "rec-73279de3e0bcfe80823d03f5cd482a4cb3d8518d8a5a41b8ea33e5d6e76488b9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.16",
+          "record_id": "rec-1bac66249e51fd2ecbe6bcf9e55c8d895f2bddf8c6235ba6b556f2550e9b0cf4",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "29.9",
+          "record_id": "rec-f3784277b847effe6f5cfe6628dc0f493347eca554e5e2046344eae2f278e3a1",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "50.62",
+      "longitude": "5.77",
+      "published_target_raw_values": {
+        "As": "1.51",
+        "Cr": "0.53",
+        "Cu": "3.28",
+        "Ni": "2.53",
+        "Pb": "2.16",
+        "Zn": "29.9"
+      },
+      "review_id": "foregs-stream-water-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N34E03W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=28",
+      "source_record_id": "src-1db6e4f82dc62f313922f2122be3c09080025476446b1b20aea20b529ebecfa2"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.76",
+          "record_id": "rec-69fe016c330665a08a633e49f53e331b99a45adc23c518cb3932d1976c8eadc9",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.157",
+          "record_id": "rec-543f0b4c0335da5f0a38927ad54cc140a92dfe582be27a048460239daf7511d2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.58",
+          "record_id": "rec-ba7f1784412316f82168d854cf6d39c61247f765539786ff079d3b94fe3cb34e",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.38",
+          "record_id": "rec-c5890230e7b2354239a16ba016f6f392fb08a30ffbfd1f4f873ad37144a4eb6b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.1",
+          "record_id": "rec-05af74c4938be474416b599d9222df19c93d695e1eaa929991eb1945568dc8fa",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.36",
+          "record_id": "rec-f788315df452b000238db38bcb412d682cfb24fa10331e25b0af5044ef6a7879",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "50.7",
+      "longitude": "5.1",
+      "published_target_raw_values": {
+        "As": "0.76",
+        "Cr": "0.157",
+        "Cu": "0.58",
+        "Ni": "2.38",
+        "Pb": "0.1",
+        "Zn": "3.36"
+      },
+      "review_id": "foregs-stream-water-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N34E03W2",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=29",
+      "source_record_id": "src-ad61842617add9d1f289b8fd99117f27d58f67092a4c1dc28d4075679db71202"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.66",
+          "record_id": "rec-88804029ff5ae75d006b17e6c108bce40f94e86353ceb47459f9fd3a5b1b0a1c",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.147",
+          "record_id": "rec-10002794bea92f267367130a70b57c6e063fc92c4453e48077b03c6b28c16cb5",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.77",
+          "record_id": "rec-6cdb36d14b368a6891f2758feb3f2959bb11ecfcb38172a6efac540dfbbacdc2",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.4",
+          "record_id": "rec-1ceef75b74c38de7199c4bb1eb3293845b01cf9a44ac7cc91641c6e38caf887c",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.14",
+          "record_id": "rec-47829481eb7d9901e980eec0e1818cb29ebe4ec39d5e9d50aef3a54dab27dd91",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.03",
+          "record_id": "rec-b6079bde3b6ff450a450e260e21c232e90ff7bcf369204b7c90929dc85b67f7e",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "50.12",
+      "longitude": "4.44",
+      "published_target_raw_values": {
+        "As": "0.66",
+        "Cr": "0.147",
+        "Cu": "0.77",
+        "Ni": "1.4",
+        "Pb": "0.14",
+        "Zn": "3.03"
+      },
+      "review_id": "foregs-stream-water-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N34E03W3",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=30",
+      "source_record_id": "src-9a1a78a06d49cfbb2d045ed6cb084410c6dda0f6b1e7a6b22834eb4f6e965efd"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.22",
+          "record_id": "rec-4b55429dc191468b6b212ca5596ff69222e359f68c7ffd0f9039f85a7cdc4faf",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.195",
+          "record_id": "rec-2768dcf9b25f1ad307b12c49e79d841019047465ebf57d4bfc7299dbcb409ca0",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.77",
+          "record_id": "rec-6b517b582256773563d48c671f6d8a36aed81fcf10581e667b69866b00c2f514",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.46",
+          "record_id": "rec-65f26521243d3de00489bc0700b17645851a26d46373fead1c0f9665b5fbf273",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.068",
+          "record_id": "rec-0c3a4ffefbd88c96742506b2509803134747cd6bbb8506c66b9f9e51637b6e1b",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.27",
+          "record_id": "rec-a8e89327a3702e8e564b5f616003ca54564f8bff5841b5ad2a6db5aa90d87a6c",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "50.16",
+      "longitude": "6.31",
+      "published_target_raw_values": {
+        "As": "0.22",
+        "Cr": "0.195",
+        "Cu": "0.77",
+        "Ni": "2.46",
+        "Pb": "0.068",
+        "Zn": "2.27"
+      },
+      "review_id": "foregs-stream-water-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N34E03W4",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=31",
+      "source_record_id": "src-218b2c3d36cff8e62c47a63280002bd980a63effdd007fa4a97f491e5eb4de7b"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.88",
+          "record_id": "rec-951eeceacd2faa263675e7378b0be9e6852b95ae8bdcc2bfe2fb726b3af58d6e",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.24",
+          "record_id": "rec-8f1b89e049111e82e020ddd84570adec3a46fb74adc557fed085e47bcbf77820",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "-1",
+          "record_id": "rec-51330a636aaebd64950f497cbae09dd1908458cb2e6f5f4ee97e5abf7a875689",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "4.49",
+          "record_id": "rec-fcd6b512cc7987083c016cca21c045f64b34c4865e1263061149b5ea49968b96",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.005",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "-1",
+          "record_id": "rec-af30e5c5e55e9b91443b4e59197208205a4dabed02ddfb9eb6df637777a53eaf",
+          "unit": "µg/l"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-QMS for published trace metals",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+          "measurement_basis": "dissolved_<0.45um_stream_water",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "-1",
+          "record_id": "rec-461c99c41bf6c1a98c7d9c3db6f1288e0056c865ef49ac10c613716dff2803c7",
+          "unit": "µg/l"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "47.83",
+      "longitude": "7.94",
+      "published_target_raw_values": {
+        "As": "0.88",
+        "Cr": "0.24",
+        "Cu": "-1",
+        "Ni": "4.49",
+        "Pb": "-1",
+        "Zn": "-1"
+      },
+      "review_id": "foregs-stream-water-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N32E04W1",
+      "selection_reasons": [
+        "member=W_all_data_2v8_17Sep07.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "source_locator": "W_all_data_2v8_17Sep07.csv#row=32",
+      "source_record_id": "src-8a888c3a80ae40ced2adf9bfa6caaf6f1752b47f32212caccdecaa0a71504d75"
+    }
+  ],
+  "review_version": "foregs-human-review-v1",
+  "source_id": "foregs-stream-water",
+  "status": "prepared"
+}

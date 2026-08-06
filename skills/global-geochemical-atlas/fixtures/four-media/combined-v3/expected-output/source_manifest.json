@@ -4,26 +4,164 @@
     "confidence_version": "d2-confidence-v1",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82",
+    "input_sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a",
     "not_a_probability": true,
-    "run_id": "21393419fa0625e9",
-    "sha256": "3e4df6d64b160258a5dbc5b97bbafce95c7a3512b7e733658a6d1982fc8ca9d5"
+    "run_id": "6266b8746d0551b8",
+    "sha256": "22e78014e4acba15afc536e7d166b458e1b79da041fa4a30b0fbdd32e3a80006"
   },
   "coverage": {
     "declared_license_rate": 1.0,
-    "records_with_declared_license": 400,
-    "records_with_source_locator": 400,
+    "records_with_declared_license": 688,
+    "records_with_source_locator": 688,
     "source_locator_rate": 1.0
   },
   "input": {
-    "bytes": 188291,
+    "bytes": 314535,
     "filename": "demo_input.csv",
-    "record_count": 400,
-    "sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82"
+    "record_count": 688,
+    "sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a"
   },
   "manifest_version": "geochemical-source-manifest-v1",
-  "source_count": 7,
+  "source_count": 13,
   "sources": [
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "F_AR_data_2v6_7Aug07.csv#row=4",
+        "F_AR_data_2v6_7Aug07.csv#row=5",
+        "F_AR_data_2v6_7Aug07.csv#row=6",
+        "F_AR_data_2v6_7Aug07.csv#row=7",
+        "F_AR_data_2v6_7Aug07.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_id": "foregs-floodplain-sediment",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "H_icp_data_2v2_11Mar04.csv#row=10",
+        "H_icp_data_2v2_11Mar04.csv#row=11",
+        "H_icp_data_2v2_11Mar04.csv#row=12",
+        "H_icp_data_2v2_11Mar04.csv#row=13",
+        "H_icp_data_2v2_11Mar04.csv#row=14"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 16,
+      "record_count": 48,
+      "source_id": "foregs-humus",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "S_AR_data_2v5_30Nov2006.csv#row=4",
+        "S_AR_data_2v5_30Nov2006.csv#row=5",
+        "S_AR_data_2v5_30Nov2006.csv#row=6",
+        "S_AR_data_2v5_30Nov2006.csv#row=7",
+        "S_AR_data_2v5_30Nov2006.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_id": "foregs-stream-sediment",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "W_all_data_2v8_17Sep07.csv#row=10",
+        "W_all_data_2v8_17Sep07.csv#row=11",
+        "W_all_data_2v8_17Sep07.csv#row=12",
+        "W_all_data_2v8_17Sep07.csv#row=13",
+        "W_all_data_2v8_17Sep07.csv#row=14"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_id": "foregs-stream-water",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "C_AR_data_2v5_8Feb06.csv#row=4",
+        "C_AR_data_2v5_8Feb06.csv#row=5",
+        "C_AR_data_2v5_8Feb06.csv#row=6",
+        "C_AR_data_2v5_8Feb06.csv#row=7",
+        "C_AR_data_2v5_8Feb06.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 24,
+      "record_count": 48,
+      "source_id": "foregs-subsoil",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "T_AR_data_2v4_8Feb06.csv#row=4",
+        "T_AR_data_2v4_8Feb06.csv#row=5",
+        "T_AR_data_2v4_8Feb06.csv#row=6",
+        "T_AR_data_2v4_8Feb06.csv#row=7",
+        "T_AR_data_2v4_8Feb06.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 24,
+      "record_count": 48,
+      "source_id": "foregs-topsoil",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
     {
       "all_records_license_declared": true,
       "all_records_located": true,

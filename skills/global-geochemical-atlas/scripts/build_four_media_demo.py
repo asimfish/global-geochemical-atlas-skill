@@ -30,6 +30,12 @@ SOURCE_ORDER = (
     "gemstat-open-archive",
     "japan-gsj-geochemical-map",
     "pangaea-north-africa-soil",
+    "foregs-topsoil",
+    "foregs-subsoil",
+    "foregs-humus",
+    "foregs-stream-water",
+    "foregs-stream-sediment",
+    "foregs-floodplain-sediment",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
@@ -39,6 +45,12 @@ EXPECTED_MEDIA = {
     "gemstat-open-archive": "water",
     "japan-gsj-geochemical-map": "sediment",
     "pangaea-north-africa-soil": "soil",
+    "foregs-topsoil": "soil",
+    "foregs-subsoil": "soil",
+    "foregs-humus": "soil",
+    "foregs-stream-water": "water",
+    "foregs-stream-sediment": "sediment",
+    "foregs-floodplain-sediment": "sediment",
 }
 
 
@@ -211,6 +223,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases.",
                 "PANGAEA fine-fraction HF-HNO3 soil is not mixed with USGS bulk-soil layers.",
                 "GSJ JGD2000 river sediment keeps its source-specific units and missing method/QC boundary.",
+                "FOREGS topsoil, subsoil and humus remain separate sample media within the canonical soil class.",
+                "FOREGS total, aqua-regia-leachable, mild-acid-leachable and dissolved values remain separate comparison groups.",
+                "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts.",
             ],
         },
         "outputs": [

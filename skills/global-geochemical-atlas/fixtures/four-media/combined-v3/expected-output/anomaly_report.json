@@ -54,6 +54,44 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-90bb2a4e24dd",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-949fa2f0c9a3",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
         "digestion_or_extraction": "Metoden anvendes på analyseløsninger fremstilt ved ekstraksjon med 7 M HNO3 i autoklav i samsvar med Norsk Standard - NS 4770",
         "element_or_analyte": "As",
@@ -132,6 +170,82 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-d86341c18bb2",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-6c7def456ad1",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-dfc6a6b59f0a",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-c3419653c05f",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
         "digestion_or_extraction": "HF-HNO3 acid digestion",
         "element_or_analyte": "As",
@@ -161,6 +275,63 @@
       "group_id": "grp-311a5512887c",
       "log10_mad": 0.169974030847,
       "log10_median": 0.376791529446,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "quadrupole ICP-MS",
+        "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-b67e13bb3f5d",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "quadrupole ICP-MS",
+        "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-942330e1eb70",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-QMS for published trace metals",
+        "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "dissolved_<0.45um_stream_water",
+        "medium": "water"
+      },
+      "group_id": "grp-23d6a29e0024",
+      "log10_mad": 0.334503390479,
+      "log10_median": -0.605209643918,
       "records_excluded": 0,
       "records_total": 12,
       "records_used": 12,
@@ -390,6 +561,44 @@
       "status": "analyzed"
     },
     {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-750ed0255fd7",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-0ea5f9797490",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
       "candidate_count": 3,
       "exclusion_reasons": {},
       "group": {
@@ -471,6 +680,82 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-70d2d96ee9bf",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-c34d2fe218da",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-c450b97869a3",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-ab752efb9522",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
         "digestion_or_extraction": "HF-HNO3 acid digestion",
         "element_or_analyte": "Cu",
@@ -490,6 +775,25 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "ICP-MS",
+        "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "mild_nitric_acid_leachable_humus",
+        "medium": "soil"
+      },
+      "group_id": "grp-4e34b5f8023f",
+      "log10_mad": 0.293909776107,
+      "log10_median": 0.762781529135,
+      "records_excluded": 0,
+      "records_total": 16,
+      "records_used": 16,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": null,
         "digestion_or_extraction": null,
         "element_or_analyte": "Cu",
@@ -500,6 +804,63 @@
       "group_id": "grp-dfaa43fa8a44",
       "log10_mad": 0.100967467817,
       "log10_median": 1.020873935862,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "quadrupole ICP-MS",
+        "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-6ac8dfe551dd",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "quadrupole ICP-MS",
+        "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-e160d3dbc2cf",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-QMS for published trace metals",
+        "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "dissolved_<0.45um_stream_water",
+        "medium": "water"
+      },
+      "group_id": "grp-bc521c777984",
+      "log10_mad": 0.133133944702,
+      "log10_median": -0.449814727441,
       "records_excluded": 0,
       "records_total": 12,
       "records_used": 12,
@@ -620,6 +981,44 @@
       "status": "insufficient_group_size"
     },
     {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-d35ee665512f",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-7b0d45324e74",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
       "candidate_count": 2,
       "exclusion_reasons": {},
       "group": {
@@ -701,6 +1100,82 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-ffdefeb36494",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-80ab6cfe15f4",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-fa4c64486ed2",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-ed386a6ecb17",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
         "digestion_or_extraction": "HF-HNO3 acid digestion",
         "element_or_analyte": "Ni",
@@ -720,6 +1195,25 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "ICP-MS",
+        "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "mild_nitric_acid_leachable_humus",
+        "medium": "soil"
+      },
+      "group_id": "grp-2c879704e390",
+      "log10_mad": 0.413919517286,
+      "log10_median": 0.491587536019,
+      "records_excluded": 0,
+      "records_total": 16,
+      "records_used": 16,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": null,
         "digestion_or_extraction": null,
         "element_or_analyte": "Ni",
@@ -730,6 +1224,63 @@
       "group_id": "grp-dcdad1abbc84",
       "log10_mad": 0.218724274978,
       "log10_median": 0.846070804683,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "quadrupole ICP-MS",
+        "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-d79c8b986b04",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "quadrupole ICP-MS",
+        "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-0a7607cd211f",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-QMS for published trace metals",
+        "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "dissolved_<0.45um_stream_water",
+        "medium": "water"
+      },
+      "group_id": "grp-8f5f406f45b9",
+      "log10_mad": 0.080114780038,
+      "log10_median": 0.135106427448,
       "records_excluded": 0,
       "records_total": 12,
       "records_used": 12,
@@ -772,6 +1323,44 @@
       "records_total": 12,
       "records_used": 12,
       "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-547607a85d29",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-7fd4d6c4082f",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
     },
     {
       "candidate_count": 2,
@@ -855,6 +1444,82 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<150um_stream_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-53fb17f309ad",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+        "digestion_or_extraction": "pressed powder pellet",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+        "medium": "sediment"
+      },
+      "group_id": "grp-70b12e50896d",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-037eb5484a93",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-AES",
+        "digestion_or_extraction": "hot aqua regia leach at 95 C",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-7a23cba239b1",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
         "digestion_or_extraction": "HF-HNO3 acid digestion",
         "element_or_analyte": "Zn",
@@ -874,6 +1539,25 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "ICP-MS",
+        "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "mild_nitric_acid_leachable_humus",
+        "medium": "soil"
+      },
+      "group_id": "grp-d70a92b868ea",
+      "log10_mad": 0.504839135991,
+      "log10_median": 1.427686880397,
+      "records_excluded": 0,
+      "records_total": 16,
+      "records_used": 16,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": null,
         "digestion_or_extraction": null,
         "element_or_analyte": "Zn",
@@ -884,6 +1568,63 @@
       "group_id": "grp-73072467310f",
       "log10_mad": 0.124395188788,
       "log10_median": 1.300486447843,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "wavelength-dispersive XRF",
+        "digestion_or_extraction": "lithium metaborate fusion",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_subsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-003c1a046f01",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "wavelength-dispersive XRF",
+        "digestion_or_extraction": "lithium metaborate fusion",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "total_selected_<2mm_topsoil",
+        "medium": "soil"
+      },
+      "group_id": "grp-88257c80e48f",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 6,
+      "records_used": 6,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "ICP-QMS for published trace metals",
+        "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "dissolved_<0.45um_stream_water",
+        "medium": "water"
+      },
+      "group_id": "grp-0f63beab569e",
+      "log10_mad": 0.245956928178,
+      "log10_median": 0.160529814603,
       "records_excluded": 0,
       "records_total": 12,
       "records_used": 12,
@@ -927,10 +1668,10 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 400,
-    "input_sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82",
+    "input_row_count": 688,
+    "input_sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a",
     "missing_recommended_input_columns": [],
-    "run_id": "21393419fa0625e9"
+    "run_id": "6266b8746d0551b8"
   },
   "scientific_status": "screening_baseline_only"
 }

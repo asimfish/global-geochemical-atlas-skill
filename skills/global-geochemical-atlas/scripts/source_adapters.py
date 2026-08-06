@@ -6,8 +6,15 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import ipaddress
 import json
+import os
 import re
+import socket
+import tempfile
+import urllib.error
+import urllib.parse
+import urllib.request
 from abc import ABC, abstractmethod
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -1337,6 +1344,352 @@ class PangaeaNorthAfricaSoilAdapter(RegistryAdapter):
             )
 
 
+class _RejectRedirects(urllib.request.HTTPRedirectHandler):
+    """Keep the one legacy FOREGS HTTP exception on its registered host and URL."""
+
+    def redirect_request(
+        self,
+        req: urllib.request.Request,
+        fp: Any,
+        code: int,
+        msg: str,
+        headers: Any,
+        newurl: str,
+    ) -> urllib.request.Request | None:
+        return None
+
+
+class ForegsAdapter(RegistryAdapter):
+    """Pinned FOREGS CSV members from one official medium-specific ZIP archive."""
+
+    official_host = "weppi.gtk.fi"
+
+    @classmethod
+    def _validate_pinned_http_url(cls, url: str) -> None:
+        parsed = urllib.parse.urlparse(url)
+        if (
+            parsed.scheme.casefold() != "http"
+            or parsed.hostname != cls.official_host
+            or parsed.username
+            or parsed.password
+            or parsed.query
+            or parsed.fragment
+        ):
+            raise SourceAdapterError("FOREGS legacy transport must be the registered public GTK HTTP URL")
+        try:
+            addresses = {item[4][0] for item in socket.getaddrinfo(parsed.hostname, parsed.port or 80)}
+        except socket.gaierror as exc:
+            raise SourceAdapterError("FOREGS publisher hostname could not be resolved") from exc
+        if not addresses or any(not ipaddress.ip_address(address).is_global for address in addresses):
+            raise SourceAdapterError("FOREGS publisher hostname did not resolve exclusively to public addresses")
+
+    @classmethod
+    def _download_once_pinned_http(
+        cls,
+        url: str,
+        output: Path,
+        timeout: float,
+        max_bytes: int,
+        expected_sha256: str | None,
+    ) -> dict[str, Any]:
+        if not expected_sha256:
+            raise SourceAdapterError("FOREGS HTTP transport is allowed only with a pinned SHA-256")
+        cls._validate_pinned_http_url(url)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        temporary: Path | None = None
+        try:
+            request = urllib.request.Request(
+                url,
+                headers={"User-Agent": downloader.USER_AGENT, "Accept": "application/zip"},
+            )
+            opener = urllib.request.build_opener(_RejectRedirects())
+            with opener.open(request, timeout=timeout) as response:
+                if response.geturl() != url:
+                    raise SourceAdapterError("FOREGS legacy transport redirected away from the pinned URL")
+                content_type = response.headers.get_content_type().casefold()
+                downloader.validate_response_metadata(
+                    content_type,
+                    response.headers.get("Content-Length"),
+                    max_bytes,
+                )
+                with tempfile.NamedTemporaryFile(
+                    "wb", prefix=f".{output.name}.", suffix=".part", dir=output.parent, delete=False
+                ) as handle:
+                    temporary = Path(handle.name)
+                    total, observed = downloader.copy_response_bounded(response, handle, max_bytes)
+                if total == 0 or observed != expected_sha256:
+                    raise SourceAdapterError("FOREGS archive is empty or differs from the pinned SHA-256")
+                os.replace(temporary, output)
+                temporary = None
+                return {
+                    "status": "downloaded",
+                    "source_url": url,
+                    "resolved_url": url,
+                    "content_type": content_type,
+                    "bytes": total,
+                    "sha256": observed,
+                    "sha256_basis": "expected",
+                    "accessed_at": downloader.utc_now(),
+                    "http_status": getattr(response, "status", 200),
+                    "etag": response.headers.get("ETag"),
+                    "last_modified": response.headers.get("Last-Modified"),
+                    "transport_security": "publisher_http_with_pinned_sha256_integrity",
+                }
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("FOREGS adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in FOREGS demo directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        archive_entry = download_entry["files"][0]
+        archive_root = archive_entry["filename"].removesuffix(".zip").replace("-", " ")
+        archive_path = root / archive_entry["filename"]
+        manifest_path = root / "dataset.download.json"
+        if mode == "cached":
+            if not archive_path.is_file():
+                raise SourceAdapterError(f"FOREGS verified cache is missing: {archive_path}")
+            observed = downloader.sha256_file(archive_path)
+            if observed != archive_entry["expected_sha256"] or archive_path.stat().st_size != archive_entry["bytes"]:
+                raise SourceAdapterError("FOREGS cached archive size or SHA-256 changed")
+            original_accessed_at: str | None = None
+            if manifest_path.is_file():
+                try:
+                    cached_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                except (OSError, json.JSONDecodeError) as exc:
+                    raise SourceAdapterError("FOREGS cached acquisition manifest is unreadable") from exc
+                if (
+                    cached_manifest.get("source_url") == archive_entry["url"]
+                    and cached_manifest.get("sha256") == observed
+                ):
+                    original_accessed_at = cached_manifest.get("accessed_at")
+            result: dict[str, Any] = {
+                "status": "cache_hit",
+                "source_url": archive_entry["url"],
+                "sha256": observed,
+                "bytes": archive_path.stat().st_size,
+                # Do not invent a retrieval time for a manually populated cache. If an
+                # online acquisition manifest exists, retain its original timestamp.
+                "cache_verified_at": original_accessed_at,
+            }
+        else:
+            try:
+                result = downloader.download_with_retries(
+                    archive_entry["url"],
+                    archive_path,
+                    30.0,
+                    int(download_entry["max_bytes"]),
+                    archive_entry["expected_sha256"],
+                    2,
+                    downloader=self._download_once_pinned_http,
+                )
+            except (downloader.DownloadError, SourceAdapterError, OSError) as exc:
+                raise SourceAdapterError(f"FOREGS archive download failed: {exc}") from exc
+            downloader.atomic_json(
+                manifest_path,
+                {
+                    **result,
+                    "dataset_version": candidate.version,
+                    "license": candidate.license_id,
+                    "transport_exception": (
+                        "GTK currently serves the byte-pinned public archive over HTTP; content integrity is "
+                        "enforced before publication by the registered SHA-256. Redirects are rejected."
+                    ),
+                },
+            )
+
+        extract_dir = root / "members"
+        if not extract_dir.exists():
+            try:
+                extracted = downloader.safe_extract_zip(
+                    archive_path,
+                    extract_dir,
+                    max_members=int(download_entry["expected_member_count"]),
+                    max_extracted_bytes=int(download_entry["max_extracted_bytes"]),
+                    required_members=[
+                        f"{archive_root}/{entry['filename']}" for entry in download_entry["members"]
+                    ],
+                    required_fields=[],
+                )
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(f"FOREGS archive extraction failed: {exc}") from exc
+            if len(extracted) != int(download_entry["expected_member_count"]):
+                raise SourceAdapterError("FOREGS archive member count changed")
+
+        verified: list[DownloadedFile] = []
+        for member in download_entry["members"]:
+            path = extract_dir / archive_root / member["filename"]
+            if (
+                not path.is_file()
+                or path.stat().st_size != member["bytes"]
+                or downloader.sha256_file(path) != member["expected_sha256"]
+            ):
+                raise SourceAdapterError(f"FOREGS member size or SHA-256 changed: {member['filename']}")
+            verified.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=member["file_id"],
+                    path=path,
+                    source_url=f"{archive_entry['url']}#member={urllib.parse.quote(member['filename'])}",
+                    sha256=member["expected_sha256"],
+                    bytes=member["bytes"],
+                    cache_status=str(result["status"]),
+                    retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
+                )
+            )
+        return verified
+
+    @staticmethod
+    def _unique_headers(values: Sequence[str]) -> list[str]:
+        occurrences: dict[str, int] = {}
+        headers: list[str] = []
+        for index, value in enumerate(values, start=1):
+            base = value.strip() or f"_unnamed_{index}"
+            occurrences[base] = occurrences.get(base, 0) + 1
+            headers.append(base if occurrences[base] == 1 else f"{base}__{occurrences[base]}")
+        return headers
+
+    @staticmethod
+    def _half_detection_limit(raw_value: str, detection_limit: str) -> bool:
+        try:
+            return float(raw_value) == float(detection_limit) / 2
+        except ValueError:
+            return False
+
+    def _rows(
+        self,
+        path: Path,
+        member: Mapping[str, Any],
+    ) -> Iterable[tuple[int, dict[str, str], dict[str, str], dict[str, str]]]:
+        try:
+            handle = path.open("r", encoding="latin-1", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"FOREGS member is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.reader(handle)
+            try:
+                headers = self._unique_headers(next(reader))
+                units_row = [value.strip() for value in next(reader)]
+                detection_row = [value.strip() for value in next(reader)]
+            except StopIteration as exc:
+                raise SourceAdapterError(f"FOREGS member lacks its three metadata rows: {path.name}") from exc
+            folded = {field.casefold(): field for field in headers}
+            required = {str(field).casefold() for field in member["required_fields"]}
+            if not required.issubset(folded):
+                raise SourceAdapterError(f"FOREGS member lacks required fields: {path.name}")
+            native_field = folded["gtn"]
+            units = dict(zip(headers, units_row, strict=False))
+            detection_limits = dict(zip(headers, detection_row, strict=False))
+            emitted = 0
+            for row in reader:
+                stripped = [value.strip() for value in row]
+                if not any(stripped):
+                    continue
+                padded = stripped + [""] * max(0, len(headers) - len(stripped))
+                values = dict(zip(headers, padded, strict=False))
+                if not values.get(native_field):
+                    continue
+                emitted += 1
+                yield reader.line_num, values, units, detection_limits
+            if emitted != int(member["physical_rows"]):
+                raise SourceAdapterError(
+                    f"FOREGS row count changed for {path.name}: {emitted} != {member['physical_rows']}"
+                )
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        registered = {
+            entry["file_id"]: entry for entry in self.candidate.registry_entry["download"]["members"]
+        }
+        if {item.file_id for item in files} != set(registered):
+            raise SourceAdapterError("FOREGS adapter requires the exact registered CSV member set")
+        total_rows = 0
+        for downloaded in files:
+            member = registered[downloaded.file_id]
+            for line_number, values, units, detection_limits in self._rows(downloaded.path, member):
+                total_rows += 1
+                folded = {field.casefold(): field for field in values}
+                native_id = values[folded["gtn"]]
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                observations: dict[str, dict[str, Any]] = {}
+                for analyte, field in member.get("target_analytes", {}).items():
+                    raw_value = str(values.get(field) or "").strip()
+                    unit = str(units.get(field) or "").strip()
+                    detection_limit = str(detection_limits.get(field) or "").strip()
+                    if raw_value:
+                        observations[analyte] = {
+                            "value": raw_value,
+                            "unit": unit,
+                            "detection_limit": detection_limit,
+                            "measurement_basis": member["measurement_basis"],
+                            "analytical_method": member["analytical_method"],
+                            "digestion_or_extraction": member["digestion_or_extraction"],
+                            "possible_upstream_dl_over_2_substitution": self._half_detection_limit(
+                                raw_value, detection_limit
+                            ),
+                        }
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_units": units,
+                        "_detection_limits": detection_limits,
+                        "_target_observations": observations,
+                        "_source_file": downloaded.path.name,
+                        "_medium": self.candidate.registry_entry["media"][0],
+                        "_sample_type": self.candidate.registry_entry["sample_type"],
+                        "_measurement_basis": member["measurement_basis"],
+                        "_analytical_method": member["analytical_method"],
+                        "_digestion_or_extraction": member["digestion_or_extraction"],
+                        "_sample_depth_min_m": self.candidate.registry_entry["sample_depth_min_m"],
+                        "_sample_depth_max_m": self.candidate.registry_entry["sample_depth_max_m"],
+                        "_grain_fraction": self.candidate.registry_entry["grain_fraction"],
+                        "_dataset_version": self.candidate.version,
+                        "_censoring_boundary": (
+                            "The published numeric CSV has no row-level less-than qualifier. Values exactly at half "
+                            "the table DL are flagged as possible upstream DL/2 substitutions, not asserted as detections."
+                        ),
+                    },
+                )
+        expected = int(self.candidate.registry_entry["expected_counts"]["physical_rows"])
+        if total_rows != expected:
+            raise SourceAdapterError(f"FOREGS total parsed row count changed: {total_rows} != {expected}")
+
+
+class ForegsTopsoilAdapter(ForegsAdapter):
+    source_id = "foregs-topsoil"
+
+
+class ForegsSubsoilAdapter(ForegsAdapter):
+    source_id = "foregs-subsoil"
+
+
+class ForegsHumusAdapter(ForegsAdapter):
+    source_id = "foregs-humus"
+
+
+class ForegsStreamWaterAdapter(ForegsAdapter):
+    source_id = "foregs-stream-water"
+
+
+class ForegsStreamSedimentAdapter(ForegsAdapter):
+    source_id = "foregs-stream-sediment"
+
+
+class ForegsFloodplainSedimentAdapter(ForegsAdapter):
+    source_id = "foregs-floodplain-sediment"
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -1345,6 +1698,12 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeotracesIdp2025Adapter.source_id: GeotracesIdp2025Adapter,
     GsjJapanRiverSedimentAdapter.source_id: GsjJapanRiverSedimentAdapter,
     PangaeaNorthAfricaSoilAdapter.source_id: PangaeaNorthAfricaSoilAdapter,
+    ForegsTopsoilAdapter.source_id: ForegsTopsoilAdapter,
+    ForegsSubsoilAdapter.source_id: ForegsSubsoilAdapter,
+    ForegsHumusAdapter.source_id: ForegsHumusAdapter,
+    ForegsStreamWaterAdapter.source_id: ForegsStreamWaterAdapter,
+    ForegsStreamSedimentAdapter.source_id: ForegsStreamSedimentAdapter,
+    ForegsFloodplainSedimentAdapter.source_id: ForegsFloodplainSedimentAdapter,
 }
 
 

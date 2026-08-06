@@ -47,7 +47,7 @@ offline: boolean
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
-需要离线展示真实四介质接口时，使用已经 hash 固定的七来源、400 条观测最小切片：
+需要离线展示真实四介质接口时，使用已经 hash 固定的十三来源、688 条观测最小切片：
 
 ```bash
 python scripts/build_four_media_demo.py \

@@ -1,0 +1,1958 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS confirms correspondence with byte-pinned FOREGS members and the adapter. It is not human review; reviewer decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "prepared_at": "2026-08-06T08:00:00Z",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "2.5",
+          "record_id": "rec-7371f59bc309e9682b6f21e5677f7713cf0aa2578d78ef532afe2fcabc1999b1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "300",
+          "record_id": "rec-a895d47c0bd4d3e6da98a82946278f1f840912a80c43f0211150490bd9d049be",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "69",
+          "record_id": "rec-5bab25269aee78202b94385aea276fdf87a2cb3039c175f7b8f7d9edb4966345",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "380",
+          "record_id": "rec-043baf3372a7b0ef70c7681506f0deb68b44506a8be09f942dffd215388d2356",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-edc5c59057186043704748ff55c8dfe9607ae10e8948200fbe7d460154f30b9a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "220",
+          "record_id": "rec-ffec7e7718492dc73afd7d30ce06183f6bed8ebb61f93b94ad441b7740303524",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.96",
+      "longitude": "-15.57",
+      "published_target_raw_values": {
+        "As": "2.5",
+        "Cr": "300",
+        "Cu": "69",
+        "Ni": "380",
+        "Pb": "6",
+        "Zn": "220"
+      },
+      "review_id": "foregs-topsoil-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10T1",
+      "selection_reasons": [
+        "member=T_AR_data_2v4_8Feb06.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_file_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_locator": "T_AR_data_2v4_8Feb06.csv#row=4",
+      "source_record_id": "src-5134bc5b873905727058e1d842c46fcf3fe74193af9f899f70e6ca62364425ce"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5",
+          "record_id": "rec-aa21da919d75710b7582f7e6a643acb78f00c4c1bf03aa3ea1b4c0a448b63da1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "33",
+          "record_id": "rec-41431b02751458d3de973844bbc7dce7211e8487ed15638d9c107c683660da29",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "77",
+          "record_id": "rec-94628028ead48c9e6565e50b28a2a89e8e9584915a8f993a6ba4218eb2465f7d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "55",
+          "record_id": "rec-aeb061fda8713217aba299236102fffac8fc43a4b289a00fbe07aa41a4775d75",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "12",
+          "record_id": "rec-86c947dcb3957e01e7fa2243dca1c86ee96c0d4f20cc1e6ad01a05781570e615",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "46",
+          "record_id": "rec-c457bca3e324224c3cca6b583642c7579c6bb8cc10cf928895fc64d333eb7ec3",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.5",
+      "longitude": "23.83",
+      "published_target_raw_values": {
+        "As": "5",
+        "Cr": "33",
+        "Cu": "77",
+        "Ni": "55",
+        "Pb": "12",
+        "Zn": "46"
+      },
+      "review_id": "foregs-topsoil-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14T1",
+      "selection_reasons": [
+        "member=T_AR_data_2v4_8Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_locator": "T_AR_data_2v4_8Feb06.csv#row=5",
+      "source_record_id": "src-4a3cf2a299c0c36cc882f1556a76dc95b3004db2c21b552ccdaeff355dffc574"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.06078",
+          "record_id": "rec-e9bc102e740e5d0708ddb0a34306021639e37dddc07ede93c02cf96091cd3ee8",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.96442015",
+      "longitude": "-15.5660882",
+      "published_target_raw_values": {
+        "Hg": "0.06078"
+      },
+      "review_id": "foregs-topsoil-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10T1",
+      "selection_reasons": [
+        "member=T_Hg_data_2v4_8Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+      "source_locator": "T_Hg_data_2v4_8Feb06.csv#row=4",
+      "source_record_id": "src-16ed6d880af430a73568d49da92307f10d7c1c9400d0e634de8d6b92dfa60354"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "15",
+          "record_id": "rec-d5b83b5aa7a8e33eb124bee4e7ac49572b988c4baa7811bfc42db04a49f2bd00",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "1.5",
+          "record_id": "rec-cf55a993b03a15c274e2273d63662fe5dcc192f6d377c3a7b6fdf1c27fc48b11",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.43",
+      "longitude": "-0.78",
+      "published_target_raw_values": {
+        "Cr": "15",
+        "Zn": "1.5"
+      },
+      "review_id": "foregs-topsoil-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01T2",
+      "selection_reasons": [
+        "member=T_XRF_data_2v6_8Feb06.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_file_sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+      "source_locator": "T_XRF_data_2v6_8Feb06.csv#row=241",
+      "source_record_id": "src-a5ef7f4299e2835867634d5b9047bd006e4f0288cfad715a4c79d86d3f09d116"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "886",
+          "record_id": "rec-986650b3afa6031617f2827ef896515401a77dae039040b4db2fdf65750c4bcb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "232",
+          "record_id": "rec-6da70fc30b0e4729781619bba64e8b427129e83415e70206ce67e26b6a592026",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.96442015",
+      "longitude": "-15.5660882",
+      "published_target_raw_values": {
+        "Cr": "886",
+        "Zn": "232"
+      },
+      "review_id": "foregs-topsoil-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10T1",
+      "selection_reasons": [
+        "member=T_XRF_data_2v6_8Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+      "source_locator": "T_XRF_data_2v6_8Feb06.csv#row=4",
+      "source_record_id": "src-2bc58a8a22abd947917b4cd03c9371ed7464fe6f4d49bbcd773361b364012efa"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "1",
+          "record_id": "rec-ce167bbc167849182ba5d69c0d639d102a1303a242075bdc44693dd1d7b522e1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "3",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7.78",
+          "record_id": "rec-b359d91a5f2a7a2b5d444f3d6d5481bfa3ad2a22d26f9e0f281dce8f6cdba830",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.43",
+      "longitude": "-0.78",
+      "published_target_raw_values": {
+        "Ni": "1",
+        "Pb": "7.78"
+      },
+      "review_id": "foregs-topsoil-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01T2",
+      "selection_reasons": [
+        "member=T_icp_data_2v3_8Feb06.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_file_sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+      "source_locator": "T_icp_data_2v3_8Feb06.csv#row=239",
+      "source_record_id": "src-ac69d8a46882bcbbfe1752d715c466a95ff26abb2b65dc453899e6c911354115"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "402",
+          "record_id": "rec-30a1dd8cfbcc6ef871ad009f6caf96a0075ca9b51adfda46d5ce0444bbc39b24",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "3",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7.87",
+          "record_id": "rec-f8d70105d75b6ab01bf7d657c7b5c60e64fd744ba7de305a6e9705eb40de7b67",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.96442015",
+      "longitude": "-15.5660882",
+      "published_target_raw_values": {
+        "Ni": "402",
+        "Pb": "7.87"
+      },
+      "review_id": "foregs-topsoil-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10T1",
+      "selection_reasons": [
+        "member=T_icp_data_2v3_8Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+      "source_locator": "T_icp_data_2v3_8Feb06.csv#row=4",
+      "source_record_id": "src-92cf84ca86bd9b99c4963ce1ca749ceacd023e7d467fd5a9a0a9ec3c97295cae"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.73",
+          "record_id": "rec-ef52de6f67da37954692ee0d573d00eff7b7d3b565aef012b7903a1bf21e7865",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "103",
+          "record_id": "rec-05c77a848597e5cb9347536ac0b9180654495c0d0b0aa8ccacdff15dd58fef7d",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "27.96442015",
+      "longitude": "-15.5660882",
+      "published_target_raw_values": {
+        "As": "3.73",
+        "Cu": "103"
+      },
+      "review_id": "foregs-topsoil-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N19W10T1",
+      "selection_reasons": [
+        "member=T_icpadd_data_2v3_8Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+      "source_locator": "T_icpadd_data_2v3_8Feb06.csv#row=4",
+      "source_record_id": "src-71a6839a96d7bd0f8701c77e88b24966e03ba53765a4fb77ab8ed62566fecc94"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "16",
+          "record_id": "rec-ef1034435bbf3006bc5f3fce867edaec927ea82be8831d58228782b156bda723",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "66",
+          "record_id": "rec-5f449aeaf0715943a88f40350b35e9ef5720d6bb9b3f9c84ef96d513ac2490d1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "34",
+          "record_id": "rec-f144c38b301fe2256b7940fe5fc1972a4c8e5fa55635a6c6bc56b0a57124c930",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "53",
+          "record_id": "rec-9a8b692565aac6bbc8433faef3a02a05707f36b827db877e21d1f8a4d805d549",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "22",
+          "record_id": "rec-6715fa821dae8d36f125a4181b0a412dd320964a5c20efc7646d1c9472f495fa",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "56",
+          "record_id": "rec-ef555bf3f36672e0bb59d37e52509e03c7261ea5ac327719e1a8a5c33cf2b899",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.4",
+      "longitude": "24.67",
+      "published_target_raw_values": {
+        "As": "16",
+        "Cr": "66",
+        "Cu": "34",
+        "Ni": "53",
+        "Pb": "22",
+        "Zn": "56"
+      },
+      "review_id": "foregs-topsoil-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T2",
+      "selection_reasons": [
+        "member=T_AR_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_locator": "T_AR_data_2v4_8Feb06.csv#row=6",
+      "source_record_id": "src-1e61daa4457aa36469a948a0287d7466104d9dcaf94421b8c3c95367879f85d9"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.03718",
+          "record_id": "rec-332e9d006ae2c65f5d1aa11ea524d3d7c478c70cca2f5d13ab4815a96f314b84",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.49645002",
+      "longitude": "23.826111943",
+      "published_target_raw_values": {
+        "Hg": "0.03718"
+      },
+      "review_id": "foregs-topsoil-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14T1",
+      "selection_reasons": [
+        "member=T_Hg_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+      "source_locator": "T_Hg_data_2v4_8Feb06.csv#row=5",
+      "source_record_id": "src-45c5a19828a571fe088989c76223310fd3bb66d6fb0366c663c35a796aae6a37"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "70",
+          "record_id": "rec-00ca262e6d3ad79878fbd083c10171e41fd649430dd7483308c6a11009bba138",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "53",
+          "record_id": "rec-5a829f5863fd441fdffcb3a089d6ae77d7bb61419f5756ff3ac55957dcff0639",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.49645002",
+      "longitude": "23.826111943",
+      "published_target_raw_values": {
+        "Cr": "70",
+        "Zn": "53"
+      },
+      "review_id": "foregs-topsoil-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14T1",
+      "selection_reasons": [
+        "member=T_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+      "source_locator": "T_XRF_data_2v6_8Feb06.csv#row=5",
+      "source_record_id": "src-cdeccb9afc64965a03c1bd9256e803e4eca759fb579934f35b1a7edae8abf2c5"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "68.3",
+          "record_id": "rec-8e18fdc2e13e33a41f10408e7e912a2b00eeb1e79ffaffdf625fe1b1fe65f877",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "3",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "15.4",
+          "record_id": "rec-351b169d3d6b9c41d1955658d8f53dd7d3a2fcb961f59e67eeed37e9e37c7761",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.49645002",
+      "longitude": "23.826111943",
+      "published_target_raw_values": {
+        "Ni": "68.3",
+        "Pb": "15.4"
+      },
+      "review_id": "foregs-topsoil-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14T1",
+      "selection_reasons": [
+        "member=T_icp_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+      "source_locator": "T_icp_data_2v3_8Feb06.csv#row=5",
+      "source_record_id": "src-0d918528b5e0b5010a73a717d727b760b45f0e2a1611031f2b46fad6b394bf97"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5.35",
+          "record_id": "rec-0b7a31b8282624a8b56213bdaa41b57f4e477e9842488ee71efbf50b38929190",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "65.5",
+          "record_id": "rec-7eaadc6e862d968238604abb6c65c0505071c9c7caa6d4f8a292a0b59b5fe98b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.49645002",
+      "longitude": "23.826111943",
+      "published_target_raw_values": {
+        "As": "5.35",
+        "Cu": "65.5"
+      },
+      "review_id": "foregs-topsoil-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E14T1",
+      "selection_reasons": [
+        "member=T_icpadd_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+      "source_locator": "T_icpadd_data_2v3_8Feb06.csv#row=5",
+      "source_record_id": "src-a482fa0d826bd1e964d1723e8ebb56d9fe3a3005ee78abbe91b4e973eb4d7fae"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-e82645e15d75f0c85fe311ee4be12ca8a9392e599972daca7fc2528b2d57d930",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "115",
+          "record_id": "rec-32848f9aec99cca0b3bd69d2d84856a1b2903034eb9f3a1e51ae9d4700dba6b1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "33",
+          "record_id": "rec-188c76d15571c3149cd4dcf4705dedb17db9658a23b6474ee7e9a956040ec40f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "119",
+          "record_id": "rec-aee9217bffb5dba6a00664f86713eff2b0187a2dcd51ede83748b11f4cc9f6d9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "11",
+          "record_id": "rec-ff6784d3cc6b54e4ffbc8ff0e01d7ac943c932fafbe842267a8455b874175155",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "49",
+          "record_id": "rec-b33826cac1a70bf08537772e97be924f436a848c9b2e47f233efcf3c34f4eae3",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.04",
+      "longitude": "25.28",
+      "published_target_raw_values": {
+        "As": "6",
+        "Cr": "115",
+        "Cu": "33",
+        "Ni": "119",
+        "Pb": "11",
+        "Zn": "49"
+      },
+      "review_id": "foregs-topsoil-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T4",
+      "selection_reasons": [
+        "member=T_AR_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_locator": "T_AR_data_2v4_8Feb06.csv#row=7",
+      "source_record_id": "src-71a6c56469948ffdd17df7f0c714dac298a4901699d2b2768c3ecba4326e86e1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.04388",
+          "record_id": "rec-b7e1d2b56a6888b4cb76916826f72c5b0666666a4d12ff79b14856445197c70b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.40422557",
+      "longitude": "24.67156107",
+      "published_target_raw_values": {
+        "Hg": "0.04388"
+      },
+      "review_id": "foregs-topsoil-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T2",
+      "selection_reasons": [
+        "member=T_Hg_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+      "source_locator": "T_Hg_data_2v4_8Feb06.csv#row=6",
+      "source_record_id": "src-e6f32d343789a111e3bec870e4da05bc106bea1b2d707eda5087c9c47fa2e084"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "142",
+          "record_id": "rec-60a2e0e80c1db6dc3398b8968dc0901ab135c556962f8324fd6022d3e3650c98",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "77",
+          "record_id": "rec-ceaba83a1ba6406e8b54b4bb2e4c217077e5664d8ea3479f45fdeae94ad64fcb",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.40422557",
+      "longitude": "24.67156107",
+      "published_target_raw_values": {
+        "Cr": "142",
+        "Zn": "77"
+      },
+      "review_id": "foregs-topsoil-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T2",
+      "selection_reasons": [
+        "member=T_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+      "source_locator": "T_XRF_data_2v6_8Feb06.csv#row=6",
+      "source_record_id": "src-54751de98af78f1ef714f057e906b8d4e723da3612df40b65685cd2dd69f3f45"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "76.9",
+          "record_id": "rec-d3eab9a823f434bd4fac110fed4a85d8bc29bbb339f7a0ff9f8e8c98f563627e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "3",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "25.6",
+          "record_id": "rec-be53f03bfc41a9121aa931e8c67ca99f5c74cd5156a98b81e5d49de063d959f6",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.40422557",
+      "longitude": "24.67156107",
+      "published_target_raw_values": {
+        "Ni": "76.9",
+        "Pb": "25.6"
+      },
+      "review_id": "foregs-topsoil-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T2",
+      "selection_reasons": [
+        "member=T_icp_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+      "source_locator": "T_icp_data_2v3_8Feb06.csv#row=6",
+      "source_record_id": "src-62f524304f60d5b4fe430d4a6e581ce86be5ae4c15ca5f3b256b7f469dcd38c6"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "16.7",
+          "record_id": "rec-ffa21521cb303119d945fd3bb4260ae0851bf91ab8f3f92c27481badf7532093",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "29.1",
+          "record_id": "rec-f875033527c53f362f93c71fccdb0232f6248dec0062f5d717f43b7a614e20a3",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.40422557",
+      "longitude": "24.67156107",
+      "published_target_raw_values": {
+        "As": "16.7",
+        "Cu": "29.1"
+      },
+      "review_id": "foregs-topsoil-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T2",
+      "selection_reasons": [
+        "member=T_icpadd_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+      "source_locator": "T_icpadd_data_2v3_8Feb06.csv#row=6",
+      "source_record_id": "src-0a019be84cb658edd96110a90262e073f658d7f50ae06beb20c3a755818bee62"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "2.5",
+          "record_id": "rec-e944061a6d05fdd90ab26c48b90d654a3af3dadadb972cda23ec6cb4ac68101b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "49",
+          "record_id": "rec-344670ebf27b070634ce8bdb9b920c889bf0289047c1f5c66f07ade85fa08fa8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "23",
+          "record_id": "rec-79a4b51675d6a8d52bad670519739caf47cc1744077f146ab207406a7b0b620d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "65",
+          "record_id": "rec-21ff3d16f5c3169c0b658567a9e2d393cdb68b8eca8742ecade60e82f9978d11",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-8712fdb913a304938ab387b8ce556e7e046dd24c2172322ab480697f965c0112",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "35",
+          "record_id": "rec-1fffa38c801b5d7a4521753b33247f11bc9603411cb325e25233a020c63f8b1b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.27",
+      "longitude": "25.2",
+      "published_target_raw_values": {
+        "As": "2.5",
+        "Cr": "49",
+        "Cu": "23",
+        "Ni": "65",
+        "Pb": "6",
+        "Zn": "35"
+      },
+      "review_id": "foregs-topsoil-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T5",
+      "selection_reasons": [
+        "member=T_AR_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_locator": "T_AR_data_2v4_8Feb06.csv#row=8",
+      "source_record_id": "src-504d6e720c2e4c2dc8a8a7b2d7267c11ed6209f6df87236a690b1414d2695bec"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.02664",
+          "record_id": "rec-02fcf9b14a99f20cc3adddd06b7177b2fa19a68f9ff0ab7ff4dc2934b201a1fe",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.043132637",
+      "longitude": "25.28311772",
+      "published_target_raw_values": {
+        "Hg": "0.02664"
+      },
+      "review_id": "foregs-topsoil-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T4",
+      "selection_reasons": [
+        "member=T_Hg_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+      "source_locator": "T_Hg_data_2v4_8Feb06.csv#row=7",
+      "source_record_id": "src-fada5751d156018bc769be018f98644b9ec27349be736daab7e371fd85251b70"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "505",
+          "record_id": "rec-c330f6b4821116bbd11b7409415a793621b6b9b9c69407d81cf47707d27421d3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "59",
+          "record_id": "rec-fd572c75ba7989417083cf586643e4ceab867bfdda9cd6ad0a01d25ba7efd0b9",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.043132637",
+      "longitude": "25.28311772",
+      "published_target_raw_values": {
+        "Cr": "505",
+        "Zn": "59"
+      },
+      "review_id": "foregs-topsoil-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T4",
+      "selection_reasons": [
+        "member=T_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+      "source_locator": "T_XRF_data_2v6_8Feb06.csv#row=7",
+      "source_record_id": "src-e184fb44557f5846a183f249828f2296912312891b4ed483eba986cd8eaa75f9"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "144",
+          "record_id": "rec-43ff549f9d67970ce2c050799122553acd28cbb09dbf4c800b67b468c5a2306e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "3",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "12.7",
+          "record_id": "rec-136f91a62c57d44154592e4eebd3c26f4676626f5b42da3ccdbdae905b916643",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.043132637",
+      "longitude": "25.28311772",
+      "published_target_raw_values": {
+        "Ni": "144",
+        "Pb": "12.7"
+      },
+      "review_id": "foregs-topsoil-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T4",
+      "selection_reasons": [
+        "member=T_icp_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+      "source_locator": "T_icp_data_2v3_8Feb06.csv#row=7",
+      "source_record_id": "src-56a8fe41e92f1ee7fdfd7b2f78acd982301ec5680697f7ffe53f6d4fa8c6fd43"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7.15",
+          "record_id": "rec-3c6426eec226fe822a76f838aff3ba045292634c1222f3f36d2241ca150db7ae",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "29.2",
+          "record_id": "rec-17469cf968b41fe691d2a8dd9c6d7fdf94c3985f3917deef495631c828b5df50",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.043132637",
+      "longitude": "25.28311772",
+      "published_target_raw_values": {
+        "As": "7.15",
+        "Cu": "29.2"
+      },
+      "review_id": "foregs-topsoil-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T4",
+      "selection_reasons": [
+        "member=T_icpadd_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+      "source_locator": "T_icpadd_data_2v3_8Feb06.csv#row=7",
+      "source_record_id": "src-6a44556f031706f968756ac78c62fe2511c8732729e53a2fd76cc7b3b17e1fb0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6",
+          "record_id": "rec-c8d0dec0ed4b6a3c3e7336cd8510571b31aba6ae3fd7249584c5c05170066807",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "34",
+          "record_id": "rec-2339bc33e9964be2e337fed8b8b9bb1f5193534a404f9f538727239e839fe360",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "22",
+          "record_id": "rec-90fa1ed4f2cc9f2a217c1f03b57e1efb6297476fa1f17510ab36a52e542b159d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "37",
+          "record_id": "rec-746d1ee00fb98d48aab15492c92f90d4072dc8de02e046a2c4a7b84d49d338b7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "9",
+          "record_id": "rec-2a652175cdee591c3582ccc08ec3fb080bea6e7bc5be5d6c097b42a23ceced62",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "58",
+          "record_id": "rec-3d3d06e661bd1eea408d0f3b23f4d3430d4d12987b5dad1672c2b2299328675f",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.19",
+      "longitude": "26.1",
+      "published_target_raw_values": {
+        "As": "6",
+        "Cr": "34",
+        "Cu": "22",
+        "Ni": "37",
+        "Pb": "9",
+        "Zn": "58"
+      },
+      "review_id": "foregs-topsoil-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E16T3",
+      "selection_reasons": [
+        "member=T_AR_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_locator": "T_AR_data_2v4_8Feb06.csv#row=9",
+      "source_record_id": "src-271df5e97b89cda3264d97e54c804433fd20a5c66853f7d1048cb020b1744eb4"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.0133",
+          "record_id": "rec-d071c2c24d892d9f6184b597ab65b7f6b6b5871611158c88d12ff044db292c54",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269707429",
+      "longitude": "25.195870096",
+      "published_target_raw_values": {
+        "Hg": "0.0133"
+      },
+      "review_id": "foregs-topsoil-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T5",
+      "selection_reasons": [
+        "member=T_Hg_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+      "source_locator": "T_Hg_data_2v4_8Feb06.csv#row=8",
+      "source_record_id": "src-b7c59329159b1d6ae9e8ff7c9b50dd49f758efafb0f03570c3da13ee1c1e4229"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "164",
+          "record_id": "rec-3bae916bbe5de486e02f82c338a77255183735466f1126ac44d638b26ff34442",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "detection_limit": "3",
+          "digestion_or_extraction": "lithium metaborate fusion",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "35",
+          "record_id": "rec-13fb46453c7bff2fb4c740d411ca106d173ec7c473d35e79a3f52bd0a29328bf",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269707429",
+      "longitude": "25.195870096",
+      "published_target_raw_values": {
+        "Cr": "164",
+        "Zn": "35"
+      },
+      "review_id": "foregs-topsoil-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T5",
+      "selection_reasons": [
+        "member=T_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+      "source_locator": "T_XRF_data_2v6_8Feb06.csv#row=8",
+      "source_record_id": "src-f1a3365c0b20ffefa74c949ffecd9ea7fad7a4f3ad70a8e99165bb5c8c0952d1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "67.2",
+          "record_id": "rec-7f6d027342d60e8eda5938d105059d00997d1cd69675f1dc389f8e6f5f077272",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "3",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "6.9",
+          "record_id": "rec-5a27689d69adc0228ff6fcf700b28ec4d0111adc6f67d068e8d3e5d8b3e53a6d",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269707429",
+      "longitude": "25.195870096",
+      "published_target_raw_values": {
+        "Ni": "67.2",
+        "Pb": "6.9"
+      },
+      "review_id": "foregs-topsoil-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T5",
+      "selection_reasons": [
+        "member=T_icp_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+      "source_locator": "T_icp_data_2v3_8Feb06.csv#row=8",
+      "source_record_id": "src-e39b472aa676a37d67051d357d1f02d38ea9d91e3800c535dd21e9eb4cdc7b69"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.2",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5.11",
+          "record_id": "rec-4521b178d45c77fd2da02669fcc51594cc9b02bdc809d20c9c19439b38411e82",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "detection_limit": "0.01",
+          "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+          "measurement_basis": "total_selected_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "17.6",
+          "record_id": "rec-746ff3d561edaa58cfcc55d7311d17f560d51b48e76320b7d0c902af13cf36b0",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.269707429",
+      "longitude": "25.195870096",
+      "published_target_raw_values": {
+        "As": "5.11",
+        "Cu": "17.6"
+      },
+      "review_id": "foregs-topsoil-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E15T5",
+      "selection_reasons": [
+        "member=T_icpadd_data_2v3_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+      "source_locator": "T_icpadd_data_2v3_8Feb06.csv#row=8",
+      "source_record_id": "src-e26a400ceb9b4dfab143915b6beff52acd67e0032da09dc45ae54789f03ac3f9"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "5",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7",
+          "record_id": "rec-b4719cf225b982557e1b115a9873f2769e561ba36425e227e60a6b00801a33b4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "32",
+          "record_id": "rec-eb2f152c4b8515121b43c357da95b7496244f9bf7d90d12b07ff9ab3eba4a8d8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "19",
+          "record_id": "rec-70ae2b3fd3cdf4b81cd6ffd01253b1567c55fc4943fcdee34da4b498d345566c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "2",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "32",
+          "record_id": "rec-d0bee563278db54705f1b5e5f36e69d677d627ea64c3a8a7fac7bfaa5cae0d1b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "3",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "11",
+          "record_id": "rec-4f5e0d9782923480a081f8737cc0f15394b3ad9224371e2ce2f8ae282371ce22",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "detection_limit": "1",
+          "digestion_or_extraction": "hot aqua regia leach at 95 C",
+          "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "63",
+          "record_id": "rec-25da9b927adec706ebdda05555431ed3fa0a6caa254e32dd90081c3756feb496",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "37.48",
+      "longitude": "13.75",
+      "published_target_raw_values": {
+        "As": "7",
+        "Cr": "32",
+        "Cu": "19",
+        "Ni": "32",
+        "Pb": "11",
+        "Zn": "63"
+      },
+      "review_id": "foregs-topsoil-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N25E08T1",
+      "selection_reasons": [
+        "member=T_AR_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_locator": "T_AR_data_2v4_8Feb06.csv#row=10",
+      "source_record_id": "src-7c3d1da7fdf6935bfeb22e0395c68cfe65122a3ccc4d953494de3d4db77a72cd"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_topsoil",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.02306",
+          "record_id": "rec-1dbbd8085af5b90d68640aefad2e417fc8363b57f7e57bb7d02ad4ae9526a4fc",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "35.186187279",
+      "longitude": "26.099125756",
+      "published_target_raw_values": {
+        "Hg": "0.02306"
+      },
+      "review_id": "foregs-topsoil-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N24E16T3",
+      "selection_reasons": [
+        "member=T_Hg_data_2v4_8Feb06.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+      "source_locator": "T_Hg_data_2v4_8Feb06.csv#row=9",
+      "source_record_id": "src-e02026d80c07042f07e51f3c57218c6a9fbc3a0e9172d09e79812706a4902c87"
+    }
+  ],
+  "review_version": "foregs-human-review-v1",
+  "source_id": "foregs-topsoil",
+  "status": "prepared"
+}

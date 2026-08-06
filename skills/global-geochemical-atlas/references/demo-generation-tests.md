@@ -45,3 +45,34 @@
 | MarChem | 112 | 112 | 112 | `valid`，0 errors；8 条 fixture 删失观测未被填补 |
 
 D2 生成 `d2-confidence-v1` 报告，D1 证据打包器验证输入 SHA-256 后原样绑定其报告 SHA-256。D1 不重新计算置信度公式或数值。
+
+## 2026-08-06 16:00 CST：FOREGS 六介质扩展
+
+六个具体数据集从 FOREGS 父项目中独立注册；完整解析共对账 16,364 个 CSV 数据行和 48,504 条 As/Cr/Cu/Hg/Ni/Pb/Zn 映射。小样仅选 48 条观测用于接口回归，不代表抽样密度或区域代表性。
+
+| 来源 | 全量 CSV 行 | 小样观测 | `demo_input.csv` SHA-256 | `sources.jsonl` SHA-256 |
+|---|---:|---:|---|---|
+| `foregs-topsoil` | 4,195 | 48 | `e45f573db608634a65453acaf2a724a46b7291e6a0ae11ad93af50878cf8dee1` | `d2fb99230b6ad0b3243ec43a5271836b21d45e9ca231c1f10aa1fad5749cd08c` |
+| `foregs-subsoil` | 3,922 | 48 | `196c056e57c26303df2fc270245bb344a2b53abc34992bde0c6909e6ee8d1286` | `41292d6dfe213e99ae4487c2ac657fb217b694e9c8c8cd2477309337371fcdbb` |
+| `foregs-humus` | 1,111 | 48 | `38886457c87bcc27878c1c8581f1a38ea95dcdac91475229f2c66ab41b2bdfb5` | `00739879086c5e3bb3d70624e97f6ca084d60507da7b03ca9a3d8642e3968d64` |
+| `foregs-stream-water` | 808 | 48 | `bb7a887e7688ff02b76a0c1988df2c7f86164a70143b1164a903c79373ae3554` | `d7010d0d74ea551a3d82316b530cfae033e410e48c4c9cb932b38ca243aefa5b` |
+| `foregs-stream-sediment` | 3,393 | 48 | `59fd2c203464e751547da9bdc3a08ad7bfd3d4acdb46758d0f44665252f87097` | `8a0f97953f2ff8ab6d0538e0c25b663ae6d793487fef89462b8ccc072abd4c91` |
+| `foregs-floodplain-sediment` | 2,935 | 48 | `82e767778a5e8fb0faf2e5241427866f18ee457d315400aa70ef3fe42625dad2` | `da77e2ec474f6a22b9465ed059eee07812dbf7723c7a83de8041ce7fc45b3284` |
+
+### FOREGS 复现与边界检查
+
+- 六个来源均用同一份 hash 校验缓存、48 条观测和固定 `generated_at=2026-08-06T08:00:00Z` 在独立临时目录重建；CSV、JSONL 和 manifest 均逐字节一致。
+- 另从官方 GTK 地址在线重取 837,779-byte `Topsoil.zip`，实测 SHA-256 为 `ac23bffd5e116545a8c5618c943c75d995e81cdf5adc6d2902238d2e11e40357`；在线下载、解压、4,195 行解析和 48 条小样生成全部通过，随后两次离线缓存重放逐字节一致。
+- 缓存模式只沿用已有在线获取记录的原始时间；手工填充但 hash 已验证的缓存不伪造 `retrieved_at`，避免把每次本地校验时间写成来源获取时间。
+- 每个来源准备 30 条分层人工复核记录，机器预检均为 30/30 PASS；`completed_comparisons` 仍为 0，因此来源保持 `normalized_analysis`，不冒充 `benchmark_ready`。
+- 总量、王水可浸出、温和硝酸可浸出和溶解态保持不同 `measurement_basis`；CSV 中恰好等于 `DL/2` 的值只标记为“可能的上游替代”，不直接断言为检出或删失。
+
+### 十三来源联合回归
+
+联合四介质 fixture 扩为 688 条观测、85 个比较分区，其中水体 17 个分区：
+
+- `demo_input.csv`：`e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a`
+- `sources.jsonl`：`925dd4489d18b63ffb1d44c86ada895c64038d90feeeafce71bb29f2f02738a1`
+- `run_manifest.json`：`f70f773fdb51e2d63cf11fd1a1cbfa689e193e44177d8d2c5f69d96825d8d523`
+
+完整工作流成功标准化并验证 688/688 条坐标，保留 20 条已确认删失观测，输出 11 条工程异常候选。联合输入、证据和九文件输出包均通过字节级重建。

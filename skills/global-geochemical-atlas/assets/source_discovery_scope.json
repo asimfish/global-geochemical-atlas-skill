@@ -1,6 +1,6 @@
 {
   "scope_version": "geochemical-source-discovery-scope-v1",
-  "as_of": "2026-08-06T03:48:23Z",
+  "as_of": "2026-08-06T08:00:00Z",
   "round": 5,
   "status": "in_progress",
   "saturated": false,
@@ -58,6 +58,12 @@
         "emodnet-chemistry",
         "finland-gtk-geochemistry",
         "foregs-europe",
+        "foregs-topsoil",
+        "foregs-subsoil",
+        "foregs-humus",
+        "foregs-stream-water",
+        "foregs-stream-sediment",
+        "foregs-floodplain-sediment",
         "gemas-europe",
         "ireland-tellus",
         "norway-marchem",
@@ -66,7 +72,7 @@
       ],
       "remaining_work": [
         "Search the remaining national geological surveys and regional marine or freshwater networks.",
-        "Trace FOREGS, GEMAS, EEA and EMODnet records back to national or project-level upstream releases."
+        "Keep the six implemented FOREGS media tied to one parent-project lineage; trace GEMAS, EEA and EMODnet records back to national or project-level upstream releases."
       ]
     },
     "north-america": {

@@ -1,5 +1,5 @@
 {
-  "claim_boundary": "The combined package binds 7 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
+  "claim_boundary": "The combined package binds 13 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
   "combined_demo_version": "d1-four-media-combined-v1",
   "comparison_isolation": {
     "explicit_boundaries": [
@@ -8,7 +8,10 @@
       "MarChem partial nitric-acid sediment is not interpreted as total content.",
       "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases.",
       "PANGAEA fine-fraction HF-HNO3 soil is not mixed with USGS bulk-soil layers.",
-      "GSJ JGD2000 river sediment keeps its source-specific units and missing method/QC boundary."
+      "GSJ JGD2000 river sediment keeps its source-specific units and missing method/QC boundary.",
+      "FOREGS topsoil, subsoil and humus remain separate sample media within the canonical soil class.",
+      "FOREGS total, aqua-regia-leachable, mild-acid-leachable and dissolved values remain separate comparison groups.",
+      "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts."
     ],
     "group_fields": [
       "element_or_analyte",
@@ -18,9 +21,10 @@
       "analytical_method",
       "digestion_or_extraction"
     ],
-    "partition_count": 46,
-    "water_partition_count": 13,
+    "partition_count": 85,
+    "water_partition_count": 17,
     "water_partitions": {
+      "[\"As\", \"water\", \"dissolved_<0.45um_stream_water\", \"\", \"ICP-QMS for published trace metals\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
       "[\"As\", \"water\", \"freshwater_dissolved_fraction\", \"\", \"Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma\", \"GEMStat dissolved operational fraction\"]": 4,
       "[\"As\", \"water\", \"freshwater_dissolved_fraction\", \"\", \"Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS\", \"GEMStat dissolved operational fraction\"]": 8,
       "[\"As\", \"water\", \"freshwater_dissolved_fraction\", \"\", \"Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion\", \"GEMStat dissolved operational fraction\"]": 4,
@@ -31,8 +35,11 @@
       "[\"As\", \"water\", \"freshwater_total_fraction\", \"\", \"Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion\", \"GEMStat total operational fraction\"]": 4,
       "[\"As\", \"water\", \"freshwater_total_fraction\", \"\", \"Inductively-Coupled Plasma Sector Field Mass Spectrometry with Closed Vessel Digestion\", \"GEMStat total operational fraction\"]": 1,
       "[\"As\", \"water\", \"freshwater_total_fraction\", \"\", \"Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer\", \"GEMStat total operational fraction\"]": 8,
+      "[\"Cu\", \"water\", \"dissolved_<0.45um_stream_water\", \"\", \"ICP-QMS for published trace metals\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
       "[\"Cu\", \"water\", \"dissolved_seawater_molar_per_mass\", \"global_ocean_cruise_track\", \"\", \"dissolved_fraction; contributor-specific protocol\"]": 16,
+      "[\"Ni\", \"water\", \"dissolved_<0.45um_stream_water\", \"\", \"ICP-QMS for published trace metals\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
       "[\"Ni\", \"water\", \"dissolved_seawater_molar_per_mass\", \"global_ocean_cruise_track\", \"\", \"dissolved_fraction; contributor-specific protocol\"]": 16,
+      "[\"Zn\", \"water\", \"dissolved_<0.45um_stream_water\", \"\", \"ICP-QMS for published trace metals\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
       "[\"Zn\", \"water\", \"dissolved_seawater_molar_per_mass\", \"global_ocean_cruise_track\", \"\", \"dissolved_fraction; contributor-specific protocol\"]": 16
     }
   },
@@ -114,36 +121,108 @@
       "source_evidence_score": 85.0,
       "source_id": "pangaea-north-africa-soil",
       "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/foregs-topsoil/sources.jsonl",
+      "evidence_sha256": "d2fb99230b6ad0b3243ec43a5271836b21d45e9ca231c1f10aa1fad5749cd08c",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/foregs-topsoil/demo_input.csv",
+      "input_sha256": "e45f573db608634a65453acaf2a724a46b7291e6a0ae11ad93af50878cf8dee1",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "foregs-topsoil",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/foregs-subsoil/sources.jsonl",
+      "evidence_sha256": "41292d6dfe213e99ae4487c2ac657fb217b694e9c8c8cd2477309337371fcdbb",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/foregs-subsoil/demo_input.csv",
+      "input_sha256": "196c056e57c26303df2fc270245bb344a2b53abc34992bde0c6909e6ee8d1286",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "foregs-subsoil",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/foregs-humus/sources.jsonl",
+      "evidence_sha256": "00739879086c5e3bb3d70624e97f6ca084d60507da7b03ca9a3d8642e3968d64",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/foregs-humus/demo_input.csv",
+      "input_sha256": "38886457c87bcc27878c1c8581f1a38ea95dcdac91475229f2c66ab41b2bdfb5",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "foregs-humus",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/foregs-stream-water/sources.jsonl",
+      "evidence_sha256": "d7010d0d74ea551a3d82316b530cfae033e410e48c4c9cb932b38ca243aefa5b",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/foregs-stream-water/demo_input.csv",
+      "input_sha256": "bb7a887e7688ff02b76a0c1988df2c7f86164a70143b1164a903c79373ae3554",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "foregs-stream-water",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/foregs-stream-sediment/sources.jsonl",
+      "evidence_sha256": "8a0f97953f2ff8ab6d0538e0c25b663ae6d793487fef89462b8ccc072abd4c91",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/foregs-stream-sediment/demo_input.csv",
+      "input_sha256": "59fd2c203464e751547da9bdc3a08ad7bfd3d4acdb46758d0f44665252f87097",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "foregs-stream-sediment",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/foregs-floodplain-sediment/sources.jsonl",
+      "evidence_sha256": "da77e2ec474f6a22b9465ed059eee07812dbf7723c7a83de8041ce7fc45b3284",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/foregs-floodplain-sediment/demo_input.csv",
+      "input_sha256": "82e767778a5e8fb0faf2e5241427866f18ee457d315400aa70ef3fe42625dad2",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "foregs-floodplain-sediment",
+      "use_mode": "normalized_analysis"
     }
   ],
-  "generated_at": "2026-08-05T15:20:00Z",
+  "generated_at": "2026-08-06T08:00:00Z",
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 188291,
+      "bytes": 314535,
       "path": "demo_input.csv",
-      "sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82"
+      "sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a"
     },
     {
-      "bytes": 663666,
+      "bytes": 1100562,
       "path": "sources.jsonl",
-      "sha256": "8a5ef7401f8548d7fb84237c3c6dd38531796244a6656738a058c529a5e53a7d"
+      "sha256": "925dd4489d18b63ffb1d44c86ada895c64038d90feeeafce71bb29f2f02738a1"
     }
   ],
   "record_counts": {
     "by_analyte": {
-      "As": 124,
-      "Cu": 92,
-      "Ni": 92,
-      "Zn": 92
+      "As": 184,
+      "Cu": 168,
+      "Ni": 168,
+      "Zn": 168
     },
     "by_medium": {
       "rock": 48,
-      "sediment": 160,
-      "soil": 96,
-      "water": 96
+      "sediment": 256,
+      "soil": 240,
+      "water": 144
     },
     "by_source": {
+      "foregs-floodplain-sediment": 48,
+      "foregs-humus": 48,
+      "foregs-stream-sediment": 48,
+      "foregs-stream-water": 48,
+      "foregs-subsoil": 48,
+      "foregs-topsoil": 48,
       "gemstat-open-archive": 48,
       "georoc-archaean": 48,
       "geotraces-idp2025": 48,
@@ -152,7 +231,7 @@
       "pangaea-north-africa-soil": 48,
       "usgs-conus-soil": 48
     },
-    "total": 400
+    "total": 688
   },
   "request": {
     "elements": [
@@ -240,6 +319,8 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "foregs-floodplain-sediment",
+          "foregs-stream-sediment",
           "japan-gsj-geochemical-map",
           "norway-marchem"
         ],
@@ -262,6 +343,9 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "foregs-humus",
+          "foregs-subsoil",
+          "foregs-topsoil",
           "pangaea-north-africa-soil",
           "usgs-conus-soil"
         ],
@@ -285,6 +369,7 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "foregs-stream-water",
           "gemstat-open-archive",
           "geotraces-idp2025"
         ],
@@ -292,6 +377,12 @@
       }
     },
     "selected_sources": [
+      "foregs-floodplain-sediment",
+      "foregs-humus",
+      "foregs-stream-sediment",
+      "foregs-stream-water",
+      "foregs-subsoil",
+      "foregs-topsoil",
       "gemstat-open-archive",
       "georoc-archaean",
       "geotraces-idp2025",
@@ -302,7 +393,7 @@
     ],
     "status": "partial"
   },
-  "scientific_scope": "7 verified source demos combined to exercise one four-media workflow",
+  "scientific_scope": "13 verified source demos combined to exercise one four-media workflow",
   "warnings": [
     "This combined fixture proves interface compatibility, not representative global coverage.",
     "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",

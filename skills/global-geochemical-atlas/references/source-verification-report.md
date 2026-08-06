@@ -2,11 +2,11 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-06 12:00（Asia/Shanghai）
+更新时间：2026-08-06 16:00（Asia/Shanghai）
 
 ## 当前结论
 
-四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；土壤、沉积物和水体各有两条互补路由，因此共七个来源，当前都是 85 分、A 级、`normalized_analysis`。七份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；在原七条路线基础上，FOREGS topsoil、subsoil、humus、stream water、stream sediment、floodplain sediment 已拆成六个独立可执行来源，因此共十三个来源，当前都是 85 分、A 级、`normalized_analysis`。十三份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
@@ -17,6 +17,12 @@
 | `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash、完整成员清单、canonical 适配器、1,070 行对账和地图运行 | 30 条人工回看尚待完成 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
 | `japan-gsj-geochemical-map` | 官方双 CSV、文件版本/hash、CP932 解码、JGD2000、3,024/3,024 序号连接、七元素/单位对账、48 条 fixture、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；源 CSV 缺逐行方法、检出限和 QC | A 级 `normalized_analysis`，补充独立河流沉积物区域但尚未达到 `benchmark_ready` |
 | `gemstat-open-archive` | v3 版本 DOI、CC BY 4.0、五个精确 ZIP range、492,999 条 As 观测、站点/参数/方法连接、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；大量方法代码 0；33 国覆盖不均；重复、删失和 Pending review 值需分层使用 | A 级 `normalized_analysis`，补齐登记中的水体 As，但尚未达到 `benchmark_ready` |
+| `foregs-topsoil` | 官方 ZIP/hash、5 个分析 CSV、4,195 行、10,908 条七目标元素映射、总量/王水量隔离、48 条 fixture、30 条复核准备 | 人工决定未签署；欧洲低密度调查；行级 `<DL` 限定符不可恢复 | A 级 `normalized_analysis`；不等于欧洲连续土壤覆盖 |
+| `foregs-subsoil` | 官方 ZIP/hash、5 个分析 CSV、3,922 行、10,201 条七目标元素映射、深层土壤语义保留 | 同上；具体样点只说明 50–200 cm 范围内取 25 cm 层，不能伪造精确起止深度 | A 级 `normalized_analysis`；与 topsoil 分开 |
+| `foregs-humus` | 官方 ZIP/hash、3 个分析 CSV、1,111 行、1,845 条目标映射、温和硝酸提取边界保留 | 人工决定未签署；没有 As/Cr；温和浸出不是总量 | A 级 `normalized_analysis`；仅补充腐殖质介质 |
+| `foregs-stream-water` | 官方 ZIP/hash、808 行、As/Cr/Cu/Ni/Pb/Zn 各 808 条、<0.45 µm 与 ICP-QMS 方法保留 | 人工决定未签署；没有可接受 Hg；单次基线不是时间序列 | A 级 `normalized_analysis`；补充欧洲溪流水 |
+| `foregs-stream-sediment` | 官方 ZIP/hash、4 个分析 CSV、3,393 行、11,030 条目标映射、总量/王水量和 <150 µm 粒级隔离 | 人工决定未签署；低密度溪流汇水区样点 | A 级 `normalized_analysis`；与 GSJ/MarChem 不静默合并 |
+| `foregs-floodplain-sediment` | 官方 ZIP/hash、4 个分析 CSV、2,935 行、9,672 条目标映射、0–25 cm 与粒级保留 | 人工决定未签署；泛滥平原与溪流沉积物不是同一介质子型 | A 级 `normalized_analysis`；独立于 stream sediment |
 
 ## `georoc-archaean` 与 `usgs-conus-soil` 复核准备
 
@@ -241,9 +247,33 @@ SeaDataNet QC 码按原值保留：1=good、2=probably good、3=probably bad、4
 
 证据评分为 85/A/`normalized_analysis`。人工复核未签署只损失对应证据分，不阻断科研路由；它不能升级为 `benchmark_ready`。
 
+## FOREGS 六介质复核
+
+FOREGS 不是一个模糊的“欧洲来源”适配器，而是六个独立 `source_id`。官方数据包的科学发布为 2005 年；本轮固定 2026-03-03 发布方文件快照，每个 ZIP 和纳入解析的 CSV 都有 SHA-256、字节数、物理行数和源行定位。
+
+| 来源 | CSV 行 | 不同 GTN 并集 | 七目标元素映射 |
+|---|---:|---:|---:|
+| topsoil | 4,195 | 862 | 10,908 |
+| subsoil | 3,922 | 794 | 10,201 |
+| humus | 1,111 | 388 | 1,845 |
+| stream water | 808 | 808 | 4,848 |
+| stream sediment | 3,393 | 855 | 11,030 |
+| floodplain sediment | 2,935 | 750 | 9,672 |
+| 合计 | 16,364 | 不跨介质相加 | 48,504 |
+
+适配器保留三类不能越过的边界：
+
+- 土壤和沉积物的 `total_selected` 与 `aqua_regia_leachable` 同时保留为不同测量基础；腐殖质的 4.5% HNO3 超声提取单独标为温和酸可浸出量；水体为 `<0.45 µm` 过滤溶解态；
+- 表格第二、三行的原单位和检出限进入逐观测证据；发布 CSV 没有逐行 `<` 限定符，因此恰好等于 `DL/2` 的数值只标记为“可能的上游替代”，不伪装成已确认检出或可恢复删失值；
+- GTN、国家字段、坐标、样品深度/粒级和具体分析成员保持原样。topsoil 中重复 GTN 通过文件名和行号保持为独立源记录，不用字典覆盖。
+
+GTK 旧站当前的 HTTPS 证书链不能通过标准 TLS 校验，而官方文件端点仍可通过 HTTP 取得。适配器将其作为明确的来源级例外：只允许固定主机和固定 URL、拒绝重定向、下载前必须登记 64 位 SHA-256，只有内容完全匹配才发布到缓存。这个限制降低传输可用性，不改变文件内容完整性检查，也不能推广成通用 HTTP 下载策略。
+
+六个来源各有 30 行待签署复核单，分层覆盖不同 CSV 成员、普通数值和可能的 `DL/2` 边界；机器比对均为 30/30 PASS，人工字段仍为空。每个来源另有 48 条 fixture；具备总量和王水量的来源按“元素 × 测量基础”平衡，水体和腐殖质按其实际可用目标元素平衡。
+
 ## 四介质联合运行
 
-`fixtures/four-media/combined-v3/request.json` 以 `sources=auto` 请求 As/Cu/Ni/Zn 和 rock/soil/sediment/water。路由选择七个 A 级 `normalized_analysis` 来源，`scripts/build_four_media_demo.py` 验证每个来源 fixture 的 manifest hash 和逐观测证据后再合并：
+`fixtures/four-media/combined-v3/request.json` 以 `sources=auto` 请求 As/Cu/Ni/Zn 和 rock/soil/sediment/water。路由选择十三个 A 级 `normalized_analysis` 来源，`scripts/build_four_media_demo.py` 验证每个来源 fixture 的 manifest hash 和逐观测证据后再合并：
 
 | 介质/来源 | 观测数 |
 |---|---:|
@@ -254,12 +284,18 @@ SeaDataNet QC 码按原值保留：1=good、2=probably good、3=probably bad、4
 | sediment / GSJ Japan | 48 |
 | water / GEOTRACES | 48 |
 | water / GEMStat | 48 |
-| 合计 | 400 |
+| soil / FOREGS topsoil | 48 |
+| soil / FOREGS subsoil | 48 |
+| soil / FOREGS humus | 48 |
+| sediment / FOREGS stream sediment | 48 |
+| sediment / FOREGS floodplain sediment | 48 |
+| water / FOREGS stream water | 48 |
+| 合计 | 688 |
 
-联合流程得到 400/400 标准化、400/400 有效坐标、20 条删失记录和完整九文件输出。D2 的默认背景键形成 46 个组：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源；除既有海水/淡水、分相、部分消解、土层和岩石选择值边界外，PANGAEA 细粒 HF-HNO3 土壤与 USGS 土层、GSJ 来源特定单位和方法缺失边界也未被混合。
+联合流程得到 688/688 标准化、688/688 有效坐标、20 条已确认删失记录和完整九文件输出。D2 的默认背景键形成 85 个组，其中水体 17 个：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源；FOREGS 的总量、王水、温和硝酸和溶解态边界也没有与既有来源静默混合。FOREGS 中可能的 `DL/2` 数值只保留证据警告，不计入 20 条“已确认删失”。
 
-筛查产生 11 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从七个来源 fixture 字节级重建。
+筛查产生 11 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从十三个来源 fixture 字节级重建。
 
 ## 复核边界
 
-本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质都有 `normalized_analysis` 路由，但仍是专题、国家、区域、航次或自愿提交覆盖，全部保持 `partial`。土壤和沉积物虽各有两个来源，但粒级、消解、海洋/河流与方法边界使它们不能自动构成同背景复测；水体 As、Cu、Ni、Zn 各自仍只有一个来源，海水与淡水也必须隔离比较。
+本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质都有 `normalized_analysis` 路由，但仍是专题、国家、区域、航次或自愿提交覆盖，全部保持 `partial`。土壤现有五个、沉积物四个、水体三个可执行数据集，但粒级、消解、海洋/河流/洪泛平原、分相与方法边界使它们不能自动构成同背景复测；水体 As、Cu、Ni、Zn 虽均已至少有两个来源，海水与淡水或不同方法仍必须隔离比较。

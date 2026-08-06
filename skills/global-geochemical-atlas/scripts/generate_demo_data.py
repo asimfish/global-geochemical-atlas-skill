@@ -930,6 +930,122 @@ def gsj_japan_demo(
     return rows, evidence_rows, len(selected_source_rows)
 
 
+def foregs_demo(
+    records: Sequence[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    registered_classes = {
+        (analyte, member["measurement_basis"])
+        for member in candidate.registry_entry["download"]["members"]
+        for analyte in member.get("target_analytes", {})
+        if analyte in ANALYTES
+    }
+    if not registered_classes or observation_limit % len(registered_classes) != 0:
+        raise DemoError(
+            f"FOREGS observation limit must be divisible by {len(registered_classes)} "
+            "to balance analyte and measurement basis"
+        )
+    per_class_limit = observation_limit // len(registered_classes)
+    selected: Counter[tuple[str, str]] = Counter()
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    selected_source_rows: set[str] = set()
+    for record in records:
+        if all(selected[item] >= per_class_limit for item in registered_classes):
+            break
+        observations = record.fields.get("_target_observations")
+        if not isinstance(observations, Mapping):
+            raise DemoError(f"FOREGS target mapping is missing: {record.source_locator}")
+        folded = {str(field).casefold(): field for field in record.fields}
+        sample_field = folded.get("gtn")
+        latitude_field = folded.get("lat")
+        longitude_field = folded.get("long")
+        if not sample_field or not latitude_field or not longitude_field:
+            raise DemoError(f"FOREGS identity or coordinate fields are missing: {record.source_locator}")
+        sample_id = str(record.fields.get(sample_field) or "").strip()
+        latitude = str(record.fields.get(latitude_field) or "").strip()
+        longitude = str(record.fields.get(longitude_field) or "").strip()
+        if not sample_id or any(_reported_float(value) is None for value in (latitude, longitude)):
+            continue
+        downloaded = files.get(str(record.fields.get("_source_file") or ""))
+        if downloaded is None:
+            raise DemoError(f"FOREGS record references an unknown file: {record.source_locator}")
+        country_field = folded.get("country")
+        reported_country = str(record.fields.get(country_field) or "").strip() if country_field else ""
+        for analyte, values in observations.items():
+            if analyte not in ANALYTES or not isinstance(values, Mapping):
+                continue
+            measurement_basis = str(values.get("measurement_basis") or "")
+            observation_class = (analyte, measurement_basis)
+            if observation_class not in registered_classes or selected[observation_class] >= per_class_limit:
+                continue
+            raw_value = str(values.get("value") or "").strip()
+            unit = str(values.get("unit") or "").strip()
+            if _reported_float(raw_value) is None or not unit:
+                continue
+            record_id = stable_record_id(
+                record.source_id, record.source_record_id, analyte, raw_value, unit
+            )
+            rows.append(
+                {
+                    "record_id": record_id,
+                    "source_record_id": record.source_record_id,
+                    "sample_id": sample_id,
+                    "element_or_analyte": analyte,
+                    "value": raw_value,
+                    "unit": unit,
+                    "medium": str(record.fields.get("_medium") or ""),
+                    "measurement_basis": measurement_basis,
+                    "value_qualifier": "",
+                    "detection_limit": str(values.get("detection_limit") or ""),
+                    "detection_limit_unit": unit,
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "source_crs": "EPSG:4326",
+                    "coordinate_uncertainty_m": "",
+                    "geologic_unit": "",
+                    "analytical_method": str(values.get("analytical_method") or ""),
+                    "digestion_or_extraction": str(values.get("digestion_or_extraction") or ""),
+                    "laboratory": "",
+                    "license": candidate.license_id,
+                    "source_tier": "official_curated",
+                    "source_id": record.source_id,
+                    "source_locator": record.source_locator,
+                    "sampled_at": "",
+                    "sample_depth_min_m": str(record.fields.get("_sample_depth_min_m") or ""),
+                    "sample_depth_max_m": str(record.fields.get("_sample_depth_max_m") or ""),
+                    "grain_fraction": str(record.fields.get("_grain_fraction") or ""),
+                }
+            )
+            entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+            entry.update(
+                {
+                    "article_citations": [candidate.registry_entry["citation"]],
+                    "article_dois": [],
+                    "selection_rule": (
+                        "balanced source order by analyte and measurement basis; valid coordinates; "
+                        "publisher numeric value preserved"
+                    ),
+                    "reported_country": reported_country,
+                    "sample_type": str(record.fields.get("_sample_type") or ""),
+                    "measurement_basis": measurement_basis,
+                    "detection_limit": str(values.get("detection_limit") or ""),
+                    "possible_upstream_dl_over_2_substitution": bool(
+                        values.get("possible_upstream_dl_over_2_substitution")
+                    ),
+                    "scientific_note": str(record.fields.get("_censoring_boundary") or ""),
+                }
+            )
+            evidence_rows.append(entry)
+            selected_source_rows.add(record.source_record_id)
+            selected[observation_class] += 1
+    if len(rows) != observation_limit:
+        raise DemoError(f"FOREGS produced {len(rows)} observations, expected {observation_limit}")
+    return rows, evidence_rows, len(selected_source_rows)
+
+
 @contextmanager
 def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[DownloadedFile]]]:
     adapter = get_adapter(args.source)
@@ -1001,6 +1117,10 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             rows, evidence, selected_source_rows = gsj_japan_demo(
                 raw_records, files, candidate, args.observations
             )
+        elif args.source.startswith("foregs-"):
+            rows, evidence, selected_source_rows = foregs_demo(
+                raw_records, files, candidate, args.observations
+            )
         else:
             raise DemoError(f"unsupported source: {args.source}")
 
@@ -1033,6 +1153,8 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             "analytes": list(
                 ("Cu", "Ni", "Zn") if args.source == "geotraces-idp2025"
                 else ("As",) if args.source == "gemstat-open-archive"
+                else sorted({row["element_or_analyte"] for row in rows})
+                if args.source.startswith("foregs-")
                 else ANALYTES
             ),
             "mode": args.mode,
@@ -1060,6 +1182,16 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         "warnings": [
             "This is a deterministic demonstration slice, not a statistically representative sample.",
             "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+            *(
+                [
+                    "FOREGS is a low-density European continental baseline, not continuous or local coverage.",
+                    "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases.",
+                    "The publisher CSV lacks row-level less-than qualifiers; exact half-DL values are flagged only as possible upstream DL/2 substitutions.",
+                    "Official coordinates were transformed from national systems for continental-scale presentation; source precision is not local survey accuracy.",
+                ]
+                if args.source.startswith("foregs-")
+                else []
+            ),
             *(
                 [
                     "MarChem values are dry-weight partial nitric-acid extractions, not total concentrations.",
@@ -1121,6 +1253,8 @@ def build_parser() -> argparse.ArgumentParser:
             "georoc-archaean", "usgs-conus-soil", "norway-marchem",
             "geotraces-idp2025", "gemstat-open-archive", "pangaea-north-africa-soil",
             "japan-gsj-geochemical-map",
+            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
+            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
         ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)

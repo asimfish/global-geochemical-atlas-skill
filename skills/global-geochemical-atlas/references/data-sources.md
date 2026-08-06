@@ -84,6 +84,17 @@
 - 质量边界：保留 `<`/`>`、Good/Fair/Unknown/Pending review/Suspect、5,655 条额外精确重复观测和所有源行定位；演示排除方法代码 0、Pending review、Suspect、负哨兵和极端值；
 - 覆盖边界：它是各国自愿提交的不均匀淡水汇编，不是规则全球网格。As 与 GEOTRACES 的海水 Cu/Ni/Zn 共同补齐登记目标，但不能把淡水和海水静默合并为同一背景。
 
+### FOREGS 六个独立来源
+
+- `foregs-topsoil`、`foregs-subsoil`、`foregs-humus`、`foregs-stream-water`、`foregs-stream-sediment`、`foregs-floodplain-sediment` 分别注册，不能退化成一个无法说明介质和方法的 `foregs-europe` 适配器；
+- 科学发布：Salminen et al. (2005)《Geochemical Atlas of Europe, Part 1》；固定发布方文件快照：2026-03-03；
+- 文件：六个官方 ZIP 均固定字节数和 SHA-256，解析 22 个元素分析 CSV、16,364 个物理行和 48,504 条 As/Cr/Cu/Hg/Ni/Pb/Zn 测定映射；
+- 方法：土壤和沉积物同时保留 `total_selected` 与 `aqua_regia_leachable`；腐殖质为 4.5% HNO3 超声温和浸出；溪流水为 `<0.45 µm` 过滤溶解态；
+- 使用条件：按发布方说明保留 Salminen et al. (2005) 引用和 EuroGeoSurveys/GTK copyright notice。本项目只作科研分析，不把完整归档提交 Git，也不推断宽泛的再分发许可；
+- 检出限：CSV 第三行保存表级 DL，但没有逐行 `<` 限定符。适配器对恰好 `DL/2` 的数值只增加 `possible_upstream_dl_over_2_substitution` 证据警告，不自动标成删失或检出；
+- 覆盖：平均约一个样点/4,700 km²，属于欧洲低密度大陆基线；坐标由各国坐标系转换用于大陆尺度展示，不能解释成欧洲每处有数据或本地调查精度；
+- 传输：GTK 旧站的标准 HTTPS 证书验证当前失败，实际归档端点为官方 HTTP。该适配器仅对固定 `weppi.gtk.fi` URL 启用来源级例外，拒绝重定向，并在发布缓存前强制匹配登记 SHA-256；通用下载器仍保持 HTTPS-only。
+
 ## D1 适配器和稳定 ID
 
 `scripts/source_adapters.py` 冻结以下接口：
@@ -112,7 +123,7 @@ provenance() -> SourceManifest entry
 ## 下载验证
 
 - 只下载明确的数据文件 URL，不把 HTML 搜索结果保存成 CSV。
-- 要求 HTTPS、超时、有限重试、最大字节、内容类型和响应形状检查。
+- 通用下载要求 HTTPS、超时、有限重试、最大字节、内容类型和响应形状检查。若发布方历史端点只有 HTTP，必须在单个适配器中限定固定主机/URL、拒绝重定向并强制预登记 SHA-256，不得放宽通用下载器。
 - 优先使用发布方给出的 SHA-256；否则首次下载计算哈希并在 manifest 标为 `observed`，不能冒充发布方校验和。
 - 压缩包先检查成员路径、总展开大小和成员数，避免路径穿越和压缩炸弹。
 - 下载后记录服务端过滤、本地过滤、预期记录数、实际记录数和任何截断。

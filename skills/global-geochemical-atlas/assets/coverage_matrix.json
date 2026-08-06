@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06T03:48:23Z",
+  "as_of": "2026-08-06T08:00:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -121,10 +121,10 @@
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 2,
-        "Cu": 2,
-        "Ni": 2,
-        "Zn": 2
+        "As": 4,
+        "Cu": 4,
+        "Ni": 4,
+        "Zn": 4
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -181,6 +181,8 @@
         "Zn"
       ],
       "selected_sources": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
         "norway-marchem"
       ],
@@ -200,6 +202,8 @@
         "emodnet-chemistry": "D",
         "finland-gtk-geochemistry": "D",
         "foregs-europe": "D",
+        "foregs-floodplain-sediment": "A",
+        "foregs-stream-sediment": "A",
         "india-gsi-ngcm": "D",
         "iodp-data-systems": "D",
         "ireland-tellus": "D",
@@ -232,6 +236,8 @@
         "emodnet-chemistry": "regional_partial",
         "finland-gtk-geochemistry": "national_partial",
         "foregs-europe": "regional_partial",
+        "foregs-floodplain-sediment": "regional_partial",
+        "foregs-stream-sediment": "regional_partial",
         "india-gsi-ngcm": "national_partial",
         "iodp-data-systems": "global_partial",
         "ireland-tellus": "national_partial",
@@ -248,6 +254,24 @@
         "usgs-ngdb": "national_partial"
       },
       "source_target_analytes": {
+        "foregs-floodplain-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "foregs-stream-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "japan-gsj-geochemical-map": [
           "As",
           "Cr",
@@ -280,6 +304,8 @@
         "emodnet-chemistry": "discovery",
         "finland-gtk-geochemistry": "discovery",
         "foregs-europe": "discovery",
+        "foregs-floodplain-sediment": "normalized_analysis",
+        "foregs-stream-sediment": "normalized_analysis",
         "india-gsi-ngcm": "discovery",
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
@@ -302,10 +328,10 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 2,
-        "Cu": 2,
-        "Ni": 2,
-        "Zn": 2
+        "As": 4,
+        "Cu": 5,
+        "Ni": 5,
+        "Zn": 5
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -318,6 +344,7 @@
         "As",
         "Cr",
         "Cu",
+        "Hg",
         "Ni",
         "Pb",
         "Zn"
@@ -346,6 +373,9 @@
         "Zn"
       ],
       "selected_sources": [
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil",
         "pangaea-north-africa-soil",
         "usgs-conus-soil"
       ],
@@ -355,6 +385,9 @@
         "brazil-sgb-geochemistry": "D",
         "earthchem-library": "D",
         "foregs-europe": "D",
+        "foregs-humus": "A",
+        "foregs-subsoil": "A",
+        "foregs-topsoil": "A",
         "gemas-europe": "D",
         "ireland-tellus": "D",
         "pangaea-north-africa-soil": "A",
@@ -372,6 +405,9 @@
         "brazil-sgb-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
         "foregs-europe": "regional_partial",
+        "foregs-humus": "regional_partial",
+        "foregs-subsoil": "regional_partial",
+        "foregs-topsoil": "regional_partial",
         "gemas-europe": "regional_partial",
         "ireland-tellus": "national_partial",
         "pangaea-north-africa-soil": "regional_partial",
@@ -383,6 +419,31 @@
         "wosis": "global_partial"
       },
       "source_target_analytes": {
+        "foregs-humus": [
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "foregs-subsoil": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "foregs-topsoil": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "pangaea-north-africa-soil": [
           "As",
           "Cr",
@@ -404,6 +465,9 @@
         "brazil-sgb-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "foregs-europe": "discovery",
+        "foregs-humus": "normalized_analysis",
+        "foregs-subsoil": "normalized_analysis",
+        "foregs-topsoil": "normalized_analysis",
         "gemas-europe": "discovery",
         "ireland-tellus": "discovery",
         "pangaea-north-africa-soil": "normalized_analysis",
@@ -421,22 +485,24 @@
     "water": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 1,
-        "Cu": 1,
-        "Ni": 1,
-        "Zn": 1
+        "As": 2,
+        "Cu": 2,
+        "Ni": 2,
+        "Zn": 2
       },
-      "analytes_with_multiple_sources": [],
-      "analytes_with_single_source": [
+      "analytes_with_multiple_sources": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
+      "analytes_with_single_source": [],
       "audited_analytes": [
         "As",
+        "Cr",
         "Cu",
         "Ni",
+        "Pb",
         "Zn"
       ],
       "candidate_sources": [
@@ -464,6 +530,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "foregs-stream-water",
         "gemstat-open-archive",
         "geotraces-idp2025"
       ],
@@ -476,6 +543,7 @@
         "eea-waterbase": "D",
         "emodnet-chemistry": "D",
         "foregs-europe": "D",
+        "foregs-stream-water": "A",
         "gemstat-open-archive": "A",
         "geotraces-idp2025": "A",
         "glorich": "D",
@@ -484,7 +552,7 @@
         "pangaea-repository": "D",
         "us-water-quality-portal": "D"
       },
-      "source_independence": "multiple_sources_but_single_source_per_analyte",
+      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
       "source_scopes": {
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
@@ -494,6 +562,7 @@
         "eea-waterbase": "regional_partial",
         "emodnet-chemistry": "regional_partial",
         "foregs-europe": "regional_partial",
+        "foregs-stream-water": "regional_partial",
         "gemstat-open-archive": "global_partial",
         "geotraces-idp2025": "global_ocean_partial",
         "glorich": "global_partial",
@@ -503,6 +572,14 @@
         "us-water-quality-portal": "national_partial"
       },
       "source_target_analytes": {
+        "foregs-stream-water": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "gemstat-open-archive": [
           "As"
         ],
@@ -521,6 +598,7 @@
         "eea-waterbase": "discovery",
         "emodnet-chemistry": "discovery",
         "foregs-europe": "discovery",
+        "foregs-stream-water": "normalized_analysis",
         "gemstat-open-archive": "normalized_analysis",
         "geotraces-idp2025": "normalized_analysis",
         "glorich": "discovery",

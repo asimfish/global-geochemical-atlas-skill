@@ -76,6 +76,17 @@
 - 质量边界：原始 492,999 条观测中的方法代码 0、Pending review、Suspect、重复和异常哨兵仍保留在全量适配器与审计报告中，但不进入演示；
 - 覆盖边界：As 子集只涉及 33 个贡献国家，不是规则全球淡水网格，也不能与 GEOTRACES 海水背景直接混算。
 
+## FOREGS 六介质 demo
+
+目录分别为 `foregs-topsoil/`、`foregs-subsoil/`、`foregs-humus/`、`foregs-stream-water/`、`foregs-stream-sediment/` 和 `foregs-floodplain-sediment/`。
+
+- 来源：EuroGeoSurveys/GTK《Geochemical Atlas of Europe》2005 科学发布，固定 2026-03-03 发布方文件快照；
+- 使用条件：科研分析保留 Salminen et al. (2005) 引用和发布页要求的 EuroGeoSurveys/GTK copyright notice；
+- 内容：每个来源 48 条。topsoil、subsoil、stream sediment、floodplain sediment 按 As/Cu/Ni/Zn × 总量/王水量平衡；stream water 按四元素平衡；humus 按实际存在的 Cu/Ni/Zn 平衡；
+- 方法边界：总量、王水可浸出量、腐殖质温和硝酸可浸出量和 `<0.45 µm` 溶解态保持为不同 `measurement_basis`；
+- 检出限边界：CSV 有表级 DL，但没有逐行 `<` 限定符；恰好等于 `DL/2` 的值只在证据中标为可能的上游替代，不自动改写为删失值；
+- 覆盖边界：约 1 个站点/4,700 km²，是低密度欧洲大陆基线，不是欧洲连续覆盖，也不是本地调查精度。
+
 ## 确定性再生成
 
 先按 `references/data-sources.md` 下载并验证来源。完整第三方文件留在仓库外缓存，然后在仓库根目录运行：
@@ -137,12 +148,21 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --mode cached \
   --observations 48 \
   --generated-at 2026-08-05T14:41:20Z
+
+# FOREGS 的六个 source_id 分别运行；以下以 topsoil 为例
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source foregs-topsoil \
+  --cache-dir .cache/data/foregs-adapters \
+  --output-dir /tmp/foregs-topsoil-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-06T08:00:00Z
 ```
 
 使用相同注册表版本、验证缓存/快照和 `--generated-at` 时，每个来源的三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。
 
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将以上七个来源合并到同一个 `sources=auto` 请求：400 条观测包括 rock 48、soil 96、sediment 160、water 96。`run_manifest.json` 绑定七个输入 fixture 的 hash、来源证据等级、路由结果和 46 个 D2 比较分区；`expected-output/` 是可字节级重建的九文件工作流结果。
+`fixtures/four-media/combined-v3/` 将以上十三个来源合并到同一个 `sources=auto` 请求：688 条观测包括 rock 48、soil 240、sediment 256、water 144。`run_manifest.json` 绑定十三个输入 fixture 的 hash、来源证据等级、路由结果和 85 个 D2 比较分区；`expected-output/` 是可字节级重建的九文件工作流结果。
 
-这只是接口联合测试。46 个背景组按元素、介质、measurement basis、地质单元、方法和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 11 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。
+这只是接口联合测试。85 个背景组按元素、介质、measurement basis、地质单元、方法和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 11 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。

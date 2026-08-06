@@ -1,6 +1,6 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-06T03:48:23Z",
+  "reviewed_at": "2026-08-06T08:00:00Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
     "round": 5,
@@ -529,6 +529,360 @@
       "limitations": [
         "Very low continental sampling density is not local coverage.",
         "Multiple techniques and laboratories must remain explicit even though sampling was harmonised."
+      ]
+    },
+    "foregs-topsoil": {
+      "title": "FOREGS Geochemical Atlas of Europe: topsoil",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "source_kind": "official_regional_program_dataset",
+      "status": "conditional",
+      "production_eligible": false,
+      "media": [
+        "soil"
+      ],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": [
+          "europe"
+        ],
+        "notes": "Low-density harmonised FOREGS residual topsoil, 0-25 cm without organic layer observations; not continuous or local coverage."
+      },
+      "identifiers": {
+        "parent_atlas": "Geochemical Atlas of Europe, Part 1 (2005)"
+      },
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "interfaces": [
+        {
+          "kind": "bulk_download",
+          "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+          "format": "zip_csv_xlsx",
+          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "server_filters": [
+            "country_code",
+            "sample_medium"
+          ]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php",
+        "notes": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+        "release_date": "2005"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "foregs_static_zip"
+      },
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+        "https://weppi.gtk.fi/publ/foregsatlas/articles/Analysis.pdf",
+        "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      ],
+      "limitations": [
+        "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
+        "Measurement bases and methods remain explicit and are not silently pooled.",
+        "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+      ]
+    },
+    "foregs-subsoil": {
+      "title": "FOREGS Geochemical Atlas of Europe: subsoil",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "source_kind": "official_regional_program_dataset",
+      "status": "conditional",
+      "production_eligible": false,
+      "media": [
+        "soil"
+      ],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": [
+          "europe"
+        ],
+        "notes": "Low-density harmonised FOREGS residual lower-horizon subsoil; 25 cm layer within 50-200 cm depth range observations; not continuous or local coverage."
+      },
+      "identifiers": {
+        "parent_atlas": "Geochemical Atlas of Europe, Part 1 (2005)"
+      },
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "interfaces": [
+        {
+          "kind": "bulk_download",
+          "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+          "format": "zip_csv_xlsx",
+          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "server_filters": [
+            "country_code",
+            "sample_medium"
+          ]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php",
+        "notes": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+        "release_date": "2005"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "foregs_static_zip"
+      },
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+        "https://weppi.gtk.fi/publ/foregsatlas/articles/Analysis.pdf",
+        "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      ],
+      "limitations": [
+        "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
+        "Measurement bases and methods remain explicit and are not silently pooled.",
+        "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+      ]
+    },
+    "foregs-humus": {
+      "title": "FOREGS Geochemical Atlas of Europe: humus",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "source_kind": "official_regional_program_dataset",
+      "status": "conditional",
+      "production_eligible": false,
+      "media": [
+        "soil"
+      ],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": [
+          "europe"
+        ],
+        "notes": "Low-density harmonised FOREGS humus / organic horizon where present observations; not continuous or local coverage."
+      },
+      "identifiers": {
+        "parent_atlas": "Geochemical Atlas of Europe, Part 1 (2005)"
+      },
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "interfaces": [
+        {
+          "kind": "bulk_download",
+          "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+          "format": "zip_csv_xlsx",
+          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "server_filters": [
+            "country_code",
+            "sample_medium"
+          ]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php",
+        "notes": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+        "release_date": "2005"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "foregs_static_zip"
+      },
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+        "https://weppi.gtk.fi/publ/foregsatlas/articles/Analysis.pdf",
+        "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      ],
+      "limitations": [
+        "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
+        "Measurement bases and methods remain explicit and are not silently pooled.",
+        "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+      ]
+    },
+    "foregs-stream-water": {
+      "title": "FOREGS Geochemical Atlas of Europe: stream water",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "source_kind": "official_regional_program_dataset",
+      "status": "conditional",
+      "production_eligible": false,
+      "media": [
+        "water"
+      ],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": [
+          "europe"
+        ],
+        "notes": "Low-density harmonised FOREGS stream water observations; not continuous or local coverage."
+      },
+      "identifiers": {
+        "parent_atlas": "Geochemical Atlas of Europe, Part 1 (2005)"
+      },
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "interfaces": [
+        {
+          "kind": "bulk_download",
+          "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+          "format": "zip_csv_xlsx",
+          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "server_filters": [
+            "country_code",
+            "sample_medium"
+          ]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php",
+        "notes": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+        "release_date": "2005"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "foregs_static_zip"
+      },
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+        "https://weppi.gtk.fi/publ/foregsatlas/articles/Analysis.pdf",
+        "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      ],
+      "limitations": [
+        "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
+        "Measurement bases and methods remain explicit and are not silently pooled.",
+        "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+      ]
+    },
+    "foregs-stream-sediment": {
+      "title": "FOREGS Geochemical Atlas of Europe: stream sediment",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "source_kind": "official_regional_program_dataset",
+      "status": "conditional",
+      "production_eligible": false,
+      "media": [
+        "sediment"
+      ],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": [
+          "europe"
+        ],
+        "notes": "Low-density harmonised FOREGS active stream sediment composite from a small drainage basin observations; not continuous or local coverage."
+      },
+      "identifiers": {
+        "parent_atlas": "Geochemical Atlas of Europe, Part 1 (2005)"
+      },
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "interfaces": [
+        {
+          "kind": "bulk_download",
+          "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+          "format": "zip_csv_xlsx",
+          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "server_filters": [
+            "country_code",
+            "sample_medium"
+          ]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php",
+        "notes": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+        "release_date": "2005"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "foregs_static_zip"
+      },
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+        "https://weppi.gtk.fi/publ/foregsatlas/articles/Analysis.pdf",
+        "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      ],
+      "limitations": [
+        "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
+        "Measurement bases and methods remain explicit and are not silently pooled.",
+        "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+      ]
+    },
+    "foregs-floodplain-sediment": {
+      "title": "FOREGS Geochemical Atlas of Europe: floodplain sediment",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "source_kind": "official_regional_program_dataset",
+      "status": "conditional",
+      "production_eligible": false,
+      "media": [
+        "sediment"
+      ],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": [
+          "europe"
+        ],
+        "notes": "Low-density harmonised FOREGS floodplain sediment from a larger drainage basin observations; not continuous or local coverage."
+      },
+      "identifiers": {
+        "parent_atlas": "Geochemical Atlas of Europe, Part 1 (2005)"
+      },
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "interfaces": [
+        {
+          "kind": "bulk_download",
+          "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+          "format": "zip_csv_xlsx",
+          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "server_filters": [
+            "country_code",
+            "sample_medium"
+          ]
+        }
+      ],
+      "license": {
+        "status": "citation_and_copyright_terms",
+        "id": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php",
+        "notes": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+        "release_date": "2005"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "foregs_static_zip"
+      },
+      "evidence_urls": [
+        "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+        "https://weppi.gtk.fi/publ/foregsatlas/articles/Analysis.pdf",
+        "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      ],
+      "limitations": [
+        "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
+        "Measurement bases and methods remain explicit and are not silently pooled.",
+        "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
       ]
     },
     "canada-cdogs": {

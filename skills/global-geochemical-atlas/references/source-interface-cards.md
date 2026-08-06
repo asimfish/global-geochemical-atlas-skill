@@ -128,7 +128,13 @@ V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土�
 | 来源 | 介质 | 范围 | 当前可见接口 | 主要阻断项 |
 |---|---|---|---|---|
 | `petdb` | 岩石、矿物 | 全球海底及部分陆域 | EarthChem 查询与导出 | 动态版本、原论文去重、适配器 |
-| `foregs-europe` | 土壤、沉积物、水 | 欧洲 | 压缩 Excel/Atlas | 再分发条款、文件清单、方法映射 |
+| `foregs-europe` | 土壤、沉积物、水 | 欧洲 | 项目总入口 | 仅作发现与父项目血缘；数值接入已拆成下列六项 |
+| `foregs-topsoil` | 土壤 | 欧洲 | 固定 ZIP/CSV | 已实现；总量/王水、重复 GTN、表级 DL 分开保留 |
+| `foregs-subsoil` | 土壤 | 欧洲 | 固定 ZIP/CSV | 已实现；25 cm 下层样品只保留发布方深度范围语义 |
+| `foregs-humus` | 土壤 | 欧洲 | 固定 ZIP/CSV | 已实现；温和硝酸浸出，不含 As/Cr |
+| `foregs-stream-water` | 水 | 欧洲 | 固定 ZIP/CSV | 已实现；<0.45 µm 溶解态，无可接受 Hg |
+| `foregs-stream-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；<150 µm，总量/王水分开 |
+| `foregs-floodplain-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；0–25 cm，与溪流沉积物分开 |
 | `canada-cdogs` | 沉积物、水、精矿 | 加拿大 | 调查目录和部分标准化下载 | 逐调查版本/许可、复测关系 |
 | `australia-ngsa` | 沉积物（运移表生覆盖物） | 澳大利亚 | 国家 Atlas 和产品下载 | 固定具体产品、文件 hash、介质语义 |
 | `australia-ozchem` | 岩石、沉积物 | 澳大利亚 | 仅核实到官方旧版产品说明 | 当前数值端点、版本、上游重叠 |
@@ -189,9 +195,9 @@ V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土�
 | `japan-gsj-geochemical-map` | 河流/海洋沉积物、后续表层土壤 | 日本陆海；约 3,000 河流沉积物和 5,000 海洋沉积物 | 样点/浓度数据库、Shapefile、As/Cu/Ni/Zn WMS/WMTS | 后续已将 3,024 行河流沉积物文件对固定并实现适配器；海洋沉积物和表层土壤仍是独立待接入产品 |
 | `south-africa-cgs-geochemistry` | 河流沉积物、替代土壤 | 南非多个图幅；已验证 Alexander Bay 点层含 As/Cu/Ni/Zn 和坐标字段 | ArcGIS Feature/MapServer | 先完整读取产品许可、方法、单位和检出限；图幅集合不冒充连续全国库 |
 
-### 第四轮的边界判断
+### 第四至第六轮的边界判断
 
-- 该轮结束时目录有 40 个来源和 5 个 A 级 `normalized_analysis` 样板；此后 GSJ 河流沉积物与 PANGAEA 北非土壤接入，当前目录为 41 项、A 级样板为 7 项；
+- 第四轮结束时目录有 40 个来源和 5 个 A 级 `normalized_analysis` 样板；此后 GSJ 河流沉积物、PANGAEA 北非土壤和 FOREGS 六个介质数据集完成接入，当前目录为 47 项、A 级样板为 13 项；
 - GSJ 已完成首个河流沉积物适配器；BC RGS、阿拉斯加 WebGeochem 和阿根廷 SIGAM 仍是下一批高价值数值接入候选；
 - 墨西哥目前证明的是派生图层，印度目前证明的是项目和有限分发路线，不能写成已获得原始全量数据；
 - 南非、BC 和阿拉斯加均含多来源或多图幅内容，独立来源数必须回到原调查、出版物和样品，而不是按门户计数；

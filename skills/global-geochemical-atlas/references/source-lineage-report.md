@@ -46,14 +46,17 @@
 | `argentina-segemar-geochemistry` | 国家历史与现代调查发布系统 | SIGAM 汇合 1960–1980 年代档案样品、1990 年代以后 SEGEMAR 采样和逐图幅报告 | 按原项目、图幅、样品和分析批次去重；GeoNetwork、viewer、repository PDF 和产品表不是独立来源 |
 | `india-gsi-ngcm` | 国家协调地球化学计划 | NGCM 按统一 2×2 km 单元设计；数据可在 Atlas、专题报告或活动分发中出现 | 整个计划按调查体系处理；同一 toposheet 的 Atlas、Excel 和报告不重复计数，未公开单元不推断为已覆盖 |
 | `japan-gsj-geochemical-map` | 国家陆海地球化学调查与派生地图服务 | 河流沉积物、海洋沉积物、精密区域和后续表层土壤由样点数据库派生 WMS/WMTS/3D 地图 | 按调查代际、介质和样品去重；点表是观测，Shapefile/WMS/WMTS/3D 地图不各算一份来源 |
+| `foregs-europe` | 欧洲协调基线调查父项目 | 六种介质由同一 FOREGS 设计、GTN 框架和跨国分析计划产生 | 六个可执行 `source_id` 是不同介质/方法表，不自动算六份独立调查证据；跨介质不能当复测 |
+| `foregs-topsoil` / `foregs-subsoil` / `foregs-humus` | 同一协调调查的三种陆地介质 | 共享项目、采样框架和部分实验室/QC；样品和方法不同 | 按 GTN、介质、具体文件行和 measurement basis 去重；同一 GTN 的不同介质不是重复记录，也不是独立调查背书 |
+| `foregs-stream-water` / `foregs-stream-sediment` / `foregs-floodplain-sediment` | 同一协调调查的三种水系介质 | 共享项目框架；溪流水、活性溪流沉积物与泛滥平原沉积物采样对象不同 | 分介质保留，但来源独立性统计时把 FOREGS 视为一个协调项目；总量与王水值是同一样品的不同分析基础 |
 | `south-africa-cgs-geochemistry` | 国家门户中的逐图幅产品集合 | 多个 geochemistry FeatureServer/MapServer 图层对应不同地图幅和出版物 | 按地图幅、原调查和样品计算；同一图层的 Feature/Map service 表达只算一次，门户不代表连续全国覆盖 |
 
 ## 当前单一来源依赖
 
 - 岩石生产路由只有 `georoc-archaean`，且仅覆盖太古宙克拉通；
-- 土壤已有 `usgs-conus-soil` 与 `pangaea-north-africa-soil` 两个可执行来源，但分别只覆盖美国本土调查和北非 43 个细粒组分样点，不能据此宣称全球或方法一致覆盖；
-- 沉积物已有 `norway-marchem` 与 `japan-gsj-geochemical-map` 两个可执行来源，但分别覆盖挪威海域和日本河流；方法、单位和子介质边界不同，不能视为同一背景的独立复测；
-- 水体虽有 `gemstat-open-archive` 与 `geotraces-idp2025` 两个分析来源，但 As 只来自前者，Cu/Ni/Zn 只来自后者；介质子类型也分别是淡水与海水，因此每个目标元素仍是单一来源依赖；
+- 土壤已有 USGS、PANGAEA 和 FOREGS 三套调查体系；FOREGS 又分 topsoil/subsoil/humus，但三者共享父项目，不能按三个独立调查扩张证据数；
+- 沉积物已有 MarChem、GSJ 和 FOREGS 三套调查体系；FOREGS stream/floodplain 两项共享父项目，且海洋、河流、泛滥平原、粒级和方法边界不同，不能视为同一背景的复测；
+- 水体已有 GEMStat、GEOTRACES 和 FOREGS 三套体系；目标 As/Cu/Ni/Zn 均至少有两个登记来源，但淡水、海水、欧洲溪流水和单位/方法背景不同，多来源不等于可直接合并；
 - 当前没有任何介质可以声明全球、方法一致且多来源独立覆盖。
 
 ## 去重键原则

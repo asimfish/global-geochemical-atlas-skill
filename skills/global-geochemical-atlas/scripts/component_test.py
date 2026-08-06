@@ -114,8 +114,10 @@ def check_d1(output_dir: Path) -> list[str]:
             "georoc-archaean", "usgs-conus-soil", "norway-marchem",
             "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
             "pangaea-north-africa-soil",
+            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
+            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
         },
-        "D1 registry freezes seven executable datasets across the four required media",
+        "D1 registry freezes thirteen executable datasets across the four required media",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -167,6 +169,33 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 GSJ candidate pins both CSV versions, seven targets and occurrence-order duplicate handling",
         checks,
     )
+    foregs = source_contracts.ForegsTopsoilAdapter()
+    with tempfile.TemporaryDirectory(prefix="foregs-contract-") as temporary_directory:
+        foregs_contract = Path(temporary_directory) / "synthetic.csv"
+        foregs_contract.write_text(
+            "GTN,As,As,Cu\n"
+            "identifier,mg/kg,mg/kg,mg/kg\n"
+            "detection limit,2,4,1\n"
+            "X-1,1,2,0.5\n",
+            encoding="latin-1",
+        )
+        parsed_foregs = list(
+            foregs._rows(
+                foregs_contract,
+                {"required_fields": ["GTN", "As", "Cu"], "physical_rows": 1},
+            )
+        )
+    foregs_line, foregs_values, foregs_units, foregs_limits = parsed_foregs[0]
+    require(
+        foregs_line == 4
+        and foregs_values == {"GTN": "X-1", "As": "1", "As__2": "2", "Cu": "0.5"}
+        and foregs_units["As__2"] == "mg/kg"
+        and foregs_limits["Cu"] == "1"
+        and foregs._half_detection_limit(foregs_values["As"], foregs_limits["As"])
+        and foregs._half_detection_limit(foregs_values["Cu"], foregs_limits["Cu"]),
+        "D1 FOREGS parser preserves three metadata rows, duplicate headers and possible half-DL flags",
+        checks,
+    )
     catalog = source_router.load_catalog()
     require(
         set(catalog["sources"][source_id]["status"] for source_id in ("georoc-archaean", "usgs-conus-soil"))
@@ -202,8 +231,10 @@ def check_d1(output_dir: Path) -> list[str]:
             "georoc-archaean", "usgs-conus-soil", "norway-marchem",
             "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
             "pangaea-north-africa-soil",
+            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
+            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
         },
-        "D1 V3 router selects seven normalized-analysis datasets across all media",
+        "D1 V3 router selects thirteen normalized-analysis datasets across all media",
         checks,
     )
     require(
@@ -232,8 +263,11 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         {entry["source_id"] for entry in raw_sediment_route["selected_sources"]}
-        == {"norway-marchem", "japan-gsj-geochemical-map"},
-        "D1 V3 router selects both normalized sediment sources for a raw-observation request",
+        == {
+            "norway-marchem", "japan-gsj-geochemical-map",
+            "foregs-stream-sediment", "foregs-floodplain-sediment",
+        },
+        "D1 V3 router selects all four normalized sediment sources for a raw-observation request",
         checks,
     )
     benchmark_route = source_router.route_sources(
@@ -263,12 +297,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 7, "B": 0, "C": 0, "D": len(catalog["sources"]) - 7, "U": 0},
+            "evidence_tiers": {"A": 13, "B": 0, "C": 0, "D": len(catalog["sources"]) - 13, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 7,
+                "normalized_analysis": 13,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 7,
+                "discovery": len(catalog["sources"]) - 13,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -627,6 +661,24 @@ def check_d1(output_dir: Path) -> list[str]:
             / "japan-gsj-geochemical-map"
             / "human_review.json"
         ),
+        "foregs-topsoil": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-topsoil" / "human_review.json"
+        ),
+        "foregs-subsoil": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-subsoil" / "human_review.json"
+        ),
+        "foregs-humus": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-humus" / "human_review.json"
+        ),
+        "foregs-stream-water": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "water" / "foregs-stream-water" / "human_review.json"
+        ),
+        "foregs-stream-sediment": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "sediment" / "foregs-stream-sediment" / "human_review.json"
+        ),
+        "foregs-floodplain-sediment": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "sediment" / "foregs-floodplain-sediment" / "human_review.json"
+        ),
     }
     require(
         all(
@@ -722,19 +774,25 @@ def check_d1(output_dir: Path) -> list[str]:
         and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
         and matrix["cells"]["rock"]["analyte_coverage"] == "complete_for_registered_targets"
         and matrix["cells"]["soil"]["selected_sources"]
-        == ["pangaea-north-africa-soil", "usgs-conus-soil"]
+        == [
+            "foregs-humus", "foregs-subsoil", "foregs-topsoil",
+            "pangaea-north-africa-soil", "usgs-conus-soil",
+        ]
         and matrix["cells"]["soil"]["analyte_source_counts"]
-        == {"As": 2, "Cu": 2, "Ni": 2, "Zn": 2}
+        == {"As": 4, "Cu": 5, "Ni": 5, "Zn": 5}
         and matrix["cells"]["sediment"]["selected_sources"]
-        == ["japan-gsj-geochemical-map", "norway-marchem"]
+        == [
+            "foregs-floodplain-sediment", "foregs-stream-sediment",
+            "japan-gsj-geochemical-map", "norway-marchem",
+        ]
         and matrix["cells"]["sediment"]["analyte_source_counts"]
-        == {"As": 2, "Cu": 2, "Ni": 2, "Zn": 2}
+        == {"As": 4, "Cu": 4, "Ni": 4, "Zn": 4}
         and matrix["cells"]["water"]["analyte_coverage"] == "complete_for_registered_targets"
         and matrix["cells"]["water"]["missing_analytes"] == []
         and matrix["cells"]["water"]["source_independence"]
-        == "multiple_sources_but_single_source_per_analyte"
+        == "multiple_sources_lineage_not_yet_deduplicated"
         and matrix["cells"]["water"]["analyte_source_counts"]
-        == {"As": 1, "Cu": 1, "Ni": 1, "Zn": 1},
+        == {"As": 2, "Cu": 2, "Ni": 2, "Zn": 2},
         "D1 coverage matrix keeps rock, soil, sediment and water source independence explicit",
         checks,
     )
@@ -1096,9 +1154,9 @@ def check_d1(output_dir: Path) -> list[str]:
         for line in (COMBINED_DEMO / "sources.jsonl").read_text(encoding="utf-8").splitlines()
     ]
     require(
-        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 400
+        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 688
         and combined_manifest["record_counts"]["by_medium"]
-        == {"rock": 48, "sediment": 160, "soil": 96, "water": 96}
+        == {"rock": 48, "sediment": 256, "soil": 240, "water": 144}
         and combined_manifest["record_counts"]["by_source"]
         == {
             "gemstat-open-archive": 48,
@@ -1108,14 +1166,20 @@ def check_d1(output_dir: Path) -> list[str]:
             "norway-marchem": 112,
             "pangaea-north-africa-soil": 48,
             "usgs-conus-soil": 48,
+            "foregs-topsoil": 48,
+            "foregs-subsoil": 48,
+            "foregs-humus": 48,
+            "foregs-stream-water": 48,
+            "foregs-stream-sediment": 48,
+            "foregs-floodplain-sediment": 48,
         },
-        "D1 combined fixture binds all seven datasets to one 400-observation four-media request",
+        "D1 combined fixture binds all thirteen datasets to one 688-observation four-media request",
         checks,
     )
     require(
         combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
-        and combined_manifest["comparison_isolation"]["partition_count"] == 46
-        and combined_manifest["comparison_isolation"]["water_partition_count"] == 13,
+        and combined_manifest["comparison_isolation"]["partition_count"] == 85
+        and combined_manifest["comparison_isolation"]["water_partition_count"] == 17,
         "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
         checks,
     )
@@ -1131,12 +1195,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         output_validator.validate_dir(combined_output)["status"] == "valid"
         and combined_summary["status"] == "success"
-        and combined_summary["metrics"]["record_count"] == 400
-        and combined_summary["metrics"]["standardized_record_count"] == 400
-        and combined_summary["metrics"]["valid_coordinate_count"] == 400
+        and combined_summary["metrics"]["record_count"] == 688
+        and combined_summary["metrics"]["standardized_record_count"] == 688
+        and combined_summary["metrics"]["valid_coordinate_count"] == 688
         and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
         and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
-        and len(combined_anomaly["groups"]) == 46
+        and len(combined_anomaly["groups"]) == 85
         and all(len(sources) == 1 for sources in grouped_sources.values()),
         "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
         checks,
@@ -1148,7 +1212,7 @@ def check_d1(output_dir: Path) -> list[str]:
             COMBINED_DEMO / "request.json",
             SOURCE_DEMOS,
             rebuilt_dir,
-            "2026-08-05T15:20:00Z",
+            "2026-08-06T08:00:00Z",
             False,
         )
         require(
@@ -1156,7 +1220,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 (rebuilt_dir / filename).read_bytes() == (COMBINED_DEMO / filename).read_bytes()
                 for filename in ("demo_input.csv", "sources.jsonl", "run_manifest.json")
             ),
-            "D1 combined fixture rebuilds byte-for-byte from the seven checked-in source demos",
+            "D1 combined fixture rebuilds byte-for-byte from the thirteen checked-in source demos",
             checks,
         )
         rebuilt_output = temporary_root / "output"

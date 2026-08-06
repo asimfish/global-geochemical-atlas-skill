@@ -9,16 +9,16 @@
 | 已接入 | `norway-marchem` | 已补海洋沉积物 normalized-analysis 样板；公开 API、许可、目标元素、方法、动态快照和全量关系均已核实 | 已完成工程接入 | 只覆盖挪威海域；30 条人工复核尚未签署 | 完成 30 条逐条复核后升为 `benchmark_ready`；另补独立沉积物来源 |
 | 已接入 | `pangaea-north-africa-soil` | 具体 DOI 的北非可风蚀细粒土壤，补非洲区域和完整行级方法/引用血缘 | 已完成工程接入 | 只有 43 个离散样点；与 bulk-soil 调查不可直接混用；人工复核未签署 | 完成具名复核；继续用逐 DOI 方式补论文长尾而不把 PANGAEA 仓库当独立来源 |
 | 已接入 | `japan-gsj-geochemical-map` | 3,024 行全国河流沉积物，补亚洲和独立沉积物区域 | 已完成工程接入 | CSV 缺逐行方法、检出限和 QC；海洋/土壤产品尚未接入；人工复核未签署 | 完成具名复核；固定详细方法资料，再把海洋沉积物和表层土壤作为独立产品接入 |
+| 已接入 | FOREGS 六个介质来源 | 16,364 个 CSV 行、48,504 条七目标元素映射，补欧洲 topsoil/subsoil/humus/stream water/stream sediment/floodplain sediment | 已完成工程接入 | 低密度；父项目共享血缘；行级 `<DL` 限定符不可恢复；官方旧站为 hash 固定 HTTP | 完成六份具名复核；继续补与 FOREGS 独立的国家/区域来源 |
 | 1 | `canada-bc-rgs` / `argentina-segemar-geochemistry` / `alaska-dggs-webgeochem` | 同时补北美省/州级与南美覆盖；均已有数值下载或公开目录，且保留方法/出版物线索 | 中高 | 多原始调查、历史方法、重复发布和逐文件许可 | BC 固定 2020 版文件；Argentina 选一个开放图幅；Alaska 选一个具 DOI 的 DGGS 数据包，各自做字段/方法/hash 对账 |
 | 2 | `ireland-tellus` | 同时补土壤、沉积物和水，适合验证跨介质 schema | 中 | 官网临时下线、多个区域/国家 release、许可通知需重新固定 | 官网恢复后固定具体 ZIP、release note、方法表、许可和 checksum |
-| 3 | `foregs-europe` | 一个协调调查同时补土壤、沉积物和水体，可与 Tellus 做血缘/方法对照 | 中 | 再分发条款、旧 Excel 结构、多方法/实验室 | 固定下载文件清单，确认许可并盘点 As/Cu/Ni/Zn 字段与方法 |
-| 4 | `sweden-sgu-geochemical-atlas` / `finland-gtk-geochemistry` | 增加北欧沉积物和岩石的官方可查询数值 | 中 | 产品/图层许可和版本不同，介质及提取方法必须分开 | 瑞典先固定 till CSV 许可与 hash；芬兰先选一个岩石和一个沉积物产品复核 |
-| 5 | `canada-cdogs` | 大量沉积物和水体调查，且有官方原始/标准化文件 | 中高 | 逐调查版本、联邦/省许可、复测与重发布关系 | 先选一个开放、字段完整的沉积物+水调查做端到端复核 |
-| 6 | `emodnet-chemistry` | 扩展欧洲海洋水/沉积物候选，并为水体分析物提供独立交叉来源 | 中高 | 聚合、贡献者引用和上游重复 | 固定一个不受限协调产品，并先完成 record-level provider 血缘解析 |
-| 7 | `usgs-ngdb` / `norway-ngu-lito` | 扩展岩石、沉积物和土壤的国家数据 | 高 | 历史异质；LITO 2026 版尚未完成最终 QC | USGS 先选不可变发布；LITO 等最终 QC 或明确保留 preliminary 标志后再适配 |
-| 8 | `petdb` / `georoc-database` | 把岩石从太古宙专题扩展到更多全球构造环境 | 中 | 动态数据库、相互聚合、与原论文和预编译集重叠 | 固定查询快照，验证生产端点并建立原论文/样品去重键 |
-| 9 | `soils4africa` / `brazil-sgb-geochemistry` | 增加非洲土壤与南美多介质官方入口 | 中高 | 隐私/聚合约束、许可未固定、项目和集成服务重叠 | 分别先审许可边界和导出小样，再决定适配器范围 |
-| 10 | `pangaea-repository` / `earthchem-library` / `noaa-ncei-marine-geology` / `iodp-data-systems` | 扩大 DOI、海洋和论文数据发现范围 | 高 | 逐数据集 schema 与许可，样品目录和数值混杂，镜像重复 | 先实现发现与血缘解析，不把仓库、目录或分发系统当作独立生产来源 |
+| 3 | `sweden-sgu-geochemical-atlas` / `finland-gtk-geochemistry` | 增加北欧沉积物和岩石的官方可查询数值 | 中 | 产品/图层许可和版本不同，介质及提取方法必须分开 | 瑞典先固定 till CSV 许可与 hash；芬兰先选一个岩石和一个沉积物产品复核 |
+| 4 | `canada-cdogs` | 大量沉积物和水体调查，且有官方原始/标准化文件 | 中高 | 逐调查版本、联邦/省许可、复测与重发布关系 | 先选一个开放、字段完整的沉积物+水调查做端到端复核 |
+| 5 | `emodnet-chemistry` | 扩展欧洲海洋水/沉积物候选，并为水体分析物提供独立交叉来源 | 中高 | 聚合、贡献者引用和上游重复 | 固定一个不受限协调产品，并先完成 record-level provider 血缘解析 |
+| 6 | `usgs-ngdb` / `norway-ngu-lito` | 扩展岩石、沉积物和土壤的国家数据 | 高 | 历史异质；LITO 2026 版尚未完成最终 QC | USGS 先选不可变发布；LITO 等最终 QC 或明确保留 preliminary 标志后再适配 |
+| 7 | `petdb` / `georoc-database` | 把岩石从太古宙专题扩展到更多全球构造环境 | 中 | 动态数据库、相互聚合、与原论文和预编译集重叠 | 固定查询快照，验证生产端点并建立原论文/样品去重键 |
+| 8 | `soils4africa` / `brazil-sgb-geochemistry` | 增加非洲土壤与南美多介质官方入口 | 中高 | 隐私/聚合约束、许可未固定、项目和集成服务重叠 | 分别先审许可边界和导出小样，再决定适配器范围 |
+| 9 | `pangaea-repository` / `earthchem-library` / `noaa-ncei-marine-geology` / `iodp-data-systems` | 扩大 DOI、海洋和论文数据发现范围 | 高 | 逐数据集 schema 与许可，样品目录和数值混杂，镜像重复 | 先实现发现与血缘解析，不把仓库、目录或分发系统当作独立生产来源 |
 
 `glorich` 与 `bgs-gbase` 原始点数据当前分别受非商业条款和单独授权限制，不排除于目录，但不进入 open-only 适配器排期。`australia-ozchem` 在找到当前官方数值端点前保持元数据状态。`jamstec-darwin` 与 NOAA IMLGS 当前只按样品/数据发现入口处理。
 
