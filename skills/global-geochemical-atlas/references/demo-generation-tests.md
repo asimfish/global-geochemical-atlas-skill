@@ -81,7 +81,7 @@ D2 生成 `d2-confidence-v1` 报告，D1 证据打包器验证输入 SHA-256 后
 
 - `demo_input.csv`：`e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc`
 - `sources.jsonl`：`adf4a1f0e675055dfbd90e11d573a74d86fb7afb48b12e02be1944c64432df89`
-- `run_manifest.json`：`0ee8250b730ece2cfd0dd0a7263a141720bae37bbecc5b4b2b3cfef06a4a1f3b`
+- `run_manifest.json`：`8e9af80bebca6334f95078cac7e131271dbab85d54c9757336930c50c9b9911d`
 - `sources.jsonl`：`925dd4489d18b63ffb1d44c86ada895c64038d90feeeafce71bb29f2f02738a1`
 - `run_manifest.json`：`f70f773fdb51e2d63cf11fd1a1cbfa689e193e44177d8d2c5f69d96825d8d523`
 

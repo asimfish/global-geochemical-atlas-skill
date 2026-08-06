@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06T10:05:00Z",
+  "as_of": "2026-08-06T10:35:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -360,6 +360,7 @@
         "pangaea-repository",
         "soils4africa",
         "south-africa-cgs-geochemistry",
+        "tpdc-china-mountain-soil",
         "usgs-ngdb",
         "wosis"
       ],
@@ -396,6 +397,7 @@
         "pangaea-repository": "D",
         "soils4africa": "D",
         "south-africa-cgs-geochemistry": "D",
+        "tpdc-china-mountain-soil": "C",
         "usgs-conus-soil": "A",
         "usgs-ngdb": "D",
         "wosis": "D"
@@ -417,6 +419,7 @@
         "pangaea-repository": "global_collection",
         "soils4africa": "continental_partial",
         "south-africa-cgs-geochemistry": "national_partial",
+        "tpdc-china-mountain-soil": "national_partial",
         "usgs-conus-soil": "national_partial",
         "usgs-ngdb": "national_partial",
         "wosis": "global_partial"
@@ -486,6 +489,7 @@
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
+        "tpdc-china-mountain-soil": "raw_observation",
         "usgs-conus-soil": "normalized_analysis",
         "usgs-ngdb": "discovery",
         "wosis": "discovery"
@@ -640,7 +644,8 @@
       "additional_country_geological_surveys_round_2",
       "southern_hemisphere_and_asian_national_portals",
       "state_and_provincial_geological_surveys",
-      "publication_linked_datasets"
+      "publication_linked_datasets",
+      "institutional_doi_dataset_download_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -648,7 +653,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 5,
+    "round": 6,
     "saturated": false,
     "status": "in_progress"
   },

@@ -2,11 +2,11 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-06 16:00（Asia/Shanghai）
+更新时间：2026-08-06 18:35（Asia/Shanghai）
 
 ## 当前结论
 
-四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；在原七条路线和 FOREGS 六个介质来源基础上，AfSIS Phase I V2.0 非洲土壤已完成接入，因此共十四个来源，当前都是 85 分、A 级、`normalized_analysis`。十四份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；在原七条路线和 FOREGS 六个介质来源基础上，AfSIS Phase I V2.0 非洲土壤已完成接入，因此共十四个可执行来源，当前都是 85 分、A 级、`normalized_analysis`。十四份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。本轮另将 TPDC 中国山地土壤作为第 49 个目录来源完成官方 API、文件、hash 和字段审计，但按 V4 计划暂不接入旧 27 列交换格式。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
@@ -23,6 +23,8 @@
 | `foregs-stream-water` | 官方 ZIP/hash、808 行、As/Cr/Cu/Ni/Pb/Zn 各 808 条、<0.45 µm 与 ICP-QMS 方法保留 | 人工决定未签署；没有可接受 Hg；单次基线不是时间序列 | A 级 `normalized_analysis`；补充欧洲溪流水 |
 | `foregs-stream-sediment` | 官方 ZIP/hash、4 个分析 CSV、3,393 行、11,030 条目标映射、总量/王水量和 <150 µm 粒级隔离 | 人工决定未签署；低密度溪流汇水区样点 | A 级 `normalized_analysis`；与 GSJ/MarChem 不静默合并 |
 | `foregs-floodplain-sediment` | 官方 ZIP/hash、4 个分析 CSV、2,935 行、9,672 条目标映射、0–25 cm 与粒级保留 | 人工决定未签署；泛滥平原与溪流沉积物不是同一介质子型 | A 级 `normalized_analysis`；独立于 stream sediment |
+| `afsis-phase-i-wet-chemistry` | 官方 Dataverse V2.0 三文件、2,002 个样品、12,012 条六元素数值、DL/QL 和方法映射、48 条 fixture、30 条复核准备 | 人工决定未签署；126 个缺坐标样品；负数和低于限值结果需分层解释 | A 级 `normalized_analysis`；补充非洲土壤但尚未达到 `benchmark_ready` |
+| `tpdc-china-mountain-soil` | 官方 DOI/UUID、metadata/file API、1,828,683-byte ZIP 和三成员 hash、1,314 行与 6,570 条五元素观测对账 | V4 schema、canonical adapter 和 30 条复核未完成；As/Hg 缺失；CRS 未声明；bulk-density 补表存在冲突 | 文件契约已冻结的候选；当前不计入十四个可执行来源 |
 
 ## `georoc-archaean` 与 `usgs-conus-soil` 复核准备
 
@@ -284,6 +286,26 @@ GTK 旧站当前的 HTTPS 证书链不能通过标准 TLS 校验，而官方文�
 全量对账得到 2,002 个唯一 `SSN`、2,002 个唯一 `RES.ID`、18 个原国家标签、51 个国家-站点对、992 个 topsoil、1,010 个 subsoil 和 1,876 个完整坐标对；126 条记录同时缺少经纬度，不作坐标推断。注册文件和相关论文没有明确 CRS，因此不把经纬度无证据标成 EPSG:4326。As/Cr/Cu/Ni/Pb/Zn 各有 2,002 个发布数值，共 12,012 条目标测定。
 
 所有元素均为风干土 `mg kg^-1` 王水消解准全量结果。As 使用 ICP-MS，其余五元素使用 ICP-OES；变量工作簿和 DL/QL 工作簿的单元格定位逐观测进入证据。变量表把字段 `As.75` 描述成“Arsenic-78”，并报告 2009–2013 采样，而相关 SOIL 论文报告 2009–2012；这两处冲突原样保留。发布数值不带逐行删失限定符，因此适配器保留原数值并另加阈值类别：As/Cu/Pb 分别有 48/6/7 个负数仪器结果；Pb 有 1,969 个正值低于 DL。它们不会被静默删除，也不会被冒充普通检出。30 条待签署复核单覆盖全部国家标签、上下层、缺坐标、三种负数元素和所有实际存在的阈值类别；机器 30/30 PASS，人工字段为空。
+
+## TPDC 中国山地土壤文件契约复核
+
+数据集 DOI `10.11888/Terre.tpdc.302620` 解析到 TPDC metadata UUID `2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1`。本轮按照官方网页自身调用方式核实 metadata POST、根文件清单 GET 和 file-ID POST 下载；元数据返回 `sharePolicy=A`、`shareType=online` 和 licence code `1`，TPDC 前端许可表将 `1` 映射为 CC BY 4.0。
+
+官方 `Soil dataset.zip` 为 1,828,683 bytes，SHA-256 `8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a`，成员如下：
+
+| 文件 | 字节 | SHA-256 |
+|---|---:|---|
+| `Description of the dataset.docx` | 1,246,886 | `e923ea91a29793cb224c29c1ff0693e92783c96889fbedb0100c10d48784999b` |
+| `Soil bulk density.xlsx` | 33,386 | `bb03ed1ac9f2db514ca740c8a9c8eabe5965da871e9b77ca510942ba5159b682` |
+| `Soil dataset.xlsx` | 577,715 | `923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d` |
+
+主表含 1,314 条唯一“`Sam.No` × `Horizons`”记录，没有精确重复，覆盖 30 座山地、166 个站点、485 个剖面样号；O/A/C 分别 381/481/452 条。Cr/Cu/Ni/Pb/Zn 均为 1,314 个数值且无负数或零，共 6,570 条目标观测；As 与 Hg 不在发布表。1,314 行都有数值有效经纬度、母岩类别、母岩组、土纲和土类，但来源没有声明 CRS。SN5、SN6、SN7 各出现多个坐标对，因此后续必须保留样品级坐标，不可强制聚合成站点中心。
+
+关联论文说明样品风干并过 2 mm 筛，使用 HNO3-HF-HClO4 消解；Zn 属 ICP-AES 测定，Cr/Cu/Ni/Pb 属 ICP-MS。论文还报告空白、重复、GBW-07405、95%–105% 回收率以及 ICP-AES/ICP-MS 的 RSD 范围。工作簿本身没有逐行方法、检出限或限定符，所以这些事实只能作为 `method_scope=publication`，不能冒充行级字段。
+
+主表有 67 个 BD 和 134 个 Thickness 缺失。单独 bulk-density 表提供 449 个“山地 × 站点 × 土层”键，可为 58 个主表缺失行提供候选值，但仍有 10 个主表行没有对应键；两表另有六个非空 BD 冲突和五个坐标冲突。适配器必须保留主表值、补表值、连接键和冲突标志，不得用补表静默覆盖主表。
+
+这批证据已写入候选审计和目录，但没有提前计作第十五个可执行来源。下一步先落地 V4 `sample_type`、方法 scope 与地理/地质拆分，再实现适配器和 30 条分层复核。
 
 ## 四介质联合运行
 

@@ -331,12 +331,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 14, "B": 0, "C": 0, "D": len(catalog["sources"]) - 14, "U": 0},
+            "evidence_tiers": {"A": 14, "B": 0, "C": 1, "D": len(catalog["sources"]) - 15, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
                 "normalized_analysis": 14,
-                "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 14,
+                "raw_observation": 1,
+                "discovery": len(catalog["sources"]) - 15,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -431,6 +431,38 @@ def check_d1(output_dir: Path) -> list[str]:
         and evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_dimensions"]["human_review"]["status"]
         == "missing",
         "D1 credits the pinned AfSIS files and adapter while retaining pending human review",
+        checks,
+    )
+    tpdc_evidence = candidate_evidence["tpdc-china-mountain-soil"]
+    require(
+        tpdc_evidence["archive"]["bytes"] == 1828683
+        and tpdc_evidence["archive"]["sha256"]
+        == "8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a"
+        and len(tpdc_evidence["archive"]["members"]) == 3
+        and tpdc_evidence["observed_data"]["physical_rows"] == 1314
+        and tpdc_evidence["observed_data"]["target_observations"] == 6570
+        and set(tpdc_evidence["observed_data"]["target_analytes"]) == {"Cr", "Cu", "Ni", "Pb", "Zn"}
+        and tpdc_evidence["observed_data"]["target_analytes_absent"] == ["As", "Hg"]
+        and tpdc_evidence["observed_metadata"]["bulk_density_supplement"]
+        ["non_missing_value_conflicts"]
+        == 6
+        and tpdc_evidence["observed_metadata"]["bulk_density_supplement"]
+        ["published_coordinate_conflicts"]
+        == 5,
+        "D1 TPDC candidate pins the official file contract, five targets and supplemental-table conflicts",
+        checks,
+    )
+    require(
+        evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_score"] == 65
+        and evidence["sources"]["tpdc-china-mountain-soil"]["evidence_tier"] == "C"
+        and evidence["sources"]["tpdc-china-mountain-soil"]["use_mode"] == "raw_observation"
+        and evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_dimensions"]
+        ["file_record_integrity"]["status"]
+        == "verified"
+        and evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_dimensions"]
+        ["adapter_reproducibility"]["status"]
+        == "partial",
+        "D1 exposes TPDC as a frozen raw-observation candidate without counting it as executable",
         checks,
     )
     audit = source_audit.audit_catalog(catalog, registry, candidate_evidence)

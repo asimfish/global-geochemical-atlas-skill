@@ -1,9 +1,9 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-06T10:05:00Z",
+  "reviewed_at": "2026-08-06T10:35:00Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
-    "round": 5,
+    "round": 6,
     "status": "in_progress",
     "saturated": false,
     "channels_checked": [
@@ -19,7 +19,8 @@
       "additional_country_geological_surveys_round_2",
       "southern_hemisphere_and_asian_national_portals",
       "state_and_provincial_geological_surveys",
-      "publication_linked_datasets"
+      "publication_linked_datasets",
+      "institutional_doi_dataset_download_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -2304,6 +2305,82 @@
         "Raw country labels SAfrica and Zimbambwe require a separate normalization field while retaining the publisher strings.",
         "The registered files and related article do not state the coordinate reference system, so the adapter does not assert EPSG:4326.",
         "The variable workbook describes As.75 as Arsenic-78 and reports 2009-2013 sampling, while the related paper reports 2009-2012; these metadata conflicts require source-level review."
+      ]
+    },
+    "tpdc-china-mountain-soil": {
+      "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains",
+      "publisher": "National Tibetan Plateau / Third Pole Environment Data Center",
+      "source_kind": "institutional_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["china-30-mountain-ecosystems"],
+        "notes": "The release contains 1,314 O-, A- and C-horizon samples from 166 sites in 30 mountain ecosystems and five climate zones. It is a targeted mountain survey, not a spatially continuous or nationally representative China soil grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.11888/Terre.tpdc.302620",
+        "cstr": "18406.11.Terre.tpdc.302620",
+        "metadata_uuid": "2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+        "file_id": "d4c22475-e614-42d2-b8ec-d768f1c26426"
+      },
+      "landing_page": "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+      "interfaces": [
+        {
+          "kind": "official_metadata_api",
+          "url": "https://data.tpdc.ac.cn/view/metadataView/detail/",
+          "method": "POST",
+          "format": "json",
+          "access": "open",
+          "server_filters": ["metadata_uuid"]
+        },
+        {
+          "kind": "official_file_inventory_api",
+          "url": "https://data.tpdc.ac.cn/file/file/getRootFileDataList?metadataId=2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+          "method": "GET",
+          "format": "json",
+          "access": "open",
+          "server_filters": ["metadata_uuid"]
+        },
+        {
+          "kind": "official_file_download",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426",
+          "method": "POST",
+          "format": "zip_xlsx_docx",
+          "access": "open",
+          "server_filters": ["file_id"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "The dataset metadata records licence code 1, which the TPDC interface maps to CC BY 4.0. Retain the dataset DOI, authors and TPDC attribution."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "tpdc-file-2025-07-23",
+        "release_date": "2025-07-23"
+      },
+      "adapter": {
+        "status": "not_implemented",
+        "name": null
+      },
+      "evidence_urls": [
+        "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+        "https://doi.org/10.11888/Terre.tpdc.302620",
+        "https://essd.copernicus.org/articles/17/4779/2025/",
+        "https://data.tpdc.ac.cn/en/about?type=3"
+      ],
+      "limitations": [
+        "The survey covers 30 mountain ecosystems and cannot be described as uniform nationwide China coverage.",
+        "The release contains Cr, Cu, Ni, Pb and Zn among the project targets but does not contain As or Hg.",
+        "O, A and C horizons are scientifically distinct and must remain separate sample types and comparison groups.",
+        "The source records GPS coordinates but the registered metadata and data files do not declare a coordinate reference system; no EPSG code may be inferred.",
+        "Three site labels (SN5, SN6 and SN7) have more than one published coordinate pair and must retain sample-level coordinates rather than a forced site centroid.",
+        "The separate bulk-density workbook can fill 58 missing main-table rows, but six non-missing bulk-density values and five coordinates conflict with the main workbook; supplemental values must never overwrite published main-table values silently.",
+        "The main workbook has no row-level detection-limit, qualifier or method fields. Dataset-level preparation, digestion, ICP-AES/ICP-MS and QC evidence comes from the linked article and must carry dataset or publication scope."
       ]
     },
     "south-africa-cgs-geochemistry": {

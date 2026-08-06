@@ -1,12 +1,12 @@
 # D1 数据语义、字段完整率与介质覆盖平衡 V4 计划（审阅稿）
 
-更新时间：2026-08-06 17:52（Asia/Shanghai）
+更新时间：2026-08-06 18:35（Asia/Shanghai）
 
-状态：待审阅，尚未开始 V4 代码迁移
+状态：执行中；TPDC 文件契约已冻结，V4-M0 全量审计与 M1 schema 迁移启动
 
 承接版本：`plans/d1-data-source-system-v3-plan.md`
 
-当前基线：分支 `d1/source-system-v2`，提交 `b5d3f53`
+当前基线：分支 `d1/source-system-v2`，提交 `f1ab749`
 
 ## 一、结论先行
 
@@ -269,7 +269,7 @@ V4 采用两条并行线：语义修正不等待补源，补源也不绕过新 s
 
 土壤和岩石不停止补源，但不再占用全部适配器产能：
 
-- TPDC 中国山地土壤：补中国、土层、母岩和环境背景；
+- TPDC 中国山地土壤：**已完成官方文件契约和全量字段审计，暂不接旧 schema**。DOI 解析到固定 TPDC UUID，metadata/file API 与 1,828,683-byte ZIP 已验证；主表 1,314 行、O/A/C 三层、五目标元素 6,570 条，母岩/土类/坐标齐全。As/Hg 缺失、CRS 未声明，独立 BD 表与主表存在六个非空值和五个坐标冲突；下一步在 V4 schema 中显式保留冲突后再实现 adapter；
 - AfSIS Phase I：**已完成首轮工程闭环**。使用官方 Dataverse V2.0（2025-10-13 发布），固定三份 original 文件、publisher MD5、SHA-256 和 DOI；对账 2,002 个唯一样品、18 个国家标签、51 个站点、上下层、六个目标元素、方法与全局 DL/QL。下一步是具名签署 30 条复核和将全量质量统计接入 V4 profile；
 - GEMAS：作为欧洲农业/放牧土壤独立来源，和 FOREGS 父项目血缘去重；
 - GEOROC Antarctica Intraplate Volcanics：补具体岩石专题和构造背景；
@@ -333,7 +333,7 @@ V4 请求正式支持：
 | V4-M3：覆盖立方体 | 1 天 | 六类数量指标、空间格网、介质平衡报告 | 不再只用 observation count 宣称全面 |
 | V4-M4：水体增强 | 2–4 天 | GEMStat 多元素、GEOTRACES 方法、独立淡水或海水来源 | 水体按类型/分相/方法可查询，覆盖收益可量化 |
 | V4-M5：沉积物增强 | 2–4 天 | NGSA、GSJ marine、一个独立具体数据集 | stream/floodplain/lake/marine 至少显式分型，不混合 |
-| V4-M6：土壤/岩石扩展 | 进行中 | AfSIS 已完成；继续 TPDC、GEMAS、GEOROC Antarctica 中已完成文件契约的来源 | 新数据遵守 V4 schema，不产生新的字段债务 |
+| V4-M6：土壤/岩石扩展 | 进行中 | AfSIS 已完成；TPDC 文件契约已冻结；继续 GEMAS、GEOROC Antarctica 和 TPDC V4 adapter | 新数据遵守 V4 schema，不产生新的字段债务 |
 | V4-M7：联合验收 | 1–2 天 | 新联合 fixture、查询索引、地图和测试 | 按元素、区域、地质单元、样品类型和方法均能运行并解释缺口 |
 
 ## 十、必须新增的测试
@@ -385,4 +385,5 @@ V4 完成不等于“所有字段都不为空”，而是：
 
 | 时间（Asia/Shanghai） | 事项 | 结果 | 下一步 |
 |---|---|---|---|
+| 2026-08-06 18:35 | TPDC 中国山地土壤官方文件契约与全量字段审计 | DOI `10.11888/Terre.tpdc.302620` 解析到固定 UUID，核实 metadata POST、文件清单 GET、file-ID POST 下载与 CC BY 4.0 code；固定 1,828,683-byte ZIP 及三成员 SHA-256。主表对账 1,314 条唯一 O/A/C 层记录、30 座山地、166 站点和 6,570 条 Cr/Cu/Ni/Pb/Zn 测定；As/Hg 缺失。坐标、母岩和土类逐行完整但 CRS 未声明；BD 补表能补 58 个缺失行，同时有六个非空 BD 冲突、五个坐标冲突和十个无匹配行。已写候选审计、目录和使用边界，没有提前计入十四个可执行来源 | 实现 V4-M0 profile 输出契约与 M1 sample/method/geology schema；随后用双值/冲突字段接入 TPDC adapter 和 30 条复核 |
 | 2026-08-06 18:05 | AfSIS Phase I V2.0 非洲土壤工程闭环 | 从 World Agroforestry 官方 Dataverse 固定 3 份 original CSV/XLSX，publisher MD5 与 SHA-256 双重对账；解析 2,002 个唯一 SSN/RES.ID、18 个国家标签、51 个国家-站点对、1,876 个完整坐标对和 12,012 条六元素数值。逐元素附加 ICP-MS/ICP-OES、王水准全量基础、DL/QL、负数及低于限值标记；Pb 的 1,969 条正值低于 DL 被保留并降级解释。30 条复核样本覆盖全部国家标签、上下层、缺坐标、负数与阈值类别，机器 30/30 通过、人工未签署；48 条正值样板并入联合包，当前为 14 个 A/`normalized_analysis` 来源、736 条观测、89 个比较组、16 个工程异常候选 | 优先解析 TPDC 官方文件下载链路；并推进 GEMAS/NGSA 与 GEOROC Antarctica，人工签署独立跟进 |

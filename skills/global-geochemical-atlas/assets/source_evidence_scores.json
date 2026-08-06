@@ -13,8 +13,8 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-06T10:05:00Z",
-  "source_count": 48,
+  "scored_at": "2026-08-06T10:35:00Z",
+  "source_count": 49,
   "sources": {
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
@@ -3943,6 +3943,101 @@
         "research_use_status=unknown"
       ]
     },
+    "tpdc-china-mountain-soil": {
+      "access_status": "open",
+      "attribution_note": "The dataset metadata records licence code 1, which the TPDC interface maps to CC BY 4.0. Retain the dataset DOI, authors and TPDC attribution.",
+      "conflicts": [],
+      "evidence_tier": "C",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+          ],
+          "note": "A reproducible candidate verifier exists, but no canonical production adapter is implemented.",
+          "status": "partial",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "Human review has not started.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+            "https://doi.org/10.11888/Terre.tpdc.302620",
+            "https://essd.copernicus.org/articles/17/4779/2025/",
+            "https://data.tpdc.ac.cn/en/about?type=3"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+          ],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+            "https://doi.org/10.11888/Terre.tpdc.302620",
+            "https://essd.copernicus.org/articles/17/4779/2025/",
+            "https://data.tpdc.ac.cn/en/about?type=3",
+            "doi:10.11888/Terre.tpdc.302620"
+          ],
+          "note": "Dataset and API snapshot provenance are recorded; adapter-level row locators are still pending.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+          ],
+          "note": "Core analyte, value, unit and coordinate fields were inspected; canonical adapter mapping is pending.",
+          "status": "partial",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: tpdc-file-2025-07-23",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 65.0,
+      "source_id": "tpdc-china-mountain-soil",
+      "use_mode": "raw_observation",
+      "use_mode_limitations": [
+        "a production adapter is not yet verified"
+      ]
+    },
     "us-water-quality-portal": {
       "access_status": "open",
       "attribution_note": "Federal records may be public domain, but WQX contains many contributor organizations; retain provider and dataset terms per record.",
@@ -4293,7 +4388,7 @@
     "evidence_tiers": {
       "A": 14,
       "B": 0,
-      "C": 0,
+      "C": 1,
       "D": 34,
       "U": 0
     },
@@ -4301,7 +4396,7 @@
       "benchmark_ready": 0,
       "discovery": 34,
       "normalized_analysis": 14,
-      "raw_observation": 0
+      "raw_observation": 1
     }
   }
 }

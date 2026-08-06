@@ -14,7 +14,7 @@
 
 ## V3 A 级样板来源
 
-V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土壤两项、沉积物两项、水体两项。30 条人工复核尚未完成，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
+V3 当前把十四项来源评为 A 级 `normalized_analysis`：岩石一项、土壤六项、沉积物四项、水体三项。30 条人工复核尚未完成，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
 
 ### `georoc-archaean`
 
@@ -90,6 +90,16 @@ V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土�
 - 剩余：30 条具名人工签署和 V4 全量 profile 接入。
 
 ## 待复核生产候选
+
+### `tpdc-china-mountain-soil`
+
+- 介质与范围：中国 30 个山地生态系统、166 个站点、1,314 个 O/A/C 层样品，不是全国规则网格；
+- 接口与版本：DOI `10.11888/Terre.tpdc.302620` 解析到固定 TPDC UUID；官方 metadata POST、file-inventory GET 和 file-ID POST 下载均已核实；
+- 获取与校验：`Soil dataset.zip` 为 1,828,683 bytes，SHA-256 `8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a`，三个成员逐项固定大小与 SHA-256；
+- 对账：主表 1,314 行，Cr/Cu/Ni/Pb/Zn 各 1,314 条，共 6,570 条目标观测；As/Hg 不在源表；坐标、母岩类别、土纲和土类逐行完整；
+- 方法：风干、<2 mm、HNO3-HF-HClO4 消解；Cr/Cu/Ni/Pb 为 ICP-MS，Zn 为 ICP-AES。方法和 QC 来自关联论文，只能标成 publication scope；
+- 质量边界：来源未声明 CRS；SN5/SN6/SN7 各有多个坐标对；独立 bulk-density 表可补部分缺失，但存在六个非空值冲突和五个坐标冲突，不能静默覆盖主表；
+- 剩余：V4 schema 接入、canonical adapter、30 条分层复核和完整率 profile；在此之前为已冻结文件契约的候选，不计入十四个可执行来源。
 
 ### `georoc-database`
 
@@ -207,7 +217,7 @@ V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土�
 
 ### 第四至第六轮的边界判断
 
-- 第四轮结束时目录有 40 个来源和 5 个 A 级 `normalized_analysis` 样板；此后 GSJ 河流沉积物、PANGAEA 北非土壤、FOREGS 六个介质数据集和 AfSIS Phase I V2.0 完成接入，当前目录为 48 项、A 级样板为 14 项；
+- 第四轮结束时目录有 40 个来源和 5 个 A 级 `normalized_analysis` 样板；此后 GSJ 河流沉积物、PANGAEA 北非土壤、FOREGS 六个介质数据集和 AfSIS Phase I V2.0 完成接入，TPDC 中国山地土壤完成文件契约冻结；当前目录为 49 项、A 级可执行样板仍为 14 项；
 - GSJ 已完成首个河流沉积物适配器；BC RGS、阿拉斯加 WebGeochem 和阿根廷 SIGAM 仍是下一批高价值数值接入候选；
 - 墨西哥目前证明的是派生图层，印度目前证明的是项目和有限分发路线，不能写成已获得原始全量数据；
 - 南非、BC 和阿拉斯加均含多来源或多图幅内容，独立来源数必须回到原调查、出版物和样品，而不是按门户计数；

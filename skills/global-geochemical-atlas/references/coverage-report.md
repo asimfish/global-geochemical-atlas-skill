@@ -1,10 +1,10 @@
 # D1 数据源覆盖报告
 
-核对时间：`2026-08-06T10:05:00Z`
+核对时间：`2026-08-06T10:35:00Z`
 
 整体状态：`partial`
 
-发现轮次：`5`，饱和状态：`false`
+发现轮次：`6`，饱和状态：`false`
 
 ## 当前目标
 
@@ -20,7 +20,7 @@
 | 介质 | 状态 | 当前分析来源 | 其他候选 | 来源独立性 | 分析物/方法/密度 |
 |---|---|---|---|---|---|
 | rock | `partial` | georoc-archaean | alaska-dggs-webgeochem, australia-ozchem, brazil-sgb-geochemistry, earthchem-library, earthchem-portal, finland-gtk-geochemistry, georoc-database, iodp-data-systems, jamstec-darwin, noaa-ncei-marine-geology, norway-ngu-lito, nz-petlab, pangaea-repository, petdb, usgs-ngdb | `single_source_dependency` | `complete_for_registered_targets/not_yet_audited/not_yet_audited` |
-| soil | `partial` | afsis-phase-i-wet-chemistry, foregs-humus, foregs-subsoil, foregs-topsoil, pangaea-north-africa-soil, usgs-conus-soil | alaska-dggs-webgeochem, bgs-gbase, brazil-sgb-geochemistry, earthchem-library, foregs-europe, gemas-europe, ireland-tellus, pangaea-repository, soils4africa, south-africa-cgs-geochemistry, usgs-ngdb, wosis | `multiple_sources_lineage_not_yet_deduplicated` | `complete_for_registered_targets/not_yet_audited/not_yet_audited` |
+| soil | `partial` | afsis-phase-i-wet-chemistry, foregs-humus, foregs-subsoil, foregs-topsoil, pangaea-north-africa-soil, usgs-conus-soil | alaska-dggs-webgeochem, bgs-gbase, brazil-sgb-geochemistry, earthchem-library, foregs-europe, gemas-europe, ireland-tellus, pangaea-repository, soils4africa, south-africa-cgs-geochemistry, tpdc-china-mountain-soil, usgs-ngdb, wosis | `multiple_sources_lineage_not_yet_deduplicated` | `complete_for_registered_targets/not_yet_audited/not_yet_audited` |
 | sediment | `partial` | foregs-floodplain-sediment, foregs-stream-sediment, japan-gsj-geochemical-map, norway-marchem | alaska-dggs-webgeochem, argentina-segemar-geochemistry, australia-ngsa, australia-ozchem, bgs-gbase, brazil-sgb-geochemistry, canada-bc-rgs, canada-cdogs, chile-sernageomin-geochemistry, earthchem-library, earthchem-portal, eea-waterbase, emodnet-chemistry, finland-gtk-geochemistry, foregs-europe, india-gsi-ngcm, iodp-data-systems, ireland-tellus, jamstec-darwin, mexico-sgm-geochemical-cartography, noaa-ncei-marine-geology, nz-petlab, pangaea-repository, south-africa-cgs-geochemistry, sweden-sgu-geochemical-atlas, us-water-quality-portal, usgs-ngdb | `multiple_sources_lineage_not_yet_deduplicated` | `complete_for_registered_targets/not_yet_audited/not_yet_audited` |
 | water | `partial` | foregs-stream-water, gemstat-open-archive, geotraces-idp2025 | bgs-gbase, brazil-sgb-geochemistry, canada-bc-rgs, canada-cdogs, earthchem-library, eea-waterbase, emodnet-chemistry, foregs-europe, glorich, iodp-data-systems, ireland-tellus, pangaea-repository, us-water-quality-portal | `multiple_sources_lineage_not_yet_deduplicated` | `complete_for_registered_targets/not_yet_audited/not_yet_audited` |
 

@@ -106,6 +106,18 @@
 - 元数据边界：注册文件和相关论文没有明确 CRS；变量表把 `As.75` 描述成“Arsenic-78”，且变量表与相关论文的采样年份分别为 2009–2013 和 2009–2012。适配器保留冲突，不猜测修复；
 - 命名边界：`SAfrica` 和 `Zimbambwe` 等发布方标签原样保留，规范名只写独立字段；18 个国家标签不代表均匀非洲覆盖。
 
+### `tpdc-china-mountain-soil`（已冻结文件契约，待 V4 适配）
+
+- 数据集：中国山地不同气候区土壤剖面多元素综合数据集；DOI `10.11888/Terre.tpdc.302620`；TPDC metadata UUID `2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1`；
+- 使用条件：TPDC 元数据返回 licence code `1`、`sharePolicy=A`、`shareType=online`；前端许可表把 code `1` 映射为 CC BY 4.0，使用时保留数据作者、数据 DOI 和 TPDC 署名；
+- 获取：官方 metadata POST、文件清单 GET 和 file-ID POST 下载已验证；`Soil dataset.zip` 为 1,828,683 bytes，SHA-256 `8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a`；
+- 成员：`Soil dataset.xlsx`、`Soil bulk density.xlsx`、`Description of the dataset.docx` 三项均登记字节数和 SHA-256；完整第三方文件只进入本地缓存，不提交 Git；
+- 对账：主表 1,314 条唯一“样品号 × 土层”记录，覆盖 30 座山地、166 个站点、O/A/C 三层；Cr/Cu/Ni/Pb/Zn 各 1,314 条，共 6,570 条目标测定，As/Hg 缺失；
+- 背景字段：逐行有母岩类别、母岩组、土纲、土类、海拔、经纬度、气候和植被信息，适合验证 V4 样品类型、地质背景与环境上下文 schema；
+- 方法：风干并过 2 mm 筛，HNO3-HF-HClO4 消解；Zn 用 ICP-AES，Cr/Cu/Ni/Pb 用 ICP-MS；论文报告空白、重复、GBW-07405、95%–105% 回收率和相应 RSD。工作簿没有逐行方法或检出限，因此这些事实只能以 publication scope 连接；
+- 质量边界：元数据和文件未声明坐标 CRS；SN5、SN6、SN7 各有多个发布坐标对；单独 bulk-density 表能补 58 个主表缺失行，但同时有六个非空 BD 冲突和五个坐标冲突，必须保留双来源值和冲突标记，不能覆盖主表；
+- 当前状态：文件契约和字段审计已完成，canonical adapter 尚未接入。按 V4 计划先完成 sample/method/geology schema，再制作 30 条复核和端到端 fixture。
+
 ## D1 适配器和稳定 ID
 
 `scripts/source_adapters.py` 冻结以下接口：

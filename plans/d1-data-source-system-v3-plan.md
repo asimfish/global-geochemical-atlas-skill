@@ -440,7 +440,7 @@ GEMStat 只补淡水 As，不与 GEOTRACES 海水背景静默合并。发布页�
 | GEMStat v3 | 已完成 | 本仓库全量适配器已对账 492,999 条 As；外部评测的 656 条只是测试抽样，不作为来源上限 | 补第二个独立淡水来源和更多方法明确子集 |
 | GEOTRACES IDP2025 | 已完成 | 本仓库已对账离散海水 Cu/Ni/Zn 39,327 条，保留航次、深度、QC 和贡献者边界 | 补 As 或独立海水来源；贡献者/方法完整率审计 |
 | FOREGS 六类数据集 | 待迁移 | 必须拆为 topsoil、subsoil、humus、stream water、stream sediment、floodplain sediment 六个具体 `source_id`，不能只升级通用入口 | 固定各文件/版本/hash/许可；核实并记录 `<DL` 被替换为 `DL/2` 的不可逆边界；逐介质适配和对账 |
-| TPDC 中国山地土壤 `10.11888/Terre.tpdc.302620` | 待迁移 | 可显著补中国土壤，但当前仓库尚未固定官方数据文件、下载接口、研究使用条件和 hash | 核对 TPDC 官方下载/API；保留土层、母岩、行政区原文、坐标和方法；做适配器及 30 条复核 |
+| TPDC 中国山地土壤 `10.11888/Terre.tpdc.302620` | 文件契约已完成，待 V4 适配 | 已固定官方 UUID、metadata/file API、1,828,683-byte ZIP 和三成员 hash；对账 1,314 行、O/A/C 三层及 Cr/Cu/Ni/Pb/Zn 共 6,570 条。As/Hg 不存在，CRS 未声明，BD 补表与主表存在值/坐标冲突 | 先用 V4 schema 表达样品类型、publication-scope 方法、母岩/土类与补表冲突，再实现 adapter 和 30 条复核 |
 | AfSIS Phase I `10.34725/DVN/66BFOB` | 已完成首轮工程闭环（2026-08-06） | 官方 Dataverse V2.0 三个 original 文件已固定；2,002 个样品、18 个国家标签、51 个站点、六目标元素、方法和 DL/QL 已全量对账。国家标签数量不等同均匀洲际覆盖 | 完成 30 条具名人工签署；将全量质量 profile 接入 V4 schema；持续保留缺坐标、负数和低于限值边界 |
 | GEMAS | 待迁移 | 已在目录发现，但未成为本仓库可执行适配器 | 固定可下载数值文件、版本、许可、字段、方法、hash 和层位/土地利用语义 |
 | NGSA Australia Hg | 待迁移 | 已在目录发现，可补澳大利亚沉积物与 Hg，但具体产品尚未固定 | 固定产品 DOI/下载文件/hash；核对介质、粒级、方法、Hg 单位和检出限 |
@@ -675,12 +675,13 @@ skills/global-geochemical-atlas/
 8. ~~从 GEMStat、Water Quality Portal、FOREGS/Waterbase 等候选中选择并审计一个含 As 的公开水体来源；~~ GEMStat v3 工程闭环已完成；第 4 轮已补墨西哥、BC、阿拉斯加、智利、阿根廷、印度、日本和南非，亚洲、非洲、南美及地方调查继续；
 9. 完成十三份 30 条人工签署和贡献者/方法完整率审计；
 10. ~~基于十三条已验证路线做统一请求和四介质联合输出；~~ 688 条观测和九文件输出包已完成；继续最终主 Skill 收束与比赛验收；
-11. 按 6.10 的迁移队列依次固定 TPDC、AfSIS、GEMAS/NGSA 和 GEOROC Antarctica 的官方文件契约，再实现适配器与对账。
+11. 按 6.10 的迁移队列依次固定 TPDC、AfSIS、GEMAS/NGSA 和 GEOROC Antarctica 的官方文件契约，再实现适配器与对账。AfSIS 已完成工程闭环；TPDC 已完成文件契约，等待 V4 schema 后接入。
 
 ## 十五、当前执行记录
 
 | 时间（Asia/Shanghai） | 事项 | 结果 | 下一步 |
 |---|---|---|---|
+| 2026-08-06 18:35 | TPDC 中国山地土壤文件契约冻结 | 通过 DOI 解析官方 TPDC UUID，核实 metadata/file API 和免登录文件下载；固定 1,828,683-byte ZIP 及三个 DOCX/XLSX 成员 hash。主表含 1,314 条唯一 O/A/C 层记录、30 座山地、166 个站点和 6,570 条 Cr/Cu/Ni/Pb/Zn 数值；As/Hg 缺失。来源未声明 CRS；SN5/SN6/SN7 有多坐标；BD 补表可补部分缺失但有非空值和坐标冲突。候选审计已登记，未接入旧 27 列 schema | 启动 V4-M0/M1；以显式样品类型、方法 scope、地质背景和补表冲突字段实现 TPDC adapter，再准备 30 条复核 |
 | 2026-08-06 18:05 | AfSIS Phase I V2.0 非洲土壤工程闭环 | 官方 Dataverse 三份 original 文件完成 publisher MD5、SHA-256 和字节数对账；adapter 解析 2,002 个唯一样品、18 个国家标签、51 个站点、上下层和 12,012 条六元素数值，保留 126 个缺坐标样品、负数仪器结果以及逐元素 DL/QL。30 条复核样本覆盖全部国家标签和质量边界，机器 30/30 通过、人工未签署；48 条样板并入四介质联合包，当前 14 个 A/`normalized_analysis` 来源、736 条观测、89 个比较组、16 个工程异常候选 | 下一批优先 TPDC 官方下载链路，再推进 GEMAS/NGSA 与 GEOROC Antarctica；具名人工签署独立进行 |
 | 2026-08-06 16:00 | FOREGS 六介质工程闭环 | 将父项目拆为 topsoil、subsoil、humus、stream water、stream sediment、floodplain sediment 六个可执行来源；固定 6 个 ZIP 和 22 个分析 CSV 的字节/hash/行数，解析 16,364 行并登记 48,504 条七目标元素映射。总量、王水、温和硝酸和溶解态保持分组；行级 `<DL` 缺失及可能 `DL/2` 替代显式标记。六份 30 行复核单机器检查通过、人工未签署；六套 48 条 demo 纳入联合 fixture，当前 13 个 A/`normalized_analysis` 来源、688 条观测、85 个比较组、11 个工程异常候选 | 完成 13 份具名人工签署；下一批优先固定 TPDC 中国土壤、AfSIS 非洲土壤、GEMAS/NGSA 与 GEOROC Antarctica 的官方文件和使用条件 |
 | 2026-08-06 12:00 | 外部评测迁移首批：PANGAEA 北非土壤 + GSJ 日本河流沉积物 | 不依赖外部 `/mnt/nas` 产物，分别从官方 PANGAEA 和 GSJ 重新固定源文件。PANGAEA 具体 DOI 完成 43 行、48 元素字段和六目标元素 258 条对账；GSJ 完成两个 CP932 CSV 的 3,024/3,024 出现序号连接，保留重复 ID `78013`、JGD2000 和 Hg/其他元素单位差异。两项均新增 canonical adapter、snapshot、reconciliation、30 条待签署复核和 48 条 demo，证据评分 85/A/`normalized_analysis`。目录现为 41 项、可执行适配器 7 个；四介质联合 fixture 扩为 400 条、46 个比较组和 11 个工程异常候选；159 项组件检查通过 | 提交并同步；随后按迁移队列固定 FOREGS 六个文件契约，再并行核对 TPDC、AfSIS、GEMAS/NGSA 与 GEOROC Antarctica 的官方版本、文件和使用条件 |
