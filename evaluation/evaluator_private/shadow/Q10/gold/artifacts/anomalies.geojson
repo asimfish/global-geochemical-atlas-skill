@@ -1,0 +1,19 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          110.06,
+          30.06
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "observation_id": "obs-006",
+        "score": "2.191041864462"
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

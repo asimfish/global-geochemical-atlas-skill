@@ -1,6 +1,6 @@
 {
   "schema_version": "e2.e1-alignment.v1",
-  "benchmark_version": "6.0.0-draft.1",
+  "benchmark_version": "6.0.0-draft.2",
   "e1_eval_version": "1.0.0",
   "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
   "submission": {
@@ -21,7 +21,10 @@
     "benchmark_evidence": {
       "container": "artifacts/run_manifest.json",
       "field": "benchmark_evidence",
-      "purpose": "Store task-local logical evidence without creating non-E1 submission files."
+      "purpose": "Store task-local logical evidence without creating non-E1 submission files.",
+      "candidate_visible_contract": "task.json#/candidate_visible_contract",
+      "candidate_visible_schema_version": "e2.candidate-visible.v1",
+      "csv_row_encoding": "array_of_objects_keyed_by_column_name"
     }
   },
   "dimensions": [
@@ -78,15 +81,35 @@
   "conditions": {"bare": "B0", "skill": "S0"},
   "repeats": 3,
   "isolation": {
-    "public_export_allowlist": [
-      "README_public.md",
-      "VERSION",
-      "contracts/benchmark-execution-contract.json",
-      "docs/public_interface.md",
-      "release/public"
+    "candidate_visible_root": "ai_visible_public",
+    "candidate_bundle_exporter": "tools/export_ai_bundle.py",
+    "candidate_visible_questions": {
+      "first": "Q01",
+      "last": "Q24",
+      "count": 24
+    },
+    "candidate_allowlisted_task_paths": [
+      "task.md",
+      "task.json",
+      "inputs/**"
     ],
-    "private_root_must_be_outside_e1_workspace": true,
-    "hidden_splits": ["shadow", "final_holdout"],
+    "candidate_writable_root": "ai_visible_public/submissions",
+    "candidate_forbidden_path_parts": [
+      "checker",
+      "evaluator_private",
+      "gold",
+      "results",
+      "rubric.json",
+      "task_inventory.csv"
+    ],
+    "evaluator_source_roots": [
+      "release/public",
+      "evaluator_private/shadow",
+      "evaluator_private/final_holdout"
+    ],
+    "legacy_split_labels": ["public", "shadow", "final_holdout"],
+    "strict_holdout_present": false,
+    "formal_final_requires_external_private_freeze": true,
     "current_v5_final_is_compromised": true
   }
 }

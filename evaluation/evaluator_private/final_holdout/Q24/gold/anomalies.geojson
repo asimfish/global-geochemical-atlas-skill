@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","id":"E21","geometry":{"type":"Point","coordinates":[-100.21,30.21]},"properties":{"record_id":"E21","source_id":"SRC-A","group_id":"soil|dry|total|Cu|ICP-MS","anomaly_type":"statistical_relative_enrichment","robust_z":10.4080919691,"center_log10":1.4771212547,"scale_log10":0.1173941154,"n":21}}]}

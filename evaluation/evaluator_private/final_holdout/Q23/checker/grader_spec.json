@@ -1,0 +1,133 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "anomalies_exists",
+      "path": "contextual_anomalies.csv",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "interpretation_exists",
+      "path": "interpretation.md",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 2,
+      "id": "anomaly_count",
+      "path": "contextual_anomalies.csv",
+      "points": 8,
+      "type": "csv_row_count"
+    },
+    {
+      "columns": [
+        "record_id",
+        "unit_id"
+      ],
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": [
+        [
+          "CTX1",
+          "UNIT-A"
+        ],
+        [
+          "CTX2",
+          "UNIT-B"
+        ]
+      ],
+      "id": "anomaly_keys",
+      "path": "contextual_anomalies.csv",
+      "points": 10,
+      "type": "csv_key_set"
+    },
+    {
+      "column": "robust_z",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 5.2287874528,
+      "id": "ctx1_z",
+      "key": {
+        "record_id": "CTX1"
+      },
+      "path": "contextual_anomalies.csv",
+      "points": 12,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "anomaly_type",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "relative_enrichment",
+      "id": "ctx1_type",
+      "key": {
+        "record_id": "CTX1"
+      },
+      "path": "contextual_anomalies.csv",
+      "points": 10,
+      "type": "csv_cell"
+    },
+    {
+      "column": "robust_z",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": -4.7712125472,
+      "id": "ctx2_z",
+      "key": {
+        "record_id": "CTX2"
+      },
+      "path": "contextual_anomalies.csv",
+      "points": 12,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "anomaly_type",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "relative_depletion",
+      "id": "ctx2_type",
+      "key": {
+        "record_id": "CTX2"
+      },
+      "path": "contextual_anomalies.csv",
+      "points": 10,
+      "type": "csv_cell"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "limitations",
+      "path": "interpretation.md",
+      "points": 10,
+      "terms": [
+        "statistical anomalies",
+        "relative to each matched geologic unit",
+        "does not establish",
+        "independent"
+      ],
+      "type": "text_contains_all"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [
+    {
+      "consequence": "acceptance_fail",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "RL-10-causal",
+      "path": "interpretation.md",
+      "pattern": "(is|proves|confirms|demonstrates) (a |the )?(mineral deposit|contamination source|causal mechanism)",
+      "type": "text_regex_forbidden"
+    }
+  ],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-ANOM-003"
+}

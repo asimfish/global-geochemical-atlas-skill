@@ -1,0 +1,126 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "geojson_exists",
+      "path": "island_points.geojson",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "manifest_exists",
+      "path": "spatial_manifest.json",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 2,
+      "id": "feature_count",
+      "json_path": "features",
+      "path": "island_points.geojson",
+      "points": 8,
+      "type": "json_length"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": [
+        179.8,
+        -17
+      ],
+      "id": "am01_coords",
+      "json_path": "features.0.geometry.coordinates",
+      "path": "island_points.geojson",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": [
+        -179.7,
+        -18
+      ],
+      "id": "am02_coords",
+      "json_path": "features.1.geometry.coordinates",
+      "path": "island_points.geojson",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": [
+        179.8,
+        -18,
+        -179.7,
+        -17
+      ],
+      "id": "bbox",
+      "json_path": "bbox",
+      "path": "spatial_manifest.json",
+      "points": 14,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": true,
+      "id": "crosses",
+      "json_path": "crosses_antimeridian",
+      "path": "spatial_manifest.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0.5,
+      "id": "span",
+      "json_path": "longitude_span_deg",
+      "path": "spatial_manifest.json",
+      "points": 8,
+      "tolerance": 1e-06,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 2,
+      "id": "mapped",
+      "json_path": "mapped_count",
+      "path": "spatial_manifest.json",
+      "points": 5,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 1,
+      "id": "excluded",
+      "json_path": "excluded_count",
+      "path": "spatial_manifest.json",
+      "points": 5,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "longitude_latitude",
+      "id": "order",
+      "json_path": "coordinate_order",
+      "path": "spatial_manifest.json",
+      "points": 4,
+      "type": "json_value"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-SPATIAL-003"
+}

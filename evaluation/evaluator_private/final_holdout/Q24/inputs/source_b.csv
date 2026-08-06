@@ -1,0 +1,2 @@
+record_id,batch_id,medium,basis,phase,element,reported_value,unit,method,latitude,longitude
+E24,BATCH-B,soil,dry,total,Cu,100,ppm,ICP-MS,32,-103

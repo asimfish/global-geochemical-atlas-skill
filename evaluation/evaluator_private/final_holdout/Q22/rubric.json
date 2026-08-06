@@ -1,0 +1,29 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "开放许可仍执行 attribution/share-alike 条件。",
+      "id": "open_conditions",
+      "points": 7
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "限制数据只输出 metadata/pointer，保留访问控制。",
+      "id": "restricted",
+      "points": 7
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "未知许可进入人工核验而不是默认开放。",
+      "id": "unknown",
+      "points": 6
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/redistribution_decisions.csv",
+    "inputs/license_policy.json"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-LICENSE-001"
+}

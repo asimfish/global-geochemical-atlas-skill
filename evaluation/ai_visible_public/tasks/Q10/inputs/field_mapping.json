@@ -1,0 +1,4 @@
+{
+  "source_a": {"source_record_id": "Record", "sample_id": "Sample", "latitude": "Latitude", "longitude": "Longitude", "medium": "Material", "Cu": {"column": "Cu_ppm", "unit": "ppm"}},
+  "source_b": {"source_record_id": "source_key", "sample_id": "sample_id", "latitude": "lat_dd", "longitude": "lon_dd", "medium": "medium", "Cu": {"column": "cu_mgkg", "unit": "mg/kg"}}
+}

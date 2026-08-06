@@ -1,0 +1,29 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "platform_reusability",
+      "full_credit": "字段适配来自显式 mapping，而不是对列位置或名字模糊猜测。",
+      "id": "mapping_driven",
+      "points": 8
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "record_id 同时包含 source 与 native record identity。",
+      "id": "stable_identity",
+      "points": 7
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "reported value/unit 与 normalized value/unit 同时存在。",
+      "id": "traceability",
+      "points": 5
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/observations.csv",
+    "inputs/field_mapping.json"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-INGEST-001"
+}

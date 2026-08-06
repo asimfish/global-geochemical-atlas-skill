@@ -1,0 +1,4 @@
+record_id,latitude,longitude,value,eligible_map
+AM01,-17,179.8,10,true
+AM02,-18,-179.7,20,true
+AM03,-17.5,181,30,false

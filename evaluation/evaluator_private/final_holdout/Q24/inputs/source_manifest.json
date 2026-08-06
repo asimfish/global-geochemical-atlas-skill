@@ -1,0 +1,7 @@
+{
+  "version": "q24-sources-1",
+  "sources": [
+    {"source_id": "SRC-A", "file": "source_a.csv", "expected_sha256": "03116fbcedab6f5d0dee9b551c5647195b9fd9eae3c5197dad99bcce35d0caae", "dataset_version": "A-1", "license": "CC-BY-4.0"},
+    {"source_id": "SRC-B", "file": "source_b.csv", "expected_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "dataset_version": "B-1", "license": "CC-BY-4.0"}
+  ]
+}

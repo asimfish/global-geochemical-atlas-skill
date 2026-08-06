@@ -1,0 +1,159 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "output_exists",
+      "path": "geologic_matches.csv",
+      "points": 5,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "columns",
+      "path": "geologic_matches.csv",
+      "points": 8,
+      "required": [
+        "point_id",
+        "unit_id",
+        "match_status",
+        "distance_to_boundary_deg",
+        "coordinate_precision_m",
+        "match_confidence",
+        "qc_flags"
+      ],
+      "type": "csv_columns"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 5,
+      "id": "row_count",
+      "path": "geologic_matches.csv",
+      "points": 5,
+      "type": "csv_row_count"
+    },
+    {
+      "column": "unit_id",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "UNIT-A",
+      "id": "g01_unit",
+      "key": {
+        "point_id": "G01"
+      },
+      "path": "geologic_matches.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "match_confidence",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "high",
+      "id": "g01_confidence",
+      "key": {
+        "point_id": "G01"
+      },
+      "path": "geologic_matches.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "qc_flags",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "near_unit_boundary",
+      "id": "g02_boundary",
+      "key": {
+        "point_id": "G02"
+      },
+      "path": "geologic_matches.csv",
+      "points": 9,
+      "type": "csv_cell"
+    },
+    {
+      "column": "match_confidence",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "low",
+      "id": "g02_confidence",
+      "key": {
+        "point_id": "G02"
+      },
+      "path": "geologic_matches.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "qc_flags",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "coordinate_precision_coarse",
+      "id": "g03_coarse",
+      "key": {
+        "point_id": "G03"
+      },
+      "path": "geologic_matches.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "match_status",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "no_match",
+      "id": "g04_no_match",
+      "key": {
+        "point_id": "G04"
+      },
+      "path": "geologic_matches.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "unit_id",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": null,
+      "id": "g04_unit_empty",
+      "key": {
+        "point_id": "G04"
+      },
+      "path": "geologic_matches.csv",
+      "points": 5,
+      "type": "csv_cell"
+    },
+    {
+      "column": "match_status",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "ambiguous_boundary",
+      "id": "g05_ambiguous",
+      "key": {
+        "point_id": "G05"
+      },
+      "path": "geologic_matches.csv",
+      "points": 6,
+      "type": "csv_cell"
+    },
+    {
+      "column": "unit_id",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": null,
+      "id": "g05_unit_empty",
+      "key": {
+        "point_id": "G05"
+      },
+      "path": "geologic_matches.csv",
+      "points": 4,
+      "type": "csv_cell"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-SPATIAL-002"
+}
