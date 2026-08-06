@@ -1,0 +1,240 @@
+{
+  "contract_version": "d2-global-sources-v1",
+  "frozen_on": "2026-08-05",
+  "purpose": "A small offline, seven-continent, four-medium real-data benchmark for D2. It tests global heterogeneity and evidence handling; it is not a statistically complete global atlas.",
+  "fixture_build": {
+    "builder_version": "global-fixture-builder-v1",
+    "georoc_maximum_samples_per_named_region": 80,
+    "gemstat_maximum_stations_per_country_element": 5,
+    "selection_uses_concentration_magnitude": false,
+    "parent_archives_are_bundled": false,
+    "full_parent_download_note": "The 201,278,791-byte GEMStat archive and approximately 31 MB of GEOROC parent CSVs are downloaded only to an external cache; the repository contains deterministic derivatives and evidence snapshots."
+  },
+  "resources": [
+    {
+      "id": "georoc_global_rocks_slice",
+      "dataset_ids": ["georoc_archaean_cratons", "georoc_antarctica_intraplate"],
+      "role": "data_derivative",
+      "local_file": "georoc_global_rocks.csv",
+      "bytes": 799584,
+      "sha256": "a245b8bd54d5cf004970bde21dcaf1cbb03648738356c763ba4ed6b2d73b1b9b",
+      "format": "utf8_csv",
+      "record_count": 2017,
+      "required_tokens": ["parent_persistent_id", "continent", "ANTARCTICA", "WEST AFRICAN CRATON"]
+    },
+    {
+      "id": "georoc_archaean_metadata",
+      "dataset_ids": ["georoc_archaean_cratons"],
+      "role": "official_metadata_snapshot",
+      "url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/1KRR1P",
+      "landing_page": "https://doi.org/10.25625/1KRR1P",
+      "local_file": "georoc_archaean_metadata.json",
+      "bytes": 21090,
+      "sha256": "7dbfb3a9ac81b0a52dbf7660a42575d92bf027adbc59f9f5d8999e1ba9ee088c",
+      "format": "json",
+      "required_tokens": ["1KRR1P", "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv"]
+    },
+    {
+      "id": "georoc_antarctica_metadata",
+      "dataset_ids": ["georoc_antarctica_intraplate"],
+      "role": "official_metadata_snapshot",
+      "url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/RZZ9VM",
+      "landing_page": "https://doi.org/10.25625/RZZ9VM",
+      "local_file": "georoc_antarctica_metadata.json",
+      "bytes": 77014,
+      "sha256": "8e779a156c83cd5fa0dcbdae139d97d9d5a12a2a9d07a1c6952ffc42f6651d14",
+      "format": "json",
+      "required_tokens": ["RZZ9VM", "2026-06-RZZ9VM_ANTARCTICA.csv"]
+    },
+    {
+      "id": "gemas_europe_soil",
+      "dataset_ids": ["gemas_europe_soil"],
+      "role": "official_query_response",
+      "url": "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer/3/query",
+      "landing_page": "https://data.gov.ie/dataset/0c6c5bbc-20a7-4011-8585-7befb511a4b4",
+      "local_file": "gemas_europe_soil.geojson",
+      "bytes": 786645,
+      "sha256": "b2922bb0385d74625b71e76bd26eb834e2bd304f2645702c50b72024ab623aa1",
+      "format": "geojson",
+      "record_count": 2113,
+      "required_tokens": ["FeatureCollection", "COUNTRY", "SOILTYPE", "AS_", "CU", "PB", "ZN"]
+    },
+    {
+      "id": "gemas_layer_metadata",
+      "dataset_ids": ["gemas_europe_soil"],
+      "role": "official_metadata_snapshot",
+      "url": "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer/3?f=pjson",
+      "landing_page": "https://data.gov.ie/dataset/0c6c5bbc-20a7-4011-8585-7befb511a4b4",
+      "local_file": "gemas_layer3_metadata.json",
+      "bytes": 22743,
+      "sha256": "f6f3ab1110c0f1b7607b8ecbeb5676686181f8fb878624339778b148b5c6bbc5",
+      "format": "json",
+      "required_tokens": ["Aqua Regia", "top 0\\u201320 cm", "> 20.5  mg/kg", "wkid\": 4326"]
+    },
+    {
+      "id": "ngsa_australia_hg",
+      "dataset_ids": ["ngsa_australia_hg"],
+      "role": "official_data",
+      "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV",
+      "landing_page": "https://doi.org/10.26186/150328",
+      "local_file": "ngsa_australia_hg.csv",
+      "bytes": 208089,
+      "sha256": "3089b02331e8aff7e78ec8b972fa6ff9acfe85c9b49ae67462605cef3fbb247c",
+      "format": "cp1252_csv_with_preamble",
+      "record_count": 2396,
+      "required_tokens": ["LATITUDE_GDA94", "Hg_DMA_ng/g_0.01", "Creative Commons Attribution 4.0 Australia Licence"]
+    },
+    {
+      "id": "ngsa_catalog_metadata",
+      "dataset_ids": ["ngsa_australia_hg"],
+      "role": "official_metadata_snapshot",
+      "url": "https://data.gov.au/data/api/3/action/package_show?id=d0a5af8b-48a4-425c-809f-eae6f7701542",
+      "landing_page": "https://doi.org/10.26186/150328",
+      "local_file": "ngsa_catalog_metadata.json",
+      "bytes": 10509,
+      "sha256": "92aab04fd6b33c933a8d13d4b795f67a25fcb2ae7a21f797269662ae9528e35d",
+      "format": "json",
+      "required_tokens": ["2396 new Hg concentrations", "DMA-80", "10.26186/150328"]
+    },
+    {
+      "id": "gemstat_global_water_slice",
+      "dataset_ids": ["gemstat_global_freshwater_v3"],
+      "role": "data_derivative",
+      "local_file": "gemstat_global_water.csv",
+      "bytes": 193491,
+      "sha256": "04a47bdca46b82a5f8bd6e3863455ad964456b4c298beadea7c0f048e1ba88b2",
+      "format": "utf8_csv",
+      "record_count": 656,
+      "required_tokens": ["parent_member_sha256", "Argentina", "India", "United States of America (the)"]
+    },
+    {
+      "id": "gemstat_record_metadata",
+      "dataset_ids": ["gemstat_global_freshwater_v3"],
+      "role": "official_metadata_snapshot",
+      "url": "https://zenodo.org/api/records/13881899",
+      "landing_page": "https://doi.org/10.5281/zenodo.18459694",
+      "local_file": "gemstat_record_metadata.json",
+      "bytes": 6585,
+      "sha256": "e72d1c09408a95315e383df4836d6bc50e0b3210fd83b978865e001dff52fd9d",
+      "format": "json",
+      "required_tokens": ["GFQA_v3.zip", "50,000,000 measurements", "cc-by-4.0"]
+    },
+    {
+      "id": "gemstat_readme",
+      "dataset_ids": ["gemstat_global_freshwater_v3"],
+      "role": "official_format_and_policy",
+      "url": "https://zenodo.org/api/records/18459694/files/GFQA_v3.zip/content",
+      "landing_page": "https://doi.org/10.5281/zenodo.18459694",
+      "local_file": "gemstat_readme.txt",
+      "bytes": 16727,
+      "sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d",
+      "format": "text_from_zip_member",
+      "required_tokens": ["OPEN", "CC BY 4.0", "Latitude", "WGS84"]
+    },
+    {
+      "id": "global_source_manifest",
+      "dataset_ids": ["georoc_archaean_cratons", "georoc_antarctica_intraplate", "gemas_europe_soil", "ngsa_australia_hg", "gemstat_global_freshwater_v3"],
+      "role": "derivation_manifest",
+      "local_file": "source_manifest.json",
+      "bytes": 13418,
+      "sha256": "31187e8c6236f38c9e5d453243a782b8c6a7c996ccad678634ff3b3ecd584578",
+      "format": "json",
+      "required_tokens": ["global-fixture-builder-v1", "maximum_samples_per_named_region", "archive_sha256"]
+    }
+  ],
+  "datasets": [
+    {
+      "id": "georoc_archaean_cratons",
+      "title": "GEOROC Precompiled File: Archaean Cratons",
+      "publisher": "GEOROC / Göttingen Research Online",
+      "citation": "GEOROC, Archaean Cratons precompiled dataset, frozen June 2026",
+      "persistent_identifier": "doi:10.25625/1KRR1P",
+      "version": "precompiled files generated 2026-06",
+      "license": "CC BY-SA 4.0",
+      "medium": "rock",
+      "geographic_scope": ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"],
+      "scientific_limits": [
+        "The derivative samples up to 80 records per named region and is not an abundance-weighted global survey.",
+        "GEOROC precompiled values are selected published values; method, laboratory and digestion are not exposed per determination in these CSVs.",
+        "The files provide decimal-degree coordinate bounds but do not declare a geodetic datum; midpoint mapping is explicitly an evaluation-screening assumption.",
+        "Publication and sampling density vary strongly between cratons."
+      ]
+    },
+    {
+      "id": "georoc_antarctica_intraplate",
+      "title": "GEOROC Precompiled File: Intraplate Volcanics — Antarctica",
+      "publisher": "GEOROC / Göttingen Research Online",
+      "citation": "GEOROC, Intraplate Volcanics precompiled dataset, Antarctica file, frozen June 2026",
+      "persistent_identifier": "doi:10.25625/RZZ9VM",
+      "version": "Antarctica precompiled file generated 2026-06",
+      "license": "CC BY-SA 4.0",
+      "medium": "rock",
+      "geographic_scope": ["Antarctica"],
+      "scientific_limits": [
+        "Antarctica coverage is literature-driven and spatially sparse.",
+        "The same precompiled-value, method-metadata and undeclared-datum limits as the Archaean files apply.",
+        "This file supplies geographic coverage for testing and must not be interpreted as a representative Antarctic baseline."
+      ]
+    },
+    {
+      "id": "gemas_europe_soil",
+      "title": "GEMAS Geochemical Mapping of Agricultural and Grazing Land Soil of Europe — agricultural soil layer",
+      "publisher": "Geological Survey Ireland / GEMAS / EuroGeoSurveys",
+      "citation": "Geological Survey Ireland, GEMAS European Geochemical Data, agricultural land Aqua Regia layer",
+      "persistent_identifier": "data.gov.ie dataset 0c6c5bbc-20a7-4011-8585-7befb511a4b4",
+      "version": "ArcGIS service republished 2024; query frozen 2026-08-05",
+      "license": "CC BY 4.0",
+      "medium": "soil",
+      "geographic_scope": ["Europe"],
+      "scientific_limits": [
+        "Only the 2,113 agricultural-land samples (0–20 cm) are included; the grazing-land and XRF layers are outside this benchmark slice.",
+        "Aqua regia-extractable concentrations are not interchangeable with total concentrations.",
+        "Country codes are preserved exactly as published and include non-ISO and unknown labels.",
+        "One sample per approximately 2,500 km² cannot resolve local contamination or mineralization."
+      ]
+    },
+    {
+      "id": "ngsa_australia_hg",
+      "title": "National Geochemical Survey of Australia: The Mercury Concentrations Dataset",
+      "publisher": "Geoscience Australia",
+      "citation": "Schneider, Taylor and de Caritat (2025), National Geochemical Survey of Australia: The Mercury Concentrations Dataset",
+      "persistent_identifier": "doi:10.26186/150328",
+      "version": "last updated 2025-03-31",
+      "license": "Creative Commons Attribution 4.0 Australia",
+      "medium": "sediment",
+      "geographic_scope": ["Oceania"],
+      "scientific_limits": [
+        "The dataset contains only total Hg in the <75 µm catchment outlet sediment fraction.",
+        "Top Outlet Sediment and Bottom Outlet Sediment represent different depth intervals and must remain separated.",
+        "Declared field duplicates are retained and must be flagged rather than silently removed.",
+        "An anomaly is a screening candidate, not proof of anthropogenic contamination or mineralization."
+      ]
+    },
+    {
+      "id": "gemstat_global_freshwater_v3",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive",
+      "publisher": "UNEP GEMS/Water / ICWRGC / German Federal Institute of Hydrology",
+      "citation": "UNEP GEMS/Water Global Freshwater Quality Archive v3 (2026)",
+      "persistent_identifier": "doi:10.5281/zenodo.18459694",
+      "version": "v3, published 2026-02-02",
+      "license": "CC BY 4.0 open-policy subset",
+      "medium": "water",
+      "geographic_scope": ["Asia", "Europe", "North America", "South America"],
+      "scientific_limits": [
+        "The frozen derivative covers 35 countries with at least one supported As, Cu, Pb or Zn result, not all countries represented anywhere in GEMStat.",
+        "It keeps at most five stations per country-element after selecting the earliest supported result per station; it is for workflow evaluation, not trend estimation.",
+        "Sampling purpose, water type, fraction, method, unit, date and data quality are heterogeneous and must not be pooled without grouping.",
+        "The Zenodo archive contains only OPEN-policy data; additional LIMITED or RESTRICTED portal data are deliberately excluded."
+      ]
+    }
+  ],
+  "coverage_acceptance": {
+    "minimum_continents": 7,
+    "required_continents": ["Africa", "Antarctica", "Asia", "Europe", "North America", "Oceania", "South America"],
+    "required_media": ["rock", "sediment", "soil", "water"],
+    "minimum_explicit_country_labels": 35,
+    "minimum_source_datasets": 5,
+    "maximum_single_country_share": 0.5,
+    "required_blind_spots": ["Africa has rock but no bundled soil, sediment or open GEMStat water slice", "Antarctica has literature rock only", "No medium is complete at global population scale"]
+  }
+}

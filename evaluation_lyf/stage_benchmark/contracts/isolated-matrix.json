@@ -1,0 +1,47 @@
+{
+  "version": "d2-isolated-matrix-v1",
+  "solid_unit_cases": [
+    {"unit": "mg/kg", "value": "2.5", "expected": 2.5},
+    {"unit": "ppm", "value": "2.5", "expected": 2.5},
+    {"unit": "ug/g", "value": "2.5", "expected": 2.5},
+    {"unit": "g/t", "value": "2.5", "expected": 2.5},
+    {"unit": "wt%", "value": "2.5", "expected": 25000.0},
+    {"unit": "ppb", "value": "2.5", "expected": 0.0025},
+    {"unit": "ug/kg", "value": "2.5", "expected": 0.0025},
+    {"unit": "ng/g", "value": "2.5", "expected": 0.0025},
+    {"unit": "g/kg", "value": "2.5", "expected": 2500.0},
+    {"unit": "mg/g", "value": "2.5", "expected": 2500.0}
+  ],
+  "water_unit_cases": [
+    {"unit": "ug/L", "value": "2.5", "expected": 2.5},
+    {"unit": "mcg/L", "value": "2.5", "expected": 2.5},
+    {"unit": "mg/L", "value": "2.5", "expected": 2500.0},
+    {"unit": "ng/L", "value": "2.5", "expected": 0.0025},
+    {"unit": "g/L", "value": "2.5", "expected": 2500000.0}
+  ],
+  "ambiguous_or_unsupported_cases": [
+    {"medium": "water", "unit": "ppm", "flag": "AMBIGUOUS_AQUEOUS_RATIO_UNIT"},
+    {"medium": "water", "unit": "ppb", "flag": "AMBIGUOUS_AQUEOUS_RATIO_UNIT"},
+    {"medium": "water", "unit": "wt%", "flag": "AMBIGUOUS_AQUEOUS_RATIO_UNIT"},
+    {"medium": "rock", "unit": "%", "flag": "UNSUPPORTED_UNIT"},
+    {"medium": "soil", "unit": "mol/kg", "flag": "UNSUPPORTED_UNIT"}
+  ],
+  "oxide_cases": [
+    {"formula": "SiO2", "element": "Si"},
+    {"formula": "TiO2", "element": "Ti"},
+    {"formula": "Al2O3", "element": "Al"},
+    {"formula": "FeO", "element": "Fe"},
+    {"formula": "Fe2O3", "element": "Fe"},
+    {"formula": "MnO", "element": "Mn"},
+    {"formula": "MgO", "element": "Mg"},
+    {"formula": "CaO", "element": "Ca"},
+    {"formula": "Na2O", "element": "Na"},
+    {"formula": "K2O", "element": "K"},
+    {"formula": "P2O5", "element": "P"},
+    {"formula": "Cr2O3", "element": "Cr"},
+    {"formula": "CoO", "element": "Co"},
+    {"formula": "NiO", "element": "Ni"},
+    {"formula": "CuO", "element": "Cu"},
+    {"formula": "ZnO", "element": "Zn"}
+  ]
+}

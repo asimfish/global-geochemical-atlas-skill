@@ -1,0 +1,13 @@
+{
+  "sample_id": "SampleNo",
+  "element_or_analyte": "ElementName",
+  "value": "ResultText",
+  "unit": "ResultUnit",
+  "medium": "SampleMaterial",
+  "measurement_basis": "ResultBasis",
+  "latitude": "Lat",
+  "longitude": "Lon",
+  "analytical_method": "Method",
+  "source_id": "DatasetKey",
+  "source_locator": "SourceLink"
+}

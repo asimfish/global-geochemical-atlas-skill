@@ -1,0 +1,59 @@
+{
+  "benchmark_version": "geochemical-stage-benchmark-v2",
+  "profile": "seven-continent-four-media-completion-v2",
+  "scientific_scope": "structural_real-data_workflow_benchmark_not_global_population_estimate",
+  "d1": {
+    "record_count": 93369,
+    "source_dataset_count": 28,
+    "nonempty_continent_medium_cells": 28,
+    "water_continent_count": 7,
+    "minimum_rates": {
+      "analytical_method_nonblank": 0.90,
+      "analytical_method_specific": 0.68,
+      "explicit_method_status": 1.0,
+      "explicit_geologic_status": 1.0,
+      "explicit_coordinate_uncertainty_status": 1.0,
+      "coordinate_resolution": 0.999
+    }
+  },
+  "d2": {
+    "record_count": 93369,
+    "standardized_or_censoring_limit_count": 92632,
+    "censored_record_count": 5811,
+    "valid_coordinate_count": 86521,
+    "unsupported_unit_count": 0,
+    "candidate_anomaly_count": 1363,
+    "spatial_geology": {
+      "join_version": "d2-glim-05deg-cell-join-v1",
+      "disposition_coverage": 1.0,
+      "eligible_record_count": 84665,
+      "matched_record_count": 76313,
+      "eligible_match_rate": 0.901352,
+      "water_records_with_assigned_land_unit": 0
+    }
+  },
+  "d3": {
+    "status": "pass",
+    "blocking_checks_failed": 0,
+    "database_record_count": 93369,
+    "rendered_sample_point_count": 86521,
+    "candidate_anomaly_count": 1363,
+    "anomaly_region_count": 591,
+    "source_count": 28,
+    "maximum_atlas_bytes": 100000000,
+    "external_runtime_asset_count": 0,
+    "required_deliverables": [
+      "interactive_element_map",
+      "standardized_geochemical_database",
+      "source_and_confidence_explanation",
+      "anomaly_region_results"
+    ]
+  },
+  "non_negotiable_limits": [
+    "28/28 structural cells do not establish national or global representativeness.",
+    "Explicit unknown status coverage is reported separately from known-value coverage.",
+    "Coordinate decimal resolution is not coordinate accuracy or uncertainty.",
+    "GLiM 0.5 degree dominant surface lithology is screening context, not site-scale geology.",
+    "Candidate anomalies do not establish pollution, mineralization, resource potential or cause."
+  ]
+}

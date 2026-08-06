@@ -1,0 +1,171 @@
+{
+  "datasets": [
+    {
+      "citation": "Smith et al. (2013), U.S. Geological Survey Data Series 801",
+      "doi": "10.3133/ds801",
+      "id": "usgs_ds801",
+      "license": "Public domain U.S. Government work; metadata states no access constraints and a fitness-for-use disclaimer.",
+      "medium": "soil",
+      "publisher": "U.S. Geological Survey",
+      "scientific_limits": [
+        "Low-density survey of the conterminous United States, not global coverage.",
+        "Selected elements use different analytical methods and digestion or fusion procedures.",
+        "The 0-5 cm table is one soil depth only."
+      ],
+      "title": "Geochemical and Mineralogical Data for Soils of the Conterminous United States",
+      "version": "Data Series 801; Top5 table dated 2013-09-18"
+    },
+    {
+      "citation": "Bailey et al. (2000), U.S. Geological Survey Open-File Report 99-433, version 2.0",
+      "doi": "10.3133/ofr99433",
+      "id": "usgs_rass_circle",
+      "license": "Metadata access constraints: none; use constraints: none; supplied as-is with a fitness-for-use disclaimer.",
+      "medium": "sediment",
+      "publisher": "U.S. Geological Survey",
+      "scientific_limits": [
+        "Legacy analyses span the mid-1960s to late 1980s and method accuracy varies.",
+        "N, L, G, H and B qualifiers have distinct meanings and must not be treated as numbers.",
+        "Coordinates are NAD27 and location accuracy varies with the source map."
+      ],
+      "title": "U.S. Geological Survey RASS Geochemical Data for Alaska: Circle quadrangle stream sediments",
+      "version": "Open-File Report 99-433 version 2.0; Circle CSV"
+    },
+    {
+      "citation": "Bailey et al. (2007, revised 2010), U.S. Geological Survey Open-File Report 2007-1196 version 1.1",
+      "doi": "10.3133/ofr20071196",
+      "id": "usgs_taylor_mountains_rock",
+      "license": "Metadata access constraints: none; use constraints: none; supplied with a fitness-for-use disclaimer.",
+      "medium": "rock",
+      "publisher": "U.S. Geological Survey",
+      "scientific_limits": [
+        "Only 59 reconnaissance rock samples from one Alaska quadrangle; not regional or global coverage.",
+        "Coordinates are NAD27 and published horizontal accuracy is approximately 20 feet.",
+        "Rock formation, lithology and age are field observations with blanks and question marks where uncertain."
+      ],
+      "title": "Major and trace element data for rock samples collected in the Taylor Mountains quadrangle, Alaska",
+      "version": "Open-File Report 2007-1196 version 1.1; Table 3 revised 2010-05-21"
+    },
+    {
+      "citation": "Water Quality Portal, accessed 2026-08-05 using the frozen query, DOI 10.5066/P9QRKUVJ",
+      "doi": "10.5066/P9QRKUVJ",
+      "id": "wqp_usgs_01594440_arsenic",
+      "license": "Publicly available USGS/NWIS observations; cite the WQP DOI and exact query.",
+      "medium": "water",
+      "publisher": "National Water Quality Monitoring Council / USGS / EPA",
+      "scientific_limits": [
+        "One monitoring location and one analyte; not representative of regional or global water quality.",
+        "The portal is dynamic, so the frozen file hash is the reproducible test artifact.",
+        "Many historical results omit the analytical method."
+      ],
+      "title": "Water Quality Portal arsenic results for USGS-01594440",
+      "version": "Dynamic WQP query frozen on 2026-08-05"
+    }
+  ],
+  "frozen_on": "2026-08-05",
+  "manifest_version": "d2-real-fixture-manifest-v2",
+  "network_used": false,
+  "offline": true,
+  "resource_count": 8,
+  "resources": [
+    {
+      "bytes": 1450062,
+      "dataset_id": "usgs_ds801",
+      "id": "usgs_ds801_top5",
+      "landing_page": "https://pubs.usgs.gov/ds/801/",
+      "path": "usgs_ds801_top5.tsv",
+      "record_count": 4857,
+      "role": "data",
+      "sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894",
+      "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt",
+      "verification": "pinned_sha256_size_structure"
+    },
+    {
+      "bytes": 235457,
+      "dataset_id": "usgs_ds801",
+      "id": "usgs_ds801_metadata",
+      "landing_page": "https://pubs.usgs.gov/ds/801/",
+      "path": "usgs_ds801_metadata.pdf",
+      "record_count": null,
+      "role": "metadata",
+      "sha256": "27c5968106886ec6ab1b0ad5427d05c81b1309ea5cd16dc292d93c51ff68e17b",
+      "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_5_Metadata.pdf",
+      "verification": "pinned_sha256_size_structure"
+    },
+    {
+      "bytes": 622158,
+      "dataset_id": "usgs_rass_circle",
+      "id": "usgs_rass_circle_sediment",
+      "landing_page": "https://pubs.usgs.gov/of/1999/of99-433/html/Circle.html",
+      "path": "usgs_rass_circle_sediment.csv",
+      "record_count": 1662,
+      "role": "data",
+      "sha256": "dda47af5b7e172cab9697033c1589ccdfecf80343efb32770a82b33c75dba76b",
+      "url": "https://pubs.usgs.gov/of/1999/of99-433/csv/CIsed.csv",
+      "verification": "pinned_sha256_size_structure"
+    },
+    {
+      "bytes": 104528,
+      "dataset_id": "usgs_rass_circle",
+      "id": "usgs_rass_circle_metadata",
+      "landing_page": "https://pubs.usgs.gov/of/1999/of99-433/",
+      "path": "usgs_rass_circle_metadata.txt",
+      "record_count": null,
+      "role": "metadata",
+      "sha256": "76883b150c5575afdb70873a9c32f0e365373662eec155f602a1b8471db447b4",
+      "url": "https://pubs.usgs.gov/of/1999/of99-433/metadata/metadata.txt",
+      "verification": "pinned_sha256_size_structure"
+    },
+    {
+      "bytes": 27814,
+      "dataset_id": "usgs_taylor_mountains_rock",
+      "id": "usgs_taylor_mountains_rock",
+      "landing_page": "https://pubs.usgs.gov/of/2007/1196/",
+      "path": "usgs_taylor_mountains_rock.csv",
+      "record_count": 59,
+      "role": "data",
+      "sha256": "a54b4fb7778b7f1314dfcdb7c59b8ef759477522dec60bb18bc0c6c046ca8178",
+      "url": "https://pubs.usgs.gov/of/2007/1196/of2007-1196_v1.1_tables/ak19-5050_Table03_ver1-1.csv",
+      "verification": "pinned_sha256_size_structure"
+    },
+    {
+      "bytes": 233682,
+      "dataset_id": "usgs_taylor_mountains_rock",
+      "id": "usgs_taylor_mountains_metadata",
+      "landing_page": "https://pubs.usgs.gov/of/2007/1196/",
+      "path": "usgs_taylor_mountains_metadata.txt",
+      "record_count": null,
+      "role": "metadata",
+      "sha256": "5cf69a77edf9abd00a6a3819cef5602e881b336d39c8ed8d135ec8a6a3512de6",
+      "url": "https://pubs.usgs.gov/of/2007/1196/of2007-1196_v1.1_metadata/TAmetadata.txt",
+      "verification": "pinned_sha256_size_structure"
+    },
+    {
+      "bytes": 38702,
+      "dataset_id": "wqp_usgs_01594440_arsenic",
+      "id": "wqp_usgs_01594440_arsenic",
+      "landing_page": "https://water.usgs.gov/catalog/datasets/b971c11a-0d87-496b-bb11-d78a950fcc9e/",
+      "path": "wqp_usgs_01594440_arsenic.csv",
+      "record_count": 90,
+      "role": "data",
+      "sha256": "5bb552a64e5c1dec1576bfeff5296b32422cbc05ad91bfeb011d1bcd8dd6e0f6",
+      "url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-01594440&characteristicName=Arsenic&dataProfile=resultPhysChem&mimeType=csv&count=no",
+      "verification": "pinned_sha256_size_structure"
+    },
+    {
+      "bytes": 1307,
+      "dataset_id": "wqp_usgs_01594440_arsenic",
+      "id": "wqp_usgs_01594440_station",
+      "landing_page": "https://water.usgs.gov/catalog/datasets/b971c11a-0d87-496b-bb11-d78a950fcc9e/",
+      "path": "wqp_usgs_01594440_station.csv",
+      "record_count": 1,
+      "role": "station_metadata",
+      "sha256": "f112c8ed13415faf47ac899769475ee24b868281dfbea34d7f41d8aaca72ceda",
+      "url": "https://www.waterqualitydata.us/data/Station/search?siteid=USGS-01594440&mimeType=csv&count=no",
+      "verification": "pinned_sha256_size_structure"
+    }
+  ],
+  "scientific_scope": "Offline, independently verifiable real-data holdout for D2; not a claim of global coverage.",
+  "source_contract": "real-sources.json",
+  "source_contract_sha256": "ec562420e0f9ce9bc50cede3f8131d35029f0055746ed53a893b4eb548230441",
+  "total_bytes": 2713710
+}
