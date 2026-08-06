@@ -238,6 +238,8 @@ python scripts/render_visualization.py \
 
 全流程必须生成标准数据库、来源与置信度说明、异常结果和交互地图。D3 独立生成 `interactive_map.html`、`samples.geojson`、`visualization_profile.json` 与 `visualization_report.json`，并原样携带页面引用的 D1/D2 证据文件。配置与报告分别受 [references/visualization-profile.schema.json](references/visualization-profile.schema.json) 和 [references/visualization-report.schema.json](references/visualization-report.schema.json) 约束；显示规则、失败边界和验收步骤见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 
+在交互页面首部把上述四项产物做成同等显著的一级入口。标准数据库页必须能直接核验完整 CSV 记录数、行语义、可上图预览与排除计数；置信度页必须展示 source、completeness、method、spatial、QC 五个分量及其权重、均值、等级分布、门控规则和“不是概率”边界。不要只给下载链接。区域产物只能裁剪 HTML 内嵌记录和 `samples.geojson`，不得改写完整 `geochemistry.csv`；同时明确完整报告统计与当前区域预览统计的口径差异。
+
 ## 8. 验证与失败关闭
 
 对 `run_workflow.py` 生成的核心十文件目录执行：

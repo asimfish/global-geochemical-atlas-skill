@@ -250,6 +250,15 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "D2 未提供分析方法",
         "不是与周围空间点的平均值比较",
         "showAnomalyRegion",
+        'id="deliverableCenter"',
+        'id="databaseView"',
+        'id="databaseSearch"',
+        'id="confidenceSummary"',
+        'id="confidenceComponents"',
+        'href="geochemistry.csv"',
+        'href="confidence_report.json"',
+        "完整数据库以",
+        "不是正确概率",
     ):
         if marker not in text:
             errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")

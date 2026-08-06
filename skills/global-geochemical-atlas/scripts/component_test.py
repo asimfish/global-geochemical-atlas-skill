@@ -1574,6 +1574,28 @@ def check_d3(output_dir: Path) -> list[str]:
         checks,
     )
     require(
+        all(
+            marker in html
+            for marker in (
+                'id="deliverableCenter"',
+                'id="databaseView"',
+                'id="databaseSearch"',
+                'id="databaseTableBody"',
+                'id="confidenceSummary"',
+                'id="confidenceComponents"',
+                "renderDatabase",
+                "renderConfidence",
+                'href="geochemistry.csv"',
+                'href="confidence_report.json"',
+                'href="source_manifest.json"',
+                "完整数据库以",
+                "不是正确概率",
+            )
+        ),
+        "D3 exposes the standardized database and confidence explanation as first-class deliverables",
+        checks,
+    )
+    require(
         "全部元素按样品标识去重显示" in html
         and "不跨元素、介质或单位比较浓度" in html,
         "D3 defaults to a scientifically valid all-data sample overview",
@@ -1617,6 +1639,7 @@ def check_d3(output_dir: Path) -> list[str]:
             map_report.get("capability_matrix", {}).get("filter_dimensions", {}).values()
         )
         and all(map_report.get("capability_matrix", {}).get("outputs", {}).values())
+        and all(map_report.get("capability_matrix", {}).get("deliverables", {}).values())
         and map_report.get("capability_matrix", {})
         .get("scientific_semantics", {})
         .get("heatmap_interpolates_concentration")

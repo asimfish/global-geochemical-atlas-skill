@@ -933,6 +933,11 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         PAYLOAD_VERSION,
         ANOMALY_RENDER_MODE,
         PROFILE_VERSION,
+        'id="deliverableCenter"',
+        'id="databaseView"',
+        'id="confidenceSummary"',
+        "完整数据库以",
+        "不是正确概率",
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:
@@ -1009,6 +1014,12 @@ def build_map(
             "clickable_sample_density_heatmap": True,
             "element_pair_comparison": True,
             "enrichment_and_depletion_candidates": True,
+        },
+        "deliverables": {
+            "standardized_database_first_class_ui": True,
+            "confidence_and_sources_first_class_ui": True,
+            "anomaly_results_first_class_ui": True,
+            "interactive_map_first_class_ui": True,
         },
         "scientific_semantics": {
             "heatmap_encodes": "physical_sample_density",
