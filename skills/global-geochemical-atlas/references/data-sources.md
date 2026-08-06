@@ -35,7 +35,7 @@
 | 南极洲 water | BCO-DMO `10.26008/1912/bco-dmo.877466.1` | 总溶解 Ni/Cu/Zn，`nmol/L` 与 GEOTRACES flags；水样不连接陆地岩性 |
 
 下载器必须固定直接数据 URL、文件字节数和 SHA-256；动态 ArcGIS 查询还要冻结完整参数、返回空间参考、
-记录数与取得日期。仓库 `evaluation/stage_benchmark/contracts/completion-sources.json` 给出一套经过验证的测试快照，
+记录数与取得日期。仓库 `evaluation_lyf/stage_benchmark/contracts/completion-sources.json` 给出一套经过验证的测试快照，
 它是评测契约，不是完整全球数据库镜像。
 
 ## MVP 冻结数据源

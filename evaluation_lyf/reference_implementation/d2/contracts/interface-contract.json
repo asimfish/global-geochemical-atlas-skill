@@ -1,0 +1,73 @@
+{
+  "interface_version": "d2-interface-v2",
+  "d1_to_d2": {
+    "format": "UTF-8 CSV; one analyte determination per row",
+    "minimum_canonical_columns": ["element_or_analyte", "value", "unit", "medium"],
+    "schema_map": "Optional JSON object mapping canonical fields to source CSV column names",
+    "provenance_fields": [
+      "source_id",
+      "source_record_id",
+      "source_qualifier_raw",
+      "dataset_title",
+      "dataset_doi",
+      "dataset_version",
+      "source_file",
+      "source_row",
+      "source_locator",
+      "file_sha256",
+      "license",
+      "source_tier"
+    ],
+    "rules": [
+      "Preserve source qualifiers and detection limits; do not impute censored values.",
+      "Populate species_or_oxide only when the reported quantity is explicitly a compound or species.",
+      "Provide WGS84 coordinates or leave canonical coordinates empty and retain source CRS evidence.",
+      "Do not delete duplicates before D2 QC."
+    ]
+  },
+  "d2_to_d3": {
+    "required_outputs": [
+      "geochemistry.csv",
+      "samples.geojson",
+      "anomalies.geojson",
+      "qc_report.json",
+      "confidence_report.json",
+      "geology_report.json",
+      "anomaly_report.json",
+      "map_spec.json",
+      "run_manifest.json"
+    ],
+    "map_contract": "map_spec.json",
+    "rules": [
+      "Do not render null normalized values as zero.",
+      "Use a distinct symbol for censored observations.",
+      "Keep missing-coordinate records in a table/QC view and never place them at (0, 0).",
+      "Show candidate anomaly and operational confidence disclaimers."
+    ]
+  },
+  "d2_to_e1": {
+    "success_exit_code": 0,
+    "invalid_input_exit_code": 2,
+    "machine_result": "One JSON object on stdout mapping output roles to paths",
+    "determinism": "Same input bytes, schema map and parameters must produce byte-identical outputs",
+    "schemas": ["../schema.json", "schema-map.schema.json", "run-manifest.schema.json"]
+  },
+  "d2_to_e2": {
+    "scientific_statuses": [
+      "analyzed",
+      "insufficient_group_size",
+      "insufficient_quantified_fraction",
+      "zero_dispersion"
+    ],
+    "default_anomaly_gates": {
+      "minimum_group_size": 20,
+      "minimum_quantified_fraction": 0.7,
+      "absolute_modified_z_threshold": 3.5
+    },
+    "prohibited_interpretations": [
+      "Candidate anomaly proves pollution.",
+      "Candidate anomaly proves mineralization or an ore deposit.",
+      "Operational confidence is a statistical probability or measurement accuracy."
+    ]
+  }
+}
