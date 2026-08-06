@@ -142,8 +142,22 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         else:
             if map_report.get("map_version") != "d3-interactive-atlas-v3":
                 errors.append("visualization map_version is unsupported")
-            if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v1":
+            if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v2":
                 errors.append("visualization UI hierarchy contract is unsupported")
+            question_contract = map_report.get("visual_question_contract")
+            expected_views = {"map", "database", "combination", "sources", "anomalies", "quality"}
+            if not isinstance(question_contract, dict) or question_contract.get("schema_version") != "d3-visual-question-contract-v1":
+                errors.append("visualization visual-question contract is missing or unsupported")
+            elif set(question_contract.get("views", {})) != expected_views:
+                errors.append("visualization visual-question contract does not cover every primary view")
+            else:
+                for view_name, view_contract in question_contract["views"].items():
+                    if not isinstance(view_contract, dict) or set(view_contract) != {
+                        "question", "comparison_baseline", "encoding", "boundary"
+                    }:
+                        errors.append(f"visualization question contract is malformed for {view_name}")
+                    elif not view_contract["question"] or not view_contract["comparison_baseline"] or not view_contract["encoding"] or not view_contract["boundary"]:
+                        errors.append(f"visualization question contract is incomplete for {view_name}")
             if map_report.get("external_assets") != 0 or map_report.get("interpolation") is not False:
                 errors.append("visualization report violates the offline/no-interpolation boundary")
             if map_report.get("mapped_record_count") != sample_count:

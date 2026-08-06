@@ -272,19 +272,19 @@ python scripts/render_visualization.py \
 
 `medium` 是岩石/土壤/沉积物/水体等宽类介质，`sample_type` 是更细的样品类型；两者都不能从 `analytical_method` / `method_family` 推测。若 D2 未提供方法，页面和报告必须显示“D2 未提供分析方法”，不得填成推测值；可比浓度与元素组合必须把方法缺失作为限制。页面标签和解释使用中文，内部 canonical 字段与枚举仍保持稳定；`measurement_basis` 必须显示为“测量基准”并通过确定性词表翻译，不能把内部长枚举直接扔给用户。
 
-密度热力图只编码物理采样点计数，同时保留可点击锚点；它不插值浓度。地图在全球和区域产物中都必须支持拖动平移、滚轮缩放、“上一步视图”和重置；区域产物可平移查看裁剪范围内数据，但不得加载或泄露区域外记录。异常详情必须用候选值—背景中位数对照尺直观显示高/低倍数，同时展示 robust z、阈值、背景组字段、组内样本量、log10 中位数与 MAD，并说明它与可比背景组比较，不是与周围点平均值比较。
+密度热力图只编码物理采样点计数，同时保留可点击锚点；它不插值浓度。地图在全球和区域产物中都必须支持拖动/方向键平移、滚轮/按钮缩放、“上一步视图”和重置；区域产物可平移查看裁剪范围内数据，但不得加载或泄露区域外记录。异常详情必须用候选值—背景中位数—稳健高低阈值对照尺直观显示倍数，同时展示 robust z、背景组字段、组内样本量、log10 中位数与 MAD，并说明阈值浓度由 D2 摘要按同一公式反算、它与可比背景组比较，不是与周围点平均值比较。
 
 全流程必须生成标准数据库、来源与置信度说明、异常结果和交互地图，并额外生成 `iteration_backlog.csv`，把删失观测、来源定位/许可/坐标/方法/地质背景缺失、标准化失败、低置信度与错误级 QC 分开列出。删失观测标为 `scientific_limit`，不自动当作 D1/D2 失败。D3 独立生成 `interactive_map.html`、`samples.geojson`、`visualization_profile.json`、`visualization_report.json` 与 `iteration_backlog.csv`，并原样携带页面引用的 D1/D2 证据文件。配置、报告与待办行分别受 [references/visualization-profile.schema.json](references/visualization-profile.schema.json)、[references/visualization-report.schema.json](references/visualization-report.schema.json) 和 [references/iteration-backlog.schema.json](references/iteration-backlog.schema.json) 约束；自动复查状态机见 [references/iteration-loop.md](references/iteration-loop.md)，显示规则、失败边界和验收步骤见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 
-在交互页面首部把上述四项产物做成同等显著的一级入口。标准数据库页必须能直接核验完整 CSV 记录数、行语义、可上图预览与排除计数；置信度页必须展示 source、completeness、method、spatial、QC 五个分量及其权重、均值、等级分布、门控规则和“不是概率”边界。不要只给下载链接。区域产物只能裁剪 HTML 内嵌记录和 `samples.geojson`，不得改写完整 `geochemistry.csv`；同时明确完整报告统计与当前区域预览统计的口径差异。
+在交互页面首部提供一个可展开的“产物与下载 · 4/4 可核查”一级产物坞，展开后四项产物同等显著。标准数据库页必须能直接核验完整 CSV 记录数、行语义、可上图预览与排除计数；置信度页必须展示 source、completeness、method、spatial、QC 五个分量及其权重、均值、等级分布、门控规则和“不是概率”边界。不要只给下载链接。区域产物只能裁剪 HTML 内嵌记录和 `samples.geojson`，不得改写完整 `geochemistry.csv`；同时明确完整报告统计与当前区域预览统计的口径差异。
 
 标准数据库页按“读 + 审计提案”实现研究型增删查改：支持检索、排序、分页、记录详情和地图定位；新增、修改、删除只能进入 `geochemistry-research-patch-v1` 修订包，其中删除是逻辑排除提案。浏览器不得直接覆盖 canonical CSV、删除原始记录或改写证据链。来源与置信度页使用可检索表格和来源详情面板，至少显示数据集、测定/样点数、元素、介质、方法/坐标完整率、置信度中位数、许可、证据级别和来源定位。质量页必须展示并可下载完整迭代清单。
 
-遵守 `task-first-progressive-disclosure-v1` 界面层级：只生成一套主标签导航和一个紧凑的四交付物状态栏，不在页头重复下载胶囊、能力徽章或 `story` 下拉。地图首屏只展开区域、元素、介质和地图表达；细分样品类型、地质单元、颜色、bbox、basis、方法、方法范围、来源、置信度与异常网格放进“更多筛选”。这条约束必须由模板、报告 capability matrix 与验证器共同检查，确保 Agent 面对其他数据仍能复现。
+遵守 `task-first-progressive-disclosure-v2` 界面层级：只生成一套以“看分布、查记录、比元素、核来源、懂异常、修质量”为动词的主导航；四项交付物放入默认收起的一级产物坞；地图顶部只保留测定记录、物理样点、候选异常、元素·介质四项指标，不在页头重复下载胶囊、能力徽章或 `story` 下拉。地图首屏只展开区域、元素、介质和地图表达；细分样品类型、地质单元、颜色、bbox、basis、方法、方法范围、来源、置信度与异常网格放进“更多筛选”。在 `visualization_report.json.map_report.visual_question_contract` 中为六个主视图分别声明 `question`、`comparison_baseline`、`encoding` 与 `boundary`；模板、报告 capability matrix 与验证器共同检查这些约束，确保 Agent 面对其他数据仍能复现。
 
 交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、样品类型、方法 scope、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
 
-元素组合默认使用同一物理样品内的 log10 配对散点、Spearman ρ 和共测覆盖矩阵。结论必须显式列出区域、介质、测量基准、方法、两轴单位、有效配对数、被排除记录和未混合的可比层，并说明关联不等于因果。散点加两轴样本中位数线，帮助识别高-高、低-低和反向象限；矩阵数字只表示共测覆盖，不表示相关强度。只有用户提供明确的地球化学归一化参照和所需元素集合时，才生成 REE spider；只有满足闭合组成与检出限处理条件时，才生成 ternary/CLR 图，不要把通用相关散点伪装成这些专业图。
+元素组合默认使用同一物理样品内的 log10 配对散点、Spearman ρ、相对配对中位数的四象限数量/占比和共测覆盖矩阵。结论必须显式列出区域、介质、测量基准、方法、两轴单位、有效配对数、被排除记录和未混合的可比层，并说明关联不等于因果。散点加两轴样本中位数线，四象限明确显示高-高、低-低和两个反向组合；矩阵数字只表示共测覆盖，不表示相关强度。只有用户提供明确的地球化学归一化参照和所需元素集合时，才生成 REE spider；只有满足闭合组成与检出限处理条件时，才生成 ternary/CLR 图，不要把通用相关散点伪装成这些专业图。
 
 ## 8. 验证与失败关闭
 

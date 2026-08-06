@@ -20,7 +20,8 @@ MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
 PROFILE_VERSION = "d3-visualization-profile-v2"
-UI_HIERARCHY_VERSION = "task-first-progressive-disclosure-v1"
+UI_HIERARCHY_VERSION = "task-first-progressive-disclosure-v2"
+VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
 MISSING_METHOD_LABEL = "D2 未提供分析方法"
@@ -62,6 +63,48 @@ REGION_PRESETS: dict[str, dict[str, Any]] = {
         "label": "澳大利亚（国家边界严格裁剪）",
         "bounds": {"w": 112.0, "e": 154.0, "s": -44.0, "n": -10.0},
         "country_code": "AUS",
+    },
+}
+
+VISUAL_QUESTION_CONTRACT: dict[str, Any] = {
+    "schema_version": VISUAL_QUESTION_VERSION,
+    "views": {
+        "map": {
+            "question": "当前区域有哪些观测，采样覆盖有多密？",
+            "comparison_baseline": "当前筛选范围内的物理采样点与记录",
+            "encoding": ["position=WGS84 coordinate", "glow=physical sample density", "symbol=clickable observation"],
+            "boundary": "密度不编码浓度；空白不等于元素不存在。",
+        },
+        "database": {
+            "question": "每条标准化测定能否被检索、追溯并提出审计修订？",
+            "comparison_baseline": "canonical geochemistry.csv",
+            "encoding": ["row=one analyte measurement", "patch=proposal only"],
+            "boundary": "页面修订不直接改写 canonical 数据或证据。",
+        },
+        "combination": {
+            "question": "同一批可比样品中的两个元素是否共同升降？",
+            "comparison_baseline": "同区域、介质、basis、方法与单位的同样品配对",
+            "encoding": ["position=log10 paired value", "quadrant=relative to paired medians", "rho=Spearman association"],
+            "boundary": "共测与相关不证明因果、污染来源或矿化成因。",
+        },
+        "sources": {
+            "question": "这些记录来自哪里，证据和工作流置信度允许怎样使用？",
+            "comparison_baseline": "D1 source manifest and D2 confidence components",
+            "encoding": ["table=source coverage", "components=workflow usability"],
+            "boundary": "工作流置信度不是正确概率或统计置信区间。",
+        },
+        "anomalies": {
+            "question": "候选值相对可比背景中位数和稳健阈值偏离多少？",
+            "comparison_baseline": "D2 declared comparable background group",
+            "encoding": ["position=robust-z threshold scale", "color=high or low candidate", "ring=count-only visual aggregation"],
+            "boundary": "候选不是空间邻域均值结论，也不证明污染或成因。",
+        },
+        "quality": {
+            "question": "下一轮应由 D1/D2 修复什么，哪些只能复核或保留为科学限制？",
+            "comparison_baseline": "versioned QC and iteration backlog",
+            "encoding": ["status=action/review/scientific limit", "owner=D1 or D2"],
+            "boundary": "无证据时停止自动补齐，删失值不自动视为失败。",
+        },
     },
 }
 
@@ -971,6 +1014,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         ANOMALY_RENDER_MODE,
         PROFILE_VERSION,
         UI_HIERARCHY_VERSION,
+        VISUAL_QUESTION_VERSION,
         'id="deliverableCenter"',
         'id="databaseView"',
         'id="confidenceSummary"',
@@ -1071,21 +1115,26 @@ def build_map(
             "hierarchy_version": UI_HIERARCHY_VERSION,
             "single_primary_navigation": True,
             "compact_deliverable_dock": True,
+            "collapsible_deliverable_dock": True,
+            "task_based_navigation_labels": True,
             "four_primary_map_controls": True,
+            "four_top_level_kpis": True,
             "advanced_filters_progressive_disclosure": True,
             "duplicate_story_selector": False,
             "recoverable_map_navigation": True,
+            "keyboard_map_navigation": True,
             "regional_pan_without_scope_expansion": True,
             "localized_measurement_basis": True,
             "research_patch_crud": "proposal_only_no_direct_mutation",
         },
         "scientific_semantics": {
+            "visual_question_contract": VISUAL_QUESTION_VERSION,
             "heatmap_encodes": "physical_sample_density",
             "heatmap_interpolates_concentration": False,
             "anomaly_basis": "D2 robust z within declared comparable background groups",
             "anomaly_region_semantics": "visual aggregation of D2 candidate points only",
-            "anomaly_contrast": "candidate_vs_comparable_group_median",
-            "element_pair_analysis": "log10_scatter_median_quadrants_spearman_and_coverage_matrix",
+            "anomaly_contrast": "candidate_vs_comparable_group_median_and_robust_thresholds",
+            "element_pair_analysis": "log10_scatter_median_quadrant_shares_spearman_and_coverage_matrix",
         },
     }
     context = {
@@ -1096,6 +1145,7 @@ def build_map(
         "visualization_profile_warnings": profile_warnings,
         "spatial_scope": spatial_scope,
         "capability_matrix": capability_matrix,
+        "visual_question_contract": VISUAL_QUESTION_CONTRACT,
         "total_record_count": total_records,
         "source_mappable_record_count": source_mappable_records,
         "mappable_record_count": len(records),
@@ -1157,6 +1207,7 @@ def build_map(
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
         "spatial_scope": spatial_scope,
+        "visual_question_contract": VISUAL_QUESTION_CONTRACT,
         "visualization_modes": [
             "distribution_points",
             "sample_density_heatmap",

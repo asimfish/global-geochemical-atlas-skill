@@ -2501,7 +2501,10 @@ def check_d3(output_dir: Path) -> list[str]:
                 "layoutAnomalyBubbles",
                 "conic-gradient",
                 'id="taskContext"',
-                "task-first-progressive-disclosure-v1",
+                "task-first-progressive-disclosure-v2",
+                "d3-visual-question-contract-v1",
+                'id="zoomIn"',
+                "comboQuadrants",
                 "d3-visualization-profile-v2",
                 'id="boundaries-data"',
                 "pointInCountry",
@@ -2642,7 +2645,11 @@ def check_d3(output_dir: Path) -> list[str]:
         and all(map_report.get("capability_matrix", {}).get("outputs", {}).values())
         and all(map_report.get("capability_matrix", {}).get("deliverables", {}).values())
         and map_report.get("ui_hierarchy_version")
-        == "task-first-progressive-disclosure-v1"
+        == "task-first-progressive-disclosure-v2"
+        and map_report.get("visual_question_contract", {}).get("schema_version")
+        == "d3-visual-question-contract-v1"
+        and set(map_report.get("visual_question_contract", {}).get("views", {}))
+        == {"map", "database", "combination", "sources", "anomalies", "quality"}
         and map_report.get("capability_matrix", {})
         .get("interaction_design", {})
         .get("single_primary_navigation")
