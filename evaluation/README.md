@@ -71,6 +71,17 @@ python3 tools/finalize_score.py \
 
 `grade_task.py` 的点数只是证据覆盖量，不是独立总分。只有符合 E1 schema 的六维 `score.json` 才是单次运行分数。完整执行步骤见 [`RUNBOOK.md`](RUNBOOK.md)。
 
+## 重新答题前清空结果
+
+从 `evaluation/` 目录先预览，再执行清理：
+
+```bash
+python3 tools/reset_ai_submissions.py --dry-run
+python3 tools/reset_ai_submissions.py
+```
+
+脚本只清理 `ai_visible_public/submissions/Q01` 至 `Q24` 中的答题结果，并确保每题最终只保留空的 `.gitkeep`；题面、输入和评分材料不会被修改。
+
 ## 被测 Codex 快速入口
 
 Q01–Q24 的唯一答题工作目录和可直接复制的提示词见 [`ai_visible_public/README.md`](ai_visible_public/README.md)。不要把整个 `evaluation/` 作为答题 AI 工作目录。
