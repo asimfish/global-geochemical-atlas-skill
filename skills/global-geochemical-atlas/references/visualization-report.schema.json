@@ -56,7 +56,33 @@
           },
           "additionalProperties": false
         },
-        "capability_matrix": {"type": "object"}
+        "capability_matrix": {
+          "type": "object",
+          "required": ["interaction_design"],
+          "properties": {
+            "interaction_design": {
+              "type": "object",
+              "required": [
+                "professional_navigation_labels",
+                "combination_region_selector",
+                "combination_custom_bbox",
+                "regional_combination_scope_lock_supported",
+                "comparison_profile_export",
+                "formal_comparison_requires_profile_rerender"
+              ],
+              "properties": {
+                "professional_navigation_labels": {"const": true},
+                "combination_region_selector": {"const": true},
+                "combination_custom_bbox": {"const": true},
+                "regional_combination_scope_lock_supported": {"const": true},
+                "comparison_profile_export": {"const": true},
+                "formal_comparison_requires_profile_rerender": {"const": true}
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
       },
       "additionalProperties": true
     },

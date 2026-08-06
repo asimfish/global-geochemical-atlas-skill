@@ -33,6 +33,8 @@ python scripts/validate_visualization.py --output-dir visualization_output
 
 国家、城市或任意研究框改用 `--spatial-scope regional --region PRESET`，或使用
 `--region custom --bbox W S E N --region-label LABEL`；元素组合使用 `--story comparison --comparison-x X --comparison-y Y`。
+可用 `assets/visualization-profile.comparison-regional.template.json` 查看一份通过 schema 的区域元素组合完整模板，
+但应复制到任务输出目录后修改，不能覆盖 Skill 内的固定资产。
 打开 `visualization_output/interactive_map.html` 时应直接进入该任务视图。检查
 `visualization_report.json`，不要隐藏 `profile_warnings`。全球配置生成世界图；区域配置会将 HTML、
 异常显示和 `samples.geojson` 裁剪并锁定到预设或自定义范围。中国、美国和澳大利亚预设使用离线
@@ -80,7 +82,7 @@ GEOROC fixture 的 datum 尚无足够证据，故 48 条记录保留 reported co
 7. 在“样点分布 / 采样密度 / 组合核查”之间切换，强调热力柔光只统计物理样点密度、不插值浓度，并点击半透明锚点查看记录。
 8. 筛选 As/soil 并选择“按可比浓度”；只有 basis、方法组和单位收敛后才出现浓度对数色阶。
 9. 点击候选点核对原值、标准值、样品类型、元素、方法缺失状态、QC、置信度和来源定位；展开 robust z 阈值、背景组样本量、中位数、MAD 和相对倍数，说明不是邻域平均。
-10. 打开“元素组合对比”，先从组合页选择命名区域或输入自定义 `W,S,E,N`，确认它与地图同步；再展示该范围内最大可比层散点、Spearman 报告门和共测矩阵。
+10. 打开“元素组合对比”，先从组合页选择命名区域或输入自定义 `W,S,E,N`，确认它与地图同步；再展示该范围内最大可比层散点、Spearman 报告门和共测矩阵。点击“导出可复现配置”，把下载的 `d3-visualization-profile-v2` 重新传给 `render_visualization.py`，并用 `validate_visualization.py` 核验正式区域产物及输入/profile/输出哈希。
 11. 在全球视图展示简洁的红蓝异常圆环，说明它会随缩放展开且圆环面积不代表地理范围；点击圆环后才显示真实 bbox，并展示方向、候选数量、最大 |z|、来源与记录下钻。再打开“异常结果”，用“地图定位”返回同一 2° 网格，并说明 `visual_aggregation_only`。
 12. 切换“质量与边界”，展示证据等级、坐标空洞和解释边界，再展示水体 ppm、坐标交换与小样本组的失败关闭。
 

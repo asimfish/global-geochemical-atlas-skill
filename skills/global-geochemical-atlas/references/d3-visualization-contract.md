@@ -193,6 +193,10 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 元素组合页单独显示“对比区域”和自定义 WGS84 `W,S,E,N`，并与地图区域双向同步。全球产物可选择全球、
 命名区域或自定义 bbox；区域产物的选择器只显示并锁定生成时裁剪范围，不能借组合页读取范围外记录。
 样品配对散点、四象限、Spearman ρ、共测矩阵和 Agent 结论必须共同调用同一 `rowInRegion` 空间判定。
+网页内的范围、元素与介质选择属于探索状态。正式报告、引用或 Agent 交接必须从页面导出合法的
+`d3-visualization-profile-v2`，再交给 `scripts/render_visualization.py` 生成独立区域产物并运行
+`scripts/validate_visualization.py`。`visualization_report.json` 必须同时绑定 D1/D2 输入哈希、profile 输入哈希和
+输出哈希；没有 profile 重渲染记录的瞬时浏览器状态不能作为最终元素组合结论。
 
 `visualization_report.json.map_report.visual_question_contract` 必须使用
 `d3-visual-question-contract-v1`，并覆盖 map、database、combination、sources、anomalies、quality 六个视图。
@@ -219,6 +223,7 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 - 异常页是否用候选值—背景中位数—稳健高低阈值对照尺显示倍数差、robust z 与完整背景条件；
 - 元素组合结论是否写清区域、介质、测量基准、方法、单位、有效 n、四象限占比、排除数和“非因果”边界；
 - 元素组合页是否能直接选择命名区域或自定义 bbox，是否与地图同步，区域产物是否仍锁定裁剪范围；
+- 元素组合探索状态是否能导出合法 profile，并由同一 D1/D2 输入重渲染为哈希绑定的正式区域产物；
 - 质量页是否可筛选、下载 `iteration_backlog.csv`，并区分 action/review/scientific-limit；
 - 空区域是否显示“覆盖缺口”而不是零含量或不存在；
 - 点、异常区域和来源卡片是否能下钻到记录证据；

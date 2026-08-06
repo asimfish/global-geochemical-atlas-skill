@@ -65,6 +65,9 @@ VISUALIZATION_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.j
 REGIONAL_VISUALIZATION_PROFILE = (
     SKILL_DIR / "assets" / "visualization-profile.regional.template.json"
 )
+REGIONAL_COMPARISON_PROFILE = (
+    SKILL_DIR / "assets" / "visualization-profile.comparison-regional.template.json"
+)
 VISUALIZATION_PROFILE_SCHEMA = SKILL_DIR / "references" / "visualization-profile.schema.json"
 VISUALIZATION_REPORT_SCHEMA = SKILL_DIR / "references" / "visualization-report.schema.json"
 
@@ -2494,6 +2497,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 'id="comboRegionSelect"',
                 'id="comboCustomBounds"',
                 'id="applyComboBounds"',
+                'id="exportComparisonProfile"',
+                "comparisonProfile",
+                "导出可复现配置",
                 "applyCustomBounds",
                 'id="comboMatrix"',
                 'id="openAnomalyRegions"',
@@ -2685,6 +2691,14 @@ def check_d3(output_dir: Path) -> list[str]:
         is True
         and map_report.get("capability_matrix", {})
         .get("interaction_design", {})
+        .get("comparison_profile_export")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("formal_comparison_requires_profile_rerender")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
         .get("advanced_filters_progressive_disclosure")
         is True
         and map_report.get("capability_matrix", {})
@@ -2755,6 +2769,7 @@ def check_d3(output_dir: Path) -> list[str]:
     )
     profile = json_value(VISUALIZATION_PROFILE)
     regional_profile = json_value(REGIONAL_VISUALIZATION_PROFILE)
+    regional_comparison_profile = json_value(REGIONAL_COMPARISON_PROFILE)
     profile_schema = json_value(VISUALIZATION_PROFILE_SCHEMA)
     visualization_report_schema = json_value(VISUALIZATION_REPORT_SCHEMA)
     require(
@@ -2779,6 +2794,17 @@ def check_d3(output_dir: Path) -> list[str]:
         and regional_profile.get("default_region") == "shanghai"
         and regional_profile.get("custom_region") is None,
         "D3 publishes a distinct city-ready regional product template",
+        checks,
+    )
+    require(
+        map_builder.load_visualization_profile(REGIONAL_COMPARISON_PROFILE)
+        == regional_comparison_profile
+        and regional_comparison_profile.get("story") == "comparison"
+        and regional_comparison_profile.get("spatial_scope") == "regional"
+        and regional_comparison_profile.get("default_region") == "china"
+        and regional_comparison_profile.get("comparison")
+        == {"x": "Cu", "y": "Pb", "medium": "soil"},
+        "D3 publishes a validated regional element-comparison template",
         checks,
     )
     with tempfile.TemporaryDirectory() as question_matrix_temp:
@@ -2830,6 +2856,31 @@ def check_d3(output_dir: Path) -> list[str]:
                     "soil",
                 ],
             ),
+            (
+                "custom-region-comparison",
+                "comparison",
+                [
+                    "--story",
+                    "comparison",
+                    "--spatial-scope",
+                    "regional",
+                    "--region",
+                    "custom",
+                    "--bbox",
+                    "100",
+                    "30",
+                    "110",
+                    "40",
+                    "--region-label",
+                    "西北研究框",
+                    "--comparison-x",
+                    "As",
+                    "--comparison-y",
+                    "Pb",
+                    "--comparison-medium",
+                    "soil",
+                ],
+            ),
             ("database-audit", "database", ["--story", "database"]),
             (
                 "source-evidence",
@@ -2873,6 +2924,7 @@ def check_d3(output_dir: Path) -> list[str]:
             )
             generated_profiles.append(generated_profile)
         custom_profile = generated_profiles[2]
+        custom_comparison_profile = generated_profiles[4]
         require(
             generated_profiles[1].get("filters", {}).get("sample_type") == "soil_topsoil"
             and generated_profiles[1].get("filters", {}).get("method_scope") == "observation"
@@ -2880,9 +2932,15 @@ def check_d3(output_dir: Path) -> list[str]:
             and custom_profile.get("custom_region", {}).get("label") == "智利研究框"
             and custom_profile.get("custom_region", {}).get("bounds")
             == {"w": -75.0, "s": -56.0, "e": -66.0, "n": -17.0}
+            and custom_comparison_profile.get("spatial_scope") == "regional"
+            and custom_comparison_profile.get("default_region") == "custom"
+            and custom_comparison_profile.get("custom_region", {}).get("bounds")
+            == {"w": 100.0, "s": 30.0, "e": 110.0, "n": 40.0}
+            and custom_comparison_profile.get("comparison")
+            == {"x": "As", "y": "Pb", "medium": "soil"}
             and {profile_value.get("story") for profile_value in generated_profiles}
             == {"overview", "coverage", "anomaly", "comparison", "database", "evidence"},
-            "D3 question matrix covers six stories and an arbitrary regional bbox",
+            "D3 question matrix covers six stories and reproducible arbitrary regional comparison profiles",
             checks,
         )
         invalid_question_profile = question_root / "invalid-question.json"

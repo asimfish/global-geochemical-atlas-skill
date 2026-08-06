@@ -146,6 +146,23 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                 errors.append("visualization UI hierarchy contract is unsupported")
             if map_report.get("terminology_contract") != "competition-geochemistry-v1":
                 errors.append("visualization professional terminology contract is unsupported")
+            interaction_design = map_report.get("capability_matrix", {}).get(
+                "interaction_design", {}
+            )
+            required_interactions = (
+                "professional_navigation_labels",
+                "combination_region_selector",
+                "combination_custom_bbox",
+                "regional_combination_scope_lock_supported",
+                "comparison_profile_export",
+                "formal_comparison_requires_profile_rerender",
+            )
+            for capability in required_interactions:
+                if interaction_design.get(capability) is not True:
+                    errors.append(
+                        "visualization interaction contract is missing required capability: "
+                        + capability
+                    )
             question_contract = map_report.get("visual_question_contract")
             expected_views = {"map", "database", "combination", "sources", "anomalies", "quality"}
             if not isinstance(question_contract, dict) or question_contract.get("schema_version") != "d3-visual-question-contract-v1":

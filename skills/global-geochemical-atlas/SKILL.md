@@ -259,6 +259,10 @@ python scripts/create_visualization_profile.py \
   --output TASK_PROFILE.json
 ```
 
+可读取 `assets/visualization-profile.template.json`、`assets/visualization-profile.regional.template.json` 和
+`assets/visualization-profile.comparison-regional.template.json` 理解全球、普通区域与区域元素组合的完整字段形态，
+但正式任务仍优先调用上述脚本或从交互页面导出 profile，不能直接覆盖模板资产。
+
 全球问题保持 `spatial_scope=global`；国家、城市、流域、矿区或任意范围用 `regional`。`china`、`usa`、`usa48`、`australia` 预设使用固定 Natural Earth 国家多边形与 bbox 联合裁剪；其他区域优先使用 `custom + WGS84 bbox` 并明确 bbox 不是精确行政或地质边界。区域产物只裁剪 HTML 内嵌记录、异常显示和 `samples.geojson`，原始 D1/D2 证据文件仍完整保留。把用户明确指定的元素、地质单元、介质、方法、来源与置信度写入参数；不要为了显示更多点而取消无匹配条件。
 
 然后运行：
@@ -286,7 +290,7 @@ python scripts/render_visualization.py \
 
 交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、样品类型、方法 scope、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
 
-元素组合默认使用同一物理样品内的 log10 配对散点、Spearman ρ、相对配对中位数的四象限数量/占比和共测覆盖矩阵。组合页必须直接提供对比区域选择和自定义 WGS84 `W,S,E,N`，并与地图区域双向同步；全球产物允许切换全球、命名区域或自定义 bbox，区域产物必须锁定生成时的裁剪范围，散点、四象限、Spearman ρ、共测矩阵和 Agent 结论全部使用同一空间范围。结论必须显式列出区域、介质、测量基准、方法、两轴单位、有效配对数、被排除记录和未混合的可比层，并说明关联不等于因果。散点加两轴样本中位数线，四象限明确显示高-高、低-低和两个反向组合；矩阵数字只表示共测覆盖，不表示相关强度。只有用户提供明确的地球化学归一化参照和所需元素集合时，才生成 REE spider；只有满足闭合组成与检出限处理条件时，才生成 ternary/CLR 图，不要把通用相关散点伪装成这些专业图。
+元素组合默认使用同一物理样品内的 log10 配对散点、Spearman ρ、相对配对中位数的四象限数量/占比和共测覆盖矩阵。组合页必须直接提供对比区域选择和自定义 WGS84 `W,S,E,N`，并与地图区域双向同步；全球产物允许切换全球、命名区域或自定义 bbox，区域产物必须锁定生成时的裁剪范围，散点、四象限、Spearman ρ、共测矩阵和 Agent 结论全部使用同一空间范围。浏览器中的区域、元素和介质切换只作为探索状态；用于正式报告、引用或 Agent 交接时，必须点击“导出可复现配置”得到合法的 `d3-visualization-profile-v2`，再把它传给 `render_visualization.py` 重渲染并运行 `validate_visualization.py`。最终以 `visualization_profile.json`、`visualization_report.json.inputs`、`profile_input.sha256` 和 `output_sha256` 作为复现记录，不得把瞬时网页状态当作正式科学结论。结论必须显式列出区域、介质、测量基准、方法、两轴单位、有效配对数、被排除记录和未混合的可比层，并说明关联不等于因果。散点加两轴样本中位数线，四象限明确显示高-高、低-低和两个反向组合；矩阵数字只表示共测覆盖，不表示相关强度。只有用户提供明确的地球化学归一化参照和所需元素集合时，才生成 REE spider；只有满足闭合组成与检出限处理条件时，才生成 ternary/CLR 图，不要把通用相关散点伪装成这些专业图。
 
 ## 8. 验证与失败关闭
 

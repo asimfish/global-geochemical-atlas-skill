@@ -1,0 +1,33 @@
+{
+  "schema_version": "d3-visualization-profile-v2",
+  "title": "中国土壤 Cu × Pb 元素组合对比",
+  "subtitle": "区域产物严格裁剪到中国国家边界；元素组合只使用同区域、介质、测量基准、方法和单位均可比的同样品配对。",
+  "story": "comparison",
+  "theme": "evidence-dark",
+  "spatial_scope": "regional",
+  "default_region": "china",
+  "custom_region": null,
+  "filters": {
+    "element": null,
+    "medium": null,
+    "sample_type": null,
+    "basis": null,
+    "geology": null,
+    "method": null,
+    "method_scope": null,
+    "source": null,
+    "confidence": null
+  },
+  "comparison": {
+    "x": "Cu",
+    "y": "Pb",
+    "medium": "soil"
+  },
+  "display": {
+    "map_mode": "combined",
+    "color_by": "medium",
+    "anomaly_grid_degrees": 1,
+    "show_anomaly_points": false,
+    "show_anomaly_regions": true
+  }
+}

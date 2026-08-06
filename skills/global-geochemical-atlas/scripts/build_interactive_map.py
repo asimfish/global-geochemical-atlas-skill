@@ -1025,6 +1025,8 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="databaseEditor"',
         'id="sourceTableBody"',
         'id="anomalyInspector"',
+        'id="exportComparisonProfile"',
+        "comparisonProfile",
         'id="iterationTableBody"',
         'href="iteration_backlog.csv"',
     }
@@ -1122,6 +1124,8 @@ def build_map(
             "combination_region_selector": True,
             "combination_custom_bbox": True,
             "regional_combination_scope_lock_supported": True,
+            "comparison_profile_export": True,
+            "formal_comparison_requires_profile_rerender": True,
             "four_primary_map_controls": True,
             "four_top_level_kpis": True,
             "advanced_filters_progressive_disclosure": True,
