@@ -3,7 +3,7 @@
   "generated_at_utc": "2026-08-06T15:48:36Z",
   "repository": {
     "url": "https://github.com/asimfish/global-geochemical-atlas-skill.git",
-    "candidate_branch": "acceptance/e1-e2-closeout-20260806",
+    "candidate_branch": "acceptance/e1-e2-candidate-20260806",
     "candidate_commit": "4f77a7594e713ff422d5b0e7a3608a4b90d3c51b",
     "candidate_git_tree": "e3fdf6e724ff32daee6a073bcac328f9022d4490",
     "clean_at_candidate_commit": true,
@@ -75,7 +75,6 @@
   ],
   "formal_status": "DEVELOPMENT_CANDIDATE_NOT_G5_SIGNED",
   "limitations": [
-    "The candidate branch is not an official release until the remote ref is pushed and independently fetched.",
     "The E2 formal execution policy still awaits E1, D3 and E2 signatures.",
     "No native OpenCode production campaign or official B0/S0 cohort is claimed by this identity record.",
     "No new private Final is included in or attested by this public repository."
