@@ -1,0 +1,9 @@
+question_id,task_id,split,title,fixture_type,input_count,required_output_count,status,gold_version,evidence_points,llm_evidence_points,scoring_contract
+Q01,GGA-DATA-001,public,全球玄武岩 Ni 数据源选择,curated_offline_catalog_of_real_sources,1,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1
+Q02,GGA-DATA-002,public,美国本土土壤 Pb 数据源匹配,curated_offline_catalog_of_real_sources,1,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1
+Q03,GGA-NORM-001,public,固体样品质量分数统一到 mg/kg,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1
+Q04,GGA-NORM-002,public,Fe2O3 转 Fe 元素含量,synthetic_adversarial_fixture,2,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1
+Q05,GGA-PROV-001,public,下载资产完整性与媒体类型验证,synthetic_local_download_responses,4,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1
+Q06,GGA-QC-001,public,LOD 与限定符语义解析,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1
+Q07,GGA-SPATIAL-001,public,坐标质量控制与可地图化判定,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1
+Q08,GGA-QC-002,public,重复、平行样和多方法记录处理,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.1,80,20,e1-six-dimension-v1

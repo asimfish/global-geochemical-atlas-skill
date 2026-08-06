@@ -1,0 +1,140 @@
+{
+  "schema_version": "p01_08.audit.p06.v1",
+  "status": "pending_final_review",
+  "benchmark_version": "6.0.0-draft.1",
+  "source_eval_version": "1.0.0",
+  "source_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "alignment_contract": "evaluation/contracts/benchmark-execution-contract.json",
+  "alignment_contract_sha256": "d113eb7b9b5ee185e0a07bb00e4a5f16ee8ee1113fa84c33e305eb65797b275c",
+  "official_benchmark_result": false,
+  "scope": "external_end_to_end_integration_negative_testing",
+  "responsibility_alignment": {
+    "joint_external_gates": ["P06-D005", "P06-D006"],
+    "e1_local_or_upstream_implementation": ["P06-D001", "P06-D002", "P06-D003", "P06-D004", "P06-D007", "P06-D008", "P06-D009", "P06-D010"],
+    "rule": "E2 supplies sealed inputs, policy approval and official evidence; E1 remains responsible for consuming frozen inputs and publishing one fail-closed terminal state."
+  },
+  "summary": {
+    "open_findings": 10,
+    "p0_or_gate": 7,
+    "p1": 3,
+    "conclusion": "not_ready"
+  },
+  "findings": [
+    {
+      "id": "P06-D001",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "The runner mock published success and COMPLETED, but the ten produced artifacts triggered 11 validator failures.",
+      "impact": "A nominally successful run is not scientifically scoreable.",
+      "close_condition": "Generate all required valid scientific artifacts and complete validation before final success publication."
+    },
+    {
+      "id": "P06-D002",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "Materialized frozen data was archived but not consumed by the mock or production worker path.",
+      "impact": "B0/S0 comparisons cannot prove they used identical frozen input bytes.",
+      "close_condition": "Mount frozen inputs read-only into the worker and record byte-level consumption evidence for both modes."
+    },
+    {
+      "id": "P06-D003",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "Inherited P03 evidence handling retained a plaintext secret in an attempt outcome artifact.",
+      "impact": "Archived evidence can leak credentials or fixture secrets.",
+      "close_condition": "Close the upstream redaction defect and recursively scan every archived evidence file without exclusions."
+    },
+    {
+      "id": "P06-D004",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "Deadline enforcement, contract identity propagation, and timeout-versus-cancel classification remain inconsistent upstream.",
+      "impact": "Integration status and retry decisions can be incorrect or unauditable.",
+      "close_condition": "Close the upstream defects and rerun classification tests through the real supervisor CLI."
+    },
+    {
+      "id": "P06-D005",
+      "severity": "P0_GATE",
+      "status": "WAITING_EXTERNAL",
+      "observed": "Upstream READY markers, production Skill/Git identity, root lock and image acceptance, official rubric, and G5 joint sign-off are absent.",
+      "impact": "The candidate cannot enter a formal integration run.",
+      "close_condition": "Bind every approval to the same candidate, contract, image, Skill, model, task, and rubric hashes."
+    },
+    {
+      "id": "P06-D006",
+      "severity": "P1",
+      "status": "WAITING_EXTERNAL",
+      "observed": "Approved official-online and native Codex smoke runs are unavailable.",
+      "impact": "Protocol fixtures do not certify the production host or approved network path.",
+      "close_condition": "Run the same frozen fixture on the approved network and native Codex host and archive the evidence."
+    },
+    {
+      "id": "P06-D007",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "The unified entry point exited 74 while raw result and COMPLETED reported success/0, score was null, the hard gate failed, and the archive retained success/0.",
+      "impact": "Consumers can reach opposite conclusions about the same run.",
+      "close_condition": "Create one final result and atomically bind process exit, result, archive, score, manifest, and marker."
+    },
+    {
+      "id": "P06-D008",
+      "severity": "P0",
+      "status": "OPEN",
+      "observed": "Every data-layer error was mapped to download-invalid code 12; an HTTP 403 permission failure could not produce required code 11.",
+      "impact": "Public error semantics and retry behavior are incorrect.",
+      "close_condition": "Use one exhaustive versioned mapping for permission, download, format, and unknown internal errors."
+    },
+    {
+      "id": "P06-D009",
+      "severity": "P1",
+      "status": "OPEN",
+      "observed": "The composition audit reported no duplicate worker implementation even when an additional worker file was introduced.",
+      "impact": "Divergent execution implementations can escape structural review.",
+      "close_condition": "Audit implementations through AST/dependency structure or an equivalent allowlisted graph and retain a duplicate-worker negative test."
+    },
+    {
+      "id": "P06-D010",
+      "severity": "P1",
+      "status": "OPEN",
+      "observed": "The clean-environment test only used an empty HOME, limited environment, and root working directory; it did not provide namespace, cgroup, read-only filesystem, or network isolation.",
+      "impact": "The test cannot certify formal sandbox boundaries or write-escape prevention.",
+      "close_condition": "Keep status PARTIAL until the approved runtime passes isolation and write-escape negative tests."
+    }
+  ],
+  "reproduced_cases": [
+    {
+      "case": "terminal_state_inconsistency",
+      "process_exit": 74,
+      "summary_status": "artifact_validation_failed",
+      "raw_result_status": "success",
+      "raw_result_exit": 0,
+      "score": null,
+      "completed_marker_present": true,
+      "hard_gate_passed": false,
+      "archive_result_status": "success",
+      "archive_result_exit": 0
+    },
+    {
+      "case": "permission_error_mapping",
+      "input": "HTTP 403",
+      "expected_public_code": 11,
+      "observed_public_code": 12
+    },
+    {
+      "case": "duplicate_worker_detection",
+      "input": "additional worker implementation",
+      "expected": "audit_fail",
+      "observed_duplicate_worker_implementation": false
+    },
+    {
+      "case": "clean_environment_isolation",
+      "observed": "empty HOME, reduced environment, cwd /",
+      "formal_sandbox_proven": false
+    }
+  ],
+  "limitations": [
+    "No approved official-online execution was performed.",
+    "No native Codex host certification was performed.",
+    "These observations are external integration evidence, not Benchmark v6 task results."
+  ]
+}

@@ -12,7 +12,10 @@
 | `sources` | `auto`/string[] | 否 | auto | 只选择公开科学来源 |
 | `output_formats` | string[] | 否 | csv,json,geojson,html_map | 结构化产物 |
 | `target_crs` | string | 否 | EPSG:4326 | v1 只输出 WGS84 canonical 坐标 |
-| `license_policy` | string | 否 | open_only | 受限数据只记元数据、不打包 |
+| `license_policy` | string | 否 | open_only | V1 兼容字段；V3 使用 `research_use_policy` |
+| `research_use_policy` | string | 否 | permitted_research | 按本次科研使用条件筛选，不把科研使用与再分发混为一谈 |
+| `minimum_evidence_tier` | string | 否 | D | A/B/C/D/U，控制最低来源证据完整度 |
+| `minimum_use_mode` | string | 否 | normalized_analysis | discovery/raw_observation/normalized_analysis/benchmark_ready |
 | `max_records` | integer | 否 | 50000 | 1–200000；超出需分批 |
 | `offline` | boolean | 否 | false | 只使用哈希验证缓存或 demo |
 

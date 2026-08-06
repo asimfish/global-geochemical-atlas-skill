@@ -32,4 +32,4 @@ python scripts/component_test.py --component all
 python scripts/self_test.py
 ```
 
-当前结果为 D1/D2/D3 共 110 项契约检查通过、self-test 68 项通过。D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。D3 测试会从完整 D1/D2 输出目录读取任务配置，调用 `render_visualization.py`，并检查全球与区域模板分离、区域配置已应用、HTML 与 GeoJSON 仅嵌入 bbox 内记录、默认视图锁定区域、城市空结果不回退世界图、冲突配置失败关闭，以及 `visualization_report.json` 的空间范围、接口版本与状态。
+当前结果为 D1/D2/D3 共 162 项契约检查通过、self-test 68 项通过；后续以 `component_test.py --component all` 的机器输出为准。D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。D3 测试会从完整 D1/D2 输出目录读取任务配置，调用 `render_visualization.py`，并检查配置已应用、全球与区域产物语义、国家多边形严格裁剪、热力图可下钻、异常解释证据、默认视图、接口版本、状态与独立 D3 验证器。

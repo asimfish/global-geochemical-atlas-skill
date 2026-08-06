@@ -4,6 +4,8 @@
 
 本仓库只包含一个正式 Skill：`skills/global-geochemical-atlas/`。正文采用 Agent Skills、OpenCode 与 Codex 可共同读取的最小公共格式。
 
+根目录的 `evaluation/` 是团队开发期科学 benchmark，不是主办方官方题库、不是 Skill 运行依赖，也不进入最终 Skill 提交包。Public Q01–Q08 只用于接口诊断；没有真实 B0/S0 三次运行和隔离隐藏集时，不得把 gold smoke 宣称为正式 uplift。
+
 ## 30 秒离线复现
 
 要求：Python 3.11+；不需要第三方依赖、网络、密钥或 GPU。
@@ -43,6 +45,8 @@ python skills/global-geochemical-atlas/scripts/render_visualization.py \
   --input-dir demo_output \
   --profile skills/global-geochemical-atlas/assets/visualization-profile.template.json \
   --output-dir visualization_output
+python skills/global-geochemical-atlas/scripts/validate_visualization.py \
+  --output-dir visualization_output
 ```
 
 配置决定首屏任务、区域、元素、介质、地质单元、元素组合和图层；结果同时输出配置与
@@ -65,6 +69,21 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 ```
 
 `standardize_geochemistry.py` 的最低分析列为 `element_or_analyte,value,unit,medium`；要运行并交付完整 `run_workflow.py`，还必须提供非空 `source_id,source_locator,license`，否则证据打包会失败关闭。正式科学运行还应提供 `source_tier`、样品 ID、measurement basis、经纬度、CRS、分析方法、消解/提取方法、检出限和文件哈希。完整契约见 `skills/global-geochemical-atlas/references/`；D3 消费层详见 [可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md)。
+
+## 真实来源预检与 D1 原值索引
+
+对真实请求先生成渐进式来源证据评分，再执行准入审计、保守路由和覆盖矩阵。以下固定 fixture 覆盖 rock、soil、sediment、water 与 As/Cu/Ni/Zn，可离线复现：
+
+```bash
+python skills/global-geochemical-atlas/scripts/score_source_evidence.py
+python skills/global-geochemical-atlas/scripts/source_audit.py
+python skills/global-geochemical-atlas/scripts/source_router.py \
+  --request skills/global-geochemical-atlas/fixtures/source-routing/global-all-media-request.json
+python skills/global-geochemical-atlas/scripts/coverage_report.py \
+  --request skills/global-geochemical-atlas/fixtures/source-routing/global-all-media-request.json
+```
+
+`source_catalog.json` 中的候选不等于本次请求可执行的来源。证据分数衡量八类证据的完整度，不是真值概率；路由器再按访问状态、科研使用条件、最低证据等级和 use mode 选择来源。`offline=true` 时，在调用方另行验证版本化缓存及 SHA-256 前不会选中任何在线来源。动态 API 还需用 `snapshot_source.py` 固定请求、响应哈希和成员清单。需要保存 D1 分层原值归档并查询时，先运行 `validate_acquisition.py`，再用 `build_index.py` 构建可重建的 SQLite 索引。索引不执行 D2 的单位换算、QC、置信度或异常分析，最终标准化数据库仍是 `geochemistry.csv`。
 
 ## 科学边界
 
@@ -94,7 +113,7 @@ skills/
 
 仓库仍然只有一个生产 Skill，但内部按稳定接口拆为三个责任域：
 
-- D1 维护下载、缓存、demo 数据和证据打包，负责 **数据来源与置信度说明**；
+- D1 维护来源目录、准入审计、路由与覆盖、下载缓存、原值归档索引、demo 数据和证据打包，负责 **数据来源与置信度说明**；
 - D2 维护标准化、QC、置信度算法和异常分析，负责 **标准化地球化学数据库** 与 **异常区域识别结果**；
 - D3 维护唯一 `SKILL.md`、总工作流、地图和 demo，负责 **可交互元素分布地图** 与 **可复用 Skill 文档**。
 

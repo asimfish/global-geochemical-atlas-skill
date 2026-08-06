@@ -220,22 +220,36 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         report = run(args)
     except VisualizationError as exc:
-        args.output_dir.mkdir(parents=True, exist_ok=True)
-        atomic_json(args.output_dir / "visualization_report.json", failure_report(exc.status, str(exc)))
-        print(f"render_visualization: {exc}", file=sys.stderr)
-        return 2
-    print(
-        json.dumps(
-            {
-                "status": report["status"],
-                "output_dir": str(args.output_dir),
-                "profile_warnings": report["profile_warnings"],
-            },
-            ensure_ascii=False,
-            sort_keys=True,
+        failure = exc
+    except (OSError, json.JSONDecodeError) as exc:
+        failure = VisualizationError("incomplete_retrieval", str(exc))
+    else:
+        print(
+            json.dumps(
+                {
+                    "status": report["status"],
+                    "output_dir": str(args.output_dir),
+                    "profile_warnings": report["profile_warnings"],
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+            )
         )
-    )
-    return 0
+        return 0
+    try:
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        atomic_json(
+            args.output_dir / "visualization_report.json",
+            failure_report(failure.status, str(failure)),
+        )
+    except OSError as report_error:
+        print(
+            f"render_visualization: {failure}; could not write failure report: {report_error}",
+            file=sys.stderr,
+        )
+        return 2
+    print(f"render_visualization: {failure}", file=sys.stderr)
+    return 2
 
 
 if __name__ == "__main__":

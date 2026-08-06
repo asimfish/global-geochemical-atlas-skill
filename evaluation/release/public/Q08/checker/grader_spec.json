@@ -1,0 +1,137 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "observations_exists",
+      "path": "observations.csv",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "log_exists",
+      "path": "dedup_log.csv",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "observation_columns",
+      "path": "observations.csv",
+      "points": 8,
+      "required": [
+        "raw_row_id",
+        "source_record_id",
+        "sample_id",
+        "method",
+        "replicate_group_id",
+        "disposition"
+      ],
+      "type": "csv_columns"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 5,
+      "id": "observation_count",
+      "path": "observations.csv",
+      "points": 8,
+      "type": "csv_row_count"
+    },
+    {
+      "columns": [
+        "raw_row_id"
+      ],
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": [
+        [
+          "D01"
+        ],
+        [
+          "D03"
+        ],
+        [
+          "D04"
+        ],
+        [
+          "D05"
+        ],
+        [
+          "D06"
+        ]
+      ],
+      "id": "kept_rows",
+      "path": "observations.csv",
+      "points": 20,
+      "type": "csv_key_set"
+    },
+    {
+      "column": "disposition",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "kept_replicate",
+      "id": "replicate_kept",
+      "key": {
+        "raw_row_id": "D03"
+      },
+      "path": "observations.csv",
+      "points": 10,
+      "type": "csv_cell"
+    },
+    {
+      "column": "disposition",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "kept_method_difference",
+      "id": "method_kept",
+      "key": {
+        "raw_row_id": "D04"
+      },
+      "path": "observations.csv",
+      "points": 10,
+      "type": "csv_cell"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "same_coordinate_samples",
+      "path": "observations.csv",
+      "points": 8,
+      "terms": [
+        "D05,SR004,B1",
+        "D06,SR005,B2"
+      ],
+      "type": "text_contains_all"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 1,
+      "id": "dedup_count",
+      "path": "dedup_log.csv",
+      "points": 4,
+      "type": "csv_row_count"
+    },
+    {
+      "column": "reason",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "exact_duplicate_import",
+      "id": "dedup_reason",
+      "key": {
+        "removed_raw_row_id": "D02"
+      },
+      "path": "dedup_log.csv",
+      "points": 4,
+      "type": "csv_cell"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-QC-002"
+}

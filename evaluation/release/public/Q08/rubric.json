@@ -1,0 +1,29 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "platform_reusability",
+      "full_credit": "区分导入重复、实验室平行样、方法差异和样品身份。",
+      "id": "identity_model",
+      "points": 8
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "full_credit": "每个被移除行都能在 dedup_log 回链到保留行。",
+      "id": "auditability",
+      "points": 6
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "未在没有来源特定规则时擅自选最佳分析值。",
+      "id": "no_best_value_overreach",
+      "points": 6
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/observations.csv",
+    "artifacts/run_manifest.json#/benchmark_evidence/dedup_log.csv"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-QC-002"
+}

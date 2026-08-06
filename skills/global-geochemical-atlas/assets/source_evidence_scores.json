@@ -1,0 +1,2828 @@
+{
+  "catalog_version": "geochemical-source-catalog-v1",
+  "claim_boundary": "Higher scores mean that more source, version, integrity, provenance, schema, method, adapter and review evidence is documented. They do not express the probability that every measurement is true or that coverage is complete.",
+  "dimension_weights": {
+    "adapter_reproducibility": 10,
+    "file_record_integrity": 15,
+    "human_review": 10,
+    "identity_publisher": 10,
+    "method_qc_metadata": 10,
+    "provenance": 15,
+    "schema_semantics": 15,
+    "version_snapshot": 15
+  },
+  "evidence_version": "geochemical-source-evidence-v3",
+  "registry_version": "geochemical-source-registry-v1",
+  "scored_at": "2026-08-05T10:05:00Z",
+  "source_count": 32,
+  "sources": {
+    "australia-ngsa": {
+      "access_status": "open",
+      "attribution_note": "Geoscience Australia material is generally CC BY 4.0, but each selected data product must be checked for third-party exceptions.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
+            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
+            "https://www.ga.gov.au/copyright"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
+            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
+            "https://www.ga.gov.au/copyright"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "australia-ngsa",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
+    "australia-ozchem": {
+      "access_status": "unavailable",
+      "attribution_note": "Current product-specific licensing and any contributed state data exceptions need confirmation.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.ga.gov.au/bigobj/GA8096.pdf",
+            "https://www.ga.gov.au/copyright"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.ga.gov.au/bigobj/GA8096.pdf",
+            "https://www.ga.gov.au/copyright"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "australia-ozchem",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "access_status=unavailable",
+        "research_use_status=unknown"
+      ]
+    },
+    "bgs-gbase": {
+      "access_status": "restricted",
+      "attribution_note": "Derived grids are OGL; underpinning survey point observations require a separate BGS licence and are not open-only production data.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/g-base/",
+            "https://www.bgs.ac.uk/datasets/uk-stream-sediment-geochemistry/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/g-base/",
+            "https://www.bgs.ac.uk/datasets/uk-stream-sediment-geochemistry/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "bgs-gbase",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "access_status=restricted",
+        "research_use_status=permission_required"
+      ]
+    },
+    "brazil-sgb-geochemistry": {
+      "access_status": "open",
+      "attribution_note": "Open access is stated for repository items, but reuse/redistribution terms for the integrated service need verification.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://geosgb.sgb.gov.br/geosgb/index_en.html",
+            "https://geosgb.sgb.gov.br/geosgb/about_geosgb_en.html",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada_all/FeatureServer",
+            "https://rigeo.sgb.gov.br/items/5adc5a2e-78ca-4da4-990c-c932658481a7"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://geosgb.sgb.gov.br/geosgb/index_en.html",
+            "https://geosgb.sgb.gov.br/geosgb/about_geosgb_en.html",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada_all/FeatureServer",
+            "https://rigeo.sgb.gov.br/items/5adc5a2e-78ca-4da4-990c-c932658481a7"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "brazil-sgb-geochemistry",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
+    "canada-cdogs": {
+      "access_status": "open",
+      "attribution_note": "Federal and provincial releases can use different Open Government licences; pin and retain the licence of each selected release.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/main/home_en.htm",
+            "https://natural-resources.canada.ca/science-data/science-research/earth-sciences-tools-applications"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/main/home_en.htm",
+            "https://natural-resources.canada.ca/science-data/science-research/earth-sciences-tools-applications"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "canada-cdogs",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "earthchem-library": {
+      "access_status": "open",
+      "attribution_note": "Depositors choose among CC0, CC BY, CC BY-SA and non-commercial Creative Commons licences; filter at dataset level.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://ecl.earthchem.org/home.php",
+            "https://earthchem.org/ecl/policies"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://ecl.earthchem.org/home.php",
+            "https://earthchem.org/ecl/policies"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "earthchem-library",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "earthchem-portal": {
+      "access_status": "open",
+      "attribution_note": "Retain the original database, dataset and publication terms for every record.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://earthchem.org/data-access/overview",
+            "https://earthchem.org/ecl/templates",
+            "https://earthchem.org/ecl/vocabularies"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://earthchem.org/data-access/overview",
+            "https://earthchem.org/ecl/templates",
+            "https://earthchem.org/ecl/vocabularies"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "earthchem-portal",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "eea-waterbase": {
+      "access_status": "open",
+      "attribution_note": "EEA permits commercial and non-commercial reuse with attribution, subject to dataset-specific third-party notices; exact machine-readable licence needs pinning.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.eea.europa.eu/data-and-maps/data/waterbase-water-quality-icm-2",
+            "https://www.eea.europa.eu/en/about/contact-us/faqs/can-i-use-eea-content-in-my-work-or-in-my-organisations-products"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.eea.europa.eu/data-and-maps/data/waterbase-water-quality-icm-2",
+            "https://www.eea.europa.eu/en/about/contact-us/faqs/can-i-use-eea-content-in-my-work-or-in-my-organisations-products"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "eea-waterbase",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "emodnet-chemistry": {
+      "access_status": "application_required",
+      "attribution_note": "CDI records include both freely downloadable and restricted data; harmonised ERDDAP collections are compiled from unrestricted measurements but still require originator lineage.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://emodnet.ec.europa.eu/en/chemistry",
+            "https://erddap.emodnet-chemistry.eu/erddap/index.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://emodnet.ec.europa.eu/en/chemistry",
+            "https://erddap.emodnet-chemistry.eu/erddap/index.html"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "emodnet-chemistry",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "access_status=application_required",
+        "research_use_status=permission_required"
+      ]
+    },
+    "finland-gtk-geochemistry": {
+      "access_status": "open",
+      "attribution_note": "The listed national rock product is free with an open licence, while other GTK products and detailed assay services may have separate terms or fees.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://hakku.gtk.fi/en/locations?id=4",
+            "https://gtkdata.gtk.fi/arcgis/rest/services/Kansannayte/Kansannayte_v11/MapServer/54"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://hakku.gtk.fi/en/locations?id=4",
+            "https://gtkdata.gtk.fi/arcgis/rest/services/Kansannayte/Kansannayte_v11/MapServer/54"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "finland-gtk-geochemistry",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "foregs-europe": {
+      "access_status": "open",
+      "attribution_note": "Pages state that the database is freely downloadable and prescribe atlas citation/copyright; machine-readable redistribution terms still need legal review.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+            "https://www.globalgeochemicalbaselines.eu/content/91/publications-/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+            "https://www.globalgeochemicalbaselines.eu/content/91/publications-/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "foregs-europe",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "gemas-europe": {
+      "access_status": "open",
+      "attribution_note": "Numeric data redistribution and dataset-level license require verification.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://gemas.eurogeosurveys.org/",
+            "https://gemas.eurogeosurveys.org/Links_GEMAS.htm"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://gemas.eurogeosurveys.org/",
+            "https://gemas.eurogeosurveys.org/Links_GEMAS.htm"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "gemas-europe",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
+    "gemstat-open-archive": {
+      "access_status": "application_required",
+      "attribution_note": "Only batches explicitly released as CC BY 4.0 or equivalent may enter open production outputs.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://gemstat.org/data-gemstat/data-portal/",
+            "https://gemstat.org/about/data-availability/",
+            "https://gemstat.org/data-gemstat/data-submission/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://gemstat.org/data-gemstat/data-portal/",
+            "https://gemstat.org/about/data-availability/",
+            "https://gemstat.org/data-gemstat/data-submission/",
+            "doi:10.5281/zenodo.13881899"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "gemstat-open-archive",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "access_status=application_required",
+        "research_use_status=permission_required"
+      ]
+    },
+    "georoc-archaean": {
+      "access_status": "open",
+      "attribution_note": "Retain GEOROC and original publication citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Archive members are pinned by name, size and publisher checksum.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2F1KRR1P",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2F1KRR1P",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp",
+            "doi:10.25625/1KRR1P"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 12.0",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "georoc-archaean",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "georoc-database": {
+      "access_status": "open",
+      "attribution_note": "Database query data require GEOROC and original source citation; repository datasets may have separate terms.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://georoc.eu/",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp",
+            "https://api-test.georoc.eu/api/v1/docs/index.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://georoc.eu/",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp",
+            "https://api-test.georoc.eu/api/v1/docs/index.html"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "georoc-database",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "geotraces-idp2025": {
+      "access_status": "open",
+      "attribution_note": "Fair Use Agreement requires IDP and original data-contributor citations.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.geotraces.org/idp2025/",
+            "https://www.bodc.ac.uk/geotraces/data/idp2025/",
+            "https://www.bodc.ac.uk/data/published_data_library/catalogue/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.geotraces.org/idp2025/",
+            "https://www.bodc.ac.uk/geotraces/data/idp2025/",
+            "https://www.bodc.ac.uk/data/published_data_library/catalogue/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c/",
+            "doi:10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: IDP2025",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 32.5,
+      "source_id": "geotraces-idp2025",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "glorich": {
+      "access_status": "open",
+      "attribution_note": "Non-commercial restriction excludes this dataset from the current open-only production route.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.902360"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.902360",
+            "doi:10.1594/PANGAEA.902360"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: PANGAEA.902360",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 37.5,
+      "source_id": "glorich",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "iodp-data-systems": {
+      "access_status": "application_required",
+      "attribution_note": "Data access, moratorium status, citations and policies vary by program, science operator, expedition and derived publication.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.iodp.org/resources/access-data-and-samples",
+            "https://iodp.tamu.edu/LORE/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.iodp.org/resources/access-data-and-samples",
+            "https://iodp.tamu.edu/LORE/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 30.0,
+      "source_id": "iodp-data-systems",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "access_status=application_required",
+        "research_use_status=permission_required"
+      ]
+    },
+    "ireland-tellus": {
+      "access_status": "open",
+      "attribution_note": "The official open-data policy and exact licence notice on each downloadable release must be pinned together.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.gsi.ie/en-ie/data-and-maps/Pages/Geochemistry.aspx",
+            "https://gsi.geodata.gov.ie/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.gsi.ie/en-ie/data-and-maps/Pages/Geochemistry.aspx",
+            "https://gsi.geodata.gov.ie/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "ireland-tellus",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "jamstec-darwin": {
+      "access_status": "open",
+      "attribution_note": "Cruise policy, moratorium, citation and data-quality class vary by record; commercial use requires advance application.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.godac.jamstec.go.jp/darwin/en/",
+            "https://www.jamstec.go.jp/e/database/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.godac.jamstec.go.jp/darwin/en/",
+            "https://www.jamstec.go.jp/e/database/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "jamstec-darwin",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "noaa-ncei-marine-geology": {
+      "access_status": "open",
+      "attribution_note": "NOAA requests citation of the original source and DOI where provided; each archived numerical dataset must retain its own source and reuse terms.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.ncei.noaa.gov/products/marine-geology-geophysics/marine-geology/data",
+            "https://www.ncei.noaa.gov/erddap/info/IMLGS_Marine_Geology/index.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.ncei.noaa.gov/products/marine-geology-geophysics/marine-geology/data",
+            "https://www.ncei.noaa.gov/erddap/info/IMLGS_Marine_Geology/index.html",
+            "doi:10.7289/V5H41PB8"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "noaa-ncei-marine-geology",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "norway-marchem": {
+      "access_status": "open",
+      "attribution_note": "The service states CC BY 4.0 and Norwegian Licence for Open Government Data; dataset landing-page citations and acknowledgements still apply.",
+      "conflicts": [],
+      "evidence_tier": "C",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
+          ],
+          "note": "A reproducible candidate verifier exists, but no canonical production adapter is implemented.",
+          "status": "partial",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json",
+            "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://marchem-editor.hi.no/",
+            "https://marchem-api.hi.no/labParameterGroup/list"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
+          ],
+          "note": "Digestion scope, LLQ and accreditation evidence are available, but method/QC coverage is not complete.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://marchem-editor.hi.no/",
+            "https://marchem-api.hi.no/labParameterGroup/list"
+          ],
+          "note": "Dataset and API snapshot provenance are recorded; adapter-level row locators are still pending.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
+          ],
+          "note": "Core analyte, value, unit and coordinate fields were inspected; canonical adapter mapping is pending.",
+          "status": "partial",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json",
+            "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json",
+            "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false"
+          ],
+          "note": "A dynamic API response is frozen by exact request, observation time and SHA-256.",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 65.0,
+      "source_id": "norway-marchem",
+      "use_mode": "raw_observation",
+      "use_mode_limitations": [
+        "a production adapter is not yet verified"
+      ]
+    },
+    "norway-ngu-lito": {
+      "access_status": "open",
+      "attribution_note": "The spreadsheet is publicly downloadable, but its exact reuse licence and citation contract need to be pinned.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.ngu.no/geologisk-kartlegging/lito-geokjemisk-kartlegging-av-norges-berggrunn",
+            "https://static.ngu.no/lito/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.ngu.no/geologisk-kartlegging/lito-geokjemisk-kartlegging-av-norges-berggrunn",
+            "https://static.ngu.no/lito/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: June 2026 preliminary",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 32.5,
+      "source_id": "norway-ngu-lito",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
+    "nz-petlab": {
+      "access_status": "account_required",
+      "attribution_note": "A free account is required for export; download and redistribution terms need review.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://pet.gns.cri.nz/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://pet.gns.cri.nz/",
+            "doi:10.21420/9DJH-RP34"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "nz-petlab",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "access_status=account_required",
+        "research_use_status=unknown"
+      ]
+    },
+    "pangaea-repository": {
+      "access_status": "open",
+      "attribution_note": "The licence is stated on each dataset; recent defaults do not replace dataset-level checks for historical, moratorium or community-specific records.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.pangaea.de/",
+            "https://www.pangaea.de/about/",
+            "https://www.pangaea.de/about/terms.php"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.pangaea.de/",
+            "https://www.pangaea.de/about/",
+            "https://www.pangaea.de/about/terms.php"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 30.0,
+      "source_id": "pangaea-repository",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "petdb": {
+      "access_status": "open",
+      "attribution_note": "Site license is CC BY-SA 4.0; every record must also retain its original publication and contributing-dataset citation.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://search.earthchem.org/about",
+            "https://earthchem.org/resources/support"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://search.earthchem.org/about",
+            "https://earthchem.org/resources/support"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 17.5,
+      "source_id": "petdb",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "soils4africa": {
+      "access_status": "application_required",
+      "attribution_note": "CC BY 4.0 use is accompanied by anti-identification and reporting/aggregation conditions that must be implemented before production.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://africasis.isric.org/",
+            "https://africasis.isric.org/download.html",
+            "https://africasis.isric.org/documents.html",
+            "https://africasis.isric.org/res/files/Soils4Africa_licence_agreement_v20240926.pdf"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://africasis.isric.org/",
+            "https://africasis.isric.org/download.html",
+            "https://africasis.isric.org/documents.html",
+            "https://africasis.isric.org/res/files/Soils4Africa_licence_agreement_v20240926.pdf"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "soils4africa",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "access_status=application_required",
+        "research_use_status=permission_required"
+      ]
+    },
+    "sweden-sgu-geochemical-atlas": {
+      "access_status": "open",
+      "attribution_note": "The official data endpoint is public, but an exact reuse licence must be pinned before production.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "unknown",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.sgu.se/en/mineral-resources/geokemisk-kartlaggning/geochemical-atlas-of-sweden/data-and-tables/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.sgu.se/en/mineral-resources/geokemisk-kartlaggning/geochemical-atlas-of-sweden/data-and-tables/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "sweden-sgu-geochemical-atlas",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=unknown"
+      ]
+    },
+    "us-water-quality-portal": {
+      "access_status": "open",
+      "attribution_note": "Federal records may be public domain, but WQX contains many contributor organizations; retain provider and dataset terms per record.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "version_snapshot",
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.waterqualitydata.us/",
+            "https://www.waterqualitydata.us/webservices_documentation/",
+            "https://www.waterqualitydata.us/portal_userguide/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.waterqualitydata.us/",
+            "https://www.waterqualitydata.us/webservices_documentation/",
+            "https://www.waterqualitydata.us/portal_userguide/"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "status": "missing",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 22.5,
+      "source_id": "us-water-quality-portal",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    },
+    "usgs-conus-soil": {
+      "access_status": "open",
+      "attribution_note": "USGS-produced data are public domain; credit and dataset citation are retained.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "open_research",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://pubs.usgs.gov/ds/801/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://pubs.usgs.gov/ds/801/",
+            "doi:10.3133/ds801"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: Data Series 801, 2013 release",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "usgs-conus-soil",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "usgs-ngdb": {
+      "access_status": "open",
+      "attribution_note": "Individual releases and non-USGS contributions still require dataset-level review.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "open_research",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.usgs.gov/centers/gggsc/science/national-geochemical-database",
+            "https://www.usgs.gov/centers/gggsc/data"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://www.usgs.gov/centers/gggsc/science/national-geochemical-database",
+            "https://www.usgs.gov/centers/gggsc/data"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 30.0,
+      "source_id": "usgs-ngdb",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "record integrity or schema semantics are not sufficiently evidenced"
+      ]
+    },
+    "wosis": {
+      "access_status": "open",
+      "attribution_note": "Public records can include CC BY and CC BY-NC; license must be retained and filtered at record level.",
+      "conflicts": [],
+      "evidence_tier": "D",
+      "missing_dimensions": [
+        "file_record_integrity",
+        "schema_semantics",
+        "method_qc_metadata",
+        "adapter_reproducibility",
+        "human_review"
+      ],
+      "research_use_status": "permission_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No callable adapter and frozen parsing contract are registered.",
+          "status": "missing",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No frozen file or archive inventory is registered.",
+          "status": "missing",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://docs.isric.org/globaldata/wosis/",
+            "https://docs.isric.org/globaldata/wosis/faq-wosis.html",
+            "https://files.isric.org/public/wosis_snapshot/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified record-level method or QC inventory is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "https://docs.isric.org/globaldata/wosis/",
+            "https://docs.isric.org/globaldata/wosis/faq-wosis.html",
+            "https://files.isric.org/public/wosis_snapshot/",
+            "doi:10.17027/isric-wdcsoils-20231130"
+          ],
+          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
+          "status": "partial",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No verified field mapping to the canonical schema is recorded.",
+          "status": "missing",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 7.5,
+          "evidence": [],
+          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
+          "status": "partial",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 25.0,
+      "source_id": "wosis",
+      "use_mode": "discovery",
+      "use_mode_limitations": [
+        "research_use_status=permission_required"
+      ]
+    }
+  },
+  "summary": {
+    "evidence_tiers": {
+      "A": 2,
+      "B": 0,
+      "C": 1,
+      "D": 29,
+      "U": 0
+    },
+    "use_modes": {
+      "benchmark_ready": 0,
+      "discovery": 29,
+      "normalized_analysis": 2,
+      "raw_observation": 1
+    }
+  }
+}

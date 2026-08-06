@@ -1,0 +1,28 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "清楚区分左删失、右删失、报告零、未分析/未报告。",
+      "id": "semantic_separation",
+      "points": 10
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "不擅自用 LOD/2 或 0 替代，并说明替代需要单独方法和敏感性分析。",
+      "id": "no_imputation",
+      "points": 6
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "说明为何这些记录不能直接进入对数异常计算。",
+      "id": "analysis_eligibility",
+      "points": 4
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/parsed_values.csv"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-QC-001"
+}

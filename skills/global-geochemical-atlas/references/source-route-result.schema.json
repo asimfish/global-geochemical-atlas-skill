@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-source-route-result:v3",
+  "title": "D1 evidence-aware source routing result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "route_version",
+    "status",
+    "request",
+    "selected_sources",
+    "review_sources",
+    "coverage",
+    "limitations",
+    "claim_boundary"
+  ],
+  "properties": {
+    "route_version": {"const": "geochemical-source-route-v3"},
+    "status": {"type": "string", "enum": ["ready", "partial", "needs_human_review", "unsupported_scope"]},
+    "request": {"type": "object"},
+    "selected_sources": {"type": "array", "items": {"$ref": "#/$defs/routeSource"}},
+    "review_sources": {"type": "array", "items": {"$ref": "#/$defs/routeSource"}},
+    "coverage": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["status", "selected_sources", "candidate_sources", "note"],
+        "properties": {
+          "status": {"type": "string", "enum": ["covered", "partial", "uncovered", "unknown", "restricted"]},
+          "selected_sources": {"$ref": "#/$defs/uniqueStrings"},
+          "candidate_sources": {"$ref": "#/$defs/uniqueStrings"},
+          "note": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "limitations": {"$ref": "#/$defs/uniqueStrings"},
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "routeSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "title",
+        "status",
+        "access_status",
+        "research_use_status",
+        "evidence_tier",
+        "source_evidence_score",
+        "use_mode",
+        "attribution_note",
+        "matching_media",
+        "coverage_extent",
+        "reason"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "status": {"type": "string", "minLength": 1},
+        "access_status": {"$ref": "#/$defs/accessStatus"},
+        "research_use_status": {"$ref": "#/$defs/researchUseStatus"},
+        "evidence_tier": {"$ref": "#/$defs/evidenceTier"},
+        "source_evidence_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "use_mode": {"$ref": "#/$defs/useMode"},
+        "attribution_note": {"type": "string"},
+        "matching_media": {"$ref": "#/$defs/uniqueStrings"},
+        "coverage_extent": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "accessStatus": {
+      "type": "string",
+      "enum": ["open", "account_required", "application_required", "restricted", "unavailable"]
+    },
+    "researchUseStatus": {
+      "type": "string",
+      "enum": ["open_research", "attribution_required", "noncommercial_research_only", "permission_required", "unknown"]
+    },
+    "evidenceTier": {"type": "string", "enum": ["A", "B", "C", "D", "U"]},
+    "useMode": {
+      "type": "string",
+      "enum": ["discovery", "raw_observation", "normalized_analysis", "benchmark_ready"]
+    }
+  }
+}

@@ -265,7 +265,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         elif path.stat().st_size == 0:
             errors.append(f"required output is empty: {path.name}")
         elif path.stat().st_size > 100_000_000:
-            errors.append(f"output exceeds 100 MB safety limit: {path.name}")
+            errors.append(f"output exceeds the 100 MB runtime safety limit: {path.name}")
     if errors:
         return {"status": "invalid", "errors": errors, "warnings": warnings, "metrics": {}}
 

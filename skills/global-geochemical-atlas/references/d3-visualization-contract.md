@@ -23,8 +23,9 @@ D3 只消费 D1/D2 结论：
    `assets/visualization-profile.regional.template.json`。只修改与用户问题有关的字段。
 4. 运行 `scripts/render_visualization.py`；不要直接编辑 HTML 模板。
 5. 检查 `visualization_report.json.status`、`profile_warnings`、记录计数和文件大小。
-6. 打开生成的 HTML 做最小人工检查：首屏任务、空结果、图例、点击证据和来源链接。
-7. 返回产物路径、已应用配置、覆盖提示和解释边界。
+6. 运行 `scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT`；不要对独立 D3 包运行要求 `run_summary.json` 的核心流程验证器。
+7. 打开生成的 HTML 做最小人工检查：首屏任务、空结果、图例、点击证据和来源链接。
+8. 返回产物路径、已应用配置、覆盖提示和解释边界。
 
 ## 3. 输入目录
 
@@ -128,6 +129,15 @@ python scripts/render_visualization.py \
 脚本负责解析模板、嵌入数据、复制页面引用的证据文件并生成报告。已有生成文件时不静默覆盖；确需
 替换时显式传 `--force`。
 
+渲染后验证独立包：
+
+```bash
+python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
+```
+
+`validate_outputs.py` 验证 `run_workflow.py` 的核心十文件目录；它要求 `run_summary.json`，不用于
+独立 D3 目录。D3 验证器改为核对配置、报告、输入与输出哈希、地图计数、离线依赖和科学边界。
+
 ## 6. 输出与验收
 
 核心 D3 输出：
@@ -139,7 +149,7 @@ python scripts/render_visualization.py \
   [visualization-report.schema.json](visualization-report.schema.json)。
 
 输出目录同时保留页面引用的标准数据库、来源、置信度和异常文件。HTML 不依赖 CDN、远程字体、
-在线瓦片或浏览器扩展；HTML 或 GeoJSON 单文件超过 100 MB 时失败关闭。
+在线瓦片或浏览器扩展；HTML 或 GeoJSON 单文件超过 100 MB 的运行时安全上限时失败关闭。该上限约束生成产物，不替代官网对提交包及仓库内文件的更严格限制。
 
 验收至少检查：
 
@@ -160,7 +170,8 @@ python scripts/render_visualization.py \
 D2 方法缺失必须原样显示并进入覆盖诊断。只有当前筛选同时满足单一元素、单一介质、单一已知 measurement basis、单一已知方法组和单一
 标准单位时，才允许使用浓度 `log10` 色阶；否则明确回退为分类色。密度图统计屏幕网格中的物理
 采样点，并用圆形柔光显示；这不是核密度估计，也不是浓度插值。热力模式仍保留可点击的半透明
-样点锚点，确保任何视觉汇总都能下钻到记录证据。
+样点锚点，确保任何视觉汇总都能下钻到记录证据。显示层的共同色阶不会合并
+D2 按材料、土层或地质背景建立的异常背景组，也不能替代分层敏感性分析。
 
 元素组合只接受同一来源与样品、同介质、同 basis、同方法组、各元素唯一单位、非删失正值。
 存在多个可比层时只画样品对最多的一层并报告排除数；少于 8 对或秩方差为零时不报告 Spearman。

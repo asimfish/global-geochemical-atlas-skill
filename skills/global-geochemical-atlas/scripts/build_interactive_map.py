@@ -1048,7 +1048,7 @@ def build_map(
     geojson_bytes = len(geojson_text.encode("utf-8"))
     if html_bytes > MAX_OUTPUT_BYTES or geojson_bytes > MAX_OUTPUT_BYTES:
         raise MapBuildError(
-            "map output would exceed the 100 MB single-file limit; filter or split the input"
+            "map output would exceed the 100 MB runtime safety limit; filter or split the input"
         )
     atomic_text(output_geojson, geojson_text)
     atomic_text(output_html, html)

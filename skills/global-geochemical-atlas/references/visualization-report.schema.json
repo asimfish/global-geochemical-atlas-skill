@@ -6,7 +6,7 @@
   "required": ["interface_version", "status", "outputs", "limitations", "next_actions"],
   "properties": {
     "interface_version": {"const": "d3-visualization-interface-v1"},
-    "status": {"enum": ["success", "invalid_input", "unsupported_scope", "incomplete_retrieval"]},
+    "status": {"enum": ["success", "invalid_input", "unsupported_scope", "incomplete_retrieval", "needs_human_review"]},
     "input_contract": {"type": "string"},
     "inputs": {
       "type": "object",

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d1-publication:v1",
+  "title": "D1 publication archive entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "publication_id", "doi", "citation", "title", "authors", "year", "dataset_ids", "relation_types"],
+  "properties": {
+    "schema_version": {"const": "d1-publication-v1"},
+    "publication_id": {"type": "string", "minLength": 1},
+    "doi": {"type": ["string", "null"]},
+    "citation": {"type": "string", "minLength": 1},
+    "title": {"type": ["string", "null"]},
+    "authors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "year": {"type": ["integer", "null"], "minimum": 1600},
+    "dataset_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "relation_types": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  }
+}

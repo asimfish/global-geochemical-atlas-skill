@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:request:v1",
-  "title": "Global geochemical atlas request",
+  "$id": "urn:global-geochemical-atlas:request:v3",
+  "title": "Global geochemical atlas evidence-aware request",
   "type": "object",
   "additionalProperties": false,
   "required": ["elements", "region", "media"],
@@ -14,7 +14,6 @@
     },
     "region": {
       "oneOf": [
-        {"const": "global"},
         {"type": "string", "minLength": 1},
         {
           "type": "object",
@@ -71,6 +70,21 @@
     },
     "target_crs": {"const": "EPSG:4326", "default": "EPSG:4326"},
     "license_policy": {"const": "open_only", "default": "open_only"},
+    "research_use_policy": {
+      "type": "string",
+      "enum": ["permitted_research", "open_research_only", "include_permission_required"],
+      "default": "permitted_research"
+    },
+    "minimum_evidence_tier": {
+      "type": "string",
+      "enum": ["A", "B", "C", "D", "U"],
+      "default": "D"
+    },
+    "minimum_use_mode": {
+      "type": "string",
+      "enum": ["discovery", "raw_observation", "normalized_analysis", "benchmark_ready"],
+      "default": "normalized_analysis"
+    },
     "max_records": {"type": "integer", "minimum": 1, "maximum": 200000, "default": 50000},
     "offline": {"type": "boolean", "default": false}
   }

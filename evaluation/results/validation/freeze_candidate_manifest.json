@@ -1,0 +1,918 @@
+{
+  "label": "benchmark-v6-execution-contract",
+  "benchmark_version": "6.0.0-draft.1",
+  "file_count": 182,
+  "content_manifest_sha256": "1111096441508a2cb4d9e2c38fe8a37896671f83bae5ea0e73377f8496cdca9e",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3284,
+      "sha256": "24b6a14e30f7143b7ed2872ff4b89b499678de52a17a314fc011efca2cc543c0"
+    },
+    {
+      "path": "README_public.md",
+      "bytes": 950,
+      "sha256": "addfd6df52f63237c85c780653f67fc40fdf25eb4d6cee087756899b15065a5d"
+    },
+    {
+      "path": "RUNBOOK.md",
+      "bytes": 9044,
+      "sha256": "d55f0cc816a009c4c64bdf1612ae88dbae2b5a341783411627eb27d4e96bfa1b"
+    },
+    {
+      "path": "VERSION",
+      "bytes": 14,
+      "sha256": "3c7a830107b3258f5e08c7c844b7c35e853d389288321f08ea0f75ae7c4a3c2e"
+    },
+    {
+      "path": "audit/p01_08_review_20260805/README.md",
+      "bytes": 3110,
+      "sha256": "ffa24ebe55f5e65b99190a0e33eef739c5e73df6255e3b791511a1121186c723"
+    },
+    {
+      "path": "audit/p01_08_review_20260805/defect_register.md",
+      "bytes": 21900,
+      "sha256": "ec5fd6362356affa7cc74042953f545d175b6731f574aa263f96622068c78aca"
+    },
+    {
+      "path": "audit/p01_08_review_20260805/manifest.json",
+      "bytes": 1317,
+      "sha256": "15c064e36b5fcc658fbee9f94bea7c9b4fc0c361f317ee7f574d7f9f5ec77275"
+    },
+    {
+      "path": "audit/p01_08_review_20260805/p05_validator_findings.json",
+      "bytes": 6698,
+      "sha256": "84f10c2f7fb9028e2c3553e604375f5214882944a20c2cbfccafc718d1ccea92"
+    },
+    {
+      "path": "audit/p01_08_review_20260805/p06_integration_findings.json",
+      "bytes": 6675,
+      "sha256": "57fad715f6872d82ff940ae2cc9610d7f60acb501b984785be775722d750860a"
+    },
+    {
+      "path": "audit/p01_08_review_20260805/responsibility_and_signoff_mapping.md",
+      "bytes": 3571,
+      "sha256": "fabc9b9f76bf1ff20bff1de1d4173e2a28d7454c484b1cc3f6bf1b48a3fefed6"
+    },
+    {
+      "path": "audit/v4_2_audit.md",
+      "bytes": 3147,
+      "sha256": "c9bf55a5740cc0565abf271c2d88f907111e8b3c289e7c91153d7bf88f67f158"
+    },
+    {
+      "path": "contracts/benchmark-execution-contract.json",
+      "bytes": 3757,
+      "sha256": "d113eb7b9b5ee185e0a07bb00e4a5f16ee8ee1113fa84c33e305eb65797b275c"
+    },
+    {
+      "path": "contracts/benchmark-score.schema.json",
+      "bytes": 7500,
+      "sha256": "291dde01f7603cf0bf10460e919dc74d8ac04fe19a1d5d5a1a5cd947a3150330"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/run_manifest.json",
+      "bytes": 1905,
+      "sha256": "ac6c13273b684c23a246d29062c582f707e08a9e410060846b8cbd1d53edbe88"
+    },
+    {
+      "path": "contracts/submission-artifact-template/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "docs/docker_usage.md",
+      "bytes": 6160,
+      "sha256": "c0bf06358a21c6918fea426c4f2ba47b9126fe6e8d606769936fa53ecb2dc203"
+    },
+    {
+      "path": "docs/execution-contract-guide.md",
+      "bytes": 2441,
+      "sha256": "eb3b13d4c48132e9646bb46cac64534483edeb0b5dd608b2a1b240e1fd03c2da"
+    },
+    {
+      "path": "docs/known_limitations.md",
+      "bytes": 3250,
+      "sha256": "e9934f3f4f6b7c765cf5544bc961c30e114a55e216c7e20a7ce91fe8562245f7"
+    },
+    {
+      "path": "docs/llm_grader_protocol.md",
+      "bytes": 2950,
+      "sha256": "7ee2bca56cb57f7a18121ee3df09c3e68c17d7d285b2fea0f59c4ab39dde7e10"
+    },
+    {
+      "path": "docs/public_interface.md",
+      "bytes": 1609,
+      "sha256": "a22a26c3b4690b789940e486e0cdf92038ec3134dcc1c02053cf1917bb14a8cd"
+    },
+    {
+      "path": "docs/scientific_red_lines.md",
+      "bytes": 2664,
+      "sha256": "e2fb5a5199c44e44f020d5a45802ae494bf9a9963cf2a69dc56cd5c689192eac"
+    },
+    {
+      "path": "docs/scoring_and_rubric.md",
+      "bytes": 3330,
+      "sha256": "3889cb5d4db8ad11860afff6fe4a6255625fc965f13a8afa74cfde439734865d"
+    },
+    {
+      "path": "docs/source_registry.md",
+      "bytes": 2885,
+      "sha256": "f85924962e06e57613e5baa1a90695b1c83ec4e3a200fefb453d88a61f6f26bc"
+    },
+    {
+      "path": "docs/split_and_isolation.md",
+      "bytes": 1826,
+      "sha256": "349bcebe60434341240a83e5eba1f7f7f993925509d1d7dc524cc5343bb55e85"
+    },
+    {
+      "path": "docs/test_matrix.md",
+      "bytes": 4250,
+      "sha256": "2a1c729fef3a0251cfbf8e2d963a285e6ff0d77f47f01265e52697ab89f78eac"
+    },
+    {
+      "path": "release/public/Q01/checker/grader_spec.json",
+      "bytes": 3945,
+      "sha256": "97fcf4d10c646d3db8ec056f2acee0463b166ac42c99f494f721a69045b013d0"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/run_manifest.json",
+      "bytes": 3873,
+      "sha256": "5f71e845497d95fa334a56d02757c05c40ec653d99988eb93a60297d02098293"
+    },
+    {
+      "path": "release/public/Q01/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q01/gold/provenance_plan.json",
+      "bytes": 349,
+      "sha256": "1c11f1b2373b6587d77d221192442e67efb7a1312aeabbd61552e39d0e8a3512"
+    },
+    {
+      "path": "release/public/Q01/gold/source_selection.json",
+      "bytes": 746,
+      "sha256": "8c87f0df2ce7cf12aeba75a234096504b7b2a7d9ed7bea7dc83c0beeec7e2a3b"
+    },
+    {
+      "path": "release/public/Q01/inputs/data_sources.json",
+      "bytes": 1356,
+      "sha256": "c8bae2840e0b3a973f0b9c8dda2afcb55b40c15e4c3d034792943f3c820a7ad4"
+    },
+    {
+      "path": "release/public/Q01/rubric.json",
+      "bytes": 1137,
+      "sha256": "a066ca1d155af626bd5602fac4e42a82a12a2564f32cd5f3c7cd0625dc9771d9"
+    },
+    {
+      "path": "release/public/Q01/task.json",
+      "bytes": 1110,
+      "sha256": "8285c4a885fc540792f6f9d5762366a369392f6dcb6c42a79c1cb5054d915c3c"
+    },
+    {
+      "path": "release/public/Q01/task.md",
+      "bytes": 1502,
+      "sha256": "05adb281e72bae178174f4f6b2ce7f9a445d8276de47932cdc087e4e5cfd5ef4"
+    },
+    {
+      "path": "release/public/Q02/checker/grader_spec.json",
+      "bytes": 2571,
+      "sha256": "aa30526dc6f646790c7ade31ac6f94779f3b6c3997797aae80c0ce46cf31afa5"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/run_manifest.json",
+      "bytes": 3162,
+      "sha256": "ce707ac935894a319f96c2fce33cc766f7fac9e36296d13195ba15cb97867dcb"
+    },
+    {
+      "path": "release/public/Q02/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q02/gold/dataset_decision.json",
+      "bytes": 656,
+      "sha256": "c63bcb5727fa4573123d49ed9d367d926b9c14f4d39e7b3311b25f6f7795278f"
+    },
+    {
+      "path": "release/public/Q02/inputs/source_catalog.json",
+      "bytes": 1006,
+      "sha256": "ed0d440d3b6bb0e7d1cb8fca86d92d1ee49620eae33e44eb68e1ca618fd7abed"
+    },
+    {
+      "path": "release/public/Q02/rubric.json",
+      "bytes": 842,
+      "sha256": "feba48bc65ef84258ea48778c48d7b16d6fcd7145a0f5d811c7a406aadab12c7"
+    },
+    {
+      "path": "release/public/Q02/task.json",
+      "bytes": 1047,
+      "sha256": "f261917591c94db006536b43d69d3777185bb59fc7f4b8c11fa754cffc031c92"
+    },
+    {
+      "path": "release/public/Q02/task.md",
+      "bytes": 1093,
+      "sha256": "ab1a923e2808f3045109a1c6a14f371fb4cdd63688143f2d936092fcceef0674"
+    },
+    {
+      "path": "release/public/Q03/checker/grader_spec.json",
+      "bytes": 4641,
+      "sha256": "d28b9132da20834efd4a9d746a9cceb18e2faefd13539701a49381824feac92b"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/run_manifest.json",
+      "bytes": 4165,
+      "sha256": "2c18a603e84d8461a5afa710b9984d7fa4d57b57b88fffb870d43ccb98b594b9"
+    },
+    {
+      "path": "release/public/Q03/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q03/gold/normalized_elements.csv",
+      "bytes": 382,
+      "sha256": "9566345dd20fff5d9b6e9e1b3ffdc031de509f82e8997779df4733d288df4734"
+    },
+    {
+      "path": "release/public/Q03/inputs/soil_elements.csv",
+      "bytes": 226,
+      "sha256": "8d099a567094fc5130762bb8ee4620eb2fa710b8bfffcf078c3fe232f3cfef8d"
+    },
+    {
+      "path": "release/public/Q03/rubric.json",
+      "bytes": 793,
+      "sha256": "4d48abb607aded799ab7ba76160cc254bad6e75372510ed8df46b5bc39e2a261"
+    },
+    {
+      "path": "release/public/Q03/task.json",
+      "bytes": 1036,
+      "sha256": "252b9fd96adf99c258dca2552c023dab174bb43369d1a03ed605aa814b15171c"
+    },
+    {
+      "path": "release/public/Q03/task.md",
+      "bytes": 968,
+      "sha256": "1b681b7a38869a28049b7e5c40e0ce21ff71f431f9853c5bd7cb9c84740a2a94"
+    },
+    {
+      "path": "release/public/Q04/checker/grader_spec.json",
+      "bytes": 3857,
+      "sha256": "ea8bb983380044bcd14833954f3b6922ca3cc9d660eb1e7f304d0fe7ac0144f1"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/run_manifest.json",
+      "bytes": 4214,
+      "sha256": "fb28f2278680f9cf523289116dd326ebf22cdb7ec09186d65c5ff77b04826488"
+    },
+    {
+      "path": "release/public/Q04/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q04/gold/element_database.csv",
+      "bytes": 497,
+      "sha256": "48843e704b4c26b97473a991aa407382f40e3f2c3bf032d413639169f06e1cad"
+    },
+    {
+      "path": "release/public/Q04/inputs/conversion_constants.json",
+      "bytes": 292,
+      "sha256": "84cf1ddf9d19bc39724a0293b9aa02f62a400cfa1a6b5c0371c6abfc931fc5b7"
+    },
+    {
+      "path": "release/public/Q04/inputs/rock_oxide.csv",
+      "bytes": 148,
+      "sha256": "e84566a8bb4d5a92bd02bb16a59f4cad66a21ed977e7ef99e67986325e25ed35"
+    },
+    {
+      "path": "release/public/Q04/rubric.json",
+      "bytes": 850,
+      "sha256": "00191d11d923a73bcc668182d1c48e3a9f192fb746d3c1d20503323c336baf5e"
+    },
+    {
+      "path": "release/public/Q04/task.json",
+      "bytes": 1071,
+      "sha256": "4b02ea859b07f29662469dbaeff480f7a818f4dda2423b6ba09d0169b735e9c0"
+    },
+    {
+      "path": "release/public/Q04/task.md",
+      "bytes": 1175,
+      "sha256": "6ddafcb72a290136a5a399afee7dc2248f5a265b703efec7db3597bf7e3a0abf"
+    },
+    {
+      "path": "release/public/Q05/checker/grader_spec.json",
+      "bytes": 3978,
+      "sha256": "bc09095478a815cf7dc7f50b40fef1607fab6a8abceeb3525bbed9a73fdf830f"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/run_manifest.json",
+      "bytes": 3401,
+      "sha256": "1e24f469672ef1dbeca1d22017c4b85013aa5f4bfe3a7bbb2469887310b5cff4"
+    },
+    {
+      "path": "release/public/Q05/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q05/gold/verification_report.json",
+      "bytes": 746,
+      "sha256": "e46b3c251ecffecf4fa70bc4a92034651b17d9375d8e52c1bba8817b1ee89926"
+    },
+    {
+      "path": "release/public/Q05/inputs/download_manifest.json",
+      "bytes": 534,
+      "sha256": "8f6dca759f261d405de865e09cfd51a6986ec9095eb081e730f3301520036350"
+    },
+    {
+      "path": "release/public/Q05/inputs/html_as_csv.csv",
+      "bytes": 97,
+      "sha256": "9bec9bfb2fad5bd77c78df04f45441e80a3000bf3ccd9d1c416197fe4e6fed38"
+    },
+    {
+      "path": "release/public/Q05/inputs/tampered.csv",
+      "bytes": 46,
+      "sha256": "84efbab5cb3f1d35038167bff6bc1b21c8c093593639ec936a1de63525ae81b5"
+    },
+    {
+      "path": "release/public/Q05/inputs/valid_data.csv",
+      "bytes": 61,
+      "sha256": "73b952b81b4e4f41c00968d242946a78e09e7e878fa42fb31d9bb7084477cca5"
+    },
+    {
+      "path": "release/public/Q05/rubric.json",
+      "bytes": 880,
+      "sha256": "53c79ce590e8352bf27ef6f3673f21ea7a1209ed71d3914ae1f72b5e9fd30d14"
+    },
+    {
+      "path": "release/public/Q05/task.json",
+      "bytes": 1124,
+      "sha256": "cb2962c49016e5fe3d875625c65b93dc7831a45329a7134974e5da344eb29a36"
+    },
+    {
+      "path": "release/public/Q05/task.md",
+      "bytes": 1026,
+      "sha256": "468074e825bc6768cf25bd86d5c376c49e06b8f11284b98329b3b67a77c71057"
+    },
+    {
+      "path": "release/public/Q06/checker/grader_spec.json",
+      "bytes": 4212,
+      "sha256": "340560441aae9a017fcb358b5d29f96094df5b69aef722bad93b1b47f53a8a30"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/run_manifest.json",
+      "bytes": 4579,
+      "sha256": "e0aaa655af2255300e180e5f3d4ac7c00b1294a9e080abebdd86045feb9ae406"
+    },
+    {
+      "path": "release/public/Q06/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q06/gold/parsed_values.csv",
+      "bytes": 398,
+      "sha256": "fe1ed4343ea91504d4b7516bcfb19bfdd12a66c9854d8446ac9756f41e031353"
+    },
+    {
+      "path": "release/public/Q06/inputs/censored_values.csv",
+      "bytes": 160,
+      "sha256": "2cb5d44af282271584bd9c82355daa5f04d9ea4f26d715b462dd31b940284b94"
+    },
+    {
+      "path": "release/public/Q06/rubric.json",
+      "bytes": 847,
+      "sha256": "08b30955553d7a2b72ab509d146465d3ed2152744d9af006361bef9dc758fb5d"
+    },
+    {
+      "path": "release/public/Q06/task.json",
+      "bytes": 1051,
+      "sha256": "363e747b09d177d9ec45ab10c511591d0fa20b6e48453458770f88870d2e193d"
+    },
+    {
+      "path": "release/public/Q06/task.md",
+      "bytes": 1112,
+      "sha256": "1b2d8101fdcbd3ae584e2d497ffc92939c0c59d5fe52d531edf230474eb30390"
+    },
+    {
+      "path": "release/public/Q07/checker/grader_spec.json",
+      "bytes": 4889,
+      "sha256": "d67d29bd3c08c1440f136c22a5adcc8b6b156b443315810fbbb9da48106d7383"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/run_manifest.json",
+      "bytes": 5336,
+      "sha256": "b5693457b042b25591aad9af42666e9810a16a48b38596b0046767128f8980d9"
+    },
+    {
+      "path": "release/public/Q07/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q07/gold/coordinate_qc.csv",
+      "bytes": 519,
+      "sha256": "5413ffe1c2bde0b74728ed61ec271854af5f253155af0b478c0201b5309b5dc7"
+    },
+    {
+      "path": "release/public/Q07/inputs/coordinates.csv",
+      "bytes": 266,
+      "sha256": "d12efb5091dc4c7c7f97033a491f2cbb021ca30f5b09f99a673d3c68270e6e44"
+    },
+    {
+      "path": "release/public/Q07/rubric.json",
+      "bytes": 817,
+      "sha256": "633aec8b52c86ebca37938035af42fbdbdc03a69783d284b60a0170b9ebc5859"
+    },
+    {
+      "path": "release/public/Q07/task.json",
+      "bytes": 1072,
+      "sha256": "0c07fb8f73cef2128719026923c5e41c26f5e962a4c56610f04b0b5f7735994b"
+    },
+    {
+      "path": "release/public/Q07/task.md",
+      "bytes": 1063,
+      "sha256": "6d6d9c60f73d55923b0c902b9844b2d12be44814d66fbe689b00cea59819e195"
+    },
+    {
+      "path": "release/public/Q08/checker/grader_spec.json",
+      "bytes": 3377,
+      "sha256": "7e34af0155f28257df27a77072d39857277008aa8f8282f0a5e003f34f723de3"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/anomalies.geojson",
+      "bytes": 316,
+      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/anomaly_results.csv",
+      "bytes": 815,
+      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/geochemical.sqlite",
+      "bytes": 12288,
+      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/h3_cells.csv",
+      "bytes": 61,
+      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/map.html",
+      "bytes": 149,
+      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/map.png",
+      "bytes": 73,
+      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/observations.csv",
+      "bytes": 672,
+      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/qc_report.json",
+      "bytes": 214,
+      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/run_manifest.json",
+      "bytes": 4885,
+      "sha256": "0d10b637f31dfa0dd6ae41b5904c62198436cc1ad2d9b91e321fe4c4c7992276"
+    },
+    {
+      "path": "release/public/Q08/gold/artifacts/sources.jsonl",
+      "bytes": 364,
+      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+    },
+    {
+      "path": "release/public/Q08/gold/dedup_log.csv",
+      "bytes": 81,
+      "sha256": "acd378e6ad1678d9be946fb2f9058ffa7711458addbf8051c89831b24c338128"
+    },
+    {
+      "path": "release/public/Q08/gold/observations.csv",
+      "bytes": 439,
+      "sha256": "a8413b1109c1c6645972825162a454ef17dd1a21510815640785a1925f6d9f75"
+    },
+    {
+      "path": "release/public/Q08/inputs/duplicate_records.csv",
+      "bytes": 378,
+      "sha256": "be66389ad01f248551d73abf75ed72b7376506f03e92692fa22272277a2daf51"
+    },
+    {
+      "path": "release/public/Q08/rubric.json",
+      "bytes": 882,
+      "sha256": "9ea4bbe360b7d1de5d3c7b09f41364825aefe84d12327161e3181dee3338d99b"
+    },
+    {
+      "path": "release/public/Q08/task.json",
+      "bytes": 1078,
+      "sha256": "044cb4d2f63e445f56ebc0f3434093d592da79f0bafbd1e9f083ae5de8236b5a"
+    },
+    {
+      "path": "release/public/Q08/task.md",
+      "bytes": 1056,
+      "sha256": "abd7fde990defb2ef6b71d6ff5477750fa7bb7393eee52fc31b41d0ff9d10783"
+    },
+    {
+      "path": "results/README.md",
+      "bytes": 469,
+      "sha256": "ff36b205136a14b2fb7cd635b90271fec20f5116b87bd9ef9421e71963443537"
+    },
+    {
+      "path": "results/raw_runs_template.jsonl",
+      "bytes": 1170,
+      "sha256": "3d0a930efba6896d0272fcddd189854cc4192fec21333ad88956e1edcd4b1f29"
+    },
+    {
+      "path": "results/scientific_acceptance_report_template.md",
+      "bytes": 1453,
+      "sha256": "294b760c2ade0f483f507cb18e1069926ae71e4611d7713b34dcc7dc51b626e9"
+    },
+    {
+      "path": "results/score_summary_template.csv",
+      "bytes": 78,
+      "sha256": "26e219e7ff223f17e561eaeefe75be9d202f95b9ca7bd0dba8c295564a821fc5"
+    },
+    {
+      "path": "results/validation/package_validation.json",
+      "bytes": 13873,
+      "sha256": "e0c541d927807084f155116cbda9471f61fe04251552a904c3934dd1c8d4e406"
+    },
+    {
+      "path": "task_inventory.csv",
+      "bytes": 1350,
+      "sha256": "dccb9c4eff051f4010056841433062d245284cc163d0e2a6c0e1293f9aada708"
+    },
+    {
+      "path": "tools/aggregate_runs.py",
+      "bytes": 12768,
+      "sha256": "31bee31c067aa300d7ea4496384bc444be1ae8a6f58f43a21c7e0e72bc1b8a1c"
+    },
+    {
+      "path": "tools/create_freeze_manifest.py",
+      "bytes": 2235,
+      "sha256": "53e916b80d8304a5521e89877ff33a919dc04d4c21b952a57048a8f10794c6cb"
+    },
+    {
+      "path": "tools/export_public_package.py",
+      "bytes": 3763,
+      "sha256": "a850529bd2f73675e0a4cf83ff9f8775bb0ade4150ce19e7199190b337c259d2"
+    },
+    {
+      "path": "tools/finalize_score.py",
+      "bytes": 19586,
+      "sha256": "548684213d13ea7cb1580e1088617104606e51b9036e4d4dbe9d6cc5b185e950"
+    },
+    {
+      "path": "tools/grade_task.py",
+      "bytes": 16683,
+      "sha256": "478ecdf5001fe3b8a5bf33937aaa3c90dcfc76697a51e48d6e76a28593ad821b"
+    },
+    {
+      "path": "tools/migrate_benchmark_contract.py",
+      "bytes": 11178,
+      "sha256": "c195c0c7ceba9b4a6355c196b258049c4b4ad9d4da4973477e2b13683b92cb23"
+    },
+    {
+      "path": "tools/split_private_assets.py",
+      "bytes": 4203,
+      "sha256": "d370cce28d9ab6fc0a65fd00c08001eceacc4166c5042e6ac8658617fe4b6dcf"
+    },
+    {
+      "path": "tools/validate_package.py",
+      "bytes": 10030,
+      "sha256": "0b2ffb0f5abbb1c816c45721b6b29a8d7ce653ce0471cbb65eef4bbf6016c83e"
+    },
+    {
+      "path": "tools/verify_isolation.py",
+      "bytes": 2666,
+      "sha256": "e3eb9ef61f2be7d68874aa34dca86de564975ac4839467f9914608ff735e20ad"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d1-sample:v1",
+  "title": "D1 material sample archive entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sample_id", "native_sample_id", "igsn", "parent_sample_id", "sampling_event_id", "medium_raw", "material_raw", "lithology_raw", "geologic_unit_raw", "soil_horizon_raw", "grain_fraction_raw", "filtered_state_raw", "description_raw", "missing_reasons"],
+  "properties": {
+    "schema_version": {"const": "d1-sample-v1"},
+    "sample_id": {"type": "string", "minLength": 1},
+    "native_sample_id": {"type": ["string", "null"]},
+    "igsn": {"type": ["string", "null"]},
+    "parent_sample_id": {"type": ["string", "null"]},
+    "sampling_event_id": {"type": "string", "minLength": 1},
+    "medium_raw": {"type": "string", "minLength": 1},
+    "material_raw": {"type": ["string", "null"]},
+    "lithology_raw": {"type": ["string", "null"]},
+    "geologic_unit_raw": {"type": ["string", "null"]},
+    "soil_horizon_raw": {"type": ["string", "null"]},
+    "grain_fraction_raw": {"type": ["string", "null"]},
+    "filtered_state_raw": {"type": ["string", "null"]},
+    "description_raw": {"type": ["string", "null"]},
+    "missing_reasons": {"$ref": "#/$defs/missingReasons"}
+  },
+  "$defs": {
+    "missingReasons": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "enum": ["not_reported", "not_applicable", "not_available", "redacted", "parse_failed"]}
+    }
+  }
+}

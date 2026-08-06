@@ -29,6 +29,7 @@ python scripts/render_visualization.py \
   --input-dir demo_output \
   --profile /tmp/task-profile.json \
   --output-dir visualization_output
+python scripts/validate_visualization.py --output-dir visualization_output
 ```
 
 按演示问题修改 `/tmp/task-profile.json` 的 `story`、空间产物类型、默认区域、元素、介质或 X/Y；打开
@@ -36,6 +37,8 @@ python scripts/render_visualization.py \
 `visualization_report.json`，不要隐藏 `profile_warnings`。全球配置生成世界图；区域配置会将 HTML、
 异常显示和 `samples.geojson` 裁剪并锁定到预设或自定义范围。中国、美国和澳大利亚预设使用离线
 国家多边形严格裁剪；上海、欧洲与自定义范围仍是 bbox。
+这里不要把 `validate_outputs.py` 指向 `visualization_output`：该验证器面向含 `run_summary.json` 的
+核心全流程目录；独立 D3 包由 `validate_visualization.py` 验证。
 
 ## 真实来源证据链 demo
 

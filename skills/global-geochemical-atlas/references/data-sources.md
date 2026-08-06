@@ -9,7 +9,7 @@
 | 来源 | 适合介质 | 入口 | 使用条件与限制 |
 |---|---|---|---|
 | USGS National Geochemical Database | rock/soil/sediment/mineral/concentrate | `https://www.usgs.gov/centers/gggsc/science/national-geochemical-database` | 政府来源；具体数据发布可能用不同 legacy qualifier 编码，逐数据集读取元数据 |
-| EarthChem Portal | rock 与文献汇编 | `https://earthchem.org/portal` | 联邦检索 PetDB、GEOROC 等；保留原数据库、样品和文献引用；不要把聚合站当唯一证据 |
+| EarthChem Portal | rock 与文献汇编 | `https://earthchem.org/data-access/overview` | 联邦检索 PetDB、GEOROC 等；保留原数据库、样品和文献引用；不要把聚合站当唯一证据 |
 | EarthChem developer resources | 结构化服务 | `https://earthchem.org/resources/developers` | 使用文档化 WFS/XML；验证 schema、计数和服务版本 |
 | GEMStat open archive | water | `https://doi.org/10.5281/zenodo.13881899` | 只使用明确开放批次；通常 CC BY 4.0，并按数据提供者要求署名；大文件先按范围设计本地过滤 |
 | GEMStat portal | water | `https://gemstat.org/data-gemstat/data-portal/` | 门户下载可能要求联系信息或限制站点数；不要自动绕过表单；受限批次不再分发 |
@@ -66,7 +66,7 @@ provenance() -> SourceManifest entry
 
 1. 先判断介质、区域、元素、时间和 measurement basis。
 2. 优先能服务端按区域/元素过滤、提供方法和来源定位的结构化发布。
-3. 检查许可是否允许当前用途和再分发；`open_only` 下排除 limited/restricted 原始数据。
+3. 单独检查是否允许本次科研分析、是否要求署名、限定非商业科研或需要申请；不把科研使用条件并入科学证据分。
 4. 同一记录经聚合平台转载时，保留聚合来源和原始提供者两层定位。
 5. 数据版本或字段字典缺失时标记 `needs_human_review`，不要猜 qualifier。
 
@@ -92,6 +92,6 @@ python scripts/build_evidence_bundle.py \
 
 该步骤要求 sidecar 与 canonical `record_id` 集合完全一致，校验对应来源字段，并绑定 CSV、sidecar、acquisition manifest 与置信度报告哈希。该步骤不改变 D2 的置信度算法或数值。
 
-## 许可边界
+## 科研使用与仓库存储边界
 
-MIT 只覆盖本仓库原创代码和文档，不覆盖外部数据。对许可不明、仅限研究或禁止再分发的数据，只保存公开元数据与检索说明；不得打包原始记录。
+MIT 只覆盖本仓库原创代码和文档，不覆盖外部数据。本项目使用第三方数据开展科研查询和分析，不制作原数据库镜像。科研使用条件不明时先保存公开元数据和检索说明；允许科研使用的完整原始文件进入本地只读缓存，不提交 Git，比赛交付保存标准化科研结果、地图、引用和证据说明。

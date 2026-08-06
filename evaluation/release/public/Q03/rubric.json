@@ -1,0 +1,28 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "说明这些等价只在题目已固定固体质量/质量基准时成立。",
+      "id": "basis_scope",
+      "points": 8
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "原值、原单位和转换规则逐行可追溯。",
+      "id": "traceability",
+      "points": 8
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "不使用会造成数量级变化的过早舍入。",
+      "id": "precision",
+      "points": 4
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/normalized_elements.csv"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-NORM-001"
+}
