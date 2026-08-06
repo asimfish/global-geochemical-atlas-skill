@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-05T15:54:04Z",
+  "as_of": "2026-08-06T03:48:23Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -121,22 +121,25 @@
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 1,
-        "Cu": 1,
-        "Ni": 1,
-        "Zn": 1
+        "As": 2,
+        "Cu": 2,
+        "Ni": 2,
+        "Zn": 2
       },
-      "analytes_with_multiple_sources": [],
-      "analytes_with_single_source": [
+      "analytes_with_multiple_sources": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
+      "analytes_with_single_source": [],
       "audited_analytes": [
         "As",
+        "Cr",
         "Cu",
+        "Hg",
         "Ni",
+        "Pb",
         "Zn"
       ],
       "candidate_sources": [
@@ -159,7 +162,6 @@
         "iodp-data-systems",
         "ireland-tellus",
         "jamstec-darwin",
-        "japan-gsj-geochemical-map",
         "mexico-sgm-geochemical-cartography",
         "noaa-ncei-marine-geology",
         "nz-petlab",
@@ -179,6 +181,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "japan-gsj-geochemical-map",
         "norway-marchem"
       ],
       "source_evidence_tiers": {
@@ -201,7 +204,7 @@
         "iodp-data-systems": "D",
         "ireland-tellus": "D",
         "jamstec-darwin": "D",
-        "japan-gsj-geochemical-map": "D",
+        "japan-gsj-geochemical-map": "A",
         "mexico-sgm-geochemical-cartography": "D",
         "noaa-ncei-marine-geology": "D",
         "norway-marchem": "A",
@@ -212,7 +215,7 @@
         "us-water-quality-portal": "D",
         "usgs-ngdb": "D"
       },
-      "source_independence": "single_source_dependency",
+      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
         "argentina-segemar-geochemistry": "national_partial",
@@ -245,6 +248,15 @@
         "usgs-ngdb": "national_partial"
       },
       "source_target_analytes": {
+        "japan-gsj-geochemical-map": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "norway-marchem": [
           "As",
           "Cu",
@@ -272,7 +284,7 @@
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
         "jamstec-darwin": "discovery",
-        "japan-gsj-geochemical-map": "discovery",
+        "japan-gsj-geochemical-map": "normalized_analysis",
         "mexico-sgm-geochemical-cartography": "discovery",
         "noaa-ncei-marine-geology": "discovery",
         "norway-marchem": "normalized_analysis",
@@ -290,34 +302,34 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 1,
-        "Cu": 1,
-        "Ni": 1,
-        "Zn": 1
+        "As": 2,
+        "Cu": 2,
+        "Ni": 2,
+        "Zn": 2
       },
-      "analytes_with_multiple_sources": [],
-      "analytes_with_single_source": [
+      "analytes_with_multiple_sources": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
+      "analytes_with_single_source": [],
       "audited_analytes": [
         "As",
+        "Cr",
         "Cu",
         "Ni",
+        "Pb",
         "Zn"
       ],
       "candidate_sources": [
         "alaska-dggs-webgeochem",
-        "argentina-segemar-geochemistry",
         "bgs-gbase",
         "brazil-sgb-geochemistry",
         "earthchem-library",
         "foregs-europe",
         "gemas-europe",
         "ireland-tellus",
-        "japan-gsj-geochemical-map",
         "pangaea-repository",
         "soils4africa",
         "south-africa-cgs-geochemistry",
@@ -334,18 +346,18 @@
         "Zn"
       ],
       "selected_sources": [
+        "pangaea-north-africa-soil",
         "usgs-conus-soil"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
-        "argentina-segemar-geochemistry": "D",
         "bgs-gbase": "D",
         "brazil-sgb-geochemistry": "D",
         "earthchem-library": "D",
         "foregs-europe": "D",
         "gemas-europe": "D",
         "ireland-tellus": "D",
-        "japan-gsj-geochemical-map": "D",
+        "pangaea-north-africa-soil": "A",
         "pangaea-repository": "D",
         "soils4africa": "D",
         "south-africa-cgs-geochemistry": "D",
@@ -353,17 +365,16 @@
         "usgs-ngdb": "D",
         "wosis": "D"
       },
-      "source_independence": "single_source_dependency",
+      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
-        "argentina-segemar-geochemistry": "national_partial",
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
         "foregs-europe": "regional_partial",
         "gemas-europe": "regional_partial",
         "ireland-tellus": "national_partial",
-        "japan-gsj-geochemical-map": "national_partial",
+        "pangaea-north-africa-soil": "regional_partial",
         "pangaea-repository": "global_collection",
         "soils4africa": "continental_partial",
         "south-africa-cgs-geochemistry": "national_partial",
@@ -372,6 +383,14 @@
         "wosis": "global_partial"
       },
       "source_target_analytes": {
+        "pangaea-north-africa-soil": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "usgs-conus-soil": [
           "As",
           "Cu",
@@ -381,14 +400,13 @@
       },
       "source_use_modes": {
         "alaska-dggs-webgeochem": "discovery",
-        "argentina-segemar-geochemistry": "discovery",
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "foregs-europe": "discovery",
         "gemas-europe": "discovery",
         "ireland-tellus": "discovery",
-        "japan-gsj-geochemical-map": "discovery",
+        "pangaea-north-africa-soil": "normalized_analysis",
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
@@ -531,16 +549,16 @@
       "additional_country_geological_surveys_round_1",
       "additional_country_geological_surveys_round_2",
       "southern_hemisphere_and_asian_national_portals",
-      "state_and_provincial_geological_surveys"
+      "state_and_provincial_geological_surveys",
+      "publication_linked_datasets"
     ],
     "remaining_channels": [
-      "publication_linked_datasets",
       "additional_country_geological_surveys_round_3",
       "african_country_surveys_round_2",
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 4,
+    "round": 5,
     "saturated": false,
     "status": "in_progress"
   },

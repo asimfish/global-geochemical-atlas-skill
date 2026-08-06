@@ -1,6 +1,6 @@
 {
   "registry_version": "geochemical-source-registry-v1",
-  "verified_at": "2026-08-05T12:50:00Z",
+  "verified_at": "2026-08-06T03:48:23Z",
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -798,6 +798,213 @@
         "Dissolved, dissolved-labile and particulate fractions are distinct and must not be combined.",
         "SeaDataNet quality flags and contributor-level method/citation links must remain attached to observations.",
         "Molar-per-mass values must not be silently converted to mass-per-volume without element atomic mass and an explicit seawater-density assumption."
+      ]
+    },
+    "japan-gsj-geochemical-map": {
+      "adapter": "gsj_japan_river_sediment",
+      "title": "Geochemical Map of Japan: national river-sediment sample and concentration tables",
+      "publisher": "Geological Survey of Japan, AIST",
+      "dataset_doi": null,
+      "dataset_version": "sample-2024-02-20_concentration-2007-01-10",
+      "release_date": "2024-02-20",
+      "landing_page": "https://gbank.gsj.jp/geochemmap/data/download.htm",
+      "metadata_url": "https://www.gsj.jp/en/about/overview/geochemical-map.html",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "japan-national-river-network-partial",
+      "download": {
+        "mode": "pinned-official-csv-pair",
+        "max_bytes_per_file": 2000000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "observed_at": "2026-08-06T03:48:23Z",
+        "encoding": "CP932-compatible Shift_JIS",
+        "files": [
+          {
+            "file_id": "samples",
+            "filename": "samplejoho.csv",
+            "url": "https://gbank.gsj.jp/geochemmap/data/joho/samplejoho.csv",
+            "publisher_updated_at": "2024-02-20",
+            "bytes": 334302,
+            "expected_sha256": "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c"
+          },
+          {
+            "file_id": "concentrations",
+            "filename": "noudo.csv",
+            "url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv",
+            "publisher_updated_at": "2007-01-10",
+            "bytes": 1198951,
+            "expected_sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671"
+          }
+        ]
+      },
+      "required_fields": [
+        "試料番号",
+        "経度(JGD2000)",
+        "緯度(JGD2000)",
+        "番号2",
+        "As",
+        "Cr",
+        "Cu",
+        "Hg",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "sample_required_fields": [
+        "試料番号",
+        "地図名",
+        "経度(JGD2000)",
+        "緯度(JGD2000)",
+        "採取地",
+        "川",
+        "試料粒度"
+      ],
+      "concentration_required_fields": [
+        "番号2",
+        "As",
+        "Cr",
+        "Cu",
+        "Hg",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "target_analytes": {
+        "As": "As",
+        "Cr": "Cr",
+        "Cu": "Cu",
+        "Hg": "Hg",
+        "Ni": "Ni",
+        "Pb": "Pb",
+        "Zn": "Zn"
+      },
+      "target_units": {
+        "As": "ppm",
+        "Cr": "ppm",
+        "Cu": "ppm",
+        "Hg": "ppb",
+        "Ni": "ppm",
+        "Pb": "ppm",
+        "Zn": "ppm"
+      },
+      "expected_counts": {
+        "sample_rows": 3024,
+        "concentration_physical_rows": 3025,
+        "concentration_blank_rows": 1,
+        "concentration_rows": 3024,
+        "distinct_reported_sample_ids": 3023,
+        "duplicate_reported_sample_ids": 1,
+        "duplicate_sample_id": "78013",
+        "ordinal_joined_rows": 3024,
+        "target_observations": 21168,
+        "target_value_counts": {
+          "As": 3024,
+          "Cr": 3024,
+          "Cu": 3024,
+          "Hg": 3024,
+          "Ni": 3024,
+          "Pb": 3024,
+          "Zn": 3024
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "name": "GSJ website terms aligned with Japan Government Standard Terms of Use 2.0",
+        "url": "https://www.gsj.jp/license/index.html"
+      },
+      "citation": "Imai, N. et al. (2004). Geochemical Map of Japan. Geological Survey of Japan, AIST, 209 p.; official online sample and concentration tables.",
+      "redistribution": "Use for attributed research analysis under the GSJ website terms. The complete third-party CSV files remain outside Git.",
+      "scientific_notes": [
+        "This adapter covers the national river-sediment tables only; marine sediment and later surface-soil products remain separate datasets.",
+        "The national map is based on fine stream sediment below 180 micrometres and discrete river-network samples, not a regular national grid.",
+        "Source coordinates are JGD2000 (EPSG:4612) and must be transformed explicitly before WGS84 map output.",
+        "The official web service identifies Hg as ppb and the other registered trace elements as ppm.",
+        "Sample ID 78013 occurs twice in both files; the adapter joins by normalized sample ID plus occurrence order and never overwrites a duplicate dictionary key.",
+        "The two CSV files do not contain row-level analytical method, detection-limit or quality-flag fields; method evidence must be attached from the cited project publications."
+      ]
+    },
+    "pangaea-north-africa-soil": {
+      "adapter": "pangaea_tab_dataset",
+      "title": "Chemical compositions of deflatable soil fractions from North Africa",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.949903",
+      "parent_dataset_doi": "10.1594/PANGAEA.949906",
+      "publication_doi": "10.1016/j.quascirev.2022.107729",
+      "dataset_version": "2022-10-25",
+      "release_date": "2022-10-25",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.949903",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.949903",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "north-africa-sahara-sahel-partial",
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 100000,
+        "accepted_content_types": [
+          "text/tab-separated-values"
+        ],
+        "observed_at": "2026-08-06T03:13:54Z",
+        "files": [
+          {
+            "file_id": "table-s5",
+            "filename": "Table_S5.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile",
+            "bytes": 30336,
+            "expected_sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485"
+          }
+        ]
+      },
+      "required_fields": [
+        "Event",
+        "Area",
+        "Location",
+        "Latitude",
+        "Longitude",
+        "Sample ID"
+      ],
+      "target_analytes": {
+        "As": "As [mg/kg]",
+        "Cr": "Cr [mg/kg]",
+        "Cu": "Cu [mg/kg]",
+        "Ni": "Ni [mg/kg]",
+        "Pb": "Pb [mg/kg]",
+        "Zn": "Zn [mg/kg]"
+      },
+      "expected_counts": {
+        "physical_rows": 43,
+        "distinct_samples": 43,
+        "element_fields": 48,
+        "nonempty_element_measurements": 2061,
+        "pangaea_reported_data_points": 2190,
+        "target_observations": 258,
+        "target_value_counts": {
+          "As": 43,
+          "Cr": 43,
+          "Cu": 43,
+          "Ni": 43,
+          "Pb": 43,
+          "Zn": 43
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Guinoiseau, D. et al. (2022). Chemical compositions of deflatable soil fractions from North Africa. PANGAEA. https://doi.org/10.1594/PANGAEA.949903",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic demonstration rows retain DOI, file hash and row locators.",
+      "scientific_notes": [
+        "The table contains 43 discrete samples and is not continuous coverage of North Africa.",
+        "The bundled publication describes the analysed material as the less-than-20-micrometre fine silt-clay fraction of bulk soil.",
+        "Values use HF-HNO3 acid digestion and Agilent 7900 quadrupole ICP-MS with 2.5% HNO3 eluent.",
+        "International basalt standards BHVO-2 and BCR-2 agreed within plus or minus 10 percent of recommended concentrations in the parent study.",
+        "Publisher location strings are retained; border samples are not assigned to a country solely from coordinates."
       ]
     }
   }

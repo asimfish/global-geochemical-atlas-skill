@@ -1,12 +1,14 @@
 {
-  "claim_boundary": "The combined package binds five already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
+  "claim_boundary": "The combined package binds 7 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
   "combined_demo_version": "d1-four-media-combined-v1",
   "comparison_isolation": {
     "explicit_boundaries": [
       "GEOTRACES seawater nmol/kg is not mixed with GEMStat freshwater mass-per-volume arsenic.",
       "GEMStat dissolved, suspended and total arsenic remain separate comparison groups.",
       "MarChem partial nitric-acid sediment is not interpreted as total content.",
-      "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases."
+      "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases.",
+      "PANGAEA fine-fraction HF-HNO3 soil is not mixed with USGS bulk-soil layers.",
+      "GSJ JGD2000 river sediment keeps its source-specific units and missing method/QC boundary."
     ],
     "group_fields": [
       "element_or_analyte",
@@ -16,7 +18,7 @@
       "analytical_method",
       "digestion_or_extraction"
     ],
-    "partition_count": 34,
+    "partition_count": 46,
     "water_partition_count": 13,
     "water_partitions": {
       "[\"As\", \"water\", \"freshwater_dissolved_fraction\", \"\", \"Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma\", \"GEMStat dissolved operational fraction\"]": 4,
@@ -90,43 +92,67 @@
       "source_evidence_score": 85.0,
       "source_id": "gemstat-open-archive",
       "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/japan-gsj-geochemical-map/sources.jsonl",
+      "evidence_sha256": "34923c012dfd2638e65e7e61a5fea4191c10788c84d1c9f1df043d50038ef0a0",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/japan-gsj-geochemical-map/demo_input.csv",
+      "input_sha256": "9cea2ca672bbe35d2a6b3546764cb350f437925fb470fa4be3dd78405784a872",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "japan-gsj-geochemical-map",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/pangaea-north-africa-soil/sources.jsonl",
+      "evidence_sha256": "15cbc81ae87ba4e73311c30609d13b1855f3fa4f61de1dd0c0c709b52798c47c",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/pangaea-north-africa-soil/demo_input.csv",
+      "input_sha256": "f0c24b3eac42e595df8cce304b735529bdd29f91781d98a11d8724076f0dbb26",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-north-africa-soil",
+      "use_mode": "normalized_analysis"
     }
   ],
   "generated_at": "2026-08-05T15:20:00Z",
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 147303,
+      "bytes": 188291,
       "path": "demo_input.csv",
-      "sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d"
+      "sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82"
     },
     {
-      "bytes": 505778,
+      "bytes": 663666,
       "path": "sources.jsonl",
-      "sha256": "398d2d6443976a3cb2c86454218ccf94e900d6a11795f1741f4fcd440d1bc691"
+      "sha256": "8a5ef7401f8548d7fb84237c3c6dd38531796244a6656738a058c529a5e53a7d"
     }
   ],
   "record_counts": {
     "by_analyte": {
-      "As": 100,
-      "Cu": 68,
-      "Ni": 68,
-      "Zn": 68
+      "As": 124,
+      "Cu": 92,
+      "Ni": 92,
+      "Zn": 92
     },
     "by_medium": {
       "rock": 48,
-      "sediment": 112,
-      "soil": 48,
+      "sediment": 160,
+      "soil": 96,
       "water": 96
     },
     "by_source": {
       "gemstat-open-archive": 48,
       "georoc-archaean": 48,
       "geotraces-idp2025": 48,
+      "japan-gsj-geochemical-map": 48,
       "norway-marchem": 112,
+      "pangaea-north-africa-soil": 48,
       "usgs-conus-soil": 48
     },
-    "total": 304
+    "total": 400
   },
   "request": {
     "elements": [
@@ -203,7 +229,6 @@
           "iodp-data-systems",
           "ireland-tellus",
           "jamstec-darwin",
-          "japan-gsj-geochemical-map",
           "mexico-sgm-geochemical-cartography",
           "noaa-ncei-marine-geology",
           "nz-petlab",
@@ -215,6 +240,7 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "japan-gsj-geochemical-map",
           "norway-marchem"
         ],
         "status": "partial"
@@ -222,14 +248,12 @@
       "soil": {
         "candidate_sources": [
           "alaska-dggs-webgeochem",
-          "argentina-segemar-geochemistry",
           "bgs-gbase",
           "brazil-sgb-geochemistry",
           "earthchem-library",
           "foregs-europe",
           "gemas-europe",
           "ireland-tellus",
-          "japan-gsj-geochemical-map",
           "pangaea-repository",
           "soils4africa",
           "south-africa-cgs-geochemistry",
@@ -238,6 +262,7 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "pangaea-north-africa-soil",
           "usgs-conus-soil"
         ],
         "status": "partial"
@@ -270,12 +295,14 @@
       "gemstat-open-archive",
       "georoc-archaean",
       "geotraces-idp2025",
+      "japan-gsj-geochemical-map",
       "norway-marchem",
+      "pangaea-north-africa-soil",
       "usgs-conus-soil"
     ],
     "status": "partial"
   },
-  "scientific_scope": "five verified source demos combined to exercise one four-media workflow",
+  "scientific_scope": "7 verified source demos combined to exercise one four-media workflow",
   "warnings": [
     "This combined fixture proves interface compatibility, not representative global coverage.",
     "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",

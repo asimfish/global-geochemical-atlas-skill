@@ -1,9 +1,9 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-05T15:54:04Z",
+  "reviewed_at": "2026-08-06T03:48:23Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
-    "round": 4,
+    "round": 5,
     "status": "in_progress",
     "saturated": false,
     "channels_checked": [
@@ -18,10 +18,10 @@
       "additional_country_geological_surveys_round_1",
       "additional_country_geological_surveys_round_2",
       "southern_hemisphere_and_asian_national_portals",
-      "state_and_provincial_geological_surveys"
+      "state_and_provincial_geological_surveys",
+      "publication_linked_datasets"
     ],
     "remaining_channels": [
-      "publication_linked_datasets",
       "additional_country_geological_surveys_round_3",
       "african_country_surveys_round_2",
       "pacific_island_and_oceania_state_surveys",
@@ -1081,6 +1081,59 @@
         "Archive files are heterogeneous and must be accepted, versioned and cited at the original dataset level."
       ]
     },
+    "pangaea-north-africa-soil": {
+      "title": "Chemical compositions of deflatable soil fractions from North Africa",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["north-africa-sahara-sahel"],
+        "notes": "Forty-three discrete sample rows spanning publisher coordinates -13.26 to 32.50 degrees longitude and 15.67 to 33.83 degrees latitude; not a continuous regional grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.949903",
+        "parent_dataset_doi": "10.1594/PANGAEA.949906",
+        "publication_doi": "10.1016/j.quascirev.2022.107729"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.949903",
+      "interfaces": [
+        {
+          "kind": "doi_tabular_download",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile",
+          "format": "utf8_tab_separated_text",
+          "access": "open",
+          "server_filters": ["dataset_doi", "character_encoding"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "Dataset-level CC BY 4.0 permits research use with attribution to the named authors, DOI and repository."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "2022-10-25",
+        "release_date": "2022-10-25"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "pangaea_tab_dataset"
+      },
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.949903",
+        "https://doi.pangaea.de/10.1594/PANGAEA.949906"
+      ],
+      "limitations": [
+        "The table contains 43 discrete samples and cannot be described as uniform North African coverage.",
+        "The analysed material is the less-than-20-micrometre fine silt-clay fraction after HF-HNO3 digestion, so values are not automatically comparable with bulk-soil or partial-extraction surveys.",
+        "Publisher location strings include border descriptions; country must not be inferred solely from coordinates.",
+        "The source reports international reference-material agreement within plus or minus 10 percent, but no row-level detection limits are present in Table S5."
+      ]
+    },
     "pangaea-repository": {
       "title": "PANGAEA Data Publisher for Earth & Environmental Science",
       "publisher": "Alfred Wegener Institute and MARUM, University of Bremen",
@@ -1681,7 +1734,7 @@
       "source_kind": "official_national_geochemical_catalog",
       "status": "needs_human_review",
       "production_eligible": false,
-      "media": ["soil", "sediment"],
+      "media": ["sediment"],
       "coverage": {
         "extent_class": "national_partial",
         "regions": ["argentina"],
@@ -1779,47 +1832,62 @@
       "source_kind": "official_national_geochemical_database",
       "status": "needs_human_review",
       "production_eligible": false,
-      "media": ["soil", "sediment"],
+      "media": ["sediment"],
       "coverage": {
         "extent_class": "national_partial",
-        "regions": ["japan-land-and-coastal-waters"],
-        "notes": "Official database built from about 3,000 river-sediment and 5,000 marine-sediment samples across Japan and its coastal zone, with later detailed regional maps and a surface-soil addition."
+        "regions": ["japan-river-network"],
+        "notes": "This implemented dataset contains 3,024 national river-sediment sample rows. Marine sediment, later regional additions and surface soil remain separate candidate products."
       },
       "identifiers": {},
-      "landing_page": "https://gbank.gsj.jp/geochemmap/",
+      "landing_page": "https://gbank.gsj.jp/geochemmap/data/download.htm",
       "interfaces": [
         {
-          "kind": "sample_and_concentration_database",
-          "url": "https://gbank.gsj.jp/geochemmap/",
-          "format": "web_database_and_shapefile",
-          "access": "open_public_database",
-          "server_filters": ["element", "sample_medium", "region"]
+          "kind": "official_sample_csv",
+          "url": "https://gbank.gsj.jp/geochemmap/data/joho/samplejoho.csv",
+          "format": "cp932_csv_jgd2000",
+          "access": "open",
+          "server_filters": []
         },
         {
-          "kind": "wms_wmts_map_service",
-          "url": "https://gbank.gsj.jp/ows/geochemmap_en",
-          "format": "wms_1_1_1_1_3_0_wmts_1_0_0",
+          "kind": "official_concentration_csv",
+          "url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv",
+          "format": "cp932_csv",
+          "access": "open",
+          "server_filters": []
+        },
+        {
+          "kind": "wms_wmts_unit_and_visual_service",
+          "url": "https://gbank.gsj.jp/owscontents/contents/geochemmap.html",
+          "format": "wms_wmts_and_unit_inventory",
           "access": "open_public_map_service",
           "server_filters": ["element", "bbox", "crs", "scale"]
         }
       ],
       "license": {
-        "status": "open_site_terms_product_review",
-        "id": null,
-        "url": "https://gbank.gsj.jp/geochemmap/",
-        "notes": "The database and map services are public and include a terms-of-use link; the exact downloadable point-data notice, attribution and research-use conditions must be pinned before adaptation."
+        "status": "open",
+        "id": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "url": "https://www.gsj.jp/license/index.html",
+        "notes": "GSJ states that research products published on its website follow Japan Government Standard Terms of Use 2.0 and may be reused with attribution; third-party content remains excluded."
       },
-      "version": {"status": "site_snapshot", "value": "site last updated 2023-12-25", "release_date": "2023-12-25"},
-      "adapter": {"status": "not_implemented", "name": null},
+      "version": {
+        "status": "pinned",
+        "value": "sample-2024-02-20_concentration-2007-01-10",
+        "release_date": "2024-02-20"
+      },
+      "adapter": {"status": "implemented", "name": "gsj_japan_river_sediment"},
       "evidence_urls": [
         "https://www.gsj.jp/information/overview/geochemical-map.html",
-        "https://gbank.gsj.jp/geochemmap/",
-        "https://gbank.gsj.jp/owscontents/contents/geochemmap.html"
+        "https://gbank.gsj.jp/geochemmap/data/download.htm",
+        "https://gbank.gsj.jp/owscontents/contents/geochemmap.html",
+        "https://www.gsj.jp/license/index.html"
       ],
       "limitations": [
-        "River sediment, marine sediment and later surface-soil products must remain separate media and survey generations.",
-        "WMS and WMTS are derived visual products; production observations must come from sample-level concentration data.",
-        "The current site version lacks a dataset DOI or publisher checksum in the reviewed pages."
+        "The implemented pair contains river sediment only; marine sediment, regional supplements and later surface-soil products remain separate.",
+        "The 3,024 samples follow river catchments and do not form a uniform national grid.",
+        "Coordinates are JGD2000 and require explicit transformation before WGS84 output.",
+        "Sample ID 78013 occurs twice in each file and must be joined by occurrence order.",
+        "Hg is ppb while registered As, Cr, Cu, Ni, Pb and Zn values are ppm.",
+        "The CSV pair has no row-level method, detection-limit or QC fields; method evidence must be resolved from project publications."
       ]
     },
     "south-africa-cgs-geochemistry": {

@@ -39,13 +39,15 @@ source_evidence_score = 100 × Σ awarded_points / Σ applicable_weights
 
 ## 当前可复现基线
 
-截至 2026-08-05：
+截至 2026-08-06：
 
 | 来源 | 分数/等级 | use mode | 关键未完成项 |
 |---|---|---|---|
 | `georoc-archaean` | 85 / A | `normalized_analysis` | 30 条人工复核、方法/QC 完整率审计 |
 | `usgs-conus-soil` | 85 / A | `normalized_analysis` | 跨三土层 30 条人工复核、方法/QC 完整率审计 |
+| `pangaea-north-africa-soil` | 85 / A | `normalized_analysis` | 30 条人工复核；只有 43 个北非细粒组分样点，不代表连续或 bulk-soil 覆盖 |
 | `norway-marchem` | 85 / A | `normalized_analysis` | 30 条人工复核 |
+| `japan-gsj-geochemical-map` | 85 / A | `normalized_analysis` | 30 条人工复核；源 CSV 缺逐行方法、检出限与 QC |
 | `geotraces-idp2025` | 85 / A | `normalized_analysis` | 30 条人工复核、贡献者/方法完整率审计；As 由 GEMStat 淡水路由补充但背景必须隔离 |
 | `gemstat-open-archive` | 85 / A | `normalized_analysis` | 30 条人工复核；大量方法代码 0，需按方法完备性限制可比较子集 |
 

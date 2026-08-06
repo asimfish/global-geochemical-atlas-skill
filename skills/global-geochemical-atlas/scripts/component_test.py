@@ -112,9 +112,10 @@ def check_d1(output_dir: Path) -> list[str]:
         set(registry["sources"])
         == {
             "georoc-archaean", "usgs-conus-soil", "norway-marchem",
-            "geotraces-idp2025", "gemstat-open-archive",
+            "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
+            "pangaea-north-africa-soil",
         },
-        "D1 registry freezes four-media references plus a complementary freshwater arsenic route",
+        "D1 registry freezes seven executable datasets across the four required media",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -144,6 +145,26 @@ def check_d1(output_dir: Path) -> list[str]:
         and set(geotraces.registry_entry["target_analytes"]) == {"Cu", "Ni", "Zn"}
         and geotraces.registry_entry["expected_counts"]["target_observations"] == 39327,
         "D1 GEOTRACES candidate pins the seawater export and its explicit arsenic gap",
+        checks,
+    )
+    pangaea = source_contracts.registry_candidate("pangaea-north-africa-soil")
+    require(
+        pangaea.version == "2022-10-25"
+        and pangaea.license_id == "CC-BY-4.0"
+        and set(pangaea.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
+        and pangaea.registry_entry["expected_counts"]["physical_rows"] == 43
+        and pangaea.registry_entry["expected_counts"]["target_observations"] == 258,
+        "D1 PANGAEA candidate pins the concrete DOI table, six targets and exact row counts",
+        checks,
+    )
+    gsj = source_contracts.registry_candidate("japan-gsj-geochemical-map")
+    require(
+        gsj.version == "sample-2024-02-20_concentration-2007-01-10"
+        and set(gsj.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
+        and gsj.registry_entry["target_units"]["Hg"] == "ppb"
+        and gsj.registry_entry["expected_counts"]["ordinal_joined_rows"] == 3024
+        and gsj.registry_entry["expected_counts"]["duplicate_sample_id"] == "78013",
+        "D1 GSJ candidate pins both CSV versions, seven targets and occurrence-order duplicate handling",
         checks,
     )
     catalog = source_router.load_catalog()
@@ -179,9 +200,10 @@ def check_d1(output_dir: Path) -> list[str]:
         {entry["source_id"] for entry in route["selected_sources"]}
         == {
             "georoc-archaean", "usgs-conus-soil", "norway-marchem",
-            "geotraces-idp2025", "gemstat-open-archive",
+            "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
+            "pangaea-north-africa-soil",
         },
-        "D1 V3 router selects normalized-analysis routes for all media and water target analytes",
+        "D1 V3 router selects seven normalized-analysis datasets across all media",
         checks,
     )
     require(
@@ -210,8 +232,8 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         {entry["source_id"] for entry in raw_sediment_route["selected_sources"]}
-        == {"norway-marchem"},
-        "D1 V3 router can select the normalized MarChem snapshot for a raw-observation request",
+        == {"norway-marchem", "japan-gsj-geochemical-map"},
+        "D1 V3 router selects both normalized sediment sources for a raw-observation request",
         checks,
     )
     benchmark_route = source_router.route_sources(
@@ -227,8 +249,8 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         not benchmark_route["selected_sources"]
         and {entry["source_id"] for entry in benchmark_route["review_sources"]}
-        >= {"georoc-archaean", "usgs-conus-soil"},
-        "D1 keeps both A-tier sources below benchmark_ready until human review is complete",
+        >= {"georoc-archaean", "usgs-conus-soil", "pangaea-north-africa-soil"},
+        "D1 keeps A-tier rock and soil datasets below benchmark_ready until human review is complete",
         checks,
     )
     candidate_evidence = score_source_evidence.load_candidate_evidence()
@@ -241,12 +263,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 5, "B": 0, "C": 0, "D": len(catalog["sources"]) - 5, "U": 0},
+            "evidence_tiers": {"A": 7, "B": 0, "C": 0, "D": len(catalog["sources"]) - 7, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 5,
+                "normalized_analysis": 7,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 5,
+                "discovery": len(catalog["sources"]) - 7,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -589,6 +611,22 @@ def check_d1(output_dir: Path) -> list[str]:
         "gemstat-open-archive": json_value(
             SKILL_DIR / "fixtures" / "four-media" / "water" / "gemstat-open-archive" / "human_review.json"
         ),
+        "pangaea-north-africa-soil": json_value(
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "soil"
+            / "pangaea-north-africa-soil"
+            / "human_review.json"
+        ),
+        "japan-gsj-geochemical-map": json_value(
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "sediment"
+            / "japan-gsj-geochemical-map"
+            / "human_review.json"
+        ),
     }
     require(
         all(
@@ -635,8 +673,30 @@ def check_d1(output_dir: Path) -> list[str]:
             for record in prepared_reference_reviews["gemstat-open-archive"]["records"]
             for item in record["adapter_observations"]
         }
-        == {"Fair", "Good", "Pending review", "Suspect", "Unknown"},
-        "D1 review selection spans source members, layers, missing values, QC and GEMStat fraction/quality edges",
+        == {"Fair", "Good", "Pending review", "Suspect", "Unknown"}
+        and {
+            item["analyte"]
+            for record in prepared_reference_reviews["pangaea-north-africa-soil"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
+        and all(
+            record["automated_checks"]["publisher_location_preserved_without_country_inference"]
+            for record in prepared_reference_reviews["pangaea-north-africa-soil"]["records"]
+        )
+        and [
+            (record["reported_sample_id"], record["sample_id_occurrence"])
+            for record in prepared_reference_reviews["japan-gsj-geochemical-map"]["records"]
+            if record["reported_sample_id"] == "78013"
+        ]
+        == [("78013", 1), ("78013", 2)]
+        and {
+            item["unit"]
+            for record in prepared_reference_reviews["japan-gsj-geochemical-map"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"ppm", "ppb"},
+        "D1 review selection spans source members, layers, missing values, QC, fractions, locations and GSJ duplicate/unit edges",
         checks,
     )
     require(
@@ -661,13 +721,21 @@ def check_d1(output_dir: Path) -> list[str]:
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
         and matrix["cells"]["rock"]["analyte_coverage"] == "complete_for_registered_targets"
+        and matrix["cells"]["soil"]["selected_sources"]
+        == ["pangaea-north-africa-soil", "usgs-conus-soil"]
+        and matrix["cells"]["soil"]["analyte_source_counts"]
+        == {"As": 2, "Cu": 2, "Ni": 2, "Zn": 2}
+        and matrix["cells"]["sediment"]["selected_sources"]
+        == ["japan-gsj-geochemical-map", "norway-marchem"]
+        and matrix["cells"]["sediment"]["analyte_source_counts"]
+        == {"As": 2, "Cu": 2, "Ni": 2, "Zn": 2}
         and matrix["cells"]["water"]["analyte_coverage"] == "complete_for_registered_targets"
         and matrix["cells"]["water"]["missing_analytes"] == []
         and matrix["cells"]["water"]["source_independence"]
         == "multiple_sources_but_single_source_per_analyte"
         and matrix["cells"]["water"]["analyte_source_counts"]
         == {"As": 1, "Cu": 1, "Ni": 1, "Zn": 1},
-        "D1 coverage matrix closes the registered water analyte gap without overclaiming independent replication",
+        "D1 coverage matrix keeps rock, soil, sediment and water source independence explicit",
         checks,
     )
     archive_bundle = json_value(SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json")
@@ -872,6 +940,8 @@ def check_d1(output_dir: Path) -> list[str]:
         "norway-marchem": 112,
         "geotraces-idp2025": 48,
         "gemstat-open-archive": 48,
+        "japan-gsj-geochemical-map": 48,
+        "pangaea-north-africa-soil": 48,
     }
     for source_id, expected_demo_count in expected_demo_counts.items():
         demo_dir = SOURCE_DEMOS / source_id
@@ -982,6 +1052,42 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 GEOTRACES fixture retains dissolved fraction, depth and accepted source QC",
         checks,
     )
+    pangaea_demo_rows = csv_rows(SOURCE_DEMOS / "pangaea-north-africa-soil" / "demo_input.csv")
+    pangaea_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "pangaea-north-africa-soil" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        {row["measurement_basis"] for row in pangaea_demo_rows}
+        == {"deflatable_soil_fraction_total_acid_digest"}
+        and {row["grain_fraction"] for row in pangaea_demo_rows}
+        == {"<20 µm fine silt-clay fraction"}
+        and {row["digestion_or_extraction"] for row in pangaea_demo_rows}
+        == {"HF-HNO3 acid digestion"}
+        and all(item["reported_location"] for item in pangaea_evidence),
+        "D1 PANGAEA fixture retains fine-fraction, digestion and publisher location semantics",
+        checks,
+    )
+    gsj_demo_rows = csv_rows(SOURCE_DEMOS / "japan-gsj-geochemical-map" / "demo_input.csv")
+    gsj_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "japan-gsj-geochemical-map" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        {row["measurement_basis"] for row in gsj_demo_rows}
+        == {"river_sediment_<180um_national_geochemical_map"}
+        and {row["grain_fraction"] for row in gsj_demo_rows}
+        == {"<180 µm fine stream sediment"}
+        and {row["coordinate_uncertainty_m"] for row in gsj_demo_rows} == {"20"}
+        and all(item["original_coordinate_crs"] == "EPSG:4612 (JGD2000)" for item in gsj_evidence)
+        and all(item["sample_file_sha256"] == "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c" for item in gsj_evidence),
+        "D1 GSJ fixture retains fine-sediment, JGD2000 and two-file evidence semantics",
+        checks,
+    )
 
     combined_manifest = json_value(COMBINED_DEMO / "run_manifest.json")
     combined_rows = csv_rows(COMBINED_DEMO / "demo_input.csv")
@@ -990,23 +1096,25 @@ def check_d1(output_dir: Path) -> list[str]:
         for line in (COMBINED_DEMO / "sources.jsonl").read_text(encoding="utf-8").splitlines()
     ]
     require(
-        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 304
+        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 400
         and combined_manifest["record_counts"]["by_medium"]
-        == {"rock": 48, "sediment": 112, "soil": 48, "water": 96}
+        == {"rock": 48, "sediment": 160, "soil": 96, "water": 96}
         and combined_manifest["record_counts"]["by_source"]
         == {
             "gemstat-open-archive": 48,
             "georoc-archaean": 48,
             "geotraces-idp2025": 48,
+            "japan-gsj-geochemical-map": 48,
             "norway-marchem": 112,
+            "pangaea-north-africa-soil": 48,
             "usgs-conus-soil": 48,
         },
-        "D1 combined fixture binds all five routes to one 304-observation four-media request",
+        "D1 combined fixture binds all seven datasets to one 400-observation four-media request",
         checks,
     )
     require(
         combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
-        and combined_manifest["comparison_isolation"]["partition_count"] == 34
+        and combined_manifest["comparison_isolation"]["partition_count"] == 46
         and combined_manifest["comparison_isolation"]["water_partition_count"] == 13,
         "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
         checks,
@@ -1023,12 +1131,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         output_validator.validate_dir(combined_output)["status"] == "valid"
         and combined_summary["status"] == "success"
-        and combined_summary["metrics"]["record_count"] == 304
-        and combined_summary["metrics"]["standardized_record_count"] == 304
-        and combined_summary["metrics"]["valid_coordinate_count"] == 304
+        and combined_summary["metrics"]["record_count"] == 400
+        and combined_summary["metrics"]["standardized_record_count"] == 400
+        and combined_summary["metrics"]["valid_coordinate_count"] == 400
         and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
         and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
-        and len(combined_anomaly["groups"]) == 34
+        and len(combined_anomaly["groups"]) == 46
         and all(len(sources) == 1 for sources in grouped_sources.values()),
         "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
         checks,
@@ -1048,7 +1156,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 (rebuilt_dir / filename).read_bytes() == (COMBINED_DEMO / filename).read_bytes()
                 for filename in ("demo_input.csv", "sources.jsonl", "run_manifest.json")
             ),
-            "D1 combined fixture rebuilds byte-for-byte from the five checked-in source demos",
+            "D1 combined fixture rebuilds byte-for-byte from the seven checked-in source demos",
             checks,
         )
         rebuilt_output = temporary_root / "output"

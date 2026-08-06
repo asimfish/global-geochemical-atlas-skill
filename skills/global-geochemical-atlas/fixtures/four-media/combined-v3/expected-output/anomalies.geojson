@@ -133,6 +133,32 @@
     {
       "geometry": {
         "coordinates": [
+          127.7467,
+          26.3626
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": "0那覇",
+        "group_id": "grp-477650e24e2e",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 1522.586,
+        "record_id": "rec-9a84b1a74bd5bce5bc4913ec6799f58971dc3d37154c2b22feef2bcb6b5e629b",
+        "robust_z": 6.458494,
+        "sample_id": "5",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
           6.25,
           65.0408
         ],

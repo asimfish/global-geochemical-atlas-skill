@@ -4,25 +4,25 @@
     "confidence_version": "d2-confidence-v1",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "input_sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82",
     "not_a_probability": true,
-    "run_id": "9d3f753cdb7cf11c",
-    "sha256": "40a1c3f94ee57ddf922998323d4136453624929b5d95e2aa8d9088cc20cdc819"
+    "run_id": "21393419fa0625e9",
+    "sha256": "3e4df6d64b160258a5dbc5b97bbafce95c7a3512b7e733658a6d1982fc8ca9d5"
   },
   "coverage": {
     "declared_license_rate": 1.0,
-    "records_with_declared_license": 304,
-    "records_with_source_locator": 304,
+    "records_with_declared_license": 400,
+    "records_with_source_locator": 400,
     "source_locator_rate": 1.0
   },
   "input": {
-    "bytes": 147303,
+    "bytes": 188291,
     "filename": "demo_input.csv",
-    "record_count": 304,
-    "sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d"
+    "record_count": 400,
+    "sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82"
   },
   "manifest_version": "geochemical-source-manifest-v1",
-  "source_count": 5,
+  "source_count": 7,
   "sources": [
     {
       "all_records_license_declared": true,
@@ -98,6 +98,29 @@
       "all_records_located": true,
       "evidence_type": "source_declared_in_input",
       "example_locators": [
+        "samplejoho.csv#row=10;noudo.csv#row=10",
+        "samplejoho.csv#row=11;noudo.csv#row=11",
+        "samplejoho.csv#row=12;noudo.csv#row=12",
+        "samplejoho.csv#row=13;noudo.csv#row=13",
+        "samplejoho.csv#row=2;noudo.csv#row=2"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-GSJ-Government-Standard-Terms-2.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_id": "japan-gsj-geochemical-map",
+      "source_tiers": [
+        "government"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
         "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1006",
         "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1014",
         "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1015",
@@ -114,6 +137,29 @@
       "source_id": "norway-marchem",
       "source_tiers": [
         "government"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "Table_S5.tab#row=115",
+        "Table_S5.tab#row=116",
+        "Table_S5.tab#row=117",
+        "Table_S5.tab#row=118",
+        "Table_S5.tab#row=119"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_id": "pangaea-north-africa-soil",
+      "source_tiers": [
+        "official_curated"
       ]
     },
     {

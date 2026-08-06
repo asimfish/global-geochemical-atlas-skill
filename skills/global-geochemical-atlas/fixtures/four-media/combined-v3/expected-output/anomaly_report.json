@@ -1,5 +1,5 @@
 {
-  "candidate_count": 10,
+  "candidate_count": 11,
   "caveat": "Candidates are relative to the declared background group and do not establish pollution, mineralization, provenance, or cause.",
   "group_by": [
     "element_or_analyte",
@@ -88,6 +88,63 @@
       "records_excluded": 3,
       "records_total": 17,
       "records_used": 14,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "As",
+        "geologic_unit": "0与論島",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-21061bd48aec",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 1,
+      "records_used": 1,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "As",
+        "geologic_unit": "0那覇",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-27dc89682619",
+      "log10_mad": 0.112704280191,
+      "log10_median": 1.033423755487,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "digestion_or_extraction": "HF-HNO3 acid digestion",
+        "element_or_analyte": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil"
+      },
+      "group_id": "grp-9081ab518c18",
+      "log10_mad": 0.085740785013,
+      "log10_median": 1.035332138569,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
       "status": "analyzed"
     },
     {
@@ -379,6 +436,63 @@
         "analytical_method": null,
         "digestion_or_extraction": null,
         "element_or_analyte": "Cu",
+        "geologic_unit": "0与論島",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-0845bcc797f5",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 1,
+      "records_used": 1,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 1,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Cu",
+        "geologic_unit": "0那覇",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-477650e24e2e",
+      "log10_mad": 0.180854257246,
+      "log10_median": 1.450833933891,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "digestion_or_extraction": "HF-HNO3 acid digestion",
+        "element_or_analyte": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil"
+      },
+      "group_id": "grp-f4c056209f5b",
+      "log10_mad": 0.081210558547,
+      "log10_median": 1.640057802417,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Cu",
         "geologic_unit": null,
         "measurement_basis": "total_or_near_total_<2mm",
         "medium": "soil"
@@ -552,6 +666,63 @@
         "analytical_method": null,
         "digestion_or_extraction": null,
         "element_or_analyte": "Ni",
+        "geologic_unit": "0与論島",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-d86c600e7c0c",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 1,
+      "records_used": 1,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
+        "geologic_unit": "0那覇",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-8fc9281dfcb7",
+      "log10_mad": 0.089814031744,
+      "log10_median": 1.451371893184,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "digestion_or_extraction": "HF-HNO3 acid digestion",
+        "element_or_analyte": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil"
+      },
+      "group_id": "grp-fc661e02d277",
+      "log10_mad": 0.067191462604,
+      "log10_median": 1.795184450262,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Ni",
         "geologic_unit": null,
         "measurement_basis": "total_or_near_total_<2mm",
         "medium": "soil"
@@ -649,6 +820,63 @@
         "analytical_method": null,
         "digestion_or_extraction": null,
         "element_or_analyte": "Zn",
+        "geologic_unit": "0与論島",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-a9c8041086f9",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 0,
+      "records_total": 1,
+      "records_used": 1,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Zn",
+        "geologic_unit": "0那覇",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment"
+      },
+      "group_id": "grp-6073586e1499",
+      "log10_mad": 0.262554365958,
+      "log10_median": 2.066802828173,
+      "records_excluded": 0,
+      "records_total": 11,
+      "records_used": 11,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "digestion_or_extraction": "HF-HNO3 acid digestion",
+        "element_or_analyte": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil"
+      },
+      "group_id": "grp-82853503015b",
+      "log10_mad": 0.09159693821,
+      "log10_median": 2.110691989818,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": null,
+        "digestion_or_extraction": null,
+        "element_or_analyte": "Zn",
         "geologic_unit": null,
         "measurement_basis": "total_or_near_total_<2mm",
         "medium": "soil"
@@ -699,10 +927,10 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 304,
-    "input_sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "input_row_count": 400,
+    "input_sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82",
     "missing_recommended_input_columns": [],
-    "run_id": "9d3f753cdb7cf11c"
+    "run_id": "21393419fa0625e9"
   },
   "scientific_status": "screening_baseline_only"
 }

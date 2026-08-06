@@ -1,6 +1,6 @@
 # 公开地球化学数据源路由
 
-核对日期：2026-08-05。端点和许可可能变化；每次运行重新记录访问日期和实际响应。
+核对日期：2026-08-06。端点和使用条件可能变化；每次运行重新记录访问日期和实际响应。
 
 ## 优先级
 
@@ -42,6 +42,26 @@
 - 获取：USGS Publications Warehouse 的三个直接 HTTPS 文件；
 - 校验：注册表中的 SHA-256 是 2026-08-05 从官方 URL 观测所得，不冒充发布方 checksum；每次下载仍记录响应元数据和实际 SHA-256；
 - 科学边界：三种土层不得静默合并；legacy qualifier 和单位必须按该数据集自己的元数据解码。
+
+### `pangaea-north-africa-soil`
+
+- 数据集：Chemical compositions of deflatable soil fractions from North Africa；
+- DOI：具体表 DOI `10.1594/PANGAEA.949903`，父数据包 DOI `10.1594/PANGAEA.949906`；
+- 当前冻结版本：2022-10-25，直接数据成员 `Table_S5.tab`；
+- 许可：CC BY 4.0；
+- 获取：PANGAEA DOI 的 `?format=textfile` 官方 TSV 响应；
+- 校验：30,336 bytes，SHA-256 `de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485`；43 个源行、48 个元素字段、As/Cr/Cu/Ni/Pb/Zn 各 43 条；
+- 科学边界：可风蚀细粒组分经 HF-HNO3 消解和 ICP-MS 分析，不代表北非连续覆盖或通用 bulk-soil 总量；保留发布方地点文字，边境样点不按坐标猜国家。
+
+### `japan-gsj-geochemical-map`
+
+- 数据集：GSJ Geochemical Map of Japan 全国河流沉积物样点与浓度表；
+- 当前冻结版本：`samplejoho.csv` 更新 2024-02-20，`noudo.csv` 更新 2007-01-10；
+- 使用条件：GSJ 说明其网站研究成果依日本政府标准利用规约 2.0 使用并要求署名；第三方内容排除在外；
+- 获取：GSJ 官方下载页的两个 CSV，使用 CP932/Shift-JIS 解码；
+- 校验：样点表 334,302 bytes / SHA-256 `9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c`；浓度表 1,198,951 bytes / SHA-256 `0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671`；按出现序号连接得到 3,024/3,024 行，零漏连；
+- 坐标与单位：原始坐标系 JGD2000（EPSG:4612）；Hg 为 ppb，其他登记痕量元素为 ppm；
+- 科学边界：本适配器只覆盖细粒河流沉积物，不把海洋沉积物、表层土壤或 WMS 派生图层混入；源 CSV 没有逐行分析方法、检出限和 QC，必须显式保留缺失。
 
 ### `geotraces-idp2025`
 

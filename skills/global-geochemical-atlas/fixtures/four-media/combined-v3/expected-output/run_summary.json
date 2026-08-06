@@ -3,7 +3,7 @@
     "bbox": [
       -137.97,
       -6.7,
-      120.72,
+      128.0647,
       81.409639
     ],
     "coordinate_rate": 1.0,
@@ -25,28 +25,28 @@
   },
   "input": {
     "filename": "demo_input.csv",
-    "record_count": 304,
-    "sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "record_count": 400,
+    "sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82",
     "synthetic_demo": false
   },
   "limitations": [
     "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
     "Map density uses observed points only; no interpolation is performed across unsampled areas.",
-    "16 anomaly background group(s) were not analyzed due to explicit failure states."
+    "20 anomaly background group(s) were not analyzed due to explicit failure states."
   ],
   "map_report": {
-    "candidate_record_count": 10,
+    "candidate_record_count": 11,
     "external_assets": 0,
     "interpolation": false,
     "map_version": "self-contained-svg-v1",
-    "mapped_record_count": 304
+    "mapped_record_count": 400
   },
   "metrics": {
-    "candidate_anomaly_count": 10,
+    "candidate_anomaly_count": 11,
     "censored_record_count": 20,
-    "record_count": 304,
-    "standardized_record_count": 304,
-    "valid_coordinate_count": 304
+    "record_count": 400,
+    "standardized_record_count": 400,
+    "valid_coordinate_count": 400
   },
   "next_actions": [
     "Inspect source_manifest.json and record-level source locators before scientific reuse.",

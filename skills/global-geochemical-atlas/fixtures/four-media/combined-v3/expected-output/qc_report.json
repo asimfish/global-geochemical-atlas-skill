@@ -7,13 +7,13 @@
   },
   "flag_counts": {
     "CENSORED_VALUE": 20,
-    "MISSING_ANALYTICAL_METHOD": 144,
-    "MISSING_COORDINATE_UNCERTAINTY": 304,
-    "MISSING_DIGESTION_OR_EXTRACTION": 96
+    "MISSING_ANALYTICAL_METHOD": 192,
+    "MISSING_COORDINATE_UNCERTAINTY": 352,
+    "MISSING_DIGESTION_OR_EXTRACTION": 144
   },
   "pipeline_version": "d2-pipeline-v1",
-  "record_count": 304,
-  "records_with_numeric_value_or_limit": 304,
+  "record_count": 400,
+  "records_with_numeric_value_or_limit": 400,
   "run_metadata": {
     "configuration": {
       "group_by": [
@@ -28,16 +28,16 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 304,
-    "input_sha256": "ea2f06d8d9dd30ea7530449f4ce8812dee463c17e1f5d7e9749ec95cada2240d",
+    "input_row_count": 400,
+    "input_sha256": "ba6d9d7cdab4467854d52661537e196bbaafbdb4aa1c9be4f302533f621fbf82",
     "missing_recommended_input_columns": [],
-    "run_id": "9d3f753cdb7cf11c"
+    "run_id": "21393419fa0625e9"
   },
   "severity_counts": {
     "info": 20,
-    "warning": 544
+    "warning": 688
   },
   "standardization_rate": 1.0,
-  "standardized_record_count": 304,
-  "valid_coordinate_count": 304
+  "standardized_record_count": 400,
+  "valid_coordinate_count": 400
 }

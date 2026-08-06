@@ -2,18 +2,20 @@
 
 复核标准：`geochemical-source-evidence-v3`
 
-更新时间：2026-08-05 23:41（Asia/Shanghai）
+更新时间：2026-08-06 12:00（Asia/Shanghai）
 
 ## 当前结论
 
-四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；水体有海水与淡水两条互补路由，因此共五个来源，当前都是 85 分、A 级、`normalized_analysis`。五份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；土壤、沉积物和水体各有两条互补路由，因此共七个来源，当前都是 85 分、A 级、`normalized_analysis`。七份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
 | `georoc-archaean` | DOI v12.0、28 个固定成员及校验、33,745 条源记录解析、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖太古宙克拉通专题 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
 | `usgs-conus-soil` | USGS 固定发布、三层文件及 hash、14,571 条源记录解析、48 条 fixture 地图运行、跨三层 30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只覆盖美国本土 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
+| `pangaea-north-africa-soil` | 具体 DOI、CC BY 4.0、固定 TSV/hash、43 行及六个目标元素各 43 条对账、48 条 fixture、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；只有北非 43 个可风蚀细粒组分样点 | A 级 `normalized_analysis`，补充非洲土壤但尚未达到 `benchmark_ready` |
 | `geotraces-idp2025` | 官方 DOI/IDP2025、CC BY 4.0/Fair Data Use、WebODV 冻结快照、242 个成员及 hash、69,704 行/39,327 条 Cu/Ni/Zn 观测对账、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；贡献者/方法完整率仍需审计；官方海水变量表没有 As | A 级 `normalized_analysis`，尚未达到 `benchmark_ready`；As 由 GEMStat 淡水路由补充且保持背景隔离 |
 | `norway-marchem` | 官方公开 API、CC BY 4.0/NLOD、目标元素字段、单位、批次方法、观测 hash、完整成员清单、canonical 适配器、1,070 行对账和地图运行 | 30 条人工回看尚待完成 | A 级 `normalized_analysis`，尚未达到 `benchmark_ready` |
+| `japan-gsj-geochemical-map` | 官方双 CSV、文件版本/hash、CP932 解码、JGD2000、3,024/3,024 序号连接、七元素/单位对账、48 条 fixture、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；源 CSV 缺逐行方法、检出限和 QC | A 级 `normalized_analysis`，补充独立河流沉积物区域但尚未达到 `benchmark_ready` |
 | `gemstat-open-archive` | v3 版本 DOI、CC BY 4.0、五个精确 ZIP range、492,999 条 As 观测、站点/参数/方法连接、48 条 fixture 地图运行、30 条复核单机器比对 30/30 通过 | 人工决定尚未签署；大量方法代码 0；33 国覆盖不均；重复、删失和 Pending review 值需分层使用 | A 级 `normalized_analysis`，补齐登记中的水体 As，但尚未达到 `benchmark_ready` |
 
 ## `georoc-archaean` 与 `usgs-conus-soil` 复核准备
@@ -23,6 +25,24 @@ GEOROC 复核单从完整 33,745 条缓存源记录中选择 30 个源行，覆�
 USGS 复核单从三个各 4,857 行的土层文件中分别选择 10 行，共 30 行、120 条 As/Cu/Ni/Zn 观测。每条机器检查均确认文件 hash、样品 ID、坐标、土层、四元素原值与单位、深度语义和稳定观测 ID。
 
 两份复核单均为 `status=prepared`、`automated_pass_count=30`、`completed_record_count=0`。自动通过只证明待检查内容与 hash 固定的源文件和适配器一致；人工签署前，人工复核维度仍为 `missing`、0 分。相关文件位于 `fixtures/four-media/rock/georoc-archaean/human_review.json` 和 `fixtures/four-media/soil/usgs-conus-soil/human_review.json`。
+
+## `pangaea-north-africa-soil` 复核
+
+- 具体表 DOI `10.1594/PANGAEA.949903`；父包 DOI `10.1594/PANGAEA.949906` 用于补充粒级、方法、参考物质和论文关系；
+- 官方 `Table_S5.tab` 为 30,336 bytes，SHA-256 `de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485`；
+- 解析 43 个源行、48 个元素字段，共 2,061 个非空元素值；As/Cr/Cu/Ni/Pb/Zn 各有 43 条，六元素合计 258 条登记目标观测；
+- 数据集说明使用 HF-HNO3 消解和 Agilent 7900 ICP-MS；父包说明样品是可风蚀细粒组分，并报告参考物质结果处于目标值 ±10% 范围；
+- 30 条分层复核记录已准备且机器比对 30/30 通过，人工决定为空；48 条 demo 从 12 个源行生成 As/Cu/Ni/Zn 各 12 条；
+- 适用范围仅是 43 个离散样点。边境样点保留发布方地点文字，不按坐标强制赋国家，也不能把外包矩形解释为连续覆盖。
+
+## `japan-gsj-geochemical-map` 复核
+
+- 官方文件对为 `samplejoho.csv`（334,302 bytes，SHA-256 `9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c`）和 `noudo.csv`（1,198,951 bytes，SHA-256 `0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671`）；
+- 两表均按 CP932/Shift-JIS 解码。样点表 3,024 行，浓度表 3,024 个有效行；按“规范化样品号 + 出现序号”连接后 3,024/3,024，零漏连；
+- 唯一重复样品号 `78013` 在两表中都出现两次，两次记录均保留，未被普通字典覆盖；
+- As/Cr/Cu/Hg/Ni/Pb/Zn 各有 3,024 条。Hg 是 ppb，其他登记痕量元素是 ppm；原始坐标系是 JGD2000；
+- 30 条复核记录覆盖重复键和单位边界，机器比对 30/30 通过，人工决定为空；48 条 demo 从 12 个样点生成 As/Cu/Ni/Zn 各 12 条；
+- 本适配器只接河流沉积物。源 CSV 对没有逐行方法、检出限和 QC，适配器保持缺失，不把 GSJ 的海洋沉积物、表层土壤或 WMS 图层混入。
 
 ## `norway-marchem` 复核
 
@@ -223,21 +243,23 @@ SeaDataNet QC 码按原值保留：1=good、2=probably good、3=probably bad、4
 
 ## 四介质联合运行
 
-`fixtures/four-media/combined-v3/request.json` 以 `sources=auto` 请求 As/Cu/Ni/Zn 和 rock/soil/sediment/water。路由选择五个 A 级 `normalized_analysis` 来源，`scripts/build_four_media_demo.py` 验证每个来源 fixture 的 manifest hash 和逐观测证据后再合并：
+`fixtures/four-media/combined-v3/request.json` 以 `sources=auto` 请求 As/Cu/Ni/Zn 和 rock/soil/sediment/water。路由选择七个 A 级 `normalized_analysis` 来源，`scripts/build_four_media_demo.py` 验证每个来源 fixture 的 manifest hash 和逐观测证据后再合并：
 
 | 介质/来源 | 观测数 |
 |---|---:|
 | rock / GEOROC | 48 |
 | soil / USGS | 48 |
+| soil / PANGAEA North Africa | 48 |
 | sediment / MarChem | 112 |
+| sediment / GSJ Japan | 48 |
 | water / GEOTRACES | 48 |
 | water / GEMStat | 48 |
-| 合计 | 304 |
+| 合计 | 400 |
 
-联合流程得到 304/304 标准化、304/304 有效坐标、20 条删失记录和完整九文件输出。D2 的默认背景键形成 34 个组：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源，GEOTRACES 海水 `nmol/kg`、GEMStat 三种淡水 As 分相、MarChem 部分消解、USGS 土层和 GEOROC 预编译值没有跨边界合并。
+联合流程得到 400/400 标准化、400/400 有效坐标、20 条删失记录和完整九文件输出。D2 的默认背景键形成 46 个组：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源；除既有海水/淡水、分相、部分消解、土层和岩石选择值边界外，PANGAEA 细粒 HF-HNO3 土壤与 USGS 土层、GSJ 来源特定单位和方法缺失边界也未被混合。
 
-筛查产生 10 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从五个来源 fixture 字节级重建。
+筛查产生 11 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从七个来源 fixture 字节级重建。
 
 ## 复核边界
 
-本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质都有 `normalized_analysis` 路由，但仍是专题、国家、区域、航次或自愿提交覆盖，全部保持 `partial`。水体登记目标元素现已齐全，但 As、Cu、Ni、Zn 各自仍只有一个来源，海水与淡水也必须隔离比较。
+本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质都有 `normalized_analysis` 路由，但仍是专题、国家、区域、航次或自愿提交覆盖，全部保持 `partial`。土壤和沉积物虽各有两个来源，但粒级、消解、海洋/河流与方法边界使它们不能自动构成同背景复测；水体 As、Cu、Ni、Zn 各自仍只有一个来源，海水与淡水也必须隔离比较。

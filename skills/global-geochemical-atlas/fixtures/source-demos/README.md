@@ -26,6 +26,16 @@
 - 内容：0–5 cm、A horizon、C horizon 各选择 4 个源样品，每个样品保留 As、Cu、Ni、Zn；
 - 边界：三个土层保持可区分，legacy qualifier 和科学标准化由 D2 处理。
 
+## PANGAEA 北非土壤 demo
+
+目录：`pangaea-north-africa-soil/`。
+
+- 来源：PANGAEA 具体子数据集 DOI `10.1594/PANGAEA.949903`，不是 PANGAEA 通用入口；
+- 许可：CC BY 4.0；
+- 内容：43 个离散样点中选择 12 个源行，平衡保留 As、Cu、Ni、Zn 各 12 条，共 48 条；完整适配器另对账六个登记目标元素各 43 条；
+- 方法边界：样品是可风蚀细粒土壤组分，使用 HF-HNO3 消解和 ICP-MS；不能与不同粒级、不同消解的 bulk-soil 调查静默合并；
+- 空间边界：保留发布方地点文字，边境样点不按坐标强制归属国家。
+
 ## MarChem demo
 
 目录：`norway-marchem/`。
@@ -35,6 +45,16 @@
 - 内容：从已经准备的 30 条分层复核记录中保留 28 条含目标元素的源行，生成 As、Cu、Ni、Zn 各 28 条，共 112 条观测；
 - 方法边界：所有值均为干重 `mg/kg` 的部分硝酸消解结果，不代表总含量；批次认可状态和 LLQ 按观测保留；
 - 关系边界：完整快照的 1,070 行对应 880 个样品，fixture 不把第二参数组产生的附加行误算成新样品。
+
+## GSJ 日本河流沉积物 demo
+
+目录：`japan-gsj-geochemical-map/`。
+
+- 来源：GSJ 日本全国地球化学图的 `samplejoho.csv` 和 `noudo.csv` 固定文件对；
+- 使用条件：GSJ 网站研究成果按日本政府标准利用规约 2.0 使用并署名，第三方内容仍需单独核对；
+- 内容：3,024 个细粒河流沉积物源行中选择 12 个样品，平衡生成 As、Cu、Ni、Zn 各 12 条，共 48 条；
+- 编码和坐标：两表按 CP932/Shift-JIS 解码，原始坐标系是 JGD2000；演示按 WGS84 展示并设置 20 m 不确定度下限；
+- 关系边界：重复样品号 `78013` 按两表中的出现序号配对，绝不使用会覆盖重复键的普通字典连接；Hg 为 ppb，其他登记痕量元素为 ppm；源 CSV 没有逐行方法、检出限或 QC 字段，适配器不补猜。
 
 ## GEOTRACES demo
 
@@ -78,6 +98,14 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --generated-at 2026-08-05T06:25:00Z
 
 python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source pangaea-north-africa-soil \
+  --cache-dir .cache/data \
+  --output-dir /tmp/pangaea-north-africa-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-06T03:13:54Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --source norway-marchem \
   --cache-dir .cache/data \
   --archive /path/to/marchem-inorganic-2003-2024.zip \
@@ -85,6 +113,14 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --mode cached \
   --observations 112 \
   --generated-at 2026-08-05T12:50:00Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source japan-gsj-geochemical-map \
+  --cache-dir .cache/data \
+  --output-dir /tmp/gsj-japan-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-06T03:48:23Z
 
 python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --source geotraces-idp2025 \
@@ -107,6 +143,6 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将以上五个来源合并到同一个 `sources=auto` 请求：304 条观测包括 rock 48、soil 48、sediment 112、water 96。`run_manifest.json` 绑定五个输入 fixture 的 hash、来源证据等级、路由结果和 34 个 D2 比较分区；`expected-output/` 是可字节级重建的九文件工作流结果。
+`fixtures/four-media/combined-v3/` 将以上七个来源合并到同一个 `sources=auto` 请求：400 条观测包括 rock 48、soil 96、sediment 160、water 96。`run_manifest.json` 绑定七个输入 fixture 的 hash、来源证据等级、路由结果和 46 个 D2 比较分区；`expected-output/` 是可字节级重建的九文件工作流结果。
 
-这只是接口联合测试。34 个背景组按元素、介质、measurement basis、地质单元、方法和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 10 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。
+这只是接口联合测试。46 个背景组按元素、介质、measurement basis、地质单元、方法和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 11 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。

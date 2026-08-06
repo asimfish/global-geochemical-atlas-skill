@@ -9987,6 +9987,3126 @@
         "value": 0.2
       },
       "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7603,
+          26.1292
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-21ed06b4109e5e259944a3dadd1e8be408eb2d98d7c1347606b29be73c774b2f",
+        "sample_id": "1",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=2;noudo.csv#row=2",
+        "unit": "mg/kg",
+        "value": 14.0
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7603,
+          26.1292
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-e28eb4bd302489e1caae72d45c0d1194a7fd4d19d9e416e5f09bb830c0a8d1c4",
+        "sample_id": "1",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=2;noudo.csv#row=2",
+        "unit": "mg/kg",
+        "value": 38.419
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7603,
+          26.1292
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-b5b93e3f23a43723d681de4375907a13bf88ed4d563ba6962eeefba6b48e070f",
+        "sample_id": "1",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=2;noudo.csv#row=2",
+        "unit": "mg/kg",
+        "value": 22.991
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7603,
+          26.1292
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-00fa4475cd64304171a6e3183dad07955f57805029a4634598341d90b8ae7b0a",
+        "sample_id": "1",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=2;noudo.csv#row=2",
+        "unit": "mg/kg",
+        "value": 179.048
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6876,
+          26.1366
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-71d0932941ad28f5ede29973302aee8288ec0d5803285d3f028cef2edc07855c",
+        "sample_id": "2",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=3;noudo.csv#row=3",
+        "unit": "mg/kg",
+        "value": 11.3
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6876,
+          26.1366
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-6af7813b6f35930d5b596f9a7753fec3fbe0073c1f94ceb42db8f24ecc75bfb9",
+        "sample_id": "2",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=3;noudo.csv#row=3",
+        "unit": "mg/kg",
+        "value": 46.571
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6876,
+          26.1366
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-b27b76c1313569823db14f1ffce183da99525fbc4b495d5dac716bd30ad4f214",
+        "sample_id": "2",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=3;noudo.csv#row=3",
+        "unit": "mg/kg",
+        "value": 43.744
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6876,
+          26.1366
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-5e6f85c1e626e9b294afce8be8be8126fa5e879c6b7eb1f37f98baf4640a725d",
+        "sample_id": "2",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=3;noudo.csv#row=3",
+        "unit": "mg/kg",
+        "value": 188.216
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6799,
+          26.2014
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9f29f75db722207a46e14f89c1232ce7533a1cbb42a84234e1a3427742d0d522",
+        "sample_id": "3",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=4;noudo.csv#row=4",
+        "unit": "mg/kg",
+        "value": 11.3
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6799,
+          26.2014
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-d04f593701d8f99b5ac11936f52a05ad80e9a39d8833eb36c4f93f1e2e1642da",
+        "sample_id": "3",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=4;noudo.csv#row=4",
+        "unit": "mg/kg",
+        "value": 48.938
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6799,
+          26.2014
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-88bcacc4706b88a8e93cae159020efcf0a46c7a8fcfd638e89e9e2fb4f630484",
+        "sample_id": "3",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=4;noudo.csv#row=4",
+        "unit": "mg/kg",
+        "value": 36.417
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.6799,
+          26.2014
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-befec849d09912a3a087c50ec3231d003e176cf9dda2304fee2f1b13f359e0b2",
+        "sample_id": "3",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=4;noudo.csv#row=4",
+        "unit": "mg/kg",
+        "value": 213.48
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7281,
+          26.2677
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-d88a4290c6ad13ced4a92e2b5d846ff01631a1caa5e2d8c98d9dd7b41cb70b44",
+        "sample_id": "4",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=5;noudo.csv#row=5",
+        "unit": "mg/kg",
+        "value": 10.8
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7281,
+          26.2677
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-92efb73dcbe3476a671249c7ea3790bbfbe6ecccbd76a8e2aaf8d8abfd52c7f2",
+        "sample_id": "4",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=5;noudo.csv#row=5",
+        "unit": "mg/kg",
+        "value": 35.481
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7281,
+          26.2677
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-8a1e43ea89dd541d7d4536af3365e005113c9bf8f26150921487751836b0250e",
+        "sample_id": "4",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=5;noudo.csv#row=5",
+        "unit": "mg/kg",
+        "value": 28.885
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7281,
+          26.2677
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-43035afa63a94e030d55224cb6670f1acf38a95542db6f8a2855c4070f8f0306",
+        "sample_id": "4",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=5;noudo.csv#row=5",
+        "unit": "mg/kg",
+        "value": 169.028
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7467,
+          26.3626
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f99a4b26bec0cb594555cadab5f19b96f4eacb2c566d3977fc1876a4e5e32da6",
+        "sample_id": "5",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=6;noudo.csv#row=6",
+        "unit": "mg/kg",
+        "value": 24.6
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7467,
+          26.3626
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": true,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9a84b1a74bd5bce5bc4913ec6799f58971dc3d37154c2b22feef2bcb6b5e629b",
+        "sample_id": "5",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=6;noudo.csv#row=6",
+        "unit": "mg/kg",
+        "value": 1522.586
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7467,
+          26.3626
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-293f49fb3f0df3647b6e3656678a278ef2f1d91f2baa084dc90d5f742c0c1698",
+        "sample_id": "5",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=6;noudo.csv#row=6",
+        "unit": "mg/kg",
+        "value": 36.856
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7467,
+          26.3626
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-94b65260d748417971363e9b92e584387d0c8638c1626d2cb02fe660cacc43e7",
+        "sample_id": "5",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=6;noudo.csv#row=6",
+        "unit": "mg/kg",
+        "value": 367.473
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8692,
+          26.3763
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f06fda59b5ddcb841438e23e6e548aef0a1c22638da208f38a17a67690287f0c",
+        "sample_id": "6",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=7;noudo.csv#row=7",
+        "unit": "mg/kg",
+        "value": 19.0
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8692,
+          26.3763
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-55f6d23a47aee3ae4ab36c1ec04d2284b5f08d58a6f2185fb140f3e8b69617ef",
+        "sample_id": "6",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=7;noudo.csv#row=7",
+        "unit": "mg/kg",
+        "value": 28.238
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8692,
+          26.3763
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-a372d090d26fa07a7393d28b341a36806e67ef7cd9e9e2ee7e9e4ce43fd882e8",
+        "sample_id": "6",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=7;noudo.csv#row=7",
+        "unit": "mg/kg",
+        "value": 27.493
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8692,
+          26.3763
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-916b30fc2e56880cae80c158ec0feba6d8be29aef9bdeaff815ecd143dacf50c",
+        "sample_id": "6",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=7;noudo.csv#row=7",
+        "unit": "mg/kg",
+        "value": 116.628
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.941,
+          26.4561
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-3fadb810767760513529dc95953d408a69d463591374821e25375e7fbbb75bcd",
+        "sample_id": "7",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=8;noudo.csv#row=8",
+        "unit": "mg/kg",
+        "value": 8.9
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.941,
+          26.4561
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-3b2b021a5c68154b6a18264455af137f1c30b4c8960093cf2a218f8f19a0fb62",
+        "sample_id": "7",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=8;noudo.csv#row=8",
+        "unit": "mg/kg",
+        "value": 8.664
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.941,
+          26.4561
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-e05e77196bc8969ebd4168802d6a983dc491c37a728eb2482ec52b727fbb4103",
+        "sample_id": "7",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=8;noudo.csv#row=8",
+        "unit": "mg/kg",
+        "value": 10.049
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.941,
+          26.4561
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-87c3c4fae6d6df3376237b73d9dc3efb641919fd2533735f9f7222d7756b3823",
+        "sample_id": "7",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=8;noudo.csv#row=8",
+        "unit": "mg/kg",
+        "value": 41.966
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0294,
+          26.5208
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-5f589e9a13c777f6409a66db00e91bc0e09f686b6e539300996050106b9c709c",
+        "sample_id": "8",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=9;noudo.csv#row=9",
+        "unit": "mg/kg",
+        "value": 7.0
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0294,
+          26.5208
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-6a6f54550bb3d73e42717deccd5fa69a238dd662aa0cfcfda201c73d3bec45ad",
+        "sample_id": "8",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=9;noudo.csv#row=9",
+        "unit": "mg/kg",
+        "value": 15.85
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0294,
+          26.5208
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-78bb4dc8cd8380cb8f40e013ceef9fddbef14bcc6f570ee72f93123a8870d071",
+        "sample_id": "8",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=9;noudo.csv#row=9",
+        "unit": "mg/kg",
+        "value": 17.838
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0294,
+          26.5208
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f7de318a24a2952e666fa94221fe5159d359b55ff3cbed8a8be427b2a5a3bcfa",
+        "sample_id": "8",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=9;noudo.csv#row=9",
+        "unit": "mg/kg",
+        "value": 45.195
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9518,
+          26.5988
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-bdec9cddeba65bd3c99d71ed2f4de8ba2d12c9333b6727543fd098b73f69f261",
+        "sample_id": "9",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=10;noudo.csv#row=10",
+        "unit": "mg/kg",
+        "value": 9.4
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9518,
+          26.5988
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-b694056e9b95882888757ad667444cbff14e7de1894d90b3eced2ea7cda2671c",
+        "sample_id": "9",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=10;noudo.csv#row=10",
+        "unit": "mg/kg",
+        "value": 18.62
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9518,
+          26.5988
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-a6af30b2765cbdd8dd03b4bb321580c7536816d0e5f122eab1473ab1e4b1746f",
+        "sample_id": "9",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=10;noudo.csv#row=10",
+        "unit": "mg/kg",
+        "value": 25.0
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9518,
+          26.5988
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-550972b738ec8a9af3e22c927f3cda132d30268307a59a6bd15add37bc2682e4",
+        "sample_id": "9",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=10;noudo.csv#row=10",
+        "unit": "mg/kg",
+        "value": 62.77
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8999,
+          26.6596
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-2c4f094eac996c15fb97d31f5750e250bf86eb525a03ee87f48ebc4d51166a4c",
+        "sample_id": "10",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=11;noudo.csv#row=11",
+        "unit": "mg/kg",
+        "value": 7.5
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8999,
+          26.6596
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-11c63610520def84b9ff491bc0d93bac0acdf9774222179606c2a55e59b3611d",
+        "sample_id": "10",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=11;noudo.csv#row=11",
+        "unit": "mg/kg",
+        "value": 27.74
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8999,
+          26.6596
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-68890ab8d8ec9274e938c96af97b34291e1779f30c457b31e4df3ced91f98d27",
+        "sample_id": "10",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=11;noudo.csv#row=11",
+        "unit": "mg/kg",
+        "value": 31.72
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.8999,
+          26.6596
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-bee2b1b96c1e659247f860559b3821869924c0d7e509b6a01c67e37a0e182663",
+        "sample_id": "10",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=11;noudo.csv#row=11",
+        "unit": "mg/kg",
+        "value": 91.723
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9752,
+          26.6864
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0与論島",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f32f359ea24c374a23f98f853541f98b18b45445ec9fcf9dac1b993482d94f3a",
+        "sample_id": "11",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=12;noudo.csv#row=12",
+        "unit": "mg/kg",
+        "value": 10.6
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9752,
+          26.6864
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0与論島",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-52d7aab5dfb180320a6a3f5ab8b09404da7aedc8f4150096433c110689c638c0",
+        "sample_id": "11",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=12;noudo.csv#row=12",
+        "unit": "mg/kg",
+        "value": 35.693
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9752,
+          26.6864
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0与論島",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-daf0040c57ee273c9cea27046cd5d738955e3d109b56045392994ca41c96353d",
+        "sample_id": "11",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=12;noudo.csv#row=12",
+        "unit": "mg/kg",
+        "value": 35.382
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.9752,
+          26.6864
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0与論島",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-459441ac2f68ff014d3c2ac95800bfe70a46c61cf25bd0d4ac1690f90227240b",
+        "sample_id": "11",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=12;noudo.csv#row=12",
+        "unit": "mg/kg",
+        "value": 93.738
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0647,
+          26.6344
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "As",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-45aaaf5d4840f0046c8425969c3ed1a334eef58ecc4a4b0eae8fd29e2f3aa033",
+        "sample_id": "12",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=13;noudo.csv#row=13",
+        "unit": "mg/kg",
+        "value": 4.5
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0647,
+          26.6344
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Cu",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f998bc65485ea98a376a1a48647db9ab0f5f58b67b066d9b8b893cdcb6d92e91",
+        "sample_id": "12",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=13;noudo.csv#row=13",
+        "unit": "mg/kg",
+        "value": 20.284
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0647,
+          26.6344
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Ni",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-3ab613e70f7fabc998ced2eb42be719d5bd9a6dbf3d4319b830c52e57dd14a0a",
+        "sample_id": "12",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=13;noudo.csv#row=13",
+        "unit": "mg/kg",
+        "value": 28.273
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          128.0647,
+          26.6344
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": null,
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "medium",
+        "confidence_overall": 0.791303,
+        "element": "Zn",
+        "geologic_unit": "0那覇",
+        "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "qc_flags": [
+          "MISSING_ANALYTICAL_METHOD",
+          "MISSING_DIGESTION_OR_EXTRACTION"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-00c93d28d3c2ad7d035ad74581d1c970d3aad3f674630ba19f82b6cdb203bac0",
+        "sample_id": "12",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=13;noudo.csv#row=13",
+        "unit": "mg/kg",
+        "value": 62.807
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-a401738d9f03a42a8ac869956e369e42b441885e5ed9bb4420a46ad621aea485",
+        "sample_id": "SC-5",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=115",
+        "unit": "mg/kg",
+        "value": 14.84
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-aa4780b9baa05c3dc629fa5f3bd0e68fcd7f7bf983bbcf6eeb57efef7c4d4ead",
+        "sample_id": "SC-5",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=115",
+        "unit": "mg/kg",
+        "value": 49.47
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-eb03c751ea054a852e349682fa23a4bb7722fdf31179d608a2e68195fb22ba10",
+        "sample_id": "SC-5",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=115",
+        "unit": "mg/kg",
+        "value": 74.24
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-66e5109cae539a634ec417ad2eeb218759901746d6dddd0bd752252ecba167e5",
+        "sample_id": "SC-5",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=115",
+        "unit": "mg/kg",
+        "value": 162.8
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-a44da2e77de7ed53ee0ec826e6520d4028cae498f5eaa9fbd21f2d07ecadd32e",
+        "sample_id": "SC-7",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=116",
+        "unit": "mg/kg",
+        "value": 12.87
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-37696a31a1265b0538d458c22fcf35b1776fa5f7ade6518206ef7f5703f12a0f",
+        "sample_id": "SC-7",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=116",
+        "unit": "mg/kg",
+        "value": 37.91
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-c2a62a2cf309b67d938f3e9bc7707ae4d30837eb6f1bdb9ef246a514395948a1",
+        "sample_id": "SC-7",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=116",
+        "unit": "mg/kg",
+        "value": 57.24
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-c9c323b83abad0b270d681a3b7bb17c960e3359cd18e6da3e73312f7beba888f",
+        "sample_id": "SC-7",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=116",
+        "unit": "mg/kg",
+        "value": 131.3
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9c851ecb134350f5535ab5ded37e16b17aac9a60f34b8fd94970054b33586fb3",
+        "sample_id": "SC-8",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=117",
+        "unit": "mg/kg",
+        "value": 9.67
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-7366d4ba564bd6529364238d5b1273c63c1c0ad1605c7f09d7342f1b3fe68f32",
+        "sample_id": "SC-8",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=117",
+        "unit": "mg/kg",
+        "value": 30.51
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-4595ed66d9402bcd4f794a4f676d457808eb523653afbcf343e0a2ade67b42df",
+        "sample_id": "SC-8",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=117",
+        "unit": "mg/kg",
+        "value": 46.37
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          11.73,
+          30.67
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-686a02a7ecbe7cccba5469744b109a2e24f98cd74a5613d554d3f713c04c966b",
+        "sample_id": "SC-8",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=117",
+        "unit": "mg/kg",
+        "value": 103.1
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-11a1d2d955630535b1b8c7b18b74fef7aed2ad2ba2c295aa70e325a21c62008c",
+        "sample_id": "SC-21",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=118",
+        "unit": "mg/kg",
+        "value": 10.62
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9b6b9c80ca50e7142039b3d62ba08edc88fa70165f12731bca1144685aa1fefb",
+        "sample_id": "SC-21",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=118",
+        "unit": "mg/kg",
+        "value": 30.67
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-efdb0eea45bc8f14dfa212620a6f0223bb4a876d36dce6c2edd8576e9daece4f",
+        "sample_id": "SC-21",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=118",
+        "unit": "mg/kg",
+        "value": 56.07
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9980911b4cffdaf9e3264a489ceac0b900ebec721ec7ab06f177938ab462cc8e",
+        "sample_id": "SC-21",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=118",
+        "unit": "mg/kg",
+        "value": 126.8
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f83f07303af04e77fe3174dc9f7ec385dae2f6ce075caec1661fcf97ca41bfae",
+        "sample_id": "SC-24",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=119",
+        "unit": "mg/kg",
+        "value": 13.12
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9af6f43051e07ef58fccd88e131dcb993df2bb0a52bb89457fbc469737a19e5d",
+        "sample_id": "SC-24",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=119",
+        "unit": "mg/kg",
+        "value": 27.36
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-1a17bf77d41241fae3d0ca490f4793dd5f3bcecd1ddcf1f00f36f4130cf79e0e",
+        "sample_id": "SC-24",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=119",
+        "unit": "mg/kg",
+        "value": 53.22
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          14.46,
+          27.01
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-1d8c12ff15bb7bdda00f36e5366c94bd1c8afc8220aecb738a808139b99706e5",
+        "sample_id": "SC-24",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=119",
+        "unit": "mg/kg",
+        "value": 100.6
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          5.47,
+          23.95
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-bd539665884fd9340206acc0cec4942ce2b0285ee1707eff72ae1bc8623eecc9",
+        "sample_id": "SC-105",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=120",
+        "unit": "mg/kg",
+        "value": 8.84
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          5.47,
+          23.95
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-fff31577d6ee6b080ea38f217c5259b2ed83dd9e11e9d65dd134a1a21a48ee32",
+        "sample_id": "SC-105",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=120",
+        "unit": "mg/kg",
+        "value": 36.36
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          5.47,
+          23.95
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-979eed37b21e7f2072a7dc531dde427c17441d71d2f3bca62d9d0bfa0b54ef0a",
+        "sample_id": "SC-105",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=120",
+        "unit": "mg/kg",
+        "value": 48.84
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          5.47,
+          23.95
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-3491f52245b1e473a1bef745713d42ca9b8877db83745d2816c78e2f5418dea8",
+        "sample_id": "SC-105",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=120",
+        "unit": "mg/kg",
+        "value": 98.2
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -3.08,
+          17.02
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-1d27f55addb231f5edcc8e70d94b1454108d16ca6f650c4805d86b538fd91fd9",
+        "sample_id": "SC-56",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=121",
+        "unit": "mg/kg",
+        "value": 11.08
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -3.08,
+          17.02
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-937bbe5cc8077b3a0f72de78dcf7ed028771d7b682d5e986a0ea6c403ccb9480",
+        "sample_id": "SC-56",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=121",
+        "unit": "mg/kg",
+        "value": 52.85
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -3.08,
+          17.02
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-2b36115e374fe9035fe14266d0f84012c1864f9ed40325be4e6666f2334e4bab",
+        "sample_id": "SC-56",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=121",
+        "unit": "mg/kg",
+        "value": 90.45
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -3.08,
+          17.02
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-cabef6e5540ade7e8625c58ad92728d04870545aee15126e64a6776729f64ea4",
+        "sample_id": "SC-56",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=121",
+        "unit": "mg/kg",
+        "value": 170.8
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.22,
+          29.3
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-5794106122e1126675fd45e06588d74b6abaa4d2631afcd2822cf49bca80d2d5",
+        "sample_id": "SC-71",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=122",
+        "unit": "mg/kg",
+        "value": 25.47
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.22,
+          29.3
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9208b4f86d88c562e276452d3468df2a3dfe850c812280ff271ff555cb2ce21f",
+        "sample_id": "SC-71",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=122",
+        "unit": "mg/kg",
+        "value": 65.72
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.22,
+          29.3
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-44d1ebedc94bf9c0c28007153781aadad17ee4564ef9fb08a62688a546284ab0",
+        "sample_id": "SC-71",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=122",
+        "unit": "mg/kg",
+        "value": 88.2
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.22,
+          29.3
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-e726df88186b26d40a06be1bf198cd6d14e23eedca918a5fc3b9b7b960da407c",
+        "sample_id": "SC-71",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=122",
+        "unit": "mg/kg",
+        "value": 185.0
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.67,
+          24.2
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-fc5496b1b7f772201919e5c89554a84df0ad663041bd2ea63645f37f132c959b",
+        "sample_id": "SC-72",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=123",
+        "unit": "mg/kg",
+        "value": 11.33
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.67,
+          24.2
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-4af15711aed1c9f88e1215bac3b37fa8d75be35d83d15ebb6bb5c62d98644a49",
+        "sample_id": "SC-72",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=123",
+        "unit": "mg/kg",
+        "value": 42.85
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.67,
+          24.2
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-5562403cb1492357160c88c347ee989af421b58c3a09fd18212b45c40f4679ed",
+        "sample_id": "SC-72",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=123",
+        "unit": "mg/kg",
+        "value": 62.35
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.67,
+          24.2
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f141fa2ec2f3865e5a35595f13fc15660f384641df01c2104bfe88c340aca639",
+        "sample_id": "SC-72",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=123",
+        "unit": "mg/kg",
+        "value": 113.9
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.13,
+          22.25
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f497f1dc2256b0b3b6eccd6ad818d648ae7cf379ba8d47aa4d61ef89f31da5d3",
+        "sample_id": "SC-73",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=124",
+        "unit": "mg/kg",
+        "value": 8.01
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.13,
+          22.25
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-753e89678b2f2b531ac04acc3ceb0a5afb2f0c0100382265b7b478374493a430",
+        "sample_id": "SC-73",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=124",
+        "unit": "mg/kg",
+        "value": 44.48
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.13,
+          22.25
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-eb69593d9d34547bae29f010f8e6a29be980dbd20256d40d9463a18d18940145",
+        "sample_id": "SC-73",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=124",
+        "unit": "mg/kg",
+        "value": 65.14
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          1.13,
+          22.25
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-04cc1bd71f8f3eceeb4127f2e9f930b48c2c1827b925be832ad5975e11feb3cd",
+        "sample_id": "SC-73",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=124",
+        "unit": "mg/kg",
+        "value": 114.7
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          20.0
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-2fc44538f7966b251dd8a58416ebf1005d182995c9edd4ee75babf43afc87f39",
+        "sample_id": "SC-74",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=125",
+        "unit": "mg/kg",
+        "value": 7.52
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          20.0
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-07fe9f765c6e61aafa89ea75a9e34775a337ba5960321f5b95ad5df04212ae23",
+        "sample_id": "SC-74",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=125",
+        "unit": "mg/kg",
+        "value": 56.56
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          20.0
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-cb3c118259ef45b4aa80cd4bbd7aea54b26eff766b632482e53600b4268fe537",
+        "sample_id": "SC-74",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=125",
+        "unit": "mg/kg",
+        "value": 72.52
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          20.0
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-88c26c533d39aa26b9c2f6a522c29398bff72ed9f9d13bf4b5b1e492c108d787",
+        "sample_id": "SC-74",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=125",
+        "unit": "mg/kg",
+        "value": 157.2
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          19.83
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "As",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-00da0648e02e4464ace459e409b93a951017c59266332780cdfa0ab04beb4b80",
+        "sample_id": "SC-75",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=126",
+        "unit": "mg/kg",
+        "value": 5.92
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          19.83
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Cu",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-53a9f1c1d2301b7b81cb24fdf43ea13e03dda1653b44330a89af3ee7078927dc",
+        "sample_id": "SC-75",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=126",
+        "unit": "mg/kg",
+        "value": 52.05
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          19.83
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Ni",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-599561a93c4acb7d8be92c85ac15e5e87a81a387f7be10aa654186b18ddca294",
+        "sample_id": "SC-75",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=126",
+        "unit": "mg/kg",
+        "value": 62.45
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.92,
+          19.83
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.958,
+        "element": "Zn",
+        "geologic_unit": "PSA LAM (Libya-Algeria-Mali)",
+        "license": "CC-BY-4.0",
+        "measurement_basis": "deflatable_soil_fraction_total_acid_digest",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-767bc32c0dda5f461721eebf12a4fc7355433722453c0e2fa01e33782c786868",
+        "sample_id": "SC-75",
+        "source_id": "pangaea-north-africa-soil",
+        "source_locator": "Table_S5.tab#row=126",
+        "unit": "mg/kg",
+        "value": 137.1
+      },
+      "type": "Feature"
     }
   ],
   "name": "standardized_geochemical_samples",

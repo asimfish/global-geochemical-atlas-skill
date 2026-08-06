@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine the five verified source demos into one traceable four-media fixture."""
+"""Combine the verified source demos into one traceable four-media fixture."""
 
 from __future__ import annotations
 
@@ -28,6 +28,8 @@ SOURCE_ORDER = (
     "norway-marchem",
     "geotraces-idp2025",
     "gemstat-open-archive",
+    "japan-gsj-geochemical-map",
+    "pangaea-north-africa-soil",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
@@ -35,6 +37,8 @@ EXPECTED_MEDIA = {
     "norway-marchem": "sediment",
     "geotraces-idp2025": "water",
     "gemstat-open-archive": "water",
+    "japan-gsj-geochemical-map": "sediment",
+    "pangaea-north-africa-soil": "soil",
 }
 
 
@@ -109,7 +113,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     selected_route = {item["source_id"] for item in route["selected_sources"]}
     if selected_route != set(SOURCE_ORDER):
         raise CombinedDemoError(
-            f"combined request no longer selects the frozen five-source route: {sorted(selected_route)}"
+            f"combined request no longer selects the frozen source route: {sorted(selected_route)}"
         )
     evidence_report = score_source_evidence.run()
 
@@ -178,7 +182,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
         "combined_demo_version": COMBINED_VERSION,
         "generated_at": generated_at,
         "data_mode": "fixture",
-        "scientific_scope": "five verified source demos combined to exercise one four-media workflow",
+        "scientific_scope": f"{len(SOURCE_ORDER)} verified source demos combined to exercise one four-media workflow",
         "not_for_scientific_interpretation": True,
         "request": request,
         "route": {
@@ -205,6 +209,8 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "GEMStat dissolved, suspended and total arsenic remain separate comparison groups.",
                 "MarChem partial nitric-acid sediment is not interpreted as total content.",
                 "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases.",
+                "PANGAEA fine-fraction HF-HNO3 soil is not mixed with USGS bulk-soil layers.",
+                "GSJ JGD2000 river sediment keeps its source-specific units and missing method/QC boundary.",
             ],
         },
         "outputs": [
@@ -225,7 +231,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "Anomalies produced from fixture groups are pipeline candidates only and cannot support pollution or depletion claims.",
         ],
         "claim_boundary": (
-            "The combined package binds five already verified mini-slices to one request and evidence chain. "
+            f"The combined package binds {len(SOURCE_ORDER)} already verified mini-slices to one request and evidence chain. "
             "It does not increase their geographic representativeness or create independent replication."
         ),
     }

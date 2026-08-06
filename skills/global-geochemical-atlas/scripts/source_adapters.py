@@ -1067,12 +1067,284 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
             )
 
 
+class GsjJapanRiverSedimentAdapter(RegistryAdapter):
+    """Pinned GSJ national river-sediment sample and concentration tables."""
+
+    source_id = "japan-gsj-geochemical-map"
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("GSJ adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in GSJ demo directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        results: list[DownloadedFile] = []
+        for file_entry in download_entry["files"]:
+            output = root / file_entry["filename"]
+            args = _download_args(
+                url=file_entry["url"],
+                output=output,
+                manifest=root / f"{file_entry['file_id']}.download.json",
+                license_id=candidate.license_id,
+                expected_sha256=file_entry["expected_sha256"],
+                max_bytes=int(download_entry["max_bytes_per_file"]),
+                dataset_doi=candidate.dataset_doi,
+                dataset_version=candidate.version,
+                offline=mode == "cached",
+            )
+            try:
+                result = downloader.run(args)
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(f"GSJ download failed for {file_entry['file_id']}: {exc}") from exc
+            content_type = result.get("content_type")
+            if content_type and content_type not in set(download_entry["accepted_content_types"]):
+                raise SourceAdapterError(f"GSJ returned unexpected content type: {content_type}")
+            if output.stat().st_size != file_entry["bytes"]:
+                raise SourceAdapterError(f"GSJ file size changed: {output.name}")
+            results.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=file_entry["file_id"],
+                    path=output,
+                    source_url=file_entry["url"],
+                    sha256=result["sha256"],
+                    bytes=result["bytes"],
+                    cache_status=result["status"],
+                    retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
+                )
+            )
+        return results
+
+    @staticmethod
+    def _csv_rows(path: Path, required_fields: Sequence[str]) -> list[tuple[int, dict[str, str]]]:
+        try:
+            handle = path.open("r", encoding="cp932", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"GSJ file is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.DictReader(handle)
+            fields = [str(value or "").strip() for value in (reader.fieldnames or [])]
+            missing = sorted(set(required_fields) - set(fields))
+            if missing:
+                raise SourceAdapterError(f"GSJ file {path.name} lacks fields: {', '.join(missing)}")
+            rows: list[tuple[int, dict[str, str]]] = []
+            for row in reader:
+                values = {
+                    str(key): str(value or "").strip()
+                    for key, value in row.items()
+                    if key is not None
+                }
+                if any(values.values()):
+                    rows.append((reader.line_num, values))
+            return rows
+
+    @staticmethod
+    def _join_key(raw_id: str, occurrences: dict[str, int]) -> tuple[str, int]:
+        try:
+            normalized_id = str(int(raw_id.strip()))
+        except ValueError as exc:
+            raise SourceAdapterError(f"GSJ sample ID is not an integer: {raw_id!r}") from exc
+        occurrence = occurrences.get(normalized_id, 0)
+        occurrences[normalized_id] = occurrence + 1
+        return normalized_id, occurrence
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        if set(by_id) != {"samples", "concentrations"}:
+            raise SourceAdapterError("GSJ adapter requires samplejoho.csv and noudo.csv")
+        samples = self._csv_rows(
+            by_id["samples"].path, self.candidate.registry_entry["sample_required_fields"]
+        )
+        concentrations = self._csv_rows(
+            by_id["concentrations"].path,
+            self.candidate.registry_entry["concentration_required_fields"],
+        )
+        expected = self.candidate.registry_entry["expected_counts"]
+        if len(samples) != expected["sample_rows"] or len(concentrations) != expected["concentration_rows"]:
+            raise SourceAdapterError("GSJ valid source-row counts changed")
+
+        concentration_occurrences: dict[str, int] = {}
+        concentration_by_key: dict[tuple[str, int], tuple[int, dict[str, str]]] = {}
+        for line_number, values in concentrations:
+            key = self._join_key(values["番号2"], concentration_occurrences)
+            if key in concentration_by_key:
+                raise SourceAdapterError(f"GSJ concentration occurrence key is duplicated: {key}")
+            concentration_by_key[key] = (line_number, values)
+
+        sample_occurrences: dict[str, int] = {}
+        sample_keys: set[tuple[str, int]] = set()
+        for sample_line, sample in samples:
+            key = self._join_key(sample["試料番号"], sample_occurrences)
+            sample_keys.add(key)
+            match = concentration_by_key.get(key)
+            if match is None:
+                raise SourceAdapterError(f"GSJ sample has no ordinal concentration match: {key}")
+            concentration_line, concentration = match
+            sample_locator = f"{by_id['samples'].path.name}#row={sample_line}"
+            concentration_locator = f"{by_id['concentrations'].path.name}#row={concentration_line}"
+            source_locator = f"{sample_locator};{concentration_locator}"
+            native_id = f"{key[0]}#{key[1] + 1}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
+                source_locator=source_locator,
+                fields={
+                    **sample,
+                    **concentration,
+                    "_normalized_sample_id": key[0],
+                    "_sample_id_occurrence": key[1] + 1,
+                    "_sample_source_locator": sample_locator,
+                    "_concentration_source_locator": concentration_locator,
+                    "_sample_source_file": by_id["samples"].path.name,
+                    "_concentration_source_file": by_id["concentrations"].path.name,
+                    "_dataset_version": self.candidate.version,
+                    "_target_units": self.candidate.registry_entry["target_units"],
+                },
+            )
+        if sample_keys != set(concentration_by_key):
+            raise SourceAdapterError("GSJ sample and concentration ordinal key sets differ")
+        if sample_occurrences.get("78013") != 2 or concentration_occurrences.get("78013") != 2:
+            raise SourceAdapterError("GSJ duplicate sample 78013 reconciliation changed")
+
+
+class PangaeaNorthAfricaSoilAdapter(RegistryAdapter):
+    """Pinned PANGAEA tabular dataset of deflatable North African soil fractions."""
+
+    source_id = "pangaea-north-africa-soil"
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("PANGAEA adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in PANGAEA demo directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        file_entry = download_entry["files"][0]
+        output = root / file_entry["filename"]
+        args = _download_args(
+            url=file_entry["url"],
+            output=output,
+            manifest=root / "dataset.download.json",
+            license_id=candidate.license_id,
+            expected_sha256=file_entry["expected_sha256"],
+            max_bytes=int(download_entry["max_bytes"]),
+            dataset_doi=candidate.dataset_doi,
+            dataset_version=candidate.version,
+            offline=mode == "cached",
+            required_fields=candidate.registry_entry["required_fields"],
+        )
+        try:
+            result = downloader.run(args)
+        except (downloader.DownloadError, OSError) as exc:
+            raise SourceAdapterError(f"PANGAEA dataset download failed: {exc}") from exc
+        content_type = result.get("content_type")
+        if content_type and content_type not in set(download_entry["accepted_content_types"]):
+            raise SourceAdapterError(f"PANGAEA returned unexpected content type: {content_type}")
+        if output.stat().st_size != file_entry["bytes"]:
+            raise SourceAdapterError("PANGAEA file size changed")
+        return [
+            DownloadedFile(
+                source_id=self.source_id,
+                file_id=file_entry["file_id"],
+                path=output,
+                source_url=file_entry["url"],
+                sha256=result["sha256"],
+                bytes=result["bytes"],
+                cache_status=result["status"],
+                retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
+            )
+        ]
+
+    def _rows(self, path: Path) -> Iterable[tuple[int, dict[str, str]]]:
+        required = set(self.candidate.registry_entry["required_fields"])
+        target_fields = set(self.candidate.registry_entry["target_analytes"].values())
+        try:
+            handle = path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"PANGAEA file is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.reader(handle, delimiter="\t")
+            header: list[str] | None = None
+            emitted = 0
+            nonempty_measurements = 0
+            for row in reader:
+                if header is None:
+                    if row and row[0].strip() == "*/":
+                        try:
+                            header = [value.strip() for value in next(reader)]
+                        except StopIteration as exc:
+                            raise SourceAdapterError("PANGAEA file ends before its tabular header") from exc
+                        missing = sorted((required | target_fields) - set(header))
+                        if missing:
+                            raise SourceAdapterError(
+                                f"PANGAEA file lacks required fields: {', '.join(missing)}"
+                            )
+                        element_fields = [field for field in header if field.endswith(" [mg/kg]")]
+                        if len(element_fields) != self.candidate.registry_entry["expected_counts"]["element_fields"]:
+                            raise SourceAdapterError("PANGAEA elemental field count changed")
+                    continue
+                if not any(value.strip() for value in row):
+                    continue
+                padded = [value.strip() for value in row] + [""] * max(0, len(header) - len(row))
+                values = dict(zip(header, padded, strict=False))
+                if not values.get("Sample ID"):
+                    raise SourceAdapterError(f"PANGAEA sample ID is missing at row {reader.line_num}")
+                emitted += 1
+                nonempty_measurements += sum(
+                    bool(values.get(field, ""))
+                    for field in element_fields
+                )
+                yield reader.line_num, values
+            if header is None:
+                raise SourceAdapterError("PANGAEA file has no DATA DESCRIPTION terminator or table header")
+            expected = self.candidate.registry_entry["expected_counts"]
+            if emitted != expected["physical_rows"]:
+                raise SourceAdapterError(
+                    f"PANGAEA physical-row count changed: {emitted} != {expected['physical_rows']}"
+                )
+            if nonempty_measurements != expected["nonempty_element_measurements"]:
+                raise SourceAdapterError("PANGAEA nonempty elemental-measurement count changed")
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "table-s5":
+            raise SourceAdapterError("PANGAEA adapter requires the registered Table S5 file")
+        downloaded = files[0]
+        for line_number, values in self._rows(downloaded.path):
+            source_locator = f"{downloaded.path.name}#row={line_number}"
+            native_id = values.get("Sample ID") or values.get("Event")
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "_source_file": downloaded.path.name,
+                    "_dataset_version": self.candidate.version,
+                    "_analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
+                    "_digestion_or_extraction": "HF-HNO3 acid digestion",
+                },
+            )
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
     MarchemSnapshotAdapter.source_id: MarchemSnapshotAdapter,
     GemstatOpenArchiveAdapter.source_id: GemstatOpenArchiveAdapter,
     GeotracesIdp2025Adapter.source_id: GeotracesIdp2025Adapter,
+    GsjJapanRiverSedimentAdapter.source_id: GsjJapanRiverSedimentAdapter,
+    PangaeaNorthAfricaSoilAdapter.source_id: PangaeaNorthAfricaSoilAdapter,
 }
 
 

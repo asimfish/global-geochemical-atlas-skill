@@ -1,7 +1,7 @@
 {
   "scope_version": "geochemical-source-discovery-scope-v1",
-  "as_of": "2026-08-05T15:54:04Z",
-  "round": 4,
+  "as_of": "2026-08-06T03:48:23Z",
+  "round": 5,
   "status": "in_progress",
   "saturated": false,
   "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
@@ -15,18 +15,23 @@
         "georoc-archaean",
         "georoc-database",
         "glorich",
+        "pangaea-north-africa-soil",
         "pangaea-repository",
         "petdb",
         "wosis"
       ],
       "remaining_work": [
-        "Run publication-linked DOI searches by medium and target analyte.",
+        "Continue publication-linked DOI searches by medium and target analyte beyond the first implemented North African soil dataset.",
         "Resolve each aggregator result to its upstream dataset and publication."
       ]
     },
     "africa": {
       "status": "in_progress",
-      "catalogued_sources": ["soils4africa", "south-africa-cgs-geochemistry"],
+      "catalogued_sources": [
+        "pangaea-north-africa-soil",
+        "soils4africa",
+        "south-africa-cgs-geochemistry"
+      ],
       "remaining_work": [
         "Search additional national geological surveys and water-quality portals beyond South Africa and the continental soil program.",
         "Resolve more African rock and water sources, and determine whether CGS map-sheet services expose reusable methods and stable numerical releases."
@@ -41,7 +46,7 @@
       ],
       "remaining_work": [
         "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals.",
-        "Resolve stable numerical access and terms for India NGCM, plus the point-data download contract for the GSJ Geochemical Map.",
+        "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented national river-sediment CSV pair into separately versioned marine-sediment and surface-soil products.",
         "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI."
       ]
     },
