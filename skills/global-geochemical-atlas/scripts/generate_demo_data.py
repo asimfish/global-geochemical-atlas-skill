@@ -28,7 +28,7 @@ MARCHEM_REVIEW_SAMPLE = (
     / "candidate-audits"
     / "marchem-inorganic-20260805T102709Z.json"
 )
-INPUT_COLUMNS = (
+LEGACY_INPUT_COLUMNS = (
     "record_id",
     "source_record_id",
     "sample_id",
@@ -57,6 +57,68 @@ INPUT_COLUMNS = (
     "sample_depth_max_m",
     "grain_fraction",
 )
+
+# Optional V4 exchange columns. Older V3 inputs remain readable; generators now
+# always emit these headers so information extracted by adapters is not lost at
+# the D1 -> D2 boundary.
+V4_INPUT_COLUMNS = (
+    "sample_type_raw",
+    "sample_type",
+    "sample_type_mapping_status",
+    "sample_type_missing_reason",
+    "geographic_context_raw",
+    "survey_area",
+    "map_sheet",
+    "cruise_track",
+    "lithology_raw",
+    "lithology",
+    "soil_horizon_raw",
+    "soil_horizon",
+    "sediment_environment",
+    "water_body_type",
+    "water_fraction",
+    "filtered_state",
+    "geologic_unit_raw",
+    "geologic_age_raw",
+    "tectonic_setting_raw",
+    "matched_geologic_unit",
+    "geology_map_source",
+    "geology_map_version",
+    "match_method",
+    "match_scale",
+    "boundary_distance_m",
+    "match_uncertainty",
+    "geology_missing_reason",
+    "method_scope",
+    "method_assignment_basis",
+    "preparation",
+    "analytical_technique",
+    "instrument",
+    "quantitation_limit",
+    "quantitation_limit_unit",
+    "reference_materials",
+    "method_source_locator",
+    "method_publication_id",
+    "method_missing_reason",
+    "citation_id_raw",
+    "publication_id",
+    "publication_doi",
+    "citation_text_raw",
+    "citation_scope",
+    "citation_assignment_basis",
+    "upstream_primary_source_id",
+    "citation_resolution_status",
+    "citation_missing_reason",
+    "access_status",
+    "research_use_status",
+    "license_url",
+    "license_scope",
+    "attribution_required",
+    "redistribution_status",
+    "terms_verified_at",
+)
+
+INPUT_COLUMNS = LEGACY_INPUT_COLUMNS + V4_INPUT_COLUMNS
 
 
 class DemoError(RuntimeError):

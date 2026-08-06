@@ -4,10 +4,10 @@
     "confidence_version": "d2-confidence-v1",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc",
+    "input_sha256": "4d71b236c94544db406b1c380a289830f02fdf64cf88345ee4463f4b8f35dd83",
     "not_a_probability": true,
-    "run_id": "27205279251f6284",
-    "sha256": "ea7bfbc5026b0fe6fae464a5e086297ecc08fa8482c1d5bec9b6fd6faccf22ab"
+    "run_id": "d0ef21e3a1edb334",
+    "sha256": "52a5c6cfa71b4192f01d93f4f60b29eb2904bbfcd925c25e824e2a058f3fa093"
   },
   "coverage": {
     "declared_license_rate": 1.0,
@@ -16,10 +16,10 @@
     "source_locator_rate": 1.0
   },
   "input": {
-    "bytes": 337321,
+    "bytes": 378044,
     "filename": "demo_input.csv",
     "record_count": 736,
-    "sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc"
+    "sha256": "4d71b236c94544db406b1c380a289830f02fdf64cf88345ee4463f4b8f35dd83"
   },
   "manifest_version": "geochemical-source-manifest-v1",
   "source_count": 14,

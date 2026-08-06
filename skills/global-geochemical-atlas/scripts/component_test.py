@@ -37,6 +37,8 @@ import score_source_evidence
 import snapshot_source
 import source_router
 import query_source
+import export_archive_exchange
+import profile_source_completeness
 import standardize_geochemistry as standardizer
 import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
@@ -867,6 +869,28 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 checked-in coverage matrix is reproducible from the catalog and request",
         checks,
     )
+    completeness_profile = profile_source_completeness.build_profile(
+        SKILL_DIR / "assets" / "source_manifest.json",
+        SKILL_DIR / "fixtures" / "candidate-audits",
+        SOURCE_DEMOS,
+    )
+    require(
+        completeness_profile == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
+        and completeness_profile["summary"] == {
+            "executable_source_count": 14,
+            "sources_with_full_audit": 12,
+            "sources_with_target_observation_denominator": 12,
+            "sources_without_full_audit": 2,
+            "demo_record_count": 736,
+            "uniform_full_field_profiles": 0,
+        }
+        and completeness_profile["sources"]["georoc-archaean"]["full_population"]["audit_status"]
+        == "not_measured"
+        and completeness_profile["sources"]["gemstat-open-archive"]["full_population"]
+        ["target_observation_count"] == 492999,
+        "D1 V4 completeness profile separates audited full-population evidence from 736 demo rows",
+        checks,
+    )
     require(
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
@@ -923,6 +947,48 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 archive validation fails on a broken observation relationship",
         checks,
     )
+    v4_archive_path = SKILL_DIR / "fixtures" / "schema-v2" / "archive-bundle.json"
+    v4_archive = json_value(v4_archive_path)
+    v4_validation = acquisition_validator.validate_bundle(v4_archive)
+    require(
+        v4_validation["status"] == "PASS"
+        and v4_validation["entity_counts"]["samples"] == 1
+        and v4_validation["entity_counts"]["methods"] == 1,
+        "D1 V4 archive validates explicit sample type, geology and method-scope contracts",
+        checks,
+    )
+    v4_exchange = export_archive_exchange.export_rows(v4_archive)
+    require(
+        len(v4_exchange) == 1
+        and v4_exchange[0]["sample_type_raw"] == "Topsoil"
+        and v4_exchange[0]["sample_type"] == "soil_topsoil"
+        and v4_exchange[0]["sample_type_mapping_status"] == "exact"
+        and v4_exchange[0]["geographic_context_raw"] == "Synthetic survey block"
+        and v4_exchange[0]["geologic_unit"] == ""
+        and v4_exchange[0]["geologic_unit_raw"] == "Synthetic Granite"
+        and v4_exchange[0]["method_scope"] == "observation"
+        and v4_exchange[0]["citation_scope"] == "method",
+        "D1 V4 export preserves raw/mapped semantics and never promotes geography into legacy geology",
+        checks,
+    )
+    v4_standardized = standardizer.process_rows(v4_exchange)
+    require(
+        v4_standardized[0]["sample_type"] == "soil_topsoil"
+        and v4_standardized[0]["geologic_unit"] is None
+        and v4_standardized[0]["geologic_unit_raw"] == "Synthetic Granite"
+        and v4_standardized[0]["soil_horizon"] == "A"
+        and v4_standardized[0]["method_scope"] == "observation",
+        "D1-to-D2 V4 exchange fields survive standardization without inference",
+        checks,
+    )
+    legacy_without_sample_type = standardizer.normalize_row(
+        {"element_or_analyte": "As", "value": "1", "unit": "mg/kg", "medium": "soil"}, 2
+    )
+    require(
+        legacy_without_sample_type["sample_type"] is None,
+        "D1 V4 never infers sample_type from analyte, unit or medium",
+        checks,
+    )
     with tempfile.TemporaryDirectory(prefix="d1-sqlite-contract-") as index_temp:
         index_root = Path(index_temp)
         first_index = index_root / "first.sqlite"
@@ -969,6 +1035,23 @@ def check_d1(output_dir: Path) -> list[str]:
         require(
             query_source.query_index(first_index, methods=["XRF"])["record_count"] == 1,
             "D1 indexed query filters exact source-native analytical techniques",
+            checks,
+        )
+        v4_index = index_root / "v4.sqlite"
+        v4_build = index_builder.build_index(v4_archive_path, v4_index)
+        v4_query = query_source.query_index(
+            v4_index,
+            sample_types=["soil_topsoil"],
+            soil_horizons=["A"],
+            geologic_units=["Synthetic Granite"],
+            methods=["ICP-MS"],
+            method_scopes=["observation"],
+        )
+        require(
+            v4_build["status"] == "PASS"
+            and v4_query["record_count"] == 1
+            and v4_query["records"][0]["geographic_context_raw"] == "Synthetic survey block",
+            "D1 V4 SQLite query filters sample type, horizon, source geology and method scope",
             checks,
         )
         with sqlite3.connect(first_index) as connection:
@@ -1303,7 +1386,7 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
-        and combined_manifest["comparison_isolation"]["partition_count"] == 89
+        and combined_manifest["comparison_isolation"]["partition_count"] == 80
         and combined_manifest["comparison_isolation"]["water_partition_count"] == 17,
         "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
         checks,
@@ -1325,7 +1408,7 @@ def check_d1(output_dir: Path) -> list[str]:
         and combined_summary["metrics"]["valid_coordinate_count"] == 736
         and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
         and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
-        and len(combined_anomaly["groups"]) == 89
+        and len(combined_anomaly["groups"]) == 80
         and all(len(sources) == 1 for sources in grouped_sources.values()),
         "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
         checks,
@@ -1793,8 +1876,14 @@ def check_d3(output_dir: Path) -> list[str]:
     html = (output_dir / "interactive_map.html").read_text(encoding="utf-8")
     require("<script src=" not in html.casefold(), "D3 map is self-contained without external scripts", checks)
     require(
-        all(marker in html for marker in ('id="element"', 'id="medium"', 'id="confidence"', 'id="anomalyOnly"')),
-        "D3 map exposes element, medium, confidence and anomaly filters",
+        all(
+            marker in html
+            for marker in (
+                'id="element"', 'id="medium"', 'id="sampleType"', 'id="methodScope"',
+                'id="confidence"', 'id="anomalyOnly"',
+            )
+        ),
+        "D3 map exposes element, medium, sample type, method scope, confidence and anomaly filters",
         checks,
     )
     require("候选异常不代表污染" in html, "D3 map communicates the scientific interpretation boundary", checks)

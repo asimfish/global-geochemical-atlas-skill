@@ -26,13 +26,13 @@
   "input": {
     "filename": "demo_input.csv",
     "record_count": 736,
-    "sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc",
+    "sha256": "4d71b236c94544db406b1c380a289830f02fdf64cf88345ee4463f4b8f35dd83",
     "synthetic_demo": false
   },
   "limitations": [
     "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
     "Map density uses observed points only; no interpolation is performed across unsampled areas.",
-    "52 anomaly background group(s) were not analyzed due to explicit failure states."
+    "42 anomaly background group(s) were not analyzed due to explicit failure states."
   ],
   "map_report": {
     "candidate_record_count": 16,
@@ -68,9 +68,16 @@
     "group_by": [
       "element_or_analyte",
       "medium",
+      "sample_type",
+      "soil_horizon",
+      "sediment_environment",
+      "water_fraction",
+      "grain_fraction",
       "measurement_basis",
-      "geologic_unit",
+      "geologic_unit_raw",
+      "matched_geologic_unit",
       "analytical_method",
+      "method_scope",
       "digestion_or_extraction"
     ],
     "max_records": 50000,

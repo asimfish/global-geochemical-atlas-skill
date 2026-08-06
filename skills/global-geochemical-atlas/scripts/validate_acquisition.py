@@ -24,6 +24,10 @@ ENTITY_CONTRACTS = {
     "observations": ("observation_id", "d1-observation-v1", "observation.schema.json"),
     "acquisition_runs": ("acquisition_run_id", "d1-acquisition-run-v1", "acquisition-run.schema.json"),
 }
+V2_ENTITY_OVERRIDES = {
+    "samples": ("sample_id", "d1-sample-v2", "sample-v2.schema.json"),
+    "methods": ("method_id", "d1-analytical-method-v2", "analytical-method-v2.schema.json"),
+}
 MISSING_REASONS = {"not_reported", "not_applicable", "not_available", "redacted", "parse_failed"}
 
 
@@ -41,7 +45,10 @@ def _load(path: Path) -> dict[str, Any]:
 
 def _index_entities(bundle: Mapping[str, Any], errors: list[str]) -> dict[str, dict[str, Mapping[str, Any]]]:
     indexes: dict[str, dict[str, Mapping[str, Any]]] = {}
-    for collection, (id_field, expected_version, schema_name) in ENTITY_CONTRACTS.items():
+    contracts = dict(ENTITY_CONTRACTS)
+    if bundle.get("bundle_version") == "d1-archive-fixture-v2":
+        contracts.update(V2_ENTITY_OVERRIDES)
+    for collection, (id_field, expected_version, schema_name) in contracts.items():
         schema_path = SKILL_DIR / "references" / schema_name
         if not schema_path.is_file():
             errors.append(f"missing schema file: {schema_name}")
@@ -96,7 +103,7 @@ def _require_reference(
 
 def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
-    if bundle.get("bundle_version") != "d1-archive-fixture-v1":
+    if bundle.get("bundle_version") not in {"d1-archive-fixture-v1", "d1-archive-fixture-v2"}:
         errors.append("unsupported or missing bundle_version")
     indexes = _index_entities(bundle, errors)
     datasets = indexes["datasets"]
@@ -123,12 +130,37 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
                 break
             seen.add(parent_id)
             parent_id = samples[parent_id].get("parent_sample_id")
+        if sample.get("schema_version") == "d1-sample-v2":
+            required_v2_fields = {
+                "sample_type_raw", "sample_type", "sample_type_mapping_status", "geographic_context_raw",
+                "survey_area", "map_sheet", "cruise_track", "lithology", "geologic_age_raw",
+                "tectonic_setting_raw", "matched_geologic_unit", "geology_map_source", "geology_map_version",
+                "match_method", "match_scale", "boundary_distance_m", "match_uncertainty", "soil_horizon",
+                "sediment_environment", "water_body_type", "water_fraction",
+            }
+            for field in sorted(required_v2_fields - set(sample)):
+                errors.append(f"{sample_id} lacks V2 sample field: {field}")
+            if sample.get("sample_type") and sample.get("sample_type_mapping_status") not in {
+                "exact", "dataset_constant", "mapped"
+            }:
+                errors.append(f"{sample_id} has a sample_type without mapping evidence")
+            if sample.get("matched_geologic_unit") and not all(
+                sample.get(field) for field in ("geology_map_source", "geology_map_version", "match_method", "match_scale")
+            ):
+                errors.append(f"{sample_id} has matched geology without map version, method and scale")
     for publication_id, publication in publications.items():
         for dataset_id in publication.get("dataset_ids", []):
             _require_reference(publication_id, "dataset_ids", dataset_id, datasets, errors)
     for method_id, method in methods.items():
         for publication_id in method.get("publication_ids", []):
             _require_reference(method_id, "publication_ids", publication_id, publications, errors)
+        if method.get("schema_version") == "d1-analytical-method-v2":
+            if method.get("method_scope") not in {"observation", "sample", "batch", "file", "dataset", "publication"}:
+                errors.append(f"{method_id} has invalid or missing method_scope")
+            if not method.get("method_assignment_basis"):
+                errors.append(f"{method_id} lacks method_assignment_basis")
+            if not method.get("method_source_locator"):
+                errors.append(f"{method_id} lacks method_source_locator")
     for provenance_id, item in provenance.items():
         _require_reference(provenance_id, "dataset_id", item.get("dataset_id"), datasets, errors)
         _require_reference(provenance_id, "acquisition_run_id", item.get("acquisition_run_id"), runs, errors)
@@ -156,7 +188,7 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
             errors.append(f"{run_id} lacks schema or vocabulary versions")
 
     return {
-        "validation_version": "d1-archive-validation-v1",
+        "validation_version": "d1-archive-validation-v2-compatible",
         "status": "PASS" if not errors else "FAIL",
         "entity_counts": {name: len(values) for name, values in indexes.items()},
         "errors": errors,
