@@ -71,11 +71,12 @@
         "hierarchy_version": "task-first-progressive-disclosure-v2",
         "keyboard_map_navigation": true,
         "localized_measurement_basis": true,
+        "professional_navigation_labels": true,
         "recoverable_map_navigation": true,
         "regional_pan_without_scope_expansion": true,
         "research_patch_crud": "proposal_only_no_direct_mutation",
         "single_primary_navigation": true,
-        "task_based_navigation_labels": true
+        "terminology_contract": "competition-geochemistry-v1"
       },
       "outputs": {
         "clickable_sample_density_heatmap": true,
@@ -140,7 +141,7 @@
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1041228,
+    "html_bytes": 1041731,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -310,6 +311,7 @@
       "region_key": "global",
       "region_label": "全球"
     },
+    "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "task-first-progressive-disclosure-v2",
     "unmappable_record_count": 96,
     "visual_question_contract": {

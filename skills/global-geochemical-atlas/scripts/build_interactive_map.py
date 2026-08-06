@@ -22,6 +22,7 @@ ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
 PROFILE_VERSION = "d3-visualization-profile-v2"
 UI_HIERARCHY_VERSION = "task-first-progressive-disclosure-v2"
 VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
+TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
 MISSING_METHOD_LABEL = "D2 未提供分析方法"
@@ -1113,10 +1114,11 @@ def build_map(
         },
         "interaction_design": {
             "hierarchy_version": UI_HIERARCHY_VERSION,
+            "terminology_contract": TERMINOLOGY_CONTRACT,
             "single_primary_navigation": True,
             "compact_deliverable_dock": True,
             "collapsible_deliverable_dock": True,
-            "task_based_navigation_labels": True,
+            "professional_navigation_labels": True,
             "four_primary_map_controls": True,
             "four_top_level_kpis": True,
             "advanced_filters_progressive_disclosure": True,
@@ -1140,6 +1142,7 @@ def build_map(
     context = {
         "map_version": MAP_VERSION,
         "ui_hierarchy_version": UI_HIERARCHY_VERSION,
+        "terminology_contract": TERMINOLOGY_CONTRACT,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
@@ -1185,6 +1188,7 @@ def build_map(
     return {
         "map_version": MAP_VERSION,
         "ui_hierarchy_version": UI_HIERARCHY_VERSION,
+        "terminology_contract": TERMINOLOGY_CONTRACT,
         "mapped_record_count": len(records),
         "source_mappable_record_count": source_mappable_records,
         "scope_excluded_mappable_record_count": source_mappable_records - len(records),

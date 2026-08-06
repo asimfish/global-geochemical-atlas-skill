@@ -30,10 +30,11 @@
     },
     "map_report": {
       "type": "object",
-      "required": ["map_version", "ui_hierarchy_version", "visual_question_contract", "capability_matrix"],
+      "required": ["map_version", "ui_hierarchy_version", "terminology_contract", "visual_question_contract", "capability_matrix"],
       "properties": {
         "map_version": {"const": "d3-interactive-atlas-v3"},
         "ui_hierarchy_version": {"const": "task-first-progressive-disclosure-v2"},
+        "terminology_contract": {"const": "competition-geochemistry-v1"},
         "visual_question_contract": {
           "type": "object",
           "required": ["schema_version", "views"],

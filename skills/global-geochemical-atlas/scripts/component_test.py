@@ -2503,6 +2503,13 @@ def check_d3(output_dir: Path) -> list[str]:
                 'id="taskContext"',
                 "task-first-progressive-disclosure-v2",
                 "d3-visual-question-contract-v1",
+                "competition-geochemistry-v1",
+                "可交互元素分布地图",
+                "标准化地球化学数据库",
+                "元素组合对比",
+                "数据来源与置信度说明",
+                "异常区域识别结果",
+                "质量控制与自动迭代",
                 'id="zoomIn"',
                 "comboQuadrants",
                 "d3-visualization-profile-v2",
@@ -2646,6 +2653,8 @@ def check_d3(output_dir: Path) -> list[str]:
         and all(map_report.get("capability_matrix", {}).get("deliverables", {}).values())
         and map_report.get("ui_hierarchy_version")
         == "task-first-progressive-disclosure-v2"
+        and map_report.get("terminology_contract")
+        == "competition-geochemistry-v1"
         and map_report.get("visual_question_contract", {}).get("schema_version")
         == "d3-visual-question-contract-v1"
         and set(map_report.get("visual_question_contract", {}).get("views", {}))
@@ -2653,6 +2662,10 @@ def check_d3(output_dir: Path) -> list[str]:
         and map_report.get("capability_matrix", {})
         .get("interaction_design", {})
         .get("single_primary_navigation")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("professional_navigation_labels")
         is True
         and map_report.get("capability_matrix", {})
         .get("interaction_design", {})

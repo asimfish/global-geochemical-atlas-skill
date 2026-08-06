@@ -144,6 +144,8 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                 errors.append("visualization map_version is unsupported")
             if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v2":
                 errors.append("visualization UI hierarchy contract is unsupported")
+            if map_report.get("terminology_contract") != "competition-geochemistry-v1":
+                errors.append("visualization professional terminology contract is unsupported")
             question_contract = map_report.get("visual_question_contract")
             expected_views = {"map", "database", "combination", "sources", "anomalies", "quality"}
             if not isinstance(question_contract, dict) or question_contract.get("schema_version") != "d3-visual-question-contract-v1":

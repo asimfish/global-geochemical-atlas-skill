@@ -302,6 +302,13 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="taskContext"',
         "task-first-progressive-disclosure-v2",
         "d3-visual-question-contract-v1",
+        "competition-geochemistry-v1",
+        "可交互元素分布地图",
+        "标准化地球化学数据库",
+        "元素组合对比",
+        "数据来源与置信度说明",
+        "异常区域识别结果",
+        "质量控制与自动迭代",
         'id="databaseView"',
         'id="databaseSearch"',
         'id="confidenceSummary"',
@@ -330,6 +337,9 @@ def validate_html(path: Path, errors: list[str]) -> None:
             errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")
     if 'id="storyPreset"' in text or text.count('class="tabs"') != 1:
         errors.append("interactive_map.html duplicates task navigation or story selection")
+    for informal_label in (">看分布<", ">查记录<", ">比元素<", ">核来源<", ">懂异常<", ">修质量<"):
+        if informal_label in text:
+            errors.append(f"interactive_map.html uses an informal primary navigation label: {informal_label}")
 
 
 def validate_dir(output_dir: Path) -> dict[str, Any]:
