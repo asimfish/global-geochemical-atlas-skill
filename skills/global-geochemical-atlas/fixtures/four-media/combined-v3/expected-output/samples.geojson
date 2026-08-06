@@ -22323,6 +22323,1590 @@
         "value": 56.0
       },
       "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          36.09859085,
+          -6.92975998
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-98a975e1668a3f4385f5456296412442187d1eded49a8160964ad52519667c15",
+        "sample_id": "icr005934",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=2",
+        "unit": "mg/kg",
+        "value": 0.262535152
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          36.09859085,
+          -6.92975998
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-9e4b0cd2f670220feab8c9d8c467be7943050b68a297d1bd555fb3753432ca9c",
+        "sample_id": "icr005934",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=2",
+        "unit": "mg/kg",
+        "value": 17.3685872
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          36.09859085,
+          -6.92975998
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-bb78a3516362f336015e4b35f444a6b4e75717fdd402d8ad933bee5c04d31a7e",
+        "sample_id": "icr005934",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=2",
+        "unit": "mg/kg",
+        "value": 24.10590367
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          36.09859085,
+          -6.92975998
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-bfa94e91bd969dd75ed1d32fbd5ab3fe765821081b9385e22e8df62bf1478d72",
+        "sample_id": "icr005934",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=2",
+        "unit": "mg/kg",
+        "value": 33.41106803
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          34.98209381,
+          8.5800066
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f1d792a515754c4e7c439547cb2b0c0a25dc60008cf178e7cfa3e0debddb356f",
+        "sample_id": "icr030027",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=375",
+        "unit": "mg/kg",
+        "value": 1.991408208
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          34.98209381,
+          8.5800066
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-dfb7725bd2fc73989bd370361df6498cd4d6659409bdec19ef7263637e103b6c",
+        "sample_id": "icr030027",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=375",
+        "unit": "mg/kg",
+        "value": 43.50550753
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          34.98209381,
+          8.5800066
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": true,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f6603ee69bb905f9525b0b7b1a0b842ad0a7b55f7aa2e2878b70c449108e0330",
+        "sample_id": "icr030027",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=375",
+        "unit": "mg/kg",
+        "value": 90.78275904
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          34.98209381,
+          8.5800066
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-36ea432335848889af4f910bfa5500c6fe48afa1893ed0edb224a50ccd1adef7",
+        "sample_id": "icr030027",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=375",
+        "unit": "mg/kg",
+        "value": 73.79036332
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          38.99001312,
+          -0.147003
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-606943eb85cedee58fcb1226e59f8001c195ee7e695f1bab9fe4d676952b108e",
+        "sample_id": "icr033353",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=555",
+        "unit": "mg/kg",
+        "value": 1.013677475
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          38.99001312,
+          -0.147003
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-d72f199ceb14654dad8ddf5c6813b1893068f693a5834a60af197a43f1a4d6fa",
+        "sample_id": "icr033353",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=555",
+        "unit": "mg/kg",
+        "value": 17.09613855
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          38.99001312,
+          -0.147003
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-dea77d44019f8d64eece3e6b3c4d6a895d35c26d9922cc1d6a7d9ce32af87065",
+        "sample_id": "icr033353",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=555",
+        "unit": "mg/kg",
+        "value": 26.20593579
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          38.99001312,
+          -0.147003
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-476c913a77690ac1c4e2c3fe14449a5f062dce6127c691ffac483e000eca3cce",
+        "sample_id": "icr033353",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=555",
+        "unit": "mg/kg",
+        "value": 51.68512927
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          48.6886,
+          -18.3426
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f90d468bba647e70c350dc99bb1f535d2c0c71446d758983b7d5ee7307da136e",
+        "sample_id": "icr062137",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1422",
+        "unit": "mg/kg",
+        "value": 0.195128021
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          48.6886,
+          -18.3426
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-1829d85fac0a02f5705f88a78017336b5f705f787991799a58299f3bae864ae4",
+        "sample_id": "icr062137",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1422",
+        "unit": "mg/kg",
+        "value": 9.445979378
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          48.6886,
+          -18.3426
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-929811ace69c8dd7153b8f7ffe3f9d6f97bdc13d0978bb3d15834ac9de777d6b",
+        "sample_id": "icr062137",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1422",
+        "unit": "mg/kg",
+        "value": 16.61177745
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          48.6886,
+          -18.3426
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-10de00f93b8dbf0d10caedb7986391434c5f5ad8dd3aef1daf78df7232c07655",
+        "sample_id": "icr062137",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1422",
+        "unit": "mg/kg",
+        "value": 20.43959346
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          32.27067566,
+          0.49136299
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-a8a720c5811cc14eceec479f1f6d25819cf6583849e6b19a27c5360441177a70",
+        "sample_id": "icr054165",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1191",
+        "unit": "mg/kg",
+        "value": 1.638311366
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          32.27067566,
+          0.49136299
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f6ba6038318c940efb45efa3e7e71336a8c58b52abf392993c4a048884983990",
+        "sample_id": "icr054165",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1191",
+        "unit": "mg/kg",
+        "value": 24.195228
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          32.27067566,
+          0.49136299
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-6d220c976d3eaf525bd5e2df4e671100c124be96d51aeb4ba742ba5bcfcc9d04",
+        "sample_id": "icr054165",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1191",
+        "unit": "mg/kg",
+        "value": 19.46109762
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          32.27067566,
+          0.49136299
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-efd28b5cbc62141562da63f907f59d04f5376646bf2cbcdbc52a08fe0eef7c18",
+        "sample_id": "icr054165",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1191",
+        "unit": "mg/kg",
+        "value": 61.47191817
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          15.68749167,
+          -7.37775
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-b713fb92ef6f69b063d55bde4b01030a9dab2b1d934be5bf7c18f4ab13f3e6e3",
+        "sample_id": "icr072247",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1710",
+        "unit": "mg/kg",
+        "value": 0.331265174
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          15.68749167,
+          -7.37775
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-cd387830ca7a621dd19a451307340f867f54d2308b01ac81a2c172e9646979fb",
+        "sample_id": "icr072247",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1710",
+        "unit": "mg/kg",
+        "value": 4.640889825
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          15.68749167,
+          -7.37775
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": true,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-7e9cafd076dbcc6e5d64ef07809e4b7d13adbdfd6da185146176f8a742e86783",
+        "sample_id": "icr072247",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1710",
+        "unit": "mg/kg",
+        "value": 4.070365923
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          15.68749167,
+          -7.37775
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-77a01148b64dc3b86ad20c7357e9bad4f27a141d8bd0d788bbc8d74d786dc136",
+        "sample_id": "icr072247",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1710",
+        "unit": "mg/kg",
+        "value": 5.567903232
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          26.4554,
+          -21.7779
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-7bc747e4c61b62d25bf3b3da3f8c27f20f9b81bce004645b3b8a2f6658390f87",
+        "sample_id": "icr074318",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1797",
+        "unit": "mg/kg",
+        "value": 0.475788835
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          26.4554,
+          -21.7779
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-51aea9379c7cd7d9cd781d404d83dcc2ceed62289cc0f411be9b8dac4b46d79c",
+        "sample_id": "icr074318",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1797",
+        "unit": "mg/kg",
+        "value": 21.16099822
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          26.4554,
+          -21.7779
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-3b84f5c13942249102e3b4131417e7c35f3bf0748d90aa35fea445482cc5a39a",
+        "sample_id": "icr074318",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1797",
+        "unit": "mg/kg",
+        "value": 20.57142953
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          26.4554,
+          -21.7779
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-a5211bb2d8cc15f56dbc6ba27a41d5e60f914f6030d01db26771d0cc126dcdde",
+        "sample_id": "icr074318",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1797",
+        "unit": "mg/kg",
+        "value": 19.25045724
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          9.880528333,
+          8.12667833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-76982f3bd5304e444dacc6cbe9a2f43e05239918bbd03b1205cacd7ea9350986",
+        "sample_id": "icr034011",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=794",
+        "unit": "mg/kg",
+        "value": 0.440711878
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          9.880528333,
+          8.12667833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": true,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-d31d9961116b50b4b09f2498ce830b5e22dd3b785d9806f06f98f6e299d907ad",
+        "sample_id": "icr034011",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=794",
+        "unit": "mg/kg",
+        "value": 2.028759336
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          9.880528333,
+          8.12667833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": true,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-0aacc2285ee6ac0208d84849e00fce236b15eedf7509dfb0b25d1224748cc779",
+        "sample_id": "icr034011",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=794",
+        "unit": "mg/kg",
+        "value": 3.095247095
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          9.880528333,
+          8.12667833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-dcb58356319dea49574a3406f1e4624dce98dcf47d22f52aae20f151256037e9",
+        "sample_id": "icr034011",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=794",
+        "unit": "mg/kg",
+        "value": 3.399157365
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -10.99383,
+          14.82578833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-f1ec0978298f092ef701e06524223769bf4bd82bd8be9ed24fcd1e91857e9f91",
+        "sample_id": "icr010535",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=99",
+        "unit": "mg/kg",
+        "value": 3.791195063
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -10.99383,
+          14.82578833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-70bf8f2b94ada5bdae32e0068e9cd0d7502f491105e8ba6f56f2d660ddfb7fda",
+        "sample_id": "icr010535",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=99",
+        "unit": "mg/kg",
+        "value": 17.12531546
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -10.99383,
+          14.82578833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-2c9187a23112aa6ab38dbe7dbe89b2bb2f30c02e205b73ccd434af5add7ff31d",
+        "sample_id": "icr010535",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=99",
+        "unit": "mg/kg",
+        "value": 22.23350096
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -10.99383,
+          14.82578833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-559aff02d87a3deac0b96d7c5fd90e98f2a66d4c5247577850a92785f8c24046",
+        "sample_id": "icr010535",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=99",
+        "unit": "mg/kg",
+        "value": 18.722749
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -13.42232167,
+          10.49729833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-c0816caa34ceebd8c5c81253500e537c693c97c19eaabef61f19072a49cafa9d",
+        "sample_id": "icr042811",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1131",
+        "unit": "mg/kg",
+        "value": 9.748435445
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -13.42232167,
+          10.49729833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-042eec49ae529d44741b95e36564120cb9d2c239b310174d49460d39428a16de",
+        "sample_id": "icr042811",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1131",
+        "unit": "mg/kg",
+        "value": 24.43115845
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -13.42232167,
+          10.49729833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-e1a253f8f3153dc36000ebd286f13433d7cc2e692eef95426c1ab0371d454d0c",
+        "sample_id": "icr042811",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1131",
+        "unit": "mg/kg",
+        "value": 28.89858856
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -13.42232167,
+          10.49729833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-bc66c40ee1d99c87e106aa40e0c391596c1f6ee8798fe869a165deca596afda1",
+        "sample_id": "icr042811",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1131",
+        "unit": "mg/kg",
+        "value": 26.94346254
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          30.0228,
+          -27.5684
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-8b72f7fb21fb01b8fc34079bca4d65ab3e561e7b4db4d56161cfc3403e69ea9a",
+        "sample_id": "icr048485",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1154",
+        "unit": "mg/kg",
+        "value": 1.020505277
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          30.0228,
+          -27.5684
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-d53e51916573b7a64f5fae474b13c8149c2c2bdb44665815fb12cb2715bfea74",
+        "sample_id": "icr048485",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1154",
+        "unit": "mg/kg",
+        "value": 57.40246574
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          30.0228,
+          -27.5684
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": true,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-0e14283e8fe11c828db81638fda336c3cc5cd31da19d252e736544db498f9d8f",
+        "sample_id": "icr048485",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1154",
+        "unit": "mg/kg",
+        "value": 116.5085933
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          30.0228,
+          -27.5684
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-8c6588501dafe3429255b9b25595b6572a1ee5cad983bdac14274751f93c6cf2",
+        "sample_id": "icr048485",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1154",
+        "unit": "mg/kg",
+        "value": 47.46639215
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          29.4097,
+          -18.142
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "As",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-d46b8e78c5142016d01bc4f82483ea2212c292d344e773204a0a4f5a1a15e661",
+        "sample_id": "icr073989",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1791",
+        "unit": "mg/kg",
+        "value": 3.521504506
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          29.4097,
+          -18.142
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Cu",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-3769f86f880777e112dc0545af7610641cc1eed637150b657d13bb58938e957d",
+        "sample_id": "icr073989",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1791",
+        "unit": "mg/kg",
+        "value": 15.69674852
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          29.4097,
+          -18.142
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Ni",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-de0cd94799bdeb70ab914a0efc177ec60030b847eda5d7b16a7a1fd1fff7f98a",
+        "sample_id": "icr073989",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1791",
+        "unit": "mg/kg",
+        "value": 13.53949763
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          29.4097,
+          -18.142
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "candidate_anomaly": false,
+        "censoring_limit": null,
+        "confidence_band": "high",
+        "confidence_overall": 0.916,
+        "element": "Zn",
+        "geologic_unit": null,
+        "license": "CC-BY-4.0",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "qc_flags": [
+          "MISSING_SOURCE_CRS",
+          "MISSING_COORDINATE_UNCERTAINTY"
+        ],
+        "qualifier": "reported",
+        "record_id": "rec-2012c0bcdfc5dcd36da753250e4e7f5fe003286d34ff36cadd5c65f752eee8ba",
+        "sample_id": "icr073989",
+        "source_id": "afsis-phase-i-wet-chemistry",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1791",
+        "unit": "mg/kg",
+        "value": 18.4159892
+      },
+      "type": "Feature"
     }
   ],
   "name": "standardized_geochemical_samples",

@@ -4,26 +4,49 @@
     "confidence_version": "d2-confidence-v1",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a",
+    "input_sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc",
     "not_a_probability": true,
-    "run_id": "6266b8746d0551b8",
-    "sha256": "22e78014e4acba15afc536e7d166b458e1b79da041fa4a30b0fbdd32e3a80006"
+    "run_id": "27205279251f6284",
+    "sha256": "ea7bfbc5026b0fe6fae464a5e086297ecc08fa8482c1d5bec9b6fd6faccf22ab"
   },
   "coverage": {
     "declared_license_rate": 1.0,
-    "records_with_declared_license": 688,
-    "records_with_source_locator": 688,
+    "records_with_declared_license": 736,
+    "records_with_source_locator": 736,
     "source_locator_rate": 1.0
   },
   "input": {
-    "bytes": 314535,
+    "bytes": 337321,
     "filename": "demo_input.csv",
-    "record_count": 688,
-    "sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a"
+    "record_count": 736,
+    "sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc"
   },
   "manifest_version": "geochemical-source-manifest-v1",
-  "source_count": 13,
+  "source_count": 14,
   "sources": [
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1131",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1154",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1191",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1422",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1710"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_id": "afsis-phase-i-wet-chemistry",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
     {
       "all_records_license_declared": true,
       "all_records_located": true,

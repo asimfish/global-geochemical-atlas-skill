@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06T08:00:00Z",
+  "as_of": "2026-08-06T10:05:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -328,10 +328,10 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 4,
-        "Cu": 5,
-        "Ni": 5,
-        "Zn": 5
+        "As": 5,
+        "Cu": 6,
+        "Ni": 6,
+        "Zn": 6
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -373,6 +373,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -380,6 +381,7 @@
         "usgs-conus-soil"
       ],
       "source_evidence_tiers": {
+        "afsis-phase-i-wet-chemistry": "A",
         "alaska-dggs-webgeochem": "D",
         "bgs-gbase": "D",
         "brazil-sgb-geochemistry": "D",
@@ -400,6 +402,7 @@
       },
       "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
       "source_scopes": {
+        "afsis-phase-i-wet-chemistry": "continental_partial",
         "alaska-dggs-webgeochem": "regional_partial",
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
@@ -419,6 +422,14 @@
         "wosis": "global_partial"
       },
       "source_target_analytes": {
+        "afsis-phase-i-wet-chemistry": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "foregs-humus": [
           "Cu",
           "Hg",
@@ -460,6 +471,7 @@
         ]
       },
       "source_use_modes": {
+        "afsis-phase-i-wet-chemistry": "normalized_analysis",
         "alaska-dggs-webgeochem": "discovery",
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",

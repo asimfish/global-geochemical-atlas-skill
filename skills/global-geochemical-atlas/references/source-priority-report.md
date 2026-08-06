@@ -10,6 +10,7 @@
 | 已接入 | `pangaea-north-africa-soil` | 具体 DOI 的北非可风蚀细粒土壤，补非洲区域和完整行级方法/引用血缘 | 已完成工程接入 | 只有 43 个离散样点；与 bulk-soil 调查不可直接混用；人工复核未签署 | 完成具名复核；继续用逐 DOI 方式补论文长尾而不把 PANGAEA 仓库当独立来源 |
 | 已接入 | `japan-gsj-geochemical-map` | 3,024 行全国河流沉积物，补亚洲和独立沉积物区域 | 已完成工程接入 | CSV 缺逐行方法、检出限和 QC；海洋/土壤产品尚未接入；人工复核未签署 | 完成具名复核；固定详细方法资料，再把海洋沉积物和表层土壤作为独立产品接入 |
 | 已接入 | FOREGS 六个介质来源 | 16,364 个 CSV 行、48,504 条七目标元素映射，补欧洲 topsoil/subsoil/humus/stream water/stream sediment/floodplain sediment | 已完成工程接入 | 低密度；父项目共享血缘；行级 `<DL` 限定符不可恢复；官方旧站为 hash 固定 HTTP | 完成六份具名复核；继续补与 FOREGS 独立的国家/区域来源 |
+| 已接入 | `afsis-phase-i-wet-chemistry` | 2,002 个非洲多国 topsoil/subsoil 样品、18 个国家标签、51 个站点和六目标元素，补非洲土壤与方法/阈值证据 | 已完成工程接入 | 非均匀 LDSF 站点；126 个缺坐标样品；负数及大量低于 DL/QL 的发布数值；人工复核未签署 | 完成具名复核和 V4 全量 profile；继续补非洲水体、岩石及独立土壤来源 |
 | 1 | `canada-bc-rgs` / `argentina-segemar-geochemistry` / `alaska-dggs-webgeochem` | 同时补北美省/州级与南美覆盖；均已有数值下载或公开目录，且保留方法/出版物线索 | 中高 | 多原始调查、历史方法、重复发布和逐文件许可 | BC 固定 2020 版文件；Argentina 选一个开放图幅；Alaska 选一个具 DOI 的 DGGS 数据包，各自做字段/方法/hash 对账 |
 | 2 | `ireland-tellus` | 同时补土壤、沉积物和水，适合验证跨介质 schema | 中 | 官网临时下线、多个区域/国家 release、许可通知需重新固定 | 官网恢复后固定具体 ZIP、release note、方法表、许可和 checksum |
 | 3 | `sweden-sgu-geochemical-atlas` / `finland-gtk-geochemistry` | 增加北欧沉积物和岩石的官方可查询数值 | 中 | 产品/图层许可和版本不同，介质及提取方法必须分开 | 瑞典先固定 till CSV 许可与 hash；芬兰先选一个岩石和一个沉积物产品复核 |

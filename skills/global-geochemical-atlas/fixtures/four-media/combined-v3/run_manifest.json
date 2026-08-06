@@ -1,5 +1,5 @@
 {
-  "claim_boundary": "The combined package binds 13 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
+  "claim_boundary": "The combined package binds 14 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
   "combined_demo_version": "d1-four-media-combined-v1",
   "comparison_isolation": {
     "explicit_boundaries": [
@@ -11,7 +11,9 @@
       "GSJ JGD2000 river sediment keeps its source-specific units and missing method/QC boundary.",
       "FOREGS topsoil, subsoil and humus remain separate sample media within the canonical soil class.",
       "FOREGS total, aqua-regia-leachable, mild-acid-leachable and dissolved values remain separate comparison groups.",
-      "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts."
+      "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts.",
+      "AfSIS aqua-regia quasi-total topsoil and subsoil remain separate from total and differently extracted soil values.",
+      "AfSIS numeric below-DL or below-QL results retain explicit observation evidence and are not promoted to ordinary detections."
     ],
     "group_fields": [
       "element_or_analyte",
@@ -21,7 +23,7 @@
       "analytical_method",
       "digestion_or_extraction"
     ],
-    "partition_count": 85,
+    "partition_count": 89,
     "water_partition_count": 17,
     "water_partitions": {
       "[\"As\", \"water\", \"dissolved_<0.45um_stream_water\", \"\", \"ICP-QMS for published trace metals\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
@@ -187,36 +189,48 @@
       "source_evidence_score": 85.0,
       "source_id": "foregs-floodplain-sediment",
       "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_path": "fixtures/source-demos/afsis-phase-i-wet-chemistry/sources.jsonl",
+      "evidence_sha256": "0d241dfca9acedd34d2e898d9355f529f01b7ce872962319ea8ed267094600af",
+      "evidence_tier": "A",
+      "input_path": "fixtures/source-demos/afsis-phase-i-wet-chemistry/demo_input.csv",
+      "input_sha256": "563f4e461892913088cbc6f65e74f31126210c4375dcf070596fd5c2ff974fe8",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "afsis-phase-i-wet-chemistry",
+      "use_mode": "normalized_analysis"
     }
   ],
-  "generated_at": "2026-08-06T08:00:00Z",
+  "generated_at": "2026-08-06T10:05:00Z",
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 314535,
+      "bytes": 337321,
       "path": "demo_input.csv",
-      "sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a"
+      "sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc"
     },
     {
-      "bytes": 1100562,
+      "bytes": 1221263,
       "path": "sources.jsonl",
-      "sha256": "925dd4489d18b63ffb1d44c86ada895c64038d90feeeafce71bb29f2f02738a1"
+      "sha256": "adf4a1f0e675055dfbd90e11d573a74d86fb7afb48b12e02be1944c64432df89"
     }
   ],
   "record_counts": {
     "by_analyte": {
-      "As": 184,
-      "Cu": 168,
-      "Ni": 168,
-      "Zn": 168
+      "As": 196,
+      "Cu": 180,
+      "Ni": 180,
+      "Zn": 180
     },
     "by_medium": {
       "rock": 48,
       "sediment": 256,
-      "soil": 240,
+      "soil": 288,
       "water": 144
     },
     "by_source": {
+      "afsis-phase-i-wet-chemistry": 48,
       "foregs-floodplain-sediment": 48,
       "foregs-humus": 48,
       "foregs-stream-sediment": 48,
@@ -231,7 +245,7 @@
       "pangaea-north-africa-soil": 48,
       "usgs-conus-soil": 48
     },
-    "total": 688
+    "total": 736
   },
   "request": {
     "elements": [
@@ -343,6 +357,7 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "afsis-phase-i-wet-chemistry",
           "foregs-humus",
           "foregs-subsoil",
           "foregs-topsoil",
@@ -377,6 +392,7 @@
       }
     },
     "selected_sources": [
+      "afsis-phase-i-wet-chemistry",
       "foregs-floodplain-sediment",
       "foregs-humus",
       "foregs-stream-sediment",
@@ -393,7 +409,7 @@
     ],
     "status": "partial"
   },
-  "scientific_scope": "13 verified source demos combined to exercise one four-media workflow",
+  "scientific_scope": "14 verified source demos combined to exercise one four-media workflow",
   "warnings": [
     "This combined fixture proves interface compatibility, not representative global coverage.",
     "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",

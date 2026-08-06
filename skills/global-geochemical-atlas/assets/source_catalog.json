@@ -1,6 +1,6 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-06T08:00:00Z",
+  "reviewed_at": "2026-08-06T10:05:00Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
     "round": 5,
@@ -2242,6 +2242,68 @@
         "Sample ID 78013 occurs twice in each file and must be joined by occurrence order.",
         "Hg is ppb while registered As, Cr, Cu, Ni, Pb and Zn values are ppm.",
         "The CSV pair has no row-level method, detection-limit or QC fields; method evidence must be resolved from project publications."
+      ]
+    },
+    "afsis-phase-i-wet-chemistry": {
+      "title": "AfSIS Phase I archived soil samples: wet chemistry data",
+      "publisher": "World Agroforestry (ICRAF) and Rothamsted Research",
+      "source_kind": "institutional_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "continental_partial",
+        "regions": ["sub-saharan-africa-18-country-labels-51-ldsf-sites"],
+        "notes": "The release contains 2,002 topsoil and subsoil samples from 51 LDSF sentinel sites. It is broad multi-country evidence, not a continuous or statistically uniform African grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.34725/DVN/66BFOB"
+      },
+      "landing_page": "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/66BFOB",
+      "interfaces": [
+        {
+          "kind": "versioned_dataverse_metadata_api",
+          "url": "https://data.worldagroforestry.org/api/datasets/:persistentId/?persistentId=doi%3A10.34725%2FDVN%2F66BFOB&version=2.0",
+          "format": "json",
+          "access": "open",
+          "server_filters": ["dataset_doi", "dataset_version"]
+        },
+        {
+          "kind": "original_file_downloads",
+          "url": "https://data.worldagroforestry.org/api/access/datafile/11218?format=original",
+          "format": "csv_and_xlsx",
+          "access": "open",
+          "server_filters": ["datafile_id", "original_format"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "Version 2.0 terms specify CC BY 4.0; retain dataset and article citations."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "2.0",
+        "release_date": "2025-10-13"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "afsis_dataverse_original_files"
+      },
+      "evidence_urls": [
+        "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/66BFOB",
+        "https://www.cifor-icraf.org/knowledge/dataset/66BFOB/",
+        "https://soil.copernicus.org/articles/7/305/2021/"
+      ],
+      "limitations": [
+        "The LDSF field design and available archived samples are not uniform national or continental coverage.",
+        "Aqua-regia results are quasi-total and must remain separate from total or differently extracted soil values.",
+        "One hundred twenty-six samples have no coordinates and cannot enter coordinate-dependent mapping without additional evidence.",
+        "The source contains negative numeric instrument results and many positive values below source-wide DL or QL; these remain explicit quality flags.",
+        "Raw country labels SAfrica and Zimbambwe require a separate normalization field while retaining the publisher strings.",
+        "The registered files and related article do not state the coordinate reference system, so the adapter does not assert EPSG:4326.",
+        "The variable workbook describes As.75 as Arsenic-78 and reports 2009-2013 sampling, while the related paper reports 2009-2012; these metadata conflicts require source-level review."
       ]
     },
     "south-africa-cgs-geochemistry": {

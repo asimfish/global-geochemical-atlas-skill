@@ -79,6 +79,16 @@ V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土�
 - 边界：449,714 条使用未定义方法代码 0；删失、质量标签、5,655 条额外精确重复和 Pending review 极端值全部保留，演示只选 Good/Fair 且方法明确的记录；
 - 剩余：30 条具名人工签署、原始 data provider 血缘深化和第二个独立淡水来源。
 
+### `afsis-phase-i-wet-chemistry`
+
+- 介质与范围：18 个国家标签、51 个 LDSF 站点的 2,002 个 archived topsoil/subsoil 样品，不是均匀非洲网格；
+- 接口与版本：World Agroforestry Dataverse DOI `10.34725/DVN/66BFOB`，V2.0，CC BY 4.0；
+- 获取与校验：三个 `format=original` datafile 端点，CSV/XLSX 分别校验 publisher MD5、SHA-256 和字节数；
+- 对账：两个样品标识均 2,002 个唯一值，1,876 个完整坐标对，六目标元素各 2,002 条；
+- 方法：风干土王水准全量，As ICP-MS，Cr/Cu/Ni/Pb/Zn ICP-OES；方法、单位、DL 和 QL 有固定工作簿行定位；
+- 边界：126 个缺坐标样品；来源未声明 CRS；负数和低于 DL/QL 的发布数值只分级标记；`As.75`/“Arsenic-78”与采样年份冲突保持显式；原国家标签与规范名分开；
+- 剩余：30 条具名人工签署和 V4 全量 profile 接入。
+
 ## 待复核生产候选
 
 ### `georoc-database`
@@ -197,7 +207,7 @@ V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土�
 
 ### 第四至第六轮的边界判断
 
-- 第四轮结束时目录有 40 个来源和 5 个 A 级 `normalized_analysis` 样板；此后 GSJ 河流沉积物、PANGAEA 北非土壤和 FOREGS 六个介质数据集完成接入，当前目录为 47 项、A 级样板为 13 项；
+- 第四轮结束时目录有 40 个来源和 5 个 A 级 `normalized_analysis` 样板；此后 GSJ 河流沉积物、PANGAEA 北非土壤、FOREGS 六个介质数据集和 AfSIS Phase I V2.0 完成接入，当前目录为 48 项、A 级样板为 14 项；
 - GSJ 已完成首个河流沉积物适配器；BC RGS、阿拉斯加 WebGeochem 和阿根廷 SIGAM 仍是下一批高价值数值接入候选；
 - 墨西哥目前证明的是派生图层，印度目前证明的是项目和有限分发路线，不能写成已获得原始全量数据；
 - 南非、BC 和阿拉斯加均含多来源或多图幅内容，独立来源数必须回到原调查、出版物和样品，而不是按门户计数；

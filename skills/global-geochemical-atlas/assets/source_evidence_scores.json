@@ -13,9 +13,104 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-06T08:00:00Z",
-  "source_count": 47,
+  "scored_at": "2026-08-06T10:05:00Z",
+  "source_count": 48,
   "sources": {
+    "afsis-phase-i-wet-chemistry": {
+      "access_status": "open",
+      "attribution_note": "Version 2.0 terms specify CC BY 4.0; retain dataset and article citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/afsis-phase-i-wet-chemistry-20260806T100500Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/afsis-phase-i-wet-chemistry-20260806T100500Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [
+            "fixtures/four-media/soil/afsis-phase-i-wet-chemistry/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/66BFOB",
+            "https://www.cifor-icraf.org/knowledge/dataset/66BFOB/",
+            "https://soil.copernicus.org/articles/7/305/2021/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/afsis-phase-i-wet-chemistry-20260806T100500Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/66BFOB",
+            "https://www.cifor-icraf.org/knowledge/dataset/66BFOB/",
+            "https://soil.copernicus.org/articles/7/305/2021/",
+            "doi:10.34725/DVN/66BFOB"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/afsis-phase-i-wet-chemistry-20260806T100500Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2.0",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "afsis-phase-i-wet-chemistry",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "alaska-dggs-webgeochem": {
       "access_status": "open",
       "attribution_note": "Recent DGGS raw-data releases state an open end-user licence, while the integrated database also contains federal and legacy sources. Acceptance must occur per publication or upstream contributor.",
@@ -4196,7 +4291,7 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 13,
+      "A": 14,
       "B": 0,
       "C": 0,
       "D": 34,
@@ -4205,7 +4300,7 @@
     "use_modes": {
       "benchmark_ready": 0,
       "discovery": 34,
-      "normalized_analysis": 13,
+      "normalized_analysis": 14,
       "raw_observation": 0
     }
   }

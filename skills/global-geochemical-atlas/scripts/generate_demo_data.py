@@ -1046,6 +1046,121 @@ def foregs_demo(
     return rows, evidence_rows, len(selected_source_rows)
 
 
+def afsis_demo(
+    records: Sequence[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    if observation_limit % len(ANALYTES) != 0:
+        raise DemoError("AfSIS observation limit must be divisible by 4 for balanced analytes")
+    source_row_limit = observation_limit // len(ANALYTES)
+    preferred_countries = (
+        "Tanzania", "Ethiopia", "Kenya", "Madagascar", "Uganda", "Angola",
+        "Botswana", "Nigeria", "Mali", "Guinea", "SAfrica", "Zimbambwe",
+    )
+    if source_row_limit != len(preferred_countries):
+        raise DemoError("the checked-in AfSIS fixture requires exactly 48 observations from 12 country labels")
+    selected_records: list[RawRecord] = []
+    for index, country in enumerate(preferred_countries):
+        preferred_depth = "Topsoil" if index % 2 == 0 else "Subsoil"
+        matches = [
+            record for record in records
+            if str(record.fields.get("Country") or "") == country
+            and str(record.fields.get("Latitude") or "").strip()
+            and str(record.fields.get("Longitude") or "").strip()
+            and isinstance(record.fields.get("_target_observations"), Mapping)
+            and all(
+                _reported_float(record.fields["_target_observations"][analyte]["value"]) is not None
+                and float(record.fields["_target_observations"][analyte]["value"]) > 0
+                for analyte in ANALYTES
+            )
+        ]
+        if not matches:
+            raise DemoError(f"AfSIS has no positive complete-coordinate demo row for {country}")
+        selected_records.append(
+            next((item for item in matches if item.fields.get("Depth") == preferred_depth), matches[0])
+        )
+
+    measurement = files.get(candidate.registry_entry["download"]["files"][0]["filename"])
+    if measurement is None:
+        raise DemoError("AfSIS measurement file evidence is missing")
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    for record in selected_records:
+        observations = record.fields["_target_observations"]
+        for analyte in ANALYTES:
+            values = observations[analyte]
+            raw_value = str(values["value"])
+            unit = str(values["unit"])
+            record_id = stable_record_id(
+                record.source_id, record.source_record_id, analyte, raw_value, unit
+            )
+            rows.append(
+                {
+                    "record_id": record_id,
+                    "source_record_id": record.source_record_id,
+                    "sample_id": str(record.fields.get("SSN") or ""),
+                    "element_or_analyte": analyte,
+                    "value": raw_value,
+                    "unit": unit,
+                    "medium": "soil",
+                    "measurement_basis": str(values["measurement_basis"]),
+                    "value_qualifier": "",
+                    "detection_limit": str(values["detection_limit"]),
+                    "detection_limit_unit": unit,
+                    "latitude": str(record.fields.get("Latitude") or ""),
+                    "longitude": str(record.fields.get("Longitude") or ""),
+                    "source_crs": str(record.fields.get("_source_crs") or ""),
+                    "coordinate_uncertainty_m": "",
+                    "geologic_unit": "",
+                    "analytical_method": str(values["analytical_method"]),
+                    "digestion_or_extraction": str(values["digestion_or_extraction"]),
+                    "laboratory": str(values["laboratory"]),
+                    "license": candidate.license_id,
+                    "source_tier": "official_curated",
+                    "source_id": record.source_id,
+                    "source_locator": record.source_locator,
+                    "sampled_at": "2009/2013",
+                    "sample_depth_min_m": str(record.fields.get("_sample_depth_min_m") or ""),
+                    "sample_depth_max_m": str(record.fields.get("_sample_depth_max_m") or ""),
+                    "grain_fraction": str(record.fields.get("_grain_fraction") or ""),
+                }
+            )
+            entry = _base_evidence(record, measurement, candidate, record_id, analyte)
+            entry.update(
+                {
+                    "article_citations": [candidate.registry_entry["citation"]],
+                    "article_dois": ["10.5194/soil-7-305-2021"],
+                    "selection_rule": (
+                        "one positive complete-coordinate source row from each of 12 fixed country labels; "
+                        "alternating preferred topsoil and subsoil depth; As/Cu/Ni/Zn preserved"
+                    ),
+                    "reported_country": str(record.fields.get("Country") or ""),
+                    "normalized_country": str(record.fields.get("_country_normalized") or ""),
+                    "site": str(record.fields.get("Site") or ""),
+                    "reported_depth": str(record.fields.get("Depth") or ""),
+                    "measurement_basis": str(values["measurement_basis"]),
+                    "detection_limit": str(values["detection_limit"]),
+                    "quantitation_limit": str(values["quantitation_limit"]),
+                    "below_detection_limit": bool(values["below_detection_limit"]),
+                    "below_quantitation_limit": bool(values["below_quantitation_limit"]),
+                    "negative_numeric_result": False,
+                    "variable_metadata_locator": str(values["variable_metadata_locator"]),
+                    "threshold_metadata_locator": str(values["threshold_metadata_locator"]),
+                    "source_variable_description": str(values["source_variable_description"]),
+                    "metadata_conflicts": list(record.fields.get("_metadata_conflicts") or []),
+                    "source_crs_status": "not_reported_in_registered_files_or_related_article",
+                    "grain_fraction_source_scope": "related_article_dataset_level",
+                    "scientific_note": str(record.fields.get("_quality_boundary") or ""),
+                }
+            )
+            evidence_rows.append(entry)
+    if len(rows) != observation_limit:
+        raise DemoError(f"AfSIS produced {len(rows)} observations, expected {observation_limit}")
+    return rows, evidence_rows, len(selected_records)
+
+
 @contextmanager
 def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[DownloadedFile]]]:
     adapter = get_adapter(args.source)
@@ -1119,6 +1234,10 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             )
         elif args.source.startswith("foregs-"):
             rows, evidence, selected_source_rows = foregs_demo(
+                raw_records, files, candidate, args.observations
+            )
+        elif args.source == "afsis-phase-i-wet-chemistry":
+            rows, evidence, selected_source_rows = afsis_demo(
                 raw_records, files, candidate, args.observations
             )
         else:
@@ -1230,6 +1349,19 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             ),
             *(
                 [
+                    "AfSIS Phase I contains 2,002 archived samples from 51 LDSF sites and is not a uniform African grid.",
+                    "Aqua-regia values are quasi-total and remain separate from total and other soil extraction bases.",
+                    "Published negative instrument results and positive values below source-wide DL or QL remain explicit quality flags; this positive demo excludes negative rows.",
+                    "One hundred twenty-six source samples have no coordinates; the demo selects only complete-coordinate rows and does not infer missing positions.",
+                    "The source does not state a coordinate reference system; latitude/longitude are preserved while source_crs remains blank.",
+                    "The variable workbook description conflicts with field As.75 by saying Arsenic-78, and its 2009-2013 sampling period differs from the related paper's 2009-2012; both conflicts stay in evidence.",
+                    "Publisher country labels are retained verbatim, with SAfrica and Zimbambwe normalized only in separate evidence fields.",
+                ]
+                if args.source == "afsis-phase-i-wet-chemistry"
+                else []
+            ),
+            *(
+                [
                     "GEOTRACES IDP2025 seawater has no arsenic variable; a separate water source is required for As.",
                     "Values remain in nmol/kg because mass-per-volume conversion requires explicit atomic-mass and seawater-density assumptions.",
                     "Only SeaDataNet QC 1 and 2 values are included in this demo; all source flags remain available in the raw adapter.",
@@ -1255,6 +1387,7 @@ def build_parser() -> argparse.ArgumentParser:
             "japan-gsj-geochemical-map",
             "foregs-topsoil", "foregs-subsoil", "foregs-humus",
             "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
+            "afsis-phase-i-wet-chemistry",
         ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)

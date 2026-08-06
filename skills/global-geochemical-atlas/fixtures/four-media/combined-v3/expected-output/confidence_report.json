@@ -1,6 +1,6 @@
 {
   "band_counts": {
-    "high": 544,
+    "high": 592,
     "low": 0,
     "medium": 144
   },
@@ -10,12 +10,12 @@
     "medium": ">=0.60 and <0.80"
   },
   "component_means": {
-    "completeness": 0.955603,
-    "method": 0.837209,
-    "overall": 0.90901,
-    "qc": 0.88593,
-    "source": 0.984884,
-    "spatial": 0.813953
+    "completeness": 0.958498,
+    "method": 0.847826,
+    "overall": 0.909466,
+    "qc": 0.882935,
+    "source": 0.98587,
+    "spatial": 0.8
   },
   "confidence_version": "d2-confidence-v1",
   "gates": {
@@ -38,10 +38,10 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 688,
-    "input_sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a",
+    "input_row_count": 736,
+    "input_sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc",
     "missing_recommended_input_columns": [],
-    "run_id": "6266b8746d0551b8"
+    "run_id": "27205279251f6284"
   },
   "weights": {
     "completeness": 0.2,

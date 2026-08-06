@@ -1,5 +1,5 @@
 {
-  "candidate_count": 11,
+  "candidate_count": 16,
   "caveat": "Candidates are relative to the declared background group and do not establish pollution, mineralization, provenance, or cause.",
   "group_by": [
     "element_or_analyte",
@@ -241,6 +241,25 @@
       "records_total": 6,
       "records_used": 6,
       "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+        "digestion_or_extraction": "Aqua regia acid digest",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil"
+      },
+      "group_id": "grp-82dcc3ffb0a1",
+      "log10_mad": 0.425192257202,
+      "log10_median": 0.007357525447,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
     },
     {
       "candidate_count": 0,
@@ -753,6 +772,25 @@
       "status": "insufficient_group_size"
     },
     {
+      "candidate_count": 1,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "digestion_or_extraction": "Aqua regia acid digest",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil"
+      },
+      "group_id": "grp-c3da9c8313ae",
+      "log10_mad": 0.149135352851,
+      "log10_median": 1.236701536816,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
@@ -1173,6 +1211,25 @@
       "status": "insufficient_group_size"
     },
     {
+      "candidate_count": 4,
+      "exclusion_reasons": {},
+      "group": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "digestion_or_extraction": "Aqua regia acid digest",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil"
+      },
+      "group_id": "grp-8bbd196c5d88",
+      "log10_mad": 0.120230263828,
+      "log10_median": 1.330136162918,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
@@ -1520,6 +1577,25 @@
       "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
+        "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+        "digestion_or_extraction": "Aqua regia acid digest",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil"
+      },
+      "group_id": "grp-e1e19c7cf156",
+      "log10_mad": 0.229675460664,
+      "log10_median": 1.370462830119,
+      "records_excluded": 0,
+      "records_total": 12,
+      "records_used": 12,
+      "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {},
+      "group": {
         "analytical_method": "Agilent 7900 quadrupole ICP-MS; 2.5% HNO3 eluent",
         "digestion_or_extraction": "HF-HNO3 acid digestion",
         "element_or_analyte": "Zn",
@@ -1668,10 +1744,10 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 688,
-    "input_sha256": "e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a",
+    "input_row_count": 736,
+    "input_sha256": "e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc",
     "missing_recommended_input_columns": [],
-    "run_id": "6266b8746d0551b8"
+    "run_id": "27205279251f6284"
   },
   "scientific_status": "screening_baseline_only"
 }

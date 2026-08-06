@@ -36,6 +36,7 @@ SOURCE_ORDER = (
     "foregs-stream-water",
     "foregs-stream-sediment",
     "foregs-floodplain-sediment",
+    "afsis-phase-i-wet-chemistry",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
@@ -51,6 +52,7 @@ EXPECTED_MEDIA = {
     "foregs-stream-water": "water",
     "foregs-stream-sediment": "sediment",
     "foregs-floodplain-sediment": "sediment",
+    "afsis-phase-i-wet-chemistry": "soil",
 }
 
 
@@ -226,6 +228,8 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "FOREGS topsoil, subsoil and humus remain separate sample media within the canonical soil class.",
                 "FOREGS total, aqua-regia-leachable, mild-acid-leachable and dissolved values remain separate comparison groups.",
                 "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts.",
+                "AfSIS aqua-regia quasi-total topsoil and subsoil remain separate from total and differently extracted soil values.",
+                "AfSIS numeric below-DL or below-QL results retain explicit observation evidence and are not promoted to ordinary detections.",
             ],
         },
         "outputs": [

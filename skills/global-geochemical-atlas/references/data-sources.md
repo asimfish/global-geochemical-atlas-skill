@@ -95,6 +95,17 @@
 - 覆盖：平均约一个样点/4,700 km²，属于欧洲低密度大陆基线；坐标由各国坐标系转换用于大陆尺度展示，不能解释成欧洲每处有数据或本地调查精度；
 - 传输：GTK 旧站的标准 HTTPS 证书验证当前失败，实际归档端点为官方 HTTP。该适配器仅对固定 `weppi.gtk.fi` URL 启用来源级例外，拒绝重定向，并在发布缓存前强制匹配登记 SHA-256；通用下载器仍保持 HTTPS-only。
 
+### `afsis-phase-i-wet-chemistry`
+
+- 数据集：AfSIS Phase I archived soil samples wet chemistry，官方 World Agroforestry Dataverse V2.0；
+- DOI：`10.34725/DVN/66BFOB`；许可：CC BY 4.0；
+- 获取：三个 `format=original` datafile 端点，分别为 847,634-byte CSV、21,024-byte variables XLSX 和 10,445-byte DL/QL XLSX；每个文件同时校验发布方 MD5、登记 SHA-256 和字节数；
+- 对账：2,002 个唯一 SSN/RES.ID、18 个原国家标签、51 个 LDSF 站点、992 个 topsoil、1,010 个 subsoil、1,876 个完整坐标对和六元素共 12,012 条数值；
+- 方法：风干土王水消解准全量；As 为 ICP-MS，Cr/Cu/Ni/Pb/Zn 为 ICP-OES；方法、单位、实验室、DL 和 QL 都从固定工作簿绑定到逐观测证据；
+- 质量边界：126 个样品没有坐标；As/Cu/Pb 存在负数仪器结果；Pb 的大多数发布数值低于全局 DL。原数值保留并分级标记，不静默删除、不当作普通检出；
+- 元数据边界：注册文件和相关论文没有明确 CRS；变量表把 `As.75` 描述成“Arsenic-78”，且变量表与相关论文的采样年份分别为 2009–2013 和 2009–2012。适配器保留冲突，不猜测修复；
+- 命名边界：`SAfrica` 和 `Zimbambwe` 等发布方标签原样保留，规范名只写独立字段；18 个国家标签不代表均匀非洲覆盖。
+
 ## D1 适配器和稳定 ID
 
 `scripts/source_adapters.py` 冻结以下接口：

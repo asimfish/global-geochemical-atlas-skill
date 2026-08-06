@@ -1,0 +1,146 @@
+{
+  "acquisition": {
+    "cache_statuses": [
+      "cache_hit"
+    ],
+    "file_urls": [
+      "https://data.worldagroforestry.org/api/access/datafile/11218?format=original",
+      "https://data.worldagroforestry.org/api/access/datafile/11219?format=original",
+      "https://data.worldagroforestry.org/api/access/datafile/12234?format=original"
+    ],
+    "format_note": "Original CSV/XLSX endpoints are pinned. Dataverse's dynamically converted tabular representation is not used as an immutable artifact.",
+    "observed_at": "2026-08-06T10:05:00Z",
+    "request_url": "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/66BFOB"
+  },
+  "archive": {
+    "bytes": 879103,
+    "members": [
+      {
+        "bytes": 10445,
+        "name": "AfSIS_Phase_I_wet_chemistry_detection_limits_v2.xlsx",
+        "sha256": "0b373fe17172d32861ebd829083a8f01c1bca7cbbc09e700c95dfb4f043011f1"
+      },
+      {
+        "bytes": 847634,
+        "name": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+        "sha256": "32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605"
+      },
+      {
+        "bytes": 21024,
+        "name": "AfSIS_Phase_I_wet_chemistry_variables_v2.xlsx",
+        "sha256": "f2d5ee0b86af7b7d2066d610862e9bf8c97b7544803b201fb492bae61817ad3c"
+      }
+    ],
+    "sha256": "0ab9c7428599e76cfdb94030a081012373ff1a2b550c224084a7353e218a28d7"
+  },
+  "claim_boundary": "This audit proves three byte-pinned original files, 2,002 unique archived samples and exact method, depth and threshold mapping. It does not prove uniform African coverage or that below-limit numeric results are ordinary detections.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "bbox_wgs84": [
+      -23.07762,
+      -29.9813,
+      48.7638,
+      14.87954
+    ],
+    "complete_coordinate_pairs": 1876,
+    "country_label_counts": {
+      "Angola": 82,
+      "Botswana": 59,
+      "Burkina Faso": 2,
+      "Cameroon": 15,
+      "Ethiopia": 381,
+      "Ghana": 2,
+      "Guinea": 23,
+      "Kenya": 340,
+      "Madagascar": 347,
+      "Mali": 28,
+      "Mozambique": 15,
+      "Niger": 24,
+      "Nigeria": 35,
+      "SAfrica": 23,
+      "Tanzania": 367,
+      "Uganda": 222,
+      "Zambia": 23,
+      "Zimbambwe": 14
+    },
+    "country_site_pairs": 51,
+    "depth_counts": {
+      "Subsoil": 1010,
+      "Topsoil": 992
+    },
+    "distinct_res_id": 2002,
+    "distinct_ssn": 2002,
+    "missing_coordinate_pairs": 126,
+    "physical_rows": 2002,
+    "target_analytes": {
+      "As": 2002,
+      "Cr": 2002,
+      "Cu": 2002,
+      "Ni": 2002,
+      "Pb": 2002,
+      "Zn": 2002
+    },
+    "target_observations": 12012,
+    "threshold_category_counts": {
+      "As": {
+        "at_or_above_ql": 436,
+        "dl_to_ql": 885,
+        "negative_numeric": 48,
+        "positive_below_dl": 633
+      },
+      "Cr": {
+        "at_or_above_ql": 2002
+      },
+      "Cu": {
+        "at_or_above_ql": 1266,
+        "dl_to_ql": 514,
+        "negative_numeric": 6,
+        "positive_below_dl": 216
+      },
+      "Ni": {
+        "at_or_above_ql": 1982,
+        "dl_to_ql": 20
+      },
+      "Pb": {
+        "at_or_above_ql": 4,
+        "dl_to_ql": 22,
+        "negative_numeric": 7,
+        "positive_below_dl": 1969
+      },
+      "Zn": {
+        "at_or_above_ql": 1807,
+        "dl_to_ql": 173,
+        "positive_below_dl": 22
+      }
+    }
+  },
+  "observed_metadata": {
+    "analysis_years": "2017-2018",
+    "grain_fraction_from_related_article": "<2 mm",
+    "laboratory": "Rothamsted Research",
+    "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+    "medium": "soil",
+    "metadata_conflicts": [
+      "As.75 is described as Arsenic-78 in the variable workbook.",
+      "The variable workbook reports 2009-2013 sampling; the related SOIL article reports 2009-2012."
+    ],
+    "raw_country_labels_preserved": true,
+    "row_level_censor_qualifier_present": false,
+    "sample_depths": {
+      "Subsoil": "20-50 cm",
+      "Topsoil": "0-20 cm"
+    },
+    "sample_years": "2009-2013",
+    "source_coordinate_crs": "not_reported_in_registered_files_or_related_article",
+    "source_wide_detection_and_quantitation_limits_present": true,
+    "units": "mg kg^-1"
+  },
+  "snapshot_id": "afsis-phase-i-wet-chemistry:2.0:0ab9c7428599",
+  "source_id": "afsis-phase-i-wet-chemistry",
+  "verification_version": "afsis-phase-i-audit-v1"
+}

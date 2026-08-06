@@ -6,7 +6,7 @@
 
 ## 当前结论
 
-四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；在原七条路线基础上，FOREGS topsoil、subsoil、humus、stream water、stream sediment、floodplain sediment 已拆成六个独立可执行来源，因此共十三个来源，当前都是 85 分、A 级、`normalized_analysis`。十三份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
+四个介质均已完成 canonical 适配、真实来源对账和端到端 fixture；在原七条路线和 FOREGS 六个介质来源基础上，AfSIS Phase I V2.0 非洲土壤已完成接入，因此共十四个来源，当前都是 85 分、A 级、`normalized_analysis`。十四份 30 条人工复核单均已准备且机器比对通过，但尚未由具名人员逐条签署，因此不增加人工复核分，也不标记为 `benchmark_ready`。旧字段 `needs_human_review`、`production_eligible=false` 只为 V1 兼容保留，不再抹去已验证证据。
 
 | 来源 | 已通过的关键项 | 尚未通过的关键项 | 当前决定 |
 |---|---|---|---|
@@ -271,9 +271,23 @@ GTK 旧站当前的 HTTPS 证书链不能通过标准 TLS 校验，而官方文�
 
 六个来源各有 30 行待签署复核单，分层覆盖不同 CSV 成员、普通数值和可能的 `DL/2` 边界；机器比对均为 30/30 PASS，人工字段仍为空。每个来源另有 48 条 fixture；具备总量和王水量的来源按“元素 × 测量基础”平衡，水体和腐殖质按其实际可用目标元素平衡。
 
+## AfSIS Phase I V2.0 复核
+
+官方 World Agroforestry Dataverse 数据集 DOI 为 `10.34725/DVN/66BFOB`，固定版本 2.0（2025-10-13）。适配器只使用三个 `format=original` 文件，不使用 Dataverse 动态转换的 tabular 响应：
+
+| 文件 | 字节 | SHA-256 | 发布方 MD5 |
+|---|---:|---|---|
+| wet chemistry CSV | 847,634 | `32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605` | `2fa987e2c558e3b6c82eb6de3a772d26` |
+| variables XLSX | 21,024 | `f2d5ee0b86af7b7d2066d610862e9bf8c97b7544803b201fb492bae61817ad3c` | `f5eadce8f97c265047a636b3cc9fc82e` |
+| detection limits XLSX | 10,445 | `0b373fe17172d32861ebd829083a8f01c1bca7cbbc09e700c95dfb4f043011f1` | `df7a01bf4200a408c03280800f7d40bb` |
+
+全量对账得到 2,002 个唯一 `SSN`、2,002 个唯一 `RES.ID`、18 个原国家标签、51 个国家-站点对、992 个 topsoil、1,010 个 subsoil 和 1,876 个完整坐标对；126 条记录同时缺少经纬度，不作坐标推断。注册文件和相关论文没有明确 CRS，因此不把经纬度无证据标成 EPSG:4326。As/Cr/Cu/Ni/Pb/Zn 各有 2,002 个发布数值，共 12,012 条目标测定。
+
+所有元素均为风干土 `mg kg^-1` 王水消解准全量结果。As 使用 ICP-MS，其余五元素使用 ICP-OES；变量工作簿和 DL/QL 工作簿的单元格定位逐观测进入证据。变量表把字段 `As.75` 描述成“Arsenic-78”，并报告 2009–2013 采样，而相关 SOIL 论文报告 2009–2012；这两处冲突原样保留。发布数值不带逐行删失限定符，因此适配器保留原数值并另加阈值类别：As/Cu/Pb 分别有 48/6/7 个负数仪器结果；Pb 有 1,969 个正值低于 DL。它们不会被静默删除，也不会被冒充普通检出。30 条待签署复核单覆盖全部国家标签、上下层、缺坐标、三种负数元素和所有实际存在的阈值类别；机器 30/30 PASS，人工字段为空。
+
 ## 四介质联合运行
 
-`fixtures/four-media/combined-v3/request.json` 以 `sources=auto` 请求 As/Cu/Ni/Zn 和 rock/soil/sediment/water。路由选择十三个 A 级 `normalized_analysis` 来源，`scripts/build_four_media_demo.py` 验证每个来源 fixture 的 manifest hash 和逐观测证据后再合并：
+`fixtures/four-media/combined-v3/request.json` 以 `sources=auto` 请求 As/Cu/Ni/Zn 和 rock/soil/sediment/water。路由选择十四个 A 级 `normalized_analysis` 来源，`scripts/build_four_media_demo.py` 验证每个来源 fixture 的 manifest hash 和逐观测证据后再合并：
 
 | 介质/来源 | 观测数 |
 |---|---:|
@@ -287,15 +301,16 @@ GTK 旧站当前的 HTTPS 证书链不能通过标准 TLS 校验，而官方文�
 | soil / FOREGS topsoil | 48 |
 | soil / FOREGS subsoil | 48 |
 | soil / FOREGS humus | 48 |
+| soil / AfSIS Phase I | 48 |
 | sediment / FOREGS stream sediment | 48 |
 | sediment / FOREGS floodplain sediment | 48 |
 | water / FOREGS stream water | 48 |
-| 合计 | 688 |
+| 合计 | 736 |
 
-联合流程得到 688/688 标准化、688/688 有效坐标、20 条已确认删失记录和完整九文件输出。D2 的默认背景键形成 85 个组，其中水体 17 个：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源；FOREGS 的总量、王水、温和硝酸和溶解态边界也没有与既有来源静默混合。FOREGS 中可能的 `DL/2` 数值只保留证据警告，不计入 20 条“已确认删失”。
+联合流程得到 736/736 标准化、736/736 有效坐标、20 条已确认删失记录和完整九文件输出。D2 的默认背景键形成 89 个组，其中水体 17 个：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源；FOREGS 的总量、王水、温和硝酸和溶解态边界以及 AfSIS 的王水准全量与 ICP-MS/ICP-OES 方法也没有与既有来源静默混合。FOREGS 中可能的 `DL/2` 数值和 AfSIS 的低于 DL/QL 数值只保留证据边界，不计入 20 条“已确认删失”。
 
-筛查产生 11 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从十三个来源 fixture 字节级重建。
+筛查产生 16 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从十四个来源 fixture 字节级重建。
 
 ## 复核边界
 
-本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质都有 `normalized_analysis` 路由，但仍是专题、国家、区域、航次或自愿提交覆盖，全部保持 `partial`。土壤现有五个、沉积物四个、水体三个可执行数据集，但粒级、消解、海洋/河流/洪泛平原、分相与方法边界使它们不能自动构成同背景复测；水体 As、Cu、Ni、Zn 虽均已至少有两个来源，海水与淡水或不同方法仍必须隔离比较。
+本报告证明的是官方接口、下载响应、文件结构、适配器和元数据之间的可追溯关系，不证明每个历史测量值等于真实环境状态。覆盖矩阵按请求的最低 evidence tier 和 use mode 计算；四种介质都有 `normalized_analysis` 路由，但仍是专题、国家、区域、航次或自愿提交覆盖，全部保持 `partial`。土壤现有六个、沉积物四个、水体三个可执行数据集，但粒级、消解、海洋/河流/洪泛平原、分相与方法边界使它们不能自动构成同背景复测；水体 As、Cu、Ni、Zn 虽均已至少有两个来源，海水与淡水或不同方法仍必须隔离比较。

@@ -159,6 +159,32 @@
     {
       "geometry": {
         "coordinates": [
+          9.880528333,
+          8.12667833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "group_id": "grp-c3da9c8313ae",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 2.028759336,
+        "record_id": "rec-d31d9961116b50b4b09f2498ce830b5e22dd3b785d9806f06f98f6e299d907ad",
+        "robust_z": -4.203689,
+        "sample_id": "icr034011",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
           6.25,
           65.0408
         ],
@@ -230,6 +256,110 @@
         "record_id": "rec-4aa202c7c8f607e2e6b7a94aca0e11658b629f33602e86b4312676d5001dd566",
         "robust_z": -6.878966,
         "sample_id": "R3579GR20A_00-01 cm",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          9.880528333,
+          8.12667833
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-8bbd196c5d88",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 3.095247095,
+        "record_id": "rec-0aacc2285ee6ac0208d84849e00fce236b15eedf7509dfb0b25d1224748cc779",
+        "robust_z": -4.709249,
+        "sample_id": "icr034011",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          30.0228,
+          -27.5684
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-8bbd196c5d88",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 116.5085933,
+        "record_id": "rec-0e14283e8fe11c828db81638fda336c3cc5cd31da19d252e736544db498f9d8f",
+        "robust_z": 4.130192,
+        "sample_id": "icr048485",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          15.68749167,
+          -7.37775
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-8bbd196c5d88",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 4.070365923,
+        "record_id": "rec-7e9cafd076dbcc6e5d64ef07809e4b7d13adbdfd6da185146176f8a742e86783",
+        "robust_z": -4.042008,
+        "sample_id": "icr072247",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          34.98209381,
+          8.5800066
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-8bbd196c5d88",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+        "medium": "soil",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 90.78275904,
+        "record_id": "rec-f6603ee69bb905f9525b0b7b1a0b842ad0a7b55f7aa2e2878b70c449108e0330",
+        "robust_z": 3.522324,
+        "sample_id": "icr030027",
         "status": "candidate_anomaly"
       },
       "type": "Feature"

@@ -1,0 +1,76 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-06T10:05:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 23162,
+      "path": "demo_input.csv",
+      "sha256": "563f4e461892913088cbc6f65e74f31126210c4375dcf070596fd5c2ff974fe8"
+    },
+    {
+      "bytes": 120701,
+      "path": "sources.jsonl",
+      "sha256": "0d241dfca9acedd34d2e898d9355f529f01b7ce872962319ea8ed267094600af"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 2002,
+    "selected_source_rows": 12
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.34725/DVN/66BFOB",
+    "dataset_version": "2.0",
+    "license": "CC-BY-4.0",
+    "source_id": "afsis-phase-i-wet-chemistry",
+    "title": "AfSIS Phase I archived soil samples: wet chemistry data"
+  },
+  "source_files": [
+    {
+      "bytes": 847634,
+      "filename": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+      "retrieved_at": "2026-08-06T10:02:27Z",
+      "sha256": "32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605",
+      "source_url": "https://data.worldagroforestry.org/api/access/datafile/11218?format=original"
+    },
+    {
+      "bytes": 21024,
+      "filename": "AfSIS_Phase_I_wet_chemistry_variables_v2.xlsx",
+      "retrieved_at": "2026-08-06T10:02:28Z",
+      "sha256": "f2d5ee0b86af7b7d2066d610862e9bf8c97b7544803b201fb492bae61817ad3c",
+      "source_url": "https://data.worldagroforestry.org/api/access/datafile/11219?format=original"
+    },
+    {
+      "bytes": 10445,
+      "filename": "AfSIS_Phase_I_wet_chemistry_detection_limits_v2.xlsx",
+      "retrieved_at": "2026-08-06T10:02:30Z",
+      "sha256": "0b373fe17172d32861ebd829083a8f01c1bca7cbbc09e700c95dfb4f043011f1",
+      "source_url": "https://data.worldagroforestry.org/api/access/datafile/12234?format=original"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "AfSIS Phase I contains 2,002 archived samples from 51 LDSF sites and is not a uniform African grid.",
+    "Aqua-regia values are quasi-total and remain separate from total and other soil extraction bases.",
+    "Published negative instrument results and positive values below source-wide DL or QL remain explicit quality flags; this positive demo excludes negative rows.",
+    "One hundred twenty-six source samples have no coordinates; the demo selects only complete-coordinate rows and does not infer missing positions.",
+    "The source does not state a coordinate reference system; latitude/longitude are preserved while source_crs remains blank.",
+    "The variable workbook description conflicts with field As.75 by saying Arsenic-78, and its 2009-2013 sampling period differs from the related paper's 2009-2012; both conflicts stay in evidence.",
+    "Publisher country labels are retained verbatim, with SAfrica and Zimbambwe normalized only in separate evidence fields."
+  ]
+}

@@ -67,12 +67,22 @@ D2 生成 `d2-confidence-v1` 报告，D1 证据打包器验证输入 SHA-256 后
 - 每个来源准备 30 条分层人工复核记录，机器预检均为 30/30 PASS；`completed_comparisons` 仍为 0，因此来源保持 `normalized_analysis`，不冒充 `benchmark_ready`。
 - 总量、王水可浸出、温和硝酸可浸出和溶解态保持不同 `measurement_basis`；CSV 中恰好等于 `DL/2` 的值只标记为“可能的上游替代”，不直接断言为检出或删失。
 
-### 十三来源联合回归
+## 2026-08-06 18:05 CST：AfSIS Phase I V2.0 扩展
 
-联合四介质 fixture 扩为 688 条观测、85 个比较分区，其中水体 17 个分区：
+| 来源 | 原始样品行 | fixture 观测 | `demo_input.csv` SHA-256 | `sources.jsonl` SHA-256 |
+|---|---:|---:|---|---|
+| `afsis-phase-i-wet-chemistry` | 2,002 | 48 | `563f4e461892913088cbc6f65e74f31126210c4375dcf070596fd5c2ff974fe8` | `0d241dfca9acedd34d2e898d9355f529f01b7ce872962319ea8ed267094600af` |
 
-- `demo_input.csv`：`e6ad90042de02b0be2ead469d53f3c4593ebdf05062b4c47a2c6b5dc9d68a76a`
+全量对账固定三份 original 文件和 publisher MD5/SHA-256，核实 2,002 个唯一 SSN/RES.ID、18 个国家标签、51 个国家-站点对、1,876 个完整坐标对和六目标元素各 2,002 个数值。30 条 review 覆盖所有国家标签、上下层、缺坐标、负数、低于 DL、DL–QL 和高于 QL 类别，自动检查 30/30 PASS、人工字段保持空白。fixture 只选 12 个国家标签的正值完整坐标行，原国家名和独立规范名同时保留。
+
+### 十四来源联合回归
+
+联合四介质 fixture 扩为 736 条观测、89 个比较分区，其中水体仍为 17 个分区：
+
+- `demo_input.csv`：`e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc`
+- `sources.jsonl`：`adf4a1f0e675055dfbd90e11d573a74d86fb7afb48b12e02be1944c64432df89`
+- `run_manifest.json`：`0ee8250b730ece2cfd0dd0a7263a141720bae37bbecc5b4b2b3cfef06a4a1f3b`
 - `sources.jsonl`：`925dd4489d18b63ffb1d44c86ada895c64038d90feeeafce71bb29f2f02738a1`
 - `run_manifest.json`：`f70f773fdb51e2d63cf11fd1a1cbfa689e193e44177d8d2c5f69d96825d8d523`
 
-完整工作流成功标准化并验证 688/688 条坐标，保留 20 条已确认删失观测，输出 11 条工程异常候选。联合输入、证据和九文件输出包均通过字节级重建。
+完整工作流成功标准化并验证 736/736 条坐标，保留 20 条已确认删失观测，输出 16 条工程异常候选。联合输入、证据和九文件输出包均通过字节级重建。
