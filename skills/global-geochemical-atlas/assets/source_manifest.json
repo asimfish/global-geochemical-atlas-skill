@@ -1,6 +1,6 @@
 {
   "registry_version": "geochemical-source-registry-v1",
-  "verified_at": "2026-08-05T06:04:00Z",
+  "verified_at": "2026-08-06T08:00:00Z",
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -294,6 +294,12 @@
         "ROCK NAME",
         "MATERIAL"
       ],
+      "target_analytes": {
+        "As": "AS(PPM)",
+        "Cu": "CU(PPM)",
+        "Ni": "NI(PPM)",
+        "Zn": "ZN(PPM)"
+      },
       "license": {
         "spdx": "CC-BY-SA-4.0",
         "name": "Creative Commons Attribution-ShareAlike 4.0 International",
@@ -369,6 +375,12 @@
         "Latitude",
         "Longitude"
       ],
+      "target_analytes": {
+        "As": ["Top5_As", "A_As", "C_As"],
+        "Cu": ["Top5_Cu", "A_Cu", "C_Cu"],
+        "Ni": ["Top5_Ni", "A_Ni", "C_Ni"],
+        "Zn": ["Top5_Zn", "A_Zn", "C_Zn"]
+      },
       "license": {
         "spdx": "LicenseRef-USGS-Public-Domain",
         "name": "U.S. public domain; credit requested",
@@ -395,6 +407,1546 @@
       "scientific_notes": [
         "The three files represent 0-5 cm, A-horizon, and C-horizon/deep samples and must remain distinguishable.",
         "Legacy qualifiers and units must be decoded from this dataset's own metadata before D2 normalization."
+      ]
+    },
+    "norway-marchem": {
+      "adapter": "marchem_dynamic_snapshot",
+      "title": "MarChem marine chemistry database for Norwegian waters",
+      "publisher": "Institute of Marine Research and Geological Survey of Norway",
+      "dataset_doi": null,
+      "dataset_version": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+      "release_date": null,
+      "data_generated_at": "2026-08-05T10:27:09Z",
+      "landing_page": "https://marchem-editor.hi.no/",
+      "metadata_url": "https://marchem-api.hi.no/labParameterGroup/list",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "norwegian-marine-waters",
+      "download": {
+        "mode": "content-addressed-dynamic-api-snapshot",
+        "url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false",
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "max_bytes": 10000000,
+        "archive_filename": "marchem-inorganic-2003-2024.zip",
+        "expected_sha256": "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6",
+        "expected_bytes": 81598,
+        "expected_member_count": 3,
+        "expected_uncompressed_bytes": 619072,
+        "members": [
+          {
+            "file_id": "metadata",
+            "filename": "MetaData/MarChem_Inorganic_LabParameter_20260805T102709Z.csv",
+            "bytes": 320402,
+            "expected_sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d"
+          },
+          {
+            "file_id": "data",
+            "filename": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+            "bytes": 295287,
+            "expected_sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
+          },
+          {
+            "file_id": "info",
+            "filename": "MarChem_Info_20260805T102709Z",
+            "bytes": 3383,
+            "expected_sha256": "93e4db2dd0c726751f21557caa28a8da4275da87745369d0a506e8fbd84e584f"
+          }
+        ],
+        "snapshot_manifest": "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json"
+      },
+      "required_fields": [
+        "Sample_code",
+        "Cruise_year",
+        "Station_event_code",
+        "Longitude",
+        "Latitude",
+        "Batch_code"
+      ],
+      "metadata_required_fields": [
+        "Batch",
+        "Lab_parameter_code",
+        "Unit",
+        "Wet_or_dry_weight",
+        "Analysis_method",
+        "LLQ",
+        "Laboratory",
+        "Comment",
+        "Sample_preparation_method"
+      ],
+      "target_analytes": {
+        "As": "As_ICPOES_mg/kg",
+        "Cu": "Cu_ICPOES_mg/kg",
+        "Ni": "Ni_ICPOES_mg/kg",
+        "Zn": "Zn_ICPOES_mg/kg"
+      },
+      "expected_counts": {
+        "physical_rows": 1070,
+        "distinct_samples": 880,
+        "duplicate_sample_codes": 190,
+        "target_bearing_rows": 880,
+        "target_observations": 3520
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Institute of Marine Research and Geological Survey of Norway. MarChem marine chemistry database, content-addressed API snapshot observed 2026-08-05T10:27:11Z.",
+      "redistribution": "Use for attributed research analysis; the complete third-party snapshot remains outside Git and is not republished by this project.",
+      "scientific_notes": [
+        "As, Cu, Ni and Zn are reported as dry-weight mg/kg after partial nitric-acid digestion and are not total concentrations.",
+        "The export contains 1,070 physical rows for 880 distinct sample codes because 190 samples occur in two parameter-group rows.",
+        "Batch-level method metadata include accredited and not-accredited analyses and must be retained per observation.",
+        "This dataset version is a project content-addressed dynamic snapshot, not a publisher DOI or immutable publisher release."
+      ]
+    },
+    "gemstat-open-archive": {
+      "adapter": "gemstat_v3_arsenic_range",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 arsenic subset",
+      "publisher": "UNEP GEMS/Water Programme, GEMS/Water Data Centre and German Federal Institute of Hydrology",
+      "dataset_doi": "10.5281/zenodo.18459694",
+      "concept_doi": "10.5281/zenodo.13881899",
+      "dataset_version": "v3",
+      "release_date": "2026-02-02",
+      "landing_page": "https://zenodo.org/records/18459694",
+      "metadata_url": "https://zenodo.org/api/records/18459694",
+      "media": [
+        "water"
+      ],
+      "geographic_scope": "global-freshwater-partial",
+      "download": {
+        "mode": "pinned-zip-member-byte-ranges",
+        "archive_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1",
+        "archive_filename": "GFQA_v3.zip",
+        "archive_bytes": 201278791,
+        "publisher_checksum": {
+          "algorithm": "md5",
+          "value": "00f3ea19ce529753977eb3aeb08fbc47"
+        },
+        "observed_at": "2026-08-05T14:41:20Z",
+        "zip_member_count": 84,
+        "selected_members": [
+          {
+            "file_id": "arsenic-observations",
+            "filename": "Arsenic.csv",
+            "range_start": 3033466,
+            "range_end": 5138990,
+            "range_sha256": "64d67a154816b58c06569c38d74c5d1c1cf3fe4a265a7127f6248a0a06b2386f",
+            "bytes": 30585144,
+            "expected_sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+          },
+          {
+            "file_id": "methods",
+            "filename": "GEMStat_methods_metadata.csv",
+            "range_start": 37150286,
+            "range_end": 37236391,
+            "range_sha256": "b57e5a891c86df10467bf0a4292411646e465c42829b6a6812b752bd23b52eea",
+            "bytes": 521959,
+            "expected_sha256": "fba3a0903228811def4cd7910298ccd1965b64b76fbdca90445988eec08ffbb3"
+          },
+          {
+            "file_id": "parameters",
+            "filename": "GEMStat_parameter_metadata.csv",
+            "range_start": 37236392,
+            "range_end": 37279436,
+            "range_sha256": "b65ea5a45a0439b53a95694986e30df2ea7f0b4dca0c78c01302f6d3cfb85df5",
+            "bytes": 146762,
+            "expected_sha256": "46f9ddc6ed181a8a3a685fe590143d847e20960e67f20aa7dd9f4347f2c9b518"
+          },
+          {
+            "file_id": "stations",
+            "filename": "GEMStat_station_metadata.csv",
+            "range_start": 37279437,
+            "range_end": 37914330,
+            "range_sha256": "aed790aa81b1801bfe16da00e1b1a4455d938829d885d374a3bd0b5612a33520",
+            "bytes": 3571887,
+            "expected_sha256": "978d3682d4fc702e1dd9c9e4e148ca586899002b551018dbfc3e40c9f7e1695d"
+          },
+          {
+            "file_id": "readme",
+            "filename": "README_output_format.txt",
+            "range_start": 171533195,
+            "range_end": 171536953,
+            "range_sha256": "4849149f512a9ef8a5c0c32a64821c59a3f1132e73412efe7568aeb00525609f",
+            "bytes": 16727,
+            "expected_sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d"
+          }
+        ],
+        "acquisition_script": "scripts/acquire_gemstat_arsenic.py",
+        "snapshot_manifest": "fixtures/four-media/water/gemstat-open-archive/snapshot_manifest.json"
+      },
+      "required_fields": [
+        "GEMS Station Number",
+        "Sample Date",
+        "Sample Time",
+        "Depth",
+        "Parameter Code",
+        "Analysis Method Code",
+        "Value Flags",
+        "Value",
+        "Unit",
+        "Data Quality"
+      ],
+      "station_required_fields": [
+        "GEMS Station Number",
+        "Country Name",
+        "Water Type",
+        "Latitude",
+        "Longitude"
+      ],
+      "method_required_fields": [
+        "Parameter Code",
+        "Analysis Method Code",
+        "Unit",
+        "Parameter Long Name",
+        "Method Name",
+        "Method Type",
+        "Method Number",
+        "Method Source",
+        "Method Description"
+      ],
+      "target_analytes": {
+        "As": [
+          "As-Dis",
+          "As-Sus",
+          "As-Tot"
+        ]
+      },
+      "expected_counts": {
+        "arsenic_observations": 492999,
+        "arsenic_station_count": 15621,
+        "arsenic_country_count": 33,
+        "arsenic_parameter_counts": {
+          "As-Dis": 188961,
+          "As-Sus": 5439,
+          "As-Tot": 298599
+        },
+        "unit_counts": {
+          "mg/l": 453413,
+          "µg/l": 39586
+        },
+        "value_flag_counts": {
+          "": 289636,
+          "<": 203344,
+          ">": 19
+        },
+        "data_quality_counts": {
+          "Fair": 466710,
+          "Good": 4557,
+          "Pending review": 1649,
+          "Suspect": 294,
+          "Unknown": 19789
+        },
+        "water_type_counts": {
+          "Groundwater station": 30671,
+          "Lake station": 43253,
+          "Reservoir station": 13886,
+          "River station": 402080,
+          "Wetland station": 3109
+        },
+        "method_combinations_used": 24,
+        "undefined_method_observations": 449714,
+        "unmatched_method_rows": 0,
+        "unmatched_station_rows": 0,
+        "exact_duplicate_extra_observations": 5655,
+        "exact_duplicate_groups": 5513,
+        "maximum_exact_duplicate_multiplicity": 6,
+        "pending_review_negative_sentinels": 3,
+        "pending_review_extreme_mg_l": 78,
+        "station_metadata_rows": 22981,
+        "station_metadata_unique_ids": 22946,
+        "station_metadata_exact_duplicate_rows": 35,
+        "parameter_metadata_rows": 621,
+        "method_metadata_rows": 2228
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Heinle, M., Lisniak, D., and Saile, P. (2026). UNEP GEMS/Water Global Freshwater Quality Archive, v3. Zenodo. https://doi.org/10.5281/zenodo.18459694",
+      "redistribution": "Use for attributed research analysis. The complete third-party archive remains outside Git; this project materializes only a verified arsenic and metadata subset.",
+      "scientific_notes": [
+        "As-Dis, As-Sus and As-Tot are distinct dissolved, suspended and total fractions and must not be merged silently.",
+        "The arsenic subset contains both mg/l and µg/l and preserves less-than and greater-than censoring flags.",
+        "Most arsenic rows use undefined analysis method code 0; method completeness therefore remains a material comparison limitation.",
+        "Three -999.999 and 78 values at or above 1000 mg/l are marked Pending review and must not enter normalized demos or anomaly claims.",
+        "Station metadata contain 35 exact duplicate rows across 35 IDs; the adapter preserves both source locators but uses one identical station fact set.",
+        "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 station rows and 621 parameter rows; the one-record differences remain explicit.",
+        "GEMStat is voluntarily contributed and geographically uneven; the arsenic subset covers 33 countries and is not uniform global freshwater coverage."
+      ]
+    },
+    "geotraces-idp2025": {
+      "adapter": "geotraces_webodv_snapshot",
+      "title": "GEOTRACES Intermediate Data Product 2025: discrete seawater",
+      "publisher": "GEOTRACES Intermediate Data Product Group and NERC EDS British Oceanographic Data Centre",
+      "dataset_doi": "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "dataset_version": "IDP2025",
+      "release_date": "2025-11-20",
+      "landing_page": "https://www.bodc.ac.uk/geotraces/data/dp/",
+      "metadata_url": "https://www.bodc.ac.uk/data/published_data_library/api/doi/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "media": [
+        "water"
+      ],
+      "geographic_scope": "global-ocean-cruise-tracks",
+      "download": {
+        "mode": "content-addressed-webodv-export",
+        "exporter_landing_page": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV",
+        "metadata_api": "https://www.bodc.ac.uk/data/published_data_library/api/doi/42c92148-8d03-8be6-e063-7086abc09f0c",
+        "observed_at": "2026-08-05T13:41:55Z",
+        "archive_filename": "geotraces-idp2025-seawater-depth-cu-ni-zn.zip",
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "max_bytes": 5000000,
+        "files": [
+          {
+            "file_id": "webodv-export-archive",
+            "filename": "geotraces-idp2025-seawater-depth-cu-ni-zn.zip",
+            "url": "https://geotraces.webodv.awi.de/",
+            "bytes": 903710,
+            "expected_sha256": "a61f441e5ae269f6c5514a9279393728f464859d970ca6be19207f7e601e5677",
+            "sha256_basis": "observed_official_webodv_export_2026-08-05T13:41:55Z"
+          }
+        ],
+        "expected_member_count": 242,
+        "expected_uncompressed_bytes": 29049057,
+        "members": [
+          {
+            "file_id": "seawater-depth-cu-ni-zn",
+            "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+            "bytes": 28760915,
+            "expected_sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44"
+          }
+        ],
+        "selection": {
+          "dataset_path": "IDP2025>seawater>GEOTRACES_IDP2025_Seawater",
+          "format": "ODV Spreadsheet V4.8",
+          "logic": "stations_with_one_or_more_selected_target_variables",
+          "geographic_bounds": [
+            -243,
+            117,
+            -90,
+            90
+          ],
+          "date_bounds": [
+            "1850-01-01",
+            "2026-12-31"
+          ],
+          "output_variable_ids_one_based": [
+            1,
+            62,
+            81,
+            88
+          ],
+          "required_variable_ids_zero_based": [
+            61,
+            80,
+            87
+          ]
+        },
+        "snapshot_manifest": "fixtures/four-media/water/geotraces-idp2025/snapshot_manifest.json"
+      },
+      "required_fields": [
+        "Cruise",
+        "Station",
+        "yyyy-mm-ddThh:mm:ss.sss",
+        "Longitude [degrees_east]",
+        "Latitude [degrees_north]",
+        "Sampling Devices",
+        "Cruise Information Link",
+        "DEPTH [m]",
+        "Cu_D_CONC [nmol/kg]",
+        "Ni_D_CONC [nmol/kg]",
+        "Zn_D_CONC [nmol/kg]"
+      ],
+      "target_analytes": {
+        "Cu": "Cu_D_CONC [nmol/kg]",
+        "Ni": "Ni_D_CONC [nmol/kg]",
+        "Zn": "Zn_D_CONC [nmol/kg]"
+      },
+      "quality_schema": {
+        "name": "SEADATANET",
+        "accepted_for_demo": [
+          "1",
+          "2"
+        ],
+        "flag_meanings": {
+          "0": "no quality control",
+          "1": "good value",
+          "2": "probably good value",
+          "3": "probably bad value",
+          "4": "bad value",
+          "5": "changed value",
+          "6": "value below detection",
+          "7": "value in excess",
+          "8": "interpolated value",
+          "9": "missing value",
+          "A": "value phenomenon uncertain",
+          "B": "nominal value",
+          "Q": "value below limit of quantification"
+        }
+      },
+      "expected_counts": {
+        "collection_station_count": 4094,
+        "collection_cruise_count": 82,
+        "collection_data_variable_count": 418,
+        "physical_rows": 69704,
+        "target_bearing_rows": 19186,
+        "target_observations": 39327,
+        "selected_cruises": 46,
+        "selected_cruise_station_pairs": 1550,
+        "target_value_counts": {
+          "Cu": 6275,
+          "Ni": 17035,
+          "Zn": 16017
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International with IDP2025 Fair Data Use expectations",
+        "url": "https://www.bodc.ac.uk/geotraces/data/idp2025/documents/IDP2025_FairDataUseStatement.pdf"
+      },
+      "citation": "GEOTRACES Intermediate Data Product Group (2025). The GEOTRACES Intermediate Data Product 2025 (IDP2025). NERC EDS British Oceanographic Data Centre NOC. https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "redistribution": "Use with attribution and the IDP2025 Fair Data Use statement; retain original contributor citations. The complete export remains outside Git.",
+      "scientific_notes": [
+        "This source covers discrete seawater along cruise tracks, not a regular global grid.",
+        "The registered target subset contains dissolved Cu, Ni and Zn in nmol/kg; arsenic is absent from the official IDP2025 seawater variable inventory.",
+        "Dissolved, dissolved-labile and particulate fractions are distinct and must not be combined.",
+        "SeaDataNet quality flags and contributor-level method/citation links must remain attached to observations.",
+        "Molar-per-mass values must not be silently converted to mass-per-volume without element atomic mass and an explicit seawater-density assumption."
+      ]
+    },
+    "japan-gsj-geochemical-map": {
+      "adapter": "gsj_japan_river_sediment",
+      "title": "Geochemical Map of Japan: national river-sediment sample and concentration tables",
+      "publisher": "Geological Survey of Japan, AIST",
+      "dataset_doi": null,
+      "dataset_version": "sample-2024-02-20_concentration-2007-01-10",
+      "release_date": "2024-02-20",
+      "landing_page": "https://gbank.gsj.jp/geochemmap/data/download.htm",
+      "metadata_url": "https://www.gsj.jp/en/about/overview/geochemical-map.html",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "japan-national-river-network-partial",
+      "download": {
+        "mode": "pinned-official-csv-pair",
+        "max_bytes_per_file": 2000000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "observed_at": "2026-08-06T03:48:23Z",
+        "encoding": "CP932-compatible Shift_JIS",
+        "files": [
+          {
+            "file_id": "samples",
+            "filename": "samplejoho.csv",
+            "url": "https://gbank.gsj.jp/geochemmap/data/joho/samplejoho.csv",
+            "publisher_updated_at": "2024-02-20",
+            "bytes": 334302,
+            "expected_sha256": "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c"
+          },
+          {
+            "file_id": "concentrations",
+            "filename": "noudo.csv",
+            "url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv",
+            "publisher_updated_at": "2007-01-10",
+            "bytes": 1198951,
+            "expected_sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671"
+          }
+        ]
+      },
+      "required_fields": [
+        "試料番号",
+        "経度(JGD2000)",
+        "緯度(JGD2000)",
+        "番号2",
+        "As",
+        "Cr",
+        "Cu",
+        "Hg",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "sample_required_fields": [
+        "試料番号",
+        "地図名",
+        "経度(JGD2000)",
+        "緯度(JGD2000)",
+        "採取地",
+        "川",
+        "試料粒度"
+      ],
+      "concentration_required_fields": [
+        "番号2",
+        "As",
+        "Cr",
+        "Cu",
+        "Hg",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "target_analytes": {
+        "As": "As",
+        "Cr": "Cr",
+        "Cu": "Cu",
+        "Hg": "Hg",
+        "Ni": "Ni",
+        "Pb": "Pb",
+        "Zn": "Zn"
+      },
+      "target_units": {
+        "As": "ppm",
+        "Cr": "ppm",
+        "Cu": "ppm",
+        "Hg": "ppb",
+        "Ni": "ppm",
+        "Pb": "ppm",
+        "Zn": "ppm"
+      },
+      "expected_counts": {
+        "sample_rows": 3024,
+        "concentration_physical_rows": 3025,
+        "concentration_blank_rows": 1,
+        "concentration_rows": 3024,
+        "distinct_reported_sample_ids": 3023,
+        "duplicate_reported_sample_ids": 1,
+        "duplicate_sample_id": "78013",
+        "ordinal_joined_rows": 3024,
+        "target_observations": 21168,
+        "target_value_counts": {
+          "As": 3024,
+          "Cr": 3024,
+          "Cu": 3024,
+          "Hg": 3024,
+          "Ni": 3024,
+          "Pb": 3024,
+          "Zn": 3024
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "name": "GSJ website terms aligned with Japan Government Standard Terms of Use 2.0",
+        "url": "https://www.gsj.jp/license/index.html"
+      },
+      "citation": "Imai, N. et al. (2004). Geochemical Map of Japan. Geological Survey of Japan, AIST, 209 p.; official online sample and concentration tables.",
+      "redistribution": "Use for attributed research analysis under the GSJ website terms. The complete third-party CSV files remain outside Git.",
+      "scientific_notes": [
+        "This adapter covers the national river-sediment tables only; marine sediment and later surface-soil products remain separate datasets.",
+        "The national map is based on fine stream sediment below 180 micrometres and discrete river-network samples, not a regular national grid.",
+        "Source coordinates are JGD2000 (EPSG:4612) and must be transformed explicitly before WGS84 map output.",
+        "The official web service identifies Hg as ppb and the other registered trace elements as ppm.",
+        "Sample ID 78013 occurs twice in both files; the adapter joins by normalized sample ID plus occurrence order and never overwrites a duplicate dictionary key.",
+        "The two CSV files do not contain row-level analytical method, detection-limit or quality-flag fields; method evidence must be attached from the cited project publications."
+      ]
+    },
+    "pangaea-north-africa-soil": {
+      "adapter": "pangaea_tab_dataset",
+      "title": "Chemical compositions of deflatable soil fractions from North Africa",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.949903",
+      "parent_dataset_doi": "10.1594/PANGAEA.949906",
+      "publication_doi": "10.1016/j.quascirev.2022.107729",
+      "dataset_version": "2022-10-25",
+      "release_date": "2022-10-25",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.949903",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.949903",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "north-africa-sahara-sahel-partial",
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 100000,
+        "accepted_content_types": [
+          "text/tab-separated-values"
+        ],
+        "observed_at": "2026-08-06T03:13:54Z",
+        "files": [
+          {
+            "file_id": "table-s5",
+            "filename": "Table_S5.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile",
+            "bytes": 30336,
+            "expected_sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485"
+          }
+        ]
+      },
+      "required_fields": [
+        "Event",
+        "Area",
+        "Location",
+        "Latitude",
+        "Longitude",
+        "Sample ID"
+      ],
+      "target_analytes": {
+        "As": "As [mg/kg]",
+        "Cr": "Cr [mg/kg]",
+        "Cu": "Cu [mg/kg]",
+        "Ni": "Ni [mg/kg]",
+        "Pb": "Pb [mg/kg]",
+        "Zn": "Zn [mg/kg]"
+      },
+      "expected_counts": {
+        "physical_rows": 43,
+        "distinct_samples": 43,
+        "element_fields": 48,
+        "nonempty_element_measurements": 2061,
+        "pangaea_reported_data_points": 2190,
+        "target_observations": 258,
+        "target_value_counts": {
+          "As": 43,
+          "Cr": 43,
+          "Cu": 43,
+          "Ni": 43,
+          "Pb": 43,
+          "Zn": 43
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Guinoiseau, D. et al. (2022). Chemical compositions of deflatable soil fractions from North Africa. PANGAEA. https://doi.org/10.1594/PANGAEA.949903",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic demonstration rows retain DOI, file hash and row locators.",
+      "scientific_notes": [
+        "The table contains 43 discrete samples and is not continuous coverage of North Africa.",
+        "The bundled publication describes the analysed material as the less-than-20-micrometre fine silt-clay fraction of bulk soil.",
+        "Values use HF-HNO3 acid digestion and Agilent 7900 quadrupole ICP-MS with 2.5% HNO3 eluent.",
+        "International basalt standards BHVO-2 and BCR-2 agreed within plus or minus 10 percent of recommended concentrations in the parent study.",
+        "Publisher location strings are retained; border samples are not assigned to a country solely from coordinates."
+      ]
+    },
+  "foregs-topsoil": {
+      "adapter": "foregs_static_zip",
+      "title": "FOREGS Geochemical Atlas of Europe: topsoil",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "dataset_doi": null,
+      "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+      "release_date": "2005",
+      "publisher_file_snapshot": "2026-03-03",
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "metadata_url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "europe-low-density-continental-baseline",
+      "sample_type": "residual topsoil, 0-25 cm without organic layer",
+      "sample_depth_min_m": "0",
+      "sample_depth_max_m": "0.25",
+      "grain_fraction": "<2 mm",
+      "download": {
+        "mode": "official-legacy-http-zip-with-pinned-sha256",
+        "max_bytes": 2000000,
+        "max_extracted_bytes": 20000000,
+        "expected_member_count": 16,
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "archive",
+            "filename": "Topsoil.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip",
+            "bytes": 837779,
+            "expected_sha256": "ac23bffd5e116545a8c5618c943c75d995e81cdf5adc6d2902238d2e11e40357"
+          }
+        ],
+        "members": [
+          {
+            "file_id": "aqua-regia",
+            "filename": "T_AR_data_2v4_8Feb06.csv",
+            "bytes": 74667,
+            "expected_sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+            "physical_rows": 837,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "aqua_regia_leachable_<2mm_topsoil",
+            "analytical_method": "ICP-AES",
+            "digestion_or_extraction": "hot aqua regia leach at 95 C",
+            "target_analytes": {
+              "As": "AS_AR",
+              "Cr": "CR_AR",
+              "Cu": "CU_AR",
+              "Ni": "NI_AR",
+              "Pb": "PB_AR",
+              "Zn": "ZN_AR"
+            }
+          },
+          {
+            "file_id": "mercury",
+            "filename": "T_Hg_data_2v4_8Feb06.csv",
+            "bytes": 48814,
+            "expected_sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+            "physical_rows": 830,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_Hg_direct_solid_<2mm_topsoil",
+            "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+            "digestion_or_extraction": "direct solid analysis; no wet digestion",
+            "target_analytes": {
+              "Hg": "HG"
+            }
+          },
+          {
+            "file_id": "xrf-total",
+            "filename": "T_XRF_data_2v6_8Feb06.csv",
+            "bytes": 105504,
+            "expected_sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+            "physical_rows": 845,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_topsoil",
+            "analytical_method": "wavelength-dispersive XRF",
+            "digestion_or_extraction": "lithium metaborate fusion",
+            "target_analytes": {
+              "Cr": "CR_T",
+              "Zn": "ZN_T"
+            }
+          },
+          {
+            "file_id": "icp-total",
+            "filename": "T_icp_data_2v3_8Feb06.csv",
+            "bytes": 138142,
+            "expected_sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+            "physical_rows": 843,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_topsoil",
+            "analytical_method": "quadrupole ICP-MS",
+            "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+            "target_analytes": {
+              "Ni": "NI",
+              "Pb": "PB"
+            }
+          },
+          {
+            "file_id": "icp-additional-total",
+            "filename": "T_icpadd_data_2v3_8Feb06.csv",
+            "bytes": 82167,
+            "expected_sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+            "physical_rows": 840,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_topsoil",
+            "analytical_method": "quadrupole ICP-MS",
+            "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+            "target_analytes": {
+              "As": "AS_MS",
+              "Cu": "CU_MS"
+            }
+          }
+        ]
+      },
+      "required_fields": [
+        "GTN",
+        "LONG",
+        "LAT"
+      ],
+      "target_analytes": {
+        "As": 1677,
+        "Cr": 1682,
+        "Cu": 1677,
+        "Hg": 830,
+        "Ni": 1680,
+        "Pb": 1680,
+        "Zn": 1682
+      },
+      "expected_counts": {
+        "physical_rows": 4195,
+        "distinct_gtn_union": 862,
+        "target_observations": 10908,
+        "target_value_counts": {
+          "As": 1677,
+          "Cr": 1682,
+          "Cu": 1677,
+          "Hg": 830,
+          "Ni": 1680,
+          "Pb": 1680,
+          "Zn": 1682
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "name": "FOREGS atlas citation and copyright notice",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      },
+      "citation": "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo.",
+      "redistribution": "Attributed research analysis. Full publisher archives remain outside Git; checked-in fixtures retain file hashes and row locators.",
+      "scientific_notes": [
+        "About one site per 4,700 square kilometres; this is a low-density continental baseline, not local or continuous coverage.",
+        "Coordinates were transformed from national systems for continental-scale presentation.",
+        "Published CSVs lack row-level less-than qualifiers; exact half-DL values are flagged as possible upstream DL/2 substitutions.",
+        "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases.",
+        "Some source tables contain repeated GTNs; source row locators preserve them instead of overwriting."
+      ]
+    },
+    "foregs-subsoil": {
+      "adapter": "foregs_static_zip",
+      "title": "FOREGS Geochemical Atlas of Europe: subsoil",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "dataset_doi": null,
+      "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+      "release_date": "2005",
+      "publisher_file_snapshot": "2026-03-03",
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "metadata_url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "europe-low-density-continental-baseline",
+      "sample_type": "residual lower-horizon subsoil; 25 cm layer within 50-200 cm depth range",
+      "sample_depth_min_m": "",
+      "sample_depth_max_m": "",
+      "grain_fraction": "<2 mm",
+      "download": {
+        "mode": "official-legacy-http-zip-with-pinned-sha256",
+        "max_bytes": 2000000,
+        "max_extracted_bytes": 20000000,
+        "expected_member_count": 16,
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "archive",
+            "filename": "Subsoil.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip",
+            "bytes": 788137,
+            "expected_sha256": "a0c5f40174c28a0ec0b5e36e97344497d9216be0b22ba80b7dddf9ff73d832c0"
+          }
+        ],
+        "members": [
+          {
+            "file_id": "aqua-regia",
+            "filename": "C_AR_data_2v5_8Feb06.csv",
+            "bytes": 65998,
+            "expected_sha256": "a6be09c8db44f22cac340285886d866d9420f58a649f46dab5eff7af489047bc",
+            "physical_rows": 784,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+            "analytical_method": "ICP-AES",
+            "digestion_or_extraction": "hot aqua regia leach at 95 C",
+            "target_analytes": {
+              "As": "AS_AR_C",
+              "Cr": "CR_AR_C",
+              "Cu": "CU_AR_C",
+              "Ni": "NI_AR_C",
+              "Pb": "PB_AR_C",
+              "Zn": "ZN_AR_C"
+            }
+          },
+          {
+            "file_id": "mercury",
+            "filename": "C_Hg_data_2v4_9Feb06.csv",
+            "bytes": 45702,
+            "expected_sha256": "ab05092768181a03b02c9abdfea4981d1088677e2d646b63a3bbf6dcdada93d2",
+            "physical_rows": 779,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_Hg_direct_solid_<2mm_subsoil",
+            "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+            "digestion_or_extraction": "direct solid analysis; no wet digestion",
+            "target_analytes": {
+              "Hg": "Hg_C"
+            }
+          },
+          {
+            "file_id": "xrf-total",
+            "filename": "C_XRF_data_2v6_8Feb06.csv",
+            "bytes": 98402,
+            "expected_sha256": "436ebabf7431b1d93769d63fcc2d50755bac9e72a2141dc6325c69cafa1c591b",
+            "physical_rows": 788,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_subsoil",
+            "analytical_method": "wavelength-dispersive XRF",
+            "digestion_or_extraction": "lithium metaborate fusion",
+            "target_analytes": {
+              "Cr": "CR_SI",
+              "Zn": "ZN_SI"
+            }
+          },
+          {
+            "file_id": "icp-total",
+            "filename": "C_icp_data_2v6_9Feb06.csv",
+            "bytes": 128965,
+            "expected_sha256": "b983234ff136212be55b8fb9a2d12fb41433ad1315c8eca8d91d2ee207712d8b",
+            "physical_rows": 788,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_subsoil",
+            "analytical_method": "quadrupole ICP-MS",
+            "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+            "target_analytes": {
+              "Ni": "NI",
+              "Pb": "PB"
+            }
+          },
+          {
+            "file_id": "icp-additional-total",
+            "filename": "C_icpadd_data_2v5_9Feb06.csv",
+            "bytes": 72001,
+            "expected_sha256": "313446ee8924841c8c4725dd3084bb6ef949092c51130aa12be25b94008f74c7",
+            "physical_rows": 783,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_subsoil",
+            "analytical_method": "quadrupole ICP-MS",
+            "digestion_or_extraction": "cold HNO3-HF dissolution for selected elements",
+            "target_analytes": {
+              "As": "AS_MS",
+              "Cu": "CU_MSNEW"
+            }
+          }
+        ]
+      },
+      "required_fields": [
+        "GTN",
+        "LONG",
+        "LAT"
+      ],
+      "target_analytes": {
+        "As": 1567,
+        "Cr": 1572,
+        "Cu": 1567,
+        "Hg": 779,
+        "Ni": 1572,
+        "Pb": 1572,
+        "Zn": 1572
+      },
+      "expected_counts": {
+        "physical_rows": 3922,
+        "distinct_gtn_union": 794,
+        "target_observations": 10201,
+        "target_value_counts": {
+          "As": 1567,
+          "Cr": 1572,
+          "Cu": 1567,
+          "Hg": 779,
+          "Ni": 1572,
+          "Pb": 1572,
+          "Zn": 1572
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "name": "FOREGS atlas citation and copyright notice",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      },
+      "citation": "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo.",
+      "redistribution": "Attributed research analysis. Full publisher archives remain outside Git; checked-in fixtures retain file hashes and row locators.",
+      "scientific_notes": [
+        "About one site per 4,700 square kilometres; this is a low-density continental baseline, not local or continuous coverage.",
+        "Coordinates were transformed from national systems for continental-scale presentation.",
+        "Published CSVs lack row-level less-than qualifiers; exact half-DL values are flagged as possible upstream DL/2 substitutions.",
+        "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases."
+      ]
+    },
+    "foregs-humus": {
+      "adapter": "foregs_static_zip",
+      "title": "FOREGS Geochemical Atlas of Europe: humus",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "dataset_doi": null,
+      "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+      "release_date": "2005",
+      "publisher_file_snapshot": "2026-03-03",
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "metadata_url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "europe-low-density-continental-baseline",
+      "sample_type": "humus / organic horizon where present",
+      "sample_depth_min_m": "",
+      "sample_depth_max_m": "",
+      "grain_fraction": "source humus material",
+      "download": {
+        "mode": "official-legacy-http-zip-with-pinned-sha256",
+        "max_bytes": 2000000,
+        "max_extracted_bytes": 20000000,
+        "expected_member_count": 6,
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "archive",
+            "filename": "Humus.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip",
+            "bytes": 87509,
+            "expected_sha256": "9c2dd6ffa6ca10be9f7c550e3043da9abdae0294850d52cbacc15efdaacf82ef"
+          }
+        ],
+        "members": [
+          {
+            "file_id": "mercury",
+            "filename": "H_Hg_data_2v3_7Aug2007.csv",
+            "bytes": 14968,
+            "expected_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+            "physical_rows": 377,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_Hg_direct_solid_humus",
+            "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+            "digestion_or_extraction": "direct solid analysis; no wet digestion",
+            "target_analytes": {
+              "Hg": "Hg"
+            }
+          },
+          {
+            "file_id": "mild-acid-icp",
+            "filename": "H_icp_data_2v2_11Mar04.csv",
+            "bytes": 20190,
+            "expected_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+            "physical_rows": 367,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "mild_nitric_acid_leachable_humus",
+            "analytical_method": "ICP-MS",
+            "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+            "target_analytes": {
+              "Cu": "CU",
+              "Ni": "NI",
+              "Zn": "ZN"
+            }
+          },
+          {
+            "file_id": "mild-acid-icp-additional",
+            "filename": "H_icpadd_data_2v0.csv",
+            "bytes": 22048,
+            "expected_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+            "physical_rows": 367,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "mild_nitric_acid_leachable_humus",
+            "analytical_method": "ICP-MS",
+            "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+            "target_analytes": {
+              "Pb": "PB"
+            }
+          }
+        ]
+      },
+      "required_fields": [
+        "GTN",
+        "LONG",
+        "LAT"
+      ],
+      "target_analytes": {
+        "Cu": 367,
+        "Hg": 377,
+        "Ni": 367,
+        "Pb": 367,
+        "Zn": 367
+      },
+      "expected_counts": {
+        "physical_rows": 1111,
+        "distinct_gtn_union": 388,
+        "target_observations": 1845,
+        "target_value_counts": {
+          "Cu": 367,
+          "Hg": 377,
+          "Ni": 367,
+          "Pb": 367,
+          "Zn": 367
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "name": "FOREGS atlas citation and copyright notice",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      },
+      "citation": "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo.",
+      "redistribution": "Attributed research analysis. Full publisher archives remain outside Git; checked-in fixtures retain file hashes and row locators.",
+      "scientific_notes": [
+        "About one site per 4,700 square kilometres; this is a low-density continental baseline, not local or continuous coverage.",
+        "Coordinates were transformed from national systems for continental-scale presentation.",
+        "Published CSVs lack row-level less-than qualifiers; exact half-DL values are flagged as possible upstream DL/2 substitutions.",
+        "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases.",
+        "Mild nitric acid mainly targets adsorbed, exchangeable and carbonate-bound phases; it is not total composition.",
+        "The published humus tables do not contain As or Cr."
+      ]
+    },
+    "foregs-stream-water": {
+      "adapter": "foregs_static_zip",
+      "title": "FOREGS Geochemical Atlas of Europe: stream water",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "dataset_doi": null,
+      "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+      "release_date": "2005",
+      "publisher_file_snapshot": "2026-03-03",
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "metadata_url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+      "media": [
+        "water"
+      ],
+      "geographic_scope": "europe-low-density-continental-baseline",
+      "sample_type": "stream water",
+      "sample_depth_min_m": "",
+      "sample_depth_max_m": "",
+      "grain_fraction": "<0.45 micrometre filtered fraction",
+      "download": {
+        "mode": "official-legacy-http-zip-with-pinned-sha256",
+        "max_bytes": 2000000,
+        "max_extracted_bytes": 20000000,
+        "expected_member_count": 2,
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "archive",
+            "filename": "Stream-Water.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip",
+            "bytes": 404125,
+            "expected_sha256": "2c081224ea3f3646d805f7bbe9fd7737ecfdf0938c2abff444ff28b540116fc3"
+          }
+        ],
+        "members": [
+          {
+            "file_id": "stream-water",
+            "filename": "W_all_data_2v8_17Sep07.csv",
+            "bytes": 312446,
+            "expected_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+            "physical_rows": 808,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "dissolved_<0.45um_stream_water",
+            "analytical_method": "ICP-QMS for published trace metals",
+            "digestion_or_extraction": "filtered below 0.45 micrometres and acidified to 1% v/v HNO3",
+            "target_analytes": {
+              "As": "AS",
+              "Cr": "CR",
+              "Cu": "CU",
+              "Ni": "NI",
+              "Pb": "PB",
+              "Zn": "ZN"
+            }
+          }
+        ]
+      },
+      "required_fields": [
+        "GTN",
+        "LONG",
+        "LAT"
+      ],
+      "target_analytes": {
+        "As": 808,
+        "Cr": 808,
+        "Cu": 808,
+        "Ni": 808,
+        "Pb": 808,
+        "Zn": 808
+      },
+      "expected_counts": {
+        "physical_rows": 808,
+        "distinct_gtn_union": 808,
+        "target_observations": 4848,
+        "target_value_counts": {
+          "As": 808,
+          "Cr": 808,
+          "Cu": 808,
+          "Ni": 808,
+          "Pb": 808,
+          "Zn": 808
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "name": "FOREGS atlas citation and copyright notice",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      },
+      "citation": "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo.",
+      "redistribution": "Attributed research analysis. Full publisher archives remain outside Git; checked-in fixtures retain file hashes and row locators.",
+      "scientific_notes": [
+        "About one site per 4,700 square kilometres; this is a low-density continental baseline, not local or continuous coverage.",
+        "Coordinates were transformed from national systems for continental-scale presentation.",
+        "Published CSVs lack row-level less-than qualifiers; exact half-DL values are flagged as possible upstream DL/2 substitutions.",
+        "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases.",
+        "Rejected mercury data are not present.",
+        "Stream-water composition varies seasonally and yearly; this atlas is not a time series."
+      ]
+    },
+    "foregs-stream-sediment": {
+      "adapter": "foregs_static_zip",
+      "title": "FOREGS Geochemical Atlas of Europe: stream sediment",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "dataset_doi": null,
+      "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+      "release_date": "2005",
+      "publisher_file_snapshot": "2026-03-03",
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "metadata_url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "europe-low-density-continental-baseline",
+      "sample_type": "active stream sediment composite from a small drainage basin",
+      "sample_depth_min_m": "",
+      "sample_depth_max_m": "",
+      "grain_fraction": "wet sieved <150 micrometres",
+      "download": {
+        "mode": "official-legacy-http-zip-with-pinned-sha256",
+        "max_bytes": 2000000,
+        "max_extracted_bytes": 20000000,
+        "expected_member_count": 10,
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "archive",
+            "filename": "Stream-Sediment.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip",
+            "bytes": 641447,
+            "expected_sha256": "639f9333d58a786609d86cfb52eeb48fb50e0841a2aeaaf3b7a01dbf48dab5c1"
+          }
+        ],
+        "members": [
+          {
+            "file_id": "aqua-regia",
+            "filename": "S_AR_data_2v5_30Nov2006.csv",
+            "bytes": 82266,
+            "expected_sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+            "physical_rows": 845,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "aqua_regia_leachable_<150um_stream_sediment",
+            "analytical_method": "ICP-AES",
+            "digestion_or_extraction": "hot aqua regia leach at 95 C",
+            "target_analytes": {
+              "As": "As",
+              "Cr": "Cr",
+              "Cu": "Cu",
+              "Ni": "Ni",
+              "Pb": "Pb",
+              "Zn": "Zn"
+            }
+          },
+          {
+            "file_id": "mercury",
+            "filename": "S_Hg_data_2v5_30Nov06.csv",
+            "bytes": 40477,
+            "expected_sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef",
+            "physical_rows": 848,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_Hg_direct_solid_<150um_stream_sediment",
+            "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+            "digestion_or_extraction": "direct solid analysis; no wet digestion",
+            "target_analytes": {
+              "Hg": "Hg"
+            }
+          },
+          {
+            "file_id": "xrf-total",
+            "filename": "S_XRF_data_2v9_30Nov06.csv",
+            "bytes": 132523,
+            "expected_sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+            "physical_rows": 852,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<150um_stream_sediment",
+            "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+            "digestion_or_extraction": "pressed powder pellet",
+            "target_analytes": {
+              "As": "AS",
+              "Cr": "CR",
+              "Cu": "CU",
+              "Ni": "NI",
+              "Pb": "PB",
+              "Zn": "ZN"
+            }
+          },
+          {
+            "file_id": "icp-total",
+            "filename": "S_icp_data_2v6_30Nov06.csv",
+            "bytes": 132977,
+            "expected_sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58",
+            "physical_rows": 848,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<150um_stream_sediment",
+            "analytical_method": "quadrupole ICP-MS",
+            "digestion_or_extraction": "sodium peroxide sinter dissolved in water and nitric acid",
+            "target_analytes": {}
+          }
+        ]
+      },
+      "required_fields": [
+        "GTN",
+        "LONG",
+        "LAT"
+      ],
+      "target_analytes": {
+        "As": 1697,
+        "Cr": 1697,
+        "Cu": 1697,
+        "Hg": 848,
+        "Ni": 1697,
+        "Pb": 1697,
+        "Zn": 1697
+      },
+      "expected_counts": {
+        "physical_rows": 3393,
+        "distinct_gtn_union": 855,
+        "target_observations": 11030,
+        "target_value_counts": {
+          "As": 1697,
+          "Cr": 1697,
+          "Cu": 1697,
+          "Hg": 848,
+          "Ni": 1697,
+          "Pb": 1697,
+          "Zn": 1697
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "name": "FOREGS atlas citation and copyright notice",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      },
+      "citation": "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo.",
+      "redistribution": "Attributed research analysis. Full publisher archives remain outside Git; checked-in fixtures retain file hashes and row locators.",
+      "scientific_notes": [
+        "About one site per 4,700 square kilometres; this is a low-density continental baseline, not local or continuous coverage.",
+        "Coordinates were transformed from national systems for continental-scale presentation.",
+        "Published CSVs lack row-level less-than qualifiers; exact half-DL values are flagged as possible upstream DL/2 substitutions.",
+        "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases."
+      ]
+    },
+    "foregs-floodplain-sediment": {
+      "adapter": "foregs_static_zip",
+      "title": "FOREGS Geochemical Atlas of Europe: floodplain sediment",
+      "publisher": "EuroGeoSurveys and Geological Survey of Finland",
+      "dataset_doi": null,
+      "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+      "release_date": "2005",
+      "publisher_file_snapshot": "2026-03-03",
+      "landing_page": "https://www.bgs.ac.uk/geology-projects/applied-geochemistry/international-geochemistry/foregs/",
+      "metadata_url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "europe-low-density-continental-baseline",
+      "sample_type": "floodplain sediment from a larger drainage basin",
+      "sample_depth_min_m": "0",
+      "sample_depth_max_m": "0.25",
+      "grain_fraction": "<2 mm; pulverized <0.063 mm",
+      "download": {
+        "mode": "official-legacy-http-zip-with-pinned-sha256",
+        "max_bytes": 2000000,
+        "max_extracted_bytes": 20000000,
+        "expected_member_count": 10,
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "archive",
+            "filename": "Floodplain-Sediment.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip",
+            "bytes": 560005,
+            "expected_sha256": "6e3481e97beb3f831aaefd75032872c3bd15e4dd7f296bee3ba9262f172b6739"
+          }
+        ],
+        "members": [
+          {
+            "file_id": "aqua-regia",
+            "filename": "F_AR_data_2v6_7Aug07.csv",
+            "bytes": 71479,
+            "expected_sha256": "04fe3c65ffadc205a8c9d6c1d5869cb6d729a965faf399bd32874b7f50fb6b51",
+            "physical_rows": 747,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+            "analytical_method": "ICP-AES",
+            "digestion_or_extraction": "hot aqua regia leach at 95 C",
+            "target_analytes": {
+              "As": "As",
+              "Cr": "Cr",
+              "Cu": "Cu",
+              "Ni": "Ni",
+              "Pb": "Pb",
+              "Zn": "Zn"
+            }
+          },
+          {
+            "file_id": "mercury",
+            "filename": "F_Hg_data_2v3_7Aug2007.csv",
+            "bytes": 29191,
+            "expected_sha256": "7c76110a7d960309d56813ee3ad8a8f28333e504868d9a05baebef6167f97aa4",
+            "physical_rows": 696,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+            "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+            "digestion_or_extraction": "direct solid analysis; no wet digestion",
+            "target_analytes": {
+              "Hg": "Hg"
+            }
+          },
+          {
+            "file_id": "xrf-total",
+            "filename": "F_XRF_data_2v6_7Aug07.csv",
+            "bytes": 115247,
+            "expected_sha256": "04628e52364b70a1c39492631568e1aa47b77285becd2393d283b7ea9088431f",
+            "physical_rows": 749,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+            "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+            "digestion_or_extraction": "pressed powder pellet",
+            "target_analytes": {
+              "As": "AS",
+              "Cr": "CR",
+              "Cu": "CU",
+              "Ni": "NI",
+              "Pb": "PB",
+              "Zn": "ZN"
+            }
+          },
+          {
+            "file_id": "icp-total",
+            "filename": "F_ICP_data_2v6_7Aug07.csv",
+            "bytes": 114939,
+            "expected_sha256": "8d7a6b65746f5d78fb96c5bc3012f843acab7ab3ab7fe72ae904f7f542d4a5aa",
+            "physical_rows": 743,
+            "required_fields": [
+              "GTN",
+              "LONG",
+              "LAT"
+            ],
+            "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+            "analytical_method": "quadrupole ICP-MS",
+            "digestion_or_extraction": "sodium peroxide sinter dissolved in water and nitric acid",
+            "target_analytes": {}
+          }
+        ]
+      },
+      "required_fields": [
+        "GTN",
+        "LONG",
+        "LAT"
+      ],
+      "target_analytes": {
+        "As": 1496,
+        "Cr": 1496,
+        "Cu": 1496,
+        "Hg": 696,
+        "Ni": 1496,
+        "Pb": 1496,
+        "Zn": 1496
+      },
+      "expected_counts": {
+        "physical_rows": 2935,
+        "distinct_gtn_union": 750,
+        "target_observations": 9672,
+        "target_value_counts": {
+          "As": 1496,
+          "Cr": 1496,
+          "Cu": 1496,
+          "Hg": 696,
+          "Ni": 1496,
+          "Pb": 1496,
+          "Zn": 1496
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-FOREGS-Research-Attribution-2005",
+        "name": "FOREGS atlas citation and copyright notice",
+        "url": "https://weppi.gtk.fi/publ/foregsatlas/disclaimer.php"
+      },
+      "citation": "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo.",
+      "redistribution": "Attributed research analysis. Full publisher archives remain outside Git; checked-in fixtures retain file hashes and row locators.",
+      "scientific_notes": [
+        "About one site per 4,700 square kilometres; this is a low-density continental baseline, not local or continuous coverage.",
+        "Coordinates were transformed from national systems for continental-scale presentation.",
+        "Published CSVs lack row-level less-than qualifiers; exact half-DL values are flagged as possible upstream DL/2 substitutions.",
+        "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases."
       ]
     }
   }

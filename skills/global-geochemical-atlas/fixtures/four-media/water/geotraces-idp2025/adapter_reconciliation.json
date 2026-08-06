@@ -1,0 +1,177 @@
+{
+  "checks": {
+    "all_target_units_preserved": true,
+    "physical_rows_match": true,
+    "selected_cruises_match": true,
+    "selected_stations_match": true,
+    "target_counts_match": true,
+    "target_observations_match": true,
+    "target_rows_match": true
+  },
+  "counts": {
+    "physical_rows": 69704,
+    "selected_cruise_station_pairs": 1550,
+    "selected_cruises": 46,
+    "target_bearing_rows": 19186,
+    "target_observations": 39327,
+    "target_quality_flag_counts": {
+      "Cu": {
+        "1": 4137,
+        "2": 1876,
+        "3": 255,
+        "4": 7
+      },
+      "Ni": {
+        "1": 11714,
+        "2": 4599,
+        "3": 691,
+        "4": 23,
+        "5": 8
+      },
+      "Zn": {
+        "1": 11115,
+        "2": 4145,
+        "3": 397,
+        "4": 214,
+        "5": 5,
+        "6": 141
+      }
+    },
+    "target_value_counts": {
+      "Cu": 6275,
+      "Ni": 17035,
+      "Zn": 16017
+    }
+  },
+  "coverage": {
+    "bbox": [
+      -179.990997,
+      -77.7015,
+      180.0,
+      89.990501
+    ],
+    "sample_date_range": [
+      "2005-01-10",
+      "2021-01-07"
+    ],
+    "sample_depth_range_m": [
+      0.0,
+      7167.0
+    ]
+  },
+  "limitations": [
+    "Arsenic is absent and requires another water source.",
+    "Rows with SeaDataNet flags 3 or 4 remain traceable raw observations but are not accepted for demos.",
+    "Contributor-specific methods and citations must be followed through the cruise and IDP metadata links."
+  ],
+  "parameter_inventory": {
+    "arsenic_variable_matches": [],
+    "collection_name": "GEOTRACES_IDP2025_Seawater",
+    "cruise_count": 82,
+    "data_variable_count": 418,
+    "description": "GEOTRACES IDP2025 seawater discrete sample hydrographic and tracer data",
+    "metadata_variable_count": 28,
+    "quality_schemas": [
+      {
+        "bad_flag": "8",
+        "default_flag": "1",
+        "description": "ODV - ODV generic quality codes",
+        "flag_descriptions": [
+          "0: good quality",
+          "1: unknown quality",
+          "4: questionable quality",
+          "8: bad quality"
+        ],
+        "flags": [
+          "0",
+          "1",
+          "4",
+          "8"
+        ],
+        "good_flag": "0",
+        "miss_flag": "1",
+        "outlier_flags": [
+          "4",
+          "8"
+        ],
+        "schema": "ODV",
+        "schema_id": 0
+      },
+      {
+        "bad_flag": "4",
+        "default_flag": "0",
+        "description": "SEADATANET - SeaDataNet quality codes",
+        "flag_descriptions": [
+          "0: no quality control",
+          "1: good value",
+          "2: probably good value",
+          "3: probably bad value",
+          "4: bad value",
+          "5: changed value",
+          "6: value below detection",
+          "7: value in excess",
+          "8: interpolated value",
+          "9: missing value",
+          "A: value phenomenon uncertain",
+          "B: nominal value",
+          "Q: value below limit of quantification"
+        ],
+        "flags": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "B",
+          "Q"
+        ],
+        "good_flag": "1",
+        "miss_flag": "9",
+        "outlier_flags": [
+          "3",
+          "4"
+        ],
+        "schema": "SEADATANET",
+        "schema_id": 3
+      }
+    ],
+    "source_file_sha256": "cf8e9eb877cf732913846ad3651c3b9d16f751375cfc6f02f43bd4a1fcee2ac0",
+    "station_count": 4094,
+    "targets": {
+      "Cu": {
+        "data_count": 6275,
+        "field": "Cu_D_CONC",
+        "one_based_webodv_id": 62,
+        "quality_schema_id": 3,
+        "unit": "nmol/kg",
+        "zero_based_index": 61
+      },
+      "Ni": {
+        "data_count": 17035,
+        "field": "Ni_D_CONC",
+        "one_based_webodv_id": 81,
+        "quality_schema_id": 3,
+        "unit": "nmol/kg",
+        "zero_based_index": 80
+      },
+      "Zn": {
+        "data_count": 16017,
+        "field": "Zn_D_CONC",
+        "one_based_webodv_id": 88,
+        "quality_schema_id": 3,
+        "unit": "nmol/kg",
+        "zero_based_index": 87
+      }
+    }
+  },
+  "reconciliation_version": "geotraces-idp2025-export-audit-v1",
+  "snapshot_id": "geotraces-idp2025:IDP2025:a61f441e5ae2",
+  "source_id": "geotraces-idp2025",
+  "status": "PASS"
+}

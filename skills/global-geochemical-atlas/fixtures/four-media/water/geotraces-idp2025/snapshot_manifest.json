@@ -1,0 +1,1299 @@
+{
+  "archive": {
+    "member_count": 242,
+    "members": [
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/0903_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "5d825db93a961fbfde5b03c3d8a99b8c6c62a77da7bdf908d938ba2d09c4a773"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/0903_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "0c24de55659fc17c88cfb718cf5358d74a604b1e52bde738ef8cd0e6c261b1e1"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2012-01_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "df31987167e9d537dc8a8dafc6ad4d59acad4d2a2c3b27a4d58d1ebc0248492e"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2012-01_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "2b9f160ea3c14b3b59ab4ae0c72b70f2df29a43e93954173b7e2a18eb75030a6"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2012-13_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "ca3785240d90d6e7c0724702f7a2bd6494b8863b364da9932b62aa32c3eb146e"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2012-13_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "b6c7fcd5c098c677cd08aada1f21d3eb83829b81df9287dd68e3577252c8d2b9"
+      },
+      {
+        "bytes": 1791,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2012-13_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "9a557daf657787cf642f3a0353e017d598bd9dd3a267068b3d0c77adf62bd83b"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2012-13_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "b6c7fcd5c098c677cd08aada1f21d3eb83829b81df9287dd68e3577252c8d2b9"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2013-01_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "e100cda861c5a530e1c20ebf579d03431873b67cc743eb315fa7b6dfc3ac3258"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2013-01_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "697400dbb8c6f47b06cc10848b1fc216a2a2798702d5e1b1f05ede030638c066"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2013-18_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "aceb9a1c74b1519dd50b415dfdc9c43cdd463ff6742848f3d07888c9c59866d7"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2013-18_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "a6841bcf48606081d9c1d3c05769874ac504329d5e3f040f4311015de2055655"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2014-01_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "d1f5e506ad446a2d844742374e74c8e2e4645dc0222f0b23576a73483394351b"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2014-01_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "dadeb13a30780aaeb6eac4545698df0dfdc736c11b92fe37894db903c15e810f"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2014-19_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "abc5199752e0545d4d63c898f2b317b9d9bc71e4ecc45f007680ef893f186cea"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2014-19_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "06ec2d9dca59339002abcfdafad3e586d54bcaf1d7fa2e3b3a12e3a7a61c0bd4"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2015-01_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "2f0b04b3ecb6dec1ee9dce1936a7035f92fafdcd95f3778fc897efb53cc6a201"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2015-01_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "12875e931197c15db3a008bc2d6939f7e497b877127156f2866287fee2f130fb"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2015-10_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "aef7fbcb78a4c5ab37ce4bb7771678b2d157d0922ebb1823858ec92821cc0001"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2015-10_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "3c3e153a1e31c8318fe37626dc43a4d0b35b39e3d46f605abb497c96aecfae59"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2016-06_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "c631c02d99be5650f3ecd13db39a1c690d365d97ee2a751bcc5f866614a8ba80"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2016-06_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "b5a4f73698e3fcee13cd7c2db7bdd86e1a5b3f056c381166f31f3eddc2b05d07"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2017-06_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "999e0c6dae6cec2a559e817ae7d02c7830caccf4fd53daae242b42c4b2dde9e9"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2017-06_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "6d64cb689d9b0d3ad26f4b068f86cdfc6b15a35d89363cb8110c8b124292179e"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2017-08_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "9473a7add5e0a6b935da099b0def28dbefbeae259d726391c9c529df765a8fcb"
+      },
+      {
+        "bytes": 1283,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2017-08_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "a89dcd50ad215fb1074d6b228c85b4028b13ecb477edd7cd9b3a8caef6ed1f08"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2018-40_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "40d7dcb57af4b32b6a091e2d709c2b9b556b2343e5c35f9576b9ad5a558d4ee9"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2018-40_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "390db3eee830d1193a314c977e234114c1858547519ab03fcd501cff95b71c45"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2019-08_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "55da2bcf15f0f21a46beed81b1380a2f077074f9918017881e0bbaf584589a61"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2019-08_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "1e72d254cea2d490fd2794348b18b771528bd389ce1bfb2b372fe9bbbaf0c74d"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2020-08_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "268ab7111e5727ef056e71b7fafb62f443d4f9db2eb319fa8c9d5fc7b5071156"
+      },
+      {
+        "bytes": 1278,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/2020-08_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "414f547bcad7e95c3ac3e6d2cf42149b7f664a8d26e731c3fbe79755c027e1d1"
+      },
+      {
+        "bytes": 1076,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE1_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "955dea67d60c62c7927f0726efe3cb81f1f4697c79d85d4ec894271f7c871547"
+      },
+      {
+        "bytes": 1076,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE1_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "4caf883d727b409b8420f59c488e3c6e486e43c795a2da2734272a713a7f5ff5"
+      },
+      {
+        "bytes": 1076,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE2_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "553968c2b7692033e9c52e3ec3402de9acc0aa3d38a8a292391970d2af412531"
+      },
+      {
+        "bytes": 1796,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE2_Ni_D_CONC_BOTTLE_01.html",
+        "sha256": "682aa081f55404f54432ea3c0290bcc72bbe6e26fbf353483630eebf1a892157"
+      },
+      {
+        "bytes": 1286,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE2_Ni_D_CONC_BOTTLE_1.html",
+        "sha256": "f095c463f2a75b2eddfa5bb165e881f2cef6ede75ce7d8906161d57880cfca1f"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE2_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "df235cb16865b61d98d0bb83b9d05ddc6427a769c85aadca9c8d3c0d66589196"
+      },
+      {
+        "bytes": 1286,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE3_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "32bd5d7029b2f9854adee912dadc7715c5a17302eb1f4ca9ffed17eabc5167d5"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ACE3_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "896e53fba97ff1db22f9883ba1826a1c89589ed0650cfd932e43c904f74a3372"
+      },
+      {
+        "bytes": 1078,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AE1909_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "54a8d466e259a019cf5126555aa920d19691c17d25d3f61ae077a8e71e4165cc"
+      },
+      {
+        "bytes": 1078,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AE1921_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "fc0685f4c2698a88c9ba01932fd8022a32279598aabb776c6fd96e417c3197e5"
+      },
+      {
+        "bytes": 1078,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AE1930_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "89f2a870e358bab44583d02025975d9a8567e74a77f9bf188ed5990621f2bf92"
+      },
+      {
+        "bytes": 1079,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ANA08B_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "3b888633d72e43b3d593bc8954c34aad786ad77f7291a602394fe2fe110d9cab"
+      },
+      {
+        "bytes": 1079,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ANA08B_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "fb0d34327acc74e948f742aa40659a053b70ec9c3ef3a976cc4080a12d748fd0"
+      },
+      {
+        "bytes": 1147,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ANA08B_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "4b00c8eca152ea173873fedbe9255ca8bc62ecc68f46997e0442555639cdd5ed"
+      },
+      {
+        "bytes": 1218,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AU0703_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "ed75c0f79118184acfdd63b076d903ee7d99436cbf75fc38e250e8aad8a24bc3"
+      },
+      {
+        "bytes": 1218,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AU0806_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "0924c926b735ca7fb3eab79d410aef6c6f8c4ee868f36b327636f8c289337eab"
+      },
+      {
+        "bytes": 1218,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AU0806_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "9fad2756b7bf4f1b18cb7aff433ad0668fe255ea1fc67615b6f55b6b82188a9f"
+      },
+      {
+        "bytes": 1299,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AU1603_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "b844459f40a04310cbbb466e922aadf82f5c60d2e7681cbbfa852eb597c67500"
+      },
+      {
+        "bytes": 1299,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/AU1603_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "cbd99679ec7f7df2a8dcf877b015ad4500a5d7ad3f5174b2c667aec4dd721ab7"
+      },
+      {
+        "bytes": 1150,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ArcticNet1502_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "c72ddfcc05a28f1de655dd1bc27857dc2137c89c2c64f6f8baeebee31ba3ce24"
+      },
+      {
+        "bytes": 1150,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ArcticNet1502_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "2a45d357ccbe215acc9c2d56d01cbee52039621e89a3c7abe284ff781b8ee536"
+      },
+      {
+        "bytes": 1150,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ArcticNet1503_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "7e7be408900a4f96e4b8fd534ccfdab38b5fba2be9b6e8ee46022e279d36b2ce"
+      },
+      {
+        "bytes": 1150,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/ArcticNet1503_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "c76f11d452cc2ef4db71c5168045504e78f5765fd16bc352c33e24c99c99cfdb"
+      },
+      {
+        "bytes": 1068,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/D357_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "646dd45ee82dbc7b0d678b22f7f7828cf22885912e3ba5613b49ab578bd87150"
+      },
+      {
+        "bytes": 1066,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/D357_Ni_D_CONC_FISH_0.html",
+        "sha256": "349501623038e2296512378945cf8b74f609dcc9884819db3e63443dfb21e26e"
+      },
+      {
+        "bytes": 1134,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/D357_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "2e835e18441f7d9399a0fe6c950bc3217ab3154e2fd206620a29bbb5142db195"
+      },
+      {
+        "bytes": 1077,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/EN631_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "91560c7d32294385486aeac6f004ae85a2741934e96380150474a1415ad790a6"
+      },
+      {
+        "bytes": 1360,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/GEOVIDE_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "ab3929ae012224ef6c004a00bdb59de7bcd6ae710f063b672372d6038fd6fb4a"
+      },
+      {
+        "bytes": 1360,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/GEOVIDE_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "2007a8c1f9a69763db384b6585afcd1224809aa1de97d026acff9105b253b9cd"
+      },
+      {
+        "bytes": 1149,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Cu_D_CONC_BOAT_PUMP_0.html",
+        "sha256": "d6f50bbef1a1b30bb4511516d63e1e419b747cd2c221c79120cc65ef4044e150"
+      },
+      {
+        "bytes": 1149,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Ni_D_CONC_BOAT_PUMP_0.html",
+        "sha256": "f00101256d7f72c30e924f3b30b8a6fc210dc4a7778894d94154c671b69c7df8"
+      },
+      {
+        "bytes": 1664,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Ni_D_CONC_BOAT_PUMP_01.html",
+        "sha256": "2ec672ef43161ba8af85e9776c885f8252d138b55477425fa56aeb52624cc13d"
+      },
+      {
+        "bytes": 1082,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "122ca21ef1595110802077af9526699e2b9421f091a2dbea14068ff8b7a7fa10"
+      },
+      {
+        "bytes": 1661,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Ni_D_CONC_BOTTLE_01.html",
+        "sha256": "9ee01a54e097867aca650a537cca52f2f42fcb5b04fb67a34786d59f536459fe"
+      },
+      {
+        "bytes": 1146,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Ni_D_CONC_BOTTLE_1.html",
+        "sha256": "b802f0f62abdeeb048ec965fcf3939aaebcde35b3b7762c473d9eda7259497d6"
+      },
+      {
+        "bytes": 1087,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Ni_D_CONC_SUBICE_PUMP_0.html",
+        "sha256": "1e3a309eebf1ae19e907cb63c433bd6a90032fb37c4680c03e6e481805dd39dc"
+      },
+      {
+        "bytes": 1666,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Ni_D_CONC_SUBICE_PUMP_01.html",
+        "sha256": "f3ba3827c42c2086f15fd6934150be2eb43bd7169668b4befa3e80adf2403c37"
+      },
+      {
+        "bytes": 1085,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Zn_D_CONC_BOAT_PUMP_0.html",
+        "sha256": "1b2dbe2edbafc69e55b5f8f8d34a1a6d6da6fc6ce6dc3cbaf79c18303261895c"
+      },
+      {
+        "bytes": 1071,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "a5d499f604d44303024d0e706fabc9f58550bacec0dc991e4bd5b17aeb32ce47"
+      },
+      {
+        "bytes": 1586,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "6a2845362cb58319f548693ced357c494041e0453798bc9287646f5929c5153a"
+      },
+      {
+        "bytes": 1071,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "a5d499f604d44303024d0e706fabc9f58550bacec0dc991e4bd5b17aeb32ce47"
+      },
+      {
+        "bytes": 1087,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/HLY1502_Zn_D_CONC_SUBICE_PUMP_0.html",
+        "sha256": "c5c894ddebf8720016b0e3e8ed55b5e876169254d52a48dbc130dfc3c938aca1"
+      },
+      {
+        "bytes": 1303,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/IN2016_V01_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "7205243ce7b8b6429a5895a446fba9d0f3810eba023f81a08c32a72fd4f970b4"
+      },
+      {
+        "bytes": 1303,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/IN2016_V01_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "914c1911ae0800ab3e26c405ca453c11ab6f1e82521051e94ed4cf8da841b290"
+      },
+      {
+        "bytes": 1015,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/IN2016_V02_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "8dc34de35435389600b7c26deca9d601c863f8256eae953f80984888618d6bac"
+      },
+      {
+        "bytes": 1500,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/IN2018_V01_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "a6f0159d8f1c9dbd12ccc33e3814e2e0ea28c51c1727fda5d66f8ae454edcd83"
+      },
+      {
+        "bytes": 1500,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/IN2018_V01_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "56b4f513cba610d3ae0525b22839514d898f1b3ebe8c09529aa539deb87401ab"
+      },
+      {
+        "bytes": 1009,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/IN2020_08_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "50dfdf79f8e60a55d9c7f876646ff093cbd2021af97cae8a3fe4012afd86c72b"
+      },
+      {
+        "bytes": 1009,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/IN2020_08_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "14d4ae6f3566e13b84ebd9e6e42091f39e2308e17c9e79bce8455fc2711f8844"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC057_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "5c91e5a76885994a400865b04d87a02f6c91ecd15d69d066f54cbf5d98f4058a"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC057_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "87fa0a189b606e3127af680d6d73a7b50b602d6ace7742a19218e7e42325ab2f"
+      },
+      {
+        "bytes": 1010,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "2fbcd8c44faf947703f0febeade76e65eb19d540211e8b6f53c6adae13e2e726"
+      },
+      {
+        "bytes": 1008,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Cu_D_CONC_FISH_0.html",
+        "sha256": "403ce12cfd8bc5041785c209cc744bb7b24b22cb4d6233bf435b842f96700e44"
+      },
+      {
+        "bytes": 1010,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "87fb14c3701a8dde49acbb44492b47dc06f30d33da42b978891cf9714734d111"
+      },
+      {
+        "bytes": 1010,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Ni_D_CONC_BOTTLE_1.html",
+        "sha256": "87fb14c3701a8dde49acbb44492b47dc06f30d33da42b978891cf9714734d111"
+      },
+      {
+        "bytes": 1008,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Ni_D_CONC_FISH_0.html",
+        "sha256": "58df513e655d4bd32d580712be38348fddfaf27eddb1f330296d55c04eac63ae"
+      },
+      {
+        "bytes": 1513,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Ni_D_CONC_FISH_01.html",
+        "sha256": "f63059a9c362b8bf2ef496fe7d6c405f9a0150b061d09e9f53507b16f6aca247"
+      },
+      {
+        "bytes": 1136,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "469594b4dbad4aa6564b9e1e480c5866268d2f82e05795fa666b4517786d0ea0"
+      },
+      {
+        "bytes": 1008,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC068_Zn_D_CONC_FISH_0.html",
+        "sha256": "3cbcf826a0b13a832c7a3f7d72008aff2509847562bca1ad802f61bcd49c6f09"
+      },
+      {
+        "bytes": 1072,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC150_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "befb9a5d39c3e78d2f4d657c7cdd61051670c0f255ae29df61f30daa3d56563a"
+      },
+      {
+        "bytes": 1070,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/JC150_Zn_D_CONC_FISH_0.html",
+        "sha256": "95f80a66429049bbced28da753cb557aafc4f248df51b7814698616326584706"
+      },
+      {
+        "bytes": 1072,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH05-02_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "9b7d18910a40a384ef12a81b2b1b3a2de235e3305bb01b203252055c0da0b31d"
+      },
+      {
+        "bytes": 1006,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH09-05_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "1062e47f7dd2203d8b5636daf47db62b1611dd2f4c5ea73b5bc933b9e58a94a1"
+      },
+      {
+        "bytes": 1006,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH09-05_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "f7897a28a2b590a59301d75e05dc12813f134ff6bab14fd8445cd436655637a5"
+      },
+      {
+        "bytes": 1146,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH11-07_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "ac6a564d4fc0f1fe569f738a2be0e21a7e622a03c69a2358a9966cd43ce40e66"
+      },
+      {
+        "bytes": 1146,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH11-07_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "f5c91e398130b67df60487c508eb3ca6d7ab74f64b87715e4b353a73a678904d"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH12-04_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "38ca1056b47730ff2a6d6e2bdde89014424b44c527fc299273c161ae3eeb3f52"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH12-04_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "b736ca175f17176c655cac6bfc81d614f3e18b1ed9435281ba379c31879cbec1"
+      },
+      {
+        "bytes": 1579,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH12-04_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "29182f5f246b97292545e08db56df9eb68b18f720ad381d589c4bd74f23dafdb"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH12-04_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "b736ca175f17176c655cac6bfc81d614f3e18b1ed9435281ba379c31879cbec1"
+      },
+      {
+        "bytes": 1146,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH14-06_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "b4a2d54883392680e70d064e615cd9b17535613a604e988f34cb8b8a15b67e65"
+      },
+      {
+        "bytes": 1146,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH14-06_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "469d3251ff26e94afb81dc0360d973b1b78ee94c60bc7b3e0c8211cba3c71d40"
+      },
+      {
+        "bytes": 1720,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH14-06_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "249f7f5bd6a67a0e3fcbfb1aa58d29767feb134d64d746d57df295babdf842ca"
+      },
+      {
+        "bytes": 1146,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH14-06_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "469d3251ff26e94afb81dc0360d973b1b78ee94c60bc7b3e0c8211cba3c71d40"
+      },
+      {
+        "bytes": 1074,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH17-03_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "03b2323fc8bfa09ab6b5c845245f471033e9fdd02e10fcbe4cb7bbd28f35fa3b"
+      },
+      {
+        "bytes": 1145,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH17-03_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "da3b573ca2fe34cff49ebda2bb9d016d7f35f0159ba75aa9b30abe216bf52721"
+      },
+      {
+        "bytes": 1145,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KH17-03_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "edf08eda8c9385b38e5c579a0d4b0616868fd3ea0eebc013cff0c74a6deaa2fc"
+      },
+      {
+        "bytes": 1001,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KK1903_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "eeeb3a6bdb4c34c1ad47a73d4aa006468329d996bffaf764ebc4d5a8405ead68"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KK1903_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "8c1d1896b1d86a9f5138f470190b8b3957c47f9cf2b8bbe4613df720b1de1496"
+      },
+      {
+        "bytes": 1510,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KK1903_Ni_D_CONC_BOTTLE_01.html",
+        "sha256": "1bca97e2cbc3ac6000cbf4f1820b9fb6006fe48a86fa81a735be29741d1b13cd"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KK1903_Ni_D_CONC_BOTTLE_1.html",
+        "sha256": "8c1d1896b1d86a9f5138f470190b8b3957c47f9cf2b8bbe4613df720b1de1496"
+      },
+      {
+        "bytes": 1073,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KK1903_Ni_D_CONC_FISH_0.html",
+        "sha256": "4646eefa2ca70aacc425bd4f40494bc1cc4ac60cf98708d1290ab1e2f7a29e48"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KM1128_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "56d03bc23d7db7c4e3c6bab48febc23bf5bc2df95b2554f7118c2667a66c989f"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KM1128_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "b3c4b11b83025ba04dd3a06debfd0e20fa6292f5e4ce845b286e7acb2a9c9ab7"
+      },
+      {
+        "bytes": 1006,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "53796ae7477c30c914fdb4513a0439575d68821129ffbaef4cb6e7ed08382cfb"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Ni_D_CONC_FISH_0.html",
+        "sha256": "e7dfa114130b520c65ea55431ca28badfd1ba6e669037cd15f356236482be3c3"
+      },
+      {
+        "bytes": 1002,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "46978297eed26689fec99bc5b0d21a0841a2a24e47e815c5877ca74dacf4d3f9"
+      },
+      {
+        "bytes": 1443,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "b60e6769b1a6cecdcb5646749c219fdcd0cabd6e32fb08736f66eb55f153e7be"
+      },
+      {
+        "bytes": 1760,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_BOTTLE_012.html",
+        "sha256": "3dfffd1958bcb7f0eaaa84b7a2edde1e4d8f70b2fec40525c96fd79565cd7401"
+      },
+      {
+        "bytes": 1437,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_BOTTLE_02.html",
+        "sha256": "a946a458fa1fd4e873e3b74accbe1bcef9e3321b02c8e4c5fa145a3c91a6bf28"
+      },
+      {
+        "bytes": 1000,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "483d45d1acc4f63c14cdd1de40edea84abcf4bdffb49074abddf9f21c451fbeb"
+      },
+      {
+        "bytes": 1441,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_BOTTLE_12.html",
+        "sha256": "eb766dbff9e66fa605f69dc0939d822dce820d434e24459409d62332b6d4b94d"
+      },
+      {
+        "bytes": 1000,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_BOTTLE_2.html",
+        "sha256": "483d45d1acc4f63c14cdd1de40edea84abcf4bdffb49074abddf9f21c451fbeb"
+      },
+      {
+        "bytes": 998,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_FISH_0.html",
+        "sha256": "db31635afecc8fcd10509fec902b43fc0508c91a5af5b90f8b30305ea21e955c"
+      },
+      {
+        "bytes": 1439,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN199_Zn_D_CONC_FISH_01.html",
+        "sha256": "5c5e32593af27dbc3b2837b40702d1350506505571a3a1e5ae9d3ff81d4cc7a7"
+      },
+      {
+        "bytes": 1006,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "f5ea563e2daed35f796c6b529c66491e93f9a2e210d3e3a325b93a73149fa5c4"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Cu_D_CONC_FISH_0.html",
+        "sha256": "75edc90fefa918c93c1354b61928e7a033697cd666888f65fa1a8c2162c435a3"
+      },
+      {
+        "bytes": 1006,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "3180e58f241c1de3d5259d588c9c22bccda020dbd2d79492a3f18a168af2847a"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Ni_D_CONC_FISH_0.html",
+        "sha256": "0c098b54b0d611456e8720488e7f97db7223e04ae49ab97c4af0eaefb48c3566"
+      },
+      {
+        "bytes": 1000,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "13dcfbfa136911805d4b00ec9579ae49147f4f9cd9b38ce698a3b92aca42ec4b"
+      },
+      {
+        "bytes": 1437,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "fc8890e5120871b281e4e5b6f04137479b849a8e9683e77ef37767b4cd62744e"
+      },
+      {
+        "bytes": 1760,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_BOTTLE_012.html",
+        "sha256": "4d1e4f71a57b664e4b3722e4eb20b8088782d06e74115e7eeb6b9c041c62b8e8"
+      },
+      {
+        "bytes": 1437,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_BOTTLE_02.html",
+        "sha256": "fc8890e5120871b281e4e5b6f04137479b849a8e9683e77ef37767b4cd62744e"
+      },
+      {
+        "bytes": 1000,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "13dcfbfa136911805d4b00ec9579ae49147f4f9cd9b38ce698a3b92aca42ec4b"
+      },
+      {
+        "bytes": 1437,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_BOTTLE_12.html",
+        "sha256": "fc8890e5120871b281e4e5b6f04137479b849a8e9683e77ef37767b4cd62744e"
+      },
+      {
+        "bytes": 1000,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_BOTTLE_2.html",
+        "sha256": "13dcfbfa136911805d4b00ec9579ae49147f4f9cd9b38ce698a3b92aca42ec4b"
+      },
+      {
+        "bytes": 998,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/KN204_Zn_D_CONC_FISH_0.html",
+        "sha256": "4378eb9efde3ee04d764cce930dd4788d4c34b8553d76523c19ebad44013d1cd"
+      },
+      {
+        "bytes": 1067,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M107_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "e05baaaaf8c03784a872d2d06f6536dca3a7dabb3599706548eaefe73ea6cfef"
+      },
+      {
+        "bytes": 1067,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M107_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "d440f99f32990b7f9f871126acf599d359993d275c94c7e604bca29923e20e88"
+      },
+      {
+        "bytes": 1220,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M121_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "d69adbb90ee4c703dc398d9549dde798aeb6d9cd1000271eedec5469e02013ef"
+      },
+      {
+        "bytes": 1218,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M121_Cu_D_CONC_FISH_0.html",
+        "sha256": "309c7f3afe5118d32939777c72a50a1b21913ff58c2fb05c1921b7b56d7e35a4"
+      },
+      {
+        "bytes": 1220,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M121_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "d43c06d6b61fe1ec468dd9b809d9846aa384de248e3f505c46702039e6101dbc"
+      },
+      {
+        "bytes": 1218,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M121_Ni_D_CONC_FISH_0.html",
+        "sha256": "bb02eb56dc5df5348aa6b547953245a01c42c5e7c0bd93af7362e60463ff64f4"
+      },
+      {
+        "bytes": 1220,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M121_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "291bd46038b154a645fa01f0f1d344144ff03114c7162fb1d1cf3c01f94654ab"
+      },
+      {
+        "bytes": 1218,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M121_Zn_D_CONC_FISH_0.html",
+        "sha256": "e9ee345083e84f116258a37feea02eb6be66f516ca88ea3fb5c57aa0e62a51db"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M135_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "be5c0700e6c7f5db066b259c90a6e71f07e8864cf244ba6f77d857dd5c50d3fc"
+      },
+      {
+        "bytes": 1002,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M135_Cu_D_CONC_FISH_0.html",
+        "sha256": "beb8d320d52f53b4205a2fd7c7afc71a789b756af58300409efd9218d7343d4d"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M135_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "79b7fd87fc0b1cd4851542827cf701cdd74cfff65e5ffada1de61fb14477979d"
+      },
+      {
+        "bytes": 1002,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/M135_Ni_D_CONC_FISH_0.html",
+        "sha256": "d4287153d891d264f67e51396e9400dbd1ac14bcee46199f07b3044d365ecaad"
+      },
+      {
+        "bytes": 1214,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/MD188_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "1c50ba59848aa62a92611d0b87ffafdba1f2cb5fafd662d76af937d6054419fb"
+      },
+      {
+        "bytes": 1214,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/MD188_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "9af17008f377b79a23b8a856d853cffb1fde29e522e7222eafef2dff94a07585"
+      },
+      {
+        "bytes": 1288,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/NBP1310_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "ef616c12ac3eb7cf1ac43ffdb3934fd4b4cda6c456298080d204f3c5cb45b24d"
+      },
+      {
+        "bytes": 1288,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/NBP1310_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "d3fac8f032e74f715928b20371bb6244df80a76e4f28e45ab9de010f919cd70c"
+      },
+      {
+        "bytes": 1288,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/NBP1310_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "0fbb0ac03471e392c9acb7dd8b4a9580d37fa0258477c8f4940b712752c6260e"
+      },
+      {
+        "bytes": 1152,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/NBP1409_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "21c870894827c45cc6adc5dee3148a44c455c8861aaa23ced3f55ea5f155b5da"
+      },
+      {
+        "bytes": 1152,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/NBP1409_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "6b4c114e21c10250465dc375ec948ec118aad9c68930f82c99cbe162f4885414"
+      },
+      {
+        "bytes": 1152,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/NBP1409_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "8fcdea921192bc0e1f3101d27855add118d0db5176df2a099b256233cf21c547"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE319_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "59a7f51b643d1ad44e3174e724c73419532af1c1f41aa0769d1dd36f01311923"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE319_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "399d043d79309285e38e3f60ef5186cd9f5201575cdfbe9aa13d7029e5324758"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE321_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "2c98e250006a37dfb7b653ea5ec0e0d3003386a848b54171e59d9270e8c8ace1"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE321_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "a553c8884df2c48adcd2cf644b429be889b147e1a0f8fb58c23eb8ed505cef3d"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE358_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "a3c6a7a3a27c6f131b734f90bb9f8ee91ea9f4225935e28d296b348b2656dcd2"
+      },
+      {
+        "bytes": 1140,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE358_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "4499060a69b3d670e7853e75d8f9b57ad7246df9a0e841afffcd4160297b6212"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE370_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "ed60733cfe578f6b29d716b74058ceb5d09cd0b5d77a3c8b1765f437567a392a"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE370_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "51804f16c936b9f7cfbab37c69f735be2e59be379946d67d6bbcd4335ab71f3e"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "beb0764f8e737258f02a19a17b0f308726c6ca07a92bb19a94e1f1b99ca6bd6c"
+      },
+      {
+        "bytes": 1962,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Ni_D_CONC_BOTTLE_012.html",
+        "sha256": "0bc683e60418fc3a92c62b16fa0f82136e9cf57c6ff664c84323ff28d4ecbe8b"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Ni_D_CONC_BOTTLE_1.html",
+        "sha256": "beb0764f8e737258f02a19a17b0f308726c6ca07a92bb19a94e1f1b99ca6bd6c"
+      },
+      {
+        "bytes": 1509,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Ni_D_CONC_BOTTLE_12.html",
+        "sha256": "e7a9fddc641edb9e37cd766af98f699f131b9f8905b0bbaafd7ec68ecbd73bef"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "12983bb2f174aab9dce1eb92b4afded49767f5c2169983f1c56eec8190ad4b6e"
+      },
+      {
+        "bytes": 1962,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Zn_D_CONC_BOTTLE_012.html",
+        "sha256": "1cf07aaa5c2b6d93178cb612dfd92f146bd35b36e8106e01e1effd83fa6bb48e"
+      },
+      {
+        "bytes": 1509,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Zn_D_CONC_BOTTLE_02.html",
+        "sha256": "966d8c6295f89f27e25ca88bb596f54f9e4f9ad7476fd2fb042fd09902600fd2"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE373_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "12983bb2f174aab9dce1eb92b4afded49767f5c2169983f1c56eec8190ad4b6e"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE374_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "e172bc5fdd901e2655a41965c131f5eb927dd66c269d7b86b56d021c36d002ff"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PE374_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "30fffa619b6ab1d4990676bddf55b4f1d2f2c5c28d4932018ec61f21eabd0711"
+      },
+      {
+        "bytes": 1076,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS100_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "353163eb812d0f407d980dcab8b59e99056b19aa8dff082cd83aaca1fbe59fc7"
+      },
+      {
+        "bytes": 1076,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS100_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "07dead4d0ae86a804351ab7220c26addf8b208e822d104bd413c238eceb202c8"
+      },
+      {
+        "bytes": 1078,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS117_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "ed79d41d357555e8e62be30bba80f5fd12177976b008f3ebdd7d9380e45947d9"
+      },
+      {
+        "bytes": 1078,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS117_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "63b15e5ada9ce42102ae8546ce9ea7f1d304ed6cff6029d319f180b54b63e158"
+      },
+      {
+        "bytes": 1146,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS117_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "6acddcbd629bc2d7f3ba5e3d3cc25cf9bdefce6fcfcd40a48353eb160e25274f"
+      },
+      {
+        "bytes": 1072,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS71_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "c9a6d9406972fb75c123d613660113a3ac2f6fab6fc9f957ec5f9a1d337f4226"
+      },
+      {
+        "bytes": 1508,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS71_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "aefd5d465c60fa2292f07d4724e8fea35877646736231f703a3eb5014289ca25"
+      },
+      {
+        "bytes": 1072,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS71_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "c9a6d9406972fb75c123d613660113a3ac2f6fab6fc9f957ec5f9a1d337f4226"
+      },
+      {
+        "bytes": 1002,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS71_Zn_D_CONC_FISH_0.html",
+        "sha256": "31bdde05eb08c3a865c648d25d9b7b6522af230cb67b15d42f6ec4b6a167cf17"
+      },
+      {
+        "bytes": 1214,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS94_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "6e90ac706538ff551c40c7f1f07fe6c404bba19bb5d79e36921005b94d3bd6fd"
+      },
+      {
+        "bytes": 1214,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS94_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "45f60e3027a80e38412c9f373f8008f8b814119207bfe8fb3f09234f096f9241"
+      },
+      {
+        "bytes": 1214,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/PS94_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "231db15a11ff79ca38cca6c2506bfabf07e030d0417f054d29b1756a26eb25e9"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR0501_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "fc575d9bdd88a63907cb81bc70c03170be89e41c0b2151a8a292df918ad8eebf"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR0501_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "c428143dd01fb1db5039924c7485d133c7e651c7eae1dff8cd24da02e6510d0a"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR0501_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "3803b67894fccebe3f917940f0350de52169d6aad5237f9a1884d1ca91486355"
+      },
+      {
+        "bytes": 1207,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1814_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "8b7c9851a6faa3ea98ed71c47f03879f6118021e7d7e3b9f59829ece34b32515"
+      },
+      {
+        "bytes": 1205,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1814_Ni_D_CONC_FISH_0.html",
+        "sha256": "a56e7808fb8ec82eddbf16ddbc912e87e60b5acd0411c017cff7b034bcb9f3a6"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1814_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "5278c76a5912fb40943d5bfbdaad2d243bec8c041d690aa239cd81e7d18eebf1"
+      },
+      {
+        "bytes": 1136,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1814_Zn_D_CONC_FISH_0.html",
+        "sha256": "9f306630a67ea16d7ed50a779f3b35ebc6f044e8d6125eff3262bfd7115ca011"
+      },
+      {
+        "bytes": 1207,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1815_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "b2671bee7cd1b4e4770e07ec514c8ba171ab3b072136416d075b67b835a5aaee"
+      },
+      {
+        "bytes": 1205,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1815_Ni_D_CONC_FISH_0.html",
+        "sha256": "d718c01ffcadb9edd771ec2d2c95d63b5f6786137d44bf9ebdf4c68dd4eade29"
+      },
+      {
+        "bytes": 1138,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1815_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "67f97eaf79af41024cc037bd99f5913853db37682e6aa51fbdb3603fa6e995bd"
+      },
+      {
+        "bytes": 1136,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/RR1815_Zn_D_CONC_FISH_0.html",
+        "sha256": "bd368e356326213262d1d22371ff173b3ba78dfe642af53eddb20bbc32d755e9"
+      },
+      {
+        "bytes": 1160,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SAG25_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "eb7c7101779610c457b5309a29fa68ed0766f46cd9bc6bd2973373d4d4b51550"
+      },
+      {
+        "bytes": 1160,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SAG25_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "d9bcb24be57df183e0a2878b459c09daa5775fc6c4c97a5bd1b2d5f63f4f43c9"
+      },
+      {
+        "bytes": 1158,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SCALE-SPR19_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "c3fad18de4d9231c164cd0004ffded4aebe94ad09a2cd2f7bc16b77efcc20dfd"
+      },
+      {
+        "bytes": 1158,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SCALE-SPR19_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "17503d76092a07cf9ed57808311d5cb287d74c04f5af4c8084d06df44800cd83"
+      },
+      {
+        "bytes": 1158,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SCALE-WIN19_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "5458d7dd4936b11cd1ac346390332d65b574ff0a8cbe1266e31d32fb1f46d8ac"
+      },
+      {
+        "bytes": 1158,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SCALE-WIN19_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "ebe97a2861dd0f42aa6673bfcf24a6d0e335429e683fdb81fc11a5e252162643"
+      },
+      {
+        "bytes": 1290,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SS01_10_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "647f488861f22c90d80b499ec79614bc238a5344234cd24e711d39112030cf3b"
+      },
+      {
+        "bytes": 1012,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SS01_10_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "646535e756b31d3f2162e64b3ca31d3d7401eeb3971bb59746b126a6e1428d5b"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SS2011_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "d02e05ffc4c2ef423d2db1c8836c1b4a88c979fbd888fe1bf94817b0d1ffb3b5"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/SS2011_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "5e9b098e0e41d6a129b029026aeae4e175fa0738a63ec26e821303271880b79f"
+      },
+      {
+        "bytes": 1012,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TAN0609_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "3e4c0c75927936838d4eb173d611fdac073cb66c66800038c1a4af2ea8b7cbc5"
+      },
+      {
+        "bytes": 1074,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TAN0811_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "00fff7583d87fec61d95e87cd5f7ab5bfb4066e8835bdb4ace984ffcb3e037dc"
+      },
+      {
+        "bytes": 1005,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TAN0811_Ni_D_CONC_FISH_0.html",
+        "sha256": "b53ff050bcce8b77b0c98ff2c392d6c7e2d27e5f834879eab2269e846692bba1"
+      },
+      {
+        "bytes": 1074,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TAN0811_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "5a44a2195e44971da3001db4064f11bc863882ec89fccd3297e96dde2d1e3c87"
+      },
+      {
+        "bytes": 1005,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TAN0811_Zn_D_CONC_FISH_0.html",
+        "sha256": "bd8c7f4fed5774f754e803e0000a3a2a9a33731ab24b1822836b503e026128d6"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TAN1109_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "7086e903011722d71653a9089d67da84fda37fedafad2ba12880362e3030d99b"
+      },
+      {
+        "bytes": 1075,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TAN1109_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "34925516ff9d0c8639e4d15741c76023d16e28b43c8bfa4b640b186df39adb34"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN191A_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "a30ecc6b15092b2d454bb983b53e5cb11a2b317351b382a01b8935a1a334008b"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN191A_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "40692151cf34d88c5a907a45370ba99c6dee7f2ad67779869f187f150e7be6b0"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN191B_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "763c107b10a9e5b53040e8f1734c55e087c4ccbafca3667b41aa6480ea3ee584"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN191B_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "b1a221156e0d3ac4f05eaea3bf3be50b8f31757ca8809300a6392c2e5f0e2ab6"
+      },
+      {
+        "bytes": 1004,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN191B_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "c21d21158bd3ebe5360cf35cc0f41f5aede31bb41a0fed413da8adb2c02671d2"
+      },
+      {
+        "bytes": 1149,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Cu_D_CONC_BOTTLE_0.html",
+        "sha256": "528cf268cd37d1f599036e31827617e37c41e15825c22a8592680705afd9b5f3"
+      },
+      {
+        "bytes": 1657,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Cu_D_CONC_BOTTLE_01.html",
+        "sha256": "20d7d9ce10f6f65a351011ecc1db0c5f69104523e450143e7e6df79da64bb513"
+      },
+      {
+        "bytes": 1073,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Cu_D_CONC_BOTTLE_1.html",
+        "sha256": "5b6e44a723065efcc4fb85414393c6b33053b7c487323203ccd1db6282441a31"
+      },
+      {
+        "bytes": 1147,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Cu_D_CONC_FISH_0.html",
+        "sha256": "d1335779a4a5b4ea0fecae8ed8002507c0718598c27ff130b3b4838f3b6e2a6d"
+      },
+      {
+        "bytes": 1588,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Cu_D_CONC_FISH_01.html",
+        "sha256": "b9784d231bb7da7127b79448b88b23871d72f6e6f2596ef8fd4b2e811f740596"
+      },
+      {
+        "bytes": 1074,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Ni_D_CONC_BOTTLE_0.html",
+        "sha256": "1ee01f7db33e59a9b406c009e5725abfdc3e91e25318f43a862122909028ef15"
+      },
+      {
+        "bytes": 1582,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Ni_D_CONC_BOTTLE_01.html",
+        "sha256": "39794c332609c6064ee6d39e4ee6b5a576280eb3835f5691254f5ea84ff3f2c0"
+      },
+      {
+        "bytes": 1074,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Ni_D_CONC_BOTTLE_1.html",
+        "sha256": "1ee01f7db33e59a9b406c009e5725abfdc3e91e25318f43a862122909028ef15"
+      },
+      {
+        "bytes": 1072,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Ni_D_CONC_FISH_0.html",
+        "sha256": "f9b80e5d4224d41204c4a40a5a7d4dd0d6eb15b8b854d1fd2e6180d55378f910"
+      },
+      {
+        "bytes": 1513,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Ni_D_CONC_FISH_01.html",
+        "sha256": "c5c92a798d51600f3b6ffa995225aed86162152839316e71cf1231834237f28f"
+      },
+      {
+        "bytes": 1072,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Ni_D_CONC_FISH_1.html",
+        "sha256": "f9b80e5d4224d41204c4a40a5a7d4dd0d6eb15b8b854d1fd2e6180d55378f910"
+      },
+      {
+        "bytes": 1000,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_BOTTLE_0.html",
+        "sha256": "4b4be9d7e18464cd08d57b1774524cba0805492afbd27e6c86b4ae301547e5f6"
+      },
+      {
+        "bytes": 1508,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_BOTTLE_01.html",
+        "sha256": "c05c69156652d8f590adcfc13cf3338834b4a5894ab9d983f28f80b3b14779d9"
+      },
+      {
+        "bytes": 1827,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_BOTTLE_012.html",
+        "sha256": "bf517fbe897bf89e658231b6db59d5489728403475c2381bae2cc56bffa959cb"
+      },
+      {
+        "bytes": 1437,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_BOTTLE_02.html",
+        "sha256": "2d41ebc2ec5f03d66fedc8f6d2db20977ab11cce4b4c61a57894e1cc80a1acef"
+      },
+      {
+        "bytes": 1000,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_BOTTLE_1.html",
+        "sha256": "4b4be9d7e18464cd08d57b1774524cba0805492afbd27e6c86b4ae301547e5f6"
+      },
+      {
+        "bytes": 1510,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_BOTTLE_12.html",
+        "sha256": "f858e255ecf149d99f4ec2aed58dc6b9de8155dd5e98a6a13ec00f77927a1bae"
+      },
+      {
+        "bytes": 1002,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_BOTTLE_2.html",
+        "sha256": "5b56205b41a11ab4bfbf0e3ff077b12a8007490eeaad44c4a12351a6dbc2f22c"
+      },
+      {
+        "bytes": 998,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.misc/infos/TN303_Zn_D_CONC_FISH_0.html",
+        "sha256": "9fdec569acb1072733caf1f1e11ed77407cb3127030b6aa3a8cf183f80c966bf"
+      },
+      {
+        "bytes": 28760915,
+        "name": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+        "sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44"
+      }
+    ]
+  },
+  "claim_boundary": "This snapshot pins one official webODV export selection. It is not the complete IDP2025, a regular ocean grid or evidence that unsampled locations have no trace elements.",
+  "counts": {
+    "physical_rows": 69704,
+    "selected_cruise_station_pairs": 1550,
+    "selected_cruises": 46,
+    "target_bearing_rows": 19186,
+    "target_observations": 39327,
+    "target_quality_flag_counts": {
+      "Cu": {
+        "1": 4137,
+        "2": 1876,
+        "3": 255,
+        "4": 7
+      },
+      "Ni": {
+        "1": 11714,
+        "2": 4599,
+        "3": 691,
+        "4": 23,
+        "5": 8
+      },
+      "Zn": {
+        "1": 11115,
+        "2": 4145,
+        "3": 397,
+        "4": 214,
+        "5": 5,
+        "6": 141
+      }
+    },
+    "target_value_counts": {
+      "Cu": 6275,
+      "Ni": 17035,
+      "Zn": 16017
+    }
+  },
+  "evidence": {
+    "collection_metadata_sha256": "cf8e9eb877cf732913846ad3651c3b9d16f751375cfc6f02f43bd4a1fcee2ac0",
+    "dataset_doi": "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+    "dataset_version": "IDP2025",
+    "license": "CC-BY-4.0",
+    "primary_member": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+    "primary_member_sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44"
+  },
+  "observed_at": "2026-08-05T13:41:55Z",
+  "request": {
+    "selection": {
+      "dataset_path": "IDP2025>seawater>GEOTRACES_IDP2025_Seawater",
+      "date_bounds": [
+        "1850-01-01",
+        "2026-12-31"
+      ],
+      "format": "ODV Spreadsheet V4.8",
+      "geographic_bounds": [
+        -243,
+        117,
+        -90,
+        90
+      ],
+      "logic": "stations_with_one_or_more_selected_target_variables",
+      "output_variable_ids_one_based": [
+        1,
+        62,
+        81,
+        88
+      ],
+      "required_variable_ids_zero_based": [
+        61,
+        80,
+        87
+      ]
+    },
+    "url": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+  },
+  "response": {
+    "bytes": 903710,
+    "filename": "geotraces-idp2025-seawater-depth-cu-ni-zn.zip",
+    "sha256": "a61f441e5ae269f6c5514a9279393728f464859d970ca6be19207f7e601e5677"
+  },
+  "snapshot_id": "geotraces-idp2025:IDP2025:a61f441e5ae2",
+  "snapshot_version": "geochemical-source-snapshot-v1",
+  "source_id": "geotraces-idp2025"
+}

@@ -1,0 +1,71 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-05T12:50:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 112
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 64511,
+      "path": "demo_input.csv",
+      "sha256": "7ae5180c7167946d01ae48e4ff980c6531ad8aaafb54a655cb2d0d4ebb150b3b"
+    },
+    {
+      "bytes": 205438,
+      "path": "sources.jsonl",
+      "sha256": "65938d4f927a4739a3ff00aa506558532fcf414f2234a7c81184d1d240cfcf93"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 112,
+    "raw_source_rows": 1070,
+    "selected_source_rows": 28
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+    "license": "CC-BY-4.0",
+    "source_id": "norway-marchem",
+    "title": "MarChem marine chemistry database for Norwegian waters"
+  },
+  "source_files": [
+    {
+      "bytes": 320402,
+      "filename": "MarChem_Inorganic_LabParameter_20260805T102709Z.csv",
+      "retrieved_at": "2026-08-05T10:27:11Z",
+      "sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d",
+      "source_url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MetaData/MarChem_Inorganic_LabParameter_20260805T102709Z.csv"
+    },
+    {
+      "bytes": 295287,
+      "filename": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+      "retrieved_at": "2026-08-05T10:27:11Z",
+      "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10",
+      "source_url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MarChem_Inorganic_Data_20260805T102709Z.csv"
+    },
+    {
+      "bytes": 3383,
+      "filename": "MarChem_Info_20260805T102709Z",
+      "retrieved_at": "2026-08-05T10:27:11Z",
+      "sha256": "93e4db2dd0c726751f21557caa28a8da4275da87745369d0a506e8fbd84e584f",
+      "source_url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MarChem_Info_20260805T102709Z"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "MarChem values are dry-weight partial nitric-acid extractions, not total concentrations.",
+    "Accreditation status varies by batch and remains attached to observation evidence."
+  ]
+}

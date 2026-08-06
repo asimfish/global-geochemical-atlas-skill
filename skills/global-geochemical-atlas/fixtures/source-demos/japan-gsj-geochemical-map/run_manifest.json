@@ -1,0 +1,66 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-06T03:48:23Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 19898,
+      "path": "demo_input.csv",
+      "sha256": "9cea2ca672bbe35d2a6b3546764cb350f437925fb470fa4be3dd78405784a872"
+    },
+    {
+      "bytes": 89560,
+      "path": "sources.jsonl",
+      "sha256": "34923c012dfd2638e65e7e61a5fea4191c10788c84d1c9f1df043d50038ef0a0"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 3024,
+    "selected_source_rows": 12
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "sample-2024-02-20_concentration-2007-01-10",
+    "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+    "source_id": "japan-gsj-geochemical-map",
+    "title": "Geochemical Map of Japan: national river-sediment sample and concentration tables"
+  },
+  "source_files": [
+    {
+      "bytes": 334302,
+      "filename": "samplejoho.csv",
+      "retrieved_at": "2026-08-06T03:57:08Z",
+      "sha256": "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c",
+      "source_url": "https://gbank.gsj.jp/geochemmap/data/joho/samplejoho.csv"
+    },
+    {
+      "bytes": 1198951,
+      "filename": "noudo.csv",
+      "retrieved_at": "2026-08-06T03:57:10Z",
+      "sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671",
+      "source_url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "The fixture covers 3,024 fine river-sediment samples, not a regular grid or the separate marine/surface-soil products.",
+    "Original coordinates are JGD2000; the display fixture carries values to WGS84 with a conservative 20 m uncertainty floor.",
+    "Hg is ppb while the other registered trace elements are ppm; the CSV pair has no row-level method, detection-limit or QC fields.",
+    "Duplicate sample ID 78013 is preserved by occurrence-order joining and is never overwritten."
+  ]
+}

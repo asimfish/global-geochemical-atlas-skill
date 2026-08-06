@@ -1,6 +1,6 @@
 # D1 数据源接口卡片
 
-核对日期：2026-08-05。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
+核对日期：2026-08-06。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
 
 ## V1 兼容状态说明
 
@@ -12,9 +12,9 @@
 | `needs_human_review` | 已发现相关数据，但版本、许可、接口、字段或适配器仍需复核 |
 | `rejected` | 已有证据表明不适合当前用途；仍保留排除理由 |
 
-## 已批准来源
+## V3 A 级样板来源
 
-V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核尚未完成，因此都不是 `benchmark_ready`。
+V3 当前把七项来源评为 A 级 `normalized_analysis`：岩石一项、土壤两项、沉积物两项、水体两项。30 条人工复核尚未完成，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
 
 ### `georoc-archaean`
 
@@ -36,6 +36,49 @@ V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 - 适配器：`usgs_static_txt`，已实现；
 - 边界：只代表 CONUS，legacy qualifier 和方法必须按数据集元数据解释。
 
+### `pangaea-north-africa-soil`
+
+- 介质与范围：北非 43 个离散样点的可风蚀细粒土壤组分；
+- 接口与版本：具体表 DOI `10.1594/PANGAEA.949903`，版本 2022-10-25，CC BY 4.0；
+- 对账：`Table_S5.tab` 43 行、48 个元素字段，As/Cr/Cu/Ni/Pb/Zn 各 43 条登记目标观测；
+- 方法：HF-HNO3 消解，Agilent 7900 ICP-MS；方法和参考物质细节回溯父包 DOI `10.1594/PANGAEA.949906`；
+- 边界：不是连续北非覆盖，不与不同粒级或消解的 bulk-soil 调查静默混合；边境样点保留发布方地点文字；
+- 剩余：30 条具名人工签署和方法/QC 完整率深化。
+
+### `norway-marchem`
+
+- 介质与范围：挪威海域沉积物；
+- 接口与快照：官方公开导出 API，动态快照固定精确请求、81,598-byte ZIP、成员和观测 hash；
+- 对账：1,070 个物理行、880 个样品、3,520 条 As/Cu/Ni/Zn 观测和逐观测批次方法全部连接；
+- 边界：干重 `mg/kg`、部分硝酸消解，不代表总含量；45 条删失值和认可状态原样保留；
+- 剩余：30 条具名人工签署。
+
+### `japan-gsj-geochemical-map`
+
+- 介质与范围：日本全国 3,024 个细粒河流沉积物记录；不包含独立海洋沉积物和表层土壤产品；
+- 接口与版本：官方 `samplejoho.csv`（2024-02-20）和 `noudo.csv`（2007-01-10），两个文件均固定 SHA-256；
+- 对账：按样品号和出现序号连接 3,024/3,024 行，重复 ID `78013` 的两次出现均保留；As/Cr/Cu/Hg/Ni/Pb/Zn 各 3,024 条；
+- 坐标与单位：JGD2000；Hg 为 ppb，其他登记痕量元素为 ppm；
+- 边界：CSV 对不含逐行方法、检出限和 QC，不补猜；WMS/WMTS 是派生展示，不算第二份观测；
+- 剩余：30 条具名人工签署，并寻找能固定到本表的详细分析方法与 QC 文件。
+
+### `geotraces-idp2025`
+
+- 介质与范围：全球海洋航次离散海水，不是规则网格；
+- 接口与快照：官方 WebODV IDP2025 子集，固定请求、903,710-byte ZIP、242 个成员和全部 hash；
+- 对账：69,704 个样品深度行、39,327 条 dissolved Cu/Ni/Zn 观测，覆盖 46 个含目标值航次和 0–7,167 m；
+- 边界：`nmol/kg` 保持原单位，SeaDataNet QC 原样保留；官方变量表无 As；
+- 剩余：30 条具名人工签署和贡献者/方法完整率；As 由 GEMStat 淡水路由补充，但两种水体背景保持隔离。
+
+### `gemstat-open-archive`
+
+- 介质与范围：33 个贡献国家的河流、湖泊、地下水、水库和湿地砷观测，空间与时间覆盖不均；
+- 接口与版本：Zenodo v3，版本 DOI `10.5281/zenodo.18459694`，CC BY 4.0；
+- 获取与校验：官方 201 MB ZIP 不整包镜像，按精确 byte range 取得 As 和四个元数据成员，并逐项验证压缩 SHA-256、ZIP header、CRC、展开大小和展开 SHA-256；
+- 对账：492,999 条 As 观测、15,621 个站点、33 国、三种分相、两种单位、五类水体站；
+- 边界：449,714 条使用未定义方法代码 0；删失、质量标签、5,655 条额外精确重复和 Pending review 极端值全部保留，演示只选 Good/Fair 且方法明确的记录；
+- 剩余：30 条具名人工签署、原始 data provider 血缘深化和第二个独立淡水来源。
+
 ## 待复核生产候选
 
 ### `georoc-database`
@@ -54,15 +97,6 @@ V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 - 许可：USGS 来源通常为美国公有领域，但逐数据发布核对非 USGS 内容和引用；
 - 待办：选择不可变的具体数据发布，核对下载文件、版本、字段字典、方法和 qualifier；
 - 风险：历史系统合并导致方法、单位和编码高度异质。
-
-### `gemstat-open-archive`
-
-- 介质与范围：全球河流、湖泊、水库、湿地和地下水，覆盖不均；
-- 已发现接口：Data Portal、年度 Zenodo 开放批次 `10.5281/zenodo.13881899`；
-- 可用过滤：站点、国家、流域、参数和日期；门户下载有站点数与表单限制；
-- 许可：逐提交批次可以是 Open、Limited 或 Restricted；生产只允许明确开放批次；
-- 待办：固定具体 Zenodo 版本、文件清单、checksum、字段和数据提供者署名；
-- 红线：不绕过联系表单、站点上限或 Restricted 数据策略。
 
 ### `wosis`
 
@@ -89,12 +123,18 @@ V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 
 ## M6 第二轮新增候选
 
-本轮新增 14 个入口，候选总数从 8 个增至 22 个。新增不等于批准；默认路由仍只有 `georoc-archaean` 和 `usgs-conus-soil` 两个生产来源。
+本轮当时新增 14 个入口，候选总数从 8 个增至 22 个；以下保留当轮发现记录。之后 MarChem 和 GEOTRACES 已在 V3 完成工程接入，当前状态见本文开头和机器评分文件。
 
 | 来源 | 介质 | 范围 | 当前可见接口 | 主要阻断项 |
 |---|---|---|---|---|
 | `petdb` | 岩石、矿物 | 全球海底及部分陆域 | EarthChem 查询与导出 | 动态版本、原论文去重、适配器 |
-| `foregs-europe` | 土壤、沉积物、水 | 欧洲 | 压缩 Excel/Atlas | 再分发条款、文件清单、方法映射 |
+| `foregs-europe` | 土壤、沉积物、水 | 欧洲 | 项目总入口 | 仅作发现与父项目血缘；数值接入已拆成下列六项 |
+| `foregs-topsoil` | 土壤 | 欧洲 | 固定 ZIP/CSV | 已实现；总量/王水、重复 GTN、表级 DL 分开保留 |
+| `foregs-subsoil` | 土壤 | 欧洲 | 固定 ZIP/CSV | 已实现；25 cm 下层样品只保留发布方深度范围语义 |
+| `foregs-humus` | 土壤 | 欧洲 | 固定 ZIP/CSV | 已实现；温和硝酸浸出，不含 As/Cr |
+| `foregs-stream-water` | 水 | 欧洲 | 固定 ZIP/CSV | 已实现；<0.45 µm 溶解态，无可接受 Hg |
+| `foregs-stream-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；<150 µm，总量/王水分开 |
+| `foregs-floodplain-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；0–25 cm，与溪流沉积物分开 |
 | `canada-cdogs` | 沉积物、水、精矿 | 加拿大 | 调查目录和部分标准化下载 | 逐调查版本/许可、复测关系 |
 | `australia-ngsa` | 沉积物（运移表生覆盖物） | 澳大利亚 | 国家 Atlas 和产品下载 | 固定具体产品、文件 hash、介质语义 |
 | `australia-ozchem` | 岩石、沉积物 | 澳大利亚 | 仅核实到官方旧版产品说明 | 当前数值端点、版本、上游重叠 |
@@ -104,21 +144,21 @@ V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 | `brazil-sgb-geochemistry` | 岩石、土壤、沉积物、水、精矿 | 巴西 | ArcGIS FeatureServer、项目 ZIP | 许可、字段、方法、重复关系 |
 | `nz-petlab` | 岩石、矿物、沉积物 | 新西兰及部分全球馆藏 | 开放查询、注册后导出 | 导出条款、动态版本、引用去重 |
 | `earthchem-library` | 全介质发现 | 全球 DOI 仓库 | 检索和原始文件下载 | 逐数据集许可/schema/hash，不是统一数据集 |
-| `geotraces-idp2025` | 海水 | 全球海洋航次 | BODC PDL 元数据/异步归档、WebODV 子集 | DOI、许可和产品元数据已核实；归档仍未准备完成，文件清单、字段映射、贡献者引用待验收 |
+| `geotraces-idp2025` | 海水 | 全球海洋航次 | BODC PDL 元数据、WebODV 子集 | 当轮只核实 DOI、许可和产品元数据；后续已用 WebODV 完成快照、字段、QC、适配器和端到端验收 |
 | `glorich` | 河水 | 全球河流 | PANGAEA DOI 批量包 | CC BY-NC-SA，不进入当前 open-only 生产 |
 | `eea-waterbase` | 水、沉积物 | 欧洲 | CSV 下载与筛选 | 动态版本、国家方法差异、具体许可标识 |
 
 ### 本轮最重要的判断
 
-- 沉积物候选从少数发现线索扩展到欧洲、加拿大、澳大利亚、英国、巴西、美国和 DOI 仓库入口，但仍无批准来源；
+- 沉积物候选从少数发现线索扩展到欧洲、加拿大、澳大利亚、英国、巴西、美国和 DOI 仓库入口；该结论记录的是当轮发现状态，后续 MarChem 已接入；
 - 水体已区分河流、一般水质、欧洲报告水体和全球海洋航次，不能把它们混成一种介质；
-- `geotraces-idp2025` 同时具备固定版本、DOI、CC BY 4.0 和质量控制说明；BODC 异步归档在本轮仍为 `notready`，不能提前声称文件与变量已经验收；
+- `geotraces-idp2025` 当轮已具备固定版本、DOI、CC BY 4.0 和质量控制说明；当时 BODC 异步归档为 `notready`，后续改用官方 WebODV 冻结子集并完成文件与变量验收；
 - `glorich` 很大但带 NC 限制，`bgs-gbase` 原始点数据需单独授权；两者保留用于覆盖判断，不参与 open-only 自动路由；
 - `earthchem-library` 和 Water Quality Portal 是发现/聚合入口，生产数据必须保留并去重上游数据集与提供者。
 
 ## M6 第三轮新增候选
 
-本轮新增 10 个入口，候选目录由 22 个增至 32 个，重点补海洋/湖泊档案和欧洲、亚洲国家机构。生产批准来源仍只有两个。
+本轮新增 10 个入口，候选目录由 22 个增至 32 个，重点补海洋/湖泊档案和欧洲、亚洲国家机构。当轮二元批准来源仍只有两个；当时 V3 已有四个 A 级 `normalized_analysis` 样板。
 
 | 来源 | 介质 | 范围 | 当前可见接口 | 当前判断与主要阻断项 |
 |---|---|---|---|---|
@@ -137,8 +177,31 @@ V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 
 - 样品目录和数值测定已经拆开：IMLGS、DARWIN 只承担发现，不能直接满足分析请求；
 - PANGAEA、NOAA、IODP、EMODnet 与国家数据库可能发布同一航次或项目，来源独立性按原项目和原样品计算；
-- 新增候选提升的是“去哪里找”的全面性，不改变沉积物、水体仍无 approved 来源的事实；
+- 新增候选提升的是“去哪里找”的全面性；当轮沉积物、水体尚无 V1 `approved`，后续已分别完成 MarChem 和 GEOTRACES V3 工程样板；
 - `source_discovery_scope.json` 按区域记录尚未完成的检索，亚洲、非洲、南美及州/省级调查仍是明显缺口；发现状态继续为 `in_progress`、`saturated=false`。
+
+## M7 第四轮新增候选
+
+本轮新增 8 个官方入口，目录由 32 个增至 40 个，补到墨西哥、加拿大省级、美国州级、智利、阿根廷、印度、日本和南非。新增的是“已找到并有官方证据的入口”，不是已经完成适配或达到生产置信度的来源。
+
+| 来源 | 介质 | 范围与可见规模 | 已验证接口 | 当前判断与下一步 |
+|---|---|---|---|---|
+| `mexico-sgm-geochemical-cartography` | 河流沉积物派生图层 | 墨西哥全国 1:250,000，源于 1995–2005 活性河流沉积物分析 | GeoInfoMex SHP/KML、联邦开放数据页 | 先确认下载文件是否包含样点原始数值；联邦 CC BY 4.0 与 GeoInfoMex 限制性告示需按文件核对 |
+| `canada-bc-rgs` | 沉积物、水、重矿物精矿 | BC 省；2020 版称 65,000 样品、约 500 万测定、116 个原始来源、18 种方法/实验室 | XLS/PDF 版本下载、样点 ArcGIS | 高价值多介质候选；先固定 2020 文件、hash、字段表、许可和原调查血缘 |
+| `alaska-dggs-webgeochem` | 岩石、土壤、沉积物、精矿 | 阿拉斯加；持续汇入 DGGS、USGS、BLM 和历史来源 | WebGeochem 查询/全量导出、具 DOI 的 DGGS 数据包 | 首个适配器优先选不可变 DGGS publication package，不直接冻结无版本全库 |
+| `chile-sernageomin-geochemistry` | 河流沉积物 | 智利区域图幅；官方称超过 10,000 样品、23 万平方公里、每样最多 66 元素 | 官方 viewer、ArcGIS、逐图幅 Excel 产品 | 产品和许可逐图幅核对；全国规模描述不能替代文件级验收 |
+| `argentina-segemar-geochemistry` | 河流沉积物、土壤 | 阿根廷；SIGAM 年报称超过 40,000 条沉积物记录 | GeoNetwork 开放目录、SIGAM viewer、逐图幅产品 | 先挑一个可下载图幅核对 54 元素字段、方法、坐标误差和许可 |
+| `india-gsi-ngcm` | 河流沉积物 | 印度 NGCM；2×2 km 单元、计划 66 元素、1:50,000 | 官方 Atlas、曾用于黑客松的 Excel/PDF 分发 | 当前 Atlas 返回 0 条，数值入口带登录/活动属性，暂只作发现 |
+| `japan-gsj-geochemical-map` | 河流/海洋沉积物、后续表层土壤 | 日本陆海；约 3,000 河流沉积物和 5,000 海洋沉积物 | 样点/浓度数据库、Shapefile、As/Cu/Ni/Zn WMS/WMTS | 后续已将 3,024 行河流沉积物文件对固定并实现适配器；海洋沉积物和表层土壤仍是独立待接入产品 |
+| `south-africa-cgs-geochemistry` | 河流沉积物、替代土壤 | 南非多个图幅；已验证 Alexander Bay 点层含 As/Cu/Ni/Zn 和坐标字段 | ArcGIS Feature/MapServer | 先完整读取产品许可、方法、单位和检出限；图幅集合不冒充连续全国库 |
+
+### 第四至第六轮的边界判断
+
+- 第四轮结束时目录有 40 个来源和 5 个 A 级 `normalized_analysis` 样板；此后 GSJ 河流沉积物、PANGAEA 北非土壤和 FOREGS 六个介质数据集完成接入，当前目录为 47 项、A 级样板为 13 项；
+- GSJ 已完成首个河流沉积物适配器；BC RGS、阿拉斯加 WebGeochem 和阿根廷 SIGAM 仍是下一批高价值数值接入候选；
+- 墨西哥目前证明的是派生图层，印度目前证明的是项目和有限分发路线，不能写成已获得原始全量数据；
+- 南非、BC 和阿拉斯加均含多来源或多图幅内容，独立来源数必须回到原调查、出版物和样品，而不是按门户计数；
+- 第四轮仍未解决非洲水体、亚洲更多国家、太平洋岛国和论文 DOI 长尾，发现状态保持 `in_progress`、`saturated=false`。
 
 ## M7 首批逐源复核
 
@@ -147,8 +210,8 @@ V3 当前把两项来源评为 A 级 `normalized_analysis`；30 条人工复核�
 - `norway-marchem` 的公开 API 已能稳定返回目标元素，但当前响应是带生成时间的动态 ZIP，不是已固定 DOI 的不可变发布；
 - MarChem 本次导出有 1,070 个物理数据行、880 个不同样品。190 个样品因两个参数组而重复出现，但每个样品只有一行含目标元素；适配器必须按参数和批次展开，不能按行计样品；
 - 四个目标元素均为干重 `mg/kg`，保留 `<` 删失值；方法是部分硝酸消解，不代表总量；目标方法元数据中同时存在 accredited 和 not-accredited 批次；
-- 已准备 30 条分层机器抽样，人工回看仍为 pending，因此当前为 C 级 `raw_observation`，尚不是 `benchmark_ready`；
-- `geotraces-idp2025` 的 DOI、CC BY 4.0、产品范围、五个数据包和 QC 描述已核实；BODC 归档仍在准备，实际文件和变量级验收继续等待。
+- MarChem 已准备 30 条分层机器抽样并完成 canonical 适配和全量对账，当前为 85/A/`normalized_analysis`；人工回看仍为 pending，因此尚不是 `benchmark_ready`；
+- `geotraces-idp2025` 已用官方 WebODV 完成 69,704 行和 39,327 条 Cu/Ni/Zn 观测验收，当前为 85/A/`normalized_analysis`；无 As，人工回看和贡献者/方法完整率仍待完成。
 
 ## 路由示例
 

@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "bbox_match": true,
+    "distinct_samples_match": true,
+    "file_bytes_match": true,
+    "file_sha256_match": true,
+    "physical_rows_match": true,
+    "review_sample_prepared": true,
+    "target_counts_match": true
+  },
+  "counts": {
+    "area_counts": {
+      "Non representative PSA (Hoggar and Niger)": 6,
+      "Outlier": 1,
+      "PSA BD (Bodele Depression)": 3,
+      "PSA LAM (Libya-Algeria-Mali)": 13,
+      "PSA LE (Libya-Egypt)": 5,
+      "PSA MC (Mali Center)": 2,
+      "PSA WAC (West African Coast)": 12,
+      "Unassigned PSA": 1
+    },
+    "bbox": [
+      -13.26,
+      15.67,
+      32.5,
+      33.83
+    ],
+    "distinct_samples": 43,
+    "physical_rows": 43,
+    "potential_source_area_count": 8,
+    "reported_location_count": 33,
+    "target_analytes": {
+      "As": 43,
+      "Cr": 43,
+      "Cu": 43,
+      "Ni": 43,
+      "Pb": 43,
+      "Zn": 43
+    },
+    "target_observations": 258
+  },
+  "limitations": [
+    "Forty-three discrete samples do not form continuous regional coverage.",
+    "The <20 µm HF-HNO3 fraction remains isolated from other soil preparation bases.",
+    "Country is not inferred from coordinates or border-location text.",
+    "Table S5 has no row-level detection-limit or qualifier fields."
+  ],
+  "reconciliation_version": "pangaea-north-africa-soil-audit-v1",
+  "snapshot_id": "pangaea-north-africa-soil:2022-10-25:de402b7f469c",
+  "source_id": "pangaea-north-africa-soil",
+  "status": "PASS"
+}

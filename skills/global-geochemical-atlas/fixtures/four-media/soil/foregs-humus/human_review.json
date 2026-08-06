@@ -1,0 +1,1598 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS confirms correspondence with byte-pinned FOREGS members and the adapter. It is not human review; reviewer decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "prepared_at": "2026-08-06T08:00:00Z",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.026",
+          "record_id": "rec-0b50a7633672d35a82bdb7db0a5362e3a76ed5a55867e0e2e062c6a2a9438f7e",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "41.87",
+      "longitude": "20.58",
+      "published_target_raw_values": {
+        "Hg": "0.026"
+      },
+      "review_id": "foregs-humus-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N28E11H4",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=4",
+      "source_record_id": "src-3969e754610a4d44eeec917d494a0b91026725fe176fa6ecb5e96e8f24801404"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.6",
+          "record_id": "rec-f541b62c0ba033e429321439f04e5f377b8fa834d6b86742b5da2645866ee91d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": true,
+          "raw_value": "0.15",
+          "record_id": "rec-211be4150bb74db016d3f069daad0df7ace174d781b94d053383de6e2e5f4ed8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.5",
+          "record_id": "rec-a077bd0b4f9f727975d44e52b7063939a00c0e911b3a7711dc0942734bfd7a01",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.26",
+      "longitude": "-0.09",
+      "published_target_raw_values": {
+        "Cu": "0.6",
+        "Ni": "0.15",
+        "Zn": "3.5"
+      },
+      "review_id": "foregs-humus-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01H5",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=9",
+      "source_record_id": "src-346bc0540006c6416a00ddc1b41e36052dbf39c83888477b9a9b5c9bd6d1c1cb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.7",
+          "record_id": "rec-f90a2402121ba5f4f96a9fb5220b30ffdd38d826d3ba316c723a12fe38da2d61",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.1",
+          "record_id": "rec-118dc8bc0884fc978f377249e63748ad369a0ba8260ed82313bacf42ca330754",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "15.2",
+          "record_id": "rec-b5fa2c8dd81423b1ac5997e7698f6e71817c972641bc6828e7bc031f5e4d656e",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.96",
+      "longitude": "2.03",
+      "published_target_raw_values": {
+        "Cu": "3.7",
+        "Ni": "2.1",
+        "Zn": "15.2"
+      },
+      "review_id": "foregs-humus-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E02H2",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=4",
+      "source_record_id": "src-066760d69678d06ff6fd54a11ab608bcef18f17cd0a939fd2af242dbcd343cfc"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "38.8",
+          "record_id": "rec-b7558d450d388f2f6b0b9e1c2ef79088a4083b8e82709818135d043d5872d01b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.96",
+      "longitude": "2.03",
+      "published_target_raw_values": {
+        "Pb": "38.8"
+      },
+      "review_id": "foregs-humus-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E02H2",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;ordinary_numeric_row"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=4",
+      "source_record_id": "src-c9e7fc138a64b84a3b2e094630913f4d4a9bffdc1ce132ee38e4173f9dd735f1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.314",
+          "record_id": "rec-db1c951079644dc3ef432937602cec1645d487e8e8477edacafb2ba48059ac6b",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.96",
+      "longitude": "2.03",
+      "published_target_raw_values": {
+        "Hg": "0.314"
+      },
+      "review_id": "foregs-humus-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E02H2",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=5",
+      "source_record_id": "src-27c65a24174e06b6a9c8e2b5dae58e99fc6398052e3c378ff0142cae75f73b8a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.1",
+          "record_id": "rec-7822f98d4aa40a9e878cd2a48f39484c2691c0c17ccf126840e099ee6b9d3eb8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.9",
+          "record_id": "rec-94c6ec69855f2729ea7bf42a2724706e8936c85519ec4a3a3977c035732ece39",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "19.8",
+          "record_id": "rec-1464cd9029d6f9c5e032a2dec9c5a2119e53cf3c201d96862916668a7a9453a4",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.71",
+      "longitude": "3.38",
+      "published_target_raw_values": {
+        "Cu": "3.1",
+        "Ni": "1.9",
+        "Zn": "19.8"
+      },
+      "review_id": "foregs-humus-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E02H5",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=5",
+      "source_record_id": "src-6bc1f72df4d15e03317dd62f401af54c7173adc40b609df8fdf15b030fb0acd0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "32.6",
+          "record_id": "rec-7b8fe8eaabdc9bc2049d2f2ca2bee1471f77c669845a95f3bacbf67dc7ee0d0d",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.71",
+      "longitude": "3.38",
+      "published_target_raw_values": {
+        "Pb": "32.6"
+      },
+      "review_id": "foregs-humus-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E02H5",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=5",
+      "source_record_id": "src-112d9a6f9a6f9571ca58a7af378ff6864613c9847450ab49da27ce357886afa8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.225",
+          "record_id": "rec-e9b45346f3011fee4444efa9f4810d2edbb8bb1949f47a4553c98eb1689dfd7e",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.71",
+      "longitude": "3.38",
+      "published_target_raw_values": {
+        "Hg": "0.225"
+      },
+      "review_id": "foregs-humus-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E02H5",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=6",
+      "source_record_id": "src-91dfc46c6c1f999ee3bdda8a7596b6efb5cacd94329ed57fc6135bd74cd8a5da"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "8.4",
+          "record_id": "rec-875b6388f2c7d3aa5e0f70ce6548d1b3f77db2babeb3943c7ee372f45dd0ce61",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "9.1",
+          "record_id": "rec-4d44bcee13a64753c9033f38f4313075ee86b011a85be29f04e924740b510150",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "36.2",
+          "record_id": "rec-c051816f698f5b4389029dd5e96b295a646110166c7710606f96ecf78707eb4c",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.67",
+      "longitude": "6.65",
+      "published_target_raw_values": {
+        "Cu": "8.4",
+        "Ni": "9.1",
+        "Zn": "36.2"
+      },
+      "review_id": "foregs-humus-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E04H2",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=6",
+      "source_record_id": "src-1a95874b71ae1067ec4ba5b816f5a86206125a784207fb50ac1b7c9cc2d7f7d1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "26.7",
+          "record_id": "rec-a0c023ea85631958ef3af675f7396797d1bdac916977370d2f9c6bacb1093e23",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.67",
+      "longitude": "6.65",
+      "published_target_raw_values": {
+        "Pb": "26.7"
+      },
+      "review_id": "foregs-humus-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E04H2",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=6",
+      "source_record_id": "src-b7e2995f2afe6910117770bcc7eb38a57cb00326717ce228956b44112a82fd94"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.108",
+          "record_id": "rec-7b85c1b3ac003f321cab235efcf15e5ca57fd5ecdd38299ac0d63334674a0099",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.67",
+      "longitude": "6.65",
+      "published_target_raw_values": {
+        "Hg": "0.108"
+      },
+      "review_id": "foregs-humus-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E04H2",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=7",
+      "source_record_id": "src-3425ef9a7ef8970afc166526841b84215fde09ccd8e6c2c69c0b5caacd37057f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "23.1",
+          "record_id": "rec-f4becae44b99fd9f8cdfb54fd9e69a24438ec93879dc415e39d94d0b5def0ce9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "13.9",
+          "record_id": "rec-94d19842979892a2f2d14ecdb7d1dc67c2c4d8ff0e384ae09ab666533b8bf772",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "72.6",
+          "record_id": "rec-0117cc21717f995148101dbf92785ad8c8e1a66cce796b47c2f8612c96627908",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.18",
+      "longitude": "10.13",
+      "published_target_raw_values": {
+        "Cu": "23.1",
+        "Ni": "13.9",
+        "Zn": "72.6"
+      },
+      "review_id": "foregs-humus-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E06H5",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=7",
+      "source_record_id": "src-e3ae8b090ff0db518aab2b406cc91013eed1cc3706b055d5a26eb22727775148"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "39",
+          "record_id": "rec-7dbfeb431e4d2f2522cb539af7b7344a7457386a22fe60c1ccd7b0ed2b17d919",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.18",
+      "longitude": "10.13",
+      "published_target_raw_values": {
+        "Pb": "39"
+      },
+      "review_id": "foregs-humus-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E06H5",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=7",
+      "source_record_id": "src-245e2ff3762fe1dcd6f26f4ab4669be0f252796c2050680fafb7cc08eafce02a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.139",
+          "record_id": "rec-73fb36c516c24d734acb50e4c8516c4c46655b3d32dc33db52d784e664252a9d",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.18",
+      "longitude": "10.13",
+      "published_target_raw_values": {
+        "Hg": "0.139"
+      },
+      "review_id": "foregs-humus-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E06H5",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=8",
+      "source_record_id": "src-64faa5b60bbc02d18057fa36549975aeff7897b6b052af0f51b26018a6c128d8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1",
+          "record_id": "rec-e6dfbe07e70b6109e61d65da0b913031a380d7ee24b1d68fc9b6117729cf9184",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.7",
+          "record_id": "rec-98c3423cd08522c65de052269ca6877bdcafc6ff22a2e35645f0697c3fb181dc",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5.8",
+          "record_id": "rec-43c6d6a38a6e6d49dc7ebb4378cd4167afb815c26e13517a81994799d513145e",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.43",
+      "longitude": "-0.78",
+      "published_target_raw_values": {
+        "Cu": "1",
+        "Ni": "0.7",
+        "Zn": "5.8"
+      },
+      "review_id": "foregs-humus-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01H2",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=8",
+      "source_record_id": "src-568934211ab75c58c3414d9671614a3b954e3cb3f3aca9ebbfd201d9941a19de"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "12.3",
+          "record_id": "rec-e333b63e680643b338077cdb3f41cb0fc1e30653c4f9306e30172c7365f8c6a2",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.43",
+      "longitude": "-0.78",
+      "published_target_raw_values": {
+        "Pb": "12.3"
+      },
+      "review_id": "foregs-humus-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01H2",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=8",
+      "source_record_id": "src-4147e09db98a0df96c35e7e2a488a579f17cc0aca9fe4304fe60448768b2ee2a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.167",
+          "record_id": "rec-5b5a37ac7861fd34c4dababfb3e389f9e3e636135f63aff44bbf94bc842f23a9",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.55",
+      "longitude": "15.49",
+      "published_target_raw_values": {
+        "Hg": "0.167"
+      },
+      "review_id": "foregs-humus-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E09H2",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=9",
+      "source_record_id": "src-d95b2b62861ebddcc562ea84efc97c57236ce0757bc55ac14efe496ee6488629"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.1",
+          "record_id": "rec-44264af143fe44d71d9c9c4d812182c9d8fa8cf934277ccac40933ce184617f8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "1.1",
+          "record_id": "rec-0e308b357e6ccc9643cec855e4c9a5f0fade1ea639816c63a83a9cd406b4d547",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "5.4",
+          "record_id": "rec-9644e7f942bc3a2747a26e0a45a0dfc0651a1f3c02e68bd0f05befadc8a46ddb",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.11",
+      "longitude": "1.43",
+      "published_target_raw_values": {
+        "Cu": "3.1",
+        "Ni": "1.1",
+        "Zn": "5.4"
+      },
+      "review_id": "foregs-humus-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E01H1",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=10",
+      "source_record_id": "src-60ae12b093ef11585a664e86fd1176b743b9bc0979fdcccf13b162ed3bfc6fd4"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "4.8",
+          "record_id": "rec-4fa05033fdf1e64e62980efcedf31daed7bb1abeafc82a4615bae1bebf68ac5f",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.26",
+      "longitude": "-0.09",
+      "published_target_raw_values": {
+        "Pb": "4.8"
+      },
+      "review_id": "foregs-humus-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01H5",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=9",
+      "source_record_id": "src-8d6e466ceb3820f1c4def1b01d107ff43a246591f5af5206cc3174d5f33b7786"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.307",
+          "record_id": "rec-4646ca1f3b66908cf5f48b072faeeec20920be1c0eb32eb7d6bc7e6bf38eef24",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "43.88",
+      "longitude": "16.54",
+      "published_target_raw_values": {
+        "Hg": "0.307"
+      },
+      "review_id": "foregs-humus-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30E09H4",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=10",
+      "source_record_id": "src-c7a57657bb575d9ac495e8a085d56829c8fadf7038b03a8ffad25dd989b46767"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "3.9",
+          "record_id": "rec-ee75f3a39b397b151a1e48664324ff3fed7476b1b6d68c85d78e153082a99277",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2",
+          "record_id": "rec-ab8af79e70c2359d72460c78db7e8cf28f90df07a44fdef85cb8102aed3cfd96",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "16.3",
+          "record_id": "rec-cef6957ed020fff684c92c2ff3b902da124b251498cb6a9ecc4212b079d53203",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "45.66",
+      "longitude": "0.6",
+      "published_target_raw_values": {
+        "Cu": "3.9",
+        "Ni": "2",
+        "Zn": "16.3"
+      },
+      "review_id": "foregs-humus-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E01H3",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=11",
+      "source_record_id": "src-ca644aef5cdee9a06ad7a82eaae69829c409c61e649c9d949eb18e08412f10eb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "19",
+          "record_id": "rec-a556fe3c788b33a239c81c822924dda8e8649b706d09b71f80b86fdef4b29256",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.11",
+      "longitude": "1.43",
+      "published_target_raw_values": {
+        "Pb": "19"
+      },
+      "review_id": "foregs-humus-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E01H1",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=10",
+      "source_record_id": "src-1d470f4be73c947d2335c0a8a377584d8f4e095eb0b39876513e08bcdc999472"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.053",
+          "record_id": "rec-ac8bf1a056dfa698ed4fb0c0bb08677f52b3b0a4f8a13eb13aceee661ef28d41",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.43",
+      "longitude": "-0.78",
+      "published_target_raw_values": {
+        "Hg": "0.053"
+      },
+      "review_id": "foregs-humus-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01H2",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=11",
+      "source_record_id": "src-155f39cf029d7ca469737664af4ccffaaf701892274b723cc0ba4a8ef657017e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "4.3",
+          "record_id": "rec-dacc71cb4274a52eb0e8f048643412f2c4aca6fec85346e298339c6bf3ccaf4f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.6",
+          "record_id": "rec-0b7cbbedd503952ec0529e5f5b397368e973e2edee6d7064ec10cdf1339a5828",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "19.1",
+          "record_id": "rec-2e7614a9420433c930495b7e1e3824681917741be262eacb719d2c88d7275c1d",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "45.18",
+      "longitude": "1.64",
+      "published_target_raw_values": {
+        "Cu": "4.3",
+        "Ni": "2.6",
+        "Zn": "19.1"
+      },
+      "review_id": "foregs-humus-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E01H4",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=12",
+      "source_record_id": "src-69539804051cfc56365085d70d6797e40b34905d08138defe683eeeb2b61e70b"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "19.8",
+          "record_id": "rec-01aca5dfa894c3d6428af5bf0f3c565bd9b1e17ad65f35b95e5f61a0115aaec9",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "45.66",
+      "longitude": "0.6",
+      "published_target_raw_values": {
+        "Pb": "19.8"
+      },
+      "review_id": "foregs-humus-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E01H3",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=11",
+      "source_record_id": "src-9f6d1074929e9732efdff647830c99191b7f5248c2db6f21a1f60cffa8fc758a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.032",
+          "record_id": "rec-184bf3f8bd0eed678a037704835237d0beb226391ebc79be728bedd350f3e4a4",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "44.26",
+      "longitude": "-0.09",
+      "published_target_raw_values": {
+        "Hg": "0.032"
+      },
+      "review_id": "foregs-humus-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N30W01H5",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=12",
+      "source_record_id": "src-a454499b65b0d0d441bd3782ab63c9adafcbd1ccbc8e0d40a22433c0df75500d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "4.1",
+          "record_id": "rec-b093c46d587d706f3af7c3059907593d913a1970ff20ac07344b15a03de1f317",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "2.5",
+          "record_id": "rec-8c70b253e7f30a555e8d5d9dbe13d0526ae301b78672b4e08622db2d5240cd5d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "7.1",
+          "record_id": "rec-5a37621a84c12ed8881a4467c9e6d1c7faa2f04792bb66ece76b108ab6bec183",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "45.33",
+      "longitude": "2.75",
+      "published_target_raw_values": {
+        "Cu": "4.1",
+        "Ni": "2.5",
+        "Zn": "7.1"
+      },
+      "review_id": "foregs-humus-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E02H3",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=13",
+      "source_record_id": "src-03921521d7ace43de5d68585a2273cdb9500ab7e542f17e67445e6d88016a8ab"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.5",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "23.8",
+          "record_id": "rec-877265df7429e12abc127c4a4304879650eafb61921cd1481d989644f27deacc",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "45.18",
+      "longitude": "1.64",
+      "published_target_raw_values": {
+        "Pb": "23.8"
+      },
+      "review_id": "foregs-humus-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E01H4",
+      "selection_reasons": [
+        "member=H_icpadd_data_2v0.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983",
+      "source_locator": "H_icpadd_data_2v0.csv#row=12",
+      "source_record_id": "src-f999c652e35b0a577b7585c87612b522830781d6b9ba7e02c2f0c874824b3d90"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "detection_limit": "0.0001",
+          "digestion_or_extraction": "direct solid analysis; no wet digestion",
+          "measurement_basis": "total_Hg_direct_solid_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "0.124",
+          "record_id": "rec-83e59eef600e5a5557a7953fc1e179681f4f5e5be8965d2ec32e6343d8ce35b7",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.11",
+      "longitude": "1.43",
+      "published_target_raw_values": {
+        "Hg": "0.124"
+      },
+      "review_id": "foregs-humus-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E01H1",
+      "selection_reasons": [
+        "member=H_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef",
+      "source_locator": "H_Hg_data_2v3_7Aug2007.csv#row=13",
+      "source_record_id": "src-861549de20e165a63fdeb8718928a5502782e480373b7ec7f4abbf68361d029a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "15.2",
+          "record_id": "rec-2414114ebdffc7047dde9080ed29cb59d4ebf90ac1dd29a11c2f47dd2af214df",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "0.3",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "25.3",
+          "record_id": "rec-4f033f967f72a97bbd220179e3d44d904a92d8f611be1aa6004eeb8d099ec8eb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-MS",
+          "detection_limit": "1",
+          "digestion_or_extraction": "4.5% HNO3 ultrasonic extraction for 90 minutes",
+          "measurement_basis": "mild_nitric_acid_leachable_humus",
+          "possible_upstream_dl_over_2_substitution": false,
+          "raw_value": "110.2",
+          "record_id": "rec-eee041616ae986440bb366e982c78aa4a9664f5be8cd8a1f62b4c646ce8ad1d4",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "measurement_basis_and_method_preserved": true,
+        "possible_dl2_is_warning_not_censoring_assertion": true,
+        "registered_member_hash_matches": true,
+        "sample_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "units_and_table_detection_limits_preserved": true
+      },
+      "automated_status": "PASS",
+      "latitude": "46.31",
+      "longitude": "9.77",
+      "published_target_raw_values": {
+        "Cu": "15.2",
+        "Ni": "25.3",
+        "Zn": "110.2"
+      },
+      "review_id": "foregs-humus-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "N31E05H1",
+      "selection_reasons": [
+        "member=H_icp_data_2v2_11Mar04.csv;round_robin_fill"
+      ],
+      "source_file_sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+      "source_locator": "H_icp_data_2v2_11Mar04.csv#row=14",
+      "source_record_id": "src-02aa33283d470386f2156ce83e4440ea833fff419c353976317dc7c75d785dc5"
+    }
+  ],
+  "review_version": "foregs-human-review-v1",
+  "source_id": "foregs-humus",
+  "status": "prepared"
+}

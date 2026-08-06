@@ -1,0 +1,62 @@
+{
+  "acquisition": {
+    "cache_status": "cache_hit",
+    "observed_at": "2026-08-06T08:00:00Z",
+    "request_url": "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip",
+    "transport_note": "Official GTK HTTP archive accepted only after exact registered SHA-256 verification; redirects rejected."
+  },
+  "archive": {
+    "bytes": 87509,
+    "members": [
+      {
+        "bytes": 14968,
+        "name": "H_Hg_data_2v3_7Aug2007.csv",
+        "sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef"
+      },
+      {
+        "bytes": 20190,
+        "name": "H_icp_data_2v2_11Mar04.csv",
+        "sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4"
+      },
+      {
+        "bytes": 22048,
+        "name": "H_icpadd_data_2v0.csv",
+        "sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983"
+      }
+    ],
+    "sha256": "9c2dd6ffa6ca10be9f7c550e3043da9abdae0294850d52cbacc15efdaacf82ef"
+  },
+  "claim_boundary": "This audit proves a byte-pinned official FOREGS medium archive, exact CSV row counts and method-separated target mappings. It does not prove local spatial coverage, preserved censoring qualifiers or comparability across analytical bases.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "distinct_gtn_union": 388,
+    "physical_rows": 1111,
+    "target_analytes": {
+      "Cu": 367,
+      "Hg": 377,
+      "Ni": 367,
+      "Pb": 367,
+      "Zn": 367
+    },
+    "target_observations": 1845
+  },
+  "observed_metadata": {
+    "grain_fraction": "source humus material",
+    "medium": "soil",
+    "method_bases": [
+      "mild_nitric_acid_leachable_humus",
+      "total_Hg_direct_solid_humus"
+    ],
+    "row_level_detection_qualifiers_present": false,
+    "sample_type": "humus / organic horizon where present",
+    "table_level_detection_limits_present": true
+  },
+  "snapshot_id": "foregs-humus:2005-files-2026-03-03:9c2dd6ffa6ca",
+  "source_id": "foregs-humus",
+  "verification_version": "foregs-medium-audit-v1"
+}

@@ -1,0 +1,75 @@
+{
+  "acquisition": {
+    "cache_status": "cache_hit",
+    "observed_at": "2026-08-06T08:00:00Z",
+    "request_url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip",
+    "transport_note": "Official GTK HTTP archive accepted only after exact registered SHA-256 verification; redirects rejected."
+  },
+  "archive": {
+    "bytes": 788137,
+    "members": [
+      {
+        "bytes": 65998,
+        "name": "C_AR_data_2v5_8Feb06.csv",
+        "sha256": "a6be09c8db44f22cac340285886d866d9420f58a649f46dab5eff7af489047bc"
+      },
+      {
+        "bytes": 45702,
+        "name": "C_Hg_data_2v4_9Feb06.csv",
+        "sha256": "ab05092768181a03b02c9abdfea4981d1088677e2d646b63a3bbf6dcdada93d2"
+      },
+      {
+        "bytes": 98402,
+        "name": "C_XRF_data_2v6_8Feb06.csv",
+        "sha256": "436ebabf7431b1d93769d63fcc2d50755bac9e72a2141dc6325c69cafa1c591b"
+      },
+      {
+        "bytes": 128965,
+        "name": "C_icp_data_2v6_9Feb06.csv",
+        "sha256": "b983234ff136212be55b8fb9a2d12fb41433ad1315c8eca8d91d2ee207712d8b"
+      },
+      {
+        "bytes": 72001,
+        "name": "C_icpadd_data_2v5_9Feb06.csv",
+        "sha256": "313446ee8924841c8c4725dd3084bb6ef949092c51130aa12be25b94008f74c7"
+      }
+    ],
+    "sha256": "a0c5f40174c28a0ec0b5e36e97344497d9216be0b22ba80b7dddf9ff73d832c0"
+  },
+  "claim_boundary": "This audit proves a byte-pinned official FOREGS medium archive, exact CSV row counts and method-separated target mappings. It does not prove local spatial coverage, preserved censoring qualifiers or comparability across analytical bases.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "distinct_gtn_union": 794,
+    "physical_rows": 3922,
+    "target_analytes": {
+      "As": 1567,
+      "Cr": 1572,
+      "Cu": 1567,
+      "Hg": 779,
+      "Ni": 1572,
+      "Pb": 1572,
+      "Zn": 1572
+    },
+    "target_observations": 10201
+  },
+  "observed_metadata": {
+    "grain_fraction": "<2 mm",
+    "medium": "soil",
+    "method_bases": [
+      "aqua_regia_leachable_<2mm_subsoil",
+      "total_Hg_direct_solid_<2mm_subsoil",
+      "total_selected_<2mm_subsoil"
+    ],
+    "row_level_detection_qualifiers_present": false,
+    "sample_type": "residual lower-horizon subsoil; 25 cm layer within 50-200 cm depth range",
+    "table_level_detection_limits_present": true
+  },
+  "snapshot_id": "foregs-subsoil:2005-files-2026-03-03:a0c5f40174c2",
+  "source_id": "foregs-subsoil",
+  "verification_version": "foregs-medium-audit-v1"
+}

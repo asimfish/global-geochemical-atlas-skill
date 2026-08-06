@@ -1,0 +1,70 @@
+{
+  "acquisition": {
+    "cache_status": "cache_hit",
+    "observed_at": "2026-08-06T08:00:00Z",
+    "request_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip",
+    "transport_note": "Official GTK HTTP archive accepted only after exact registered SHA-256 verification; redirects rejected."
+  },
+  "archive": {
+    "bytes": 641447,
+    "members": [
+      {
+        "bytes": 82266,
+        "name": "S_AR_data_2v5_30Nov2006.csv",
+        "sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce"
+      },
+      {
+        "bytes": 40477,
+        "name": "S_Hg_data_2v5_30Nov06.csv",
+        "sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef"
+      },
+      {
+        "bytes": 132523,
+        "name": "S_XRF_data_2v9_30Nov06.csv",
+        "sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8"
+      },
+      {
+        "bytes": 132977,
+        "name": "S_icp_data_2v6_30Nov06.csv",
+        "sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58"
+      }
+    ],
+    "sha256": "639f9333d58a786609d86cfb52eeb48fb50e0841a2aeaaf3b7a01dbf48dab5c1"
+  },
+  "claim_boundary": "This audit proves a byte-pinned official FOREGS medium archive, exact CSV row counts and method-separated target mappings. It does not prove local spatial coverage, preserved censoring qualifiers or comparability across analytical bases.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "distinct_gtn_union": 855,
+    "physical_rows": 3393,
+    "target_analytes": {
+      "As": 1697,
+      "Cr": 1697,
+      "Cu": 1697,
+      "Hg": 848,
+      "Ni": 1697,
+      "Pb": 1697,
+      "Zn": 1697
+    },
+    "target_observations": 11030
+  },
+  "observed_metadata": {
+    "grain_fraction": "wet sieved <150 micrometres",
+    "medium": "sediment",
+    "method_bases": [
+      "aqua_regia_leachable_<150um_stream_sediment",
+      "total_Hg_direct_solid_<150um_stream_sediment",
+      "total_selected_<150um_stream_sediment"
+    ],
+    "row_level_detection_qualifiers_present": false,
+    "sample_type": "active stream sediment composite from a small drainage basin",
+    "table_level_detection_limits_present": true
+  },
+  "snapshot_id": "foregs-stream-sediment:2005-files-2026-03-03:639f9333d58a",
+  "source_id": "foregs-stream-sediment",
+  "verification_version": "foregs-medium-audit-v1"
+}

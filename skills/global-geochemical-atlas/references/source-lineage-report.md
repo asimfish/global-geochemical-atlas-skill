@@ -1,6 +1,6 @@
 # D1 来源血缘与独立性报告
 
-核对日期：2026-08-05。此报告用于避免把聚合站转载、同一上游数据的多个镜像或预编译子集误算成多份独立证据。
+核对日期：2026-08-06。此报告用于避免把聚合站转载、同一上游数据的多个镜像或预编译子集误算成多份独立证据。
 
 ## 当前关系
 
@@ -30,6 +30,7 @@
 | `eea-waterbase` | 区域报告聚合库 | 各欧洲国家向 EEA 报送 | EEA 分发不增加独立性；按国家提供者、监测站和计划计算 |
 | `noaa-ncei-marine-geology` | 海洋/湖泊长期档案与样品目录 | 汇集多机构、航次、IODP legacy 数据及实物样品库元数据 | IMLGS 只作发现；数值必须回到具体档案文件、项目和原始引用，与 IODP/PANGAEA 镜像去重 |
 | `pangaea-repository` | DOI 数据仓库 | 保存作者、项目和数据中心提交的数据；包含 `glorich` 及部分 IODP 数据 | 仓库不算独立来源；按 DOI 背后的原项目、样品和论文判定，并与 EarthChem Library 等仓库镜像去重 |
+| `pangaea-north-africa-soil` | 具体 DOI 数据集 | 子表 DOI `10.1594/PANGAEA.949903` 属于父包 `10.1594/PANGAEA.949906`，与关联论文和同一原始采样项目共享血缘 | 具体 DOI 可执行，但 PANGAEA 只是分发者；按父包、原样品、作者和论文去重，子表与父包不算两份独立证据 |
 | `iodp-data-systems` | 国际协调钻探计划的多系统档案 | 同一航次数据可同时出现在运营方 LIMS、SEDIS、PANGAEA 和 NCEI | 按航次/站位/孔/样品/分析记录合并血缘，不按分发系统数量增加独立性 |
 | `emodnet-chemistry` | 欧洲海洋化学聚合与协调产品 | CDI 来自国家数据中心，ERDDAP/webODV 是其中不受限记录的标准化汇编 | 与 EEA、SeaDataNet 和国家发布按提供者、站位、样品与时间去重；派生产品不是第二来源 |
 | `jamstec-darwin` | 航次、潜次与样品发现系统 | JAMSTEC 航次数据及岩石/沉积物样品目录；可能关联 legacy GANSEKI | 当前不把样品目录当数值证据；GANSEKI 未解析到当前端点前不另计来源 |
@@ -38,12 +39,24 @@
 | `finland-gtk-geochemistry` | 国家数据产品和多套调查服务 | Hakku 岩石产品、区域/详细 till 与河流沉积物 ArcGIS 图层 | 每套原调查分别建血缘；同一记录在 Hakku、地图服务和下载文件之间去重 |
 | `norway-ngu-lito` | 国家协调岩石调查 | NGU LITO 采样、实验室分析及版本化 XLSX | 作为一个调查体系；旧静态页面与 2026 新发布不算两套独立数据 |
 | `norway-marchem` | 国家海洋沉积物数据库 | MAREANO 及 NGU/IMR 其他监测项目，另在 NMDC 发布 DOI | 按原监测项目、站位、样品和 DOI 版本去重；MarChem、NMDC 与 EMODnet 镜像只算一次 |
+| `mexico-sgm-geochemical-cartography` | 国家派生地球化学图层 | 由 SGM 活性河流沉积物分析生成的 1:250,000 SHP/KML 图层 | 派生地图不能作为第二份观测证据；必须找到样点表并按原样品/图幅与后续 1:50,000 异常层去重 |
+| `canada-bc-rgs` | 省级多调查汇编 | 汇入 BCGS、GSC、Geoscience BC 的 116 个原始来源 | 独立性按原调查、样品和分析批次计算；RGS 2020 汇编、CDoGS 和原报告重叠时只算一次 |
+| `alaska-dggs-webgeochem` | 州级多机构汇编与发布系统 | 汇入 DGGS、USGS、BLM、BOM 及扫描历史报告；DGGS 新数据另有 DOI publication package | WebGeochem 导出与单独 DGGS/USGS 发布按 publication/sample/analysis 去重；门户本身不增加独立性 |
+| `chile-sernageomin-geochemistry` | 国家协调计划和逐图幅发布 | 同一样品可出现在官方 viewer、ArcGIS 服务、Excel 产品和图幅报告 | 按图幅/项目、采样点、样品和分析记录合并；全国计划统计不能按产品数扩张证据数 |
+| `argentina-segemar-geochemistry` | 国家历史与现代调查发布系统 | SIGAM 汇合 1960–1980 年代档案样品、1990 年代以后 SEGEMAR 采样和逐图幅报告 | 按原项目、图幅、样品和分析批次去重；GeoNetwork、viewer、repository PDF 和产品表不是独立来源 |
+| `india-gsi-ngcm` | 国家协调地球化学计划 | NGCM 按统一 2×2 km 单元设计；数据可在 Atlas、专题报告或活动分发中出现 | 整个计划按调查体系处理；同一 toposheet 的 Atlas、Excel 和报告不重复计数，未公开单元不推断为已覆盖 |
+| `japan-gsj-geochemical-map` | 国家陆海地球化学调查与派生地图服务 | 河流沉积物、海洋沉积物、精密区域和后续表层土壤由样点数据库派生 WMS/WMTS/3D 地图 | 按调查代际、介质和样品去重；点表是观测，Shapefile/WMS/WMTS/3D 地图不各算一份来源 |
+| `foregs-europe` | 欧洲协调基线调查父项目 | 六种介质由同一 FOREGS 设计、GTN 框架和跨国分析计划产生 | 六个可执行 `source_id` 是不同介质/方法表，不自动算六份独立调查证据；跨介质不能当复测 |
+| `foregs-topsoil` / `foregs-subsoil` / `foregs-humus` | 同一协调调查的三种陆地介质 | 共享项目、采样框架和部分实验室/QC；样品和方法不同 | 按 GTN、介质、具体文件行和 measurement basis 去重；同一 GTN 的不同介质不是重复记录，也不是独立调查背书 |
+| `foregs-stream-water` / `foregs-stream-sediment` / `foregs-floodplain-sediment` | 同一协调调查的三种水系介质 | 共享项目框架；溪流水、活性溪流沉积物与泛滥平原沉积物采样对象不同 | 分介质保留，但来源独立性统计时把 FOREGS 视为一个协调项目；总量与王水值是同一样品的不同分析基础 |
+| `south-africa-cgs-geochemistry` | 国家门户中的逐图幅产品集合 | 多个 geochemistry FeatureServer/MapServer 图层对应不同地图幅和出版物 | 按地图幅、原调查和样品计算；同一图层的 Feature/Map service 表达只算一次，门户不代表连续全国覆盖 |
 
 ## 当前单一来源依赖
 
 - 岩石生产路由只有 `georoc-archaean`，且仅覆盖太古宙克拉通；
-- 土壤生产路由只有 `usgs-conus-soil`，且仅覆盖美国本土；
-- 沉积物和水体尚无通过准入的生产来源；
+- 土壤已有 USGS、PANGAEA 和 FOREGS 三套调查体系；FOREGS 又分 topsoil/subsoil/humus，但三者共享父项目，不能按三个独立调查扩张证据数；
+- 沉积物已有 MarChem、GSJ 和 FOREGS 三套调查体系；FOREGS stream/floodplain 两项共享父项目，且海洋、河流、泛滥平原、粒级和方法边界不同，不能视为同一背景的复测；
+- 水体已有 GEMStat、GEOTRACES 和 FOREGS 三套体系；目标 As/Cu/Ni/Zn 均至少有两个登记来源，但淡水、海水、欧洲溪流水和单位/方法背景不同，多来源不等于可直接合并；
 - 当前没有任何介质可以声明全球、方法一致且多来源独立覆盖。
 
 ## 去重键原则
