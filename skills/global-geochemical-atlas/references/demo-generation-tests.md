@@ -33,11 +33,11 @@ python scripts/component_test.py --component all
 python scripts/self_test.py
 ```
 
-合并后结果为 D1 227 项、D2 29 项、D3 20 项，共 276 项契约检查通过；self-test 68 项通过。
+不要在文档中固化会随契约增加而过期的测试总数；以 `component_test.py --component all` 和 `self_test.py` 的机器输出为准。D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。D3 回归先用 `create_visualization_profile.py` 为 overview、coverage、anomaly、comparison、database、evidence 六类问题生成配置，再调用 `render_visualization.py`，检查全球、任意自定义 bbox 与严格国家区域产物、区域元素组合 profile、筛选、空结果、默认首屏、接口版本和独立 D3 验证器。页面导出的探索配置与脚本生成配置使用同一 `d3-visualization-profile-v2`，正式结论必须通过重渲染和输入/profile/输出哈希闭环；该矩阵验证的是可复用问题契约，不把某份真实数据、国家、元素或 HTML 当作标准答案。
 
 ### 确定性复现
 
-十四个来源均通过输出哈希、记录数及一对一证据关联检查；联合 fixture 还会在新的临时目录重建输入与完整十文件输出，并逐字节比较。
+十四个来源均通过输出哈希、记录数及一对一证据关联检查；联合 fixture 还会在新的临时目录重建输入与完整十一文件输出，并逐字节比较。
 
 ### 证据链
 
@@ -91,4 +91,4 @@ D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-
 
 ### 十四来源联合回归
 
-联合四介质 fixture 在保留主线 108 条 USGS 三土层样本并加入 AfSIS 后共有 796 条观测，标准化前后均为 93 个比较分区，其中水体 18 个。完整工作流成功标准化 796/796 条记录；700/796 条具有有效 canonical 坐标，GEOROC 与 AfSIS 共 96 条 reported coordinates 因 datum/CRS 未证实而失败关闭。流程保留 23 条已确认删失观测、输出 16 条工程异常候选并生成十文件输出包；异常仅是相对已声明背景组的工程筛查候选，不构成污染、矿化或成因结论。
+联合四介质 fixture 在保留主线 108 条 USGS 三土层样本并加入 AfSIS 后共有 796 条观测，标准化前后均为 93 个比较分区，其中水体 18 个。完整工作流成功标准化 796/796 条记录；700/796 条具有有效 canonical 坐标，GEOROC 与 AfSIS 共 96 条 reported coordinates 因 datum/CRS 未证实而失败关闭。流程保留 23 条已确认删失观测、输出 16 条工程异常候选并生成十一文件输出包（含独立迭代清单）；异常仅是相对已声明背景组的工程筛查候选，不构成污染、矿化或成因结论。

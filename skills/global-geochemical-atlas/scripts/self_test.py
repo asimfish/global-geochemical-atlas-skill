@@ -34,6 +34,7 @@ EXPECTED_OUTPUTS = {
     "anomaly_report.json",
     "samples.geojson",
     "interactive_map.html",
+    "iteration_backlog.csv",
     "run_summary.json",
 }
 
@@ -140,6 +141,7 @@ def run_suite() -> dict[str, Any]:
         "marchem-candidate-verification.schema.json",
         "visualization-profile.schema.json",
         "visualization-report.schema.json",
+        "iteration-backlog.schema.json",
         "dataset-source.schema.json",
         "publication.schema.json",
         "sampling-event.schema.json",
@@ -235,6 +237,16 @@ def run_suite() -> dict[str, Any]:
 
         rows = read_csv(first / "geochemistry.csv")
         require(len(rows) == 19, "demo should contain 19 canonical records")
+        iteration_rows = read_csv(first / "iteration_backlog.csv")
+        require(
+            any(
+                row["issue_code"] == "CENSORED_OBSERVATION"
+                and row["status"] == "scientific_limit"
+                and row["auto_recheck"] == "false"
+                for row in iteration_rows
+            ),
+            "iteration backlog must preserve censored observations as non-imputed scientific limits",
+        )
         require(float(by_id(rows, "rock-fe-001")["normalized_value"]) == 25_000, "wt% conversion failed")
         spaced_weight_percent = standardizer.normalize_row(
             complete_d2_row(value="1", unit="wt. %", medium="rock"),
@@ -617,6 +629,10 @@ def run_suite() -> dict[str, Any]:
         require("ALL DATA" in html, "map does not default to the complete overview")
         require("Natural Earth 1:110m" in html, "map omits the offline land basemap")
         require(
+            "ai4s-natural-earth-admin0-v1" in html and "pointInCountry" in html,
+            "map omits pinned country boundaries or strict country clipping",
+        )
+        require(
             "全部元素按样品标识去重显示" in html,
             "map does not explain measurement-to-sample deduplication",
         )
@@ -629,13 +645,46 @@ def run_suite() -> dict[str, Any]:
                     'id="colorMode"',
                     'id="comboX"',
                     'id="comboY"',
+                    'id="comboRegionSelect"',
+                    'id="comboCustomBounds"',
+                    'id="applyComboBounds"',
+                    "applyCustomBounds",
                     'id="openAnomalyRegions"',
                     "visual_aggregation_only",
                     "showAnomalyRegion",
                     "focusAnomalyRegion",
+                    "D2 未提供分析方法",
+                    "不是与周围空间点的平均值比较",
+                    'id="deliverableCenter"',
+                    'id="taskContext"',
+                    "task-first-progressive-disclosure-v2",
+                    "d3-visual-question-contract-v1",
+                    "competition-geochemistry-v1",
+                    "可交互元素分布地图",
+                    "标准化地球化学数据库",
+                    "元素组合对比",
+                    "数据来源与置信度说明",
+                    "异常区域识别结果",
+                    "质量控制与自动迭代",
+                    'id="zoomIn"',
+                    "comboQuadrants",
+                    'id="databaseView"',
+                    'id="databaseSearch"',
+                    'id="confidenceSummary"',
+                    'id="confidenceComponents"',
+                    "renderDatabase",
+                    "renderConfidence",
+                    'href="geochemistry.csv"',
+                    'href="confidence_report.json"',
+                    "完整数据库以",
+                    "不是正确概率",
                 )
             ),
             "map omits D3 v3 region, heatmap, combination or anomaly-region controls",
+        )
+        require(
+            'id="storyPreset"' not in html and html.count('class="tabs"') == 1,
+            "map duplicates its task navigation",
         )
         require(
             summary["map_report"]["display_sample_count"] == 17

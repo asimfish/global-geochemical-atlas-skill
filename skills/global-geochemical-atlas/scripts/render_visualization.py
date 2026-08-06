@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 import build_interactive_map as map_builder
+import build_iteration_backlog as backlog_builder
 
 
 INTERFACE_VERSION = "d3-visualization-interface-v1"
@@ -32,6 +33,7 @@ GENERATED_OUTPUTS = (
     "samples.geojson",
     "visualization_profile.json",
     "visualization_report.json",
+    "iteration_backlog.csv",
 )
 
 
@@ -111,6 +113,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             + ", ".join(existing),
         )
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    backlog_path = args.output_dir / "iteration_backlog.csv"
+    backlog_report = backlog_builder.build(inputs["geochemistry.csv"], backlog_path)
 
     try:
         profile = map_builder.load_visualization_profile(args.profile)
@@ -124,6 +128,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             confidence_report_path=inputs["confidence_report.json"],
             source_manifest_path=inputs["source_manifest.json"],
             anomaly_report_path=inputs["anomaly_report.json"],
+            iteration_backlog_path=backlog_path,
             visualization_profile_path=args.profile,
         )
     except map_builder.MapBuildError as exc:
@@ -144,7 +149,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     input_hashes = {name: sha256_file(path) for name, path in inputs.items()}
     output_hashes = {
         name: sha256_file(args.output_dir / name)
-        for name in ("interactive_map.html", "samples.geojson", "visualization_profile.json")
+        for name in (
+            "interactive_map.html", "samples.geojson", "visualization_profile.json",
+            "iteration_backlog.csv",
+        )
     }
     report = {
         "interface_version": INTERFACE_VERSION,
@@ -161,12 +169,25 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "interactive_map": "interactive_map.html",
             "samples": "samples.geojson",
             "profile": "visualization_profile.json",
+            "iteration_backlog": "iteration_backlog.csv",
         },
         "output_sha256": output_hashes,
         "map_report": map_report,
+        "iteration_backlog": backlog_report,
         "limitations": [
             "D3 renders existing D1/D2 evidence and candidate anomalies; it does not recompute them.",
             "Blank areas indicate no included observations, not element absence or zero concentration.",
+            (
+                "Regional products clip the HTML payload, anomaly display, and samples GeoJSON to "
+                f"the configured scope using {map_report.get('spatial_scope', {}).get('clip_method')}; "
+                "copied D1/D2 evidence files remain complete."
+                if profile["spatial_scope"] == "regional"
+                else "This is a global product; regional views remain exploratory selections."
+            ),
+            (
+                "Analytical-method gaps and sample-medium imbalance are reported as D2 coverage "
+                "limitations and are never inferred away by D3."
+            ),
         ],
         "next_actions": [
             "Open interactive_map.html at the configured task view.",
@@ -195,7 +216,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--profile",
         type=Path,
         default=map_builder.DEFAULT_PROFILE,
-        help="d3-visualization-profile-v1 JSON; defaults to the bundled template",
+        help="d3-visualization-profile-v2 JSON; defaults to the bundled template",
     )
     parser.add_argument(
         "--max-points", type=int, default=50_000, help="Fail closed above this mappable record count"

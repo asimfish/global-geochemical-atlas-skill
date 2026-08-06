@@ -23,9 +23,10 @@ from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
 
-import build_evidence_bundle as evidence_builder
 import acquire_gemstat_arsenic as gemstat_acquisition
+import build_evidence_bundle as evidence_builder
 import build_four_media_demo
+import build_interactive_map as map_builder
 import build_index as index_builder
 import benchmark_index
 import cache_control
@@ -57,8 +58,16 @@ WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 VISUALIZATION_RENDERER = SCRIPT_DIR / "render_visualization.py"
+VISUALIZATION_PROFILE_CREATOR = SCRIPT_DIR / "create_visualization_profile.py"
 BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
+COUNTRY_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
 VISUALIZATION_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
+REGIONAL_VISUALIZATION_PROFILE = (
+    SKILL_DIR / "assets" / "visualization-profile.regional.template.json"
+)
+REGIONAL_COMPARISON_PROFILE = (
+    SKILL_DIR / "assets" / "visualization-profile.comparison-regional.template.json"
+)
 VISUALIZATION_PROFILE_SCHEMA = SKILL_DIR / "references" / "visualization-profile.schema.json"
 VISUALIZATION_REPORT_SCHEMA = SKILL_DIR / "references" / "visualization-report.schema.json"
 
@@ -1803,7 +1812,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 (rebuilt_output / filename).read_bytes() == (combined_output / filename).read_bytes()
                 for filename in output_validator.REQUIRED_FILES.values()
             ),
-            "D1 combined ten-file output package rebuilds byte-for-byte",
+            "D1 combined eleven-file output package rebuilds byte-for-byte",
             checks,
         )
 
@@ -2499,7 +2508,7 @@ def check_d3(output_dir: Path) -> list[str]:
     require(len(skill_dirs) == 1 and skill_dirs[0] == SKILL_DIR, "D3 keeps exactly one production Skill", checks)
     required_outputs = set(output_validator.REQUIRED_FILES.values())
     actual_outputs = {path.name for path in output_dir.iterdir() if path.is_file()}
-    require(actual_outputs == required_outputs, "D3 publishes the stable ten-file output set", checks)
+    require(actual_outputs == required_outputs, "D3 publishes the stable eleven-file output set", checks)
     validation = output_validator.validate_dir(output_dir)
     require(validation.get("status") == "valid", "D3 integrated outputs pass the public validator", checks)
     html = (output_dir / "interactive_map.html").read_text(encoding="utf-8")
@@ -2536,6 +2545,13 @@ def check_d3(output_dir: Path) -> list[str]:
             for marker in (
                 'id="comboX"',
                 'id="comboY"',
+                'id="comboRegionSelect"',
+                'id="comboCustomBounds"',
+                'id="applyComboBounds"',
+                'id="exportComparisonProfile"',
+                "comparisonProfile",
+                "导出可复现配置",
+                "applyCustomBounds",
                 'id="comboMatrix"',
                 'id="openAnomalyRegions"',
                 "visual_aggregation_only",
@@ -2545,11 +2561,35 @@ def check_d3(output_dir: Path) -> list[str]:
                 "zoom-adaptive-anomaly-bubbles-v1",
                 "layoutAnomalyBubbles",
                 "conic-gradient",
-                'id="storyPreset"',
-                "d3-visualization-profile-v1",
+                'id="taskContext"',
+                "task-first-progressive-disclosure-v2",
+                "d3-visual-question-contract-v1",
+                "competition-geochemistry-v1",
+                "可交互元素分布地图",
+                "标准化地球化学数据库",
+                "元素组合对比",
+                "数据来源与置信度说明",
+                "异常区域识别结果",
+                "质量控制与自动迭代",
+                'id="zoomIn"',
+                "comboQuadrants",
+                "d3-visualization-profile-v2",
+                'id="boundaries-data"',
+                "pointInCountry",
+                "D2 未提供分析方法",
+                "不是与周围空间点的平均值比较",
+                "renderPoints(true)",
+                'id="modeExplainer"',
             )
         ),
         "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
+        checks,
+    )
+    require(
+        'id="storyPreset"' not in html
+        and html.count('class="tabs"') == 1
+        and html.count('class="deliverable-center"') == 1,
+        "D3 keeps one primary navigation and no duplicate task selector",
         checks,
     )
     require(
@@ -2567,6 +2607,67 @@ def check_d3(output_dir: Path) -> list[str]:
         checks,
     )
     require(
+        all(
+            marker in html
+            for marker in (
+                'id="deliverableCenter"',
+                'id="databaseView"',
+                'id="databaseSearch"',
+                'id="databaseTableBody"',
+                'id="confidenceSummary"',
+                'id="confidenceComponents"',
+                "renderDatabase",
+                "renderConfidence",
+                'href="geochemistry.csv"',
+                'href="confidence_report.json"',
+                'href="source_manifest.json"',
+                "完整数据库以",
+                "不是正确概率",
+            )
+        ),
+        "D3 exposes the standardized database and confidence explanation as first-class deliverables",
+        checks,
+    )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'id="backView"',
+                "rememberView",
+                "canvas.onpointerdown=event=>{drag=",
+                "basisLabel",
+                "全部测量基准",
+                'id="databaseEditor"',
+                "geochemistry-research-patch-v1",
+                'id="sourceTableBody"',
+                'id="anomalyInspector"',
+                "anomaly-contrast",
+                "comboConclusion",
+                'id="iterationTableBody"',
+                'href="iteration_backlog.csv"',
+            )
+        ),
+        "D3 exposes recoverable navigation and research-grade database, evidence, anomaly, combination and iteration workbenches",
+        checks,
+    )
+    iteration_rows = csv_rows(output_dir / "iteration_backlog.csv")
+    require(
+        bool(iteration_rows)
+        and all(row["stage_owner"] in {"D1", "D2"} for row in iteration_rows)
+        and all(
+            row["status"] in {"action_required", "review_required", "scientific_limit"}
+            for row in iteration_rows
+        )
+        and any(
+            row["issue_code"] == "CENSORED_OBSERVATION"
+            and row["status"] == "scientific_limit"
+            and row["auto_recheck"] == "false"
+            for row in iteration_rows
+        ),
+        "D3 iteration backlog routes D1/D2 gaps and keeps censored observations as non-imputed scientific limits",
+        checks,
+    )
+    require(
         "全部元素按样品标识去重显示" in html
         and "不跨元素、介质或单位比较浓度" in html,
         "D3 defaults to a scientifically valid all-data sample overview",
@@ -2575,8 +2676,9 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         "Natural Earth 1:110m" in html
         and "ai4s-natural-earth-land-v1" in html
+        and "ai4s-natural-earth-admin0-v1" in html
         and "public domain" in html,
-        "D3 embeds a pinned offline basemap with visible provenance",
+        "D3 embeds pinned offline land and country boundaries with visible provenance",
         checks,
     )
     require("候选异常不代表污染" in html, "D3 map communicates the scientific interpretation boundary", checks)
@@ -2591,7 +2693,10 @@ def check_d3(output_dir: Path) -> list[str]:
         and map_report.get("anomaly_region_render_mode")
         == "zoom-adaptive-anomaly-bubbles-v1"
         and map_report.get("visualization_profile", {}).get("schema_version")
-        == "d3-visualization-profile-v1"
+        == "d3-visualization-profile-v2"
+        and map_report.get("spatial_scope", {}).get("mode") == "global"
+        and map_report.get("spatial_scope", {}).get("output_clipped") is False
+        and map_report.get("scope_excluded_mappable_record_count") == 0
         and isinstance(map_report.get("visualization_profile_warnings"), list)
         and set(map_report.get("visualization_modes", []))
         == {
@@ -2601,7 +2706,62 @@ def check_d3(output_dir: Path) -> list[str]:
             "candidate_anomaly_region_aggregation",
         }
         and map_report.get("external_assets") == 0
-        and map_report.get("interpolation") is False,
+        and map_report.get("interpolation") is False
+        and all(
+            map_report.get("capability_matrix", {}).get("filter_dimensions", {}).values()
+        )
+        and all(map_report.get("capability_matrix", {}).get("outputs", {}).values())
+        and all(map_report.get("capability_matrix", {}).get("deliverables", {}).values())
+        and map_report.get("ui_hierarchy_version")
+        == "task-first-progressive-disclosure-v2"
+        and map_report.get("terminology_contract")
+        == "competition-geochemistry-v1"
+        and map_report.get("visual_question_contract", {}).get("schema_version")
+        == "d3-visual-question-contract-v1"
+        and set(map_report.get("visual_question_contract", {}).get("views", {}))
+        == {"map", "database", "combination", "sources", "anomalies", "quality"}
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("single_primary_navigation")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("professional_navigation_labels")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("combination_region_selector")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("combination_custom_bbox")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("regional_combination_scope_lock_supported")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("comparison_profile_export")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("formal_comparison_requires_profile_rerender")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("advanced_filters_progressive_disclosure")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("duplicate_story_selector")
+        is False
+        and map_report.get("capability_matrix", {})
+        .get("scientific_semantics", {})
+        .get("heatmap_interpolates_concentration")
+        is False
+        and map_report.get("data_coverage_diagnostics", {}).get("sample_type_field")
+        == "medium",
         "D3 run summary declares the reusable map contract and default view",
         checks,
     )
@@ -2618,11 +2778,14 @@ def check_d3(output_dir: Path) -> list[str]:
         and coverage.get("global", {}).get("sample_count")
         == map_report.get("display_sample_count")
         and all(
-            item.get("administrative_clip") is False
-            for item in coverage.values()
-            if isinstance(item, dict)
+            coverage.get(key, {}).get("administrative_clip") is True
+            for key in ("china", "usa", "usa48", "australia")
+        )
+        and all(
+            coverage.get(key, {}).get("administrative_clip") is False
+            for key in ("global", "shanghai", "europe")
         ),
-        "D3 region coverage reconciles the global total and labels bbox semantics",
+        "D3 region coverage reconciles totals and distinguishes strict country clips from bbox scopes",
         checks,
     )
     basemap = json_value(BASEMAP)
@@ -2634,13 +2797,41 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 basemap provenance, source archive hash and geometry count are pinned",
         checks,
     )
+    boundaries = json_value(COUNTRY_BOUNDARIES)
+    require(
+        boundaries.get("asset_version") == "ai4s-natural-earth-admin0-v1"
+        and boundaries.get("license") == "public domain"
+        and boundaries.get("source_sha256")
+        == "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f"
+        and boundaries.get("country_count") == 177
+        and boundaries.get("point_count") == 10_654,
+        "D3 country boundary provenance and geometry counts are pinned",
+        checks,
+    )
+    loaded_boundaries = map_builder.load_country_boundaries(COUNTRY_BOUNDARIES)
+    country_index = {
+        country["iso_a3"]: country for country in loaded_boundaries["countries"]
+    }
+    require(
+        map_builder.point_in_country(116.4074, 39.9042, country_index["CHN"])
+        and not map_builder.point_in_country(139.6917, 35.6895, country_index["CHN"]),
+        "D3 strict China polygon includes Beijing and excludes Tokyo",
+        checks,
+    )
     profile = json_value(VISUALIZATION_PROFILE)
+    regional_profile = json_value(REGIONAL_VISUALIZATION_PROFILE)
+    regional_comparison_profile = json_value(REGIONAL_COMPARISON_PROFILE)
     profile_schema = json_value(VISUALIZATION_PROFILE_SCHEMA)
     visualization_report_schema = json_value(VISUALIZATION_REPORT_SCHEMA)
     require(
-        profile.get("schema_version") == "d3-visualization-profile-v1"
+        profile.get("schema_version") == "d3-visualization-profile-v2"
+        and profile.get("spatial_scope") == "global"
         and profile_schema.get("properties", {}).get("schema_version", {}).get("const")
-        == "d3-visualization-profile-v1"
+        == "d3-visualization-profile-v2"
+        and set(profile_schema.get("properties", {}).get("spatial_scope", {}).get("enum", []))
+        == {"global", "regional"}
+        and set(profile_schema.get("properties", {}).get("story", {}).get("enum", []))
+        == {"overview", "coverage", "anomaly", "comparison", "database", "evidence"}
         and visualization_report_schema.get("properties", {})
         .get("interface_version", {})
         .get("const")
@@ -2648,12 +2839,187 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 publishes a versioned task profile template and Schema",
         checks,
     )
+    require(
+        regional_profile.get("schema_version") == "d3-visualization-profile-v2"
+        and regional_profile.get("spatial_scope") == "regional"
+        and regional_profile.get("default_region") == "shanghai"
+        and regional_profile.get("custom_region") is None,
+        "D3 publishes a distinct city-ready regional product template",
+        checks,
+    )
+    require(
+        map_builder.load_visualization_profile(REGIONAL_COMPARISON_PROFILE)
+        == regional_comparison_profile
+        and regional_comparison_profile.get("story") == "comparison"
+        and regional_comparison_profile.get("spatial_scope") == "regional"
+        and regional_comparison_profile.get("default_region") == "china"
+        and regional_comparison_profile.get("comparison")
+        == {"x": "Cu", "y": "Pb", "medium": "soil"},
+        "D3 publishes a validated regional element-comparison template",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as question_matrix_temp:
+        question_root = Path(question_matrix_temp)
+        question_cases = (
+            ("global-overview", "overview", ["--story", "overview"]),
+            (
+                "filtered-coverage",
+                "coverage",
+                [
+                    "--story", "coverage", "--element", "Cu", "--medium", "soil",
+                    "--sample-type", "soil_topsoil", "--method-scope", "observation",
+                ],
+            ),
+            (
+                "custom-region-anomaly",
+                "anomaly",
+                [
+                    "--story",
+                    "anomaly",
+                    "--spatial-scope",
+                    "regional",
+                    "--region",
+                    "custom",
+                    "--bbox",
+                    "-75",
+                    "-56",
+                    "-66",
+                    "-17",
+                    "--region-label",
+                    "智利研究框",
+                    "--element",
+                    "Cu",
+                    "--geology",
+                    "Andes",
+                ],
+            ),
+            (
+                "element-comparison",
+                "comparison",
+                [
+                    "--story",
+                    "comparison",
+                    "--comparison-x",
+                    "As",
+                    "--comparison-y",
+                    "Pb",
+                    "--comparison-medium",
+                    "soil",
+                ],
+            ),
+            (
+                "custom-region-comparison",
+                "comparison",
+                [
+                    "--story",
+                    "comparison",
+                    "--spatial-scope",
+                    "regional",
+                    "--region",
+                    "custom",
+                    "--bbox",
+                    "100",
+                    "30",
+                    "110",
+                    "40",
+                    "--region-label",
+                    "西北研究框",
+                    "--comparison-x",
+                    "As",
+                    "--comparison-y",
+                    "Pb",
+                    "--comparison-medium",
+                    "soil",
+                ],
+            ),
+            ("database-audit", "database", ["--story", "database"]),
+            (
+                "source-evidence",
+                "evidence",
+                ["--story", "evidence", "--source", "demo-source"],
+            ),
+        )
+        generated_profiles = []
+        for case_name, expected_story, case_args in question_cases:
+            profile_path = question_root / f"{case_name}.json"
+            run_command(
+                [
+                    sys.executable,
+                    str(VISUALIZATION_PROFILE_CREATOR),
+                    "--output",
+                    str(profile_path),
+                    *case_args,
+                ]
+            )
+            generated_profile = map_builder.load_visualization_profile(profile_path)
+            bundle = question_root / f"{case_name}-bundle"
+            run_command(
+                [
+                    sys.executable,
+                    str(VISUALIZATION_RENDERER),
+                    "--input-dir",
+                    str(output_dir),
+                    "--profile",
+                    str(profile_path),
+                    "--output-dir",
+                    str(bundle),
+                ]
+            )
+            generated_report = json_value(bundle / "visualization_report.json")
+            require(
+                generated_profile.get("story") == expected_story
+                and generated_report.get("profile") == generated_profile
+                and visualization_validator.validate_dir(bundle).get("status") == "valid",
+                f"D3 question profile reproduces the {case_name} task without HTML edits",
+                checks,
+            )
+            generated_profiles.append(generated_profile)
+        custom_profile = generated_profiles[2]
+        custom_comparison_profile = generated_profiles[4]
+        require(
+            generated_profiles[1].get("filters", {}).get("sample_type") == "soil_topsoil"
+            and generated_profiles[1].get("filters", {}).get("method_scope") == "observation"
+            and custom_profile.get("default_region") == "custom"
+            and custom_profile.get("custom_region", {}).get("label") == "智利研究框"
+            and custom_profile.get("custom_region", {}).get("bounds")
+            == {"w": -75.0, "s": -56.0, "e": -66.0, "n": -17.0}
+            and custom_comparison_profile.get("spatial_scope") == "regional"
+            and custom_comparison_profile.get("default_region") == "custom"
+            and custom_comparison_profile.get("custom_region", {}).get("bounds")
+            == {"w": 100.0, "s": 30.0, "e": 110.0, "n": 40.0}
+            and custom_comparison_profile.get("comparison")
+            == {"x": "As", "y": "Pb", "medium": "soil"}
+            and {profile_value.get("story") for profile_value in generated_profiles}
+            == {"overview", "coverage", "anomaly", "comparison", "database", "evidence"},
+            "D3 question matrix covers six stories and reproducible arbitrary regional comparison profiles",
+            checks,
+        )
+        invalid_question_profile = question_root / "invalid-question.json"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_PROFILE_CREATOR),
+                "--output",
+                str(invalid_question_profile),
+                "--story",
+                "comparison",
+                "--comparison-x",
+                "As",
+            ],
+            expected_code=2,
+        )
+        require(
+            not invalid_question_profile.exists(),
+            "D3 profile creator fails closed on an incomplete comparison question",
+            checks,
+        )
     with tempfile.TemporaryDirectory() as visualization_temp:
         visualization_root = Path(visualization_temp)
         task_profile = dict(profile)
-        task_profile["title"] = "As 土壤候选异常任务视图"
+        task_profile["title"] = "中国 As 土壤候选异常任务视图"
         task_profile["story"] = "anomaly"
-        task_profile["default_region"] = "usa48"
+        task_profile["spatial_scope"] = "regional"
+        task_profile["default_region"] = "china"
         task_profile["filters"] = {
             **profile["filters"],
             "element": "As",
@@ -2683,6 +3049,9 @@ def check_d3(output_dir: Path) -> list[str]:
         configured_html = (visualization_output / "interactive_map.html").read_text(
             encoding="utf-8"
         )
+        scoped_geojson = json_value(visualization_output / "samples.geojson")
+        scoped_features = scoped_geojson.get("features", [])
+        scoped_report = visualization_report.get("map_report", {}).get("spatial_scope", {})
         require(
             visualization_report.get("status") == "success"
             and visualization_report.get("interface_version")
@@ -2690,16 +3059,93 @@ def check_d3(output_dir: Path) -> list[str]:
             and visualization_report.get("profile", {}).get("story") == "anomaly"
             and visualization_report.get("profile", {}).get("filters", {}).get("element")
             == "As"
+            and visualization_report.get("profile", {}).get("spatial_scope") == "regional"
             and visualization_report.get("map_report", {}).get("default_view")
-            == "profile_driven_task_view"
-            and "As 土壤候选异常任务视图" in configured_html,
-            "D3 Agent entry point renders a task-configured map without editing HTML",
+            == "regional_scope_task_view"
+            and scoped_report.get("region_key") == "china"
+            and scoped_report.get("country_code") == "CHN"
+            and scoped_report.get("clip_method") == "country_polygon_and_bbox"
+            and scoped_report.get("output_clipped") is True
+            and "中国 As 土壤候选异常任务视图" in configured_html
+            and "REGIONAL OUTPUT" in configured_html,
+            "D3 Agent entry point renders a locked regional task map without editing HTML",
             checks,
         )
         require(
-            visualization_validator.validate_dir(visualization_output).get("status")
-            == "valid",
-            "D3 standalone bundle passes its dedicated public validator",
+            len(scoped_features)
+            == visualization_report.get("map_report", {}).get("mapped_record_count")
+            and scoped_geojson.get("spatial_scope", {}).get("mode") == "regional"
+            and scoped_geojson.get("spatial_scope", {}).get("output_clipped") is True
+            and all(
+                map_builder.point_in_country(
+                    feature["geometry"]["coordinates"][0],
+                    feature["geometry"]["coordinates"][1],
+                    country_index["CHN"],
+                )
+                for feature in scoped_features
+            ),
+            "D3 regional GeoJSON contains only records inside the configured country polygon",
+            checks,
+        )
+        city_output = visualization_root / "city-bundle"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_RENDERER),
+                "--input-dir",
+                str(output_dir),
+                "--profile",
+                str(REGIONAL_VISUALIZATION_PROFILE),
+                "--output-dir",
+                str(city_output),
+            ]
+        )
+        city_report = json_value(city_output / "visualization_report.json")
+        city_geojson = json_value(city_output / "samples.geojson")
+        require(
+            city_report.get("map_report", {}).get("spatial_scope", {}).get("region_key")
+            == "shanghai"
+            and city_report.get("map_report", {}).get("mapped_record_count") == 0
+            and city_report.get("map_report", {}).get("scope_excluded_mappable_record_count")
+            == city_report.get("map_report", {}).get("source_mappable_record_count")
+            and city_geojson.get("features") == []
+            and any("覆盖缺口" in warning for warning in city_report.get("profile_warnings", [])),
+            "D3 city template keeps an empty regional result instead of falling back to a world map",
+            checks,
+        )
+        invalid_profile = dict(profile)
+        invalid_profile["spatial_scope"] = "regional"
+        invalid_profile_path = visualization_root / "invalid-profile.json"
+        invalid_profile_path.write_text(
+            json.dumps(invalid_profile, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        invalid_output = visualization_root / "invalid-bundle"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_RENDERER),
+                "--input-dir",
+                str(output_dir),
+                "--profile",
+                str(invalid_profile_path),
+                "--output-dir",
+                str(invalid_output),
+            ],
+            expected_code=2,
+        )
+        require(
+            json_value(invalid_output / "visualization_report.json").get("status")
+            == "invalid_input",
+            "D3 fails closed when regional scope is paired with the global region",
+            checks,
+        )
+        require(
+            all(
+                visualization_validator.validate_dir(path).get("status") == "valid"
+                for path in (visualization_output, city_output)
+            ),
+            "D3 global and regional standalone bundles pass the dedicated public validator",
             checks,
         )
     return checks

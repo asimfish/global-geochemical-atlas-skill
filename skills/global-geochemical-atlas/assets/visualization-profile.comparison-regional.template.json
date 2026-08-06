@@ -1,11 +1,11 @@
 {
   "schema_version": "d3-visualization-profile-v2",
-  "title": "全球地球化学元素图谱",
-  "subtitle": "从标准化记录进入分布、覆盖、元素组合和候选异常证据；空白表示当前数据覆盖缺口。",
-  "story": "overview",
+  "title": "中国土壤 Cu × Pb 元素组合对比",
+  "subtitle": "区域产物严格裁剪到中国国家边界；元素组合只使用同区域、介质、测量基准、方法和单位均可比的同样品配对。",
+  "story": "comparison",
   "theme": "evidence-dark",
-  "spatial_scope": "global",
-  "default_region": "global",
+  "spatial_scope": "regional",
+  "default_region": "china",
   "custom_region": null,
   "filters": {
     "element": null,
@@ -19,14 +19,14 @@
     "confidence": null
   },
   "comparison": {
-    "x": null,
-    "y": null,
-    "medium": null
+    "x": "Cu",
+    "y": "Pb",
+    "medium": "soil"
   },
   "display": {
     "map_mode": "combined",
     "color_by": "medium",
-    "anomaly_grid_degrees": 2,
+    "anomaly_grid_degrees": 1,
     "show_anomaly_points": false,
     "show_anomaly_regions": true
   }

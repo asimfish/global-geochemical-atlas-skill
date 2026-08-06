@@ -36,6 +36,7 @@
 | `anomaly_report.json` | 背景组、阈值、排除和失败状态 |
 | `samples.geojson` | 可地图化的标准样点，不含无效坐标 |
 | `interactive_map.html` | 自包含交互地图；内嵌固定底图与 D1/D2 报告，不依赖 CDN，不在 D3 重算科学结果 |
+| `iteration_backlog.csv` | D1/D2 证据缺口、处理失败、复核项与删失科学限制的机器可读迭代清单 |
 | `run_summary.json` | 整体状态、请求摘要、产物、coverage 与限制 |
 
 ## 证据链

@@ -23,7 +23,13 @@ REQUIRED_FILES = {
     "anomaly_report": "anomaly_report.json",
     "samples": "samples.geojson",
     "interactive_map": "interactive_map.html",
+    "iteration_backlog": "iteration_backlog.csv",
     "run_summary": "run_summary.json",
+}
+
+ITERATION_BACKLOG_COLUMNS = {
+    "item_id", "record_id", "source_id", "stage_owner", "severity", "status",
+    "issue_code", "field", "observed_value", "detail", "recommended_action", "auto_recheck",
 }
 
 REQUIRED_DATABASE_COLUMNS = {
@@ -96,7 +102,6 @@ def validate_database(path: Path, errors: list[str], warnings: list[str]) -> dic
         missing = sorted(REQUIRED_DATABASE_COLUMNS - headers)
         if missing:
             errors.append(f"geochemistry.csv missing columns: {', '.join(missing)}")
-            return metrics
         record_ids: set[str] = set()
         for line_number, row in enumerate(reader, start=2):
             metrics["record_count"] += 1
@@ -123,6 +128,31 @@ def validate_database(path: Path, errors: list[str], warnings: list[str]) -> dic
     if metrics["source_locator_missing"]:
         warnings.append(f"{metrics['source_locator_missing']} record(s) lack source_locator")
     return metrics
+
+
+def validate_iteration_backlog(path: Path, canonical_ids: set[str], errors: list[str]) -> int:
+    item_ids: set[str] = set()
+    count = 0
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        missing = sorted(ITERATION_BACKLOG_COLUMNS - set(reader.fieldnames or []))
+        if missing:
+            errors.append("iteration_backlog.csv missing columns: " + ", ".join(missing))
+            return 0
+        for line_number, row in enumerate(reader, start=2):
+            count += 1
+            item_id = (row.get("item_id") or "").strip()
+            record_id = (row.get("record_id") or "").strip()
+            if not item_id or item_id in item_ids:
+                errors.append(f"iteration_backlog.csv:{line_number} has missing or duplicate item_id")
+            item_ids.add(item_id)
+            if record_id not in canonical_ids:
+                errors.append(f"iteration_backlog.csv:{line_number} references unknown record_id {record_id}")
+            if row.get("stage_owner") not in {"D1", "D2"}:
+                errors.append(f"iteration_backlog.csv:{line_number} has invalid stage_owner")
+            if row.get("status") not in {"action_required", "review_required", "scientific_limit"}:
+                errors.append(f"iteration_backlog.csv:{line_number} has invalid status")
+    return count
 
 
 def database_evidence_index(path: Path) -> dict[str, dict[str, str]]:
@@ -241,7 +271,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     if '<script id="samples-data" type="application/json">' not in text:
         errors.append("interactive_map.html does not embed the samples data block")
-    for block_id in ("anomalies-data", "basemap-data", "context-data"):
+    for block_id in ("anomalies-data", "basemap-data", "boundaries-data", "context-data"):
         if f'<script id="{block_id}" type="application/json">' not in text:
             errors.append(f"interactive_map.html does not embed the {block_id} block")
     if re.search(r"<script\b[^>]*\bsrc\s*=", text, re.IGNORECASE):
@@ -254,19 +284,69 @@ def validate_html(path: Path, errors: list[str]) -> None:
         errors.append("interactive_map.html omits the D3 map version or all-data default view")
     if "Natural Earth 1:110m" not in text or "public domain" not in text:
         errors.append("interactive_map.html omits offline basemap provenance")
+    if "ai4s-natural-earth-admin0-v1" not in text or "pointInCountry" not in text:
+        errors.append("interactive_map.html omits strict offline country boundary support")
     for marker in (
         'id="region"',
         'id="mapMode"',
         'id="colorMode"',
         'id="comboX"',
         'id="comboY"',
+        'id="comboRegionSelect"',
+        'id="comboCustomBounds"',
+        'id="applyComboBounds"',
+        "applyCustomBounds",
+        'id="exportComparisonProfile"',
+        "comparisonProfile",
+        "导出可复现配置",
         'id="openAnomalyRegions"',
         "visual_aggregation_only",
         "样点密度热力图",
+        "D2 未提供分析方法",
+        "不是与周围空间点的平均值比较",
         "showAnomalyRegion",
+        'id="deliverableCenter"',
+        'id="taskContext"',
+        "task-first-progressive-disclosure-v2",
+        "d3-visual-question-contract-v1",
+        "competition-geochemistry-v1",
+        "可交互元素分布地图",
+        "标准化地球化学数据库",
+        "元素组合对比",
+        "数据来源与置信度说明",
+        "异常区域识别结果",
+        "质量控制与自动迭代",
+        'id="databaseView"',
+        'id="databaseSearch"',
+        'id="confidenceSummary"',
+        'id="confidenceComponents"',
+        'href="geochemistry.csv"',
+        'href="confidence_report.json"',
+        "完整数据库以",
+        "不是正确概率",
+        'id="backView"',
+        'id="zoomIn"',
+        'id="zoomOut"',
+        "comboQuadrants",
+        "threshold-values",
+        "rememberView",
+        "basisLabel",
+        'id="databaseEditor"',
+        "geochemistry-research-patch-v1",
+        'id="sourceTableBody"',
+        'id="anomalyInspector"',
+        "anomaly-contrast",
+        "comboConclusion",
+        'id="iterationTableBody"',
+        'href="iteration_backlog.csv"',
     ):
         if marker not in text:
             errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")
+    if 'id="storyPreset"' in text or text.count('class="tabs"') != 1:
+        errors.append("interactive_map.html duplicates task navigation or story selection")
+    for informal_label in (">看分布<", ">查记录<", ">比元素<", ">核来源<", ">懂异常<", ">修质量<"):
+        if informal_label in text:
+            errors.append(f"interactive_map.html uses an informal primary navigation label: {informal_label}")
 
 
 def validate_dir(output_dir: Path) -> dict[str, Any]:
@@ -285,6 +365,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
     database_metrics = validate_database(paths["database"], errors, warnings)
     canonical_evidence = database_evidence_index(paths["database"])
+    iteration_count = validate_iteration_backlog(
+        paths["iteration_backlog"], set(canonical_evidence), errors
+    )
     evidence_count = validate_record_evidence(paths["record_evidence"], canonical_evidence, errors)
     parsed: dict[str, Any] = {}
     for key in ("source_manifest", "qc_report", "confidence_report", "anomalies", "anomaly_report", "samples", "run_summary"):
@@ -423,6 +506,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "record_evidence_count": evidence_count,
             "sample_feature_count": sample_count,
             "candidate_feature_count": anomaly_count,
+            "iteration_backlog_count": iteration_count,
         },
     }
 
