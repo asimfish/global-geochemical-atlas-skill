@@ -1,5 +1,7 @@
 # AI Prompt 导航
 
+跨 `evaluation`、`evaluation_lyf` 和 Docker 的统一选择指南见仓库根目录 [`TESTING_PROMPTS.md`](../TESTING_PROMPTS.md)。本文只维护 `evaluation/` 内答题与评分两类 Prompt 的隔离边界。
+
 本目录有两类 AI，职责和可见材料必须严格分开。
 
 ## 让 AI 做题

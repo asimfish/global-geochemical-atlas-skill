@@ -108,6 +108,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 | 定制全球、区域或元素组合地图 | [D3 可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md) |
 | 修改 D1/D2/D3 或提交 PR | [贡献指南](CONTRIBUTING.md) |
 | 查看开发期 Q01–Q24 benchmark | [评测说明](evaluation/README.md) |
+| 选择正确的测试 Prompt | [测试 Prompt 总入口](TESTING_PROMPTS.md) |
 
 ## 开发验证
 

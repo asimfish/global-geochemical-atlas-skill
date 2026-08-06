@@ -67,6 +67,21 @@ class PromptContractTests(unittest.TestCase):
             with self.subTest(path=relative):
                 self.assertTrue((ROOT / relative).is_file(), relative)
 
+    def test_central_prompt_index_routes_without_copy_drift(self) -> None:
+        index = (ROOT / "TESTING_PROMPTS.md").read_text(encoding="utf-8")
+        for relative in (
+            "evaluation/ai_visible_public/AGENT_PROMPT.md",
+            "evaluation/docs/independent_grading_agent_prompt.md",
+            "evaluation_lyf/agent_uplift/QWEN_NO_SKILL_PROMPT.md",
+            "evaluation_lyf/agent_uplift/QWEN_WITH_SKILL_PROMPT.md",
+            "evaluation/docker/campaign.py",
+            "evaluation/docs/docker_usage.md",
+        ):
+            with self.subTest(path=relative):
+                self.assertIn(relative, index)
+        self.assertIn("Docker 是", index)
+        self.assertIn("runner 自动", index)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
