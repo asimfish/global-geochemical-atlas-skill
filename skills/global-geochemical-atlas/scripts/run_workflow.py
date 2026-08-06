@@ -113,6 +113,7 @@ def summary_outputs() -> dict[str, str]:
         "record_evidence": "record_evidence.jsonl",
         "qc_report": "qc_report.json",
         "confidence_report": "confidence_report.json",
+        "geology_report": "geology_report.json",
         "anomalies": "anomalies.geojson",
         "anomaly_report": "anomaly_report.json",
         "samples": "samples.geojson",
@@ -177,6 +178,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             min_group_size=args.min_group_size,
             robust_z_threshold=args.robust_z_threshold,
             region_bbox=args.region_bbox,
+            geology_grid_path=args.geology_grid,
         )
     except standardizer.PipelineError as exc:
         raise WorkflowError("invalid_input", str(exc)) from exc
@@ -308,6 +310,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--region-bbox", type=standardizer.parse_bbox, metavar="W,S,E,N",
         help="Optional WGS84 requested region, used for coordinate QC (dateline crossing supported)",
+    )
+    parser.add_argument(
+        "--geology-grid",
+        type=Path,
+        help="Optional official PANGAEA.788537 ZIP used for versioned GLiM 0.5 degree matching",
     )
     parser.add_argument("--max-records", type=int, default=50_000, help="Fail closed above this input count")
     parser.add_argument(

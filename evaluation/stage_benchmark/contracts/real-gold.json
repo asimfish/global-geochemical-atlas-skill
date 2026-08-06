@@ -1,0 +1,128 @@
+{
+  "gold_version": "d2-real-gold-v2",
+  "provenance": "Expectations were transcribed from named source records and published metadata before running D2.",
+  "minimum_adapter_counts": {
+    "usgs_ds801": 7,
+    "usgs_rass_circle": 28,
+    "usgs_taylor_mountains_rock": 6,
+    "wqp_usgs_01594440_arsenic": 90
+  },
+  "record_expectations": {
+    "usgs-ds801-top5:C-328818:As": {
+      "original_value_raw": "2.1",
+      "original_value": 2.1,
+      "original_unit": "mg/kg",
+      "value_qualifier": "reported",
+      "normalized_value": 2.1,
+      "normalized_unit": "mg/kg",
+      "latitude": 31.3146,
+      "longitude": -87.1166,
+      "method_family": "hg_aas"
+    },
+    "usgs-ds801-top5:C-328818:Cd": {
+      "original_value_raw": "<0.1",
+      "value_qualifier": "lt",
+      "censored": true,
+      "normalized_value": null,
+      "normalized_censoring_limit": 0.1
+    },
+    "usgs-ds801-top5:C-328818:Fe": {
+      "original_value_raw": "0.52",
+      "original_unit": "wt. %",
+      "normalized_value": 5200.0,
+      "normalized_unit": "mg/kg",
+      "conversion_factor": 10000.0,
+      "method_family": "icp_aes"
+    },
+    "usgs-ds801-top5:C-328818:Hg": {
+      "original_value_raw": "0.01",
+      "value_qualifier": "reported",
+      "normalized_value": 0.01,
+      "method_family": "cv_aas"
+    },
+    "usgs-rass-circle:CBH571:As": {
+      "original_value_raw": null,
+      "source_qualifier_raw": "N",
+      "value_qualifier": "nd",
+      "censored": true,
+      "detection_limit": 200.0,
+      "normalized_censoring_limit": 200.0,
+      "latitude": null,
+      "longitude": null,
+      "required_flags": ["CENSORED_VALUE", "UNSUPPORTED_SOURCE_CRS"]
+    },
+    "usgs-rass-circle:CBH571:Cu": {
+      "original_value_raw": "100",
+      "value_qualifier": "reported",
+      "normalized_value": 100.0,
+      "normalized_unit": "mg/kg",
+      "latitude": null,
+      "required_flags": ["UNSUPPORTED_SOURCE_CRS"]
+    },
+    "usgs-rass-circle:CBV067:Zn": {
+      "original_value_raw": "200",
+      "source_qualifier_raw": "L",
+      "value_qualifier": "trace",
+      "censored": true,
+      "normalized_value": null,
+      "normalized_censoring_limit": 200.0,
+      "required_flags": ["CENSORED_VALUE", "UNQUANTIFIED_TRACE", "UNSUPPORTED_SOURCE_CRS"]
+    },
+    "usgs-taylor-rock:C-289851:Fe": {
+      "original_value_raw": "3.21",
+      "original_unit": "%",
+      "value_qualifier": "reported",
+      "normalized_value": null,
+      "normalized_unit": null,
+      "conversion_factor": null,
+      "method_family": "icp_aes_ms",
+      "lithology": "granite",
+      "latitude": null,
+      "longitude": null,
+      "required_flags": ["UNSUPPORTED_UNIT", "UNSUPPORTED_SOURCE_CRS"]
+    },
+    "usgs-taylor-rock:C-289822:Cu": {
+      "original_value_raw": "<5",
+      "source_qualifier_raw": "<",
+      "value_qualifier": "lt",
+      "censored": true,
+      "normalized_value": null,
+      "normalized_censoring_limit": 5.0,
+      "required_flags": ["CENSORED_VALUE", "UNSUPPORTED_SOURCE_CRS"]
+    },
+    "usgs-taylor-rock:C-289853:Ni": {
+      "original_value_raw": "88",
+      "normalized_value": 88.0,
+      "normalized_unit": "mg/kg",
+      "lithology": "siltstone, claystone, mudstone",
+      "geologic_unit": "Kuskokwim(?)",
+      "geologic_context_version": "OFR 2007-1196 v1.1 (2010-05-21)",
+      "geologic_match_method": "source_table_reported",
+      "required_flags": ["UNSUPPORTED_SOURCE_CRS"]
+    },
+    "wqp:NWIS-72607869": {
+      "original_value_raw": "1.0",
+      "value_qualifier": "reported",
+      "measurement_basis": "aqueous_dissolved",
+      "normalized_value": 1.0,
+      "normalized_unit": "ug/L",
+      "latitude": null,
+      "longitude": null,
+      "required_flags": ["MISSING_ANALYTICAL_METHOD", "MISSING_DIGESTION_OR_EXTRACTION", "UNSUPPORTED_SOURCE_CRS"]
+    },
+    "wqp:NWIS-72607870": {
+      "original_value_raw": null,
+      "source_qualifier_raw": "Not Detected",
+      "value_qualifier": "nd",
+      "measurement_basis": "aqueous_suspended",
+      "detection_limit": 1.0,
+      "normalized_censoring_limit": 1.0,
+      "required_flags": ["CENSORED_VALUE", "UNSUPPORTED_SOURCE_CRS"]
+    }
+  },
+  "d1_raw_qualifier_expectations": {
+    "usgs-rass-circle:CBV067:Zn": "L",
+    "usgs-taylor-rock:C-289822:Cu": "<",
+    "wqp:NWIS-72607870": "Not Detected"
+  }
+}

@@ -1,0 +1,117 @@
+/* DATA DESCRIPTION:
+Citation:	McLeod, Malcolm; Bockheim, James G; Balks, Megan; Aislabie, Jackie (2009): (Table II) Geochemistry of selected soils in western Wright Valley, Antarctica [dataset]. PANGAEA, https://doi.org/10.1594/PANGAEA.816759, 
+	In supplement to: McLeod, M et al. (2009): Soils of western Wright Valley, Antarctica. Antarctic Science, 21(04), 355, https://doi.org/10.1017/S0954102009001965
+Coverage:	MEDIAN LATITUDE: -77.548750 * MEDIAN LONGITUDE: 161.140000 * SOUTH-BOUND LATITUDE: -77.565000 * WEST-BOUND LONGITUDE: 160.820000 * NORTH-BOUND LATITUDE: -77.530000 * EAST-BOUND LONGITUDE: 161.260000
+	DATE/TIME START: 2006-01-01T00:00:00 * DATE/TIME END: 2007-01-01T00:00:00
+	MINIMUM DEPTH, sediment/rock: 0.0025 m * MAXIMUM DEPTH, sediment/rock: 0.7300 m
+Event(s):	WrightV_Dais * LATITUDE: -77.550000 * LONGITUDE: 161.230000 * DATE/TIME START: 2006-01-01T00:00:00 * DATE/TIME END: 2007-01-01T00:00:00 * LOCATION: Wright Valley, East Antarctica * METHOD/DEVICE: Soil profile (SOIL)
+	WrightV_Labyrinth * LATITUDE: -77.550000 * LONGITUDE: 160.820000 * DATE/TIME START: 2006-01-01T00:00:00 * DATE/TIME END: 2007-01-01T00:00:00 * LOCATION: Wright Valley, East Antarctica * METHOD/DEVICE: Soil profile (SOIL)
+	WrightV_North-Fork * LATITUDE: -77.530000 * LONGITUDE: 161.250000 * DATE/TIME START: 2006-01-01T00:00:00 * DATE/TIME END: 2007-01-01T00:00:00 * LOCATION: Wright Valley, East Antarctica * METHOD/DEVICE: Soil profile (SOIL)
+	WrightV_South-Fork * LATITUDE: -77.565000 * LONGITUDE: 161.260000 * DATE/TIME START: 2006-01-01T00:00:00 * DATE/TIME END: 2007-01-01T00:00:00 * LOCATION: Wright Valley, East Antarctica * METHOD/DEVICE: Soil profile (SOIL)
+Comment:	A 1:5 soil/water extract of subsamples was analysed.
+Parameter(s):	Event label (Event)
+	Latitude of event (Latitude)
+	Longitude of event (Longitude)
+	Profile ID (Profile ID) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz)
+	Soil horizon (Soil hori) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz)
+	Depth, top/min [m] (Depth top) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz)
+	Depth, bottom/max [m] (Depth bot) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz)
+	DEPTH, sediment/rock [m] (Depth sed) * GEOCODE
+	pH, soil (pH soil) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * COMMENT: water
+	Conductivity of soil/sediment [mS/m] (Cond soil/sed) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz)
+	Salt content per area [mg/cm**2] (Salt) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * COMMENT: total soluble, to 70 cm
+	Calcium [mg/kg] (Ca2+) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * METHOD/DEVICE: Flame atomic absorption spectrometry (FAAS)
+	Magnesium [mg/kg] (Mg2+) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * METHOD/DEVICE: Flame atomic absorption spectrometry (FAAS)
+	Sodium [mg/kg] (Na) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * METHOD/DEVICE: Flame atomic absorption spectrometry (FAAS)
+	Potassium [mg/kg] (K) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * METHOD/DEVICE: Flame atomic absorption spectrometry (FAAS) * COMMENT: water soluble
+	Chloride [mg/kg] (Cl) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * METHOD/DEVICE: Ion chromatography
+	Nitrogen in nitrate [mg/kg] (N-[NO3]-) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * METHOD/DEVICE: Ion chromatography
+	Sulfate [mg/kg] ([SO4]2-) * PI: McLeod, Malcolm (mcleodm@landcareresearch.co.nz) * METHOD/DEVICE: Ion chromatography
+License:	Creative Commons Attribution 3.0 Unported (CC-BY-3.0) (URI: https://creativecommons.org/licenses/by/3.0/)
+Size:	1105 data points
+*/
+Event	Latitude	Longitude	Profile ID	Soil hori	Depth top [m]	Depth bot [m]	Depth sed [m]	pH soil	Cond soil/sed [mS/m]	Salt [mg/cm**2]	Ca2+ [mg/kg]	Mg2+ [mg/kg]	Na [mg/kg]	K [mg/kg]	Cl [mg/kg]	N-[NO3]- [mg/kg]	[SO4]2- [mg/kg]
+WrightV_Labyrinth	-77.550	160.820	WV07-17	D	0.000	0.01	0.0050	6.68	0	11	2.3	1.7	11.2	25.7	36.6	1.3	11.0
+WrightV_Labyrinth	-77.550	160.820	WV07-17	Cox	0.010	0.10	0.0550	6.23	4		2.0	1.3	8.7	41.5	57.6	0.7	16.4
+WrightV_Labyrinth	-77.550	160.820	WV07-17	Cn	0.100	0.26	0.1800	6.07	3		1.0	1.7	5.8	42.8	58.1	0.8	15.8
+WrightV_Labyrinth	-77.550	160.820	WV07-18	D	0.000	0.01	0.0050	7.67	18	6	9.8	4.9	153.0	23.2	72.2	6.3	106.0
+WrightV_Labyrinth	-77.550	160.820	WV07-18	Cn	0.010	0.09	0.0500	7.45	5		1.8	1.0	35.3	31.2	44.1	1.4	13.5
+WrightV_Labyrinth	-77.550	160.820	WV07-18	2Cox	0.090	0.38	0.2350	8.58	1		12.6	7.9	17.8	15.6	68.1	0.0	13.0
+WrightV_Labyrinth	-77.550	160.820	WV07-19	D	0.000	0.01	0.0050	6.42	119	36	235.0	180.0	241.0	33.9	375.0	102.0	160.0
+WrightV_Labyrinth	-77.550	160.820	WV07-19	Coxjj	0.010	0.15	0.0800	6.61	26		3.5	9.5	176.0	35.8	176.0	25.1	155.0
+WrightV_Labyrinth	-77.550	160.820	WV07-19	Cn	0.150	0.20	0.1750	6.77	5		0.8	2.5	24.6	46.5	68.7	1.3	20.6
+WrightV_Labyrinth	-77.550	160.820	WV07-20	D	0.000	0.01	0.0050	5.89	528	343	2120.0	501.0	3170.0	61.6	645.0	214.0	11400.0
+WrightV_Labyrinth	-77.550	160.820	WV07-20	Cox	0.010	0.17	0.0900	5.98	96		558.0	124.0	298.0	46.6	173.0	38.3	2100.0
+WrightV_Labyrinth	-77.550	160.820	WV07-21	D	0.000	0.01	0.0050	6.56	4	9	2.3	1.0	29.0	29.7	36.1	1.3	35.7
+WrightV_Labyrinth	-77.550	160.820	WV07-21	Cox	0.010	0.13	0.0700	6.73	3		2.3	1.0	14.9	47.7	57.2	1.3	12.4
+WrightV_Labyrinth	-77.550	160.820	WV07-22	D	0.000	0.01	0.0050	5.87	198	940	160.0	347.0	441.0	36.9	1360.0	246.0	38.4
+WrightV_Labyrinth	-77.550	160.820	WV07-22	Bwjj1	0.010	0.07	0.0400	5.85	452		1890.0	647.0	1270.0	34.7	1570.0	377.0	6060.0
+WrightV_Labyrinth	-77.550	160.820	WV07-22	Bwz	0.070	0.17	0.1200	5.81	392		2010.0	638.0	1220.0	42.6	1060.0	324.0	8500.0
+WrightV_Labyrinth	-77.550	160.820	WV07-22	Bwjj2	0.170	0.30	0.2350	5.41	186		545.0	175.0	458.0	37.8	588.0	339.0	1320.0
+WrightV_Labyrinth	-77.550	160.820	WV07-22	Bwjj3	0.300	0.53	0.4150	5.64	217		375.0	288.0	604.0	30.5	813.0	181.0	1900.0
+WrightV_Labyrinth	-77.550	160.820	WV07-22	Bw	0.530	0.80	0.6650	5.75	314		504.0	274.0	962.0	38.1	945.0	186.0	4750.0
+WrightV_Labyrinth	-77.550	160.820	WV07-23	D	0.000	0.01	0.0050	9.24	15	8	7.2	4.0	124.0	15.5	101.0	11.7	138.0
+WrightV_Labyrinth	-77.550	160.820	WV07-23	Cox1	0.010	0.10	0.0550	8.82	3		0.0	1.1	16.0	3.3	30.6	3.4	34.5
+WrightV_Labyrinth	-77.550	160.820	WV07-23	Cox2	0.100	0.22	0.1600	8.76	2		10.8	8.6	38.3	10.5	54.4	0.0	49.0
+WrightV_Labyrinth	-77.550	160.820	WV07-23	Coxfm	>0.220			8.73	2		4.9	5.7	28.9	9.6	43.3	1.9	29.8
+WrightV_Labyrinth	-77.550	160.820	WV07-24	D	0.000	0.01	0.0050	8.18	4	3	2.7	4.6	31.1	11.1	42.5	2.4	50.4
+WrightV_Labyrinth	-77.550	160.820	WV07-24	Bw	0.010	0.09	0.0500	8.15	2		1.1	2.4	15.5	11.6	28.8	1.3	16.5
+WrightV_Labyrinth	-77.550	160.820	WV07-24	Cox	0.090	0.20	0.1450	8.25	1		1.0	2.1	10.7	14.4	32.2	0.0	12.1
+WrightV_Labyrinth	-77.550	160.820	WV07-24	Coxfm	>0.200			8.15	1		2.5	3.5	15.5	30.3	72.5	0.0	25.0
+WrightV_Labyrinth	-77.550	160.820	WV07-27	D	0.000	0.01	0.0050	7.95	3	4	9.1	4.5	13.3	7.4	15.2	0.7	58.4
+WrightV_Labyrinth	-77.550	160.820	WV07-27	Cn	0.010	0.25	0.1300	8.31	1		1.8	1.1	12.4	17.4	28.8	0.7	13.9
+WrightV_Labyrinth	-77.550	160.820	WV07-27	Cnfm	>0.250			8.12	1		2.1	1.0	14.0	14.1	47.1	0.7	27.2
+WrightV_Labyrinth	-77.550	160.820	WV07-28	D	0.000	0.01	0.0050	8.67	8	6	10.7	10.9	47.2	25.3	72.2	6.6	50.5
+WrightV_Labyrinth	-77.550	160.820	WV07-28	Bw	0.010	0.08	0.0450	9.03	4		3.7	1.6	37.1	15.2	54.1	2.5	49.5
+WrightV_Labyrinth	-77.550	160.820	WV07-28	Cn	0.080	0.16	0.1200	7.62	1		0.2	0.9	12.9	32.9	52.1	0.9	14.3
+WrightV_Labyrinth	-77.550	160.820	WV07-28	Cnfm	>0.160			7.88	1		3.4	1.8	11.6	35.8	53.5	0.6	12.6
+WrightV_Labyrinth	-77.550	160.820	WV07-29	D	0.000	0.01	0.0050	9.26	3	5	1.0	0.7	34.1	18.0	37.1	0.9	21.4
+WrightV_Labyrinth	-77.550	160.820	WV07-29	Cn1	0.010	0.08	0.0450	8.57	2		7.0	1.1	28.3	35.3	78.3	1.2	27.5
+WrightV_Labyrinth	-77.550	160.820	WV07-29	Cn2	0.080	0.29	0.1850	7.97	1		2.3	8.9	14.7	23.5	56.0	1.1	23.7
+WrightV_Labyrinth	-77.550	160.820	WV07-29	Cnfm	>0.290			8.44	2		5.3	2.1	20.2	10.9	28.3	1.8	17.9
+WrightV_Dais	-77.550	161.230	WV07-45	D	0.000	0.01	0.0050	8.52	788	900	2720.0	129.0	2930.0	38.3	3800.0	923.0	1790.0
+WrightV_Dais	-77.550	161.230	WV07-45	Bwz	0.010	0.11	0.0600	8.21	884		1920.0	283.0	2220.0	39.1	2540.0	483.0	2090.0
+WrightV_Dais	-77.550	161.230	WV07-45	Bw	0.110	0.28	0.1950	8.50	252		814.0	32.5	374.0	11.7	483.0	76.7	933.0
+WrightV_Dais	-77.550	161.230	WV07-45	Cox	0.280	0.68	0.4800	9.55	114		8.9	3.0	403.0	8.6	1070.0	150.0	66.8
+WrightV_Dais	-77.550	161.230	WV07-46	D	0.000	0.01	0.0050	8.36	301	2560	1380.0	74.2	750.0	34.8	2820.0	219.0	842.0
+WrightV_Dais	-77.550	161.230	WV07-46	Bw1	0.010	0.09	0.0500	8.16	587		1090.0	117.0	970.0	39.9	4460.0	281.0	2370.0
+WrightV_Dais	-77.550	161.230	WV07-46	Bwz	0.090	0.28	0.1850	8.27	1110		1120.0	129.0	2860.0	62.1	10000.0	325.0	2170.0
+WrightV_Dais	-77.550	161.230	WV07-46	Bw2	0.280	0.56	0.4200	8.41	652		704.0	136.0	2360.0	58.8	9970.0	310.0	1010.0
+WrightV_South-Fork	-77.565	161.260	WV07-1	D	0.000	0.01	0.0050	8.02	1	7	3.7	2.1	9.8	14.1	30.6	0.8	15.6
+WrightV_South-Fork	-77.565	161.260	WV07-1	Cox	0.010	0.22	0.1150	8.17	1		3.5	4.1	9.0	8.4	19.4	0.0	12.1
+WrightV_South-Fork	-77.565	161.260	WV07-1	Cfm	>0.220			7.90	3		7.6	4.8	16.2	20.1	66.0	0.0	15.3
+WrightV_South-Fork	-77.565	161.260	WV07-4	Dz	0.000	0.02	0.0100	7.57	5360	3380	13400.0	187.0	23200.0	93.4	113000.0	153.0	2080.0
+WrightV_South-Fork	-77.565	161.260	WV07-4	Cnz1	0.020	0.15	0.0850	7.82	811		2210.0	33.0	478.0	15.3	8790.0	5.3	260.0
+WrightV_South-Fork	-77.565	161.260	WV07-4	Cnz2	0.150	0.32	0.2350	7.56	893		2840.0	44.7	493.0	21.3	11600.0	5.7	41.3
+WrightV_South-Fork	-77.565	161.260	WV07-5	D	0.000	0.04	0.0200	7.87	3930	4000	2840.0	44.7	493.0	21.3	11600.0	5.7	41.3
+WrightV_South-Fork	-77.565	161.260	WV07-5	Coxz	0.040	0.26	0.1500	7.85	810		2410.0	28.2	1130.0	14.8	7930.0	3.8	1100.0
+WrightV_South-Fork	-77.565	161.260	WV07-5	Cn1	0.260	0.40	0.3300	7.69	639		2100.0	25.1	262.0	9.1	4330.0	3.6	746.0
+WrightV_South-Fork	-77.565	161.260	WV07-5	Cn2	0.400	0.60	0.5000	7.41	1360		3770.0	57.6	626.0	19.5	13600.0	0.0	166.0
+WrightV_South-Fork	-77.565	161.260	WV07-6	D	0.000	0.01	0.0025	9.23	34	360	81.8	6.5	168.0	28.2	558.0	7.2	129.0
+WrightV_South-Fork	-77.565	161.260	WV07-6	Bw1	0.005	0.07	0.0375	8.73	145		176.0	32.7	396.0	13.2	2430.0	31.4	508.0
+WrightV_South-Fork	-77.565	161.260	WV07-6	Bw2	0.070	0.33	0.2000	8.37	177		404.0	63.1	452.0	19.0	2560.0	54.0	979.0
+WrightV_South-Fork	-77.565	161.260	WV07-6		0.330	0.50	0.4150	8.84	51	227		10.8	95.5	11.7	640.0	10.8	173.0
+WrightV_South-Fork	-77.565	161.260	WV07-7	D	0.000	0.01	0.0025	8.57	80	5	191.0	27.8	127.0	17.7	1180.0	7.5	133.0
+WrightV_South-Fork	-77.565	161.260	WV07-7	Coxjj	0.005	0.16	0.0825	9.00	1		3.8	15.4	15.6	18.3	20.1	0.0	10.0
+WrightV_South-Fork	-77.565	161.260	WV07-7	Cn	0.160	0.31	0.2350	8.37	1		5.1	25.4	12.0	24.0	17.1	0.0	12.7
+WrightV_South-Fork	-77.565	161.260	WV07-11	D	0.000	0.01	0.0050	9.09	37	1690	192.0	7.6	75.1	13.9	183.0	10.3	217.0
+WrightV_South-Fork	-77.565	161.260	WV07-11	Bw	0.010	0.20	0.1050	8.40	1470		1050.0	98.0	14200.0	45.5	23700.0	112.0	2360.0
+WrightV_South-Fork	-77.565	161.260	WV07-11	Cn1	0.200	0.47	0.3350	8.78	194		344.0	27.1	491.0	26.7	2360.0	83.5	195.0
+WrightV_South-Fork	-77.565	161.260	WV07-11	Cn2	0.470	0.81	0.6400	9.02	83		111.0	16.1	324.0	36.1	1080.0	55.5	68.4
+WrightV_South-Fork	-77.565	161.260	WV07-12	D	0.000	0.01	0.0050	8.93	10	10	6.4	2.1	72.9	7.1	72.7	2.5	108.0
+WrightV_South-Fork	-77.565	161.260	WV07-12	Bw	0.010	0.15	0.0800	8.92	6		9.0	5.4	50.9	12.4	48.2	1.2	72.0
+WrightV_South-Fork	-77.565	161.260	WV07-12	Cox	0.150	0.22	0.1850	8.43	1		5.1	10.3	13.5	20.3	25.1	0.6	11.1
+WrightV_South-Fork	-77.565	161.260	WV07-12	Coxfm	0.220	>0.30		8.71	2		27.5	7.3	18.3	11.5	32.3	1.8	23.9
+WrightV_South-Fork	-77.565	161.260	WV07-13	D	0.000	0.01	0.0050	9.41	30	16	37.9	9.7	178.0	9.7	175.0	15.8	289.0
+WrightV_South-Fork	-77.565	161.260	WV07-13	Bwjj1	0.010	0.14	0.0750	9.37	18		19.8	13.4	114.0	35.8	183.0	8.2	169.0
+WrightV_South-Fork	-77.565	161.260	WV07-13	Bwjj2	0.140	0.22	0.1800	9.08	2		9.6	8.0	31.1	18.8	34.9	0.6	24.0
+WrightV_South-Fork	-77.565	161.260	WV07-13	Cn	0.220	0.33	0.2750	8.45	1		4.6	2.9	13.4	9.2	16.3	0.0	11.5
+WrightV_South-Fork	-77.565	161.260	WV07-13					8.66	2		5.4	5.6	21.5	18.4	25.1	0.7	16.5
+WrightV_North-Fork	-77.530	161.250	WV07-30	D	0.000	0.01	0.0050	6.26	7	80	2.6	0.5	16.9	52.8	78.3	1.9	43.4
+WrightV_North-Fork	-77.530	161.250	WV07-30	Cn	0.010	0.11	0.0600	7.34	16		17.4	2.8	67.9	58.2	107.0	2.7	126.0
+WrightV_North-Fork	-77.530	161.250	WV07-30	2Bw	0.110	0.37	0.2400	7.42	39		151.0	30.5	68.2	65.7	423.0	34.2	43.3
+WrightV_North-Fork	-77.530	161.250	WV07-30	2Cox	0.370	0.48	0.4250	6.34	15		17.9	6.3	34.9	81.3	203.0	5.2	47.1
+WrightV_North-Fork	-77.530	161.250	WV07-33	D	0.000	0.01	0.0050	6.96	44	1800	58.5	26.9	244.0	36.7	404.0	40.4	168.0
+WrightV_North-Fork	-77.530	161.250	WV07-33	Bw	0.010	0.10	0.0550	6.70	682		3380.0	707.0	2560.0	90.3	5300.0	665.0	7490.0
+WrightV_North-Fork	-77.530	161.250	WV07-33	Bwz	0.100	0.46	0.2800	6.05	1200		282.0	476.0	9600.0	105.0	16800.0	881.0	2360.0
+WrightV_North-Fork	-77.530	161.250	WV07-33	Cox	0.460	1.00	0.7300	6.12	506		245.0	323.0	3840.0	111.0	5660.0	747.0	223.0

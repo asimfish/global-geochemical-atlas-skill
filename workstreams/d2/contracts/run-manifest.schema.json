@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d2-run-manifest:v1",
+  "title": "D2 deterministic run manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version", "interface_version", "pipeline_version", "status", "deterministic",
+    "timestamps_omitted_for_determinism", "input", "configuration", "record_counts", "quality_flag_types",
+    "contracts", "outputs", "scientific_scope", "limitations"
+  ],
+  "properties": {
+    "manifest_version": {"const": "d2-run-manifest-v1"},
+    "interface_version": {"const": "d2-interface-v2"},
+    "pipeline_version": {"const": "d2-pipeline-v2"},
+    "status": {"enum": ["success", "success_with_quality_flags"]},
+    "deterministic": {"const": true},
+    "timestamps_omitted_for_determinism": {"const": true},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "row_count", "schema_map_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "row_count": {"type": "integer", "minimum": 1},
+        "schema_map_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "configuration": {"type": "object"},
+    "record_counts": {"type": "object"},
+    "quality_flag_types": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "contracts": {"type": "object"},
+    "outputs": {
+      "type": "array",
+      "minItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "path", "media_type", "bytes", "sha256"],
+        "properties": {
+          "role": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "pattern": "^[^/\\\\]+$"},
+          "media_type": {"type": "string", "minLength": 1},
+          "bytes": {"type": "integer", "minimum": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "scientific_scope": {"const": "standardization_qc_and_screening_only"},
+    "limitations": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}

@@ -159,7 +159,8 @@ python scripts/query_source.py \
 ```bash
 python scripts/standardize_geochemistry.py \
   --input INPUT.csv \
-  --output-dir OUTPUT_DIR
+  --output-dir OUTPUT_DIR \
+  --geology-grid CACHE/pangaea-788537.zip
 ```
 
 严格执行 [references/scientific-rules.md](references/scientific-rules.md)：
@@ -167,6 +168,7 @@ python scripts/standardize_geochemistry.py \
 - 新增标准字段，不覆盖原值；
 - 固体质量比统一到 `mg/kg`；水体质量/体积统一到 `ug/L`；
 - 水体 `ppm`、`ppb` 或裸 `%` 在缺少密度/basis 时拒绝换算；
+- 水体 `nmol/L`、`µmol/L`、`mmol/L`、`mol/L` 只在元素明确时按固定原子量表换成 `µg/L`，并保留公式；
 - 删失值的 `normalized_value` 置空，只保留可换算的 censoring limit；
 - 来源限定符原词写入 `source_qualifier_raw`，同时输出 canonical `value_qualifier`；
 - 可能交换的经纬度只加 flag，不静默交换；
@@ -177,7 +179,22 @@ python scripts/standardize_geochemistry.py \
 
 ## 5. 处理空间与地质背景
 
-只有在转换链可追溯时才写入 WGS84 坐标，并记录 source CRS、转换方法和坐标不确定性。地质空间匹配必须记录图层来源、原始 source ID、比例尺、空间谓词和边界不确定性。
+只有在转换链可追溯时才写入 WGS84 坐标，并记录 source CRS、转换方法和坐标不确定性。来源没有报告坐标精度时写
+`coordinate_uncertainty_status=unknown_not_reported_by_source`；可以另算 `coordinate_resolution_m` 表示文本小数分辨率，
+但必须标明它不是定位准确度。分析方法和来源地质背景也分别用 `analytical_method_status` 与
+`geologic_context_status` 覆盖全部记录；显式 unknown 不得算作已知值覆盖。
+
+地质空间匹配必须记录图层来源、版本、文件 SHA-256、比例尺/分辨率、空间谓词和失败处置。需要统一全球筛查层时，
+下载并哈希固定 PANGAEA `10.1594/PANGAEA.788537` 的 GLiM 0.5° ZIP，再通过 `--geology-grid` 执行确定性的
+point-in-cell 连接。输出写入独立的 `spatial_geology_*` 字段，不覆盖来源报告的 `geologic_unit`：
+
+- `matched`：有效陆地固体记录命中 GLiM 类别；
+- `no_coverage` / `invalid_or_missing_coordinate`：显式保留失败原因；
+- `not_applicable_water`：水体不得赋陆地岩性；
+- `not_applicable_marine_sediment`：明确海洋沉积物不得赋陆地表层岩性。
+
+GLiM 类别是 0.5° 主导表层岩性的筛查上下文，不是场地级地层、母岩或异常成因证据。运行后检查
+`geology_report.json` 的 `disposition_coverage=1` 和 `water_records_with_assigned_land_unit=0`。
 
 当前冻结来源的硬边界：USGS Data Series 801 的官方 Appendix 5 声明 WGS 84，并给出 As 的 HG-AAS/fusion 与 Cu/Ni/Zn 的 ICP-AES/four-acid 方法；可以保留这些元数据。经审查的 GEOROC 公开元数据仅说明十进制度坐标，未充分声明统一 datum，因此只写 `original_latitude_raw`/`original_longitude_raw`，canonical 经纬度与 `source_crs` 留空，标记 `COORDINATE_NOT_CANONICALIZED`。不要仅凭数值范围标成 EPSG:4326。
 
@@ -205,6 +222,7 @@ python scripts/run_workflow.py \
   --evidence-jsonl sources.jsonl \
   --acquisition-manifest run_manifest.json \
   --output-dir OUTPUT_DIR \
+  --geology-grid CACHE/pangaea-788537.zip \
   --max-records 50000
 ```
 

@@ -1,0 +1,147 @@
+{
+  "contract_version": "stage-completion-sources-v2",
+  "frozen_on": "2026-08-06",
+  "purpose": "Hash-pinned official datasets used to close the structural seven-continent by four-medium benchmark and to exercise a versioned global surface-lithology spatial join. Structural coverage is not national representativeness.",
+  "resources": [
+    {
+      "id": "glim_05deg",
+      "dataset_id": "glim_global_lithology",
+      "role": "versioned_spatial_reference",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.788537?format=textfile",
+      "landing_page": "https://doi.org/10.1594/PANGAEA.788537",
+      "local_file": "geology/pangaea-788537.zip",
+      "sha256": "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e",
+      "bytes": 38670,
+      "license": "CC-BY-3.0",
+      "version": "PANGAEA.788537; 2012 publication; 0.5 degree raster"
+    },
+    {
+      "id": "africa_sediment",
+      "dataset_id": "pangaea_880617",
+      "role": "official_data",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.880617?format=textfile",
+      "landing_page": "https://doi.org/10.1594/PANGAEA.880617",
+      "local_file": "africa/pangaea-880617.tab",
+      "sha256": "94aefec747455559fe0c41f66e413c25f70afaf185ff3eaa73c8f104cd552686",
+      "bytes": 17018,
+      "license": "CC-BY-3.0",
+      "version": "PANGAEA.880617"
+    },
+    {
+      "id": "africa_water",
+      "dataset_id": "pangaea_947275",
+      "role": "official_data",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.947275?format=textfile",
+      "landing_page": "https://doi.org/10.1594/PANGAEA.947275",
+      "local_file": "africa/pangaea-947275.tab",
+      "sha256": "fb62124c276c6cf4eb549899bf30e78c7d8cdde083173662a53e16ea4e0155a6",
+      "bytes": 211079,
+      "license": "CC-BY-4.0",
+      "version": "PANGAEA.947275"
+    },
+    {
+      "id": "brazil_sediment",
+      "dataset_id": "sgb_avelino_stream_sediment",
+      "role": "official_data",
+      "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/f6a62017-1e7a-46c4-87c1-f5588e908834/content",
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/11268",
+      "local_file": "south-america/sgb-avelino-geochemistry.xlsx",
+      "sha256": "9c86298bdde01abb8e71d83e5e4d3dbdd6d0fc3b85d027b6910334436fe84f1e",
+      "bytes": 235468,
+      "publisher_md5": "66cea072ca0c3a0f9e2e6680431f35cb",
+      "license": "official-open-government-data; verify reuse terms at landing page",
+      "version": "SGB/CPRM repository object doc/11268"
+    },
+    {
+      "id": "brazil_soil_chemistry",
+      "dataset_id": "sgb_area_l_be_soil",
+      "role": "official_data",
+      "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/91d51781-300e-4a50-a994-ce5a17f5fbf7/content",
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/11157",
+      "local_file": "south-america/sgb-area-l-be-soil.zip",
+      "sha256": "fdb81af538a3cdc60842a111ff2b082ce2b07f43e175db353468381cc9b31f86",
+      "bytes": 265292,
+      "publisher_md5": "bb7ff3aae8eb2ccbe1b2b8665f3c065b",
+      "license": "official-open-government-data; verify reuse terms at landing page",
+      "version": "SGB/CPRM repository object doc/11157"
+    },
+    {
+      "id": "brazil_soil_locations",
+      "dataset_id": "sgb_area_l_be_soil",
+      "role": "official_spatial_join_table",
+      "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5/query?where=PROJETO%3D%27%C3%81rea%20L%20-%20BE%27&outFields=OBJECTID%2CPROJETO%2CNUM_CAMPO%2CNUM_LAB%2CROCHMATRIZ%2CDESCROCHA%2CURL&returnGeometry=true&outSR=4326&orderByFields=OBJECTID&f=json",
+      "landing_page": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5",
+      "local_file": "south-america/sgb-area-l-be-locations.json",
+      "sha256": "25f9f3e7cc5992db4f4bbff41eec97b7a0000c1f7dc532a0e26f6fef0b6792a0",
+      "bytes": 40442,
+      "license": "official-open-government-service; verify reuse terms at landing page",
+      "version": "SGB geoquimica_integrada FeatureServer layer 5; retrieved 2026-08-06"
+    },
+    {
+      "id": "australia_water",
+      "dataset_id": "ga_northern_australia_hydrochemistry",
+      "role": "official_data",
+      "url": "https://d28rz98at9flks.cloudfront.net/133388/133388_01_3.XLSX",
+      "landing_page": "https://doi.org/10.11636/Record.2020.015",
+      "local_file": "oceania/ga-northern-australia-water.xlsx",
+      "sha256": "fbacb2316d1938d5351067a8ed8b0bcdc115093bc50d107880bb4a419bc56411",
+      "bytes": 324100,
+      "license": "CC-BY-4.0",
+      "version": "Geoscience Australia Record 2020/015 data package 133388_01_3"
+    },
+    {
+      "id": "oceania_soil",
+      "dataset_id": "pangaea_935591",
+      "role": "official_data",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.935591?format=textfile",
+      "landing_page": "https://doi.org/10.1594/PANGAEA.935591",
+      "local_file": "oceania/pangaea-935591.tab",
+      "sha256": "210d63a02a7bb43cd9537beded803db15de2fdbd55a41583ae9fe3a8ba38de92",
+      "bytes": 46792,
+      "license": "CC-BY-4.0",
+      "version": "PANGAEA.935591"
+    },
+    {
+      "id": "antarctica_soil",
+      "dataset_id": "pangaea_816759",
+      "role": "official_data",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.816759?format=textfile",
+      "landing_page": "https://doi.org/10.1594/PANGAEA.816759",
+      "local_file": "antarctica/pangaea-816759.tab",
+      "sha256": "067e8b0b71d6bf578f7b71509f7660f3a88d43d98815a7e8e7591f519a993fa6",
+      "bytes": 12980,
+      "license": "CC-BY-3.0",
+      "version": "PANGAEA.816759"
+    },
+    {
+      "id": "antarctica_sediment",
+      "dataset_id": "mendeley_cfnhps54h7_v1",
+      "role": "official_data",
+      "url": "https://data.mendeley.com/public-files/datasets/cfnhps54h7/files/b21a1c0e-0b6f-4d2e-b0df-f1e8bbad0465/file_downloaded",
+      "landing_page": "https://data.mendeley.com/datasets/cfnhps54h7/1",
+      "local_file": "antarctica/mendeley-cfnhps54h7-v1.xlsx",
+      "sha256": "b913cf4b7d03d38b9b22ffefd29ad1125874d39492d2f14edd569d114c0a1bf3",
+      "bytes": 63214,
+      "license": "CC-BY-4.0",
+      "version": "Mendeley Data v1; related article 10.1016/j.chemgeo.2020.119649"
+    },
+    {
+      "id": "antarctica_water",
+      "dataset_id": "bco_dmo_877466_v1",
+      "role": "official_data",
+      "url": "https://datadocs.bco-dmo.org/dataset/877466/file/k66gkj3FYnBgXL/totaldissolvedmetals_forbcodmo-1.csv",
+      "landing_page": "https://www.bco-dmo.org/dataset/877466",
+      "local_file": "antarctica/bco-dmo-877466.csv",
+      "sha256": "c77d43df80cddaf258417f6a98cd4e03e729126db28d8393f7cc3c3a287dbff6",
+      "bytes": 27147,
+      "license": "CC-BY-4.0",
+      "version": "BCO-DMO 877466 version 1; 2022-07-26"
+    }
+  ],
+  "scientific_limits": [
+    "A nonempty continent-medium cell proves only that the adapter can process at least one real official dataset in that cell.",
+    "Source-unreported methods, geologic context and coordinate uncertainty remain explicit unknowns; they are never imputed.",
+    "GLiM 0.5 degree cells are dominant surface lithology screening context, not site-scale formation mapping.",
+    "A land lithology is not assigned to water observations."
+  ]
+}

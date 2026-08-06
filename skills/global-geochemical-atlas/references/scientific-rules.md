@@ -36,6 +36,9 @@
 `measurement_basis`、`value_qualifier`、`source_qualifier_raw`、`missing_reason`、`detection_limit`、`detection_limit_unit`、
 `original_latitude_raw`、`original_longitude_raw`、`latitude`、`longitude`、`source_crs`、
 `coordinate_transform_method`、`coordinate_uncertainty_m`、
+`coordinate_uncertainty_status`、`coordinate_uncertainty_basis`、`coordinate_resolution_m`、
+`coordinate_resolution_basis`、`measurement_uncertainty`、`measurement_uncertainty_unit`、
+`measurement_uncertainty_basis`、
 `geologic_unit`、`lithology`、`analytical_method`、`method_family`、`digestion_or_extraction`、
 `laboratory`、`reference_material`、`license`、`source_tier`、`sampled_at`、`sample_depth_min_m`、
 `sample_depth_max_m`、`grain_fraction`、`dataset_title`、`dataset_doi`、`dataset_version`、
@@ -87,6 +90,12 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 | `mg/L` | 1,000 |
 | `ng/L` | 0.001 |
 | `g/L` | 1,000,000 |
+| `nmol/L` | `atomic_weight × 0.001` |
+| `µmol/L` | `atomic_weight` |
+| `mmol/L` | `atomic_weight × 1,000` |
+| `mol/L` | `atomic_weight × 1,000,000` |
+
+摩尔浓度只在分析物能无歧义映射到白名单元素时换为 `µg/L`；输出必须记录元素、原子量表版本和公式。
 
 水体中的 ppm、ppb、wt% 或质量比单位没有密度与 basis 时保持未转换，并加 `AMBIGUOUS_AQUEOUS_RATIO_UNIT`。
 
@@ -161,6 +170,7 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 - `geochemistry.csv`：canonical 标准记录；`qc_flags` 为 JSON 数组字符串。
 - `qc_report.json`：记录数、标准化率、删失数、坐标有效数和 flags 统计。
 - `confidence_report.json`：公式版本、权重、分量均值和 band 分布。
+- `geology_report.json`：全记录空间连接处置、图层版本/哈希、适用记录匹配率及水体误赋检查。
 - `anomalies.geojson`：候选异常点；无有效坐标时 geometry 为 null。
 - `anomaly_report.json`：所有背景组的统计与无法计算原因。
 

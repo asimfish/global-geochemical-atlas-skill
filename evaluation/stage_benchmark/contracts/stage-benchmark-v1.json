@@ -1,0 +1,260 @@
+{
+  "benchmark_version": "geochemical-stage-benchmark-v1",
+  "profile": "expanded-global-real-v1",
+  "scientific_scope": "frozen_real_data_workflow_benchmark_not_global_population_estimate",
+  "task_requirements": {
+    "d1": [
+      "collect element values from rock, soil, sediment and water",
+      "retain sample coordinates, source CRS, geology, analytical method and measurement basis",
+      "retain record-level source, version, license, locator and file hash evidence",
+      "report geographic and source coverage gaps without treating blank regions as zero"
+    ],
+    "d2": [
+      "standardize units without destroying original values or censor qualifiers",
+      "validate coordinates and preserve documented spatial/geologic matches",
+      "perform quality control and decomposed operational-confidence scoring",
+      "screen high and low candidate anomalies only within comparable background groups",
+      "close the input/output provenance hash chain"
+    ],
+    "d3": [
+      "produce an offline interactive element distribution map",
+      "expose the standardized database, source evidence, confidence and anomaly results",
+      "support element, region, geology, medium, method, source and confidence filters",
+      "support sample-density heatmaps and comparable element-pair views",
+      "make coverage gaps, QC limitations and non-causal anomaly boundaries visible"
+    ]
+  },
+  "d1": {
+    "cli": "python candidate_d1.py --core-fixture-dir <dir> --expanded-fixture-dir <dir> --output-dir <new-dir>",
+    "required_outputs": [
+      "d1_global_export.csv",
+      "d1_global_manifest.json"
+    ],
+    "required_columns": [
+      "record_id",
+      "source_record_id",
+      "sample_id",
+      "element_or_analyte",
+      "analyte_reported",
+      "value",
+      "unit",
+      "value_qualifier",
+      "source_qualifier_raw",
+      "missing_reason",
+      "medium",
+      "material",
+      "measurement_basis",
+      "latitude",
+      "longitude",
+      "source_crs",
+      "coordinate_transform_method",
+      "coordinate_uncertainty_m",
+      "lithology",
+      "geologic_unit",
+      "geologic_unit_id",
+      "geologic_context_source",
+      "geologic_context_version",
+      "geologic_match_method",
+      "geologic_match_confidence",
+      "analytical_method",
+      "method_family",
+      "digestion_or_extraction",
+      "detection_limit",
+      "detection_limit_unit",
+      "source_id",
+      "dataset_title",
+      "dataset_doi",
+      "dataset_version",
+      "source_file",
+      "source_row",
+      "source_locator",
+      "file_sha256",
+      "license",
+      "source_tier",
+      "benchmark_continent",
+      "benchmark_country",
+      "benchmark_region"
+    ],
+    "expected": {
+      "record_count": 44536,
+      "source_dataset_count": 15,
+      "explicit_country_label_count": 102,
+      "elements": ["As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"],
+      "media": ["rock", "sediment", "soil", "water"],
+      "continents": [
+        "Africa",
+        "Antarctica",
+        "Asia",
+        "Europe",
+        "North America",
+        "Oceania",
+        "South America"
+      ],
+      "records_by_source": {
+        "afsis_phase1_wet_chemistry": 4440,
+        "foregs_floodplain_sediment": 1704,
+        "foregs_humus": 813,
+        "foregs_stream_sediment": 1868,
+        "foregs_stream_water": 1578,
+        "foregs_subsoil": 1816,
+        "foregs_topsoil": 1834,
+        "gemas_europe_soil": 8452,
+        "gemstat_global_freshwater_v3": 656,
+        "georoc_antarctica_intraplate": 304,
+        "georoc_archaean_cratons": 7647,
+        "gsj_japan_river_sediment": 4200,
+        "ngsa_australia_hg": 2396,
+        "pangaea_north_africa_soils": 258,
+        "tpdc_china_mountain_soil": 6570
+      },
+      "records_by_medium": {
+        "rock": 7951,
+        "sediment": 10168,
+        "soil": 24183,
+        "water": 2234
+      },
+      "records_by_element": {
+        "As": 5275,
+        "Cr": 5763,
+        "Cu": 7750,
+        "Hg": 4197,
+        "Ni": 6055,
+        "Pb": 7752,
+        "Zn": 7744
+      },
+      "minimum_rates": {
+        "coordinate_pair": 0.9998,
+        "analytical_method": 0.807,
+        "geologic_context_source": 0.435,
+        "record_provenance": 1.0,
+        "source_crs": 1.0
+      }
+    },
+    "spot_checks": {
+      "gemas-3001-As": {
+        "value": "1.55405313",
+        "unit": "mg/kg",
+        "medium": "soil",
+        "source_id": "gemas_europe_soil"
+      },
+      "ngsa-2007190001001 Fine-Hg": {
+        "value": "21.96",
+        "unit": "ng/g",
+        "medium": "sediment",
+        "source_crs": "GDA94 geographic (EPSG:4283)"
+      },
+      "gemstat-AUT00404-As-9334": {
+        "value": "0.00035",
+        "unit": "mg/l",
+        "value_qualifier": "<",
+        "source_qualifier_raw": "<"
+      },
+      "georoc-georoc_antarctica_intraplate-1265343:Cu": {
+        "value": "27.8",
+        "unit": "ppm",
+        "medium": "rock",
+        "dataset_doi": "10.25625/RZZ9VM"
+      },
+      "tpdc-cn-AL1-1-O-row2-Cr": {
+        "value": "18.9559163",
+        "unit": "mg/kg",
+        "benchmark_country": "China",
+        "source_id": "tpdc_china_mountain_soil"
+      },
+      "afsis-icr005934-As": {
+        "value": "0.262535152",
+        "unit": "mg/kg",
+        "source_id": "afsis_phase1_wet_chemistry"
+      },
+      "foregs_topsoil-N28E11T1-As-row128": {
+        "value": "6",
+        "source_qualifier_raw": "source_dataset_may_encode_below_DL_as_DL_over_2",
+        "source_id": "foregs_topsoil"
+      },
+      "gsj-japan-1-occ1-Hg": {
+        "value": "80.0",
+        "unit": "ppb",
+        "source_crs": "JGD2000 geographic (EPSG:4612)"
+      },
+      "pangaea-na-SC-5-As": {
+        "value": "14.84",
+        "unit": "mg/kg",
+        "dataset_doi": "10.1594/PANGAEA.949903"
+      }
+    }
+  },
+  "d2": {
+    "cli": "python candidate_d2.py --input <d1-csv> --output-dir <new-dir>",
+    "required_outputs": [
+      "geochemistry.csv",
+      "samples.geojson",
+      "anomalies.geojson",
+      "qc_report.json",
+      "confidence_report.json",
+      "anomaly_report.json",
+      "map_spec.json",
+      "run_manifest.json"
+    ],
+    "expected": {
+      "record_count": 44536,
+      "standardized_numeric_value_count": 44199,
+      "standardized_or_censoring_limit_count": 44447,
+      "censored_record_count": 248,
+      "mappable_record_count": 44510,
+      "candidate_anomaly_count": 535,
+      "analyzed_background_group_count": 213,
+      "confidence_components": ["source", "completeness", "method", "spatial", "qc"],
+      "group_by_required": [
+        "element_or_analyte",
+        "medium",
+        "measurement_basis",
+        "geologic_unit",
+        "method_family",
+        "digestion_or_extraction"
+      ]
+    }
+  },
+  "d3": {
+    "cli": "python candidate_d3.py --input-dir <gold-d1-d2-dir> --output-dir <new-dir>",
+    "preferred_outputs": [
+      "interactive_map.html",
+      "geochemistry.csv",
+      "samples.geojson",
+      "anomalies.geojson",
+      "qc_report.json",
+      "confidence_report.json",
+      "source_manifest.json",
+      "anomaly_report.json",
+      "visualization_profile.json",
+      "visualization_report.json"
+    ],
+    "compatibility_map_names": ["interactive_map.html", "atlas.html"],
+    "required_filter_concepts": [
+      "region",
+      "element",
+      "medium",
+      "geology",
+      "method",
+      "source",
+      "confidence"
+    ],
+    "required_view_concepts": [
+      "distribution_points",
+      "sample_density_heatmap",
+      "element_pair_comparison",
+      "candidate_anomaly_region_aggregation",
+      "source_and_confidence",
+      "quality_and_boundaries"
+    ],
+    "expected": {
+      "database_record_count": 44536,
+      "mappable_record_count": 44510,
+      "display_sample_count": 11548,
+      "candidate_anomaly_count": 535,
+      "source_count": 15,
+      "maximum_single_file_bytes": 100000000,
+      "external_runtime_asset_count": 0,
+      "concentration_interpolation": false
+    }
+  }
+}

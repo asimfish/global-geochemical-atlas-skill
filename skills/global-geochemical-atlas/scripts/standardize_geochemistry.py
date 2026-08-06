@@ -17,6 +17,7 @@ import os
 import re
 import statistics
 import tempfile
+import zipfile
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
@@ -27,6 +28,7 @@ PIPELINE_VERSION = "d2-pipeline-v2"
 CONFIDENCE_VERSION = "d2-confidence-v2"
 ANOMALY_VERSION = "d2-robust-mad-v2"
 ATOMIC_WEIGHT_VERSION = "d2-atomic-weights-v1"
+GEOLOGY_JOIN_VERSION = "d2-glim-05deg-cell-join-v1"
 
 MINIMUM_INPUT_COLUMNS = {"element_or_analyte", "value", "unit", "medium"}
 DEFAULT_GROUP_BY = (
@@ -50,6 +52,7 @@ GROUPABLE_FIELDS = {
     "source_id",
     "source_tier",
     "normalized_unit",
+    "spatial_geologic_unit",
 }
 
 SCHEMA_COLUMNS = (
@@ -84,6 +87,13 @@ SCHEMA_COLUMNS = (
     "source_crs",
     "coordinate_transform_method",
     "coordinate_uncertainty_m",
+    "coordinate_uncertainty_status",
+    "coordinate_uncertainty_basis",
+    "coordinate_resolution_m",
+    "coordinate_resolution_basis",
+    "measurement_uncertainty",
+    "measurement_uncertainty_unit",
+    "measurement_uncertainty_basis",
     "sampled_at",
     "sample_depth_min_m",
     "sample_depth_max_m",
@@ -96,7 +106,18 @@ SCHEMA_COLUMNS = (
     "geologic_match_method",
     "distance_to_geologic_boundary_m",
     "geologic_match_confidence",
+    "geologic_context_status",
+    "spatial_geology_status",
+    "spatial_geologic_unit",
+    "spatial_geologic_unit_id",
+    "spatial_geology_source",
+    "spatial_geology_version",
+    "spatial_geology_match_method",
+    "spatial_geology_resolution_deg",
+    "spatial_geology_applicability",
+    "spatial_geology_reason",
     "analytical_method",
+    "analytical_method_status",
     "method_family",
     "digestion_or_extraction",
     "laboratory",
@@ -123,10 +144,14 @@ INPUT_FIELDS = {
     "source_qualifier_raw",
     "missing_reason", "medium", "material", "measurement_basis", "original_latitude_raw",
     "original_longitude_raw", "latitude", "longitude", "source_crs",
-    "coordinate_transform_method", "coordinate_uncertainty_m", "sampled_at", "sample_depth_min_m",
+    "coordinate_transform_method", "coordinate_uncertainty_m", "coordinate_uncertainty_status",
+    "coordinate_uncertainty_basis", "coordinate_resolution_m", "coordinate_resolution_basis",
+    "measurement_uncertainty", "measurement_uncertainty_unit", "measurement_uncertainty_basis",
+    "sampled_at", "sample_depth_min_m",
     "sample_depth_max_m", "grain_fraction", "lithology", "geologic_unit", "geologic_unit_id",
     "geologic_context_source", "geologic_context_version", "geologic_match_method",
-    "distance_to_geologic_boundary_m", "geologic_match_confidence", "analytical_method", "method_family",
+    "distance_to_geologic_boundary_m", "geologic_match_confidence", "geologic_context_status",
+    "analytical_method", "analytical_method_status", "method_family",
     "digestion_or_extraction", "laboratory", "reference_material", "detection_limit", "detection_limit_unit",
     "source_id", "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row",
     "source_locator", "file_sha256", "license", "source_tier",
@@ -134,7 +159,8 @@ INPUT_FIELDS = {
 RECOMMENDED_INPUT_COLUMNS = {
     "record_id", "source_record_id", "sample_id", "measurement_basis", "source_id", "source_locator",
     "dataset_title", "dataset_version", "source_file", "source_row", "latitude", "longitude", "source_crs",
-    "coordinate_uncertainty_m", "analytical_method", "method_family", "digestion_or_extraction", "license",
+    "coordinate_uncertainty_m", "coordinate_uncertainty_status", "analytical_method",
+    "analytical_method_status", "method_family", "digestion_or_extraction", "license",
     "source_tier",
 }
 
@@ -229,6 +255,10 @@ ATOMIC_WEIGHTS = {
     "Ni": 58.6934,
     "Cu": 63.546,
     "Zn": 65.38,
+    "As": 74.921595,
+    "Cd": 112.414,
+    "Hg": 200.592,
+    "Pb": 207.2,
 }
 OXIDE_RULES: dict[str, tuple[str, str, dict[str, int]]] = {
     "SIO2": ("SiO2", "Si", {"Si": 1, "O": 2}),
@@ -268,6 +298,12 @@ SOLID_FACTORS = {
     "g/kg": 1_000.0, "mg/g": 1_000.0,
 }
 WATER_FACTORS = {"ug/l": 1.0, "mg/l": 1_000.0, "ng/l": 0.001, "g/l": 1_000_000.0}
+WATER_MOLAR_MULTIPLIERS = {
+    "nmol/l": 0.001,
+    "umol/l": 1.0,
+    "mmol/l": 1_000.0,
+    "mol/l": 1_000_000.0,
+}
 AQUEOUS_AMBIGUOUS_UNITS = {
     "ppm", "ppb", "wt%", "%", "percent", "mg/kg", "ug/kg", "g/kg", "ug/g", "ng/g", "mg/g",
 }
@@ -559,12 +595,20 @@ def parse_measurement(
     return number, qualifier, censoring_limit, detection_limit, missing_reason
 
 
-def conversion_for(medium: str, original_unit: Any, flags: list[str]) -> tuple[float | None, str | None]:
+def conversion_for(
+    medium: str, original_unit: Any, analyte: str, flags: list[str]
+) -> tuple[float | None, str | None]:
     unit = canonicalize_unit(original_unit)
     if medium in SOLID_MEDIA and unit in SOLID_FACTORS:
         return SOLID_FACTORS[unit], "mg/kg"
     if medium == "water" and unit in WATER_FACTORS:
         return WATER_FACTORS[unit], "ug/L"
+    if medium == "water" and unit in WATER_MOLAR_MULTIPLIERS:
+        atomic_weight = ATOMIC_WEIGHTS.get(analyte)
+        if atomic_weight is None:
+            flags.append("UNSUPPORTED_UNIT")
+            return None, None
+        return WATER_MOLAR_MULTIPLIERS[unit] * atomic_weight, "ug/L"
     if medium == "water" and unit in AQUEOUS_AMBIGUOUS_UNITS:
         flags.append("AMBIGUOUS_AQUEOUS_RATIO_UNIT")
         return None, None
@@ -779,12 +823,14 @@ def normalize_row(
     source_tier = normalize_source_tier(row.get("source_tier"), flags)
 
     original_value, qualifier, censoring_limit, detection_limit, missing_reason = parse_measurement(row, flags)
-    unit_factor, normalized_unit = conversion_for(medium, row.get("unit"), flags)
+    unit_factor, normalized_unit = conversion_for(medium, row.get("unit"), analyte, flags)
     species_factor, species_formula = species_conversion_factor(species_or_oxide, analyte, flags)
     factor = unit_factor * species_factor if unit_factor is not None and species_factor is not None else None
     conversion_formula = None
     if factor is not None:
         conversion_formula = f"normalized = original * {unit_factor:g}"
+        if canonicalize_unit(row.get("unit")) in WATER_MOLAR_MULTIPLIERS:
+            conversion_formula += f"; molar-to-mass using {analyte} atomic weight ({ATOMIC_WEIGHT_VERSION})"
         if species_formula is not None:
             conversion_formula += f" * {species_factor:.12g}; {species_formula}"
     normalized_value: float | None = None
@@ -796,7 +842,7 @@ def normalize_row(
             limit_unit = blank_to_none(row.get("detection_limit_unit"))
             if qualifier in {"bdl", "nd"} and limit_unit is not None:
                 limit_flags: list[str] = []
-                limit_factor, limit_target = conversion_for(medium, limit_unit, limit_flags)
+                limit_factor, limit_target = conversion_for(medium, limit_unit, analyte, limit_flags)
                 if limit_factor is not None and limit_target == normalized_unit and species_factor is not None:
                     normalized_censoring_limit = censoring_limit * limit_factor * species_factor
                 else:
@@ -883,6 +929,13 @@ def normalize_row(
         "source_crs": source_crs,
         "coordinate_transform_method": coordinate_transform_method,
         "coordinate_uncertainty_m": coordinate_uncertainty,
+        "coordinate_uncertainty_status": blank_to_none(row.get("coordinate_uncertainty_status")),
+        "coordinate_uncertainty_basis": blank_to_none(row.get("coordinate_uncertainty_basis")),
+        "coordinate_resolution_m": parse_optional_float(row.get("coordinate_resolution_m")),
+        "coordinate_resolution_basis": blank_to_none(row.get("coordinate_resolution_basis")),
+        "measurement_uncertainty": parse_optional_float(row.get("measurement_uncertainty")),
+        "measurement_uncertainty_unit": blank_to_none(row.get("measurement_uncertainty_unit")),
+        "measurement_uncertainty_basis": blank_to_none(row.get("measurement_uncertainty_basis")),
         "sampled_at": blank_to_none(row.get("sampled_at")),
         "sample_depth_min_m": depth_min,
         "sample_depth_max_m": depth_max,
@@ -895,7 +948,18 @@ def normalize_row(
         "geologic_match_method": blank_to_none(row.get("geologic_match_method")),
         "distance_to_geologic_boundary_m": boundary_distance,
         "geologic_match_confidence": geologic_match_confidence,
+        "geologic_context_status": blank_to_none(row.get("geologic_context_status")),
+        "spatial_geology_status": "not_run_no_grid",
+        "spatial_geologic_unit": None,
+        "spatial_geologic_unit_id": None,
+        "spatial_geology_source": None,
+        "spatial_geology_version": None,
+        "spatial_geology_match_method": None,
+        "spatial_geology_resolution_deg": None,
+        "spatial_geology_applicability": None,
+        "spatial_geology_reason": "No --geology-grid was supplied.",
         "analytical_method": analytical_method,
+        "analytical_method_status": blank_to_none(row.get("analytical_method_status")),
         "method_family": method_family,
         "digestion_or_extraction": digestion,
         "laboratory": blank_to_none(row.get("laboratory")),
@@ -946,6 +1010,131 @@ def process_rows(
     records = [normalize_row(row, index, region_bbox) for index, row in enumerate(rows, start=2)]
     mark_duplicate_candidates(records)
     return records
+
+
+class GlimGrid:
+    """Reader for the official GLiM 0.5 degree Arc/ASCII distribution."""
+
+    source = "https://doi.org/10.1594/PANGAEA.788537"
+    version = "PANGAEA.788537; 0.5 degree dominant surface lithology raster"
+    resolution = 0.5
+
+    def __init__(self, archive_path: Path) -> None:
+        if not archive_path.is_file():
+            raise PipelineError(f"geology grid does not exist: {archive_path}")
+        try:
+            with zipfile.ZipFile(archive_path) as archive:
+                class_lines = archive.read("Classnames.txt").decode("utf-8").splitlines()[1:]
+                grid_lines = archive.read("glim_wgs84_0point5deg.txt.asc").decode("ascii").splitlines()
+        except (zipfile.BadZipFile, KeyError, UnicodeDecodeError) as exc:
+            raise PipelineError(f"invalid GLiM 0.5 degree archive: {archive_path}") from exc
+        self.class_codes: dict[int, str] = {}
+        for line in class_lines:
+            parts = next(csv.reader([line], delimiter=";"))
+            self.class_codes[int(parts[1])] = parts[3].strip('"')
+        header = {line.split()[0].casefold(): float(line.split()[1]) for line in grid_lines[:6]}
+        self.ncols = int(header["ncols"])
+        self.nrows = int(header["nrows"])
+        self.xllcorner = header["xllcorner"]
+        self.yllcorner = header["yllcorner"]
+        self.cellsize = header["cellsize"]
+        self.nodata = int(header["nodata_value"])
+        if (self.ncols, self.nrows, self.xllcorner, self.yllcorner, self.cellsize) != (
+            720,
+            360,
+            -180.0,
+            -90.0,
+            0.5,
+        ):
+            raise PipelineError("unexpected GLiM grid geometry")
+        self.values = [tuple(int(value) for value in line.split()) for line in grid_lines[6:]]
+        if len(self.values) != self.nrows or any(len(row) != self.ncols for row in self.values):
+            raise PipelineError("GLiM grid dimensions do not match its header")
+
+    def lookup(self, latitude: float, longitude: float) -> tuple[int, str] | None:
+        row = min(self.nrows - 1, max(0, math.floor((90.0 - latitude) / self.cellsize)))
+        column = min(self.ncols - 1, max(0, math.floor((longitude + 180.0) / self.cellsize)))
+        value = self.values[row][column]
+        if value == self.nodata:
+            return None
+        code = self.class_codes.get(value)
+        if code is None or code == "nd":
+            return None
+        return value, code
+
+
+def apply_spatial_geology(records: Sequence[dict[str, Any]], grid: GlimGrid | None) -> None:
+    for record in records:
+        if grid is None:
+            continue
+        record.update(
+            {
+                "spatial_geology_source": grid.source,
+                "spatial_geology_version": grid.version,
+                "spatial_geology_match_method": GEOLOGY_JOIN_VERSION,
+                "spatial_geology_resolution_deg": grid.resolution,
+                "spatial_geology_applicability": "screening_dominant_surface_lithology_only",
+            }
+        )
+        medium = str(record.get("medium") or "")
+        material = str(record.get("material") or "").casefold()
+        if medium == "water":
+            record["spatial_geology_status"] = "not_applicable_water"
+            record["spatial_geology_reason"] = "Land surface lithology is not assigned to water observations."
+            continue
+        if medium == "sediment" and "marine" in material:
+            record["spatial_geology_status"] = "not_applicable_marine_sediment"
+            record["spatial_geology_reason"] = "Land surface lithology is not assigned to marine sediment."
+            continue
+        latitude, longitude = record.get("latitude"), record.get("longitude")
+        if latitude is None or longitude is None:
+            record["spatial_geology_status"] = "invalid_or_missing_coordinate"
+            record["spatial_geology_reason"] = "No valid canonical point was available for the spatial join."
+            continue
+        match = grid.lookup(float(latitude), float(longitude))
+        if match is None:
+            record["spatial_geology_status"] = "no_coverage"
+            record["spatial_geology_reason"] = "The GLiM cell is NODATA or class nd."
+            continue
+        class_id, class_code = match
+        record["spatial_geology_status"] = "matched"
+        record["spatial_geologic_unit"] = class_code
+        record["spatial_geologic_unit_id"] = f"GLiM:{class_id}"
+        record["spatial_geology_reason"] = "Point contained by the deterministic 0.5 degree GLiM raster cell."
+
+
+def build_geology_report(
+    records: Sequence[Mapping[str, Any]], grid_path: Path | None, run_metadata: Mapping[str, Any]
+) -> dict[str, Any]:
+    statuses = Counter(str(record["spatial_geology_status"]) for record in records)
+    excluded = {"not_applicable_water", "not_applicable_marine_sediment"}
+    eligible = sum(str(record["spatial_geology_status"]) not in excluded for record in records)
+    matched = statuses["matched"]
+    water_with_unit = sum(
+        record["medium"] == "water" and record.get("spatial_geologic_unit") is not None for record in records
+    )
+    return {
+        "report_version": "d2-spatial-geology-report-v1",
+        "join_version": GEOLOGY_JOIN_VERSION,
+        "run_metadata": dict(run_metadata),
+        "grid_supplied": grid_path is not None,
+        "grid": None
+        if grid_path is None
+        else {
+            "source": GlimGrid.source,
+            "version": GlimGrid.version,
+            "path": grid_path.name,
+            "sha256": sha256_file(grid_path),
+            "resolution_degrees": GlimGrid.resolution,
+        },
+        "status_counts": dict(sorted(statuses.items())),
+        "disposition_coverage": round(sum(statuses.values()) / len(records), 6) if records else 1.0,
+        "eligible_record_count": eligible,
+        "matched_record_count": matched,
+        "eligible_match_rate": round(matched / eligible, 6) if eligible else 0.0,
+        "water_records_with_assigned_land_unit": water_with_unit,
+        "scientific_limit": "GLiM dominant 0.5 degree surface lithology is screening context, not a site-scale formation or causal interpretation.",
+    }
 
 
 def group_identifier(group_by: Sequence[str], key: Sequence[Any]) -> str:
@@ -1041,6 +1230,8 @@ def detect_anomalies(
                         "medium": record["medium"],
                         "measurement_basis": record["measurement_basis"],
                         "geologic_unit": record["geologic_unit"],
+                        "spatial_geologic_unit": record["spatial_geologic_unit"],
+                        "spatial_geology_status": record["spatial_geology_status"],
                         "method_family": record["method_family"],
                         "normalized_value": record["normalized_value"],
                         "normalized_unit": record["normalized_unit"],
@@ -1249,6 +1440,14 @@ def atomic_write_text(path: Path, content: str) -> None:
     os.replace(temporary, path)
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def write_csv(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
@@ -1274,6 +1473,7 @@ def run_pipeline(
     input_path: Path, output_dir: Path, group_by: Sequence[str] = DEFAULT_GROUP_BY, min_group_size: int = 8,
     robust_z_threshold: float = 3.5, region_bbox: tuple[float, float, float, float] | None = None,
     schema_map_path: Path | None = None, min_quantified_fraction: float = 0.70,
+    geology_grid_path: Path | None = None,
 ) -> dict[str, Path]:
     unknown_group_fields = sorted(set(group_by) - GROUPABLE_FIELDS)
     if unknown_group_fields:
@@ -1289,6 +1489,8 @@ def run_pipeline(
     schema_map, schema_map_hash = load_schema_map(schema_map_path)
     rows, missing_recommended_columns = load_csv(input_path, schema_map)
     records = process_rows(rows, region_bbox)
+    geology_grid = GlimGrid(geology_grid_path) if geology_grid_path is not None else None
+    apply_spatial_geology(records, geology_grid)
     config = {
         "group_by": list(group_by),
         "minimum_group_size": min_group_size,
@@ -1296,6 +1498,8 @@ def run_pipeline(
         "minimum_quantified_fraction": min_quantified_fraction,
         "region_bbox": list(region_bbox) if region_bbox else None,
         "schema_map": dict(sorted(schema_map.items())),
+        "geology_grid_sha256": sha256_file(geology_grid_path) if geology_grid_path is not None else None,
+        "geology_join_version": GEOLOGY_JOIN_VERSION if geology_grid_path is not None else None,
     }
     input_hash = hashlib.sha256(input_bytes).hexdigest()
     run_id = hashlib.sha256(
@@ -1315,17 +1519,20 @@ def run_pipeline(
     anomaly_report["run_metadata"] = run_metadata
     qc_report = build_qc_report(records, run_metadata)
     confidence_report = build_confidence_report(records, run_metadata)
+    geology_report = build_geology_report(records, geology_grid_path, run_metadata)
 
     outputs = {
         "database": output_dir / "geochemistry.csv",
         "qc_report": output_dir / "qc_report.json",
         "confidence_report": output_dir / "confidence_report.json",
+        "geology_report": output_dir / "geology_report.json",
         "anomalies": output_dir / "anomalies.geojson",
         "anomaly_report": output_dir / "anomaly_report.json",
     }
     write_csv(outputs["database"], records)
     atomic_write_text(outputs["qc_report"], json_text(qc_report))
     atomic_write_text(outputs["confidence_report"], json_text(confidence_report))
+    atomic_write_text(outputs["geology_report"], json_text(geology_report))
     atomic_write_text(outputs["anomalies"], json_text(geojson))
     atomic_write_text(outputs["anomaly_report"], json_text(anomaly_report))
     return outputs
@@ -1340,6 +1547,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--schema-map", type=Path,
         help="Optional JSON object mapping canonical D2 input fields to source CSV column names",
+    )
+    parser.add_argument(
+        "--geology-grid",
+        type=Path,
+        help="Optional PANGAEA.788537 ZIP for versioned GLiM 0.5 degree point-in-cell matching",
     )
     parser.add_argument(
         "--group-by", default=",".join(DEFAULT_GROUP_BY),
@@ -1374,6 +1586,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             region_bbox=args.region_bbox,
             schema_map_path=args.schema_map,
             min_quantified_fraction=args.min_quantified_fraction,
+            geology_grid_path=args.geology_grid,
         )
     except (PipelineError, OSError) as exc:
         parser.error(str(exc))

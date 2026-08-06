@@ -19,6 +19,7 @@ REQUIRED_FILES = {
     "record_evidence": "record_evidence.jsonl",
     "qc_report": "qc_report.json",
     "confidence_report": "confidence_report.json",
+    "geology_report": "geology_report.json",
     "anomalies": "anomalies.geojson",
     "anomaly_report": "anomaly_report.json",
     "samples": "samples.geojson",

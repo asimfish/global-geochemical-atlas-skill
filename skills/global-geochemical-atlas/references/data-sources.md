@@ -1,6 +1,6 @@
 # 公开地球化学数据源路由
 
-核对日期：2026-08-05。端点和许可可能变化；每次运行重新记录访问日期和实际响应。
+核对日期：2026-08-06。端点和许可可能变化；每次运行重新记录访问日期和实际响应。
 
 ## 优先级
 
@@ -15,6 +15,28 @@
 | GEMStat portal | water | `https://gemstat.org/data-gemstat/data-portal/` | 门户下载可能要求联系信息或限制站点数；不要自动绕过表单；受限批次不再分发 |
 | Macrostrat | 地质背景 | `https://macrostrat.org/` | 数据通常 CC BY 4.0；同时引用 API 返回的原始地图来源和 source ID；记录比例尺与边界不确定性 |
 | Macrostrat API docs | 点位地质匹配 | `https://dev.macrostrat.org/docs` | API 版本快速演进；固定实际路由和响应字段，不凭记忆构造端点 |
+| GLiM | 全球主导表层岩性筛查 | `https://doi.org/10.1594/PANGAEA.788537` | CC BY 3.0；0.5° 栅格只作区域筛查背景，不冒充场地级地层或成因证据 |
+
+## 七洲四介质补充路由
+
+以下来源用于填补结构性覆盖空洞。它们证明工作流能处理对应洲—介质的真实数据，不证明国家级或全球代表性；
+每次运行仍按请求区域、元素、许可和方法可比性筛选。
+
+| 区域/介质 | 官方或 DOI 来源 | 方法与接口要点 |
+|---|---|---|
+| 非洲 sediment | PANGAEA `10.1594/PANGAEA.880617` | 坐标在 Event 元数据；关联论文 `10.1029/2017GC007228` 记录 bulk XRF 方法 |
+| 非洲 water | PANGAEA `10.1594/PANGAEA.947275` | 溶解态 Ni/Cu/Zn/Pb 为 `nmol/L`，保留标准差和 GEOTRACES QF |
+| 南美 soil | SGB/CPRM `https://rigeo.sgb.gov.br/handle/doc/11157` 与官方 FeatureServer layer 5 | 化学表按 `NUM_CAMPO` 连接官方点；保留 ND、`<`、`>` 与光学发射方法 |
+| 南美 sediment | SGB/CPRM `https://rigeo.sgb.gov.br/handle/doc/11268` | 水系沉积物，aqua regia + ICP-MS，原始逗号小数和限定符不得丢失 |
+| 大洋洲 soil | PANGAEA `10.1594/PANGAEA.935591` | 只把 `Samp type=Soil` 进入 soil；街尘和沉积物不改名混入 |
+| 大洋洲 water | Geoscience Australia `10.11636/Record.2020.015` | 多 sheet 地下水；逐分析物读取单位、实验室、方法、过滤尺度和 LOD |
+| 南极洲 soil | PANGAEA `10.1594/PANGAEA.816759` | 1:5 soil-water extract；不能与 total/near-total 固体浓度混成同一 background |
+| 南极洲 sediment | Mendeley Data `10.17632/cfnhps54h7.1` | `<63 µm`、预浸取/消解、ICP-QQQ；关联论文 `10.1016/j.chemgeo.2020.119649` |
+| 南极洲 water | BCO-DMO `10.26008/1912/bco-dmo.877466.1` | 总溶解 Ni/Cu/Zn，`nmol/L` 与 GEOTRACES flags；水样不连接陆地岩性 |
+
+下载器必须固定直接数据 URL、文件字节数和 SHA-256；动态 ArcGIS 查询还要冻结完整参数、返回空间参考、
+记录数与取得日期。仓库 `evaluation/stage_benchmark/contracts/completion-sources.json` 给出一套经过验证的测试快照，
+它是评测契约，不是完整全球数据库镜像。
 
 ## MVP 冻结数据源
 

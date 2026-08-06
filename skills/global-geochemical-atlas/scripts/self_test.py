@@ -29,6 +29,7 @@ EXPECTED_OUTPUTS = {
     "record_evidence.jsonl",
     "qc_report.json",
     "confidence_report.json",
+    "geology_report.json",
     "anomalies.geojson",
     "anomaly_report.json",
     "samples.geojson",

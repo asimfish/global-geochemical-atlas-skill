@@ -7,9 +7,9 @@
   },
   "reviewed_at": "2026-08-05",
   "scope": {
-    "canonical_field_count": 62,
+    "canonical_field_count": 80,
     "crosswalked_field_count": 36,
-    "non_core_field_count": 26,
+    "non_core_field_count": 44,
     "statement": "The crosswalk covers priority sample, observation, method, spatial and provenance semantics. It supports import/export design and gap analysis, but it does not certify conformance to EarthChem, USGS AGDB2, ODM2, IGSN or DataCite."
   },
   "mapping_type_definitions": {
@@ -557,7 +557,7 @@
     },
     {
       "classification": "deferred_crosswalk",
-      "fields": ["sample_identity_group", "replicate_group_id", "coordinate_uncertainty_m", "grain_fraction", "geologic_unit", "geologic_unit_id", "geologic_context_source", "geologic_context_version", "geologic_match_method", "distance_to_geologic_boundary_m", "geologic_match_confidence"],
+      "fields": ["sample_identity_group", "replicate_group_id", "coordinate_uncertainty_m", "coordinate_uncertainty_status", "coordinate_uncertainty_basis", "coordinate_resolution_m", "coordinate_resolution_basis", "measurement_uncertainty", "measurement_uncertainty_unit", "measurement_uncertainty_basis", "grain_fraction", "geologic_unit", "geologic_unit_id", "geologic_context_source", "geologic_context_version", "geologic_match_method", "distance_to_geologic_boundary_m", "geologic_match_confidence", "geologic_context_status", "spatial_geology_status", "spatial_geologic_unit", "spatial_geologic_unit_id", "spatial_geology_source", "spatial_geology_version", "spatial_geology_match_method", "spatial_geology_resolution_deg", "spatial_geology_applicability", "spatial_geology_reason", "analytical_method_status"],
       "rationale": "Important duplicate-resolution, fraction and spatial-geology enrichment fields, but the reviewed sources do not establish a sufficiently portable one-to-one mapping. Future versions should add GeoSciML/CGI vocabularies, explicit uncertainty models and platform-specific extensions before claiming alignment."
     }
   ]
