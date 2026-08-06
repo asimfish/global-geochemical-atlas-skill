@@ -1,6 +1,6 @@
 {
   "registry_version": "geochemical-source-registry-v1",
-  "verified_at": "2026-08-06T08:00:00Z",
+  "verified_at": "2026-08-06T10:05:00Z",
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -1947,6 +1947,138 @@
         "Coordinates were transformed from national systems for continental-scale presentation.",
         "Published CSVs lack row-level less-than qualifiers; exact half-DL values are flagged as possible upstream DL/2 substitutions.",
         "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases."
+      ]
+    },
+    "afsis-phase-i-wet-chemistry": {
+      "adapter": "afsis_dataverse_original_files",
+      "title": "AfSIS Phase I archived soil samples: wet chemistry data",
+      "publisher": "World Agroforestry (ICRAF) and Rothamsted Research",
+      "dataset_doi": "10.34725/DVN/66BFOB",
+      "dataset_version": "2.0",
+      "release_date": "2025-10-13",
+      "landing_page": "https://data.worldagroforestry.org/dataset.xhtml?persistentId=doi:10.34725/DVN/66BFOB",
+      "metadata_url": "https://data.worldagroforestry.org/api/datasets/:persistentId/?persistentId=doi%3A10.34725%2FDVN%2F66BFOB&version=2.0",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "18-sub-saharan-african-country-labels-51-ldsf-sites",
+      "sample_type": "topsoil 0-20 cm and subsoil 20-50 cm",
+      "download": {
+        "mode": "versioned-dataverse-original-file-endpoints",
+        "max_bytes_per_file": 2000000,
+        "accepted_content_types": [
+          "application/octet-stream",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "text/comma-separated-values",
+          "text/csv",
+          "text/tab-separated-values"
+        ],
+        "files": [
+          {
+            "file_id": "measurements",
+            "filename": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+            "url": "https://data.worldagroforestry.org/api/access/datafile/11218?format=original",
+            "persistent_id": "doi:10.34725/DVN/66BFOB/M9S42Z",
+            "bytes": 847634,
+            "expected_sha256": "32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "2fa987e2c558e3b6c82eb6de3a772d26"
+            }
+          },
+          {
+            "file_id": "variables",
+            "filename": "AfSIS_Phase_I_wet_chemistry_variables_v2.xlsx",
+            "url": "https://data.worldagroforestry.org/api/access/datafile/11219?format=original",
+            "persistent_id": "doi:10.34725/DVN/66BFOB/E1OELB",
+            "bytes": 21024,
+            "expected_sha256": "f2d5ee0b86af7b7d2066d610862e9bf8c97b7544803b201fb492bae61817ad3c",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "f5eadce8f97c265047a636b3cc9fc82e"
+            }
+          },
+          {
+            "file_id": "detection-limits",
+            "filename": "AfSIS_Phase_I_wet_chemistry_detection_limits_v2.xlsx",
+            "url": "https://data.worldagroforestry.org/api/access/datafile/12234?format=original",
+            "persistent_id": "doi:10.34725/DVN/66BFOB/EYVSPP",
+            "bytes": 10445,
+            "expected_sha256": "0b373fe17172d32861ebd829083a8f01c1bca7cbbc09e700c95dfb4f043011f1",
+            "publisher_checksum": {
+              "algorithm": "md5",
+              "value": "df7a01bf4200a408c03280800f7d40bb"
+            }
+          }
+        ]
+      },
+      "required_fields": [
+        "SSN",
+        "RES.ID",
+        "Country",
+        "Site",
+        "Cluster",
+        "Plot",
+        "Latitude",
+        "Longitude",
+        "Depth"
+      ],
+      "target_analytes": {
+        "As": "As.75",
+        "Cr": "Cr",
+        "Cu": "Cu",
+        "Ni": "Ni",
+        "Pb": "Pb",
+        "Zn": "Zn"
+      },
+      "expected_counts": {
+        "physical_rows": 2002,
+        "unique_ssn": 2002,
+        "unique_res_id": 2002,
+        "country_labels": 18,
+        "country_site_pairs": 51,
+        "complete_coordinate_pairs": 1876,
+        "target_value_counts": {
+          "As": 2002,
+          "Cr": 2002,
+          "Cu": 2002,
+          "Ni": 2002,
+          "Pb": 2002,
+          "Zn": 2002
+        },
+        "negative_value_counts": {
+          "As": 48,
+          "Cr": 0,
+          "Cu": 6,
+          "Ni": 0,
+          "Pb": 7,
+          "Zn": 0
+        },
+        "positive_below_dl_counts": {
+          "As": 633,
+          "Cr": 0,
+          "Cu": 216,
+          "Ni": 0,
+          "Pb": 1969,
+          "Zn": 22
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "von Fromm, S. F. et al. (2021). Continental-scale controls on soil organic carbon across sub-Saharan Africa. SOIL 7, 305-332. doi:10.5194/soil-7-305-2021. Dataset version 2.0: doi:10.34725/DVN/66BFOB.",
+      "redistribution": "Research-use derived fixtures retain attribution, DOI, source-file hashes and row locators; full publisher files remain outside Git.",
+      "scientific_notes": [
+        "The 2,002 archived samples cover 51 LDSF sentinel sites with 18 country labels and are not a spatially uniform African grid.",
+        "Aqua-regia digestion is quasi-total; results must not be mixed with total or other extraction bases without explicit separation.",
+        "The source-wide DL and QL apply to the published wet-chemistry batch. Numeric values below them are flagged rather than silently discarded or promoted to detections.",
+        "Negative numeric instrument results are retained as evidence-bound source values but excluded from the positive demonstration fixture.",
+        "One hundred twenty-six samples lack both latitude and longitude; no coordinate is inferred.",
+        "Raw country labels including SAfrica and Zimbambwe are preserved; normalized names are stored separately.",
+        "The registered files and related article do not state a coordinate reference system; latitude and longitude are preserved but source_crs remains missing.",
+        "The variable workbook labels field As.75 as Arsenic-78 and gives sampling years 2009-2013, while the related article reports 2009-2012; both conflicts remain explicit."
       ]
     }
   }

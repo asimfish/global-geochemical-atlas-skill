@@ -1,0 +1,185 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "output_exists",
+      "path": "redistribution_decisions.csv",
+      "points": 5,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "columns",
+      "path": "redistribution_decisions.csv",
+      "points": 8,
+      "required": [
+        "source_id",
+        "license_class",
+        "redistribution_allowed",
+        "allowed_payload",
+        "required_actions",
+        "confidence_penalty"
+      ],
+      "type": "csv_columns"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 4,
+      "id": "row_count",
+      "path": "redistribution_decisions.csv",
+      "points": 5,
+      "type": "csv_row_count"
+    },
+    {
+      "column": "redistribution_allowed",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": true,
+      "id": "l01_allowed",
+      "key": {
+        "source_id": "L01"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "required_actions",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "attribution",
+      "id": "l01_attribution",
+      "key": {
+        "source_id": "L01"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 6,
+      "type": "csv_cell"
+    },
+    {
+      "column": "required_actions",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "attribution;share_alike",
+      "id": "l02_sharealike",
+      "key": {
+        "source_id": "L02"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 9,
+      "type": "csv_cell"
+    },
+    {
+      "column": "redistribution_allowed",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "l03_forbidden",
+      "key": {
+        "source_id": "L03"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 10,
+      "type": "csv_cell"
+    },
+    {
+      "column": "allowed_payload",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "metadata_and_pointer_only",
+      "id": "l03_payload",
+      "key": {
+        "source_id": "L03"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "confidence_penalty",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 10,
+      "id": "l03_penalty",
+      "key": {
+        "source_id": "L03"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 6,
+      "type": "csv_cell"
+    },
+    {
+      "column": "license_class",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "unknown",
+      "id": "l04_unknown",
+      "key": {
+        "source_id": "L04"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 6,
+      "type": "csv_cell"
+    },
+    {
+      "column": "redistribution_allowed",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "l04_forbidden",
+      "key": {
+        "source_id": "L04"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 6,
+      "type": "csv_cell"
+    },
+    {
+      "column": "confidence_penalty",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 20,
+      "id": "l04_penalty",
+      "key": {
+        "source_id": "L04"
+      },
+      "path": "redistribution_decisions.csv",
+      "points": 4,
+      "type": "csv_cell"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [
+    {
+      "column": "redistribution_allowed",
+      "consequence": "task_zero",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "RL-13-restricted",
+      "key": {
+        "source_id": "L03"
+      },
+      "path": "redistribution_decisions.csv",
+      "type": "csv_cell"
+    },
+    {
+      "column": "redistribution_allowed",
+      "consequence": "task_zero",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "RL-13-unknown",
+      "key": {
+        "source_id": "L04"
+      },
+      "path": "redistribution_decisions.csv",
+      "type": "csv_cell"
+    }
+  ],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-LICENSE-001"
+}

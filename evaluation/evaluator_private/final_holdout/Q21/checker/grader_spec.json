@@ -1,0 +1,163 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "output_exists",
+      "path": "batch_acceptance.csv",
+      "points": 5,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "columns",
+      "path": "batch_acceptance.csv",
+      "points": 8,
+      "required": [
+        "batch_id",
+        "crm_recovery_percent",
+        "crm_pass",
+        "blank_value",
+        "blank_pass",
+        "duplicate_rpd_percent",
+        "duplicate_pass",
+        "batch_pass",
+        "disposition"
+      ],
+      "type": "csv_columns"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 2,
+      "id": "row_count",
+      "path": "batch_acceptance.csv",
+      "points": 5,
+      "type": "csv_row_count"
+    },
+    {
+      "column": "crm_recovery_percent",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 105,
+      "id": "b1_recovery",
+      "key": {
+        "batch_id": "BATCH-1"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "duplicate_rpd_percent",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 9.5238095238,
+      "id": "b1_rpd",
+      "key": {
+        "batch_id": "BATCH-1"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 10,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "batch_pass",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": true,
+      "id": "b1_pass",
+      "key": {
+        "batch_id": "BATCH-1"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "crm_recovery_percent",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 135,
+      "id": "b2_recovery",
+      "key": {
+        "batch_id": "BATCH-2"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "blank_pass",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "b2_blank",
+      "key": {
+        "batch_id": "BATCH-2"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 7,
+      "type": "csv_cell"
+    },
+    {
+      "column": "duplicate_rpd_percent",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 40,
+      "id": "b2_rpd",
+      "key": {
+        "batch_id": "BATCH-2"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "duplicate_pass",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "b2_duplicate_fail",
+      "key": {
+        "batch_id": "BATCH-2"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 6,
+      "type": "csv_cell"
+    },
+    {
+      "column": "batch_pass",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "b2_batch_fail",
+      "key": {
+        "batch_id": "BATCH-2"
+      },
+      "path": "batch_acceptance.csv",
+      "points": 8,
+      "type": "csv_cell"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [
+    {
+      "column": "batch_pass",
+      "consequence": "task_cap_20",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "RL-09-qc-failed-batch",
+      "key": {
+        "batch_id": "BATCH-2"
+      },
+      "path": "batch_acceptance.csv",
+      "type": "csv_cell"
+    }
+  ],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-QC-004"
+}

@@ -1,0 +1,42 @@
+{
+  "task_id": "GGA-NORM-001",
+  "criteria": [
+    {
+      "id": "basis_scope",
+      "dimension_id": "domain_understanding",
+      "score": 8,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/normalized_elements.csv: row S01 conversion_rule=ppm_mass_mass_to_mg_per_kg; row S05 conversion_rule=ppb_mass_mass_times_0.001",
+        "artifacts/run_manifest.json#/benchmark_evidence/normalized_elements.csv: rows S01-S06 original_unit in {ppm, mg/kg, wt%, ug/g, ppb, g/kg} all normalized to mg/kg via mass/mass-qualified frozen rules"
+      ],
+      "reason": "All six rows apply the frozen mass/mass-qualified conversion-rule strings (mass_mass qualifiers on ppm and ppb rules; wt%, ug/g, g/kg are inherently mass/mass units) consistently to solid soil records, encoding that the equivalences hold under the task-fixed solid mass/mass basis; machine report conversion_rules check passed with missing terms=[]."
+    },
+    {
+      "id": "traceability",
+      "dimension_id": "scientific_credibility",
+      "score": 8,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/normalized_elements.csv: header row retains original_value, original_unit, conversion_rule columns",
+        "artifacts/run_manifest.json#/benchmark_evidence/normalized_elements.csv: row S03 (0.012 wt% -> 120 mg/kg via wt_percent_times_10000), row S05 (8000 ppb -> 8 mg/kg via ppb_mass_mass_times_0.001), row S06 (0.4 g/kg -> 400 mg/kg via g_per_kg_times_1000)",
+        "MACHINE EVIDENCE REPORT: checks original_values and conversion_rules passed (missing terms=[])"
+      ],
+      "reason": "Every row S01-S06 keeps original_value, original_unit and the frozen conversion_rule alongside normalized_value/normalized_unit, and each normalized value is arithmetically derivable from its row's original value and rule; row-level traceability is complete and consistent with the checker report."
+    },
+    {
+      "id": "precision",
+      "dimension_id": "domain_understanding",
+      "score": 4,
+      "max": 4,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/normalized_elements.csv: normalized_value cells 42, 18, 120, 35, 8, 400 are exact conversions with no rounding applied",
+        "MACHINE EVIDENCE REPORT: checks s01_value..s06_value passed with tol=1e-06"
+      ],
+      "reason": "All converted values are exact (e.g., 0.012 wt% -> 120, 8000 ppb -> 8, 0.4 g/kg -> 400) with no premature rounding; every cell check passed at absolute tolerance 1e-06, so no order-of-magnitude-distorting rounding occurred."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "low",
+  "human_review_required": false
+}

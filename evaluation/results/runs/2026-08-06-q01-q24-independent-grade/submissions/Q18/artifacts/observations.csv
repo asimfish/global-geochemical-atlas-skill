@@ -1,0 +1,2 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+U03,U03,,25,,,,,q18-fixture,

@@ -1,0 +1,46 @@
+{
+  "task_id": "GGA-CONF-001",
+  "criteria": [
+    {
+      "id": "transparent_components",
+      "dimension_id": "domain_understanding",
+      "score": 8,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json: benchmark_evidence/confidence.json records[0] components {provenance:25, coordinates:20, analysis:20, sample:15, record_qc:20} sum=100 == confidence_score 100",
+        "artifacts/run_manifest.json: benchmark_evidence/confidence.json records[1] components {provenance:15, coordinates:12, analysis:12, sample:10, record_qc:10} sum=59 == confidence_score 59",
+        "artifacts/run_manifest.json: benchmark_evidence/confidence.json records[2] components {provenance:5, coordinates:0, analysis:0, sample:5, record_qc:0} sum=10 == confidence_score 10",
+        "inputs/confidence_policy.json: provenance/coordinates/analysis/sample/record_qc value tables — every awarded component matches an allowed policy value"
+      ],
+      "reason": "All five components are present per record and each total is exactly recomputable by summation; component values all map to allowed policy buckets, consistent with machine checks k01_components/k02_components/k0x_score."
+    },
+    {
+      "id": "threshold",
+      "dimension_id": "domain_understanding",
+      "score": 6,
+      "max": 6,
+      "evidence": [
+        "artifacts/run_manifest.json: benchmark_evidence/confidence.json records[1] confidence_score=59 with confidence_label='low'",
+        "inputs/confidence_policy.json: labels {high_min:80, medium_min:60, low_min:0} — 59 < 60, so frozen threshold yields 'low'",
+        "MACHINE EVIDENCE REPORT checks[k02_label]: actual='low' expected='low' passed"
+      ],
+      "reason": "Score 59 is labeled 'low' exactly per frozen thresholds (medium_min=60); no rounding up to medium occurred, matching the deterministic k02_label check."
+    },
+    {
+      "id": "not_probability",
+      "dimension_id": "domain_understanding",
+      "score": 6,
+      "max": 6,
+      "evidence": [
+        "artifacts/run_manifest.json: benchmark_evidence/confidence.json records[0].confidence_is_probability=false",
+        "artifacts/run_manifest.json: benchmark_evidence/confidence.json records[1].confidence_is_probability=false",
+        "artifacts/run_manifest.json: benchmark_evidence/confidence.json records[2].confidence_is_probability=false",
+        "inputs/confidence_policy.json: additive completeness/QC component tables and record_qc penalty scheme define a heuristic, not a calibrated probability model"
+      ],
+      "reason": "Every record explicitly carries confidence_is_probability=false (machine checks k01_not_probability/k02_not_probability passed), and the scoring structure follows the frozen completeness/QC heuristic policy rather than a probability calibration."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "low",
+  "human_review_required": false
+}

@@ -1,0 +1,29 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "每个总分能从五个组件精确复算。",
+      "id": "transparent_components",
+      "points": 8
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "59 按冻结阈值为 low，不任意四舍五入。",
+      "id": "threshold",
+      "points": 6
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "明确分数是 completeness/QC heuristic，不是校准概率。",
+      "id": "not_probability",
+      "points": 6
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/confidence.json",
+    "inputs/confidence_policy.json"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-CONF-001"
+}

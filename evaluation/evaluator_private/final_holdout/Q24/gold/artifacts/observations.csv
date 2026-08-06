@@ -1,0 +1,7 @@
+observation_id,source_id,source_row,sample_id,element,raw_value,raw_unit,normalized_value_ppm,medium,qualifier,censored,detection_limit,latitude,longitude,method,qc_status
+obs-001,src-001,2,sample-001,Au,1,ppm,1,soil,=,false,,30.01,110.01,ICP-MS,accepted
+obs-002,src-001,3,sample-002,Au,2,ppm,2,soil,=,false,,30.02,110.02,ICP-MS,accepted
+obs-003,src-001,4,sample-003,Au,3,ppm,3,soil,=,false,,30.03,110.03,ICP-MS,accepted
+obs-004,src-001,5,sample-004,Au,4,ppm,4,soil,=,false,,30.04,110.04,ICP-MS,accepted
+obs-005,src-001,6,sample-005,Au,5,ppm,5,soil,=,false,,30.05,110.05,ICP-MS,accepted
+obs-006,src-001,7,sample-006,Au,20,ppm,20,soil,=,false,,30.06,110.06,ICP-MS,accepted

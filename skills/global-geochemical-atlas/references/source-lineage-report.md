@@ -49,12 +49,13 @@
 | `foregs-europe` | 欧洲协调基线调查父项目 | 六种介质由同一 FOREGS 设计、GTN 框架和跨国分析计划产生 | 六个可执行 `source_id` 是不同介质/方法表，不自动算六份独立调查证据；跨介质不能当复测 |
 | `foregs-topsoil` / `foregs-subsoil` / `foregs-humus` | 同一协调调查的三种陆地介质 | 共享项目、采样框架和部分实验室/QC；样品和方法不同 | 按 GTN、介质、具体文件行和 measurement basis 去重；同一 GTN 的不同介质不是重复记录，也不是独立调查背书 |
 | `foregs-stream-water` / `foregs-stream-sediment` / `foregs-floodplain-sediment` | 同一协调调查的三种水系介质 | 共享项目框架；溪流水、活性溪流沉积物与泛滥平原沉积物采样对象不同 | 分介质保留，但来源独立性统计时把 FOREGS 视为一个协调项目；总量与王水值是同一样品的不同分析基础 |
+| `afsis-phase-i-wet-chemistry` | AfSIS Phase I archived sample subset | 51 个 LDSF sentinel sites 的归档样品由 World Agroforestry 发布、Rothamsted Research 完成湿化学分析，并由论文和 Dataverse V2.0 共同描述 | 数据集、论文和三个 datafile 是同一调查/分析包，不算多份独立证据；按 SSN/RES.ID、站点、深度、分析物和方法去重，与 Soils4Africa 等后续项目不因地理重叠自动判为相同样品 |
 | `south-africa-cgs-geochemistry` | 国家门户中的逐图幅产品集合 | 多个 geochemistry FeatureServer/MapServer 图层对应不同地图幅和出版物 | 按地图幅、原调查和样品计算；同一图层的 Feature/Map service 表达只算一次，门户不代表连续全国覆盖 |
 
 ## 当前单一来源依赖
 
 - 岩石生产路由只有 `georoc-archaean`，且仅覆盖太古宙克拉通；
-- 土壤已有 USGS、PANGAEA 和 FOREGS 三套调查体系；FOREGS 又分 topsoil/subsoil/humus，但三者共享父项目，不能按三个独立调查扩张证据数；
+- 土壤已有 USGS、PANGAEA、FOREGS 和 AfSIS 四套调查体系；FOREGS 又分 topsoil/subsoil/humus，但三者共享父项目，不能按三个独立调查扩张证据数；AfSIS 增加非洲多国站点覆盖，但不是均匀大陆网格；
 - 沉积物已有 MarChem、GSJ 和 FOREGS 三套调查体系；FOREGS stream/floodplain 两项共享父项目，且海洋、河流、泛滥平原、粒级和方法边界不同，不能视为同一背景的复测；
 - 水体已有 GEMStat、GEOTRACES 和 FOREGS 三套体系；目标 As/Cu/Ni/Zn 均至少有两个登记来源，但淡水、海水、欧洲溪流水和单位/方法背景不同，多来源不等于可直接合并；
 - 当前没有任何介质可以声明全球、方法一致且多来源独立覆盖。

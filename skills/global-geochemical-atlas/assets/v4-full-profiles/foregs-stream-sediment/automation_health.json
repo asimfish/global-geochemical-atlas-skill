@@ -1,0 +1,60 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 4,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "expected_target_observation_count": 11030,
+  "files": [
+    {
+      "bytes": 82266,
+      "cache_status": "cache_hit",
+      "file_id": "aqua-regia",
+      "filename": "S_AR_data_2v5_30Nov2006.csv",
+      "sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce"
+    },
+    {
+      "bytes": 132977,
+      "cache_status": "cache_hit",
+      "file_id": "icp-total",
+      "filename": "S_icp_data_2v6_30Nov06.csv",
+      "sha256": "2474bac5f128d655e8255fe60ddfcd3ba244f4677430890aa73fbbfbe2e6bc58"
+    },
+    {
+      "bytes": 40477,
+      "cache_status": "cache_hit",
+      "file_id": "mercury",
+      "filename": "S_Hg_data_2v5_30Nov06.csv",
+      "sha256": "40af8d7957b6b1a317928b8d4c0696cde0dca8fadc7e6e7a06f8a83f078e32ef"
+    },
+    {
+      "bytes": 132523,
+      "cache_status": "cache_hit",
+      "file_id": "xrf-total",
+      "filename": "S_XRF_data_2v9_30Nov06.csv",
+      "sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8"
+    }
+  ],
+  "last_successful_fetch_at": null,
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 3393,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "bc1099f6d2a706491667583045cd42b9c41d1743afcf213009c2d4b79402c841",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "foregs-stream-sediment",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 11030,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

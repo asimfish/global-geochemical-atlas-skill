@@ -1,0 +1,3 @@
+group_id,n,method,center_log10,scale_log10,status,anomaly_count
+VARIABLE,21,robust_log10_mad,1.3010299957,0.1689324141,success,1
+CONSTANT,20,empirical_quantile_fallback,0.6989700043,0,success_with_fallback,0

@@ -95,11 +95,11 @@ GEOROC fixture 的 datum 尚无足够证据，故 48 条记录保留 reported co
 ```bash
 python scripts/build_four_media_demo.py \
   --output-dir /tmp/four-media-demo \
-  --generated-at 2026-08-05T15:20:00Z
+  --generated-at 2026-08-06T10:05:00Z
 
 python scripts/run_workflow.py \
   --input /tmp/four-media-demo/demo_input.csv \
   --output-dir /tmp/four-media-output
 ```
 
-预期为 748 条真实来源最小观测、四介质、十三来源、748/748 标准化、700/748 有效 canonical 坐标、23 条已确认删失值、93 个标准化后隔离背景组及完整十文件输出。GEOROC 的 48 条 reported coordinates 因 datum 未证实而不冒充 WGS84；FOREGS 中可能的 `DL/2` 数值只带证据警告，不冒充已确认删失。演示时先展示覆盖空白和来源范围，再展示地图；16 个候选异常只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。
+预期为 796 条真实来源最小观测、四介质、十四来源、796/796 标准化、700/796 有效 canonical 坐标、23 条已确认删失值、93 个隔离背景组及完整十文件输出。GEOROC 与 AfSIS 的 96 条 reported coordinates 因 datum/CRS 未证实而不冒充 WGS84；FOREGS 中可能的 `DL/2` 数值和 AfSIS 中低于来源 DL/QL 的已发布数值只带证据边界。演示时先展示覆盖空白和来源范围，再展示地图；16 个工程异常候选只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。

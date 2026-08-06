@@ -1,0 +1,28 @@
+{
+  "task_id": "GGA-E2E-001",
+  "question_id": "Q24",
+  "title": "端到端小型地球化学图谱验收",
+  "status": "partial_success",
+  "exit_code": 2,
+  "counts": {
+    "task_id": "GGA-E2E-001",
+    "policy_version": "q24-policy-1",
+    "raw_input_rows": 25,
+    "excluded_integrity_rows": 1,
+    "accepted_database_rows": 24,
+    "censored_rows": 1,
+    "invalid_coordinate_rows": 1,
+    "mapped_features": 23,
+    "anomaly_eligible_rows": 21,
+    "anomaly_features": 1,
+    "groups_not_scored": [
+      "water|aqueous|dissolved|Pb|ICP-MS"
+    ]
+  },
+  "warnings": [
+    "Source integrity mismatch for SRC-B (source_b.csv); entire source excluded from observations",
+    "anomaly group water|aqueous|dissolved|Pb|ICP-MS not scored (n below minimum)",
+    "record E22 censored (<0.5 ppm); retained bound and qualifier, not treated as exact",
+    "record E23 invalid coordinate (latitude out of range); kept in database, excluded from map"
+  ]
+}

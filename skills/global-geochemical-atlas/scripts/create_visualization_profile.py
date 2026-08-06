@@ -86,9 +86,11 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
     filters = {
         "element": optional_text(args.element),
         "medium": optional_text(args.medium),
+        "sample_type": optional_text(args.sample_type),
         "basis": optional_text(args.basis),
         "geology": optional_text(args.geology),
         "method": optional_text(args.method),
+        "method_scope": optional_text(args.method_scope),
         "source": optional_text(args.source),
         "confidence": optional_text(args.confidence),
     }
@@ -175,9 +177,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--region-label")
     parser.add_argument("--element")
     parser.add_argument("--medium")
+    parser.add_argument("--sample-type")
     parser.add_argument("--basis")
     parser.add_argument("--geology")
     parser.add_argument("--method")
+    parser.add_argument("--method-scope")
     parser.add_argument("--source")
     parser.add_argument("--confidence")
     parser.add_argument("--comparison-x")

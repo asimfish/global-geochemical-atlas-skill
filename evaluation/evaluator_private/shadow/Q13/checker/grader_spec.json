@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "output_exists",
+      "path": "eligibility.json",
+      "points": 5,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "q13-eligibility-1",
+      "id": "policy",
+      "json_path": "policy_version",
+      "path": "eligibility.json",
+      "points": 5,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 2,
+      "id": "groups_count",
+      "json_path": "groups",
+      "path": "eligibility.json",
+      "points": 5,
+      "type": "json_length"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 19,
+      "id": "small_n",
+      "json_path": "groups.0.n_total",
+      "path": "eligibility.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "small_ineligible",
+      "json_path": "groups.0.eligible",
+      "path": "eligibility.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "insufficient_sample_size",
+      "id": "small_status",
+      "json_path": "groups.0.status",
+      "path": "eligibility.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0,
+      "id": "small_no_scores",
+      "json_path": "groups.0.anomaly_scores_written",
+      "path": "eligibility.json",
+      "points": 7,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0.65,
+      "id": "censored_fraction",
+      "json_path": "groups.1.quantified_fraction",
+      "path": "eligibility.json",
+      "points": 8,
+      "tolerance": 1e-06,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "censored_ineligible",
+      "json_path": "groups.1.eligible",
+      "path": "eligibility.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "excessive_censoring",
+      "id": "censored_status",
+      "json_path": "groups.1.status",
+      "path": "eligibility.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0,
+      "id": "censored_no_scores",
+      "json_path": "groups.1.anomaly_scores_written",
+      "path": "eligibility.json",
+      "points": 6,
+      "type": "json_value"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [
+    {
+      "consequence": "task_cap_20",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "RL-09-small-n",
+      "json_path": "groups.0.eligible",
+      "path": "eligibility.json",
+      "type": "json_value"
+    },
+    {
+      "consequence": "task_cap_20",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "RL-09-censoring",
+      "json_path": "groups.1.eligible",
+      "path": "eligibility.json",
+      "type": "json_value"
+    }
+  ],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-ANOM-001"
+}

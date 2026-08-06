@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 
-GRADER_VERSION = "6.0.0-draft.1"
+GRADER_VERSION = "6.0.0-draft.2"
 ALIGNMENT_PATH = Path(__file__).resolve().parents[1] / "contracts" / "benchmark-execution-contract.json"
 
 

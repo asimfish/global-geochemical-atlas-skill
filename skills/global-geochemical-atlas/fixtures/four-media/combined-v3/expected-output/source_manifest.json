@@ -4,25 +4,25 @@
     "confidence_version": "d2-confidence-v2",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236",
+    "input_sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
     "not_a_probability": true,
-    "run_id": "d3592baa95a192f1",
-    "sha256": "030138a1c160464e2c3428433f63760e24b59cf7189bb87cfefd86670bc2e10e"
+    "run_id": "3e077dc27d6ce88e",
+    "sha256": "8871107402b3240c11e4d0ae979c67ddecec5b6387e8495494c399b2693c7196"
   },
   "coverage": {
     "declared_license_rate": 1.0,
-    "records_with_declared_license": 748,
-    "records_with_source_locator": 748,
+    "records_with_declared_license": 796,
+    "records_with_source_locator": 796,
     "records_with_verified_evidence": 0,
     "source_locator_rate": 1.0,
     "verified_evidence_rate": 0.0
   },
   "data_mode": "input",
   "input": {
-    "bytes": 398758,
+    "bytes": 1028010,
     "filename": "demo_input.csv",
-    "record_count": 748,
-    "sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236"
+    "record_count": 796,
+    "sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720"
   },
   "manifest_version": "geochemical-source-manifest-v2",
   "not_for_scientific_interpretation": false,
@@ -31,20 +31,66 @@
     "evidence_level": "source_declared_in_input",
     "exact_record_id_match": true,
     "filename": "record_evidence.jsonl",
-    "record_count": 748,
+    "record_count": 796,
     "schema_version": "geochemical-record-evidence-v1",
-    "sha256": "3f6d885cee8c8ad786bd64a00164537bb64dd47119856a0f9be98cfbc1cca6df"
+    "sha256": "c37f021f8b19fa3e4a5be5a831f082503259313e83d6ca5763fe3b85b498dbb9"
   },
-  "source_count": 13,
+  "source_count": 14,
   "sources": [
     {
       "all_records_license_declared": true,
       "all_records_located": true,
       "article_citations": [],
       "article_dois": [],
+      "dataset_dois": [
+        "10.34725/DVN/66BFOB"
+      ],
+      "dataset_titles": [
+        "AfSIS Phase I archived soil samples: wet chemistry data"
+      ],
+      "dataset_versions": [
+        "2.0"
+      ],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1131",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1154",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1191",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1422",
+        "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1710"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_files": [
+        {
+          "filename": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+          "sha256": "32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605",
+          "url": null
+        }
+      ],
+      "source_id": "afsis-phase-i-wet-chemistry",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: floodplain sediment"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "F_AR_data_2v6_7Aug07.csv#row=4",
@@ -60,7 +106,18 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "F_AR_data_2v6_7Aug07.csv",
+          "sha256": "04fe3c65ffadc205a8c9d6c1d5869cb6d729a965faf399bd32874b7f50fb6b51",
+          "url": null
+        },
+        {
+          "filename": "F_XRF_data_2v6_7Aug07.csv",
+          "sha256": "04628e52364b70a1c39492631568e1aa47b77285becd2393d283b7ea9088431f",
+          "url": null
+        }
+      ],
       "source_id": "foregs-floodplain-sediment",
       "source_tiers": [
         "official_curated"
@@ -73,8 +130,12 @@
       "article_citations": [],
       "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: humus"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "H_icp_data_2v2_11Mar04.csv#row=10",
@@ -90,7 +151,13 @@
       "located_record_count": 48,
       "locator_count": 16,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "H_icp_data_2v2_11Mar04.csv",
+          "sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4",
+          "url": null
+        }
+      ],
       "source_id": "foregs-humus",
       "source_tiers": [
         "official_curated"
@@ -103,8 +170,12 @@
       "article_citations": [],
       "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: stream sediment"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "S_AR_data_2v5_30Nov2006.csv#row=4",
@@ -120,7 +191,18 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "S_AR_data_2v5_30Nov2006.csv",
+          "sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce",
+          "url": null
+        },
+        {
+          "filename": "S_XRF_data_2v9_30Nov06.csv",
+          "sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8",
+          "url": null
+        }
+      ],
       "source_id": "foregs-stream-sediment",
       "source_tiers": [
         "official_curated"
@@ -133,8 +215,12 @@
       "article_citations": [],
       "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: stream water"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "W_all_data_2v8_17Sep07.csv#row=10",
@@ -150,7 +236,13 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "W_all_data_2v8_17Sep07.csv",
+          "sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+          "url": null
+        }
+      ],
       "source_id": "foregs-stream-water",
       "source_tiers": [
         "official_curated"
@@ -163,8 +255,12 @@
       "article_citations": [],
       "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: subsoil"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "C_AR_data_2v5_8Feb06.csv#row=4",
@@ -180,7 +276,28 @@
       "located_record_count": 48,
       "locator_count": 24,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "C_AR_data_2v5_8Feb06.csv",
+          "sha256": "a6be09c8db44f22cac340285886d866d9420f58a649f46dab5eff7af489047bc",
+          "url": null
+        },
+        {
+          "filename": "C_XRF_data_2v6_8Feb06.csv",
+          "sha256": "436ebabf7431b1d93769d63fcc2d50755bac9e72a2141dc6325c69cafa1c591b",
+          "url": null
+        },
+        {
+          "filename": "C_icp_data_2v6_9Feb06.csv",
+          "sha256": "b983234ff136212be55b8fb9a2d12fb41433ad1315c8eca8d91d2ee207712d8b",
+          "url": null
+        },
+        {
+          "filename": "C_icpadd_data_2v5_9Feb06.csv",
+          "sha256": "313446ee8924841c8c4725dd3084bb6ef949092c51130aa12be25b94008f74c7",
+          "url": null
+        }
+      ],
       "source_id": "foregs-subsoil",
       "source_tiers": [
         "official_curated"
@@ -193,8 +310,12 @@
       "article_citations": [],
       "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: topsoil"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "T_AR_data_2v4_8Feb06.csv#row=4",
@@ -210,7 +331,28 @@
       "located_record_count": 48,
       "locator_count": 24,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "T_AR_data_2v4_8Feb06.csv",
+          "sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+          "url": null
+        },
+        {
+          "filename": "T_XRF_data_2v6_8Feb06.csv",
+          "sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+          "url": null
+        },
+        {
+          "filename": "T_icp_data_2v3_8Feb06.csv",
+          "sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+          "url": null
+        },
+        {
+          "filename": "T_icpadd_data_2v3_8Feb06.csv",
+          "sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+          "url": null
+        }
+      ],
       "source_id": "foregs-topsoil",
       "source_tiers": [
         "official_curated"
@@ -222,9 +364,15 @@
       "all_records_located": true,
       "article_citations": [],
       "article_dois": [],
-      "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_dois": [
+        "10.5281/zenodo.18459694"
+      ],
+      "dataset_titles": [
+        "UNEP GEMS/Water Global Freshwater Quality Archive: v3 arsenic subset"
+      ],
+      "dataset_versions": [
+        "v3"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "Arsenic.csv#row=25632",
@@ -240,7 +388,13 @@
       "located_record_count": 48,
       "locator_count": 48,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "Arsenic.csv",
+          "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231",
+          "url": null
+        }
+      ],
       "source_id": "gemstat-open-archive",
       "source_tiers": [
         "official_curated"
@@ -299,9 +453,15 @@
       "all_records_located": true,
       "article_citations": [],
       "article_dois": [],
-      "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_dois": [
+        "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+      ],
+      "dataset_titles": [
+        "GEOTRACES Intermediate Data Product 2025: discrete seawater"
+      ],
+      "dataset_versions": [
+        "IDP2025"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=125",
@@ -317,7 +477,13 @@
       "located_record_count": 48,
       "locator_count": 33,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+          "sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44",
+          "url": null
+        }
+      ],
       "source_id": "geotraces-idp2025",
       "source_tiers": [
         "official_curated"
@@ -330,8 +496,12 @@
       "article_citations": [],
       "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "Geochemical Map of Japan: national river-sediment sample and concentration tables"
+      ],
+      "dataset_versions": [
+        "sample-2024-02-20_concentration-2007-01-10"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "samplejoho.csv#row=10;noudo.csv#row=10",
@@ -347,7 +517,13 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "samplejoho.csv",
+          "sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671",
+          "url": null
+        }
+      ],
       "source_id": "japan-gsj-geochemical-map",
       "source_tiers": [
         "government"
@@ -360,8 +536,12 @@
       "article_citations": [],
       "article_dois": [],
       "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_titles": [
+        "MarChem marine chemistry database for Norwegian waters"
+      ],
+      "dataset_versions": [
+        "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1006",
@@ -377,7 +557,13 @@
       "located_record_count": 112,
       "locator_count": 28,
       "record_count": 112,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+          "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10",
+          "url": null
+        }
+      ],
       "source_id": "norway-marchem",
       "source_tiers": [
         "government"
@@ -389,9 +575,15 @@
       "all_records_located": true,
       "article_citations": [],
       "article_dois": [],
-      "dataset_dois": [],
-      "dataset_titles": [],
-      "dataset_versions": [],
+      "dataset_dois": [
+        "10.1594/PANGAEA.949903"
+      ],
+      "dataset_titles": [
+        "Chemical compositions of deflatable soil fractions from North Africa"
+      ],
+      "dataset_versions": [
+        "2022-10-25"
+      ],
       "evidence_type": "source_declared_in_input",
       "example_locators": [
         "Table_S5.tab#row=115",
@@ -407,7 +599,13 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
-      "source_files": [],
+      "source_files": [
+        {
+          "filename": "Table_S5.tab",
+          "sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485",
+          "url": null
+        }
+      ],
       "source_id": "pangaea-north-africa-soil",
       "source_tiers": [
         "official_curated"

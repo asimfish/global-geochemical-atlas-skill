@@ -1,0 +1,46 @@
+material	variablename	variabledescription	Units-airdrysoilbasis	instrumentusedforanalysis	methodused	labwhereanalysiswasconducted	datesampleswerecollected	yearanalysiswasconducted
+""	"SSN"	"Soil sample number/Sample  Serial Number"	""	""	""	""	""	
+""	"RES.ID"	"Rothamsted Research soil sample number/Sample  Serial Number"	""	""	""	""	""	
+""	"Country"	"Country name"	""	""	""	""	""	
+""	"Site"	"Sentinel site name"	""	""	""	""	""	
+""	"Cluster"	"Cluster number"	""	""	""	""	""	
+""	"Plot"	"Plot number"	""	""	""	""	""	
+""	"Latitude"	"GPS X-coordinate where sample was collected"	""	""	""	""	""	
+""	"Longitude"	"GPS Y-coordinate where sample was collected"	""	""	""	""	""	
+""	"Depth"	"Topsoil = 0-20 cm depth; Subsoil = 20-50 cm depth"	""	""	""	""	""	
+"Soil"	"pH"	"Soil pH in water (soil: water ratio of 1:2.5 weight to volume basis)"	"Units"	"Voltmeter"	"Potentiometric"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Percent_N"	"Total Carbon content"	"% by weight"	"LECO"	"Dry combustion"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Percent_C"	"Total Nitrogen content"	"% by weight"	"LECO"	"Dry combustion"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Percent_Inorg_C"	"Percent Inorganic Carbon"	"% by weight"	"Primacs (Skalar)"	"Dry combustion"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Percent_Org_C"	"Percent Organic Carbon (Organic C is total C minus inorganic C)"	"% by weight"	""	"Calculated"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Am.Ox_Al"	"Acid ammonium oxalate extractable Al"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Acid Ammonium Oxalate extraction "	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Am.Ox.Fe"	"Acid ammonium oxalate extractable Fe"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Acid Ammonium Oxalate extraction "	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"AmOx.Mn"	"Acid ammonium oxalate extractable Mn"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Acid Ammonium Oxalate extraction "	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"AmOx.P"	"Acid ammonium oxalate extractable P"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Acid Ammonium Oxalate extraction "	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Olsen.P"	"Bicarbonate-extractable PO4"	"mg kg^-1"	"Skalar Autoanalyzer"	"Colorimetric"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"pbi"	"Phosphate buffering index "	""	""	"Calculated"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Caex"	"Exchangeable Calcium"	"cmolc kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Extraction with cobalt(III) hexamine chloride solution (Cohex)"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Kex"	"Exchangeable Potassium"	"cmolc kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Extraction with cobalt(III) hexamine chloride solution (Cohex)"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Mgex"	"Exchangeable Magnesium"	"cmolc kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Extraction with cobalt(III) hexamine chloride solution (Cohex)"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Naex"	"Exchangeable Sodium"	"cmolc kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Extraction with cobalt(III) hexamine chloride solution (Cohex)"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"eCEC"	"Effective Cation Exchange Capacity "	"cmolc kg^-1"	""	"Calculated"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Al"	"Quasi-total Aluminium"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Ca"	"Quasi-total Calcium"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Co"	"Quasi-total Cobalt"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Cr"	"Quasi-total Chromium"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Cu"	"Quasi-total Copper"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Fe"	"Quasi-total Iron"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"K"	"Quasi-total Potassium"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Mg"	"Quasi-total Magnesium"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Mn"	"Quasi-total Manganese"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Na"	"Quasi-total Sodium"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Ni"	"Quasi-total Nickel"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"P"	"Quasi-total Phosphorus"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Pb"	"Quasi-total Lead"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"S"	"Quasi-total Sulphur"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Zn"	"Quasi-total Zinc"	"mg kg^-1"	"Optical Emission spectrometry ( ICP-OES)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"As.75"	"Quasi-total Arsenic-78 isotope"	"mg kg^-1"	"Inductively Coupled Plasma Mass Spectrometry (ICP-MS)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Se.78"	"Quasi-total Selenium-78 isotope"	"mg kg^-1"	"Inductively Coupled Plasma Mass Spectrometry (ICP-MS)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Mo.95"	"Quasi-total Molybdenum-95 isotope"	"mg kg^-1"	"Inductively Coupled Plasma Mass Spectrometry (ICP-MS)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+"Soil"	"Cd.114"	"Quasi-total Cadmium-114"	"mg kg^-1"	"Inductively Coupled Plasma Mass Spectrometry (ICP-MS)"	"Aqua regia acid digest"	"Rothamsted Research "	"2009-2013"	2017.0
+""	""	""	""	""	""	""	""	

@@ -1,0 +1,5 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+A-001,SA1,Cu,12,mg/kg,soil,40,-110,source_a,
+A-002,SA2,Cu,25,mg/kg,soil,41,-111,source_a,
+B-101,SB1,Cu,30,mg/kg,sediment,35,-100,source_b,
+B-102,SB2,Cu,45,mg/kg,sediment,36,-101,source_b,

@@ -1,0 +1,2 @@
+{"source_id": "source_a", "file": "inputs/source_a.csv", "computed_sha256": "c9b16f97386ea4d49edea641237a183d40391cff74940f9360e88552caa6a2b4", "schema_variant": "source_a"}
+{"source_id": "source_b", "file": "inputs/source_b.csv", "computed_sha256": "770119cbe220ce8df56bbe50a3eadfb3acd6eec0fd99b0da09b965257602817f", "schema_variant": "source_b"}

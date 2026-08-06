@@ -1,0 +1,7 @@
+{
+  "records": [
+    {"record_id": "K01", "provenance": {"url": "https://example.org/a", "version": "1", "license": "CC-BY-4.0", "sha256": "abc"}, "coordinates": {"valid": true, "crs": "EPSG:4326", "precision_m": 50}, "analysis": {"method": "ICP-MS", "laboratory": "L1", "detection_limit": 0.1}, "sample": {"medium": "soil", "material": "fine_fraction", "lithology": "alluvium"}, "qc_flags": []},
+    {"record_id": "K02", "provenance": {"url": "https://example.org/b", "version": "2", "license": "CC-BY-4.0", "sha256": null}, "coordinates": {"valid": true, "crs": "EPSG:4326", "precision_m": 500}, "analysis": {"method": "XRF", "laboratory": null, "detection_limit": 1}, "sample": {"medium": "rock", "material": "whole_rock", "lithology": null}, "qc_flags": ["duplicate_review", "range_warning"]},
+    {"record_id": "K03", "provenance": {"url": "https://example.org/c", "version": null, "license": null, "sha256": null}, "coordinates": {"valid": false, "crs": null, "precision_m": null}, "analysis": {"method": null, "laboratory": null, "detection_limit": null}, "sample": {"medium": "soil", "material": null, "lithology": null}, "qc_flags": ["a", "b", "c", "d"]}
+  ]
+}

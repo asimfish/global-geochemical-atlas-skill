@@ -1,0 +1,170 @@
+{
+  "task_id": "GGA-NORM-001",
+  "scoring_contract": "e1-six-dimension-v1",
+  "score_status": "evidence_only",
+  "hard_gate_passed": true,
+  "evidence_points_awarded": 80,
+  "evidence_points_possible": 80,
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "weight": 0.25,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "weight": 0.3,
+      "evidence_points_awarded": 5,
+      "evidence_points_possible": 5,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "weight": 0.14,
+      "evidence_points_awarded": 10,
+      "evidence_points_possible": 10,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "weight": 0.15,
+      "evidence_points_awarded": 65,
+      "evidence_points_possible": 65,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "weight": 0.1,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "weight": 0.06,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    }
+  ],
+  "checks": [
+    {
+      "id": "output_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "normalized_elements.csv: file"
+    },
+    {
+      "id": "columns",
+      "type": "csv_columns",
+      "dimension_id": "platform_reusability",
+      "passed": true,
+      "points_awarded": 10,
+      "points_possible": 10,
+      "evidence": "normalized_elements.csv: missing columns=[]"
+    },
+    {
+      "id": "row_count",
+      "type": "csv_row_count",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "normalized_elements.csv: rows=6; expected=6"
+    },
+    {
+      "id": "key_set",
+      "type": "csv_key_set",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "normalized_elements.csv: actual keys=[('S01', 'Ni'), ('S02', 'Pb'), ('S03', 'Zn'), ('S04', 'Cu'), ('S05', 'Co'), ('S06', 'As')]; expected=[('S01', 'Ni'), ('S02', 'Pb'), ('S03', 'Zn'), ('S04', 'Cu'), ('S05', 'Co'), ('S06', 'As')]"
+    },
+    {
+      "id": "s01_value",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "normalized_elements.csv key={'sample_id': 'S01'} column=normalized_value actual='42' expected=42 tol=1e-06"
+    },
+    {
+      "id": "s02_value",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "normalized_elements.csv key={'sample_id': 'S02'} column=normalized_value actual='18' expected=18 tol=1e-06"
+    },
+    {
+      "id": "s03_value",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "normalized_elements.csv key={'sample_id': 'S03'} column=normalized_value actual='120' expected=120 tol=1e-06"
+    },
+    {
+      "id": "s04_value",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "normalized_elements.csv key={'sample_id': 'S04'} column=normalized_value actual='35' expected=35 tol=1e-06"
+    },
+    {
+      "id": "s05_value",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "normalized_elements.csv key={'sample_id': 'S05'} column=normalized_value actual='8' expected=8 tol=1e-06"
+    },
+    {
+      "id": "s06_value",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "normalized_elements.csv key={'sample_id': 'S06'} column=normalized_value actual='400' expected=400 tol=1e-06"
+    },
+    {
+      "id": "original_values",
+      "type": "text_contains_all",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 10,
+      "points_possible": 10,
+      "evidence": "normalized_elements.csv: missing terms=[]"
+    },
+    {
+      "id": "conversion_rules",
+      "type": "text_contains_all",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 8,
+      "points_possible": 8,
+      "evidence": "normalized_elements.csv: missing terms=[]"
+    }
+  ],
+  "redline_events": [],
+  "grader_version": "6.0.0-draft.2"
+}

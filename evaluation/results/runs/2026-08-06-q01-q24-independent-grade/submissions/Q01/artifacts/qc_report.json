@@ -1,0 +1,14 @@
+{
+  "task_id": "GGA-DATA-001",
+  "question_id": "Q01",
+  "title": "全球玄武岩 Ni 数据源选择",
+  "status": "success",
+  "exit_code": 0,
+  "counts": {
+    "input_sources": 3,
+    "selected_primary": 1,
+    "selected_discovery": 1,
+    "rejected": 1
+  },
+  "warnings": []
+}

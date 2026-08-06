@@ -1,0 +1,207 @@
+{
+  "bundle_version": "d1-archive-fixture-v2",
+  "not_for_scientific_interpretation": true,
+  "datasets": [
+    {
+      "schema_version": "d1-dataset-source-v1",
+      "dataset_id": "dataset-fixture-v2",
+      "source_id": "fixture-source-v2",
+      "title": "D1 V4 schema relation fixture",
+      "publisher": "AI4S test fixture",
+      "dataset_doi": "10.0000/synthetic.v2",
+      "dataset_version": "2.0.0",
+      "landing_page": "https://example.org/fixture-v2",
+      "license_id": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "retrieved_at": "2026-08-06T11:00:00Z",
+      "files": [
+        {
+          "file_id": "fixture-v2-csv",
+          "filename": "fixture-v2.csv",
+          "source_url": "https://example.org/fixture-v2.csv",
+          "bytes": 234,
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        }
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "schema_version": "d1-publication-v1",
+      "publication_id": "publication-fixture-v2",
+      "doi": "10.0000/synthetic.method.v2",
+      "citation": "Synthetic V4 schema fixture; not a scientific publication.",
+      "title": "D1 V4 schema fixture",
+      "authors": ["AI4S"],
+      "year": 2026,
+      "dataset_ids": ["dataset-fixture-v2"],
+      "relation_types": ["Documents", "DescribesMethod"]
+    }
+  ],
+  "sampling_events": [
+    {
+      "schema_version": "d1-sampling-event-v1",
+      "sampling_event_id": "event-fixture-v2",
+      "dataset_id": "dataset-fixture-v2",
+      "site_id": "SITE-V2",
+      "sampled_at_raw": "2026-02-03",
+      "collection_method_raw": "topsoil composite",
+      "location": {
+        "latitude_raw": "38.5",
+        "longitude_raw": "-104.5",
+        "source_crs": "EPSG:4326",
+        "latitude": 38.5,
+        "longitude": -104.5,
+        "coordinate_uncertainty_m": 25.0,
+        "elevation_m": 1750.0,
+        "depth_min_m": 0.0,
+        "depth_max_m": 0.2,
+        "place_raw": "Synthetic survey block"
+      },
+      "missing_reasons": {}
+    }
+  ],
+  "samples": [
+    {
+      "schema_version": "d1-sample-v2",
+      "sample_id": "sample-v2-topsoil",
+      "native_sample_id": "SITE-V2-A",
+      "igsn": null,
+      "parent_sample_id": null,
+      "sampling_event_id": "event-fixture-v2",
+      "medium_raw": "soil",
+      "material_raw": "topsoil composite",
+      "sample_type_raw": "Topsoil",
+      "sample_type": "soil_topsoil",
+      "sample_type_mapping_status": "exact",
+      "geographic_context_raw": "Synthetic survey block",
+      "survey_area": "Block V2",
+      "map_sheet": "SYN-001",
+      "cruise_track": null,
+      "lithology_raw": "granite-derived soil",
+      "lithology": "granite",
+      "geologic_unit_raw": "Synthetic Granite",
+      "geologic_age_raw": "Mesozoic",
+      "tectonic_setting_raw": null,
+      "matched_geologic_unit": null,
+      "geology_map_source": null,
+      "geology_map_version": null,
+      "match_method": null,
+      "match_scale": null,
+      "boundary_distance_m": null,
+      "match_uncertainty": null,
+      "soil_horizon_raw": "A horizon",
+      "soil_horizon": "A",
+      "sediment_environment": null,
+      "grain_fraction_raw": "<2 mm",
+      "water_body_type": null,
+      "water_fraction": null,
+      "filtered_state_raw": null,
+      "description_raw": "Synthetic V4 topsoil sample",
+      "missing_reasons": {
+        "igsn": "not_reported",
+        "cruise_track": "not_applicable",
+        "tectonic_setting_raw": "not_reported",
+        "matched_geologic_unit": "not_available",
+        "geology_map_source": "not_available",
+        "geology_map_version": "not_available",
+        "match_method": "not_available",
+        "match_scale": "not_available",
+        "boundary_distance_m": "not_available",
+        "match_uncertainty": "not_available",
+        "sediment_environment": "not_applicable",
+        "water_body_type": "not_applicable",
+        "water_fraction": "not_applicable",
+        "filtered_state_raw": "not_applicable"
+      }
+    }
+  ],
+  "methods": [
+    {
+      "schema_version": "d1-analytical-method-v2",
+      "method_id": "method-v2-icp-ms",
+      "method_code_raw": "M-V2",
+      "method_scope": "observation",
+      "method_assignment_basis": "source row method code",
+      "preparation_raw": "sieved <2 mm and pulverized",
+      "digestion_or_extraction_raw": "four-acid digestion",
+      "technique_raw": "ICP-MS",
+      "instrument_raw": "Synthetic ICP-MS",
+      "laboratory_raw": "Synthetic Lab",
+      "calibration_raw": null,
+      "quantitation_limit_raw": "2 mg/kg",
+      "reference_materials_raw": ["SYN-RM-1"],
+      "blank_qc_raw": "procedural blank",
+      "replicate_qc_raw": "one duplicate",
+      "method_source_locator": "fixture-v2.csv#method=M-V2",
+      "publication_ids": ["publication-fixture-v2"],
+      "missing_reasons": {"calibration_raw": "not_reported"}
+    }
+  ],
+  "provenance": [
+    {
+      "schema_version": "d1-provenance-v1",
+      "provenance_id": "provenance-v2-row-2",
+      "source_id": "fixture-source-v2",
+      "dataset_id": "dataset-fixture-v2",
+      "acquisition_run_id": "run-fixture-v2",
+      "source_record_id": "source-v2-row-2",
+      "source_locator": "fixture-v2.csv#row=2",
+      "source_file": "fixture-v2.csv",
+      "source_sheet": null,
+      "source_row": 2,
+      "source_column": "As",
+      "input_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "adapter_name": "fixture_v2_adapter",
+      "adapter_version": "2.0.0",
+      "processing_steps": [{"name": "preserve_v4_semantics", "version": "1.0.0", "parameters": {"infer": false}}]
+    }
+  ],
+  "observations": [
+    {
+      "schema_version": "d1-observation-v1",
+      "observation_id": "observation-v2-as",
+      "sample_id": "sample-v2-topsoil",
+      "method_id": "method-v2-icp-ms",
+      "provenance_id": "provenance-v2-row-2",
+      "analyte_reported": "As",
+      "value_raw": "12.4",
+      "parsed_value": 12.4,
+      "value_qualifier": "reported",
+      "unit_raw": "mg/kg",
+      "measurement_basis_raw": "dry weight total digest",
+      "detection_limit_raw": "1",
+      "parsed_detection_limit": 1.0,
+      "detection_limit_unit_raw": "mg/kg",
+      "uncertainty_raw": null,
+      "replicate_id": null,
+      "missing_reasons": {"uncertainty_raw": "not_reported", "replicate_id": "not_applicable"}
+    }
+  ],
+  "acquisition_runs": [
+    {
+      "schema_version": "d1-acquisition-run-v1",
+      "acquisition_run_id": "run-fixture-v2",
+      "request": {"elements": ["As"], "region": "global", "media": ["soil"], "sample_types": ["soil_topsoil"]},
+      "dataset_ids": ["dataset-fixture-v2"],
+      "schema_versions": {
+        "dataset": "d1-dataset-source-v1",
+        "sample": "d1-sample-v2",
+        "method": "d1-analytical-method-v2",
+        "observation": "d1-observation-v1"
+      },
+      "vocabulary_versions": {
+        "medium": "d1-medium-v1",
+        "sample_type": "d1-sample-type-v1",
+        "missing_reason": "d1-missing-reason-v1",
+        "value_qualifier": "d1-value-qualifier-v1"
+      },
+      "started_at": "2026-08-06T11:00:00Z",
+      "finished_at": "2026-08-06T11:00:01Z",
+      "status": "success",
+      "cache_status": "not_applicable",
+      "counts": {"source_records": 1, "observations": 1, "rejected_records": 0, "failed_records": 0},
+      "outputs": [{"path": "archive-bundle.json", "sha256": "1111111111111111111111111111111111111111111111111111111111111111", "bytes": 0}]
+    }
+  ]
+}

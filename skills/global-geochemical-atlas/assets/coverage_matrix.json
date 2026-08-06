@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06T08:00:00Z",
+  "as_of": "2026-08-06T10:35:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -328,10 +328,10 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 4,
-        "Cu": 5,
-        "Ni": 5,
-        "Zn": 5
+        "As": 5,
+        "Cu": 6,
+        "Ni": 6,
+        "Zn": 6
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -360,6 +360,7 @@
         "pangaea-repository",
         "soils4africa",
         "south-africa-cgs-geochemistry",
+        "tpdc-china-mountain-soil",
         "usgs-ngdb",
         "wosis"
       ],
@@ -373,6 +374,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -380,6 +382,7 @@
         "usgs-conus-soil"
       ],
       "source_evidence_tiers": {
+        "afsis-phase-i-wet-chemistry": "A",
         "alaska-dggs-webgeochem": "D",
         "bgs-gbase": "D",
         "brazil-sgb-geochemistry": "D",
@@ -394,12 +397,14 @@
         "pangaea-repository": "D",
         "soils4africa": "D",
         "south-africa-cgs-geochemistry": "D",
+        "tpdc-china-mountain-soil": "C",
         "usgs-conus-soil": "A",
         "usgs-ngdb": "D",
         "wosis": "D"
       },
       "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
       "source_scopes": {
+        "afsis-phase-i-wet-chemistry": "continental_partial",
         "alaska-dggs-webgeochem": "regional_partial",
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
@@ -414,11 +419,20 @@
         "pangaea-repository": "global_collection",
         "soils4africa": "continental_partial",
         "south-africa-cgs-geochemistry": "national_partial",
+        "tpdc-china-mountain-soil": "national_partial",
         "usgs-conus-soil": "national_partial",
         "usgs-ngdb": "national_partial",
         "wosis": "global_partial"
       },
       "source_target_analytes": {
+        "afsis-phase-i-wet-chemistry": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "foregs-humus": [
           "Cu",
           "Hg",
@@ -460,6 +474,7 @@
         ]
       },
       "source_use_modes": {
+        "afsis-phase-i-wet-chemistry": "normalized_analysis",
         "alaska-dggs-webgeochem": "discovery",
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
@@ -474,6 +489,7 @@
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
+        "tpdc-china-mountain-soil": "raw_observation",
         "usgs-conus-soil": "normalized_analysis",
         "usgs-ngdb": "discovery",
         "wosis": "discovery"
@@ -628,7 +644,8 @@
       "additional_country_geological_surveys_round_2",
       "southern_hemisphere_and_asian_national_portals",
       "state_and_provincial_geological_surveys",
-      "publication_linked_datasets"
+      "publication_linked_datasets",
+      "institutional_doi_dataset_download_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -636,7 +653,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 5,
+    "round": 6,
     "saturated": false,
     "status": "in_progress"
   },

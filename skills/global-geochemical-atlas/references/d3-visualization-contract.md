@@ -57,9 +57,11 @@ anomaly_report.json
   "filters": {
     "element": null,
     "medium": null,
+    "sample_type": null,
     "basis": null,
     "geology": null,
     "method": null,
+    "method_scope": null,
     "source": null,
     "confidence": null
   },
@@ -138,7 +140,7 @@ python scripts/create_visualization_profile.py \
 ```
 
 脚本同时支持 `overview`、`coverage`、`anomaly`、`comparison`、`database` 和 `evidence` 六类问题，
-以及元素、介质、basis、地质单元、方法、来源、置信度、元素组合和显示方式参数。运行
+以及元素、介质、细分样品类型、basis、地质单元、方法、方法范围、来源、置信度、元素组合和显示方式参数。运行
 `python scripts/create_visualization_profile.py --help` 查看完整接口。仓库中的两个 JSON 模板只是默认资产与降级入口，不要求 Agent 复制修改。
 
 脚本负责解析模板、嵌入数据、复制页面引用的证据文件并生成报告。已有生成文件时不静默覆盖；确需
@@ -175,8 +177,8 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 
 页面信息层级固定为 `task-first-progressive-disclosure-v1`：只保留一套主标签导航；四项交付物使用
 紧凑状态栏，不再在页头重复文件胶囊或能力徽章；`story` 只决定初始标签和显示预设，不再生成第二个
-“任务视图”选择器。地图首屏只平铺区域、元素、样品类型 / 介质、地图表达四个高频控件，地质单元、
-颜色、bbox、basis、方法、来源、置信度和异常网格放入“更多筛选”。不得为突出功能而把同一入口、
+“任务视图”选择器。地图首屏只平铺区域、元素、介质、地图表达四个高频控件，细分样品类型、地质单元、
+颜色、bbox、basis、方法、方法范围、来源、置信度和异常网格放入“更多筛选”。不得为突出功能而把同一入口、
 同一状态或同一组能力重复展示两次。该规则适用于任何新数据和区域报告，不是 demo 专用样式。
 
 页面数据库预览只浏览 HTML 内嵌的可上图记录，完整数据库始终以原样保留的 `geochemistry.csv` 为准。

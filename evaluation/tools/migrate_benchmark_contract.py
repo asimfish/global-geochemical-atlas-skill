@@ -13,10 +13,29 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from candidate_visible_contract import (
+    MARKER_END as CANDIDATE_MARKER_END,
+    MARKER_START as CANDIDATE_MARKER_START,
+    build_candidate_visible_contract,
+)
 
-VERSION = "6.0.0-draft.1"
+
+VERSION = "6.0.0-draft.2"
 ALIGNMENT_FILE = "contracts/benchmark-execution-contract.json"
 MARKER = "<!-- e1-alignment-v1 -->"
+
+
+CANDIDATE_CONTRACT_BLOCK = f"""{CANDIDATE_MARKER_START}
+## 答题 AI 可见的机器提交契约
+
+本题逻辑输出的精确容器、格式、CSV 列和 JSON 结构位于
+`task.json.candidate_visible_contract`。该字段是题面的一部分，答题 AI 必须读取并遵守。
+
+特别是，`format=\"csv\"` 的逻辑证据必须使用 `columns` 加对象数组 `rows`；
+每个 row 以列名为键，不得使用依赖位置的数组行。JSON 逻辑证据必须使用
+`{{\"format\": \"json\", \"value\": ...}}`。未声明的题目专用物理文件不得创建。
+{CANDIDATE_MARKER_END}
+"""
 
 
 def _atomic_text(path: Path, value: str) -> None:
@@ -39,6 +58,15 @@ def _atomic_json(path: Path, value: Any) -> None:
 
 def _load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _upsert_marker_block(content: str, start: str, end: str, block: str) -> str:
+    if start in content and end in content:
+        prefix, remainder = content.split(start, 1)
+        _, suffix = remainder.split(end, 1)
+        leading = prefix.rstrip() + "\n\n" if prefix.strip() else ""
+        return leading + block.strip() + "\n\n" + suffix.lstrip()
+    return block.strip() + "\n\n" + content.lstrip()
 
 
 def _task_dirs(evaluation_root: Path, private_root: Path | None) -> list[Path]:
@@ -125,6 +153,11 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
     metadata = _load_json(metadata_path)
     legacy_outputs = list(metadata.get("legacy_logical_outputs") or metadata.get("required_outputs", []))
     required = [item["path"] for item in contract["submission"]["required_artifacts"]]
+    candidate_visible_contract = build_candidate_visible_contract(
+        task_dir,
+        legacy_outputs,
+        contract["submission"]["benchmark_evidence"]["container"],
+    )
     metadata.update(
         {
             "status": "ALIGNED_E1",
@@ -135,6 +168,7 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
             "required_outputs": required,
             "legacy_logical_outputs": legacy_outputs,
             "benchmark_evidence_container": contract["submission"]["benchmark_evidence"]["container"],
+            "candidate_visible_contract": candidate_visible_contract,
         }
     )
     _atomic_json(metadata_path, metadata)
@@ -198,7 +232,14 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
             "把它们按 JSON/CSV/JSONL/text 的原结构写入 "
             "`artifacts/run_manifest.json` 的 `benchmark_evidence` 对象；E2 checker 只从该对象读取。\n\n"
         )
-        _atomic_text(task_markdown, preface + content)
+        content = preface + content
+    content = _upsert_marker_block(
+        content,
+        CANDIDATE_MARKER_START,
+        CANDIDATE_MARKER_END,
+        CANDIDATE_CONTRACT_BLOCK,
+    )
+    _atomic_text(task_markdown, content)
     return {"question_id": metadata["question_id"], "task_id": metadata["task_id"], "legacy_outputs": legacy_outputs}
 
 
@@ -221,7 +262,7 @@ def _update_inventory(path: Path) -> None:
     temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8", newline="") as handle:
-            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
             writer.writeheader()
             writer.writerows(rows)
             handle.flush()
@@ -245,8 +286,9 @@ def main() -> int:
     tasks = [_align_task(task_dir, contract, template) for task_dir in _task_dirs(root, private_root)]
     _atomic_text(root / "VERSION", VERSION + "\n")
     _update_inventory(root / "task_inventory.csv")
-    if private_root:
-        _update_inventory(private_root / "task_inventory_private.csv")
+    selected_private = private_root or (root / "evaluator_private")
+    if selected_private.is_dir():
+        _update_inventory(selected_private / "task_inventory_private.csv")
     print(json.dumps({"status": "PASS", "benchmark_version": VERSION, "tasks_aligned": len(tasks)}, ensure_ascii=False))
     return 0
 

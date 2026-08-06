@@ -32,6 +32,9 @@ REQUIRED_DATABASE_COLUMNS = {
     "element_or_analyte",
     "medium",
     "measurement_basis",
+    "sample_type_raw",
+    "sample_type",
+    "sample_type_mapping_status",
     "original_value_raw",
     "source_qualifier_raw",
     "original_unit",
@@ -41,7 +44,11 @@ REQUIRED_DATABASE_COLUMNS = {
     "latitude",
     "longitude",
     "analytical_method",
+    "method_scope",
     "digestion_or_extraction",
+    "geologic_unit_raw",
+    "matched_geologic_unit",
+    "citation_scope",
     "source_id",
     "source_locator",
     "license",
@@ -179,7 +186,18 @@ def validate_record_evidence(
         if file_hash is not None and (not isinstance(file_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", file_hash)):
             errors.append(f"record_evidence.jsonl:{line_number} has invalid source_file_sha256")
         source_url = value.get("source_file_url")
-        if source_url is not None and (not isinstance(source_url, str) or not source_url.startswith("https://")):
+        source_url_safe = (
+            isinstance(source_url, str)
+            and (
+                source_url.startswith("https://")
+                or (
+                    source_url.startswith("http://weppi.gtk.fi/")
+                    and isinstance(file_hash, str)
+                    and re.fullmatch(r"[0-9a-f]{64}", file_hash) is not None
+                )
+            )
+        )
+        if source_url is not None and not source_url_safe:
             errors.append(f"record_evidence.jsonl:{line_number} has invalid source_file_url")
     if record_ids != set(canonical):
         errors.append("record_evidence.jsonl record IDs do not exactly match geochemistry.csv")

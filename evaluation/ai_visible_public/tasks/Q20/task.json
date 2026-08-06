@@ -1,0 +1,153 @@
+{
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "candidate_visible_contract": {
+    "container": "artifacts/run_manifest.json",
+    "field": "benchmark_evidence",
+    "logical_outputs": {
+      "island_points.geojson": {
+        "format": "json",
+        "json_shape": {
+          "properties": {
+            "features": {
+              "items": {
+                "properties": {
+                  "geometry": {
+                    "properties": {
+                      "coordinates": {
+                        "items": {
+                          "type": "number"
+                        },
+                        "type": "array"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "coordinates",
+                      "type"
+                    ],
+                    "type": "object"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "properties": {
+                    "properties": {
+                      "record_id": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "record_id",
+                      "value"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "geometry",
+                  "id",
+                  "properties",
+                  "type"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "features",
+            "type"
+          ],
+          "type": "object"
+        }
+      },
+      "spatial_manifest.json": {
+        "format": "json",
+        "json_shape": {
+          "properties": {
+            "bbox": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "coordinate_order": {
+              "type": "string"
+            },
+            "crosses_antimeridian": {
+              "type": "boolean"
+            },
+            "excluded_count": {
+              "type": "integer"
+            },
+            "longitude_span_deg": {
+              "type": "number"
+            },
+            "mapped_count": {
+              "type": "integer"
+            },
+            "task_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "bbox",
+            "coordinate_order",
+            "crosses_antimeridian",
+            "excluded_count",
+            "longitude_span_deg",
+            "mapped_count",
+            "task_id"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "schema_version": "e2.candidate-visible.v1"
+  },
+  "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "e1_eval_version": "1.0.0",
+  "failure_tags": [
+    "ANTIMERIDIAN_GLOBAL_BBOX",
+    "GEOJSON_AXIS_ORDER",
+    "INVALID_LONGITUDE_MAPPED"
+  ],
+  "fixture_type": "synthetic_antimeridian_fixture",
+  "gold_version": "6.0.0-draft.2",
+  "input_assets": [
+    "island_points.csv"
+  ],
+  "legacy_logical_outputs": [
+    "island_points.geojson",
+    "spatial_manifest.json"
+  ],
+  "question_id": "Q20",
+  "required_outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "split": "final_holdout",
+  "status": "ALIGNED_E1",
+  "task_id": "GGA-SPATIAL-003",
+  "title": "反经线 GeoJSON 与最小跨度 bbox"
+}

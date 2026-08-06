@@ -1,0 +1,7 @@
+record_id,element,reported_value,reported_unit,medium,basis,phase,normalized_value,normalized_unit,comparison_group,conversion_rule
+M01,Pb,25,mg/kg,soil,dry,total,25,mg/kg,soil|dry|total,identity_mg_per_kg
+M02,Pb,30,mg/kg,soil,wet,total,30,mg/kg,soil|wet|total,identity_mg_per_kg_no_basis_change
+M03,Pb,0.02,mg/L,water,aqueous,dissolved,20,ug/L,water|aqueous|dissolved,mg_per_l_times_1000
+M04,Pb,100,ug/g,soil,dry,total,100,mg/kg,soil|dry|total,ug_per_g_to_mg_per_kg
+M05,Pb,20,ug/L,water,aqueous,filtered_dissolved,20,ug/L,water|aqueous|dissolved,identity_ug_per_l
+M06,Pb,25000,ug/kg,soil,dry,total,25,mg/kg,soil|dry|total,ug_per_kg_times_0.001

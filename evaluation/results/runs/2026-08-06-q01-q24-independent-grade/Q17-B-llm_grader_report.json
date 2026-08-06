@@ -1,0 +1,42 @@
+{
+  "task_id": "GGA-PROV-002",
+  "criteria": [
+    {
+      "id": "field_consistency",
+      "dimension_id": "domain_understanding",
+      "score": 8,
+      "max": 10,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/provenance_verdict.json: verdicts[1].reason='identifier_metadata_conflict'",
+        "artifacts/run_manifest.json#/benchmark_evidence/provenance_verdict.json: verdicts[0].reason='metadata_consistent_with_frozen_registry'",
+        "inputs/identifier_registry.json: entries[0] defines doi, dataset_title, authority_url_prefix, allowed_medium"
+      ],
+      "reason": "F-B's reject reason identifier_metadata_conflict (identifier present but metadata disagreeing) is distinguishable from identifier_not_in_frozen_registry, showing validation went beyond DOI-string existence to registry metadata fields (title/URL/medium defined in the registry). Full credit withheld because no per-field comparison record is present and candidates.json is not in the bundle, so which specific fields conflicted cannot be independently confirmed."
+    },
+    {
+      "id": "unknown_identifier",
+      "dimension_id": "domain_understanding",
+      "score": 6,
+      "max": 6,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/provenance_verdict.json: verdicts[2] {candidate_id='F-C', status='reject', reason='identifier_not_in_frozen_registry'}",
+        "inputs/identifier_registry.json: entries contains only doi 10.25625/2JETOA"
+      ],
+      "reason": "Candidate F-C, whose identifier is absent from the single-entry frozen registry, was rejected with the exact frozen reason identifier_not_in_frozen_registry instead of being accepted or patched into validity; consistent with checker c_reject passing."
+    },
+    {
+      "id": "scope_limit",
+      "dimension_id": "domain_understanding",
+      "score": 4,
+      "max": 4,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/provenance_verdict.json: validation_scope='metadata_consistency_only'",
+        "artifacts/run_manifest.json#/benchmark_evidence/provenance_verdict.json: verdicts[0].reason='metadata_consistent_with_frozen_registry'"
+      ],
+      "reason": "Root field validation_scope='metadata_consistency_only' explicitly bounds the verdict to metadata consistency and does not claim scientific validation of data values; matches the frozen scope value confirmed by the machine scope check."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "medium",
+  "human_review_required": false
+}

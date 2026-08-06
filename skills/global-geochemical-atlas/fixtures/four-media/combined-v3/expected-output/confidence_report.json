@@ -1,8 +1,8 @@
 {
   "band_counts": {
-    "high": 604,
+    "high": 700,
     "low": 48,
-    "medium": 96
+    "medium": 48
   },
   "band_thresholds": {
     "high": ">=0.80",
@@ -18,12 +18,12 @@
     "spatial": "Canonical coordinate availability plus declared CRS and coordinate uncertainty; original-only coordinates score zero."
   },
   "component_means": {
-    "completeness": 0.779805,
-    "method": 0.871658,
-    "overall": 0.87243,
-    "qc": 0.888583,
-    "source": 0.982086,
-    "spatial": 0.761497
+    "completeness": 0.960981,
+    "method": 0.879397,
+    "overall": 0.902486,
+    "qc": 0.880829,
+    "source": 0.983166,
+    "spatial": 0.715578
   },
   "confidence_version": "d2-confidence-v2",
   "gates": {
@@ -38,9 +38,17 @@
         "element_or_analyte",
         "medium",
         "material",
+        "sample_type",
+        "soil_horizon",
+        "sediment_environment",
+        "water_fraction",
+        "grain_fraction",
         "measurement_basis",
-        "geologic_unit",
+        "geologic_unit_raw",
+        "matched_geologic_unit",
+        "analytical_method",
         "method_family",
+        "method_scope",
         "digestion_or_extraction"
       ],
       "minimum_group_size": 8,
@@ -49,10 +57,10 @@
       "robust_z_threshold": 3.5,
       "schema_map": {}
     },
-    "input_row_count": 748,
-    "input_sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236",
+    "input_row_count": 796,
+    "input_sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
     "missing_recommended_input_columns": [],
-    "run_id": "d3592baa95a192f1",
+    "run_id": "3e077dc27d6ce88e",
     "schema_map_sha256": null
   },
   "source_scoring": {

@@ -1,0 +1,6 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+G01,G01,,,,,5,5,q11-fixture,
+G02,G02,,,,,5,9.999,q11-fixture,near_unit_boundary
+G03,G03,,,,,5,15,q11-fixture,coordinate_precision_coarse
+G04,G04,,,,,5,25,q11-fixture,
+G05,G05,,,,,5,10,q11-fixture,near_unit_boundary

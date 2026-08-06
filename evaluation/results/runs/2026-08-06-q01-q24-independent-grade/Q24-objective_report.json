@@ -1,0 +1,305 @@
+{
+  "task_id": "GGA-E2E-001",
+  "scoring_contract": "e1-six-dimension-v1",
+  "score_status": "evidence_only",
+  "hard_gate_passed": true,
+  "evidence_points_awarded": 80,
+  "evidence_points_possible": 80,
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "weight": 0.25,
+      "evidence_points_awarded": 6,
+      "evidence_points_possible": 6,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "weight": 0.3,
+      "evidence_points_awarded": 63,
+      "evidence_points_possible": 63,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "weight": 0.14,
+      "evidence_points_awarded": 11,
+      "evidence_points_possible": 11,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "weight": 0.15,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "weight": 0.1,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "weight": 0.06,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    }
+  ],
+  "checks": [
+    {
+      "id": "observations_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 1,
+      "points_possible": 1,
+      "evidence": "observations.csv: file"
+    },
+    {
+      "id": "qc_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 1,
+      "points_possible": 1,
+      "evidence": "qc_report.json: file"
+    },
+    {
+      "id": "sources_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 1,
+      "points_possible": 1,
+      "evidence": "sources.jsonl: file"
+    },
+    {
+      "id": "map_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 1,
+      "points_possible": 1,
+      "evidence": "map.geojson: file"
+    },
+    {
+      "id": "anomalies_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 1,
+      "points_possible": 1,
+      "evidence": "anomalies.geojson: file"
+    },
+    {
+      "id": "manifest_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 1,
+      "points_possible": 1,
+      "evidence": "run_manifest.json: file"
+    },
+    {
+      "id": "summary_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 1,
+      "points_possible": 1,
+      "evidence": "summary.md: file"
+    },
+    {
+      "id": "observation_count",
+      "type": "csv_row_count",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "observations.csv: rows=24; expected=24"
+    },
+    {
+      "id": "source_count",
+      "type": "jsonl_row_count",
+      "dimension_id": "scientific_credibility",
+      "passed": true,
+      "points_awarded": 3,
+      "points_possible": 3,
+      "evidence": "sources.jsonl: JSONL rows=2; expected=2"
+    },
+    {
+      "id": "map_count",
+      "type": "json_length",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "map.geojson path=features length=23; expected=23"
+    },
+    {
+      "id": "anomaly_count",
+      "type": "json_length",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "anomalies.geojson path=features length=1; expected=1"
+    },
+    {
+      "id": "e21_value",
+      "type": "csv_cell",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "observations.csv key={'record_id': 'E21'} column=normalized_value actual='500' expected=500 tol=0.0"
+    },
+    {
+      "id": "e22_censored",
+      "type": "csv_cell",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "observations.csv key={'record_id': 'E22'} column=censored actual='True' expected=True tol=0.0"
+    },
+    {
+      "id": "e23_not_mapped",
+      "type": "csv_cell",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "observations.csv key={'record_id': 'E23'} column=eligible_map actual='False' expected=False tol=0.0"
+    },
+    {
+      "id": "e25_unit",
+      "type": "csv_cell",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "observations.csv key={'record_id': 'E25'} column=normalized_unit actual='ug/L' expected='ug/L' tol=0.0"
+    },
+    {
+      "id": "qc_raw",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 3,
+      "points_possible": 3,
+      "evidence": "qc_report.json path=raw_input_rows actual=25 expected=25"
+    },
+    {
+      "id": "qc_accepted",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 3,
+      "points_possible": 3,
+      "evidence": "qc_report.json path=accepted_database_rows actual=24 expected=24"
+    },
+    {
+      "id": "qc_integrity_excluded",
+      "type": "json_value",
+      "dimension_id": "scientific_credibility",
+      "passed": true,
+      "points_awarded": 3,
+      "points_possible": 3,
+      "evidence": "qc_report.json path=excluded_integrity_rows actual=1 expected=1"
+    },
+    {
+      "id": "qc_mapped",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 3,
+      "points_possible": 3,
+      "evidence": "qc_report.json path=mapped_features actual=23 expected=23"
+    },
+    {
+      "id": "qc_anomaly",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 3,
+      "points_possible": 3,
+      "evidence": "qc_report.json path=anomaly_features actual=1 expected=1"
+    },
+    {
+      "id": "manifest_status",
+      "type": "json_value",
+      "dimension_id": "platform_reusability",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "run_manifest.json path=status actual='partial_success' expected='partial_success'"
+    },
+    {
+      "id": "manifest_exit",
+      "type": "json_value",
+      "dimension_id": "platform_reusability",
+      "passed": true,
+      "points_awarded": 2,
+      "points_possible": 2,
+      "evidence": "run_manifest.json path=exit_code actual=2 expected=2"
+    },
+    {
+      "id": "map_traceability",
+      "type": "json_object_has_keys",
+      "dimension_id": "platform_reusability",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "map.geojson path=features.0.properties missing keys=[]"
+    },
+    {
+      "id": "anomaly_id",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 3,
+      "points_possible": 3,
+      "evidence": "anomalies.geojson path=features.0.id actual='E21' expected='E21'"
+    },
+    {
+      "id": "anomaly_type",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "anomalies.geojson path=features.0.properties.anomaly_type actual='statistical_relative_enrichment' expected='statistical_relative_enrichment'"
+    },
+    {
+      "id": "anomaly_z",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "anomalies.geojson path=features.0.properties.robust_z actual=10.408091969133482 expected=10.4080919691"
+    },
+    {
+      "id": "summary_evidence",
+      "type": "text_contains_all",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 2,
+      "points_possible": 2,
+      "evidence": "summary.md: missing terms=[]"
+    }
+  ],
+  "redline_events": [],
+  "grader_version": "6.0.0-draft.2"
+}

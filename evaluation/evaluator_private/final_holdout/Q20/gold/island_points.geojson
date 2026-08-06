@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","id":"AM01","geometry":{"type":"Point","coordinates":[179.8,-17]},"properties":{"record_id":"AM01","value":10}},{"type":"Feature","id":"AM02","geometry":{"type":"Point","coordinates":[-179.7,-18]},"properties":{"record_id":"AM02","value":20}}]}

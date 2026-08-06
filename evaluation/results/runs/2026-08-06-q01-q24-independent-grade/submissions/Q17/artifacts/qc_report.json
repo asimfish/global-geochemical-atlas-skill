@@ -1,0 +1,13 @@
+{
+  "task_id": "GGA-PROV-002",
+  "question_id": "Q17",
+  "title": "来源标识符与元数据一致性",
+  "status": "success",
+  "exit_code": 0,
+  "counts": {
+    "candidates": 3,
+    "accepted": 1,
+    "rejected": 2
+  },
+  "warnings": []
+}

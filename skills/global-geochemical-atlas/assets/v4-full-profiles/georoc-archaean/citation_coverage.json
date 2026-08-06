@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "citation_scope_counts": {
+    "observation": 65988
+  },
+  "citation_text_count": 65988,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_doi": "10.25625/1KRR1P",
+  "dataset_doi_present": true,
+  "dataset_version": "12.0",
+  "observation_denominator": 65988,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "publication_doi_observation_count": 0,
+  "source_id": "georoc-archaean",
+  "upstream_primary_source_observation_count": 0
+}

@@ -1,0 +1,2 @@
+{"source_id": "q12-fixture", "file": "inputs/confidence_policy.json", "computed_sha256": "a1aa1cab121164d65e2f750eb0ef578f37d16e966e3edb915b54286aa75cab18", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
+{"source_id": "q12-fixture", "file": "inputs/records.json", "computed_sha256": "0ae5de840d5a3277f6a938a76bb48415373010ade27a87044fc06ba71f1b83a0", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

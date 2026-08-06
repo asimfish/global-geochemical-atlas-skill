@@ -1,0 +1,13 @@
+{
+  "task_id": "GGA-SPATIAL-001",
+  "question_id": "Q07",
+  "title": "坐标质量控制与可地图化判定",
+  "status": "success",
+  "exit_code": 0,
+  "counts": {
+    "input_rows": 9,
+    "eligible_map": 2,
+    "flagged": 7
+  },
+  "warnings": []
+}

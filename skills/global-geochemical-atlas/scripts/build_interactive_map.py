@@ -218,6 +218,11 @@ def load_records(
                     "analyte_reported": row.get("analyte_reported") or None,
                     "medium": row.get("medium"),
                     "material": row.get("material") or None,
+                    "sample_type": row.get("sample_type") or None,
+                    "soil_horizon": row.get("soil_horizon") or None,
+                    "sediment_environment": row.get("sediment_environment") or None,
+                    "water_body_type": row.get("water_body_type") or None,
+                    "water_fraction": row.get("water_fraction") or None,
                     "measurement_basis": row.get("measurement_basis") or None,
                     "original_value_raw": row.get("original_value_raw") or None,
                     "original_unit": row.get("original_unit") or None,
@@ -231,8 +236,11 @@ def load_records(
                     "longitude": longitude,
                     "lithology": row.get("lithology") or None,
                     "geologic_unit": row.get("geologic_unit") or None,
+                    "geologic_unit_raw": row.get("geologic_unit_raw") or None,
+                    "matched_geologic_unit": row.get("matched_geologic_unit") or None,
                     "analytical_method": row.get("analytical_method") or None,
                     "method_family": row.get("method_family") or None,
+                    "method_scope": row.get("method_scope") or None,
                     "digestion_or_extraction": row.get("digestion_or_extraction") or None,
                     "source_id": row.get("source_id") or None,
                     "dataset_title": row.get("dataset_title") or None,
@@ -365,7 +373,10 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         raise MapBuildError("custom_region must be null unless default_region=custom")
 
     filters = profile.get("filters")
-    filter_keys = {"element", "medium", "basis", "geology", "method", "source", "confidence"}
+    filter_keys = {
+        "element", "medium", "sample_type", "basis", "geology", "method", "method_scope",
+        "source", "confidence",
+    }
     if not isinstance(filters, dict):
         raise MapBuildError("visualization profile filters must be an object")
     require_exact_keys(filters, filter_keys, "visualization profile filters")
@@ -464,6 +475,9 @@ def visualization_profile_warnings(
     available = {
         "element": {str(record.get("element")) for record in records if record.get("element")},
         "medium": {str(record.get("medium")) for record in records if record.get("medium")},
+        "sample_type": {
+            str(record.get("sample_type")) for record in records if record.get("sample_type")
+        },
         "basis": {
             str(record.get("measurement_basis"))
             for record in records
@@ -473,6 +487,9 @@ def visualization_profile_warnings(
             str(record.get("geologic_unit")) for record in records if record.get("geologic_unit")
         },
         "method": method_values,
+        "method_scope": {
+            str(record.get("method_scope")) for record in records if record.get("method_scope")
+        },
         "source": {str(record.get("source_id")) for record in records if record.get("source_id")},
         "confidence": {
             str(record.get("confidence_band"))
@@ -509,10 +526,12 @@ def visualization_profile_warnings(
     field_map = {
         "element": "element",
         "medium": "medium",
+        "sample_type": "sample_type",
         "basis": "measurement_basis",
         "geology": "geologic_unit",
         "source": "source_id",
         "confidence": "confidence_band",
+        "method_scope": "method_scope",
     }
 
     def matches_filters(record: Mapping[str, Any]) -> bool:
@@ -809,6 +828,7 @@ PACKED_FIELDS = (
     "analyte_reported",
     "medium",
     "material",
+    "sample_type",
     "measurement_basis",
     "original_value_raw",
     "original_unit",
@@ -822,6 +842,7 @@ PACKED_FIELDS = (
     "geologic_unit",
     "analytical_method",
     "method_family",
+    "method_scope",
     "digestion_or_extraction",
     "source_id",
     "dataset_title",
@@ -870,6 +891,7 @@ def compact_map_payload(
                 string_index(record.get("analyte_reported")),
                 string_index(record.get("medium")),
                 string_index(record.get("material")),
+                string_index(record.get("sample_type")),
                 string_index(record.get("measurement_basis")),
                 string_index(record.get("original_value_raw")),
                 string_index(record.get("original_unit")),
@@ -883,6 +905,7 @@ def compact_map_payload(
                 string_index(record.get("geologic_unit")),
                 string_index(record.get("analytical_method")),
                 string_index(record.get("method_family")),
+                string_index(record.get("method_scope")),
                 string_index(record.get("digestion_or_extraction")),
                 string_index(record.get("source_id")),
                 string_index(record.get("dataset_title")),

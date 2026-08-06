@@ -1,0 +1,7 @@
+{
+  "version": "q11-policy-1",
+  "boundary_near_threshold_deg": 0.01,
+  "coarse_coordinate_threshold_m": 1000,
+  "shared_boundary_behavior": "ambiguous_no_assignment",
+  "confidence": {"clean_interior": "high", "near_boundary": "low", "coarse_coordinate": "low", "no_match": "none", "ambiguous": "low"}
+}

@@ -1,0 +1,161 @@
+{
+  "task_id": "GGA-MAP-001",
+  "scoring_contract": "e1-six-dimension-v1",
+  "score_status": "evidence_only",
+  "hard_gate_passed": true,
+  "evidence_points_awarded": 80,
+  "evidence_points_possible": 80,
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "weight": 0.25,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "weight": 0.3,
+      "evidence_points_awarded": 80,
+      "evidence_points_possible": 80,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "weight": 0.14,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "weight": 0.15,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "weight": 0.1,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "weight": 0.06,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    }
+  ],
+  "checks": [
+    {
+      "id": "geojson_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "points.geojson: file"
+    },
+    {
+      "id": "manifest_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "map_manifest.json: file"
+    },
+    {
+      "id": "feature_count",
+      "type": "json_length",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 10,
+      "points_possible": 10,
+      "evidence": "points.geojson path=features length=2; expected=2"
+    },
+    {
+      "id": "map1_id",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "points.geojson path=features.0.id actual='MAP1' expected='MAP1'"
+    },
+    {
+      "id": "map1_coords",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 12,
+      "points_possible": 12,
+      "evidence": "points.geojson path=features.0.geometry.coordinates actual=[100, 10] expected=[100, 10]"
+    },
+    {
+      "id": "map2_coords",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 12,
+      "points_possible": 12,
+      "evidence": "points.geojson path=features.1.geometry.coordinates actual=[-120, 40] expected=[-120, 40]"
+    },
+    {
+      "id": "map1_properties",
+      "type": "json_object_has_keys",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 10,
+      "points_possible": 10,
+      "evidence": "points.geojson path=features.0.properties missing keys=[]"
+    },
+    {
+      "id": "mapped_count",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "map_manifest.json path=mapped_features actual=2 expected=2"
+    },
+    {
+      "id": "excluded_count",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "map_manifest.json path=excluded_rows actual=3 expected=3"
+    },
+    {
+      "id": "coordinate_order",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "map_manifest.json path=coordinate_order actual='longitude_latitude' expected='longitude_latitude'"
+    },
+    {
+      "id": "no_crs_member",
+      "type": "json_value",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "map_manifest.json path=geojson_crs_member_present actual=False expected=False"
+    }
+  ],
+  "redline_events": [],
+  "grader_version": "6.0.0-draft.2"
+}

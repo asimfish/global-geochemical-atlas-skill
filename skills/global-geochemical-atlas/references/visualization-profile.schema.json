@@ -57,13 +57,15 @@
     },
     "filters": {
       "type": "object",
-      "required": ["element", "medium", "basis", "geology", "method", "source", "confidence"],
+      "required": ["element", "medium", "sample_type", "basis", "geology", "method", "method_scope", "source", "confidence"],
       "properties": {
         "element": {"type": ["string", "null"]},
         "medium": {"type": ["string", "null"]},
+        "sample_type": {"type": ["string", "null"]},
         "basis": {"type": ["string", "null"]},
         "geology": {"type": ["string", "null"]},
         "method": {"type": ["string", "null"]},
+        "method_scope": {"type": ["string", "null"]},
         "source": {"type": ["string", "null"]},
         "confidence": {"type": ["string", "null"]}
       },

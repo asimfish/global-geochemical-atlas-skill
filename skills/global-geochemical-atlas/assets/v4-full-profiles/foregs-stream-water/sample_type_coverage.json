@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "media": {
+    "water": 4848
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "water_stream": 4848
+  },
+  "sediment_environments": {
+    "not_applicable": 4848
+  },
+  "source_id": "foregs-stream-water",
+  "water_body_types": {
+    "stream": 4848
+  },
+  "water_fractions": {
+    "dissolved": 4848
+  }
+}

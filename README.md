@@ -65,7 +65,7 @@ python skills/global-geochemical-atlas/scripts/self_test.py
 ```bash
 python skills/global-geochemical-atlas/scripts/build_four_media_demo.py \
   --output-dir /tmp/four-media-demo \
-  --generated-at 2026-08-05T15:20:00Z
+  --generated-at 2026-08-06T10:05:00Z
 
 python skills/global-geochemical-atlas/scripts/run_workflow.py \
   --input /tmp/four-media-demo/demo_input.csv \

@@ -1,6 +1,7 @@
 {
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v2",
+  "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
   "generated_at": "2026-08-05T06:25:00Z",
   "generation_request": {
@@ -18,9 +19,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 29282,
+      "bytes": 68640,
       "path": "demo_input.csv",
-      "sha256": "382148f96b6e9f5c4c8beecd696d38921a2413e2a7af69e0d17c26be30291751"
+      "sha256": "cf6f105867c0f5d3f031b0b95cc703df89b196f06b604de331b05e46b9309446"
     },
     {
       "bytes": 86168,
@@ -239,6 +240,7 @@
       "source_url": "https://doi.org/10.25625/1KRR1P/0LBXI0"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",

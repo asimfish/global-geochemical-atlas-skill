@@ -51,19 +51,29 @@ offline: boolean
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
-需要离线展示真实四介质接口时，使用已经 hash 固定的十三来源、748 条观测最小切片：
+需要离线展示真实四介质接口时，使用已经 hash 固定的十四来源、796 条观测最小切片：
 
 ```bash
 python scripts/build_four_media_demo.py \
   --output-dir /tmp/four-media-demo \
-  --generated-at 2026-08-05T15:20:00Z
+  --generated-at 2026-08-06T10:05:00Z
 
 python scripts/run_workflow.py \
   --input /tmp/four-media-demo/demo_input.csv \
   --output-dir /tmp/four-media-output
 ```
 
-联合 manifest 必须显示来源、介质、分析物和比较分区。共同进入一张地图不表示记录可以混为同一背景；异常分组仍按元素、介质、measurement basis、地质单元、方法和消解/提取隔离。
+联合 manifest 必须显示来源、介质、分析物和比较分区。共同进入一张地图不表示记录可以混为同一背景；异常分组仍按元素、介质、material、样品类型、层位/环境/分相/粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取隔离。
+
+需要判断“数据是否全面”或比较不同介质时，不读取 demo 行数作分母。对已验证全量缓存运行：
+
+```bash
+python scripts/build_v4_full_profiles.py
+python scripts/reconcile_v4_coordinate_claims.py
+python scripts/reconcile_v4_coordinate_claims.py --check
+```
+
+优先读取 `assets/v4-coverage-balance.json` 和 `assets/v4-coverage-cube.csv`，同时报告 observation、distinct sample、independent lineage、reported-coordinate sample、canonical EPSG:4326 sample、comparable observation 和 observed spatial cell。来源坐标数值完整不等于 CRS 已证实；格网只表示有实测点，不能解释为格网内部连续覆盖。
 
 ## 3. 建立来源与下载证据
 
@@ -266,7 +276,9 @@ python scripts/render_visualization.py \
 
 在交互页面首部把上述四项产物做成同等显著的一级入口。标准数据库页必须能直接核验完整 CSV 记录数、行语义、可上图预览与排除计数；置信度页必须展示 source、completeness、method、spatial、QC 五个分量及其权重、均值、等级分布、门控规则和“不是概率”边界。不要只给下载链接。区域产物只能裁剪 HTML 内嵌记录和 `samples.geojson`，不得改写完整 `geochemistry.csv`；同时明确完整报告统计与当前区域预览统计的口径差异。
 
-遵守 `task-first-progressive-disclosure-v1` 界面层级：只生成一套主标签导航和一个紧凑的四交付物状态栏，不在页头重复下载胶囊、能力徽章或 `story` 下拉。地图首屏只展开区域、元素、样品类型 / 介质和地图表达；地质单元、颜色、bbox、basis、方法、来源、置信度与异常网格放进“更多筛选”。这条约束必须由模板、报告 capability matrix 与验证器共同检查，确保 Agent 面对其他数据仍能复现。
+遵守 `task-first-progressive-disclosure-v1` 界面层级：只生成一套主标签导航和一个紧凑的四交付物状态栏，不在页头重复下载胶囊、能力徽章或 `story` 下拉。地图首屏只展开区域、元素、介质和地图表达；细分样品类型、地质单元、颜色、bbox、basis、方法、方法范围、来源、置信度与异常网格放进“更多筛选”。这条约束必须由模板、报告 capability matrix 与验证器共同检查，确保 Agent 面对其他数据仍能复现。
+
+交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、样品类型、方法 scope、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
 
 ## 8. 验证与失败关闭
 

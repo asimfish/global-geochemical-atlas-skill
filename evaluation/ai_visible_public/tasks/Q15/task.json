@@ -1,0 +1,175 @@
+{
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "candidate_visible_contract": {
+    "container": "artifacts/run_manifest.json",
+    "field": "benchmark_evidence",
+    "logical_outputs": {
+      "map_manifest.json": {
+        "format": "json",
+        "json_shape": {
+          "properties": {
+            "coordinate_order": {
+              "type": "string"
+            },
+            "crs": {
+              "type": "string"
+            },
+            "excluded_rows": {
+              "type": "integer"
+            },
+            "geojson_crs_member_present": {
+              "type": "boolean"
+            },
+            "input_rows": {
+              "type": "integer"
+            },
+            "mapped_features": {
+              "type": "integer"
+            },
+            "task_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "coordinate_order",
+            "crs",
+            "excluded_rows",
+            "geojson_crs_member_present",
+            "input_rows",
+            "mapped_features",
+            "task_id"
+          ],
+          "type": "object"
+        }
+      },
+      "points.geojson": {
+        "format": "json",
+        "json_shape": {
+          "properties": {
+            "features": {
+              "items": {
+                "properties": {
+                  "geometry": {
+                    "properties": {
+                      "coordinates": {
+                        "items": {
+                          "type": "integer"
+                        },
+                        "type": "array"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "coordinates",
+                      "type"
+                    ],
+                    "type": "object"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "properties": {
+                    "properties": {
+                      "confidence_score": {
+                        "type": "integer"
+                      },
+                      "element": {
+                        "type": "string"
+                      },
+                      "medium": {
+                        "type": "string"
+                      },
+                      "qc_flags": {
+                        "items": {},
+                        "type": "array"
+                      },
+                      "record_id": {
+                        "type": "string"
+                      },
+                      "source_id": {
+                        "type": "string"
+                      },
+                      "unit": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "confidence_score",
+                      "element",
+                      "medium",
+                      "qc_flags",
+                      "record_id",
+                      "source_id",
+                      "unit",
+                      "value"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "geometry",
+                  "id",
+                  "properties",
+                  "type"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "features",
+            "type"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "schema_version": "e2.candidate-visible.v1"
+  },
+  "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "e1_eval_version": "1.0.0",
+  "failure_tags": [
+    "GEOJSON_AXIS_ORDER",
+    "INVALID_POINT_MAPPED",
+    "MAP_PROVENANCE_MISSING"
+  ],
+  "fixture_type": "synthetic_adversarial_fixture",
+  "gold_version": "6.0.0-draft.2",
+  "input_assets": [
+    "observations.csv"
+  ],
+  "legacy_logical_outputs": [
+    "points.geojson",
+    "map_manifest.json"
+  ],
+  "question_id": "Q15",
+  "required_outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "split": "shadow",
+  "status": "ALIGNED_E1",
+  "task_id": "GGA-MAP-001",
+  "title": "可追溯观测点 GeoJSON"
+}
