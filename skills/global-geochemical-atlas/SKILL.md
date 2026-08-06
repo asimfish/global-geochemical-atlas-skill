@@ -51,19 +51,29 @@ offline: boolean
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
-需要离线展示真实四介质接口时，使用已经 hash 固定的十三来源、748 条观测最小切片：
+需要离线展示真实四介质接口时，使用已经 hash 固定的十四来源、796 条观测最小切片：
 
 ```bash
 python scripts/build_four_media_demo.py \
   --output-dir /tmp/four-media-demo \
-  --generated-at 2026-08-05T15:20:00Z
+  --generated-at 2026-08-06T10:05:00Z
 
 python scripts/run_workflow.py \
   --input /tmp/four-media-demo/demo_input.csv \
   --output-dir /tmp/four-media-output
 ```
 
-联合 manifest 必须显示来源、介质、分析物和比较分区。共同进入一张地图不表示记录可以混为同一背景；异常分组仍按元素、介质、measurement basis、地质单元、方法和消解/提取隔离。
+联合 manifest 必须显示来源、介质、分析物和比较分区。共同进入一张地图不表示记录可以混为同一背景；异常分组仍按元素、介质、material、样品类型、层位/环境/分相/粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取隔离。
+
+需要判断“数据是否全面”或比较不同介质时，不读取 demo 行数作分母。对已验证全量缓存运行：
+
+```bash
+python scripts/build_v4_full_profiles.py
+python scripts/reconcile_v4_coordinate_claims.py
+python scripts/reconcile_v4_coordinate_claims.py --check
+```
+
+优先读取 `assets/v4-coverage-balance.json` 和 `assets/v4-coverage-cube.csv`，同时报告 observation、distinct sample、independent lineage、reported-coordinate sample、canonical EPSG:4326 sample、comparable observation 和 observed spatial cell。来源坐标数值完整不等于 CRS 已证实；格网只表示有实测点，不能解释为格网内部连续覆盖。
 
 ## 3. 建立来源与下载证据
 
@@ -244,6 +254,8 @@ python scripts/render_visualization.py \
 不要编辑 `assets/interactive-atlas-v3.html`。它是确定性渲染资产，不是提交给用户填写的网页源码。检查 `visualization_report.json.status` 和 `profile_warnings`；首屏必须直接回答用户问题，仍允许切换分布、密度、元素组合、异常、来源与质量视图。
 
 全流程必须生成标准数据库、来源与置信度说明、异常结果和交互地图。D3 独立生成 `interactive_map.html`、`samples.geojson`、`visualization_profile.json` 与 `visualization_report.json`，并原样携带页面引用的 D1/D2 证据文件。配置与报告分别受 [references/visualization-profile.schema.json](references/visualization-profile.schema.json) 和 [references/visualization-report.schema.json](references/visualization-report.schema.json) 约束；显示规则、失败边界和验收步骤见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
+
+交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、样品类型、方法 scope、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
 
 ## 8. 验证与失败关闭
 

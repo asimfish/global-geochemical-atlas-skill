@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/global-geochemical-atlas/v4-full-profile.schema.json",
+  "title": "D1 V4 full-population profile artifact",
+  "type": "object",
+  "required": [
+    "profile_version",
+    "source_id",
+    "dataset_version",
+    "as_of",
+    "claim_boundary"
+  ],
+  "properties": {
+    "profile_version": {
+      "const": "d1-v4-full-population-profile-v1"
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "as_of": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_boundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile_scope": {
+      "const": "full_population"
+    },
+    "observation_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "observation_denominator": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "additionalProperties": true
+}

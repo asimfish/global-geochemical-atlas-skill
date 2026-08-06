@@ -36,6 +36,7 @@ SOURCE_ORDER = (
     "foregs-stream-water",
     "foregs-stream-sediment",
     "foregs-floodplain-sediment",
+    "afsis-phase-i-wet-chemistry",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
@@ -51,6 +52,7 @@ EXPECTED_MEDIA = {
     "foregs-stream-water": "water",
     "foregs-stream-sediment": "sediment",
     "foregs-floodplain-sediment": "sediment",
+    "afsis-phase-i-wet-chemistry": "soil",
 }
 
 
@@ -201,6 +203,20 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     source_counts = Counter(row["source_id"] for row in rows)
     medium_counts = Counter(row["medium"] for row in rows)
     analyte_counts = Counter(row["element_or_analyte"] for row in rows)
+    source_files: dict[str, dict[str, Any]] = {}
+    for item in evidence_rows:
+        filename = str(item.get("source_file") or "")
+        entry = {
+            "filename": filename,
+            "sha256": str(item.get("source_file_sha256") or ""),
+            "source_url": str(item.get("source_file_url") or ""),
+            "bytes": item.get("source_file_bytes"),
+        }
+        if not filename or not entry["sha256"] or not entry["source_url"]:
+            raise CombinedDemoError("combined evidence lacks source-file hash binding")
+        previous = source_files.setdefault(filename, entry)
+        if previous != entry:
+            raise CombinedDemoError(f"conflicting source-file evidence for {filename}")
     route_coverage = {
         medium: {
             "status": "partial",
@@ -234,6 +250,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "coverage": route_coverage if request.get("offline") else route["coverage"],
         },
         "fixture_inputs": fixture_inputs,
+        "source_files": [source_files[name] for name in sorted(source_files)],
         "record_counts": {
             "total": len(rows),
             "by_source": dict(sorted(source_counts.items())),
@@ -258,6 +275,8 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "FOREGS topsoil, subsoil and humus remain separate sample media within the canonical soil class.",
                 "FOREGS total, aqua-regia-leachable, mild-acid-leachable and dissolved values remain separate comparison groups.",
                 "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts.",
+                "AfSIS aqua-regia quasi-total topsoil and subsoil remain separate from total and differently extracted soil values.",
+                "AfSIS numeric below-DL or below-QL results retain explicit observation evidence and are not promoted to ordinary detections.",
             ],
         },
         "outputs": [
@@ -277,6 +296,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",
             "Anomalies produced from fixture groups are pipeline candidates only and cannot support pollution or depletion claims.",
         ],
+        "failures": [],
         "claim_boundary": (
             f"The combined package binds {len(SOURCE_ORDER)} already verified mini-slices to one request and evidence chain. "
             "It does not increase their geographic representativeness or create independent replication."

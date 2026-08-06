@@ -6,7 +6,7 @@
       128.0647,
       81.409639
     ],
-    "coordinate_rate": 0.935829,
+    "coordinate_rate": 0.879397,
     "coverage_claim": "Observed sample locations only; blank regions are not inferred as absence.",
     "elements": [
       "As",
@@ -27,14 +27,14 @@
     "data_mode": "input",
     "filename": "demo_input.csv",
     "not_for_scientific_interpretation": false,
-    "record_count": 748,
-    "sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236",
+    "record_count": 796,
+    "sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
     "synthetic_demo": false
   },
   "limitations": [
     "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
     "Map density uses observed points only; no interpolation is performed across unsampled areas.",
-    "52 anomaly background group(s) were not analyzed due to explicit failure states."
+    "51 anomaly background group(s) were not analyzed due to explicit failure states."
   ],
   "map_report": {
     "anomaly_region_render_mode": "zoom-adaptive-anomaly-bubbles-v1",
@@ -51,7 +51,7 @@
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 444676,
+    "html_bytes": 481166,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -206,8 +206,8 @@
       "australia",
       "custom_bbox"
     ],
-    "samples_geojson_bytes": 816198,
-    "unmappable_record_count": 48,
+    "samples_geojson_bytes": 1009570,
+    "unmappable_record_count": 96,
     "visualization_modes": [
       "distribution_points",
       "sample_density_heatmap",
@@ -236,6 +236,8 @@
         "geology": null,
         "medium": null,
         "method": null,
+        "method_scope": null,
+        "sample_type": null,
         "source": null
       },
       "schema_version": "d3-visualization-profile-v1",
@@ -249,8 +251,8 @@
   "metrics": {
     "candidate_anomaly_count": 16,
     "censored_record_count": 23,
-    "record_count": 748,
-    "standardized_record_count": 748,
+    "record_count": 796,
+    "standardized_record_count": 796,
     "valid_coordinate_count": 700
   },
   "next_actions": [
@@ -275,9 +277,17 @@
       "element_or_analyte",
       "medium",
       "material",
+      "sample_type",
+      "soil_horizon",
+      "sediment_environment",
+      "water_fraction",
+      "grain_fraction",
       "measurement_basis",
-      "geologic_unit",
+      "geologic_unit_raw",
+      "matched_geologic_unit",
+      "analytical_method",
       "method_family",
+      "method_scope",
       "digestion_or_extraction"
     ],
     "max_records": 50000,

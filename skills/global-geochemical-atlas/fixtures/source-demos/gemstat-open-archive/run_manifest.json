@@ -1,6 +1,7 @@
 {
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
   "generated_at": "2026-08-05T14:41:20Z",
   "generation_request": {
@@ -13,9 +14,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 23346,
+      "bytes": 62233,
       "path": "demo_input.csv",
-      "sha256": "54dc5916f764ba7d31384054c90da86502d2821ff0a96fd543ff69d6e6233a22"
+      "sha256": "468f48c8183a1ea95780d751dce9052c81c545fff4430823b90dd541a6957cf4"
     },
     {
       "bytes": 87785,
@@ -73,6 +74,7 @@
       "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",

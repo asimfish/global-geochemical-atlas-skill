@@ -1,0 +1,23 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2.0",
+  "media": {
+    "soil": 12012
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "soil_subsoil": 6060,
+    "soil_topsoil": 5952
+  },
+  "sediment_environments": {
+    "not_applicable": 12012
+  },
+  "source_id": "afsis-phase-i-wet-chemistry",
+  "water_body_types": {
+    "not_applicable": 12012
+  },
+  "water_fractions": {
+    "not_applicable": 12012
+  }
+}

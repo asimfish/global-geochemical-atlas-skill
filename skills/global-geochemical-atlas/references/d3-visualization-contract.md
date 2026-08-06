@@ -56,9 +56,11 @@ anomaly_report.json
   "filters": {
     "element": null,
     "medium": null,
+    "sample_type": null,
     "basis": null,
     "geology": null,
     "method": null,
+    "method_scope": null,
     "source": null,
     "confidence": null
   },

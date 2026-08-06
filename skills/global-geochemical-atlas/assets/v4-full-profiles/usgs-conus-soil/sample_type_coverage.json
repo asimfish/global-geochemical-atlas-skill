@@ -1,0 +1,24 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "Data Series 801, 2013 release",
+  "media": {
+    "soil": 58284
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "soil_a_horizon": 19428,
+    "soil_c_horizon": 19428,
+    "soil_topsoil": 19428
+  },
+  "sediment_environments": {
+    "not_applicable": 58284
+  },
+  "source_id": "usgs-conus-soil",
+  "water_body_types": {
+    "not_applicable": 58284
+  },
+  "water_fractions": {
+    "not_applicable": 58284
+  }
+}

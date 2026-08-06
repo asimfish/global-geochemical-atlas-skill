@@ -15,6 +15,8 @@ import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
+import zipfile
+import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -1690,6 +1692,309 @@ class ForegsFloodplainSedimentAdapter(ForegsAdapter):
     source_id = "foregs-floodplain-sediment"
 
 
+class AfsisPhaseIWetChemistryAdapter(RegistryAdapter):
+    """Pinned AfSIS Phase I original CSV plus method and detection-limit workbooks."""
+
+    source_id = "afsis-phase-i-wet-chemistry"
+    _xlsx_namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+    _country_names = {"SAfrica": "South Africa", "Zimbambwe": "Zimbabwe"}
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("AfSIS adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in AfSIS demo directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        accepted = set(download_entry["accepted_content_types"])
+        results: list[DownloadedFile] = []
+        for file_entry in download_entry["files"]:
+            output = root / file_entry["filename"]
+            args = _download_args(
+                url=file_entry["url"],
+                output=output,
+                manifest=root / f"{file_entry['file_id']}.download.json",
+                license_id=candidate.license_id,
+                expected_sha256=file_entry["expected_sha256"],
+                max_bytes=int(download_entry["max_bytes_per_file"]),
+                dataset_doi=candidate.dataset_doi,
+                dataset_version=candidate.version,
+                offline=mode == "cached",
+                required_fields=(
+                    candidate.registry_entry["required_fields"]
+                    if file_entry["file_id"] == "measurements"
+                    else ()
+                ),
+            )
+            try:
+                result = downloader.run(args)
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(f"AfSIS download failed for {file_entry['file_id']}: {exc}") from exc
+            content_type = str(result.get("content_type") or "")
+            if content_type and content_type not in accepted:
+                raise SourceAdapterError(
+                    f"AfSIS file {file_entry['file_id']} returned unexpected content type: {content_type}"
+                )
+            if output.stat().st_size != int(file_entry["bytes"]):
+                raise SourceAdapterError(f"AfSIS file size changed: {file_entry['filename']}")
+            if _md5_file(output) != file_entry["publisher_checksum"]["value"]:
+                raise SourceAdapterError(f"AfSIS publisher MD5 changed: {file_entry['filename']}")
+            results.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=file_entry["file_id"],
+                    path=output,
+                    source_url=file_entry["url"],
+                    sha256=result["sha256"],
+                    bytes=result["bytes"],
+                    cache_status=result["status"],
+                    retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
+                )
+            )
+        return results
+
+    @staticmethod
+    def _column_index(reference: str) -> int:
+        match = re.match(r"^([A-Z]+)", reference)
+        if not match:
+            raise SourceAdapterError(f"AfSIS workbook has an invalid cell reference: {reference}")
+        value = 0
+        for character in match.group(1):
+            value = value * 26 + ord(character) - ord("A") + 1
+        return value - 1
+
+    @classmethod
+    def _xlsx_rows(cls, path: Path) -> list[tuple[int, list[str]]]:
+        """Read the one registered worksheet without extracting or trusting arbitrary members."""
+
+        allowed_members = {"xl/sharedStrings.xml", "xl/worksheets/sheet1.xml"}
+        try:
+            with zipfile.ZipFile(path) as archive:
+                members = archive.infolist()
+                if len(members) > 30 or sum(item.file_size for item in members) > 1_000_000:
+                    raise SourceAdapterError(f"AfSIS workbook exceeds its safe structural limits: {path.name}")
+                available = {item.filename for item in members}
+                if not allowed_members.issubset(available):
+                    raise SourceAdapterError(f"AfSIS workbook lacks its registered worksheet XML: {path.name}")
+                strings_root = ET.fromstring(archive.read("xl/sharedStrings.xml"))
+                sheet_root = ET.fromstring(archive.read("xl/worksheets/sheet1.xml"))
+        except (OSError, zipfile.BadZipFile, ET.ParseError, KeyError) as exc:
+            raise SourceAdapterError(f"AfSIS workbook is unreadable: {path.name}") from exc
+
+        namespace = f"{{{cls._xlsx_namespace}}}"
+        shared_strings = [
+            "".join(node.text or "" for node in item.iter(f"{namespace}t"))
+            for item in strings_root.findall(f"{namespace}si")
+        ]
+        rows: list[tuple[int, list[str]]] = []
+        for row in sheet_root.findall(f".//{namespace}sheetData/{namespace}row"):
+            indexed: dict[int, str] = {}
+            for cell in row.findall(f"{namespace}c"):
+                reference = str(cell.get("r") or "")
+                index = cls._column_index(reference)
+                value_node = cell.find(f"{namespace}v")
+                value = "" if value_node is None else str(value_node.text or "")
+                if cell.get("t") == "s" and value:
+                    try:
+                        value = shared_strings[int(value)]
+                    except (ValueError, IndexError) as exc:
+                        raise SourceAdapterError(f"AfSIS workbook has an invalid shared string: {path.name}") from exc
+                indexed[index] = value.strip()
+            width = max(indexed, default=-1) + 1
+            rows.append((int(row.get("r") or len(rows) + 1), [indexed.get(i, "") for i in range(width)]))
+        return rows
+
+    def _variable_metadata(self, downloaded: DownloadedFile) -> dict[str, dict[str, str]]:
+        rows = self._xlsx_rows(downloaded.path)
+        if not rows:
+            raise SourceAdapterError("AfSIS variable workbook is empty")
+        headers = rows[0][1]
+        required_headers = [
+            "variable name", "variable description", "Units - air dry soil basis",
+            "instrument used for analysis", "method used", "lab where analysis was conducted",
+            "date samples were collected", "year analysis was conducted",
+        ]
+        if not set(required_headers).issubset(headers):
+            raise SourceAdapterError("AfSIS variable workbook headings changed")
+        metadata: dict[str, dict[str, str]] = {}
+        for row_number, row in rows[1:]:
+            padded = row + [""] * max(0, len(headers) - len(row))
+            values = dict(zip(headers, padded, strict=False))
+            variable = values.get("variable name", "")
+            if variable:
+                metadata[variable] = {
+                    **values,
+                    "source_locator": f"{downloaded.path.name}#sheet1-row={row_number}",
+                }
+        expected = set(self.candidate.registry_entry["target_analytes"].values())
+        if not expected.issubset(metadata):
+            raise SourceAdapterError("AfSIS variable workbook lacks target-element metadata")
+        return metadata
+
+    def _detection_limits(self, downloaded: DownloadedFile) -> dict[str, dict[str, str]]:
+        rows = {row_number: values for row_number, values in self._xlsx_rows(downloaded.path)}
+        limits: dict[str, dict[str, str]] = {}
+        for method, header_row, dl_row, ql_row in (
+            ("ICP-OES (Perkin Elmer Optima)", 7, 8, 9),
+            ("ICP-MS (Perkin Elmer NexION)", 16, 17, 18),
+        ):
+            headers = rows.get(header_row, [])
+            dl_values = rows.get(dl_row, [])
+            ql_values = rows.get(ql_row, [])
+            for index, analyte in enumerate(headers):
+                if not analyte:
+                    continue
+                limits[f"{method}|{analyte}"] = {
+                    "detection_limit": dl_values[index] if index < len(dl_values) else "",
+                    "quantitation_limit": ql_values[index] if index < len(ql_values) else "",
+                    "source_locator": (
+                        f"{downloaded.path.name}#sheet1-rows={header_row},{dl_row},{ql_row}"
+                    ),
+                }
+        required = {
+            "ICP-MS (Perkin Elmer NexION)|As",
+            *{f"ICP-OES (Perkin Elmer Optima)|{item}" for item in ("Cr", "Cu", "Ni", "Pb", "Zn")},
+        }
+        if not required.issubset(limits) or any(
+            not limits[key]["detection_limit"] or not limits[key]["quantitation_limit"] for key in required
+        ):
+            raise SourceAdapterError("AfSIS detection-limit workbook lacks registered target limits")
+        return limits
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        if set(by_id) != {"measurements", "variables", "detection-limits"}:
+            raise SourceAdapterError("AfSIS adapter requires the exact three registered original files")
+        variables = self._variable_metadata(by_id["variables"])
+        limits = self._detection_limits(by_id["detection-limits"])
+        target_fields = self.candidate.registry_entry["target_analytes"]
+        expected = self.candidate.registry_entry["expected_counts"]
+        seen_ssn: set[str] = set()
+        seen_res: set[str] = set()
+        countries: set[str] = set()
+        sites: set[tuple[str, str]] = set()
+        coordinate_pairs = 0
+        target_counts: dict[str, int] = {analyte: 0 for analyte in target_fields}
+        negative_counts: dict[str, int] = {analyte: 0 for analyte in target_fields}
+        below_dl_counts: dict[str, int] = {analyte: 0 for analyte in target_fields}
+        emitted = 0
+        try:
+            handle = by_id["measurements"].path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError("AfSIS measurement CSV is unreadable") from exc
+        with handle:
+            reader = csv.DictReader(handle)
+            required = set(self.candidate.registry_entry["required_fields"]) | set(target_fields.values())
+            if not reader.fieldnames or not required.issubset(reader.fieldnames):
+                raise SourceAdapterError("AfSIS measurement CSV lacks registered fields")
+            for values in reader:
+                emitted += 1
+                ssn = str(values.get("SSN") or "").strip()
+                res_id = str(values.get("RES.ID") or "").strip()
+                if not ssn or not res_id or ssn in seen_ssn or res_id in seen_res:
+                    raise SourceAdapterError(f"AfSIS sample identifiers are missing or duplicated at row {reader.line_num}")
+                seen_ssn.add(ssn)
+                seen_res.add(res_id)
+                country = str(values.get("Country") or "").strip()
+                site = str(values.get("Site") or "").strip()
+                countries.add(country)
+                sites.add((country, site))
+                latitude = str(values.get("Latitude") or "").strip()
+                longitude = str(values.get("Longitude") or "").strip()
+                if bool(latitude) != bool(longitude):
+                    raise SourceAdapterError(f"AfSIS sample has only one coordinate at row {reader.line_num}")
+                coordinate_pairs += bool(latitude and longitude)
+                depth = str(values.get("Depth") or "").strip()
+                if depth not in {"Topsoil", "Subsoil"}:
+                    raise SourceAdapterError(f"AfSIS sample has an unknown depth class at row {reader.line_num}")
+                observations: dict[str, dict[str, Any]] = {}
+                for analyte, field in target_fields.items():
+                    raw_value = str(values.get(field) or "").strip()
+                    try:
+                        numeric = float(raw_value)
+                    except ValueError as exc:
+                        raise SourceAdapterError(
+                            f"AfSIS {field} is not numeric at row {reader.line_num}"
+                        ) from exc
+                    variable = variables[field]
+                    limit_key = (
+                        "ICP-MS (Perkin Elmer NexION)|As"
+                        if analyte == "As"
+                        else f"ICP-OES (Perkin Elmer Optima)|{analyte}"
+                    )
+                    threshold = limits[limit_key]
+                    detection_limit = float(threshold["detection_limit"])
+                    quantitation_limit = float(threshold["quantitation_limit"])
+                    target_counts[analyte] += 1
+                    negative_counts[analyte] += numeric < 0
+                    below_dl_counts[analyte] += 0 <= numeric < detection_limit
+                    observations[analyte] = {
+                        "value": raw_value,
+                        "unit": variable["Units - air dry soil basis"],
+                        "detection_limit": threshold["detection_limit"],
+                        "quantitation_limit": threshold["quantitation_limit"],
+                        "below_detection_limit": 0 <= numeric < detection_limit,
+                        "below_quantitation_limit": 0 <= numeric < quantitation_limit,
+                        "negative_numeric_result": numeric < 0,
+                        "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+                        "analytical_method": variable["instrument used for analysis"].strip(),
+                        "digestion_or_extraction": variable["method used"].strip(),
+                        "laboratory": variable["lab where analysis was conducted"].strip(),
+                        "source_variable_description": variable["variable description"].strip(),
+                        "variable_metadata_locator": variable["source_locator"],
+                        "threshold_metadata_locator": threshold["source_locator"],
+                    }
+                source_locator = f"{by_id['measurements'].path.name}#row={reader.line_num}"
+                depth_range = ("0", "0.2") if depth == "Topsoil" else ("0.2", "0.5")
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(self.source_id, ssn, source_locator),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_country_normalized": self._country_names.get(country, country),
+                        "_target_observations": observations,
+                        "_source_file": by_id["measurements"].path.name,
+                        "_source_crs": "",
+                        "_medium": "soil",
+                        "_sample_type": depth,
+                        "_sample_depth_min_m": depth_range[0],
+                        "_sample_depth_max_m": depth_range[1],
+                        "_measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+                        "_grain_fraction": "<2 mm",
+                        "_dataset_version": self.candidate.version,
+                        "_metadata_conflicts": [
+                            "As.75 source column is described as Arsenic-78 in the variable workbook; the raw field "
+                            "name and description are both retained and the isotope label is not silently repaired.",
+                            "The variable workbook reports sampling in 2009-2013 while the related SOIL article "
+                            "reports AfSIS field sampling in 2009-2012.",
+                        ],
+                        "_quality_boundary": (
+                            "Published numeric results are retained verbatim. Negative instrument results and positive "
+                            "values below the source-wide DL or QL are flagged, not silently removed or promoted to detections."
+                        ),
+                    },
+                )
+        reconciled = {
+            "physical_rows": emitted,
+            "unique_ssn": len(seen_ssn),
+            "unique_res_id": len(seen_res),
+            "country_labels": len(countries),
+            "country_site_pairs": len(sites),
+            "complete_coordinate_pairs": coordinate_pairs,
+            "target_value_counts": target_counts,
+            "negative_value_counts": negative_counts,
+            "positive_below_dl_counts": below_dl_counts,
+        }
+        if reconciled != expected:
+            raise SourceAdapterError(f"AfSIS reconciliation changed: {reconciled!r} != {expected!r}")
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -1704,6 +2009,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     ForegsStreamWaterAdapter.source_id: ForegsStreamWaterAdapter,
     ForegsStreamSedimentAdapter.source_id: ForegsStreamSedimentAdapter,
     ForegsFloodplainSedimentAdapter.source_id: ForegsFloodplainSedimentAdapter,
+    AfsisPhaseIWetChemistryAdapter.source_id: AfsisPhaseIWetChemistryAdapter,
 }
 
 

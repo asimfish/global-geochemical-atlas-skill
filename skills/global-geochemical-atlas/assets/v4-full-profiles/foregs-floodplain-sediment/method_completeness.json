@@ -1,0 +1,16 @@
+{
+  "analytical_method_counts": {
+    "ICP-AES": 4482,
+    "WD-XRF and ED(P)-XRF selected by element": 4494,
+    "cold-vapour AAS after gold amalgam preconcentration": 696
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "method_scope_counts": {
+    "file": 9672
+  },
+  "observation_count": 9672,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "foregs-floodplain-sediment"
+}

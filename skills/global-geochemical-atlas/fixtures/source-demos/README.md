@@ -163,8 +163,14 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 
 使用相同注册表版本、验证缓存/快照和 `--generated-at` 时，每个来源的三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。
 
+## AfSIS Phase I V2.0 土壤 demo
+
+`afsis-phase-i-wet-chemistry/` 从官方 Dataverse 的三个 original 文件生成 48 条正值观测：12 个国家标签各选一个有完整坐标的样品，并为 As/Cu/Ni/Zn 各保留一条测定。原始国家标签 `SAfrica`、`Zimbambwe` 不被覆盖，规范名只写入独立证据字段；上下层、王水准全量基础、ICP-MS/ICP-OES、实验室、DL 和 QL 均逐观测绑定。
+
+全量来源有 2,002 个样品，其中 126 个缺少经纬度；As/Cu/Pb 有负数仪器结果，Pb 有 1,969 条正值低于来源 DL。注册文件和相关论文没有声明坐标 CRS，因此 demo 保留经纬度但 `source_crs` 为空；变量表的 `As.75`/“Arsenic-78”以及采样年份也有文字冲突并保留在 evidence。demo 为了通过地图流水线只选正值与完整坐标，不得据此宣称全量无缺失或所有数值均为可靠检出。完整边界见 candidate audit 和 30 条待签署复核单。
+
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将以上十三个来源合并到同一个 `sources=auto` 请求：748 条观测包括 rock 48、soil 300、sediment 256、water 144。`run_manifest.json` 绑定十三个输入 fixture 的 hash、来源证据等级、离线验证状态，以及标准化前 86 个输入分区和标准化后 93 个 D2 比较组；`expected-output/` 是可字节级重建的十文件工作流结果。
+`fixtures/four-media/combined-v3/` 将以上十四个来源合并到同一个 `sources=auto` 请求：796 条观测包括 rock 48、soil 348、sediment 256、water 144。`run_manifest.json` 绑定十四个输入 fixture 的 hash、来源证据等级、离线验证状态，以及标准化前后均为 93 个 D2 比较分区（水体 18 个）；`expected-output/` 是可字节级重建的十文件工作流结果。
 
-这只是接口联合测试。93 个标准化后背景组按元素、介质、material、measurement basis、地质单元、方法族和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 16 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。
+这只是接口联合测试。93 个背景组按元素、介质、material、样品类型、土壤层位、沉积环境、水分相、粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取方法隔离；当前没有一个组跨越不兼容来源。GEOROC 和 AfSIS 未证实 CRS 的 reported coordinates 不进入 canonical 地图。16 个工程异常候选只验证筛查流程，不构成区域异常、污染或矿化结论。
