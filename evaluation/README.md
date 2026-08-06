@@ -29,6 +29,7 @@ python3 evaluation/docker/campaign.py run \
 ```
 
 mock 只验证运行器，不是模型成绩。正式 OpenCode 命令、网关密钥规则和证据目录见 [`docs/docker_usage.md`](docs/docker_usage.md)。
+如果目标是让用户只开两个空目录并分别测试纯 Qwen 与 Qwen + Skill，请直接复制 [`evaluation_lyf/agent_uplift/`](../evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md) 中的两份固定 Prompt；该公开 uplift case 与 Q01–Q24 的 campaign 分开计分，但复用这里的 Docker 环境。
 
 ## E1 交卷文件
 

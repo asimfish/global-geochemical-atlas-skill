@@ -186,6 +186,15 @@ D3 只消费 D1/D2 公共产物，不重新计算标准值、置信度或异常�
 
 ## 开发与验证
 
+仓库的测试分层如下。Docker 是统一执行环境，不是第三套 benchmark：
+
+| 入口 | 验证内容 |
+|---|---|
+| Skill `component_test.py` / `self_test.py` | D1/D2/D3 契约与最小端到端回归 |
+| [`evaluation/`](evaluation/) | Q01–Q24、B0/S0、E1 十产物和评分证据 |
+| [`evaluation_lyf/`](evaluation_lyf/) | D1/D2/D3 独立科学门禁与 Qwen Skill uplift |
+| [`evaluation/docker/`](evaluation/docker/) | 上述评测共用的镜像、隔离、OpenCode 与 campaign runner |
+
 ```bash
 # 全组件契约
 python skills/global-geochemical-atlas/scripts/component_test.py --component all
@@ -195,9 +204,13 @@ python skills/global-geochemical-atlas/scripts/self_test.py
 
 # evaluation 工具测试
 python -m unittest discover -s evaluation/tools/tests -v
+
+# Docker 控制器与两份 Qwen Prompt 契约
+python -m unittest discover -s evaluation/docker/tests -v
+python evaluation_lyf/agent_uplift/test_prompt_contract.py
 ```
 
-也可以把 `all` 换成 `d1`、`d2` 或 `d3`，单独验证责任域。路径归属、接口变更规则和完成定义见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
+也可以把 `all` 换成 `d1`、`d2` 或 `d3`，单独验证责任域。Docker 的标准构建和 smoke 命令见 [`evaluation/docs/docker_usage.md`](evaluation/docs/docker_usage.md)；两个空目录直接粘贴的有/无 Skill Prompt 见 [`evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md`](evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md)。路径归属、接口变更规则和完成定义见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
 
 ## 运行与加载
 

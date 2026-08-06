@@ -8,6 +8,8 @@
 
 两套评测不会各自维护镜像，因此不会产生 OpenCode 版本、依赖或资源策略漂移。
 
+Docker 实现集中在 [`evaluation/docker/`](../docker/)：`Dockerfile` 冻结环境，`campaign.py` 提供 build/run/stage，`container/` 提供 OpenCode、mock agent 与白名单代理，`tests/` 覆盖控制器契约。它是统一运行层，不是与 `evaluation`、`evaluation_lyf` 并列的第三套评分。只想在两个空目录里做 Qwen 有/无 Skill 对照时，直接使用 [`evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md`](../../evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md) 中的零准备流程。
+
 ## 1. 与比赛规则的对应关系
 
 | 规则 | 本仓库实现 |
