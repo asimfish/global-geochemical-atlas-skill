@@ -8,7 +8,7 @@
 固定实验参数（不可改）：
 
 - repository: https://github.com/asimfish/global-geochemical-atlas-skill.git
-- commit: 5ebb436c3906631f74a2b82e22b5c9a0c7c82a13
+- commit: 8b66e14269a4347ca3cda93b0fbf86db48bb40c1
 - model: Qwen3.8-Max
 - temperature=0
 - 资源：2 CPU、4 GB 内存、256 PIDs、单次任务 900 秒
@@ -19,10 +19,10 @@
 ```bash
 git clone --filter=blob:none --no-checkout \
   https://github.com/asimfish/global-geochemical-atlas-skill.git bootstrap_repo
-git -C bootstrap_repo checkout --detach 5ebb436c3906631f74a2b82e22b5c9a0c7c82a13
-test "$(git -C bootstrap_repo rev-parse HEAD)" = "5ebb436c3906631f74a2b82e22b5c9a0c7c82a13"
+git -C bootstrap_repo checkout --detach 8b66e14269a4347ca3cda93b0fbf86db48bb40c1
+test "$(git -C bootstrap_repo rev-parse HEAD)" = "8b66e14269a4347ca3cda93b0fbf86db48bb40c1"
 mkdir work
-git -C bootstrap_repo archive 5ebb436c3906631f74a2b82e22b5c9a0c7c82a13 \
+git -C bootstrap_repo archive 8b66e14269a4347ca3cda93b0fbf86db48bb40c1 \
   evaluation_lyf/agent_uplift skills/global-geochemical-atlas | tar -x -C work
 mkdir -p work/.agents/skills
 mv work/skills/global-geochemical-atlas work/.agents/skills/global-geochemical-atlas
