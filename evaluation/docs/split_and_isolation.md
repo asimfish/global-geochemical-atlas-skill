@@ -36,6 +36,15 @@ python3 tools/verify_isolation.py . /secure/e2-private-root
 
 导出包只包含 alignment contract 明确允许的路径，并生成 `PUBLIC_MANIFEST.json`。`results/raw/`、评审 prompt、私有 manifest、Shadow 和 Final 都不得进入公开包。
 
+## 被测 AI 的最小 Public 目录
+
+不得把整个 `evaluation/` 或上述开发者 Public 导出包交给被测 AI。仓库内的
+`ai_visible_public/` 只包含 Q01–Q08 的题面、安全任务元数据、声明的输入、
+空 submission 目录和使用提示；不包含 gold、checker、rubric 或评分工具。
+
+使用 `tools/export_ai_bundle.py` 生成或验证该目录。被测 Codex 的工作目录和
+提示词见 `ai_visible_public/README.md`。
+
 ## 泄漏与 holdout 资格
 
 公开反馈前必须检查是否出现隐藏样品 ID、坐标、数值、文件名、gold 字段组合、阈值或 checker 日志。通过“例如”改写唯一隐藏案例同样属于泄漏。

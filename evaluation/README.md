@@ -35,6 +35,7 @@ artifacts/run_manifest.json
 
 ```text
 evaluation/
+├── ai_visible_public/            # 被测 AI 的 Public 题面、输入和 submissions
 ├── contracts/                    # E1 对齐契约、E1 score schema、gold 模板
 ├── docs/                         # 评分、接口和隔离规则
 ├── release/public/Q01-Q08/       # 可公开开发题
@@ -63,3 +64,7 @@ python3 tools/finalize_score.py \
 ```
 
 `grade_task.py` 的点数只是证据覆盖量，不是独立总分。只有符合 E1 schema 的六维 `score.json` 才是单次运行分数。完整执行步骤见 [`RUNBOOK.md`](RUNBOOK.md)。
+
+## 被测 Codex 快速入口
+
+工作目录和可直接复制的提示词见 [`ai_visible_public/README.md`](ai_visible_public/README.md)。
