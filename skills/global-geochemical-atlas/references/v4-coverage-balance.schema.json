@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/global-geochemical-atlas/v4-coverage-balance.schema.json",
+  "title": "D1 V4 medium and element coverage balance",
+  "type": "object",
+  "required": [
+    "coverage_balance_version",
+    "denominator_definition",
+    "media",
+    "medium_elements",
+    "claim_boundary"
+  ],
+  "properties": {
+    "coverage_balance_version": {
+      "const": "d1-v4-medium-balance-v1"
+    },
+    "denominator_definition": {
+      "type": "string",
+      "minLength": 1
+    },
+    "media": {
+      "type": "object",
+      "required": ["rock", "soil", "sediment", "water"],
+      "additionalProperties": {
+        "$ref": "#/$defs/coverageMetrics"
+      }
+    },
+    "medium_elements": {
+      "type": "object",
+      "additionalProperties": {
+        "allOf": [
+          {"$ref": "#/$defs/coverageMetrics"},
+          {
+            "type": "object",
+            "required": ["medium", "element"]
+          }
+        ]
+      }
+    },
+    "claim_boundary": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "coverageMetrics": {
+      "type": "object",
+      "required": [
+        "observation_count",
+        "distinct_sample_count",
+        "independent_lineage_count",
+        "source_ids",
+        "valid_coordinate_sample_count",
+        "comparable_observation_count",
+        "covered_spatial_cells",
+        "spatial_grid"
+      ],
+      "properties": {
+        "observation_count": {"type": "integer", "minimum": 0},
+        "distinct_sample_count": {"type": "integer", "minimum": 0},
+        "independent_lineage_count": {"type": "integer", "minimum": 0},
+        "source_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "valid_coordinate_sample_count": {"type": "integer", "minimum": 0},
+        "comparable_observation_count": {"type": "integer", "minimum": 0},
+        "covered_spatial_cells": {"type": "integer", "minimum": 0},
+        "spatial_grid": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

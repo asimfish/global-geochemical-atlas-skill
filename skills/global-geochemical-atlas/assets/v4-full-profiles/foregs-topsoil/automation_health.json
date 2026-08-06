@@ -1,0 +1,67 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 5,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "expected_target_observation_count": 10908,
+  "files": [
+    {
+      "bytes": 74667,
+      "cache_status": "cache_hit",
+      "file_id": "aqua-regia",
+      "filename": "T_AR_data_2v4_8Feb06.csv",
+      "sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7"
+    },
+    {
+      "bytes": 82167,
+      "cache_status": "cache_hit",
+      "file_id": "icp-additional-total",
+      "filename": "T_icpadd_data_2v3_8Feb06.csv",
+      "sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102"
+    },
+    {
+      "bytes": 138142,
+      "cache_status": "cache_hit",
+      "file_id": "icp-total",
+      "filename": "T_icp_data_2v3_8Feb06.csv",
+      "sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6"
+    },
+    {
+      "bytes": 48814,
+      "cache_status": "cache_hit",
+      "file_id": "mercury",
+      "filename": "T_Hg_data_2v4_8Feb06.csv",
+      "sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9"
+    },
+    {
+      "bytes": 105504,
+      "cache_status": "cache_hit",
+      "file_id": "xrf-total",
+      "filename": "T_XRF_data_2v6_8Feb06.csv",
+      "sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8"
+    }
+  ],
+  "last_successful_fetch_at": null,
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 4195,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "b191a9add1f9a14a64564e7c00a6404abab85eb4330e3ead7429dca77a31eb18",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "foregs-topsoil",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 10908,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

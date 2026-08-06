@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "media": {
+    "soil": 10201
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "soil_subsoil": 10201
+  },
+  "sediment_environments": {
+    "not_applicable": 10201
+  },
+  "source_id": "foregs-subsoil",
+  "water_body_types": {
+    "not_applicable": 10201
+  },
+  "water_fractions": {
+    "not_applicable": 10201
+  }
+}

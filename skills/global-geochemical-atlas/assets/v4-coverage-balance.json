@@ -1,0 +1,453 @@
+{
+  "claim_boundary": "More observations do not imply broader coverage. Independent lineage and observed grid-cell counts must be interpreted alongside sample type, method and region.",
+  "coverage_balance_version": "d1-v4-medium-balance-v1",
+  "denominator_definition": "full-cache target observations; sample IDs are deduplicated within source, not across sources",
+  "media": {
+    "rock": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 395,
+      "distinct_sample_count": 25659,
+      "independent_lineage_count": 1,
+      "observation_count": 65988,
+      "source_ids": [
+        "georoc-archaean"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 20866
+    },
+    "sediment": {
+      "comparable_observation_count": 22678,
+      "covered_spatial_cells": 720,
+      "distinct_sample_count": 5504,
+      "independent_lineage_count": 4,
+      "observation_count": 45390,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map",
+        "norway-marchem"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 5504
+    },
+    "soil": {
+      "comparable_observation_count": 34468,
+      "covered_spatial_cells": 1472,
+      "distinct_sample_count": 18469,
+      "independent_lineage_count": 6,
+      "observation_count": 93508,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 18343
+    },
+    "water": {
+      "comparable_observation_count": 48133,
+      "covered_spatial_cells": 2370,
+      "distinct_sample_count": 504797,
+      "independent_lineage_count": 3,
+      "observation_count": 537174,
+      "source_ids": [
+        "foregs-stream-water",
+        "gemstat-open-archive",
+        "geotraces-idp2025"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 504797
+    }
+  },
+  "medium_elements": {
+    "rock|As": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 96,
+      "distinct_sample_count": 4488,
+      "element": "As",
+      "independent_lineage_count": 1,
+      "medium": "rock",
+      "observation_count": 4765,
+      "source_ids": [
+        "georoc-archaean"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 4206
+    },
+    "rock|Cu": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 315,
+      "distinct_sample_count": 17443,
+      "element": "Cu",
+      "independent_lineage_count": 1,
+      "medium": "rock",
+      "observation_count": 17890,
+      "source_ids": [
+        "georoc-archaean"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 14218
+    },
+    "rock|Ni": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 388,
+      "distinct_sample_count": 25138,
+      "element": "Ni",
+      "independent_lineage_count": 1,
+      "medium": "rock",
+      "observation_count": 25688,
+      "source_ids": [
+        "georoc-archaean"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 20480
+    },
+    "rock|Zn": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 316,
+      "distinct_sample_count": 17215,
+      "element": "Zn",
+      "independent_lineage_count": 1,
+      "medium": "rock",
+      "observation_count": 17645,
+      "source_ids": [
+        "georoc-archaean"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 14037
+    },
+    "sediment|As": {
+      "comparable_observation_count": 4073,
+      "covered_spatial_cells": 720,
+      "distinct_sample_count": 5504,
+      "element": "As",
+      "independent_lineage_count": 4,
+      "medium": "sediment",
+      "observation_count": 7097,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map",
+        "norway-marchem"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 5504
+    },
+    "sediment|Cr": {
+      "comparable_observation_count": 3193,
+      "covered_spatial_cells": 645,
+      "distinct_sample_count": 4624,
+      "element": "Cr",
+      "independent_lineage_count": 3,
+      "medium": "sediment",
+      "observation_count": 6217,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 4624
+    },
+    "sediment|Cu": {
+      "comparable_observation_count": 4073,
+      "covered_spatial_cells": 720,
+      "distinct_sample_count": 5504,
+      "element": "Cu",
+      "independent_lineage_count": 4,
+      "medium": "sediment",
+      "observation_count": 7097,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map",
+        "norway-marchem"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 5504
+    },
+    "sediment|Hg": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 79,
+      "distinct_sample_count": 3023,
+      "element": "Hg",
+      "independent_lineage_count": 3,
+      "medium": "sediment",
+      "observation_count": 4568,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 3023
+    },
+    "sediment|Ni": {
+      "comparable_observation_count": 4073,
+      "covered_spatial_cells": 720,
+      "distinct_sample_count": 5504,
+      "element": "Ni",
+      "independent_lineage_count": 4,
+      "medium": "sediment",
+      "observation_count": 7097,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map",
+        "norway-marchem"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 5504
+    },
+    "sediment|Pb": {
+      "comparable_observation_count": 3193,
+      "covered_spatial_cells": 645,
+      "distinct_sample_count": 4624,
+      "element": "Pb",
+      "independent_lineage_count": 3,
+      "medium": "sediment",
+      "observation_count": 6217,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 4624
+    },
+    "sediment|Zn": {
+      "comparable_observation_count": 4073,
+      "covered_spatial_cells": 720,
+      "distinct_sample_count": 5504,
+      "element": "Zn",
+      "independent_lineage_count": 4,
+      "medium": "sediment",
+      "observation_count": 7097,
+      "source_ids": [
+        "foregs-floodplain-sediment",
+        "foregs-stream-sediment",
+        "japan-gsj-geochemical-map",
+        "norway-marchem"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 5504
+    },
+    "soil|As": {
+      "comparable_observation_count": 5163,
+      "covered_spatial_cells": 1469,
+      "distinct_sample_count": 18062,
+      "element": "As",
+      "independent_lineage_count": 5,
+      "medium": "soil",
+      "observation_count": 19860,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 17936
+    },
+    "soil|Cr": {
+      "comparable_observation_count": 5173,
+      "covered_spatial_cells": 586,
+      "distinct_sample_count": 3692,
+      "element": "Cr",
+      "independent_lineage_count": 4,
+      "medium": "soil",
+      "observation_count": 5299,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "pangaea-north-africa-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 3566
+    },
+    "soil|Cu": {
+      "comparable_observation_count": 5530,
+      "covered_spatial_cells": 1471,
+      "distinct_sample_count": 18429,
+      "element": "Cu",
+      "independent_lineage_count": 6,
+      "medium": "soil",
+      "observation_count": 20227,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 18303
+    },
+    "soil|Hg": {
+      "comparable_observation_count": 1986,
+      "covered_spatial_cells": 497,
+      "distinct_sample_count": 1977,
+      "element": "Hg",
+      "independent_lineage_count": 3,
+      "medium": "soil",
+      "observation_count": 1986,
+      "source_ids": [
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 1977
+    },
+    "soil|Ni": {
+      "comparable_observation_count": 5538,
+      "covered_spatial_cells": 1472,
+      "distinct_sample_count": 18430,
+      "element": "Ni",
+      "independent_lineage_count": 6,
+      "medium": "soil",
+      "observation_count": 20235,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 18304
+    },
+    "soil|Pb": {
+      "comparable_observation_count": 5538,
+      "covered_spatial_cells": 588,
+      "distinct_sample_count": 4050,
+      "element": "Pb",
+      "independent_lineage_count": 5,
+      "medium": "soil",
+      "observation_count": 5664,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "pangaea-north-africa-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 3924
+    },
+    "soil|Zn": {
+      "comparable_observation_count": 5540,
+      "covered_spatial_cells": 1472,
+      "distinct_sample_count": 18439,
+      "element": "Zn",
+      "independent_lineage_count": 6,
+      "medium": "soil",
+      "observation_count": 20237,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 18313
+    },
+    "water|As": {
+      "comparable_observation_count": 44093,
+      "covered_spatial_cells": 1219,
+      "distinct_sample_count": 486480,
+      "element": "As",
+      "independent_lineage_count": 2,
+      "medium": "water",
+      "observation_count": 493807,
+      "source_ids": [
+        "foregs-stream-water",
+        "gemstat-open-archive"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 486480
+    },
+    "water|Cr": {
+      "comparable_observation_count": 808,
+      "covered_spatial_cells": 489,
+      "distinct_sample_count": 808,
+      "element": "Cr",
+      "independent_lineage_count": 1,
+      "medium": "water",
+      "observation_count": 808,
+      "source_ids": [
+        "foregs-stream-water"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 808
+    },
+    "water|Cu": {
+      "comparable_observation_count": 808,
+      "covered_spatial_cells": 975,
+      "distinct_sample_count": 7057,
+      "element": "Cu",
+      "independent_lineage_count": 2,
+      "medium": "water",
+      "observation_count": 7083,
+      "source_ids": [
+        "foregs-stream-water",
+        "geotraces-idp2025"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 7057
+    },
+    "water|Ni": {
+      "comparable_observation_count": 808,
+      "covered_spatial_cells": 1553,
+      "distinct_sample_count": 17071,
+      "element": "Ni",
+      "independent_lineage_count": 2,
+      "medium": "water",
+      "observation_count": 17843,
+      "source_ids": [
+        "foregs-stream-water",
+        "geotraces-idp2025"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 17071
+    },
+    "water|Pb": {
+      "comparable_observation_count": 808,
+      "covered_spatial_cells": 489,
+      "distinct_sample_count": 808,
+      "element": "Pb",
+      "independent_lineage_count": 1,
+      "medium": "water",
+      "observation_count": 808,
+      "source_ids": [
+        "foregs-stream-water"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 808
+    },
+    "water|Zn": {
+      "comparable_observation_count": 808,
+      "covered_spatial_cells": 1398,
+      "distinct_sample_count": 16034,
+      "element": "Zn",
+      "independent_lineage_count": 2,
+      "medium": "water",
+      "observation_count": 16825,
+      "source_ids": [
+        "foregs-stream-water",
+        "geotraces-idp2025"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 16034
+    }
+  }
+}

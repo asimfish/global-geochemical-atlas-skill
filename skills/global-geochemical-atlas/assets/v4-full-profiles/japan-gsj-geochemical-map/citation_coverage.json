@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "citation_scope_counts": {
+    "dataset": 21168
+  },
+  "citation_text_count": 21168,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_doi": null,
+  "dataset_doi_present": false,
+  "dataset_version": "sample-2024-02-20_concentration-2007-01-10",
+  "observation_denominator": 21168,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "publication_doi_observation_count": 0,
+  "source_id": "japan-gsj-geochemical-map",
+  "upstream_primary_source_observation_count": 0
+}

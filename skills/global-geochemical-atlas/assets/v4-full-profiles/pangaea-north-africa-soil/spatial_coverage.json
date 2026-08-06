@@ -1,0 +1,68 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "bbox": [
+    -13.26,
+    15.67,
+    32.5,
+    33.83
+  ],
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_uncertainty_m_observation_counts": {
+    "not_reported": 258
+  },
+  "covered_spatial_cells": 32,
+  "dataset_version": "2022-10-25",
+  "distinct_sample_count": 43,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "region_count": 8,
+  "region_observation_counts": {
+    "Non representative PSA (Hoggar and Niger)": 36,
+    "Outlier": 6,
+    "PSA BD (Bodele Depression)": 18,
+    "PSA LAM (Libya-Algeria-Mali)": 78,
+    "PSA LE (Libya-Egypt)": 30,
+    "PSA MC (Mali Center)": 12,
+    "PSA WAC (West African Coast)": 72,
+    "Unassigned PSA": 6
+  },
+  "source_crs_observation_counts": {
+    "EPSG:4326": 258
+  },
+  "source_id": "pangaea-north-africa-soil",
+  "spatial_cell_ids": [
+    "+15:+006",
+    "+15:-014",
+    "+16:+007",
+    "+16:+008",
+    "+16:+018",
+    "+16:-004",
+    "+17:-004",
+    "+18:+008",
+    "+19:+000",
+    "+19:+011",
+    "+20:+000",
+    "+20:+011",
+    "+21:+005",
+    "+22:+001",
+    "+23:+005",
+    "+23:+006",
+    "+24:+000",
+    "+24:+007",
+    "+24:+032",
+    "+27:+002",
+    "+27:+014",
+    "+29:+001",
+    "+29:+021",
+    "+29:+031",
+    "+29:-007",
+    "+30:+011",
+    "+30:+031",
+    "+30:-008",
+    "+31:+006",
+    "+32:-003",
+    "+32:-005",
+    "+33:+009"
+  ],
+  "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+  "valid_coordinate_sample_count": 43
+}

@@ -880,16 +880,60 @@ def check_d1(output_dir: Path) -> list[str]:
         and completeness_profile["summary"] == {
             "executable_source_count": 14,
             "sources_with_full_audit": 12,
-            "sources_with_target_observation_denominator": 12,
+            "sources_with_target_observation_denominator": 14,
             "sources_without_full_audit": 2,
             "demo_record_count": 736,
-            "uniform_full_field_profiles": 0,
+            "uniform_full_field_profiles": 14,
         }
         and completeness_profile["sources"]["georoc-archaean"]["full_population"]["audit_status"]
+        == "uniform_full_profile"
+        and completeness_profile["sources"]["georoc-archaean"]["candidate_audit"]["audit_status"]
         == "not_measured"
         and completeness_profile["sources"]["gemstat-open-archive"]["full_population"]
         ["target_observation_count"] == 492999,
-        "D1 V4 completeness profile separates audited full-population evidence from 736 demo rows",
+        "D1 V4 completeness profile separates uniform full-cache profiles, candidate audits and 736 demo rows",
+        checks,
+    )
+    full_profile_root = SKILL_DIR / "assets" / "v4-full-profiles"
+    full_manifest = json_value(full_profile_root / "manifest.json")
+    coverage_balance = json_value(SKILL_DIR / "assets" / "v4-coverage-balance.json")
+    cube_rows = csv_rows(SKILL_DIR / "assets" / "v4-coverage-cube.csv")
+    source_field_profiles = {
+        source_id: json_value(full_profile_root / source_id / "field_completeness.json")
+        for source_id in registry["sources"]
+    }
+    marchem_health = json_value(full_profile_root / "norway-marchem" / "automation_health.json")
+    require(
+        full_manifest["source_count"] == full_manifest["registered_source_count"] == 14
+        and full_manifest["observation_count"] == 742060
+        and full_manifest["distinct_sample_count"] == 554429
+        and full_manifest["valid_coordinate_sample_count"] == 549510
+        and full_manifest["comparable_observation_count"] == 105279
+        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 5773
+        and sum(int(row["observation_count"]) for row in cube_rows) == 742060
+        and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 105279
+        and all(
+            profile["profile_scope"] == "full_population"
+            and profile["observation_count"] > 0
+            and all(
+                item["non_empty"] + item["missing"] == item["denominator"] == profile["observation_count"]
+                for item in profile["fields"].values()
+            )
+            for profile in source_field_profiles.values()
+        )
+        and marchem_health["version_drift"]["outer_archive_drift"] is True
+        and marchem_health["version_drift"]["data_and_method_member_hashes_match"] is True
+        and set(coverage_balance["media"]) == {"rock", "soil", "sediment", "water"}
+        and coverage_balance["media"]["water"]["observation_count"] == 537174
+        and coverage_balance["media"]["water"]["independent_lineage_count"] == 3
+        and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 4
+        and all(
+            (SKILL_DIR / item["path"]).is_file()
+            and (SKILL_DIR / item["path"]).stat().st_size == item["bytes"]
+            and sha256_file(SKILL_DIR / item["path"]) == item["sha256"]
+            for item in full_manifest["artifacts"]
+        ),
+        "D1 V4 full profiles prove fourteen full-cache denominators and all six coverage-cube metrics",
         checks,
     )
     require(
@@ -1244,9 +1288,12 @@ def check_d1(output_dir: Path) -> list[str]:
         json.loads(line)
         for line in (SOURCE_DEMOS / "georoc-archaean" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
     ]
+    georoc_demo_rows = csv_rows(SOURCE_DEMOS / "georoc-archaean" / "demo_input.csv")
     require(
-        all(item.get("article_citations") for item in georoc_evidence),
-        "D1 GEOROC fixture resolves citation IDs to original reference text",
+        all(item.get("article_citations") for item in georoc_evidence)
+        and all(row["lithology_raw"] and row["geologic_age_raw"] and row["tectonic_setting_raw"] for row in georoc_demo_rows)
+        and all(not row["geologic_unit_raw"] and not row["matched_geologic_unit"] for row in georoc_demo_rows),
+        "D1 GEOROC fixture resolves citations and preserves lithology, age and tectonic context without inventing units",
         checks,
     )
     gemstat_demo_rows = csv_rows(SOURCE_DEMOS / "gemstat-open-archive" / "demo_input.csv")

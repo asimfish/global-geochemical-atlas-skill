@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "citation_scope_counts": {
+    "dataset": 12012
+  },
+  "citation_text_count": 12012,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_doi": "10.34725/DVN/66BFOB",
+  "dataset_doi_present": true,
+  "dataset_version": "2.0",
+  "observation_denominator": 12012,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "publication_doi_observation_count": 0,
+  "source_id": "afsis-phase-i-wet-chemistry",
+  "upstream_primary_source_observation_count": 0
+}

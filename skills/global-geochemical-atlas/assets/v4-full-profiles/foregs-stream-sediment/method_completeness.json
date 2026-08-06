@@ -1,0 +1,16 @@
+{
+  "analytical_method_counts": {
+    "ICP-AES": 5070,
+    "WD-XRF and ED(P)-XRF selected by element": 5112,
+    "cold-vapour AAS after gold amalgam preconcentration": 848
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "method_scope_counts": {
+    "file": 11030
+  },
+  "observation_count": 11030,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "foregs-stream-sediment"
+}

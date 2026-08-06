@@ -1,0 +1,46 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 2,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "sample-2024-02-20_concentration-2007-01-10",
+  "expected_target_observation_count": 21168,
+  "files": [
+    {
+      "bytes": 1198951,
+      "cache_status": "cache_hit",
+      "file_id": "concentrations",
+      "filename": "noudo.csv",
+      "sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671"
+    },
+    {
+      "bytes": 334302,
+      "cache_status": "cache_hit",
+      "file_id": "samples",
+      "filename": "samplejoho.csv",
+      "sha256": "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-06T03:57:10Z",
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 3024,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "23c06f3fb72ea0a595268092cc0a8d221ffff7b79cbc355e38681a4bead07c37",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "japan-gsj-geochemical-map",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 21168,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "analytical_method_counts": {
+    "Analysis of dissolved metals is done by inductively coupled argon plasma mass spectrometry (ICP-MS).": 320,
+    "Det. of As and Se by Conversion to their Hydrides and Aspiration of the Gas into the Ag-H Flame": 425,
+    "Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma": 602,
+    "Determination of total arsenic, antimony and selenium by inductively coupled argon plasma": 1723,
+    "Dissolved metals by CRC-ICP-MS and discrete sampling pneumatic nebulization": 220,
+    "Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization": 5233,
+    "Dissolved metals by inductively coupled argon plasma-mass spectrometry technique (ICP-MS).": 322,
+    "Dissolved metals by inductively coupled argon plasma/mass spectrometer with pneumatic nebulization": 91,
+    "Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS": 2001,
+    "Extractable elements in acid preserved samples are analyzed by ICP-MS.": 3555,
+    "Extractable metals by inductively coupled plasma-collision/reaction cell-mass spectrometry": 136,
+    "Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)": 1748,
+    "Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion": 490,
+    "Inductively-Coupled Plasma Sector Field Mass Spectrometry with Closed Vessel Digestion": 298,
+    "Silver Diethyldithiocarbamate Method with HNO3 Digestion": 161,
+    "Total metals by CRC-ICP-MS and discrete sampling pneumatic nebulization": 220,
+    "Total metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization": 13359,
+    "Total metals by inductively coupled plasma-mass spectrometry with in-bottle digestion": 2528,
+    "Total metals in water by ICP-MS": 346,
+    "Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer": 9507,
+    "missing": 449714
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "v3",
+  "method_scope_counts": {
+    "missing": 449714,
+    "observation": 43285
+  },
+  "observation_count": 492999,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "gemstat-open-archive"
+}

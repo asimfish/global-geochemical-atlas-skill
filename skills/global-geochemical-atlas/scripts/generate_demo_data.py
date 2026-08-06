@@ -291,6 +291,10 @@ def georoc_demo(
                     "sample_depth_min_m": "",
                     "sample_depth_max_m": "",
                     "grain_fraction": "",
+                    "material_raw": str(record.fields.get("MATERIAL") or "").strip(),
+                    "lithology_raw": str(record.fields.get("ROCK NAME") or "").strip(),
+                    "geologic_age_raw": str(record.fields.get("AGE") or "").strip(),
+                    "tectonic_setting_raw": str(record.fields.get("TECTONIC SETTING") or "").strip(),
                 }
             )
             entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
@@ -313,6 +317,10 @@ def georoc_demo(
                     "article_citations": article_citations,
                     "article_dois": article_dois,
                     "selection_rule": "whole-rock; exact point coordinates; balanced As/Cu/Ni/Zn; source order",
+                    "material_raw": str(record.fields.get("MATERIAL") or "").strip(),
+                    "lithology_raw": str(record.fields.get("ROCK NAME") or "").strip(),
+                    "geologic_age_raw": str(record.fields.get("AGE") or "").strip(),
+                    "tectonic_setting_raw": str(record.fields.get("TECTONIC SETTING") or "").strip(),
                     "scientific_note": "GEOROC precompiled selected value; not every replicate determination.",
                 }
             )

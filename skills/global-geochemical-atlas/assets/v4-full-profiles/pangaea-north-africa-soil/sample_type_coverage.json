@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2022-10-25",
+  "media": {
+    "soil": 258
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "soil_surface": 258
+  },
+  "sediment_environments": {
+    "not_applicable": 258
+  },
+  "source_id": "pangaea-north-africa-soil",
+  "water_body_types": {
+    "not_applicable": 258
+  },
+  "water_fractions": {
+    "not_applicable": 258
+  }
+}

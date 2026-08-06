@@ -1,0 +1,14 @@
+{
+  "analytical_method_counts": {
+    "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)": 3520
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+  "method_scope_counts": {
+    "batch": 3520
+  },
+  "observation_count": 3520,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "norway-marchem"
+}

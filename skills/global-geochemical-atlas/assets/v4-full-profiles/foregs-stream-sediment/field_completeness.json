@@ -1,0 +1,216 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "denominator_definition": "all non-empty target-analyte observations emitted by the verified source adapter",
+  "fields": {
+    "access_status": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "analytical_method": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "citation_resolution_status": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "citation_scope": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "citation_text_raw": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "coordinate_pair": {
+      "denominator": 11030,
+      "missing": 848,
+      "non_empty": 10182,
+      "rate": 0.923119
+    },
+    "coordinate_uncertainty_m": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "detection_limit": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "element_or_analyte": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "geologic_age_raw": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "geologic_unit_raw": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "grain_fraction": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "license": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "license_url": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "lithology_raw": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "matched_geologic_unit": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "measurement_basis": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "method_assignment_basis": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "method_or_missing_reason": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "method_scope": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "research_use_status": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "sample_id": {
+      "denominator": 11030,
+      "missing": 848,
+      "non_empty": 10182,
+      "rate": 0.923119
+    },
+    "sample_type": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "sample_type_mapping_status": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "sample_type_raw": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "sediment_environment": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "soil_horizon": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "source_crs": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "source_locator": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "tectonic_setting_raw": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "unit": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "value": {
+      "denominator": 11030,
+      "missing": 0,
+      "non_empty": 11030,
+      "rate": 1.0
+    },
+    "water_body_type": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "water_fraction": {
+      "denominator": 11030,
+      "missing": 11030,
+      "non_empty": 0,
+      "rate": 0.0
+    }
+  },
+  "observation_count": 11030,
+  "profile_scope": "full_population",
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "foregs-stream-sediment"
+}

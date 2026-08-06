@@ -61,6 +61,14 @@ python scripts/run_workflow.py \
 
 联合 manifest 必须显示来源、介质、分析物和比较分区。共同进入一张地图不表示记录可以混为同一背景；异常分组仍按元素、介质、measurement basis、地质单元、方法和消解/提取隔离。
 
+需要判断“数据是否全面”或比较不同介质时，不读取 demo 行数作分母。对已验证全量缓存运行：
+
+```bash
+python scripts/build_v4_full_profiles.py --check
+```
+
+优先读取 `assets/v4-coverage-balance.json` 和 `assets/v4-coverage-cube.csv`，同时报告 observation、distinct sample、independent lineage、valid-coordinate sample、comparable observation 和 observed spatial cell 六类指标。格网只表示有实测点，不能解释为格网内部连续覆盖。
+
 ## 3. 建立来源与下载证据
 
 为每个数据源记录：
@@ -157,7 +165,7 @@ python scripts/run_workflow.py \
 - `interactive_map.html`；
 - `run_summary.json`。
 
-交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
+交互地图必须由真实 CSV/GeoJSON 驱动，支持元素、介质、样品类型、方法 scope、置信度和候选异常筛选。无坐标记录留在数据库和 QC 报告中，不得放到 `(0,0)`。热力表达必须同时展示样点数量和覆盖空洞；不要用插值把无数据区伪装成连续覆盖。
 
 ## 8. 验证与失败关闭
 

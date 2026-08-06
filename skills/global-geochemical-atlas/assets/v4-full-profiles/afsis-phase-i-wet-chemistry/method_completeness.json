@@ -1,0 +1,15 @@
+{
+  "analytical_method_counts": {
+    "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)": 2002,
+    "Optical Emission spectrometry ( ICP-OES)": 10010
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2.0",
+  "method_scope_counts": {
+    "dataset": 12012
+  },
+  "observation_count": 12012,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "afsis-phase-i-wet-chemistry"
+}

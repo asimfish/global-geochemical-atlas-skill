@@ -1,0 +1,60 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 4,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "expected_target_observation_count": 9672,
+  "files": [
+    {
+      "bytes": 71479,
+      "cache_status": "cache_hit",
+      "file_id": "aqua-regia",
+      "filename": "F_AR_data_2v6_7Aug07.csv",
+      "sha256": "04fe3c65ffadc205a8c9d6c1d5869cb6d729a965faf399bd32874b7f50fb6b51"
+    },
+    {
+      "bytes": 114939,
+      "cache_status": "cache_hit",
+      "file_id": "icp-total",
+      "filename": "F_ICP_data_2v6_7Aug07.csv",
+      "sha256": "8d7a6b65746f5d78fb96c5bc3012f843acab7ab3ab7fe72ae904f7f542d4a5aa"
+    },
+    {
+      "bytes": 29191,
+      "cache_status": "cache_hit",
+      "file_id": "mercury",
+      "filename": "F_Hg_data_2v3_7Aug2007.csv",
+      "sha256": "7c76110a7d960309d56813ee3ad8a8f28333e504868d9a05baebef6167f97aa4"
+    },
+    {
+      "bytes": 115247,
+      "cache_status": "cache_hit",
+      "file_id": "xrf-total",
+      "filename": "F_XRF_data_2v6_7Aug07.csv",
+      "sha256": "04628e52364b70a1c39492631568e1aa47b77285becd2393d283b7ea9088431f"
+    }
+  ],
+  "last_successful_fetch_at": null,
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 2935,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "f840601f33d1b9e13786f4258f639e49eb7d1aac7f97a58c2446fb295235ab75",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "foregs-floodplain-sediment",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 9672,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

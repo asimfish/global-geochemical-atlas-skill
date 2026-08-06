@@ -1,0 +1,53 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 3,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "expected_target_observation_count": 1845,
+  "files": [
+    {
+      "bytes": 14968,
+      "cache_status": "cache_hit",
+      "file_id": "mercury",
+      "filename": "H_Hg_data_2v3_7Aug2007.csv",
+      "sha256": "eb30ddd0d4f43fe7405068c55bb7a0d462c839cef3f7e5e01446ceb7e0a016ef"
+    },
+    {
+      "bytes": 20190,
+      "cache_status": "cache_hit",
+      "file_id": "mild-acid-icp",
+      "filename": "H_icp_data_2v2_11Mar04.csv",
+      "sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4"
+    },
+    {
+      "bytes": 22048,
+      "cache_status": "cache_hit",
+      "file_id": "mild-acid-icp-additional",
+      "filename": "H_icpadd_data_2v0.csv",
+      "sha256": "e9a99a6f54f40715af8c394cc964b4753a240d849ee794e06add077d523ca983"
+    }
+  ],
+  "last_successful_fetch_at": null,
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 1111,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "86f88ccf01f0c2644484525bbd545b3a9c1dab356161bac6c2245f80ef205a57",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "foregs-humus",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 1845,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

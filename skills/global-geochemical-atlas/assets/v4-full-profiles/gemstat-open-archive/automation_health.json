@@ -1,0 +1,67 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 5,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "v3",
+  "expected_target_observation_count": null,
+  "files": [
+    {
+      "bytes": 30585144,
+      "cache_status": "cache_verified",
+      "file_id": "arsenic-observations",
+      "filename": "Arsenic.csv",
+      "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+    },
+    {
+      "bytes": 521959,
+      "cache_status": "cache_verified",
+      "file_id": "methods",
+      "filename": "GEMStat_methods_metadata.csv",
+      "sha256": "fba3a0903228811def4cd7910298ccd1965b64b76fbdca90445988eec08ffbb3"
+    },
+    {
+      "bytes": 146762,
+      "cache_status": "cache_verified",
+      "file_id": "parameters",
+      "filename": "GEMStat_parameter_metadata.csv",
+      "sha256": "46f9ddc6ed181a8a3a685fe590143d847e20960e67f20aa7dd9f4347f2c9b518"
+    },
+    {
+      "bytes": 16727,
+      "cache_status": "cache_verified",
+      "file_id": "readme",
+      "filename": "README_output_format.txt",
+      "sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d"
+    },
+    {
+      "bytes": 3571887,
+      "cache_status": "cache_verified",
+      "file_id": "stations",
+      "filename": "GEMStat_station_metadata.csv",
+      "sha256": "978d3682d4fc702e1dd9c9e4e148ca586899002b551018dbfc3e40c9f7e1695d"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-05T14:41:20Z",
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 492999,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "6ba7f7308b5eccfba3ed34ed6f2eb41ab964a703733dfab4b95c87876dd889b0",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "baseline_recorded_no_registered_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "gemstat-open-archive",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 492999,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

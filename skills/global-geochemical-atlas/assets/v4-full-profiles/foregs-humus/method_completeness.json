@@ -1,0 +1,15 @@
+{
+  "analytical_method_counts": {
+    "ICP-MS": 1468,
+    "cold-vapour AAS after gold amalgam preconcentration": 377
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "method_scope_counts": {
+    "file": 1845
+  },
+  "observation_count": 1845,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "foregs-humus"
+}

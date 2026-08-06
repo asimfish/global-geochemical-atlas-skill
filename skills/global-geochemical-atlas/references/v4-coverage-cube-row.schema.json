@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/global-geochemical-atlas/v4-coverage-cube-row.schema.json",
+  "title": "D1 V4 coverage cube CSV row",
+  "type": "object",
+  "required": [
+    "cube_version",
+    "source_id",
+    "medium",
+    "element",
+    "sample_type",
+    "method_scope",
+    "region",
+    "measurement_basis",
+    "observation_count",
+    "distinct_sample_count",
+    "independent_lineage_count",
+    "valid_coordinate_sample_count",
+    "comparable_observation_count",
+    "covered_spatial_cells",
+    "spatial_grid"
+  ],
+  "properties": {
+    "cube_version": {"const": "d1-v4-coverage-cube-v1"},
+    "source_id": {"type": "string", "minLength": 1},
+    "medium": {"enum": ["rock", "soil", "sediment", "water"]},
+    "element": {"type": "string", "minLength": 1},
+    "sample_type": {"type": "string", "minLength": 1},
+    "method_scope": {"type": "string", "minLength": 1},
+    "region": {"type": "string", "minLength": 1},
+    "measurement_basis": {"type": "string", "minLength": 1},
+    "observation_count": {"type": ["integer", "string"]},
+    "distinct_sample_count": {"type": ["integer", "string"]},
+    "independent_lineage_count": {"type": ["integer", "string"]},
+    "valid_coordinate_sample_count": {"type": ["integer", "string"]},
+    "comparable_observation_count": {"type": ["integer", "string"]},
+    "covered_spatial_cells": {"type": ["integer", "string"]},
+    "spatial_grid": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}
