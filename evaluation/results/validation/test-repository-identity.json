@@ -1,0 +1,83 @@
+{
+  "schema_version": "gga.test-repository-identity.v1",
+  "generated_at_utc": "2026-08-06T15:48:36Z",
+  "repository": {
+    "url": "https://github.com/asimfish/global-geochemical-atlas-skill.git",
+    "candidate_branch": "acceptance/e1-e2-closeout-20260806",
+    "candidate_commit": "4f77a7594e713ff422d5b0e7a3608a4b90d3c51b",
+    "candidate_git_tree": "e3fdf6e724ff32daee6a073bcac328f9022d4490",
+    "clean_at_candidate_commit": true,
+    "license": "MIT"
+  },
+  "production_skill": {
+    "relative_path": "skills/global-geochemical-atlas",
+    "git_tree": "64aa5cd1e50d21c16573268b069dae0ec4d2dbb6",
+    "tree_sha256": "0afc84db15548f021acc0c484eef04b2a5199ce3d0685311ab540297b9807969",
+    "hash_contract": "SHA256(relative_path_utf8 || NUL || size_ascii || NUL || bytes || NUL), paths sorted"
+  },
+  "evaluation": {
+    "version": "6.0.0-draft.1",
+    "e1_eval_version": "1.0.0",
+    "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+    "freeze_manifest": "evaluation/results/validation/freeze_candidate_manifest.json",
+    "freeze_manifest_sha256": "511da90abe457dc3c6036e8afdb55cd4ab4a15f79a8aaf7f22d266b067f1ad5f",
+    "evaluation_content_manifest_sha256": "41130f4d64ebb60ea4cb56b27b5d24d0d98aeb7b0f9ac3ed0214ea45e2642de0",
+    "package_validation": "evaluation/results/validation/package_validation.json",
+    "package_validation_sha256": "59fe8041921707987cd1dfcc4228717fd8025f789e38ecdda0b81767d51244bf",
+    "ai_visible_public_content_manifest_sha256": "0efab09077f962778a0fd10f506c75ef549178ec7764bfa05409dcf0665828fb"
+  },
+  "size_evidence": {
+    "limit_bytes_exclusive": 250000000,
+    "candidate_tracked_blob_bytes": 9815986,
+    "git_directory_bytes": 2763773,
+    "worktree_passed": true,
+    "git_objects_passed": true
+  },
+  "checks": [
+    {
+      "id": "skill_self_test",
+      "command": "python skills/global-geochemical-atlas/scripts/self_test.py",
+      "status": "PASS",
+      "checks": 68
+    },
+    {
+      "id": "skill_component_tests",
+      "command": "python skills/global-geochemical-atlas/scripts/component_test.py --component all",
+      "status": "PASS",
+      "checks": 250
+    },
+    {
+      "id": "evaluation_tool_tests",
+      "command": "python -m unittest discover -s evaluation/tools/tests -p test_*.py -v",
+      "status": "PASS",
+      "tests": 10
+    },
+    {
+      "id": "qwen_runner_offline_tests",
+      "command": "python -m unittest discover -s evaluation/model_tests/qwen3_8_max -p test_*.py -v",
+      "status": "PASS",
+      "tests": 4
+    },
+    {
+      "id": "public_package_validation",
+      "command": "python evaluation/tools/validate_package.py evaluation --public-only --report evaluation/results/validation/package_validation.json",
+      "status": "PASS",
+      "tasks": 8
+    },
+    {
+      "id": "ai_visible_public_export",
+      "command": "python evaluation/tools/export_ai_bundle.py evaluation OUTPUT_DIR",
+      "status": "PASS",
+      "questions": 8,
+      "input_files": 41,
+      "submission_files": 0
+    }
+  ],
+  "formal_status": "DEVELOPMENT_CANDIDATE_NOT_G5_SIGNED",
+  "limitations": [
+    "The candidate branch is not an official release until the remote ref is pushed and independently fetched.",
+    "The E2 formal execution policy still awaits E1, D3 and E2 signatures.",
+    "No native OpenCode production campaign or official B0/S0 cohort is claimed by this identity record.",
+    "No new private Final is included in or attested by this public repository."
+  ]
+}
