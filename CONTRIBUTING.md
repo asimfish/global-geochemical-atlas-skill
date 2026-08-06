@@ -33,7 +33,7 @@ D3 工作流编排 + 地图 + 输出校验 ──► 十一个稳定交付文件
 ## 接口冻结规则
 
 - D1 → D2：CSV 至少提供 `element_or_analyte,value,unit,medium`；正式数据还应携带样品、basis、坐标、方法、来源定位与许可。分层归档先按 `validate_acquisition.py` 校验，再依 `schema-mapping.md` 展开为一行一个 observation；派生 SQLite 只用于 D1 原值检索。
-- D2 → D1/D3：固定生成五个分析产物，记录结构以 `geochemistry-record.schema.json` 为准，置信度版本当前为 `d2-confidence-v2`；D1 非 canonical 列名可按 `schema-map.schema.json` 显式映射。
+- D2 → D1/D3：固定生成五个分析产物，记录结构以 `geochemistry-record.schema.json` 为准，置信度版本当前为 `d2-confidence-v3`；D1 非 canonical 列名可按 `schema-map.schema.json` 显式映射。
 - D1 → D3：固定生成 `source_manifest.json` 和 `record_evidence.jsonl`；输入 SHA-256 必须与 D2 run metadata 相同，sidecar 的 record ID 必须与 canonical database 完全一致，并绑定 acquisition manifest 与 `confidence_report.json` 的 SHA-256。
 - D3 → 用户：固定生成 README 所列十一个文件（含 `iteration_backlog.csv`）；更名、删减或改变语义属于破坏性接口变更。
 - 任何 Schema、版本号、输出文件名或 CLI 参数变更，都要在同一 PR 中更新文档、组件测试和完整回归测试。

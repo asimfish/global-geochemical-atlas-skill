@@ -7,8 +7,8 @@
 | `elements` | string[] | 是 | 无 | 使用元素符号或可无歧义规范化的名称 |
 | `region` | object/string | 是 | 无 | `global`、命名区域或 WGS84 bbox |
 | `media` | string[] | 是 | 无 | rock/soil/sediment/water/mineral/concentrate |
-| `measurement_basis` | string[]/null | 否 | null | total/dissolved/extractable 等 |
-| `time_range` | [string,string]/null | 否 | null | 采样时间而非发布日期 |
+| `measurement_basis` | string[]/null | 否 | null | 非空数组；total/dissolved/extractable 等 |
+| `time_range` | [string,string]/null | 否 | null | 采样时间而非发布日期；两项以四位年份开头且 start ≤ end |
 | `sources` | `auto`/string[] | 否 | auto | 只选择公开科学来源 |
 | `output_formats` | string[] | 否 | csv,json,geojson,html_map | 结构化产物 |
 | `target_crs` | string | 否 | EPSG:4326 | v1 只输出 WGS84 canonical 坐标 |
@@ -38,6 +38,8 @@
 | `interactive_map.html` | 自包含交互地图；内嵌固定底图与 D1/D2 报告，不依赖 CDN，不在 D3 重算科学结果 |
 | `iteration_backlog.csv` | D1/D2 证据缺口、处理失败、复核项与删失科学限制的机器可读迭代清单 |
 | `run_summary.json` | 整体状态、请求摘要、产物、coverage 与限制 |
+
+使用 `run_atlas_request.py` 时还生成 `request_evidence/`，保存冻结的 `request.json`、请求特定 `source_route.json`、`coverage.json/.md` 和符合 [request-execution.schema.json](request-execution.schema.json) 的 `execution.json`。这些是十一项核心产物之外的请求执行证据；其中实时路由状态与本地 fixture/hash 解析状态分开记录，不能互相覆盖。
 
 ## 证据链
 

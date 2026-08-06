@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -16,6 +17,7 @@ import score_source_evidence
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
+FULL_PROFILE_ROOT = SKILL_DIR / "assets" / "v4-full-profiles"
 
 CATALOG_VERSION = "geochemical-source-catalog-v1"
 ROUTE_VERSION = "geochemical-source-route-v3"
@@ -150,6 +152,7 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
     measurement_basis = request.get("measurement_basis")
     if measurement_basis is not None and (
         not isinstance(measurement_basis, list)
+        or not measurement_basis
         or not all(isinstance(item, str) and item for item in measurement_basis)
         or len(measurement_basis) != len(set(measurement_basis))
     ):
@@ -161,6 +164,8 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
         or not all(isinstance(item, str) for item in time_range)
     ):
         raise SourceRoutingError("time_range must be null or a two-string array")
+    if time_range is not None and _year(time_range[0]) > _year(time_range[1]):
+        raise SourceRoutingError("time_range start must not be after end")
     output_formats = request.get("output_formats", ["csv", "json", "geojson", "html_map"])
     if (
         not isinstance(output_formats, list)
@@ -210,6 +215,7 @@ def _route_entry(
     evidence: Mapping[str, Any],
     matching_media: list[str],
     reason: str,
+    request_compatibility: Mapping[str, Any],
 ) -> dict[str, Any]:
     return {
         "source_id": source_id,
@@ -223,7 +229,193 @@ def _route_entry(
         "attribution_note": evidence["attribution_note"],
         "matching_media": matching_media,
         "coverage_extent": entry["coverage"]["extent_class"],
+        "request_compatibility": dict(request_compatibility),
         "reason": reason,
+    }
+
+
+def _normalized_scope(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", str(value or "").casefold()).strip("_")
+
+
+def _walk_values(value: Any, key: str) -> list[Any]:
+    found: list[Any] = []
+    if isinstance(value, Mapping):
+        for current_key, current_value in value.items():
+            if current_key == key:
+                found.append(current_value)
+            found.extend(_walk_values(current_value, key))
+    elif isinstance(value, list):
+        for item in value:
+            found.extend(_walk_values(item, key))
+    return found
+
+
+def _year(value: str) -> int:
+    match = re.match(r"^(\d{4})(?:-|$)", value.strip())
+    if not match:
+        raise SourceRoutingError("time_range entries must start with a four-digit year")
+    return int(match.group(1))
+
+
+def _bbox_intersects(first: Sequence[float], second: Sequence[float]) -> bool:
+    def longitude_ranges(bbox: Sequence[float]) -> list[tuple[float, float]]:
+        west, _, east, _ = bbox
+        return [(west, east)] if west <= east else [(west, 180.0), (-180.0, east)]
+
+    if first[3] < second[1] or second[3] < first[1]:
+        return False
+    return any(
+        left_a <= right_b and left_b <= right_a
+        for left_a, right_a in longitude_ranges(first)
+        for left_b, right_b in longitude_ranges(second)
+    )
+
+
+def _source_bbox(source_id: str) -> list[float] | None:
+    path = FULL_PROFILE_ROOT / source_id / "spatial_coverage.json"
+    if not path.is_file():
+        return None
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    bbox = value.get("bbox") if isinstance(value, dict) else None
+    if (
+        not isinstance(bbox, list)
+        or len(bbox) != 4
+        or not all(isinstance(item, (int, float)) and not isinstance(item, bool) for item in bbox)
+    ):
+        return None
+    return [float(item) for item in bbox]
+
+
+def basis_matches(requested: str, declared: str) -> bool:
+    wanted = _normalized_scope(requested)
+    available = _normalized_scope(declared)
+    if not wanted or not available:
+        return False
+    if wanted == available:
+        return True
+    generic = {
+        "total": ("total", "near_total", "quasi_total"),
+        "dissolved": ("dissolved", "filtered"),
+        "extractable": ("extract", "extraction", "extractable", "leachable", "digestion"),
+    }
+    padded_available = f"_{available}_"
+    return any(f"_{token}_" in padded_available for token in generic.get(wanted, (wanted,)))
+
+
+def request_compatibility(
+    source_id: str,
+    entry: Mapping[str, Any],
+    registry_entry: Mapping[str, Any] | None,
+    request: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Compare every retrieval-changing request field with frozen source evidence."""
+
+    registered = registry_entry if isinstance(registry_entry, Mapping) else {}
+    target_analytes = sorted(str(item) for item in registered.get("target_analytes", {}))
+    matched_analytes = sorted(set(request["elements"]).intersection(target_analytes))
+    analyte_status = "compatible" if matched_analytes else "incompatible" if target_analytes else "unverified"
+
+    region = request["region"]
+    source_bbox = _source_bbox(source_id)
+    if region == "global":
+        region_status = "not_applicable"
+        region_note = "global request; source coverage remains partial as declared"
+    elif isinstance(region, dict):
+        if source_bbox is None:
+            region_status = "unverified"
+            region_note = "canonical source bbox unavailable; WGS84 filtering cannot be verified"
+        elif _bbox_intersects(region["bbox"], source_bbox):
+            region_status = "compatible"
+            region_note = f"requested bbox intersects frozen canonical source bbox {source_bbox}"
+        else:
+            region_status = "incompatible"
+            region_note = f"requested bbox does not intersect frozen canonical source bbox {source_bbox}"
+    else:
+        requested_region = _normalized_scope(region)
+        declared_regions = [_normalized_scope(item) for item in entry["coverage"].get("regions", [])]
+        if any(
+            requested_region == item
+            or requested_region in item.split("_")
+            or item in requested_region
+            for item in declared_regions
+        ):
+            region_status = "compatible"
+            region_note = "named region matches a declared catalog scope"
+        else:
+            region_status = "unverified"
+            region_note = "named region has no frozen polygon/equivalence mapping for this source"
+
+    requested_basis = request.get("measurement_basis")
+    declared_basis = sorted(
+        {
+            str(item)
+            for value in _walk_values(registered, "measurement_basis")
+            for item in (value if isinstance(value, list) else [value])
+            if str(item or "").strip()
+        }
+    )
+    if requested_basis is None:
+        basis_status = "not_applicable"
+        matched_basis: list[str] = []
+    else:
+        matched_basis = sorted(
+            declared
+            for declared in declared_basis
+            if any(basis_matches(requested, declared) for requested in requested_basis)
+        )
+        basis_status = "compatible" if matched_basis else "incompatible" if declared_basis else "unverified"
+
+    requested_time = request.get("time_range")
+    declared_bounds = [
+        value
+        for value in _walk_values(registered, "date_bounds")
+        if isinstance(value, list) and len(value) == 2 and all(isinstance(item, str) for item in value)
+    ]
+    if requested_time is None:
+        time_status = "not_applicable"
+        matched_bounds: list[list[str]] = []
+    else:
+        requested_start, requested_end = (_year(item) for item in requested_time)
+        matched_bounds = [
+            list(bounds)
+            for bounds in declared_bounds
+            if requested_start <= _year(bounds[1]) and _year(bounds[0]) <= requested_end
+        ]
+        time_status = "compatible" if matched_bounds else "incompatible" if declared_bounds else "unverified"
+
+    return {
+        "analytes": {
+            "status": analyte_status,
+            "requested": list(request["elements"]),
+            "registered": target_analytes,
+            "matched": matched_analytes,
+        },
+        "region": {
+            "status": region_status,
+            "declared_regions": list(entry["coverage"].get("regions", [])),
+            "canonical_bbox": source_bbox,
+            "note": region_note,
+        },
+        "measurement_basis": {
+            "status": basis_status,
+            "requested": requested_basis,
+            "declared": declared_basis,
+            "matched": matched_basis,
+        },
+        "time_range": {
+            "status": time_status,
+            "requested": requested_time,
+            "declared_bounds": declared_bounds,
+            "matched_bounds": matched_bounds,
+        },
+        "max_records": {
+            "status": "enforced_downstream",
+            "requested": request["max_records"],
+        },
     }
 
 
@@ -262,6 +454,19 @@ def route_sources(
         if not matching_media:
             continue
         evidence = evidence_report["sources"][source_id]
+        compatibility = request_compatibility(
+            source_id,
+            entry,
+            resolved_registry.get("sources", {}).get(source_id),
+            normalized,
+        )
+        compatibility_blockers = [
+            f"{dimension}={details['status']}"
+            for dimension, details in compatibility.items()
+            if isinstance(details, Mapping)
+            and details.get("status") in {"incompatible", "unverified"}
+            and dimension != "max_records"
+        ]
         evidence_ok = (
             score_source_evidence.TIER_RANK[evidence["evidence_tier"]]
             >= score_source_evidence.TIER_RANK[normalized["minimum_evidence_tier"]]
@@ -274,7 +479,8 @@ def route_sources(
             normalized["research_use_policy"], evidence["research_use_status"]
         )
         offline_ok = not normalized["offline"]
-        if evidence_ok and use_mode_ok and research_ok and offline_ok:
+        compatibility_ok = not compatibility_blockers
+        if evidence_ok and use_mode_ok and research_ok and offline_ok and compatibility_ok:
             selected.append(
                 _route_entry(
                     source_id,
@@ -285,6 +491,7 @@ def route_sources(
                         f"meets minimum tier {normalized['minimum_evidence_tier']}, "
                         f"use mode {normalized['minimum_use_mode']} and research-use policy"
                     ),
+                    compatibility,
                 )
             )
         else:
@@ -299,8 +506,18 @@ def route_sources(
                 blockers.append(f"research_use_status={evidence['research_use_status']}")
             if not offline_ok:
                 blockers.append("offline_cache_not_verified")
+            blockers.extend(compatibility_blockers)
             blockers.extend(f"conflict={item}" for item in evidence["conflicts"])
-            review.append(_route_entry(source_id, entry, evidence, matching_media, "; ".join(blockers)))
+            review.append(
+                _route_entry(
+                    source_id,
+                    entry,
+                    evidence,
+                    matching_media,
+                    "; ".join(blockers) or "request compatibility requires review",
+                    compatibility,
+                )
+            )
 
     coverage: dict[str, Any] = {}
     saturated = bool(resolved_catalog["discovery_state"]["saturated"])
@@ -333,8 +550,9 @@ def route_sources(
     else:
         status = "unsupported_scope"
     limitations = [
-        "Catalog routing identifies possible sources; evidence tier is not a truth probability, and analyte availability plus record-level comparability still require source queries and D2 review.",
+        "Catalog routing applies frozen analyte, region, measurement-basis and temporal evidence; record-level availability and comparability still require acquisition plus D2 review.",
         "A partial route must not be presented as complete global coverage.",
+        "max_records is an acquisition/output ceiling enforced by the downstream runner, not evidence that the selected records are representative.",
     ]
     if not saturated:
         limitations.append("Source discovery is still in progress; absence from this route is not proof that no source exists.")

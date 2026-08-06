@@ -58,6 +58,7 @@
         "attribution_note",
         "matching_media",
         "coverage_extent",
+        "request_compatibility",
         "reason"
       ],
       "properties": {
@@ -72,8 +73,31 @@
         "attribution_note": {"type": "string"},
         "matching_media": {"$ref": "#/$defs/uniqueStrings"},
         "coverage_extent": {"type": "string", "minLength": 1},
+        "request_compatibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["analytes", "region", "measurement_basis", "time_range", "max_records"],
+          "properties": {
+            "analytes": {"$ref": "#/$defs/compatibilityDimension"},
+            "region": {"$ref": "#/$defs/compatibilityDimension"},
+            "measurement_basis": {"$ref": "#/$defs/compatibilityDimension"},
+            "time_range": {"$ref": "#/$defs/compatibilityDimension"},
+            "max_records": {"$ref": "#/$defs/compatibilityDimension"}
+          }
+        },
         "reason": {"type": "string", "minLength": 1}
       }
+    },
+    "compatibilityDimension": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["compatible", "incompatible", "unverified", "not_applicable", "enforced_downstream"]
+        }
+      },
+      "additionalProperties": true
     },
     "accessStatus": {
       "type": "string",

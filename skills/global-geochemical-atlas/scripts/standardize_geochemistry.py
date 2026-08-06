@@ -25,7 +25,7 @@ from typing import Any
 
 INTERFACE_VERSION = "d2-interface-v2"
 PIPELINE_VERSION = "d2-pipeline-v2"
-CONFIDENCE_VERSION = "d2-confidence-v2"
+CONFIDENCE_VERSION = "d2-confidence-v3"
 ANOMALY_VERSION = "d2-robust-mad-v2"
 ATOMIC_WEIGHT_VERSION = "d2-atomic-weights-v1"
 GEOLOGY_JOIN_VERSION = "d2-glim-05deg-cell-join-v1"
@@ -761,7 +761,7 @@ def stable_record_id(row: Mapping[str, Any], row_number: int) -> str:
     return f"gen-{digest}"
 
 
-def score_confidence(record: Mapping[str, Any]) -> dict[str, float | str]:
+def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
     flags = list(record["qc_flags"])
     tier = str(record["source_tier"])
     source = SOURCE_TIER_SCORES.get(tier, SOURCE_TIER_SCORES["unknown"])
@@ -818,8 +818,32 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, float | str]:
         - 0.02 * severity_counts["info"],
     )
     overall = 0.30 * source + 0.20 * completeness + 0.20 * method + 0.15 * spatial + 0.15 * qc
+    gates_applied: list[str] = []
     if severity_counts["error"]:
         overall = min(overall, 0.59)
+        gates_applied.append("error_qc_low_cap")
+    if record["latitude"] is None or record["longitude"] is None:
+        overall = min(overall, 0.59)
+        gates_applied.append("missing_canonical_coordinate_low_cap")
+    elif record["coordinate_uncertainty_m"] is None:
+        overall = min(overall, 0.79)
+        gates_applied.append("missing_coordinate_uncertainty_medium_cap")
+    if any(
+        record[field] in (None, "")
+        for field in ("measurement_basis", "analytical_method", "method_family", "digestion_or_extraction")
+    ):
+        overall = min(overall, 0.79)
+        gates_applied.append("incomplete_method_context_medium_cap")
+    geologic_context_present = any(
+        record.get(field) not in (None, "")
+        for field in ("matched_geologic_unit", "geologic_unit_raw", "geologic_unit", "lithology_raw", "lithology")
+    )
+    geology_required = record.get("medium") in {"rock", "soil"} or (
+        record.get("medium") == "sediment" and record.get("sediment_environment") != "marine"
+    )
+    if geology_required and not geologic_context_present:
+        overall = min(overall, 0.79)
+        gates_applied.append("missing_geologic_context_medium_cap")
     band = "high" if overall >= 0.80 else "medium" if overall >= 0.60 else "low"
     return {
         "version": CONFIDENCE_VERSION,
@@ -830,6 +854,7 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, float | str]:
         "qc": round(qc, 6),
         "overall": round(overall, 6),
         "band": band,
+        "gates_applied": sorted(gates_applied),
     }
 
 
@@ -1502,6 +1527,11 @@ def build_confidence_report(
         for component in components
     }
     bands = Counter(str(record["operational_confidence"]["band"]) for record in records)
+    gates = Counter(
+        str(gate)
+        for record in records
+        for gate in record["operational_confidence"].get("gates_applied", [])
+    )
     return {
         "confidence_version": CONFIDENCE_VERSION,
         "name": "operational_confidence",
@@ -1531,7 +1561,14 @@ def build_confidence_report(
             ),
         },
         "band_thresholds": {"high": ">=0.80", "medium": ">=0.60 and <0.80", "low": "<0.60"},
-        "gates": {"any_error_flag": "overall capped at 0.59 (low)"},
+        "gates": {
+            "error_qc_low_cap": "Any error-level QC flag caps overall at 0.59 (low).",
+            "missing_canonical_coordinate_low_cap": "Missing canonical WGS84 coordinates cap overall at 0.59 (low).",
+            "missing_coordinate_uncertainty_medium_cap": "Canonical coordinates without declared uncertainty cap overall at 0.79 (medium).",
+            "incomplete_method_context_medium_cap": "Missing basis, method family, analytical method or digestion/extraction caps overall at 0.79 (medium).",
+            "missing_geologic_context_medium_cap": "Rock, soil and non-marine sediment without source or matched geology cap overall at 0.79 (medium).",
+        },
+        "gate_counts": dict(sorted(gates.items())),
         "component_means": means,
         "band_counts": {band: bands.get(band, 0) for band in ("high", "medium", "low")},
     }
