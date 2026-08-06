@@ -223,7 +223,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     if '<script id="samples-data" type="application/json">' not in text:
         errors.append("interactive_map.html does not embed the samples data block")
-    for block_id in ("anomalies-data", "basemap-data", "context-data"):
+    for block_id in ("anomalies-data", "basemap-data", "boundaries-data", "context-data"):
         if f'<script id="{block_id}" type="application/json">' not in text:
             errors.append(f"interactive_map.html does not embed the {block_id} block")
     if re.search(r"<script\b[^>]*\bsrc\s*=", text, re.IGNORECASE):
@@ -236,6 +236,8 @@ def validate_html(path: Path, errors: list[str]) -> None:
         errors.append("interactive_map.html omits the D3 map version or all-data default view")
     if "Natural Earth 1:110m" not in text or "public domain" not in text:
         errors.append("interactive_map.html omits offline basemap provenance")
+    if "ai4s-natural-earth-admin0-v1" not in text or "pointInCountry" not in text:
+        errors.append("interactive_map.html omits strict offline country boundary support")
     for marker in (
         'id="region"',
         'id="mapMode"',
@@ -245,6 +247,8 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="openAnomalyRegions"',
         "visual_aggregation_only",
         "样点密度热力图",
+        "D2 未提供分析方法",
+        "不是与周围空间点的平均值比较",
         "showAnomalyRegion",
     ):
         if marker not in text:

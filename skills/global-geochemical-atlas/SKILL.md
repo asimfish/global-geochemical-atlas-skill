@@ -156,7 +156,7 @@ python scripts/run_workflow.py \
 若已有 D1/D2 标准输出目录，不要重新运行标准化或异常判定。先判断空间产物类型，再复制配置：
 
 - 用户问全球分布或跨区域对比时，复制 `assets/visualization-profile.template.json`，保持 `spatial_scope=global` 与 `default_region=global`；
-- 用户问国家、城市、流域、矿区或任意 bbox 时，复制 `assets/visualization-profile.regional.template.json`，设置 `spatial_scope=regional` 和对应预设或自定义 bbox。区域产物必须只把区域内记录嵌入 HTML、异常显示和 `samples.geojson`，不得用世界全景代替区域图；原始 D1/D2 证据文件仍完整保留。
+- 用户问国家、城市、流域、矿区或任意 bbox 时，复制 `assets/visualization-profile.regional.template.json`，设置 `spatial_scope=regional` 和对应预设或自定义范围。`china`、`usa`、`usa48`、`australia` 使用仓库内固定的 Natural Earth Admin‑0 国家多边形与 bbox 联合严格裁剪；`shanghai`、`europe` 与 `custom` 仍是显式 bbox。区域产物必须只把范围内记录嵌入 HTML、异常显示和 `samples.geojson`，不得用世界全景代替区域图；原始 D1/D2 证据文件仍完整保留。
 
 然后根据用户问题填写任务视图：
 
@@ -176,6 +176,8 @@ python scripts/render_visualization.py \
 ```
 
 不要编辑 `assets/interactive-atlas-v3.html`。它是确定性渲染资产，不是提交给用户填写的网页源码。检查 `visualization_report.json.status` 和 `profile_warnings`；首屏必须直接回答用户问题，仍允许切换分布、密度、元素组合、异常、来源与质量视图。
+
+`medium` 才是样品类型；`analytical_method` / `method_family` 是独立的分析方法证据，不能用方法字段猜样品类型。若 D2 未提供方法，页面和报告必须显示“D2 未提供分析方法”，不得填成推测值；可比浓度与元素组合必须把方法缺失作为限制。密度热力图只编码物理采样点计数，同时保留可点击锚点；它不插值浓度。异常详情必须展示 robust z、阈值、背景组字段、组内样本量、log10 中位数与 MAD，并说明它与可比背景组比较，不是与周围点平均值比较。
 
 全流程必须生成标准数据库、来源与置信度说明、异常结果和交互地图。D3 独立生成 `interactive_map.html`、`samples.geojson`、`visualization_profile.json` 与 `visualization_report.json`，并原样携带页面引用的 D1/D2 证据文件。完整配置 schema、显示规则、失败边界和验收步骤见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 

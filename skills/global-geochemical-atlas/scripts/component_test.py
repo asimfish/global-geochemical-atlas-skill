@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import build_interactive_map as map_builder
 import download_data as downloader
 import source_adapters as source_contracts
 import standardize_geochemistry as standardizer
@@ -34,6 +35,7 @@ DOWNLOADER = SCRIPT_DIR / "download_data.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 VISUALIZATION_RENDERER = SCRIPT_DIR / "render_visualization.py"
 BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
+COUNTRY_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
 VISUALIZATION_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
 REGIONAL_VISUALIZATION_PROFILE = (
     SKILL_DIR / "assets" / "visualization-profile.regional.template.json"
@@ -937,6 +939,12 @@ def check_d3(output_dir: Path) -> list[str]:
                 "conic-gradient",
                 'id="storyPreset"',
                 "d3-visualization-profile-v2",
+                'id="boundaries-data"',
+                "pointInCountry",
+                "D2 未提供分析方法",
+                "不是与周围空间点的平均值比较",
+                "renderPoints(true)",
+                'id="modeExplainer"',
             )
         ),
         "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
@@ -965,8 +973,9 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         "Natural Earth 1:110m" in html
         and "ai4s-natural-earth-land-v1" in html
+        and "ai4s-natural-earth-admin0-v1" in html
         and "public domain" in html,
-        "D3 embeds a pinned offline basemap with visible provenance",
+        "D3 embeds pinned offline land and country boundaries with visible provenance",
         checks,
     )
     require("候选异常不代表污染" in html, "D3 map communicates the scientific interpretation boundary", checks)
@@ -994,7 +1003,17 @@ def check_d3(output_dir: Path) -> list[str]:
             "candidate_anomaly_region_aggregation",
         }
         and map_report.get("external_assets") == 0
-        and map_report.get("interpolation") is False,
+        and map_report.get("interpolation") is False
+        and all(
+            map_report.get("capability_matrix", {}).get("filter_dimensions", {}).values()
+        )
+        and all(map_report.get("capability_matrix", {}).get("outputs", {}).values())
+        and map_report.get("capability_matrix", {})
+        .get("scientific_semantics", {})
+        .get("heatmap_interpolates_concentration")
+        is False
+        and map_report.get("data_coverage_diagnostics", {}).get("sample_type_field")
+        == "medium",
         "D3 run summary declares the reusable map contract and default view",
         checks,
     )
@@ -1011,11 +1030,14 @@ def check_d3(output_dir: Path) -> list[str]:
         and coverage.get("global", {}).get("sample_count")
         == map_report.get("display_sample_count")
         and all(
-            item.get("administrative_clip") is False
-            for item in coverage.values()
-            if isinstance(item, dict)
+            coverage.get(key, {}).get("administrative_clip") is True
+            for key in ("china", "usa", "usa48", "australia")
+        )
+        and all(
+            coverage.get(key, {}).get("administrative_clip") is False
+            for key in ("global", "shanghai", "europe")
         ),
-        "D3 region coverage reconciles the global total and labels bbox semantics",
+        "D3 region coverage reconciles totals and distinguishes strict country clips from bbox scopes",
         checks,
     )
     basemap = json_value(BASEMAP)
@@ -1025,6 +1047,27 @@ def check_d3(output_dir: Path) -> list[str]:
         == "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de"
         and basemap.get("point_count") == 5_133,
         "D3 basemap provenance, source archive hash and geometry count are pinned",
+        checks,
+    )
+    boundaries = json_value(COUNTRY_BOUNDARIES)
+    require(
+        boundaries.get("asset_version") == "ai4s-natural-earth-admin0-v1"
+        and boundaries.get("license") == "public domain"
+        and boundaries.get("source_sha256")
+        == "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f"
+        and boundaries.get("country_count") == 177
+        and boundaries.get("point_count") == 10_654,
+        "D3 country boundary provenance and geometry counts are pinned",
+        checks,
+    )
+    loaded_boundaries = map_builder.load_country_boundaries(COUNTRY_BOUNDARIES)
+    country_index = {
+        country["iso_a3"]: country for country in loaded_boundaries["countries"]
+    }
+    require(
+        map_builder.point_in_country(116.4074, 39.9042, country_index["CHN"])
+        and not map_builder.point_in_country(139.6917, 35.6895, country_index["CHN"]),
+        "D3 strict China polygon includes Beijing and excludes Tokyo",
         checks,
     )
     profile = json_value(VISUALIZATION_PROFILE)
@@ -1103,6 +1146,8 @@ def check_d3(output_dir: Path) -> list[str]:
             and visualization_report.get("map_report", {}).get("default_view")
             == "regional_scope_task_view"
             and scoped_report.get("region_key") == "china"
+            and scoped_report.get("country_code") == "CHN"
+            and scoped_report.get("clip_method") == "country_polygon_and_bbox"
             and scoped_report.get("output_clipped") is True
             and "中国 As 土壤候选异常任务视图" in configured_html
             and "REGIONAL OUTPUT" in configured_html,
@@ -1115,11 +1160,14 @@ def check_d3(output_dir: Path) -> list[str]:
             and scoped_geojson.get("spatial_scope", {}).get("mode") == "regional"
             and scoped_geojson.get("spatial_scope", {}).get("output_clipped") is True
             and all(
-                73 <= feature["geometry"]["coordinates"][0] <= 135
-                and 18 <= feature["geometry"]["coordinates"][1] <= 54
+                map_builder.point_in_country(
+                    feature["geometry"]["coordinates"][0],
+                    feature["geometry"]["coordinates"][1],
+                    country_index["CHN"],
+                )
                 for feature in scoped_features
             ),
-            "D3 regional GeoJSON contains only records inside the configured country bbox",
+            "D3 regional GeoJSON contains only records inside the configured country polygon",
             checks,
         )
         city_output = visualization_root / "city-bundle"

@@ -169,9 +169,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "Blank areas indicate no included observations, not element absence or zero concentration.",
             (
                 "Regional products clip the HTML payload, anomaly display, and samples GeoJSON to "
-                "the configured WGS84 bbox; copied D1/D2 evidence files remain complete."
+                f"the configured scope using {map_report.get('spatial_scope', {}).get('clip_method')}; "
+                "copied D1/D2 evidence files remain complete."
                 if profile["spatial_scope"] == "regional"
                 else "This is a global product; regional views remain exploratory selections."
+            ),
+            (
+                "Analytical-method gaps and sample-medium imbalance are reported as D2 coverage "
+                "limitations and are never inferred away by D3."
             ),
         ],
         "next_actions": [

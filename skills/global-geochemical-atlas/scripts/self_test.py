@@ -473,6 +473,10 @@ def run_suite() -> dict[str, Any]:
         require("ALL DATA" in html, "map does not default to the complete overview")
         require("Natural Earth 1:110m" in html, "map omits the offline land basemap")
         require(
+            "ai4s-natural-earth-admin0-v1" in html and "pointInCountry" in html,
+            "map omits pinned country boundaries or strict country clipping",
+        )
+        require(
             "全部元素按样品标识去重显示" in html,
             "map does not explain measurement-to-sample deduplication",
         )
@@ -489,6 +493,8 @@ def run_suite() -> dict[str, Any]:
                     "visual_aggregation_only",
                     "showAnomalyRegion",
                     "focusAnomalyRegion",
+                    "D2 未提供分析方法",
+                    "不是与周围空间点的平均值比较",
                 )
             ),
             "map omits D3 v3 region, heatmap, combination or anomaly-region controls",

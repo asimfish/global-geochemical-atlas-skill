@@ -59,3 +59,18 @@
 
 该底图只提供地图上下文，不参与地质单元匹配、异常推断或覆盖完整性判断。页面显示来源、比例尺、
 许可和 WGS84 语义；构建器在嵌入前验证资产版本、许可、坐标范围和点数安全上限。
+
+## Natural Earth 离线国家边界
+
+- 标题：Natural Earth 1:110m Admin 0 Countries；
+- 冻结版本：5.1.1；
+- 官方说明页：<https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/>；
+- 固定上游提交：`ca96624a56bd078437bca8184e78163e5039ad19`；
+- 固定 GeoJSON SHA-256：`6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f`；
+- 使用条款：Natural Earth 数据为 public domain；
+- 仓库资产：`../assets/natural-earth-110m-admin0.json`，177 个国家 feature、10,654 个坐标点；
+- 生成工具：`../scripts/prepare_country_boundaries.py` 只接受上述固定 hash，并将坐标四舍五入到 4 位小数。
+
+该资产用于绘制 Admin‑0 国家线，并让 `china`、`usa`、`usa48`、`australia` 预设执行国家多边形与
+bbox 联合点内判定。Natural Earth 默认表达 de facto 制图边界；它只用于定位和数据范围裁剪，不构成
+法定边界、外交立场、地质单元或异常范围声明。`shanghai`、`europe` 与自定义范围仍是显式 bbox。

@@ -79,16 +79,18 @@ anomaly_report.json
 | 调研范围 | `spatial_scope` | `default_region` | D3 输出行为 |
 |---|---|---|---|
 | 全球分布、跨洲总览 | `global` | 必须为 `global` | 生成世界图，嵌入全部可上图记录，可交互选择区域 |
-| 国家、城市、流域、矿区 | `regional` | 非 `global` 预设或 `custom` | 生成区域图，只嵌入 bbox 内记录并锁定区域入口 |
+| 国家、城市、流域、矿区 | `regional` | 非 `global` 预设或 `custom` | 生成区域图，只嵌入严格配置范围内记录并锁定区域入口 |
 
-区域预设支持 `usa`、`usa48`、`china`、`shanghai`、`europe`、`australia`。其他范围使用
+区域预设支持 `usa`、`usa48`、`china`、`shanghai`、`europe`、`australia`。其中 `usa`、`usa48`、
+`china`、`australia` 使用固定 Natural Earth Admin‑0 国家多边形与 bbox 联合判定，避免国家 bbox
+误纳邻国样点；`shanghai`、`europe` 仍是 bbox。其他范围使用
 `default_region=custom`，并填写 WGS84 `custom_region.label` 与 `bounds={w,s,e,n}`。区域模式下：
 
-- `interactive_map.html` 的样点、异常候选、来源卡片和元素组合只来自 bbox 内记录；
-- `samples.geojson` 只含 bbox 内 feature，并声明 `spatial_scope.output_clipped=true`；
+- `interactive_map.html` 的样点、异常候选、来源卡片和元素组合只来自配置范围内记录；
+- `samples.geojson` 只含配置范围内 feature，并声明 `spatial_scope.output_clipped=true`、`clip_method` 与可选 `country_code`；
 - 页面不提供切回世界图的入口，URL 参数也不得突破区域范围；
 - `geochemistry.csv`、`anomalies.geojson` 等原始 D1/D2 证据文件仍原样保留，避免破坏来源追溯；
-- bbox 是显示裁剪，不宣称为精确行政或地质边界。
+- 国家多边形采用 Natural Earth de facto 制图口径，只作定位与严格点内筛选，不构成法定边界声明；bbox 不宣称为精确行政或地质边界。
 
 按问题选择一个 `story`：
 
@@ -102,7 +104,7 @@ anomaly_report.json
 
 只把用户明确指定的元素、介质、地质单元等写入 `filters`。不要为了让地图“看起来有数据”而取消
 无匹配筛选；保留该值，使页面显示覆盖缺口，并在 `profile_warnings` 中报告。自定义区域必须写明
-WGS84 `W,S,E,N`；预设区域只是 bbox，不是假装精确行政裁切。
+WGS84 `W,S,E,N`；国家预设与 bbox 预设必须在报告中明确 `clip_method`。
 
 ## 5. 单命令生成
 
@@ -154,16 +156,20 @@ python scripts/render_visualization.py \
 默认全元素总览按 `source_id + sample_id + medium + coordinates` 折叠为物理采样符号；缺少
 `sample_id` 时使用 `record_id`，不得只凭坐标去重。按元素着色时使用“采样身份 + 元素”。
 
-只有当前筛选同时满足单一元素、单一介质、单一已知 measurement basis、单一已知方法组和单一
+`medium` 是样品类型；`analytical_method` / `method_family` 是测定方法证据，两者不可互相推断。
+D2 方法缺失必须原样显示并进入覆盖诊断。只有当前筛选同时满足单一元素、单一介质、单一已知 measurement basis、单一已知方法组和单一
 标准单位时，才允许使用浓度 `log10` 色阶；否则明确回退为分类色。密度图统计屏幕网格中的物理
-采样点，并用圆形柔光显示；这不是核密度估计，也不是浓度插值。
+采样点，并用圆形柔光显示；这不是核密度估计，也不是浓度插值。热力模式仍保留可点击的半透明
+样点锚点，确保任何视觉汇总都能下钻到记录证据。
 
 元素组合只接受同一来源与样品、同介质、同 basis、同方法组、各元素唯一单位、非删失正值。
 存在多个可比层时只画样品对最多的一层并报告排除数；少于 8 对或秩方差为零时不报告 Spearman。
 
 异常区域状态固定为 `visual_aggregation_only`。固定 1°/2°/5° 网格只聚合 D2 high/low 候选点；
 全球视图可把相邻网格画成缩放自适应红蓝圆环，选中时再展示真实 bbox。圆环面积不表示真实范围，
-异常候选也不等于污染、矿化或成因结论。
+异常候选也不等于污染、矿化或成因结论。记录详情必须给出
+`z = 0.67448975 × (log10(value) − median) / MAD`、阈值、背景组分层字段、组内样本量、中位数、
+MAD 与相对中位数倍数，并明确不是与附近空间点平均值比较。
 
 ## 8. 失败状态
 
