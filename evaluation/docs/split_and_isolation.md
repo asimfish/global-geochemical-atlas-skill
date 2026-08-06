@@ -54,3 +54,5 @@ python3 tools/verify_isolation.py \
 公开反馈前必须检查是否出现隐藏样品 ID、坐标、数值、文件名、gold 字段组合、阈值或 checker 日志。通过“例如”改写唯一隐藏案例同样属于泄漏。
 
 当前旧版 Q17–Q24 曾存在于公开 Git 历史，因此已失去严格 holdout 资格。迁出只能防止继续混放，不能撤销历史暴露；正式比赛必须由独立评测负责人新建并私下签名一套 Final。
+
+`validate_package.py --private-root` 默认拒绝旧 Final。只有显式增加 `--allow-legacy-regression` 才会继续做结构与 gold smoke，并始终报告 `formal_private_eligible=false`；该结果不得进入正式 cohort。新 Final 还必须使 alignment contract 的 `final_rotation` 进入 `FROZEN_FOR_OFFICIAL`，并由可信 E2 Ed25519 key 签署不泄漏题目内容的 rotation receipt。

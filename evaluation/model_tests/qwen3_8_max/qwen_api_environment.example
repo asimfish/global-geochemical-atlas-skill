@@ -1,0 +1,6 @@
+# Alibaba Cloud Model Studio, Beijing region
+QWEN_BASE_URL=https://WORKSPACE_ID.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
+QWEN_MODEL=qwen3.8-max
+
+# Load the real key only in your shell.
+# QWEN_API_KEY is intentionally not stored in this file.

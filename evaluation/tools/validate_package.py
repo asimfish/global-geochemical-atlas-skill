@@ -19,6 +19,45 @@ ALL_EXPECTED = {
 }
 
 
+def assess_private_eligibility(
+    alignment: dict[str, object], private_root: Path, allow_legacy_regression: bool
+) -> tuple[bool, list[str], list[str]]:
+    """Fail closed unless both the private root and E2 rotation are formally frozen."""
+
+    errors: list[str] = []
+    limitations: list[str] = []
+    status_path = private_root / "PRIVATE_STATUS.json"
+    try:
+        private_status = json.loads(status_path.read_text(encoding="utf-8"))
+        if not isinstance(private_status, dict):
+            raise ValueError("PRIVATE_STATUS.json must contain an object")
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        message = f"private root status is missing or invalid: {exc}"
+        if allow_legacy_regression:
+            limitations.append(message + "; structural regression only")
+            private_status = {}
+        else:
+            errors.append(message)
+            private_status = {}
+
+    final_rotation = alignment.get("final_rotation", {})
+    if not isinstance(final_rotation, dict):
+        final_rotation = {}
+    eligible = (
+        private_status.get("formal_final_eligible") is True
+        and private_status.get("status") == "FROZEN_PRIVATE_FINAL"
+        and final_rotation.get("formal_final_eligible") is True
+        and final_rotation.get("status") == "FROZEN_FOR_OFFICIAL"
+    )
+    if not eligible:
+        message = "private Final is legacy/unsigned or E2 final rotation is not FROZEN_FOR_OFFICIAL"
+        if allow_legacy_regression:
+            limitations.append(message + "; structural regression only")
+        else:
+            errors.append(message)
+    return eligible, errors, limitations
+
+
 def task_locations(root: Path, private_root: Path | None = None, public_only: bool = False) -> list[tuple[str, Path]]:
     result: list[tuple[str, Path]] = []
     locations: list[tuple[str, Path]] = [("public", root / "release" / "public")]
@@ -38,6 +77,11 @@ def main() -> int:
     parser.add_argument("--report", type=Path)
     parser.add_argument("--private-root", type=Path, help="Private root containing shadow/ and final_holdout/ outside the E1 workspace")
     parser.add_argument("--public-only", action="store_true")
+    parser.add_argument(
+        "--allow-legacy-regression",
+        action="store_true",
+        help="Validate the compromised legacy private package structurally, never as formal holdout evidence",
+    )
     args = parser.parse_args()
     root = args.root.resolve()
     private_root = args.private_root.resolve() if args.private_root else None
@@ -50,6 +94,14 @@ def main() -> int:
         expected.update({"shadow": ALL_EXPECTED["shadow"], "final_holdout": ALL_EXPECTED["final_holdout"]})
 
     errors: list[str] = []
+    limitations: list[str] = []
+    formal_private_eligible: bool | None = None
+    if private_root is not None and not args.public_only:
+        formal_private_eligible, private_errors, private_limitations = assess_private_eligibility(
+            alignment, private_root, args.allow_legacy_regression
+        )
+        errors.extend(private_errors)
+        limitations.extend(private_limitations)
     smoke: list[dict[str, object]] = []
     seen: dict[str, set[int]] = {key: set() for key in expected}
     task_ids: list[str] = []
@@ -185,6 +237,8 @@ def main() -> int:
         "e1_contract_sha256": alignment["e1_contract_sha256"],
         "split_counts": {split: len(values) for split, values in seen.items()},
         "smoke_tests": smoke,
+        "formal_private_eligible": formal_private_eligible,
+        "limitations": limitations,
         "errors": errors,
         "status": "PASS" if not errors else "FAIL",
     }

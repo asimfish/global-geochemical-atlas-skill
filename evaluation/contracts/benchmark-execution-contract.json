@@ -77,6 +77,59 @@
   },
   "conditions": {"bare": "B0", "skill": "S0"},
   "repeats": 3,
+  "formal_execution_policy": {
+    "status": "AWAITING_E2_G0_SIGNATURE",
+    "executor": "opencode",
+    "task_manifest_sha256": null,
+    "model": {
+      "manifest_sha256": null,
+      "id": null,
+      "version": null,
+      "parameters": null,
+      "seed_support": null
+    },
+    "network": {
+      "mode": "cached",
+      "policy": "allowlist",
+      "allowlist_id": null,
+      "allowlist_sha256": null,
+      "cache_isolated_by_run": true
+    },
+    "time_budget": {
+      "candidate_wall_seconds": 43200,
+      "includes": ["preflight", "install", "download", "initialization", "execution", "artifact_write", "retry_backoff"],
+      "scoring_outside_candidate_budget": true
+    },
+    "resource_limits": {
+      "cpu_cores": 2,
+      "memory_bytes": 4294967296,
+      "disk_bytes": 21474836480,
+      "pids": 256,
+      "gpu_count": 0
+    },
+    "retry_policy": {
+      "max_attempts": 3,
+      "backoff_seconds": [5, 15],
+      "retry_on": ["HTTP_429", "HTTP_502", "HTTP_503", "HTTP_504", "SCHEDULER_PRESTART_INTERRUPT", "TRANSIENT_NETWORK_DISCONNECT"],
+      "budget_resets": false
+    },
+    "pairing": {
+      "variants": ["B0", "S0"],
+      "repeats": 3,
+      "same_repeat_requires_identical_task_input_model_seed_resources": true,
+      "only_allowed_difference": "skill.enabled"
+    },
+    "required_signers": ["E1", "D3", "E2"],
+    "signature_algorithm": "ed25519"
+  },
+  "final_rotation": {
+    "status": "WAITING_EXTERNAL_NEW_FINAL",
+    "formal_final_eligible": false,
+    "compromised_legacy_private_manifest_sha256": "0f210b8006d74b4c038f03c7ff973326c22959e7f63911a6e5573bf7b3a27a7c",
+    "required_new_final_tasks": 8,
+    "receipt_signature_algorithm": "ed25519",
+    "receipt_signature_purpose": "final-rotation-receipt"
+  },
   "isolation": {
     "public_export_allowlist": [
       "README_public.md",

@@ -473,6 +473,8 @@
       "passed": true
     }
   ],
+  "formal_private_eligible": null,
+  "limitations": [],
   "errors": [],
   "status": "PASS"
 }

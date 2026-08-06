@@ -40,6 +40,7 @@ evaluation/
 ├── ai_visible_public/            # 被测 AI 的 Public 题面、输入和 submissions
 ├── contracts/                    # E1 对齐契约、E1 score schema、gold 模板
 ├── docs/                         # 评分、接口和隔离规则
+├── model_tests/qwen3_8_max/      # Qwen3.8-Max API 检查与隔离运行器
 ├── release/public/Q01-Q08/       # 可公开开发题
 ├── tools/                        # 校验、证据判分、最终计分、汇总和导出工具
 └── results/                      # 运行记录与报告模板，不包含伪造实测结果
@@ -54,6 +55,10 @@ Shadow/Final 不在本目录。正式执行时通过 `--private-root` 指向工�
 ```bash
 python3 tools/validate_package.py . --public-only
 python3 tools/validate_package.py . --private-root /secure/e2-private-root
+# 旧 Final 只允许显式做结构回归，且报告 formal_private_eligible=false：
+python3 tools/validate_package.py . \
+  --private-root /secure/e2-legacy-private-root \
+  --allow-legacy-regression
 python3 tools/verify_isolation.py \
   --evaluation-root . \
   --private-root /secure/e2-private-root \
@@ -69,6 +74,8 @@ python3 tools/finalize_score.py \
 ```
 
 `grade_task.py` 的点数只是证据覆盖量，不是独立总分。只有符合 E1 schema 的六维 `score.json` 才是单次运行分数。完整执行步骤见 [`RUNBOOK.md`](RUNBOOK.md)。
+
+使用 Qwen3.8-Max 执行 Public B0/S0 的准备、API 和命令示例见 [`model_tests/qwen3_8_max/README.md`](model_tests/qwen3_8_max/README.md)。
 
 ## 被测 Codex 快速入口
 

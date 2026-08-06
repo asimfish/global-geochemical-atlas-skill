@@ -102,13 +102,18 @@ python3 tools/validate_package.py . --public-only \
 python3 tools/validate_package.py . \
   --private-root /secure/e2-private-root
 
+# 仅对已泄漏旧 Final 做结构回归；此命令永远不形成正式证据：
+python3 tools/validate_package.py . \
+  --private-root /secure/e2-legacy-private-root \
+  --allow-legacy-regression
+
 python3 tools/verify_isolation.py \
   --evaluation-root . \
   --private-root /secure/e2-private-root \
   --e1-workspace ..
 ```
 
-预期版本为 `6.0.0-draft.1`，Public 8 题；提供 private root 时共 24 题。每题 gold smoke 必须通过，错误列表必须为空。
+预期版本为 `6.0.0-draft.1`，Public 8 题。正式 private root 必须是新 Final、通过 E2 签名冻结且 `formal_private_eligible=true`；旧 24 题包即使 gold smoke 全过，也只能作为 regression，不能进入正式 cohort。
 
 Public 包只能白名单导出：
 
