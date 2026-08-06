@@ -516,6 +516,8 @@ def run_suite() -> dict[str, Any]:
                     "D2 未提供分析方法",
                     "不是与周围空间点的平均值比较",
                     'id="deliverableCenter"',
+                    'id="taskContext"',
+                    "task-first-progressive-disclosure-v1",
                     'id="databaseView"',
                     'id="databaseSearch"',
                     'id="confidenceSummary"',
@@ -529,6 +531,10 @@ def run_suite() -> dict[str, Any]:
                 )
             ),
             "map omits D3 v3 region, heatmap, combination or anomaly-region controls",
+        )
+        require(
+            'id="storyPreset"' not in html and html.count('class="tabs"') == 1,
+            "map duplicates its task navigation",
         )
         require(
             summary["map_report"]["display_sample_count"] == 17

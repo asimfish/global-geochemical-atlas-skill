@@ -266,6 +266,8 @@ python scripts/render_visualization.py \
 
 在交互页面首部把上述四项产物做成同等显著的一级入口。标准数据库页必须能直接核验完整 CSV 记录数、行语义、可上图预览与排除计数；置信度页必须展示 source、completeness、method、spatial、QC 五个分量及其权重、均值、等级分布、门控规则和“不是概率”边界。不要只给下载链接。区域产物只能裁剪 HTML 内嵌记录和 `samples.geojson`，不得改写完整 `geochemistry.csv`；同时明确完整报告统计与当前区域预览统计的口径差异。
 
+遵守 `task-first-progressive-disclosure-v1` 界面层级：只生成一套主标签导航和一个紧凑的四交付物状态栏，不在页头重复下载胶囊、能力徽章或 `story` 下拉。地图首屏只展开区域、元素、样品类型 / 介质和地图表达；地质单元、颜色、bbox、basis、方法、来源、置信度与异常网格放进“更多筛选”。这条约束必须由模板、报告 capability matrix 与验证器共同检查，确保 Agent 面对其他数据仍能复现。
+
 ## 8. 验证与失败关闭
 
 对 `run_workflow.py` 生成的核心十文件目录执行：

@@ -251,6 +251,8 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "不是与周围空间点的平均值比较",
         "showAnomalyRegion",
         'id="deliverableCenter"',
+        'id="taskContext"',
+        "task-first-progressive-disclosure-v1",
         'id="databaseView"',
         'id="databaseSearch"',
         'id="confidenceSummary"',
@@ -262,6 +264,8 @@ def validate_html(path: Path, errors: list[str]) -> None:
     ):
         if marker not in text:
             errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")
+    if 'id="storyPreset"' in text or text.count('class="tabs"') != 1:
+        errors.append("interactive_map.html duplicates task navigation or story selection")
 
 
 def validate_dir(output_dir: Path) -> dict[str, Any]:

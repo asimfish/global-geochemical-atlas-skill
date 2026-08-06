@@ -60,6 +60,14 @@
         "region": true,
         "sample_type_medium": true
       },
+      "interaction_design": {
+        "advanced_filters_progressive_disclosure": true,
+        "compact_deliverable_dock": true,
+        "duplicate_story_selector": false,
+        "four_primary_map_controls": true,
+        "hierarchy_version": "task-first-progressive-disclosure-v1",
+        "single_primary_navigation": true
+      },
       "outputs": {
         "clickable_sample_density_heatmap": true,
         "element_pair_comparison": true,
@@ -120,7 +128,7 @@
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 690051,
+    "html_bytes": 688414,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -290,6 +298,7 @@
       "region_key": "global",
       "region_label": "全球"
     },
+    "ui_hierarchy_version": "task-first-progressive-disclosure-v1",
     "unmappable_record_count": 48,
     "visualization_modes": [
       "distribution_points",

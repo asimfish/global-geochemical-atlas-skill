@@ -2156,7 +2156,8 @@ def check_d3(output_dir: Path) -> list[str]:
                 "zoom-adaptive-anomaly-bubbles-v1",
                 "layoutAnomalyBubbles",
                 "conic-gradient",
-                'id="storyPreset"',
+                'id="taskContext"',
+                "task-first-progressive-disclosure-v1",
                 "d3-visualization-profile-v2",
                 'id="boundaries-data"',
                 "pointInCountry",
@@ -2167,6 +2168,13 @@ def check_d3(output_dir: Path) -> list[str]:
             )
         ),
         "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
+        checks,
+    )
+    require(
+        'id="storyPreset"' not in html
+        and html.count('class="tabs"') == 1
+        and html.count('class="deliverable-center"') == 1,
+        "D3 keeps one primary navigation and no duplicate task selector",
         checks,
     )
     require(
@@ -2250,6 +2258,20 @@ def check_d3(output_dir: Path) -> list[str]:
         )
         and all(map_report.get("capability_matrix", {}).get("outputs", {}).values())
         and all(map_report.get("capability_matrix", {}).get("deliverables", {}).values())
+        and map_report.get("ui_hierarchy_version")
+        == "task-first-progressive-disclosure-v1"
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("single_primary_navigation")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("advanced_filters_progressive_disclosure")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
+        .get("duplicate_story_selector")
+        is False
         and map_report.get("capability_matrix", {})
         .get("scientific_semantics", {})
         .get("heatmap_interpolates_concentration")

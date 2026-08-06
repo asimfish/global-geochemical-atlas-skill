@@ -137,6 +137,8 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         else:
             if map_report.get("map_version") != "d3-interactive-atlas-v3":
                 errors.append("visualization map_version is unsupported")
+            if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v1":
+                errors.append("visualization UI hierarchy contract is unsupported")
             if map_report.get("external_assets") != 0 or map_report.get("interpolation") is not False:
                 errors.append("visualization report violates the offline/no-interpolation boundary")
             if map_report.get("mapped_record_count") != sample_count:

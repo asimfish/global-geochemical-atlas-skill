@@ -18,6 +18,7 @@ MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
 PROFILE_VERSION = "d3-visualization-profile-v2"
+UI_HIERARCHY_VERSION = "task-first-progressive-disclosure-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
 MISSING_METHOD_LABEL = "D2 未提供分析方法"
@@ -944,6 +945,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         PAYLOAD_VERSION,
         ANOMALY_RENDER_MODE,
         PROFILE_VERSION,
+        UI_HIERARCHY_VERSION,
         'id="deliverableCenter"',
         'id="databaseView"',
         'id="confidenceSummary"',
@@ -1032,6 +1034,14 @@ def build_map(
             "anomaly_results_first_class_ui": True,
             "interactive_map_first_class_ui": True,
         },
+        "interaction_design": {
+            "hierarchy_version": UI_HIERARCHY_VERSION,
+            "single_primary_navigation": True,
+            "compact_deliverable_dock": True,
+            "four_primary_map_controls": True,
+            "advanced_filters_progressive_disclosure": True,
+            "duplicate_story_selector": False,
+        },
         "scientific_semantics": {
             "heatmap_encodes": "physical_sample_density",
             "heatmap_interpolates_concentration": False,
@@ -1041,6 +1051,7 @@ def build_map(
     }
     context = {
         "map_version": MAP_VERSION,
+        "ui_hierarchy_version": UI_HIERARCHY_VERSION,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
@@ -1083,6 +1094,7 @@ def build_map(
     )
     return {
         "map_version": MAP_VERSION,
+        "ui_hierarchy_version": UI_HIERARCHY_VERSION,
         "mapped_record_count": len(records),
         "source_mappable_record_count": source_mappable_records,
         "scope_excluded_mappable_record_count": source_mappable_records - len(records),
