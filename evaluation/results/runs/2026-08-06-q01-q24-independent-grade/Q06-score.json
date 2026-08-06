@@ -1,0 +1,320 @@
+{
+  "candidate_status": "success",
+  "checks_path": "objective_report.json",
+  "computed_at": "2026-08-06T15:05:19.953726Z",
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "scientific_credibility.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.25
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.output_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 1.0
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.3
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 10.0,
+          "metric_id": "objective.columns",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 10.0,
+          "weight": 1.0
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.14
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.row_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.058823529412
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.c01_bound",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.082352941176
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.c01_numeric_empty",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.082352941176
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.c02_nd",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.082352941176
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.c02_dl",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.082352941176
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.c03_zero",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.082352941176
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.c03_not_censored",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.082352941176
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.c04_upper",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.082352941176
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "objective.c05_missing",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.070588235294
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.c06_unknown_dl",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.058823529412
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 10.0,
+          "metric_id": "llm.semantic_separation",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Left-censored (C01), right-censored (C04), reported zero (C03), unreported (C05), and ND/BDL (C02/C06) are all separated with the frozen semantic values and correct censored flags; consistent with machine checks c01_bound through c06_unknown_dl, all passed.",
+          "status": "scored",
+          "value": 10.0,
+          "weight": 0.117647058824
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "llm.no_imputation",
+          "normalized_score": 66.666667,
+          "passed": false,
+          "reason": "No LOD/2 or 0 substitution anywhere: numeric_value is empty for every censored/unreported record and no detection limit is fabricated for C06. However, the declared evidence (CSV only) contains no statement that substitution would require a separate method and sensitivity analysis, so the explanation half of full_credit is unmet.",
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.070588235294
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "llm.analysis_eligibility",
+          "normalized_score": 75.0,
+          "passed": false,
+          "reason": "Eligibility is correctly encoded for all six records, including the subtle reported-zero case, and emptying numeric_value for censored records blocks direct log use; however, the artifact encodes the classification without a narrative explanation of why these records cannot enter log-anomaly computation, so 1 point is withheld.",
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.047058823529
+        }
+      ],
+      "score": 96.470588,
+      "weight": 0.15
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "innovation_ecosystem.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.1
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "open_source_potential.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.06
+    }
+  ],
+  "eval_version": "1.0.0",
+  "evidence": [
+    "llm_grader_report.json",
+    "objective_report.json"
+  ],
+  "hard_gate_passed": true,
+  "rubric_sha256": "08b30955553d7a2b72ab509d146465d3ed2152744d9af006361bef9dc758fb5d",
+  "run_id": "regression-q06-independent-review",
+  "schema_version": "1.0.0",
+  "score_status": "partial",
+  "scorer_version": "6.0.0",
+  "total_score": 58.470588
+}

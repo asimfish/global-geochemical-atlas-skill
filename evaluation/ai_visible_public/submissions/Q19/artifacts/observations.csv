@@ -1,0 +1,5 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+N01,N01,Ni,157.16030011085468,mg/kg,,,,q19-fixture,
+N02,N02,Ni,392.9007502771367,mg/kg,,,,q19-fixture,
+N03,N03,Ni,200,mg/kg,,,,q19-fixture,
+N04,N04,Ni,,mg/kg,,,,q19-fixture,not_requested

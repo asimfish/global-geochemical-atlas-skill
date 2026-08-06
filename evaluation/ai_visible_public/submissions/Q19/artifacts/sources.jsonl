@@ -1,0 +1,2 @@
+{"source_id": "q19-fixture", "file": "inputs/constants.json", "computed_sha256": "db83eccb1ab9ad5a6cee6ac1090e8678683966cab5406c8bbe53ecdf482563a4", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
+{"source_id": "q19-fixture", "file": "inputs/nickel_species.csv", "computed_sha256": "a003354d9a04dd90e0c34f0769718d17d4d613da8e986e529c3b2e023f3bb9d3", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

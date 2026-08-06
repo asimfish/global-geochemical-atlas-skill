@@ -1,0 +1,1 @@
+{"source_id": "usgs_ngdb", "authority_url": "https://www.usgs.gov/centers/gggsc/science/national-geochemical-database", "regions": ["united_states", "territories"], "media": ["rock", "sediment", "soil", "mineral"], "record_level_coordinates": true, "role": "primary"}

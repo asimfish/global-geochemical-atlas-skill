@@ -1,0 +1,306 @@
+{
+  "candidate_status": "success",
+  "checks_path": "objective_report.json",
+  "computed_at": "2026-08-06T15:05:21.181845Z",
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "llm.traceability",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Both features carry record_id, source_id, confidence_score, and qc_flags, enabling record/source back-linkage with QC and confidence retained; feature ids match record_ids.",
+          "status": "scored",
+          "value": 8.0,
+          "weight": 1.0
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.25
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.geojson_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.05
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.manifest_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.05
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 10.0,
+          "metric_id": "objective.feature_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 10.0,
+          "weight": 0.125
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "objective.map1_id",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.075
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 12.0,
+          "metric_id": "objective.map1_coords",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 12.0,
+          "weight": 0.15
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 12.0,
+          "metric_id": "objective.map2_coords",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 12.0,
+          "weight": 0.15
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 10.0,
+          "metric_id": "objective.map1_properties",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 10.0,
+          "weight": 0.125
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "objective.mapped_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.075
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "objective.excluded_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.075
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "objective.coordinate_order",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.075
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.no_crs_member",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.05
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.3
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "platform_reusability.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.14
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "llm.exclusion",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Manifest counts all 5 input rows with 2 mapped and 3 excluded (2+3=5), showing invalid rows were excluded but counted rather than hiding them; consistent with checker results.",
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.5
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "llm.standard",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Manifest correctly declares longitude-latitude order and CRS84; coordinates are [longitude, latitude] and the GeoJSON contains no custom crs member, matching checker coordinate_order and no_crs_member passes.",
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.5
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.15
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "innovation_ecosystem.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.1
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "open_source_potential.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.06
+    }
+  ],
+  "eval_version": "1.0.0",
+  "evidence": [
+    "llm_grader_report.json",
+    "objective_report.json"
+  ],
+  "hard_gate_passed": true,
+  "rubric_sha256": "2df65f040af927b6243245bd7bf5e15558a81234a03f2d23a1ebc4a940a5ce35",
+  "run_id": "regression-q15-independent-review",
+  "schema_version": "1.0.0",
+  "score_status": "partial",
+  "scorer_version": "6.0.0",
+  "total_score": 70.0
+}

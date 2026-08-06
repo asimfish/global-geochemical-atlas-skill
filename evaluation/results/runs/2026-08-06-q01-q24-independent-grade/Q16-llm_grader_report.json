@@ -1,0 +1,44 @@
+{
+  "task_id": "GGA-MAP-002",
+  "criteria": [
+    {
+      "id": "density",
+      "dimension_id": "domain_understanding",
+      "score": 8,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/heatmap_config.json: interpretation field",
+        "artifacts/run_manifest.json#/benchmark_evidence/heatmap.html: first <p> field descriptions",
+        "artifacts/run_manifest.json#/benchmark_evidence/cells.csv: header and rows H001-H003"
+      ],
+      "reason": "heatmap_config.json interpretation states 'sample_count is sampling density, not concentration'; heatmap.html explicitly defines 'sample_count = number of samples per cell (sampling density, NOT concentration)' separately from 'median_value = median of quantified values in mg/kg'; cells.csv keeps sample_count and median_value as separate columns with consistent values (e.g., H001: 4 samples, median 20)."
+    },
+    {
+      "id": "censoring",
+      "dimension_id": "domain_understanding",
+      "score": 6,
+      "max": 6,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/cells.csv: rows H001 and H003 (censored_fraction, quantified_count vs sample_count)",
+        "artifacts/run_manifest.json#/benchmark_evidence/heatmap_config.json: layers array and interpretation field",
+        "artifacts/run_manifest.json#/benchmark_evidence/heatmap.html: first <p> (censored_fraction definition)"
+      ],
+      "reason": "Censored values are counted in sample_count and exposed via a dedicated censored_fraction layer (config layers array; html field note) but excluded from the median: H001 censored_fraction=(4-3)/4=0.25 with median 20, H003 (3-1)/3=0.6667 with median 5, matching checker expectations computed on quantified values only; config states 'censored values excluded from median and color scale'."
+    },
+    {
+      "id": "reproducibility",
+      "dimension_id": "engineering_quality",
+      "score": 6,
+      "max": 6,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/heatmap_config.json: aggregation, radius_pixels, color_domain_mg_kg fields",
+        "artifacts/run_manifest.json#/benchmark_evidence/cells.csv: precomputed per-cell rows H001-H003",
+        "MACHINE EVIDENCE REPORT: checks aggregation_fixed and color_domain passed"
+      ],
+      "reason": "Config freezes aggregation='precomputed_cell_median', radius_pixels=30, and color_domain_mg_kg=[0,300]; the heatmap renders precomputed cells from cells.csv (html table rows identical to cells.csv), confirmed by passed checker checks aggregation_fixed and color_domain."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "low",
+  "human_review_required": false
+}

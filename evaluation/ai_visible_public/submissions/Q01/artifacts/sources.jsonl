@@ -1,0 +1,2 @@
+{"source_id": "georoc_precompiled", "name": "GEOROC Precompiled Files", "url": "https://georoc.eu/georoc/precompiled/", "role": "primary", "example_compilation_doi": "10.25625/2JETOA", "versioned_files": true, "license": null}
+{"source_id": "earthchem_portal", "name": "EarthChem Portal", "url": "https://earthchem.org/about/about-overview", "role": "discovery", "versioned_files": false, "license": null}

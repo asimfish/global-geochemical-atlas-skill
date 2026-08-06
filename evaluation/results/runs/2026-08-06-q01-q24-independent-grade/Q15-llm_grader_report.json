@@ -1,0 +1,41 @@
+{
+  "task_id": "GGA-MAP-001",
+  "criteria": [
+    {
+      "id": "traceability",
+      "dimension_id": "scientific_credibility",
+      "score": 8,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/points.geojson: features.0.properties (record_id='MAP1', source_id='SRC1', confidence_score=90, qc_flags=[])",
+        "artifacts/run_manifest.json#/benchmark_evidence/points.geojson: features.1.properties (record_id='MAP2', source_id='SRC2', confidence_score=75, qc_flags=[])"
+      ],
+      "reason": "Both features carry record_id, source_id, confidence_score, and qc_flags, enabling record/source back-linkage with QC and confidence retained; feature ids match record_ids."
+    },
+    {
+      "id": "exclusion",
+      "dimension_id": "domain_understanding",
+      "score": 6,
+      "max": 6,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/map_manifest.json: input_rows=5, mapped_features=2, excluded_rows=3",
+        "MACHINE EVIDENCE REPORT checks mapped_features (actual=2 expected=2) and excluded_rows (actual=3 expected=3)"
+      ],
+      "reason": "Manifest counts all 5 input rows with 2 mapped and 3 excluded (2+3=5), showing invalid rows were excluded but counted rather than hiding them; consistent with checker results."
+    },
+    {
+      "id": "standard",
+      "dimension_id": "domain_understanding",
+      "score": 6,
+      "max": 6,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/map_manifest.json: coordinate_order='longitude_latitude', crs='CRS84', geojson_crs_member_present=false",
+        "artifacts/run_manifest.json#/benchmark_evidence/points.geojson: features.0.geometry.coordinates=[100,10], features.1.geometry.coordinates=[-120,40]; no legacy 'crs' member in FeatureCollection"
+      ],
+      "reason": "Manifest correctly declares longitude-latitude order and CRS84; coordinates are [longitude, latitude] and the GeoJSON contains no custom crs member, matching checker coordinate_order and no_crs_member passes."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "low",
+  "human_review_required": false
+}

@@ -1,0 +1,170 @@
+{
+  "task_id": "GGA-QC-001",
+  "scoring_contract": "e1-six-dimension-v1",
+  "score_status": "evidence_only",
+  "hard_gate_passed": true,
+  "evidence_points_awarded": 80,
+  "evidence_points_possible": 80,
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "weight": 0.25,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "weight": 0.3,
+      "evidence_points_awarded": 5,
+      "evidence_points_possible": 5,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "weight": 0.14,
+      "evidence_points_awarded": 10,
+      "evidence_points_possible": 10,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "weight": 0.15,
+      "evidence_points_awarded": 65,
+      "evidence_points_possible": 65,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "weight": 0.1,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "weight": 0.06,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    }
+  ],
+  "checks": [
+    {
+      "id": "output_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "parsed_values.csv: file"
+    },
+    {
+      "id": "columns",
+      "type": "csv_columns",
+      "dimension_id": "platform_reusability",
+      "passed": true,
+      "points_awarded": 10,
+      "points_possible": 10,
+      "evidence": "parsed_values.csv: missing columns=[]"
+    },
+    {
+      "id": "row_count",
+      "type": "csv_row_count",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "parsed_values.csv: rows=6; expected=6"
+    },
+    {
+      "id": "c01_bound",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "parsed_values.csv key={'record_id': 'C01'} column=bound_value actual='0.1' expected=0.1 tol=1e-06"
+    },
+    {
+      "id": "c01_numeric_empty",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "parsed_values.csv key={'record_id': 'C01'} column=numeric_value actual='' expected=None tol=0.0"
+    },
+    {
+      "id": "c02_nd",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "parsed_values.csv key={'record_id': 'C02'} column=qualifier actual='ND' expected='ND' tol=0.0"
+    },
+    {
+      "id": "c02_dl",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "parsed_values.csv key={'record_id': 'C02'} column=detection_limit actual='0.20' expected=0.2 tol=1e-06"
+    },
+    {
+      "id": "c03_zero",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "parsed_values.csv key={'record_id': 'C03'} column=numeric_value actual='0' expected=0 tol=0.0"
+    },
+    {
+      "id": "c03_not_censored",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "parsed_values.csv key={'record_id': 'C03'} column=censored actual='False' expected=False tol=0.0"
+    },
+    {
+      "id": "c04_upper",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "parsed_values.csv key={'record_id': 'C04'} column=missing_reason actual='above_upper_limit' expected='above_upper_limit' tol=0.0"
+    },
+    {
+      "id": "c05_missing",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "parsed_values.csv key={'record_id': 'C05'} column=missing_reason actual='not_reported' expected='not_reported' tol=0.0"
+    },
+    {
+      "id": "c06_unknown_dl",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "parsed_values.csv key={'record_id': 'C06'} column=missing_reason actual='below_detection_limit_unknown_limit' expected='below_detection_limit_unknown_limit' tol=0.0"
+    }
+  ],
+  "redline_events": [],
+  "grader_version": "6.0.0-draft.2"
+}

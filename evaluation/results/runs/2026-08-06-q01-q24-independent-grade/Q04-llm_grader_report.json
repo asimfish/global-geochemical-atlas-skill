@@ -1,0 +1,39 @@
+{
+  "task_id": "GGA-NORM-002",
+  "criteria": [
+    {
+      "id": "stoichiometry",
+      "dimension_id": "scientific_credibility",
+      "score": 8,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/element_database.csv: rows R01,R02 conversion_factor=0.6994307614270416, conversion_rule=fe2o3_to_fe_frozen_mass_fraction",
+        "inputs/conversion_constants.json: fe_mass_fraction_in_fe2o3=0.6994307614270416, atomic_weights Fe=55.845 O=15.999, fe2o3_molar_mass=159.687"
+      ],
+      "reason": "Factor exactly equals frozen stoichiometric mass fraction (2*55.845/159.687); rule name explicitly cites frozen mass fraction and checker 'factor' verified it to 1e-08."
+    },
+    {
+      "id": "identity",
+      "dimension_id": "domain_understanding",
+      "score": 8,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/element_database.csv: analyte_reported preserved (R01,R02=Fe2O3; R03=Fe; R04=FeO) with distinct rules fe2o3_to_fe_frozen_mass_fraction / identity_element_unit_conversion / empty rule with status=not_requested"
+      ],
+      "reason": "All three analyte identities retained and never share one rule: Fe2O3 rows converted with frozen factor, Fe row is unit_conversion_only with factor 1, FeO row status=not_requested with empty normalized_value and no factor applied, matching checker key_set/r03/r04 checks."
+    },
+    {
+      "id": "traceability",
+      "dimension_id": "scientific_credibility",
+      "score": 4,
+      "max": 4,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/element_database.csv: columns analyte_reported,reported_value,reported_unit populated for all rows (R01 Fe2O3/10/wt%; R02 Fe2O3/70000/mg/kg; R03 Fe/5/wt%; R04 FeO/8/wt%)"
+      ],
+      "reason": "Every output row retains original reported analyte, value, and unit alongside normalized fields; checker 'columns' reports no missing columns."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "low",
+  "human_review_required": false
+}

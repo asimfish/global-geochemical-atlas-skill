@@ -1,0 +1,3 @@
+record_id,group_id,value,robust_z,anomaly_type
+CTX1,UNIT-A,50.0,5.228787452803374,relative_enrichment
+CTX2,UNIT-B,50.0,-4.771212547196626,relative_depletion
