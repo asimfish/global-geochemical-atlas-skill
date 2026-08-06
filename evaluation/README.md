@@ -14,6 +14,22 @@
 
 冻结接口见 [`contracts/benchmark-execution-contract.json`](contracts/benchmark-execution-contract.json)，人类可读说明见 [`docs/execution-contract-guide.md`](docs/execution-contract-guide.md)。Docker 环境的连接、构建、测试和当前验收边界见 [`docs/docker_usage.md`](docs/docker_usage.md)。
 
+## 统一 Docker runner
+
+`docker/campaign.py` 将当前 E2 题库接入比赛式执行环境：OpenCode 固定版本、2 CPU、4 GB、无 GPU、900 秒、受控网络、B0/S0 只差一个只读 Skill 挂载。主模型默认每题每条件三次，可选补充模型每题每条件一次；输出直接兼容现有 `grade_task.py`、`finalize_score.py` 和 `aggregate_runs.py`。
+
+```bash
+python3 evaluation/docker/campaign.py build-image \
+  --image global-geochemical-eval:local
+python3 evaluation/docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --agent mock --network offline \
+  --tasks Q01 --conditions B0,S0 --repeats 3 \
+  --output-dir /tmp/gga-docker-smoke
+```
+
+mock 只验证运行器，不是模型成绩。正式 OpenCode 命令、网关密钥规则和证据目录见 [`docs/docker_usage.md`](docs/docker_usage.md)。
+
 ## E1 交卷文件
 
 每次运行的 submission 根目录必须且只能声明以下物理产物：

@@ -44,6 +44,11 @@ def build_parser() -> argparse.ArgumentParser:
         default=20,
         help="Real-suite DS801/RASS/Taylor smoke cap; use 0 for the full 40,131-record baseline",
     )
+    parser.add_argument(
+        "--real-fixture-dir",
+        type=Path,
+        help="Writable copy of the frozen real-data fixtures; defaults to the checked-in fixture directory",
+    )
     return parser
 
 
@@ -68,16 +73,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     e2e_dir = args.output_dir / "e2e"
     e2e_stage = stage([sys.executable, str(E2E_SCRIPT), "--output-dir", str(e2e_dir)])
     real_dir = args.output_dir / "real"
-    real_stage = stage(
-        [
-            sys.executable,
-            str(REAL_SCRIPT),
-            "--output-dir",
-            str(real_dir),
-            "--max-source-samples",
-            str(args.real_max_source_samples),
-        ]
-    )
+    real_command = [
+        sys.executable,
+        str(REAL_SCRIPT),
+        "--output-dir",
+        str(real_dir),
+        "--max-source-samples",
+        str(args.real_max_source_samples),
+    ]
+    if args.real_fixture_dir:
+        real_command.extend(["--fixture-dir", str(args.real_fixture_dir)])
+    real_stage = stage(real_command)
     global_dir = args.output_dir / "global"
     global_stage = stage(
         [sys.executable, str(GLOBAL_SCRIPT), "--output-dir", str(global_dir)]

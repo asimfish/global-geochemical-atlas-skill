@@ -17,6 +17,27 @@ evaluation_lyf/
 `reference_implementation/` 不是参赛正式代码，也不应替代 D1、D2 或 D3 同学的候选实现。它只用于证明基准的
 输入、输出和评分器能完整跑通。
 
+## 统一入口
+
+`suite_adapter.py` 把现有 suite 规范化为稳定的 JSON 报告、stdout/stderr、超时和退出码接口；它与 `evaluation/docker/campaign.py` 共用一套 Docker 评测架构，但不把科学门禁结果冒充比赛 uplift 分数。
+
+```bash
+python3 evaluation_lyf/suite_adapter.py \
+  --suite isolated \
+  --stress-records 10000 \
+  --timeout-seconds 900 \
+  --output-dir /tmp/gga-isolated-gate
+```
+
+也可以从统一控制器运行：
+
+```bash
+python3 evaluation/docker/campaign.py stage \
+  --image global-geochemical-eval:local \
+  --suite all \
+  --output-dir /tmp/gga-stage-all
+```
+
 ## 分阶段测试
 
 从仓库根目录执行：
