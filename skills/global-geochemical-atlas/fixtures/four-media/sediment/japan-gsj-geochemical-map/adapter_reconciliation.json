@@ -1,0 +1,57 @@
+{
+  "checks": {
+    "concentration_file_hash_match": true,
+    "duplicate_78013_preserved": true,
+    "ordinal_join_count_match": true,
+    "review_sample_prepared": true,
+    "sample_file_hash_match": true,
+    "target_counts_match": true,
+    "target_units_match": true,
+    "valid_row_counts_match": true
+  },
+  "counts": {
+    "bbox_jgd2000": [
+      127.6799,
+      26.1292,
+      145.7221,
+      45.4518
+    ],
+    "concentration_rows": 3024,
+    "distinct_reported_sample_ids": 3023,
+    "duplicate_reported_sample_ids": {
+      "78013": 2
+    },
+    "map_sheet_count": 112,
+    "ordinal_joined_rows": 3024,
+    "sample_rows": 3024,
+    "target_analytes": {
+      "As": 3024,
+      "Cr": 3024,
+      "Cu": 3024,
+      "Hg": 3024,
+      "Ni": 3024,
+      "Pb": 3024,
+      "Zn": 3024
+    },
+    "target_observations": 21168,
+    "target_units": {
+      "As": "ppm",
+      "Cr": "ppm",
+      "Cu": "ppm",
+      "Hg": "ppb",
+      "Ni": "ppm",
+      "Pb": "ppm",
+      "Zn": "ppm"
+    }
+  },
+  "limitations": [
+    "River samples follow drainage networks and do not form a regular grid.",
+    "JGD2000 coordinates require explicit handling before WGS84 output.",
+    "The CSV pair lacks row-level method, detection-limit and QC metadata.",
+    "Marine sediment and surface-soil products are outside this adapter."
+  ],
+  "reconciliation_version": "gsj-japan-river-sediment-audit-v1",
+  "snapshot_id": "japan-gsj-geochemical-map:sample-2024-02-20_concentration-2007-01-10:b251e7f7b3e1",
+  "source_id": "japan-gsj-geochemical-map",
+  "status": "PASS"
+}

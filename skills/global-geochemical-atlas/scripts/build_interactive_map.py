@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a self-contained, data-driven SVG map and samples GeoJSON."""
+"""Build the D3 self-contained interactive atlas and map-ready GeoJSON."""
 
 from __future__ import annotations
 
@@ -14,8 +14,50 @@ from pathlib import Path
 from typing import Any
 
 
+MAP_VERSION = "d3-interactive-atlas-v3"
+PAYLOAD_VERSION = "d3-compact-payload-v1"
+ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
+PROFILE_VERSION = "d3-visualization-profile-v1"
+BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
+MAX_OUTPUT_BYTES = 100_000_000
+SKILL_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
+DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "interactive-atlas-v3.html"
+DEFAULT_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
+REGION_PRESETS: dict[str, dict[str, Any]] = {
+    "global": {
+        "label": "全球",
+        "bounds": {"w": -180.0, "e": 180.0, "s": -90.0, "n": 90.0},
+    },
+    "usa": {
+        "label": "美国范围框（含阿拉斯加）",
+        "bounds": {"w": -170.0, "e": -66.0, "s": 18.0, "n": 72.0},
+    },
+    "usa48": {
+        "label": "美国本土范围框",
+        "bounds": {"w": -125.0, "e": -66.0, "s": 24.0, "n": 50.0},
+    },
+    "china": {
+        "label": "中国范围框",
+        "bounds": {"w": 73.0, "e": 135.0, "s": 18.0, "n": 54.0},
+    },
+    "shanghai": {
+        "label": "上海范围框",
+        "bounds": {"w": 120.85, "e": 122.2, "s": 30.65, "n": 31.9},
+    },
+    "europe": {
+        "label": "欧洲范围框",
+        "bounds": {"w": -25.0, "e": 45.0, "s": 34.0, "n": 72.0},
+    },
+    "australia": {
+        "label": "澳大利亚范围框",
+        "bounds": {"w": 112.0, "e": 154.0, "s": -44.0, "n": -10.0},
+    },
+}
+
+
 class MapBuildError(ValueError):
-    """Raised when map inputs are invalid."""
+    """Raised when D2 map inputs or the bundled basemap are invalid."""
 
 
 def optional_float(value: Any) -> float | None:
@@ -37,20 +79,36 @@ def parse_json_cell(value: Any, fallback: Any) -> Any:
         return fallback
 
 
-def load_records(path: Path, max_points: int) -> list[dict[str, Any]]:
+def parse_bool_cell(value: Any) -> bool:
+    return str(value or "").strip().casefold() in {"1", "true", "yes"}
+
+
+def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int]:
+    """Consume, but never reinterpret, the public D2 canonical CSV."""
     if not path.is_file():
         raise MapBuildError(f"database does not exist: {path}")
     records: list[dict[str, Any]] = []
+    total_records = 0
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         required = {
-            "record_id", "element_or_analyte", "medium", "normalized_value", "normalized_unit",
-            "latitude", "longitude", "qc_flags", "operational_confidence", "source_id", "source_locator",
+            "record_id",
+            "element_or_analyte",
+            "medium",
+            "normalized_value",
+            "normalized_unit",
+            "latitude",
+            "longitude",
+            "qc_flags",
+            "operational_confidence",
+            "source_id",
+            "source_locator",
         }
         if reader.fieldnames is None or not required.issubset(reader.fieldnames):
             missing = sorted(required - set(reader.fieldnames or []))
             raise MapBuildError(f"database missing map columns: {', '.join(missing)}")
         for row in reader:
+            total_records += 1
             latitude = optional_float(row.get("latitude"))
             longitude = optional_float(row.get("longitude"))
             if latitude is None or longitude is None:
@@ -59,52 +117,384 @@ def load_records(path: Path, max_points: int) -> list[dict[str, Any]]:
                 continue
             confidence = parse_json_cell(row.get("operational_confidence"), {})
             qc_flags = parse_json_cell(row.get("qc_flags"), [])
+            if not isinstance(confidence, dict):
+                confidence = {}
+            if not isinstance(qc_flags, list):
+                qc_flags = []
             records.append(
                 {
                     "record_id": row.get("record_id"),
                     "sample_id": row.get("sample_id") or None,
                     "element": row.get("element_or_analyte"),
+                    "analyte_reported": row.get("analyte_reported") or None,
                     "medium": row.get("medium"),
+                    "material": row.get("material") or None,
                     "measurement_basis": row.get("measurement_basis") or None,
+                    "original_value_raw": row.get("original_value_raw") or None,
+                    "original_unit": row.get("original_unit") or None,
+                    "source_qualifier_raw": row.get("source_qualifier_raw") or None,
+                    "qualifier": row.get("value_qualifier") or None,
+                    "censored": parse_bool_cell(row.get("censored")),
+                    "censoring_limit": optional_float(row.get("normalized_censoring_limit")),
                     "value": optional_float(row.get("normalized_value")),
                     "unit": row.get("normalized_unit") or None,
-                    "qualifier": row.get("value_qualifier") or None,
-                    "censoring_limit": optional_float(row.get("normalized_censoring_limit")),
                     "latitude": latitude,
                     "longitude": longitude,
+                    "lithology": row.get("lithology") or None,
                     "geologic_unit": row.get("geologic_unit") or None,
                     "analytical_method": row.get("analytical_method") or None,
+                    "method_family": row.get("method_family") or None,
+                    "digestion_or_extraction": row.get("digestion_or_extraction") or None,
                     "source_id": row.get("source_id") or None,
+                    "dataset_title": row.get("dataset_title") or None,
+                    "dataset_doi": row.get("dataset_doi") or None,
+                    "dataset_version": row.get("dataset_version") or None,
                     "source_locator": row.get("source_locator") or None,
                     "license": row.get("license") or None,
-                    "confidence_band": confidence.get("band", "unknown") if isinstance(confidence, dict) else "unknown",
-                    "confidence_overall": (
-                        confidence.get("overall") if isinstance(confidence, dict) else None
-                    ),
-                    "qc_flags": qc_flags if isinstance(qc_flags, list) else [],
+                    "confidence_band": confidence.get("band", "unknown"),
+                    "confidence_overall": optional_float(confidence.get("overall")),
+                    "confidence_components": {
+                        key: optional_float(confidence.get(key))
+                        for key in ("source", "completeness", "method", "spatial", "qc")
+                    },
+                    "qc_flags": [str(flag) for flag in qc_flags],
                 }
             )
             if len(records) > max_points:
-                raise MapBuildError(f"valid map points exceed --max-points ({max_points}); filter the input first")
-    return records
+                raise MapBuildError(
+                    f"valid map points exceed --max-points ({max_points}); filter the input first"
+                )
+    return records, total_records
 
 
-def load_anomalies(path: Path) -> dict[str, Any]:
+def load_json_object(path: Path | None, label: str) -> dict[str, Any]:
+    if path is None:
+        return {}
     if not path.is_file():
-        raise MapBuildError(f"anomalies GeoJSON does not exist: {path}")
+        raise MapBuildError(f"{label} does not exist: {path}")
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
-        raise MapBuildError("anomalies GeoJSON is invalid JSON") from exc
+        raise MapBuildError(f"{label} is invalid JSON") from exc
+    if not isinstance(value, dict):
+        raise MapBuildError(f"{label} must be a JSON object")
+    return value
+
+
+def require_exact_keys(value: Mapping[str, Any], expected: set[str], label: str) -> None:
+    missing = sorted(expected - set(value))
+    unknown = sorted(set(value) - expected)
+    if missing or unknown:
+        details = []
+        if missing:
+            details.append("missing " + ", ".join(missing))
+        if unknown:
+            details.append("unknown " + ", ".join(unknown))
+        raise MapBuildError(f"{label} fields are invalid: {'; '.join(details)}")
+
+
+def profile_text(value: Any, label: str, maximum: int, nullable: bool = False) -> str | None:
+    if value is None and nullable:
+        return None
+    if not isinstance(value, str) or not value.strip():
+        raise MapBuildError(f"visualization profile {label} must be a non-empty string")
+    text = value.strip()
+    if len(text) > maximum:
+        raise MapBuildError(f"visualization profile {label} exceeds {maximum} characters")
+    return text
+
+
+def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
+    profile = load_json_object(path or DEFAULT_PROFILE, "visualization profile")
+    top_keys = {
+        "schema_version",
+        "title",
+        "subtitle",
+        "story",
+        "theme",
+        "default_region",
+        "custom_region",
+        "filters",
+        "comparison",
+        "display",
+    }
+    require_exact_keys(profile, top_keys, "visualization profile")
+    if profile.get("schema_version") != PROFILE_VERSION:
+        raise MapBuildError(f"visualization profile must use {PROFILE_VERSION}")
+    if profile.get("theme") != "evidence-dark":
+        raise MapBuildError("visualization profile theme must be evidence-dark")
+    story = profile.get("story")
+    if story not in {"overview", "coverage", "anomaly", "comparison", "evidence"}:
+        raise MapBuildError("visualization profile story is unsupported")
+    default_region = profile.get("default_region")
+    if default_region not in {*REGION_PRESETS, "custom"}:
+        raise MapBuildError("visualization profile default_region is unsupported")
+
+    custom_region = profile.get("custom_region")
+    if custom_region is not None:
+        if not isinstance(custom_region, dict):
+            raise MapBuildError("visualization profile custom_region must be null or an object")
+        require_exact_keys(custom_region, {"label", "bounds"}, "custom_region")
+        bounds = custom_region.get("bounds")
+        if not isinstance(bounds, dict):
+            raise MapBuildError("visualization profile custom_region.bounds must be an object")
+        require_exact_keys(bounds, {"w", "s", "e", "n"}, "custom_region.bounds")
+        numbers: dict[str, float] = {}
+        for key in ("w", "s", "e", "n"):
+            raw_value = bounds.get(key)
+            if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+                raise MapBuildError(
+                    f"visualization profile custom_region.bounds.{key} is invalid"
+                )
+            value = float(raw_value)
+            if not math.isfinite(value):
+                raise MapBuildError(
+                    f"visualization profile custom_region.bounds.{key} is invalid"
+                )
+            numbers[key] = value
+        if not (
+            -180 <= numbers["w"] < numbers["e"] <= 180
+            and -90 <= numbers["s"] < numbers["n"] <= 90
+        ):
+            raise MapBuildError("visualization profile custom bounds must satisfy W<E and S<N")
+        custom_region = {
+            "label": profile_text(custom_region.get("label"), "custom_region.label", 80),
+            "bounds": numbers,
+        }
+    if default_region == "custom" and custom_region is None:
+        raise MapBuildError("default_region=custom requires custom_region")
+
+    filters = profile.get("filters")
+    filter_keys = {"element", "medium", "basis", "geology", "method", "source", "confidence"}
+    if not isinstance(filters, dict):
+        raise MapBuildError("visualization profile filters must be an object")
+    require_exact_keys(filters, filter_keys, "visualization profile filters")
+    normalized_filters = {
+        key: profile_text(filters.get(key), f"filters.{key}", 160, nullable=True)
+        for key in sorted(filter_keys)
+    }
+
+    comparison = profile.get("comparison")
+    comparison_keys = {"x", "y", "medium"}
+    if not isinstance(comparison, dict):
+        raise MapBuildError("visualization profile comparison must be an object")
+    require_exact_keys(comparison, comparison_keys, "visualization profile comparison")
+    normalized_comparison = {
+        key: profile_text(comparison.get(key), f"comparison.{key}", 160, nullable=True)
+        for key in sorted(comparison_keys)
+    }
+
+    display = profile.get("display")
+    display_keys = {
+        "map_mode",
+        "color_by",
+        "anomaly_grid_degrees",
+        "show_anomaly_points",
+        "show_anomaly_regions",
+    }
+    if not isinstance(display, dict):
+        raise MapBuildError("visualization profile display must be an object")
+    require_exact_keys(display, display_keys, "visualization profile display")
+    if display.get("map_mode") not in {"distribution", "heat", "combined"}:
+        raise MapBuildError("visualization profile display.map_mode is unsupported")
+    if display.get("color_by") not in {"medium", "element", "value"}:
+        raise MapBuildError("visualization profile display.color_by is unsupported")
+    grid_degrees = display.get("anomaly_grid_degrees")
+    if isinstance(grid_degrees, bool) or grid_degrees not in {1, 2, 5}:
+        raise MapBuildError("visualization profile anomaly grid must be 1, 2, or 5 degrees")
+    for key in ("show_anomaly_points", "show_anomaly_regions"):
+        if not isinstance(display.get(key), bool):
+            raise MapBuildError(f"visualization profile display.{key} must be boolean")
+
+    return {
+        "schema_version": PROFILE_VERSION,
+        "title": profile_text(profile.get("title"), "title", 120),
+        "subtitle": profile_text(profile.get("subtitle"), "subtitle", 500),
+        "story": story,
+        "theme": "evidence-dark",
+        "default_region": default_region,
+        "custom_region": custom_region,
+        "filters": normalized_filters,
+        "comparison": normalized_comparison,
+        "display": {key: display[key] for key in sorted(display_keys)},
+    }
+
+
+def visualization_profile_warnings(
+    profile: Mapping[str, Any], records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]
+) -> list[str]:
+    method_values = {
+        str(record.get("method_family") or record.get("analytical_method") or "unknown")
+        for record in records
+    }
+    available = {
+        "element": {str(record.get("element")) for record in records if record.get("element")},
+        "medium": {str(record.get("medium")) for record in records if record.get("medium")},
+        "basis": {
+            str(record.get("measurement_basis"))
+            for record in records
+            if record.get("measurement_basis")
+        },
+        "geology": {
+            str(record.get("geologic_unit")) for record in records if record.get("geologic_unit")
+        },
+        "method": method_values,
+        "source": {str(record.get("source_id")) for record in records if record.get("source_id")},
+        "confidence": {
+            str(record.get("confidence_band"))
+            for record in records
+            if record.get("confidence_band")
+        },
+    }
+    warnings = []
+    for key, requested in profile["filters"].items():
+        if requested and requested not in available[key]:
+            warnings.append(f"请求筛选值在当前数据中未观测到：{key}={requested}")
+    for key in ("x", "y"):
+        requested = profile["comparison"].get(key)
+        if requested and requested not in available["element"]:
+            warnings.append(f"请求的组合元素在当前数据中未观测到：{key}={requested}")
+    requested_medium = profile["comparison"].get("medium")
+    if requested_medium and requested_medium not in available["medium"]:
+        warnings.append(f"请求的组合介质在当前数据中未观测到：{requested_medium}")
+    region = (
+        profile["custom_region"]
+        if profile["default_region"] == "custom"
+        else REGION_PRESETS[profile["default_region"]]
+    )
+    bounds = region["bounds"]
+    region_records = [
+        record
+        for record in records
+        if bounds["w"] <= float(record["longitude"]) <= bounds["e"]
+        and bounds["s"] <= float(record["latitude"]) <= bounds["n"]
+    ]
+    if not region_records:
+        warnings.append("默认区域没有可上图记录；页面将显示覆盖缺口")
+    filters = profile["filters"]
+    field_map = {
+        "element": "element",
+        "medium": "medium",
+        "basis": "measurement_basis",
+        "geology": "geologic_unit",
+        "source": "source_id",
+        "confidence": "confidence_band",
+    }
+
+    def matches_filters(record: Mapping[str, Any]) -> bool:
+        for profile_key, record_key in field_map.items():
+            requested = filters.get(profile_key)
+            if requested and record.get(record_key) != requested:
+                return False
+        requested_method = filters.get("method")
+        method = record.get("method_family") or record.get("analytical_method") or "unknown"
+        return not requested_method or method == requested_method
+
+    configured_records = [record for record in region_records if matches_filters(record)]
+    if region_records and not configured_records:
+        warnings.append("默认区域与筛选组合没有可上图记录")
+    if profile["story"] == "anomaly" and not any(
+        str(record.get("record_id")) in anomaly_ids for record in configured_records
+    ):
+        warnings.append("当前异常任务配置没有匹配的 D2 候选")
+    return warnings
+
+
+def load_anomalies(path: Path) -> dict[str, Any]:
+    value = load_json_object(path, "anomalies GeoJSON")
     if value.get("type") != "FeatureCollection" or not isinstance(value.get("features"), list):
         raise MapBuildError("anomalies input must be a GeoJSON FeatureCollection")
     return value
 
 
-def samples_geojson(records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]) -> dict[str, Any]:
+def load_basemap(path: Path) -> dict[str, Any]:
+    value = load_json_object(path, "offline basemap")
+    rings = value.get("rings")
+    if (
+        value.get("asset_version") != BASEMAP_ASSET_VERSION
+        or value.get("license") != "public domain"
+        or not isinstance(rings, list)
+        or not rings
+        or len(rings) > 1_000
+    ):
+        raise MapBuildError("offline basemap provenance or structure is invalid")
+    point_count = 0
+    for ring in rings:
+        if not isinstance(ring, list) or len(ring) < 3:
+            raise MapBuildError("offline basemap contains an invalid polygon ring")
+        for point in ring:
+            point_count += 1
+            if (
+                not isinstance(point, list)
+                or len(point) != 2
+                or optional_float(point[0]) is None
+                or optional_float(point[1]) is None
+                or not (-180 <= float(point[0]) <= 180)
+                or not (-90 <= float(point[1]) <= 90)
+            ):
+                raise MapBuildError("offline basemap contains an invalid coordinate")
+    if point_count > 100_000:
+        raise MapBuildError("offline basemap exceeds the point safety limit")
+    return {
+        "asset_version": value["asset_version"],
+        "title": value.get("title", "Natural Earth land"),
+        "natural_earth_version": value.get("natural_earth_version"),
+        "scale": value.get("scale", "1:110m"),
+        "coordinate_reference_system": value.get(
+            "coordinate_reference_system", "WGS84 longitude/latitude"
+        ),
+        "source_page": value.get("source_page"),
+        "license": value["license"],
+        "archive_sha256": value.get("archive_sha256"),
+        "point_count": point_count,
+        "rings": rings,
+    }
+
+
+def sample_display_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
+    return (
+        record.get("source_id"),
+        record.get("sample_id") or record.get("record_id"),
+        record.get("medium"),
+        record.get("longitude"),
+        record.get("latitude"),
+    )
+
+
+def region_coverage(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    coverage: dict[str, Any] = {}
+    for key, region in REGION_PRESETS.items():
+        bounds = region["bounds"]
+        matched = [
+            record
+            for record in records
+            if bounds["w"] <= float(record["longitude"]) <= bounds["e"]
+            and bounds["s"] <= float(record["latitude"]) <= bounds["n"]
+        ]
+        coverage[key] = {
+            "label": region["label"],
+            "bounds": dict(bounds),
+            "record_count": len(matched),
+            "sample_count": len({sample_display_key(record) for record in matched}),
+            "elements": sorted(
+                {str(record.get("element")) for record in matched if record.get("element")}
+            ),
+            "media": sorted(
+                {str(record.get("medium")) for record in matched if record.get("medium")}
+            ),
+            "administrative_clip": False,
+        }
+    return coverage
+
+
+def samples_geojson(
+    records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]
+) -> dict[str, Any]:
     features = []
     for record in records:
-        properties = {key: value for key, value in record.items() if key not in {"latitude", "longitude"}}
+        properties = {
+            key: value for key, value in record.items() if key not in {"latitude", "longitude"}
+        }
         properties["candidate_anomaly"] = str(record["record_id"]) in anomaly_ids
         features.append(
             {
@@ -119,13 +509,126 @@ def samples_geojson(records: Sequence[Mapping[str, Any]], anomaly_ids: set[str])
     return {
         "type": "FeatureCollection",
         "name": "standardized_geochemical_samples",
+        "map_version": MAP_VERSION,
         "features": features,
+    }
+
+
+PACKED_FIELDS = (
+    "longitude",
+    "latitude",
+    "record_id",
+    "sample_id",
+    "element",
+    "analyte_reported",
+    "medium",
+    "material",
+    "measurement_basis",
+    "original_value_raw",
+    "original_unit",
+    "source_qualifier_raw",
+    "qualifier",
+    "censored",
+    "censoring_limit",
+    "value",
+    "unit",
+    "lithology",
+    "geologic_unit",
+    "analytical_method",
+    "method_family",
+    "digestion_or_extraction",
+    "source_id",
+    "dataset_title",
+    "dataset_doi",
+    "dataset_version",
+    "source_locator",
+    "license",
+    "confidence_band",
+    "confidence_overall",
+    "confidence_source",
+    "confidence_completeness",
+    "confidence_method",
+    "confidence_spatial",
+    "confidence_qc",
+    "qc_flags",
+    "candidate_anomaly",
+)
+
+
+def compact_map_payload(
+    records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]
+) -> dict[str, Any]:
+    """Pack repeated strings and property names for a smaller self-contained HTML."""
+    strings: list[str] = []
+    indexes: dict[str, int] = {}
+
+    def string_index(value: Any) -> int:
+        if value is None or value == "":
+            return -1
+        text = str(value)
+        if text not in indexes:
+            indexes[text] = len(strings)
+            strings.append(text)
+        return indexes[text]
+
+    packed_rows: list[list[Any]] = []
+    for record in records:
+        confidence = record.get("confidence_components") or {}
+        packed_rows.append(
+            [
+                record.get("longitude"),
+                record.get("latitude"),
+                string_index(record.get("record_id")),
+                string_index(record.get("sample_id")),
+                string_index(record.get("element")),
+                string_index(record.get("analyte_reported")),
+                string_index(record.get("medium")),
+                string_index(record.get("material")),
+                string_index(record.get("measurement_basis")),
+                string_index(record.get("original_value_raw")),
+                string_index(record.get("original_unit")),
+                string_index(record.get("source_qualifier_raw")),
+                string_index(record.get("qualifier")),
+                1 if record.get("censored") else 0,
+                record.get("censoring_limit"),
+                record.get("value"),
+                string_index(record.get("unit")),
+                string_index(record.get("lithology")),
+                string_index(record.get("geologic_unit")),
+                string_index(record.get("analytical_method")),
+                string_index(record.get("method_family")),
+                string_index(record.get("digestion_or_extraction")),
+                string_index(record.get("source_id")),
+                string_index(record.get("dataset_title")),
+                string_index(record.get("dataset_doi")),
+                string_index(record.get("dataset_version")),
+                string_index(record.get("source_locator")),
+                string_index(record.get("license")),
+                string_index(record.get("confidence_band")),
+                record.get("confidence_overall"),
+                confidence.get("source"),
+                confidence.get("completeness"),
+                confidence.get("method"),
+                confidence.get("spatial"),
+                confidence.get("qc"),
+                [string_index(flag) for flag in record.get("qc_flags", [])],
+                1 if str(record.get("record_id")) in anomaly_ids else 0,
+            ]
+        )
+    return {
+        "schema_version": PAYLOAD_VERSION,
+        "map_version": MAP_VERSION,
+        "fields": list(PACKED_FIELDS),
+        "strings": strings,
+        "rows": packed_rows,
     }
 
 
 def atomic_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         handle.write(content)
         temporary = Path(handle.name)
     os.replace(temporary, path)
@@ -142,86 +645,26 @@ def safe_embedded_json(value: Any) -> str:
     )
 
 
-HTML_TEMPLATE = r'''<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>全球地球化学元素分布图谱</title>
-<style>
-:root{color-scheme:dark;--bg:#07111f;--panel:#0e1c2d;--line:#28445e;--text:#e8f2f8;--muted:#9ab0c1;--accent:#4fd1c5;--warn:#ffbd59}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#173451 0,#07111f 42%);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text)}
-header{padding:20px 24px 12px}h1{font-size:24px;margin:0 0 4px}header p{color:var(--muted);margin:0;max-width:1000px}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px;padding:12px 18px 24px}.card{background:rgba(14,28,45,.94);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px #0005}
-.controls{display:flex;flex-wrap:wrap;gap:9px;padding:12px;border-bottom:1px solid var(--line);align-items:end}.control{display:grid;gap:4px}.control label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
-select,button{background:#11283d;border:1px solid #35536c;border-radius:7px;color:var(--text);padding:7px 9px}button{cursor:pointer}button:hover{border-color:var(--accent)}
-.check{display:flex;gap:6px;align-items:center;padding:7px 4px}.map-wrap{position:relative;min-height:560px;overflow:hidden}svg{display:block;width:100%;height:560px;touch-action:none;background:linear-gradient(#09203a,#0a1726)}
-.ocean{fill:#0b2135}.grid{stroke:#36536a;stroke-width:.45;opacity:.55}.equator{stroke:#5c7f95;stroke-width:.75}.point{cursor:pointer;stroke:#06111d;stroke-width:.7;vector-effect:non-scaling-stroke}.candidate{stroke:var(--warn);stroke-width:2.4;vector-effect:non-scaling-stroke}
-.tooltip{position:absolute;display:none;pointer-events:none;max-width:330px;background:#06101ddd;border:1px solid #53738b;border-radius:8px;padding:9px 11px;box-shadow:0 8px 24px #0008;font-size:12px}.tooltip strong{color:#fff}.tooltip .muted{color:var(--muted);word-break:break-all}
-.map-note{position:absolute;left:10px;bottom:9px;background:#07111fcc;padding:5px 8px;border-radius:6px;color:var(--muted);font-size:11px}.side{display:grid;gap:14px;align-content:start}.section{padding:13px}.section h2{font-size:14px;margin:0 0 9px}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{padding:9px;background:#0a1726;border-radius:8px}.metric b{display:block;font-size:20px;color:var(--accent)}.metric span{font-size:11px;color:var(--muted)}
-.legend{font-size:12px;color:var(--muted);margin-top:9px}.gradient{height:9px;border-radius:5px;background:linear-gradient(90deg,hsl(210 75% 54%),hsl(46 90% 58%),hsl(4 82% 58%));margin:5px 0}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:6px 4px;border-bottom:1px solid #22384c}th{color:var(--muted);font-weight:600}.scroll{max-height:230px;overflow:auto}
-.badge{display:inline-block;padding:2px 6px;border-radius:99px;background:#18344a;color:#bcd0dd;font-size:10px}.badge.anom{background:#5b3c12;color:#ffd994}.empty{color:var(--muted);padding:18px;text-align:center}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.map-wrap,svg{min-height:460px;height:460px}}
-</style>
-</head>
-<body>
-<header><h1>全球地球化学元素分布图谱</h1><p>证据优先的样点视图。颜色仅在相同标准单位组内按 log10 浓度缩放；密度格网不做空间插值。候选异常不代表污染、矿化或成因。</p></header>
-<main class="layout">
-  <section class="card">
-    <div class="controls">
-      <div class="control"><label for="element">元素</label><select id="element"></select></div>
-      <div class="control"><label for="medium">介质</label><select id="medium"></select></div>
-      <div class="control"><label for="confidence">运行级置信度</label><select id="confidence"></select></div>
-      <div class="control"><label for="mode">图层</label><select id="mode"><option value="points">浓度样点</option><option value="density">格网样点密度</option></select></div>
-      <label class="check"><input id="anomalyOnly" type="checkbox">仅候选异常</label>
-      <button id="fitView" type="button">定位数据</button><button id="resetView" type="button">全球视图</button>
-    </div>
-    <div class="map-wrap" id="mapWrap">
-      <svg id="map" viewBox="0 0 1000 500" role="img" aria-label="等距圆柱投影地球化学样点地图">
-        <rect class="ocean" x="0" y="0" width="1000" height="500"></rect>
-        <g id="graticule"></g><g id="dataLayer"></g>
-      </svg>
-      <div class="tooltip" id="tooltip"></div>
-      <div class="map-note">WGS84 等距圆柱投影 · 示意底图 · 滚轮缩放 / 拖动平移</div>
-    </div>
-  </section>
-  <aside class="side">
-    <section class="card section"><h2>当前视图</h2><div class="metric-grid"><div class="metric"><b id="visibleCount">0</b><span>有效坐标样点</span></div><div class="metric"><b id="candidateCount">0</b><span>候选异常</span></div><div class="metric"><b id="sourceCount">0</b><span>来源 ID</span></div><div class="metric"><b id="unitCount">0</b><span>标准单位组</span></div></div><div class="legend"><div class="gradient"></div><span>同单位组：低 → 高（log10）；黄色描边 = 候选异常</span></div></section>
-    <section class="card section"><h2>元素组合概览</h2><div class="scroll"><table><thead><tr><th>元素</th><th>单位</th><th>n</th><th>中位数</th></tr></thead><tbody id="comparison"></tbody></table></div></section>
-    <section class="card section"><h2>可复查记录</h2><div class="scroll"><table><thead><tr><th>记录</th><th>元素</th><th>值</th></tr></thead><tbody id="records"></tbody></table></div></section>
-    <section class="card section"><h2>解释边界</h2><div class="legend">无坐标记录仍保留在数据库/QC 报告中。本图不把它们放到零岛；不对空白区域做插值。点击样点查看 source ID、定位、分析方法和 QC。</div></section>
-  </aside>
-</main>
-<script id="samples-data" type="application/json">__SAMPLES_JSON__</script>
-<script>
-"use strict";
-const fc=JSON.parse(document.getElementById("samples-data").textContent);
-const samples=fc.features.map(f=>({...f.properties,longitude:f.geometry.coordinates[0],latitude:f.geometry.coordinates[1]}));
-const $=id=>document.getElementById(id), NS="http://www.w3.org/2000/svg", map=$("map"), layer=$("dataLayer"), tip=$("tooltip"), wrap=$("mapWrap");
-function unique(key){return [...new Set(samples.map(x=>x[key]).filter(x=>x!==null&&x!==undefined&&x!==""))].sort()}
-function fillSelect(id,values,label){const node=$(id);node.replaceChildren();const all=document.createElement("option");all.value="";all.textContent=label;node.append(all);for(const v of values){const o=document.createElement("option");o.value=v;o.textContent=v;node.append(o)}}
-fillSelect("element",unique("element"),"全部元素");fillSelect("medium",unique("medium"),"全部介质");fillSelect("confidence",unique("confidence_band"),"全部置信度");
-function svgEl(name,attrs={}){const e=document.createElementNS(NS,name);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e}
-const grid=$("graticule");for(let lon=-150;lon<=150;lon+=30){grid.append(svgEl("line",{x1:(lon+180)/360*1000,y1:0,x2:(lon+180)/360*1000,y2:500,class:"grid"}))}for(let lat=-60;lat<=60;lat+=30){grid.append(svgEl("line",{x1:0,y1:(90-lat)/180*500,x2:1000,y2:(90-lat)/180*500,class:lat===0?"equator":"grid"}))}
-function project(lon,lat){return[(lon+180)/360*1000,(90-lat)/180*500]}
-function median(a){if(!a.length)return null;const b=[...a].sort((x,y)=>x-y),m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2}
-function filtered(){return samples.filter(s=>(!$("element").value||s.element===$("element").value)&&(!$("medium").value||s.medium===$("medium").value)&&(!$("confidence").value||s.confidence_band===$("confidence").value)&&(!$("anomalyOnly").checked||s.candidate_anomaly))}
-function unitScales(rows){const groups={};for(const r of rows){if(r.value>0&&r.unit){(groups[r.unit]??=[]).push(Math.log10(r.value))}}const out={};for(const[u,a]of Object.entries(groups)){out[u]=[Math.min(...a),Math.max(...a)]}return out}
-function color(r,scales){if(!(r.value>0)||!r.unit||!scales[r.unit])return"#7890a2";const[min,max]=scales[r.unit],t=max===min?.55:(Math.log10(r.value)-min)/(max-min);const hue=210-206*Math.max(0,Math.min(1,t));return`hsl(${hue} 82% 58%)`}
-function showTip(event,r){tip.replaceChildren();const lines=[`${r.element} · ${r.value??"删失/缺失"} ${r.unit??""}`,`记录: ${r.record_id}`,`样品: ${r.sample_id??"未提供"}`,`介质/basis: ${r.medium} / ${r.measurement_basis??"未提供"}`,`地质单元: ${r.geologic_unit??"未提供"}`,`方法: ${r.analytical_method??"未提供"}`,`置信度: ${r.confidence_band} (${r.confidence_overall??"-"})`,`QC: ${(r.qc_flags||[]).join(", ")||"无 flag"}`,`来源: ${r.source_id??"未提供"}`,`定位: ${r.source_locator??"未提供"}`];lines.forEach((line,i)=>{const d=document.createElement("div");d.textContent=line;if(i===0){const b=document.createElement("strong");b.textContent=line;d.replaceChildren(b)}if(i>=8)d.className="muted";tip.append(d)});tip.style.display="block";const box=wrap.getBoundingClientRect();tip.style.left=Math.min(event.clientX-box.left+12,box.width-340)+"px";tip.style.top=Math.max(8,event.clientY-box.top-20)+"px"}
-function hideTip(){tip.style.display="none"}
-function renderPoints(rows){const scales=unitScales(rows);for(const r of rows){const[x,y]=project(r.longitude,r.latitude),c=svgEl("circle",{cx:x,cy:y,r:r.candidate_anomaly?5.2:3.4,fill:color(r,scales),class:r.candidate_anomaly?"point candidate":"point",tabindex:0});c.addEventListener("pointerenter",e=>showTip(e,r));c.addEventListener("pointermove",e=>showTip(e,r));c.addEventListener("pointerleave",hideTip);layer.append(c)}}
-function renderDensity(rows){const nx=36,ny=18,bins=new Map();for(const r of rows){const[x,y]=project(r.longitude,r.latitude),ix=Math.min(nx-1,Math.floor(x/1000*nx)),iy=Math.min(ny-1,Math.floor(y/500*ny)),k=`${ix},${iy}`;bins.set(k,(bins.get(k)||0)+1)}const max=Math.max(1,...bins.values());for(const[k,count]of bins){const[ix,iy]=k.split(",").map(Number),rect=svgEl("rect",{x:ix*1000/nx,y:iy*500/ny,width:1000/nx,height:500/ny,fill:"#ff7b54",opacity:.15+.8*Math.sqrt(count/max),stroke:"#ffc077",'stroke-width':.35});rect.addEventListener("pointerenter",e=>showTip(e,{element:"格网样点密度",value:count,unit:"records/cell",record_id:k,sample_id:null,medium:"mixed",measurement_basis:null,geologic_unit:null,analytical_method:null,confidence_band:"not_applicable",confidence_overall:null,qc_flags:[],source_id:`${new Set(rows.map(x=>x.source_id).filter(Boolean)).size} source(s)`,source_locator:"不插值，仅计数",candidate_anomaly:false}));rect.addEventListener("pointerleave",hideTip);layer.append(rect)}}
-function textCell(value){const td=document.createElement("td");td.textContent=value??"-";return td}
-function updateTables(rows){const comp=$("comparison");comp.replaceChildren();const grouped=new Map();for(const r of rows){if(r.value===null||!r.unit)continue;const k=`${r.element}\u0000${r.unit}`;(grouped.get(k)||grouped.set(k,[]).get(k)).push(r.value)}for(const[k,vals]of [...grouped.entries()].sort()){const[element,unit]=k.split("\u0000"),tr=document.createElement("tr");tr.append(textCell(element),textCell(unit),textCell(vals.length),textCell(Number(median(vals).toPrecision(5))));comp.append(tr)}if(!grouped.size){const tr=document.createElement("tr"),td=textCell("当前筛选无可比较数值");td.colSpan=4;tr.append(td);comp.append(tr)}const tbody=$("records");tbody.replaceChildren();for(const r of rows.slice(0,40)){const tr=document.createElement("tr"),id=document.createElement("td"),badge=document.createElement("span");badge.className=r.candidate_anomaly?"badge anom":"badge";badge.textContent=r.record_id;id.append(badge);tr.append(id,textCell(r.element),textCell(r.value===null?`≤${r.censoring_limit??"?"}`:`${r.value} ${r.unit??""}`));tbody.append(tr)}}
-function render(){const rows=filtered();layer.replaceChildren();if($("mode").value==="density")renderDensity(rows);else renderPoints(rows);resizePoints();$("visibleCount").textContent=rows.length;$("candidateCount").textContent=rows.filter(x=>x.candidate_anomaly).length;$("sourceCount").textContent=new Set(rows.map(x=>x.source_id).filter(Boolean)).size;$("unitCount").textContent=new Set(rows.map(x=>x.unit).filter(Boolean)).size;updateTables(rows)}
-for(const id of["element","medium","confidence","mode","anomalyOnly"])$(id).addEventListener("change",render);
-let view=[0,0,1000,500],drag=null;function resizePoints(){for(const c of layer.querySelectorAll("circle.point")){c.setAttribute("r",(c.classList.contains("candidate")?5.2:3.4)*view[2]/1000)}}function setView(){map.setAttribute("viewBox",view.join(" "));resizePoints()}function fitToRows(rows){if(!rows.length){view=[0,0,1000,500];setView();return}const points=rows.map(r=>project(r.longitude,r.latitude)),xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),width=Math.max(1,(maxX-minX)*1.45,(maxY-minY)*2.9),height=width/2,cx=(minX+maxX)/2,cy=(minY+maxY)/2;view=[Math.max(0,Math.min(1000-width,cx-width/2)),Math.max(0,Math.min(500-height,cy-height/2)),width,height];setView()}$("fitView").addEventListener("click",()=>fitToRows(filtered()));$("resetView").addEventListener("click",()=>{view=[0,0,1000,500];setView()});map.addEventListener("wheel",e=>{e.preventDefault();const rect=map.getBoundingClientRect(),px=view[0]+(e.clientX-rect.left)/rect.width*view[2],py=view[1]+(e.clientY-rect.top)/rect.height*view[3],factor=e.deltaY>0?1.2:.83,nw=Math.max(1,Math.min(1000,view[2]*factor)),nh=nw/2;view=[Math.max(0,Math.min(1000-nw,px-(px-view[0])*nw/view[2])),Math.max(0,Math.min(500-nh,py-(py-view[1])*nh/view[3])),nw,nh];setView()},{passive:false});map.addEventListener("pointerdown",e=>{drag=[e.clientX,e.clientY,...view];map.setPointerCapture(e.pointerId)});map.addEventListener("pointermove",e=>{if(!drag)return;const rect=map.getBoundingClientRect(),dx=(e.clientX-drag[0])/rect.width*drag[4],dy=(e.clientY-drag[1])/rect.height*drag[5];view=[Math.max(0,Math.min(1000-drag[4],drag[2]-dx)),Math.max(0,Math.min(500-drag[5],drag[3]-dy)),drag[4],drag[5]];setView()});map.addEventListener("pointerup",()=>{drag=null});map.addEventListener("pointercancel",()=>{drag=null});
-render();fitToRows(samples);
-</script>
-</body></html>
-'''
+def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
+    if not path.is_file():
+        raise MapBuildError(f"interactive map template does not exist: {path}")
+    template = path.read_text(encoding="utf-8")
+    required = {
+        "__SAMPLES_JSON__",
+        "__ANOMALIES_JSON__",
+        "__BASEMAP_JSON__",
+        "__CONTEXT_JSON__",
+        MAP_VERSION,
+        PAYLOAD_VERSION,
+        ANOMALY_RENDER_MODE,
+        PROFILE_VERSION,
+    }
+    missing = sorted(marker for marker in required if marker not in template)
+    if missing:
+        raise MapBuildError(
+            f"interactive map template missing markers: {', '.join(missing)}"
+        )
+    return template
 
 
 def build_map(
@@ -230,36 +673,131 @@ def build_map(
     output_html: Path,
     output_geojson: Path,
     max_points: int = 50_000,
+    qc_report_path: Path | None = None,
+    confidence_report_path: Path | None = None,
+    source_manifest_path: Path | None = None,
+    anomaly_report_path: Path | None = None,
+    basemap_path: Path = DEFAULT_BASEMAP,
+    visualization_profile_path: Path | None = None,
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
-    records = load_records(database, max_points)
+    records, total_records = load_records(database, max_points)
     anomalies = load_anomalies(anomalies_path)
+    basemap = load_basemap(basemap_path)
+    profile = load_visualization_profile(visualization_profile_path)
     anomaly_ids = {
         str(feature.get("properties", {}).get("record_id"))
         for feature in anomalies["features"]
         if feature.get("properties", {}).get("record_id") is not None
     }
+    profile_warnings = visualization_profile_warnings(profile, records, anomaly_ids)
     geojson = samples_geojson(records, anomaly_ids)
-    html = HTML_TEMPLATE.replace("__SAMPLES_JSON__", safe_embedded_json(geojson))
-    atomic_text(output_geojson, json.dumps(geojson, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    map_payload = compact_map_payload(records, anomaly_ids)
+    context = {
+        "map_version": MAP_VERSION,
+        "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
+        "visualization_profile": profile,
+        "visualization_profile_warnings": profile_warnings,
+        "total_record_count": total_records,
+        "mappable_record_count": len(records),
+        "region_presets": REGION_PRESETS,
+        "qc_report": load_json_object(qc_report_path, "QC report"),
+        "confidence_report": load_json_object(confidence_report_path, "confidence report"),
+        "source_manifest": load_json_object(source_manifest_path, "source manifest"),
+        "anomaly_report": load_json_object(anomaly_report_path, "anomaly report"),
+    }
+    html = (
+        load_html_template().replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
+        .replace("__ANOMALIES_JSON__", safe_embedded_json(anomalies))
+        .replace("__BASEMAP_JSON__", safe_embedded_json(basemap))
+        .replace("__CONTEXT_JSON__", safe_embedded_json(context))
+    )
+    geojson_text = (
+        json.dumps(geojson, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + "\n"
+    )
+    html_bytes = len(html.encode("utf-8"))
+    geojson_bytes = len(geojson_text.encode("utf-8"))
+    if html_bytes > MAX_OUTPUT_BYTES or geojson_bytes > MAX_OUTPUT_BYTES:
+        raise MapBuildError(
+            "map output would exceed the 100 MB runtime safety limit; filter or split the input"
+        )
+    atomic_text(output_geojson, geojson_text)
     atomic_text(output_html, html)
+    sample_keys = {sample_display_key(record) for record in records}
+    all_data_overview = (
+        profile["story"] == "overview"
+        and profile["default_region"] == "global"
+        and not any(profile["filters"].values())
+    )
     return {
-        "map_version": "self-contained-svg-v1",
+        "map_version": MAP_VERSION,
         "mapped_record_count": len(records),
-        "candidate_record_count": sum(str(record["record_id"]) in anomaly_ids for record in records),
+        "display_sample_count": len(sample_keys),
+        "unmappable_record_count": total_records - len(records),
+        "candidate_record_count": sum(
+            str(record["record_id"]) in anomaly_ids for record in records
+        ),
+        "default_view": (
+            "all_data_sample_deduplicated" if all_data_overview else "profile_driven_task_view"
+        ),
+        "embedded_payload_schema": PAYLOAD_VERSION,
+        "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
+        "visualization_profile": profile,
+        "visualization_profile_warnings": profile_warnings,
+        "visualization_modes": [
+            "distribution_points",
+            "sample_density_heatmap",
+            "element_pair_comparison",
+            "candidate_anomaly_region_aggregation",
+        ],
+        "region_presets": [*REGION_PRESETS, "custom_bbox"],
+        "region_coverage": region_coverage(records),
         "external_assets": 0,
         "interpolation": False,
+        "html_bytes": html_bytes,
+        "samples_geojson_bytes": geojson_bytes,
+        "basemap": {
+            "asset_version": basemap["asset_version"],
+            "title": basemap["title"],
+            "scale": basemap["scale"],
+            "license": basemap["license"],
+            "archive_sha256": basemap["archive_sha256"],
+            "embedded": True,
+        },
     }
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Build self-contained interactive HTML and samples GeoJSON.")
-    parser.add_argument("--database", required=True, type=Path, help="Standardized geochemistry.csv")
-    parser.add_argument("--anomalies", required=True, type=Path, help="Candidate anomalies GeoJSON")
+    parser = argparse.ArgumentParser(
+        description="Build the self-contained D3 interactive atlas and samples GeoJSON."
+    )
+    parser.add_argument("--database", required=True, type=Path, help="D2 geochemistry.csv")
+    parser.add_argument(
+        "--anomalies", required=True, type=Path, help="D2 candidate anomalies GeoJSON"
+    )
     parser.add_argument("--output-html", required=True, type=Path, help="Self-contained HTML path")
-    parser.add_argument("--output-geojson", required=True, type=Path, help="Map-ready samples GeoJSON path")
-    parser.add_argument("--max-points", type=int, default=50_000, help="Fail if valid coordinate points exceed this")
+    parser.add_argument(
+        "--output-geojson", required=True, type=Path, help="Map-ready samples GeoJSON path"
+    )
+    parser.add_argument("--qc-report", type=Path, help="Optional D2 qc_report.json")
+    parser.add_argument(
+        "--confidence-report", type=Path, help="Optional D2 confidence_report.json"
+    )
+    parser.add_argument("--source-manifest", type=Path, help="Optional D1 source_manifest.json")
+    parser.add_argument("--anomaly-report", type=Path, help="Optional D2 anomaly_report.json")
+    parser.add_argument(
+        "--basemap", type=Path, default=DEFAULT_BASEMAP, help="Pinned offline basemap asset"
+    )
+    parser.add_argument(
+        "--profile",
+        type=Path,
+        help="Optional d3-visualization-profile-v1 JSON; defaults to the bundled template",
+    )
+    parser.add_argument(
+        "--max-points", type=int, default=50_000, help="Fail if valid coordinate points exceed this"
+    )
     return parser
 
 
@@ -267,7 +805,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
-        report = build_map(args.database, args.anomalies, args.output_html, args.output_geojson, args.max_points)
+        report = build_map(
+            args.database,
+            args.anomalies,
+            args.output_html,
+            args.output_geojson,
+            args.max_points,
+            args.qc_report,
+            args.confidence_report,
+            args.source_manifest,
+            args.anomaly_report,
+            args.basemap,
+            args.profile,
+        )
     except (MapBuildError, OSError) as exc:
         parser.error(str(exc))
     print(json.dumps(report, ensure_ascii=False, sort_keys=True))

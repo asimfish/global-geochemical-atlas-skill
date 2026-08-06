@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d1-analytical-method:v1",
+  "title": "D1 analytical method archive entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "method_id", "method_code_raw", "preparation_raw", "digestion_or_extraction_raw", "technique_raw", "instrument_raw", "laboratory_raw", "calibration_raw", "reference_materials_raw", "publication_ids", "missing_reasons"],
+  "properties": {
+    "schema_version": {"const": "d1-analytical-method-v1"},
+    "method_id": {"type": "string", "minLength": 1},
+    "method_code_raw": {"type": ["string", "null"]},
+    "preparation_raw": {"type": ["string", "null"]},
+    "digestion_or_extraction_raw": {"type": ["string", "null"]},
+    "technique_raw": {"type": ["string", "null"]},
+    "instrument_raw": {"type": ["string", "null"]},
+    "laboratory_raw": {"type": ["string", "null"]},
+    "calibration_raw": {"type": ["string", "null"]},
+    "reference_materials_raw": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "publication_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "missing_reasons": {"$ref": "#/$defs/missingReasons"}
+  },
+  "$defs": {
+    "missingReasons": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "enum": ["not_reported", "not_applicable", "not_available", "redacted", "parse_failed"]}
+    }
+  }
+}

@@ -108,6 +108,26 @@ def run_suite() -> dict[str, Any]:
         "record-evidence.schema.json",
         "acquisition-run-manifest.schema.json",
         "source-registry.schema.json",
+        "source-catalog.schema.json",
+        "source-route-result.schema.json",
+        "source-audit.schema.json",
+        "source-evidence-report.schema.json",
+        "snapshot-manifest.schema.json",
+        "snapshot-diff.schema.json",
+        "coverage-matrix.schema.json",
+        "source-discovery-record.schema.json",
+        "source-discovery-scope.schema.json",
+        "marchem-candidate-verification.schema.json",
+        "visualization-profile.schema.json",
+        "visualization-report.schema.json",
+        "dataset-source.schema.json",
+        "publication.schema.json",
+        "sampling-event.schema.json",
+        "sample.schema.json",
+        "analytical-method.schema.json",
+        "provenance.schema.json",
+        "observation.schema.json",
+        "acquisition-run.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
@@ -469,6 +489,51 @@ def run_suite() -> dict[str, Any]:
         html = (first / "interactive_map.html").read_text(encoding="utf-8")
         require("<script src=" not in html.casefold(), "map has an external script dependency")
         require("候选异常不代表污染" in html, "map omits interpretation boundary")
+        require("d3-interactive-atlas-v3" in html, "map version is missing")
+        require("ALL DATA" in html, "map does not default to the complete overview")
+        require("Natural Earth 1:110m" in html, "map omits the offline land basemap")
+        require(
+            "全部元素按样品标识去重显示" in html,
+            "map does not explain measurement-to-sample deduplication",
+        )
+        require(
+            all(
+                marker in html
+                for marker in (
+                    'id="region"',
+                    'id="mapMode"',
+                    'id="colorMode"',
+                    'id="comboX"',
+                    'id="comboY"',
+                    'id="openAnomalyRegions"',
+                    "visual_aggregation_only",
+                    "showAnomalyRegion",
+                    "focusAnomalyRegion",
+                )
+            ),
+            "map omits D3 v3 region, heatmap, combination or anomaly-region controls",
+        )
+        require(
+            summary["map_report"]["display_sample_count"] == 17
+            and summary["map_report"]["unmappable_record_count"] == 1,
+            "map report does not reconcile sample-level display and coordinate failures",
+        )
+        samples_open = '<script id="samples-data" type="application/json">'
+        packed = json.loads(html.split(samples_open, 1)[1].split("</script>", 1)[0])
+        require(
+            packed["schema_version"] == "d3-compact-payload-v1"
+            and len(packed["rows"]) == 18
+            and len(packed["fields"]) == len(packed["rows"][0])
+            and isinstance(packed["strings"], list),
+            "map compact payload does not round-trip the mapped demo records",
+        )
+        coverage = summary["map_report"]["region_coverage"]
+        require(
+            coverage["global"]["record_count"] == 18
+            and coverage["global"]["sample_count"] == 17
+            and coverage["shanghai"]["administrative_clip"] is False,
+            "map region coverage does not reconcile records or bbox semantics",
+        )
         require("\\u003c/script\\u003e" in __import__("build_interactive_map").safe_embedded_json("</script>"), "unsafe JSON embedding")
 
         limited = first / "limited"

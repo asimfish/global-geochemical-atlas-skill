@@ -1,0 +1,13 @@
+{
+  "elements": ["As", "Cu", "Ni", "Zn"],
+  "region": "global",
+  "media": ["rock", "soil", "sediment", "water"],
+  "sources": "auto",
+  "license_policy": "open_only",
+  "research_use_policy": "permitted_research",
+  "minimum_evidence_tier": "D",
+  "minimum_use_mode": "normalized_analysis",
+  "max_records": 50000,
+  "offline": true,
+  "output_formats": ["csv", "json", "geojson", "html_map"]
+}

@@ -1,0 +1,87 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "failures": [],
+  "generated_at": "2026-08-06T08:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 19968,
+      "path": "demo_input.csv",
+      "sha256": "e45f573db608634a65453acaf2a724a46b7291e6a0ae11ad93af50878cf8dee1"
+    },
+    {
+      "bytes": 72028,
+      "path": "sources.jsonl",
+      "sha256": "d2fb99230b6ad0b3243ec43a5271836b21d45e9ca231c1f10aa1fad5749cd08c"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 4195,
+    "selected_source_rows": 24
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+    "license": "LicenseRef-FOREGS-Research-Attribution-2005",
+    "source_id": "foregs-topsoil",
+    "title": "FOREGS Geochemical Atlas of Europe: topsoil"
+  },
+  "source_files": [
+    {
+      "bytes": 74667,
+      "filename": "T_AR_data_2v4_8Feb06.csv",
+      "retrieved_at": null,
+      "sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_AR_data_2v4_8Feb06.csv"
+    },
+    {
+      "bytes": 48814,
+      "filename": "T_Hg_data_2v4_8Feb06.csv",
+      "retrieved_at": null,
+      "sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_Hg_data_2v4_8Feb06.csv"
+    },
+    {
+      "bytes": 105504,
+      "filename": "T_XRF_data_2v6_8Feb06.csv",
+      "retrieved_at": null,
+      "sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_XRF_data_2v6_8Feb06.csv"
+    },
+    {
+      "bytes": 138142,
+      "filename": "T_icp_data_2v3_8Feb06.csv",
+      "retrieved_at": null,
+      "sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icp_data_2v3_8Feb06.csv"
+    },
+    {
+      "bytes": 82167,
+      "filename": "T_icpadd_data_2v3_8Feb06.csv",
+      "retrieved_at": null,
+      "sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102",
+      "source_url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icpadd_data_2v3_8Feb06.csv"
+    }
+  ],
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "FOREGS is a low-density European continental baseline, not continuous or local coverage.",
+    "Total, aqua-regia-leachable, mild-acid-leachable and dissolved measurements remain separate comparison bases.",
+    "The publisher CSV lacks row-level less-than qualifiers; exact half-DL values are flagged only as possible upstream DL/2 substitutions.",
+    "Official coordinates were transformed from national systems for continental-scale presentation; source precision is not local survey accuracy."
+  ]
+}

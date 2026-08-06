@@ -1,0 +1,68 @@
+{
+  "archive": {
+    "members": [
+      {
+        "bytes": 1198951,
+        "name": "noudo.csv",
+        "sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671"
+      },
+      {
+        "bytes": 334302,
+        "name": "samplejoho.csv",
+        "sha256": "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c"
+      }
+    ],
+    "sha256": "b251e7f7b3e15c0063ee226fe4d4cc17f09d9b0462126ebd3a75fed064c7dd20"
+  },
+  "claim_boundary": "This audit proves two byte-pinned official CSV files, 3,024 occurrence-order joins and exact unit mapping. It does not prove a regular national grid, complete analytical-method metadata or WGS84 point accuracy.",
+  "counts": {
+    "bbox_jgd2000": [
+      127.6799,
+      26.1292,
+      145.7221,
+      45.4518
+    ],
+    "concentration_rows": 3024,
+    "distinct_reported_sample_ids": 3023,
+    "duplicate_reported_sample_ids": {
+      "78013": 2
+    },
+    "map_sheet_count": 112,
+    "ordinal_joined_rows": 3024,
+    "sample_rows": 3024,
+    "target_analytes": {
+      "As": 3024,
+      "Cr": 3024,
+      "Cu": 3024,
+      "Hg": 3024,
+      "Ni": 3024,
+      "Pb": 3024,
+      "Zn": 3024
+    },
+    "target_observations": 21168,
+    "target_units": {
+      "As": "ppm",
+      "Cr": "ppm",
+      "Cu": "ppm",
+      "Hg": "ppb",
+      "Ni": "ppm",
+      "Pb": "ppm",
+      "Zn": "ppm"
+    }
+  },
+  "observed_at": "2026-08-06T03:48:23Z",
+  "request": {
+    "file_urls": [
+      "https://gbank.gsj.jp/geochemmap/data/joho/samplejoho.csv",
+      "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
+    ],
+    "url": "https://gbank.gsj.jp/geochemmap/data/download.htm"
+  },
+  "response": {
+    "bytes": 1533253,
+    "sha256": "b251e7f7b3e15c0063ee226fe4d4cc17f09d9b0462126ebd3a75fed064c7dd20"
+  },
+  "snapshot_id": "japan-gsj-geochemical-map:sample-2024-02-20_concentration-2007-01-10:b251e7f7b3e1",
+  "snapshot_version": "geochemical-source-snapshot-v1",
+  "source_id": "japan-gsj-geochemical-map"
+}

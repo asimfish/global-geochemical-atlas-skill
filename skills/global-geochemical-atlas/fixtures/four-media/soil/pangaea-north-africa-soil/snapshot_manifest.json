@@ -1,0 +1,57 @@
+{
+  "archive": {
+    "bytes": 30336,
+    "members": [
+      {
+        "bytes": 30336,
+        "name": "Table_S5.tab",
+        "sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485"
+      }
+    ],
+    "sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485"
+  },
+  "claim_boundary": "The audit proves a byte-pinned 43-sample DOI table and exact field mapping. It does not prove continuous North African coverage or comparability with bulk-soil and partial-extraction surveys.",
+  "counts": {
+    "area_counts": {
+      "Non representative PSA (Hoggar and Niger)": 6,
+      "Outlier": 1,
+      "PSA BD (Bodele Depression)": 3,
+      "PSA LAM (Libya-Algeria-Mali)": 13,
+      "PSA LE (Libya-Egypt)": 5,
+      "PSA MC (Mali Center)": 2,
+      "PSA WAC (West African Coast)": 12,
+      "Unassigned PSA": 1
+    },
+    "bbox": [
+      -13.26,
+      15.67,
+      32.5,
+      33.83
+    ],
+    "distinct_samples": 43,
+    "physical_rows": 43,
+    "potential_source_area_count": 8,
+    "reported_location_count": 33,
+    "target_analytes": {
+      "As": 43,
+      "Cr": 43,
+      "Cu": 43,
+      "Ni": 43,
+      "Pb": 43,
+      "Zn": 43
+    },
+    "target_observations": 258
+  },
+  "observed_at": "2026-08-06T03:13:54Z",
+  "request": {
+    "dataset_doi": "10.1594/PANGAEA.949903",
+    "url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
+  },
+  "response": {
+    "bytes": 30336,
+    "sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485"
+  },
+  "snapshot_id": "pangaea-north-africa-soil:2022-10-25:de402b7f469c",
+  "snapshot_version": "geochemical-source-snapshot-v1",
+  "source_id": "pangaea-north-africa-soil"
+}

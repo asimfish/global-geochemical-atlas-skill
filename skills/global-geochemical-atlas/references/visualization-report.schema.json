@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:global-geochemical-atlas:d3-visualization-report-v1",
+  "title": "D3 visualization report",
+  "type": "object",
+  "required": ["interface_version", "status", "outputs", "limitations", "next_actions"],
+  "properties": {
+    "interface_version": {"const": "d3-visualization-interface-v1"},
+    "status": {"enum": ["success", "invalid_input", "unsupported_scope", "incomplete_retrieval", "needs_human_review"]},
+    "input_contract": {"type": "string"},
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "profile_input": {
+      "type": "object",
+      "required": ["filename", "sha256"],
+      "properties": {
+        "filename": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "profile": {"$ref": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v1"},
+    "profile_warnings": {"type": "array", "items": {"type": "string"}},
+    "outputs": {"type": "object", "additionalProperties": {"type": "string"}},
+    "output_sha256": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "map_report": {"type": "object"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "next_actions": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "success"}}},
+      "then": {
+        "required": [
+          "input_contract",
+          "inputs",
+          "profile_input",
+          "profile",
+          "profile_warnings",
+          "output_sha256",
+          "map_report"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

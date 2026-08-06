@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d1-provenance:v1",
+  "title": "D1 record provenance archive entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "provenance_id", "source_id", "dataset_id", "acquisition_run_id", "source_record_id", "source_locator", "source_file", "source_sheet", "source_row", "source_column", "input_sha256", "adapter_name", "adapter_version", "processing_steps"],
+  "properties": {
+    "schema_version": {"const": "d1-provenance-v1"},
+    "provenance_id": {"type": "string", "minLength": 1},
+    "source_id": {"type": "string", "minLength": 1},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "acquisition_run_id": {"type": "string", "minLength": 1},
+    "source_record_id": {"type": "string", "minLength": 1},
+    "source_locator": {"type": "string", "minLength": 1},
+    "source_file": {"type": ["string", "null"]},
+    "source_sheet": {"type": ["string", "null"]},
+    "source_row": {"type": ["integer", "null"], "minimum": 1},
+    "source_column": {"type": ["string", "null"]},
+    "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "adapter_name": {"type": "string", "minLength": 1},
+    "adapter_version": {"type": "string", "minLength": 1},
+    "processing_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "version", "parameters"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "version": {"type": "string", "minLength": 1},
+          "parameters": {"type": "object"}
+        }
+      }
+    }
+  }
+}

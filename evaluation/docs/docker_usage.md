@@ -1,7 +1,7 @@
 # Docker 使用与测试指南
 
-> 更新时间：2026-08-05（HKT）  
-> 适用主机：`bjzgcUbuntu`（2 × NVIDIA GeForce RTX 5090）  
+> 更新时间：2026-08-05（HKT）
+> 适用主机：`bjzgcUbuntu`（2 × NVIDIA GeForce RTX 5090）
 > 适用项目目录：`/home/ubuntu/Hackathon`
 
 本文说明如何使用已配置的 Docker 环境、构建 E1 合同镜像并验证隔离能力。验收时必须区分 Docker CLI、daemon、普通容器运行时和正式 E1 smoke；仅有 `docker --version` 输出不能证明 Docker 全链路可用。

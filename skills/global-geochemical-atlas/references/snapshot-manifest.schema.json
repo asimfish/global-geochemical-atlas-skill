@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-dynamic-snapshot:v3",
+  "title": "D1 content-addressed dynamic source snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "snapshot_version",
+    "snapshot_id",
+    "snapshot_kind",
+    "source_id",
+    "observed_at",
+    "request",
+    "response",
+    "archive",
+    "counts",
+    "actual_scope",
+    "software",
+    "research_use",
+    "evidence",
+    "limitations",
+    "claim_boundary"
+  ],
+  "properties": {
+    "snapshot_version": {"const": "geochemical-dynamic-snapshot-v3"},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "snapshot_kind": {"const": "dynamic_api_snapshot"},
+    "source_id": {"type": "string", "minLength": 1},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "url", "endpoint", "parameters", "canonical_request_sha256"],
+      "properties": {
+        "method": {"type": "string", "enum": ["GET", "POST"]},
+        "url": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "endpoint": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "value"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "value": {"type": "string"}
+            }
+          }
+        },
+        "canonical_request_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "http_status",
+        "http_status_evidence",
+        "content_type",
+        "bytes",
+        "sha256",
+        "publisher_checksum_available"
+      ],
+      "properties": {
+        "http_status": {"type": ["integer", "null"], "minimum": 100, "maximum": 599},
+        "http_status_evidence": {"type": "string", "minLength": 1},
+        "content_type": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "publisher_checksum_available": {"type": "boolean"}
+      }
+    },
+    "archive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "member_count", "members"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "member_count": {"type": "integer", "minimum": 1},
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "bytes", "sha256"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "bytes": {"type": "integer", "minimum": 0},
+              "sha256": {"$ref": "#/$defs/sha256"}
+            }
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_records",
+        "parsed_records",
+        "rejected_records",
+        "failed_records",
+        "distinct_samples",
+        "target_bearing_records"
+      ],
+      "properties": {
+        "raw_records": {"type": "integer", "minimum": 0},
+        "parsed_records": {"type": "integer", "minimum": 0},
+        "rejected_records": {"type": "integer", "minimum": 0},
+        "failed_records": {"type": "integer", "minimum": 0},
+        "distinct_samples": {"type": "integer", "minimum": 0},
+        "target_bearing_records": {"type": "integer", "minimum": 0}
+      }
+    },
+    "actual_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["latitude_range", "longitude_range", "cruise_years", "target_analytes"],
+      "properties": {
+        "latitude_range": {"$ref": "#/$defs/numberPair"},
+        "longitude_range": {"$ref": "#/$defs/numberPair"},
+        "cruise_years": {"$ref": "#/$defs/uniqueStrings"},
+        "target_analytes": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    },
+    "software": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshot_tool_version", "candidate_verifier_version"],
+      "properties": {
+        "snapshot_tool_version": {"const": "geochemical-dynamic-snapshot-v3"},
+        "candidate_verifier_version": {"type": "string", "minLength": 1}
+      }
+    },
+    "research_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "license_id", "terms_url", "attribution_note"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["open_research", "attribution_required", "noncommercial_research_only", "permission_required", "unknown"]
+        },
+        "license_id": {"type": ["string", "null"]},
+        "terms_url": {"type": ["string", "null"]},
+        "attribution_note": {"type": "string"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_evidence_path",
+        "candidate_evidence_sha256",
+        "publisher_checksum_status",
+        "content_addressed_snapshot"
+      ],
+      "properties": {
+        "candidate_evidence_path": {"type": "string", "minLength": 1},
+        "candidate_evidence_sha256": {"$ref": "#/$defs/sha256"},
+        "publisher_checksum_status": {"type": "string", "enum": ["verified", "missing"]},
+        "content_addressed_snapshot": {"const": true}
+      }
+    },
+    "limitations": {"$ref": "#/$defs/uniqueStrings"},
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "numberPair": {
+      "type": "array",
+      "prefixItems": [{"type": "number"}, {"type": "number"}],
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}

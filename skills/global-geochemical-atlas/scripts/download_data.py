@@ -329,7 +329,7 @@ def _validate_zip_members(
 def _read_delimited_header(path: Path, required_fields: Sequence[str]) -> None:
     if not required_fields:
         return
-    delimiter = "\t" if path.suffix.casefold() in {".txt", ".tsv"} else ","
+    delimiter = "\t" if path.suffix.casefold() in {".tab", ".txt", ".tsv"} else ","
     last_error: Exception | None = None
     for encoding in ("utf-8-sig", "latin-1"):
         try:
@@ -339,7 +339,7 @@ def _read_delimited_header(path: Path, required_fields: Sequence[str]) -> None:
                     fields = {value.strip() for value in row}
                     if set(required_fields).issubset(fields):
                         return
-                    if index >= 49:
+                    if index >= 199:
                         break
         except (UnicodeError, csv.Error, OSError) as exc:
             last_error = exc

@@ -4,34 +4,59 @@
 from __future__ import annotations
 
 import argparse
+import binascii
+import copy
 import csv
 import hashlib
 import io
 import json
+import sqlite3
+import struct
 import subprocess
 import sys
 import tempfile
 import urllib.error
 import zipfile
+import zlib
 from collections import Counter
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
 
 import build_evidence_bundle as evidence_builder
+import acquire_gemstat_arsenic as gemstat_acquisition
+import build_four_media_demo
+import build_index as index_builder
+import benchmark_index
+import cache_control
+import coverage_report
 import download_data as downloader
 import source_adapters as source_contracts
 import standardize_geochemistry as standardizer
+import source_audit
+import score_source_evidence
+import snapshot_source
+import source_router
+import query_source
+import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
+import validate_visualization as visualization_validator
+import verify_marchem_candidate
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 REPO_ROOT = SKILL_DIR.parents[1]
 DEMO_INPUT = SKILL_DIR / "fixtures" / "demo_input.csv"
 SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
+COMBINED_DEMO = SKILL_DIR / "fixtures" / "four-media" / "combined-v3"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
+VISUALIZATION_RENDERER = SCRIPT_DIR / "render_visualization.py"
+BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
+VISUALIZATION_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
+VISUALIZATION_PROFILE_SCHEMA = SKILL_DIR / "references" / "visualization-profile.schema.json"
+VISUALIZATION_REPORT_SCHEMA = SKILL_DIR / "references" / "visualization-report.schema.json"
 
 
 class ContractError(AssertionError):
@@ -101,8 +126,15 @@ def check_d1(output_dir: Path) -> list[str]:
 
     registry = source_contracts.load_source_registry()
     require(
-        set(registry["sources"]) == {"georoc-archaean", "usgs-conus-soil"},
-        "D1 registry freezes the two MVP public sources",
+        set(registry["sources"])
+        == {
+            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
+            "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
+            "pangaea-north-africa-soil",
+            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
+            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
+        },
+        "D1 registry freezes thirteen executable datasets across the four required media",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -111,10 +143,975 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 GEOROC candidate binds the verified version and license",
         checks,
     )
+    gemstat = source_contracts.registry_candidate("gemstat-open-archive")
+    require(
+        gemstat.version == "v3"
+        and set(gemstat.registry_entry["target_analytes"]) == {"As"}
+        and gemstat.registry_entry["expected_counts"]["arsenic_observations"] == 492999
+        and len(gemstat.registry_entry["download"]["selected_members"]) == 5,
+        "D1 GEMStat candidate pins the official v3 arsenic and metadata member subset",
+        checks,
+    )
     usgs = source_contracts.registry_candidate("usgs-conus-soil")
     require(
         len(usgs.registry_entry["download"]["files"]) == 3,
         "D1 USGS candidate keeps the three soil layers distinct",
+        checks,
+    )
+    geotraces = source_contracts.registry_candidate("geotraces-idp2025")
+    require(
+        geotraces.version == "IDP2025"
+        and set(geotraces.registry_entry["target_analytes"]) == {"Cu", "Ni", "Zn"}
+        and geotraces.registry_entry["expected_counts"]["target_observations"] == 39327,
+        "D1 GEOTRACES candidate pins the seawater export and its explicit arsenic gap",
+        checks,
+    )
+    pangaea = source_contracts.registry_candidate("pangaea-north-africa-soil")
+    require(
+        pangaea.version == "2022-10-25"
+        and pangaea.license_id == "CC-BY-4.0"
+        and set(pangaea.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
+        and pangaea.registry_entry["expected_counts"]["physical_rows"] == 43
+        and pangaea.registry_entry["expected_counts"]["target_observations"] == 258,
+        "D1 PANGAEA candidate pins the concrete DOI table, six targets and exact row counts",
+        checks,
+    )
+    gsj = source_contracts.registry_candidate("japan-gsj-geochemical-map")
+    require(
+        gsj.version == "sample-2024-02-20_concentration-2007-01-10"
+        and set(gsj.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
+        and gsj.registry_entry["target_units"]["Hg"] == "ppb"
+        and gsj.registry_entry["expected_counts"]["ordinal_joined_rows"] == 3024
+        and gsj.registry_entry["expected_counts"]["duplicate_sample_id"] == "78013",
+        "D1 GSJ candidate pins both CSV versions, seven targets and occurrence-order duplicate handling",
+        checks,
+    )
+    foregs = source_contracts.ForegsTopsoilAdapter()
+    with tempfile.TemporaryDirectory(prefix="foregs-contract-") as temporary_directory:
+        foregs_contract = Path(temporary_directory) / "synthetic.csv"
+        foregs_contract.write_text(
+            "GTN,As,As,Cu\n"
+            "identifier,mg/kg,mg/kg,mg/kg\n"
+            "detection limit,2,4,1\n"
+            "X-1,1,2,0.5\n",
+            encoding="latin-1",
+        )
+        parsed_foregs = list(
+            foregs._rows(
+                foregs_contract,
+                {"required_fields": ["GTN", "As", "Cu"], "physical_rows": 1},
+            )
+        )
+    foregs_line, foregs_values, foregs_units, foregs_limits = parsed_foregs[0]
+    require(
+        foregs_line == 4
+        and foregs_values == {"GTN": "X-1", "As": "1", "As__2": "2", "Cu": "0.5"}
+        and foregs_units["As__2"] == "mg/kg"
+        and foregs_limits["Cu"] == "1"
+        and foregs._half_detection_limit(foregs_values["As"], foregs_limits["As"])
+        and foregs._half_detection_limit(foregs_values["Cu"], foregs_limits["Cu"]),
+        "D1 FOREGS parser preserves three metadata rows, duplicate headers and possible half-DL flags",
+        checks,
+    )
+    catalog = source_router.load_catalog()
+    request_schema = json_value(SKILL_DIR / "references" / "request.schema.json")
+    region_branches = request_schema["properties"]["region"]["oneOf"]
+    require(
+        len(region_branches) == 2
+        and {branch.get("type") for branch in region_branches} == {"string", "object"},
+        "D1 request Schema keeps global/named regions disjoint from bbox objects",
+        checks,
+    )
+    valid_request = {
+        "elements": ["As"],
+        "region": "global",
+        "media": ["soil"],
+    }
+    invalid_request_overrides = [
+        {"elements": ["As", "As"]},
+        {"measurement_basis": "dry weight"},
+        {"time_range": ["2020"]},
+        {"sources": ["usgs-conus-soil", "usgs-conus-soil"]},
+        {"output_formats": ["csv", "parquet"]},
+        {"target_crs": "EPSG:3857"},
+        {"max_records": True},
+        {"max_records": 200001},
+        {"offline": "false"},
+    ]
+    rejected_invalid_requests = 0
+    for override in invalid_request_overrides:
+        invalid_request = dict(valid_request)
+        invalid_request.update(override)
+        try:
+            source_router.validate_request(invalid_request, catalog)
+        except source_router.SourceRoutingError:
+            rejected_invalid_requests += 1
+    require(
+        rejected_invalid_requests == len(invalid_request_overrides),
+        "D1 router enforces every shared request field instead of bypassing its JSON Schema",
+        checks,
+    )
+    normalized_request = source_router.validate_request(valid_request, catalog)
+    require(
+        normalized_request
+        == {
+            "elements": ["As"],
+            "region": "global",
+            "media": ["soil"],
+            "measurement_basis": None,
+            "time_range": None,
+            "sources": "auto",
+            "output_formats": ["csv", "json", "geojson", "html_map"],
+            "target_crs": "EPSG:4326",
+            "license_policy": "open_only",
+            "research_use_policy": "permitted_research",
+            "minimum_evidence_tier": "D",
+            "minimum_use_mode": "normalized_analysis",
+            "max_records": 50000,
+            "offline": False,
+        },
+        "D1 router freezes and echoes every documented optional request default",
+        checks,
+    )
+    offline_route = source_router.route_sources(
+        {
+            "elements": ["As"],
+            "region": "global",
+            "media": ["rock", "soil"],
+            "offline": True,
+        },
+        catalog,
+    )
+    require(
+        offline_route["status"] == "needs_human_review"
+        and not offline_route["selected_sources"]
+        and {item["source_id"] for item in offline_route["review_sources"]}
+        >= {"georoc-archaean", "usgs-conus-soil"}
+        and all(
+            "offline_cache_not_verified" in item["reason"]
+            for item in offline_route["review_sources"]
+            if item["source_id"] in {"georoc-archaean", "usgs-conus-soil"}
+        ),
+        "D1 offline routing fails closed until a versioned hash-verified cache is checked",
+        checks,
+    )
+    require(
+        "production_eligible=true" not in offline_route["claim_boundary"]
+        and "V3 automatic selection" in offline_route["claim_boundary"],
+        "D1 route claim boundary describes V3 evidence and use gates instead of the legacy binary flag",
+        checks,
+    )
+    catalog_schema = json_value(SKILL_DIR / "references" / "source-catalog.schema.json")
+    allowed_identifier_fields = set(
+        catalog_schema["$defs"]["source"]["properties"]["identifiers"]["properties"]
+    )
+    observed_identifier_fields = {
+        field
+        for entry in catalog["sources"].values()
+        for field in entry["identifiers"]
+    }
+    require(
+        observed_identifier_fields <= allowed_identifier_fields,
+        "D1 catalog identifier fields remain aligned with its published JSON Schema",
+        checks,
+    )
+    require(
+        set(catalog["sources"][source_id]["status"] for source_id in ("georoc-archaean", "usgs-conus-soil"))
+        == {"approved"}
+        and {
+            source_id
+            for source_id, entry in catalog["sources"].items()
+            if entry["production_eligible"]
+        }
+        == {"georoc-archaean", "usgs-conus-soil"},
+        "D1 catalog preserves the two legacy production sources while V3 status is computed separately",
+        checks,
+    )
+    require(
+        {"rock", "soil", "sediment", "water"}
+        <= {medium for entry in catalog["sources"].values() for medium in entry["media"]},
+        "D1 catalog has initial discovery coverage for all four required media",
+        checks,
+    )
+    route = source_router.route_sources(
+        {
+            "elements": ["As", "Cu", "Ni", "Zn"],
+            "region": "global",
+            "media": ["rock", "soil", "sediment", "water"],
+            "sources": "auto",
+            "license_policy": "open_only",
+        },
+        catalog,
+    )
+    require(
+        {entry["source_id"] for entry in route["selected_sources"]}
+        == {
+            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
+            "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
+            "pangaea-north-africa-soil",
+            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
+            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
+        },
+        "D1 V3 router selects thirteen normalized-analysis datasets across all media",
+        checks,
+    )
+    require(
+        route["coverage"]["rock"]["status"] == "partial"
+        and route["coverage"]["soil"]["status"] == "partial"
+        and route["coverage"]["sediment"]["status"] == "partial"
+        and route["coverage"]["water"]["status"] == "partial",
+        "D1 router does not overclaim incomplete coverage below the requested use mode",
+        checks,
+    )
+    require(
+        "usgs-ngdb" in {entry["source_id"] for entry in route["review_sources"]}
+        and "gemstat-open-archive" not in {entry["source_id"] for entry in route["review_sources"]},
+        "D1 router exposes relevant candidates and their review blockers",
+        checks,
+    )
+    raw_sediment_route = source_router.route_sources(
+        {
+            "elements": ["As", "Cu", "Ni", "Zn"],
+            "region": "global",
+            "media": ["sediment"],
+            "minimum_evidence_tier": "C",
+            "minimum_use_mode": "raw_observation",
+        },
+        catalog,
+    )
+    require(
+        {entry["source_id"] for entry in raw_sediment_route["selected_sources"]}
+        == {
+            "norway-marchem", "japan-gsj-geochemical-map",
+            "foregs-stream-sediment", "foregs-floodplain-sediment",
+        },
+        "D1 V3 router selects all four normalized sediment sources for a raw-observation request",
+        checks,
+    )
+    benchmark_route = source_router.route_sources(
+        {
+            "elements": ["As"],
+            "region": "global",
+            "media": ["rock", "soil"],
+            "minimum_evidence_tier": "A",
+            "minimum_use_mode": "benchmark_ready",
+        },
+        catalog,
+    )
+    require(
+        not benchmark_route["selected_sources"]
+        and {entry["source_id"] for entry in benchmark_route["review_sources"]}
+        >= {"georoc-archaean", "usgs-conus-soil", "pangaea-north-africa-soil"},
+        "D1 keeps A-tier rock and soil datasets below benchmark_ready until human review is complete",
+        checks,
+    )
+    candidate_evidence = score_source_evidence.load_candidate_evidence()
+    evidence = score_source_evidence.score_catalog(catalog, registry, candidate_evidence)
+    require(
+        evidence == json_value(SKILL_DIR / "assets" / "source_evidence_scores.json"),
+        "D1 checked-in V3 evidence report is reproducible from catalog, registry and candidate evidence",
+        checks,
+    )
+    require(
+        evidence["summary"]
+        == {
+            "evidence_tiers": {"A": 13, "B": 0, "C": 0, "D": len(catalog["sources"]) - 13, "U": 0},
+            "use_modes": {
+                "benchmark_ready": 0,
+                "normalized_analysis": 13,
+                "raw_observation": 0,
+                "discovery": len(catalog["sources"]) - 13,
+            },
+        },
+        "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
+        checks,
+    )
+    require(
+        evidence["sources"]["georoc-archaean"]["source_evidence_score"] == 85
+        and evidence["sources"]["georoc-archaean"]["evidence_tier"] == "A"
+        and evidence["sources"]["georoc-archaean"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["georoc-archaean"]["source_evidence_dimensions"]["human_review"]["status"]
+        == "missing",
+        "D1 scores GEOROC highly without falsely marking the pending human review complete",
+        checks,
+    )
+    require(
+        evidence["sources"]["gemstat-open-archive"]["source_evidence_score"] == 85
+        and evidence["sources"]["gemstat-open-archive"]["evidence_tier"] == "A"
+        and evidence["sources"]["gemstat-open-archive"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["gemstat-open-archive"]["source_evidence_dimensions"]["human_review"]["status"]
+        == "missing",
+        "D1 credits the range-verified GEMStat adapter without treating unsigned review as a hard rejection",
+        checks,
+    )
+    decoded_fixture = b"station,value\nA,1\n"
+    compressor = zlib.compressobj(level=9, wbits=-15)
+    compressed_fixture = compressor.compress(decoded_fixture) + compressor.flush()
+    member_name = b"test.csv"
+    fixture_crc = binascii.crc32(decoded_fixture) & 0xFFFFFFFF
+    range_fixture = struct.pack(
+        "<IHHHHHIIIHH",
+        0x04034B50,
+        0,
+        0,
+        8,
+        0,
+        0,
+        fixture_crc,
+        len(compressed_fixture),
+        len(decoded_fixture),
+        len(member_name),
+        0,
+    ) + member_name + compressed_fixture
+    range_specification = {
+        "name": "test.csv",
+        "range_start": 0,
+        "range_end": len(range_fixture) - 1,
+        "range_sha256": hashlib.sha256(range_fixture).hexdigest(),
+        "compressed_bytes": len(compressed_fixture),
+        "uncompressed_bytes": len(decoded_fixture),
+        "crc32": f"{fixture_crc:08x}",
+        "sha256": hashlib.sha256(decoded_fixture).hexdigest(),
+    }
+    original_fetch = gemstat_acquisition.fetch
+    original_sleep = gemstat_acquisition.time.sleep
+    partial_then_complete = iter((range_fixture[:-2], range_fixture))
+    gemstat_acquisition.fetch = lambda *args, **kwargs: next(partial_then_complete)
+    gemstat_acquisition.time.sleep = lambda _: None
+    try:
+        fetched_range, decoded_range = gemstat_acquisition.fetch_verified_range(
+            range_specification, timeout=1, retries=2
+        )
+    finally:
+        gemstat_acquisition.fetch = original_fetch
+        gemstat_acquisition.time.sleep = original_sleep
+    require(
+        fetched_range == range_fixture and decoded_range == decoded_fixture,
+        "D1 GEMStat acquisition retries a truncated HTTP range until content verification passes",
+        checks,
+    )
+    require(
+        evidence["sources"]["norway-marchem"]["source_evidence_score"] == 85
+        and evidence["sources"]["norway-marchem"]["evidence_tier"] == "A"
+        and evidence["sources"]["norway-marchem"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["norway-marchem"]["source_evidence_dimensions"]["version_snapshot"]["status"]
+        == "verified",
+        "D1 credits the frozen MarChem adapter while retaining its pending human-review limitation",
+        checks,
+    )
+    require(
+        evidence["sources"]["geotraces-idp2025"]["source_evidence_score"] == 85
+        and evidence["sources"]["geotraces-idp2025"]["evidence_tier"] == "A"
+        and evidence["sources"]["geotraces-idp2025"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["geotraces-idp2025"]["source_evidence_dimensions"]["human_review"]["status"]
+        == "missing",
+        "D1 credits the pinned GEOTRACES adapter without pretending the prepared review is signed",
+        checks,
+    )
+    audit = source_audit.audit_catalog(catalog, registry, candidate_evidence)
+    require(
+        audit["status"] == "PASS"
+        and audit["summary"]["evidence_tiers"] == evidence["summary"]["evidence_tiers"]
+        and audit["sources"]["gemstat-open-archive"]["operational_status"] == "available"
+        and audit["sources"]["gemstat-open-archive"]["evidence_tier"] == "A",
+        "D1 audit separates operational research-use restrictions from progressive evidence tier",
+        checks,
+    )
+    tampered_catalog = copy.deepcopy(catalog)
+    tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "unresolved"
+    tampered_audit = source_audit.audit_catalog(tampered_catalog, registry, candidate_evidence)
+    require(
+        tampered_audit["status"] == "PASS"
+        and tampered_audit["sources"]["georoc-archaean"]["research_use_status"] == "unknown"
+        and tampered_audit["sources"]["georoc-archaean"]["operational_status"] == "restricted"
+        and tampered_audit["sources"]["georoc-archaean"]["source_evidence_score"] == 85,
+        "D1 separates unresolved research-use conditions from unchanged scientific evidence completeness",
+        checks,
+    )
+    tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "open"
+    tampered_catalog["sources"]["georoc-archaean"]["version"]["value"] = "unreviewed-new-version"
+    tampered_route = source_router.route_sources(
+        {"elements": ["As"], "region": "global", "media": ["rock"]},
+        tampered_catalog,
+        registry,
+    )
+    require(
+        "georoc-archaean" not in {entry["source_id"] for entry in tampered_route["selected_sources"]}
+        and "conflict=adapter_reproducibility"
+        in next(
+            entry["reason"]
+            for entry in tampered_route["review_sources"]
+            if entry["source_id"] == "georoc-archaean"
+        ),
+        "D1 router automatically limits a source when its frozen version conflicts",
+        checks,
+    )
+    discovery_records = [
+        json.loads(line)
+        for line in (SKILL_DIR / "assets" / "source_discovery_log.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        {record["source_id"] for record in discovery_records} == set(catalog["sources"])
+        and all(
+            isinstance(record["round"], int)
+            and 1 <= record["round"] <= catalog["discovery_state"]["round"]
+            and record["evidence_url"].startswith("https://")
+            for record in discovery_records
+        )
+        and max(record["round"] for record in discovery_records) == catalog["discovery_state"]["round"],
+        "D1 discovery log accounts for every catalog source through the current official-evidence round",
+        checks,
+    )
+    discovery_scope = json_value(SKILL_DIR / "assets" / "source_discovery_scope.json")
+    scoped_source_ids = {
+        source_id
+        for area in discovery_scope["areas"].values()
+        for source_id in area["catalogued_sources"]
+    }
+    require(
+        discovery_scope["round"] == catalog["discovery_state"]["round"]
+        and discovery_scope["as_of"] == catalog["reviewed_at"]
+        and discovery_scope["saturated"] is False
+        and scoped_source_ids == set(catalog["sources"])
+        and {
+            "africa",
+            "asia",
+            "europe",
+            "north-america",
+            "south-america",
+            "oceania",
+            "marine-lacustrine-and-polar",
+        }
+        <= set(discovery_scope["areas"]),
+        "D1 discovery scope tracks regional and marine search gaps without claiming saturation",
+        checks,
+    )
+    marchem_verification = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "candidate-audits"
+        / "marchem-inorganic-20260805T102709Z.json"
+    )
+    marchem_data = marchem_verification["observed_data"]
+    require(
+        marchem_verification["verification_version"] == "marchem-candidate-verification-v1"
+        and marchem_verification["source_id"] == "norway-marchem"
+        and marchem_verification["archive"]["sha256"]
+        == "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6"
+        and len(marchem_verification["archive"]["members"]) == 3,
+        "D1 MarChem candidate evidence pins the observed dynamic archive and member inventory",
+        checks,
+    )
+    require(
+        marchem_data["data_record_count"] == 1070
+        and marchem_data["distinct_sample_code_count"] == 880
+        and marchem_data["duplicate_sample_code_count"] == 190
+        and marchem_data["target_bearing_row_count"] == 880
+        and marchem_data["sample_codes_with_target_count"] == 880
+        and marchem_data["sample_codes_without_target_count"] == 0
+        and marchem_data["sample_codes_with_multiple_target_rows_count"] == 0,
+        "D1 MarChem verification distinguishes export rows, repeated sample codes and target-bearing rows",
+        checks,
+    )
+    require(
+        all(
+            profile["record_count"] == 1070
+            and profile["present_count"] == 880
+            and profile["present_count"] + profile["missing_count"] == profile["record_count"]
+            and profile["invalid_count"] == 0
+            and profile["reported_unit"] == "mg/kg"
+            and profile["weight_basis"] == "dry"
+            for profile in marchem_data["target_analytes"].values()
+        )
+        and marchem_verification["observed_metadata"]["partial_digestion_disclosed"] is True
+        and marchem_verification["observed_metadata"]["not_total_content_disclosed"] is True
+        and marchem_verification["observed_metadata"]["accreditation_rows"]["not_accredited"] > 0,
+        "D1 MarChem evidence preserves target units, censoring context, partial digestion and accreditation limits",
+        checks,
+    )
+    require(
+        len(marchem_verification["prepared_human_review_sample"]) == 30
+        and marchem_verification["human_review"]
+        == {"required_record_count": 30, "prepared_record_count": 30, "status": "pending"}
+        and verify_marchem_candidate.parse_value("<2.0") == ("censored_lt", 2.0),
+        "D1 prepares but does not falsely mark the required MarChem human review as complete",
+        checks,
+    )
+    marchem_snapshot_path = (
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "sediment"
+        / "norway-marchem"
+        / "snapshot_manifest.json"
+    )
+    marchem_snapshot = snapshot_source.build_snapshot_from_paths(
+        SKILL_DIR
+        / "fixtures"
+        / "candidate-audits"
+        / "marchem-inorganic-20260805T102709Z.json"
+    )
+    require(
+        marchem_snapshot == json_value(marchem_snapshot_path)
+        and marchem_snapshot["snapshot_id"]
+        == "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e"
+        and marchem_snapshot["request"]["canonical_request_sha256"]
+        == "ae8fd044ad9a43c0fba34d18fdcbf677311f77da1cdb76094c6054c447eb3445"
+        and marchem_snapshot["counts"]["raw_records"] == 1070
+        and marchem_snapshot["counts"]["distinct_samples"] == 880,
+        "D1 builds the checked-in MarChem snapshot deterministically from exact request and content evidence",
+        checks,
+    )
+    require(
+        marchem_snapshot["response"]["http_status"] is None
+        and marchem_snapshot["response"]["http_status_evidence"]
+        == "missing_from_original_acquisition_manifest"
+        and marchem_snapshot["evidence"]["publisher_checksum_status"] == "missing",
+        "D1 snapshot preserves missing HTTP-status and publisher-checksum evidence instead of inventing it",
+        checks,
+    )
+    identical_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, copy.deepcopy(marchem_snapshot))
+    require(
+        identical_snapshot_diff["status"] == "identical"
+        and identical_snapshot_diff["requires_rescore"] is False,
+        "D1 snapshot diff recognizes an identical manifest without forcing rescore",
+        checks,
+    )
+    changed_snapshot = copy.deepcopy(marchem_snapshot)
+    changed_snapshot["response"]["sha256"] = "0" * 64
+    changed_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, changed_snapshot)
+    require(
+        changed_snapshot_diff["status"] == "changed"
+        and changed_snapshot_diff["requires_rescore"] is True
+        and changed_snapshot_diff["comparisons"]["response_changed"] is True,
+        "D1 snapshot diff forces rescore when a dynamic response hash changes",
+        checks,
+    )
+    marchem_reconciliation = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "sediment"
+        / "norway-marchem"
+        / "adapter_reconciliation.json"
+    )
+    require(
+        marchem_reconciliation["status"] == "PASS"
+        and marchem_reconciliation["snapshot_id"] == marchem_snapshot["snapshot_id"]
+        and marchem_reconciliation["snapshot_response_sha256"] == marchem_snapshot["response"]["sha256"]
+        and marchem_reconciliation["counts"]["physical_rows"] == 1070
+        and marchem_reconciliation["counts"]["distinct_samples"] == 880
+        and marchem_reconciliation["counts"]["target_observations"] == 3520
+        and marchem_reconciliation["counts"]["missing_target_method_links"] == 0,
+        "D1 MarChem adapter reconciles every snapshot row, sample and target method link",
+        checks,
+    )
+    require(
+        marchem_reconciliation["counts"]["target_censored_counts"]
+        == {"As": 20, "Cu": 18, "Ni": 2, "Zn": 5}
+        and marchem_reconciliation["measurement_semantics"]["units"] == ["mg/kg"]
+        and marchem_reconciliation["measurement_semantics"]["weight_bases"] == ["Dry weight"]
+        and marchem_reconciliation["checks"]["partial_digestion_boundary_preserved"] is True
+        and marchem_reconciliation["checks"]["accreditation_variation_preserved"] is True,
+        "D1 MarChem reconciliation preserves censoring, dry weight, partial digestion and accreditation",
+        checks,
+    )
+    marchem_human_review = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "sediment"
+        / "norway-marchem"
+        / "human_review.json"
+    )
+    require(
+        marchem_human_review["review_version"] == "geochemical-human-review-v1"
+        and marchem_human_review["status"] == "prepared"
+        and marchem_human_review["prepared_record_count"] == 30
+        and marchem_human_review["automated_pass_count"] == 30
+        and marchem_human_review["completed_record_count"] == 0
+        and all(record["automated_status"] == "PASS" for record in marchem_human_review["records"]),
+        "D1 prepares 30 passing MarChem comparisons without claiming human completion",
+        checks,
+    )
+    require(
+        all(
+            record["reviewer"]
+            == {"decision": None, "reviewer": None, "reviewed_at": None, "notes": None}
+            for record in marchem_human_review["records"]
+        )
+        and any(not record["adapter_observations"] for record in marchem_human_review["records"])
+        and any(
+            any(str(value).startswith("<") for value in record["published_target_raw_values"].values())
+            for record in marchem_human_review["records"]
+        ),
+        "D1 review sheet awaits a named reviewer and includes missing and censored edge cases",
+        checks,
+    )
+    prepared_reference_reviews = {
+        "georoc-archaean": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "rock" / "georoc-archaean" / "human_review.json"
+        ),
+        "usgs-conus-soil": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "usgs-conus-soil" / "human_review.json"
+        ),
+        "geotraces-idp2025": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "water" / "geotraces-idp2025" / "human_review.json"
+        ),
+        "gemstat-open-archive": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "water" / "gemstat-open-archive" / "human_review.json"
+        ),
+        "pangaea-north-africa-soil": json_value(
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "soil"
+            / "pangaea-north-africa-soil"
+            / "human_review.json"
+        ),
+        "japan-gsj-geochemical-map": json_value(
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "sediment"
+            / "japan-gsj-geochemical-map"
+            / "human_review.json"
+        ),
+        "foregs-topsoil": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-topsoil" / "human_review.json"
+        ),
+        "foregs-subsoil": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-subsoil" / "human_review.json"
+        ),
+        "foregs-humus": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-humus" / "human_review.json"
+        ),
+        "foregs-stream-water": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "water" / "foregs-stream-water" / "human_review.json"
+        ),
+        "foregs-stream-sediment": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "sediment" / "foregs-stream-sediment" / "human_review.json"
+        ),
+        "foregs-floodplain-sediment": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "sediment" / "foregs-floodplain-sediment" / "human_review.json"
+        ),
+    }
+    human_review_schema = json_value(SKILL_DIR / "references" / "human-review.schema.json")
+    allowed_review_fields = set(human_review_schema["properties"])
+    required_review_fields = set(human_review_schema["required"])
+    allowed_review_record_fields = set(
+        human_review_schema["properties"]["records"]["items"]["properties"]
+    )
+    required_review_record_fields = set(
+        human_review_schema["properties"]["records"]["items"]["required"]
+    )
+    all_prepared_reviews = {**prepared_reference_reviews, "norway-marchem": marchem_human_review}
+    require(
+        all(
+            required_review_fields <= set(review) <= allowed_review_fields
+            and all(
+                required_review_record_fields <= set(record) <= allowed_review_record_fields
+                for record in review["records"]
+            )
+            for review in all_prepared_reviews.values()
+        ),
+        "D1 all thirteen prepared human-review artifacts align with the published field contract",
+        checks,
+    )
+    require(
+        all(
+            review["status"] == "prepared"
+            and review["prepared_record_count"] == 30
+            and review["automated_pass_count"] == 30
+            and review["completed_record_count"] == 0
+            and all(record["automated_status"] == "PASS" for record in review["records"])
+            for review in prepared_reference_reviews.values()
+        ),
+        "D1 prepares 30 passing reference comparisons without auto-signing them",
+        checks,
+    )
+    require(
+        len(
+            {
+                record["source_locator"].split("#", 1)[0]
+                for record in prepared_reference_reviews["georoc-archaean"]["records"]
+            }
+        )
+        == 27
+        and {
+            reason
+            for record in prepared_reference_reviews["usgs-conus-soil"]["records"]
+            for reason in record["selection_reasons"]
+            if reason.startswith("soil_layer=")
+        }
+        == {"soil_layer=top-0-5cm", "soil_layer=a-horizon", "soil_layer=c-horizon"}
+        and sum(
+            not all(record["published_target_raw_values"].values())
+            for record in prepared_reference_reviews["georoc-archaean"]["records"]
+        )
+        > 0
+        and {item["quality_flag"] for record in prepared_reference_reviews["geotraces-idp2025"]["records"] for item in record["adapter_observations"]}
+        == {"1", "2", "3", "4", "5", "6"}
+        and {
+            item["water_fraction"]
+            for record in prepared_reference_reviews["gemstat-open-archive"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"dissolved", "suspended", "total"}
+        and {
+            item["data_quality"]
+            for record in prepared_reference_reviews["gemstat-open-archive"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"Fair", "Good", "Pending review", "Suspect", "Unknown"}
+        and {
+            item["analyte"]
+            for record in prepared_reference_reviews["pangaea-north-africa-soil"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
+        and all(
+            record["automated_checks"]["publisher_location_preserved_without_country_inference"]
+            for record in prepared_reference_reviews["pangaea-north-africa-soil"]["records"]
+        )
+        and [
+            (record["reported_sample_id"], record["sample_id_occurrence"])
+            for record in prepared_reference_reviews["japan-gsj-geochemical-map"]["records"]
+            if record["reported_sample_id"] == "78013"
+        ]
+        == [("78013", 1), ("78013", 2)]
+        and {
+            item["unit"]
+            for record in prepared_reference_reviews["japan-gsj-geochemical-map"]["records"]
+            for item in record["adapter_observations"]
+        }
+        == {"ppm", "ppb"},
+        "D1 review selection spans source members, layers, missing values, QC, fractions, locations and GSJ duplicate/unit edges",
+        checks,
+    )
+    require(
+        all(
+            evidence["sources"][source_id]["source_evidence_score"] == 85.0
+            and evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["status"] == "missing"
+            and "30-record review sample is prepared"
+            in evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["note"]
+            for source_id in prepared_reference_reviews
+        ),
+        "D1 records all prepared reviews without granting unsigned evidence points",
+        checks,
+    )
+    coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
+    matrix = coverage_report.build_matrix(catalog, coverage_request, registry)
+    require(
+        matrix == json_value(SKILL_DIR / "assets" / "coverage_matrix.json"),
+        "D1 checked-in coverage matrix is reproducible from the catalog and request",
+        checks,
+    )
+    require(
+        matrix["overall_status"] == "partial"
+        and matrix["cells"]["rock"]["source_independence"] == "single_source_dependency"
+        and matrix["cells"]["rock"]["analyte_coverage"] == "complete_for_registered_targets"
+        and matrix["cells"]["soil"]["selected_sources"]
+        == [
+            "foregs-humus", "foregs-subsoil", "foregs-topsoil",
+            "pangaea-north-africa-soil", "usgs-conus-soil",
+        ]
+        and matrix["cells"]["soil"]["analyte_source_counts"]
+        == {"As": 4, "Cu": 5, "Ni": 5, "Zn": 5}
+        and matrix["cells"]["sediment"]["selected_sources"]
+        == [
+            "foregs-floodplain-sediment", "foregs-stream-sediment",
+            "japan-gsj-geochemical-map", "norway-marchem",
+        ]
+        and matrix["cells"]["sediment"]["analyte_source_counts"]
+        == {"As": 4, "Cu": 4, "Ni": 4, "Zn": 4}
+        and matrix["cells"]["water"]["analyte_coverage"] == "complete_for_registered_targets"
+        and matrix["cells"]["water"]["missing_analytes"] == []
+        and matrix["cells"]["water"]["source_independence"]
+        == "multiple_sources_lineage_not_yet_deduplicated"
+        and matrix["cells"]["water"]["analyte_source_counts"]
+        == {"As": 2, "Cu": 2, "Ni": 2, "Zn": 2},
+        "D1 coverage matrix keeps rock, soil, sediment and water source independence explicit",
+        checks,
+    )
+    archive_bundle = json_value(SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json")
+    archive_validation = acquisition_validator.validate_bundle(archive_bundle)
+    require(
+        archive_validation["status"] == "PASS"
+        and archive_validation["entity_counts"]["observations"] == 3
+        and archive_validation["entity_counts"]["methods"] == 2,
+        "D1 archive schema fixture preserves entities and passes relation validation",
+        checks,
+    )
+    censored_observation = next(
+        item for item in archive_bundle["observations"] if item["observation_id"] == "observation-as-lt"
+    )
+    require(
+        censored_observation["value_raw"] == "<5"
+        and censored_observation["parsed_value"] == 5.0
+        and censored_observation["value_qualifier"] == "lt",
+        "D1 archive schema preserves a censored raw value without imputing it",
+        checks,
+    )
+    broken_bundle = copy.deepcopy(archive_bundle)
+    broken_bundle["observations"][0]["sample_id"] = "missing-sample"
+    broken_validation = acquisition_validator.validate_bundle(broken_bundle)
+    require(
+        broken_validation["status"] == "FAIL"
+        and any("missing-sample" in error for error in broken_validation["errors"]),
+        "D1 archive validation fails on a broken observation relationship",
+        checks,
+    )
+    schema_invalid_bundle = copy.deepcopy(archive_bundle)
+    del schema_invalid_bundle["datasets"][0]["title"]
+    schema_invalid_validation = acquisition_validator.validate_bundle(schema_invalid_bundle)
+    require(
+        schema_invalid_validation["status"] == "FAIL"
+        and any("missing required field: title" in error for error in schema_invalid_validation["errors"]),
+        "D1 archive validation enforces entity JSON Schemas before indexing",
+        checks,
+    )
+    with tempfile.TemporaryDirectory(prefix="d1-sqlite-contract-") as index_temp:
+        index_root = Path(index_temp)
+        first_index = index_root / "first.sqlite"
+        second_index = index_root / "second.sqlite"
+        archive_path = SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json"
+        first_build = index_builder.build_index(archive_path, first_index)
+        second_build = index_builder.build_index(archive_path, second_index)
+        require(
+            first_build["status"] == "PASS"
+            and first_build["counts"]["observations"] == 3
+            and first_build["counts"]["dataset_files"] == 1
+            and first_build["sha256"] == second_build["sha256"],
+            "D1 builds a deterministic integrity-checked SQLite index from the archive bundle",
+            checks,
+        )
+        try:
+            index_builder.build_index(archive_path, first_index)
+        except ValueError as exc:
+            require("refusing to overwrite" in str(exc), "D1 index creation refuses implicit overwrite", checks)
+        else:
+            raise ContractError("D1 index builder must refuse implicit overwrite")
+
+        arsenic = query_source.query_index(
+            first_index,
+            analytes=["As"],
+            media=["soil"],
+            source_ids=["fixture-source"],
+            license_ids=["CC0-1.0"],
+            bbox=[-106, 38, -104, 40],
+            text="Synthetic",
+        )
+        require(
+            arsenic["record_count"] == 1
+            and arsenic["records"][0]["value_raw"] == "<5"
+            and arsenic["records"][0]["value_qualifier"] == "lt",
+            "D1 indexed query combines analyte, medium, source, license, RTree bbox and FTS filters",
+            checks,
+        )
+        require(
+            query_source.query_index(first_index, bbox=[0, 0, 1, 1])["record_count"] == 0,
+            "D1 RTree query excludes observations outside the requested bbox",
+            checks,
+        )
+        require(
+            query_source.query_index(first_index, methods=["XRF"])["record_count"] == 1,
+            "D1 indexed query filters exact source-native analytical techniques",
+            checks,
+        )
+        with sqlite3.connect(first_index) as connection:
+            trace = connection.execute(
+                "SELECT source_file, source_row, adapter_version, acquisition_run_id "
+                "FROM provenance_trace WHERE observation_id = ?",
+                ("observation-as-lt",),
+            ).fetchone()
+            view_counts = {
+                view: connection.execute(f"SELECT COUNT(*) FROM {view}").fetchone()[0]
+                for view in ("observation_search", "sample_summary", "source_coverage", "provenance_trace")
+            }
+        require(
+            trace == ("fixture.csv", 2, "1.0.0", "run-fixture-v1"),
+            "D1 provenance view traces an observation to source row, adapter and acquisition run",
+            checks,
+        )
+        require(
+            view_counts == {
+                "observation_search": 3,
+                "sample_summary": 2,
+                "source_coverage": 3,
+                "provenance_trace": 3,
+            },
+            "D1 SQLite contract exposes four populated query views",
+            checks,
+        )
+
+        request_one = {"media": ["soil"], "elements": ["As", "Cu"], "region": "global"}
+        request_reordered = {"region": "global", "elements": ["As", "Cu"], "media": ["soil"]}
+        request_changed = {"region": "global", "elements": ["Zn"], "media": ["soil"]}
+        key_one = cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_one)
+        require(
+            key_one
+            == cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_reordered)
+            and key_one != cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_changed),
+            "D1 derived-cache key is stable under JSON key order and changes with request parameters",
+            checks,
+        )
+        cache_root = index_root / "cache"
+        version_root = cache_root / "fixture-source" / "1.0.0"
+        version_root.mkdir(parents=True)
+        cached_data = version_root / "fixture.csv"
+        cached_data.write_text("a,b\n1,2\n", encoding="utf-8")
+        (version_root / "fixture.download.json").write_text(
+            json.dumps(
+                {
+                    "output_filename": cached_data.name,
+                    "sha256": sha256_file(cached_data),
+                    "dataset_version": "1.0.0",
+                }
+            ),
+            encoding="utf-8",
+        )
+        cache_status = cache_control.inspect_cache(
+            cache_root, "fixture-source", "1.0.0", request_one
+        )
+        require(
+            cache_status["status"] == "present"
+            and cache_status["verified_manifest_count"] == 1
+            and cache_status["request_cache_key"] == key_one,
+            "D1 cache status command verifies versioned files and reports the request key",
+            checks,
+        )
+        try:
+            cache_control.delete_cache(cache_root, "fixture-source", "1.0.0", "wrong")
+        except ValueError as exc:
+            require("confirmation must exactly equal" in str(exc), "D1 cache deletion requires an exact source@version confirmation", checks)
+        else:
+            raise ContractError("D1 cache deletion must reject an incorrect confirmation")
+        deleted = cache_control.delete_cache(
+            cache_root, "fixture-source", "1.0.0", "fixture-source@1.0.0"
+        )
+        require(
+            deleted["status"] == "deleted" and not version_root.exists(),
+            "D1 cache deletion affects only the explicitly named source version",
+            checks,
+        )
+
+    performance = benchmark_index.benchmark(100_000)
+    require(
+        performance["status"] == "PASS"
+        and performance["record_count"] == 100_000
+        and performance["combined_seconds"] < performance["target_seconds"],
+        "D1 synthetic 100k parse/index/filter benchmark stays below the 10-second target",
+        checks,
+    )
+    vocabulary_registry = json_value(SKILL_DIR / "assets" / "vocabulary_registry.json")
+    require(
+        vocabulary_registry["registry_version"] == "geochemical-vocabulary-registry-v1"
+        and vocabulary_registry["vocabularies"]["earthchem-unit"]["version"] is None
+        and vocabulary_registry["vocabularies"]["d1-missing-reason-v1"]["status"] == "internal_frozen",
+        "D1 vocabulary registry distinguishes external references from frozen internal terms",
         checks,
     )
     source_record_id = source_contracts.stable_source_record_id(
@@ -144,17 +1141,38 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
 
-    for source_id in ("georoc-archaean", "usgs-conus-soil"):
+    expected_demo_counts = {
+        "georoc-archaean": 48,
+        "usgs-conus-soil": 108,
+        "norway-marchem": 112,
+        "geotraces-idp2025": 48,
+        "gemstat-open-archive": 48,
+        "japan-gsj-geochemical-map": 48,
+        "pangaea-north-africa-soil": 48,
+        "foregs-topsoil": 48,
+        "foregs-subsoil": 48,
+        "foregs-humus": 48,
+        "foregs-stream-water": 48,
+        "foregs-stream-sediment": 48,
+        "foregs-floodplain-sediment": 48,
+    }
+    expected_demo_versions = {
+        source_id: (
+            "d1-demo-slice-v2"
+            if source_id in {"georoc-archaean", "usgs-conus-soil"}
+            else "d1-demo-slice-v1"
+        )
+        for source_id in expected_demo_counts
+    }
+    for source_id, expected_demo_count in expected_demo_counts.items():
         demo_dir = SOURCE_DEMOS / source_id
         demo_input = demo_dir / "demo_input.csv"
         sources_path = demo_dir / "sources.jsonl"
         generation_manifest = json_value(demo_dir / "run_manifest.json")
         demo_rows = csv_rows(demo_input)
         evidence_rows = [json.loads(line) for line in sources_path.read_text(encoding="utf-8").splitlines()]
-        expected_observations = 48 if source_id == "georoc-archaean" else 108
-        expected_per_analyte = expected_observations // 4
         require(
-            len(demo_rows) == expected_observations and len(evidence_rows) == expected_observations,
+            len(demo_rows) == expected_demo_count and len(evidence_rows) == expected_demo_count,
             f"D1 {source_id} fixture has one evidence record per observation",
             checks,
         )
@@ -179,15 +1197,24 @@ def check_d1(output_dir: Path) -> list[str]:
             f"D1 {source_id} fixture preserves record-level evidence linkage",
             checks,
         )
+        demo_analytes = (
+            ("Cu", "Ni", "Zn")
+            if source_id in {"geotraces-idp2025", "foregs-humus"}
+            else ("As",) if source_id == "gemstat-open-archive"
+            else ("As", "Cu", "Ni", "Zn")
+        )
+        per_analyte_count = expected_demo_count // len(demo_analytes)
         require(
             Counter(row["element_or_analyte"] for row in demo_rows)
-            == Counter({item: expected_per_analyte for item in ("As", "Cu", "Ni", "Zn")}),
-            f"D1 {source_id} fixture keeps the four analytes balanced",
+            == Counter({analyte: per_analyte_count for analyte in demo_analytes}),
+            f"D1 {source_id} fixture keeps its registered analytes balanced",
             checks,
         )
         require(
-            generation_manifest.get("demo_generation_version") == "d1-demo-slice-v2",
-            f"D1 {source_id} fixture uses the evidence-complete generator contract",
+            generation_manifest.get("demo_generation_version") == expected_demo_versions[source_id]
+            and {item.get("generation_version") for item in evidence_rows}
+            == {expected_demo_versions[source_id]},
+            f"D1 {source_id} fixture pins its evidence-complete generator contract",
             checks,
         )
     georoc_evidence = [
@@ -222,6 +1249,27 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 GEOROC fixture retains reported coordinates without inventing WGS84",
         checks,
     )
+    gemstat_demo_rows = csv_rows(SOURCE_DEMOS / "gemstat-open-archive" / "demo_input.csv")
+    gemstat_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "gemstat-open-archive" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        Counter(row["measurement_basis"] for row in gemstat_demo_rows)
+        == Counter(
+            {
+                "freshwater_dissolved_fraction": 16,
+                "freshwater_suspended_fraction": 16,
+                "freshwater_total_fraction": 16,
+            }
+        )
+        and {row["unit"] for row in gemstat_demo_rows} == {"mg/l", "µg/l"}
+        and {row["value_qualifier"] for row in gemstat_demo_rows} == {"", "<"}
+        and {item["source_data_quality"] for item in gemstat_evidence} <= {"Good", "Fair"}
+        and all(item["analysis_method_code"] != "0" for item in gemstat_evidence),
+        "D1 GEMStat demo balances fractions while excluding undefined-method and low-quality records",
+        checks,
+    )
     usgs_evidence = [
         json.loads(line)
         for line in (SOURCE_DEMOS / "usgs-conus-soil" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
@@ -252,6 +1300,174 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 USGS fixture makes soil horizons explicit for D2 background grouping",
         checks,
     )
+    marchem_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "norway-marchem" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        {item.get("digestion_scope") for item in marchem_evidence} == {"partial"}
+        and {item.get("wet_or_dry_weight") for item in marchem_evidence} == {"Dry weight"}
+        and {item.get("accreditation_status") for item in marchem_evidence}
+        == {"accredited", "not_accredited"}
+        and all(item.get("metadata_source_locator") for item in marchem_evidence),
+        "D1 MarChem fixture retains per-observation method and accreditation evidence",
+        checks,
+    )
+    geotraces_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "geotraces-idp2025" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        {item.get("seadatanet_quality_flag") for item in geotraces_evidence} <= {"1", "2"}
+        and {item.get("water_fraction") for item in geotraces_evidence} == {"dissolved"}
+        and all(item.get("sample_depth_m") for item in geotraces_evidence),
+        "D1 GEOTRACES fixture retains dissolved fraction, depth and accepted source QC",
+        checks,
+    )
+    pangaea_demo_rows = csv_rows(SOURCE_DEMOS / "pangaea-north-africa-soil" / "demo_input.csv")
+    pangaea_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "pangaea-north-africa-soil" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        {row["measurement_basis"] for row in pangaea_demo_rows}
+        == {"deflatable_soil_fraction_total_acid_digest"}
+        and {row["grain_fraction"] for row in pangaea_demo_rows}
+        == {"<20 µm fine silt-clay fraction"}
+        and {row["digestion_or_extraction"] for row in pangaea_demo_rows}
+        == {"HF-HNO3 acid digestion"}
+        and all(item["reported_location"] for item in pangaea_evidence),
+        "D1 PANGAEA fixture retains fine-fraction, digestion and publisher location semantics",
+        checks,
+    )
+    gsj_demo_rows = csv_rows(SOURCE_DEMOS / "japan-gsj-geochemical-map" / "demo_input.csv")
+    gsj_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "japan-gsj-geochemical-map" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        {row["measurement_basis"] for row in gsj_demo_rows}
+        == {"river_sediment_<180um_national_geochemical_map"}
+        and {row["grain_fraction"] for row in gsj_demo_rows}
+        == {"<180 µm fine stream sediment"}
+        and {row["coordinate_uncertainty_m"] for row in gsj_demo_rows} == {"20"}
+        and all(item["original_coordinate_crs"] == "EPSG:4612 (JGD2000)" for item in gsj_evidence)
+        and all(item["sample_file_sha256"] == "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c" for item in gsj_evidence),
+        "D1 GSJ fixture retains fine-sediment, JGD2000 and two-file evidence semantics",
+        checks,
+    )
+
+    combined_manifest = json_value(COMBINED_DEMO / "run_manifest.json")
+    combined_rows = csv_rows(COMBINED_DEMO / "demo_input.csv")
+    combined_evidence = [
+        json.loads(line)
+        for line in (COMBINED_DEMO / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    require(
+        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 748
+        and combined_manifest["record_counts"]["by_medium"]
+        == {"rock": 48, "sediment": 256, "soil": 300, "water": 144}
+        and combined_manifest["record_counts"]["by_source"]
+        == {
+            "gemstat-open-archive": 48,
+            "georoc-archaean": 48,
+            "geotraces-idp2025": 48,
+            "japan-gsj-geochemical-map": 48,
+            "norway-marchem": 112,
+            "pangaea-north-africa-soil": 48,
+            "usgs-conus-soil": 108,
+            "foregs-topsoil": 48,
+            "foregs-subsoil": 48,
+            "foregs-humus": 48,
+            "foregs-stream-water": 48,
+            "foregs-stream-sediment": 48,
+            "foregs-floodplain-sediment": 48,
+        },
+        "D1 combined fixture binds all thirteen datasets to one 748-observation four-media request",
+        checks,
+    )
+    require(
+        combined_manifest["route"]["status"] == "offline_fixtures_verified"
+        and combined_manifest["route"]["source_router_status"] == "needs_human_review"
+        and combined_manifest["route"]["selection_context"] == "checked_in_fixtures_hash_verified"
+        and set(combined_manifest["route"]["selected_sources"])
+        == set(combined_manifest["record_counts"]["by_source"]),
+        "D1 combined fixture promotes offline routes only after local manifest and SHA-256 verification",
+        checks,
+    )
+    require(
+        combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
+        and combined_manifest["comparison_isolation"]["raw_input_partition_count"] == 86
+        and combined_manifest["comparison_isolation"]["partition_count"] == 93
+        and combined_manifest["comparison_isolation"]["water_partition_count"] == 17,
+        "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
+        checks,
+    )
+    combined_output = COMBINED_DEMO / "expected-output"
+    combined_summary = json_value(combined_output / "run_summary.json")
+    combined_qc = json_value(combined_output / "qc_report.json")
+    combined_anomaly = json_value(combined_output / "anomaly_report.json")
+    combined_database = csv_rows(combined_output / "geochemistry.csv")
+    grouped_sources: dict[tuple[str, ...], set[str]] = {}
+    for row in combined_database:
+        key = tuple(str(row.get(field) or "") for field in standardizer.DEFAULT_GROUP_BY)
+        grouped_sources.setdefault(key, set()).add(row["source_id"])
+    require(
+        output_validator.validate_dir(combined_output)["status"] == "valid"
+        and combined_summary["status"] == "success"
+        and combined_summary["metrics"]["record_count"] == 748
+        and combined_summary["metrics"]["standardized_record_count"] == 748
+        and combined_summary["metrics"]["valid_coordinate_count"] == 700
+        and combined_summary["metrics"]["censored_record_count"] == 23
+        and combined_summary["metrics"]["candidate_anomaly_count"] == 16
+        and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
+        and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
+        and len(combined_anomaly["groups"]) == 93
+        and all(len(sources) == 1 for sources in grouped_sources.values()),
+        "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as combined_temp:
+        temporary_root = Path(combined_temp)
+        rebuilt_dir = temporary_root / "combined"
+        build_four_media_demo.build(
+            COMBINED_DEMO / "request.json",
+            SOURCE_DEMOS,
+            rebuilt_dir,
+            "2026-08-06T08:00:00Z",
+            False,
+        )
+        require(
+            all(
+                (rebuilt_dir / filename).read_bytes() == (COMBINED_DEMO / filename).read_bytes()
+                for filename in ("demo_input.csv", "sources.jsonl", "run_manifest.json")
+            ),
+            "D1 combined fixture rebuilds byte-for-byte from the thirteen checked-in source demos",
+            checks,
+        )
+        rebuilt_output = temporary_root / "output"
+        run_command(
+            [
+                sys.executable,
+                str(WORKFLOW),
+                "--input",
+                str(rebuilt_dir / "demo_input.csv"),
+                "--output-dir",
+                str(rebuilt_output),
+            ]
+        )
+        require(
+            all(
+                (rebuilt_output / filename).read_bytes() == (combined_output / filename).read_bytes()
+                for filename in output_validator.REQUIRED_FILES.values()
+            ),
+            "D1 combined ten-file output package rebuilds byte-for-byte",
+            checks,
+        )
 
     with tempfile.TemporaryDirectory() as evidence_temp:
         bbox_result = run_command(
@@ -734,6 +1950,13 @@ def check_d2(output_dir: Path) -> list[str]:
     )
     indexed = {row["record_id"]: row for row in rows}
     require(float(indexed["rock-fe-001"]["normalized_value"]) == 25_000, "D2 solid unit conversion is stable", checks)
+    molar_flags: list[str] = []
+    require(
+        standardizer.conversion_for("water", "nmol/kg", molar_flags) == (1.0, "nmol/kg")
+        and not molar_flags,
+        "D2 preserves seawater molar-per-mass values without an unstated density conversion",
+        checks,
+    )
     require(indexed["soil-as-013"]["normalized_value"] == "", "D2 censored values are not imputed", checks)
     require(indexed["soil-as-013"]["censored"] == "true", "D2 serializes censoring state explicitly", checks)
     require(indexed["soil-as-001"]["method_family"] == "icp_ms", "D2 normalizes analytical method families", checks)
@@ -897,10 +2120,193 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 map exposes element, medium, confidence and anomaly filters",
         checks,
     )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'id="region"',
+                'id="customBounds"',
+                'id="mapMode"',
+                'id="colorMode"',
+                'id="basis"',
+                'id="anomalyGrid"',
+            )
+        ),
+        "D3 map exposes region, bbox, distribution/heat and color-mode controls",
+        checks,
+    )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'id="comboX"',
+                'id="comboY"',
+                'id="comboMatrix"',
+                'id="openAnomalyRegions"',
+                "visual_aggregation_only",
+                "样点密度热力图",
+                "showAnomalyRegion",
+                "focusAnomalyRegion",
+                "zoom-adaptive-anomaly-bubbles-v1",
+                "layoutAnomalyBubbles",
+                "conic-gradient",
+                'id="storyPreset"',
+                "d3-visualization-profile-v1",
+            )
+        ),
+        "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
+        checks,
+    )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'id="geology"',
+                'id="method"',
+                'id="source"',
+                "GEOCHEM ATLAS",
+                "ALL DATA",
+            )
+        ),
+        "D3 map exposes global, geological, method and source exploration controls",
+        checks,
+    )
+    require(
+        "全部元素按样品标识去重显示" in html
+        and "不跨元素、介质或单位比较浓度" in html,
+        "D3 defaults to a scientifically valid all-data sample overview",
+        checks,
+    )
+    require(
+        "Natural Earth 1:110m" in html
+        and "ai4s-natural-earth-land-v1" in html
+        and "public domain" in html,
+        "D3 embeds a pinned offline basemap with visible provenance",
+        checks,
+    )
     require("候选异常不代表污染" in html, "D3 map communicates the scientific interpretation boundary", checks)
     summary = json_value(output_dir / "run_summary.json")
     require(summary.get("status") == "success", "D3 run summary reports successful integration", checks)
     require(set(summary.get("outputs", {}).values()) == required_outputs - {"run_summary.json"}, "D3 summary names every reusable artifact", checks)
+    map_report = summary.get("map_report", {})
+    require(
+        map_report.get("map_version") == "d3-interactive-atlas-v3"
+        and map_report.get("default_view") == "all_data_sample_deduplicated"
+        and map_report.get("embedded_payload_schema") == "d3-compact-payload-v1"
+        and map_report.get("anomaly_region_render_mode")
+        == "zoom-adaptive-anomaly-bubbles-v1"
+        and map_report.get("visualization_profile", {}).get("schema_version")
+        == "d3-visualization-profile-v1"
+        and isinstance(map_report.get("visualization_profile_warnings"), list)
+        and set(map_report.get("visualization_modes", []))
+        == {
+            "distribution_points",
+            "sample_density_heatmap",
+            "element_pair_comparison",
+            "candidate_anomaly_region_aggregation",
+        }
+        and map_report.get("external_assets") == 0
+        and map_report.get("interpolation") is False,
+        "D3 run summary declares the reusable map contract and default view",
+        checks,
+    )
+    require(
+        0 < map_report.get("html_bytes", 0) <= 100_000_000
+        and 0 < map_report.get("samples_geojson_bytes", 0) <= 100_000_000,
+        "D3 reports and enforces the runtime map-output safety ceiling",
+        checks,
+    )
+    coverage = map_report.get("region_coverage", {})
+    require(
+        coverage.get("global", {}).get("record_count")
+        == map_report.get("mapped_record_count")
+        and coverage.get("global", {}).get("sample_count")
+        == map_report.get("display_sample_count")
+        and all(
+            item.get("administrative_clip") is False
+            for item in coverage.values()
+            if isinstance(item, dict)
+        ),
+        "D3 region coverage reconciles the global total and labels bbox semantics",
+        checks,
+    )
+    basemap = json_value(BASEMAP)
+    require(
+        basemap.get("license") == "public domain"
+        and basemap.get("archive_sha256")
+        == "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de"
+        and basemap.get("point_count") == 5_133,
+        "D3 basemap provenance, source archive hash and geometry count are pinned",
+        checks,
+    )
+    profile = json_value(VISUALIZATION_PROFILE)
+    profile_schema = json_value(VISUALIZATION_PROFILE_SCHEMA)
+    visualization_report_schema = json_value(VISUALIZATION_REPORT_SCHEMA)
+    require(
+        profile.get("schema_version") == "d3-visualization-profile-v1"
+        and profile_schema.get("properties", {}).get("schema_version", {}).get("const")
+        == "d3-visualization-profile-v1"
+        and visualization_report_schema.get("properties", {})
+        .get("interface_version", {})
+        .get("const")
+        == "d3-visualization-interface-v1",
+        "D3 publishes a versioned task profile template and Schema",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as visualization_temp:
+        visualization_root = Path(visualization_temp)
+        task_profile = dict(profile)
+        task_profile["title"] = "As 土壤候选异常任务视图"
+        task_profile["story"] = "anomaly"
+        task_profile["default_region"] = "usa48"
+        task_profile["filters"] = {
+            **profile["filters"],
+            "element": "As",
+            "medium": "soil",
+        }
+        task_profile_path = visualization_root / "task-profile.json"
+        task_profile_path.write_text(
+            json.dumps(task_profile, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        visualization_output = visualization_root / "bundle"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_RENDERER),
+                "--input-dir",
+                str(output_dir),
+                "--profile",
+                str(task_profile_path),
+                "--output-dir",
+                str(visualization_output),
+            ]
+        )
+        visualization_report = json_value(
+            visualization_output / "visualization_report.json"
+        )
+        configured_html = (visualization_output / "interactive_map.html").read_text(
+            encoding="utf-8"
+        )
+        require(
+            visualization_report.get("status") == "success"
+            and visualization_report.get("interface_version")
+            == "d3-visualization-interface-v1"
+            and visualization_report.get("profile", {}).get("story") == "anomaly"
+            and visualization_report.get("profile", {}).get("filters", {}).get("element")
+            == "As"
+            and visualization_report.get("map_report", {}).get("default_view")
+            == "profile_driven_task_view"
+            and "As 土壤候选异常任务视图" in configured_html,
+            "D3 Agent entry point renders a task-configured map without editing HTML",
+            checks,
+        )
+        require(
+            visualization_validator.validate_dir(visualization_output).get("status")
+            == "valid",
+            "D3 standalone bundle passes its dedicated public validator",
+            checks,
+        )
     return checks
 
 

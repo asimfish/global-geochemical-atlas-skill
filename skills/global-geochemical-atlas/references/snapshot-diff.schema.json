@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-snapshot-diff:v3",
+  "title": "D1 source snapshot diff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "diff_version",
+    "source_id",
+    "before_snapshot_id",
+    "after_snapshot_id",
+    "status",
+    "requires_rescore",
+    "comparisons",
+    "members",
+    "claim_boundary"
+  ],
+  "properties": {
+    "diff_version": {"const": "geochemical-snapshot-diff-v3"},
+    "source_id": {"type": "string", "minLength": 1},
+    "before_snapshot_id": {"type": "string", "minLength": 1},
+    "after_snapshot_id": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["identical", "content_unchanged_new_observation", "changed"]},
+    "requires_rescore": {"type": "boolean"},
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_changed",
+        "response_changed",
+        "counts_changed",
+        "research_use_changed",
+        "limitations_changed",
+        "observation_time_changed"
+      ],
+      "properties": {
+        "request_changed": {"type": "boolean"},
+        "response_changed": {"type": "boolean"},
+        "counts_changed": {"type": "boolean"},
+        "research_use_changed": {"type": "boolean"},
+        "limitations_changed": {"type": "boolean"},
+        "observation_time_changed": {"type": "boolean"}
+      }
+    },
+    "members": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["added", "removed", "changed"],
+      "properties": {
+        "added": {"$ref": "#/$defs/uniqueStrings"},
+        "removed": {"$ref": "#/$defs/uniqueStrings"},
+        "changed": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

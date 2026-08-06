@@ -1,0 +1,100 @@
+{
+  "checks": {
+    "arsenic_country_count_match": true,
+    "arsenic_observations_match": true,
+    "arsenic_parameter_counts_match": true,
+    "arsenic_station_count_match": true,
+    "data_quality_counts_match": true,
+    "exact_duplicate_extra_observations_match": true,
+    "exact_duplicate_groups_match": true,
+    "maximum_exact_duplicate_multiplicity_match": true,
+    "method_combinations_used_match": true,
+    "pending_review_extreme_mg_l_match": true,
+    "pending_review_negative_sentinels_match": true,
+    "undefined_method_observations_match": true,
+    "unit_counts_match": true,
+    "unmatched_method_rows_match": true,
+    "unmatched_station_rows_match": true,
+    "value_flag_counts_match": true,
+    "water_type_counts_match": true
+  },
+  "counts": {
+    "arsenic_country_count": 33,
+    "arsenic_observations": 492999,
+    "arsenic_parameter_counts": {
+      "As-Dis": 188961,
+      "As-Sus": 5439,
+      "As-Tot": 298599
+    },
+    "arsenic_station_count": 15621,
+    "data_quality_counts": {
+      "Fair": 466710,
+      "Good": 4557,
+      "Pending review": 1649,
+      "Suspect": 294,
+      "Unknown": 19789
+    },
+    "exact_duplicate_extra_observations": 5655,
+    "exact_duplicate_groups": 5513,
+    "maximum_exact_duplicate_multiplicity": 6,
+    "method_combinations_used": 24,
+    "pending_review_extreme_mg_l": 78,
+    "pending_review_negative_sentinels": 3,
+    "undefined_method_observations": 449714,
+    "unit_counts": {
+      "mg/l": 453413,
+      "µg/l": 39586
+    },
+    "unmatched_method_rows": 0,
+    "unmatched_station_rows": 0,
+    "value_flag_counts": {
+      "": 289636,
+      "<": 203344,
+      ">": 19
+    },
+    "water_type_counts": {
+      "Groundwater station": 30671,
+      "Lake station": 43253,
+      "Reservoir station": 13886,
+      "River station": 402080,
+      "Wetland station": 3109
+    }
+  },
+  "coverage": {
+    "bbox": [
+      -139.78,
+      -34.252553,
+      92.60805556,
+      81.9356
+    ],
+    "country_count": 33,
+    "sample_date_range": [
+      "1975-04-28",
+      "2023-12-29"
+    ],
+    "sample_depth_range_m": [
+      0.0,
+      500.0
+    ],
+    "water_types": {
+      "Groundwater station": 30671,
+      "Lake station": 43253,
+      "Reservoir station": 13886,
+      "River station": 402080,
+      "Wetland station": 3109
+    }
+  },
+  "limitations": [
+    "The arsenic observations cover 33 contributing countries unevenly; this is not a uniform global freshwater grid.",
+    "Dissolved, suspended and total arsenic fractions remain separate and are not interchangeable.",
+    "449,714 observations use undefined method code 0, limiting method comparability.",
+    "Censored values and all source quality labels are preserved; Pending review and Suspect rows are excluded from demos.",
+    "5,655 extra exact duplicate observations are retained and flagged rather than silently removed.",
+    "Three negative sentinel values and 78 extreme mg/l values are Pending review and cannot support anomaly claims.",
+    "The publisher page and metadata files differ by one station and one parameter; both claims are recorded."
+  ],
+  "reconciliation_version": "gemstat-v3-arsenic-audit-v1",
+  "snapshot_id": "gemstat-open-archive:v3:11605175ed99",
+  "source_id": "gemstat-open-archive",
+  "status": "PASS"
+}

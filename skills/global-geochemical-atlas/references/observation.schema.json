@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:d1-observation:v1",
+  "title": "D1 raw geochemical observation archive entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "observation_id", "sample_id", "method_id", "provenance_id", "analyte_reported", "value_raw", "parsed_value", "value_qualifier", "unit_raw", "measurement_basis_raw", "detection_limit_raw", "parsed_detection_limit", "detection_limit_unit_raw", "uncertainty_raw", "replicate_id", "missing_reasons"],
+  "properties": {
+    "schema_version": {"const": "d1-observation-v1"},
+    "observation_id": {"type": "string", "minLength": 1},
+    "sample_id": {"type": "string", "minLength": 1},
+    "method_id": {"type": "string", "minLength": 1},
+    "provenance_id": {"type": "string", "minLength": 1},
+    "analyte_reported": {"type": "string", "minLength": 1},
+    "value_raw": {"type": "string", "minLength": 1},
+    "parsed_value": {"type": ["number", "null"]},
+    "value_qualifier": {"type": "string", "enum": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "nd", "unknown"]},
+    "unit_raw": {"type": ["string", "null"]},
+    "measurement_basis_raw": {"type": ["string", "null"]},
+    "detection_limit_raw": {"type": ["string", "null"]},
+    "parsed_detection_limit": {"type": ["number", "null"], "minimum": 0},
+    "detection_limit_unit_raw": {"type": ["string", "null"]},
+    "uncertainty_raw": {"type": ["string", "null"]},
+    "replicate_id": {"type": ["string", "null"]},
+    "missing_reasons": {"$ref": "#/$defs/missingReasons"}
+  },
+  "$defs": {
+    "missingReasons": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "enum": ["not_reported", "not_applicable", "not_available", "redacted", "parse_failed"]}
+    }
+  }
+}

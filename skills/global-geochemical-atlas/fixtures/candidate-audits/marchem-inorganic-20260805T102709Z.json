@@ -1,0 +1,743 @@
+{
+  "acquisition": {
+    "observed_at": "2026-08-05T10:27:11Z",
+    "publisher_checksum_available": false,
+    "request_url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false",
+    "response_content_type": "application/zip"
+  },
+  "archive": {
+    "bytes": 81598,
+    "dynamic_export_filenames": true,
+    "filename": "marchem-inorganic-2003-2024.zip",
+    "members": [
+      {
+        "bytes": 320402,
+        "name": "MetaData/MarChem_Inorganic_LabParameter_20260805T102709Z.csv",
+        "sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d"
+      },
+      {
+        "bytes": 295287,
+        "name": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+        "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
+      },
+      {
+        "bytes": 3383,
+        "name": "MarChem_Info_20260805T102709Z",
+        "sha256": "93e4db2dd0c726751f21557caa28a8da4275da87745369d0a506e8fbd84e584f"
+      }
+    ],
+    "sha256": "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6"
+  },
+  "claim_boundary": "These are observations from one dynamic MarChem export. They verify file structure and field content, not immutable-version status, human row review, or production approval.",
+  "human_review": {
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "batches": [
+      "2015-0380",
+      "2017-0024",
+      "2017-0179",
+      "2018-0075",
+      "2018-0076",
+      "2020-0021",
+      "2021-0031",
+      "2022-0019",
+      "2023-0031",
+      "2023-0120",
+      "2024-0024",
+      "2025-0022",
+      "2025-0034"
+    ],
+    "cruise_years": [
+      "2015",
+      "2016",
+      "2017",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024"
+    ],
+    "data_record_count": 1070,
+    "distinct_batch_count": 13,
+    "distinct_sample_code_count": 880,
+    "duplicate_sample_code_count": 190,
+    "latitude_range": [
+      56.732085,
+      81.548998
+    ],
+    "longitude_range": [
+      1.588881,
+      36.6777
+    ],
+    "sample_codes_with_multiple_target_rows_count": 0,
+    "sample_codes_with_target_count": 880,
+    "sample_codes_without_target_count": 0,
+    "target_analytes": {
+      "As": {
+        "censored_gt_count": 0,
+        "censored_lt_count": 20,
+        "invalid_count": 0,
+        "missing_count": 190,
+        "numeric_count": 860,
+        "present_count": 880,
+        "record_count": 1070,
+        "reported_numeric_max": 147.0,
+        "reported_numeric_min": 2.0,
+        "reported_unit": "mg/kg",
+        "source_column": "As_ICPOES_mg/kg",
+        "weight_basis": "dry"
+      },
+      "Cu": {
+        "censored_gt_count": 0,
+        "censored_lt_count": 18,
+        "invalid_count": 0,
+        "missing_count": 190,
+        "numeric_count": 862,
+        "present_count": 880,
+        "record_count": 1070,
+        "reported_numeric_max": 47.9,
+        "reported_numeric_min": 1.0,
+        "reported_unit": "mg/kg",
+        "source_column": "Cu_ICPOES_mg/kg",
+        "weight_basis": "dry"
+      },
+      "Ni": {
+        "censored_gt_count": 0,
+        "censored_lt_count": 2,
+        "invalid_count": 0,
+        "missing_count": 190,
+        "numeric_count": 878,
+        "present_count": 880,
+        "record_count": 1070,
+        "reported_numeric_max": 55.4,
+        "reported_numeric_min": 1.0,
+        "reported_unit": "mg/kg",
+        "source_column": "Ni_ICPOES_mg/kg",
+        "weight_basis": "dry"
+      },
+      "Zn": {
+        "censored_gt_count": 0,
+        "censored_lt_count": 5,
+        "invalid_count": 0,
+        "missing_count": 190,
+        "numeric_count": 875,
+        "present_count": 880,
+        "record_count": 1070,
+        "reported_numeric_max": 154.0,
+        "reported_numeric_min": 4.0,
+        "reported_unit": "mg/kg",
+        "source_column": "Zn_ICPOES_mg/kg",
+        "weight_basis": "dry"
+      }
+    },
+    "target_bearing_row_count": 880
+  },
+  "observed_metadata": {
+    "accreditation_rows": {
+      "accredited": 28,
+      "not_accredited": 13,
+      "unclear": 0
+    },
+    "metadata_record_count": 338,
+    "not_total_content_disclosed": true,
+    "partial_digestion_disclosed": true,
+    "target_batches": {
+      "As": [
+        "2015-0380",
+        "2017-0024",
+        "2018-0075",
+        "2020-0021",
+        "2021-0031 2023-0120",
+        "2022-0019",
+        "2023-0031",
+        "2024-0024",
+        "2025-0022",
+        "2025-0034"
+      ],
+      "Cu": [
+        "2015-0380",
+        "2017-0024",
+        "2018-0075",
+        "2020-0021",
+        "2021-0031 2023-0120",
+        "2022-0019",
+        "2023-0031",
+        "2024-0024",
+        "2025-0022",
+        "2025-0034"
+      ],
+      "Ni": [
+        "2015-0380",
+        "2017-0024",
+        "2018-0075",
+        "2020-0021",
+        "2021-0031 2023-0120",
+        "2022-0019",
+        "2023-0031",
+        "2024-0024",
+        "2025-0022",
+        "2025-0034"
+      ],
+      "Zn": [
+        "2015-0380",
+        "2017-0024",
+        "2018-0075",
+        "2020-0021",
+        "2021-0031",
+        "2022-0019",
+        "2023-0031",
+        "2023-0120",
+        "2024-0024",
+        "2025-0022",
+        "2025-0034"
+      ]
+    },
+    "target_llq_values_mg_per_kg": {
+      "As": [
+        "2.0"
+      ],
+      "Cu": [
+        "1.0"
+      ],
+      "Ni": [
+        "1.0"
+      ],
+      "Zn": [
+        "2.0",
+        "4.0"
+      ]
+    },
+    "target_metadata_record_count": 41
+  },
+  "prepared_human_review_sample": [
+    {
+      "batch_code": "2015-0380",
+      "cruise_year": "2015",
+      "latitude": "73.353977",
+      "longitude": "33.527978",
+      "sample_code": "R1461MC51A_00-01 cm",
+      "selection_reasons": [
+        "all_targets_numeric",
+        "evenly_spaced_fill",
+        "first_for_batch",
+        "first_for_cruise_year",
+        "position_boundary"
+      ],
+      "source_row_number": 2,
+      "target_raw_values": {
+        "As": "21.7",
+        "Cu": "15.2",
+        "Ni": "27.4",
+        "Zn": "70.4"
+      }
+    },
+    {
+      "batch_code": "2015-0380",
+      "cruise_year": "2015",
+      "latitude": "73.046997",
+      "longitude": "35.747727",
+      "sample_code": "R1474BC97A_11-12 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_row_number": 39,
+      "target_raw_values": {
+        "As": "7.1",
+        "Cu": "15.4",
+        "Ni": "29.3",
+        "Zn": "66.3"
+      }
+    },
+    {
+      "batch_code": "2015-0380",
+      "cruise_year": "2015",
+      "latitude": "73.5998",
+      "longitude": "36.5767",
+      "sample_code": "R1492MC56A_00-01 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_row_number": 76,
+      "target_raw_values": {
+        "As": "29.9",
+        "Cu": "13.9",
+        "Ni": "22.9",
+        "Zn": "58.8"
+      }
+    },
+    {
+      "batch_code": "2015-0380",
+      "cruise_year": "2015",
+      "latitude": "65.0408",
+      "longitude": "6.2500",
+      "sample_code": "R1509MC94A_11-12 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_row_number": 113,
+      "target_raw_values": {
+        "As": "3.9",
+        "Cu": "5.7",
+        "Ni": "12.2",
+        "Zn": "27.6"
+      }
+    },
+    {
+      "batch_code": "2015-0380",
+      "cruise_year": "2015",
+      "latitude": "64.4898",
+      "longitude": "6.1622",
+      "sample_code": "R1521MC96A_32-33 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_row_number": 149,
+      "target_raw_values": {
+        "As": "3.9",
+        "Cu": "4.9",
+        "Ni": "11.4",
+        "Zn": "26.3"
+      }
+    },
+    {
+      "batch_code": "2017-0024",
+      "cruise_year": "2016",
+      "latitude": "78.2520",
+      "longitude": "28.5465",
+      "sample_code": "R1582BC07A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 213,
+      "target_raw_values": {
+        "As": "49.7",
+        "Cu": "19.5",
+        "Ni": "49.5",
+        "Zn": "103.0"
+      }
+    },
+    {
+      "batch_code": "2017-0179",
+      "cruise_year": "2016",
+      "latitude": "78.2520",
+      "longitude": "28.5465",
+      "sample_code": "R1582BC07A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "target_missing"
+      ],
+      "source_row_number": 214,
+      "target_raw_values": {
+        "As": "",
+        "Cu": "",
+        "Ni": "",
+        "Zn": ""
+      }
+    },
+    {
+      "batch_code": "2017-0024",
+      "cruise_year": "2016",
+      "latitude": "76.0320",
+      "longitude": "26.6947",
+      "sample_code": "R1627BC12A_04-05 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_row_number": 269,
+      "target_raw_values": {
+        "As": "11.0",
+        "Cu": "16.8",
+        "Ni": "34.7",
+        "Zn": "82.5"
+      }
+    },
+    {
+      "batch_code": "2017-0024",
+      "cruise_year": "2017",
+      "latitude": "76.1165",
+      "longitude": "17.7675",
+      "sample_code": "R1676MC01A_00-01 cm",
+      "selection_reasons": [
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 399,
+      "target_raw_values": {
+        "As": "26.0",
+        "Cu": "13.4",
+        "Ni": "25.2",
+        "Zn": "62.3"
+      }
+    },
+    {
+      "batch_code": "2017-0024",
+      "cruise_year": "2017",
+      "latitude": "76.1165",
+      "longitude": "17.7675",
+      "sample_code": "R1676MC01A_16-17 cm",
+      "selection_reasons": [
+        "Cu_reported_max"
+      ],
+      "source_row_number": 429,
+      "target_raw_values": {
+        "As": "9.1",
+        "Cu": "47.9",
+        "Ni": "29.7",
+        "Zn": "86.0"
+      }
+    },
+    {
+      "batch_code": "2017-0024",
+      "cruise_year": "2017",
+      "latitude": "73.954937",
+      "longitude": "22.993245",
+      "sample_code": "R1709MC04A_24-25 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_row_number": 537,
+      "target_raw_values": {
+        "As": "9.9",
+        "Cu": "17.7",
+        "Ni": "34.3",
+        "Zn": "85.1"
+      }
+    },
+    {
+      "batch_code": "2018-0075",
+      "cruise_year": "2017",
+      "latitude": "73.9687",
+      "longitude": "33.7757",
+      "sample_code": "R1751MC06A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_row_number": 547,
+      "target_raw_values": {
+        "As": "22.3",
+        "Cu": "15.7",
+        "Ni": "29.5",
+        "Zn": "75.5"
+      }
+    },
+    {
+      "batch_code": "2018-0076",
+      "cruise_year": "2017",
+      "latitude": "73.9687",
+      "longitude": "33.7757",
+      "sample_code": "R1751MC06A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_row_number": 548,
+      "target_raw_values": {
+        "As": "",
+        "Cu": "",
+        "Ni": "",
+        "Zn": ""
+      }
+    },
+    {
+      "batch_code": "2020-0021",
+      "cruise_year": "2019",
+      "latitude": "74.787690",
+      "longitude": "18.567573",
+      "sample_code": "R1951MC01A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 593,
+      "target_raw_values": {
+        "As": "16.1",
+        "Cu": "11.1",
+        "Ni": "18.9",
+        "Zn": "43.2"
+      }
+    },
+    {
+      "batch_code": "2021-0031",
+      "cruise_year": "2020",
+      "latitude": "63.884697",
+      "longitude": "7.571268",
+      "sample_code": "R2132MC06A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 631,
+      "target_raw_values": {
+        "As": "2.7",
+        "Cu": "4.7",
+        "Ni": "10.6",
+        "Zn": "21.9"
+      }
+    },
+    {
+      "batch_code": "2021-0031",
+      "cruise_year": "2020",
+      "latitude": "64.195273",
+      "longitude": "7.355115",
+      "sample_code": "R2139MC08A_14-15 cm",
+      "selection_reasons": [
+        "As_reported_min"
+      ],
+      "source_row_number": 636,
+      "target_raw_values": {
+        "As": "2.0",
+        "Cu": "9.4",
+        "Ni": "19.3",
+        "Zn": "38.2"
+      }
+    },
+    {
+      "batch_code": "2021-0031",
+      "cruise_year": "2020",
+      "latitude": "64.713538",
+      "longitude": "8.220127",
+      "sample_code": "R2229MC10A_14-15 cm",
+      "selection_reasons": [
+        "target_censored"
+      ],
+      "source_row_number": 650,
+      "target_raw_values": {
+        "As": "<2.0",
+        "Cu": "8.9",
+        "Ni": "21.1",
+        "Zn": "42.0"
+      }
+    },
+    {
+      "batch_code": "2022-0019",
+      "cruise_year": "2021",
+      "latitude": "61.136023",
+      "longitude": "5.759125",
+      "sample_code": "R2373MC01A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 739,
+      "target_raw_values": {
+        "As": "16.8",
+        "Cu": "42.9",
+        "Ni": "49.3",
+        "Zn": "146.0"
+      }
+    },
+    {
+      "batch_code": "2022-0019",
+      "cruise_year": "2021",
+      "latitude": "61.136023",
+      "longitude": "5.759125",
+      "sample_code": "R2373MC01A_04-05 cm",
+      "selection_reasons": [
+        "Zn_reported_max"
+      ],
+      "source_row_number": 741,
+      "target_raw_values": {
+        "As": "13.2",
+        "Cu": "44.0",
+        "Ni": "49.8",
+        "Zn": "154.0"
+      }
+    },
+    {
+      "batch_code": "2022-0019",
+      "cruise_year": "2021",
+      "latitude": "64.592550",
+      "longitude": "9.819355",
+      "sample_code": "R2608MC13A_00-01 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_row_number": 804,
+      "target_raw_values": {
+        "As": "5.2",
+        "Cu": "10.8",
+        "Ni": "21.8",
+        "Zn": "46.2"
+      }
+    },
+    {
+      "batch_code": "2023-0031",
+      "cruise_year": "2022",
+      "latitude": "59.551741",
+      "longitude": "4.275607",
+      "sample_code": "R3120MC10A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 846,
+      "target_raw_values": {
+        "As": "17.8",
+        "Cu": "12.5",
+        "Ni": "26.4",
+        "Zn": "64.6"
+      }
+    },
+    {
+      "batch_code": "2023-0120",
+      "cruise_year": "2022",
+      "latitude": "58.812880",
+      "longitude": "10.247057",
+      "sample_code": "R3165MC14A_02-03 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_row_number": 869,
+      "target_raw_values": {
+        "As": "17.2",
+        "Cu": "17.5",
+        "Ni": "29.7",
+        "Zn": "87.8"
+      }
+    },
+    {
+      "batch_code": "2023-0031",
+      "cruise_year": "2022",
+      "latitude": "81.409639",
+      "longitude": "26.953759",
+      "sample_code": "R2924MC02A_10-11 cm",
+      "selection_reasons": [
+        "Ni_reported_max"
+      ],
+      "source_row_number": 908,
+      "target_raw_values": {
+        "As": "43.5",
+        "Cu": "24.3",
+        "Ni": "55.4",
+        "Zn": "83.5"
+      }
+    },
+    {
+      "batch_code": "2023-0031",
+      "cruise_year": "2022",
+      "latitude": "81.409639",
+      "longitude": "26.953759",
+      "sample_code": "R2924MC02A_24-25 cm",
+      "selection_reasons": [
+        "As_reported_max"
+      ],
+      "source_row_number": 910,
+      "target_raw_values": {
+        "As": "147.0",
+        "Cu": "25.5",
+        "Ni": "43.9",
+        "Zn": "80.0"
+      }
+    },
+    {
+      "batch_code": "2024-0024",
+      "cruise_year": "2023",
+      "latitude": "59.576102",
+      "longitude": "4.930292",
+      "sample_code": "R3188MC05A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 955,
+      "target_raw_values": {
+        "As": "10.9",
+        "Cu": "13.1",
+        "Ni": "25.7",
+        "Zn": "69.4"
+      }
+    },
+    {
+      "batch_code": "2025-0034",
+      "cruise_year": "2024",
+      "latitude": "56.732085",
+      "longitude": "5.198095",
+      "sample_code": "R3425MC23A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_row_number": 996,
+      "target_raw_values": {
+        "As": "24.4",
+        "Cu": "11.7",
+        "Ni": "25.6",
+        "Zn": "68.4"
+      }
+    },
+    {
+      "batch_code": "2025-0022",
+      "cruise_year": "2024",
+      "latitude": "59.364231",
+      "longitude": "4.244871",
+      "sample_code": "R3560MC20A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_row_number": 1006,
+      "target_raw_values": {
+        "As": "18.1",
+        "Cu": "14.6",
+        "Ni": "29.5",
+        "Zn": "74.3"
+      }
+    },
+    {
+      "batch_code": "2025-0034",
+      "cruise_year": "2024",
+      "latitude": "57.141142",
+      "longitude": "4.529466",
+      "sample_code": "R3579GR20A_00-01 cm",
+      "selection_reasons": [
+        "Cu_reported_min",
+        "Zn_reported_min"
+      ],
+      "source_row_number": 1014,
+      "target_raw_values": {
+        "As": "<2.0",
+        "Cu": "<1.0",
+        "Ni": "1.1",
+        "Zn": "<4.0"
+      }
+    },
+    {
+      "batch_code": "2025-0034",
+      "cruise_year": "2024",
+      "latitude": "57.141142",
+      "longitude": "4.529466",
+      "sample_code": "R3579GR20A_01-02 cm",
+      "selection_reasons": [
+        "Ni_reported_min"
+      ],
+      "source_row_number": 1015,
+      "target_raw_values": {
+        "As": "<2.0",
+        "Cu": "<1.0",
+        "Ni": "<1.0",
+        "Zn": "<4.0"
+      }
+    },
+    {
+      "batch_code": "2025-0022",
+      "cruise_year": "2024",
+      "latitude": "79.629880",
+      "longitude": "29.145813",
+      "sample_code": "R3510MC05A_36-37 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_row_number": 1071,
+      "target_raw_values": {
+        "As": "10.7",
+        "Cu": "23.8",
+        "Ni": "44.5",
+        "Zn": "105.0"
+      }
+    }
+  ],
+  "source_id": "norway-marchem",
+  "verification_version": "marchem-candidate-verification-v1"
+}

@@ -26,9 +26,70 @@
 - 内容：0–5 cm、A horizon、C horizon 各选择 9 个源样品，每个样品保留 As、Cu、Ni、Zn，并在每层确定性纳入一条删失记录；`material` 显式编码土层，避免异常背景混合；
 - 边界：三个土层保持可区分；D1 按 USGS Appendix 5 映射 WGS 84、分析方法、消解方式和原始 qualifier，D2 负责 canonical qualifier、单位标准化、QC 和置信度。
 
+## PANGAEA 北非土壤 demo
+
+目录：`pangaea-north-africa-soil/`。
+
+- 来源：PANGAEA 具体子数据集 DOI `10.1594/PANGAEA.949903`，不是 PANGAEA 通用入口；
+- 许可：CC BY 4.0；
+- 内容：43 个离散样点中选择 12 个源行，平衡保留 As、Cu、Ni、Zn 各 12 条，共 48 条；完整适配器另对账六个登记目标元素各 43 条；
+- 方法边界：样品是可风蚀细粒土壤组分，使用 HF-HNO3 消解和 ICP-MS；不能与不同粒级、不同消解的 bulk-soil 调查静默合并；
+- 空间边界：保留发布方地点文字，边境样点不按坐标强制归属国家。
+
+## MarChem demo
+
+目录：`norway-marchem/`。
+
+- 来源：MarChem 挪威海域沉积物动态 API 快照 `norway-marchem:2026-08-05T10:27:11Z:be888784ee2e`；
+- 许可：CC BY 4.0，保留来源署名；
+- 内容：从已经准备的 30 条分层复核记录中保留 28 条含目标元素的源行，生成 As、Cu、Ni、Zn 各 28 条，共 112 条观测；
+- 方法边界：所有值均为干重 `mg/kg` 的部分硝酸消解结果，不代表总含量；批次认可状态和 LLQ 按观测保留；
+- 关系边界：完整快照的 1,070 行对应 880 个样品，fixture 不把第二参数组产生的附加行误算成新样品。
+
+## GSJ 日本河流沉积物 demo
+
+目录：`japan-gsj-geochemical-map/`。
+
+- 来源：GSJ 日本全国地球化学图的 `samplejoho.csv` 和 `noudo.csv` 固定文件对；
+- 使用条件：GSJ 网站研究成果按日本政府标准利用规约 2.0 使用并署名，第三方内容仍需单独核对；
+- 内容：3,024 个细粒河流沉积物源行中选择 12 个样品，平衡生成 As、Cu、Ni、Zn 各 12 条，共 48 条；
+- 编码和坐标：两表按 CP932/Shift-JIS 解码，原始坐标系是 JGD2000；演示按 WGS84 展示并设置 20 m 不确定度下限；
+- 关系边界：重复样品号 `78013` 按两表中的出现序号配对，绝不使用会覆盖重复键的普通字典连接；Hg 为 ppb，其他登记痕量元素为 ppm；源 CSV 没有逐行方法、检出限或 QC 字段，适配器不补猜。
+
+## GEOTRACES demo
+
+目录：`geotraces-idp2025/`。
+
+- 来源：GEOTRACES IDP2025 官方 WebODV 离散海水快照 `geotraces-idp2025:IDP2025:a61f441e5ae2`；
+- 许可：CC BY 4.0，并遵守 Fair Data Use 的数据集和原贡献者引用要求；
+- 内容：从 QC 1/2、坐标和深度有效的 dissolved 观测中平衡选择 Cu、Ni、Zn 各 16 条，共 48 条；
+- 单位边界：原始 `nmol/kg` 保持不变；没有明确元素原子量和海水密度时不换算为 `ug/L`；
+- 覆盖边界：样点来自海洋航次，不是规则全球网格；官方离散海水变量表没有 As，必须用其他水体来源补齐。
+
+## GEMStat demo
+
+目录：`gemstat-open-archive/`。
+
+- 来源：UNEP GEMS/Water Global Freshwater Quality Archive v3，版本 DOI `10.5281/zenodo.18459694`；
+- 许可：CC BY 4.0，保留 archive 引用；
+- 内容：只从 Good/Fair、方法代码明确、非负且非极端的记录中选择 dissolved、suspended、total As 各 16 条；在来源具备时平衡 `mg/l`/`µg/l`、湖泊/河流和 `<` 删失值；
+- 质量边界：原始 492,999 条观测中的方法代码 0、Pending review、Suspect、重复和异常哨兵仍保留在全量适配器与审计报告中，但不进入演示；
+- 覆盖边界：As 子集只涉及 33 个贡献国家，不是规则全球淡水网格，也不能与 GEOTRACES 海水背景直接混算。
+
+## FOREGS 六介质 demo
+
+目录分别为 `foregs-topsoil/`、`foregs-subsoil/`、`foregs-humus/`、`foregs-stream-water/`、`foregs-stream-sediment/` 和 `foregs-floodplain-sediment/`。
+
+- 来源：EuroGeoSurveys/GTK《Geochemical Atlas of Europe》2005 科学发布，固定 2026-03-03 发布方文件快照；
+- 使用条件：科研分析保留 Salminen et al. (2005) 引用和发布页要求的 EuroGeoSurveys/GTK copyright notice；
+- 内容：每个来源 48 条。topsoil、subsoil、stream sediment、floodplain sediment 按 As/Cu/Ni/Zn × 总量/王水量平衡；stream water 按四元素平衡；humus 按实际存在的 Cu/Ni/Zn 平衡；
+- 方法边界：总量、王水可浸出量、腐殖质温和硝酸可浸出量和 `<0.45 µm` 溶解态保持为不同 `measurement_basis`；
+- 检出限边界：CSV 有表级 DL，但没有逐行 `<` 限定符；恰好等于 `DL/2` 的值只在证据中标为可能的上游替代，不自动改写为删失值；
+- 覆盖边界：约 1 个站点/4,700 km²，是低密度欧洲大陆基线，不是欧洲连续覆盖，也不是本地调查精度。
+
 ## 确定性再生成
 
-先按 `references/data-sources.md` 下载并验证两个完整来源，然后在 Skill 目录的上级仓库根目录运行：
+先按 `references/data-sources.md` 下载并验证来源。完整第三方文件留在仓库外缓存，然后在仓库根目录运行：
 
 ```bash
 python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
@@ -48,6 +109,62 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --elements As,Cu,Ni,Zn \
   --observations 108 \
   --generated-at 2026-08-05T06:25:00Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source pangaea-north-africa-soil \
+  --cache-dir .cache/data \
+  --output-dir /tmp/pangaea-north-africa-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-06T03:13:54Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source norway-marchem \
+  --cache-dir .cache/data \
+  --archive /path/to/marchem-inorganic-2003-2024.zip \
+  --output-dir /tmp/marchem-demo \
+  --mode cached \
+  --observations 112 \
+  --generated-at 2026-08-05T12:50:00Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source japan-gsj-geochemical-map \
+  --cache-dir .cache/data \
+  --output-dir /tmp/gsj-japan-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-06T03:48:23Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source geotraces-idp2025 \
+  --cache-dir .cache/data \
+  --output-dir /tmp/geotraces-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-05T13:41:55Z
+
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source gemstat-open-archive \
+  --cache-dir .cache/data \
+  --output-dir /tmp/gemstat-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-05T14:41:20Z
+
+# FOREGS 的六个 source_id 分别运行；以下以 topsoil 为例
+python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
+  --source foregs-topsoil \
+  --cache-dir .cache/data/foregs-adapters \
+  --output-dir /tmp/foregs-topsoil-demo \
+  --mode cached \
+  --observations 48 \
+  --generated-at 2026-08-06T08:00:00Z
 ```
 
-使用相同注册表版本、验证缓存和 `--generated-at` 时，三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。
+使用相同注册表版本、验证缓存/快照和 `--generated-at` 时，每个来源的三个输出文件均应字节级一致。不要把 `.cache/data` 或完整第三方数据提交到仓库。
+
+## 四介质联合 fixture
+
+`fixtures/four-media/combined-v3/` 将以上十三个来源合并到同一个 `sources=auto` 请求：748 条观测包括 rock 48、soil 300、sediment 256、water 144。`run_manifest.json` 绑定十三个输入 fixture 的 hash、来源证据等级、离线验证状态，以及标准化前 86 个输入分区和标准化后 93 个 D2 比较组；`expected-output/` 是可字节级重建的十文件工作流结果。
+
+这只是接口联合测试。93 个标准化后背景组按元素、介质、material、measurement basis、地质单元、方法族和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 16 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。

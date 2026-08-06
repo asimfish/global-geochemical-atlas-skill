@@ -73,3 +73,5 @@ maximum and the dimension_id must exactly match the frozen rubric.
 解析器必须验证 criterion ID 与 rubric 完全一致、`dimension_id` 不漂移、单项不超上限。无法解析时保留原始响应，按相同冻结 prompt 最多重试一次；仍失败则人工复核或将对应维度保持 `not_scored`。
 
 Final 的 LLM 证据建议独立生成两次。分歧、任一红线候选或高不确定性均进入人工复核；复核只能依据同一 rubric 和证据，不能添加新维度。
+`human_review_required=true` 时，`finalize_score.py` 输出 `score_status=not_scored` 与
+`total_score=null`，保留证据路径但不提前形成总分；这不是 scorer 内部错误，也不能按零分处理。

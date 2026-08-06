@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-source-audit:v3",
+  "title": "D1 V3 source operational and evidence audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_version",
+    "status",
+    "catalog_version",
+    "registry_version",
+    "audited_at",
+    "source_count",
+    "summary",
+    "operationally_restricted_sources",
+    "sources",
+    "claim_boundary"
+  ],
+  "properties": {
+    "audit_version": {"const": "geochemical-source-audit-v3"},
+    "status": {"const": "PASS"},
+    "catalog_version": {"const": "geochemical-source-catalog-v1"},
+    "registry_version": {"const": "geochemical-source-registry-v1"},
+    "audited_at": {"type": "string", "format": "date-time"},
+    "source_count": {"type": "integer", "minimum": 1},
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_tiers", "use_modes", "operational_statuses"],
+      "properties": {
+        "evidence_tiers": {"$ref": "#/$defs/countMap"},
+        "use_modes": {"$ref": "#/$defs/countMap"},
+        "operational_statuses": {"$ref": "#/$defs/countMap"}
+      }
+    },
+    "operationally_restricted_sources": {"$ref": "#/$defs/uniqueStrings"},
+    "sources": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/source"}
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "countMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "weight", "awarded_points", "note", "evidence"],
+      "properties": {
+        "status": {"type": "string", "enum": ["verified", "partial", "missing", "conflict", "not_applicable"]},
+        "weight": {"type": "integer", "minimum": 1},
+        "awarded_points": {"type": "number", "minimum": 0},
+        "note": {"type": "string", "minLength": 1},
+        "evidence": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legacy_declared_status",
+        "legacy_production_eligible",
+        "access_status",
+        "research_use_status",
+        "operational_status",
+        "operational_boundaries",
+        "source_evidence_score",
+        "evidence_tier",
+        "use_mode",
+        "use_mode_limitations",
+        "conflicts",
+        "missing_dimensions",
+        "dimensions"
+      ],
+      "properties": {
+        "legacy_declared_status": {"type": "string"},
+        "legacy_production_eligible": {"type": "boolean"},
+        "access_status": {"type": "string", "enum": ["open", "account_required", "application_required", "restricted", "unavailable"]},
+        "research_use_status": {"type": "string", "enum": ["open_research", "attribution_required", "noncommercial_research_only", "permission_required", "unknown"]},
+        "operational_status": {"type": "string", "enum": ["available", "restricted"]},
+        "operational_boundaries": {"$ref": "#/$defs/uniqueStrings"},
+        "source_evidence_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "evidence_tier": {"type": "string", "enum": ["A", "B", "C", "D", "U"]},
+        "use_mode": {"type": "string", "enum": ["discovery", "raw_observation", "normalized_analysis", "benchmark_ready"]},
+        "use_mode_limitations": {"$ref": "#/$defs/uniqueStrings"},
+        "conflicts": {"$ref": "#/$defs/uniqueStrings"},
+        "missing_dimensions": {"$ref": "#/$defs/uniqueStrings"},
+        "dimensions": {
+          "type": "object",
+          "minProperties": 8,
+          "maxProperties": 8,
+          "additionalProperties": {"$ref": "#/$defs/dimension"}
+        }
+      }
+    }
+  }
+}

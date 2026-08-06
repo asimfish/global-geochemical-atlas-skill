@@ -1,0 +1,78 @@
+{
+  "adapter": "marchem_dynamic_snapshot",
+  "adapter_dataset_version": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+  "checks": {
+    "accreditation_variation_preserved": true,
+    "archive_and_members_match_registry": true,
+    "dry_weight_mg_per_kg_preserved": true,
+    "every_target_observation_has_batch_method_metadata": true,
+    "partial_digestion_boundary_preserved": true,
+    "physical_and_relationship_counts_match_snapshot": true
+  },
+  "claim_boundary": "PASS means that the adapter exactly reconciles this content-addressed snapshot and preserves its method semantics. It does not mean that Norway is globally representative or that human review is complete.",
+  "counts": {
+    "distinct_samples": 880,
+    "duplicate_extra_rows": 190,
+    "duplicate_sample_codes": 190,
+    "missing_target_method_links": 0,
+    "non_target_rows": 190,
+    "physical_rows": 1070,
+    "target_bearing_rows": 880,
+    "target_censored_counts": {
+      "As": 20,
+      "Cu": 18,
+      "Ni": 2,
+      "Zn": 5
+    },
+    "target_method_links": 3520,
+    "target_observations": 3520,
+    "target_value_counts": {
+      "As": 880,
+      "Cu": 880,
+      "Ni": 880,
+      "Zn": 880
+    }
+  },
+  "expected_counts": {
+    "distinct_samples": 880,
+    "duplicate_sample_codes": 190,
+    "physical_rows": 1070,
+    "target_bearing_rows": 880,
+    "target_observations": 3520
+  },
+  "failures": [],
+  "measurement_semantics": {
+    "accreditation_observation_counts": {
+      "accredited": 1808,
+      "not_accredited": 1712
+    },
+    "digestion_scope": "partial_nitric_acid",
+    "partial_digestion_method_link_count": 3520,
+    "target_llq_values_mg_per_kg": {
+      "As": [
+        "2.0"
+      ],
+      "Cu": [
+        "1.0"
+      ],
+      "Ni": [
+        "1.0"
+      ],
+      "Zn": [
+        "2.0",
+        "4.0"
+      ]
+    },
+    "units": [
+      "mg/kg"
+    ],
+    "weight_bases": [
+      "Dry weight"
+    ]
+  },
+  "reconciliation_version": "marchem-adapter-reconciliation-v1",
+  "snapshot_id": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+  "snapshot_response_sha256": "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6",
+  "source_id": "norway-marchem",
+  "status": "PASS"
+}

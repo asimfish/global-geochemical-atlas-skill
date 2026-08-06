@@ -1,0 +1,2625 @@
+{
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS proves that the prepared comparison matches the hash-verified source and adapter. It is not human review; reviewer decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "Data Series 801, 2013 release",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "2.1",
+          "record_id": "rec-3c16ad2e1590d783c6112c2c8138490dedd2a64edc36c03ed3276018b7544aa7",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-328818",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "5.9",
+          "record_id": "rec-892f9d1e4470378959e8ad3228da1874b261c1405640749aa8037bec197118f4",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-328818",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "3.3",
+          "record_id": "rec-abbc5192b0fb215735fa4a72008cb6e4cbcea485c663a7905f843c48a0409fe1",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-328818",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "15",
+          "record_id": "rec-fb7c45816fd1f19d0afd6142c6a9f67e59af19210f4077f0274c603b66224369",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-328818",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.1",
+        "Cu": "5.9",
+        "Ni": "3.3",
+        "Zn": "15"
+      },
+      "review_id": "usgs-conus-soil-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-328818",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=15",
+      "source_record_id": "src-bfcdf81a22ca8e9c3e880dc3a65855080f30db67b8c2778810d405524fdb2f91"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "2.6",
+          "record_id": "rec-ae4c501c541e95cad301ae31a9a09eb5552595c3b80769718539eb6695780d1b",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343186",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "11.4",
+          "record_id": "rec-4ae26d7f79fb5fd852404f5266c96d2a6a5008201dfe0e89778a723b2402f7cb",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343186",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "8.7",
+          "record_id": "rec-05fd82e5ab9121e85194aa79a41e4b425f1826640418cf9306d6b2068ff1b18f",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343186",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "38",
+          "record_id": "rec-36aacc3813152dbfeda3f7305eaead40167a6d84c328d471d655cb390a0058a6",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343186",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.6",
+        "Cu": "11.4",
+        "Ni": "8.7",
+        "Zn": "38"
+      },
+      "review_id": "usgs-conus-soil-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-343186",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=555",
+      "source_record_id": "src-ff8814a810cfd935ac8da0522d985896058a12659fd393fb3ac3ba2f6f49a107"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "3.1",
+          "record_id": "rec-ea69eef96e9cc203defc00922e6a25efa7f828569a9f9d4b923f5343b23740c2",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334666",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "36.8",
+          "record_id": "rec-93e4246ce87115bf2645014d0a25f2c4e4d83c2319791aa2e939c3f3741b15d3",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334666",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "104",
+          "record_id": "rec-eff87d980d2fceeeb862c56839d790ca32545efdce6c756fc8d4734481423f3f",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334666",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "83",
+          "record_id": "rec-079f59e9ab153fd71fe66d89b4bcde05189d02ec0bfda218b95d48628207b457",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334666",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "3.1",
+        "Cu": "36.8",
+        "Ni": "104",
+        "Zn": "83"
+      },
+      "review_id": "usgs-conus-soil-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-334666",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=1094",
+      "source_record_id": "src-aaba44c2761bc9419400b862834d4546f336f66c3f192ce4d89747df6b0e78ac"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "2.2",
+          "record_id": "rec-0f14accfd99cf95b51622885614a2802f3d049add8928b1c6a61d28f2fdc9ba5",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320867",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "11",
+          "record_id": "rec-f0c0b4a2d8364c398d3b565e92b30ba9edaa8076c4e064b943f13a7283b3dd52",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320867",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "4.9",
+          "record_id": "rec-5299a66aeff1eb080cae2b8759cee1702ea2a9545be95a7e5792445e2352c3cb",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320867",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "10",
+          "record_id": "rec-c3216924e777d3a1ef9e6b46cfd7e0ac98e48ef072f75e99134a1f85ea44d44c",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320867",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.2",
+        "Cu": "11",
+        "Ni": "4.9",
+        "Zn": "10"
+      },
+      "review_id": "usgs-conus-soil-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-320867",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=1634",
+      "source_record_id": "src-6f4afe6cf6ca67dd62b90ea5c44d9d27cdea072581d73d97fc835fbab28485e4"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "8",
+          "record_id": "rec-7a62f2b037b83e73bd02a8502f79971e478835e6969f662f309b67696cc5bdbf",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337907",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "18.1",
+          "record_id": "rec-7a5ff03314f2d0b7891f7c0ed5b673a8ac64ab71accff3a2027bb5dffb28dc86",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337907",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "30.6",
+          "record_id": "rec-054ce604524f5935221726c9489cd25382599e09128331d05f69eb40ea205740",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337907",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "82",
+          "record_id": "rec-8da667ed311c2f6eeb352493ac145b886e7a9ce61849e2ee0a36e9574266d6e5",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337907",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "8",
+        "Cu": "18.1",
+        "Ni": "30.6",
+        "Zn": "82"
+      },
+      "review_id": "usgs-conus-soil-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-337907",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=2173",
+      "source_record_id": "src-e6f33b89a5e1e7f49f5b1b1c30f59834172119bf154f049343defa9b1959f328"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "15",
+          "record_id": "rec-0804cce9966b70fbd45f5f5d619701b3da350380b74601ec8fb091fd74bf25bd",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320935",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "10.3",
+          "record_id": "rec-b1cb658b133ebd4a7fe01c5afa34fe35dfb70404db67997aa41fc73ed29b314b",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320935",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "9.5",
+          "record_id": "rec-25d6c06117390390824056762defe3acdacbf29756fc7d62fedbe2ea57abe118",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320935",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "51",
+          "record_id": "rec-5ec0deaf7aa23a467eb06798b649dc831a08de861eef972f8cfb11d40323ec2c",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320935",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "15",
+        "Cu": "10.3",
+        "Ni": "9.5",
+        "Zn": "51"
+      },
+      "review_id": "usgs-conus-soil-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-320935",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=2713",
+      "source_record_id": "src-9beef10c5344085ded722b5c14e332172c5ae9bc11b12f130164ae6842f4c6e4"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "5.9",
+          "record_id": "rec-8c8978f4334afaca70b58ee198ffb50c9137acc16220b9e3b229c6e43c0997d7",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327795",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "9.3",
+          "record_id": "rec-2a501df137b4341ce514fbc71ddd135bb240aa7e1da5e14e3906d30bc7a86a8d",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327795",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "8.4",
+          "record_id": "rec-7af4d952bfbbe6dc1adfa76f3103506544aeabecc83cccc98e5db257c08d86ab",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327795",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "32",
+          "record_id": "rec-edaf9e9feaa7e1403e98cd0b7c7cdbd16dfdf899d7a6bc2f8838bf5bad7e787e",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327795",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "5.9",
+        "Cu": "9.3",
+        "Ni": "8.4",
+        "Zn": "32"
+      },
+      "review_id": "usgs-conus-soil-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-327795",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=3252",
+      "source_record_id": "src-fc89c79644005f7171b3d6189dd830eb276a0d0b54ad6d1c5f2714ee7619b8c3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "5.6",
+          "record_id": "rec-66c9a1d9ce1e0f4ba3eb00ed8d4c4fa1c95d24cefb31b5b2086f78d1e5da8219",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353185",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "11.9",
+          "record_id": "rec-a1c7688e3c84158c36b7d11451c7b3d4872da5ebd403820c72211527499f4dcb",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353185",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "13.9",
+          "record_id": "rec-759eb32d2cf3d4486848ad45cd9e8f7dcce48f195089aa1369e0566fa3abedbd",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353185",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "37",
+          "record_id": "rec-58d56782567a9e11183215dd9aacadf01b33df0cd8f488857fbde30453e05c1d",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353185",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "5.6",
+        "Cu": "11.9",
+        "Ni": "13.9",
+        "Zn": "37"
+      },
+      "review_id": "usgs-conus-soil-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-353185",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=3792",
+      "source_record_id": "src-8aeff4f7f255bb0a4093b2b8b901d5526306d12e6779a385e2c708a944162260"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "3.8",
+          "record_id": "rec-b1319d0ecf3c89e385d806737d45736e2c79d491a87651629ad35f853f4c7520",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313019",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "9.2",
+          "record_id": "rec-6cd4966c5f75a8d1d7c34e7195390afef3ea11cd19794e1cc54e06f32c2f4a93",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313019",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "6.8",
+          "record_id": "rec-50bf37fd6462571231c03a9253ebccc52bd14400eb3c31de824f2a5848cf9109",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313019",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "31",
+          "record_id": "rec-890739993dc5ae2438d4cbee28da3db0423b3f8740ba1a527ff56c8261b7c0c0",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313019",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "3.8",
+        "Cu": "9.2",
+        "Ni": "6.8",
+        "Zn": "31"
+      },
+      "review_id": "usgs-conus-soil-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-313019",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=4331",
+      "source_record_id": "src-8af6331f0c7b4d4825e57dce637545715b219bb756a93e6d63fa6b0586ef9341"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "6.8",
+          "record_id": "rec-b74fa67005e7d940684c0ebb2857e2e69428d9e4622691d455611d78f7d1ea8c",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318379",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "18.5",
+          "record_id": "rec-24b15e3cc84cbd0b18e42698d209d393ee47aae2a7506d94c2f8ac1bfa421dfc",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318379",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "15.5",
+          "record_id": "rec-7da3bba7a0f10d818d06ae68568d7b139a4f12008ab652f55bf7dbc6853de175",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318379",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "78",
+          "record_id": "rec-2d1b7f3f9f5c307ac5540ab163a7c6248040517da78f4e26405a25f5caef5c6f",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318379",
+          "soil_layer": "top-0-5cm",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "6.8",
+        "Cu": "18.5",
+        "Ni": "15.5",
+        "Zn": "78"
+      },
+      "review_id": "usgs-conus-soil-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-318379",
+      "selection_reasons": [
+        "soil_layer=top-0-5cm",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=4871",
+      "source_record_id": "src-2f96f68943a71d42f6ac25f1122d98e0d23a5094d1f20b79bffc3f10fd43fb46"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "1.6",
+          "record_id": "rec-c872063c71eb2134348550b2a346b17fba66046c007801558cd9ed51af535ba9",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.02",
+          "sample_id": "C-328943",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "4.4",
+          "record_id": "rec-dd2914161ea66bfc52570508becd23cbfeee42998d3b886cd36e5ed1744e1303",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.02",
+          "sample_id": "C-328943",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "3.2",
+          "record_id": "rec-68e26620ff46f67a979b6a761045b0d76b7e61de6a9c30c4049c32694a6a92a9",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.02",
+          "sample_id": "C-328943",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "15",
+          "record_id": "rec-eda5071ece336ae17570b9539e025bfcf718aab3d1fe5df1c21826fd615c2c96",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.02",
+          "sample_id": "C-328943",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.6",
+        "Cu": "4.4",
+        "Ni": "3.2",
+        "Zn": "15"
+      },
+      "review_id": "usgs-conus-soil-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-328943",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=15",
+      "source_record_id": "src-17fdcb45529f89a7118ea433506f0900dbbb0238cb185c8d41aa0859ce6c67e0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "2.4",
+          "record_id": "rec-c8220af7f99003cc092fc0f3c9be69060b89b709046b5131abbe6632b1f0410c",
+          "sample_depth_max_m": "0.2",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343216",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "10.6",
+          "record_id": "rec-4a5fc9c0017e8fb6cc0a3840525da6fbce174558db27f96c1236928474fa1407",
+          "sample_depth_max_m": "0.2",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343216",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "9.1",
+          "record_id": "rec-02a4fbe41ccd9212e0de13fd35efbfdaccdbbd3dc292304f94cd0c1872628214",
+          "sample_depth_max_m": "0.2",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343216",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "37",
+          "record_id": "rec-b28056358916bf7e057d7618a46bde4d114806f567ccb274b9b664ebfdb64633",
+          "sample_depth_max_m": "0.2",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-343216",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.4",
+        "Cu": "10.6",
+        "Ni": "9.1",
+        "Zn": "37"
+      },
+      "review_id": "usgs-conus-soil-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-343216",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=555",
+      "source_record_id": "src-c2802100839e55f36f4c9384d894b25c764ba08e8ae16ad37c6c17827efdd58e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "1",
+          "record_id": "rec-9053a1d70d6fae7e78a535ad116d148d06644b03ab02f33147bfc386553c1a50",
+          "sample_depth_max_m": "0.35",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "9.1",
+          "record_id": "rec-42553d024980dd4450bcb448bc9929405f056dd469bef4059a4aaa4ff10a8282",
+          "sample_depth_max_m": "0.35",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "4.7",
+          "record_id": "rec-138ef63159940f422f5b173d9a9954e1a5259f4b190a9aada33715bf2a4a501c",
+          "sample_depth_max_m": "0.35",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "72",
+          "record_id": "rec-ca1402ff1bd2677a90826187746adb2d3530328586c675f3c4902d580ae7b25d",
+          "sample_depth_max_m": "0.35",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-334827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1",
+        "Cu": "9.1",
+        "Ni": "4.7",
+        "Zn": "72"
+      },
+      "review_id": "usgs-conus-soil-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-334827",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=1094",
+      "source_record_id": "src-7996a5904c6d9ce3437ae1bb9f8a79be771b2f34c38dac3ca93cf68f585a1887"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "1.8",
+          "record_id": "rec-5a07a289c86e248b11587ef66f5392004c5a7d42865317748fe32304842ce405",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-320888",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "4.7",
+          "record_id": "rec-4d7a5178d19ee703f634532a58790247dea3b7e703aab13814242f9f08878a8b",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-320888",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "4",
+          "record_id": "rec-3f52e5b27317dfa2de5f480331ed680e0cfef7afd416a7fc8f3432c894079413",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-320888",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "8",
+          "record_id": "rec-01387c38c2b42daad8e30ec1e300a749bd24d00502b2770449a9bc3aef421979",
+          "sample_depth_max_m": "0.3",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-320888",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.8",
+        "Cu": "4.7",
+        "Ni": "4",
+        "Zn": "8"
+      },
+      "review_id": "usgs-conus-soil-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-320888",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=1634",
+      "source_record_id": "src-bcc9c4cf52c8155814f547b80dd0906697bb1ba29f758a366edf8453a9a0179f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "8.8",
+          "record_id": "rec-6a2dc1e60382cc04912031349dd87e09c9f6d0a00648efd83453f2c4b2212177",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337929",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "18.5",
+          "record_id": "rec-b7ebd0b6fa57b3c27b30255909d0c6debd9c9ddaeea2273d42667aca099f2d54",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337929",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "29.2",
+          "record_id": "rec-62aa5d89fd40e6b45ffe476563dee860a1adf68d9db0d685b66fce9437142814",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337929",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "77",
+          "record_id": "rec-f10427c57d11261704831d0fc097728132ddb22134a253b4830679287eaffb27",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-337929",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "8.8",
+        "Cu": "18.5",
+        "Ni": "29.2",
+        "Zn": "77"
+      },
+      "review_id": "usgs-conus-soil-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-337929",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=2173",
+      "source_record_id": "src-8081a193ee7779130b3c24b99129c16a5b2f55d8e3b56d0228bad844248e34b3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "13.2",
+          "record_id": "rec-8e34d8f3f8c15d5a4052e09f808175439f414eefecf0b0c1e76e8a4e6828184f",
+          "sample_depth_max_m": "0.03",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320950",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "10.2",
+          "record_id": "rec-72257f53923d75494d2e0b2185df9ee38ef9f77ea9cdcb05f8bce4621fce69ca",
+          "sample_depth_max_m": "0.03",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320950",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "8.5",
+          "record_id": "rec-35b64a51bf170ed92c136c421ea660d920733aeb36e0e3b75fab684a13e79c9b",
+          "sample_depth_max_m": "0.03",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320950",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "47",
+          "record_id": "rec-87e4fcf9788737b05ffbf2cba153b8446b065d9300950f52a23c5b7886d8968e",
+          "sample_depth_max_m": "0.03",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-320950",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "13.2",
+        "Cu": "10.2",
+        "Ni": "8.5",
+        "Zn": "47"
+      },
+      "review_id": "usgs-conus-soil-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-320950",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=2713",
+      "source_record_id": "src-daac88d7a60d50bc84d451461b1ff35b6182bb00bb0bb4ef0c7ef3057570ab78"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "7.1",
+          "record_id": "rec-818e1056ad514bd3512623df2adc446d64d8e14db5ae623e8270c14549d0ac03",
+          "sample_depth_max_m": "0.1",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "7.9",
+          "record_id": "rec-b5ab5cbee7002a32a633f924ce6446065705e81ce68685460425788697e7b058",
+          "sample_depth_max_m": "0.1",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "8.2",
+          "record_id": "rec-dfc68a3fd2c825479a65224e638c1bf4ff05874aacbb2fe87753f5ec9ca42a52",
+          "sample_depth_max_m": "0.1",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "30",
+          "record_id": "rec-bedad01d30d97ace1bf42dde44f95e9bc194f75d1fc0bc304dbf3a0406acd930",
+          "sample_depth_max_m": "0.1",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-327827",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "7.1",
+        "Cu": "7.9",
+        "Ni": "8.2",
+        "Zn": "30"
+      },
+      "review_id": "usgs-conus-soil-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-327827",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=3252",
+      "source_record_id": "src-0bbd23321ee6280b8f525f6b286a45d5b14cc65e3096a847dccdb92b1f757cf8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "6.7",
+          "record_id": "rec-34da7b460aa7c5e96e8eefec54ff3f94af9e52e8c19d35f6fa56373cf4f6c4ae",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353762",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "10.1",
+          "record_id": "rec-95a45aac3b107ee53503b13d8e677848739db01f969816c65275264cae98de78",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353762",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "13.9",
+          "record_id": "rec-cdb3e4736ec61eb7aac81747c8305e2f0be4c06120f713ea07ef57f01336dfc8",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353762",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "42",
+          "record_id": "rec-3bd73fb602aa52e08b63a7939ac18e145f5640e15ef541b7182fcb9ca137a190",
+          "sample_depth_max_m": "0.05",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-353762",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "6.7",
+        "Cu": "10.1",
+        "Ni": "13.9",
+        "Zn": "42"
+      },
+      "review_id": "usgs-conus-soil-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-353762",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=3792",
+      "source_record_id": "src-d2e8aaa8b7ff5a5c0c8153f06a5741d5565b10fc065582aac923bf9096d3f21e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "2.3",
+          "record_id": "rec-eb9af991dbc451b3d42b0f5175626c6f5487a0703287cdc6bd5f1a40fcb222bd",
+          "sample_depth_max_m": "0.06",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313275",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "9.3",
+          "record_id": "rec-e7fe31a99212bfed43c5c0c28ffaceee7f31307e3676919cb2edad10bdcffc33",
+          "sample_depth_max_m": "0.06",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313275",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "4.3",
+          "record_id": "rec-42238ade1ca032ded9fd0682e3eb4f30001b69b453135f127d50d36da919175e",
+          "sample_depth_max_m": "0.06",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313275",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "22",
+          "record_id": "rec-de48201b3b2c961a224eb5210c625d5df4b616c2f9cc2b5b9570fa7524ba86fa",
+          "sample_depth_max_m": "0.06",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-313275",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.3",
+        "Cu": "9.3",
+        "Ni": "4.3",
+        "Zn": "22"
+      },
+      "review_id": "usgs-conus-soil-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-313275",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=4331",
+      "source_record_id": "src-662e3045a7f823d9a81d9c31ef6d9b56477347217d0249701507932d572d357a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "8.2",
+          "record_id": "rec-0f565464b408673675f137ad35bf88932e7a520b3fef908ed3ae17f3b1c4444b",
+          "sample_depth_max_m": "0.04",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318490",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "22",
+          "record_id": "rec-8a51fe1a8ac122213137e4b31947cede7ec58cdc1b6d96f824c3ee93c0b02b1c",
+          "sample_depth_max_m": "0.04",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318490",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "19",
+          "record_id": "rec-2fa8f87c8bee9dd1fe92b8280f9717edd65318b32b195abbc2b3d11066112031",
+          "sample_depth_max_m": "0.04",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318490",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "79",
+          "record_id": "rec-ff1964279c75979d57f968034638c6a815149886788346ee6019d25c72a85e51",
+          "sample_depth_max_m": "0.04",
+          "sample_depth_min_m": "0",
+          "sample_id": "C-318490",
+          "soil_layer": "a-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "8.2",
+        "Cu": "22",
+        "Ni": "19",
+        "Zn": "79"
+      },
+      "review_id": "usgs-conus-soil-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-318490",
+      "selection_reasons": [
+        "soil_layer=a-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=4871",
+      "source_record_id": "src-6f11da57a020e88001324f43bb3672a73d08cd06a7c7e039a3120720e4022361"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "4.8",
+          "record_id": "rec-e5db2246edcbee29d1669126fb8f344e3a970302cd33236bbe12c111e4971afd",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.5",
+          "sample_id": "C-328965",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "12.3",
+          "record_id": "rec-283af9aaeb4cf40d7693aeac36c87e6b2f3360758d17f938f47cdf2572f5dfe7",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.5",
+          "sample_id": "C-328965",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "11.4",
+          "record_id": "rec-04dc4388f81258a68430b20bb9a1098514fc1bbe5135016eb7a778a4c1b68faf",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.5",
+          "sample_id": "C-328965",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "31.3146",
+          "longitude": "-87.1166",
+          "medium": "soil",
+          "raw_value": "28",
+          "record_id": "rec-d7985a89dac6ff1dee8ac62a978cc059062675632ad4f22a228f8b0765c6fb02",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.5",
+          "sample_id": "C-328965",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "4.8",
+        "Cu": "12.3",
+        "Ni": "11.4",
+        "Zn": "28"
+      },
+      "review_id": "usgs-conus-soil-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-328965",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=15",
+      "source_record_id": "src-1289609d7d7cc9d27d38cb29db2171b292c32ac32c703ddd895d902c57653ba5"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "3.2",
+          "record_id": "rec-56daac10a4699062b940823c861ef870e091880c76f82aca8acbee2f9026e5ab",
+          "sample_depth_max_m": "1.05",
+          "sample_depth_min_m": "0.8",
+          "sample_id": "C-343283",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "8.2",
+          "record_id": "rec-cbc784832966696bde64b8c7bac723774c215d0566171cfbdeda5610e49035c2",
+          "sample_depth_max_m": "1.05",
+          "sample_depth_min_m": "0.8",
+          "sample_id": "C-343283",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "9.6",
+          "record_id": "rec-b2c47731c8eef00ff44e50f3714c90c2cb65f1907532df23361e4dc8c1fad53e",
+          "sample_depth_max_m": "1.05",
+          "sample_depth_min_m": "0.8",
+          "sample_id": "C-343283",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "33.578",
+          "longitude": "-115.053",
+          "medium": "soil",
+          "raw_value": "31",
+          "record_id": "rec-7f9f56ab85d2412622e26df2b6a86eb15b7ff47c48bc2287217bb47597748c3d",
+          "sample_depth_max_m": "1.05",
+          "sample_depth_min_m": "0.8",
+          "sample_id": "C-343283",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "3.2",
+        "Cu": "8.2",
+        "Ni": "9.6",
+        "Zn": "31"
+      },
+      "review_id": "usgs-conus-soil-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-343283",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=555",
+      "source_record_id": "src-5b69a4da693b02b3009f46bfb4f55aa593c7a05dee06ac4f439c36a3f5e50458"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "0.8",
+          "record_id": "rec-2b81a5f3cff5a200248df43f60bfc32e116512ce5c9e5d6972402a54d7aaaffb",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.35",
+          "sample_id": "C-335295",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "6.3",
+          "record_id": "rec-b0df275f4b1b00e640b51895d9cce9ef5fdaf2c042f3c05d0dffa0bd3bf12f45",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.35",
+          "sample_id": "C-335295",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "3.3",
+          "record_id": "rec-e15ad80775ed2ac220172b1dc54376a8fb9e62c805ba3b36b0a24135fa50c676",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.35",
+          "sample_id": "C-335295",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "45.8807",
+          "longitude": "-116.0204",
+          "medium": "soil",
+          "raw_value": "51",
+          "record_id": "rec-fc2ab168960e7283937adb4e92152f205dc3680b81172d759042b6a288dc6773",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.35",
+          "sample_id": "C-335295",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "0.8",
+        "Cu": "6.3",
+        "Ni": "3.3",
+        "Zn": "51"
+      },
+      "review_id": "usgs-conus-soil-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-335295",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=1094",
+      "source_record_id": "src-c16ea3ea7505c89b5f2bebdf48ca5697a3b7ed61cf21a44673aa3143db2434ba"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "9.3",
+          "record_id": "rec-e81a38b05d4e9a48b4fb2a37728bafb9b13fa27aad80642b805ae3c28e2bf8b3",
+          "sample_depth_max_m": "1.27",
+          "sample_depth_min_m": "1.2",
+          "sample_id": "C-320909",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "16.8",
+          "record_id": "rec-995465fe0a13ec50599fda7413fa4cddc16371752caf06a48a45c52512cdaebe",
+          "sample_depth_max_m": "1.27",
+          "sample_depth_min_m": "1.2",
+          "sample_id": "C-320909",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "25.4",
+          "record_id": "rec-21da752df94de892d4229bbf5e7434a03fe43f4f5390ce7fbfeda70c4e3a648f",
+          "sample_depth_max_m": "1.27",
+          "sample_depth_min_m": "1.2",
+          "sample_id": "C-320909",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "38.536",
+          "longitude": "-75.9298",
+          "medium": "soil",
+          "raw_value": "62",
+          "record_id": "rec-2c9e1cf4f04af4166326b9fc731b119eb8f8f2e3315a3be4f1d18436d44dfa59",
+          "sample_depth_max_m": "1.27",
+          "sample_depth_min_m": "1.2",
+          "sample_id": "C-320909",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "9.3",
+        "Cu": "16.8",
+        "Ni": "25.4",
+        "Zn": "62"
+      },
+      "review_id": "usgs-conus-soil-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-320909",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=1634",
+      "source_record_id": "src-15b2c38dd294a50ed5f7c1d32e37996444f198e98f55766a0a211989d4749bd2"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "8.5",
+          "record_id": "rec-f5d8a7d29ca67ac60f066063e8f934d3b5299b36897081875513096272bb5e25",
+          "sample_depth_max_m": "1.02",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-337885",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "15.2",
+          "record_id": "rec-1da72946918c0c1f84ec24d9a1ab89fae6b62623079745209c43a8b4ef618009",
+          "sample_depth_max_m": "1.02",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-337885",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "24.8",
+          "record_id": "rec-8cc1e334af545b44c858eeeb2b5f4e21bd22b9efb583f4fa0abcbc14abd7e198",
+          "sample_depth_max_m": "1.02",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-337885",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "47.9968",
+          "longitude": "-105.9939",
+          "medium": "soil",
+          "raw_value": "59",
+          "record_id": "rec-03024588c530284c8ab5dcb9fe9e89b21c26d806afe1def6412c14d2e69fda92",
+          "sample_depth_max_m": "1.02",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-337885",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "8.5",
+        "Cu": "15.2",
+        "Ni": "24.8",
+        "Zn": "59"
+      },
+      "review_id": "usgs-conus-soil-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-337885",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=2173",
+      "source_record_id": "src-4692c8cb1a52e78ad4ee11e11119268b613c6967875a029e54e60174d5d20361"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "17.9",
+          "record_id": "rec-4e0a8bea0605bb5d2f5cc0011e4865d8bced61ee2286c81d42c4f85ffbee666a",
+          "sample_depth_max_m": "1.18",
+          "sample_depth_min_m": "1",
+          "sample_id": "C-320990",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "6.7",
+          "record_id": "rec-55ce53430695ca5cad16a156c51e01aaac7dcdad0617e8d0330c7e7bc7ef4a62",
+          "sample_depth_max_m": "1.18",
+          "sample_depth_min_m": "1",
+          "sample_id": "C-320990",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "11.1",
+          "record_id": "rec-e215e6b6e9014b01aba5b2d48eb1882d8a7d3515c115645c1342754d3ee1bc0b",
+          "sample_depth_max_m": "1.18",
+          "sample_depth_min_m": "1",
+          "sample_id": "C-320990",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "40.3259",
+          "longitude": "-74.2198",
+          "medium": "soil",
+          "raw_value": "34",
+          "record_id": "rec-ee2f1ad7349c7c8a56c379b6a7edf52d34e3ca14f5e435c12fce21aa9c307bd4",
+          "sample_depth_max_m": "1.18",
+          "sample_depth_min_m": "1",
+          "sample_id": "C-320990",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "17.9",
+        "Cu": "6.7",
+        "Ni": "11.1",
+        "Zn": "34"
+      },
+      "review_id": "usgs-conus-soil-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-320990",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=2713",
+      "source_record_id": "src-a89f6c7dd616d9cecad914e3a40ee0045b4eaafadc21c7bdbe4257ee790088a3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "8.3",
+          "record_id": "rec-ad250b830dbedfd5ab5a817647bb2f91738733aa0be2eddd775d7c5b4089a206",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-327812",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "12.2",
+          "record_id": "rec-372f3bc05187be127c2629fd04ce45667fd5e42c1505e3399b03ca2fdc319086",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-327812",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "9.8",
+          "record_id": "rec-68fb62061bcdb56aea0558e834c3a703d9738a616ff465b4363fb3672ea51e8f",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-327812",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "34.2828",
+          "longitude": "-94.8207",
+          "medium": "soil",
+          "raw_value": "38",
+          "record_id": "rec-52a898d90491150f2d4f456203212f763d1d1a53281085f823e197dc9144804c",
+          "sample_depth_max_m": "0.5",
+          "sample_depth_min_m": "0.1",
+          "sample_id": "C-327812",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "8.3",
+        "Cu": "12.2",
+        "Ni": "9.8",
+        "Zn": "38"
+      },
+      "review_id": "usgs-conus-soil-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-327812",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=3252",
+      "source_record_id": "src-be0de9d0f3ebd7764c30dc71577eefe724f3fb12490decf1169f7cd61ef6aa1a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "7.1",
+          "record_id": "rec-dcde808c3cb8849396b2cb8c90e9265ed38c1cacf9e36723723d76172205b589",
+          "sample_depth_max_m": "1.2",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-351501",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "8.7",
+          "record_id": "rec-d8dcc4c85aa9d9153eaf84d2b48e6f6bff604f8faee018139d1f5f0a4978a51d",
+          "sample_depth_max_m": "1.2",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-351501",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "9.8",
+          "record_id": "rec-f47faa40e351f969ee71c1489913899eb13ca35d8caaf4b07f08cab5a9911205",
+          "sample_depth_max_m": "1.2",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-351501",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "36.0805",
+          "longitude": "-88.3027",
+          "medium": "soil",
+          "raw_value": "23",
+          "record_id": "rec-019f96416e5956175956a09d51cf57e778dd8b6e294c1f069d5df43242872096",
+          "sample_depth_max_m": "1.2",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-351501",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "7.1",
+        "Cu": "8.7",
+        "Ni": "9.8",
+        "Zn": "23"
+      },
+      "review_id": "usgs-conus-soil-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-351501",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=3792",
+      "source_record_id": "src-fbdc1c1994271655be3587bbe16f48e9dd459152fa429f37f7d632414efd5320"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "11.9",
+          "record_id": "rec-02331f6418d1b251fe9c3b846d679e5791c205ad27d66a08985eaf3b9429975b",
+          "sample_depth_max_m": "1.23",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-313455",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "14.8",
+          "record_id": "rec-9a9f0a2c0a1290ce20c2a5ae8d5ba5669839b10324ca8865251af2b057a9ce0e",
+          "sample_depth_max_m": "1.23",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-313455",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "21.3",
+          "record_id": "rec-1962d89c9c0f9d0fbaa4ea93eee96efb5f813b547389595d3fb9156c5d92d2b9",
+          "sample_depth_max_m": "1.23",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-313455",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "37.2683",
+          "longitude": "-111.0706",
+          "medium": "soil",
+          "raw_value": "70",
+          "record_id": "rec-d38015fb93f2e46c7fdc37bb5e6a921fce9af1e645dbe9d21317eb3d31673781",
+          "sample_depth_max_m": "1.23",
+          "sample_depth_min_m": "1.05",
+          "sample_id": "C-313455",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "11.9",
+        "Cu": "14.8",
+        "Ni": "21.3",
+        "Zn": "70"
+      },
+      "review_id": "usgs-conus-soil-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-313455",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=4331",
+      "source_record_id": "src-880b275519b8ed76f3be2a9da7a485cdb5e077ded8b041d20e86d4b7ea322ee0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "11",
+          "record_id": "rec-6412cde8e9530cfdc2a4b1204499a6236bb2057b5e0a396df8e412682edb1821",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-318670",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "19",
+          "record_id": "rec-460e64347280a8db8a38ace2364e251acc1a3d5c938912537c96259c1ce5e4cd",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-318670",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "27.5",
+          "record_id": "rec-2125684272bfd4cac8dd66a57641401e42ccbf68b5f5cdce97e24f5576366400",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-318670",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "latitude": "44.9584",
+          "longitude": "-106.2089",
+          "medium": "soil",
+          "raw_value": "73",
+          "record_id": "rec-5b1d94cd144c452cc76afed3a4c987d053fce4d98b95d862c8b2c8ebc44a159b",
+          "sample_depth_max_m": "1",
+          "sample_depth_min_m": "0.85",
+          "sample_id": "C-318670",
+          "soil_layer": "c-horizon",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "depth_semantics_preserved": true,
+        "four_target_values_preserved": true,
+        "registered_file_hash_matches": true,
+        "sample_id_preserved": true,
+        "soil_layer_preserved": true,
+        "source_units_preserved": true,
+        "stable_observation_ids_unique": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "11",
+        "Cu": "19",
+        "Ni": "27.5",
+        "Zn": "73"
+      },
+      "review_id": "usgs-conus-soil-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "C-318670",
+      "selection_reasons": [
+        "soil_layer=c-horizon",
+        "spatially_even_source_order"
+      ],
+      "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=4871",
+      "source_record_id": "src-c140687e9e18163c0182b9a2bd7b218098be6f81e8222045bdf4fe05af4f452b"
+    }
+  ],
+  "required_record_count": 30,
+  "review_version": "geochemical-human-review-v1",
+  "selection_strategy": "Ten spatially distributed source rows from each of 0-5 cm, A-horizon and C-horizon tables.",
+  "snapshot_id": "doi:10.3133/ds801@Data Series 801, 2013 release",
+  "source_id": "usgs-conus-soil",
+  "status": "prepared"
+}

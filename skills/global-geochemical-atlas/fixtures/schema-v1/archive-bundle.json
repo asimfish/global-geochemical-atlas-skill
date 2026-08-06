@@ -1,0 +1,281 @@
+{
+  "bundle_version": "d1-archive-fixture-v1",
+  "datasets": [
+    {
+      "schema_version": "d1-dataset-source-v1",
+      "dataset_id": "dataset-fixture-v1",
+      "source_id": "fixture-source",
+      "title": "D1 schema relation fixture",
+      "publisher": "AI4S test fixture",
+      "dataset_doi": null,
+      "dataset_version": "1.0.0",
+      "landing_page": "https://example.org/fixture",
+      "license_id": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "retrieved_at": "2026-08-05T00:00:00Z",
+      "files": [
+        {
+          "file_id": "fixture-csv",
+          "filename": "fixture.csv",
+          "source_url": "https://example.org/fixture.csv",
+          "bytes": 123,
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "schema_version": "d1-publication-v1",
+      "publication_id": "publication-fixture",
+      "doi": null,
+      "citation": "Synthetic schema fixture; not a scientific publication.",
+      "title": "D1 schema fixture",
+      "authors": ["AI4S"],
+      "year": 2026,
+      "dataset_ids": ["dataset-fixture-v1"],
+      "relation_types": ["Documents"]
+    }
+  ],
+  "sampling_events": [
+    {
+      "schema_version": "d1-sampling-event-v1",
+      "sampling_event_id": "event-fixture-1",
+      "dataset_id": "dataset-fixture-v1",
+      "site_id": "SITE-1",
+      "sampled_at_raw": "2026-01-02",
+      "collection_method_raw": "grab sample",
+      "location": {
+        "latitude_raw": "39.0",
+        "longitude_raw": "-105.0",
+        "source_crs": "EPSG:4326",
+        "latitude": 39.0,
+        "longitude": -105.0,
+        "coordinate_uncertainty_m": 20.0,
+        "elevation_m": 1800.0,
+        "depth_min_m": 0.0,
+        "depth_max_m": 0.05,
+        "place_raw": "Synthetic location"
+      },
+      "missing_reasons": {}
+    }
+  ],
+  "samples": [
+    {
+      "schema_version": "d1-sample-v1",
+      "sample_id": "sample-parent",
+      "native_sample_id": "SITE-1-FIELD",
+      "igsn": null,
+      "parent_sample_id": null,
+      "sampling_event_id": "event-fixture-1",
+      "medium_raw": "soil",
+      "material_raw": "field soil",
+      "lithology_raw": null,
+      "geologic_unit_raw": null,
+      "soil_horizon_raw": "0-5 cm",
+      "grain_fraction_raw": null,
+      "filtered_state_raw": null,
+      "description_raw": "Parent field sample",
+      "missing_reasons": {
+        "igsn": "not_reported",
+        "lithology_raw": "not_reported",
+        "geologic_unit_raw": "not_reported",
+        "grain_fraction_raw": "not_reported",
+        "filtered_state_raw": "not_applicable"
+      }
+    },
+    {
+      "schema_version": "d1-sample-v1",
+      "sample_id": "sample-pulp",
+      "native_sample_id": "SITE-1-PULP",
+      "igsn": null,
+      "parent_sample_id": "sample-parent",
+      "sampling_event_id": "event-fixture-1",
+      "medium_raw": "soil",
+      "material_raw": "laboratory pulp",
+      "lithology_raw": null,
+      "geologic_unit_raw": null,
+      "soil_horizon_raw": "0-5 cm",
+      "grain_fraction_raw": "<75 um",
+      "filtered_state_raw": null,
+      "description_raw": "Derived analytical subsample",
+      "missing_reasons": {
+        "igsn": "not_reported",
+        "lithology_raw": "not_reported",
+        "geologic_unit_raw": "not_reported",
+        "filtered_state_raw": "not_applicable"
+      }
+    }
+  ],
+  "methods": [
+    {
+      "schema_version": "d1-analytical-method-v1",
+      "method_id": "method-icp-ms",
+      "method_code_raw": "M1",
+      "preparation_raw": "pulverized to <75 um",
+      "digestion_or_extraction_raw": "four-acid digestion",
+      "technique_raw": "ICP-MS",
+      "instrument_raw": null,
+      "laboratory_raw": "Synthetic Lab",
+      "calibration_raw": null,
+      "reference_materials_raw": [],
+      "publication_ids": ["publication-fixture"],
+      "missing_reasons": {
+        "instrument_raw": "not_reported",
+        "calibration_raw": "not_reported"
+      }
+    },
+    {
+      "schema_version": "d1-analytical-method-v1",
+      "method_id": "method-xrf",
+      "method_code_raw": "M2",
+      "preparation_raw": "pressed pellet",
+      "digestion_or_extraction_raw": null,
+      "technique_raw": "XRF",
+      "instrument_raw": null,
+      "laboratory_raw": "Synthetic Lab",
+      "calibration_raw": null,
+      "reference_materials_raw": [],
+      "publication_ids": ["publication-fixture"],
+      "missing_reasons": {
+        "digestion_or_extraction_raw": "not_applicable",
+        "instrument_raw": "not_reported",
+        "calibration_raw": "not_reported"
+      }
+    }
+  ],
+  "provenance": [
+    {
+      "schema_version": "d1-provenance-v1",
+      "provenance_id": "provenance-row-2",
+      "source_id": "fixture-source",
+      "dataset_id": "dataset-fixture-v1",
+      "acquisition_run_id": "run-fixture-v1",
+      "source_record_id": "source-row-2",
+      "source_locator": "fixture.csv#row=2",
+      "source_file": "fixture.csv",
+      "source_sheet": null,
+      "source_row": 2,
+      "source_column": null,
+      "input_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "adapter_name": "fixture_adapter",
+      "adapter_version": "1.0.0",
+      "processing_steps": [
+        {
+          "name": "parse_raw_value",
+          "version": "1.0.0",
+          "parameters": {"preserve_raw": true}
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "schema_version": "d1-observation-v1",
+      "observation_id": "observation-as-lt",
+      "sample_id": "sample-pulp",
+      "method_id": "method-icp-ms",
+      "provenance_id": "provenance-row-2",
+      "analyte_reported": "As",
+      "value_raw": "<5",
+      "parsed_value": 5.0,
+      "value_qualifier": "lt",
+      "unit_raw": "mg/kg",
+      "measurement_basis_raw": "dry weight",
+      "detection_limit_raw": "5",
+      "parsed_detection_limit": 5.0,
+      "detection_limit_unit_raw": "mg/kg",
+      "uncertainty_raw": null,
+      "replicate_id": null,
+      "missing_reasons": {
+        "uncertainty_raw": "not_reported",
+        "replicate_id": "not_applicable"
+      }
+    },
+    {
+      "schema_version": "d1-observation-v1",
+      "observation_id": "observation-cu-1",
+      "sample_id": "sample-pulp",
+      "method_id": "method-icp-ms",
+      "provenance_id": "provenance-row-2",
+      "analyte_reported": "Cu",
+      "value_raw": "8.2",
+      "parsed_value": 8.2,
+      "value_qualifier": "reported",
+      "unit_raw": "mg/kg",
+      "measurement_basis_raw": "dry weight",
+      "detection_limit_raw": null,
+      "parsed_detection_limit": null,
+      "detection_limit_unit_raw": null,
+      "uncertainty_raw": null,
+      "replicate_id": "R1",
+      "missing_reasons": {
+        "detection_limit_raw": "not_reported",
+        "parsed_detection_limit": "not_reported",
+        "detection_limit_unit_raw": "not_reported",
+        "uncertainty_raw": "not_reported"
+      }
+    },
+    {
+      "schema_version": "d1-observation-v1",
+      "observation_id": "observation-fe-xrf",
+      "sample_id": "sample-pulp",
+      "method_id": "method-xrf",
+      "provenance_id": "provenance-row-2",
+      "analyte_reported": "Fe2O3",
+      "value_raw": "4.1",
+      "parsed_value": 4.1,
+      "value_qualifier": "reported",
+      "unit_raw": "wt%",
+      "measurement_basis_raw": "dry weight",
+      "detection_limit_raw": null,
+      "parsed_detection_limit": null,
+      "detection_limit_unit_raw": null,
+      "uncertainty_raw": null,
+      "replicate_id": null,
+      "missing_reasons": {
+        "detection_limit_raw": "not_reported",
+        "parsed_detection_limit": "not_reported",
+        "detection_limit_unit_raw": "not_reported",
+        "uncertainty_raw": "not_reported",
+        "replicate_id": "not_applicable"
+      }
+    }
+  ],
+  "acquisition_runs": [
+    {
+      "schema_version": "d1-acquisition-run-v1",
+      "acquisition_run_id": "run-fixture-v1",
+      "request": {"elements": ["As", "Cu", "Fe"], "region": "global", "media": ["soil"]},
+      "dataset_ids": ["dataset-fixture-v1"],
+      "schema_versions": {
+        "dataset": "d1-dataset-source-v1",
+        "sample": "d1-sample-v1",
+        "observation": "d1-observation-v1"
+      },
+      "vocabulary_versions": {
+        "medium": "d1-medium-v1",
+        "missing_reason": "d1-missing-reason-v1",
+        "value_qualifier": "d1-value-qualifier-v1"
+      },
+      "started_at": "2026-08-05T00:00:00Z",
+      "finished_at": "2026-08-05T00:00:01Z",
+      "status": "success",
+      "cache_status": "not_applicable",
+      "counts": {
+        "source_records": 1,
+        "observations": 3,
+        "rejected_records": 0,
+        "failed_records": 0
+      },
+      "outputs": [
+        {
+          "path": "archive-bundle.json",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "bytes": 0
+        }
+      ]
+    }
+  ],
+  "not_for_scientific_interpretation": true
+}

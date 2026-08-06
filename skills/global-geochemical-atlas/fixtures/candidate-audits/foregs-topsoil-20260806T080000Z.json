@@ -1,0 +1,75 @@
+{
+  "acquisition": {
+    "cache_status": "cache_hit",
+    "observed_at": "2026-08-06T08:00:00Z",
+    "request_url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip",
+    "transport_note": "Official GTK HTTP archive accepted only after exact registered SHA-256 verification; redirects rejected."
+  },
+  "archive": {
+    "bytes": 837779,
+    "members": [
+      {
+        "bytes": 74667,
+        "name": "T_AR_data_2v4_8Feb06.csv",
+        "sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7"
+      },
+      {
+        "bytes": 48814,
+        "name": "T_Hg_data_2v4_8Feb06.csv",
+        "sha256": "12b129ff2a210ea1aebd5b6f32a146c08f1ad6da12bbe5fbb63aa1d6233e80e9"
+      },
+      {
+        "bytes": 105504,
+        "name": "T_XRF_data_2v6_8Feb06.csv",
+        "sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8"
+      },
+      {
+        "bytes": 138142,
+        "name": "T_icp_data_2v3_8Feb06.csv",
+        "sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6"
+      },
+      {
+        "bytes": 82167,
+        "name": "T_icpadd_data_2v3_8Feb06.csv",
+        "sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102"
+      }
+    ],
+    "sha256": "ac23bffd5e116545a8c5618c943c75d995e81cdf5adc6d2902238d2e11e40357"
+  },
+  "claim_boundary": "This audit proves a byte-pinned official FOREGS medium archive, exact CSV row counts and method-separated target mappings. It does not prove local spatial coverage, preserved censoring qualifiers or comparability across analytical bases.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "distinct_gtn_union": 862,
+    "physical_rows": 4195,
+    "target_analytes": {
+      "As": 1677,
+      "Cr": 1682,
+      "Cu": 1677,
+      "Hg": 830,
+      "Ni": 1680,
+      "Pb": 1680,
+      "Zn": 1682
+    },
+    "target_observations": 10908
+  },
+  "observed_metadata": {
+    "grain_fraction": "<2 mm",
+    "medium": "soil",
+    "method_bases": [
+      "aqua_regia_leachable_<2mm_topsoil",
+      "total_Hg_direct_solid_<2mm_topsoil",
+      "total_selected_<2mm_topsoil"
+    ],
+    "row_level_detection_qualifiers_present": false,
+    "sample_type": "residual topsoil, 0-25 cm without organic layer",
+    "table_level_detection_limits_present": true
+  },
+  "snapshot_id": "foregs-topsoil:2005-files-2026-03-03:ac23bffd5e11",
+  "source_id": "foregs-topsoil",
+  "verification_version": "foregs-medium-audit-v1"
+}

@@ -1,0 +1,2221 @@
+{
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS proves that the prepared comparison matches the hash-verified source and adapter. It is not human review; reviewer decisions remain null until a named reviewer signs each row.",
+  "completed_record_count": 0,
+  "dataset_version": "IDP2025",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GA03",
+          "latitude": "31.749399",
+          "longitude": "-64.171906",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.169",
+          "record_id": "rec-397df3634c82929c1c1a85911cd1a0f6752923dc2ac00ca91baaca1fcdb4a09b",
+          "sample_depth_m": "135.4",
+          "sample_id": "GA03|Station 10|135.4m",
+          "sampled_at": "2011-11-20T17:06:54",
+          "sampling_devices": "CPUMP | CTD | SAP | UCCTD",
+          "standard_deviation": "0.219000",
+          "station": "Station 10",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GA03",
+          "latitude": "31.749399",
+          "longitude": "-64.171906",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.034",
+          "record_id": "rec-d7999587c23bdb9882592a3170acad1899cf9d36f3ae9273b531e22132c181e6",
+          "sample_depth_m": "135.4",
+          "sample_id": "GA03|Station 10|135.4m",
+          "sampled_at": "2011-11-20T17:06:54",
+          "sampling_devices": "CPUMP | CTD | SAP | UCCTD",
+          "standard_deviation": "0.038000",
+          "station": "Station 10",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA03",
+          "latitude": "31.749399",
+          "longitude": "-64.171906",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.059512",
+          "record_id": "rec-0fb016a0d0fe53852cd06287a40481c95e76df4f4f6954c8422211445aee4ab2",
+          "sample_depth_m": "135.4",
+          "sample_id": "GA03|Station 10|135.4m",
+          "sampled_at": "2011-11-20T17:06:54",
+          "sampling_devices": "CPUMP | CTD | SAP | UCCTD",
+          "standard_deviation": "",
+          "station": "Station 10",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "1.169",
+        "Ni": "2.034",
+        "Zn": "0.059512"
+      },
+      "review_id": "geotraces-idp2025-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA03|Station 10|135.4m",
+      "selection_reasons": [
+        "Cu_seadatanet_qc=1"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=6420",
+      "source_record_id": "src-b6e37b3ba60cb48e70a56729443f7d069460a64529f357c20b27c04d4f921205"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GA08",
+          "latitude": "-20.869499",
+          "longitude": "12.891500",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.398",
+          "record_id": "rec-92756f69bea16bd3f8f9c1e4137bfe3c40bc02d65e35793d03676f9084720871",
+          "sample_depth_m": "160",
+          "sample_id": "GA08|(3)|160m",
+          "sampled_at": "2015-11-23T03:57:09",
+          "sampling_devices": "BOTTLE | CTD",
+          "standard_deviation": "0.082000",
+          "station": "(3)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GA08",
+          "latitude": "-20.869499",
+          "longitude": "12.891500",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.333",
+          "record_id": "rec-cfc775529fda8a348131a9c55dd1c21ab747bdfdf7f8df58eac2e490db6894d2",
+          "sample_depth_m": "160",
+          "sample_id": "GA08|(3)|160m",
+          "sampled_at": "2015-11-23T03:57:09",
+          "sampling_devices": "BOTTLE | CTD",
+          "standard_deviation": "0.141000",
+          "station": "(3)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA08",
+          "latitude": "-20.869499",
+          "longitude": "12.891500",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.584",
+          "record_id": "rec-6a51f64fa56d1bbd59b14550669e1c82988713dd6b6f0998ee7e78707e278df3",
+          "sample_depth_m": "160",
+          "sample_id": "GA08|(3)|160m",
+          "sampled_at": "2015-11-23T03:57:09",
+          "sampling_devices": "BOTTLE | CTD",
+          "standard_deviation": "0.152000",
+          "station": "(3)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "1.398",
+        "Ni": "4.333",
+        "Zn": "1.584"
+      },
+      "review_id": "geotraces-idp2025-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA08|(3)|160m",
+      "selection_reasons": [
+        "Cu_seadatanet_qc=2"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=11221",
+      "source_record_id": "src-87b5e78c7d9e223ae6b399cdc288a7c879bc41f8a4df995164c8ca9f586a9899"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GA08",
+          "latitude": "-19.739401",
+          "longitude": "12.273300",
+          "medium": "water",
+          "quality_flag": "3",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.719",
+          "record_id": "rec-c76ae9a162dc04bb5a1122ba451071fac51b0d0719c3937ecbc903f8ed290ed5",
+          "sample_depth_m": "69.3",
+          "sample_id": "GA08|(4)|69.3m",
+          "sampled_at": "2015-11-23T13:00:06",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "0.104000",
+          "station": "(4)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GA08",
+          "latitude": "-19.739401",
+          "longitude": "12.273300",
+          "medium": "water",
+          "quality_flag": "3",
+          "quality_schema": "SEADATANET",
+          "raw_value": "7.045",
+          "record_id": "rec-998aa4ee1bbf7bca523c153e40f3fa207a3875f004975f096d7a4ee5a62c7b10",
+          "sample_depth_m": "69.3",
+          "sample_id": "GA08|(4)|69.3m",
+          "sampled_at": "2015-11-23T13:00:06",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "0.214000",
+          "station": "(4)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA08",
+          "latitude": "-19.739401",
+          "longitude": "12.273300",
+          "medium": "water",
+          "quality_flag": "3",
+          "quality_schema": "SEADATANET",
+          "raw_value": "153.490005",
+          "record_id": "rec-ce597754ba74144a997795a4a73e737ad3dd83618c1d7a86b3e388e362dbb458",
+          "sample_depth_m": "69.3",
+          "sample_id": "GA08|(4)|69.3m",
+          "sampled_at": "2015-11-23T13:00:06",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "8.747000",
+          "station": "(4)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "2.719",
+        "Ni": "7.045",
+        "Zn": "153.490005"
+      },
+      "review_id": "geotraces-idp2025-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA08|(4)|69.3m",
+      "selection_reasons": [
+        "Cu_seadatanet_qc=3"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=11258",
+      "source_record_id": "src-3c139456ef81bbd5fbfd7e3b1d04f013b62af0d308f98a740c6de290f630d8ae"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GAc04",
+          "latitude": "18.2297",
+          "longitude": "-16.528687",
+          "medium": "water",
+          "quality_flag": "4",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.011707",
+          "record_id": "rec-4df35ff0c453e2e2d34cfa29c653c7b9144f944db92bbf3970d63bddb296faaa",
+          "sample_depth_m": "327",
+          "sample_id": "GAc04|(5)|327m",
+          "sampled_at": "2014-06-25T05:59:30",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.412683",
+          "station": "(5)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GAc04",
+          "latitude": "18.2297",
+          "longitude": "-16.528687",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.163902",
+          "record_id": "rec-69783e7df0e33d8c5914324be11bf8f745d994bf0e10020bcbbd214d629b3df3",
+          "sample_depth_m": "327",
+          "sample_id": "GAc04|(5)|327m",
+          "sampled_at": "2014-06-25T05:59:30",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.453659",
+          "station": "(5)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "2.011707",
+        "Ni": "4.163902"
+      },
+      "review_id": "geotraces-idp2025-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GAc04|(5)|327m",
+      "selection_reasons": [
+        "Cu_seadatanet_qc=4"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=17233",
+      "source_record_id": "src-45e4b9d69aa120918c1649f4e57c21840a8a12470183413bad18ecc035d83969"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA01",
+          "latitude": "41.3829",
+          "longitude": "-13.887604",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.144948",
+          "record_id": "rec-42ced7d671e1b008dd14ef34a1c4d323e8ab53ef2dc6765ff8d6d64b767013a6",
+          "sample_depth_m": "14.9",
+          "sample_id": "GA01|13|14.9m",
+          "sampled_at": "2014-05-24T23:03:50",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "0.021449",
+          "station": "13",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA01",
+          "latitude": "41.3829",
+          "longitude": "-13.887604",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.074824",
+          "record_id": "rec-f3546151aba79c60b52c485d96b047a3a4da13f191dc6f6eb187dc4b42cd172a",
+          "sample_depth_m": "14.9",
+          "sample_id": "GA01|13|14.9m",
+          "sampled_at": "2014-05-24T23:03:50",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "0.000748",
+          "station": "13",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "2.144948",
+        "Zn": "0.074824"
+      },
+      "review_id": "geotraces-idp2025-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA01|13|14.9m",
+      "selection_reasons": [
+        "Ni_seadatanet_qc=1",
+        "Zn_seadatanet_qc=1",
+        "evenly_spaced_target_bearing_fill",
+        "multiple_target_analytes_on_sample"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=53",
+      "source_record_id": "src-e6a862acb7601a868b4ae886e2bd918241cd4e83fb661184ddc075a76a9e5764"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA02",
+          "latitude": "-49.547199",
+          "longitude": "-52.688110",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.88",
+          "record_id": "rec-64a07e5a3d18eefeda9682103f54164966f2a0e5d153533db4a190112e91212f",
+          "sample_depth_m": "10",
+          "sample_id": "GA02|001|10m",
+          "sampled_at": "2011-03-05T20:45:44",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "001",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA02",
+          "latitude": "-49.547199",
+          "longitude": "-52.688110",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.21",
+          "record_id": "rec-251f740019db83a843795edc7524d2b7961aa69476744b5757e64ab3a20f2056",
+          "sample_depth_m": "10",
+          "sample_id": "GA02|001|10m",
+          "sampled_at": "2011-03-05T20:45:44",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "001",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "4.88",
+        "Zn": "0.21"
+      },
+      "review_id": "geotraces-idp2025-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA02|001|10m",
+      "selection_reasons": [
+        "Ni_seadatanet_qc=2",
+        "Zn_seadatanet_qc=2"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=1675",
+      "source_record_id": "src-2927fb2957faf72c9c9dcd709fae5cbf564f1a16ee73fc0f20b1914674e51e58"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA02",
+          "latitude": "55.726799",
+          "longitude": "-43.562683",
+          "medium": "water",
+          "quality_flag": "3",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.87",
+          "record_id": "rec-e5b23b9a90245792c4406f99ce8060670a6d9f95d3a4dccea93ff986048767ac",
+          "sample_depth_m": "3337",
+          "sample_id": "GA02|004|3337m",
+          "sampled_at": "2012-08-04T09:47:30",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "",
+          "station": "004",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA02",
+          "latitude": "55.726799",
+          "longitude": "-43.562683",
+          "medium": "water",
+          "quality_flag": "3",
+          "quality_schema": "SEADATANET",
+          "raw_value": "5.31",
+          "record_id": "rec-bc6f5fd20eb29bedd6c3c4e0ceef43b41c33cae29ed2c20f20d14ea7f799a0af",
+          "sample_depth_m": "3337",
+          "sample_id": "GA02|004|3337m",
+          "sampled_at": "2012-08-04T09:47:30",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "",
+          "station": "004",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "3.87",
+        "Zn": "5.31"
+      },
+      "review_id": "geotraces-idp2025-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA02|004|3337m",
+      "selection_reasons": [
+        "Ni_seadatanet_qc=3"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=2121",
+      "source_record_id": "src-d3723147bc7e419a2fb7f0c9b7369ca2abae07988bfdb906b0ad51787f59b1d4"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA02",
+          "latitude": "-44.706902",
+          "longitude": "-45.536102",
+          "medium": "water",
+          "quality_flag": "4",
+          "quality_schema": "SEADATANET",
+          "raw_value": "8.71",
+          "record_id": "rec-5aa7014eb8a0f7bca547a1e8b9f3b85d1567efaa723ccae0ecb5b767a6bf054a",
+          "sample_depth_m": "4001",
+          "sample_id": "GA02|004|4001m",
+          "sampled_at": "2011-03-09T03:02:14",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "004",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA02",
+          "latitude": "-44.706902",
+          "longitude": "-45.536102",
+          "medium": "water",
+          "quality_flag": "4",
+          "quality_schema": "SEADATANET",
+          "raw_value": "15",
+          "record_id": "rec-56ad0632c90ba6ebbbd0350f9aaaa5a8dc793212531fe4273dbb629df61f4561",
+          "sample_depth_m": "4001",
+          "sample_id": "GA02|004|4001m",
+          "sampled_at": "2011-03-09T03:02:14",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "004",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "8.71",
+        "Zn": "15"
+      },
+      "review_id": "geotraces-idp2025-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA02|004|4001m",
+      "selection_reasons": [
+        "Ni_seadatanet_qc=4",
+        "Zn_seadatanet_qc=4"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=2163",
+      "source_record_id": "src-713b34a6004f8db7b23fa5cd16c4fe2b9bff4305defe134fc8a9062a47c38f45"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GPpr07",
+          "latitude": "48.650002",
+          "longitude": "-126.667007",
+          "medium": "water",
+          "quality_flag": "5",
+          "quality_schema": "SEADATANET",
+          "raw_value": "5.513488",
+          "record_id": "rec-8cf8faf541ded63326c111ff862ec23130fdba4b6a4327b15ba4bb9c30d0d11e",
+          "sample_depth_m": "350",
+          "sample_id": "GPpr07|P4|350m",
+          "sampled_at": "2013-08-23T03:50:00",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.096734",
+          "station": "P4",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GPpr07",
+          "latitude": "48.650002",
+          "longitude": "-126.667007",
+          "medium": "water",
+          "quality_flag": "5",
+          "quality_schema": "SEADATANET",
+          "raw_value": "5.286189",
+          "record_id": "rec-f2bedf90d3b857bb958ee7a9ea5f95663c22f95dff4f7de016b0eaeadfee256a",
+          "sample_depth_m": "350",
+          "sample_id": "GPpr07|P4|350m",
+          "sampled_at": "2013-08-23T03:50:00",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.065473",
+          "station": "P4",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "5.513488",
+        "Zn": "5.286189"
+      },
+      "review_id": "geotraces-idp2025-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GPpr07|P4|350m",
+      "selection_reasons": [
+        "Ni_seadatanet_qc=5",
+        "Zn_seadatanet_qc=5"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=62927",
+      "source_record_id": "src-d907c8062982aaa5c26106be6cec963a9d6431b1b35fbb58cbdd8d939298572f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA02",
+          "latitude": "64.000198",
+          "longitude": "-34.249908",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.72",
+          "record_id": "rec-7d6950c58a8a36b533613a4befba928dcb65d0c0cf14ac4f7fb521e07565fc46",
+          "sample_depth_m": "200",
+          "sample_id": "GA02|002|200m",
+          "sampled_at": "2010-05-02T22:44:43",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "",
+          "station": "002",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA02",
+          "latitude": "64.000198",
+          "longitude": "-34.249908",
+          "medium": "water",
+          "quality_flag": "3",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.81",
+          "record_id": "rec-444ea4e2fe51ef418705d486aeb7cffb95e4a1925b32fffc1d54abfa26bfb6d7",
+          "sample_depth_m": "200",
+          "sample_id": "GA02|002|200m",
+          "sampled_at": "2010-05-02T22:44:43",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "",
+          "station": "002",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "3.72",
+        "Zn": "0.81"
+      },
+      "review_id": "geotraces-idp2025-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA02|002|200m",
+      "selection_reasons": [
+        "Zn_seadatanet_qc=3"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=1848",
+      "source_record_id": "src-1122b489ea1eba51d16487ae85a7345b8fa0fb5a793ce3a5274e1eeb6fad3b0e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GA10",
+          "latitude": "-35.659",
+          "longitude": "14.584600",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.765501",
+          "record_id": "rec-949c5b4b6cb35e5c7f46b2a743c5f03ed19b952e7f95a1a9544b563a7d20e3e0",
+          "sample_depth_m": "3",
+          "sample_id": "GA10|(9)|3m",
+          "sampled_at": "2011-12-28T21:30:00",
+          "sampling_devices": "CPUMP",
+          "standard_deviation": "0.072386",
+          "station": "(9)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GA10",
+          "latitude": "-35.659",
+          "longitude": "14.584600",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.274491",
+          "record_id": "rec-145bd3448811ea91958cf614345b6ced54fcac6a0fa9eb6dcf35ecc1e3dc6106",
+          "sample_depth_m": "3",
+          "sample_id": "GA10|(9)|3m",
+          "sampled_at": "2011-12-28T21:30:00",
+          "sampling_devices": "CPUMP",
+          "standard_deviation": "0.261984",
+          "station": "(9)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA10",
+          "latitude": "-35.659",
+          "longitude": "14.584600",
+          "medium": "water",
+          "quality_flag": "6",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0",
+          "record_id": "rec-ca330a4318eb0ced864a57b8243220417e733ff72bd7437ff4ca06b0d1dbd473",
+          "sample_depth_m": "3",
+          "sample_id": "GA10|(9)|3m",
+          "sampled_at": "2011-12-28T21:30:00",
+          "sampling_devices": "CPUMP",
+          "standard_deviation": "0.003027",
+          "station": "(9)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "0.765501",
+        "Ni": "3.274491",
+        "Zn": "0"
+      },
+      "review_id": "geotraces-idp2025-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA10|(9)|3m",
+      "selection_reasons": [
+        "Zn_seadatanet_qc=6"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=15584",
+      "source_record_id": "src-d51627ed76a558ba71217da58600345d1b57b153e8a7be709d8a08b1ec9efd44"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GP02",
+          "latitude": "47.0019",
+          "longitude": "-179.990997",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "5.542525",
+          "record_id": "rec-c0ec83c529aa9f068653e321082bb00d0770c62212baf36c66f913a4bb9a4fa4",
+          "sample_depth_m": "10",
+          "sample_id": "GP02|BD11|10m",
+          "sampled_at": "2012-09-06T15:44:08",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "",
+          "station": "BD11",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GP02",
+          "latitude": "47.0019",
+          "longitude": "-179.990997",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.513496",
+          "record_id": "rec-07604d840067407191637163cdaf244811a4d168e7628d54568229b44f503c5e",
+          "sample_depth_m": "10",
+          "sample_id": "GP02|BD11|10m",
+          "sampled_at": "2012-09-06T15:44:08",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "",
+          "station": "BD11",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "5.542525",
+        "Zn": "0.513496"
+      },
+      "review_id": "geotraces-idp2025-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GP02|BD11|10m",
+      "selection_reasons": [
+        "longitude_min_boundary"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=39402",
+      "source_record_id": "src-539c1524846a6971e53b8d7d1c9ad2b556442f3db14df157cafd82350e47a434"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GP13",
+          "latitude": "-32.5",
+          "longitude": "180.000000",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.995122",
+          "record_id": "rec-29a12e0d722b82f04dadd0f352d44f5c122a86a6ee9996dbaa43aae9c02ebd25",
+          "sample_depth_m": "14.9",
+          "sample_id": "GP13|Station 28|14.9m",
+          "sampled_at": "2011-05-27T19:40:18",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "Station 28",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GP13",
+          "latitude": "-32.5",
+          "longitude": "180.000000",
+          "medium": "water",
+          "quality_flag": "6",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.186341",
+          "record_id": "rec-c9cafed7ad120834a2122e260faffe51fd433320e06e9b429558eeeae9bc13e2",
+          "sample_depth_m": "14.9",
+          "sample_id": "GP13|Station 28|14.9m",
+          "sampled_at": "2011-05-27T19:40:18",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "Station 28",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "1.995122",
+        "Zn": "0.186341"
+      },
+      "review_id": "geotraces-idp2025-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GP13|Station 28|14.9m",
+      "selection_reasons": [
+        "longitude_max_boundary"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=45311",
+      "source_record_id": "src-08e6ce987f9ea07a172edbb5007f44d8ae79d795adbbbb921e9eed47fefb7d8c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GPpr08",
+          "latitude": "-77.7015",
+          "longitude": "177.524002",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.97",
+          "record_id": "rec-290c36d025a5fe9d89175dd6713f1566ec1caa113c4a3b4b929468224c878913",
+          "sample_depth_m": "24.8",
+          "sample_id": "GPpr08|(23)|24.8m",
+          "sampled_at": "2013-12-24T13:16:28",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "0.120000",
+          "station": "(23)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GPpr08",
+          "latitude": "-77.7015",
+          "longitude": "177.524002",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "6.69",
+          "record_id": "rec-d15029ebb54bec1ee6dbc7e8fc2d6f98a2d7402b445739e847f4cde20914120e",
+          "sample_depth_m": "24.8",
+          "sample_id": "GPpr08|(23)|24.8m",
+          "sampled_at": "2013-12-24T13:16:28",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "0.200000",
+          "station": "(23)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GPpr08",
+          "latitude": "-77.7015",
+          "longitude": "177.524002",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.99",
+          "record_id": "rec-82f14756996bb72bb8b1e31bb5a64aadcd962954298c2655a8388ab7820b746c",
+          "sample_depth_m": "24.8",
+          "sample_id": "GPpr08|(23)|24.8m",
+          "sampled_at": "2013-12-24T13:16:28",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "0.330000",
+          "station": "(23)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "2.97",
+        "Ni": "6.69",
+        "Zn": "2.99"
+      },
+      "review_id": "geotraces-idp2025-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GPpr08|(23)|24.8m",
+      "selection_reasons": [
+        "latitude_min_boundary"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=64635",
+      "source_record_id": "src-7c2ac16b3d54316f8ff59d371fa7c2eeae740d1855cbfc403f1ed6330152ceea"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GN01",
+          "latitude": "89.990501",
+          "longitude": "35.646400",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "7.1314",
+          "record_id": "rec-86784f3f5b8d54270ae862f68102352f0c3c067d7aa93616ead1c3c6f1a5aad9",
+          "sample_depth_m": "19",
+          "sample_id": "GN01|32|19m",
+          "sampled_at": "2015-09-06T06:13:43",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "",
+          "station": "32",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GN01",
+          "latitude": "89.990501",
+          "longitude": "35.646400",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.54985",
+          "record_id": "rec-22b7e54a7ce455c25dd8f0edc67aba20b711241de39af7da9982b312dd6fba58",
+          "sample_depth_m": "19",
+          "sample_id": "GN01|32|19m",
+          "sampled_at": "2015-09-06T06:13:43",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "",
+          "station": "32",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "7.1314",
+        "Zn": "1.54985"
+      },
+      "review_id": "geotraces-idp2025-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GN01|32|19m",
+      "selection_reasons": [
+        "latitude_max_boundary"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=31486",
+      "source_record_id": "src-ae2710f24055833a7781bc57c0b54592b5f88d86782e3629188d29d52125b456"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GN01",
+          "latitude": "73.006104",
+          "longitude": "-158.770996",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.22",
+          "record_id": "rec-ded26dba2bb2a0521a455a74b64615f498ae98ba9b3cb1ce670e360e176bbb4d",
+          "sample_depth_m": "0",
+          "sample_id": "GN01|60|0m",
+          "sampled_at": "2015-10-05T06:23:50",
+          "sampling_devices": "CTD | SAP | UCCTD | ZODIAK",
+          "standard_deviation": "",
+          "station": "60",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GN01",
+          "latitude": "73.006104",
+          "longitude": "-158.770996",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "6.31415",
+          "record_id": "rec-bffe23aad6692efee25886cb821dd12df30301a76cae1970d4d38c20e0236a87",
+          "sample_depth_m": "0",
+          "sample_id": "GN01|60|0m",
+          "sampled_at": "2015-10-05T06:23:50",
+          "sampling_devices": "CTD | SAP | UCCTD | ZODIAK",
+          "standard_deviation": "",
+          "station": "60",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GN01",
+          "latitude": "73.006104",
+          "longitude": "-158.770996",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.9868",
+          "record_id": "rec-35a26ffe78628bdce3ed6ec16644219c6876d97f4bd142745ba77f6996dfb4f6",
+          "sample_depth_m": "0",
+          "sample_id": "GN01|60|0m",
+          "sampled_at": "2015-10-05T06:23:50",
+          "sampling_devices": "CTD | SAP | UCCTD | ZODIAK",
+          "standard_deviation": "",
+          "station": "60",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "4.22",
+        "Ni": "6.31415",
+        "Zn": "0.9868"
+      },
+      "review_id": "geotraces-idp2025-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GN01|60|0m",
+      "selection_reasons": [
+        "depth_min_boundary"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=33289",
+      "source_record_id": "src-960c3ea25be3b2cf765a4f939cbb52be64dd7689f6f2cef908be10a2ebe51258"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "cruise": "GP02",
+          "latitude": "37.8144",
+          "longitude": "143.882004",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "8.434014",
+          "record_id": "rec-c228bec28a060d9beb76d200953dd17acf2321a4017ff6bf7ec2c9f4e7c329d7",
+          "sample_depth_m": "7167",
+          "sample_id": "GP02|BD04|7167m",
+          "sampled_at": "2012-08-24T22:45:19",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "",
+          "station": "BD04",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Zn": "8.434014"
+      },
+      "review_id": "geotraces-idp2025-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GP02|BD04|7167m",
+      "selection_reasons": [
+        "depth_max_boundary"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=38833",
+      "source_record_id": "src-6f62c4a55d7db5b4dce495a01b85a3789a40e1f926b86e66d9e65d3d4ac996e3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA02",
+          "latitude": "-26.0891",
+          "longitude": "-34.279999",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "5.07",
+          "record_id": "rec-a3b09fd86a119937aaeac05fcaf6284f27a16833e4deb2076fbb1f867b7898d3",
+          "sample_depth_m": "3001",
+          "sample_id": "GA02|011|3001m",
+          "sampled_at": "2011-03-17T05:55:00",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "011",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA02",
+          "latitude": "-26.0891",
+          "longitude": "-34.279999",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.21",
+          "record_id": "rec-46530fc24cdae3316361aa60a2bc8a543d56b0ebed36feadcc987f1929208f2d",
+          "sample_depth_m": "3001",
+          "sample_id": "GA02|011|3001m",
+          "sampled_at": "2011-03-17T05:55:00",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "011",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "5.07",
+        "Zn": "2.21"
+      },
+      "review_id": "geotraces-idp2025-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA02|011|3001m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=3057",
+      "source_record_id": "src-4a26b74effa2d3095796d76b332dd3727f91d010dbe0890576875d65b3ab4286"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA02",
+          "latitude": "13.1566",
+          "longitude": "-53.416412",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.28",
+          "record_id": "rec-52f431080920f6209b265c01da400dda222c92a57cee2de666e0e15712f8dbe9",
+          "sample_depth_m": "401",
+          "sample_id": "GA02|033|401m",
+          "sampled_at": "2010-06-26T16:22:10",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "033",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA02",
+          "latitude": "13.1566",
+          "longitude": "-53.416412",
+          "medium": "water",
+          "quality_flag": "2",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.64",
+          "record_id": "rec-f1ab145decdd53bc1ee7d94217f99bfdf48061befb6818c86fbea3908352e482",
+          "sample_depth_m": "401",
+          "sample_id": "GA02|033|401m",
+          "sampled_at": "2010-06-26T16:22:10",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "033",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "4.28",
+        "Zn": "0.64"
+      },
+      "review_id": "geotraces-idp2025-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA02|033|401m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=4665",
+      "source_record_id": "src-43da615686d5883bc4c26fef9c991d51d3abe096f3b17fcba46915d4bcc3f7e2"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA03",
+          "latitude": "22.3505",
+          "longitude": "-35.867615",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.682",
+          "record_id": "rec-4d574fdbaab4319460dc72787ed5e88f012cb728e7841883d36f190995b4daff",
+          "sample_depth_m": "1625.7",
+          "sample_id": "GA03|Station 20|1625.7m",
+          "sampled_at": "2011-12-04T17:59:57",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "0.086000",
+          "station": "Station 20",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA03",
+          "latitude": "22.3505",
+          "longitude": "-35.867615",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.322",
+          "record_id": "rec-6f3fdb7ea63af4549d926b47740f0ea7f608fb83b72c7883232654d197432913",
+          "sample_depth_m": "1625.7",
+          "sample_id": "GA03|Station 20|1625.7m",
+          "sampled_at": "2011-12-04T17:59:57",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "",
+          "station": "Station 20",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "4.682",
+        "Zn": "1.322"
+      },
+      "review_id": "geotraces-idp2025-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA03|Station 20|1625.7m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=7303",
+      "source_record_id": "src-e6f06afee95b42d52559d3d9eef181a98158887b7a1c2283efc5fe82b79939ed"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA04N",
+          "latitude": "36.4482",
+          "longitude": "-1.021698",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.40245",
+          "record_id": "rec-cdc4901ba00fb4f066fba70e1d4df0d681fed9a10f60d78aab76f9f3a1b2a45f",
+          "sample_depth_m": "40",
+          "sample_id": "GA04N|7|40m",
+          "sampled_at": "2013-05-20T13:34:44",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "7",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA04N",
+          "latitude": "36.4482",
+          "longitude": "-1.021698",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.005866",
+          "record_id": "rec-b95fa776db08c624389d7680912cfb6db707afd09c53513b06f057e289e0765d",
+          "sample_depth_m": "40",
+          "sample_id": "GA04N|7|40m",
+          "sampled_at": "2013-05-20T13:34:44",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "7",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "3.40245",
+        "Zn": "1.005866"
+      },
+      "review_id": "geotraces-idp2025-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA04N|7|40m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=9108",
+      "source_record_id": "src-48164be661c0e10b86acdf4d4f5681f252a0a66c6d291e48abf30beeeda8cb07"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA04N",
+          "latitude": "33.206402",
+          "longitude": "25.505600",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.803922",
+          "record_id": "rec-0de27e0e6735adf3e6acbee61a83ee75fb4de9020bc3d75813e76b70913c3a70",
+          "sample_depth_m": "500",
+          "sample_id": "GA04N|20|500m",
+          "sampled_at": "2013-05-29T00:32:29",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "20",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA04N",
+          "latitude": "33.206402",
+          "longitude": "25.505600",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.104006",
+          "record_id": "rec-ace003831c5c5dd3b28fd2e1be267a130a37bd390d20940557708933ed66221c",
+          "sample_depth_m": "500",
+          "sample_id": "GA04N|20|500m",
+          "sampled_at": "2013-05-29T00:32:29",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "20",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "4.803922",
+        "Zn": "2.104006"
+      },
+      "review_id": "geotraces-idp2025-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA04N|20|500m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=10596",
+      "source_record_id": "src-ca2b837c612279797b816bacb3cac27dea98f96a1cac2452dff77c8f7baa5769"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GA08",
+          "latitude": "-13.0016",
+          "longitude": "0.000695",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.158",
+          "record_id": "rec-8eb01bedafdca073f705a2b5f02f84cd0da686c206fbe348f7ac5396318cfe96",
+          "sample_depth_m": "3497.4",
+          "sample_id": "GA08|(107)|3497.4m",
+          "sampled_at": "2015-12-09T15:48:35",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "0.064000",
+          "station": "(107)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GA08",
+          "latitude": "-13.0016",
+          "longitude": "0.000695",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "4.867",
+          "record_id": "rec-25a53332beb859b31be83d4784f638066a30acaf95202f23f124079cb46b4ab8",
+          "sample_depth_m": "3497.4",
+          "sample_id": "GA08|(107)|3497.4m",
+          "sampled_at": "2015-12-09T15:48:35",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "0.128000",
+          "station": "(107)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GA08",
+          "latitude": "-13.0016",
+          "longitude": "0.000695",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.561",
+          "record_id": "rec-4fb35c9e5d06a146555c14c47d0d3957ffedcd080ddd109baac8614494dce849",
+          "sample_depth_m": "3497.4",
+          "sample_id": "GA08|(107)|3497.4m",
+          "sampled_at": "2015-12-09T15:48:35",
+          "sampling_devices": "CPUMP | CTD | UCCTD",
+          "standard_deviation": "0.164000",
+          "station": "(107)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "2.158",
+        "Ni": "4.867",
+        "Zn": "3.561"
+      },
+      "review_id": "geotraces-idp2025-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA08|(107)|3497.4m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=13052",
+      "source_record_id": "src-a0dd7318520fc93b3ca8aca63cc9e85b538fdba59def74ef92d015cd26cb9d13"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GA10",
+          "latitude": "-36.472401",
+          "longitude": "13.214800",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "7.069161",
+          "record_id": "rec-df8d9d75ada9208e49c0c18c5f7d02e0b38804ea695eb85a86410898cfaa3d49",
+          "sample_depth_m": "3931",
+          "sample_id": "GA10|Station 3|3931m",
+          "sampled_at": "2010-10-29T04:20:02",
+          "sampling_devices": "CPUMP | CTD | SAP | UCCTD",
+          "standard_deviation": "0.035346",
+          "station": "Station 3",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "7.069161"
+      },
+      "review_id": "geotraces-idp2025-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GA10|Station 3|3931m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=15115",
+      "source_record_id": "src-5abdd30386d4fff04f22aec72fc2489dc49e4315322330f6edd3494568936559"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GAc04",
+          "latitude": "18.213499",
+          "longitude": "-16.575806",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.739512",
+          "record_id": "rec-80dbe56ff7d6faa4724784fd6b5743c0ad45f1bdf7fe13b6fcc184c6af9fdf89",
+          "sample_depth_m": "181",
+          "sample_id": "GAc04|(4)|181m",
+          "sampled_at": "2014-06-21T20:48:20",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.152195",
+          "station": "(4)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GAc04",
+          "latitude": "18.213499",
+          "longitude": "-16.575806",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.96878",
+          "record_id": "rec-6f8f559931b5c92ac506b6841755cb2d57c6ea2cb579132a1c2fb247af7f6985",
+          "sample_depth_m": "181",
+          "sample_id": "GAc04|(4)|181m",
+          "sampled_at": "2014-06-21T20:48:20",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.432195",
+          "station": "(4)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "0.739512",
+        "Ni": "3.96878"
+      },
+      "review_id": "geotraces-idp2025-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GAc04|(4)|181m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=17136",
+      "source_record_id": "src-2b191084e1ba1e2fef0590a29de2be7be1138469e8212b8a913f1d23bf37c5b2"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "cruise": "GApr12",
+          "latitude": "-63.621899",
+          "longitude": "-51.077301",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "2.811417",
+          "record_id": "rec-41e1b9f61f489e0ad20be99fc1ed01639abc1f932af3856464d72f76d71aae57",
+          "sample_depth_m": "1462",
+          "sample_id": "GApr12|(17)|1462m",
+          "sampled_at": "2019-01-29T23:00:00",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "0.087857",
+          "station": "(17)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Ni",
+          "cruise": "GApr12",
+          "latitude": "-63.621899",
+          "longitude": "-51.077301",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "6.804021",
+          "record_id": "rec-9f5d5731ea2d83940f6f3abe3627adea36408da817e7b9cde4ef6382c93fb828",
+          "sample_depth_m": "1462",
+          "sample_id": "GApr12|(17)|1462m",
+          "sampled_at": "2019-01-29T23:00:00",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "0.019524",
+          "station": "(17)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GApr12",
+          "latitude": "-63.621899",
+          "longitude": "-51.077301",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "6.745449",
+          "record_id": "rec-69add2eb849775032999d4fe0f6d687172458d6dd216a77a1f5d8e54139ebba4",
+          "sample_depth_m": "1462",
+          "sample_id": "GApr12|(17)|1462m",
+          "sampled_at": "2019-01-29T23:00:00",
+          "sampling_devices": "UCCTD",
+          "standard_deviation": "0.009762",
+          "station": "(17)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "2.811417",
+        "Ni": "6.804021",
+        "Zn": "6.745449"
+      },
+      "review_id": "geotraces-idp2025-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GApr12|(17)|1462m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=18884",
+      "source_record_id": "src-fa78e67e70eb0a721ea16d571800debad94cb1e70b66ae923e740ba9bc4c6714"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "cruise": "GIPY02",
+          "latitude": "-43.684399",
+          "longitude": "148.580002",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.043902",
+          "record_id": "rec-d984bc6b553f91110e84a87d961c5ab547c74d4a1b3d771cbc874d676633b205",
+          "sample_depth_m": "1000",
+          "sample_id": "GIPY02|24|1000m",
+          "sampled_at": "2007-02-19T06:18:11",
+          "sampling_devices": "CTD | SAP | UCCTD",
+          "standard_deviation": "",
+          "station": "24",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Zn": "3.043902"
+      },
+      "review_id": "geotraces-idp2025-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GIPY02|24|1000m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=23782",
+      "source_record_id": "src-62593ab99d38499e07cc415cb86dd11ed44f7f7b58492924ca591cfa274a57ec"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GIpr05",
+          "latitude": "-50.774101",
+          "longitude": "75.841301",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "6.777344",
+          "record_id": "rec-302dc5a6639b8efdbe96ba8527dd020832bd5da5e63345d27c144d9b9ddde80d",
+          "sample_depth_m": "683.4",
+          "sample_id": "GIpr05|(8)|683.4m",
+          "sampled_at": "2016-01-20T00:27:10",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.013430",
+          "station": "(8)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GIpr05",
+          "latitude": "-50.774101",
+          "longitude": "75.841301",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "5.198814",
+          "record_id": "rec-65e9a0eb743cb135e5c8f26dba942a5b0dd319dd67b97b32726de37d9a6b5595",
+          "sample_depth_m": "683.4",
+          "sample_id": "GIpr05|(8)|683.4m",
+          "sampled_at": "2016-01-20T00:27:10",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.015178",
+          "station": "(8)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "6.777344",
+        "Zn": "5.198814"
+      },
+      "review_id": "geotraces-idp2025-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GIpr05|(8)|683.4m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=28104",
+      "source_record_id": "src-0d5099100efc3eb4534158e97204b0122ae4cce80217896fd266bc172173b293"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GIpr10",
+          "latitude": "-55.870399",
+          "longitude": "139.054001",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "6.22",
+          "record_id": "rec-ee59e6bdfcd03a91ee1ed77b63e733677295de82c612e80bb4f2d1847c263fcf",
+          "sample_depth_m": "50",
+          "sample_id": "GIpr10|(3)|50m",
+          "sampled_at": "2020-12-25T03:26:49",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "(3)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GIpr10",
+          "latitude": "-55.870399",
+          "longitude": "139.054001",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "0.41",
+          "record_id": "rec-d1cd511521dde3420d9c89ac7bcd3c848978dbb5b10cf058df67a533573142fe",
+          "sample_depth_m": "50",
+          "sample_id": "GIpr10|(3)|50m",
+          "sampled_at": "2020-12-25T03:26:49",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "",
+          "station": "(3)",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "6.22",
+        "Zn": "0.41"
+      },
+      "review_id": "geotraces-idp2025-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GIpr10|(3)|50m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=29958",
+      "source_record_id": "src-66ecc51bc151b6fdd98258cc258843d161054004d2d2745ca10908c449016016"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "cruise": "GN03",
+          "latitude": "75.001198",
+          "longitude": "-150.001007",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "3.35524",
+          "record_id": "rec-042589bd5dbf7dec1d52aab5485c3e19349b9c745f1c5cc93ccde92ce2fba1b6",
+          "sample_depth_m": "1600",
+          "sample_id": "GN03|CB4|1600m",
+          "sampled_at": "2015-09-15T15:14:59",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.047783",
+          "station": "CB4",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        },
+        {
+          "analyte": "Zn",
+          "cruise": "GN03",
+          "latitude": "75.001198",
+          "longitude": "-150.001007",
+          "medium": "water",
+          "quality_flag": "1",
+          "quality_schema": "SEADATANET",
+          "raw_value": "1.139829",
+          "record_id": "rec-350089c56dbf317090e425f6b780d4002a0f0243666f49961a71203e77167b46",
+          "sample_depth_m": "1600",
+          "sample_id": "GN03|CB4|1600m",
+          "sampled_at": "2015-09-15T15:14:59",
+          "sampling_devices": "CTD | UCCTD",
+          "standard_deviation": "0.027229",
+          "station": "CB4",
+          "unit": "nmol/kg",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "dissolved_fraction_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "sample_identity_preserved": true,
+        "seadatanet_quality_flags_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_preserved_without_imputation": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "3.35524",
+        "Zn": "1.139829"
+      },
+      "review_id": "geotraces-idp2025-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "GN03|CB4|1600m",
+      "selection_reasons": [
+        "evenly_spaced_target_bearing_fill"
+      ],
+      "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=35380",
+      "source_record_id": "src-b73cb5f42591b077546e12f4ac721d374e2508aff628b14395478d177512a757"
+    }
+  ],
+  "required_record_count": 30,
+  "review_version": "geochemical-human-review-v1",
+  "selection_strategy": "Thirty target-bearing seawater rows spanning Cu/Ni/Zn, SeaDataNet QC edge flags, geographic/depth boundaries and evenly spaced source order.",
+  "snapshot_id": "doi:10.5285/42c92148-8d03-8be6-e063-7086abc09f0c@IDP2025#sha256:c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44",
+  "source_id": "geotraces-idp2025",
+  "status": "prepared"
+}

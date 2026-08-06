@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-source-catalog:v1",
+  "title": "D1 discovered geochemical source catalog",
+  "$comment": "V1 status and production_eligible are retained as discovery-catalog compatibility fields. V3 access, research-use, evidence tier and use mode are computed in source_evidence_scores.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["catalog_version", "reviewed_at", "claim_boundary", "discovery_state", "sources"],
+  "properties": {
+    "catalog_version": {"const": "geochemical-source-catalog-v1"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "discovery_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["round", "status", "saturated", "channels_checked", "remaining_channels"],
+      "properties": {
+        "round": {"type": "integer", "minimum": 1},
+        "status": {"type": "string", "enum": ["in_progress", "review", "complete"]},
+        "saturated": {"type": "boolean"},
+        "channels_checked": {"$ref": "#/$defs/uniqueStrings"},
+        "remaining_channels": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    },
+    "sources": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/source"}
+    }
+  },
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "nullableString": {"type": ["string", "null"]},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "publisher",
+        "source_kind",
+        "status",
+        "production_eligible",
+        "media",
+        "coverage",
+        "identifiers",
+        "landing_page",
+        "interfaces",
+        "license",
+        "version",
+        "adapter",
+        "evidence_urls",
+        "limitations"
+      ],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "publisher": {"type": "string", "minLength": 1},
+        "source_kind": {"type": "string", "minLength": 1},
+        "status": {
+          "type": "string",
+          "enum": ["approved", "conditional", "metadata_only", "needs_human_review", "rejected"]
+        },
+        "production_eligible": {
+          "type": "boolean",
+          "description": "Legacy V1 flag; V3 routing uses independently computed research-use, evidence-tier and use-mode states."
+        },
+        "media": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["rock", "soil", "sediment", "water", "mineral", "concentrate"]
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["extent_class", "regions", "notes"],
+          "properties": {
+            "extent_class": {
+              "type": "string",
+              "enum": [
+                "global",
+                "global_partial",
+                "global_collection",
+                "global_ocean_partial",
+                "continental_partial",
+                "regional_partial",
+                "national_partial",
+                "national_plus_selected_global",
+                "local_partial",
+                "unknown"
+              ]
+            },
+            "regions": {"$ref": "#/$defs/uniqueStrings"},
+            "notes": {"type": "string", "minLength": 1}
+          }
+        },
+        "identifiers": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "concept_doi": {"type": "string", "minLength": 1},
+            "dataset_doi": {"type": "string", "minLength": 1},
+            "parent_atlas": {"type": "string", "minLength": 1},
+            "parent_dataset_doi": {"type": "string", "minLength": 1},
+            "project_doi": {"type": "string", "minLength": 1},
+            "publication_doi": {"type": "string", "minLength": 1}
+          }
+        },
+        "landing_page": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "interfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "url", "format", "access", "server_filters"],
+            "properties": {
+              "kind": {"type": "string", "minLength": 1},
+              "url": {"type": "string", "minLength": 1},
+              "format": {"type": "string", "minLength": 1},
+              "access": {"type": "string", "minLength": 1},
+              "server_filters": {"$ref": "#/$defs/uniqueStrings"}
+            }
+          }
+        },
+        "license": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "id", "url", "notes"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "open",
+                "mixed_record_or_batch",
+                "upstream_specific",
+                "dataset_specific",
+                "dataset_specific_open_government",
+                "open_reuse_terms",
+                "open_site_terms_product_review",
+                "open_with_privacy_and_aggregation_conditions",
+                "citation_and_copyright_terms",
+                "unresolved",
+                "restricted"
+              ]
+            },
+            "id": {"$ref": "#/$defs/nullableString"},
+            "url": {"$ref": "#/$defs/nullableString"},
+            "notes": {"type": "string", "minLength": 1}
+          }
+        },
+        "version": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "value", "release_date"],
+          "properties": {
+            "status": {"type": "string", "minLength": 1},
+            "value": {"$ref": "#/$defs/nullableString"},
+            "release_date": {"$ref": "#/$defs/nullableString"}
+          }
+        },
+        "adapter": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "name"],
+          "properties": {
+            "status": {"type": "string", "enum": ["implemented", "discovery_only", "not_implemented"]},
+            "name": {"$ref": "#/$defs/nullableString"}
+          }
+        },
+        "evidence_urls": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "format": "uri", "pattern": "^https://"}
+        },
+        "limitations": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    }
+  }
+}
