@@ -33,7 +33,7 @@ python scripts/component_test.py --component all
 python scripts/self_test.py
 ```
 
-不要在文档中固化会随契约增加而过期的测试总数；以 `component_test.py --component all` 和 `self_test.py` 的机器输出为准。D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。D3 回归先用 `create_visualization_profile.py` 为 overview、coverage、anomaly、comparison、database、evidence 六类问题生成配置，再调用 `render_visualization.py`，检查全球、任意自定义 bbox 与严格国家区域产物、区域元素组合 profile、筛选、空结果、默认首屏、接口版本和独立 D3 验证器。页面导出的探索配置与脚本生成配置使用同一 `d3-visualization-profile-v2`，正式结论必须通过重渲染和输入/profile/输出哈希闭环；该矩阵验证的是可复用问题契约，不把某份真实数据、国家、元素或 HTML 当作标准答案。
+不要在文档中固化会随契约增加而过期的测试总数；以 `component_test.py --component all` 和 `self_test.py` 的机器输出为准。D2 生成 `d2-confidence-v3`、五个分量和逐记录关键字段门控；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。D3 回归先用 `create_visualization_profile.py` 为 overview、coverage、anomaly、comparison、database、evidence 六类问题生成配置，再调用 `render_visualization.py`，检查全球、任意自定义 bbox 与严格国家区域产物、区域元素组合 profile、筛选、空结果、默认首屏、接口版本和独立 D3 验证器。页面导出的探索配置与脚本生成配置使用同一 `d3-visualization-profile-v2`，正式结论必须通过重渲染和输入/profile/输出哈希闭环；该矩阵验证的是可复用问题契约，不把某份真实数据、国家、元素或 HTML 当作标准答案。
 
 ### 确定性复现
 
@@ -58,7 +58,7 @@ python scripts/self_test.py
 | USGS | 108 | 108 | 108 | `valid`，0 errors；3 条删失观测未被填补 |
 | MarChem | 112 | 112 | 112 | `valid`，0 errors；8 条 fixture 删失观测未被填补 |
 
-D2 生成 `d2-confidence-v2` 及分量定义；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常接口和算法版本。D1 证据打包器验证输入和报告 SHA-256，但不重新计算置信度。D3 从完整 D1/D2 输出目录读取任务配置，并由专用验证器检查可视化包。
+D2 生成 `d2-confidence-v3`、分量定义、门控原因和门控计数；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常接口和算法版本。D1 证据打包器验证输入和报告 SHA-256，但不重新计算置信度。D3 从完整 D1/D2 输出目录读取任务配置，并由专用验证器检查可视化包。
 
 ## 2026-08-06 16:00 CST：FOREGS 六介质扩展
 

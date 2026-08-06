@@ -11,22 +11,27 @@
 
 <p align="center"><sub>真实工作流截图：14 个公开来源的最小复现切片，796 条观测。它验证工程链路，不代表全球空间覆盖。</sub></p>
 
-`Python 3.11+` · `运行时零第三方依赖` · `离线 demo` · `MIT`
+`Python 3.11+` · `运行时零第三方依赖` · `真实数据生产阈值 demo` · `MIT`
 
 这是一个面向 AI Agent 的完整 Skill，而不是一张预制地图。Agent 会按 D1 → D2 → D3 工作流发现和冻结来源，执行单位与坐标质量控制，在可比背景组内筛查异常，再生成可审计的数据库、报告和地图。
 
-## 60 秒运行
+## 90 秒看见完整结果
 
 ```bash
-python skills/global-geochemical-atlas/scripts/run_workflow.py \
-  --input skills/global-geochemical-atlas/fixtures/demo_input.csv \
-  --output-dir demo_output
+python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
+  --request skills/global-geochemical-atlas/fixtures/production-usgs/request.json \
+  --demo production-usgs \
+  --analysis-profile production \
+  --generated-at 2026-08-07T00:00:00Z \
+  --output-dir /tmp/geochemical-production-demo
 
 python skills/global-geochemical-atlas/scripts/validate_outputs.py \
-  --output-dir demo_output
+  --output-dir /tmp/geochemical-production-demo
 ```
 
-两个命令应分别返回 `"status": "success"` 和 `"status": "valid"`。随后用浏览器打开 `demo_output/interactive_map.html`；无需网络、密钥、GPU 或 Python 第三方包。
+两个命令应分别返回 `"status": "success"` 和 `"status": "valid"`。随后打开 `/tmp/geochemical-production-demo/interactive_map.html`；无需网络、密钥、GPU 或 Python 第三方包。
+
+这条回归使用 996 条 hash 固定的 USGS 真实土壤测定和固定版本 GLiM 岩性图。在生产阈值 `n≥20` 下，预期 996/996 完成地质匹配、12 个可比背景组完成分析、识别 6 个 high/low 候选异常，输出校验 0 错误/0 警告。它证明工程和科学规则可执行，不代表美国土壤的统计分布；完整证据见[生产演示说明](skills/global-geochemical-atlas/references/production-demo.md)。
 
 ## 你会得到什么
 
@@ -43,11 +48,12 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 ## 使用自己的数据
 
 ```bash
-python skills/global-geochemical-atlas/scripts/run_workflow.py \
+python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
+  --request /path/to/request.json \
   --input /path/to/measurements.csv \
-  --output-dir output \
-  --region-bbox 73,18,135,54 \
-  --max-records 50000
+  --evidence-jsonl /path/to/record_evidence.jsonl \
+  --acquisition-manifest /path/to/run_manifest.json \
+  --output-dir /tmp/geochemical-output
 ```
 
 D2 最低分析字段是 `element_or_analyte,value,unit,medium`；完整证据工作流还要求 `source_id,source_locator,license`。非标准列名必须通过显式 schema map 映射，不能靠语义猜测。正式科学运行还应提供样品标识、measurement basis、WGS84/原 CRS、分析与消解方法、检出限、来源层级及文件 SHA-256。
@@ -105,6 +111,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 | 对接输入或消费 11 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
 | 理解数据库字段与专业平台 crosswalk | [数据模型](skills/global-geochemical-atlas/references/data-model.md) |
 | 审查单位、删失值、置信度和异常规则 | [科学规则](skills/global-geochemical-atlas/references/scientific-rules.md) |
+| 复现真实数据生产阈值闭环 | [生产演示](skills/global-geochemical-atlas/references/production-demo.md) |
 | 定制全球、区域或元素组合地图 | [D3 可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md) |
 | 修改 D1/D2/D3 或提交 PR | [贡献指南](CONTRIBUTING.md) |
 | 查看开发期 Q01–Q24 benchmark | [评测说明](evaluation/README.md) |

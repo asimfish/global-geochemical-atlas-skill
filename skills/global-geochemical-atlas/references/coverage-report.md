@@ -26,19 +26,18 @@
 
 ## 当前判断
 
-- 岩石只有 GEOROC 太古宙专题来源，因此仍是 `partial`；
-- 土壤已有 USGS、PANGAEA、AfSIS 与 FOREGS topsoil/subsoil/humus；AfSIS 补充非洲 18 个国家标签和 51 个 LDSF 站点，但不是均匀大陆网格；温和硝酸浸出、王水准全量和总量不可混用，整体仍为 `partial`；
-- 沉积物已有 MarChem、GSJ 与 FOREGS stream/floodplain sediment；海洋/河流/泛滥平原、粒级和消解基础不同，仍为 `partial`；
-- 水体已有 GEOTRACES 海水、GEMStat 淡水和 FOREGS 欧洲溪流水；目标分析物有多个来源，但海水/淡水、单位和时间尺度不可直接混为同一背景；
-- FOREGS 六类来源已经分别实现适配器并固定文件 hash；这增加了欧洲低密度基线覆盖，不代表欧洲每个位置有实测值；
-- AfSIS V2.0 已固定三个 original 文件并全量对账 2,002 个样品；126 个缺坐标样品和逐元素低于 DL/QL 的数值保持显式，不能用 48 条完整坐标 demo 代替全量质量结论；
-- 岩石、土壤和沉积物样板的 As、Cu、Ni、Zn 目标字段已登记；来源数增加不代表方法一致或空间充分，方法、时间和密度仍需逐源审计；
+- `rock`：状态 `partial`；来源 georoc-archaean；注册目标覆盖本次元素；仍需记录级核验；来源独立性 `single_source_dependency`。
+- `soil`：状态 `partial`；来源 afsis-phase-i-wet-chemistry、foregs-humus、foregs-subsoil、foregs-topsoil、pangaea-north-africa-soil、usgs-conus-soil；注册目标覆盖本次元素；仍需记录级核验；来源独立性 `multiple_sources_lineage_not_yet_deduplicated`。
+- `sediment`：状态 `partial`；来源 foregs-floodplain-sediment、foregs-stream-sediment、japan-gsj-geochemical-map、norway-marchem；注册目标覆盖本次元素；仍需记录级核验；来源独立性 `multiple_sources_lineage_not_yet_deduplicated`。
+- `water`：状态 `partial`；来源 foregs-stream-water、gemstat-open-archive、geotraces-idp2025；注册目标覆盖本次元素；仍需记录级核验；来源独立性 `multiple_sources_lineage_not_yet_deduplicated`。
+- 方法、时间与空间密度没有完成记录级审计时保持 `not_yet_audited`；不得用来源数量替代覆盖结论。
 - 聚合平台不计作独立证据，必须追溯并去重其上游数据集。
 
 ## 限制
 
-- Catalog routing identifies possible sources; evidence tier is not a truth probability, and analyte availability plus record-level comparability still require source queries and D2 review.
+- Catalog routing applies frozen analyte, region, measurement-basis and temporal evidence; record-level availability and comparability still require acquisition plus D2 review.
 - A partial route must not be presented as complete global coverage.
+- max_records is an acquisition/output ceiling enforced by the downstream runner, not evidence that the selected records are representative.
 - Source discovery is still in progress; absence from this route is not proof that no source exists.
 - Analyte coverage is credited only for explicit target mappings in the production registry; method, time and spatial-density coverage still require separate audits.
 - Record count alone is not evidence of representative global coverage.

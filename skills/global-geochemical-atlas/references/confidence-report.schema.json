@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:geochemistry-confidence-report:d2-v2",
-  "title": "D2 v2 operational confidence report",
+  "$id": "urn:ai4s:geochemistry-confidence-report:d2-v3",
+  "title": "D2 v3 operational confidence report",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,10 +16,11 @@
     "band_thresholds",
     "gates",
     "component_means",
-    "band_counts"
+    "band_counts",
+    "gate_counts"
   ],
   "properties": {
-    "confidence_version": {"const": "d2-confidence-v2"},
+    "confidence_version": {"const": "d2-confidence-v3"},
     "name": {"const": "operational_confidence"},
     "not_a_probability": {"const": true},
     "meaning": {"type": "string", "minLength": 1},
@@ -86,6 +87,10 @@
       }
     },
     "gates": {"type": "object", "additionalProperties": {"type": "string"}},
+    "gate_counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
     "component_means": {
       "type": "object",
       "additionalProperties": false,

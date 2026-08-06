@@ -1,10 +1,28 @@
-# 离线 demo 指南
+# Demo 指南
 
 ## 目的
 
-使用固定合成数据演示单位换算、删失值、坐标 QC、重复检测、运行级置信度、候选异常和交互地图。该数据不代表真实区域，不能用于科学结论。
+首选生产阈值真实数据演示，证明请求路由、来源证据、D2 地质匹配和 D3 交付闭环；再按需使用合成数据演示刻意构造的失败边界。任何 fixture 都不是代表性抽样，不能用于区域科学结论。
 
-## 运行
+## 首选：一键生产阈值演示
+
+从 Skill 目录执行：
+
+```bash
+python scripts/run_atlas_request.py \
+  --request fixtures/production-usgs/request.json \
+  --demo production-usgs \
+  --analysis-profile production \
+  --generated-at 2026-08-07T00:00:00Z \
+  --output-dir /tmp/geochemical-production-demo
+
+python scripts/validate_outputs.py \
+  --output-dir /tmp/geochemical-production-demo
+```
+
+预期 996 条 USGS 真实测定、996 条有效 WGS84 坐标、996 条固定 GLiM 岩性匹配、12 个达到 `n≥20` 的可比背景组和 6 个 high/low 候选异常；输出验证 0 错误、0 警告。详细边界、hash、许可和复现指标见 [production-demo.md](production-demo.md)。
+
+## 合成边界演示
 
 从 Skill 目录执行：
 

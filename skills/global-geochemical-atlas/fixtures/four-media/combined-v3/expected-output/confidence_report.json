@@ -1,8 +1,8 @@
 {
   "band_counts": {
-    "high": 700,
-    "low": 48,
-    "medium": 48
+    "high": 0,
+    "low": 96,
+    "medium": 700
   },
   "band_thresholds": {
     "high": ">=0.80",
@@ -20,14 +20,24 @@
   "component_means": {
     "completeness": 0.960981,
     "method": 0.879397,
-    "overall": 0.902486,
+    "overall": 0.764308,
     "qc": 0.880829,
     "source": 0.983166,
     "spatial": 0.715578
   },
-  "confidence_version": "d2-confidence-v2",
+  "confidence_version": "d2-confidence-v3",
+  "gate_counts": {
+    "incomplete_method_context_medium_cap": 144,
+    "missing_canonical_coordinate_low_cap": 96,
+    "missing_coordinate_uncertainty_medium_cap": 652,
+    "missing_geologic_context_medium_cap": 492
+  },
   "gates": {
-    "any_error_flag": "overall capped at 0.59 (low)"
+    "error_qc_low_cap": "Any error-level QC flag caps overall at 0.59 (low).",
+    "incomplete_method_context_medium_cap": "Missing basis, method family, analytical method or digestion/extraction caps overall at 0.79 (medium).",
+    "missing_canonical_coordinate_low_cap": "Missing canonical WGS84 coordinates cap overall at 0.59 (low).",
+    "missing_coordinate_uncertainty_medium_cap": "Canonical coordinates without declared uncertainty cap overall at 0.79 (medium).",
+    "missing_geologic_context_medium_cap": "Rock, soil and non-marine sediment without source or matched geology cap overall at 0.79 (medium)."
   },
   "meaning": "Record usability for this workflow; not truth probability, statistical confidence, or accuracy.",
   "name": "operational_confidence",

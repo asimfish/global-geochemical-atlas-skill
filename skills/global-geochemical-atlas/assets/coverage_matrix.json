@@ -658,8 +658,9 @@
     "status": "in_progress"
   },
   "limitations": [
-    "Catalog routing identifies possible sources; evidence tier is not a truth probability, and analyte availability plus record-level comparability still require source queries and D2 review.",
+    "Catalog routing applies frozen analyte, region, measurement-basis and temporal evidence; record-level availability and comparability still require acquisition plus D2 review.",
     "A partial route must not be presented as complete global coverage.",
+    "max_records is an acquisition/output ceiling enforced by the downstream runner, not evidence that the selected records are representative.",
     "Source discovery is still in progress; absence from this route is not proof that no source exists.",
     "Analyte coverage is credited only for explicit target mappings in the production registry; method, time and spatial-density coverage still require separate audits.",
     "Record count alone is not evidence of representative global coverage."
