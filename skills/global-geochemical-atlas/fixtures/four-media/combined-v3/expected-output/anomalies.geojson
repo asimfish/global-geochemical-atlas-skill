@@ -1,0 +1,520 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          7.355115,
+          64.195273
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "group_id": "grp-b8cfd54b9409",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 2.0,
+        "operational_confidence_band": "high",
+        "record_id": "rec-48a0083ddb6cceb4b17682861a2f04ae844d19506c7c5594326f23e53f218097",
+        "robust_z": -3.527132,
+        "sample_id": "R2139MC08A_14-15 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=636",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          26.953759,
+          81.409639
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "group_id": "grp-b8cfd54b9409",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 147.0,
+        "operational_confidence_band": "high",
+        "record_id": "rec-d0e29f1f3803d46ee78b7042982051de5eaea408e8955dac107269a25fd90f4c",
+        "robust_z": 3.666717,
+        "sample_id": "R2924MC02A_24-25 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=910",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.25,
+          65.0408
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "group_id": "grp-18b2f6c481f3",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 5.7,
+        "operational_confidence_band": "high",
+        "record_id": "rec-31c2cbe87dd5978155a033d450ad578066466b24bfb3816b15c856240d559fe9",
+        "robust_z": -4.81894,
+        "sample_id": "R1509MC94A_11-12 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=113",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.1622,
+          64.4898
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "group_id": "grp-18b2f6c481f3",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 4.9,
+        "operational_confidence_band": "high",
+        "record_id": "rec-4d1f81d9955060f051ba0f482d71bbc6efa02c950dee8423e7a6b24315e0ee81",
+        "robust_z": -5.552185,
+        "sample_id": "R1521MC96A_32-33 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=149",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          17.7675,
+          76.1165
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "group_id": "grp-18b2f6c481f3",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 47.9,
+        "operational_confidence_band": "high",
+        "record_id": "rec-6ab236df71eae9eeb4d4cef3e2fd83f8c17c5e78bb6f10154d12b4fdf968c541",
+        "robust_z": 5.501836,
+        "sample_id": "R1676MC01A_16-17 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=429",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          127.7467,
+          26.3626
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": "0那覇",
+        "group_id": "grp-a736f0326890",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "river_sediment_<180um_national_geochemical_map",
+        "medium": "sediment",
+        "method_family": null,
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 1522.586,
+        "operational_confidence_band": "medium",
+        "record_id": "rec-9a84b1a74bd5bce5bc4913ec6799f58971dc3d37154c2b22feef2bcb6b5e629b",
+        "robust_z": 6.458494,
+        "sample_id": "5",
+        "source_id": "japan-gsj-geochemical-map",
+        "source_locator": "samplejoho.csv#row=6;noudo.csv#row=6",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -88.0869,
+          30.8919
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "group_id": "grp-fe8ce71931eb",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "near-total concentration in <2 mm soil fraction",
+        "medium": "soil",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 1.8,
+        "operational_confidence_band": "high",
+        "record_id": "rec-1f8d8d2ed37c7a6ea4635fbd7adbaa33a86d40133188defe0bfd04e93e52840b",
+        "robust_z": -3.98562,
+        "sample_id": "C-328963",
+        "source_id": "usgs-conus-soil",
+        "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=35",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.25,
+          65.0408
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-4c4d396ebbf8",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 12.2,
+        "operational_confidence_band": "high",
+        "record_id": "rec-8604fc061b27ae9d25586a6bf8a5bae0774fe4e95d9cf6ccbda65626d7064b73",
+        "robust_z": -3.750719,
+        "sample_id": "R1509MC94A_11-12 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=113",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.1622,
+          64.4898
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-4c4d396ebbf8",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 11.4,
+        "operational_confidence_band": "high",
+        "record_id": "rec-9438a9df8d2ddde5ee72dc082c5ae2fc8980a6267c757683a472878d8b77eb5d",
+        "robust_z": -4.041061,
+        "sample_id": "R1521MC96A_32-33 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=149",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          4.529466,
+          57.141142
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-09e230c10408",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 1.1,
+        "operational_confidence_band": "high",
+        "record_id": "rec-4aa202c7c8f607e2e6b7a94aca0e11658b629f33602e86b4312676d5001dd566",
+        "robust_z": -6.878966,
+        "sample_id": "R3579GR20A_00-01 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1014",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -88.0869,
+          30.8919
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "group_id": "grp-c7b5f8d2a9a7",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "near-total concentration in <2 mm soil fraction",
+        "medium": "soil",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 2.3,
+        "operational_confidence_band": "high",
+        "record_id": "rec-842bd6c020a491d2a17a38bc20df4b53966b308cc8bfc7f49884158c4735d069",
+        "robust_z": -3.584401,
+        "sample_id": "C-328963",
+        "source_id": "usgs-conus-soil",
+        "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=35",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.1622,
+          64.4898
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "group_id": "grp-1e078708de83",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 26.3,
+        "operational_confidence_band": "high",
+        "record_id": "rec-b227c47c3bfc7de8d7e86bc95d9b372c575456a4d5eb75eeb4b77272dca8874a",
+        "robust_z": -3.688497,
+        "sample_id": "R1521MC96A_32-33 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=149",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.25,
+          65.0408
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "group_id": "grp-1e078708de83",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "dry_weight_partial_nitric_acid",
+        "medium": "sediment",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 27.6,
+        "operational_confidence_band": "high",
+        "record_id": "rec-ce3ab261803c4b8b828e0952272eb1b845f6d90a314fa9f38e6cf1f88b574e4d",
+        "robust_z": -3.507759,
+        "sample_id": "R1509MC94A_11-12 cm",
+        "source_id": "norway-marchem",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=113",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -88.0869,
+          30.8919
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "group_id": "grp-11d43a8ccc96",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "near-total concentration in <2 mm soil fraction",
+        "medium": "soil",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 4.0,
+        "operational_confidence_band": "high",
+        "record_id": "rec-403d66f7d2ae827eaec5ac9fe3983715f781b39e6b2d5531ec52142dbbf43f06",
+        "robust_z": -4.025127,
+        "sample_id": "C-328941",
+        "source_id": "usgs-conus-soil",
+        "source_locator": "Appendix_3b_Ahorizon_18Sept2013.txt#row=35",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -88.0869,
+          30.8919
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "group_id": "grp-c4b8c360a0dc",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "near-total concentration in <2 mm soil fraction",
+        "medium": "soil",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 7.0,
+        "operational_confidence_band": "high",
+        "record_id": "rec-2e15d81f012cb6f543619091eae2d804830d472f1b275ac1f5f5b839e988dc21",
+        "robust_z": -3.877232,
+        "sample_id": "C-328963",
+        "source_id": "usgs-conus-soil",
+        "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=35",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -85.9549,
+          30.4575
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "group_id": "grp-f0649e377c8e",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "measurement_basis": "near-total concentration in <2 mm soil fraction",
+        "medium": "soil",
+        "method_family": "icp_oes",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 5.0,
+        "operational_confidence_band": "high",
+        "record_id": "rec-ea8eb881bc0a1f0566f6db68efb42e0c42ea379ae230be6cb841865a2f88b57e",
+        "robust_z": -3.677724,
+        "sample_id": "C-328685",
+        "source_id": "usgs-conus-soil",
+        "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=798",
+        "spatial_geologic_unit": null,
+        "spatial_geology_status": "not_run_no_grid",
+        "status": "candidate_anomaly"
+      },
+      "type": "Feature"
+    }
+  ],
+  "interface_version": "d2-interface-v2",
+  "method_version": "d2-robust-mad-v2",
+  "name": "geochemical_candidate_anomalies",
+  "type": "FeatureCollection"
+}

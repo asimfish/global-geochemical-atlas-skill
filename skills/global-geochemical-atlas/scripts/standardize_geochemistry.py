@@ -601,6 +601,8 @@ def conversion_for(
     unit = canonicalize_unit(original_unit)
     if medium in SOLID_MEDIA and unit in SOLID_FACTORS:
         return SOLID_FACTORS[unit], "mg/kg"
+    if medium == "water" and unit == "nmol/kg":
+        return 1.0, "nmol/kg"
     if medium == "water" and unit in WATER_FACTORS:
         return WATER_FACTORS[unit], "ug/L"
     if medium == "water" and unit in WATER_MOLAR_MULTIPLIERS:
@@ -1451,7 +1453,9 @@ def sha256_file(path: Path) -> str:
 def write_csv(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
-        writer = csv.DictWriter(handle, fieldnames=SCHEMA_COLUMNS, extrasaction="ignore")
+        writer = csv.DictWriter(
+            handle, fieldnames=SCHEMA_COLUMNS, extrasaction="ignore", lineterminator="\n"
+        )
         writer.writeheader()
         for record in records:
             row = dict(record)

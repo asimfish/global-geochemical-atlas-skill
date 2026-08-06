@@ -1,0 +1,70 @@
+{
+  "acquisition": {
+    "cache_status": "cache_hit",
+    "observed_at": "2026-08-06T08:00:00Z",
+    "request_url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip",
+    "transport_note": "Official GTK HTTP archive accepted only after exact registered SHA-256 verification; redirects rejected."
+  },
+  "archive": {
+    "bytes": 560005,
+    "members": [
+      {
+        "bytes": 71479,
+        "name": "F_AR_data_2v6_7Aug07.csv",
+        "sha256": "04fe3c65ffadc205a8c9d6c1d5869cb6d729a965faf399bd32874b7f50fb6b51"
+      },
+      {
+        "bytes": 29191,
+        "name": "F_Hg_data_2v3_7Aug2007.csv",
+        "sha256": "7c76110a7d960309d56813ee3ad8a8f28333e504868d9a05baebef6167f97aa4"
+      },
+      {
+        "bytes": 115247,
+        "name": "F_XRF_data_2v6_7Aug07.csv",
+        "sha256": "04628e52364b70a1c39492631568e1aa47b77285becd2393d283b7ea9088431f"
+      },
+      {
+        "bytes": 114939,
+        "name": "F_ICP_data_2v6_7Aug07.csv",
+        "sha256": "8d7a6b65746f5d78fb96c5bc3012f843acab7ab3ab7fe72ae904f7f542d4a5aa"
+      }
+    ],
+    "sha256": "6e3481e97beb3f831aaefd75032872c3bd15e4dd7f296bee3ba9262f172b6739"
+  },
+  "claim_boundary": "This audit proves a byte-pinned official FOREGS medium archive, exact CSV row counts and method-separated target mappings. It does not prove local spatial coverage, preserved censoring qualifiers or comparability across analytical bases.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "distinct_gtn_union": 750,
+    "physical_rows": 2935,
+    "target_analytes": {
+      "As": 1496,
+      "Cr": 1496,
+      "Cu": 1496,
+      "Hg": 696,
+      "Ni": 1496,
+      "Pb": 1496,
+      "Zn": 1496
+    },
+    "target_observations": 9672
+  },
+  "observed_metadata": {
+    "grain_fraction": "<2 mm; pulverized <0.063 mm",
+    "medium": "sediment",
+    "method_bases": [
+      "aqua_regia_leachable_<2mm_floodplain_sediment",
+      "total_Hg_direct_solid_<2mm_floodplain_sediment",
+      "total_selected_<2mm_floodplain_sediment"
+    ],
+    "row_level_detection_qualifiers_present": false,
+    "sample_type": "floodplain sediment from a larger drainage basin",
+    "table_level_detection_limits_present": true
+  },
+  "snapshot_id": "foregs-floodplain-sediment:2005-files-2026-03-03:6e3481e97beb",
+  "source_id": "foregs-floodplain-sediment",
+  "verification_version": "foregs-medium-audit-v1"
+}

@@ -40,7 +40,8 @@ def build_matrix(
 ) -> dict[str, Any]:
     """Summarize route coverage while keeping unverified dimensions unknown."""
 
-    route = source_router.route_sources(request, catalog, registry)
+    resolved_registry = dict(registry) if registry is not None else source_adapters.load_source_registry()
+    route = source_router.route_sources(request, catalog, resolved_registry)
     routed_sources = {
         item["source_id"]: item for item in [*route["selected_sources"], *route["review_sources"]]
     }
@@ -49,20 +50,60 @@ def build_matrix(
         routed = route["coverage"][medium]
         selected = routed["selected_sources"]
         candidates = routed["candidate_sources"]
-        if len(selected) == 1:
-            independence = "single_source_dependency"
-        elif len(selected) > 1:
-            independence = "multiple_sources_lineage_not_yet_deduplicated"
-        else:
-            independence = "no_current_analysis_source"
         source_scopes = {
             source_id: catalog["sources"][source_id]["coverage"]["extent_class"]
             for source_id in [*selected, *candidates]
         }
+        source_target_analytes = {
+            source_id: sorted(resolved_registry["sources"][source_id].get("target_analytes", {}))
+            for source_id in selected
+            if source_id in resolved_registry.get("sources", {})
+        }
+        audited_analytes = sorted(
+            {
+                analyte
+                for analytes in source_target_analytes.values()
+                for analyte in analytes
+            }
+        )
+        requested_analytes = list(route["request"]["elements"])
+        analyte_source_counts = {
+            analyte: sum(analyte in analytes for analytes in source_target_analytes.values())
+            for analyte in requested_analytes
+        }
+        analytes_with_single_source = sorted(
+            analyte for analyte, count in analyte_source_counts.items() if count == 1
+        )
+        analytes_with_multiple_sources = sorted(
+            analyte for analyte, count in analyte_source_counts.items() if count > 1
+        )
+        if len(selected) == 1:
+            independence = "single_source_dependency"
+        elif len(selected) > 1 and analytes_with_single_source:
+            independence = "multiple_sources_but_single_source_per_analyte"
+        elif len(selected) > 1:
+            independence = "multiple_sources_lineage_not_yet_deduplicated"
+        else:
+            independence = "no_current_analysis_source"
+        missing_analytes = sorted(set(requested_analytes) - set(audited_analytes))
+        if not source_target_analytes:
+            analyte_coverage = "unknown"
+        elif not missing_analytes:
+            analyte_coverage = "complete_for_registered_targets"
+        elif set(audited_analytes).intersection(requested_analytes):
+            analyte_coverage = "partial"
+        else:
+            analyte_coverage = "none"
         cells[medium] = {
             "status": routed["status"],
-            "requested_analytes": list(route["request"]["elements"]),
-            "analyte_coverage": "unknown",
+            "requested_analytes": requested_analytes,
+            "analyte_coverage": analyte_coverage,
+            "audited_analytes": audited_analytes,
+            "missing_analytes": missing_analytes,
+            "source_target_analytes": source_target_analytes,
+            "analyte_source_counts": analyte_source_counts,
+            "analytes_with_single_source": analytes_with_single_source,
+            "analytes_with_multiple_sources": analytes_with_multiple_sources,
             "selected_sources": selected,
             "candidate_sources": candidates,
             "source_scopes": source_scopes,
@@ -97,7 +138,7 @@ def build_matrix(
         "route_status": route["status"],
         "limitations": [
             *route["limitations"],
-            "Analyte, method, time and spatial-density coverage remain unknown until source-level inventories are audited.",
+            "Analyte coverage is credited only for explicit target mappings in the production registry; method, time and spatial-density coverage still require separate audits.",
             "Record count alone is not evidence of representative global coverage.",
         ],
         "claim_boundary": (
@@ -148,10 +189,12 @@ def render_markdown(matrix: Mapping[str, Any]) -> str:
             "",
             "## 当前判断",
             "",
-            "- 岩石与土壤各有一个满足当前 `normalized_analysis` 条件的局部来源，因此仍是 `partial`；",
-            "- 沉积物已有 MarChem `raw_observation` 样板，但未达到当前请求的分析级别，因此保持 `unknown`；",
-            "- 水体来源当前仍为发现级，GEOTRACES 文件、字段和适配器证据尚未补齐；",
-            "- 每个介质的分析物、方法、时间和空间密度仍需逐源审计；",
+            "- 岩石只有 GEOROC 太古宙专题来源，因此仍是 `partial`；",
+            "- 土壤已有 USGS、PANGAEA 与 FOREGS topsoil/subsoil/humus；FOREGS 腐殖质不含 As，且温和硝酸浸出、王水和总量不可混用，整体仍为 `partial`；",
+            "- 沉积物已有 MarChem、GSJ 与 FOREGS stream/floodplain sediment；海洋/河流/泛滥平原、粒级和消解基础不同，仍为 `partial`；",
+            "- 水体已有 GEOTRACES 海水、GEMStat 淡水和 FOREGS 欧洲溪流水；目标分析物有多个来源，但海水/淡水、单位和时间尺度不可直接混为同一背景；",
+            "- FOREGS 六类来源已经分别实现适配器并固定文件 hash；这增加了欧洲低密度基线覆盖，不代表欧洲每个位置有实测值；",
+            "- 岩石、土壤和沉积物样板的 As、Cu、Ni、Zn 目标字段已登记；来源数增加不代表方法一致或空间充分，方法、时间和密度仍需逐源审计；",
             "- 聚合平台不计作独立证据，必须追溯并去重其上游数据集。",
             "",
             "## 限制",

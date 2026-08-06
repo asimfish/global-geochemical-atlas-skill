@@ -115,7 +115,7 @@ python scripts/render_visualization.py \
 python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 ```
 
-`validate_outputs.py` 验证 `run_workflow.py` 的核心十文件目录；它要求 `run_summary.json`，不用于
+`validate_outputs.py` 验证 `run_workflow.py` 的核心十一文件目录；它要求 `run_summary.json`，不用于
 独立 D3 目录。D3 验证器改为核对配置、报告、输入与输出哈希、地图计数、离线依赖和科学边界。
 
 ## 6. 输出与验收

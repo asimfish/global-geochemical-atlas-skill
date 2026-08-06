@@ -1,0 +1,471 @@
+{
+  "claim_boundary": "Record evidence is hash-bound and record-ID matched when evidence_level is verified_record_evidence. A verified chain proves provenance linkage, not measurement truth or method comparability. Declared licenses still require source-specific review.",
+  "confidence_report": {
+    "confidence_version": "d2-confidence-v2",
+    "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
+    "filename": "confidence_report.json",
+    "input_sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236",
+    "not_a_probability": true,
+    "run_id": "0a407ce7998ca37e",
+    "sha256": "e59fd0447f31ec04b803ee2b958a87a9ff3bc26c32b640489af5bb11abad0dcd"
+  },
+  "coverage": {
+    "declared_license_rate": 1.0,
+    "records_with_declared_license": 748,
+    "records_with_source_locator": 748,
+    "records_with_verified_evidence": 0,
+    "source_locator_rate": 1.0,
+    "verified_evidence_rate": 0.0
+  },
+  "data_mode": "input",
+  "input": {
+    "bytes": 398758,
+    "filename": "demo_input.csv",
+    "record_count": 748,
+    "sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236"
+  },
+  "manifest_version": "geochemical-source-manifest-v2",
+  "not_for_scientific_interpretation": false,
+  "record_evidence": {
+    "acquisition_manifest": null,
+    "evidence_level": "source_declared_in_input",
+    "exact_record_id_match": true,
+    "filename": "record_evidence.jsonl",
+    "record_count": 748,
+    "schema_version": "geochemical-record-evidence-v1",
+    "sha256": "3f6d885cee8c8ad786bd64a00164537bb64dd47119856a0f9be98cfbc1cca6df"
+  },
+  "source_count": 13,
+  "sources": [
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "F_AR_data_2v6_7Aug07.csv#row=4",
+        "F_AR_data_2v6_7Aug07.csv#row=5",
+        "F_AR_data_2v6_7Aug07.csv#row=6",
+        "F_AR_data_2v6_7Aug07.csv#row=7",
+        "F_AR_data_2v6_7Aug07.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "foregs-floodplain-sediment",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "H_icp_data_2v2_11Mar04.csv#row=10",
+        "H_icp_data_2v2_11Mar04.csv#row=11",
+        "H_icp_data_2v2_11Mar04.csv#row=12",
+        "H_icp_data_2v2_11Mar04.csv#row=13",
+        "H_icp_data_2v2_11Mar04.csv#row=14"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 16,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "foregs-humus",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "S_AR_data_2v5_30Nov2006.csv#row=4",
+        "S_AR_data_2v5_30Nov2006.csv#row=5",
+        "S_AR_data_2v5_30Nov2006.csv#row=6",
+        "S_AR_data_2v5_30Nov2006.csv#row=7",
+        "S_AR_data_2v5_30Nov2006.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "foregs-stream-sediment",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "W_all_data_2v8_17Sep07.csv#row=10",
+        "W_all_data_2v8_17Sep07.csv#row=11",
+        "W_all_data_2v8_17Sep07.csv#row=12",
+        "W_all_data_2v8_17Sep07.csv#row=13",
+        "W_all_data_2v8_17Sep07.csv#row=14"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "foregs-stream-water",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "C_AR_data_2v5_8Feb06.csv#row=4",
+        "C_AR_data_2v5_8Feb06.csv#row=5",
+        "C_AR_data_2v5_8Feb06.csv#row=6",
+        "C_AR_data_2v5_8Feb06.csv#row=7",
+        "C_AR_data_2v5_8Feb06.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 24,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "foregs-subsoil",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "T_AR_data_2v4_8Feb06.csv#row=4",
+        "T_AR_data_2v4_8Feb06.csv#row=5",
+        "T_AR_data_2v4_8Feb06.csv#row=6",
+        "T_AR_data_2v4_8Feb06.csv#row=7",
+        "T_AR_data_2v4_8Feb06.csv#row=8"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "located_record_count": 48,
+      "locator_count": 24,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "foregs-topsoil",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "Arsenic.csv#row=25632",
+        "Arsenic.csv#row=25633",
+        "Arsenic.csv#row=25634",
+        "Arsenic.csv#row=25635",
+        "Arsenic.csv#row=25636"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 48,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "gemstat-open-archive",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [
+        "10.25625/1KRR1P"
+      ],
+      "dataset_titles": [
+        "GEOROC Compilation: Archaean Cratons"
+      ],
+      "dataset_versions": [
+        "12.0"
+      ],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=10",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=11",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=12",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=13",
+        "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=172"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-SA-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 36,
+      "record_count": 48,
+      "source_files": [
+        {
+          "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
+          "sha256": "6959b5f1d1ce74ba6608d11847cf12e6427535040bc10b5854ec5ef336fcf6aa",
+          "url": null
+        },
+        {
+          "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv",
+          "sha256": "2123a1cba47aa354555582fecdfff7540a9aa8b1527e0ee0a705db8f11d30b57",
+          "url": null
+        }
+      ],
+      "source_id": "georoc-archaean",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=125",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=144",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=154",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=168",
+        "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=182"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 33,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "geotraces-idp2025",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "samplejoho.csv#row=10;noudo.csv#row=10",
+        "samplejoho.csv#row=11;noudo.csv#row=11",
+        "samplejoho.csv#row=12;noudo.csv#row=12",
+        "samplejoho.csv#row=13;noudo.csv#row=13",
+        "samplejoho.csv#row=2;noudo.csv#row=2"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-GSJ-Government-Standard-Terms-2.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "japan-gsj-geochemical-map",
+      "source_tiers": [
+        "government"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1006",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1014",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1015",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1071",
+        "MarChem_Inorganic_Data_20260805T102709Z.csv#row=113"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 112,
+      "locator_count": 28,
+      "record_count": 112,
+      "source_files": [],
+      "source_id": "norway-marchem",
+      "source_tiers": [
+        "government"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "Table_S5.tab#row=115",
+        "Table_S5.tab#row=116",
+        "Table_S5.tab#row=117",
+        "Table_S5.tab#row=118",
+        "Table_S5.tab#row=119"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 12,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "pangaea-north-africa-soil",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 0
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [
+        "10.3133/ds801"
+      ],
+      "dataset_titles": [
+        "Geochemical and mineralogical data for soils of the conterminous United States"
+      ],
+      "dataset_versions": [
+        "Data Series 801, 2013 release"
+      ],
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "Appendix_2b_Top5_18Sept2013.txt#row=15",
+        "Appendix_2b_Top5_18Sept2013.txt#row=16",
+        "Appendix_2b_Top5_18Sept2013.txt#row=17",
+        "Appendix_2b_Top5_18Sept2013.txt#row=18",
+        "Appendix_2b_Top5_18Sept2013.txt#row=19"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-USGS-Public-Domain"
+      ],
+      "located_record_count": 108,
+      "locator_count": 27,
+      "record_count": 108,
+      "source_files": [
+        {
+          "filename": "Appendix_2b_Top5_18Sept2013.txt",
+          "sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894",
+          "url": null
+        },
+        {
+          "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
+          "sha256": "462821c1164b5b4c27905a3ea62a22fa3f6172da09125d8f80ec5b2f6a69a202",
+          "url": null
+        },
+        {
+          "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
+          "sha256": "4aa8080f81f690587f762300bada16e33e376eea0003243d5333b47c78b4c90c",
+          "url": null
+        }
+      ],
+      "source_id": "usgs-conus-soil",
+      "source_tiers": [
+        "government"
+      ],
+      "verified_record_count": 0
+    }
+  ],
+  "synthetic_data_present": false
+}

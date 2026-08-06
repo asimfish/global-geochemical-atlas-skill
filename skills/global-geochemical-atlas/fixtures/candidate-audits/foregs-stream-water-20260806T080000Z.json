@@ -1,0 +1,52 @@
+{
+  "acquisition": {
+    "cache_status": "cache_hit",
+    "observed_at": "2026-08-06T08:00:00Z",
+    "request_url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip",
+    "transport_note": "Official GTK HTTP archive accepted only after exact registered SHA-256 verification; redirects rejected."
+  },
+  "archive": {
+    "bytes": 404125,
+    "members": [
+      {
+        "bytes": 312446,
+        "name": "W_all_data_2v8_17Sep07.csv",
+        "sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3"
+      }
+    ],
+    "sha256": "2c081224ea3f3646d805f7bbe9fd7737ecfdf0938c2abff444ff28b540116fc3"
+  },
+  "claim_boundary": "This audit proves a byte-pinned official FOREGS medium archive, exact CSV row counts and method-separated target mappings. It does not prove local spatial coverage, preserved censoring qualifiers or comparability across analytical bases.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "pending"
+  },
+  "observed_data": {
+    "distinct_gtn_union": 808,
+    "physical_rows": 808,
+    "target_analytes": {
+      "As": 808,
+      "Cr": 808,
+      "Cu": 808,
+      "Ni": 808,
+      "Pb": 808,
+      "Zn": 808
+    },
+    "target_observations": 4848
+  },
+  "observed_metadata": {
+    "grain_fraction": "<0.45 micrometre filtered fraction",
+    "medium": "water",
+    "method_bases": [
+      "dissolved_<0.45um_stream_water"
+    ],
+    "row_level_detection_qualifiers_present": false,
+    "sample_type": "stream water",
+    "table_level_detection_limits_present": true
+  },
+  "snapshot_id": "foregs-stream-water:2005-files-2026-03-03:2c081224ea3f",
+  "source_id": "foregs-stream-water",
+  "verification_version": "foregs-medium-audit-v1"
+}

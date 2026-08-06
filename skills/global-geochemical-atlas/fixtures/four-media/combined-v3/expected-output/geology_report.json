@@ -1,0 +1,43 @@
+{
+  "disposition_coverage": 1.0,
+  "eligible_match_rate": 0.0,
+  "eligible_record_count": 748,
+  "grid": null,
+  "grid_supplied": false,
+  "join_version": "d2-glim-05deg-cell-join-v1",
+  "matched_record_count": 0,
+  "report_version": "d2-spatial-geology-report-v1",
+  "run_metadata": {
+    "configuration": {
+      "geology_grid_sha256": null,
+      "geology_join_version": null,
+      "group_by": [
+        "element_or_analyte",
+        "medium",
+        "material",
+        "measurement_basis",
+        "geologic_unit",
+        "method_family",
+        "digestion_or_extraction"
+      ],
+      "minimum_group_size": 8,
+      "minimum_quantified_fraction": 0.7,
+      "region_bbox": null,
+      "robust_z_threshold": 3.5,
+      "schema_map": {}
+    },
+    "input_row_count": 748,
+    "input_sha256": "f316cc08a165de4845a001ec2fd80c38c084ec33e5bdf90459e1d11823fdc236",
+    "missing_recommended_input_columns": [
+      "analytical_method_status",
+      "coordinate_uncertainty_status"
+    ],
+    "run_id": "0a407ce7998ca37e",
+    "schema_map_sha256": null
+  },
+  "scientific_limit": "GLiM dominant 0.5 degree surface lithology is screening context, not a site-scale formation or causal interpretation.",
+  "status_counts": {
+    "not_run_no_grid": 748
+  },
+  "water_records_with_assigned_land_unit": 0
+}

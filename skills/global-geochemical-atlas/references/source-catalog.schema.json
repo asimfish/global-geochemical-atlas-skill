@@ -104,8 +104,12 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "concept_doi": {"type": "string", "minLength": 1},
             "dataset_doi": {"type": "string", "minLength": 1},
-            "project_doi": {"type": "string", "minLength": 1}
+            "parent_atlas": {"type": "string", "minLength": 1},
+            "parent_dataset_doi": {"type": "string", "minLength": 1},
+            "project_doi": {"type": "string", "minLength": 1},
+            "publication_doi": {"type": "string", "minLength": 1}
           }
         },
         "landing_page": {"type": "string", "format": "uri", "pattern": "^https://"},
