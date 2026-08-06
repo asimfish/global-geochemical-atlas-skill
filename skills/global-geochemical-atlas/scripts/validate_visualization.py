@@ -35,6 +35,10 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     database_metrics = workflow_validator.validate_database(
         paths["geochemistry.csv"], errors, warnings
     )
+    canonical_ids = set(workflow_validator.database_evidence_index(paths["geochemistry.csv"]))
+    iteration_count = workflow_validator.validate_iteration_backlog(
+        paths["iteration_backlog.csv"], canonical_ids, errors
+    )
     parsed: dict[str, Any] = {}
     for name in (
         "anomalies.geojson",
@@ -52,6 +56,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
     anomaly_count = 0
     sample_count = 0
+    sample_record_ids: set[str] = set()
     if "anomalies.geojson" in parsed:
         anomaly_count = workflow_validator.validate_feature_collection(
             parsed["anomalies.geojson"],
@@ -66,6 +71,18 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "samples.geojson",
             errors,
             allow_null_geometry=False,
+        )
+        sample_record_ids = {
+            str(feature.get("properties", {}).get("record_id"))
+            for feature in parsed["samples.geojson"].get("features", [])
+            if feature.get("properties", {}).get("record_id") is not None
+        }
+    scoped_anomaly_count = 0
+    if "anomalies.geojson" in parsed:
+        scoped_anomaly_count = sum(
+            str(feature.get("properties", {}).get("record_id")) in sample_record_ids
+            for feature in parsed["anomalies.geojson"].get("features", [])
+            if feature.get("properties", {}).get("record_id") is not None
         )
     if sample_count > database_metrics["record_count"]:
         errors.append("samples.geojson contains more features than geochemistry.csv records")
@@ -101,6 +118,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "interactive_map": "interactive_map.html",
             "samples": "samples.geojson",
             "profile": "visualization_profile.json",
+            "iteration_backlog": "iteration_backlog.csv",
         }
         if report.get("outputs") != expected_outputs:
             errors.append("visualization_report.json outputs do not match the D3 contract")
@@ -124,12 +142,50 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         else:
             if map_report.get("map_version") != "d3-interactive-atlas-v3":
                 errors.append("visualization map_version is unsupported")
+            if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v2":
+                errors.append("visualization UI hierarchy contract is unsupported")
+            if map_report.get("terminology_contract") != "competition-geochemistry-v1":
+                errors.append("visualization professional terminology contract is unsupported")
+            interaction_design = map_report.get("capability_matrix", {}).get(
+                "interaction_design", {}
+            )
+            required_interactions = (
+                "professional_navigation_labels",
+                "combination_region_selector",
+                "combination_custom_bbox",
+                "regional_combination_scope_lock_supported",
+                "comparison_profile_export",
+                "formal_comparison_requires_profile_rerender",
+            )
+            for capability in required_interactions:
+                if interaction_design.get(capability) is not True:
+                    errors.append(
+                        "visualization interaction contract is missing required capability: "
+                        + capability
+                    )
+            question_contract = map_report.get("visual_question_contract")
+            expected_views = {"map", "database", "combination", "sources", "anomalies", "quality"}
+            if not isinstance(question_contract, dict) or question_contract.get("schema_version") != "d3-visual-question-contract-v1":
+                errors.append("visualization visual-question contract is missing or unsupported")
+            elif set(question_contract.get("views", {})) != expected_views:
+                errors.append("visualization visual-question contract does not cover every primary view")
+            else:
+                for view_name, view_contract in question_contract["views"].items():
+                    if not isinstance(view_contract, dict) or set(view_contract) != {
+                        "question", "comparison_baseline", "encoding", "boundary"
+                    }:
+                        errors.append(f"visualization question contract is malformed for {view_name}")
+                    elif not view_contract["question"] or not view_contract["comparison_baseline"] or not view_contract["encoding"] or not view_contract["boundary"]:
+                        errors.append(f"visualization question contract is incomplete for {view_name}")
             if map_report.get("external_assets") != 0 or map_report.get("interpolation") is not False:
                 errors.append("visualization report violates the offline/no-interpolation boundary")
             if map_report.get("mapped_record_count") != sample_count:
                 errors.append("visualization mapped_record_count differs from samples.geojson")
-            if map_report.get("candidate_record_count") != anomaly_count:
-                errors.append("visualization candidate_record_count differs from anomalies.geojson")
+            if map_report.get("candidate_record_count") != scoped_anomaly_count:
+                errors.append(
+                    "visualization candidate_record_count differs from the anomalies linked "
+                    "to scoped samples.geojson records"
+                )
             if map_report.get("visualization_profile") != profile:
                 errors.append("map_report profile differs from visualization_profile.json")
             if map_report.get("visualization_profile_warnings") != report.get("profile_warnings"):
@@ -154,7 +210,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             **database_metrics,
             "record_evidence_count": evidence_count,
             "sample_feature_count": sample_count,
-            "candidate_feature_count": anomaly_count,
+            "source_candidate_feature_count": anomaly_count,
+            "scoped_candidate_feature_count": scoped_anomaly_count,
+            "iteration_backlog_count": iteration_count,
         },
     }
 

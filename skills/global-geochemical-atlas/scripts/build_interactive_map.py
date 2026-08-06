@@ -13,15 +13,23 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+import build_iteration_backlog as backlog_builder
+
 
 MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
-PROFILE_VERSION = "d3-visualization-profile-v1"
+PROFILE_VERSION = "d3-visualization-profile-v2"
+UI_HIERARCHY_VERSION = "task-first-progressive-disclosure-v2"
+VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
+TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
+BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
+MISSING_METHOD_LABEL = "D2 未提供分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
+DEFAULT_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
 DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "interactive-atlas-v3.html"
 DEFAULT_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
 REGION_PRESETS: dict[str, dict[str, Any]] = {
@@ -30,16 +38,19 @@ REGION_PRESETS: dict[str, dict[str, Any]] = {
         "bounds": {"w": -180.0, "e": 180.0, "s": -90.0, "n": 90.0},
     },
     "usa": {
-        "label": "美国范围框（含阿拉斯加）",
+        "label": "美国（国家边界严格裁剪）",
         "bounds": {"w": -170.0, "e": -66.0, "s": 18.0, "n": 72.0},
+        "country_code": "USA",
     },
     "usa48": {
-        "label": "美国本土范围框",
+        "label": "美国本土（国界 + 范围框）",
         "bounds": {"w": -125.0, "e": -66.0, "s": 24.0, "n": 50.0},
+        "country_code": "USA",
     },
     "china": {
-        "label": "中国范围框",
+        "label": "中国（国家边界严格裁剪）",
         "bounds": {"w": 73.0, "e": 135.0, "s": 18.0, "n": 54.0},
+        "country_code": "CHN",
     },
     "shanghai": {
         "label": "上海范围框",
@@ -50,8 +61,51 @@ REGION_PRESETS: dict[str, dict[str, Any]] = {
         "bounds": {"w": -25.0, "e": 45.0, "s": 34.0, "n": 72.0},
     },
     "australia": {
-        "label": "澳大利亚范围框",
+        "label": "澳大利亚（国家边界严格裁剪）",
         "bounds": {"w": 112.0, "e": 154.0, "s": -44.0, "n": -10.0},
+        "country_code": "AUS",
+    },
+}
+
+VISUAL_QUESTION_CONTRACT: dict[str, Any] = {
+    "schema_version": VISUAL_QUESTION_VERSION,
+    "views": {
+        "map": {
+            "question": "当前区域有哪些观测，采样覆盖有多密？",
+            "comparison_baseline": "当前筛选范围内的物理采样点与记录",
+            "encoding": ["position=WGS84 coordinate", "glow=physical sample density", "symbol=clickable observation"],
+            "boundary": "密度不编码浓度；空白不等于元素不存在。",
+        },
+        "database": {
+            "question": "每条标准化测定能否被检索、追溯并提出审计修订？",
+            "comparison_baseline": "canonical geochemistry.csv",
+            "encoding": ["row=one analyte measurement", "patch=proposal only"],
+            "boundary": "页面修订不直接改写 canonical 数据或证据。",
+        },
+        "combination": {
+            "question": "同一批可比样品中的两个元素是否共同升降？",
+            "comparison_baseline": "同区域、介质、basis、方法与单位的同样品配对",
+            "encoding": ["position=log10 paired value", "quadrant=relative to paired medians", "rho=Spearman association"],
+            "boundary": "共测与相关不证明因果、污染来源或矿化成因。",
+        },
+        "sources": {
+            "question": "这些记录来自哪里，证据和工作流置信度允许怎样使用？",
+            "comparison_baseline": "D1 source manifest and D2 confidence components",
+            "encoding": ["table=source coverage", "components=workflow usability"],
+            "boundary": "工作流置信度不是正确概率或统计置信区间。",
+        },
+        "anomalies": {
+            "question": "候选值相对可比背景中位数和稳健阈值偏离多少？",
+            "comparison_baseline": "D2 declared comparable background group",
+            "encoding": ["position=robust-z threshold scale", "color=high or low candidate", "ring=count-only visual aggregation"],
+            "boundary": "候选不是空间邻域均值结论，也不证明污染或成因。",
+        },
+        "quality": {
+            "question": "下一轮应由 D1/D2 修复什么，哪些只能复核或保留为科学限制？",
+            "comparison_baseline": "versioned QC and iteration backlog",
+            "encoding": ["status=action/review/scientific limit", "owner=D1 or D2"],
+            "boundary": "无证据时停止自动补齐，删失值不自动视为失败。",
+        },
     },
 }
 
@@ -83,12 +137,88 @@ def parse_bool_cell(value: Any) -> bool:
     return str(value or "").strip().casefold() in {"1", "true", "yes"}
 
 
-def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int]:
+def coordinate_in_bounds(longitude: float, latitude: float, bounds: Mapping[str, float]) -> bool:
+    return (
+        bounds["w"] <= longitude <= bounds["e"]
+        and bounds["s"] <= latitude <= bounds["n"]
+    )
+
+
+def point_on_segment(
+    longitude: float, latitude: float, start: Sequence[float], end: Sequence[float]
+) -> bool:
+    cross = (longitude - start[0]) * (end[1] - start[1]) - (
+        latitude - start[1]
+    ) * (end[0] - start[0])
+    if abs(cross) > 1e-9:
+        return False
+    return (
+        min(start[0], end[0]) - 1e-9 <= longitude <= max(start[0], end[0]) + 1e-9
+        and min(start[1], end[1]) - 1e-9 <= latitude <= max(start[1], end[1]) + 1e-9
+    )
+
+
+def point_in_ring(longitude: float, latitude: float, ring: Sequence[Sequence[float]]) -> bool:
+    inside = False
+    previous = ring[-1]
+    for current in ring:
+        if point_on_segment(longitude, latitude, previous, current):
+            return True
+        if (current[1] > latitude) != (previous[1] > latitude):
+            intersection = (previous[0] - current[0]) * (latitude - current[1]) / (
+                previous[1] - current[1]
+            ) + current[0]
+            if longitude < intersection:
+                inside = not inside
+        previous = current
+    return inside
+
+
+def geometry_polygons(geometry: Mapping[str, Any]) -> Sequence[Any]:
+    coordinates = geometry.get("coordinates") or []
+    return [coordinates] if geometry.get("type") == "Polygon" else coordinates
+
+
+def point_in_country(
+    longitude: float, latitude: float, country: Mapping[str, Any]
+) -> bool:
+    for polygon in geometry_polygons(country.get("geometry") or {}):
+        if not polygon or not point_in_ring(longitude, latitude, polygon[0]):
+            continue
+        if not any(point_in_ring(longitude, latitude, hole) for hole in polygon[1:]):
+            return True
+    return False
+
+
+def coordinate_in_region(
+    longitude: float,
+    latitude: float,
+    region: Mapping[str, Any],
+    countries_by_code: Mapping[str, Mapping[str, Any]],
+) -> bool:
+    if not coordinate_in_bounds(longitude, latitude, region["bounds"]):
+        return False
+    country_code = region.get("country_code")
+    if not country_code:
+        return True
+    country = countries_by_code.get(str(country_code))
+    if country is None:
+        raise MapBuildError(f"country boundary is unavailable: {country_code}")
+    return point_in_country(longitude, latitude, country)
+
+
+def load_records(
+    path: Path,
+    max_points: int,
+    scope_region: Mapping[str, Any],
+    countries_by_code: Mapping[str, Mapping[str, Any]],
+) -> tuple[list[dict[str, Any]], int, int]:
     """Consume, but never reinterpret, the public D2 canonical CSV."""
     if not path.is_file():
         raise MapBuildError(f"database does not exist: {path}")
     records: list[dict[str, Any]] = []
     total_records = 0
+    source_mappable_records = 0
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         required = {
@@ -114,6 +244,11 @@ def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int
             if latitude is None or longitude is None:
                 continue
             if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+                continue
+            source_mappable_records += 1
+            if not coordinate_in_region(
+                longitude, latitude, scope_region, countries_by_code
+            ):
                 continue
             confidence = parse_json_cell(row.get("operational_confidence"), {})
             qc_flags = parse_json_cell(row.get("qc_flags"), [])
@@ -170,9 +305,10 @@ def load_records(path: Path, max_points: int) -> tuple[list[dict[str, Any]], int
             )
             if len(records) > max_points:
                 raise MapBuildError(
-                    f"valid map points exceed --max-points ({max_points}); filter the input first"
+                    f"valid map points within the configured scope exceed --max-points "
+                    f"({max_points}); filter the input first"
                 )
-    return records, total_records
+    return records, total_records, source_mappable_records
 
 
 def load_json_object(path: Path | None, label: str) -> dict[str, Any]:
@@ -220,6 +356,7 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         "subtitle",
         "story",
         "theme",
+        "spatial_scope",
         "default_region",
         "custom_region",
         "filters",
@@ -232,11 +369,18 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
     if profile.get("theme") != "evidence-dark":
         raise MapBuildError("visualization profile theme must be evidence-dark")
     story = profile.get("story")
-    if story not in {"overview", "coverage", "anomaly", "comparison", "evidence"}:
+    if story not in {"overview", "coverage", "anomaly", "comparison", "database", "evidence"}:
         raise MapBuildError("visualization profile story is unsupported")
     default_region = profile.get("default_region")
     if default_region not in {*REGION_PRESETS, "custom"}:
         raise MapBuildError("visualization profile default_region is unsupported")
+    spatial_scope = profile.get("spatial_scope")
+    if spatial_scope not in {"global", "regional"}:
+        raise MapBuildError("visualization profile spatial_scope must be global or regional")
+    if spatial_scope == "global" and default_region != "global":
+        raise MapBuildError("spatial_scope=global requires default_region=global")
+    if spatial_scope == "regional" and default_region == "global":
+        raise MapBuildError("spatial_scope=regional requires a non-global default_region")
 
     custom_region = profile.get("custom_region")
     if custom_region is not None:
@@ -271,6 +415,8 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         }
     if default_region == "custom" and custom_region is None:
         raise MapBuildError("default_region=custom requires custom_region")
+    if default_region != "custom" and custom_region is not None:
+        raise MapBuildError("custom_region must be null unless default_region=custom")
 
     filters = profile.get("filters")
     filter_keys = {
@@ -294,6 +440,17 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         key: profile_text(comparison.get(key), f"comparison.{key}", 160, nullable=True)
         for key in sorted(comparison_keys)
     }
+    if (normalized_comparison["x"] is None) != (normalized_comparison["y"] is None):
+        raise MapBuildError("visualization profile comparison.x and comparison.y must be paired")
+    if story == "comparison" and (
+        normalized_comparison["x"] is None or normalized_comparison["y"] is None
+    ):
+        raise MapBuildError("visualization profile story=comparison requires comparison.x and comparison.y")
+    if (
+        normalized_comparison["x"] is not None
+        and normalized_comparison["x"] == normalized_comparison["y"]
+    ):
+        raise MapBuildError("visualization profile comparison elements must be different")
 
     display = profile.get("display")
     display_keys = {
@@ -323,6 +480,7 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         "subtitle": profile_text(profile.get("subtitle"), "subtitle", 500),
         "story": story,
         "theme": "evidence-dark",
+        "spatial_scope": spatial_scope,
         "default_region": default_region,
         "custom_region": custom_region,
         "filters": normalized_filters,
@@ -331,11 +489,33 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
     }
 
 
+def selected_region(profile: Mapping[str, Any]) -> dict[str, Any]:
+    region = (
+        profile["custom_region"]
+        if profile["default_region"] == "custom"
+        else REGION_PRESETS[profile["default_region"]]
+    )
+    selected = {"label": str(region["label"]), "bounds": dict(region["bounds"])}
+    if region.get("country_code"):
+        selected["country_code"] = str(region["country_code"])
+    selected["clip_method"] = (
+        "country_polygon_and_bbox" if region.get("country_code") else "bbox"
+    )
+    return selected
+
+
 def visualization_profile_warnings(
-    profile: Mapping[str, Any], records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]
+    profile: Mapping[str, Any],
+    records: Sequence[Mapping[str, Any]],
+    anomaly_ids: set[str],
+    countries_by_code: Mapping[str, Mapping[str, Any]],
 ) -> list[str]:
     method_values = {
-        str(record.get("method_family") or record.get("analytical_method") or "unknown")
+        str(
+            record.get("method_family")
+            or record.get("analytical_method")
+            or MISSING_METHOD_LABEL
+        )
         for record in records
     }
     available = {
@@ -374,17 +554,17 @@ def visualization_profile_warnings(
     requested_medium = profile["comparison"].get("medium")
     if requested_medium and requested_medium not in available["medium"]:
         warnings.append(f"请求的组合介质在当前数据中未观测到：{requested_medium}")
-    region = (
-        profile["custom_region"]
-        if profile["default_region"] == "custom"
-        else REGION_PRESETS[profile["default_region"]]
-    )
+    region = selected_region(profile)
     bounds = region["bounds"]
     region_records = [
         record
         for record in records
-        if bounds["w"] <= float(record["longitude"]) <= bounds["e"]
-        and bounds["s"] <= float(record["latitude"]) <= bounds["n"]
+        if coordinate_in_region(
+            float(record["longitude"]),
+            float(record["latitude"]),
+            region,
+            countries_by_code,
+        )
     ]
     if not region_records:
         warnings.append("默认区域没有可上图记录；页面将显示覆盖缺口")
@@ -406,7 +586,11 @@ def visualization_profile_warnings(
             if requested and record.get(record_key) != requested:
                 return False
         requested_method = filters.get("method")
-        method = record.get("method_family") or record.get("analytical_method") or "unknown"
+        method = (
+            record.get("method_family")
+            or record.get("analytical_method")
+            or MISSING_METHOD_LABEL
+        )
         return not requested_method or method == requested_method
 
     configured_records = [record for record in region_records if matches_filters(record)]
@@ -470,6 +654,78 @@ def load_basemap(path: Path) -> dict[str, Any]:
     }
 
 
+def load_country_boundaries(path: Path) -> dict[str, Any]:
+    value = load_json_object(path, "offline country boundaries")
+    countries = value.get("countries")
+    if (
+        value.get("asset_version") != BOUNDARY_ASSET_VERSION
+        or value.get("license") != "public domain"
+        or not isinstance(countries, list)
+        or not countries
+        or len(countries) > 300
+    ):
+        raise MapBuildError("offline country boundary provenance or structure is invalid")
+    point_total = 0
+    seen: set[str] = set()
+    normalized = []
+    for country in countries:
+        if not isinstance(country, dict):
+            raise MapBuildError("offline country boundary contains an invalid country")
+        iso_a3 = country.get("iso_a3")
+        geometry = country.get("geometry")
+        if (
+            not isinstance(iso_a3, str)
+            or len(iso_a3) != 3
+            or iso_a3 in seen
+            or not isinstance(geometry, dict)
+            or geometry.get("type") not in {"Polygon", "MultiPolygon"}
+        ):
+            raise MapBuildError("offline country boundary identifiers or geometry are invalid")
+        seen.add(iso_a3)
+        polygons = geometry_polygons(geometry)
+        if not polygons:
+            raise MapBuildError("offline country boundary has no polygon")
+        for polygon in polygons:
+            if not isinstance(polygon, list) or not polygon:
+                raise MapBuildError("offline country boundary has an invalid polygon")
+            for ring in polygon:
+                if not isinstance(ring, list) or len(ring) < 4:
+                    raise MapBuildError("offline country boundary has an invalid ring")
+                for point in ring:
+                    point_total += 1
+                    if (
+                        not isinstance(point, list)
+                        or len(point) != 2
+                        or optional_float(point[0]) is None
+                        or optional_float(point[1]) is None
+                        or not (-180 <= float(point[0]) <= 180)
+                        or not (-90 <= float(point[1]) <= 90)
+                    ):
+                        raise MapBuildError("offline country boundary has an invalid coordinate")
+        normalized.append(country)
+    if point_total > 200_000 or value.get("point_count") != point_total:
+        raise MapBuildError("offline country boundary point count is invalid")
+    required = {"CHN", "USA", "AUS"}
+    if not required.issubset(seen):
+        raise MapBuildError("offline country boundary omits a supported strict country")
+    return {
+        "asset_version": value["asset_version"],
+        "title": value.get("title"),
+        "natural_earth_version": value.get("natural_earth_version"),
+        "scale": value.get("scale"),
+        "coordinate_reference_system": value.get("coordinate_reference_system"),
+        "source_page": value.get("source_page"),
+        "source_geojson_url": value.get("source_geojson_url"),
+        "source_commit": value.get("source_commit"),
+        "source_sha256": value.get("source_sha256"),
+        "license": value["license"],
+        "boundary_semantics": value.get("boundary_semantics"),
+        "country_count": len(normalized),
+        "point_count": point_total,
+        "countries": normalized,
+    }
+
+
 def sample_display_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
     return (
         record.get("source_id"),
@@ -480,15 +736,22 @@ def sample_display_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
     )
 
 
-def region_coverage(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+def region_coverage(
+    records: Sequence[Mapping[str, Any]],
+    countries_by_code: Mapping[str, Mapping[str, Any]],
+) -> dict[str, Any]:
     coverage: dict[str, Any] = {}
     for key, region in REGION_PRESETS.items():
         bounds = region["bounds"]
         matched = [
             record
             for record in records
-            if bounds["w"] <= float(record["longitude"]) <= bounds["e"]
-            and bounds["s"] <= float(record["latitude"]) <= bounds["n"]
+            if coordinate_in_region(
+                float(record["longitude"]),
+                float(record["latitude"]),
+                region,
+                countries_by_code,
+            )
         ]
         coverage[key] = {
             "label": region["label"],
@@ -501,13 +764,73 @@ def region_coverage(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "media": sorted(
                 {str(record.get("medium")) for record in matched if record.get("medium")}
             ),
-            "administrative_clip": False,
+            "administrative_clip": bool(region.get("country_code")),
+            "clip_method": (
+                "country_polygon_and_bbox" if region.get("country_code") else "bbox"
+            ),
         }
     return coverage
 
 
+def data_coverage_diagnostics(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    media: dict[str, dict[str, Any]] = {}
+    for record in records:
+        medium = str(record.get("medium") or "unknown")
+        item = media.setdefault(
+            medium,
+            {
+                "record_count": 0,
+                "sample_keys": set(),
+                "method_missing_record_count": 0,
+            },
+        )
+        item["record_count"] += 1
+        item["sample_keys"].add(sample_display_key(record))
+        if not record.get("method_family") and not record.get("analytical_method"):
+            item["method_missing_record_count"] += 1
+    normalized_media = {}
+    for medium, item in sorted(media.items()):
+        normalized_media[medium] = {
+            "record_count": item["record_count"],
+            "sample_count": len(item["sample_keys"]),
+            "method_missing_record_count": item["method_missing_record_count"],
+            "method_completeness_rate": round(
+                1 - item["method_missing_record_count"] / item["record_count"], 6
+            ),
+        }
+    missing_method = sum(
+        not record.get("method_family") and not record.get("analytical_method")
+        for record in records
+    )
+    missing_geology = sum(not record.get("geologic_unit") for record in records)
+    return {
+        "by_medium": normalized_media,
+        "method_missing_record_count": missing_method,
+        "method_completeness_rate": round(
+            1 - missing_method / len(records), 6
+        )
+        if records
+        else None,
+        "geologic_unit_missing_record_count": missing_geology,
+        "geologic_unit_completeness_rate": round(
+            1 - missing_geology / len(records), 6
+        )
+        if records
+        else None,
+        "sample_type_field": "medium",
+        "analysis_method_fields": ["analytical_method", "method_family"],
+        "interpretation": (
+            "Sample type and analytical method are independent fields; media count imbalance "
+            "describes input coverage, not concentration or anomaly prevalence."
+        ),
+    }
+
+
 def samples_geojson(
-    records: Sequence[Mapping[str, Any]], anomaly_ids: set[str]
+    records: Sequence[Mapping[str, Any]],
+    anomaly_ids: set[str],
+    profile: Mapping[str, Any],
+    scope_region: Mapping[str, Any],
 ) -> dict[str, Any]:
     features = []
     for record in records:
@@ -529,6 +852,15 @@ def samples_geojson(
         "type": "FeatureCollection",
         "name": "standardized_geochemical_samples",
         "map_version": MAP_VERSION,
+        "spatial_scope": {
+            "mode": profile["spatial_scope"],
+            "region_key": profile["default_region"],
+            "region_label": scope_region["label"],
+            "bounds": dict(scope_region["bounds"]),
+            "country_code": scope_region.get("country_code"),
+            "clip_method": scope_region["clip_method"],
+            "output_clipped": profile["spatial_scope"] == "regional",
+        },
         "features": features,
     }
 
@@ -676,11 +1008,27 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         "__SAMPLES_JSON__",
         "__ANOMALIES_JSON__",
         "__BASEMAP_JSON__",
+        "__BOUNDARIES_JSON__",
         "__CONTEXT_JSON__",
         MAP_VERSION,
         PAYLOAD_VERSION,
         ANOMALY_RENDER_MODE,
         PROFILE_VERSION,
+        UI_HIERARCHY_VERSION,
+        VISUAL_QUESTION_VERSION,
+        'id="deliverableCenter"',
+        'id="databaseView"',
+        'id="confidenceSummary"',
+        "完整数据库以",
+        "不是正确概率",
+        'id="backView"',
+        'id="databaseEditor"',
+        'id="sourceTableBody"',
+        'id="anomalyInspector"',
+        'id="exportComparisonProfile"',
+        "comparisonProfile",
+        'id="iterationTableBody"',
+        'href="iteration_backlog.csv"',
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:
@@ -700,40 +1048,129 @@ def build_map(
     confidence_report_path: Path | None = None,
     source_manifest_path: Path | None = None,
     anomaly_report_path: Path | None = None,
+    iteration_backlog_path: Path | None = None,
     basemap_path: Path = DEFAULT_BASEMAP,
     visualization_profile_path: Path | None = None,
+    boundaries_path: Path = DEFAULT_BOUNDARIES,
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
-    records, total_records = load_records(database, max_points)
+    profile = load_visualization_profile(visualization_profile_path)
+    scope_region = selected_region(profile)
+    boundaries = load_country_boundaries(boundaries_path)
+    countries_by_code = {
+        str(country["iso_a3"]): country for country in boundaries["countries"]
+    }
+    records, total_records, source_mappable_records = load_records(
+        database, max_points, scope_region, countries_by_code
+    )
     anomalies = load_anomalies(anomalies_path)
     basemap = load_basemap(basemap_path)
-    profile = load_visualization_profile(visualization_profile_path)
     anomaly_ids = {
         str(feature.get("properties", {}).get("record_id"))
         for feature in anomalies["features"]
         if feature.get("properties", {}).get("record_id") is not None
     }
-    profile_warnings = visualization_profile_warnings(profile, records, anomaly_ids)
-    geojson = samples_geojson(records, anomaly_ids)
+    scoped_record_ids = {str(record["record_id"]) for record in records}
+    scoped_anomalies = {
+        **anomalies,
+        "features": [
+            feature
+            for feature in anomalies["features"]
+            if str(feature.get("properties", {}).get("record_id")) in scoped_record_ids
+        ],
+    }
+    profile_warnings = visualization_profile_warnings(
+        profile, records, anomaly_ids, countries_by_code
+    )
+    geojson = samples_geojson(records, anomaly_ids, profile, scope_region)
     map_payload = compact_map_payload(records, anomaly_ids)
+    spatial_scope = {
+        "mode": profile["spatial_scope"],
+        "region_key": profile["default_region"],
+        "region_label": scope_region["label"],
+        "bounds": dict(scope_region["bounds"]),
+        "country_code": scope_region.get("country_code"),
+        "clip_method": scope_region["clip_method"],
+        "output_clipped": profile["spatial_scope"] == "regional",
+    }
+    capability_matrix = {
+        "filter_dimensions": {
+            "element": True,
+            "region": True,
+            "geologic_unit": True,
+            "sample_type_medium": True,
+        },
+        "outputs": {
+            "global_or_regional_distribution_map": True,
+            "clickable_sample_density_heatmap": True,
+            "element_pair_comparison": True,
+            "enrichment_and_depletion_candidates": True,
+        },
+        "deliverables": {
+            "standardized_database_first_class_ui": True,
+            "confidence_and_sources_first_class_ui": True,
+            "anomaly_results_first_class_ui": True,
+            "interactive_map_first_class_ui": True,
+            "iteration_backlog_first_class_ui": True,
+        },
+        "interaction_design": {
+            "hierarchy_version": UI_HIERARCHY_VERSION,
+            "terminology_contract": TERMINOLOGY_CONTRACT,
+            "single_primary_navigation": True,
+            "compact_deliverable_dock": True,
+            "collapsible_deliverable_dock": True,
+            "professional_navigation_labels": True,
+            "combination_region_selector": True,
+            "combination_custom_bbox": True,
+            "regional_combination_scope_lock_supported": True,
+            "comparison_profile_export": True,
+            "formal_comparison_requires_profile_rerender": True,
+            "four_primary_map_controls": True,
+            "four_top_level_kpis": True,
+            "advanced_filters_progressive_disclosure": True,
+            "duplicate_story_selector": False,
+            "recoverable_map_navigation": True,
+            "keyboard_map_navigation": True,
+            "regional_pan_without_scope_expansion": True,
+            "localized_measurement_basis": True,
+            "research_patch_crud": "proposal_only_no_direct_mutation",
+        },
+        "scientific_semantics": {
+            "visual_question_contract": VISUAL_QUESTION_VERSION,
+            "heatmap_encodes": "physical_sample_density",
+            "heatmap_interpolates_concentration": False,
+            "anomaly_basis": "D2 robust z within declared comparable background groups",
+            "anomaly_region_semantics": "visual aggregation of D2 candidate points only",
+            "anomaly_contrast": "candidate_vs_comparable_group_median_and_robust_thresholds",
+            "element_pair_analysis": "log10_scatter_median_quadrant_shares_spearman_and_coverage_matrix",
+        },
+    }
     context = {
         "map_version": MAP_VERSION,
+        "ui_hierarchy_version": UI_HIERARCHY_VERSION,
+        "terminology_contract": TERMINOLOGY_CONTRACT,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
+        "spatial_scope": spatial_scope,
+        "capability_matrix": capability_matrix,
+        "visual_question_contract": VISUAL_QUESTION_CONTRACT,
         "total_record_count": total_records,
+        "source_mappable_record_count": source_mappable_records,
         "mappable_record_count": len(records),
         "region_presets": REGION_PRESETS,
         "qc_report": load_json_object(qc_report_path, "QC report"),
         "confidence_report": load_json_object(confidence_report_path, "confidence report"),
         "source_manifest": load_json_object(source_manifest_path, "source manifest"),
         "anomaly_report": load_json_object(anomaly_report_path, "anomaly report"),
+        "iteration_backlog": backlog_builder.load(iteration_backlog_path) if iteration_backlog_path else backlog_builder.load(Path("")),
     }
     html = (
         load_html_template().replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
-        .replace("__ANOMALIES_JSON__", safe_embedded_json(anomalies))
+        .replace("__ANOMALIES_JSON__", safe_embedded_json(scoped_anomalies))
         .replace("__BASEMAP_JSON__", safe_embedded_json(basemap))
+        .replace("__BOUNDARIES_JSON__", safe_embedded_json(boundaries))
         .replace("__CONTEXT_JSON__", safe_embedded_json(context))
     )
     geojson_text = (
@@ -751,32 +1188,47 @@ def build_map(
     sample_keys = {sample_display_key(record) for record in records}
     all_data_overview = (
         profile["story"] == "overview"
+        and profile["spatial_scope"] == "global"
         and profile["default_region"] == "global"
         and not any(profile["filters"].values())
     )
     return {
         "map_version": MAP_VERSION,
+        "ui_hierarchy_version": UI_HIERARCHY_VERSION,
+        "terminology_contract": TERMINOLOGY_CONTRACT,
         "mapped_record_count": len(records),
+        "source_mappable_record_count": source_mappable_records,
+        "scope_excluded_mappable_record_count": source_mappable_records - len(records),
         "display_sample_count": len(sample_keys),
-        "unmappable_record_count": total_records - len(records),
+        "unmappable_record_count": total_records - source_mappable_records,
         "candidate_record_count": sum(
             str(record["record_id"]) in anomaly_ids for record in records
         ),
         "default_view": (
-            "all_data_sample_deduplicated" if all_data_overview else "profile_driven_task_view"
+            "all_data_sample_deduplicated"
+            if all_data_overview
+            else (
+                "regional_scope_task_view"
+                if profile["spatial_scope"] == "regional"
+                else "profile_driven_task_view"
+            )
         ),
         "embedded_payload_schema": PAYLOAD_VERSION,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
+        "spatial_scope": spatial_scope,
+        "visual_question_contract": VISUAL_QUESTION_CONTRACT,
         "visualization_modes": [
             "distribution_points",
             "sample_density_heatmap",
             "element_pair_comparison",
             "candidate_anomaly_region_aggregation",
         ],
+        "capability_matrix": capability_matrix,
         "region_presets": [*REGION_PRESETS, "custom_bbox"],
-        "region_coverage": region_coverage(records),
+        "region_coverage": region_coverage(records, countries_by_code),
+        "data_coverage_diagnostics": data_coverage_diagnostics(records),
         "external_assets": 0,
         "interpolation": False,
         "html_bytes": html_bytes,
@@ -788,6 +1240,17 @@ def build_map(
             "license": basemap["license"],
             "archive_sha256": basemap["archive_sha256"],
             "embedded": True,
+        },
+        "country_boundaries": {
+            "asset_version": boundaries["asset_version"],
+            "title": boundaries["title"],
+            "scale": boundaries["scale"],
+            "license": boundaries["license"],
+            "source_sha256": boundaries["source_sha256"],
+            "country_count": boundaries["country_count"],
+            "point_count": boundaries["point_count"],
+            "embedded": True,
+            "semantics": boundaries["boundary_semantics"],
         },
     }
 
@@ -810,13 +1273,20 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--source-manifest", type=Path, help="Optional D1 source_manifest.json")
     parser.add_argument("--anomaly-report", type=Path, help="Optional D2 anomaly_report.json")
+    parser.add_argument("--iteration-backlog", type=Path, help="Optional D1/D2 iteration_backlog.csv")
     parser.add_argument(
         "--basemap", type=Path, default=DEFAULT_BASEMAP, help="Pinned offline basemap asset"
     )
     parser.add_argument(
+        "--boundaries",
+        type=Path,
+        default=DEFAULT_BOUNDARIES,
+        help="Pinned offline Natural Earth Admin-0 boundary asset",
+    )
+    parser.add_argument(
         "--profile",
         type=Path,
-        help="Optional d3-visualization-profile-v1 JSON; defaults to the bundled template",
+        help="Optional d3-visualization-profile-v2 JSON; defaults to the bundled template",
     )
     parser.add_argument(
         "--max-points", type=int, default=50_000, help="Fail if valid coordinate points exceed this"
@@ -829,17 +1299,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         report = build_map(
-            args.database,
-            args.anomalies,
-            args.output_html,
-            args.output_geojson,
-            args.max_points,
-            args.qc_report,
-            args.confidence_report,
-            args.source_manifest,
-            args.anomaly_report,
-            args.basemap,
-            args.profile,
+            database=args.database,
+            anomalies_path=args.anomalies,
+            output_html=args.output_html,
+            output_geojson=args.output_geojson,
+            max_points=args.max_points,
+            qc_report_path=args.qc_report,
+            confidence_report_path=args.confidence_report,
+            source_manifest_path=args.source_manifest,
+            anomaly_report_path=args.anomaly_report,
+            iteration_backlog_path=args.iteration_backlog,
+            basemap_path=args.basemap,
+            visualization_profile_path=args.profile,
+            boundaries_path=args.boundaries,
         )
     except (MapBuildError, OSError) as exc:
         parser.error(str(exc))

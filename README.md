@@ -36,7 +36,9 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 ## D3 是可视化生成 Skill，不是一张固定网页
 
 `interactive-atlas-v3.html` 是 Skill 内部模板。Agent 应从用户问题生成
-`d3-visualization-profile-v1` 配置，再用一个目录级命令渲染，不能要求用户手改 HTML：
+`d3-visualization-profile-v2` 配置，再用一个目录级命令渲染，不能要求用户手改 HTML。全球任务复制
+`visualization-profile.template.json`；国家、城市或自定义 bbox 调研复制
+`visualization-profile.regional.template.json`，后者会把 HTML、异常显示和 `samples.geojson` 裁剪到区域：
 
 ```bash
 python skills/global-geochemical-atlas/scripts/render_visualization.py \
@@ -47,8 +49,9 @@ python skills/global-geochemical-atlas/scripts/validate_visualization.py \
   --output-dir visualization_output
 ```
 
-配置决定首屏任务、区域、元素、介质、地质单元、元素组合和图层；结果同时输出配置与
-`visualization_report.json`，便于 Agent 和评测系统核验复现性及覆盖提示。
+配置决定首屏任务、区域、元素、介质、地质单元、元素组合和图层；结果同时输出配置、
+`visualization_report.json` 与 `iteration_backlog.csv`，便于 Agent 和评测系统核验复现性、覆盖提示，
+并把 D1/D2 缺口、复核项和删失科学限制路由到下一轮。
 
 然后运行自检：
 

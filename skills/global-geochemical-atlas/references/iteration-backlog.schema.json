@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:global-geochemical-atlas:iteration-backlog-row-v1",
+  "title": "Iteration backlog CSV row",
+  "type": "object",
+  "required": [
+    "item_id", "record_id", "source_id", "stage_owner", "severity", "status",
+    "issue_code", "field", "observed_value", "detail", "recommended_action", "auto_recheck"
+  ],
+  "properties": {
+    "item_id": {"type": "string", "pattern": "^ITER-[0-9a-f]{16}$"},
+    "record_id": {"type": "string", "minLength": 1},
+    "source_id": {"type": "string", "minLength": 1},
+    "stage_owner": {"enum": ["D1", "D2"]},
+    "severity": {"enum": ["error", "warning", "info"]},
+    "status": {"enum": ["action_required", "review_required", "scientific_limit"]},
+    "issue_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+    "field": {"type": "string", "minLength": 1},
+    "observed_value": {"type": "string"},
+    "detail": {"type": "string", "minLength": 1},
+    "recommended_action": {"type": "string", "minLength": 1},
+    "auto_recheck": {"enum": ["true", "false"]}
+  },
+  "additionalProperties": false
+}

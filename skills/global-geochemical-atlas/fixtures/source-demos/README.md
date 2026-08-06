@@ -171,6 +171,6 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将以上十四个来源合并到同一个 `sources=auto` 请求：796 条观测包括 rock 48、soil 348、sediment 256、water 144。`run_manifest.json` 绑定十四个输入 fixture 的 hash、来源证据等级、离线验证状态，以及标准化前后均为 93 个 D2 比较分区（水体 18 个）；`expected-output/` 是可字节级重建的十文件工作流结果。
+`fixtures/four-media/combined-v3/` 将以上十四个来源合并到同一个 `sources=auto` 请求：796 条观测包括 rock 48、soil 348、sediment 256、water 144。`run_manifest.json` 绑定十四个输入 fixture 的 hash、来源证据等级、离线验证状态，以及标准化前后均为 93 个 D2 比较分区（水体 18 个）；`expected-output/` 是可字节级重建的十一文件工作流结果，其中 `iteration_backlog.csv` 单列证据缺口、复核项和删失科学限制。
 
 这只是接口联合测试。93 个背景组按元素、介质、material、样品类型、土壤层位、沉积环境、水分相、粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取方法隔离；当前没有一个组跨越不兼容来源。GEOROC 和 AfSIS 未证实 CRS 的 reported coordinates 不进入 canonical 地图。16 个工程异常候选只验证筛查流程，不构成区域异常、污染或矿化结论。
