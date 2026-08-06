@@ -19,7 +19,8 @@ python public_case/prepare_case.py --output-dir case_data
 在 `submission/` 生成：
 
 1. `d1_raw.csv`：一行一个样品×元素测定，保留原值、单位、限定符、坐标、介质、方法、来源定位、版本、
-   许可和文件哈希；至少覆盖固定输入中的四个地球化学数据集。来源没有报告方法、地质或坐标精度时必须写显式状态，
+   许可和文件哈希；这些来源字段必须与 `public_case/sources.json` 及下载生成的 `case_manifest.json` 精确一致，
+   `source_locator` 必须使用相应 `locator_prefix` 并定位到行、事件、字段或元素；至少覆盖固定输入中的四个地球化学数据集。来源没有报告方法、地质或坐标精度时必须写显式状态，
    不得编造。
 2. `geochemistry.csv`、`qc_report.json`、`confidence_report.json`、`geology_report.json`、
    `anomalies.geojson`、`anomaly_report.json`：固体到 mg/kg、水体到 µg/L；保留删失语义；对 GLiM 执行
@@ -35,7 +36,7 @@ python public_case/prepare_case.py --output-dir case_data
 ## 评分
 
 ```bash
-python public_case/score_submission.py --submission-dir submission --output score.json
+python public_case/score_submission.py --case-dir case_data --submission-dir submission --output score.json
 ```
 
 总分 100：D1 证据链 30、D2 科学处理 35、D3 产品交付 20、可复现性 15。两组实验必须使用相同 commit、

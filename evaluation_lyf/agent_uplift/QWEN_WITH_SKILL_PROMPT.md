@@ -25,9 +25,9 @@ rm -rf bootstrap_repo
 
 不要扩展 archive。`work/` 中不得存在 `.git`；不得读取 `stage_benchmark/`、`reference_implementation/`、gold、私有评分资料、历史运行、其他 Skill 或另一实验臂产物。
 
-完整读取 `work/.agents/skills/global-geochemical-atlas/SKILL.md`，按其路由只读取任务需要的 references/scripts/assets，并记录实际使用文件。再读取 `TASK.md`、`public_case/sources.json`、`public_case/prepare_case.py` 和 `public_case/score_submission.py`，记录 scorer SHA-256，之后不得修改。
+完整读取 `work/.agents/skills/global-geochemical-atlas/SKILL.md`，按其路由只读取任务需要的 references/scripts/assets，并记录实际使用文件。再读取 `TASK.md`、`public_case/sources.json`、`public_case/prepare_case.py` 和 `public_case/score_submission.py`，分别记录这四个文件的 SHA-256，之后不得修改任何一个。
 
-使用主机 Python 准备 `experiment/with_skill_host/case_data/`，按 Skill 完成 TASK 要求的 D1、D2、D3、来源置信度、异常结果、交互地图、报告和 `run.sh`。最多三轮“实现→公开 scorer→修正”，每轮分别保存原始 score、stdout、stderr、退出码和耗时。最终 `agent_report.json` 必须含字面字段 `"skill_used": true`。保留 `case_data/`，在新的 `clean_rebuild/` 从空 submission 实际运行 `run.sh` 并再次评分，不能复制最终产物冒充重建。
+使用主机 Python 准备 `experiment/with_skill_host/case_data/`，按 Skill 完成 TASK 要求的 D1、D2、D3、来源置信度、异常结果、交互地图、报告和 `run.sh`。最多三轮“实现→公开 scorer→修正”，每轮必须用 `python public_case/score_submission.py --case-dir experiment/with_skill_host/case_data --submission-dir <本轮目录> --output <本轮score.json>` 评分，并分别保存原始 score、stdout、stderr、退出码和耗时。检查 score 中 `source_truth.source_truth_score`，不得用近似 DOI、空许可证或未绑定下载清单的哈希骗过来源核验。最终 `agent_report.json` 必须含字面字段 `"skill_used": true`。保留 `case_data/`，在新的 `clean_rebuild/` 从空 submission 实际运行 `run.sh` 并再次评分，不能复制最终产物冒充重建。
 
 写出 `experiment/with_skill_host/experiment_manifest.json`，记录固定参数、`skill_used=true`、Skill 文件与哈希、`runtime_mode=host`、Python/OS/依赖、scorer 与数据哈希、download_seconds、排除下载的 execution_seconds、各轮分数、clean rebuild 结果以及产物路径和 SHA-256。
 

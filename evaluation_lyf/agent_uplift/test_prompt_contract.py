@@ -40,6 +40,9 @@ class PromptContractTests(unittest.TestCase):
                 self.assertIn("experiment_manifest.json", prompt)
                 self.assertIn("public_case", prompt)
                 self.assertIn("score_submission.py", prompt)
+                self.assertIn("--case-dir", prompt)
+                self.assertIn("source_truth.source_truth_score", prompt)
+                self.assertIn("四个文件的 SHA-256", prompt)
                 self.assertIn("clean_rebuild", prompt)
                 self.assertIn("run.sh", prompt)
 

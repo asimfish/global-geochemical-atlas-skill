@@ -14,6 +14,19 @@ evaluation_lyf/
 
 `reference_implementation/` 不应替代 D1、D2 或 D3 的候选实现，也绝不能挂载给被测 Agent。评分必须区分候选实现缺陷、真实来源缺失与不适用情况；不得通过填造分析方法、坐标精度、地质背景或因果结论使检查通过。
 
+## 来源真实性门禁
+
+以下入口复用 `evaluation` 中独立维护的 8 来源、4 介质冻结契约，检查 DOI/标题/版本/许可证、文件哈希及代表性原始行：
+
+```bash
+python3 evaluation_lyf/suite_adapter.py \
+  --suite source-truth \
+  --timeout-seconds 120 \
+  --output-dir /tmp/gga-lyf-source-truth
+```
+
+它与 `real`/`completion` 的大规模处理测试互补：前者检查来源声明是否准确，后者检查真实数据处理是否完整。通过门禁不等于证明出版方无误或样品具有全球代表性。
+
 ## 统一入口
 
 主机诊断：

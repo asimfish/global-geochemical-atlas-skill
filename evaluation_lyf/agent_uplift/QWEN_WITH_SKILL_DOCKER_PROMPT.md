@@ -44,9 +44,9 @@ rmdir work/skills
 rm -rf bootstrap_repo
 ```
 
-完整读取 `work/.agents/skills/global-geochemical-atlas/SKILL.md`，按其路由只读取本任务所需 references/scripts/assets，并记录实际使用文件。再读取 `TASK.md`、`public_case/sources.json`、`public_case/prepare_case.py` 和 `public_case/score_submission.py`；记录 scorer SHA-256，之后不得修改。
+完整读取 `work/.agents/skills/global-geochemical-atlas/SKILL.md`，按其路由只读取本任务所需 references/scripts/assets，并记录实际使用文件。再读取 `TASK.md`、`public_case/sources.json`、`public_case/prepare_case.py` 和 `public_case/score_submission.py`；分别记录这四个文件的 SHA-256，之后不得修改任何一个。
 
-在 `experiment/with_skill_docker/` 中完成全流程：准备固定公开数据；按 Skill 执行全部交付；最多进行三轮公开 scorer；每轮保存独立 score、日志、退出码和耗时；`agent_report.json` 必须包含字面字段 `"skill_used": true`；从保留的 `case_data/` 在 `clean_rebuild/` 实际执行 `run.sh` 并重新评分，不能复制最终 submission 冒充重建。
+在 `experiment/with_skill_docker/` 中完成全流程：准备固定公开数据；按 Skill 执行全部交付；最多进行三轮公开 scorer；每轮必须在容器工作目录中用 `python public_case/score_submission.py --case-dir experiment/with_skill_docker/case_data --submission-dir <本轮目录> --output <本轮score.json>` 评分，保存独立 score、日志、退出码和耗时，并检查 `source_truth.source_truth_score`；不得用近似 DOI、空许可证或未绑定下载清单的哈希骗过来源核验；`agent_report.json` 必须包含字面字段 `"skill_used": true`；从保留的 `case_data/` 在 `clean_rebuild/` 实际执行 `run.sh` 并重新评分，不能复制最终 submission 冒充重建。
 
 写出 `experiment/with_skill_docker/experiment_manifest.json`，至少记录 repository、commit、model、temperature、`skill_used=true`、Skill 文件与哈希、`runtime_mode=docker` 或真实 fallback、Docker version/image ID、资源、网络、scorer 与数据哈希、download_seconds、排除下载的 execution_seconds、每轮分数、clean_rebuild 结果以及全部产物路径和 SHA-256。
 

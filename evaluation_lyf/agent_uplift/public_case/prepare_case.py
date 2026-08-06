@@ -55,7 +55,9 @@ def main() -> int:
         actual = {"bytes": destination.stat().st_size, "sha256": sha256(destination)}
         if actual != {"bytes": item["bytes"], "sha256": item["sha256"]}:
             parser.error(f"fixture mismatch: {destination}")
-        manifest["resources"].append({"id": item["id"], "file": item["file"], **actual})
+        # Preserve the public authority contract beside the verified local bytes so
+        # the scorer can perform exact record-level provenance checks offline.
+        manifest["resources"].append({**item, **actual})
     (args.output_dir / "case_manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )

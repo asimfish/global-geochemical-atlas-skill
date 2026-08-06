@@ -15,6 +15,7 @@ from campaign import (  # noqa: E402
     candidate_status,
     locate_llm_report,
     pair_fingerprint,
+    parser,
     parse_conditions,
     parse_tasks,
     prepare_task_bundle,
@@ -24,6 +25,13 @@ from campaign import (  # noqa: E402
 
 
 class CampaignTests(unittest.TestCase):
+    def test_source_truth_stage_is_a_supported_offline_suite(self) -> None:
+        args = parser().parse_args(
+            ["stage", "--suite", "source-truth", "--output-dir", "/tmp/source-truth"]
+        )
+        self.assertEqual(args.suite, "source-truth")
+        self.assertEqual(args.network, "offline")
+
     def test_selection_and_candidate_status(self) -> None:
         self.assertEqual(parse_tasks("q01,Q01,q24"), ["Q01", "Q24"])
         self.assertEqual(parse_conditions("s0,b0,s0"), ["S0", "B0"])

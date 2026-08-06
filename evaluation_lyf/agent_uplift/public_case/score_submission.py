@@ -5,11 +5,15 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import re
 from pathlib import Path
 from typing import Any
+
+
+PUBLIC_SOURCE_CONTRACT_SHA256 = "c719c7efc5fabae7b1653c60685cfe4da874bd04c923cf10b6113990269a36e6"
 
 
 def load_json(path: Path) -> Any:
@@ -20,9 +24,99 @@ def nonblank(row: dict[str, str], field: str) -> bool:
     return bool((row.get(field) or "").strip())
 
 
+def case_source_contract(case_dir: Path, public_contract_path: Path) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    """Return geochemical resources keyed by frozen hash after manifest verification."""
+    errors: list[str] = []
+    try:
+        contract_digest = hashlib.sha256(public_contract_path.read_bytes()).hexdigest()
+    except OSError as exc:
+        return {}, [f"cannot read public source contract: {exc}"]
+    if contract_digest != PUBLIC_SOURCE_CONTRACT_SHA256:
+        return {}, [f"public source contract hash mismatch: {contract_digest}"]
+    manifest_path = case_dir / "case_manifest.json"
+    if not manifest_path.is_file():
+        return {}, [f"missing {manifest_path}"]
+    try:
+        public = load_json(public_contract_path)
+        manifest = load_json(manifest_path)
+    except (OSError, json.JSONDecodeError) as exc:
+        return {}, [f"invalid source contract: {exc}"]
+    if manifest.get("case_version") != public.get("case_version"):
+        errors.append("case_version mismatch")
+    manifest_by_id = {item.get("id"): item for item in manifest.get("resources", [])}
+    geochemical: dict[str, dict[str, Any]] = {}
+    exact_fields = ("file", "bytes", "sha256", "doi", "url")
+    for expected in public.get("resources", []):
+        actual = manifest_by_id.get(expected.get("id"))
+        if actual is None:
+            errors.append(f"manifest missing resource {expected.get('id')}")
+            continue
+        differing = [field for field in exact_fields if actual.get(field) != expected.get(field)]
+        if differing:
+            errors.append(f"manifest resource {expected.get('id')} differs: {','.join(differing)}")
+            continue
+        if expected.get("role") == "geochemistry":
+            geochemical[str(expected["sha256"])] = expected
+    expected_count = sum(item.get("role") == "geochemistry" for item in public.get("resources", []))
+    if len(geochemical) != expected_count:
+        errors.append(f"expected {expected_count} verified geochemical resources, got {len(geochemical)}")
+    return geochemical, errors
+
+
+def source_truth_metrics(
+    rows: list[dict[str, str]], resources_by_hash: dict[str, dict[str, Any]]
+) -> dict[str, Any]:
+    """Measure exact record-level preservation of the public authority contract."""
+    if not rows:
+        return {
+            "hash_rate": 0.0,
+            "metadata_rate": 0.0,
+            "locator_rate": 0.0,
+            "covered_resource_ids": [],
+            "expected_resource_ids": sorted(item["id"] for item in resources_by_hash.values()),
+            "source_truth_score": 0.0,
+        }
+    hash_ok = metadata_ok = locator_ok = 0
+    covered: set[str] = set()
+    for row in rows:
+        expected = resources_by_hash.get((row.get("file_sha256") or "").strip())
+        if expected is None:
+            continue
+        hash_ok += 1
+        covered.add(str(expected["id"]))
+        exact = {
+            "source_id": expected["source_id"],
+            "dataset_title": expected["dataset_title"],
+            "dataset_doi": expected["doi"],
+            "dataset_version": expected["dataset_version"],
+            "license": expected["license"],
+            "medium": expected["medium"],
+        }
+        if all((row.get(field) or "").strip() == str(value) for field, value in exact.items()):
+            metadata_ok += 1
+        locator = (row.get("source_locator") or "").strip()
+        if locator.startswith(str(expected["locator_prefix"])) and any(
+            token in locator for token in ("row=", "event=", "field=", "element=")
+        ):
+            locator_ok += 1
+    denominator = len(rows)
+    rates = {
+        "hash_rate": hash_ok / denominator,
+        "metadata_rate": metadata_ok / denominator,
+        "locator_rate": locator_ok / denominator,
+        "covered_resource_ids": sorted(covered),
+        "expected_resource_ids": sorted(item["id"] for item in resources_by_hash.values()),
+    }
+    rates["source_truth_score"] = round(
+        100 * (rates["hash_rate"] + rates["metadata_rate"] + rates["locator_rate"]) / 3, 4
+    )
+    return rates
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--submission-dir", type=Path, required=True)
+    parser.add_argument("--case-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     root = args.submission_dir
@@ -48,24 +142,35 @@ def main() -> int:
     required_d1 = {
         "record_id", "sample_id", "element_or_analyte", "value", "unit", "medium", "latitude", "longitude",
         "analytical_method", "analytical_method_status", "geologic_context_status", "coordinate_uncertainty_status",
-        "source_id", "dataset_doi", "dataset_version", "source_locator", "file_sha256", "license",
+        "source_id", "dataset_title", "dataset_doi", "dataset_version", "source_locator", "file_sha256", "license",
     }
     headers = set(d1[0]) if d1 else set()
-    check("d1_schema", 5, required_d1 <= headers, sorted(required_d1 - headers))
-    check("d1_real_scale", 3, len(d1) >= 1000, len(d1))
-    doi_text = " ".join((row.get("dataset_doi") or "") + " " + (row.get("source_locator") or "") for row in d1)
-    expected_dois = ["880617", "947275", "935591", "cfnhps54h7"]
-    check("d1_all_four_datasets", 6, all(token in doi_text for token in expected_dois), [token for token in expected_dois if token in doi_text])
+    check("d1_schema", 4, required_d1 <= headers, sorted(required_d1 - headers))
+    check("d1_real_scale", 2, len(d1) >= 1000, len(d1))
+    resources_by_hash, contract_errors = case_source_contract(
+        args.case_dir, Path(__file__).with_name("sources.json")
+    )
+    truth = source_truth_metrics(d1, resources_by_hash)
+    check("d1_source_contract_available", 2, not contract_errors, contract_errors)
+    check(
+        "d1_source_coverage_exact",
+        3,
+        truth["covered_resource_ids"] == truth["expected_resource_ids"],
+        {"covered": truth["covered_resource_ids"], "expected": truth["expected_resource_ids"]},
+    )
+    check("d1_file_hash_exact", 4, truth["hash_rate"] == 1, truth["hash_rate"])
+    check("d1_authority_metadata_exact", 4, truth["metadata_rate"] == 1, truth["metadata_rate"])
+    check("d1_source_locator_exact", 3, truth["locator_rate"] == 1, truth["locator_rate"])
     cells = {(row.get("benchmark_continent"), row.get("medium")) for row in d1}
     expected_cells = {("Africa", "water"), ("Africa", "sediment"), ("Antarctica", "sediment"), ("Oceania", "soil")}
-    check("d1_continent_medium_cells", 4, expected_cells <= cells, sorted(cells))
+    check("d1_continent_medium_cells", 3, expected_cells <= cells, sorted(cells))
     status_fields = ("analytical_method_status", "geologic_context_status", "coordinate_uncertainty_status")
     status_rate = min((sum(nonblank(row, field) for row in d1) / len(d1) for field in status_fields), default=0)
-    check("d1_explicit_statuses", 4, status_rate == 1, status_rate)
+    check("d1_explicit_statuses", 3, status_rate == 1, status_rate)
     provenance_rate = sum(all(nonblank(row, field) for field in ("source_id", "source_locator", "file_sha256", "license")) for row in d1) / len(d1) if d1 else 0
-    check("d1_record_provenance", 6, provenance_rate >= 0.99, provenance_rate)
+    check("d1_record_provenance", 1, provenance_rate >= 0.99, provenance_rate)
     method_rate = sum(nonblank(row, "analytical_method") for row in d1) / len(d1) if d1 else 0
-    check("d1_method_evidence", 2, method_rate >= 0.95, method_rate)
+    check("d1_method_evidence", 1, method_rate >= 0.95, method_rate)
 
     with (root / "geochemistry.csv").open(encoding="utf-8-sig", newline="") as handle:
         d2 = list(csv.DictReader(handle))
@@ -111,7 +216,17 @@ def main() -> int:
     check("reported_failure_boundaries", 5, len(limits) >= 100, len(limits))
 
     score = round(sum(item["earned"] for item in checks), 2)
-    report = {"score": score, "maximum": 100, "status": "pass" if score >= 70 else "fail", "checks": checks}
+    report = {
+        "score": score,
+        "maximum": 100,
+        "status": "pass" if score >= 70 else "fail",
+        "source_truth": truth,
+        "source_truth_claim_boundary": (
+            "Exact match to the hash-pinned public authority contract; not proof of publisher correctness, "
+            "regional representativeness, or anomaly causation."
+        ),
+        "checks": checks,
+    }
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"score": score, "status": report["status"]}, sort_keys=True))
     return 0 if report["status"] == "pass" else 1
