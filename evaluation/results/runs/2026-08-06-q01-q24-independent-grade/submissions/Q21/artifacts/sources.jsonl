@@ -1,0 +1,2 @@
+{"source_id": "q21-fixture", "file": "inputs/batch_qc.csv", "computed_sha256": "03787b3a493d55476381655ca6ed91102a5e082d3cd9a2604344f5130822ce9d", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
+{"source_id": "q21-fixture", "file": "inputs/qc_policy.json", "computed_sha256": "02c3a08a76e4a419f6a8a83e958d97623db47b09e17753b9c933615fd0818a41", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

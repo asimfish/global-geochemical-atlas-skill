@@ -1,0 +1,77 @@
+{
+  "task_id": "GGA-ANOM-002",
+  "question_id": "Q14",
+  "title": "稳健对数 MAD 异常与零尺度回退",
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "schema_version": "e2.candidate-visible.v1",
+  "benchmark_version": "6.0.0-draft.2",
+  "status": "success",
+  "exit_code": 0,
+  "outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "warnings": [],
+  "benchmark_evidence": {
+    "group_statistics.csv": {
+      "format": "csv",
+      "columns": [
+        "group_id",
+        "n",
+        "method",
+        "center_log10",
+        "scale_log10",
+        "status",
+        "anomaly_count"
+      ],
+      "rows": [
+        {
+          "group_id": "CONSTANT",
+          "n": "20",
+          "method": "empirical_quantile_fallback",
+          "center_log10": "0.6989700043360189",
+          "scale_log10": "0",
+          "status": "mad_zero_fallback",
+          "anomaly_count": "0"
+        },
+        {
+          "group_id": "VARIABLE",
+          "n": "21",
+          "method": "robust_log10_mad",
+          "center_log10": "1.3010299956639813",
+          "scale_log10": "0.16893241413011612",
+          "status": "ok",
+          "anomaly_count": "1"
+        }
+      ]
+    },
+    "anomalies.csv": {
+      "format": "csv",
+      "columns": [
+        "record_id",
+        "group_id",
+        "value",
+        "robust_z",
+        "anomaly_type"
+      ],
+      "rows": [
+        {
+          "record_id": "V21",
+          "group_id": "VARIABLE",
+          "value": "300",
+          "robust_z": "6.961904055605489",
+          "anomaly_type": "relative_enrichment"
+        }
+      ]
+    }
+  }
+}

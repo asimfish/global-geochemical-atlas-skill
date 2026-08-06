@@ -9,6 +9,7 @@ import re
 from collections import Counter
 from pathlib import Path
 
+from candidate_visible_contract import validate_candidate_visible_contract
 from grade_task import GradeError, grade
 
 
@@ -36,7 +37,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path)
     parser.add_argument("--report", type=Path)
-    parser.add_argument("--private-root", type=Path, help="Private root containing shadow/ and final_holdout/ outside the E1 workspace")
+    parser.add_argument(
+        "--private-root",
+        type=Path,
+        help="Optional alternate root containing shadow/ and final_holdout/; defaults to evaluation/evaluator_private",
+    )
     parser.add_argument("--public-only", action="store_true")
     args = parser.parse_args()
     root = args.root.resolve()
@@ -51,6 +56,7 @@ def main() -> int:
 
     errors: list[str] = []
     smoke: list[dict[str, object]] = []
+    candidate_contracts_checked = 0
     seen: dict[str, set[int]] = {key: set() for key in expected}
     task_ids: list[str] = []
 
@@ -128,6 +134,15 @@ def main() -> int:
             except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
                 errors.append(f"{task_dir.name}: invalid rubric.json: {exc}")
 
+        grader_spec_path = task_dir / "checker" / "grader_spec.json"
+        if grader_spec_path.is_file():
+            try:
+                grader_spec = json.loads(grader_spec_path.read_text(encoding="utf-8"))
+                errors.extend(validate_candidate_visible_contract(task_dir, metadata, grader_spec))
+                candidate_contracts_checked += 1
+            except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+                errors.append(f"{task_dir.name}: invalid candidate-visible contract: {exc}")
+
         try:
             report = grade(task_dir, task_dir / "gold")
             passed = all(item["passed"] for item in report["checks"]) and report["hard_gate_passed"] and not report["redline_events"]
@@ -159,8 +174,8 @@ def main() -> int:
         errors.append(f"duplicate task IDs: {duplicates}")
 
     inventory_paths = [root / "task_inventory.csv"]
-    if private_root:
-        inventory_paths.append(private_root / "task_inventory_private.csv")
+    if not args.public_only and selected_private.is_dir():
+        inventory_paths.append(selected_private / "task_inventory_private.csv")
     if not inventory_paths[0].is_file():
         errors.append("missing task_inventory.csv")
     else:
@@ -184,6 +199,8 @@ def main() -> int:
         "e1_eval_version": alignment["e1_eval_version"],
         "e1_contract_sha256": alignment["e1_contract_sha256"],
         "split_counts": {split: len(values) for split, values in seen.items()},
+        "candidate_visible_contract_schema": "e2.candidate-visible.v1",
+        "candidate_visible_contracts_checked": candidate_contracts_checked,
         "smoke_tests": smoke,
         "errors": errors,
         "status": "PASS" if not errors else "FAIL",

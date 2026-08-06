@@ -1,0 +1,306 @@
+{
+  "candidate_status": "success",
+  "checks_path": "objective_report.json",
+  "computed_at": "2026-08-06T15:05:19.280128Z",
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 12.0,
+          "metric_id": "objective.primary_georoc",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 12.0,
+          "weight": 0.142857142857
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "objective.discovery_earthchem",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 8.0,
+          "weight": 0.095238095238
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.decision_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.059523809524
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.target_medium",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.059523809524
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.target_lithology",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.059523809524
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 9.0,
+          "metric_id": "objective.reject_random",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 9.0,
+          "weight": 0.107142857143
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 13.0,
+          "metric_id": "objective.provenance_fields",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 13.0,
+          "weight": 0.154761904762
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "objective.hash_required",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 8.0,
+          "weight": 0.095238095238
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "objective.doi_whitelist",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 7.0,
+          "weight": 0.083333333333
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "llm.source_roles",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "GEOROC is assigned status 'primary' as the frozen data asset while EarthChem is assigned 'discovery' and explicitly described as a federated discovery layer 'not as the primary data store', so GEOROC content reachable via EarthChem is not double-counted as a second independent source; checker confirms primary_source_id='georoc_precompiled' and discovery_source_id='earthchem_portal'.",
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.071428571429
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "llm.limitations",
+          "normalized_score": 50.0,
+          "passed": false,
+          "reason": "Exclusion on missing provenance is concretely evidenced by the random_web_table rejection for absent DOI/version/license/provenance and by download_sha256_required=true gating. However, no supplied artifact fragment contains an explicit statement that the frozen catalog snapshot is not a successful real-time download, and on_missing_provenance itself is not among the visible evidence fragments, so only the exclusion/demotion half of the criterion is evidenced.",
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.071428571429
+        }
+      ],
+      "score": 96.428571,
+      "weight": 0.25
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.selection_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.5
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.provenance_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.5
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.3
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "platform_reusability.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.14
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "llm.scope_reasoning",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "The primary-source decision reason explicitly maps the target to rock medium (igneous rock/basalt), global coverage ('Global compilation'), and analytical metadata ('record-level coordinates/method metadata'); checker-confirmed target.medium='rock' and target.lithology='basalt' corroborate the scope match.",
+          "status": "scored",
+          "value": 8.0,
+          "weight": 1.0
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.15
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "innovation_ecosystem.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.1
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "open_source_potential.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.06
+    }
+  ],
+  "eval_version": "1.0.0",
+  "evidence": [
+    "llm_grader_report.json",
+    "objective_report.json"
+  ],
+  "hard_gate_passed": true,
+  "rubric_sha256": "a066ca1d155af626bd5602fac4e42a82a12a2564f32cd5f3c7cd0625dc9771d9",
+  "run_id": "regression-q01-independent-review",
+  "schema_version": "1.0.0",
+  "score_status": "partial",
+  "scorer_version": "6.0.0",
+  "total_score": 69.107143
+}

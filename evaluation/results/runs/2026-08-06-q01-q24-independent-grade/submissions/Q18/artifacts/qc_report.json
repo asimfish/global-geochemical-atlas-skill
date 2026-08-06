@@ -1,0 +1,14 @@
+{
+  "task_id": "GGA-QC-003",
+  "question_id": "Q18",
+  "title": "来源特定限定值编码解析",
+  "status": "success",
+  "exit_code": 0,
+  "counts": {
+    "input_rows": 5,
+    "quantitative": 1,
+    "censored": 2,
+    "not_analyzed": 1
+  },
+  "warnings": []
+}

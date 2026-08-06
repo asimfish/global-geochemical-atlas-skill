@@ -1,0 +1,29 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "每个 feature 能回链 record 和 source，且保留 QC/置信度。",
+      "id": "traceability",
+      "points": 8
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "排除无效点但在 manifest 计数，不假装输入只有两条。",
+      "id": "exclusion",
+      "points": 6
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "正确说明 GeoJSON longitude-latitude 与 CRS84。",
+      "id": "standard",
+      "points": 6
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/points.geojson",
+    "artifacts/run_manifest.json#/benchmark_evidence/map_manifest.json"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-MAP-001"
+}

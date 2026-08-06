@@ -1,0 +1,7 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+M01,M01,Pb,25,mg/kg,soil,,,q09-fixture,soil|dry|total
+M02,M02,Pb,30,mg/kg,soil,,,q09-fixture,soil|wet|total
+M03,M03,Pb,20,ug/L,water,,,q09-fixture,water|aqueous|dissolved
+M04,M04,Pb,100,mg/kg,soil,,,q09-fixture,soil|dry|total
+M05,M05,Pb,20,ug/L,water,,,q09-fixture,water|aqueous|dissolved
+M06,M06,Pb,25,mg/kg,soil,,,q09-fixture,soil|dry|total

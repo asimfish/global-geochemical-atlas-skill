@@ -1,0 +1,11 @@
+record_id,cell_id,value_mg_kg,censored
+H01,H001,10,false
+H02,H001,20,false
+H03,H001,,true
+H04,H001,30,false
+H05,H002,100,false
+H06,H002,200,false
+H07,H002,300,false
+H08,H003,,true
+H09,H003,,true
+H10,H003,5,false

@@ -1,6 +1,29 @@
 {
   "benchmark_contract": "e2.e1-alignment.v1",
   "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "candidate_visible_contract": {
+    "container": "artifacts/run_manifest.json",
+    "field": "benchmark_evidence",
+    "logical_outputs": {
+      "parsed_values.csv": {
+        "columns": [
+          "record_id",
+          "reported_value_text",
+          "numeric_value",
+          "bound_value",
+          "qualifier",
+          "detection_limit",
+          "censored",
+          "missing_reason",
+          "eligible_log_analysis"
+        ],
+        "format": "csv",
+        "null_encoding": "empty_string_or_null",
+        "row_encoding": "array_of_objects_keyed_by_column_name"
+      }
+    },
+    "schema_version": "e2.candidate-visible.v1"
+  },
   "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
   "e1_eval_version": "1.0.0",
   "failure_tags": [
@@ -10,7 +33,7 @@
     "UPPER_BOUND_IGNORED"
   ],
   "fixture_type": "synthetic_adversarial_fixture",
-  "gold_version": "6.0.0-draft.1",
+  "gold_version": "6.0.0-draft.2",
   "input_assets": [
     "censored_values.csv"
   ],

@@ -1,6 +1,115 @@
 {
   "benchmark_contract": "e2.e1-alignment.v1",
   "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "candidate_visible_contract": {
+    "container": "artifacts/run_manifest.json",
+    "field": "benchmark_evidence",
+    "logical_outputs": {
+      "provenance_plan.json": {
+        "format": "json",
+        "json_shape": {
+          "properties": {
+            "allowed_example_doi": {
+              "type": "string"
+            },
+            "download_sha256_required": {
+              "type": "boolean"
+            },
+            "on_missing_provenance": {
+              "type": "string"
+            },
+            "record_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "task_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "allowed_example_doi",
+            "download_sha256_required",
+            "on_missing_provenance",
+            "record_fields",
+            "task_id"
+          ],
+          "type": "object"
+        }
+      },
+      "source_selection.json": {
+        "format": "json",
+        "json_shape": {
+          "properties": {
+            "decisions": {
+              "items": {
+                "properties": {
+                  "reason": {
+                    "type": "string"
+                  },
+                  "source_id": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reason",
+                  "source_id",
+                  "status"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "discovery_source_id": {
+              "type": "string"
+            },
+            "primary_source_id": {
+              "type": "string"
+            },
+            "target": {
+              "properties": {
+                "coverage": {
+                  "type": "string"
+                },
+                "element": {
+                  "type": "string"
+                },
+                "lithology": {
+                  "type": "string"
+                },
+                "medium": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "coverage",
+                "element",
+                "lithology",
+                "medium"
+              ],
+              "type": "object"
+            },
+            "task_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "decisions",
+            "discovery_source_id",
+            "primary_source_id",
+            "target",
+            "task_id"
+          ],
+          "type": "object"
+        }
+      }
+    },
+    "schema_version": "e2.candidate-visible.v1"
+  },
   "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
   "e1_eval_version": "1.0.0",
   "failure_tags": [
@@ -10,7 +119,7 @@
     "PROVENANCE_INCOMPLETE"
   ],
   "fixture_type": "curated_offline_catalog_of_real_sources",
-  "gold_version": "6.0.0-draft.1",
+  "gold_version": "6.0.0-draft.2",
   "input_assets": [
     "data_sources.json"
   ],

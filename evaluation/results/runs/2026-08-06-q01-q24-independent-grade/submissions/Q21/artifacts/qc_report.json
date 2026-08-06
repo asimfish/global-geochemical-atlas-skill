@@ -1,0 +1,13 @@
+{
+  "task_id": "GGA-QC-004",
+  "question_id": "Q21",
+  "title": "批次 CRM、空白和重复样 QA/QC 验收",
+  "status": "success",
+  "exit_code": 0,
+  "counts": {
+    "batches": 2,
+    "accepted": 1,
+    "excluded": 1
+  },
+  "warnings": []
+}

@@ -1,0 +1,12 @@
+{
+  "task_id": "GGA-LICENSE-001",
+  "question_id": "Q22",
+  "title": "许可与再分发决策",
+  "status": "success",
+  "exit_code": 0,
+  "counts": {
+    "sources": 4,
+    "redistributable": 2
+  },
+  "warnings": []
+}

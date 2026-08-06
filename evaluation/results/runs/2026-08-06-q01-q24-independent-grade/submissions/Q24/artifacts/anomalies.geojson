@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "E21",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -100.21,
+          30.21
+        ]
+      },
+      "properties": {
+        "record_id": "E21",
+        "group_id": "soil|dry|total|Cu|ICP-MS",
+        "value": 500.0,
+        "robust_z": 10.408091969133482,
+        "anomaly_type": "statistical_relative_enrichment"
+      }
+    }
+  ]
+}

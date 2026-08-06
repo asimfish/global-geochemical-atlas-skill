@@ -1,0 +1,2 @@
+{"source_id": "q23-fixture", "file": "inputs/backgrounds.json", "computed_sha256": "8d48d702faba4a17acdf96d6955fe918452e6914be3c80858e70deb6a8e1956d", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
+{"source_id": "q23-fixture", "file": "inputs/candidates.csv", "computed_sha256": "c64cc99bf17eed9915e1e79dbc8e79fb14b228f90e912c7ae98c3d3506e180e2", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

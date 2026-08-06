@@ -1,0 +1,59 @@
+{
+  "task_id": "GGA-ANOM-003",
+  "question_id": "Q23",
+  "title": "地质背景条件化异常与解释红线",
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "schema_version": "e2.candidate-visible.v1",
+  "benchmark_version": "6.0.0-draft.2",
+  "status": "success",
+  "exit_code": 0,
+  "outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "warnings": [],
+  "benchmark_evidence": {
+    "contextual_anomalies.csv": {
+      "format": "csv",
+      "columns": [
+        "record_id",
+        "unit_id",
+        "value_mg_kg",
+        "robust_z",
+        "anomaly_type",
+        "background_version"
+      ],
+      "rows": [
+        {
+          "record_id": "CTX1",
+          "unit_id": "UNIT-A",
+          "value_mg_kg": "50",
+          "robust_z": "5.228787452803374",
+          "anomaly_type": "relative_enrichment",
+          "background_version": "q23-background-1"
+        },
+        {
+          "record_id": "CTX2",
+          "unit_id": "UNIT-B",
+          "value_mg_kg": "50",
+          "robust_z": "-4.771212547196626",
+          "anomaly_type": "relative_depletion",
+          "background_version": "q23-background-1"
+        }
+      ]
+    },
+    "interpretation.md": {
+      "format": "text",
+      "value": "# Q23 背景条件化异常解释 / Contextual anomaly interpretation\n\nThe records listed in `contextual_anomalies.csv` are **statistical anomalies**\ncomputed **relative to each matched geologic unit** using that unit's frozen\nbackground (`center_log10`, `scale_log10`) and a robust |z| >= 3.5 rule.\n\n这些记录只是相对于各自地质单元背景的统计异常（statistical anomalies），\n方向分为 relative_enrichment 与 relative_depletion。\n\nA statistical deviation from unit background **does not establish** the\npresence of an ore deposit, a pollution source, or any causal mechanism.\n该结论不能单独建立矿床、污染源或因果机制；\n\nAny follow-up requires **independent** geological, mineralogical or\nsource-appraisal evidence. independent 证据是后续解释的必要前提；\n本解释未使用全局背景替代 unit_id 匹配。\n"
+    }
+  }
+}

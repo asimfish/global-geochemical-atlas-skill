@@ -1,0 +1,136 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "stats_exists",
+      "path": "group_statistics.csv",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "anomalies_exists",
+      "path": "anomalies.csv",
+      "points": 4,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 2,
+      "id": "stats_count",
+      "path": "group_statistics.csv",
+      "points": 5,
+      "type": "csv_row_count"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 1,
+      "id": "anomaly_count",
+      "path": "anomalies.csv",
+      "points": 7,
+      "type": "csv_row_count"
+    },
+    {
+      "column": "center_log10",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 1.3010299957,
+      "id": "variable_center",
+      "key": {
+        "group_id": "VARIABLE"
+      },
+      "path": "group_statistics.csv",
+      "points": 10,
+      "tolerance": 1e-07,
+      "type": "csv_cell"
+    },
+    {
+      "column": "scale_log10",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0.1689324141,
+      "id": "variable_scale",
+      "key": {
+        "group_id": "VARIABLE"
+      },
+      "path": "group_statistics.csv",
+      "points": 10,
+      "tolerance": 1e-07,
+      "type": "csv_cell"
+    },
+    {
+      "column": "method",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "robust_log10_mad",
+      "id": "variable_method",
+      "key": {
+        "group_id": "VARIABLE"
+      },
+      "path": "group_statistics.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "anomaly_type",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "relative_enrichment",
+      "id": "v21_only",
+      "key": {
+        "record_id": "V21"
+      },
+      "path": "anomalies.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "robust_z",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 6.9619040556,
+      "id": "v21_z",
+      "key": {
+        "record_id": "V21"
+      },
+      "path": "anomalies.csv",
+      "points": 10,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "method",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "empirical_quantile_fallback",
+      "id": "constant_fallback",
+      "key": {
+        "group_id": "CONSTANT"
+      },
+      "path": "group_statistics.csv",
+      "points": 8,
+      "type": "csv_cell"
+    },
+    {
+      "column": "anomaly_count",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0,
+      "id": "constant_no_anomaly",
+      "key": {
+        "group_id": "CONSTANT"
+      },
+      "path": "group_statistics.csv",
+      "points": 6,
+      "type": "csv_cell"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-ANOM-002"
+}

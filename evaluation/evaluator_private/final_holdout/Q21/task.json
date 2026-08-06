@@ -1,0 +1,61 @@
+{
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "candidate_visible_contract": {
+    "container": "artifacts/run_manifest.json",
+    "field": "benchmark_evidence",
+    "logical_outputs": {
+      "batch_acceptance.csv": {
+        "columns": [
+          "batch_id",
+          "crm_recovery_percent",
+          "crm_pass",
+          "blank_value",
+          "blank_pass",
+          "duplicate_rpd_percent",
+          "duplicate_pass",
+          "batch_pass",
+          "disposition"
+        ],
+        "format": "csv",
+        "null_encoding": "empty_string_or_null",
+        "row_encoding": "array_of_objects_keyed_by_column_name"
+      }
+    },
+    "schema_version": "e2.candidate-visible.v1"
+  },
+  "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "e1_eval_version": "1.0.0",
+  "failure_tags": [
+    "CRM_FAILURE_IGNORED",
+    "BLANK_FAILURE_IGNORED",
+    "DUPLICATE_RPD_FAILURE_IGNORED",
+    "BATCH_PARTIAL_QC_PASS"
+  ],
+  "fixture_type": "synthetic_lab_qc_fixture",
+  "gold_version": "6.0.0-draft.2",
+  "input_assets": [
+    "batch_qc.csv",
+    "qc_policy.json"
+  ],
+  "legacy_logical_outputs": [
+    "batch_acceptance.csv"
+  ],
+  "question_id": "Q21",
+  "required_outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "split": "final_holdout",
+  "status": "ALIGNED_E1",
+  "task_id": "GGA-QC-004",
+  "title": "批次 CRM、空白和重复样 QA/QC 验收"
+}

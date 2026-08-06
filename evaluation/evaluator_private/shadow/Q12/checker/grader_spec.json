@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "output_exists",
+      "path": "confidence.json",
+      "points": 5,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "q12-confidence-1",
+      "id": "policy_version",
+      "json_path": "policy_version",
+      "path": "confidence.json",
+      "points": 5,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 3,
+      "id": "record_count",
+      "json_path": "records",
+      "path": "confidence.json",
+      "points": 5,
+      "type": "json_length"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 100,
+      "id": "k01_score",
+      "json_path": "records.0.confidence_score",
+      "path": "confidence.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": {
+        "analysis": 20,
+        "coordinates": 20,
+        "provenance": 25,
+        "record_qc": 20,
+        "sample": 15
+      },
+      "id": "k01_components",
+      "json_path": "records.0.components",
+      "path": "confidence.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 59,
+      "id": "k02_score",
+      "json_path": "records.1.confidence_score",
+      "path": "confidence.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "low",
+      "id": "k02_label",
+      "json_path": "records.1.confidence_label",
+      "path": "confidence.json",
+      "points": 8,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": {
+        "analysis": 12,
+        "coordinates": 12,
+        "provenance": 15,
+        "record_qc": 10,
+        "sample": 10
+      },
+      "id": "k02_components",
+      "json_path": "records.1.components",
+      "path": "confidence.json",
+      "points": 10,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 10,
+      "id": "k03_score",
+      "json_path": "records.2.confidence_score",
+      "path": "confidence.json",
+      "points": 7,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "k01_not_probability",
+      "json_path": "records.0.confidence_is_probability",
+      "path": "confidence.json",
+      "points": 5,
+      "type": "json_value"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": false,
+      "id": "k02_not_probability",
+      "json_path": "records.1.confidence_is_probability",
+      "path": "confidence.json",
+      "points": 5,
+      "type": "json_value"
+    }
+  ],
+  "evidence_points": 80,
+  "redlines": [
+    {
+      "consequence": "task_cap_20",
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "RL-12-probability",
+      "path": "confidence.json",
+      "pattern": "confidence_is_probability\\s*\":\\s*true",
+      "type": "text_regex_forbidden"
+    }
+  ],
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-CONF-001"
+}

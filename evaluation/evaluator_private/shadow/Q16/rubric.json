@@ -1,0 +1,30 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "清楚区分 sample_count 与 median concentration。",
+      "id": "density",
+      "points": 8
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "删失值影响覆盖/QC 图层但不伪装成精确浓度。",
+      "id": "censoring",
+      "points": 6
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "full_credit": "固定聚合、radius 和 color domain，并使用预计算 cells。",
+      "id": "reproducibility",
+      "points": 6
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/cells.csv",
+    "artifacts/run_manifest.json#/benchmark_evidence/heatmap_config.json",
+    "artifacts/run_manifest.json#/benchmark_evidence/heatmap.html"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-MAP-002"
+}

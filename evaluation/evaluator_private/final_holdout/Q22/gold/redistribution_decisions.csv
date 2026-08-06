@@ -1,0 +1,5 @@
+source_id,license_class,redistribution_allowed,allowed_payload,required_actions,confidence_penalty
+L01,CC-BY-4.0,true,raw_and_derived,attribution,0
+L02,CC-BY-SA-4.0,true,raw_and_derived,attribution;share_alike,0
+L03,restricted_nonredistributable,false,metadata_and_pointer_only,do_not_redistribute_raw;retain_access_controls,10
+L04,unknown,false,metadata_only,license_review_required,20
