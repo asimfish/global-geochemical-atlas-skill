@@ -118,7 +118,7 @@
           "required": ["schema_version", "story", "spatial_scope", "default_region", "filters", "comparison", "display"],
           "properties": {
             "schema_version": {"const": "d3-visualization-profile-v2"},
-            "story": {"enum": ["overview", "coverage", "anomaly", "comparison", "evidence"]},
+            "story": {"enum": ["overview", "coverage", "anomaly", "comparison", "database", "evidence"]},
             "spatial_scope": {"enum": ["global", "regional"]},
             "default_region": {"type": "string"},
             "filters": {"type": "object"},

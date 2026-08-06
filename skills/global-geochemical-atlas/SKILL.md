@@ -210,20 +210,32 @@ python scripts/run_workflow.py \
 
 若没有 sidecar，流程仍生成最小 `record_evidence.jsonl`，但来源只能标为 `source_declared_in_input`。只有 acquisition manifest 同时哈希绑定 CSV 与 sidecar 且 record ID 完全一致时，才可标为 `verified_record_evidence`。
 
-若已有 D1/D2 标准输出目录，不要重新运行标准化或异常判定。先判断空间产物类型，再复制配置：
-
-- 用户问全球分布或跨区域对比时，复制 `assets/visualization-profile.template.json`，保持 `spatial_scope=global` 与 `default_region=global`；
-- 用户问国家、城市、流域、矿区或任意 bbox 时，复制 `assets/visualization-profile.regional.template.json`，设置 `spatial_scope=regional` 和对应预设或自定义范围。`china`、`usa`、`usa48`、`australia` 使用仓库内固定的 Natural Earth Admin‑0 国家多边形与 bbox 联合严格裁剪；`shanghai`、`europe` 与 `custom` 仍是显式 bbox。区域产物必须只把范围内记录嵌入 HTML、异常显示和 `samples.geojson`，不得用世界全景代替区域图；原始 D1/D2 证据文件仍完整保留。
-
-然后根据用户问题填写任务视图：
+若已有 D1/D2 标准输出目录，不要重新运行标准化或异常判定。先把用户问题显式解析为 `story`、`spatial_scope`、region/bbox、filters、comparison 和 display；未提及的筛选保持空值，不要猜测。根据问题选择任务视图：
 
 - 问“数据在哪里、有哪些介质”时选 `story=overview`；
 - 问“覆盖是否完整”时选 `story=coverage`；
 - 问“哪里富集或亏损”时选 `story=anomaly`；
 - 问两个元素关系时选 `story=comparison` 并设置 X/Y；
+- 问数据库字段、记录或标准化结果时选 `story=database`；
 - 问来源可靠性时选 `story=evidence`。
 
-把用户明确指定的元素、区域、地质单元和介质写入配置；不要为了显示更多点而取消无匹配条件。然后运行：
+用确定性脚本生成并验证配置，不要让 Agent 手写整份 JSON：
+
+```bash
+python scripts/create_visualization_profile.py \
+  --story anomaly \
+  --spatial-scope regional \
+  --region custom \
+  --bbox W S E N \
+  --region-label "研究区域" \
+  --element As \
+  --medium soil \
+  --output TASK_PROFILE.json
+```
+
+全球问题保持 `spatial_scope=global`；国家、城市、流域、矿区或任意范围用 `regional`。`china`、`usa`、`usa48`、`australia` 预设使用固定 Natural Earth 国家多边形与 bbox 联合裁剪；其他区域优先使用 `custom + WGS84 bbox` 并明确 bbox 不是精确行政或地质边界。区域产物只裁剪 HTML 内嵌记录、异常显示和 `samples.geojson`，原始 D1/D2 证据文件仍完整保留。把用户明确指定的元素、地质单元、介质、方法、来源与置信度写入参数；不要为了显示更多点而取消无匹配条件。
+
+然后运行：
 
 ```bash
 python scripts/render_visualization.py \

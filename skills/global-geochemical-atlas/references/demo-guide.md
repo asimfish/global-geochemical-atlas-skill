@@ -16,14 +16,13 @@ python scripts/validate_outputs.py --output-dir demo_output
 python scripts/component_test.py --component all
 ```
 
-单独演示 D3 时，不修改 HTML。先复制任务配置，再从标准输出目录生成新的可视化包：
+单独演示 D3 时，不修改 HTML，也不手写整份配置。先把问题转成显式参数，再生成任务配置：
 
 ```bash
-# 全球问题：
-cp assets/visualization-profile.template.json /tmp/task-profile.json
-
-# 国家、城市或自定义 bbox 问题则改用：
-cp assets/visualization-profile.regional.template.json /tmp/task-profile.json
+python scripts/create_visualization_profile.py \
+  --story overview \
+  --spatial-scope global \
+  --output /tmp/task-profile.json
 
 python scripts/render_visualization.py \
   --input-dir demo_output \
@@ -32,8 +31,9 @@ python scripts/render_visualization.py \
 python scripts/validate_visualization.py --output-dir visualization_output
 ```
 
-按演示问题修改 `/tmp/task-profile.json` 的 `story`、空间产物类型、默认区域、元素、介质或 X/Y；打开
-`visualization_output/interactive_map.html` 时应直接进入该任务视图。检查
+国家、城市或任意研究框改用 `--spatial-scope regional --region PRESET`，或使用
+`--region custom --bbox W S E N --region-label LABEL`；元素组合使用 `--story comparison --comparison-x X --comparison-y Y`。
+打开 `visualization_output/interactive_map.html` 时应直接进入该任务视图。检查
 `visualization_report.json`，不要隐藏 `profile_warnings`。全球配置生成世界图；区域配置会将 HTML、
 异常显示和 `samples.geojson` 裁剪并锁定到预设或自定义范围。中国、美国和澳大利亚预设使用离线
 国家多边形严格裁剪；上海、欧洲与自定义范围仍是 bbox。

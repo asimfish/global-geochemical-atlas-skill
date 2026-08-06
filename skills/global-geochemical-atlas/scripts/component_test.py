@@ -48,6 +48,7 @@ WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 VISUALIZATION_RENDERER = SCRIPT_DIR / "render_visualization.py"
+VISUALIZATION_PROFILE_CREATOR = SCRIPT_DIR / "create_visualization_profile.py"
 BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
 COUNTRY_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
 VISUALIZATION_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
@@ -1713,6 +1714,8 @@ def check_d3(output_dir: Path) -> list[str]:
         == "d3-visualization-profile-v2"
         and set(profile_schema.get("properties", {}).get("spatial_scope", {}).get("enum", []))
         == {"global", "regional"}
+        and set(profile_schema.get("properties", {}).get("story", {}).get("enum", []))
+        == {"overview", "coverage", "anomaly", "comparison", "database", "evidence"}
         and visualization_report_schema.get("properties", {})
         .get("interface_version", {})
         .get("const")
@@ -1728,6 +1731,124 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 publishes a distinct city-ready regional product template",
         checks,
     )
+    with tempfile.TemporaryDirectory() as question_matrix_temp:
+        question_root = Path(question_matrix_temp)
+        question_cases = (
+            ("global-overview", "overview", ["--story", "overview"]),
+            (
+                "filtered-coverage",
+                "coverage",
+                ["--story", "coverage", "--element", "Cu", "--medium", "soil"],
+            ),
+            (
+                "custom-region-anomaly",
+                "anomaly",
+                [
+                    "--story",
+                    "anomaly",
+                    "--spatial-scope",
+                    "regional",
+                    "--region",
+                    "custom",
+                    "--bbox",
+                    "-75",
+                    "-56",
+                    "-66",
+                    "-17",
+                    "--region-label",
+                    "智利研究框",
+                    "--element",
+                    "Cu",
+                    "--geology",
+                    "Andes",
+                ],
+            ),
+            (
+                "element-comparison",
+                "comparison",
+                [
+                    "--story",
+                    "comparison",
+                    "--comparison-x",
+                    "As",
+                    "--comparison-y",
+                    "Pb",
+                    "--comparison-medium",
+                    "soil",
+                ],
+            ),
+            ("database-audit", "database", ["--story", "database"]),
+            (
+                "source-evidence",
+                "evidence",
+                ["--story", "evidence", "--source", "demo-source"],
+            ),
+        )
+        generated_profiles = []
+        for case_name, expected_story, case_args in question_cases:
+            profile_path = question_root / f"{case_name}.json"
+            run_command(
+                [
+                    sys.executable,
+                    str(VISUALIZATION_PROFILE_CREATOR),
+                    "--output",
+                    str(profile_path),
+                    *case_args,
+                ]
+            )
+            generated_profile = map_builder.load_visualization_profile(profile_path)
+            bundle = question_root / f"{case_name}-bundle"
+            run_command(
+                [
+                    sys.executable,
+                    str(VISUALIZATION_RENDERER),
+                    "--input-dir",
+                    str(output_dir),
+                    "--profile",
+                    str(profile_path),
+                    "--output-dir",
+                    str(bundle),
+                ]
+            )
+            generated_report = json_value(bundle / "visualization_report.json")
+            require(
+                generated_profile.get("story") == expected_story
+                and generated_report.get("profile") == generated_profile
+                and visualization_validator.validate_dir(bundle).get("status") == "valid",
+                f"D3 question profile reproduces the {case_name} task without HTML edits",
+                checks,
+            )
+            generated_profiles.append(generated_profile)
+        custom_profile = generated_profiles[2]
+        require(
+            custom_profile.get("default_region") == "custom"
+            and custom_profile.get("custom_region", {}).get("label") == "智利研究框"
+            and custom_profile.get("custom_region", {}).get("bounds")
+            == {"w": -75.0, "s": -56.0, "e": -66.0, "n": -17.0}
+            and {profile_value.get("story") for profile_value in generated_profiles}
+            == {"overview", "coverage", "anomaly", "comparison", "database", "evidence"},
+            "D3 question matrix covers six stories and an arbitrary regional bbox",
+            checks,
+        )
+        invalid_question_profile = question_root / "invalid-question.json"
+        run_command(
+            [
+                sys.executable,
+                str(VISUALIZATION_PROFILE_CREATOR),
+                "--output",
+                str(invalid_question_profile),
+                "--story",
+                "comparison",
+                "--comparison-x",
+                "As",
+            ],
+            expected_code=2,
+        )
+        require(
+            not invalid_question_profile.exists(),
+            "D3 profile creator fails closed on an incomplete comparison question",
+            checks,
+        )
     with tempfile.TemporaryDirectory() as visualization_temp:
         visualization_root = Path(visualization_temp)
         task_profile = dict(profile)

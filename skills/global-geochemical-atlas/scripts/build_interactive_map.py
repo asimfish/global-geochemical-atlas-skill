@@ -314,7 +314,7 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
     if profile.get("theme") != "evidence-dark":
         raise MapBuildError("visualization profile theme must be evidence-dark")
     story = profile.get("story")
-    if story not in {"overview", "coverage", "anomaly", "comparison", "evidence"}:
+    if story not in {"overview", "coverage", "anomaly", "comparison", "database", "evidence"}:
         raise MapBuildError("visualization profile story is unsupported")
     default_region = profile.get("default_region")
     if default_region not in {*REGION_PRESETS, "custom"}:
@@ -382,6 +382,17 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
         key: profile_text(comparison.get(key), f"comparison.{key}", 160, nullable=True)
         for key in sorted(comparison_keys)
     }
+    if (normalized_comparison["x"] is None) != (normalized_comparison["y"] is None):
+        raise MapBuildError("visualization profile comparison.x and comparison.y must be paired")
+    if story == "comparison" and (
+        normalized_comparison["x"] is None or normalized_comparison["y"] is None
+    ):
+        raise MapBuildError("visualization profile story=comparison requires comparison.x and comparison.y")
+    if (
+        normalized_comparison["x"] is not None
+        and normalized_comparison["x"] == normalized_comparison["y"]
+    ):
+        raise MapBuildError("visualization profile comparison elements must be different")
 
     display = profile.get("display")
     display_keys = {

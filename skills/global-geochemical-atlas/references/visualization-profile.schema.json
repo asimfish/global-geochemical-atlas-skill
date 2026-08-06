@@ -21,7 +21,7 @@
     "title": {"type": "string", "minLength": 1, "maxLength": 120},
     "subtitle": {"type": "string", "minLength": 1, "maxLength": 500},
     "story": {
-      "enum": ["overview", "coverage", "anomaly", "comparison", "evidence"]
+      "enum": ["overview", "coverage", "anomaly", "comparison", "database", "evidence"]
     },
     "theme": {"const": "evidence-dark"},
     "spatial_scope": {
@@ -116,6 +116,19 @@
       "if": {"properties": {"default_region": {"const": "custom"}}},
       "then": {"properties": {"custom_region": {"type": "object"}}},
       "else": {"properties": {"custom_region": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"story": {"const": "comparison"}}},
+      "then": {
+        "properties": {
+          "comparison": {
+            "properties": {
+              "x": {"type": "string", "minLength": 1},
+              "y": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
     }
   ],
   "additionalProperties": false

@@ -19,9 +19,8 @@ D3 只消费 D1/D2 结论：
 
 1. 读取用户问题，提取主要元素、区域、介质、地质单元和目标视图。
 2. 检查输入目录是否包含六个必需 D1/D2 文件；缺失时返回 `invalid_input`。
-3. 全球问题复制 `assets/visualization-profile.template.json`；国家、城市或 bbox 问题复制
-   `assets/visualization-profile.regional.template.json`。只修改与用户问题有关的字段。
-4. 运行 `scripts/render_visualization.py`；不要直接编辑 HTML 模板。
+3. 把问题解析成 story、空间范围、筛选和可选元素组合；运行 `scripts/create_visualization_profile.py` 生成并验证任务配置，不手写完整 JSON。
+4. 运行 `scripts/render_visualization.py`；不要直接编辑 HTML 模板或内嵌数据。
 5. 检查 `visualization_report.json.status`、`profile_warnings`、记录计数和文件大小。
 6. 运行 `scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT`；不要对独立 D3 包运行要求 `run_summary.json` 的核心流程验证器。
 7. 打开生成的 HTML 做最小人工检查：首屏任务、空结果、图例、点击证据和来源链接。
@@ -101,6 +100,7 @@ anomaly_report.json
 | 哪些区域有数据或覆盖空洞 | `coverage` | 样点密度，关闭异常层 |
 | 哪里富集或亏损 | `anomaly` | 分布图 + 异常区域圆环 |
 | 两个元素是否共测或协变 | `comparison` | 元素组合页，并设置 X/Y |
+| 数据库有哪些字段或记录 | `database` | 标准化数据库页 |
 | 来源是否可靠 | `evidence` | 来源与置信度页 |
 
 只把用户明确指定的元素、介质、地质单元等写入 `filters`。不要为了让地图“看起来有数据”而取消
@@ -109,22 +109,37 @@ WGS84 `W,S,E,N`；国家预设与 bbox 预设必须在报告中明确 `clip_meth
 
 ## 5. 单命令生成
 
-从 Skill 目录执行：
+从 Skill 目录先生成任务配置，再渲染：
 
 ```bash
+python scripts/create_visualization_profile.py \
+  --story STORY \
+  --spatial-scope global \
+  --output TASK_PROFILE.json
+
 python scripts/render_visualization.py \
   --input-dir D1_D2_OUTPUT \
   --profile TASK_PROFILE.json \
   --output-dir VISUALIZATION_OUTPUT
 ```
 
-默认配置可直接用于全局总览：
+任意国家、城市、流域、矿区或研究框使用自定义 WGS84 bbox：
 
 ```bash
-python scripts/render_visualization.py \
-  --input-dir D1_D2_OUTPUT \
-  --output-dir VISUALIZATION_OUTPUT
+python scripts/create_visualization_profile.py \
+  --story coverage \
+  --spatial-scope regional \
+  --region custom \
+  --bbox W S E N \
+  --region-label "研究区域" \
+  --element Cu \
+  --medium sediment \
+  --output TASK_PROFILE.json
 ```
+
+脚本同时支持 `overview`、`coverage`、`anomaly`、`comparison`、`database` 和 `evidence` 六类问题，
+以及元素、介质、basis、地质单元、方法、来源、置信度、元素组合和显示方式参数。运行
+`python scripts/create_visualization_profile.py --help` 查看完整接口。仓库中的两个 JSON 模板只是默认资产与降级入口，不要求 Agent 复制修改。
 
 脚本负责解析模板、嵌入数据、复制页面引用的证据文件并生成报告。已有生成文件时不静默覆盖；确需
 替换时显式传 `--force`。
