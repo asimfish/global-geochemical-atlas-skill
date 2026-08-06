@@ -5,7 +5,7 @@
 | 场景 | 被测内容 | 需要人工粘贴什么 | Canonical 来源 |
 |---|---|---|---|
 | `evaluation/` 手工答 Q01–Q24 | E1 十产物、题目契约与科学证据 | B0 无 Skill / S0 有 Skill 两个启动 Prompt，共用同一核心题面 | `evaluation/prompts/QWEN_*_PROMPT.md` |
-| `evaluation/` 独立评分 | checker、LLM rubric、E1 finalizer | 完整评分编排 Prompt | `evaluation/docs/independent_grading_agent_prompt.md` |
+| `evaluation/` 独立评分与来源复核 | checker、LLM rubric、E1 finalizer、独立来源真实性门禁 | 完整评分编排 Prompt；来源门禁用确定性命令 | `evaluation/docs/independent_grading_agent_prompt.md`、`evaluation/docs/source_truth_audit.md` |
 | `evaluation_lyf/stage_benchmark/` | D1/D2/D3 独立科学门禁 | 不使用模型 Prompt，运行确定性命令 | `evaluation_lyf/README.md` |
 | `evaluation_lyf/agent_uplift/` | 公开真实数据的纯 Qwen / Qwen + Skill uplift | 主机版两份 + Docker 版两份 | `evaluation_lyf/agent_uplift/QWEN_*_PROMPT.md` |
 | `evaluation/docker/` | 隔离、资源限制、OpenCode、B0/S0 campaign | 不另写候选 Prompt；runner 自动按题注入 | `evaluation/docker/campaign.py` |
@@ -39,6 +39,17 @@ OUTPUT_ROOT=<一个全新且不存在的评分输出目录>
 
 评分 Prompt、gold、checker、rubric 和私有题源绝不能暴露给答题 Agent。
 
+### Prompt E-S：评分后来源真实性复核
+
+Q01–Q24 评分完成后，由评测维护者在仓库根目录运行；这不是答题 Agent Prompt，禁止把私有契约暴露给候选会话：
+
+```bash
+python3 evaluation/tools/audit_source_truth.py \
+  --output /tmp/gga-evaluation-source-truth.json
+```
+
+发布前可追加 `--online` 解析 DOI/权威入口。离线证据冲突返回 `74`；网络不可达返回 `2` 与 `needs_human_review`，不得据此声称已完成在线核验。完整边界见 [`evaluation/docs/source_truth_audit.md`](evaluation/docs/source_truth_audit.md)。
+
 ## 2. `evaluation_lyf/`：阶段门禁与公开 uplift
 
 ### D1/D2/D3 阶段门禁
@@ -55,6 +66,15 @@ python3 evaluation_lyf/suite_adapter.py \
 
 候选 D1、D2、D3 的逐阶段入口见 [`evaluation_lyf/README.md`](evaluation_lyf/README.md)。
 
+来源真实性单独门禁（不下载、不访问网络）：
+
+```bash
+python3 evaluation_lyf/suite_adapter.py \
+  --suite source-truth \
+  --timeout-seconds 120 \
+  --output-dir /tmp/gga-lyf-source-truth
+```
+
 ### Qwen Skill uplift
 
 `evaluation_lyf` 同时保留原主机直跑和 Docker 隔离两种 runtime profile。每种方式都分别创建两个空目录和两个互不通信的 Qwen3.8-Max 会话。
@@ -70,6 +90,8 @@ Docker 隔离：
 - [Docker S0：有 Skill](evaluation_lyf/agent_uplift/QWEN_WITH_SKILL_DOCKER_PROMPT.md)
 
 四份 Prompt 都包含仓库克隆、固定 commit、Skill 隔离、公开数据下载、最多三轮 scorer、`run.sh` 干净重建和结果回收；Docker 版额外准备镜像与资源隔离。不要再追加实现建议。正式实验每个 runtime profile 内每组独立运行三次并比较中位数；主机结果和 Docker 结果不得混算。
+
+新版 scorer 必须同时接收 `--case-dir <对应的 case_data>`，并在 score 中输出 `source_truth.source_truth_score`。它逐记录核对下载清单中的 SHA-256、精确 DOI、标题、版本、许可证、介质和可下钻 locator；仅出现 DOI 片段或非空来源字段不再得分。
 
 ## 3. `evaluation/docker/`：Docker 自动注入 Prompt
 
@@ -108,6 +130,17 @@ python3 evaluation/docker/campaign.py run \
   --output-dir /tmp/gga-docker-smoke
 ```
 
+Docker 内的来源真实性门禁：
+
+```bash
+python3 evaluation/docker/campaign.py stage \
+  --image global-geochemical-eval:local \
+  --suite source-truth \
+  --network offline \
+  --timeout-seconds 120 \
+  --output-dir /tmp/gga-docker-source-truth
+```
+
 ### Docker + OpenCode 正式本地 campaign
 
 ```bash
@@ -134,6 +167,7 @@ python3 evaluation/docker/campaign.py run \
 ## 4. 应该选哪一个
 
 - 想快速检查代码有没有破坏 D1/D2/D3：运行 `component_test.py`、`self_test.py` 或 `evaluation_lyf` stage，不需要 Prompt；
+- 想核对仓库中的来源声明是否仍与冻结权威快照及代表性原始行一致：运行三种入口任一处列出的 `source-truth` 门禁；
 - 想人工比较 Q01–Q24 的纯 Qwen 与 Qwen + Skill：分别使用 `evaluation/prompts/` 中的 B0/S0 启动 Prompt；
 - 想得到 Q01–Q24 的规范 B0/S0 运行记录：用 Docker OpenCode campaign，runner 自动注入 Prompt；
 - 想测“这个 Skill 对公开真实数据全流程到底有没有帮助”：从 `evaluation_lyf` 选择主机或 Docker profile，再使用对应的一对 Prompt；

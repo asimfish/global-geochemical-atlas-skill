@@ -1,7 +1,7 @@
 {
   "protocol_version": "qwen-uplift-docker-v2",
   "repository": "https://github.com/asimfish/global-geochemical-atlas-skill.git",
-  "commit": "5ebb436c3906631f74a2b82e22b5c9a0c7c82a13",
+  "commit": "8b66e14269a4347ca3cda93b0fbf86db48bb40c1",
   "model": "Qwen3.8-Max",
   "temperature": 0,
   "maximum_scorer_rounds": 3,

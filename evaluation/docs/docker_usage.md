@@ -80,6 +80,13 @@ B0 的 `run_manifest.json.benchmark_evidence.skill_visible` 必须为 `false`，
 ```bash
 python3 evaluation/docker/campaign.py stage \
   --image global-geochemical-eval:local \
+  --suite source-truth \
+  --network offline \
+  --timeout-seconds 120 \
+  --output-dir /tmp/gga-source-truth
+
+python3 evaluation/docker/campaign.py stage \
+  --image global-geochemical-eval:local \
   --suite isolated \
   --stress-records 10000 \
   --output-dir /tmp/gga-stage-isolated
@@ -90,7 +97,7 @@ python3 evaluation/docker/campaign.py stage \
   --output-dir /tmp/gga-stage-all
 ```
 
-stage 默认在同一冻结镜像中运行，repo 只读、结果目录可写，并使用与比赛 campaign 相同的 2 CPU/4 GB/PID/只读根策略。`--host` 仅用于诊断依赖问题。`--refresh-downloads` 必须配合 `--network whitelist`，并明确表示该次 stage 包含预下载，不应把其总时长当作 candidate runtime。正式 Docker campaign 使用已准备的当前题输入，因此记录 `download_seconds=0.0`。
+`source-truth` 离线核对 8 个代表性来源的权威快照、哈希和原始行；它不向候选 Agent 暴露私有契约。stage 默认在同一冻结镜像中运行，repo 只读、结果目录可写，并使用与比赛 campaign 相同的 2 CPU/4 GB/PID/只读根策略。`--host` 仅用于诊断依赖问题。`--refresh-downloads` 必须配合 `--network whitelist`，并明确表示该次 stage 包含预下载，不应把其总时长当作 candidate runtime。正式 Docker campaign 使用已准备的当前题输入，因此记录 `download_seconds=0.0`。
 
 ## 6. OpenCode 主 campaign
 

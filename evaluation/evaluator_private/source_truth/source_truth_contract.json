@@ -1,0 +1,177 @@
+{
+  "schema_version": "source-truth-contract-v1",
+  "verified_at": "2026-08-07",
+  "verification_basis": "Maintainer-curated authority metadata plus frozen source-file and row evidence. Online resolution is a separate, non-blocking freshness check.",
+  "claim_boundary": "Passing proves consistency with this independently maintained snapshot and the cited raw rows. It does not prove that a publisher made no error, that the sample represents a region, or that an anomaly has a geological cause.",
+  "required_media": ["rock", "soil", "sediment", "water"],
+  "sources": [
+    {
+      "source_id": "georoc-archaean",
+      "dataset_title": "GEOROC Compilation: Archaean Cratons",
+      "dataset_doi": "10.25625/1KRR1P",
+      "dataset_version": "12.0",
+      "license": "CC-BY-SA-4.0",
+      "authority_url": "https://doi.org/10.25625/1KRR1P",
+      "allowed_resolution_hosts": ["doi.org", "data.goettingen-research-online.de", "dataservices.gfz-potsdam.de"],
+      "medium": "rock",
+      "source_file": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
+      "source_file_sha256": "6959b5f1d1ce74ba6608d11847cf12e6427535040bc10b5854ec5ef336fcf6aa",
+      "spot_record": {
+        "source_record_id": "src-fbda42ab497287085e4c2a9ce348c10c4c5f5e0b1dc6e45ce28b3d237bed4e06",
+        "element_or_analyte": "Ni",
+        "value": "70",
+        "unit": "ppm",
+        "latitude": "",
+        "longitude": "",
+        "source_locator": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=2"
+      }
+    },
+    {
+      "source_id": "usgs-conus-soil",
+      "dataset_title": "Geochemical and mineralogical data for soils of the conterminous United States",
+      "dataset_doi": "10.3133/ds801",
+      "dataset_version": "Data Series 801, 2013 release",
+      "license": "LicenseRef-USGS-Public-Domain",
+      "authority_url": "https://doi.org/10.3133/ds801",
+      "allowed_resolution_hosts": ["doi.org", "pubs.usgs.gov"],
+      "medium": "soil",
+      "source_file": "Appendix_2b_Top5_18Sept2013.txt",
+      "source_file_sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894",
+      "spot_record": {
+        "source_record_id": "src-bfcdf81a22ca8e9c3e880dc3a65855080f30db67b8c2778810d405524fdb2f91",
+        "element_or_analyte": "As",
+        "value": "2.1",
+        "unit": "mg/kg",
+        "latitude": "31.3146",
+        "longitude": "-87.1166",
+        "source_locator": "Appendix_2b_Top5_18Sept2013.txt#row=15"
+      }
+    },
+    {
+      "source_id": "norway-marchem",
+      "dataset_title": "MarChem marine chemistry database for Norwegian waters",
+      "dataset_doi": null,
+      "dataset_version": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://marchem-api.hi.no/",
+      "allowed_resolution_hosts": ["marchem-api.hi.no"],
+      "medium": "sediment",
+      "source_file": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+      "source_file_sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10",
+      "spot_record": {
+        "source_record_id": "src-7d02abe56dcc1665bc49c1c5bf751597e2575dbe356dfc2027124679f7b04636",
+        "element_or_analyte": "As",
+        "value": "21.7",
+        "unit": "mg/kg",
+        "latitude": "73.353977",
+        "longitude": "33.527978",
+        "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=2"
+      }
+    },
+    {
+      "source_id": "geotraces-idp2025",
+      "dataset_title": "GEOTRACES Intermediate Data Product 2025: discrete seawater",
+      "dataset_doi": "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "dataset_version": "IDP2025",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c",
+      "allowed_resolution_hosts": ["doi.org", "www.bodc.ac.uk"],
+      "medium": "water",
+      "source_file": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+      "source_file_sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44",
+      "spot_record": {
+        "source_record_id": "src-e6a862acb7601a868b4ae886e2bd918241cd4e83fb661184ddc075a76a9e5764",
+        "element_or_analyte": "Ni",
+        "value": "2.144948",
+        "unit": "nmol/kg",
+        "latitude": "41.3829",
+        "longitude": "-13.887604",
+        "source_locator": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=53"
+      }
+    },
+    {
+      "source_id": "pangaea-north-africa-soil",
+      "dataset_title": "Chemical compositions of deflatable soil fractions from North Africa",
+      "dataset_doi": "10.1594/PANGAEA.949903",
+      "dataset_version": "2022-10-25",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://doi.org/10.1594/PANGAEA.949903",
+      "allowed_resolution_hosts": ["doi.org", "doi.pangaea.de", "www.pangaea.de"],
+      "medium": "soil",
+      "source_file": "Table_S5.tab",
+      "source_file_sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485",
+      "spot_record": {
+        "source_record_id": "src-0e05c733f272d431420e373279147fd31c8c25ef84e142f983ab6b1bbad6e3b0",
+        "element_or_analyte": "As",
+        "value": "14.84",
+        "unit": "mg/kg",
+        "latitude": "30.6700",
+        "longitude": "11.7300",
+        "source_locator": "Table_S5.tab#row=115"
+      }
+    },
+    {
+      "source_id": "japan-gsj-geochemical-map",
+      "dataset_title": "Geochemical Map of Japan: national river-sediment sample and concentration tables",
+      "dataset_doi": null,
+      "dataset_version": "sample-2024-02-20_concentration-2007-01-10",
+      "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+      "authority_url": "https://gbank.gsj.jp/geochemmap/",
+      "allowed_resolution_hosts": ["gbank.gsj.jp"],
+      "medium": "sediment",
+      "source_file": "samplejoho.csv",
+      "source_file_sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671",
+      "spot_record": {
+        "source_record_id": "src-3b5d4d792ddec1937781c7ecb204bfc8634c48ea7d618183fb4b7800c0031178",
+        "element_or_analyte": "As",
+        "value": "14.0",
+        "unit": "ppm",
+        "latitude": "26.1292",
+        "longitude": "127.7603",
+        "source_locator": "samplejoho.csv#row=2;noudo.csv#row=2"
+      }
+    },
+    {
+      "source_id": "afsis-phase-i-wet-chemistry",
+      "dataset_title": "AfSIS Phase I archived soil samples: wet chemistry data",
+      "dataset_doi": "10.34725/DVN/66BFOB",
+      "dataset_version": "2.0",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://doi.org/10.34725/DVN/66BFOB",
+      "allowed_resolution_hosts": ["doi.org", "data.worldagroforestry.org"],
+      "medium": "soil",
+      "source_file": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+      "source_file_sha256": "32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605",
+      "spot_record": {
+        "source_record_id": "src-2518efeaaf94d3887541b7a3a4f37e773e45e3aa1cb4f562dba2a118f6cefeaf",
+        "element_or_analyte": "As",
+        "value": "0.262535152",
+        "unit": "mg kg^-1",
+        "latitude": "-6.92975998",
+        "longitude": "36.09859085",
+        "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=2"
+      }
+    },
+    {
+      "source_id": "foregs-stream-water",
+      "dataset_title": "FOREGS Geochemical Atlas of Europe: stream water",
+      "dataset_doi": null,
+      "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+      "license": "LicenseRef-FOREGS-Research-Attribution-2005",
+      "authority_url": "https://weppi.gtk.fi/publ/foregsatlas/",
+      "allowed_resolution_hosts": ["weppi.gtk.fi"],
+      "medium": "water",
+      "source_file": "W_all_data_2v8_17Sep07.csv",
+      "source_file_sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3",
+      "spot_record": {
+        "source_record_id": "src-05507429edadae17bbb7758f6b1fc0f9f5eb02b24f99dc7fe674ea1c16d99666",
+        "element_or_analyte": "As",
+        "value": "0.12",
+        "unit": "µg/l",
+        "latitude": "41.792",
+        "longitude": "20.065",
+        "source_locator": "W_all_data_2v8_17Sep07.csv#row=4"
+      }
+    }
+  ]
+}

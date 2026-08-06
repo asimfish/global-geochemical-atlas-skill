@@ -1042,7 +1042,11 @@ def parser() -> argparse.ArgumentParser:
 
     stage = sub.add_parser("stage", help="run an evaluation_lyf scientific gate")
     stage.add_argument("--image", default="global-geochemical-eval:local")
-    stage.add_argument("--suite", choices=("isolated", "real", "global", "completion", "all"), required=True)
+    stage.add_argument(
+        "--suite",
+        choices=("source-truth", "isolated", "real", "global", "completion", "all"),
+        required=True,
+    )
     stage.add_argument("--output-dir", type=Path, required=True)
     stage.add_argument("--timeout-seconds", type=int, default=900)
     stage.add_argument("--stress-records", type=int, default=10_000)

@@ -17,6 +17,7 @@ from typing import Sequence
 ROOT = Path(__file__).resolve().parent
 SCRIPTS = ROOT / "stage_benchmark" / "scripts"
 REAL_FIXTURES = ROOT / "stage_benchmark" / "real-data" / "fixtures" / "raw"
+SOURCE_TRUTH_AUDIT = ROOT.parent / "evaluation" / "tools" / "audit_source_truth.py"
 
 
 def timestamp() -> str:
@@ -25,6 +26,13 @@ def timestamp() -> str:
 
 def command_for(args: argparse.Namespace, suite_output: Path) -> list[str]:
     python = sys.executable
+    if args.suite == "source-truth":
+        return [
+            python,
+            str(SOURCE_TRUTH_AUDIT),
+            "--output",
+            str(suite_output / "source_truth_report.json"),
+        ]
     if args.suite == "all":
         command = [
             python,
@@ -79,7 +87,11 @@ def command_for(args: argparse.Namespace, suite_output: Path) -> list[str]:
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("isolated", "real", "global", "completion", "all"), required=True)
+    parser.add_argument(
+        "--suite",
+        choices=("source-truth", "isolated", "real", "global", "completion", "all"),
+        required=True,
+    )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--stress-records", type=int, default=10_000)
     parser.add_argument("--real-max-source-samples", type=int, default=20)
