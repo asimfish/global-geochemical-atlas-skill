@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:request-execution:v1",
+  "title": "Request-driven atlas execution evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "execution_version",
+    "status",
+    "mode",
+    "analysis_profile",
+    "geology_grid",
+    "record_counts",
+    "route_status",
+    "coverage_status",
+    "route_resolution",
+    "execution_coverage_status",
+    "warnings"
+  ],
+  "properties": {
+    "execution_version": {"const": "geochemical-request-execution-v1"},
+    "status": {"const": "success"},
+    "mode": {"type": "string", "minLength": 1},
+    "analysis_profile": {"type": "string", "enum": ["demo", "production"]},
+    "geology_grid": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["filename", "sha256"],
+          "properties": {
+            "filename": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          }
+        }
+      ]
+    },
+    "record_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["before_request_filters", "after_request_filters"],
+      "properties": {
+        "before_request_filters": {"type": "integer", "minimum": 0},
+        "after_request_filters": {"type": "integer", "minimum": 0}
+      }
+    },
+    "route_status": {
+      "type": "string",
+      "enum": ["ready", "partial", "needs_human_review", "unsupported_scope"]
+    },
+    "coverage_status": {
+      "type": "string",
+      "enum": ["covered", "partial", "uncovered", "unknown"]
+    },
+    "route_resolution": {
+      "type": "string",
+      "enum": [
+        "offline_fixture_hash_verified",
+        "routed_source_evidence_verified",
+        "provided_input_processed"
+      ]
+    },
+    "execution_coverage_status": {
+      "type": "string",
+      "enum": ["covered", "partial", "uncovered", "unknown"]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

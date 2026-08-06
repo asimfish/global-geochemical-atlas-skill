@@ -1,0 +1,21 @@
+{
+  "accessed_at": "2026-08-06T22:17:32Z",
+  "attempts": 1,
+  "bytes": 38670,
+  "content_disposition": "inline; filename=hartmann-moosdorf_2012.zip",
+  "content_type": "application/zip",
+  "dataset_doi": "10.1594/PANGAEA.788537",
+  "dataset_version": "PANGAEA.788537; 0.5 degree raster",
+  "etag": "71904ce8ac2d939f4fa1d089b3c8a8fa",
+  "http_status": 200,
+  "last_modified": "Fri, 07 Sep 2012 11:22:45 GMT",
+  "license": "CC-BY-3.0",
+  "manifest_version": "geochemical-download-v1",
+  "offline": false,
+  "output_filename": "pangaea-788537.zip",
+  "resolved_url": "https://epic.awi.de/id/eprint/31092/1/hartmann-moosdorf_2012.zip",
+  "sha256": "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e",
+  "sha256_basis": "expected",
+  "source_url": "https://epic.awi.de/id/eprint/31092/1/hartmann-moosdorf_2012.zip",
+  "status": "downloaded"
+}

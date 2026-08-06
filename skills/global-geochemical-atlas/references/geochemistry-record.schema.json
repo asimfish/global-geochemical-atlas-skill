@@ -256,16 +256,30 @@
     "operational_confidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["version", "source", "completeness", "method", "spatial", "qc", "overall", "band"],
+      "required": ["version", "source", "completeness", "method", "spatial", "qc", "overall", "band", "gates_applied"],
       "properties": {
-        "version": {"const": "d2-confidence-v2"},
+        "version": {"const": "d2-confidence-v3"},
         "source": {"type": "number", "minimum": 0, "maximum": 1},
         "completeness": {"type": "number", "minimum": 0, "maximum": 1},
         "method": {"type": "number", "minimum": 0, "maximum": 1},
         "spatial": {"type": "number", "minimum": 0, "maximum": 1},
         "qc": {"type": "number", "minimum": 0, "maximum": 1},
         "overall": {"type": "number", "minimum": 0, "maximum": 1},
-        "band": {"type": "string", "enum": ["high", "medium", "low"]}
+        "band": {"type": "string", "enum": ["high", "medium", "low"]},
+        "gates_applied": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "error_qc_low_cap",
+              "missing_canonical_coordinate_low_cap",
+              "missing_coordinate_uncertainty_medium_cap",
+              "incomplete_method_context_medium_cap",
+              "missing_geologic_context_medium_cap"
+            ]
+          }
+        }
       }
     }
   }

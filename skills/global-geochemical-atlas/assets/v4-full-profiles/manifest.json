@@ -1,9 +1,9 @@
 {
   "artifacts": [
     {
-      "bytes": 18849,
+      "bytes": 18825,
       "path": "assets/v4-coverage-balance.json",
-      "sha256": "31b08d60928d0e3f8d92294414c8d050bc5f90de9d21f6ca138b83683aa5e3db"
+      "sha256": "55c7cb1ac028b320d346ecf9471b69ad98bae83f660cad9ec705e35c1f0843de"
     },
     {
       "bytes": 1330366,

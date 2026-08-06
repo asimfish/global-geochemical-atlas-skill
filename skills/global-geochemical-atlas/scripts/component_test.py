@@ -43,8 +43,10 @@ import export_archive_exchange
 import migrate_v4_source_demos
 import profile_source_completeness
 import reconcile_v4_coordinate_claims
+import run_atlas_request as request_runner
 import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
+import validate_human_review as human_review_validator
 import validate_visualization as visualization_validator
 import verify_marchem_candidate
 
@@ -55,6 +57,7 @@ DEMO_INPUT = SKILL_DIR / "fixtures" / "demo_input.csv"
 SOURCE_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 COMBINED_DEMO = SKILL_DIR / "fixtures" / "four-media" / "combined-v3"
 WORKFLOW = SCRIPT_DIR / "run_workflow.py"
+REQUEST_RUNNER = SCRIPT_DIR / "run_atlas_request.py"
 DOWNLOADER = SCRIPT_DIR / "download_data.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 VISUALIZATION_RENDERER = SCRIPT_DIR / "render_visualization.py"
@@ -70,6 +73,7 @@ REGIONAL_COMPARISON_PROFILE = (
 )
 VISUALIZATION_PROFILE_SCHEMA = SKILL_DIR / "references" / "visualization-profile.schema.json"
 VISUALIZATION_REPORT_SCHEMA = SKILL_DIR / "references" / "visualization-report.schema.json"
+PRODUCTION_REQUEST = SKILL_DIR / "fixtures" / "production-usgs" / "request.json"
 
 
 class ContractError(AssertionError):
@@ -276,7 +280,10 @@ def check_d1(output_dir: Path) -> list[str]:
     invalid_request_overrides = [
         {"elements": ["As", "As"]},
         {"measurement_basis": "dry weight"},
+        {"measurement_basis": []},
         {"time_range": ["2020"]},
+        {"time_range": ["unknown", "2020"]},
+        {"time_range": ["2021", "2020"]},
         {"sources": ["usgs-conus-soil", "usgs-conus-soil"]},
         {"output_formats": ["csv", "parquet"]},
         {"target_crs": "EPSG:3857"},
@@ -295,6 +302,30 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         rejected_invalid_requests == len(invalid_request_overrides),
         "D1 router enforces every shared request field instead of bypassing its JSON Schema",
+        checks,
+    )
+    require(
+        source_router.basis_matches("total", "near_total_acid_digest")
+        and source_router.basis_matches("dissolved", "filtered_water")
+        and not source_router.basis_matches("dissolved", "unfiltered_total_water"),
+        "D1 measurement-basis matching uses token boundaries and never treats unfiltered as filtered",
+        checks,
+    )
+    require(
+        request_runner._year_bounds("2009/2013") == (2009, 2013),
+        "D1 request filtering treats reported sampling ranges as intervals instead of one arbitrary year",
+        checks,
+    )
+    require(
+        request_runner._inside_bbox(
+            {"latitude": "35", "longitude": "103", "source_crs": "EPSG:4326"},
+            [100, 30, 110, 40],
+        )
+        and not request_runner._inside_bbox(
+            {"latitude": "35", "longitude": "103", "source_crs": ""},
+            [100, 30, 110, 40],
+        ),
+        "D1 request filtering never treats unverified source coordinates as WGS84 bbox coordinates",
         checks,
     )
     normalized_request = source_router.validate_request(valid_request, catalog)
@@ -361,6 +392,21 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 catalog identifier fields remain aligned with its published JSON Schema",
         checks,
     )
+    interface_schema_fields = set(
+        catalog_schema["$defs"]["source"]["properties"]["interfaces"]["items"]["properties"]
+    )
+    observed_interface_fields = {
+        field
+        for entry in catalog["sources"].values()
+        for interface in entry["interfaces"]
+        for field in interface
+    }
+    require(
+        observed_interface_fields <= interface_schema_fields
+        and all(interface.get("method") in {None, "GET", "POST"} for entry in catalog["sources"].values() for interface in entry["interfaces"]),
+        "D1 catalog interface fields and HTTP methods remain aligned with the published Schema",
+        checks,
+    )
     require(
         set(catalog["sources"][source_id]["status"] for source_id in ("georoc-archaean", "usgs-conus-soil"))
         == {"approved"}
@@ -414,6 +460,48 @@ def check_d1(output_dir: Path) -> list[str]:
         "usgs-ngdb" in {entry["source_id"] for entry in route["review_sources"]}
         and "gemstat-open-archive" not in {entry["source_id"] for entry in route["review_sources"]},
         "D1 router exposes relevant candidates and their review blockers",
+        checks,
+    )
+    arsenic_water_route = source_router.route_sources(
+        {"elements": ["As"], "region": "global", "media": ["water"]}, catalog, registry
+    )
+    require(
+        {entry["source_id"] for entry in arsenic_water_route["selected_sources"]}
+        == {"foregs-stream-water", "gemstat-open-archive"}
+        and "geotraces-idp2025"
+        in {entry["source_id"] for entry in arsenic_water_route["review_sources"]}
+        and next(
+            entry for entry in arsenic_water_route["review_sources"]
+            if entry["source_id"] == "geotraces-idp2025"
+        )["request_compatibility"]["analytes"]["status"] == "incompatible",
+        "D1 router applies registered analyte availability before source selection",
+        checks,
+    )
+    incompatible_route = source_router.route_sources(
+        {
+            "elements": ["Au"],
+            "region": {"bbox": [-30, -85, 30, -75]},
+            "media": ["water"],
+            "measurement_basis": ["total"],
+            "time_range": ["1950", "1960"],
+            "max_records": 1,
+        },
+        catalog,
+        registry,
+    )
+    require(
+        not incompatible_route["selected_sources"]
+        and all(
+            entry["request_compatibility"]["analytes"]["status"] != "compatible"
+            for entry in incompatible_route["review_sources"]
+            if entry["source_id"] in registry["sources"]
+        )
+        and all(
+            entry["request_compatibility"]["max_records"]
+            == {"status": "enforced_downstream", "requested": 1}
+            for entry in incompatible_route["review_sources"]
+        ),
+        "D1 router does not reuse a global arsenic route for incompatible element, bbox, basis and time requests",
         checks,
     )
     raw_sediment_route = source_router.route_sources(
@@ -908,7 +996,7 @@ def check_d1(output_dir: Path) -> list[str]:
             )
             for review in all_prepared_reviews.values()
         ),
-        "D1 all thirteen prepared human-review artifacts align with the published field contract",
+        "D1 all fourteen prepared human-review artifacts align with the published field contract",
         checks,
     )
     require(
@@ -921,6 +1009,16 @@ def check_d1(output_dir: Path) -> list[str]:
             for review in prepared_reference_reviews.values()
         ),
         "D1 prepares 30 passing reference comparisons without auto-signing them",
+        checks,
+    )
+    review_validation = human_review_validator.validate(
+        SKILL_DIR / "fixtures" / "four-media" / "soil" / "usgs-conus-soil" / "human_review.json"
+    )
+    require(
+        review_validation["status"] == "pending"
+        and review_validation["benchmark_ready_review"] is False
+        and not review_validation["errors"],
+        "D1 human-review gate validates prepared sheets without inventing benchmark readiness",
         checks,
     )
     require(
@@ -1082,6 +1180,23 @@ def check_d1(output_dir: Path) -> list[str]:
         and coverage_balance["media"]["rock"]["valid_coordinate_sample_count"] == 0
         and coverage_balance["media"]["soil"]["valid_coordinate_sample_count"] == 16467
         and coverage_balance["media"]["sediment"]["valid_coordinate_sample_count"] == 2481
+        and all(
+            int(metrics[field]) >= 0
+            for metrics in [
+                *coverage_balance["media"].values(),
+                *coverage_balance["medium_elements"].values(),
+            ]
+            for field in (
+                "observation_count", "distinct_sample_count", "independent_lineage_count",
+                "reported_coordinate_sample_count", "valid_coordinate_sample_count",
+                "comparable_observation_count", "reported_covered_spatial_cells", "covered_spatial_cells",
+            )
+        )
+        and all(
+            coverage_balance["medium_elements"][f"rock|{element}"]["valid_coordinate_sample_count"] == 0
+            and coverage_balance["medium_elements"][f"rock|{element}"]["covered_spatial_cells"] == 0
+            for element in ("As", "Cu", "Ni", "Zn")
+        )
         and all(
             int(row["valid_coordinate_sample_count"]) == 0
             and int(row["covered_spatial_cells"]) == 0
@@ -2371,7 +2486,7 @@ def check_d2(output_dir: Path) -> list[str]:
     else:
         raise ContractError("D2 production profile accepted --min-group-size below twenty")
     confidence = json_value(output_dir / "confidence_report.json")
-    require(confidence.get("confidence_version") == "d2-confidence-v2", "D2 confidence version is explicit", checks)
+    require(confidence.get("confidence_version") == "d2-confidence-v3", "D2 confidence version is explicit", checks)
     require(
         set(confidence.get("weights", {})) == {"source", "completeness", "method", "spatial", "qc"},
         "D2 confidence component contract is complete",
@@ -2385,6 +2500,98 @@ def check_d2(output_dir: Path) -> list[str]:
         checks,
     )
     require(abs(sum(confidence["weights"].values()) - 1.0) < 1e-12, "D2 confidence weights sum to one", checks)
+    require(
+        "missing_coordinate_uncertainty_medium_cap" in confidence["gates"]
+        and confidence["gate_counts"].get("error_qc_low_cap", 0) > 0,
+        "D2 confidence declares critical-field gates and applies error gates to the boundary fixture",
+        checks,
+    )
+    production_dir = output_dir / "production-request"
+    run_command(
+        [
+            sys.executable,
+            str(REQUEST_RUNNER),
+            "--request", str(PRODUCTION_REQUEST),
+            "--output-dir", str(production_dir),
+            "--demo", "production-usgs",
+            "--analysis-profile", "production",
+            "--generated-at", "2026-08-07T00:00:00Z",
+        ]
+    )
+    production_summary = json_value(production_dir / "run_summary.json")
+    production_anomaly = json_value(production_dir / "anomaly_report.json")
+    production_confidence = json_value(production_dir / "confidence_report.json")
+    production_execution = json_value(production_dir / "request_evidence" / "execution.json")
+    production_rows = csv_rows(production_dir / "geochemistry.csv")
+    require(
+        production_summary["metrics"]["record_count"] == 996
+        and production_summary["metrics"]["valid_coordinate_count"] == 996
+        and all(row["matched_geologic_unit"].startswith("GLiM:") for row in production_rows),
+        "D2 production demo performs pinned GLiM matching for every real USGS record",
+        checks,
+    )
+    require(
+        production_anomaly["minimum_group_size"] == 20
+        and sum(group["status"] == "analyzed" for group in production_anomaly["groups"]) == 12
+        and production_anomaly["candidate_count"] == 6,
+        "D2 production demo analyzes real comparable groups without lowering the twenty-record gate",
+        checks,
+    )
+    require(
+        production_confidence["confidence_version"] == "d2-confidence-v3"
+        and production_confidence["band_counts"] == {"high": 0, "medium": 996, "low": 0}
+        and production_confidence["gate_counts"]
+        == {"missing_coordinate_uncertainty_medium_cap": 996},
+        "D2 production demo keeps missing coordinate uncertainty visible through confidence gates",
+        checks,
+    )
+    execution_schema = json_value(SKILL_DIR / "references" / "request-execution.schema.json")
+    require(
+        set(production_execution) == set(execution_schema["properties"])
+        and set(execution_schema["required"]) <= set(production_execution)
+        and production_execution["route_resolution"] == "offline_fixture_hash_verified"
+        and production_execution["execution_coverage_status"] == "partial",
+        "D1-to-D3 request execution explains offline hash verification without overstating coverage",
+        checks,
+    )
+    mismatched_request = json_value(PRODUCTION_REQUEST)
+    mismatched_request["sources"] = ["georoc-archaean"]
+    with tempfile.TemporaryDirectory() as mismatch_temp:
+        mismatched_path = Path(mismatch_temp) / "mismatched-source-request.json"
+        mismatched_path.write_text(json.dumps(mismatched_request), encoding="utf-8")
+        mismatch_result = run_command(
+            [
+                sys.executable,
+                str(REQUEST_RUNNER),
+                "--request", str(mismatched_path),
+                "--output-dir", str(Path(mismatch_temp) / "mismatched-source-output"),
+                "--demo", "production-usgs",
+            ],
+            expected_code=2,
+        )
+    require(
+        '"status": "incomplete_retrieval"' in mismatch_result.stderr
+        and "'source': 996" in mismatch_result.stderr,
+        "Request runner never substitutes a bundled source excluded by the frozen request",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as tamper_temp:
+        tampered_input = Path(tamper_temp) / "demo_input.csv"
+        production_fixture = SKILL_DIR / "fixtures" / "production-usgs"
+        tampered_input.write_bytes((production_fixture / "demo_input.csv").read_bytes() + b"\n")
+        try:
+            request_runner.verify_manifest_outputs(
+                production_fixture / "run_manifest.json",
+                [tampered_input, production_fixture / "sources.jsonl"],
+            )
+        except request_runner.RequestRunError as exc:
+            require(
+                exc.status == "conflicting_evidence" and "hash/size mismatch" in str(exc),
+                "Request runner rejects a fixture whose bytes no longer match its parent manifest",
+                checks,
+            )
+        else:
+            raise ContractError("Request runner accepted tampered fixture bytes")
     anomaly_report = json_value(output_dir / "anomaly_report.json")
     anomalies = json_value(output_dir / "anomalies.geojson")
     require(

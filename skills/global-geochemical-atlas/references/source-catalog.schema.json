@@ -126,6 +126,7 @@
             "properties": {
               "kind": {"type": "string", "minLength": 1},
               "url": {"type": "string", "minLength": 1},
+              "method": {"type": "string", "enum": ["GET", "POST"]},
               "format": {"type": "string", "minLength": 1},
               "access": {"type": "string", "minLength": 1},
               "server_filters": {"$ref": "#/$defs/uniqueStrings"}

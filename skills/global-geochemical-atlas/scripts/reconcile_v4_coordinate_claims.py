@@ -176,10 +176,43 @@ def _balance_output(
                 metrics = balance["medium_elements"].get(f"{medium}|{element}")
                 if not isinstance(metrics, dict):
                     continue
+                # A source-level distinct-sample total cannot be subtracted from
+                # every element cell: an element can be absent for some samples.
+                # When every lineage in the cell is non-canonical the exact
+                # canonical result is zero. Mixed-lineage cells retain the
+                # source-specific subtraction used by the frozen AfSIS/GSJ
+                # contracts, whose registered target rows are sample-complete.
+                if set(metrics.get("source_ids", [])) <= NON_CANONICAL.keys():
+                    metrics["valid_coordinate_sample_count"] = 0
+                    metrics["covered_spatial_cells"] = 0
+                    metrics["comparable_observation_count"] = 0
+                    continue
                 metrics["valid_coordinate_sample_count"] -= reported_samples
                 metrics["covered_spatial_cells"] -= reported_cells
                 if source_id == "afsis-phase-i-wet-chemistry":
                     metrics["comparable_observation_count"] -= reported_samples
+    # Repair stale artifacts produced by the former source-total subtraction
+    # and refuse to publish impossible coverage metrics. This branch also
+    # makes reconciliation idempotent after the cube has already been marked
+    # canonical.
+    for metrics in [*balance["media"].values(), *balance["medium_elements"].values()]:
+        source_ids = set(metrics.get("source_ids", []))
+        if source_ids and source_ids <= NON_CANONICAL.keys():
+            metrics["valid_coordinate_sample_count"] = 0
+            metrics["covered_spatial_cells"] = 0
+            metrics["comparable_observation_count"] = 0
+        for field in (
+            "observation_count",
+            "distinct_sample_count",
+            "independent_lineage_count",
+            "reported_coordinate_sample_count",
+            "valid_coordinate_sample_count",
+            "comparable_observation_count",
+            "reported_covered_spatial_cells",
+            "covered_spatial_cells",
+        ):
+            if int(metrics[field]) < 0:
+                raise ReconciliationError(f"coverage balance contains negative {field}")
     balance["claim_boundary"] = (
         "More observations do not imply broader coverage. Reported source coordinates and canonical EPSG:4326 "
         "coverage are separate; independent lineage, sample type, method and region must be interpreted together."

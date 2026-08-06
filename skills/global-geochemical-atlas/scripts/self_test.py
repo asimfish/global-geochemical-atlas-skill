@@ -308,7 +308,7 @@ def run_suite() -> dict[str, Any]:
         require(set(normalized_record) == set(record_schema["required"]), "D2 record keys drifted from required schema")
         require(set(normalized_record) == set(record_schema["properties"]), "D2 record keys drifted from schema properties")
         require(
-            normalized_record["operational_confidence"]["version"] == "d2-confidence-v2",
+            normalized_record["operational_confidence"]["version"] == "d2-confidence-v3",
             "D2 confidence version did not advance with the schema",
         )
 

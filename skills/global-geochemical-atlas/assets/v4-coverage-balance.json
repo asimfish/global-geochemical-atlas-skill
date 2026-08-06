@@ -77,7 +77,7 @@
   "medium_elements": {
     "rock|As": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": -299,
+      "covered_spatial_cells": 0,
       "distinct_sample_count": 4488,
       "element": "As",
       "independent_lineage_count": 1,
@@ -90,11 +90,11 @@
         "georoc-archaean"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": -16660
+      "valid_coordinate_sample_count": 0
     },
     "rock|Cu": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": -80,
+      "covered_spatial_cells": 0,
       "distinct_sample_count": 17443,
       "element": "Cu",
       "independent_lineage_count": 1,
@@ -107,11 +107,11 @@
         "georoc-archaean"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": -6648
+      "valid_coordinate_sample_count": 0
     },
     "rock|Ni": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": -7,
+      "covered_spatial_cells": 0,
       "distinct_sample_count": 25138,
       "element": "Ni",
       "independent_lineage_count": 1,
@@ -124,11 +124,11 @@
         "georoc-archaean"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": -386
+      "valid_coordinate_sample_count": 0
     },
     "rock|Zn": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": -79,
+      "covered_spatial_cells": 0,
       "distinct_sample_count": 17215,
       "element": "Zn",
       "independent_lineage_count": 1,
@@ -141,7 +141,7 @@
         "georoc-archaean"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": -6829
+      "valid_coordinate_sample_count": 0
     },
     "sediment|As": {
       "comparable_observation_count": 4073,

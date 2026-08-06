@@ -46,12 +46,16 @@
     },
     "measurement_basis": {
       "type": ["array", "null"],
+      "minItems": 1,
       "items": {"type": "string", "minLength": 1},
       "uniqueItems": true
     },
     "time_range": {
       "type": ["array", "null"],
-      "prefixItems": [{"type": "string"}, {"type": "string"}],
+      "prefixItems": [
+        {"type": "string", "pattern": "^[0-9]{4}(?:-|$)"},
+        {"type": "string", "pattern": "^[0-9]{4}(?:-|$)"}
+      ],
       "minItems": 2,
       "maxItems": 2
     },
