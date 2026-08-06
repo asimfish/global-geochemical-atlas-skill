@@ -10,5 +10,6 @@ demo_output/
 dist/
 evaluation_lyf/agent_uplift/experiment/
 evaluation_lyf/stage_benchmark/runs/
+/evaluation/results/validation/package_validation.json
 *.zip
 *.log

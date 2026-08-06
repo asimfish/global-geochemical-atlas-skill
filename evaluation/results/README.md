@@ -2,6 +2,9 @@
 
 此处只保存真实运行产生的原始记录和由 E1 `score.json` 聚合出的报告。
 
+`validation/package_validation.json` 是 `evaluation/tools/validate_package.py` 的可重建输出，
+不进入版本控制；需要审计当前提交时按 `evaluation/README.md` 中的命令现场生成。
+
 除下方明确归档的真实运行外，本目录其余内容仅为模板或金标准自检；缺少被测 Skill、官方模型标识、冻结运行参数或沙箱日志的记录不得填写成“盲测结果”。金标准自检应写入 `validation/`，不能冒充 B0 或 S0 运行。原始记录必须使用 E1 状态、退出码和六维分数，旧版 `objective_score + llm_score` 字段不得作为正式总分。
 
 ## 已归档运行
