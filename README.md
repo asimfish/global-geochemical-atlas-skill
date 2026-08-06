@@ -115,8 +115,18 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 | 定制全球、区域或元素组合地图 | [D3 可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md) |
 | 修改 D1/D2/D3 或提交 PR | [贡献指南](CONTRIBUTING.md) |
 | 查看开发期 Q01–Q24 benchmark | [评测说明](evaluation/README.md) |
+| 选择正确的测试 Prompt | [测试 Prompt 总入口](TESTING_PROMPTS.md) |
 
 ## 开发验证
+
+仓库的测试分层如下。Docker 是统一执行环境，不是第三套 benchmark：
+
+| 入口 | 验证内容 |
+|---|---|
+| Skill `component_test.py` / `self_test.py` | D1/D2/D3 契约与最小端到端回归 |
+| [`evaluation/`](evaluation/) | Q01–Q24、B0/S0、E1 十产物和评分证据 |
+| [`evaluation_lyf/`](evaluation_lyf/) | D1/D2/D3 独立科学门禁与 Qwen Skill uplift |
+| [`evaluation/docker/`](evaluation/docker/) | 上述评测共用的镜像、隔离、OpenCode 与 campaign runner |
 
 ```bash
 # D1/D2/D3 公共接口与契约
@@ -127,7 +137,13 @@ python skills/global-geochemical-atlas/scripts/self_test.py
 
 # evaluation 工具单元测试
 python -m unittest discover -s evaluation/tools/tests -v
+
+# Docker 控制器与两份 Qwen Prompt 契约
+python -m unittest discover -s evaluation/docker/tests -v
+python evaluation_lyf/agent_uplift/test_prompt_contract.py
 ```
+
+也可以把 `all` 换成 `d1`、`d2` 或 `d3`，单独验证责任域。Docker 的标准构建和 smoke 命令见 [`evaluation/docs/docker_usage.md`](evaluation/docs/docker_usage.md)；主机版与 Docker 版的有/无 Skill Prompt 见 [`evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md`](evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md)。路径归属、接口变更规则和完成定义见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
 
 `evaluation/` 和 `evaluation_lyf/` 是开发基准，不是主办方官方题库，也不会进入最终提交包。比赛提交主体只有 `skills/global-geochemical-atlas/` 中这一份 Skill。
 

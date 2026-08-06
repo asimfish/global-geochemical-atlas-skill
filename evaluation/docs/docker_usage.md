@@ -1,185 +1,163 @@
-# Docker 使用与测试指南
+# Docker 统一评测指南
 
-> 更新时间：2026-08-05（HKT）
-> 适用主机：`bjzgcUbuntu`（2 × NVIDIA GeForce RTX 5090）
-> 适用项目目录：`/home/ubuntu/Hackathon`
+本仓库采用“一套 Docker 执行底座、两类评测入口”的结构：
 
-本文说明如何使用已配置的 Docker 环境、构建 E1 合同镜像并验证隔离能力。验收时必须区分 Docker CLI、daemon、普通容器运行时和正式 E1 smoke；仅有 `docker --version` 输出不能证明 Docker 全链路可用。
+- `evaluation_lyf/` 负责 D1/D2/D3 科学与工程门禁；
+- `evaluation/` 负责比赛代理评测，即同题 B0（无 Skill）/S0（有 Skill）隔离执行、E1 十产物检查、六维证据计分和 uplift 汇总；
+- `evaluation/docker/` 统一提供镜像、OpenCode 入口、网络白名单代理、L0/L1 预检和 campaign runner。
 
-当前普通 Docker 使用、镜像构建、内存/PID/只读根文件系统/网络/GPU 隔离均已验证通过。rootless user slice 尚未委派 CPU controller，因此正式 E1 smoke 会按设计失败关闭；在管理员完成解锁并重新测试前，不得标记为正式验收通过。
+两套评测不会各自维护镜像，因此不会产生 OpenCode 版本、依赖或资源策略漂移。
 
-## 1. 快速开始
+Docker 实现集中在 [`evaluation/docker/`](../docker/)：`Dockerfile` 冻结环境，`campaign.py` 提供 build/run/stage，`container/` 提供 OpenCode、mock agent 与白名单代理，`tests/` 覆盖控制器契约。它是统一运行层，不是与 `evaluation`、`evaluation_lyf` 并列的第三套评分。只想在两个空目录里做 Qwen 有/无 Skill 对照时，直接使用 [`evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md`](../../evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md) 中的零准备流程。
 
-```bash
-ssh bjzgcUbuntu
-docker context use rootless
-systemctl --user status docker.service --no-pager
-docker version
-docker info
-docker run --rm hello-world
-```
+## 1. 与比赛规则的对应关系
 
-`docker version` 应同时显示 Client 和 Server，`hello-world` 应正常退出。若只显示 Client，说明 CLI 已安装，但 daemon 或 socket 仍不可用。
-
-## 2. 当前配置
-
-| 项目 | 当前值 | 说明 |
-|---|---|---|
-| 操作系统 | Ubuntu 22.04.5 LTS | 内核 `6.8.0-124-generic` |
-| Docker | 28.4.0 | rootless daemon |
-| Buildx | 0.27.0 | Docker 构建插件 |
-| Compose | 2.39.2 | 使用 `docker compose` |
-| Docker context | `rootless` | socket：`/run/user/1000/docker.sock` |
-| 存储与 cgroup | overlay2；cgroup v2 | 已委派 memory、pids，未委派 cpu/cpuset |
-| 合同镜像 | `localhost/e1-contract-runner:bjzgc-rootless` | 构建和 smoke 使用此引用 |
-
-## 3. 日常操作
-
-查看 context、镜像、容器和资源占用：
-
-```bash
-docker context ls
-docker images
-docker ps
-docker ps -a
-docker stats
-```
-
-运行容器、查看日志并进入容器：
-
-```bash
-docker run --rm hello-world
-docker run -d --name docker-cli-test --network none alpine:3.20 sleep 300
-docker logs -f docker-cli-test
-docker exec -it docker-cli-test sh
-docker stop docker-cli-test
-docker rm docker-cli-test
-```
-
-构建镜像和使用 Compose：
-
-```bash
-docker build -t my-image:dev .
-docker build --no-cache -t my-image:dev .
-docker compose config
-docker compose up -d
-docker compose logs -f
-docker compose down
-```
-
-临时容器优先使用 `--rm`。清理镜像、容器或构建缓存属于破坏性操作，只删除已确认不再使用的对象。
-
-## 4. E1 项目工作流
-
-先运行一键自检：
-
-```bash
-cd /home/ubuntu/Hackathon
-bash eval/environment/docker/scripts/check-docker-cli.sh
-```
-
-返回码含义：
-
-| 返回码 | 含义 |
+| 规则 | 本仓库实现 |
 |---|---|
-| `0` | CLI、Buildx、Compose 和 daemon 均可用 |
-| `2` | CLI 完整，但 daemon/socket 不可用 |
-| `127` | Docker CLI 未安装或不在 `PATH` |
+| L0 结构/安全初筛 | `preflight.py`：单 Skill、frontmatter、体积、密钥、引用与主题检查 |
+| L1 静态审查 | preflight 生成冻结证据；原创性和独立模型审查明确保留为人工/外部 reviewer 项 |
+| L2 运行与产物 | Docker 2 CPU、4 GB、无 GPU、900 秒、只读根文件系统、PID 限制、E1 十产物清单 |
+| L3 质量评分 | 复用 Q01–Q24 checker、`finalize_score.py`、独立 LLM/static-review 报告接口 |
+| B0/S0 uplift | 相同题面、镜像、模型、repeat、网络和资源；唯一差异是 S0 的只读 Skill 挂载 |
+| 重复策略 | 主模型 B0/S0 各三次并取中位数；可选补充模型各一次，单独归档、不混入主聚合 |
+| 数据下载不计时 | campaign 输入在运行前已打包；容器计时只覆盖 Agent 执行，元数据单列 `download_seconds` |
+| 网络白名单 | candidate 仅接入 internal network；唯一出口是校验域名与公网解析地址的 CONNECT proxy |
 
-运行专项测试和正式 smoke：
+当前 repo 内 Q01–Q24 是比赛契约的本地代理题，并非主办方隐藏题。runner 会把这一边界写进计划和记录，不把本地结果宣传为官方最终分。
 
-```bash
-cd /home/ubuntu/Hackathon
-python3 -m pytest -q eval/environment/docker
+## 2. 预检
 
-IMAGE_REF=localhost/e1-contract-runner:bjzgc-rootless \
-  eval/environment/docker/scripts/run-contract-smoke.sh
-```
-
-当前宿主系统的 `jsonschema` 版本较旧，宿主 pytest 中对应 6 项会失败；相同 6 项已在锁定 Python 3.12 依赖的合同工具容器内通过。正式验收仍以完整证据和完成标记为准。
-
-## 5. 重建合同镜像
+从仓库根目录运行：
 
 ```bash
-cd /home/ubuntu/Hackathon
-CONTAINER_ENGINE=docker \
-IMAGE_REF=localhost/e1-contract-runner:bjzgc-rootless \
-  eval/environment/docker/scripts/build-contract.sh
+python3 evaluation/docker/preflight.py . \
+  --output /tmp/gga-preflight.json
 ```
 
-当前已验证的构建信息：
+退出码：`0` 全自动检查通过；`2` 自动检查通过但仍有 L1/原创性人工复核；`74` 阻断失败；`73` 环境无效。`2` 不能改写成“全部通过”，但可以进入独立审查。
+
+## 3. 构建冻结镜像
+
+```bash
+python3 evaluation/docker/campaign.py build-image \
+  --image global-geochemical-eval:local
+```
+
+默认固定 Python `3.11.9-slim-bookworm`、OpenCode `1.18.14` 和科学 Python 依赖。构建结果输出 image ID，campaign 再次记录该 ID。受控离线主机可显式使用已有基础镜像：
+
+```bash
+python3 evaluation/docker/campaign.py build-image \
+  --image global-geochemical-eval:local \
+  --python-image python:3.12-slim \
+  --no-pull
+```
+
+这只用于环境诊断；正式 campaign 应重新冻结并记录统一镜像。
+
+## 4. Docker 冒烟测试
+
+mock agent 仅验证隔离、资源参数和十产物管线，不代表模型能力成绩：
+
+```bash
+run_dir="$(mktemp -d -p /tmp gga-docker-smoke.XXXXXX)"
+python3 evaluation/docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --agent mock \
+  --network offline \
+  --tasks Q01 \
+  --conditions B0,S0 \
+  --repeats 3 \
+  --supplemental-model qwen3-vl-plus \
+  --output-dir "$run_dir/campaign"
+```
+
+B0 的 `run_manifest.json.benchmark_evidence.skill_visible` 必须为 `false`，S0 必须为 `true`。完整三次运行还必须生成 `summary.json`。
+
+## 5. D1/D2/D3 科学门禁
+
+统一适配器保留 `evaluation_lyf` 的独立报告和失败边界：
+
+```bash
+python3 evaluation/docker/campaign.py stage \
+  --image global-geochemical-eval:local \
+  --suite isolated \
+  --stress-records 10000 \
+  --output-dir /tmp/gga-stage-isolated
+
+python3 evaluation/docker/campaign.py stage \
+  --image global-geochemical-eval:local \
+  --suite all \
+  --output-dir /tmp/gga-stage-all
+```
+
+stage 默认在同一冻结镜像中运行，repo 只读、结果目录可写，并使用与比赛 campaign 相同的 2 CPU/4 GB/PID/只读根策略。`--host` 仅用于诊断依赖问题。`--refresh-downloads` 必须配合 `--network whitelist`，并明确表示该次 stage 包含预下载，不应把其总时长当作 candidate runtime。正式 Docker campaign 使用已准备的当前题输入，因此记录 `download_seconds=0.0`。
+
+## 6. OpenCode 主 campaign
+
+网关必须兼容 OpenAI API，URL 使用 HTTPS。密钥只通过宿主环境继承，命令、计划和 JSON 均不写密钥值；runner 会在归档前清除日志中的密钥字节。若候选把密钥写入 submission，runner 会等长覆盖该值并以 E1 `74` 失败关闭：
+
+```bash
+export EVAL_API_KEY='从密钥管理器注入，不写入仓库'
+
+python3 evaluation/docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --campaign-id qwen-main-v1 \
+  --agent opencode \
+  --network whitelist \
+  --provider-base-url https://gateway.example/v1 \
+  --api-key-env EVAL_API_KEY \
+  --model qwen3.8-max \
+  --temperature 0 \
+  --supplemental-model qwen3-vl-plus \
+  --tasks all \
+  --conditions B0,S0 \
+  --repeats 3 \
+  --timeout-seconds 900 \
+  --output-dir /runs/qwen-main-v1
+```
+
+网关 hostname 会自动加入本次 allowlist；科学数据域名来自 `allowlist.txt`，新增域名用重复的 `--allow-host` 显式声明。禁止使用 `--network host`。
+
+若独立 grader 已为每次运行生成报告，可接入：
+
+```bash
+  --llm-report-dir /frozen/reviews \
+  --static-review /frozen/static_review.json
+```
+
+每次 LLM 报告可命名为 `<run_id>.json`，或放在 `main/Q01/S0/repeat-1.json`（补充模型使用 `supplemental/`）。缺失报告时不补造分数，相关维度保持 `not_scored`/`partial`。
+
+## 7. 证据目录
 
 ```text
-image_ref:  localhost/e1-contract-runner:bjzgc-rootless
-image_id:   sha256:7d7dfd081eba34dbaffe0cb6dc3e3427abc821c0085e27a19f6e1685690a1d33
-evidence:   /home/ubuntu/Hackathon/eval/environment/docker/evidence/contract-build-20260805T150840Z
-profile:    e1-default-v1
+campaign/
+├── campaign_plan.json
+├── campaign_result.json
+├── runs.jsonl                  # 主模型 B0/S0 三次记录
+├── supplemental_runs.jsonl    # 可选补充模型一次记录
+├── summary.csv
+├── summary.json
+├── main/Q01/B0/repeat-1/
+│   ├── task/                   # 本次候选可见输入快照
+│   ├── workspace/
+│   ├── submission/artifacts/   # E1 十产物
+│   ├── candidate.stdout
+│   ├── candidate.stderr
+│   ├── runner_metadata.json
+│   ├── objective_report.json
+│   ├── score.json
+│   └── run_record.json
+└── supplemental/...
 ```
 
-构建完成后校验证据清单：
+记录包含 task/Skill/产物哈希、镜像 ID、资源限制、原始退出码、E1 退出码、运行时长、网络模式和 provider hostname。grader 证据在 submission 外，避免污染候选交卷。
 
-```bash
-cd /home/ubuntu/Hackathon/eval/environment/docker/evidence/contract-build-20260805T150840Z
-sha256sum -c SHA256SUMS
-```
+## 8. 失败关闭
 
-## 6. 验收分层
+- Docker daemon 或镜像缺失：`73 environment_invalid`；
+- 超时：E1 `71`；OOM/137：E1 `72`；缺产物：E1 `74`；
+- grader/finalizer 异常：生成 `ineligible` 分数，不把异常伪装成候选成功分；
+- 完整 B0/S0 × 3 聚合失败：campaign 返回 `2`；
+- proxy 只接受 allowlist hostname、80/443 端口和公网解析地址，IP literal、内网/环回地址及 DNS rebinding 结果均拒绝。
 
-| 层级 | 通过条件 | 当前结果 |
-|---|---|---|
-| CLI | Docker、Buildx、Compose 均能输出版本 | PASS |
-| daemon | `docker version` 同时显示 Client/Server，`docker info` 成功 | PASS（rootless） |
-| runtime | `docker run --rm hello-world` 成功 | PASS |
-| 镜像构建 | 合同镜像构建完成且 `SHA256SUMS` 全绿 | PASS |
-| 非 CPU 隔离 | 内存、swap、PID、只读根、tmpfs、cap-drop、无网络、GPU=0 | PASS |
-| CPU 隔离 | `--cpus 2` 能写入并生效 | FAIL_CLOSED |
-| 正式 E1 smoke | 生成 `DOCKER_SMOKE_COMPLETE` 且所有证据校验通过 | 未完成，等待 CPU controller 解锁 |
-
-## 7. 故障排查
-
-### daemon 无法连接
-
-```bash
-docker context use rootless
-systemctl --user restart docker.service
-systemctl --user status docker.service --no-pager
-docker version
-```
-
-### 镜像拉取超时
-
-确认 `~/.config/docker/daemon.json` 中 registry mirror 配置仍在，再重启用户级 Docker。正式 E1 镜像仍应使用 digest 固定版本，不能把镜像源变化当成可接受漂移。
-
-### 磁盘空间不足
-
-```bash
-df -h
-docker system df
-docker images
-docker ps -a
-```
-
-当前主机磁盘使用率较高，构建前应确认有足够空间。不要未经确认直接运行批量清理命令。
-
-### CPU 配额报错
-
-若出现 `NanoCPUs can not be set`，表示当前 rootless 用户 slice 没有 CPU controller。这不是镜像或脚本错误，不应绕过 CPU probe 或伪造完成标记。
-
-## 8. 管理员解锁正式验收
-
-管理员可选择以下一种方式：
-
-1. 将 `ubuntu` 加入系统 daemon 的 `docker` 组，重新登录后切换到 `default` context。Docker 组属于高权限边界，只能授予受信账号。
-2. 为 `user@1000.service` 或对应 user slice 显式委派 `cpu cpuset io memory pids`，然后重启用户 manager 和 rootless Docker。
-
-解锁后重新执行：
-
-```bash
-docker run --rm --cpus 2 --memory 4g --pids-limit 256 hello-world
-
-cd /home/ubuntu/Hackathon
-IMAGE_REF=localhost/e1-contract-runner:bjzgc-rootless \
-  eval/environment/docker/scripts/run-contract-smoke.sh
-```
-
-只有 CPU probe 通过、正式 smoke 生成 `DOCKER_SMOKE_COMPLETE`，且相关 `SHA256SUMS` 全部校验通过，才能把正式 E1 Docker 验收标记为 PASS。
+本地运行目录不得提交。每次正式 campaign 使用新的空输出目录，并保留原始日志和哈希证据。
