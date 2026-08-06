@@ -16,6 +16,7 @@ from typing import Any
 
 import build_evidence_bundle as evidence_builder
 import build_interactive_map as map_builder
+import build_iteration_backlog as backlog_builder
 import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
 
@@ -117,6 +118,7 @@ def summary_outputs() -> dict[str, str]:
         "anomaly_report": "anomaly_report.json",
         "samples": "samples.geojson",
         "interactive_map": "interactive_map.html",
+        "iteration_backlog": "iteration_backlog.csv",
     }
 
 
@@ -200,6 +202,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     samples_path = args.output_dir / "samples.geojson"
     map_path = args.output_dir / "interactive_map.html"
+    backlog_path = args.output_dir / "iteration_backlog.csv"
+    backlog_report = backlog_builder.build(outputs["database"], backlog_path)
     try:
         map_report = map_builder.build_map(
             outputs["database"],
@@ -211,6 +215,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             confidence_report_path=outputs["confidence_report"],
             source_manifest_path=source_manifest_path,
             anomaly_report_path=outputs["anomaly_report"],
+            iteration_backlog_path=backlog_path,
         )
     except (map_builder.MapBuildError, OSError) as exc:
         raise WorkflowError("incomplete_retrieval", f"map generation failed: {exc}") from exc
@@ -244,6 +249,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "valid_coordinate_count": int(qc_report.get("valid_coordinate_count", 0)),
         "censored_record_count": int(qc_report.get("censored_record_count", 0)),
         "candidate_anomaly_count": int(anomaly_report.get("candidate_count", 0)),
+        "iteration_action_required_count": int(
+            backlog_report.get("status_counts", {}).get("action_required", 0)
+        ),
+        "iteration_review_required_count": int(
+            backlog_report.get("status_counts", {}).get("review_required", 0)
+        ),
     }
     summary = {
         "schema_version": SUMMARY_VERSION,

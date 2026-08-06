@@ -52,6 +52,7 @@
         "anomaly_results_first_class_ui": true,
         "confidence_and_sources_first_class_ui": true,
         "interactive_map_first_class_ui": true,
+        "iteration_backlog_first_class_ui": true,
         "standardized_database_first_class_ui": true
       },
       "filter_dimensions": {
@@ -66,6 +67,10 @@
         "duplicate_story_selector": false,
         "four_primary_map_controls": true,
         "hierarchy_version": "task-first-progressive-disclosure-v1",
+        "localized_measurement_basis": true,
+        "recoverable_map_navigation": true,
+        "regional_pan_without_scope_expansion": true,
+        "research_patch_crud": "proposal_only_no_direct_mutation",
         "single_primary_navigation": true
       },
       "outputs": {
@@ -76,7 +81,9 @@
       },
       "scientific_semantics": {
         "anomaly_basis": "D2 robust z within declared comparable background groups",
+        "anomaly_contrast": "candidate_vs_comparable_group_median",
         "anomaly_region_semantics": "visual aggregation of D2 candidate points only",
+        "element_pair_analysis": "log10_scatter_median_quadrants_spearman_and_coverage_matrix",
         "heatmap_encodes": "physical_sample_density",
         "heatmap_interpolates_concentration": false
       }
@@ -128,7 +135,7 @@
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 724913,
+    "html_bytes": 1031919,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -344,6 +351,8 @@
   "metrics": {
     "candidate_anomaly_count": 16,
     "censored_record_count": 23,
+    "iteration_action_required_count": 240,
+    "iteration_review_required_count": 796,
     "record_count": 796,
     "standardized_record_count": 796,
     "valid_coordinate_count": 700
@@ -359,6 +368,7 @@
     "confidence_report": "confidence_report.json",
     "database": "geochemistry.csv",
     "interactive_map": "interactive_map.html",
+    "iteration_backlog": "iteration_backlog.csv",
     "qc_report": "qc_report.json",
     "record_evidence": "record_evidence.jsonl",
     "samples": "samples.geojson",

@@ -13,6 +13,8 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+import build_iteration_backlog as backlog_builder
+
 
 MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
@@ -974,6 +976,12 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="confidenceSummary"',
         "完整数据库以",
         "不是正确概率",
+        'id="backView"',
+        'id="databaseEditor"',
+        'id="sourceTableBody"',
+        'id="anomalyInspector"',
+        'id="iterationTableBody"',
+        'href="iteration_backlog.csv"',
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:
@@ -993,6 +1001,7 @@ def build_map(
     confidence_report_path: Path | None = None,
     source_manifest_path: Path | None = None,
     anomaly_report_path: Path | None = None,
+    iteration_backlog_path: Path | None = None,
     basemap_path: Path = DEFAULT_BASEMAP,
     visualization_profile_path: Path | None = None,
     boundaries_path: Path = DEFAULT_BOUNDARIES,
@@ -1056,6 +1065,7 @@ def build_map(
             "confidence_and_sources_first_class_ui": True,
             "anomaly_results_first_class_ui": True,
             "interactive_map_first_class_ui": True,
+            "iteration_backlog_first_class_ui": True,
         },
         "interaction_design": {
             "hierarchy_version": UI_HIERARCHY_VERSION,
@@ -1064,12 +1074,18 @@ def build_map(
             "four_primary_map_controls": True,
             "advanced_filters_progressive_disclosure": True,
             "duplicate_story_selector": False,
+            "recoverable_map_navigation": True,
+            "regional_pan_without_scope_expansion": True,
+            "localized_measurement_basis": True,
+            "research_patch_crud": "proposal_only_no_direct_mutation",
         },
         "scientific_semantics": {
             "heatmap_encodes": "physical_sample_density",
             "heatmap_interpolates_concentration": False,
             "anomaly_basis": "D2 robust z within declared comparable background groups",
             "anomaly_region_semantics": "visual aggregation of D2 candidate points only",
+            "anomaly_contrast": "candidate_vs_comparable_group_median",
+            "element_pair_analysis": "log10_scatter_median_quadrants_spearman_and_coverage_matrix",
         },
     }
     context = {
@@ -1088,6 +1104,7 @@ def build_map(
         "confidence_report": load_json_object(confidence_report_path, "confidence report"),
         "source_manifest": load_json_object(source_manifest_path, "source manifest"),
         "anomaly_report": load_json_object(anomaly_report_path, "anomaly report"),
+        "iteration_backlog": backlog_builder.load(iteration_backlog_path) if iteration_backlog_path else backlog_builder.load(Path("")),
     }
     html = (
         load_html_template().replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
@@ -1194,6 +1211,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--source-manifest", type=Path, help="Optional D1 source_manifest.json")
     parser.add_argument("--anomaly-report", type=Path, help="Optional D2 anomaly_report.json")
+    parser.add_argument("--iteration-backlog", type=Path, help="Optional D1/D2 iteration_backlog.csv")
     parser.add_argument(
         "--basemap", type=Path, default=DEFAULT_BASEMAP, help="Pinned offline basemap asset"
     )
@@ -1219,18 +1237,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         report = build_map(
-            args.database,
-            args.anomalies,
-            args.output_html,
-            args.output_geojson,
-            args.max_points,
-            args.qc_report,
-            args.confidence_report,
-            args.source_manifest,
-            args.anomaly_report,
-            args.basemap,
-            args.profile,
-            args.boundaries,
+            database=args.database,
+            anomalies_path=args.anomalies,
+            output_html=args.output_html,
+            output_geojson=args.output_geojson,
+            max_points=args.max_points,
+            qc_report_path=args.qc_report,
+            confidence_report_path=args.confidence_report,
+            source_manifest_path=args.source_manifest,
+            anomaly_report_path=args.anomaly_report,
+            iteration_backlog_path=args.iteration_backlog,
+            basemap_path=args.basemap,
+            visualization_profile_path=args.profile,
+            boundaries_path=args.boundaries,
         )
     except (MapBuildError, OSError) as exc:
         parser.error(str(exc))

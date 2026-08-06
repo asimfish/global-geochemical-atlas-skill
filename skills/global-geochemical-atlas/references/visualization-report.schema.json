@@ -29,6 +29,19 @@
       "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
     },
     "map_report": {"type": "object"},
+    "iteration_backlog": {
+      "type": "object",
+      "required": ["schema_version", "item_count", "status_counts", "owner_counts", "issue_counts"],
+      "properties": {
+        "schema_version": {"const": "geochemistry-iteration-backlog-v1"},
+        "record_count": {"type": "integer", "minimum": 0},
+        "item_count": {"type": "integer", "minimum": 0},
+        "status_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "owner_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "issue_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}}
+      },
+      "additionalProperties": false
+    },
     "limitations": {"type": "array", "items": {"type": "string"}},
     "next_actions": {"type": "array", "items": {"type": "string"}}
   },
@@ -43,7 +56,8 @@
           "profile",
           "profile_warnings",
           "output_sha256",
-          "map_report"
+          "map_report",
+          "iteration_backlog"
         ]
       }
     }

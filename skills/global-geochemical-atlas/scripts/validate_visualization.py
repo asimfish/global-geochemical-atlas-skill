@@ -35,6 +35,10 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     database_metrics = workflow_validator.validate_database(
         paths["geochemistry.csv"], errors, warnings
     )
+    canonical_ids = set(workflow_validator.database_evidence_index(paths["geochemistry.csv"]))
+    iteration_count = workflow_validator.validate_iteration_backlog(
+        paths["iteration_backlog.csv"], canonical_ids, errors
+    )
     parsed: dict[str, Any] = {}
     for name in (
         "anomalies.geojson",
@@ -114,6 +118,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "interactive_map": "interactive_map.html",
             "samples": "samples.geojson",
             "profile": "visualization_profile.json",
+            "iteration_backlog": "iteration_backlog.csv",
         }
         if report.get("outputs") != expected_outputs:
             errors.append("visualization_report.json outputs do not match the D3 contract")
@@ -174,6 +179,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "sample_feature_count": sample_count,
             "source_candidate_feature_count": anomaly_count,
             "scoped_candidate_feature_count": scoped_anomaly_count,
+            "iteration_backlog_count": iteration_count,
         },
     }
 

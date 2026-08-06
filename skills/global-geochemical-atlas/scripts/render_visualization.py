@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 import build_interactive_map as map_builder
+import build_iteration_backlog as backlog_builder
 
 
 INTERFACE_VERSION = "d3-visualization-interface-v1"
@@ -32,6 +33,7 @@ GENERATED_OUTPUTS = (
     "samples.geojson",
     "visualization_profile.json",
     "visualization_report.json",
+    "iteration_backlog.csv",
 )
 
 
@@ -111,6 +113,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             + ", ".join(existing),
         )
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    backlog_path = args.output_dir / "iteration_backlog.csv"
+    backlog_report = backlog_builder.build(inputs["geochemistry.csv"], backlog_path)
 
     try:
         profile = map_builder.load_visualization_profile(args.profile)
@@ -124,6 +128,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             confidence_report_path=inputs["confidence_report.json"],
             source_manifest_path=inputs["source_manifest.json"],
             anomaly_report_path=inputs["anomaly_report.json"],
+            iteration_backlog_path=backlog_path,
             visualization_profile_path=args.profile,
         )
     except map_builder.MapBuildError as exc:
@@ -144,7 +149,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     input_hashes = {name: sha256_file(path) for name, path in inputs.items()}
     output_hashes = {
         name: sha256_file(args.output_dir / name)
-        for name in ("interactive_map.html", "samples.geojson", "visualization_profile.json")
+        for name in (
+            "interactive_map.html", "samples.geojson", "visualization_profile.json",
+            "iteration_backlog.csv",
+        )
     }
     report = {
         "interface_version": INTERFACE_VERSION,
@@ -161,9 +169,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "interactive_map": "interactive_map.html",
             "samples": "samples.geojson",
             "profile": "visualization_profile.json",
+            "iteration_backlog": "iteration_backlog.csv",
         },
         "output_sha256": output_hashes,
         "map_report": map_report,
+        "iteration_backlog": backlog_report,
         "limitations": [
             "D3 renders existing D1/D2 evidence and candidate anomalies; it does not recompute them.",
             "Blank areas indicate no included observations, not element absence or zero concentration.",

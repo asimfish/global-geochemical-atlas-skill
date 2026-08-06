@@ -1809,7 +1809,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 (rebuilt_output / filename).read_bytes() == (combined_output / filename).read_bytes()
                 for filename in output_validator.REQUIRED_FILES.values()
             ),
-            "D1 combined ten-file output package rebuilds byte-for-byte",
+            "D1 combined eleven-file output package rebuilds byte-for-byte",
             checks,
         )
 
@@ -2454,7 +2454,7 @@ def check_d3(output_dir: Path) -> list[str]:
     require(len(skill_dirs) == 1 and skill_dirs[0] == SKILL_DIR, "D3 keeps exactly one production Skill", checks)
     required_outputs = set(output_validator.REQUIRED_FILES.values())
     actual_outputs = {path.name for path in output_dir.iterdir() if path.is_file()}
-    require(actual_outputs == required_outputs, "D3 publishes the stable ten-file output set", checks)
+    require(actual_outputs == required_outputs, "D3 publishes the stable eleven-file output set", checks)
     validation = output_validator.validate_dir(output_dir)
     require(validation.get("status") == "valid", "D3 integrated outputs pass the public validator", checks)
     html = (output_dir / "interactive_map.html").read_text(encoding="utf-8")
@@ -2555,6 +2555,45 @@ def check_d3(output_dir: Path) -> list[str]:
             )
         ),
         "D3 exposes the standardized database and confidence explanation as first-class deliverables",
+        checks,
+    )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'id="backView"',
+                "rememberView",
+                "canvas.onpointerdown=event=>{drag=",
+                "basisLabel",
+                "全部测量基准",
+                'id="databaseEditor"',
+                "geochemistry-research-patch-v1",
+                'id="sourceTableBody"',
+                'id="anomalyInspector"',
+                "anomaly-contrast",
+                "comboConclusion",
+                'id="iterationTableBody"',
+                'href="iteration_backlog.csv"',
+            )
+        ),
+        "D3 exposes recoverable navigation and research-grade database, evidence, anomaly, combination and iteration workbenches",
+        checks,
+    )
+    iteration_rows = csv_rows(output_dir / "iteration_backlog.csv")
+    require(
+        bool(iteration_rows)
+        and all(row["stage_owner"] in {"D1", "D2"} for row in iteration_rows)
+        and all(
+            row["status"] in {"action_required", "review_required", "scientific_limit"}
+            for row in iteration_rows
+        )
+        and any(
+            row["issue_code"] == "CENSORED_OBSERVATION"
+            and row["status"] == "scientific_limit"
+            and row["auto_recheck"] == "false"
+            for row in iteration_rows
+        ),
+        "D3 iteration backlog routes D1/D2 gaps and keeps censored observations as non-imputed scientific limits",
         checks,
     )
     require(

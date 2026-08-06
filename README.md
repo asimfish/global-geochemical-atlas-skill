@@ -49,8 +49,9 @@ python skills/global-geochemical-atlas/scripts/validate_visualization.py \
   --output-dir visualization_output
 ```
 
-配置决定首屏任务、区域、元素、介质、地质单元、元素组合和图层；结果同时输出配置与
-`visualization_report.json`，便于 Agent 和评测系统核验复现性及覆盖提示。
+配置决定首屏任务、区域、元素、介质、地质单元、元素组合和图层；结果同时输出配置、
+`visualization_report.json` 与 `iteration_backlog.csv`，便于 Agent 和评测系统核验复现性、覆盖提示，
+并把 D1/D2 缺口、复核项和删失科学限制路由到下一轮。
 
 然后运行自检：
 

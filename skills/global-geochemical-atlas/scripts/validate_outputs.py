@@ -23,7 +23,13 @@ REQUIRED_FILES = {
     "anomaly_report": "anomaly_report.json",
     "samples": "samples.geojson",
     "interactive_map": "interactive_map.html",
+    "iteration_backlog": "iteration_backlog.csv",
     "run_summary": "run_summary.json",
+}
+
+ITERATION_BACKLOG_COLUMNS = {
+    "item_id", "record_id", "source_id", "stage_owner", "severity", "status",
+    "issue_code", "field", "observed_value", "detail", "recommended_action", "auto_recheck",
 }
 
 REQUIRED_DATABASE_COLUMNS = {
@@ -96,7 +102,6 @@ def validate_database(path: Path, errors: list[str], warnings: list[str]) -> dic
         missing = sorted(REQUIRED_DATABASE_COLUMNS - headers)
         if missing:
             errors.append(f"geochemistry.csv missing columns: {', '.join(missing)}")
-            return metrics
         record_ids: set[str] = set()
         for line_number, row in enumerate(reader, start=2):
             metrics["record_count"] += 1
@@ -123,6 +128,31 @@ def validate_database(path: Path, errors: list[str], warnings: list[str]) -> dic
     if metrics["source_locator_missing"]:
         warnings.append(f"{metrics['source_locator_missing']} record(s) lack source_locator")
     return metrics
+
+
+def validate_iteration_backlog(path: Path, canonical_ids: set[str], errors: list[str]) -> int:
+    item_ids: set[str] = set()
+    count = 0
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        missing = sorted(ITERATION_BACKLOG_COLUMNS - set(reader.fieldnames or []))
+        if missing:
+            errors.append("iteration_backlog.csv missing columns: " + ", ".join(missing))
+            return 0
+        for line_number, row in enumerate(reader, start=2):
+            count += 1
+            item_id = (row.get("item_id") or "").strip()
+            record_id = (row.get("record_id") or "").strip()
+            if not item_id or item_id in item_ids:
+                errors.append(f"iteration_backlog.csv:{line_number} has missing or duplicate item_id")
+            item_ids.add(item_id)
+            if record_id not in canonical_ids:
+                errors.append(f"iteration_backlog.csv:{line_number} references unknown record_id {record_id}")
+            if row.get("stage_owner") not in {"D1", "D2"}:
+                errors.append(f"iteration_backlog.csv:{line_number} has invalid stage_owner")
+            if row.get("status") not in {"action_required", "review_required", "scientific_limit"}:
+                errors.append(f"iteration_backlog.csv:{line_number} has invalid status")
+    return count
 
 
 def database_evidence_index(path: Path) -> dict[str, dict[str, str]]:
@@ -279,6 +309,17 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'href="confidence_report.json"',
         "完整数据库以",
         "不是正确概率",
+        'id="backView"',
+        "rememberView",
+        "basisLabel",
+        'id="databaseEditor"',
+        "geochemistry-research-patch-v1",
+        'id="sourceTableBody"',
+        'id="anomalyInspector"',
+        "anomaly-contrast",
+        "comboConclusion",
+        'id="iterationTableBody"',
+        'href="iteration_backlog.csv"',
     ):
         if marker not in text:
             errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")
@@ -302,6 +343,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
     database_metrics = validate_database(paths["database"], errors, warnings)
     canonical_evidence = database_evidence_index(paths["database"])
+    iteration_count = validate_iteration_backlog(
+        paths["iteration_backlog"], set(canonical_evidence), errors
+    )
     evidence_count = validate_record_evidence(paths["record_evidence"], canonical_evidence, errors)
     parsed: dict[str, Any] = {}
     for key in ("source_manifest", "qc_report", "confidence_report", "anomalies", "anomaly_report", "samples", "run_summary"):
@@ -440,6 +484,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "record_evidence_count": evidence_count,
             "sample_feature_count": sample_count,
             "candidate_feature_count": anomaly_count,
+            "iteration_backlog_count": iteration_count,
         },
     }
 

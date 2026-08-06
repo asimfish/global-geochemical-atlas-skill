@@ -33,6 +33,7 @@ EXPECTED_OUTPUTS = {
     "anomaly_report.json",
     "samples.geojson",
     "interactive_map.html",
+    "iteration_backlog.csv",
     "run_summary.json",
 }
 
@@ -120,6 +121,7 @@ def run_suite() -> dict[str, Any]:
         "marchem-candidate-verification.schema.json",
         "visualization-profile.schema.json",
         "visualization-report.schema.json",
+        "iteration-backlog.schema.json",
         "dataset-source.schema.json",
         "publication.schema.json",
         "sampling-event.schema.json",
@@ -215,6 +217,16 @@ def run_suite() -> dict[str, Any]:
 
         rows = read_csv(first / "geochemistry.csv")
         require(len(rows) == 19, "demo should contain 19 canonical records")
+        iteration_rows = read_csv(first / "iteration_backlog.csv")
+        require(
+            any(
+                row["issue_code"] == "CENSORED_OBSERVATION"
+                and row["status"] == "scientific_limit"
+                and row["auto_recheck"] == "false"
+                for row in iteration_rows
+            ),
+            "iteration backlog must preserve censored observations as non-imputed scientific limits",
+        )
         require(float(by_id(rows, "rock-fe-001")["normalized_value"]) == 25_000, "wt% conversion failed")
         spaced_weight_percent = standardizer.normalize_row(
             complete_d2_row(value="1", unit="wt. %", medium="rock"),

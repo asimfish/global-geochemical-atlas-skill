@@ -21,7 +21,7 @@ D3 只消费 D1/D2 结论：
 2. 检查输入目录是否包含六个必需 D1/D2 文件；缺失时返回 `invalid_input`。
 3. 把问题解析成 story、空间范围、筛选和可选元素组合；运行 `scripts/create_visualization_profile.py` 生成并验证任务配置，不手写完整 JSON。
 4. 运行 `scripts/render_visualization.py`；不要直接编辑 HTML 模板或内嵌数据。
-5. 检查 `visualization_report.json.status`、`profile_warnings`、记录计数和文件大小。
+5. 检查 `visualization_report.json.status`、`profile_warnings`、记录计数、文件大小和 `iteration_backlog.csv`；删失观测必须是科学限制，不得伪装成修复失败。
 6. 运行 `scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT`；不要对独立 D3 包运行要求 `run_summary.json` 的核心流程验证器。
 7. 打开生成的 HTML 做最小人工检查：首屏任务、空结果、图例、点击证据和来源链接。
 8. 返回产物路径、已应用配置、覆盖提示和解释边界。
@@ -152,7 +152,7 @@ python scripts/create_visualization_profile.py \
 python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 ```
 
-`validate_outputs.py` 验证 `run_workflow.py` 的核心十文件目录；它要求 `run_summary.json`，不用于
+`validate_outputs.py` 验证 `run_workflow.py` 的核心十一文件目录；它要求 `run_summary.json`，不用于
 独立 D3 目录。D3 验证器改为核对配置、报告、输入与输出哈希、地图计数、离线依赖和科学边界。
 
 ## 6. 输出与验收
@@ -163,17 +163,21 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 - `samples.geojson`：一条 feature 对应一条当前空间产物内的合格坐标测定记录；区域模式只含 bbox 内记录；
 - `visualization_profile.json`：本次可复现任务配置；
 - `visualization_report.json`：输入哈希、配置、警告、地图计数和失败边界，结构见
-  [visualization-report.schema.json](visualization-report.schema.json)。
+  [visualization-report.schema.json](visualization-report.schema.json)；
+- `iteration_backlog.csv`：从完整 canonical 数据库派生的 D1/D2 修复、复核与科学限制清单，行结构见
+  [iteration-backlog.schema.json](iteration-backlog.schema.json)。
 
 输出目录同时保留页面引用的标准数据库、来源、置信度和异常文件。HTML 不依赖 CDN、远程字体、
 在线瓦片或浏览器扩展；HTML 或 GeoJSON 单文件超过 100 MB 的运行时安全上限时失败关闭。该上限约束生成产物，不替代官网对提交包及仓库内文件的更严格限制。
 
 四项比赛交付物必须在页面首部以同等显著的一级入口呈现，不能只藏在页头小链接或文件目录中：
 
-- “标准化地球化学数据库”入口必须显示完整 `geochemistry.csv` 记录数、数据库行语义、下载按钮和可搜索的记录预览；
+- “标准化地球化学数据库”入口必须显示完整 `geochemistry.csv` 记录数、数据库行语义、下载按钮和可检索、排序、分页的记录预览；新增、修改、删除只生成审计修订包，删除为逻辑排除，不直接改写 canonical 数据；
 - “数据来源与置信度说明”入口必须显示来源数、置信度版本、五个分量、权重、分量均值、等级分布、门控规则和“不是概率”边界；
 - “异常区域识别结果”入口必须链接记录级候选与区域显示聚合，并保留判据；
 - “可交互元素分布地图”入口必须链接任务配置驱动的地图及运行报告。
+
+地图在全球和区域产物中都允许拖动平移与滚轮缩放，并提供“上一步视图”和明确的全球/区域重置。区域平移只改变观察窗口，不能加载范围外记录。用户可见术语统一为中文；内部 `measurement_basis` 通过确定性词表显示为“测量基准”，未知枚举可保留原值但不得与中文标签混排成无解释的控制项。
 
 页面信息层级固定为 `task-first-progressive-disclosure-v1`：只保留一套主标签导航；四项交付物使用
 紧凑状态栏，不再在页头重复文件胶囊或能力徽章；`story` 只决定初始标签和显示预设，不再生成第二个
@@ -195,7 +199,12 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 - 分布、密度、元素组合和异常四类视图是否仍可切换；
 - 四项交付物是否在首屏形成一级入口，数据库和置信度是否能在页面内直接核验，而不只是下载文件；
 - 数据库完整记录、内嵌可上图记录、区域排除记录与坐标失败记录是否对账；
+- 数据库工作台是否支持查、排序、分页、地图定位及增/改/逻辑删除提案，且导出修订包不改写 canonical CSV；
 - 置信度五分量、权重、均值、等级分布、门控和“不是概率”边界是否清楚；
+- 来源表能否按来源、数据集、元素、介质或许可检索，并下钻方法/坐标完整率、证据级别和来源定位；
+- 异常页是否用候选值—背景中位数对照尺显示倍数差、robust z、阈值与完整背景条件；
+- 元素组合结论是否写清区域、介质、测量基准、方法、单位、有效 n、排除数和“非因果”边界；
+- 质量页是否可筛选、下载 `iteration_backlog.csv`，并区分 action/review/scientific-limit；
 - 空区域是否显示“覆盖缺口”而不是零含量或不存在；
 - 点、异常区域和来源卡片是否能下钻到记录证据；
 - `visualization_report.json` 是否为 `success`，警告是否被向用户说明。
@@ -205,7 +214,7 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 默认全元素总览按 `source_id + sample_id + medium + coordinates` 折叠为物理采样符号；缺少
 `sample_id` 时使用 `record_id`，不得只凭坐标去重。按元素着色时使用“采样身份 + 元素”。
 
-`medium` 是样品类型；`analytical_method` / `method_family` 是测定方法证据，两者不可互相推断。
+`medium` 是岩石、土壤、沉积物、水体等宽类介质；`sample_type` 是细分样品类型；`analytical_method` / `method_family` 是测定方法证据，三者不可互相推断。
 D2 方法缺失必须原样显示并进入覆盖诊断。只有当前筛选同时满足单一元素、单一介质、单一已知 measurement basis、单一已知方法组和单一
 标准单位时，才允许使用浓度 `log10` 色阶；否则明确回退为分类色。密度图统计屏幕网格中的物理
 采样点，并用圆形柔光显示；这不是核密度估计，也不是浓度插值。热力模式仍保留可点击的半透明
@@ -214,6 +223,9 @@ D2 按材料、土层或地质背景建立的异常背景组，也不能替代�
 
 元素组合只接受同一来源与样品、同介质、同 basis、同方法组、各元素唯一单位、非删失正值。
 存在多个可比层时只画样品对最多的一层并报告排除数；少于 8 对或秩方差为零时不报告 Spearman。
+默认专业表达是 log10 样品配对散点 + 两轴样本中位数线 + Spearman ρ，以及独立的共测覆盖矩阵。
+矩阵表示共同测量数量，不表示相关强度。Agent 可生成确定性结论，但必须带完整比较范围和非因果边界。
+只有给出明确的归一化参照与元素序列时才生成 REE spider；只有满足闭合组成和删失处理条件时才生成 ternary/CLR 图。
 
 异常区域状态固定为 `visual_aggregation_only`。固定 1°/2°/5° 网格只聚合 D2 high/low 候选点；
 全球视图可把相邻网格画成缩放自适应红蓝圆环，选中时再展示真实 bbox。圆环面积不表示真实范围，
@@ -221,7 +233,14 @@ D2 按材料、土层或地质背景建立的异常背景组，也不能替代�
 `z = 0.67448975 × (log10(value) − median) / MAD`、阈值、背景组分层字段、组内样本量、中位数、
 MAD 与相对中位数倍数，并明确不是与附近空间点平均值比较。
 
-## 8. 失败状态
+## 8. 迭代与修订边界
+
+渲染器从完整 `geochemistry.csv` 确定性生成 `iteration_backlog.csv`，HTML 只内嵌有限预览以控制性能。
+清单完整文件必须保留。D1 来源定位、许可、原始坐标/CRS、样品类型与方法证据缺口，D2 标准化、
+方法 scope、地质匹配、QC 和低置信度问题分别路由；删失值使用 `scientific_limit`。最多两轮自动复查，
+无改善或需推测时停止转人工。详细状态机见 [iteration-loop.md](iteration-loop.md)。
+
+## 9. 失败状态
 
 - `invalid_input`：目录、必需文件、配置字段或 JSON 无效；
 - `unsupported_scope`：记录数或文件大小超过安全范围；
