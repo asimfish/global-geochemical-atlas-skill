@@ -1,3 +1,0 @@
-{"source_id": "q11-fixture", "file": "inputs/match_policy.json", "computed_sha256": "d96b33b60cdc39291d9e33ca752c185d792b7313dffc357b8e6c0fbff4d01f2b", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
-{"source_id": "q11-fixture", "file": "inputs/points.csv", "computed_sha256": "27f4ad13123bacea8c1b9c55cd2ada2f546fc9941244f5bbeed617ce84a82c2f", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
-{"source_id": "q11-fixture", "file": "inputs/units.geojson", "computed_sha256": "a01a1f2ad4038e56add2686a20194086859b731235156e0f61a2515608bee6fc", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

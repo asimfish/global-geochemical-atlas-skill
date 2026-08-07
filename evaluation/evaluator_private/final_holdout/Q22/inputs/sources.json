@@ -1,8 +1,0 @@
-{
-  "sources": [
-    {"source_id": "L01", "license": "CC-BY-4.0"},
-    {"source_id": "L02", "license": "CC-BY-SA-4.0"},
-    {"source_id": "L03", "license": "restricted_nonredistributable"},
-    {"source_id": "L04", "license": null}
-  ]
-}

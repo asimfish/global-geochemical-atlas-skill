@@ -1,9 +1,0 @@
-{
-  "version": "q12-confidence-1",
-  "provenance": {"all_url_version_license_sha256": 25, "at_least_three": 15, "at_least_one": 5, "none": 0},
-  "coordinates": {"valid_crs_precision_le_100m": 20, "valid_crs_precision_le_1000m": 12, "valid_crs_other_precision": 5, "invalid": 0},
-  "analysis": {"method_lab_detection_limit": 20, "method_detection_limit": 12, "method_only": 8, "none": 0},
-  "sample": {"medium_material_lithology": 15, "medium_material": 10, "medium_only": 5, "none": 0},
-  "record_qc": {"base": 20, "penalty_per_flag": 5, "minimum": 0},
-  "labels": {"high_min": 80, "medium_min": 60, "low_min": 0}
-}

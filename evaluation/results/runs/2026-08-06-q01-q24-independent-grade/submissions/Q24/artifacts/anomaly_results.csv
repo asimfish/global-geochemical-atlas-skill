@@ -1,2 +1,0 @@
-record_id,group_id,value,robust_z,anomaly_type
-E21,soil|dry|total|Cu|ICP-MS,500.0,10.408091969133482,statistical_relative_enrichment

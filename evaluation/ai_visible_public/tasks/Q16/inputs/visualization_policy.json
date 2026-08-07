@@ -1,1 +1,0 @@
-{"version":"q16-vis-1","aggregation":"precomputed_cell_median","radius_pixels":30,"color_domain_mg_kg":[0,300],"median_uses":"quantified_only","required_layers":["median_value","sample_count","censored_fraction"]}

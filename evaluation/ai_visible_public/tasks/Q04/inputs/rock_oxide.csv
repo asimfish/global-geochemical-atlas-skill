@@ -1,5 +1,0 @@
-sample_id,analyte,value,unit,material
-R01,Fe2O3,10,wt%,whole_rock
-R02,Fe2O3,70000,mg/kg,whole_rock
-R03,Fe,5,wt%,whole_rock
-R04,FeO,8,wt%,whole_rock

@@ -1,8 +1,0 @@
-{
-  "target": {"medium": "rock", "data_family": "compiled_geochemistry"},
-  "candidates": [
-    {"candidate_id": "F-A", "doi": "10.25625/2JETOA", "dataset_title": "GEOROC Compilation: Rock Types", "url": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2F2JETOA", "medium": "rock"},
-    {"candidate_id": "F-B", "doi": "10.25625/2JETOA", "dataset_title": "Global Ocean Temperature Archive", "url": "https://georoc.eu/georoc/precompiled/", "medium": "water"},
-    {"candidate_id": "F-C", "doi": "10.9999/global-atlas-fabricated", "dataset_title": "World Rock Atlas", "url": "https://invalid.example/atlas", "medium": "rock"}
-  ]
-}

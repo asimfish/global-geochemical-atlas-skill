@@ -1,2 +1,0 @@
-{"source_id": "q13-fixture", "file": "inputs/anomaly_input.csv", "computed_sha256": "4fa3a273438733559c2dfd40441523196aac9ba54f78e8b1d8d22a09ae6874c6", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
-{"source_id": "q13-fixture", "file": "inputs/eligibility_policy.json", "computed_sha256": "38d14e7a4639c86e82f6f7921c2f1516c1087418b00648322e4a468a14ca4fc8", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

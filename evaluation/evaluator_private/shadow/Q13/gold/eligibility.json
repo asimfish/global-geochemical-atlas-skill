@@ -1,8 +1,0 @@
-{
-  "task_id": "GGA-ANOM-001",
-  "policy_version": "q13-eligibility-1",
-  "groups": [
-    {"group_id": "SMALL", "n_total": 19, "n_quantified": 19, "quantified_fraction": 1.0, "eligible": false, "status": "insufficient_sample_size", "anomaly_scores_written": 0},
-    {"group_id": "CENSORED", "n_total": 20, "n_quantified": 13, "quantified_fraction": 0.65, "eligible": false, "status": "excessive_censoring", "anomaly_scores_written": 0}
-  ]
-}

@@ -2,7 +2,7 @@
 
 <!-- 用一句话描述已经实现且可验证的结果。 -->
 
-- Scope: <!-- D1 | D2 | D3 | evaluation | cross-component -->
+- Scope: <!-- D1 | D2 | D3 | cross-component -->
 - Deliverables affected: <!-- map | database | provenance/confidence | anomalies | Skill docs | none -->
 
 # Why

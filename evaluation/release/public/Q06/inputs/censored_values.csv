@@ -1,7 +1,0 @@
-record_id,element,reported_value,unit,detection_limit
-C01,As,"<0.10",ppm,
-C02,As,ND,ppm,0.20
-C03,As,0,ppm,0.05
-C04,As,">1000",ppm,
-C05,As,,ppm,
-C06,As,BDL,ppm,

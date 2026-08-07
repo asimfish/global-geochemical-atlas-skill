@@ -1,3 +1,0 @@
-SampleNo,ElementName,ResultText,ResultUnit,SampleMaterial,ResultBasis,Lat,Lon,Method,DatasetKey,SourceLink
-MAP-001,As,12.5,mg/kg,soil,dry_total,35.0,103.0,ICP-MS,mapped-demo,local:demo_mapped_input.csv#MAP-001
-MAP-002,Pb,0.02,mg/L,groundwater,dissolved,35.1,103.1,ICP-MS,mapped-demo,local:demo_mapped_input.csv#MAP-002

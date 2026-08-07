@@ -1,2 +1,0 @@
-{"source_id": "q16-fixture", "file": "inputs/cell_observations.csv", "computed_sha256": "2cde266f1af8b75488aa139a031106c8668e8b9eb1c1f22ff20b37a7a02e77dc", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
-{"source_id": "q16-fixture", "file": "inputs/visualization_policy.json", "computed_sha256": "27eace0ddae1c12bc45722915519c4fd1be2d5e8e77930a04c96623795e15994", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

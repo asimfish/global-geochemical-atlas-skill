@@ -1,7 +1,0 @@
-{
-  "version": "q04-constants-1",
-  "atomic_weights": {"Fe": 55.845, "O": 15.999},
-  "fe2o3_molar_mass": 159.687,
-  "fe_mass_fraction_in_fe2o3": 0.6994307614270416,
-  "reference_note": "Benchmark-fixed values; NIST WebBook reports Fe2O3 formula and molecular weight approximately 159.688."
-}

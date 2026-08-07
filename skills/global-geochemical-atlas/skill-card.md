@@ -61,14 +61,14 @@ of causal, pollution, resource, or global-completeness claims.
   Frozen hashes and explicit review states are required before scientific reuse.
 - Candidate anomalies are screening results. Independent sampling design, analytical
   QA/QC, geology/mineralogy, and process evidence are needed for interpretation.
-- Official competition uplift requires an external, frozen B0/S0 campaign and cannot
-  be inferred from local tests or this card.
+- Official competition uplift is measured by the organizer's external no-skill vs
+  with-skill harness and cannot be inferred from local tests or this card.
 
 ## Verification
 
 - Activation cases: `evals/activation.json`.
-- Deterministic release checks: repository CI plus
-  `evaluation/docker/preflight.py` from the repository root.
+- Deterministic release checks: repository CI
+  (`.github/workflows/ci.yml`) on every pull request and `main` push.
 - Scientific and end-to-end checks: `scripts/component_test.py --component all` and
   `scripts/self_test.py`.
 - Repeatable offline workflow timing and its claim boundary: `BENCHMARK.md` and
@@ -76,8 +76,7 @@ of causal, pollution, resource, or global-completeness claims.
 
 ## Static scanner verification
 
-Run Forge's dependency-free scanner against a clean tracked copy of this Skill with
-`--fail-on high`. The package contains no scanner suppression or ignored path; every
-finding must be investigated before release. Repository preflight independently
-scans the complete submission package for provider-key forms and fails closed on a
-match. Passing either scanner is evidence for its rules only, not a security proof.
+The package contains no scanner suppression or ignored path; run any
+dependency-free static scanner against a clean tracked copy of this Skill and
+investigate every finding before release. Passing a scanner is evidence for its
+rules only, not a security proof.

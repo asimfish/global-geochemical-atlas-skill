@@ -8,8 +8,5 @@ __pycache__/
 output/
 demo_output/
 dist/
-evaluation_lyf/agent_uplift/experiment/
-evaluation_lyf/stage_benchmark/runs/
-evaluation/docker/runs/
 *.zip
 *.log

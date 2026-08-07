@@ -1,9 +1,0 @@
-{
-  "snapshot_date": "2026-08-05",
-  "sources": [
-    {"source_id": "usgs_ngdb", "regions": ["united_states", "territories"], "media": ["rock", "sediment", "soil", "mineral"], "record_level_coordinates": true, "authority_url": "https://www.usgs.gov/centers/gggsc/science/national-geochemical-database"},
-    {"source_id": "georoc", "regions": ["global"], "media": ["igneous_rock", "metamorphic_rock", "mineral", "volcanic_glass"], "record_level_coordinates": true, "authority_url": "https://georoc.eu/georoc/precompiled/"},
-    {"source_id": "gemas", "regions": ["europe_33_countries"], "media": ["agricultural_soil", "grazing_land_soil"], "record_level_coordinates": true, "authority_url": "https://eurogeosurveys.org/projects/gemas/"},
-    {"source_id": "wosis", "regions": ["global"], "media": ["soil_profile"], "record_level_coordinates": true, "authority_url": "https://docs.isric.org/globaldata/wosis/faq-wosis.html", "note": "available properties and method detail depend on source metadata"}
-  ]
-}

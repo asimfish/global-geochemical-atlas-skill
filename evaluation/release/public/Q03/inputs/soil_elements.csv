@@ -1,7 +1,0 @@
-sample_id,element,value,unit,basis,medium
-S01,Ni,42,ppm,mass_mass,soil
-S02,Pb,18,mg/kg,mass_mass,soil
-S03,Zn,0.012,wt%,mass_mass,soil
-S04,Cu,35,ug/g,mass_mass,soil
-S05,Co,8000,ppb,mass_mass,soil
-S06,As,0.4,g/kg,mass_mass,soil

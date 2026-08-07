@@ -1,5 +1,0 @@
-record_id,analyte_reported,reported_value,reported_unit,element,normalized_value,normalized_unit,conversion_factor,conversion_rule,status
-N01,NiO,0.020,wt%,Ni,157.16030011,mg/kg,0.7858015005542733,nio_wt_percent_to_ni_mg_per_kg,converted
-N02,NiO,500,mg/kg,Ni,392.90075028,mg/kg,0.7858015005542733,nio_mg_per_kg_to_ni_mg_per_kg,converted
-N03,Ni,0.020,wt%,Ni,200,mg/kg,1,ni_wt_percent_to_mg_per_kg,converted
-N04,Ni2O3,0.020,wt%,Ni,,,0,not_applied_ni2o3_requires_distinct_rule,not_requested

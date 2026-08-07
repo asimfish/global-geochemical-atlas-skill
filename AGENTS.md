@@ -47,13 +47,9 @@ Run from the repository root:
 ruff check .
 ruff format --check .
 mypy --config-file mypy-critical.ini
-uv run pytest -x --tb=short
 python skills/global-geochemical-atlas/scripts/component_test.py --component all
 python skills/global-geochemical-atlas/scripts/self_test.py
-python evaluation/docker/preflight.py . --output /tmp/gga-preflight.json
 ```
 
-The preflight command may return `2` only when its report has no failures and lists
-the independent manual reviews still required. Docker, OpenCode, external models,
-and human scientific sign-off must be reported as unavailable when they were not
-actually executed.
+Docker, OpenCode, external models, and human scientific sign-off must be reported
+as unavailable when they were not actually executed.

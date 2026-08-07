@@ -1,4 +1,0 @@
-record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
-CTX1,CTX1,,50,mg/kg,,,,q23-fixture,UNIT-A
-CTX2,CTX2,,50,mg/kg,,,,q23-fixture,UNIT-B
-CTX3,CTX3,,160,mg/kg,,,,q23-fixture,UNIT-B

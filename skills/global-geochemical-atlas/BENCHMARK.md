@@ -76,5 +76,5 @@ regression reference, not as a guaranteed runtime on another machine.
 The timing includes request loading, normalization, QC, anomaly screening, artifact
 generation, and output validation. It excludes public-source acquisition, OpenCode
 startup, model inference, and browser rendering. It provides no before/after speedup
-claim and no evidence about B0/S0 uplift. Official performance still requires the
+claim and no evidence about official no-skill vs with-skill uplift. Official performance still requires the
 frozen external campaign and its prescribed repeated model runs.

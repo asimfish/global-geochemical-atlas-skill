@@ -1,6 +1,0 @@
-record_id,reported_value,numeric_value,bound_value,qualifier,detection_limit,censored,missing_reason,eligible_quantitative
-U01,-0.5,,,<,0.5,true,below_detection_limit,false
-U02,-9999,,,,,false,not_analyzed,false
-U03,25,25,,=,,false,,true
-U04,1000,,1000,>,,true,above_upper_limit,false
-U05,,,,,,false,not_reported,false

@@ -1,2 +1,0 @@
-{"source_id": "q04-fixture", "file": "inputs/conversion_constants.json", "computed_sha256": "84cf1ddf9d19bc39724a0293b9aa02f62a400cfa1a6b5c0371c6abfc931fc5b7", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
-{"source_id": "q04-fixture", "file": "inputs/rock_oxide.csv", "computed_sha256": "e84566a8bb4d5a92bd02bb16a59f4cad66a21ed977e7ef99e67986325e25ed35", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

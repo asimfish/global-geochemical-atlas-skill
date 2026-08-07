@@ -9,7 +9,7 @@
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](#-90-秒快速开始)
 [![Runtime Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-%E9%9B%B6%E7%AC%AC%E4%B8%89%E6%96%B9-brightgreen)](#-90-秒快速开始)
-[![Tests](https://img.shields.io/badge/tests-383%20%2B%2075%20passing-brightgreen)](#-开发与验证)
+[![Tests](https://img.shields.io/badge/tests-386%20%2B%2075%20passing-brightgreen)](#-开发与验证)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-在你的-ai-agent-中使用)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -217,23 +217,18 @@ flowchart LR
 | 定制全球、区域或元素组合地图 | [D3 可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md) |
 | 做多轮迭代修复 | [迭代闭环协议](skills/global-geochemical-atlas/references/iteration-loop.md) |
 | 修改 D1/D2/D3 或提交 PR | [贡献指南](CONTRIBUTING.md) |
-| 查看开发期 Q01–Q24 benchmark | [评测说明](evaluation/README.md) |
 | 复现离线工作流性能基线 | [性能基准](skills/global-geochemical-atlas/BENCHMARK.md) |
-| 选择正确的测试 Prompt | [测试 Prompt 总入口](TESTING_PROMPTS.md) |
 
 ## 🧪 开发与验证
 
-仓库的测试分层如下。Docker 是统一执行环境，不是第三套 benchmark：
-
 | 入口 | 验证内容 |
 |---|---|
-| Skill `component_test.py` / `self_test.py` | D1/D2/D3 契约与最小端到端回归（383 + 75 项检查） |
-| [`evaluation/`](evaluation/) | Q01–Q24、B0/S0、E1 十产物和评分证据 |
-| [`evaluation_lyf/`](evaluation_lyf/) | D1/D2/D3 独立科学门禁与 Qwen Skill uplift |
-| [`evaluation/docker/`](evaluation/docker/) | 上述评测共用的镜像、隔离、OpenCode 与 campaign runner |
+| `component_test.py --component all` | D1/D2/D3 公共接口与契约边界（386 项检查） |
+| `self_test.py` | 科学边界、异常输入与两次运行字节级确定性（75 项检查） |
+| `benchmark_workflow.py` | 可重复的离线工作流性能基线 |
 
 ```bash
-# 全仓格式、lint 与评测关键/公共契约类型门
+# 全仓格式、lint 与公共契约类型门
 ruff check .
 ruff format --check .
 mypy --config-file mypy-critical.ini
@@ -248,24 +243,9 @@ python skills/global-geochemical-atlas/scripts/self_test.py
 python skills/global-geochemical-atlas/scripts/benchmark_workflow.py \
   --warmups 3 --runs 10 \
   --output /tmp/gga-workflow-benchmark.json
-
-# L0/L1 确定性合规预检（结构、大小、frontmatter、引用可达性、红线扫描）
-python evaluation/docker/preflight.py . --output /tmp/preflight.json
-
-# evaluation 工具单元测试
-python -m unittest discover -s evaluation/tools/tests -v
-
-# Docker 控制器与两份 Qwen Prompt 契约
-python -m unittest discover -s evaluation/docker/tests -v
-python evaluation_lyf/agent_uplift/test_prompt_contract.py
-
-# 统一报告、三次独立运行聚合和浏览器证据契约
-python -m unittest discover -s evaluation/reporting -p 'test_*.py' -v
 ```
 
-也可以把 `all` 换成 `d1`、`d2` 或 `d3`，单独验证责任域。Docker 的标准构建和 smoke 命令见 [`evaluation/docs/docker_usage.md`](evaluation/docs/docker_usage.md)；主机版与 Docker 版的有/无 Skill Prompt 见 [`evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md`](evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md)；路径归属、接口变更规则和完成定义见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
-
-> `evaluation/` 和 `evaluation_lyf/` 是开发基准，不是主办方官方题库，也不会进入最终提交包。比赛提交主体只有 `skills/global-geochemical-atlas/` 中这一份 Skill。
+也可以把 `all` 换成 `d1`、`d2` 或 `d3`，单独验证责任域。每个脚本都提供稳定的 `--help` 接口；路径归属、接口变更规则和完成定义见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。以上门禁在每个 PR 和 `main` 推送上由 GitHub Actions 自动执行。
 
 ## ❓ FAQ
 

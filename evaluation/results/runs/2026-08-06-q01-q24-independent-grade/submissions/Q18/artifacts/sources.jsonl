@@ -1,2 +1,0 @@
-{"source_id": "q18-fixture", "file": "inputs/encoded_values.csv", "computed_sha256": "022fb25481817be963af1fb38f82bb1f5742a5d203c56d68ace03cce8cc22340", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
-{"source_id": "q18-fixture", "file": "inputs/encoding_rules.json", "computed_sha256": "3d1be82031d2215e9717b064d2b411b0ceee54a12732890b0f94c1fd6ac466e6", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
