@@ -11,7 +11,7 @@ python3 evaluation_lyf/agent_uplift/export_candidate_bundle.py \
 ```
 
 固定：repository=`https://github.com/asimfish/global-geochemical-atlas-skill.git`，
-commit=`c59f2ab424480e5dc700d0628833c7cae9323bdf`，model=`Qwen3.8-Max`，temperature=0，
+commit=`3497fa284fd181cc3880bc3d84d7bbc9dff35e37`，model=`Qwen3.8-Max`，temperature=0，
 `runtime_mode=docker`，`skill_used=false`。把 bundle 只读挂载为候选初始目录；不得挂载完整仓库。原样提供
 `AGENT_PROMPT.md`。候选不可见 `.git`、Skill、score_submission.py、checker、rubric、gold、历史或另一臂。
 

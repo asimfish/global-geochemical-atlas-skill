@@ -49,7 +49,7 @@ class PromptContractTests(unittest.TestCase):
                 self.assertIn("只处理四个固定地球化学锚点属于未完成 D1", prompt)
         for name, prompt in self.candidate_prompts.items():
             with self.subTest(candidate_prompt=name):
-                self.assertIn(commit, prompt)
+                self.assertIn("BUNDLE_MANIFEST.json.source_commit", prompt)
                 self.assertIn(self.config["model"], prompt)
                 self.assertIn("temperature=0", prompt)
                 self.assertIn("TASK.md", prompt)

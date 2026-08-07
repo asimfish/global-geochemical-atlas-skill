@@ -1,7 +1,7 @@
 # Qwen3.8-Max S0 candidate prompt · Docker
 
 你已在外部控制器冻结的 Docker 容器和最小权限 bundle 中。直接完成全球地球化学图谱任务，不询问确认。
-固定参数：commit=`c59f2ab424480e5dc700d0628833c7cae9323bdf`，model=`Qwen3.8-Max`，temperature=0，
+实际 commit 以只读 `BUNDLE_MANIFEST.json.source_commit` 为准；固定 model=`Qwen3.8-Max`，temperature=0，
 `runtime_mode=docker`，`skill_used=true`，CPU=2，memory=4g，timeout=900 秒。不要调用或嵌套 Docker。
 
 验证 `BUNDLE_MANIFEST.json` condition=S0；不得存在 `.git`、gold、checker、private、历史实验、其他 Skill 或

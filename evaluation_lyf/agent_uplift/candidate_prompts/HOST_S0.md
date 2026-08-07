@@ -1,7 +1,7 @@
 # Qwen3.8-Max S0 candidate prompt · host
 
 你正在一个由外部控制器预先生成的最小权限 bundle 中执行全球地球化学图谱 uplift。直接完成任务，不询问
-确认。固定参数：commit=`c59f2ab424480e5dc700d0628833c7cae9323bdf`，model=`Qwen3.8-Max`，
+确认。实际 commit 以只读 `BUNDLE_MANIFEST.json.source_commit` 为准；固定 model=`Qwen3.8-Max`，
 temperature=0，`runtime_mode=host`，`skill_used=true`。
 
 先验证 `BUNDLE_MANIFEST.json`：condition 必须是 S0；当前目录不得有 `.git`、gold、checker、private、历史实验、
