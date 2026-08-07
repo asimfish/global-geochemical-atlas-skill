@@ -10,6 +10,7 @@ D3 只消费 D1/D2 结论：
 
 - 不修改 `geochemistry.csv` 的标准值、单位、qualifier、QC 或置信度；
 - 不重算 `anomalies.geojson` 的阈值、背景组或 high/low 方向；
+- 不重算 `anomaly_regions.geojson` 的精确检验、FDR 或区域状态；
 - 不替 D1 判断许可，也不把声明来源升级为已验证来源；
 - 不把显示聚合写回标准数据库或记录级 GeoJSON。
 
@@ -47,6 +48,9 @@ anomaly_report.json
 若存在 `record_evidence.jsonl`，渲染包一并保留。`geochemistry.csv` 至少包含记录 ID、元素、介质、
 标准值/单位、坐标、QC、置信度、来源 ID 和来源定位。坐标为空、非有限或超出 WGS84 的记录不进入
 地图，但继续保留在数据库和 QC 报告。超过 `--max-points` 时失败关闭，不抽样冒充完整结果。
+
+核心十五产物目录还包含 `batch_acceptance.csv`、`batch_qc_report.json`、`anomaly_regions.geojson`、
+`spatial_anomaly_report.json`。D3 在它们存在时必须原样嵌入/复制并展示；独立兼容模式仍只要求上方六个历史最小输入，缺少统计区域时只能显示记录级候选和 `visual_aggregation_only`，不能补造 FDR 结果。
 
 ## 4. 任务配置模板
 
@@ -157,7 +161,7 @@ python scripts/create_visualization_profile.py \
 python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 ```
 
-`validate_outputs.py` 验证 `run_workflow.py` 的核心十一文件目录；它要求 `run_summary.json`，不用于
+`validate_outputs.py` 验证 `run_workflow.py` 的核心十五文件目录；它要求 `run_summary.json`，不用于
 独立 D3 目录。D3 验证器改为核对配置、报告、输入与输出哈希、地图计数、离线依赖和科学边界。
 
 ## 6. 输出与验收
@@ -179,7 +183,7 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 
 - “标准化地球化学数据库”入口必须显示完整 `geochemistry.csv` 记录数、数据库行语义、下载按钮和可检索、排序、分页的记录预览；新增、修改、删除只生成审计修订包，删除为逻辑排除，不直接改写 canonical 数据；
 - “数据来源与置信度说明”入口必须显示来源数、置信度版本、五个分量、权重、分量均值、等级分布、门控规则和“不是概率”边界；
-- “异常区域识别结果”入口必须链接记录级候选与区域显示聚合，并保留判据；
+- “异常区域识别结果”入口必须分别链接记录级候选、D2 FDR 统计候选区域与 D3 显示聚合，并保留各自判据；
 - “可交互元素分布地图”入口必须链接任务配置驱动的地图及运行报告。
 
 地图在全球和区域产物中都允许拖动/方向键平移与滚轮/按钮缩放，并提供“上一步视图”和明确的全球/区域重置。区域平移只改变观察窗口，不能加载范围外记录。用户可见术语统一为中文；内部 `measurement_basis` 通过确定性词表显示为“测量基准”，未知枚举可保留原值但不得与中文标签混排成无解释的控制项。
@@ -247,9 +251,8 @@ D2 按材料、土层或地质背景建立的异常背景组，也不能替代�
 矩阵表示共同测量数量，不表示相关强度。Agent 可生成确定性结论，但必须带完整比较范围和非因果边界。
 只有给出明确的归一化参照与元素序列时才生成 REE spider；只有满足闭合组成和删失处理条件时才生成 ternary/CLR 图。
 
-异常区域状态固定为 `visual_aggregation_only`。固定 1°/2°/5° 网格只聚合 D2 high/low 候选点；
-全球视图可把相邻网格画成缩放自适应红蓝圆环，选中时再展示真实 bbox。圆环面积不表示真实范围，
-异常候选也不等于污染、矿化或成因结论。记录详情必须给出
+异常区域有两套不得混用的语义。`anomaly_regions.geojson` 来自 D2
+`d2-spatial-hypergeometric-fdr-v1`：它在同一可比组内做一侧精确富集检验并控制 BH-FDR，D3 只能按虚线 Polygon 原样显示。交互页面另有固定 1°/2°/5° 网格圆环，只按当前筛选聚合 D2 high/low 候选点，状态固定为 `visual_aggregation_only`，不带 p/q 值。全球视图可把后者画成缩放自适应红蓝圆环，选中时再展示真实 bbox。两类边界都不表示真实异常范围、地质/行政边界、污染、矿化或成因结论。记录详情必须给出
 `z = 0.67448975 × (log10(value) − median) / MAD`、阈值、背景组分层字段、组内样本量、中位数、
 MAD 与相对中位数倍数，并明确不是与附近空间点平均值比较。
 

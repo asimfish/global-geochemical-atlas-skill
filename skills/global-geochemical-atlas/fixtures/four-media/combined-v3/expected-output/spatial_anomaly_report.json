@@ -1,0 +1,359 @@
+{
+  "candidate_region_count": 0,
+  "caveat": "Fixed cells with over-represented record-level candidates are screening regions only. Grid edges are not geological or administrative boundaries and blank areas are not absence.",
+  "fdr_alpha": 0.1,
+  "grid_degrees": 2.0,
+  "groups": [
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-070c301cec90",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 1,
+      "mapped_usable_record_count": 16
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-1fa0695b827f",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 5,
+      "mapped_usable_record_count": 8
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-29b6bfe679e1",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 4,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-30169e4af47c",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 9,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-3937ba1dee88",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 6,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-3ea6906b236b",
+      "high_candidate_count": 0,
+      "low_candidate_count": 1,
+      "mapped_cell_count": 5,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-47f3f45e19e4",
+      "high_candidate_count": 0,
+      "low_candidate_count": 2,
+      "mapped_cell_count": 8,
+      "mapped_usable_record_count": 11
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-50e6f2bbeab7",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 1,
+      "mapped_usable_record_count": 16
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-54f0ffa68c22",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 10,
+      "mapped_usable_record_count": 15
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-79422d41402e",
+      "high_candidate_count": 1,
+      "low_candidate_count": 2,
+      "mapped_cell_count": 8,
+      "mapped_usable_record_count": 11
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-7e526b64a6c3",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 9,
+      "mapped_usable_record_count": 16
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-7f41fe259f5a",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 9,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-8b7144dfc368",
+      "high_candidate_count": 1,
+      "low_candidate_count": 1,
+      "mapped_cell_count": 10,
+      "mapped_usable_record_count": 14
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-8c6fa0172e2f",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 9,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-92afb9e4466b",
+      "high_candidate_count": 0,
+      "low_candidate_count": 1,
+      "mapped_cell_count": 6,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-939e4b87879d",
+      "high_candidate_count": 0,
+      "low_candidate_count": 1,
+      "mapped_cell_count": 6,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-9613524d8919",
+      "high_candidate_count": 0,
+      "low_candidate_count": 1,
+      "mapped_cell_count": 6,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-98adef029fc8",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 5,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-9cb7784e0312",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 1,
+      "mapped_usable_record_count": 16
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-a5485a270629",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 9,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-ad75389ff9a4",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 4,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b014e076fab1",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 6,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b22c29b0ce1b",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 9,
+      "mapped_usable_record_count": 16
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b294b9c2bf28",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 5,
+      "mapped_usable_record_count": 8
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b45eb84eb4db",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 5,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b4ed3b4e209b",
+      "high_candidate_count": 0,
+      "low_candidate_count": 1,
+      "mapped_cell_count": 10,
+      "mapped_usable_record_count": 16
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b50e3d3af73d",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 9,
+      "mapped_usable_record_count": 16
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b74108ca9790",
+      "high_candidate_count": 0,
+      "low_candidate_count": 1,
+      "mapped_cell_count": 6,
+      "mapped_usable_record_count": 9
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-b7d2b6f8fd6d",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 10,
+      "mapped_usable_record_count": 15
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-baec22c358c6",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 4,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-c0d1c5bd67d7",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 2,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-c9892a1bc343",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 5,
+      "mapped_usable_record_count": 8
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-d01f24d0d998",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 2,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-d7bc3c627e93",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 8,
+      "mapped_usable_record_count": 11
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-d8d4ac3e66a8",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 2,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-d95bd5c7ec05",
+      "high_candidate_count": 1,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 2,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-daf786030142",
+      "high_candidate_count": 0,
+      "low_candidate_count": 0,
+      "mapped_cell_count": 4,
+      "mapped_usable_record_count": 12
+    },
+    {
+      "eligible_hypothesis_count": 0,
+      "group_id": "grp-fae30f2d1d8b",
+      "high_candidate_count": 0,
+      "low_candidate_count": 2,
+      "mapped_cell_count": 8,
+      "mapped_usable_record_count": 11
+    }
+  ],
+  "hypothesis_count": 0,
+  "interface_version": "d2-interface-v2",
+  "method_version": "d2-spatial-hypergeometric-fdr-v1",
+  "minimum_spatial_candidates": 2,
+  "minimum_spatial_samples": 5,
+  "multiple_testing_method": "Benjamini-Hochberg FDR",
+  "nonzero_candidate_cell_tests": [],
+  "null_model": "one-sided exact hypergeometric enrichment conditional on the candidate count within the same D2 comparable background group",
+  "point_candidate_method_version": "d2-robust-mad-v2",
+  "run_metadata": {
+    "configuration": {
+      "batch_qc_gate_applied": false,
+      "group_by": [
+        "element_or_analyte",
+        "medium",
+        "material",
+        "sample_type",
+        "soil_horizon",
+        "sediment_environment",
+        "water_fraction",
+        "grain_fraction",
+        "measurement_basis",
+        "geologic_unit_raw",
+        "matched_geologic_unit",
+        "analytical_method",
+        "method_family",
+        "method_scope",
+        "digestion_or_extraction"
+      ],
+      "minimum_group_size": 8,
+      "minimum_quantified_fraction": 0.7,
+      "minimum_spatial_candidates": 2,
+      "minimum_spatial_samples": 5,
+      "region_bbox": null,
+      "robust_z_threshold": 3.5,
+      "schema_map": {},
+      "spatial_fdr_alpha": 0.1,
+      "spatial_grid_degrees": 2.0
+    },
+    "input_row_count": 796,
+    "input_sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
+    "missing_recommended_input_columns": [],
+    "run_id": "deadbcc72c8f4cd9",
+    "schema_map_sha256": null
+  },
+  "scientific_status": "screening_candidate_regions_only",
+  "status": "insufficient_spatial_background"
+}

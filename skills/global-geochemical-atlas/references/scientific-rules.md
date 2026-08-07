@@ -32,7 +32,7 @@
 
 ### 推荐列
 
-`record_id`、`source_record_id`、`sample_id`、`igsn`、`analyte_reported`、`species_or_oxide`、
+`record_id`、`source_record_id`、`sample_id`、`analysis_batch_id`、`igsn`、`analyte_reported`、`species_or_oxide`、
 `measurement_basis`、`value_qualifier`、`source_qualifier_raw`、`missing_reason`、`detection_limit`、`detection_limit_unit`、
 `original_latitude_raw`、`original_longitude_raw`、`latitude`、`longitude`、`source_crs`、
 `coordinate_transform_method`、`coordinate_uncertainty_m`、
@@ -113,9 +113,22 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 - 坐标：`INVALID_COORDINATE`、`INCOMPLETE_COORDINATE`、`COORDINATE_NOT_CANONICALIZED`、`POSSIBLE_COORDINATE_SWAP`、`ZERO_ISLAND_COORDINATE`、`OUTSIDE_REQUEST_REGION`、`MISSING_SOURCE_CRS`、`UNSUPPORTED_SOURCE_CRS`、`MISSING_COORDINATE_UNCERTAINTY`、`INVALID_COORDINATE_UNCERTAINTY`。
 - 地质匹配：`GEOLOGY_MATCH_NO_COVERAGE`、`GEOLOGY_BOUNDARY_UNCERTAIN`、`INVALID_GEOLOGIC_DISTANCE`、`INVALID_GEOLOGIC_MATCH_CONFIDENCE`。
 - 来源：`MISSING_SOURCE_ID`、`MISSING_SOURCE_LOCATOR`、`MISSING_LICENSE`、`UNKNOWN_SOURCE_TIER`。
-- 样品：`MISSING_SAMPLE_ID`、`DEPTH_RANGE_INVALID`、`DUPLICATE_CANDIDATE`。
+- 样品与批次：`MISSING_SAMPLE_ID`、`DEPTH_RANGE_INVALID`、`DUPLICATE_CANDIDATE`、`MISSING_ANALYSIS_BATCH_ID`、`BATCH_QC_NOT_EVALUATED`、`BATCH_QC_FAILED`。
 
 脚本不得静默修正可能交换的坐标；只有 D1 提供区域范围并能无歧义证明交换后落入范围时，后续版本才允许显式更正并保留变更记录。
+
+### 实验室分析批次门禁
+
+批次 QC 是记录级 QC 之外的独立门禁。输入和 policy 分别由
+[batch-qc-policy.schema.json](batch-qc-policy.schema.json) 与 CLI 契约冻结：
+
+- CRM：对每条 `CRM` 重新计算 `recovery = observed / certified × 100%`，所有 CRM 均须落在显式闭区间；
+- 空白：所有 `BLANK` 均须不超过 policy 上限；
+- 重复样：每个 `pair_id` 必须恰好两条，以 `RPD = |x1-x2| / ((x1+x2)/2) × 100%` 重算并满足上限；
+- 不接受输入自带的通过标签；缺 CRM、空白、完整重复对、批次 ID 或单位不一致均失败关闭；
+- 只有全部必需检查通过才写 `batch_qc_status=pass`。失败/不完整批次写明处置并保留记录，但不能进入记录级或空间异常背景。
+
+未提供批次 policy 不表示批次通过：产物状态固定为 `not_supplied`，运行摘要说明这项证据未评估。
 
 ## 5. 运行级置信度
 
@@ -147,35 +160,42 @@ v3 使用可审计门控：任一 `error` 级 flag 或缺少 canonical WGS84 坐
 
 处理步骤：
 
-1. 只使用成功标准化、非删失、非重复候选、正的 `normalized_value`。
-2. 以去除重复候选后的独立记录为分母，可量化有效比例默认至少 70%；不足输出 `insufficient_quantified_fraction`。
-3. `demo` profile 每个背景组默认至少 8 条有效记录；`production` profile 默认且强制至少 20 条，低于 20 时流程失败。两种阈值均需进入运行元数据；正式研究仍应由 E2 按介质、尺度和 holdout 结果校准。
-4. 对浓度取 `log10`。
-5. 计算中位数和原始 MAD。
-6. 计算 modified robust z-score：`0.67448975 * (x - median) / MAD`。
-7. 默认 `|z| >= 3.5` 标记为 `candidate_anomaly`，方向为 high 或 low。
-8. MAD 为零时不强行给异常；输出 `zero_dispersion`，等待更合适的背景模型。
-9. 输出背景组字段、独立记录数、有效比例、删失比例、排除数、median、MAD、阈值和方法版本。
+1. 先排除批次失败/不完整与疑似重复，得到 `independent_record_count`；先检查总独立记录数，避免“小样本 + 高删失”被误报成删失率问题。
+2. 再以独立记录为分母计算可量化有效比例，默认至少 70%；不足输出 `insufficient_quantified_fraction`。
+3. 再检查成功标准化、非删失、正值的 `usable_record_count`。`demo` 默认至少 8，`production` 默认且强制至少 20；不足输出 `insufficient_usable_group_size`，不降低阈值。
+4. 对可用浓度取 `log10`，计算中位数和原始 MAD。
+5. 计算 modified robust z-score：`0.67448975 * (x - median) / MAD`。
+6. 默认 `|z| >= 3.5` 标记为 `candidate_anomaly`，方向为 high 或 low。
+7. MAD 为零时不强行给异常；输出 `zero_dispersion`，等待更合适的背景模型。
+8. 输出背景组字段、独立记录数、有效比例、删失比例、排除数、median、MAD、阈值、门禁顺序和方法版本。
 
 阈值可配置，但任何阈值变化必须写入报告。不同分析方法或消解/提取造成明显不可比时，调用方应把这些字段加入 `--group-by`。
+
+### 空间候选区域
+
+记录级 high/low 候选通过后，D2 可在固定 WGS84 网格中做第二道筛查：每个可比背景组和方向分别检验。在网格内、网格外均达到空间样本门槛时，使用一侧精确超几何检验判断候选是否过度集中；它以组内候选总数为条件，避免“网格外零候选”产生不现实的零 p 值。所有可检验的网格/方向假设一起执行 Benjamini–Hochberg FDR，默认 `q≤0.10`，且区域至少含 2 个记录级候选。生产空间门槛默认网格内外各 `n≥20`，demo 为各 `n≥5`。
+
+结果方法版本为 `d2-spatial-hypergeometric-fdr-v1`。Polygon 只是固定筛查单元，不是插值面、地质/行政/污染边界；多尺度敏感性、空间自相关与独立验证仍是后续研究要求。没有通过门禁的区域表示证据不足，不表示不存在异常。
 
 ## 7. 输出文件
 
 - `geochemistry.csv`：canonical 标准记录；`qc_flags` 为 JSON 数组字符串。
 - `qc_report.json`：记录数、标准化率、删失数、坐标有效数和 flags 统计。
 - `confidence_report.json`：公式版本、权重、分量均值和 band 分布。
+- `batch_acceptance.csv`、`batch_qc_report.json`：批次重算结果、policy/hash 和排除处置。
 - `anomalies.geojson`：候选异常点；无有效坐标时 geometry 为 null。
 - `anomaly_report.json`：所有背景组的统计与无法计算原因。
+- `anomaly_regions.geojson`、`spatial_anomaly_report.json`：FDR 筛查区域、精确检验、门槛和失败边界。
 
 ### D1、D3、E1、E2 协作接口
 
 - D1 → D2：UTF-8 CSV，一行一个样品 × 分析物测定；非 canonical 列名必须用符合
   `schema-map.schema.json` 的显式映射，来源 qualifier、检出限、CRS、源行定位和文件 SHA-256 不得猜测。
-- D2 → D3：固定生成上述五个分析产物；D3 可忽略 v2 新增列，但不得把 null 浓度绘制为零、把候选异常写成因果结论，或重新计算 `operational_confidence`。
+- D2 → D3：固定生成上述九个分析产物；D3 可忽略可选内容，但不得把 null 浓度绘制为零、把统计区域与显示聚合混为一谈、把候选异常写成因果结论，或重新计算 `operational_confidence`。
 - D2 → E1：`standardize_geochemistry.py` 成功时退出码为 0，并在 stdout 输出产物角色到路径的 JSON；无效输入或配置通过 argparse 以退出码 2 失败，写产物时采用原子替换。
 - D2 → E2：`anomaly_report.json` 必须记录分组、最小样本量、最小可量化比例、modified z 阈值与
-  `analyzed`、`insufficient_group_size`、`insufficient_quantified_fraction`、`zero_dispersion` 失败状态。
-- 相同输入字节、schema map 和参数应产生字节一致的五个 D2 产物；运行元数据记录输入与映射 SHA-256。
+  `analyzed`、`insufficient_group_size`、`insufficient_quantified_fraction`、`insufficient_usable_group_size`、`zero_dispersion` 失败状态；空间报告另记录精确检验、假设总数和 BH-FDR。
+- 相同输入字节、schema map、批次文件、policy 和参数应产生字节一致的九个 D2 产物；运行元数据记录输入与映射 SHA-256。
 
 ### 可选 GLiM 空间匹配
 

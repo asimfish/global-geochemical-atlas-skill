@@ -15,7 +15,7 @@ Library（ECL）、USGS Alaska Geochemical Database 2.0（AGDB2）、ODM2，以�
 交换标准。IGSN/DataCite 主要描述实体样品和持久标识符，不负责承载逐项分析结果。
 
 机器可读版本见 `platform-field-crosswalk.json`；其结构由
-`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 62 个 canonical 字段
+`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 118 个 canonical 字段
 完全分区，防止 Schema 改动后文档悄悄过期。
 
 ## 2. 映射类型
@@ -108,16 +108,15 @@ qualifier 与 conversion evidence，避免不可逆的数据“清洗”。
 | `source_locator` | landing page/DOI + 合法 record fragment | publication URL + table/key | `CitationLink` + namespaced DatasetID/ResultID | 注册 DOI URL 或有关系类型的 relatedIdentifier |
 | `license` | 数据集声明 license，不从“可下载”推断 | `Use_Constraints` + `Access_Constraints` | core reviewed surface 无直接字段 | `rightsList` 的 identifier/URI/text |
 
-## 5. 26 个非核心映射字段为什么仍然保留
+## 5. 82 个非核心映射字段为什么仍然保留
 
-Crosswalk 不会为了看起来“全覆盖”而制造虚假对应。当前 62 个 canonical 字段中，36 个进入优先互操作
-矩阵，另外 26 个被明确分成两类：
+Crosswalk 不会为了看起来“全覆盖”而制造虚假对应。当前 118 个 canonical 字段中，36 个进入优先互操作
+矩阵，另外 82 个被明确分成两类；机器文件中的字段数组是唯一完整清单：
 
-- `local_extension`：`record_id`、`source_record_id`、raw value/qualifier/coordinate、转换因子与公式、源文件与源行、
-  SHA-256、来源层级、QC flags 和 `operational_confidence`。这些是 D2 证据链与运行安全设计，不冒充平台原生字段。
-- `deferred_crosswalk`：样品身份/重复组、坐标不确定性、粒级，以及地质单元匹配与边界距离字段。它们有专业意义，
-  但本轮资料不足以做可靠的一对一映射。后续应引入 GeoSciML/CGI 词表、明确空间不确定性模型及平台 extension
-  规范后再升级。
+- `local_extension`（34 个）：稳定记录 ID、raw value/qualifier/coordinate、转换因子与公式、源文件/源行/hash、来源层级、QC、置信度，以及 V4 引入的样品类型映射、引用和权利审计字段。这些是证据链与运行安全设计，不冒充平台原生字段。
+- `deferred_crosswalk`（48 个）：样品身份/重复/分析批次、`batch_qc_status` 与处置、坐标不确定性、粒级、样品细类、水体/沉积环境、方法 scope、引用关系，以及地质单元匹配与边界距离字段。它们有专业意义，但已审查表面不足以做可靠的一对一映射。后续应引入 GeoSciML/CGI、实验室 QA/QC 与平台 extension 规范后再升级。
+
+`analysis_batch_id`、`batch_qc_status`、`batch_qc_disposition` 因而提升的是**本项目 canonical 数据库内部的批次可审计性和失败关闭能力**，不是对 ODM2/EarthChem 批次模型的认证。未来 exporter 必须把批次、Action/Method、DataQuality 和观测关系显式建模，不能只改列名。
 
 这种显式缺口比强行把 `geologic_unit` 映射成任意 lithology 字符串更规范：前者能触发补充元数据，后者会制造
 不可见的语义错误。

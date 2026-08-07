@@ -1,4 +1,16 @@
 {
+  "batch_qc": {
+    "accepted_batch_ids": [],
+    "decision_count": 0,
+    "excluded_batch_ids": [],
+    "failed_or_incomplete_batch_count": 0,
+    "gate_applied": false,
+    "passed_batch_count": 0,
+    "record_status_counts": {
+      "not_supplied": 796
+    },
+    "report_status": "not_supplied"
+  },
   "censored_record_count": 23,
   "definitions": {
     "coordinate_valid": "both canonical latitude and longitude are present and range-valid",
@@ -27,6 +39,7 @@
   "records_with_numeric_value_or_limit": 796,
   "run_metadata": {
     "configuration": {
+      "batch_qc_gate_applied": false,
       "group_by": [
         "element_or_analyte",
         "medium",
@@ -46,14 +59,18 @@
       ],
       "minimum_group_size": 8,
       "minimum_quantified_fraction": 0.7,
+      "minimum_spatial_candidates": 2,
+      "minimum_spatial_samples": 5,
       "region_bbox": null,
       "robust_z_threshold": 3.5,
-      "schema_map": {}
+      "schema_map": {},
+      "spatial_fdr_alpha": 0.1,
+      "spatial_grid_degrees": 2.0
     },
     "input_row_count": 796,
     "input_sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
     "missing_recommended_input_columns": [],
-    "run_id": "3e077dc27d6ce88e",
+    "run_id": "deadbcc72c8f4cd9",
     "schema_map_sha256": null
   },
   "severity_counts": {

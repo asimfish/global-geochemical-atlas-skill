@@ -1,0 +1,9 @@
+batch_id,qc_type,qc_id,value,certified_value,pair_id,unit
+LAB-A,CRM,CRM-A,105,100,,mg/kg
+LAB-A,BLANK,BLK-A,2,,,mg/kg
+LAB-A,DUPLICATE,DUP-A1,50,,PAIR-A,mg/kg
+LAB-A,DUPLICATE,DUP-A2,55,,PAIR-A,mg/kg
+LAB-B,CRM,CRM-B,135,100,,mg/kg
+LAB-B,BLANK,BLK-B,8,,,mg/kg
+LAB-B,DUPLICATE,DUP-B1,40,,PAIR-B,mg/kg
+LAB-B,DUPLICATE,DUP-B2,60,,PAIR-B,mg/kg

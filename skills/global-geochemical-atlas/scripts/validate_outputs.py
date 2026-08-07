@@ -9,7 +9,7 @@ import hashlib
 import json
 import math
 import re
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +21,10 @@ REQUIRED_FILES = {
     "confidence_report": "confidence_report.json",
     "anomalies": "anomalies.geojson",
     "anomaly_report": "anomaly_report.json",
+    "batch_acceptance": "batch_acceptance.csv",
+    "batch_qc_report": "batch_qc_report.json",
+    "anomaly_regions": "anomaly_regions.geojson",
+    "spatial_anomaly_report": "spatial_anomaly_report.json",
     "samples": "samples.geojson",
     "interactive_map": "interactive_map.html",
     "iteration_backlog": "iteration_backlog.csv",
@@ -35,6 +39,9 @@ ITERATION_BACKLOG_COLUMNS = {
 REQUIRED_DATABASE_COLUMNS = {
     "record_id",
     "sample_id",
+    "analysis_batch_id",
+    "batch_qc_status",
+    "batch_qc_disposition",
     "element_or_analyte",
     "medium",
     "measurement_basis",
@@ -155,6 +162,84 @@ def validate_iteration_backlog(path: Path, canonical_ids: set[str], errors: list
     return count
 
 
+def validate_batch_acceptance(
+    path: Path, errors: list[str]
+) -> tuple[int, int, dict[str, bool]]:
+    required = {
+        "batch_id", "crm_recovery_percent", "crm_pass", "blank_value", "blank_pass",
+        "duplicate_rpd_percent", "duplicate_pass", "batch_pass", "disposition",
+    }
+    count = 0
+    passed = 0
+    batch_ids: set[str] = set()
+    decisions: dict[str, bool] = {}
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        missing = sorted(required - set(reader.fieldnames or []))
+        if missing:
+            errors.append("batch_acceptance.csv missing columns: " + ", ".join(missing))
+            return 0, 0, {}
+        for line_number, row in enumerate(reader, start=2):
+            count += 1
+            batch_id = (row.get("batch_id") or "").strip()
+            if not batch_id or batch_id in batch_ids:
+                errors.append(f"batch_acceptance.csv:{line_number} has missing or duplicate batch_id")
+            batch_ids.add(batch_id)
+            for field in ("crm_pass", "blank_pass", "duplicate_pass", "batch_pass"):
+                if row.get(field) not in {"true", "false"}:
+                    errors.append(f"batch_acceptance.csv:{line_number} has invalid {field}")
+            batch_pass = row.get("batch_pass") == "true"
+            checks_pass = all(
+                row.get(field) == "true"
+                for field in ("crm_pass", "blank_pass", "duplicate_pass")
+            )
+            if batch_pass != checks_pass:
+                errors.append(
+                    f"batch_acceptance.csv:{line_number} violates all-checks-must-pass"
+                )
+            expected = (
+                "accept_for_scientific_analysis"
+                if batch_pass
+                else "exclude_batch_and_investigate"
+            )
+            if row.get("disposition") != expected:
+                errors.append(f"batch_acceptance.csv:{line_number} has inconsistent disposition")
+            decisions[batch_id] = batch_pass
+            passed += int(batch_pass)
+    return count, passed, decisions
+
+
+def validate_database_batch_gate(
+    path: Path,
+    report_status: str | None,
+    decisions: Mapping[str, bool],
+    errors: list[str],
+) -> None:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        for line_number, row in enumerate(csv.DictReader(handle), start=2):
+            batch_id = (row.get("analysis_batch_id") or "").strip()
+            status = (row.get("batch_qc_status") or "").strip()
+            disposition = (row.get("batch_qc_disposition") or "").strip()
+            if report_status == "not_supplied":
+                expected_status, expected_disposition = "not_supplied", ""
+            elif not batch_id or batch_id not in decisions:
+                expected_status, expected_disposition = (
+                    "incomplete", "exclude_batch_and_investigate"
+                )
+            elif decisions[batch_id]:
+                expected_status, expected_disposition = (
+                    "pass", "accept_for_scientific_analysis"
+                )
+            else:
+                expected_status, expected_disposition = (
+                    "fail", "exclude_batch_and_investigate"
+                )
+            if (status, disposition) != (expected_status, expected_disposition):
+                errors.append(
+                    f"geochemistry.csv:{line_number} conflicts with the batch acceptance gate"
+                )
+
+
 def database_evidence_index(path: Path) -> dict[str, dict[str, str]]:
     fields = (
         "source_record_id", "source_id", "source_locator", "license", "analyte_reported",
@@ -267,6 +352,50 @@ def validate_feature_collection(
     return len(features)
 
 
+def validate_anomaly_regions(value: Any, errors: list[str]) -> int:
+    if not isinstance(value, dict) or value.get("type") != "FeatureCollection":
+        errors.append("anomaly_regions.geojson is not a GeoJSON FeatureCollection")
+        return 0
+    if (
+        value.get("interface_version") != "d2-interface-v2"
+        or value.get("method_version") != "d2-spatial-hypergeometric-fdr-v1"
+    ):
+        errors.append("anomaly_regions.geojson has an unsupported interface or method version")
+    features = value.get("features")
+    if not isinstance(features, list):
+        errors.append("anomaly_regions.geojson.features is not an array")
+        return 0
+    for index, feature in enumerate(features):
+        geometry = feature.get("geometry") if isinstance(feature, dict) else None
+        properties = feature.get("properties") if isinstance(feature, dict) else None
+        rings = geometry.get("coordinates") if isinstance(geometry, dict) else None
+        if geometry is None or geometry.get("type") != "Polygon" or not isinstance(rings, list) or not rings:
+            errors.append(f"anomaly_regions.geojson feature {index} has invalid Polygon geometry")
+            continue
+        ring = rings[0]
+        if (
+            not isinstance(ring, list)
+            or len(ring) < 4
+            or ring[0] != ring[-1]
+            or any(not valid_coordinate_pair(point) for point in ring)
+        ):
+            errors.append(f"anomaly_regions.geojson feature {index} has invalid ring")
+        if (
+            not isinstance(properties, dict)
+            or properties.get("status") != "candidate_anomaly_region"
+            or properties.get("scientific_status") != "screening_candidate_only"
+            or properties.get("method_version") != "d2-spatial-hypergeometric-fdr-v1"
+            or properties.get("boundary_model")
+            != "fixed_wgs84_grid_cell_not_geologic_boundary"
+            or not isinstance(properties.get("p_value"), (int, float))
+            or not 0 <= float(properties["p_value"]) <= 1
+            or not isinstance(properties.get("fdr_q_value"), (int, float))
+            or not 0 <= float(properties["fdr_q_value"]) <= 1
+        ):
+            errors.append(f"anomaly_regions.geojson feature {index} overstates or omits screening status")
+    return len(features)
+
+
 def validate_html(path: Path, errors: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     if '<script id="samples-data" type="application/json">' not in text:
@@ -301,6 +430,8 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "导出可复现配置",
         'id="openAnomalyRegions"',
         "visual_aggregation_only",
+        'id="statisticalRegionTable"',
+        "spatial_anomaly_report.json",
         "样点密度热力图",
         "D2 未提供分析方法",
         "不是与周围空间点的平均值比较",
@@ -369,8 +500,14 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         paths["iteration_backlog"], set(canonical_evidence), errors
     )
     evidence_count = validate_record_evidence(paths["record_evidence"], canonical_evidence, errors)
+    batch_count, passed_batch_count, batch_decisions = validate_batch_acceptance(
+        paths["batch_acceptance"], errors
+    )
     parsed: dict[str, Any] = {}
-    for key in ("source_manifest", "qc_report", "confidence_report", "anomalies", "anomaly_report", "samples", "run_summary"):
+    for key in (
+        "source_manifest", "qc_report", "confidence_report", "anomalies", "anomaly_report",
+        "batch_qc_report", "anomaly_regions", "spatial_anomaly_report", "samples", "run_summary",
+    ):
         try:
             parsed[key] = strict_json(paths[key])
         except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
@@ -378,6 +515,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
     anomaly_count = 0
     sample_count = 0
+    anomaly_region_count = 0
     if "anomalies" in parsed:
         anomaly_count = validate_feature_collection(
             parsed["anomalies"], "anomalies.geojson", errors, allow_null_geometry=True, require_candidate_status=True
@@ -386,6 +524,8 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         sample_count = validate_feature_collection(
             parsed["samples"], "samples.geojson", errors, allow_null_geometry=False
         )
+    if "anomaly_regions" in parsed:
+        anomaly_region_count = validate_anomaly_regions(parsed["anomaly_regions"], errors)
     if sample_count > database_metrics["record_count"]:
         errors.append("samples.geojson contains more features than geochemistry.csv records")
 
@@ -406,6 +546,8 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors.append("run_summary record_count does not match geochemistry.csv")
         if metrics.get("candidate_anomaly_count") != anomaly_count:
             errors.append("run_summary candidate count does not match anomalies.geojson")
+        if metrics.get("candidate_anomaly_region_count") != anomaly_region_count:
+            errors.append("run_summary candidate-region count does not match anomaly_regions.geojson")
     else:
         errors.append("run_summary.json must contain an object")
 
@@ -495,6 +637,54 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             properties = feature.get("properties") if isinstance(feature, dict) else None
             if not isinstance(properties, dict) or properties.get("method_version") != "d2-robust-mad-v2":
                 errors.append(f"anomalies.geojson feature {index} has an unsupported method_version")
+    batch_report = parsed.get("batch_qc_report")
+    if not isinstance(batch_report, dict) or batch_report.get("schema_version") != "geochemical-batch-qc-report-v1":
+        errors.append("batch_qc_report.json has an unsupported schema_version")
+    elif batch_report.get("status") not in {"not_supplied", "evaluated"}:
+        errors.append("batch_qc_report.json has an unsupported status")
+    elif (
+        batch_report.get("batch_count") != batch_count
+        or batch_report.get("passed_batch_count") != passed_batch_count
+        or batch_report.get("failed_or_incomplete_batch_count")
+        != batch_count - passed_batch_count
+    ):
+        errors.append("batch_qc_report.json counts do not match batch_acceptance.csv")
+    if isinstance(batch_report, dict):
+        validate_database_batch_gate(
+            paths["database"], batch_report.get("status"), batch_decisions, errors
+        )
+    spatial_report = parsed.get("spatial_anomaly_report")
+    if (
+        not isinstance(spatial_report, dict)
+        or spatial_report.get("method_version") != "d2-spatial-hypergeometric-fdr-v1"
+        or spatial_report.get("scientific_status") != "screening_candidate_regions_only"
+        or spatial_report.get("point_candidate_method_version") != "d2-robust-mad-v2"
+        or spatial_report.get("multiple_testing_method") != "Benjamini-Hochberg FDR"
+        or not str(spatial_report.get("null_model") or "").startswith(
+            "one-sided exact hypergeometric enrichment"
+        )
+        or not isinstance(spatial_report.get("hypothesis_count"), int)
+        or spatial_report.get("hypothesis_count", -1) < anomaly_region_count
+        or spatial_report.get("candidate_region_count") != anomaly_region_count
+    ):
+        errors.append("spatial_anomaly_report.json is missing the screened-region contract")
+
+    qc_report = parsed.get("qc_report")
+    if isinstance(batch_report, dict) and isinstance(qc_report, dict):
+        batch_qc = qc_report.get("batch_qc")
+        if (
+            not isinstance(batch_qc, dict)
+            or batch_qc.get("report_status") != batch_report.get("status")
+            or batch_qc.get("passed_batch_count") != passed_batch_count
+            or batch_qc.get("failed_or_incomplete_batch_count")
+            != batch_count - passed_batch_count
+        ):
+            errors.append("qc_report.json batch gate does not match batch QC artifacts")
+    if isinstance(summary, dict) and isinstance(batch_report, dict):
+        if summary.get("metrics", {}).get("batch_qc_failed_or_incomplete_count") != (
+            batch_count - passed_batch_count
+        ):
+            errors.append("run_summary batch count does not match batch QC artifacts")
 
     validate_html(paths["interactive_map"], errors)
     return {
@@ -507,6 +697,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "sample_feature_count": sample_count,
             "candidate_feature_count": anomaly_count,
             "iteration_backlog_count": iteration_count,
+            "batch_count": batch_count,
+            "passed_batch_count": passed_batch_count,
+            "candidate_anomaly_region_count": anomaly_region_count,
         },
     }
 

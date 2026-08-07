@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:request-execution:v1",
+  "$id": "urn:global-geochemical-atlas:request-execution:v2",
   "title": "Request-driven atlas execution evidence",
   "type": "object",
   "additionalProperties": false,
@@ -11,6 +11,8 @@
     "analysis_profile",
     "geology_grid",
     "record_counts",
+    "source_outcomes",
+    "acquisition_manifests",
     "route_status",
     "coverage_status",
     "route_resolution",
@@ -18,8 +20,8 @@
     "warnings"
   ],
   "properties": {
-    "execution_version": {"const": "geochemical-request-execution-v1"},
-    "status": {"const": "success"},
+    "execution_version": {"const": "geochemical-request-execution-v2"},
+    "status": {"type": "string", "enum": ["success", "partial_success"]},
     "mode": {"type": "string", "minLength": 1},
     "analysis_profile": {"type": "string", "enum": ["demo", "production"]},
     "geology_grid": {
@@ -45,6 +47,90 @@
         "after_request_filters": {"type": "integer", "minimum": 0}
       }
     },
+    "source_outcomes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id", "status", "allocated_max_records", "record_count",
+          "manifest_sha256", "error"
+        ],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "status": {"type": "string", "enum": ["success", "failed"]},
+          "allocated_max_records": {"type": "integer", "minimum": 1},
+          "record_count": {"type": "integer", "minimum": 0},
+          "manifest_sha256": {
+            "type": ["string", "null"],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "error": {"type": ["string", "null"]}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"const": "success"}}},
+            "then": {
+              "properties": {
+                "record_count": {"type": "integer", "minimum": 1},
+                "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                "error": {"type": "null"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"const": "failed"}}},
+            "then": {
+              "properties": {
+                "record_count": {"const": 0},
+                "manifest_sha256": {"type": "null"},
+                "error": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "acquisition_manifests": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "source_id", "path", "sha256"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "request_filtered_manifest",
+              "parent_source_manifest",
+              "source_manifest"
+            ]
+          },
+          "source_id": {"type": ["string", "null"], "minLength": 1},
+          "path": {
+            "type": "string",
+            "pattern": "^acquisition/[A-Za-z0-9][A-Za-z0-9._-]*\\.json$"
+          },
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"role": {"const": "source_manifest"}}},
+            "then": {
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              }
+            },
+            "else": {"properties": {"source_id": {"type": "null"}}}
+          }
+        ]
+      }
+    },
     "route_status": {
       "type": "string",
       "enum": ["ready", "partial", "needs_human_review", "unsupported_scope"]
@@ -58,6 +144,7 @@
       "enum": [
         "offline_fixture_hash_verified",
         "routed_source_evidence_verified",
+        "routed_multi_source_evidence_verified",
         "provided_input_processed"
       ]
     },
