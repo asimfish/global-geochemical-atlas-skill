@@ -1,0 +1,216 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+  "denominator_definition": "all non-empty target-analyte observations emitted by the verified source adapter",
+  "fields": {
+    "access_status": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "analytical_method": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "citation_resolution_status": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "citation_scope": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "citation_text_raw": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "coordinate_pair": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "coordinate_uncertainty_m": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "detection_limit": {
+      "denominator": 192,
+      "missing": 189,
+      "non_empty": 3,
+      "rate": 0.015625
+    },
+    "element_or_analyte": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "geologic_age_raw": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "geologic_unit_raw": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "grain_fraction": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "license": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "license_url": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "lithology_raw": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "matched_geologic_unit": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "measurement_basis": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "method_assignment_basis": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "method_or_missing_reason": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "method_scope": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "research_use_status": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "sample_id": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "sample_type": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "sample_type_mapping_status": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "sample_type_raw": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "sediment_environment": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "soil_horizon": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "source_crs": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "source_locator": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "tectonic_setting_raw": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "unit": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "value": {
+      "denominator": 192,
+      "missing": 0,
+      "non_empty": 192,
+      "rate": 1.0
+    },
+    "water_body_type": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    },
+    "water_fraction": {
+      "denominator": 192,
+      "missing": 192,
+      "non_empty": 0,
+      "rate": 0.0
+    }
+  },
+  "observation_count": 192,
+  "profile_scope": "full_population",
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "brazil-sgb-florianopolis-soil"
+}

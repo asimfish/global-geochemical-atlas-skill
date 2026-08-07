@@ -10,6 +10,7 @@ import os
 import sqlite3
 import sys
 import tempfile
+import urllib.parse
 from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path
@@ -32,6 +33,21 @@ class GeologyJoinError(RuntimeError):
 
 def _text(value: Any) -> str:
     return "" if value is None else str(value)
+
+
+def location_match_id(row: dict[str, Any]) -> str:
+    """Return a readable location identity without collapsing coordinate conflicts."""
+
+    native_sample_id = _text(row.get("sample_id") or row.get("source_record_id"))
+    parts = (
+        _text(row.get("source_id")),
+        native_sample_id,
+        f"lat={_text(row.get('latitude'))}",
+        f"lon={_text(row.get('longitude'))}",
+        f"crs={_text(row.get('source_crs'))}",
+        f"uncertainty_m={_text(row.get('coordinate_uncertainty_m'))}",
+    )
+    return "|".join(urllib.parse.quote(part, safe="=:+-._") for part in parts)
 
 
 def join(input_csv: Path, results_jsonl: Path, output_csv: Path) -> dict[str, Any]:
@@ -81,8 +97,7 @@ def join(input_csv: Path, results_jsonl: Path, output_csv: Path) -> dict[str, An
             writer = csv.DictWriter(target, fieldnames=fieldnames, extrasaction="ignore")
             writer.writeheader()
             for row in reader:
-                native_sample_id = row.get("sample_id") or row.get("source_record_id") or ""
-                qualified = f"{row.get('source_id', '')}|{native_sample_id}"
+                qualified = location_match_id(row)
                 result = connection.execute("SELECT payload FROM results WHERE sample_id = ?", (qualified,)).fetchone()
                 if result is None:
                     missing_samples.add(qualified)

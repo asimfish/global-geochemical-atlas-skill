@@ -4,37 +4,43 @@
   "denominator_definition": "full-cache target observations; sample IDs are deduplicated within source, not across sources",
   "media": {
     "rock": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 413,
-      "distinct_sample_count": 25972,
-      "independent_lineage_count": 1,
+      "comparable_observation_count": 1271,
+      "covered_spatial_cells": 420,
+      "distinct_sample_count": 26203,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
-      "observation_count": 67171,
+      "observation_count": 68618,
       "source_ids": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 21178
+      "valid_coordinate_sample_count": 21409
     },
     "sediment": {
-      "comparable_observation_count": 25236,
-      "covered_spatial_cells": 1313,
-      "distinct_sample_count": 12831,
-      "independent_lineage_count": 6,
+      "comparable_observation_count": 31458,
+      "covered_spatial_cells": 1317,
+      "distinct_sample_count": 14036,
+      "independent_lineage_count": 8,
       "lineage_ids": [
         "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
         "norway-marchem",
         "pangaea-arabian-sea-sediment"
       ],
-      "observation_count": 82282,
+      "observation_count": 89825,
       "source_ids": [
         "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -43,24 +49,26 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 12831
+      "valid_coordinate_sample_count": 14036
     },
     "soil": {
-      "comparable_observation_count": 94741,
-      "covered_spatial_cells": 1851,
-      "distinct_sample_count": 23914,
-      "independent_lineage_count": 6,
+      "comparable_observation_count": 94869,
+      "covered_spatial_cells": 1852,
+      "distinct_sample_count": 23946,
+      "independent_lineage_count": 7,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
         "pangaea-north-africa-soil",
         "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
-      "observation_count": 153781,
+      "observation_count": 153973,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -70,144 +78,160 @@
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 23788
+      "valid_coordinate_sample_count": 23820
     },
     "water": {
-      "comparable_observation_count": 306516,
-      "covered_spatial_cells": 2440,
-      "distinct_sample_count": 708605,
-      "independent_lineage_count": 4,
+      "comparable_observation_count": 307063,
+      "covered_spatial_cells": 2442,
+      "distinct_sample_count": 709260,
+      "independent_lineage_count": 5,
       "lineage_ids": [
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
         "geotraces-idp2025",
         "us-wqp-sacramento-river-arsenic"
       ],
-      "observation_count": 3783544,
+      "observation_count": 3784199,
       "source_ids": [
+        "cdogs-210102-lake-water",
         "foregs-stream-water",
         "gemstat-open-archive",
         "geotraces-idp2025",
         "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 708605
+      "valid_coordinate_sample_count": 709260
     }
   },
   "medium_elements": {
     "rock|As": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 97,
-      "distinct_sample_count": 4503,
+      "comparable_observation_count": 188,
+      "covered_spatial_cells": 104,
+      "distinct_sample_count": 4691,
       "element": "As",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 4780,
+      "observation_count": 4968,
       "source_ids": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 4221
+      "valid_coordinate_sample_count": 4409
     },
     "rock|Cr": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 14,
-      "distinct_sample_count": 241,
+      "comparable_observation_count": 284,
+      "covered_spatial_cells": 21,
+      "distinct_sample_count": 472,
       "element": "Cr",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 241,
+      "observation_count": 525,
       "source_ids": [
-        "georoc-antarctica-intraplate"
+        "georoc-antarctica-intraplate",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 240
+      "valid_coordinate_sample_count": 471
     },
     "rock|Cu": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 329,
-      "distinct_sample_count": 17630,
+      "comparable_observation_count": 182,
+      "covered_spatial_cells": 336,
+      "distinct_sample_count": 17856,
       "element": "Cu",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 18077,
+      "observation_count": 18303,
       "source_ids": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 14405
+      "valid_coordinate_sample_count": 14631
     },
     "rock|Ni": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 404,
-      "distinct_sample_count": 25405,
+      "comparable_observation_count": 251,
+      "covered_spatial_cells": 411,
+      "distinct_sample_count": 25635,
       "element": "Ni",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 25955,
+      "observation_count": 26250,
       "source_ids": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 20746
+      "valid_coordinate_sample_count": 20976
     },
     "rock|Pb": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 17,
-      "distinct_sample_count": 276,
+      "comparable_observation_count": 101,
+      "covered_spatial_cells": 23,
+      "distinct_sample_count": 421,
       "element": "Pb",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 276,
-      "source_ids": [
-        "georoc-antarctica-intraplate"
-      ],
-      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 276
-    },
-    "rock|Zn": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 328,
-      "distinct_sample_count": 17412,
-      "element": "Zn",
-      "independent_lineage_count": 1,
-      "lineage_ids": [
-        "georoc-compilation"
-      ],
-      "medium": "rock",
-      "observation_count": 17842,
+      "observation_count": 421,
       "source_ids": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 14234
+      "valid_coordinate_sample_count": 421
+    },
+    "rock|Zn": {
+      "comparable_observation_count": 265,
+      "covered_spatial_cells": 335,
+      "distinct_sample_count": 17643,
+      "element": "Zn",
+      "independent_lineage_count": 2,
+      "lineage_ids": [
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
+      ],
+      "medium": "rock",
+      "observation_count": 18151,
+      "source_ids": [
+        "georoc-antarctica-intraplate",
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 14465
     },
     "sediment|As": {
-      "comparable_observation_count": 4100,
-      "covered_spatial_cells": 768,
-      "distinct_sample_count": 10435,
+      "comparable_observation_count": 4723,
+      "covered_spatial_cells": 772,
+      "distinct_sample_count": 11611,
       "element": "As",
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 7,
       "lineage_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
@@ -215,8 +239,10 @@
         "pangaea-arabian-sea-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 12029,
+      "observation_count": 13205,
       "source_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -225,23 +251,27 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 10435
+      "valid_coordinate_sample_count": 11611
     },
     "sediment|Cr": {
-      "comparable_observation_count": 3220,
-      "covered_spatial_cells": 693,
-      "distinct_sample_count": 9555,
+      "comparable_observation_count": 4171,
+      "covered_spatial_cells": 697,
+      "distinct_sample_count": 10557,
       "element": "Cr",
-      "independent_lineage_count": 4,
+      "independent_lineage_count": 6,
       "lineage_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
         "pangaea-arabian-sea-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 11149,
+      "observation_count": 12151,
       "source_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -249,15 +279,17 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 9555
+      "valid_coordinate_sample_count": 10557
     },
     "sediment|Cu": {
-      "comparable_observation_count": 4100,
-      "covered_spatial_cells": 768,
-      "distinct_sample_count": 10435,
+      "comparable_observation_count": 5250,
+      "covered_spatial_cells": 772,
+      "distinct_sample_count": 11611,
       "element": "Cu",
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 7,
       "lineage_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
@@ -265,8 +297,10 @@
         "pangaea-arabian-sea-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 12029,
+      "observation_count": 13211,
       "source_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -275,39 +309,43 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 10435
+      "valid_coordinate_sample_count": 11611
     },
     "sediment|Hg": {
-      "comparable_observation_count": 2396,
-      "covered_spatial_cells": 662,
-      "distinct_sample_count": 10323,
+      "comparable_observation_count": 3013,
+      "covered_spatial_cells": 664,
+      "distinct_sample_count": 10978,
       "element": "Hg",
-      "independent_lineage_count": 4,
+      "independent_lineage_count": 5,
       "lineage_ids": [
         "australia-ngsa-mercury",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 11868,
+      "observation_count": 12523,
       "source_ids": [
         "australia-ngsa-mercury",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 10323
+      "valid_coordinate_sample_count": 10978
     },
     "sediment|Ni": {
-      "comparable_observation_count": 4100,
-      "covered_spatial_cells": 768,
-      "distinct_sample_count": 10435,
+      "comparable_observation_count": 5214,
+      "covered_spatial_cells": 772,
+      "distinct_sample_count": 11611,
       "element": "Ni",
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 7,
       "lineage_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
@@ -315,8 +353,10 @@
         "pangaea-arabian-sea-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 12029,
+      "observation_count": 13205,
       "source_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -325,23 +365,27 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 10435
+      "valid_coordinate_sample_count": 11611
     },
     "sediment|Pb": {
-      "comparable_observation_count": 3220,
-      "covered_spatial_cells": 693,
-      "distinct_sample_count": 9555,
+      "comparable_observation_count": 4364,
+      "covered_spatial_cells": 697,
+      "distinct_sample_count": 10731,
       "element": "Pb",
-      "independent_lineage_count": 4,
+      "independent_lineage_count": 6,
       "lineage_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
         "pangaea-arabian-sea-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 11149,
+      "observation_count": 12325,
       "source_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -349,15 +393,17 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 9555
+      "valid_coordinate_sample_count": 10731
     },
     "sediment|Zn": {
-      "comparable_observation_count": 4100,
-      "covered_spatial_cells": 768,
-      "distinct_sample_count": 10435,
+      "comparable_observation_count": 4723,
+      "covered_spatial_cells": 772,
+      "distinct_sample_count": 11611,
       "element": "Zn",
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 7,
       "lineage_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
@@ -365,8 +411,10 @@
         "pangaea-arabian-sea-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 12029,
+      "observation_count": 13205,
       "source_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -375,68 +423,73 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 10435
+      "valid_coordinate_sample_count": 11611
     },
     "soil|As": {
       "comparable_observation_count": 13425,
-      "covered_spatial_cells": 1809,
-      "distinct_sample_count": 22193,
+      "covered_spatial_cells": 1810,
+      "distinct_sample_count": 22225,
       "element": "As",
-      "independent_lineage_count": 5,
-      "lineage_ids": [
-        "afsis-phase-i-wet-chemistry",
-        "foregs-geochemical-atlas-europe-2005",
-        "gemas-europe",
-        "pangaea-north-africa-soil",
-        "usgs-conus-soil"
-      ],
-      "medium": "soil",
-      "observation_count": 28122,
-      "source_ids": [
-        "afsis-phase-i-wet-chemistry",
-        "foregs-subsoil",
-        "foregs-topsoil",
-        "gemas-europe",
-        "pangaea-north-africa-soil",
-        "usgs-conus-soil"
-      ],
-      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 22067
-    },
-    "soil|Cr": {
-      "comparable_observation_count": 14749,
-      "covered_spatial_cells": 967,
-      "distinct_sample_count": 9137,
-      "element": "Cr",
-      "independent_lineage_count": 5,
-      "lineage_ids": [
-        "afsis-phase-i-wet-chemistry",
-        "foregs-geochemical-atlas-europe-2005",
-        "gemas-europe",
-        "pangaea-north-africa-soil",
-        "tpdc-china-mountain-soil"
-      ],
-      "medium": "soil",
-      "observation_count": 14875,
-      "source_ids": [
-        "afsis-phase-i-wet-chemistry",
-        "foregs-subsoil",
-        "foregs-topsoil",
-        "gemas-europe",
-        "pangaea-north-africa-soil",
-        "tpdc-china-mountain-soil"
-      ],
-      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 9011
-    },
-    "soil|Cu": {
-      "comparable_observation_count": 15106,
-      "covered_spatial_cells": 1851,
-      "distinct_sample_count": 23874,
-      "element": "Cu",
       "independent_lineage_count": 6,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
+      "medium": "soil",
+      "observation_count": 28154,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 22099
+    },
+    "soil|Cr": {
+      "comparable_observation_count": 14781,
+      "covered_spatial_cells": 968,
+      "distinct_sample_count": 9169,
+      "element": "Cr",
+      "independent_lineage_count": 6,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil"
+      ],
+      "medium": "soil",
+      "observation_count": 14907,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 9043
+    },
+    "soil|Cu": {
+      "comparable_observation_count": 15138,
+      "covered_spatial_cells": 1852,
+      "distinct_sample_count": 23906,
+      "element": "Cu",
+      "independent_lineage_count": 7,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
         "pangaea-north-africa-soil",
@@ -444,9 +497,10 @@
         "usgs-conus-soil"
       ],
       "medium": "soil",
-      "observation_count": 29803,
+      "observation_count": 29835,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -456,7 +510,7 @@
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 23748
+      "valid_coordinate_sample_count": 23780
     },
     "soil|Hg": {
       "comparable_observation_count": 6117,
@@ -480,51 +534,55 @@
       "valid_coordinate_sample_count": 6108
     },
     "soil|Ni": {
-      "comparable_observation_count": 15114,
-      "covered_spatial_cells": 1851,
-      "distinct_sample_count": 23875,
+      "comparable_observation_count": 15146,
+      "covered_spatial_cells": 1852,
+      "distinct_sample_count": 23907,
       "element": "Ni",
+      "independent_lineage_count": 7,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
+      "medium": "soil",
+      "observation_count": 29843,
+      "source_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-humus",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 23781
+    },
+    "soil|Pb": {
+      "comparable_observation_count": 15146,
+      "covered_spatial_cells": 968,
+      "distinct_sample_count": 9527,
+      "element": "Pb",
       "independent_lineage_count": 6,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
-        "foregs-geochemical-atlas-europe-2005",
-        "gemas-europe",
-        "pangaea-north-africa-soil",
-        "tpdc-china-mountain-soil",
-        "usgs-conus-soil"
-      ],
-      "medium": "soil",
-      "observation_count": 29811,
-      "source_ids": [
-        "afsis-phase-i-wet-chemistry",
-        "foregs-humus",
-        "foregs-subsoil",
-        "foregs-topsoil",
-        "gemas-europe",
-        "pangaea-north-africa-soil",
-        "tpdc-china-mountain-soil",
-        "usgs-conus-soil"
-      ],
-      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 23749
-    },
-    "soil|Pb": {
-      "comparable_observation_count": 15114,
-      "covered_spatial_cells": 967,
-      "distinct_sample_count": 9495,
-      "element": "Pb",
-      "independent_lineage_count": 5,
-      "lineage_ids": [
-        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
         "pangaea-north-africa-soil",
         "tpdc-china-mountain-soil"
       ],
       "medium": "soil",
-      "observation_count": 15240,
+      "observation_count": 15272,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -533,16 +591,17 @@
         "tpdc-china-mountain-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 9369
+      "valid_coordinate_sample_count": 9401
     },
     "soil|Zn": {
       "comparable_observation_count": 15116,
-      "covered_spatial_cells": 1851,
-      "distinct_sample_count": 23884,
+      "covered_spatial_cells": 1852,
+      "distinct_sample_count": 23916,
       "element": "Zn",
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 7,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
         "pangaea-north-africa-soil",
@@ -550,9 +609,10 @@
         "usgs-conus-soil"
       ],
       "medium": "soil",
-      "observation_count": 29813,
+      "observation_count": 29845,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -562,7 +622,7 @@
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 23758
+      "valid_coordinate_sample_count": 23790
     },
     "water|As": {
       "comparable_observation_count": 44282,
@@ -681,6 +741,23 @@
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 611042
+    },
+    "water|U": {
+      "comparable_observation_count": 547,
+      "covered_spatial_cells": 2,
+      "distinct_sample_count": 655,
+      "element": "U",
+      "independent_lineage_count": 1,
+      "lineage_ids": [
+        "cdogs-survey-210102"
+      ],
+      "medium": "water",
+      "observation_count": 655,
+      "source_ids": [
+        "cdogs-210102-lake-water"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 655
     },
     "water|Zn": {
       "comparable_observation_count": 55153,

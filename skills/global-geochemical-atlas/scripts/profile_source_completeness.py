@@ -27,6 +27,7 @@ DEFAULT_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 DEFAULT_FULL_PROFILES = SKILL_DIR / "assets" / "v4-full-profiles"
 DEFAULT_JSON = SKILL_DIR / "assets" / "v4-source-completeness.json"
 DEFAULT_MARKDOWN = SKILL_DIR / "references" / "v4-source-completeness.md"
+DEFAULT_FIXTURES = SKILL_DIR / "fixtures"
 
 PROFILE_VERSION = "d1-v4-source-completeness-v1"
 DEMO_FIELDS = (
@@ -90,6 +91,43 @@ def _latest_audits(audit_dir: Path) -> dict[str, tuple[Path, dict[str, Any]]]:
             raise ProfileError(f"candidate audit has no source_id: {path}")
         audits[source_id] = (path, value)
     return audits
+
+
+def _automated_audits(fixture_root: Path = DEFAULT_FIXTURES) -> dict[str, tuple[Path, dict[str, Any]]]:
+    """Discover the canonical Codex audits independently of directory layout."""
+
+    audits: dict[str, tuple[Path, dict[str, Any]]] = {}
+    for name in ("automated_audit.json", "automated_review.json"):
+        for path in sorted(fixture_root.rglob(name)):
+            value = _load_json(path)
+            source_id = value.get("source_id")
+            if not isinstance(source_id, str) or not source_id:
+                raise ProfileError(f"automated audit has no source_id: {path}")
+            status = value.get("status")
+            if status != "automated_audit_complete":
+                continue
+            current = audits.get(source_id)
+            # Prefer the canonical filename when a compatibility review copy is
+            # also present for the same source.
+            if current is None or path.name == "automated_audit.json":
+                audits[source_id] = (path, value)
+    return audits
+
+
+def _automated_audit_profile(item: tuple[Path, Mapping[str, Any]] | None) -> dict[str, Any]:
+    if item is None:
+        return {"status": "evidence_incomplete", "audited_record_count": 0, "audit_path": None}
+    path, value = item
+    records = value.get("records")
+    count = value.get("audited_record_count")
+    if not isinstance(count, int):
+        count = len(records) if isinstance(records, list) else 0
+    return {
+        "status": "automated_audit_complete",
+        "reviewer_type": value.get("reviewer_type") or "codex",
+        "audited_record_count": count,
+        "audit_path": str(path.relative_to(SKILL_DIR)),
+    }
 
 
 def _nested(mapping: Mapping[str, Any], *keys: str) -> Any:
@@ -307,6 +345,7 @@ def build_profile(
     if not isinstance(sources, Mapping) or not sources:
         raise ProfileError("source registry has no sources object")
     audits = _latest_audits(audit_dir)
+    automated_audits = _automated_audits()
     profiles: dict[str, Any] = {}
     for source_id in sorted(sources):
         source = sources[source_id]
@@ -324,13 +363,17 @@ def build_profile(
             "media": source.get("media", []),
             "full_population": full,
             "candidate_audit": candidate_audit,
+            "automated_audit": _automated_audit_profile(automated_audits.get(source_id)),
             "demo_fixture": demo,
             "usage_rights": _load_json(full_rights_path) if full_rights_path.is_file() else _rights(source),
             "automation_health": (
                 _load_json(full_automation_path) if full_automation_path.is_file() else _automation(source, demo)
             ),
         }
-    audited = sum(value["candidate_audit"]["audit_status"] == "audited_snapshot" for value in profiles.values())
+    audited = sum(
+        value["automated_audit"]["status"] == "automated_audit_complete"
+        for value in profiles.values()
+    )
     uniform = sum(
         value["full_population"]["field_completeness_status"] == "measured_uniformly"
         for value in profiles.values()
@@ -339,7 +382,7 @@ def build_profile(
     demo_records = sum(value["demo_fixture"]["record_count"] for value in profiles.values())
     missing_audits = sorted(
         source_id for source_id, value in profiles.items()
-        if value["candidate_audit"]["audit_status"] == "not_measured"
+        if value["automated_audit"]["status"] != "automated_audit_complete"
     )
     missing_uniform_profiles = sorted(
         source_id for source_id, value in profiles.items()
@@ -363,8 +406,8 @@ def build_profile(
             "code": "FULL_AUDIT_MISSING",
             "affected_sources": len(missing_audits),
             "source_ids": missing_audits,
-            "detail": "These executable sources have no checked-in candidate full-population audit.",
-            "next_action": "Add immutable full-source audits without substituting demo rows.",
+            "detail": "These executable sources have no checked-in 30-record Codex evidence audit.",
+            "next_action": "Add a structured automated audit with raw locators, parsing judgments and reasons.",
         },
     ]
     return {
@@ -380,9 +423,9 @@ def build_profile(
         },
         "summary": {
             "executable_source_count": len(profiles),
-            "sources_with_full_audit": audited,
+            "sources_with_automated_audit": audited,
             "sources_with_target_observation_denominator": denominators,
-            "sources_without_full_audit": len(missing_audits),
+            "sources_without_automated_audit": len(missing_audits),
             "demo_record_count": demo_records,
             "uniform_full_field_profiles": uniform,
         },
@@ -405,15 +448,15 @@ def _markdown(profile: Mapping[str, Any]) -> str:
         "## 摘要",
         "",
         f"- 可执行来源：{summary['executable_source_count']}",
-        f"- 有全量候选审计：{summary['sources_with_full_audit']}",
+        f"- 有 30 条结构化自动审计：{summary['sources_with_automated_audit']}",
         f"- 有明确目标测定分母：{summary['sources_with_target_observation_denominator']}",
-        f"- 缺少全量候选审计：{summary['sources_without_full_audit']}",
+        f"- 缺少结构化自动审计：{summary['sources_without_automated_audit']}",
         f"- 演示样板记录：{summary['demo_record_count']}（仅工程测试）",
         f"- 已完成统一全量逐字段 profile：{summary['uniform_full_field_profiles']}",
         "",
         "## 来源口径",
         "",
-        "| 来源 | 全量审计 | 全量目标测定 | demo 行 | 样品类型 demo 完整率 | 方法 scope demo 完整率 |",
+        "| 来源 | 自动审计 | 全量目标测定 | demo 行 | 样品类型 demo 完整率 | 方法 scope demo 完整率 |",
         "|---|---|---:|---:|---:|---:|",
     ]
     for source_id, value in profile["sources"].items():
@@ -425,7 +468,7 @@ def _markdown(profile: Mapping[str, Any]) -> str:
         sample_rate = fields.get("sample_type", {}).get("rate", 0.0)
         method_rate = fields.get("method_scope", {}).get("rate", 0.0)
         lines.append(
-            f"| `{source_id}` | {full['audit_status']} | {target_text} | {demo['record_count']} | "
+            f"| `{source_id}` | {value['automated_audit']['status']} | {target_text} | {demo['record_count']} | "
             f"{sample_rate:.1%} | {method_rate:.1%} |"
         )
     lines.extend(

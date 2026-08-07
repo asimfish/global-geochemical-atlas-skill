@@ -1,0 +1,22 @@
+{
+  "analytical_method_counts": {
+    "C_ICPAES_MS-55": 330,
+    "C_ICPOES_MS-60": 126,
+    "C_ICPOES_MS-61": 54,
+    "ME-4ACD81": 44,
+    "ME-MS81": 124,
+    "X-ray fluorescence spectrometry": 301,
+    "instrumental neutron activation analysis": 292,
+    "missing": 176
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2026-02-09",
+  "method_scope_counts": {
+    "missing": 176,
+    "observation": 1271
+  },
+  "observation_count": 1447,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "usgs-utah-volcanic-whole-rock"
+}

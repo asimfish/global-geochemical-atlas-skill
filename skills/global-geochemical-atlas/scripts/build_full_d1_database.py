@@ -255,7 +255,7 @@ def _combine_files(paths: Sequence[Path], output: Path, *, keep_first_header: bo
 
 
 def export_sample_locations(csv_path: Path, output: Path) -> dict[str, Any]:
-    """Write one stable, source-qualified location row per distinct sample."""
+    """Write one stable row per distinct source sample and coordinate claim."""
 
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(dir=output.parent, prefix=".sample-locations-", delete=False) as handle:
@@ -275,7 +275,7 @@ def export_sample_locations(csv_path: Path, output: Path) -> dict[str, Any]:
             for row in csv.DictReader(source):
                 source_id = str(row.get("source_id") or "")
                 sample_id = str(row.get("sample_id") or row.get("source_record_id") or "")
-                qualified = f"{source_id}|{sample_id}"
+                qualified = apply_geology_context.location_match_id(row)
                 values = (
                     qualified, source_id, sample_id, row.get("latitude", ""), row.get("longitude", ""),
                     row.get("source_crs", ""), row.get("coordinate_uncertainty_m", ""),
@@ -284,8 +284,8 @@ def export_sample_locations(csv_path: Path, output: Path) -> dict[str, Any]:
                 existing = connection.execute(
                     "SELECT * FROM locations WHERE qualified_sample_id = ?", (qualified,)
                 ).fetchone()
-                if existing is not None and tuple(existing) != values:
-                    raise FullDatabaseError(f"conflicting location evidence for sample {qualified}")
+                if existing is not None and tuple(existing[:7]) != tuple(values[:7]):
+                    raise FullDatabaseError(f"conflicting location identity for sample {qualified}")
                 connection.execute("INSERT OR IGNORE INTO locations VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values)
         connection.commit()
         with output_temp.open("w", encoding="utf-8", newline="") as output_handle:
@@ -317,7 +317,8 @@ def export_sample_locations(csv_path: Path, output: Path) -> dict[str, Any]:
 FLAT_COLUMNS = (
     "observation_id", "analyte_reported", "value_raw", "value_qualifier", "unit_raw",
     "measurement_basis_raw", "sample_id", "sampling_event_id", "medium_raw", "sample_type",
-    "lithology_raw", "lithology", "soil_horizon", "sediment_environment", "water_body_type",
+    "lithology_raw", "lithology", "soil_horizon_raw", "soil_horizon", "soil_horizon_missing_reason",
+    "sediment_environment", "water_body_type",
     "water_fraction", "geologic_unit_raw", "matched_geologic_unit", "geology_map_source",
     "geology_map_source_id", "geology_map_version", "match_method", "match_scale", "boundary_distance_m",
     "match_uncertainty", "match_status", "match_candidates",
@@ -355,7 +356,7 @@ def build_flat_index(csv_path: Path, output: Path) -> dict[str, Any]:
         batch: list[tuple[Any, ...]] = []
         with csv_path.open("r", encoding="utf-8", newline="") as handle:
             for row in csv.DictReader(handle):
-                event_id = f"{row.get('source_id','')}|{row.get('sample_id','')}"
+                event_id = apply_geology_context.location_match_id(row)
                 latitude = full_profiles._numeric(row.get("latitude"))  # noqa: SLF001
                 longitude = full_profiles._numeric(row.get("longitude"))  # noqa: SLF001
                 connection.execute(
@@ -375,7 +376,9 @@ def build_flat_index(csv_path: Path, output: Path) -> dict[str, Any]:
                     "sample_type": row.get("sample_type", ""),
                     "lithology_raw": row.get("lithology_raw", ""),
                     "lithology": row.get("lithology", ""),
+                    "soil_horizon_raw": row.get("soil_horizon_raw", ""),
                     "soil_horizon": row.get("soil_horizon", ""),
+                    "soil_horizon_missing_reason": row.get("soil_horizon_missing_reason", ""),
                     "sediment_environment": row.get("sediment_environment", ""),
                     "water_body_type": row.get("water_body_type", ""),
                     "water_fraction": row.get("water_fraction", ""),

@@ -14,7 +14,7 @@
   "evidence_version": "geochemical-source-evidence-v4",
   "registry_version": "geochemical-source-registry-v1",
   "scored_at": "2026-08-07T12:00:00Z",
-  "source_count": 58,
+  "source_count": 59,
   "sources": {
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
@@ -638,6 +638,92 @@
       "use_mode_limitations": [
         "research_use_status=permission_required"
       ]
+    },
+    "brazil-sgb-florianopolis-soil": {
+      "access_status": "open",
+      "attribution_note": "RIGeo item metadata states open and permits research access; redistribution remains unevaluated.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-soil-20260807T173500Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/south-america/brazil-sgb-florianopolis-soil/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://rigeo.sgb.gov.br/handle/doc/23413",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-soil-20260807T173500Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://rigeo.sgb.gov.br/handle/doc/23413",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-soil-20260807T173500Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "brazil-sgb-florianopolis-soil",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "brazil-sgb-florianopolis-stream-sediment": {
       "access_status": "open",
@@ -5156,14 +5242,14 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 25,
+      "A": 26,
       "B": 0,
       "C": 0,
       "D": 33,
       "U": 0
     },
     "use_modes": {
-      "benchmark_ready": 25,
+      "benchmark_ready": 26,
       "discovery": 33,
       "normalized_analysis": 0,
       "raw_observation": 0

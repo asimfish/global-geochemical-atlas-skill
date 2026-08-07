@@ -3561,6 +3561,28 @@ class BrazilSgbFlorianopolisStreamSedimentAdapter(RegistryAdapter):
         return self._delegate().parse(files)
 
 
+class BrazilSgbFlorianopolisSoilAdapter(RegistryAdapter):
+    """Registered wrapper around the independently audited SGB soil adapter."""
+
+    source_id = "brazil-sgb-florianopolis-soil"
+
+    def _delegate(self) -> DataSourceAdapter:
+        import brazil_sgb_florianopolis_soil as brazil_sgb_soil
+
+        return brazil_sgb_soil.BrazilSgbFlorianopolisSoilAdapter()
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        return self._delegate().download(candidate, cache_dir, mode)
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        return self._delegate().parse(files)
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -3587,6 +3609,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     Cdogs210102LakeSedimentAdapter.source_id: Cdogs210102LakeSedimentAdapter,
     Cdogs210102LakeWaterAdapter.source_id: Cdogs210102LakeWaterAdapter,
     BrazilSgbFlorianopolisStreamSedimentAdapter.source_id: BrazilSgbFlorianopolisStreamSedimentAdapter,
+    BrazilSgbFlorianopolisSoilAdapter.source_id: BrazilSgbFlorianopolisSoilAdapter,
 }
 
 

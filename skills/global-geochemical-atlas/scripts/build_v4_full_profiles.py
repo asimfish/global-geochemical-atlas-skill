@@ -315,6 +315,14 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             _text(fields.get("longitude")),
             _text(fields.get("source_crs")) or "EPSG:4326",
         )
+    if source_id == "brazil-sgb-florianopolis-soil":
+        return (
+            "|".join((_text(fields.get("sample_id")), _text(fields.get("num_lab")))),
+            "Florianopolis, Brazil",
+            _text(fields.get("latitude")),
+            _text(fields.get("longitude")),
+            _text(fields.get("source_crs")) or "EPSG:4326",
+        )
     raise FullProfileError(f"no sample/place mapping for {source_id}")
 
 
@@ -336,7 +344,7 @@ def _method(source_id: str, fields: Mapping[str, Any], field_name: str, values: 
             locator = _text(item.get("_metadata_source_locator"))
     elif source_id == "pangaea-north-africa-soil":
         method = _text(fields.get("_analytical_method"))
-    elif source_id == "brazil-sgb-florianopolis-stream-sediment":
+    elif source_id in {"brazil-sgb-florianopolis-stream-sediment", "brazil-sgb-florianopolis-soil"}:
         method = _text(fields.get("analytical_method_raw"))
         locator = _text(fields.get("source_locator"))
     return method, locator
@@ -464,6 +472,12 @@ def _semantic_evidence(source_id: str, fields: Mapping[str, Any], record_id: str
         evidence["sample_type_raw"] = _text(fields.get("sample_type_raw"))
         evidence["project"] = _text(fields.get("projeto_amostragem"))
         evidence["sample_id"] = _text(fields.get("sample_id"))
+    elif source_id == "brazil-sgb-florianopolis-soil":
+        evidence["sample_type_raw"] = _text(fields.get("sample_type_raw"))
+        evidence["project"] = _text(fields.get("projeto_amostragem"))
+        evidence["sample_id"] = _text(fields.get("sample_id"))
+        evidence["soil_horizon_raw"] = _text(fields.get("soil_horizon_raw"))
+        evidence["soil_type_raw"] = _text(fields.get("soil_type_raw"))
     return evidence
 
 
@@ -530,6 +544,9 @@ def _observation(
         "license": _text((registry_entry.get("license") or {}).get("spdx")),
         "grain_fraction": _text(raw.fields.get("_grain_fraction")),
         "material_raw": _text(raw.fields.get("MATERIAL")) or _text(raw.fields.get("_rock_type_raw")),
+        "soil_horizon_raw": _text(raw.fields.get("soil_horizon_raw")),
+        "soil_horizon": _text(raw.fields.get("soil_horizon")),
+        "soil_horizon_missing_reason": _text(raw.fields.get("soil_horizon_missing_reason")),
         "lithology_raw": _text(raw.fields.get("ROCK NAME")) or _text(raw.fields.get("_lithology_raw")) or (
             _text(raw.fields.get("Rock Group")) if source_id == "tpdc-china-mountain-soil" else ""
         ),

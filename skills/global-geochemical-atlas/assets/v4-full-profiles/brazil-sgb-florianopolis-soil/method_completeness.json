@@ -1,0 +1,14 @@
+{
+  "analytical_method_counts": {
+    "Espectrografia Ótica de Emissão": 192
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+  "method_scope_counts": {
+    "record": 192
+  },
+  "observation_count": 192,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "brazil-sgb-florianopolis-soil"
+}

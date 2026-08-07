@@ -1,0 +1,27 @@
+{
+  "content_hashing_used": false,
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-generic-fixture-demo-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "generated_at": "2026-08-07T13:19:35Z",
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 58286,
+      "path": "demo_input.csv"
+    },
+    {
+      "bytes": 43170,
+      "path": "sources.jsonl"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 30,
+    "raw_source_rows_read": 5
+  },
+  "source": {
+    "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+    "source_id": "brazil-sgb-florianopolis-soil"
+  },
+  "v4_semantics_version": "d1-v4-source-semantics-v1"
+}

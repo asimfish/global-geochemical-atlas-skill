@@ -82,6 +82,7 @@ V4_INPUT_COLUMNS = (
     "lithology",
     "soil_horizon_raw",
     "soil_horizon",
+    "soil_horizon_missing_reason",
     "sediment_environment",
     "water_body_type",
     "water_fraction",

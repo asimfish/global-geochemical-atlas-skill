@@ -1,5 +1,5 @@
 {
-  "claim_boundary": "The combined package binds 21 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
+  "claim_boundary": "The combined package binds 26 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
   "combined_demo_version": "d1-four-media-combined-v1",
   "comparison_isolation": {
     "explicit_boundaries": [
@@ -20,7 +20,10 @@
       "PANGAEA Arabian Sea bulk-core sediment retains its generic publisher method scope and DOI lineage.",
       "GEOROC Antarctica coordinate ranges are not converted to invented points and its missing row-level method remains explicit.",
       "TPDC O/A/C soil horizons and article-scoped ICP-MS/ICP-AES assignments remain separate.",
-      "GEMAS aqua-regia and XRF analysis groups remain separate measurement bases and comparison partitions."
+      "GEMAS aqua-regia and XRF analysis groups remain separate measurement bases and comparison partitions.",
+      "USGS Utah whole-rock method candidates remain record-linked and are not inferred from analyte or unit.",
+      "CDoGS lake water and lake sediment share one upstream survey lineage and remain separate media.",
+      "Brazil SGB soil and stream sediment preserve ND and less-than values without numeric substitution."
     ],
     "group_fields": [
       "element_or_analyte",
@@ -38,8 +41,8 @@
       "method_scope",
       "digestion_or_extraction"
     ],
-    "partition_count": 160,
-    "water_partition_count": 36,
+    "partition_count": 193,
+    "water_partition_count": 37,
     "water_partitions": {
       "[\"As\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma\", \"observation\", \"GEMStat dissolved operational fraction\"]": 1,
       "[\"As\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
@@ -71,6 +74,7 @@
       "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
       "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
       "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
+      "[\"U\", \"water\", \"water_lake\", \"\", \"\", \"untreated\", \"\", \"source_native_unspecified_basis\", \"\", \"\", \"\", \"Fission track analysis\", \"package_column\", \"\"]": 30,
       "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
       "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
       "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
@@ -85,265 +89,325 @@
       "evidence_bytes": 75207,
       "evidence_path": "fixtures/source-demos/georoc-archaean/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 60507,
+      "input_bytes": 60972,
       "input_path": "fixtures/source-demos/georoc-archaean/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "georoc-archaean",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 66962,
       "evidence_path": "fixtures/source-demos/georoc-antarctica-intraplate/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 51758,
+      "input_bytes": 52223,
       "input_path": "fixtures/source-demos/georoc-antarctica-intraplate/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "georoc-antarctica-intraplate",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
+    },
+    {
+      "evidence_bytes": 80165,
+      "evidence_path": "fixtures/source-demos/usgs-utah-volcanic-whole-rock/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 60926,
+      "input_path": "fixtures/source-demos/usgs-utah-volcanic-whole-rock/demo_input.csv",
+      "record_count": 48,
+      "source_evidence_score": 95.0,
+      "source_id": "usgs-utah-volcanic-whole-rock",
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 61392,
       "evidence_path": "fixtures/source-demos/usgs-conus-soil/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 45624,
+      "input_bytes": 46089,
       "input_path": "fixtures/source-demos/usgs-conus-soil/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "usgs-conus-soil",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
+    },
+    {
+      "evidence_bytes": 43170,
+      "evidence_path": "fixtures/source-demos/brazil-sgb-florianopolis-soil/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 58286,
+      "input_path": "fixtures/source-demos/brazil-sgb-florianopolis-soil/demo_input.csv",
+      "record_count": 30,
+      "source_evidence_score": 95.0,
+      "source_id": "brazil-sgb-florianopolis-soil",
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 205438,
       "evidence_path": "fixtures/source-demos/norway-marchem/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 134576,
+      "input_bytes": 135489,
       "input_path": "fixtures/source-demos/norway-marchem/demo_input.csv",
       "record_count": 112,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "norway-marchem",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 142243,
       "evidence_path": "fixtures/source-demos/geotraces-idp2025/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 65415,
+      "input_bytes": 65880,
       "input_path": "fixtures/source-demos/geotraces-idp2025/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "geotraces-idp2025",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 106255,
       "evidence_path": "fixtures/source-demos/gemstat-open-archive/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 63089,
+      "input_bytes": 63610,
       "input_path": "fixtures/source-demos/gemstat-open-archive/demo_input.csv",
       "record_count": 56,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "gemstat-open-archive",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
+    },
+    {
+      "evidence_bytes": 19561,
+      "evidence_path": "fixtures/source-demos/cdogs-210102-lake-water/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 33306,
+      "input_path": "fixtures/source-demos/cdogs-210102-lake-water/demo_input.csv",
+      "record_count": 30,
+      "source_evidence_score": 95.0,
+      "source_id": "cdogs-210102-lake-water",
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 105729,
       "evidence_path": "fixtures/source-demos/us-wqp-sacramento-river-arsenic/sources.jsonl",
-      "evidence_tier": "B",
-      "input_bytes": 57927,
+      "evidence_tier": "A",
+      "input_bytes": 58392,
       "input_path": "fixtures/source-demos/us-wqp-sacramento-river-arsenic/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 77.5,
+      "source_evidence_score": 87.5,
       "source_id": "us-wqp-sacramento-river-arsenic",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 89560,
       "evidence_path": "fixtures/source-demos/japan-gsj-geochemical-map/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 44697,
+      "input_bytes": 45162,
       "input_path": "fixtures/source-demos/japan-gsj-geochemical-map/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "japan-gsj-geochemical-map",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
+    },
+    {
+      "evidence_bytes": 33696,
+      "evidence_path": "fixtures/source-demos/cdogs-210102-lake-sediment/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 55445,
+      "input_path": "fixtures/source-demos/cdogs-210102-lake-sediment/demo_input.csv",
+      "record_count": 48,
+      "source_evidence_score": 95.0,
+      "source_id": "cdogs-210102-lake-sediment",
+      "use_mode": "benchmark_ready"
+    },
+    {
+      "evidence_bytes": 45236,
+      "evidence_path": "fixtures/source-demos/brazil-sgb-florianopolis-stream-sediment/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 62330,
+      "input_path": "fixtures/source-demos/brazil-sgb-florianopolis-stream-sediment/demo_input.csv",
+      "record_count": 31,
+      "source_evidence_score": 95.0,
+      "source_id": "brazil-sgb-florianopolis-stream-sediment",
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 68328,
       "evidence_path": "fixtures/source-demos/pangaea-north-africa-soil/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 55781,
+      "input_bytes": 56246,
       "input_path": "fixtures/source-demos/pangaea-north-africa-soil/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "pangaea-north-africa-soil",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 72028,
       "evidence_path": "fixtures/source-demos/foregs-topsoil/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 45583,
+      "input_bytes": 46048,
       "input_path": "fixtures/source-demos/foregs-topsoil/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-topsoil",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 73222,
       "evidence_path": "fixtures/source-demos/foregs-subsoil/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 46254,
+      "input_bytes": 46719,
       "input_path": "fixtures/source-demos/foregs-subsoil/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-subsoil",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 71547,
       "evidence_path": "fixtures/source-demos/foregs-humus/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 45571,
+      "input_bytes": 46036,
       "input_path": "fixtures/source-demos/foregs-humus/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-humus",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 71400,
       "evidence_path": "fixtures/source-demos/foregs-stream-water/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 49679,
+      "input_bytes": 50144,
       "input_path": "fixtures/source-demos/foregs-stream-water/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-stream-water",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 74445,
       "evidence_path": "fixtures/source-demos/foregs-stream-sediment/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 49009,
+      "input_bytes": 49474,
       "input_path": "fixtures/source-demos/foregs-stream-sediment/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-stream-sediment",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 74254,
       "evidence_path": "fixtures/source-demos/foregs-floodplain-sediment/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 49172,
+      "input_bytes": 49637,
       "input_path": "fixtures/source-demos/foregs-floodplain-sediment/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-floodplain-sediment",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 120701,
       "evidence_path": "fixtures/source-demos/afsis-phase-i-wet-chemistry/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 57337,
+      "input_bytes": 57802,
       "input_path": "fixtures/source-demos/afsis-phase-i-wet-chemistry/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "afsis-phase-i-wet-chemistry",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 79070,
       "evidence_path": "fixtures/source-demos/australia-ngsa-mercury/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 64261,
+      "input_bytes": 64726,
       "input_path": "fixtures/source-demos/australia-ngsa-mercury/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "australia-ngsa-mercury",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 84805,
       "evidence_path": "fixtures/source-demos/japan-gsj-marine-sediment/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 58904,
+      "input_bytes": 59425,
       "input_path": "fixtures/source-demos/japan-gsj-marine-sediment/demo_input.csv",
       "record_count": 56,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "japan-gsj-marine-sediment",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 67296,
       "evidence_path": "fixtures/source-demos/pangaea-arabian-sea-sediment/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 58948,
+      "input_bytes": 59413,
       "input_path": "fixtures/source-demos/pangaea-arabian-sea-sediment/demo_input.csv",
       "record_count": 48,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "pangaea-arabian-sea-sediment",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 58880,
       "evidence_path": "fixtures/source-demos/tpdc-china-mountain-soil/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 49376,
+      "input_bytes": 49785,
       "input_path": "fixtures/source-demos/tpdc-china-mountain-soil/demo_input.csv",
       "record_count": 40,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "tpdc-china-mountain-soil",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     },
     {
       "evidence_bytes": 98116,
       "evidence_path": "fixtures/source-demos/gemas-europe/sources.jsonl",
       "evidence_tier": "A",
-      "input_bytes": 83463,
+      "input_bytes": 83956,
       "input_path": "fixtures/source-demos/gemas-europe/demo_input.csv",
       "record_count": 52,
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "gemas-europe",
-      "use_mode": "normalized_analysis"
+      "use_mode": "benchmark_ready"
     }
   ],
-  "generated_at": "2026-08-06T16:30:00Z",
+  "generated_at": "2026-08-07T17:35:00Z",
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 1209831,
+      "bytes": 1480421,
       "path": "demo_input.csv"
     },
     {
-      "bytes": 1866878,
+      "bytes": 2083212,
       "path": "sources.jsonl"
     }
   ],
   "record_counts": {
     "by_analyte": {
-      "As": 236,
-      "Cr": 48,
-      "Cu": 228,
-      "Hg": 68,
-      "Ni": 228,
-      "Pb": 48,
-      "Zn": 228
+      "As": 262,
+      "Cr": 66,
+      "Cu": 255,
+      "Hg": 76,
+      "Ni": 254,
+      "Pb": 74,
+      "U": 30,
+      "Zn": 254
     },
     "by_medium": {
-      "rock": 96,
-      "sediment": 408,
-      "soil": 380,
-      "water": 200
+      "rock": 144,
+      "sediment": 487,
+      "soil": 410,
+      "water": 230
     },
     "by_source": {
       "afsis-phase-i-wet-chemistry": 48,
       "australia-ngsa-mercury": 48,
+      "brazil-sgb-florianopolis-soil": 30,
+      "brazil-sgb-florianopolis-stream-sediment": 31,
+      "cdogs-210102-lake-sediment": 48,
+      "cdogs-210102-lake-water": 30,
       "foregs-floodplain-sediment": 48,
       "foregs-humus": 48,
       "foregs-stream-sediment": 48,
@@ -362,9 +426,10 @@
       "pangaea-north-africa-soil": 48,
       "tpdc-china-mountain-soil": 40,
       "us-wqp-sacramento-river-arsenic": 48,
-      "usgs-conus-soil": 48
+      "usgs-conus-soil": 48,
+      "usgs-utah-volcanic-whole-rock": 48
     },
-    "total": 1084
+    "total": 1271
   },
   "request": {
     "elements": [
@@ -417,7 +482,8 @@
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
           "georoc-antarctica-intraplate",
-          "georoc-archaean"
+          "georoc-archaean",
+          "usgs-utah-volcanic-whole-rock"
         ],
         "status": "partial"
       },
@@ -454,6 +520,8 @@
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
           "australia-ngsa-mercury",
+          "brazil-sgb-florianopolis-stream-sediment",
+          "cdogs-210102-lake-sediment",
           "foregs-floodplain-sediment",
           "foregs-stream-sediment",
           "japan-gsj-geochemical-map",
@@ -480,6 +548,7 @@
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
           "afsis-phase-i-wet-chemistry",
+          "brazil-sgb-florianopolis-soil",
           "foregs-humus",
           "foregs-subsoil",
           "foregs-topsoil",
@@ -508,6 +577,7 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "cdogs-210102-lake-water",
           "foregs-stream-water",
           "gemstat-open-archive",
           "geotraces-idp2025",
@@ -519,6 +589,10 @@
     "selected_sources": [
       "afsis-phase-i-wet-chemistry",
       "australia-ngsa-mercury",
+      "brazil-sgb-florianopolis-soil",
+      "brazil-sgb-florianopolis-stream-sediment",
+      "cdogs-210102-lake-sediment",
+      "cdogs-210102-lake-water",
       "foregs-floodplain-sediment",
       "foregs-humus",
       "foregs-stream-sediment",
@@ -537,11 +611,12 @@
       "pangaea-north-africa-soil",
       "tpdc-china-mountain-soil",
       "us-wqp-sacramento-river-arsenic",
-      "usgs-conus-soil"
+      "usgs-conus-soil",
+      "usgs-utah-volcanic-whole-rock"
     ],
     "status": "partial"
   },
-  "scientific_scope": "21 verified source demos combined to exercise one four-media workflow",
+  "scientific_scope": "26 verified source demos combined to exercise one four-media workflow",
   "warnings": [
     "This combined fixture proves interface compatibility, not representative global coverage.",
     "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",

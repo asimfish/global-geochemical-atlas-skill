@@ -1,11 +1,11 @@
 {
   "artifacts": [
     {
-      "bytes": 22252,
+      "bytes": 25264,
       "path": "assets/v4-coverage-balance.json"
     },
     {
-      "bytes": 1794425,
+      "bytes": 2912656,
       "path": "assets/v4-coverage-cube.csv"
     },
     {
@@ -71,6 +71,134 @@
     {
       "bytes": 822,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/usage_rights_coverage.json"
+    },
+    {
+      "bytes": 3268,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/automation_health.json"
+    },
+    {
+      "bytes": 710,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/citation_coverage.json"
+    },
+    {
+      "bytes": 4745,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/field_completeness.json"
+    },
+    {
+      "bytes": 674,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/geology_coverage.json"
+    },
+    {
+      "bytes": 606,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/method_completeness.json"
+    },
+    {
+      "bytes": 710,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/sample_type_coverage.json"
+    },
+    {
+      "bytes": 1003,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/spatial_coverage.json"
+    },
+    {
+      "bytes": 890,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/usage_rights_coverage.json"
+    },
+    {
+      "bytes": 3291,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/automation_health.json"
+    },
+    {
+      "bytes": 719,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/citation_coverage.json"
+    },
+    {
+      "bytes": 4822,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/field_completeness.json"
+    },
+    {
+      "bytes": 681,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/geology_coverage.json"
+    },
+    {
+      "bytes": 645,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/method_completeness.json"
+    },
+    {
+      "bytes": 708,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/sample_type_coverage.json"
+    },
+    {
+      "bytes": 1036,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/spatial_coverage.json"
+    },
+    {
+      "bytes": 900,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/usage_rights_coverage.json"
+    },
+    {
+      "bytes": 2933,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/automation_health.json"
+    },
+    {
+      "bytes": 693,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/citation_coverage.json"
+    },
+    {
+      "bytes": 4789,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/field_completeness.json"
+    },
+    {
+      "bytes": 655,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/geology_coverage.json"
+    },
+    {
+      "bytes": 701,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/method_completeness.json"
+    },
+    {
+      "bytes": 678,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/sample_type_coverage.json"
+    },
+    {
+      "bytes": 31755,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/spatial_coverage.json"
+    },
+    {
+      "bytes": 879,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/usage_rights_coverage.json"
+    },
+    {
+      "bytes": 2784,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/automation_health.json"
+    },
+    {
+      "bytes": 687,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/citation_coverage.json"
+    },
+    {
+      "bytes": 4717,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/field_completeness.json"
+    },
+    {
+      "bytes": 651,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/geology_coverage.json"
+    },
+    {
+      "bytes": 580,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/method_completeness.json"
+    },
+    {
+      "bytes": 659,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/sample_type_coverage.json"
+    },
+    {
+      "bytes": 31680,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/spatial_coverage.json"
+    },
+    {
+      "bytes": 872,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/usage_rights_coverage.json"
     },
     {
       "bytes": 3018,
@@ -681,78 +809,88 @@
       "path": "assets/v4-full-profiles/usgs-conus-soil/usage_rights_coverage.json"
     },
     {
-      "bytes": 3244,
+      "bytes": 6598,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/automation_health.json"
+    },
+    {
+      "bytes": 688,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/citation_coverage.json"
+    },
+    {
+      "bytes": 4798,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/field_completeness.json"
+    },
+    {
+      "bytes": 643,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/geology_coverage.json"
+    },
+    {
+      "bytes": 787,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/method_completeness.json"
+    },
+    {
+      "bytes": 668,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/sample_type_coverage.json"
+    },
+    {
+      "bytes": 2274,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/spatial_coverage.json"
+    },
+    {
+      "bytes": 833,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/usage_rights_coverage.json"
+    },
+    {
+      "bytes": 3669,
       "path": "references/v4-full-population-profile.md"
     }
   ],
   "as_of": "2026-08-06T10:05:00Z",
-  "comparable_observation_count": 426493,
-  "coverage_cube_rows": 8268,
+  "comparable_observation_count": 434661,
+  "coverage_cube_rows": 13052,
   "coverage_cube_version": "d1-v4-coverage-cube-v1",
-  "covered_spatial_cells_source_sum": 8116,
+  "covered_spatial_cells_source_sum": 8130,
   "denominator_definition": "all non-empty registered target observations parsed from verified full caches",
-  "distinct_sample_count": 771322,
-  "incremental_build": {
-    "changed_sources": [],
-    "executed_source_count": 0,
-    "plan_version": "d1-incremental-profile-plan-v1",
-    "reused_sources": [
-      "afsis-phase-i-wet-chemistry",
-      "australia-ngsa-mercury",
-      "foregs-floodplain-sediment",
-      "foregs-humus",
-      "foregs-stream-sediment",
-      "foregs-stream-water",
-      "foregs-subsoil",
-      "foregs-topsoil",
-      "gemas-europe",
-      "gemstat-open-archive",
-      "georoc-antarctica-intraplate",
-      "georoc-archaean",
-      "geotraces-idp2025",
-      "japan-gsj-geochemical-map",
-      "japan-gsj-marine-sediment",
-      "norway-marchem",
-      "pangaea-arabian-sea-sediment",
-      "pangaea-north-africa-soil",
-      "tpdc-china-mountain-soil",
-      "us-wqp-sacramento-river-arsenic",
-      "usgs-conus-soil"
-    ]
-  },
+  "distinct_sample_count": 773445,
   "media": {
     "rock": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 413,
-      "distinct_sample_count": 25972,
-      "independent_lineage_count": 1,
+      "comparable_observation_count": 1271,
+      "covered_spatial_cells": 420,
+      "distinct_sample_count": 26203,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
-      "observation_count": 67171,
+      "observation_count": 68618,
       "source_ids": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 21178
+      "valid_coordinate_sample_count": 21409
     },
     "sediment": {
-      "comparable_observation_count": 25236,
-      "covered_spatial_cells": 1313,
-      "distinct_sample_count": 12831,
-      "independent_lineage_count": 6,
+      "comparable_observation_count": 31458,
+      "covered_spatial_cells": 1317,
+      "distinct_sample_count": 14036,
+      "independent_lineage_count": 8,
       "lineage_ids": [
         "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
         "norway-marchem",
         "pangaea-arabian-sea-sediment"
       ],
-      "observation_count": 82282,
+      "observation_count": 89825,
       "source_ids": [
         "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -761,24 +899,26 @@
         "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 12831
+      "valid_coordinate_sample_count": 14036
     },
     "soil": {
-      "comparable_observation_count": 94741,
-      "covered_spatial_cells": 1851,
-      "distinct_sample_count": 23914,
-      "independent_lineage_count": 6,
+      "comparable_observation_count": 94869,
+      "covered_spatial_cells": 1852,
+      "distinct_sample_count": 23946,
+      "independent_lineage_count": 7,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
         "pangaea-north-africa-soil",
         "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
-      "observation_count": 153781,
+      "observation_count": 153973,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -788,34 +928,36 @@
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 23788
+      "valid_coordinate_sample_count": 23820
     },
     "water": {
-      "comparable_observation_count": 306516,
-      "covered_spatial_cells": 2440,
-      "distinct_sample_count": 708605,
-      "independent_lineage_count": 4,
+      "comparable_observation_count": 307063,
+      "covered_spatial_cells": 2442,
+      "distinct_sample_count": 709260,
+      "independent_lineage_count": 5,
       "lineage_ids": [
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
         "geotraces-idp2025",
         "us-wqp-sacramento-river-arsenic"
       ],
-      "observation_count": 3783544,
+      "observation_count": 3784199,
       "source_ids": [
+        "cdogs-210102-lake-water",
         "foregs-stream-water",
         "gemstat-open-archive",
         "geotraces-idp2025",
         "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 708605
+      "valid_coordinate_sample_count": 709260
     }
   },
-  "observation_count": 4086778,
+  "observation_count": 4096615,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "registered_source_count": 21,
-  "source_count": 21,
+  "registered_source_count": 26,
+  "source_count": 26,
   "sources": [
     {
       "comparable_observation_count": 11256,
@@ -836,6 +978,46 @@
       "observation_count": 2396,
       "source_id": "australia-ngsa-mercury",
       "valid_coordinate_sample_count": 2396
+    },
+    {
+      "comparable_observation_count": 128,
+      "covered_spatial_cells": 1,
+      "distinct_sample_count": 32,
+      "medium": "soil",
+      "method_rate": 1.0,
+      "observation_count": 192,
+      "source_id": "brazil-sgb-florianopolis-soil",
+      "valid_coordinate_sample_count": 32
+    },
+    {
+      "comparable_observation_count": 2032,
+      "covered_spatial_cells": 2,
+      "distinct_sample_count": 521,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 3132,
+      "source_id": "brazil-sgb-florianopolis-stream-sediment",
+      "valid_coordinate_sample_count": 521
+    },
+    {
+      "comparable_observation_count": 4190,
+      "covered_spatial_cells": 2,
+      "distinct_sample_count": 684,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 4411,
+      "source_id": "cdogs-210102-lake-sediment",
+      "valid_coordinate_sample_count": 684
+    },
+    {
+      "comparable_observation_count": 547,
+      "covered_spatial_cells": 2,
+      "distinct_sample_count": 655,
+      "medium": "water",
+      "method_rate": 1.0,
+      "observation_count": 655,
+      "source_id": "cdogs-210102-lake-water",
+      "valid_coordinate_sample_count": 655
     },
     {
       "comparable_observation_count": 8976,
@@ -1026,7 +1208,17 @@
       "observation_count": 58284,
       "source_id": "usgs-conus-soil",
       "valid_coordinate_sample_count": 14380
+    },
+    {
+      "comparable_observation_count": 1271,
+      "covered_spatial_cells": 7,
+      "distinct_sample_count": 231,
+      "medium": "rock",
+      "method_rate": 0.878369,
+      "observation_count": 1447,
+      "source_id": "usgs-utah-volcanic-whole-rock",
+      "valid_coordinate_sample_count": 231
     }
   ],
-  "valid_coordinate_sample_count": 766402
+  "valid_coordinate_sample_count": 768525
 }

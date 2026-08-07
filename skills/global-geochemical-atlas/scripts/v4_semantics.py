@@ -206,6 +206,15 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "source_workbook_leitura_field",
         "citation_scope": "dataset",
     },
+    "brazil-sgb-florianopolis-soil": {
+        "sample_type": "soil_unspecified_horizon",
+        "sample_type_mapping_status": "mapped",
+        "soil_horizon": "",
+        "soil_horizon_missing_reason": "source reports Nao Identificado",
+        "method_scope": "record",
+        "method_assignment_basis": "source_workbook_leitura_field",
+        "citation_scope": "dataset",
+    },
 }
 
 SOIL_TYPE_MAP = {
@@ -328,6 +337,11 @@ def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Map
     elif source_id == "brazil-sgb-florianopolis-stream-sediment":
         raw = _text(evidence.get("sample_type_raw"))
         result["sample_type_raw"] = raw
+    elif source_id == "brazil-sgb-florianopolis-soil":
+        result["sample_type_raw"] = _text(evidence.get("sample_type_raw"))
+        result["soil_horizon_raw"] = _text(evidence.get("soil_horizon_raw"))
+        result["soil_horizon"] = ""
+        result["soil_horizon_missing_reason"] = _text(contract.get("soil_horizon_missing_reason"))
     return result
 
 
@@ -402,6 +416,11 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
             part for part in (result["survey_area"], _text(evidence.get("site_id"))) if part
         )
     elif source_id == "brazil-sgb-florianopolis-stream-sediment":
+        result["survey_area"] = "Florianopolis, Brazil"
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], _text(evidence.get("project")), _text(evidence.get("sample_id"))) if part
+        )
+    elif source_id == "brazil-sgb-florianopolis-soil":
         result["survey_area"] = "Florianopolis, Brazil"
         result["geographic_context_raw"] = " / ".join(
             part for part in (result["survey_area"], _text(evidence.get("project")), _text(evidence.get("sample_id"))) if part

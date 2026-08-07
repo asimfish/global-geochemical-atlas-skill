@@ -23,6 +23,7 @@ import sys
 import tempfile
 import time
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections.abc import Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -242,7 +243,13 @@ def decode_mvt_units(tile: bytes) -> tuple[int, list[dict[str, Any]]]:
                 {
                     "feature_id": feature_id,
                     "properties": properties,
-                    "rings": _decode_geometry(geometry),
+                    "rings": (rings := _decode_geometry(geometry)),
+                    "bbox": (
+                        min(point[0] for ring in rings for point in ring),
+                        min(point[1] for ring in rings for point in ring),
+                        max(point[0] for ring in rings for point in ring),
+                        max(point[1] for ring in rings for point in ring),
+                    ) if rings else None,
                 }
             )
         return extent, decoded
@@ -328,6 +335,7 @@ class MacrostratClient:
         self.user_agent = user_agent
         self.fixture = fixture
         self._decoded_tiles: OrderedDict[tuple[int, int, int], tuple[int, list[dict[str, Any]]]] = OrderedDict()
+        self._request_failures: dict[Path, str] = {}
 
     def _request(self, url: str) -> bytes:
         error: Exception | None = None
@@ -345,9 +353,15 @@ class MacrostratClient:
     def _cached(self, path: Path, url: str) -> tuple[bytes, str]:
         if path.is_file():
             return path.read_bytes(), "fixture" if self.fixture else "cache"
+        if path in self._request_failures:
+            raise GeologyContextError(self._request_failures[path])
         if self.offline:
             raise GeologyContextError(f"offline cache miss: {path}")
-        payload = self._request(url)
+        try:
+            payload = self._request(url)
+        except GeologyContextError as exc:
+            self._request_failures[path] = str(exc)
+            raise
         _atomic_write(path, payload)
         return payload, "online"
 
@@ -548,7 +562,18 @@ def match_tile(sample: SampleLocation, client: MacrostratClient, *, zoom: int = 
         x, y, local_x, local_y = _tile_position(sample.latitude, sample.longitude, zoom)
         extent, features, cache_status, endpoint = client.tile_units(zoom, x, y)
         point_x, point_y = local_x * extent, local_y * extent
-        covering = [feature for feature in features if _point_in_polygon(point_x, point_y, feature["rings"])]
+        covering = [
+            feature
+            for feature in features
+            if (
+                feature.get("bbox") is None
+                or (
+                    feature["bbox"][0] <= point_x <= feature["bbox"][2]
+                    and feature["bbox"][1] <= point_y <= feature["bbox"][3]
+                )
+            )
+            and _point_in_polygon(point_x, point_y, feature["rings"])
+        ]
         version, _ = client.api_version()
         covering_pairs = [
             (feature, candidate)
@@ -700,6 +725,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--timeout", type=float, default=30.0)
     parser.add_argument("--retries", type=int, default=2)
+    parser.add_argument("--tile-workers", type=int, default=8, help="Concurrent tile prefetch workers")
     parser.add_argument("--run-manifest", type=Path, help="Optional non-hash run identity and count report")
     return parser
 
@@ -724,14 +750,57 @@ def main(argv: Sequence[str] | None = None) -> int:
         counts: dict[str, int] = {}
         cache_counts: dict[str, int] = {}
         occupied_tiles: set[tuple[int, int, int]] = set()
+        coordinate_results: dict[tuple[Any, ...], dict[str, Any]] = {}
+        prefetch_counts = {"cache_or_downloaded": 0, "failed": 0}
         record_count = 0
         try:
+            if args.mode == "tile" and not client.offline:
+                for location in iter_locations(args.input):
+                    if location.latitude is None or location.longitude is None or abs(location.latitude) > 85.05112878:
+                        continue
+                    tile_x, tile_y, _, _ = _tile_position(location.latitude, location.longitude, args.zoom)
+                    occupied_tiles.add((args.zoom, tile_x, tile_y))
+                with ThreadPoolExecutor(max_workers=max(1, args.tile_workers)) as executor:
+                    futures = {
+                        executor.submit(client.tile, zoom, tile_x, tile_y): (zoom, tile_x, tile_y)
+                        for zoom, tile_x, tile_y in occupied_tiles
+                    }
+                    for future in as_completed(futures):
+                        try:
+                            future.result()
+                        except GeologyContextError:
+                            prefetch_counts["failed"] += 1
+                        else:
+                            prefetch_counts["cache_or_downloaded"] += 1
             with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
                 for location in iter_locations(args.input):
-                    if args.mode == "point":
-                        row = match_point(location, client)
+                    coordinate_key = (
+                        args.mode,
+                        args.zoom if args.mode == "tile" else None,
+                        location.latitude,
+                        location.longitude,
+                        location.source_crs,
+                        location.coordinate_transform,
+                    )
+                    cached_row = coordinate_results.get(coordinate_key)
+                    if cached_row is None:
+                        if args.mode == "point":
+                            row = match_point(location, client)
+                        else:
+                            row = match_tile(location, client, zoom=args.zoom)
+                        coordinate_results[coordinate_key] = dict(row)
                     else:
-                        row = match_tile(location, client, zoom=args.zoom)
+                        row = dict(cached_row)
+                        row.update(
+                            sample_id=location.sample_id,
+                            latitude=location.latitude,
+                            longitude=location.longitude,
+                            input_source_crs=location.source_crs,
+                            coordinate_transform=location.coordinate_transform,
+                            geologic_unit_raw=location.geologic_unit_raw,
+                            cache_status="coordinate_result_reused",
+                        )
+                    if args.mode == "tile":
                         if location.latitude is not None and location.longitude is not None:
                             tile_x, tile_y, _, _ = _tile_position(location.latitude, location.longitude, args.zoom)
                             occupied_tiles.add((args.zoom, tile_x, tile_y))
@@ -769,6 +838,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "cache_status_counts": cache_counts,
                 "tile_zoom": args.zoom if args.mode == "tile" else None,
                 "occupied_tile_count": len(occupied_tiles) if args.mode == "tile" else None,
+                "unique_coordinate_query_count": len(coordinate_results),
+                "tile_prefetch_counts": prefetch_counts if args.mode == "tile" else None,
                 "cache_identity_fields": (
                     ["api_version", "latitude", "longitude"]
                     if args.mode == "point"

@@ -1,0 +1,14 @@
+{
+  "analytical_method_counts": {
+    "Fission track analysis": 655
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "cdogs-svy210102-page-2025-05-18",
+  "method_scope_counts": {
+    "package_column": 655
+  },
+  "observation_count": 655,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "cdogs-210102-lake-water"
+}

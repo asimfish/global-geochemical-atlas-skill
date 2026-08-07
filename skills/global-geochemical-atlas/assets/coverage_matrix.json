@@ -155,10 +155,10 @@
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 6,
-        "Cu": 6,
-        "Ni": 6,
-        "Zn": 6
+        "As": 8,
+        "Cu": 8,
+        "Ni": 8,
+        "Zn": 8
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -205,9 +205,11 @@
         "us-water-quality-portal",
         "usgs-ngdb"
       ],
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 8,
       "lineage_ids": [
         "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
@@ -225,6 +227,8 @@
       ],
       "selected_sources": [
         "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -239,9 +243,11 @@
         "australia-ngsa-mercury": "A",
         "australia-ozchem": "D",
         "bgs-gbase": "D",
+        "brazil-sgb-florianopolis-stream-sediment": "A",
         "brazil-sgb-geochemistry": "D",
         "canada-bc-rgs": "D",
         "canada-cdogs": "D",
+        "cdogs-210102-lake-sediment": "A",
         "chile-sernageomin-geochemistry": "D",
         "earthchem-library": "D",
         "earthchem-portal": "D",
@@ -276,9 +282,11 @@
         "australia-ngsa-mercury": "national_partial",
         "australia-ozchem": "national_partial",
         "bgs-gbase": "national_partial",
+        "brazil-sgb-florianopolis-stream-sediment": "regional_partial",
         "brazil-sgb-geochemistry": "national_partial",
         "canada-bc-rgs": "regional_partial",
         "canada-cdogs": "national_partial",
+        "cdogs-210102-lake-sediment": "regional_partial",
         "chile-sernageomin-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
         "earthchem-portal": "global_partial",
@@ -308,6 +316,23 @@
       "source_target_analytes": {
         "australia-ngsa-mercury": [
           "Hg"
+        ],
+        "brazil-sgb-florianopolis-stream-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "cdogs-210102-lake-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
         ],
         "foregs-floodplain-sediment": [
           "As",
@@ -367,9 +392,11 @@
         "australia-ngsa-mercury": "benchmark_ready",
         "australia-ozchem": "discovery",
         "bgs-gbase": "discovery",
+        "brazil-sgb-florianopolis-stream-sediment": "benchmark_ready",
         "brazil-sgb-geochemistry": "discovery",
         "canada-bc-rgs": "discovery",
         "canada-cdogs": "discovery",
+        "cdogs-210102-lake-sediment": "benchmark_ready",
         "chile-sernageomin-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "earthchem-portal": "discovery",
@@ -403,10 +430,10 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 6,
-        "Cu": 8,
-        "Ni": 8,
-        "Zn": 8
+        "As": 7,
+        "Cu": 9,
+        "Ni": 9,
+        "Zn": 9
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -437,9 +464,10 @@
         "usgs-ngdb",
         "wosis"
       ],
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 7,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
         "pangaea-north-africa-soil",
@@ -457,6 +485,7 @@
       ],
       "selected_sources": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -469,6 +498,7 @@
         "afsis-phase-i-wet-chemistry": "A",
         "alaska-dggs-webgeochem": "D",
         "bgs-gbase": "D",
+        "brazil-sgb-florianopolis-soil": "A",
         "brazil-sgb-geochemistry": "D",
         "earthchem-library": "D",
         "foregs-europe": "D",
@@ -491,6 +521,7 @@
         "afsis-phase-i-wet-chemistry": "continental_partial",
         "alaska-dggs-webgeochem": "regional_partial",
         "bgs-gbase": "national_partial",
+        "brazil-sgb-florianopolis-soil": "regional_partial",
         "brazil-sgb-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
         "foregs-europe": "regional_partial",
@@ -510,6 +541,14 @@
       },
       "source_target_analytes": {
         "afsis-phase-i-wet-chemistry": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "brazil-sgb-florianopolis-soil": [
           "As",
           "Cr",
           "Cu",
@@ -577,6 +616,7 @@
         "afsis-phase-i-wet-chemistry": "benchmark_ready",
         "alaska-dggs-webgeochem": "discovery",
         "bgs-gbase": "discovery",
+        "brazil-sgb-florianopolis-soil": "benchmark_ready",
         "brazil-sgb-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "foregs-europe": "discovery",
@@ -620,6 +660,7 @@
         "Hg",
         "Ni",
         "Pb",
+        "U",
         "Zn"
       ],
       "candidate_sources": [
@@ -637,8 +678,9 @@
         "pangaea-repository",
         "us-water-quality-portal"
       ],
-      "independent_lineage_count": 4,
+      "independent_lineage_count": 5,
       "lineage_ids": [
+        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
         "geotraces-idp2025",
@@ -654,6 +696,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "cdogs-210102-lake-water",
         "foregs-stream-water",
         "gemstat-open-archive",
         "geotraces-idp2025",
@@ -664,6 +707,7 @@
         "brazil-sgb-geochemistry": "D",
         "canada-bc-rgs": "D",
         "canada-cdogs": "D",
+        "cdogs-210102-lake-water": "A",
         "earthchem-library": "D",
         "eea-waterbase": "D",
         "emodnet-chemistry": "D",
@@ -684,6 +728,7 @@
         "brazil-sgb-geochemistry": "national_partial",
         "canada-bc-rgs": "regional_partial",
         "canada-cdogs": "national_partial",
+        "cdogs-210102-lake-water": "regional_partial",
         "earthchem-library": "global_collection",
         "eea-waterbase": "regional_partial",
         "emodnet-chemistry": "regional_partial",
@@ -699,6 +744,9 @@
         "us-wqp-sacramento-river-arsenic": "single_station_time_series"
       },
       "source_target_analytes": {
+        "cdogs-210102-lake-water": [
+          "U"
+        ],
         "foregs-stream-water": [
           "As",
           "Cr",
@@ -730,6 +778,7 @@
         "brazil-sgb-geochemistry": "discovery",
         "canada-bc-rgs": "discovery",
         "canada-cdogs": "discovery",
+        "cdogs-210102-lake-water": "benchmark_ready",
         "earthchem-library": "discovery",
         "eea-waterbase": "discovery",
         "emodnet-chemistry": "discovery",
