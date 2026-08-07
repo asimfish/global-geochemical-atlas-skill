@@ -1,0 +1,2138 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "norway-marchem-review-17",
+        "norway-marchem-review-28",
+        "norway-marchem-review-29"
+      ]
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 4,
+      "record_ids": [
+        "norway-marchem-review-06",
+        "norway-marchem-review-07",
+        "norway-marchem-review-12",
+        "norway-marchem-review-13"
+      ]
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "norway-marchem-review-18",
+        "norway-marchem-review-19",
+        "norway-marchem-review-24"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 2,
+      "record_ids": [
+        "norway-marchem-review-07",
+        "norway-marchem-review-13"
+      ]
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "norway-marchem-review-01",
+        "norway-marchem-review-02",
+        "norway-marchem-review-03",
+        "norway-marchem-review-04",
+        "norway-marchem-review-05",
+        "norway-marchem-review-06",
+        "norway-marchem-review-07",
+        "norway-marchem-review-08",
+        "norway-marchem-review-09",
+        "norway-marchem-review-10",
+        "norway-marchem-review-11",
+        "norway-marchem-review-12",
+        "norway-marchem-review-13",
+        "norway-marchem-review-14",
+        "norway-marchem-review-15",
+        "norway-marchem-review-16",
+        "norway-marchem-review-17",
+        "norway-marchem-review-18",
+        "norway-marchem-review-19",
+        "norway-marchem-review-20",
+        "norway-marchem-review-21",
+        "norway-marchem-review-22",
+        "norway-marchem-review-23",
+        "norway-marchem-review-24",
+        "norway-marchem-review-25",
+        "norway-marchem-review-26",
+        "norway-marchem-review-27",
+        "norway-marchem-review-28",
+        "norway-marchem-review-29",
+        "norway-marchem-review-30"
+      ]
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 25,
+      "record_ids": [
+        "norway-marchem-review-01",
+        "norway-marchem-review-02",
+        "norway-marchem-review-03",
+        "norway-marchem-review-04",
+        "norway-marchem-review-05",
+        "norway-marchem-review-06",
+        "norway-marchem-review-08",
+        "norway-marchem-review-09",
+        "norway-marchem-review-10",
+        "norway-marchem-review-11",
+        "norway-marchem-review-12",
+        "norway-marchem-review-14",
+        "norway-marchem-review-15",
+        "norway-marchem-review-16",
+        "norway-marchem-review-18",
+        "norway-marchem-review-19",
+        "norway-marchem-review-20",
+        "norway-marchem-review-21",
+        "norway-marchem-review-22",
+        "norway-marchem-review-23",
+        "norway-marchem-review-24",
+        "norway-marchem-review-25",
+        "norway-marchem-review-26",
+        "norway-marchem-review-27",
+        "norway-marchem-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=2",
+          "src-7d02abe56dcc1665bc49c1c5bf751597e2575dbe356dfc2027124679f7b04636"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "21.7",
+          "record_id": "rec-f4b08381d3f51d97a8895869f6ef0a2365c6a5b5719e421c1d8da91e197ac8e3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "15.2",
+          "record_id": "rec-dccd06f7d486eba6b41c69502ada001d0499bc684f1c0d598f00630c2d521a86",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "27.4",
+          "record_id": "rec-ac08ce0a086f1b60a4689e5506710012c78cbf44961fd2a537db4681d44f483f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "70.4",
+          "record_id": "rec-12932de3f77a052987367261a3292d8a1c279e68e3dbdb866027c04b0bc26833",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "21.7",
+        "Cu": "15.2",
+        "Ni": "27.4",
+        "Zn": "70.4"
+      },
+      "review_id": "norway-marchem-review-01",
+      "sample_id": "R1461MC51A_00-01 cm",
+      "selection_reasons": [
+        "all_targets_numeric",
+        "evenly_spaced_fill",
+        "first_for_batch",
+        "first_for_cruise_year",
+        "position_boundary"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=2",
+      "source_record_id": "src-7d02abe56dcc1665bc49c1c5bf751597e2575dbe356dfc2027124679f7b04636"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=39",
+          "src-6b71c07f9cb447baea69caaac77f7654081dc26930da57e9914070a766549a83"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "7.1",
+          "record_id": "rec-24630263c56fcc49a74fe91dad1bb3b2875a00dae4124f202b83cf84880512f7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "15.4",
+          "record_id": "rec-8ab6e8acd7570499b09ac4a8166cd63aaa3c651bb4c8085ebbb5f9dd4c9ba578",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "29.3",
+          "record_id": "rec-0058596898e83bbcfea8b81ff7f6d8f7d08cfbd70b54b1477e44150b6df5c083",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "66.3",
+          "record_id": "rec-8a9ecf5805136c5647a1bbb41b1eac36848ca6b8270b9b48dff1df5863ca452c",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "7.1",
+        "Cu": "15.4",
+        "Ni": "29.3",
+        "Zn": "66.3"
+      },
+      "review_id": "norway-marchem-review-02",
+      "sample_id": "R1474BC97A_11-12 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=39",
+      "source_record_id": "src-6b71c07f9cb447baea69caaac77f7654081dc26930da57e9914070a766549a83"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=76",
+          "src-ddbc3a3e2e68d6d9cc5e25cd3ea0beb12952a7e93544a36fadbcde376f3ec69e"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "29.9",
+          "record_id": "rec-6faabf1fd348a7833b78585925862f6b196b28039f188e9b42f288f5ed5255ae",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "13.9",
+          "record_id": "rec-fd7f24d2b542f1b007e6b68aeb0d08e5f377717c20871dd4ad786bbb9c96fe08",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "22.9",
+          "record_id": "rec-fd864853c07b21c9183bd7adb21e1d96a2395627bf3b6f55390569318b0b5d17",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "58.8",
+          "record_id": "rec-79447b6cbf74fbc7f98f2a972fa7ef3f54c3bb208fbb57e5f1dae3cef04b210b",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "29.9",
+        "Cu": "13.9",
+        "Ni": "22.9",
+        "Zn": "58.8"
+      },
+      "review_id": "norway-marchem-review-03",
+      "sample_id": "R1492MC56A_00-01 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=76",
+      "source_record_id": "src-ddbc3a3e2e68d6d9cc5e25cd3ea0beb12952a7e93544a36fadbcde376f3ec69e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=113",
+          "src-1ebb243634fc886c180dc8955fc4deaa5becd9a3910627b74315d3224ae497d8"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "3.9",
+          "record_id": "rec-dda0c9fcfbd38e6b027121abb980b1b279d2dd3c7d9048d92cc6adf6e8cd2965",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "5.7",
+          "record_id": "rec-31c2cbe87dd5978155a033d450ad578066466b24bfb3816b15c856240d559fe9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "12.2",
+          "record_id": "rec-8604fc061b27ae9d25586a6bf8a5bae0774fe4e95d9cf6ccbda65626d7064b73",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "27.6",
+          "record_id": "rec-ce3ab261803c4b8b828e0952272eb1b845f6d90a314fa9f38e6cf1f88b574e4d",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "3.9",
+        "Cu": "5.7",
+        "Ni": "12.2",
+        "Zn": "27.6"
+      },
+      "review_id": "norway-marchem-review-04",
+      "sample_id": "R1509MC94A_11-12 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=113",
+      "source_record_id": "src-1ebb243634fc886c180dc8955fc4deaa5becd9a3910627b74315d3224ae497d8"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=149",
+          "src-7c7d3b800d7e1c37d8c92a617af2012d748abdc200cb83779d2077b7b9b8165c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "3.9",
+          "record_id": "rec-12ec5298282502a075366c69a0e74b5a45115b0fd4c42f8ebb246bda3fa4d82d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "4.9",
+          "record_id": "rec-4d1f81d9955060f051ba0f482d71bbc6efa02c950dee8423e7a6b24315e0ee81",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "11.4",
+          "record_id": "rec-9438a9df8d2ddde5ee72dc082c5ae2fc8980a6267c757683a472878d8b77eb5d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "26.3",
+          "record_id": "rec-b227c47c3bfc7de8d7e86bc95d9b372c575456a4d5eb75eeb4b77272dca8874a",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "3.9",
+        "Cu": "4.9",
+        "Ni": "11.4",
+        "Zn": "26.3"
+      },
+      "review_id": "norway-marchem-review-05",
+      "sample_id": "R1521MC96A_32-33 cm",
+      "selection_reasons": [
+        "evenly_spaced_fill"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=149",
+      "source_record_id": "src-7c7d3b800d7e1c37d8c92a617af2012d748abdc200cb83779d2077b7b9b8165c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=213",
+          "src-27e5f0174a5f9ee4ca3b522594507baabdafef6fc8e7ac9d2046e9925140587b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "49.7",
+          "record_id": "rec-284507efab50ef52b25dc2abda346f39ed4949cf7d96dbcc3426e9bd4d553052",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "19.5",
+          "record_id": "rec-138eebb1d482e8322dac1042db9a0801293446a0dce64f94e9e981ebb7c6b24a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "49.5",
+          "record_id": "rec-3d914598b94d37829a57498b3e37d4a950cb595f8c4335a12ead3c76ecb8af53",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "103.0",
+          "record_id": "rec-f6a57f54b69f9da36c8a87e2a3afc2e276a8b346674658d5afcf67830823fedf",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "49.7",
+        "Cu": "19.5",
+        "Ni": "49.5",
+        "Zn": "103.0"
+      },
+      "review_id": "norway-marchem-review-06",
+      "sample_id": "R1582BC07A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=213",
+      "source_record_id": "src-27e5f0174a5f9ee4ca3b522594507baabdafef6fc8e7ac9d2046e9925140587b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=214",
+          "src-4feac9097839a1014187be01f0cef02b83e64c10cdd6e508d8046c300cfac8b4"
+        ],
+        "findings": [
+          "missing_coordinate",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "",
+        "Zn": ""
+      },
+      "review_id": "norway-marchem-review-07",
+      "sample_id": "R1582BC07A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "target_missing"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=214",
+      "source_record_id": "src-4feac9097839a1014187be01f0cef02b83e64c10cdd6e508d8046c300cfac8b4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=269",
+          "src-528c7bf57aa12d15692650a48dbb50e2d51fb7748341c84abd3ebff3a0ddb0b4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "11.0",
+          "record_id": "rec-f1b4d26a02d06b251a2a2c70513e9db8402966997da5258787b40da0efba2cd7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "16.8",
+          "record_id": "rec-60a425d5937b4c7e17289de8e76e2866bb0aaa1ee0dc234b2a0d85b1b566f3f8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "34.7",
+          "record_id": "rec-837e722976dad90e1d74ae107f7a16b7488fa2d1fec0456499a04841875f6da8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "82.5",
+          "record_id": "rec-aa97b95e2ddbd836a7dee7af792dbf6f8a8554e2062cf4834b6e17eb083d270b",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "11.0",
+        "Cu": "16.8",
+        "Ni": "34.7",
+        "Zn": "82.5"
+      },
+      "review_id": "norway-marchem-review-08",
+      "sample_id": "R1627BC12A_04-05 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=269",
+      "source_record_id": "src-528c7bf57aa12d15692650a48dbb50e2d51fb7748341c84abd3ebff3a0ddb0b4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=399",
+          "src-eb74a5cdf58d8f27b9bb8628e15204798b3c70422de6649056fb7f69673f43a6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "26.0",
+          "record_id": "rec-cfb134fd119ef8675c78c2424e4dee618b3fc8dd7d55ca74cc06e6502de9248c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "13.4",
+          "record_id": "rec-11b12e69c2e88774b321a1d99e0a0f02f3194a9b04c155fe06bea5123315efc3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "25.2",
+          "record_id": "rec-e66ecbe9e857e8deec9214bd4ab90d5937407f6cb43be4a99365698a923a75bd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "62.3",
+          "record_id": "rec-eef577ca4614d33965ef79a1077c9e108994e5ec28020c96c7a38decb8da3ad0",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "26.0",
+        "Cu": "13.4",
+        "Ni": "25.2",
+        "Zn": "62.3"
+      },
+      "review_id": "norway-marchem-review-09",
+      "sample_id": "R1676MC01A_00-01 cm",
+      "selection_reasons": [
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=399",
+      "source_record_id": "src-eb74a5cdf58d8f27b9bb8628e15204798b3c70422de6649056fb7f69673f43a6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=429",
+          "src-27f4775435c98ef5243177580f9fbf63e600b9306ebb91295609feaceb9cbebd"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "9.1",
+          "record_id": "rec-f0b7b6a7ddce9f7afebc46c98aa965d125b43d61aa074d3ce7cf2f03023b296f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "47.9",
+          "record_id": "rec-6ab236df71eae9eeb4d4cef3e2fd83f8c17c5e78bb6f10154d12b4fdf968c541",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "29.7",
+          "record_id": "rec-944ff00b2b643f2ba908cdc9e79f5ddd071727279e4f6668e47ea5424ad754e2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "86.0",
+          "record_id": "rec-b00f70f00a0fd51466a5f01e056e3c4ef1c70318e1ce0167d6509391bbf6a5e9",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "9.1",
+        "Cu": "47.9",
+        "Ni": "29.7",
+        "Zn": "86.0"
+      },
+      "review_id": "norway-marchem-review-10",
+      "sample_id": "R1676MC01A_16-17 cm",
+      "selection_reasons": [
+        "Cu_reported_max"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=429",
+      "source_record_id": "src-27f4775435c98ef5243177580f9fbf63e600b9306ebb91295609feaceb9cbebd"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=537",
+          "src-c02f5bc590f915def16b912e1e7008b3086dbdb6336f233bd3d2c75175c49671"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "9.9",
+          "record_id": "rec-a66817d7f4581dbee7bd42532d5e4a2f6dee360b6714fc063a1ddd62f3cdc269",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "17.7",
+          "record_id": "rec-88e1caec9dbb08c4e87efe4f193aaad9e48861cbe7b7433531686ea399cf773a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "34.3",
+          "record_id": "rec-ed7e15224c3b44f7da8db96115f66581c25121b148715d2492d4b38738d65ffb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "85.1",
+          "record_id": "rec-bd1abbd3b382bb630a370d59e1f3e36c156f1b44f78f55d935641efa820ea94f",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "9.9",
+        "Cu": "17.7",
+        "Ni": "34.3",
+        "Zn": "85.1"
+      },
+      "review_id": "norway-marchem-review-11",
+      "sample_id": "R1709MC04A_24-25 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=537",
+      "source_record_id": "src-c02f5bc590f915def16b912e1e7008b3086dbdb6336f233bd3d2c75175c49671"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=547",
+          "src-6bc8cef54f15ffc70d4ef5188142855623699043e048949553bdbdda2a3db3dd"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "22.3",
+          "record_id": "rec-df1ee43a1eddae35b46927c1d80649b722eb33ad3d01581fe42bc5941c78a771",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "15.7",
+          "record_id": "rec-61bf5621f3a8c5914b9e607619c3c2e6925ee395993d13251feca194afbb6c33",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "29.5",
+          "record_id": "rec-d1cf40788929217f6b06209a00638c0f4ea5a928bb6fce01f1230d36d9058d4b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "75.5",
+          "record_id": "rec-0d2d1865e48e01ecc6e6a61d7ed4768490e634485d94de6a776a25a27a38706f",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "22.3",
+        "Cu": "15.7",
+        "Ni": "29.5",
+        "Zn": "75.5"
+      },
+      "review_id": "norway-marchem-review-12",
+      "sample_id": "R1751MC06A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=547",
+      "source_record_id": "src-6bc8cef54f15ffc70d4ef5188142855623699043e048949553bdbdda2a3db3dd"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=548",
+          "src-473d5ecd942da0ba2ef446738966f9d65e3e622ddb446c18443a242131126863"
+        ],
+        "findings": [
+          "missing_coordinate",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "",
+        "Zn": ""
+      },
+      "review_id": "norway-marchem-review-13",
+      "sample_id": "R1751MC06A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=548",
+      "source_record_id": "src-473d5ecd942da0ba2ef446738966f9d65e3e622ddb446c18443a242131126863"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=593",
+          "src-9817411ea0515436aaafb069513873eb5f0e4a057b882ab15d0fbdb07f7af071"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "16.1",
+          "record_id": "rec-e02a0b26047f5dfe8bc8d468f0a87e1bf1fa6327297108902c062be84a2b9a80",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "11.1",
+          "record_id": "rec-d09e1f5f3b1dd447d1beffedc55efa89c0a86beecac134d7055460e4f7c3b549",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "18.9",
+          "record_id": "rec-19bd8bf67804c8aac58640ff4845da34d89645c9b1e26bd415be9bcfc07212c7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "43.2",
+          "record_id": "rec-aee0950f8245b4a6b597f10b7243415612e4b45287ae44c7dce57121d87a6d8c",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "16.1",
+        "Cu": "11.1",
+        "Ni": "18.9",
+        "Zn": "43.2"
+      },
+      "review_id": "norway-marchem-review-14",
+      "sample_id": "R1951MC01A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=593",
+      "source_record_id": "src-9817411ea0515436aaafb069513873eb5f0e4a057b882ab15d0fbdb07f7af071"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=631",
+          "src-56e19de3927df0cea20197211e0530f9344e9270a33f3764fe3bd7c288b39d44"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "2.7",
+          "record_id": "rec-b084c656b60f6d6e9a75e8b070f4e4aff21be5760d8d08213f7da000457fd632",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "4.7",
+          "record_id": "rec-1efe6d0c83d2d97ad7fd0d55ebbe6895c6711531d69c3bbae544069b9e67ef42",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "10.6",
+          "record_id": "rec-053adae60c89dacbcedf934151aa5970075bfc069313487e0f8fbf0b68fdd273",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "21.9",
+          "record_id": "rec-9e069c652708e7f9bef49b59d200286e975c257c141b60332cebe6e87218f488",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.7",
+        "Cu": "4.7",
+        "Ni": "10.6",
+        "Zn": "21.9"
+      },
+      "review_id": "norway-marchem-review-15",
+      "sample_id": "R2132MC06A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=631",
+      "source_record_id": "src-56e19de3927df0cea20197211e0530f9344e9270a33f3764fe3bd7c288b39d44"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=636",
+          "src-06a8dfb89fd68d3189243aefdde68393e99188c55cced8f896676b5f3fe3c530"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "2.0",
+          "record_id": "rec-48a0083ddb6cceb4b17682861a2f04ae844d19506c7c5594326f23e53f218097",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "9.4",
+          "record_id": "rec-7b1abbc103524772135e8ec60609c6f3ee0668e26a626899d511cf38d46f35c2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "19.3",
+          "record_id": "rec-aaa9f3108922266cfa26ba106dd447012eeb64d9aeb2f208ee1fe3ceaf9fda9c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "38.2",
+          "record_id": "rec-3a558f426e83194e733ff6301b65352f487e29eec54c562f73f812661b4731d3",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.0",
+        "Cu": "9.4",
+        "Ni": "19.3",
+        "Zn": "38.2"
+      },
+      "review_id": "norway-marchem-review-16",
+      "sample_id": "R2139MC08A_14-15 cm",
+      "selection_reasons": [
+        "As_reported_min"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=636",
+      "source_record_id": "src-06a8dfb89fd68d3189243aefdde68393e99188c55cced8f896676b5f3fe3c530"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=650",
+          "src-8e48f113b13d137e8724d1e055b47f6067f8712ea8e25412b17e1344a400dd5c"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<2.0",
+          "record_id": "rec-65fd5cafdba1ddaf8d4946fb095575bfeaddfa42c47c77bdb9e2a42935353029",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "8.9",
+          "record_id": "rec-4f4b4e189a45ecf5ae95c5dd7cf4c1287f2fd0594a48fe16977b6220195c08aa",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "21.1",
+          "record_id": "rec-7b0277a8dc9069ef63919f305628aa047be1fbb75fbbd25719df96ea74784a8c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "42.0",
+          "record_id": "rec-3aa0f16b264a543223eae552b4b3e9ca927bc81629f9d39672b15d25a1ad3315",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "<2.0",
+        "Cu": "8.9",
+        "Ni": "21.1",
+        "Zn": "42.0"
+      },
+      "review_id": "norway-marchem-review-17",
+      "sample_id": "R2229MC10A_14-15 cm",
+      "selection_reasons": [
+        "target_censored"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=650",
+      "source_record_id": "src-8e48f113b13d137e8724d1e055b47f6067f8712ea8e25412b17e1344a400dd5c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=739",
+          "src-ac3239ab77ffbc880020a20cefff7a0107c36ff5f364b2fb8ebce80eab35437e"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "16.8",
+          "record_id": "rec-46c105cf67c76541c4211246fc7a808c89b9a0349c128f18e6b1b878decd760d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "42.9",
+          "record_id": "rec-d0f25e63fa59a55e7f1c39119c040507c7c53cd540438b5b11196102740673d6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "49.3",
+          "record_id": "rec-8e9601022630b2a226d1b01fd8596565803dfd899ca39183e274d7a9751da5cc",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "146.0",
+          "record_id": "rec-a80dd9ccdf00fefccdde79c7a2913c4973c37de939657e58e30de64119f4c799",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "16.8",
+        "Cu": "42.9",
+        "Ni": "49.3",
+        "Zn": "146.0"
+      },
+      "review_id": "norway-marchem-review-18",
+      "sample_id": "R2373MC01A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=739",
+      "source_record_id": "src-ac3239ab77ffbc880020a20cefff7a0107c36ff5f364b2fb8ebce80eab35437e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=741",
+          "src-d84deb2cbf11b19df6aae137227cda26a5219f0e19f4bbc2a746ac10e467eb3c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "13.2",
+          "record_id": "rec-b080ff5b0dc6a1862084bd77f6f47cd5c12c10ac4eddc0f5ebcf27c388cbf348",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "44.0",
+          "record_id": "rec-274a4f329c5e7b8d44e301b0724818da646c5d5e1829e7f4dce92279b33a1507",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "49.8",
+          "record_id": "rec-cd9c123ae70da11446385e8863e3a81281cb7d67d36fe700520a94d9dd362c87",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "154.0",
+          "record_id": "rec-a30840ab17cd9801a6d62a5818f13f2fb472eed49b0bfd400a000fefa7b2db55",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "13.2",
+        "Cu": "44.0",
+        "Ni": "49.8",
+        "Zn": "154.0"
+      },
+      "review_id": "norway-marchem-review-19",
+      "sample_id": "R2373MC01A_04-05 cm",
+      "selection_reasons": [
+        "Zn_reported_max"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=741",
+      "source_record_id": "src-d84deb2cbf11b19df6aae137227cda26a5219f0e19f4bbc2a746ac10e467eb3c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=804",
+          "src-a5b5e6b863d4f9f2a369599d1e4b67aea9370bcdf02ee69d248f0f6d4d0cdca2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "5.2",
+          "record_id": "rec-14d37839bc0a3e34bcfb3e40d1b791a4ba7df158547d7dd622160658e822343f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "10.8",
+          "record_id": "rec-08ea2f02831bd4a0e3799fe53dde27a6927887d437f21d2230002ece863ffe56",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "21.8",
+          "record_id": "rec-f15d71e495417f950c0baa7b222427da9e0cb22f687531be04c1e4668e138f93",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "46.2",
+          "record_id": "rec-0b390cd82d9f6a7742446ed372abda4574f3e582049a98e40cd4e5667c93096b",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "5.2",
+        "Cu": "10.8",
+        "Ni": "21.8",
+        "Zn": "46.2"
+      },
+      "review_id": "norway-marchem-review-20",
+      "sample_id": "R2608MC13A_00-01 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=804",
+      "source_record_id": "src-a5b5e6b863d4f9f2a369599d1e4b67aea9370bcdf02ee69d248f0f6d4d0cdca2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=846",
+          "src-21c2a9455f3fac453a99b5d0198142c8f6c50ea0b4671591c0efa665c9e7d42a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "17.8",
+          "record_id": "rec-a7235280ab618a4e2e58fb8ffebb9166221d25d632040fab772cbb88496cbb25",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "12.5",
+          "record_id": "rec-8be62c5a14e9df91763f5c6ccc491ecd22f2e9b48e15acca23413713f442d039",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "26.4",
+          "record_id": "rec-93acf084c108b4b91fd53214785142f155f40a917c9d1538e5c2261d62f519d3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "64.6",
+          "record_id": "rec-693b533bd06d16cd61273b0f68ee17327a45e5521b92a5b46bc4e80dc49b0a19",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "17.8",
+        "Cu": "12.5",
+        "Ni": "26.4",
+        "Zn": "64.6"
+      },
+      "review_id": "norway-marchem-review-21",
+      "sample_id": "R3120MC10A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=846",
+      "source_record_id": "src-21c2a9455f3fac453a99b5d0198142c8f6c50ea0b4671591c0efa665c9e7d42a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=869",
+          "src-1a17816d6c7902fc216babcfa48503a8018702d4b0e9a9fe42faaf0a573de774"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "17.2",
+          "record_id": "rec-48b24fe07592f4f2f44970eaeda2bba3b5510fcfa75b0dcfc9312e94fe7f9d73",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "17.5",
+          "record_id": "rec-1e42b27718c1cb2b3d9bccdea0881e3efb42a51774a43c9523f33d60160a9bab",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "29.7",
+          "record_id": "rec-907dd8787e21f3b6d5e446fb10ec42cb24361ee572189cdb11feda9f9b1983cf",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "87.8",
+          "record_id": "rec-f4896b29ab24a8c08f2671f4a2741f9a31faa9eca8008efae049f93f51c4e4c5",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "17.2",
+        "Cu": "17.5",
+        "Ni": "29.7",
+        "Zn": "87.8"
+      },
+      "review_id": "norway-marchem-review-22",
+      "sample_id": "R3165MC14A_02-03 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=869",
+      "source_record_id": "src-1a17816d6c7902fc216babcfa48503a8018702d4b0e9a9fe42faaf0a573de774"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=908",
+          "src-739acda09520e6f7cda272c7a208d6b2a07ab06826a39fe5ffede81a4c1a29eb"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "43.5",
+          "record_id": "rec-72643be7412f76a58da26790b487542b18248685edaf456b2200d2d61d51d14d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "24.3",
+          "record_id": "rec-eb5a8dab3dcd84906ef0f999eb940ea855156cf4be15d1be8606c2bc5671d1c3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "55.4",
+          "record_id": "rec-7806463a5f958e7822e344ffe95cc6136cfc5d2d872a522d5f7c36e4d20b96a6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "83.5",
+          "record_id": "rec-d98bb4c0363eed4127e11e8278af4da34b3b4153bc96030695b9a0b6db488ee1",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "43.5",
+        "Cu": "24.3",
+        "Ni": "55.4",
+        "Zn": "83.5"
+      },
+      "review_id": "norway-marchem-review-23",
+      "sample_id": "R2924MC02A_10-11 cm",
+      "selection_reasons": [
+        "Ni_reported_max"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=908",
+      "source_record_id": "src-739acda09520e6f7cda272c7a208d6b2a07ab06826a39fe5ffede81a4c1a29eb"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=910",
+          "src-92349871a565c8be09cc0b9d5b4a8a6eb544c392eb4f38027288a24de37cf0af"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "147.0",
+          "record_id": "rec-d0e29f1f3803d46ee78b7042982051de5eaea408e8955dac107269a25fd90f4c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "25.5",
+          "record_id": "rec-028f50d3b21b4c4e60e3273b097f3f1945623e9b5137b3580ef0eaa0edc60767",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "43.9",
+          "record_id": "rec-aa57221c658a332e6fd9865d77d3a6cde2d31da0b782ea56eff259e9da659ed1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "80.0",
+          "record_id": "rec-de0ee93028cd1683039d0b1871a71a36873971290311429b02c42249985e6c3c",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "147.0",
+        "Cu": "25.5",
+        "Ni": "43.9",
+        "Zn": "80.0"
+      },
+      "review_id": "norway-marchem-review-24",
+      "sample_id": "R2924MC02A_24-25 cm",
+      "selection_reasons": [
+        "As_reported_max"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=910",
+      "source_record_id": "src-92349871a565c8be09cc0b9d5b4a8a6eb544c392eb4f38027288a24de37cf0af"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=955",
+          "src-402ee9cea10eb4bd74878682c2fe8acb69ef0fbba60ef6a726319e9a6ce53930"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "10.9",
+          "record_id": "rec-a847a37b1c90f97956d7fab8ed75465bb1b58ed9a219780ac16848c566bc5757",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "13.1",
+          "record_id": "rec-99fc9b078d1a159c2e492f4863c401fedc86e980a9369e614958165c18765810",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "25.7",
+          "record_id": "rec-00b1810cb0d76ac56b3ad6084f6c3dfb4f6ca38d9a6df73e6f02da4bb17ed0e7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "69.4",
+          "record_id": "rec-9ed380208718fa3ef24ada2c8920b3456894a05b1616c8748288b658934fefb7",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "10.9",
+        "Cu": "13.1",
+        "Ni": "25.7",
+        "Zn": "69.4"
+      },
+      "review_id": "norway-marchem-review-25",
+      "sample_id": "R3188MC05A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=955",
+      "source_record_id": "src-402ee9cea10eb4bd74878682c2fe8acb69ef0fbba60ef6a726319e9a6ce53930"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=996",
+          "src-d3708d25759f4505e28dd056ddcfa7f9f76d92978b19936379ac6c35e6c461a8"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "24.4",
+          "record_id": "rec-132ee9c50577d7fb1cb8be05355a490731900a7881eee6cacfd9190d709cfe25",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "11.7",
+          "record_id": "rec-7db8cf8baf623ec661ab76a2a1b4ca53e6a1e53ba1287da11388ce9eae6f3c24",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "25.6",
+          "record_id": "rec-31616c6d06c177e97b6909c770cccde2fb2d75828d6a72072fd44d9e9039c43c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "68.4",
+          "record_id": "rec-d6b0f90a0de6fc2c6ff6035e7042fd592d8ff92b3e8aa6845254e43227c767b9",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "24.4",
+        "Cu": "11.7",
+        "Ni": "25.6",
+        "Zn": "68.4"
+      },
+      "review_id": "norway-marchem-review-26",
+      "sample_id": "R3425MC23A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch",
+        "first_for_cruise_year"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=996",
+      "source_record_id": "src-d3708d25759f4505e28dd056ddcfa7f9f76d92978b19936379ac6c35e6c461a8"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1006",
+          "src-88b20d94a008020d885f483e72a2c2a512d12bc2c749a9671054a8d3df6de6c9"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "18.1",
+          "record_id": "rec-4b8294b1544ea4e0716e4c9c4bfa247d58ce226b72abf4563f87a3db8bc7cda0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "14.6",
+          "record_id": "rec-3f79707b88e4ecf9802c5c3804a1c354a85fb5402f2162277a7e101301671838",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "29.5",
+          "record_id": "rec-8421983de9353fd3261bbd5baaf9944bb2d8f4dd6f3a916809df65b6696b36ab",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "74.3",
+          "record_id": "rec-21c3b92f928b09c15594db40fc6b3fe48b58033107863e716bc71065f3790e4c",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "18.1",
+        "Cu": "14.6",
+        "Ni": "29.5",
+        "Zn": "74.3"
+      },
+      "review_id": "norway-marchem-review-27",
+      "sample_id": "R3560MC20A_00-01 cm",
+      "selection_reasons": [
+        "first_for_batch"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1006",
+      "source_record_id": "src-88b20d94a008020d885f483e72a2c2a512d12bc2c749a9671054a8d3df6de6c9"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1014",
+          "src-c92c09dce33838dc3823f83fbe2f5b177ad4a8cf9836fd92cbfcd0efcf24b207"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<2.0",
+          "record_id": "rec-905697a776222545b74abb0aabbe10b3e86b77cf7e53d630dd8c12c63a016be1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<1.0",
+          "record_id": "rec-431e31198cbd44c4a8863a6c38060425fd58aa82e879f7f5859d562bd334952d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "1.1",
+          "record_id": "rec-4aa202c7c8f607e2e6b7a94aca0e11658b629f33602e86b4312676d5001dd566",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<4.0",
+          "record_id": "rec-b7b8becca1c0044f302f0a27dd7ad93bc3a661d32b7f2ebce0ee0d92e9d92787",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "<2.0",
+        "Cu": "<1.0",
+        "Ni": "1.1",
+        "Zn": "<4.0"
+      },
+      "review_id": "norway-marchem-review-28",
+      "sample_id": "R3579GR20A_00-01 cm",
+      "selection_reasons": [
+        "Cu_reported_min",
+        "Zn_reported_min"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1014",
+      "source_record_id": "src-c92c09dce33838dc3823f83fbe2f5b177ad4a8cf9836fd92cbfcd0efcf24b207"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1015",
+          "src-ff526d77dfccac3818aca4627ceb55b89bab6194c452a5ac9114243934f19c74"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<2.0",
+          "record_id": "rec-d80d469b69dfcd499ee744655f9a4dd428911c13fe0cb3609a45838d939141ce",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<1.0",
+          "record_id": "rec-0817210fb1419c4c39557a43603a962696d8fac23990d50966923f27fec8d4d1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<1.0",
+          "record_id": "rec-0e03dfea8226c944590776d6a003209feb2f1e1f14e1c1e8c6932a33d13e1ee1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "<4.0",
+          "record_id": "rec-eda29bf76edb5f9e2aa9b262c0312480d07d2e0e71a3f12225574d1c68a2695d",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "<2.0",
+        "Cu": "<1.0",
+        "Ni": "<1.0",
+        "Zn": "<4.0"
+      },
+      "review_id": "norway-marchem-review-29",
+      "sample_id": "R3579GR20A_01-02 cm",
+      "selection_reasons": [
+        "Ni_reported_min"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1015",
+      "source_record_id": "src-ff526d77dfccac3818aca4627ceb55b89bab6194c452a5ac9114243934f19c74"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1071",
+          "src-8e62894e10a005ee8ade355a6ac875d3e3258a9bd54e4096c242c5ba9af1dd32"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "10.7",
+          "record_id": "rec-49d55d053dd40239861d3721c9c4c618b230650f2abee4c5839557d4c8779cd2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "23.8",
+          "record_id": "rec-2792c76d2c9232ef9f070629123f0bfc1b5df6d82296e505743906c2fe9b5e57",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "44.5",
+          "record_id": "rec-5b15e2be44e8012ec96d1bdd04538b2b397776fe2ca842f258fc884ba4b270e7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Inductively coupled plasma atomic emission spectroscopy (ICP-OES)",
+          "raw_value": "105.0",
+          "record_id": "rec-2d1f984d90d977e64bcbb78c2e649cc8a1cbf11dd5b1aa754237bc9347d5e715",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "10.7",
+        "Cu": "23.8",
+        "Ni": "44.5",
+        "Zn": "105.0"
+      },
+      "review_id": "norway-marchem-review-30",
+      "sample_id": "R3510MC05A_36-37 cm",
+      "selection_reasons": [
+        "position_boundary"
+      ],
+      "source_locator": "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1071",
+      "source_record_id": "src-8e62894e10a005ee8ade355a6ac875d3e3258a9bd54e4096c242c5ba9af1dd32"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "norway-marchem",
+  "status": "automated_audit_complete"
+}

@@ -1,0 +1,2620 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "afsis-phase-i-wet-chemistry-review-02",
+        "afsis-phase-i-wet-chemistry-review-05",
+        "afsis-phase-i-wet-chemistry-review-19"
+      ]
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "afsis-phase-i-wet-chemistry-review-04",
+        "afsis-phase-i-wet-chemistry-review-08",
+        "afsis-phase-i-wet-chemistry-review-13"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "afsis-phase-i-wet-chemistry-review-01",
+        "afsis-phase-i-wet-chemistry-review-02",
+        "afsis-phase-i-wet-chemistry-review-03",
+        "afsis-phase-i-wet-chemistry-review-04",
+        "afsis-phase-i-wet-chemistry-review-05",
+        "afsis-phase-i-wet-chemistry-review-06",
+        "afsis-phase-i-wet-chemistry-review-07",
+        "afsis-phase-i-wet-chemistry-review-08",
+        "afsis-phase-i-wet-chemistry-review-09",
+        "afsis-phase-i-wet-chemistry-review-10",
+        "afsis-phase-i-wet-chemistry-review-11",
+        "afsis-phase-i-wet-chemistry-review-12",
+        "afsis-phase-i-wet-chemistry-review-13",
+        "afsis-phase-i-wet-chemistry-review-14",
+        "afsis-phase-i-wet-chemistry-review-15",
+        "afsis-phase-i-wet-chemistry-review-16",
+        "afsis-phase-i-wet-chemistry-review-17",
+        "afsis-phase-i-wet-chemistry-review-18",
+        "afsis-phase-i-wet-chemistry-review-19",
+        "afsis-phase-i-wet-chemistry-review-20",
+        "afsis-phase-i-wet-chemistry-review-21",
+        "afsis-phase-i-wet-chemistry-review-22",
+        "afsis-phase-i-wet-chemistry-review-23",
+        "afsis-phase-i-wet-chemistry-review-24",
+        "afsis-phase-i-wet-chemistry-review-25",
+        "afsis-phase-i-wet-chemistry-review-26",
+        "afsis-phase-i-wet-chemistry-review-27",
+        "afsis-phase-i-wet-chemistry-review-28",
+        "afsis-phase-i-wet-chemistry-review-29",
+        "afsis-phase-i-wet-chemistry-review-30"
+      ]
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "afsis-phase-i-wet-chemistry-review-01",
+        "afsis-phase-i-wet-chemistry-review-04",
+        "afsis-phase-i-wet-chemistry-review-19"
+      ]
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 27,
+      "record_ids": [
+        "afsis-phase-i-wet-chemistry-review-01",
+        "afsis-phase-i-wet-chemistry-review-03",
+        "afsis-phase-i-wet-chemistry-review-04",
+        "afsis-phase-i-wet-chemistry-review-06",
+        "afsis-phase-i-wet-chemistry-review-07",
+        "afsis-phase-i-wet-chemistry-review-08",
+        "afsis-phase-i-wet-chemistry-review-09",
+        "afsis-phase-i-wet-chemistry-review-10",
+        "afsis-phase-i-wet-chemistry-review-11",
+        "afsis-phase-i-wet-chemistry-review-12",
+        "afsis-phase-i-wet-chemistry-review-13",
+        "afsis-phase-i-wet-chemistry-review-14",
+        "afsis-phase-i-wet-chemistry-review-15",
+        "afsis-phase-i-wet-chemistry-review-16",
+        "afsis-phase-i-wet-chemistry-review-17",
+        "afsis-phase-i-wet-chemistry-review-18",
+        "afsis-phase-i-wet-chemistry-review-20",
+        "afsis-phase-i-wet-chemistry-review-21",
+        "afsis-phase-i-wet-chemistry-review-22",
+        "afsis-phase-i-wet-chemistry-review-23",
+        "afsis-phase-i-wet-chemistry-review-24",
+        "afsis-phase-i-wet-chemistry-review-25",
+        "afsis-phase-i-wet-chemistry-review-26",
+        "afsis-phase-i-wet-chemistry-review-27",
+        "afsis-phase-i-wet-chemistry-review-28",
+        "afsis-phase-i-wet-chemistry-review-29",
+        "afsis-phase-i-wet-chemistry-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "2.0",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1173",
+          "src-c1801e649e61ed55dc3d242f46b31d0210f1b2d194aafffcb4c59fbee7d56c49"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "2.633457956",
+          "record_id": "rec-612fe5521318c74b586498ee0b702bed902a86110e7d9d007129b2efe67d826f",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "54.85398668",
+          "record_id": "rec-da8ff6cc7519360de6612821f38d4995907b9a5bf66c71882c7e52171ae4d79d",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "17.69304307",
+          "record_id": "rec-4cbc5f8dfe513fe128bf0d9ced62e43494a705667dfa00f01473d5489ddad4dd",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "20.30261056",
+          "record_id": "rec-61483e2ccd52e511cba31ce63b2ac3e6d7bf62b7cc7897a644e5b88f9ffbd7f5",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "9.058589326",
+          "record_id": "rec-e5c926166208c2e3ddc014e7518162aa92514486b333cfa4f0631227cbdab51a",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "37.04906341",
+          "record_id": "rec-05d4c1b38d5e54b66879018163597585ff418d2dba09442778ed5ab50e81d86d",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-01",
+      "sample_id": "icr049069",
+      "selection_reasons": [
+        "As=at_or_above_ql",
+        "Cr=at_or_above_ql",
+        "Cu=at_or_above_ql",
+        "Ni=at_or_above_ql",
+        "Pb=positive_below_dl",
+        "Zn=at_or_above_ql",
+        "coordinates=missing_both",
+        "country=SAfrica",
+        "depth=Subsoil"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1173",
+      "source_record_id": "src-c1801e649e61ed55dc3d242f46b31d0210f1b2d194aafffcb4c59fbee7d56c49"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=112",
+          "src-b7d770298a3eb5020d2ecc37812f76e684c141f9dacd8d80ae89f71bcb3b8acb"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "-0.000816037",
+          "record_id": "rec-e86c1fe2cd90049bf523893870aa6e007ec0cb8003ca431bcaed6592529a7271",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.891797701",
+          "record_id": "rec-6421588a28019adfd41c117e3e751e82bb644c9ea3304f44ebc8f3a8d7089ca8",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.818666202",
+          "record_id": "rec-02849769d1b926f628e332af491deea070b5902983e605705bdcc67c6a73e999",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.615620298",
+          "record_id": "rec-c65cc8f46cbea199b4fa91a4e35600a1c289ca63b7a7821d84f9c86fed01877f",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.383858545",
+          "record_id": "rec-7f45bdcd54626ab2b0c7b8e5db0e66477dc500a02ca60166a0803ee808dea237",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.900233249",
+          "record_id": "rec-6ea815407bb46629bd8abb256e516b8cb8db4b200afd524a62c6ddbcc9cb17d4",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-02",
+      "sample_id": "icr020860",
+      "selection_reasons": [
+        "As=negative_numeric",
+        "Cu=positive_below_dl",
+        "Ni=dl_to_ql",
+        "Zn=dl_to_ql",
+        "country=Tanzania",
+        "depth=Topsoil"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=112",
+      "source_record_id": "src-b7d770298a3eb5020d2ecc37812f76e684c141f9dacd8d80ae89f71bcb3b8acb"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1294",
+          "src-a90aa44810aa42ddfd34ad15886753ddc8d4d2bcdba88398083bd0aaefa8f7f3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.545532918",
+          "record_id": "rec-ffdf951dc9f9bea39a406a8352a52c3eb658e23449337be87e068f67b0749bee",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "17.43386497",
+          "record_id": "rec-2933a7ecdaae6e8eaab192ccf01391bd4138af2d7f26ea7efee652dff980b9cc",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "7.19313046",
+          "record_id": "rec-57c1b5125d0469a6af9d74d7ee807bbbf8c6eac0aa3a99fc8cd925082479cb2e",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "8.581627226",
+          "record_id": "rec-e71328e45c360f811f5b2db3e520f3041044fba56230959d75c803f95a84eaa0",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "30.73407771",
+          "record_id": "rec-47cd845c6449dfa2ea887a3300c0e5ed19335a36d9c0710c2f2565524da63f0f",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "27.7026521",
+          "record_id": "rec-bbd9ef3a2aa5aab4773f30e90080f4bbc92e4da4d54fbf92800f6321b477e6ee",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-03",
+      "sample_id": "icr054394",
+      "selection_reasons": [
+        "As=positive_below_dl",
+        "Cu=dl_to_ql",
+        "Pb=dl_to_ql",
+        "country=Uganda"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1294",
+      "source_record_id": "src-a90aa44810aa42ddfd34ad15886753ddc8d4d2bcdba88398083bd0aaefa8f7f3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1981",
+          "src-56d7fc7be36bfdea609d2ac8490dc54733b149a4d1462a90489f5d26e28e1a04"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.908450521",
+          "record_id": "rec-71cdf2d3e87044e6d48c5e607c4fd180b36a071c77b6a499067f9c4ac8ea6cb7",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "101.6201199",
+          "record_id": "rec-921b588daebf4e3081b9ad24d48a87063f68fcd159833a6e16d0cb2f3332e217",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "628.5816569",
+          "record_id": "rec-7df6a690ba668fadb18c5d6adcd03d9a54267f3c378d7aebef0d821cc752ef56",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "68.60070346",
+          "record_id": "rec-720c636c68c7d3f69ddb200cc6b5f3341a2e3151c3612c0fe32c71aafe9ea57c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1270.287408",
+          "record_id": "rec-5bd3076e1489f8c3b3376af1be818e98a60ef98385a4cdac01d2e7f3109b051f",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "169.4638034",
+          "record_id": "rec-ba320b976f88e05d3a462af111e0fbfdcd97a75e2a743fbb22d68fb1cff050f1",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-04",
+      "sample_id": "icr076616",
+      "selection_reasons": [
+        "As=dl_to_ql",
+        "Pb=at_or_above_ql",
+        "country=Madagascar"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1981",
+      "source_record_id": "src-56d7fc7be36bfdea609d2ac8490dc54733b149a4d1462a90489f5d26e28e1a04"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=512",
+          "src-d05ca8758c7c836b235a4be796bc81539b4b6a3985c14c402b28be26073cdbfe"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.643615497",
+          "record_id": "rec-cbd1f0e4eab4e543049e2c56af18308ed8b5410f3f1df766a63f1fca63d3d2af",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "20.15988329",
+          "record_id": "rec-0053c9a2f222890e44dc59e93ea6930b078371623a642eb54e082132238aabcb",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "9.093383403",
+          "record_id": "rec-9c64b07e7d7e1bd8e0071d4244149ebd917bf287f1b279556df6fb022f431e9e",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "19.17102775",
+          "record_id": "rec-2bd7744e12be152621754ef6622c1be393661363a5246302b1c21cd560398050",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "-0.035712908",
+          "record_id": "rec-cd16eb815b9645df006300a518253a1e9fbc128deba7dd170cfc0721daf29d17",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "19.45147523",
+          "record_id": "rec-e15b5fb9066d3a902b05174c1bdb1cd0e201e3c3626f2a61c3becd22df8de9df",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-05",
+      "sample_id": "icr030379",
+      "selection_reasons": [
+        "Pb=negative_numeric",
+        "country=Ethiopia"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=512",
+      "source_record_id": "src-d05ca8758c7c836b235a4be796bc81539b4b6a3985c14c402b28be26073cdbfe"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1177",
+          "src-fdf8b60d07e91ab8505985c646136e6020e802384d5c0b5cadf757ea256c6d62"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.067338683",
+          "record_id": "rec-3c69483e742a2a35d3df08f5901296f4ce786e2bedf3048e9fb94e8c9f2926c3",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.094589636",
+          "record_id": "rec-1b9d5de4b92d552fd8865814fb79c4d74e9de7d5f8c1a50e32b2f1ffc47e08a0",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.625808317",
+          "record_id": "rec-fc551b9408741c7efc234f93d2bd18f6e833f99aa9510474640b7140716a4059",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.424313152",
+          "record_id": "rec-3d05471d3e0c2cddce8d45bdcf40c2daf6d4943f9673fb7f3630c5479dc0fc47",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.27709266",
+          "record_id": "rec-7595a4dd2d44564ad848fb44051a7412d010bdcb8c11df102fc70134d6f21d6c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.846707052",
+          "record_id": "rec-f580f5f1ad171bae337a150b2cdbb4abc0e5576e3822d9c4d03745f67ee6d569",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-06",
+      "sample_id": "icr049934",
+      "selection_reasons": [
+        "Zn=positive_below_dl",
+        "country=Mozambique"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1177",
+      "source_record_id": "src-fdf8b60d07e91ab8505985c646136e6020e802384d5c0b5cadf757ea256c6d62"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=99",
+          "src-a9e69bcfdb1859fef00761f0cd0060db7345129a72cd2493c758beedf59382e9"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.791195063",
+          "record_id": "rec-f1ec0978298f092ef701e06524223769bf4bd82bd8be9ed24fcd1e91857e9f91",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "64.09709025",
+          "record_id": "rec-08f3e8ab1f89b957a03b7335c9bbd2e2ca7fa751c69b0c3055abe2cfbfd56b7b",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "17.12531546",
+          "record_id": "rec-70bf8f2b94ada5bdae32e0068e9cd0d7502f491105e8ba6f56f2d660ddfb7fda",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "22.23350096",
+          "record_id": "rec-2c9187a23112aa6ab38dbe7dbe89b2bb2f30c02e205b73ccd434af5add7ff31d",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "16.10643393",
+          "record_id": "rec-2e61151a39d7b5b46e8efc7a91a5f118b7004b7727209b94b7eea044736df749",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "18.722749",
+          "record_id": "rec-559aff02d87a3deac0b96d7c5fd90e98f2a66d4c5247577850a92785f8c24046",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-07",
+      "sample_id": "icr010535",
+      "selection_reasons": [
+        "country=Mali"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=99",
+      "source_record_id": "src-a9e69bcfdb1859fef00761f0cd0060db7345129a72cd2493c758beedf59382e9"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=101",
+          "src-9b1b139d83933c0e984c6cf62414ae99a759e63c9284c6346a07465531dff0a6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "2.605369983",
+          "record_id": "rec-48c41cf37f47c516e7c1a8332d43155c9029d9e79e80ecd6b7a3bb7dce455555",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "223.5361443",
+          "record_id": "rec-7a39744156c7bd885becc704a710e1a6a8638ee41f24f5949821eca8480e8211",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "48.34043207",
+          "record_id": "rec-1c00391359c1114788fe4eae79332e79f96541af7790834533e706b892148812",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "44.17547374",
+          "record_id": "rec-ec2b9d61a6cc1d89af08a866a5aa6de91f7762291006b6319cfe37151ae8cffb",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "11.39316438",
+          "record_id": "rec-442b559cf8fb9d8c2866deff1c356e2a0900cc2c2c8b2f8fb858b3f1264226fc",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "59.58098862",
+          "record_id": "rec-934d4b14e16c9ca5f8e4e55481de496a836e1a0c8fb27786a64f05148c39b0b4",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-08",
+      "sample_id": "icr011078",
+      "selection_reasons": [
+        "country=Burkina Faso"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=101",
+      "source_record_id": "src-9b1b139d83933c0e984c6cf62414ae99a759e63c9284c6346a07465531dff0a6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=105",
+          "src-134e6635a23ce45183539a538c83d23f88e9172455bccbd829671c98c5071793"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.632432246",
+          "record_id": "rec-642df672dc2de8f524729e400f3bd796f2e6a7a0389e46ee7e8c7857a7fbf6b6",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "16.43064456",
+          "record_id": "rec-cae0162e776de267e19b366eb9afe9633a7fbc32d1b0b0e519ca1088a283dd89",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "2.853750229",
+          "record_id": "rec-f0862c63b1bb590e7eb9a6a03488e18b7d2acadbb6a0c40181178ae045e47bf8",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.523277104",
+          "record_id": "rec-03c1443d2fdb784cf21fe24f6799805774b97cee854fef14399f57b4b1aa3af3",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.078519018",
+          "record_id": "rec-ffac042231438bce7a42375cb771898b86bcd28757b6f77465514699c2ed72d8",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "5.804183573",
+          "record_id": "rec-b105c06eb1ad5b8f4620fca75b2718c2ce1a7abda6954579dcff5ce7f6d10fdc",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-09",
+      "sample_id": "icr015592",
+      "selection_reasons": [
+        "country=Ghana"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=105",
+      "source_record_id": "src-134e6635a23ce45183539a538c83d23f88e9172455bccbd829671c98c5071793"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=555",
+          "src-9dda586b5aacc419e9a1f03f369dcbb4368e70b7063870a61c841acb1e62f32f"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.013677475",
+          "record_id": "rec-606943eb85cedee58fcb1226e59f8001c195ee7e695f1bab9fe4d676952b108e",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "32.82345078",
+          "record_id": "rec-93a40ad0caf82e05bc245279c6918af85bdf76d49fcf037758b337bd049a13a9",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "17.09613855",
+          "record_id": "rec-d72f199ceb14654dad8ddf5c6813b1893068f693a5834a60af197a43f1a4d6fa",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "26.20593579",
+          "record_id": "rec-dea77d44019f8d64eece3e6b3c4d6a895d35c26d9922cc1d6a7d9ce32af87065",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "7.364038107",
+          "record_id": "rec-4db2e5f3fd3dca083c64d87abee65a8db4392b008200139acc9134b8f3286518",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "51.68512927",
+          "record_id": "rec-476c913a77690ac1c4e2c3fe14449a5f062dce6127c691ffac483e000eca3cce",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-10",
+      "sample_id": "icr033353",
+      "selection_reasons": [
+        "country=Kenya"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=555",
+      "source_record_id": "src-9dda586b5aacc419e9a1f03f369dcbb4368e70b7063870a61c841acb1e62f32f"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=794",
+          "src-fb3d6aa46468f2ea7d0bc95d89ec0d1c24270c945bd4672d5fc4d0f5ad74317b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.440711878",
+          "record_id": "rec-76982f3bd5304e444dacc6cbe9a2f43e05239918bbd03b1205cacd7ea9350986",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "38.11956411",
+          "record_id": "rec-605b1aa3d7dd319ff849574ac6c06bb5a37856329ac777f09d95b8fe2aaf08b1",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "2.028759336",
+          "record_id": "rec-d31d9961116b50b4b09f2498ce830b5e22dd3b785d9806f06f98f6e299d907ad",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.095247095",
+          "record_id": "rec-0aacc2285ee6ac0208d84849e00fce236b15eedf7509dfb0b25d1224748cc779",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "10.69224982",
+          "record_id": "rec-682a0e3290954b137d8f6c629fe85e441827a85706eb05e323a11a13f8874cdd",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.399157365",
+          "record_id": "rec-dcb58356319dea49574a3406f1e4624dce98dcf47d22f52aae20f151256037e9",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-11",
+      "sample_id": "icr034011",
+      "selection_reasons": [
+        "country=Nigeria"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=794",
+      "source_record_id": "src-fb3d6aa46468f2ea7d0bc95d89ec0d1c24270c945bd4672d5fc4d0f5ad74317b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=813",
+          "src-bc40fcebba457a546a8548a1708f5de150580f603e5e968a3514c0f884d0564d"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.0914648",
+          "record_id": "rec-792a26d9beccc08da47219aea421bc5b92b68e84367e7b4c3588bbb14013a3f9",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "16.79132701",
+          "record_id": "rec-f0a07b4f370c2e28f8c16d66d265c1ca4a1046e672f06cdc3fbd5bef26a13124",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.866877091",
+          "record_id": "rec-8682696085a4732ad6e289154b999e62f7f1c809bd9ad00e360f341a50e61af9",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "7.570090666",
+          "record_id": "rec-e511bc437739db6de220b33e23359eae3c0ef791da1d44615ed2ed86149640cc",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "24.6223607",
+          "record_id": "rec-8b273fbb2ecc2bca502fb07a2c87f5de1a9da9faac3fcd6de1470dc651b70d45",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "29.59550735",
+          "record_id": "rec-fda97fa55ada3b92339cbb35ca7a8a958393bdfe729a47c0464836a8ad0fa2d5",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-12",
+      "sample_id": "icr037767",
+      "selection_reasons": [
+        "country=Cameroon"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=813",
+      "source_record_id": "src-bc40fcebba457a546a8548a1708f5de150580f603e5e968a3514c0f884d0564d"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1130",
+          "src-cfd314061cf41c210affb71417739ddf1761037653fc0946f20dd7e6f69224d7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.521345051",
+          "record_id": "rec-69fd2e1c3a3d5277b657e4904f2c211c1b9aeca4bd8e9c0c2473ed0a1427d67b",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "459.5576159",
+          "record_id": "rec-e012defdc620aff93a3246922e956a877ddb43aafb2e7f5f2446d055aa608150",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "17.27029457",
+          "record_id": "rec-93794b0cc9e0bb7f207ae9f608fe7dbe82066e0214bae8c36ee592c4f446a1d5",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "22.47910784",
+          "record_id": "rec-609b3deaabd4ecd8847a6e1bb89f5a4129a64343a28958f58d4e217a41dbc4fc",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "7.26395508",
+          "record_id": "rec-2827a4331492b6cba94a7068715c0d6374823a204c47ce35022abb600b2b7590",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "14.57244811",
+          "record_id": "rec-e1f39c8ecec607f99812faa7bc7741bc63bd6b62ca7acbb459142360bb742b77",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-13",
+      "sample_id": "icr042790",
+      "selection_reasons": [
+        "country=Guinea"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1130",
+      "source_record_id": "src-cfd314061cf41c210affb71417739ddf1761037653fc0946f20dd7e6f69224d7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1413",
+          "src-00884c8214b8fc18c0efac7cb8a52c51bb00358642cd11afce744d15d9d71034"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.313103021",
+          "record_id": "rec-0d19b59cc4b0cfb421bc83d135d14abb927dd626ce8168a9639ae696e16e426a",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "50.50348314",
+          "record_id": "rec-d3b0a5d62f57b60e051d4960592dbee95361600cb9be7617c449a8258f953730",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "25.08069559",
+          "record_id": "rec-cc53bb9dfc56fd40ed005bd30183d6620a17a553a753df34c47977f234d17fd2",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "20.73278344",
+          "record_id": "rec-81f8199f0f75ce1ba9df346f9cab06ffa7c0d548302803ab6380b9ba6a6319c0",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.339676946",
+          "record_id": "rec-4cd5ef2417cc5be61fedc953454f8b279f5a1d6b619ab3fd7c1520a59706f007",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "24.08201683",
+          "record_id": "rec-c3aa4814acee8c8a6b68e2d45053205369712a114a71fdd27de0638958ba32c0",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-14",
+      "sample_id": "icr055982",
+      "selection_reasons": [
+        "country=Zambia"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1413",
+      "source_record_id": "src-00884c8214b8fc18c0efac7cb8a52c51bb00358642cd11afce744d15d9d71034"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1643",
+          "src-f491ae631d160f10a2e8dccde94b0f4edf15494677073f046f386e551dc957ab"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.164671413",
+          "record_id": "rec-b0b9860ecf396a661e533152cf0131a7ea08934b8d7a012269c5c9ed74976fdd",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "29.76391721",
+          "record_id": "rec-b481f94f7a433e9e7926fa133120e8d1e882236c28c15e7f7c7706118debd3fc",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.171542723",
+          "record_id": "rec-4f2c9e0d105736d80d1399cd0c1ca5e507c0d695c9a9b8e0f7591ba648c8f723",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "8.76094484",
+          "record_id": "rec-1897ff9ef3a48c1a40659647029b2a1afccb77c28e14f3c2eb8565fa1473d5bb",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "5.408434728",
+          "record_id": "rec-ff7f869bdd9294f0acd34ee2cf8b62e6af837161e9e899f887058aaf742d5b71",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "11.17208303",
+          "record_id": "rec-c281dcdf517ed033d4d3c7b4557eeea51656ed1594b6617cd1580c59379b536d",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-15",
+      "sample_id": "icr068101",
+      "selection_reasons": [
+        "country=Niger"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1643",
+      "source_record_id": "src-f491ae631d160f10a2e8dccde94b0f4edf15494677073f046f386e551dc957ab"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1709",
+          "src-24de39c4afb88565612b8bab5c181176e85cfe5842526204025f32e32f7f0737"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.329589421",
+          "record_id": "rec-d28127fea8f3ce6b261d0a925c61ab4e7056e2e028bc8dec9174c55ae5c4caa4",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "10.06597197",
+          "record_id": "rec-b30b81a510e922882cb7969e5160845c34fbc4e7a8c21883238184761a459d01",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.202640098",
+          "record_id": "rec-53ad5218ad259a521e990dc074711ac6509471cfedb8b1f414584ee05fb8c473",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.435954375",
+          "record_id": "rec-972c185767abbdb7c4188b106de5ec5f0aadae1ba09e614c8a1d65155018420a",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.709335634",
+          "record_id": "rec-7a3aa0dcfdbccb13db273d6290c36d7759b8529bc7f4a0fa68ec5c3e779dbf21",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "5.730838944",
+          "record_id": "rec-ab81f7a852e02370498c9a6941e88e0540928240e6b2dc0ef80d372030b4571a",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-16",
+      "sample_id": "icr072246",
+      "selection_reasons": [
+        "country=Angola"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1709",
+      "source_record_id": "src-24de39c4afb88565612b8bab5c181176e85cfe5842526204025f32e32f7f0737"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1791",
+          "src-dce122cfe4f54abc1ec7f6a30ba4e426ee3e544fd85659a63d316eae75938f10"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.521504506",
+          "record_id": "rec-d46b8e78c5142016d01bc4f82483ea2212c292d344e773204a0a4f5a1a15e661",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "40.45078526",
+          "record_id": "rec-64b4acb1cb37bf468f79a0589be686c4804c2f5681fe79d9b8e813da13b7e267",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "15.69674852",
+          "record_id": "rec-3769f86f880777e112dc0545af7610641cc1eed637150b657d13bb58938e957d",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "13.53949763",
+          "record_id": "rec-de0cd94799bdeb70ab914a0efc177ec60030b847eda5d7b16a7a1fd1fff7f98a",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "15.08571343",
+          "record_id": "rec-571ab66604c9d87294398f704202316077bc5491301e82823c81d63d149c9033",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "18.4159892",
+          "record_id": "rec-2012c0bcdfc5dcd36da753250e4e7f5fe003286d34ff36cadd5c65f752eee8ba",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-17",
+      "sample_id": "icr073989",
+      "selection_reasons": [
+        "country=Zimbambwe"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1791",
+      "source_record_id": "src-dce122cfe4f54abc1ec7f6a30ba4e426ee3e544fd85659a63d316eae75938f10"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1797",
+          "src-126411e26538e0adad7bd8b2e475518d08e815cfeb2f0d4c15f5a3312d0bad4c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.475788835",
+          "record_id": "rec-7bc747e4c61b62d25bf3b3da3f8c27f20f9b81bce004645b3b8a2f6658390f87",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "56.70366684",
+          "record_id": "rec-23dbed0b150f39edfb5e6aa2c31701f41a4a26aec173aefa6f21a132d17831b2",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "21.16099822",
+          "record_id": "rec-51aea9379c7cd7d9cd781d404d83dcc2ceed62289cc0f411be9b8dac4b46d79c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "20.57142953",
+          "record_id": "rec-3b84f5c13942249102e3b4131417e7c35f3bf0748d90aa35fea445482cc5a39a",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.612162794",
+          "record_id": "rec-5c6f55ab449e634168e7bf5300ef737213fc2ee3b5b38fa3d7d3c1034e442b40",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "19.25045724",
+          "record_id": "rec-a5211bb2d8cc15f56dbc6ba27a41d5e60f914f6030d01db26771d0cc126dcdde",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-18",
+      "sample_id": "icr074318",
+      "selection_reasons": [
+        "country=Botswana"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1797",
+      "source_record_id": "src-126411e26538e0adad7bd8b2e475518d08e815cfeb2f0d4c15f5a3312d0bad4c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1951",
+          "src-ea93195851494c6ca1a813d2cac3e9baf1e8fc3f0e195a3f9b578eb5ead3a127"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "missing_coordinate",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "2.509553415",
+          "record_id": "rec-424391d7ad03c702c98d61f8373a1ef9b0f8963cf854bf4ed168268d3bcd1808",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.125853727",
+          "record_id": "rec-1364618c9fc4eb44db52f9fafba843d50403761008a428116bf0f94165d0f276",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "-1.677464071",
+          "record_id": "rec-4a59000cf923c745c6ae08251ac2b058160913e93dd11eae284b7929888de133",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "1.815853096",
+          "record_id": "rec-cdd0091bd97cfa94755e3805a3baff6c4588874a2b5e9dc5e0673a17c68b556c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "9.288234424",
+          "record_id": "rec-06d58eb9cfecbaee2d2a71f8b82c01e09b110ce9e3ea5896c8b29e499eb5f58c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "93.84822984",
+          "record_id": "rec-af4e5e134a15ba79d357ded64d03e3f6b186cd927c3417f153a08e3e4465ee24",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-19",
+      "sample_id": "icr076526",
+      "selection_reasons": [
+        "Cu=negative_numeric"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1951",
+      "source_record_id": "src-ea93195851494c6ca1a813d2cac3e9baf1e8fc3f0e195a3f9b578eb5ead3a127"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=2",
+          "src-2518efeaaf94d3887541b7a3a4f37e773e45e3aa1cb4f562dba2a118f6cefeaf"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.262535152",
+          "record_id": "rec-98a975e1668a3f4385f5456296412442187d1eded49a8160964ad52519667c15",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "50.77759182",
+          "record_id": "rec-03e5b978cff06bc6e523e0e28d042c8005ed43fae811c583744e5080c68a7632",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "17.3685872",
+          "record_id": "rec-9e4b0cd2f670220feab8c9d8c467be7943050b68a297d1bd555fb3753432ca9c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "24.10590367",
+          "record_id": "rec-bb78a3516362f336015e4b35f444a6b4e75717fdd402d8ad933bee5c04d31a7e",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "5.011335901",
+          "record_id": "rec-17d70d4b67c124bf660fb56b4e33915c4c29306aee28e1914a200ce7bd110ab0",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "33.41106803",
+          "record_id": "rec-bfa94e91bd969dd75ed1d32fbd5ab3fe765821081b9385e22e8df62bf1478d72",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-20",
+      "sample_id": "icr005934",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=2",
+      "source_record_id": "src-2518efeaaf94d3887541b7a3a4f37e773e45e3aa1cb4f562dba2a118f6cefeaf"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=3",
+          "src-56c0e4ab3657998b8524c12fd9ed493fed1b67fa98f8006622b3b8325fe60319"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.277514719",
+          "record_id": "rec-bb52e4bcf20b732830febaa63d74d6b31c0d86da5224b24273196e1b6570c809",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "37.55763477",
+          "record_id": "rec-2639f2c20b7ef10bebb6ebdaa648a02a010984eef1e874d627baa7c3683f806d",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "18.14255591",
+          "record_id": "rec-f60939593ae25b23bb07d63855341abaf803090a3671890b349ceadd08d72a74",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "25.43334414",
+          "record_id": "rec-83b6e6ae04db2a86584b8d49918ebf26f4d2addcb6f0427d109b9207fcdc8692",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "5.977996711",
+          "record_id": "rec-69de1701cf79f5ec0667b34d933db8952dedcb59b5ee3fecadb2b46751cd440c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "44.95955454",
+          "record_id": "rec-f4d31190416714a1c1a6c3ab375aae2cf7b091f8ad62c4d5683af895e884298b",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-21",
+      "sample_id": "icr005940",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=3",
+      "source_record_id": "src-56c0e4ab3657998b8524c12fd9ed493fed1b67fa98f8006622b3b8325fe60319"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=4",
+          "src-bc6d4eb58d49cc35aea6c9ab74b835aa87b8240bbc10f258c6e021bcab59ca7d"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.132216558",
+          "record_id": "rec-b87d8a4fd63caa10fb3fa67f455bdd2696bce9bf2de19dc85273ab846cc4ec67",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "21.21761372",
+          "record_id": "rec-79a02ea8ecb9f8824a7eb517b264ceb3f84badffb9f16215ea3a73c9573a16a2",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "6.735090124",
+          "record_id": "rec-2d9a11a367dbb6993879b56fdf01a01d3c4eb03819395578e04768fd5c869116",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "8.849816555",
+          "record_id": "rec-10334e02b2a619efb23b46c48a52bf5fa3645cf7f8c05fbb20bf3181dec97b91",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.35448764",
+          "record_id": "rec-30c6a261502bf09b260078266212ef15fa51e1bca9b250596ca6d1aa49283b4d",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "19.33745414",
+          "record_id": "rec-5ffd8f2175ffe665ed8398d1562fb908af60511fa727d98331c18a237cea7e95",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-22",
+      "sample_id": "icr005949",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=4",
+      "source_record_id": "src-bc6d4eb58d49cc35aea6c9ab74b835aa87b8240bbc10f258c6e021bcab59ca7d"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=5",
+          "src-99bd49980e12d93fcfbe88ab562008d01e47dea88d04dc1d9124763980a65e58"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.164285477",
+          "record_id": "rec-6f6e74a541915be59b59a64ce652d9536908d1b17180b7fbf8110dbc09742395",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "11.72933745",
+          "record_id": "rec-c313c8d6f21f4020bd89f6edee93b0d30633b9aa6b2ce8485e31ad6806d8b362",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "6.110352352",
+          "record_id": "rec-d73e89af46a5db375082acb498bf3832e3274d294cdc412e1f002b5427d56988",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "7.599911735",
+          "record_id": "rec-f1ace01d7fcd1e190f00c29eba36d0e8c313851b3ec00e52d20f5c3a6b1564a9",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.475053266",
+          "record_id": "rec-ba1f31a5a7fb90c44e63b13884b5b9d82a4276f6b39ae70a47d56c69c00bda83",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "44.06966189",
+          "record_id": "rec-dbd05b366d144142550fb5a7df4da33b09f8707ee43c16c620a13570c6c4a818",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-23",
+      "sample_id": "icr005950",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=5",
+      "source_record_id": "src-99bd49980e12d93fcfbe88ab562008d01e47dea88d04dc1d9124763980a65e58"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=6",
+          "src-760f2f71e9a595ec20ec4b8eca082d3e0962346d465bdab52f86984afd6a9c00"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.201461178",
+          "record_id": "rec-b999faa8df9998d53361f3dacbb69f37b039bc862c6a376a6184dca99c90b351",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "22.53007593",
+          "record_id": "rec-255599197c9e433b785c9a0b4d44a711a71b5ce15d01efb4f1519326b19b684f",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "8.48755035",
+          "record_id": "rec-e6909e3132cca382bf74a1c19f90195b3c20b3a120625c5c30b5733a10b4f935",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "13.79550946",
+          "record_id": "rec-d3cc0aba348742f78e1efb21bf378cc229061197753da38319c0c8e0e96dbd2a",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.396235733",
+          "record_id": "rec-b7ed847219cc2853c8af37b8bf788f7c74eda61c4fb2852f6f37fd3d5f38234b",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "28.3858624",
+          "record_id": "rec-508ff050e7d54a8ee699bff4978462e86148e05334fbce4d9e7b1a6285eaec2a",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-24",
+      "sample_id": "icr005952",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=6",
+      "source_record_id": "src-760f2f71e9a595ec20ec4b8eca082d3e0962346d465bdab52f86984afd6a9c00"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=7",
+          "src-abf7f757e11a4868611fa368cd99045b35c1db6d1bee5321287c33894b1d2ffb"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.19800167",
+          "record_id": "rec-e56561881a48aada0bcb539b3e173ab73e18dfdeeba5219083cbfaf5cec9ee4c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "33.30518179",
+          "record_id": "rec-a14a3a71a0051a5ce4cb4f75d9819347fa110262b368cb48884c990fd78ccb9d",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "7.370845391",
+          "record_id": "rec-cfcc2bfde18721e10c6dcd096ad2eb1b443d02a3f48bccdc8fe5e005b3ab785f",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "16.60181895",
+          "record_id": "rec-d8de9775ace5be9c975aa25c7c46aae1d7650b349d0c951c362005125c2d9236",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.889871841",
+          "record_id": "rec-6c55c31127f3f05c9754add19e136aeba5ad85617dd50f6431f919da010a026c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "22.33533741",
+          "record_id": "rec-a825e42c9c43a2c6518630fdc4a58b224c80a086e7e06585ffea3d63e45d02b8",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-25",
+      "sample_id": "icr005955",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=7",
+      "source_record_id": "src-abf7f757e11a4868611fa368cd99045b35c1db6d1bee5321287c33894b1d2ffb"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=8",
+          "src-f238f5e3f80bd8a239b9012223874c053df3438d145f90570cdae3b181975edc"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.167495788",
+          "record_id": "rec-101f2649e9763c71b568a0a873aa6e0c92291a4b61f26ba2b15ec49c7eaf44ae",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "22.53377793",
+          "record_id": "rec-37ad41fb2a728c86c38079cb0d1e37d0c2e399c15c1870f780163597c2b114ab",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "6.89550778",
+          "record_id": "rec-1d867ae089801c20a39c61c16073d0d9ecc9262f8de5032246277e91f9e94c5e",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "11.146063",
+          "record_id": "rec-1381a6fe2b40da265bc7ca440c9f48555866ee8c77cd5deaa93ffd24fc3daa41",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.574452584",
+          "record_id": "rec-382e75f8d0d3eaa972291f2136d0ac0d7b448dc1d216acafbcda8533e30426b3",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "26.65318619",
+          "record_id": "rec-282c2571590bcda2a633ce36338359cf5b793bc62890bbcd92be8d6050995f0f",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-26",
+      "sample_id": "icr005958",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=8",
+      "source_record_id": "src-f238f5e3f80bd8a239b9012223874c053df3438d145f90570cdae3b181975edc"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=9",
+          "src-841f13b0c67859568fcf6faf704979c30e1ad294cd7763e9ca471ad13d30466e"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.15525958",
+          "record_id": "rec-c0cf095d4f74718a38165ca2ab5f563e775bffd22cb3645ed73558a2e71c86fc",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "12.85579841",
+          "record_id": "rec-c7dc41ced443f1adff78e38ea26f49bebda810ce0e2873046f98a7b0847570c2",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "6.881932722",
+          "record_id": "rec-e3da419364bc397fa63267cfd49f588879738002b9521c11ae81f9404345c03c",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "8.229048192",
+          "record_id": "rec-d2954d68d0614dbe3c758c95f10e9547582de5c049eed6f75f60fd42d5287835",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.985624383",
+          "record_id": "rec-3504f0aa810cc6db61437266fefb13e551598d6849b835355118ec6fd29f1e40",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "32.54555117",
+          "record_id": "rec-18357bf9188a462c22502207d395386810b80c966b7aa0c96d89a5bff69b3ae1",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-27",
+      "sample_id": "icr005962",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=9",
+      "source_record_id": "src-841f13b0c67859568fcf6faf704979c30e1ad294cd7763e9ca471ad13d30466e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=10",
+          "src-1ce6dd3e8a240f66692bf4553a7445a7c51805724dcc067ea805201fb81de1c5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.154239733",
+          "record_id": "rec-30da915c819db7935b924a8fe721f3e22d0d6313346f1139b41ffa57eca800e7",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "26.86784133",
+          "record_id": "rec-2ec936a62dab1aeaab5360dae4224ccebfdd822f26b51e2a1e0f8f83a6b3cdc7",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "6.770751116",
+          "record_id": "rec-6bff86c7e1ed611f5eb4d6319b7368d88f33a99611fce50eef161d0e4c2aa624",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "13.69628719",
+          "record_id": "rec-acfb189d2f13e121000a432f5dab242c42f87cd54d7f8162d9bd3b991b59bb97",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.663346223",
+          "record_id": "rec-17229acb9443c923057ad54e0c229b66637b96921e888a6d378ecff81d1fedc0",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "25.0087059",
+          "record_id": "rec-af6c34a11de0a42013b2f8d952e1196d9cc020d392491db5345b874a4251a859",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-28",
+      "sample_id": "icr005964",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=10",
+      "source_record_id": "src-1ce6dd3e8a240f66692bf4553a7445a7c51805724dcc067ea805201fb81de1c5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=11",
+          "src-b8815dd19895da093b6b39f5de387392b59abb15ef9d15231c423f81718fc487"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.254675089",
+          "record_id": "rec-0bc969432c82e22e80e149ae6f8083dd71b77dd58f554a0990a7a40873d0c3b1",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "30.89383965",
+          "record_id": "rec-2f67747005cd5cf355ad1fbb1c49d7fdec0a2254dccea3072355738da9614bcb",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "13.23022572",
+          "record_id": "rec-687a4d87deba01174ae0d5b9eb6d6e8257b7891e349a853e18d3f3f258f11d74",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "14.34051242",
+          "record_id": "rec-ed9fe9636ea431a2a6ce22b6339330764cf9f7f41bfd526ad1fbf31b2e589a24",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "3.995090528",
+          "record_id": "rec-c545b44a1a8a74b4bce86baa074d62bbfde170f959e1900f2c9f553f5811fa07",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "30.20746845",
+          "record_id": "rec-6f56c2eb0fe27d04d9a10ffe438a7d6958e510cc4644111d658987de8f442204",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-29",
+      "sample_id": "icr005971",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=11",
+      "source_record_id": "src-b8815dd19895da093b6b39f5de387392b59abb15ef9d15231c423f81718fc487"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "AfSIS_Phase_I_wet_chemistry_v2.csv#row=12",
+          "src-f2182f8e7efc25297b3d4df0365d4cbbc02731e72a8960960ddb3477ef889db4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Inductively Coupled Plasma Mass Spectrometry (ICP-MS)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "0.316420612",
+          "record_id": "rec-d46911f3807368416da1bf145e3f45d23419fe0c254682c9dda6194da86968c5",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "34.31913086",
+          "record_id": "rec-7fe002ea2f4c8f1a7afaa840088284fcf71b46b386c204d586ab34efab72a3cf",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "15.09392193",
+          "record_id": "rec-5461699a1ff5a8bea78b8c2ffaa6c683cf6efd3ed269a0478d2547efcff2caed",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "18.28509068",
+          "record_id": "rec-b60dd459efd4a30ec616badd14c1eadb899625ca44b93b2e1b64c70def20cc57",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "4.373022038",
+          "record_id": "rec-1a1986ec5c0e4ef3af04d93ff1024e9ddf352731c688e28cf6e96b4f72906fca",
+          "unit": "mg kg^-1"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Optical Emission spectrometry ( ICP-OES)",
+          "measurement_basis": "aqua_regia_quasi_total_air_dry_soil",
+          "raw_value": "31.52111964",
+          "record_id": "rec-9367f9487a7ee6fcd6701c1a96019c0d4fe302bb90167354918a63fd167c0bfb",
+          "unit": "mg kg^-1"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "afsis-phase-i-wet-chemistry-review-30",
+      "sample_id": "icr005972",
+      "selection_reasons": [
+        "source_order_fill"
+      ],
+      "source_locator": "AfSIS_Phase_I_wet_chemistry_v2.csv#row=12",
+      "source_record_id": "src-f2182f8e7efc25297b3d4df0365d4cbbc02731e72a8960960ddb3477ef889db4"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "afsis-phase-i-wet-chemistry",
+  "status": "automated_audit_complete"
+}

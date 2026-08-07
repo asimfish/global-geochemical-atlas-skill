@@ -1,0 +1,1337 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "australia-ngsa-mercury-review-15",
+        "australia-ngsa-mercury-review-17",
+        "australia-ngsa-mercury-review-18"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "australia-ngsa-mercury-review-01",
+        "australia-ngsa-mercury-review-02",
+        "australia-ngsa-mercury-review-03",
+        "australia-ngsa-mercury-review-04",
+        "australia-ngsa-mercury-review-05",
+        "australia-ngsa-mercury-review-06",
+        "australia-ngsa-mercury-review-07",
+        "australia-ngsa-mercury-review-08",
+        "australia-ngsa-mercury-review-09",
+        "australia-ngsa-mercury-review-10",
+        "australia-ngsa-mercury-review-11",
+        "australia-ngsa-mercury-review-12",
+        "australia-ngsa-mercury-review-13",
+        "australia-ngsa-mercury-review-14",
+        "australia-ngsa-mercury-review-15",
+        "australia-ngsa-mercury-review-16",
+        "australia-ngsa-mercury-review-17",
+        "australia-ngsa-mercury-review-18",
+        "australia-ngsa-mercury-review-19",
+        "australia-ngsa-mercury-review-20",
+        "australia-ngsa-mercury-review-21",
+        "australia-ngsa-mercury-review-22",
+        "australia-ngsa-mercury-review-23",
+        "australia-ngsa-mercury-review-24",
+        "australia-ngsa-mercury-review-25",
+        "australia-ngsa-mercury-review-26",
+        "australia-ngsa-mercury-review-27",
+        "australia-ngsa-mercury-review-28",
+        "australia-ngsa-mercury-review-29",
+        "australia-ngsa-mercury-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "2025-03-31",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=13",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190001001%20Fine%7C150328_00_1.CSV%23row%3D13"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "21.96",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190001001%2520Fine%257C150328_00_1.CSV%2523row%253D13%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-01",
+      "sample_id": "2007190001001 Fine",
+      "selection_reasons": [
+        "depth=TOS",
+        "duplicate=none"
+      ],
+      "source_locator": "150328_00_1.CSV#row=13",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190001001%20Fine%7C150328_00_1.CSV%23row%3D13"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=16",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190003001%20Fine%7C150328_00_1.CSV%23row%3D16"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "11.12",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190003001%2520Fine%257C150328_00_1.CSV%2523row%253D16%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-02",
+      "sample_id": "2007190003001 Fine",
+      "selection_reasons": [
+        "depth=TOS",
+        "duplicate=Duplicate 1"
+      ],
+      "source_locator": "150328_00_1.CSV#row=16",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190003001%20Fine%7C150328_00_1.CSV%23row%3D16"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=350",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190213001%20Fine%7C150328_00_1.CSV%23row%3D350"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.64",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190213001%2520Fine%257C150328_00_1.CSV%2523row%253D350%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-03",
+      "sample_id": "2007190213001 Fine",
+      "selection_reasons": [
+        "depth=TOS",
+        "duplicate=Duplicate 2"
+      ],
+      "source_locator": "150328_00_1.CSV#row=350",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190213001%20Fine%7C150328_00_1.CSV%23row%3D350"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=14",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190001002%20Fine%7C150328_00_1.CSV%23row%3D14"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "15.89",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190001002%2520Fine%257C150328_00_1.CSV%2523row%253D14%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-04",
+      "sample_id": "2007190001002 Fine",
+      "selection_reasons": [
+        "depth=BOS",
+        "duplicate=none"
+      ],
+      "source_locator": "150328_00_1.CSV#row=14",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190001002%20Fine%7C150328_00_1.CSV%23row%3D14"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=17",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190003002%20Fine%7C150328_00_1.CSV%23row%3D17"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "6.36",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190003002%2520Fine%257C150328_00_1.CSV%2523row%253D17%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-05",
+      "sample_id": "2007190003002 Fine",
+      "selection_reasons": [
+        "depth=BOS",
+        "duplicate=Duplicate 1"
+      ],
+      "source_locator": "150328_00_1.CSV#row=17",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190003002%20Fine%7C150328_00_1.CSV%23row%3D17"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=351",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190213002%20Fine%7C150328_00_1.CSV%23row%3D351"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "6.68",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190213002%2520Fine%257C150328_00_1.CSV%2523row%253D351%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-06",
+      "sample_id": "2007190213002 Fine",
+      "selection_reasons": [
+        "depth=BOS",
+        "duplicate=Duplicate 2"
+      ],
+      "source_locator": "150328_00_1.CSV#row=351",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190213002%20Fine%7C150328_00_1.CSV%23row%3D351"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=96",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190055002%20Fine%7C150328_00_1.CSV%23row%3D96"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "8.98",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190055002%2520Fine%257C150328_00_1.CSV%2523row%253D96%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-07",
+      "sample_id": "2007190055002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=96",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190055002%20Fine%7C150328_00_1.CSV%23row%3D96"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=178",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190105001%20Fine%7C150328_00_1.CSV%23row%3D178"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "40.94",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190105001%2520Fine%257C150328_00_1.CSV%2523row%253D178%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-08",
+      "sample_id": "2007190105001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=178",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190105001%20Fine%7C150328_00_1.CSV%23row%3D178"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=261",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190153001%20Fine%7C150328_00_1.CSV%23row%3D261"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "14.23",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190153001%2520Fine%257C150328_00_1.CSV%2523row%253D261%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-09",
+      "sample_id": "2007190153001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=261",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190153001%20Fine%7C150328_00_1.CSV%23row%3D261"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=343",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190208002%20Fine%7C150328_00_1.CSV%23row%3D343"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.96",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190208002%2520Fine%257C150328_00_1.CSV%2523row%253D343%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-10",
+      "sample_id": "2007190208002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=343",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190208002%20Fine%7C150328_00_1.CSV%23row%3D343"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=426",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190259002%20Fine%7C150328_00_1.CSV%23row%3D426"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "26.81",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190259002%2520Fine%257C150328_00_1.CSV%2523row%253D426%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-11",
+      "sample_id": "2007190259002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=426",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190259002%20Fine%7C150328_00_1.CSV%23row%3D426"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=509",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190326001%20Fine%7C150328_00_1.CSV%23row%3D509"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "10.26",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190326001%2520Fine%257C150328_00_1.CSV%2523row%253D509%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-12",
+      "sample_id": "2007190326001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=509",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190326001%20Fine%7C150328_00_1.CSV%23row%3D509"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=591",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190382001%20Fine%7C150328_00_1.CSV%23row%3D591"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "3.17",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190382001%2520Fine%257C150328_00_1.CSV%2523row%253D591%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-13",
+      "sample_id": "2007190382001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=591",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190382001%20Fine%7C150328_00_1.CSV%23row%3D591"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=674",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190434002%20Fine%7C150328_00_1.CSV%23row%3D674"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "38.81",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190434002%2520Fine%257C150328_00_1.CSV%2523row%253D674%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-14",
+      "sample_id": "2007190434002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=674",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190434002%20Fine%7C150328_00_1.CSV%23row%3D674"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=756",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190485002%20Fine%7C150328_00_1.CSV%23row%3D756"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "69.27",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190485002%2520Fine%257C150328_00_1.CSV%2523row%253D756%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-15",
+      "sample_id": "2007190485002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=756",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190485002%20Fine%7C150328_00_1.CSV%23row%3D756"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=839",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190537001%20Fine%7C150328_00_1.CSV%23row%3D839"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "15.44",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190537001%2520Fine%257C150328_00_1.CSV%2523row%253D839%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-16",
+      "sample_id": "2007190537001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=839",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190537001%20Fine%7C150328_00_1.CSV%23row%3D839"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=921",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190584001%20Fine%7C150328_00_1.CSV%23row%3D921"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "556",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190584001%2520Fine%257C150328_00_1.CSV%2523row%253D921%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-17",
+      "sample_id": "2007190584001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=921",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190584001%20Fine%7C150328_00_1.CSV%23row%3D921"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1004",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190659002%20Fine%7C150328_00_1.CSV%23row%3D1004"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "49.01",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190659002%2520Fine%257C150328_00_1.CSV%2523row%253D1004%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-18",
+      "sample_id": "2007190659002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1004",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190659002%20Fine%7C150328_00_1.CSV%23row%3D1004"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1087",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190721002%20Fine%7C150328_00_1.CSV%23row%3D1087"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "7.25",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190721002%2520Fine%257C150328_00_1.CSV%2523row%253D1087%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-19",
+      "sample_id": "2007190721002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1087",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190721002%20Fine%7C150328_00_1.CSV%23row%3D1087"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1169",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190774001%20Fine%7C150328_00_1.CSV%23row%3D1169"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.99",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190774001%2520Fine%257C150328_00_1.CSV%2523row%253D1169%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-20",
+      "sample_id": "2007190774001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1169",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190774001%20Fine%7C150328_00_1.CSV%23row%3D1169"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1252",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190829002%20Fine%7C150328_00_1.CSV%23row%3D1252"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "10.72",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190829002%2520Fine%257C150328_00_1.CSV%2523row%253D1252%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-21",
+      "sample_id": "2007190829002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1252",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190829002%20Fine%7C150328_00_1.CSV%23row%3D1252"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1334",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190882001%20Fine%7C150328_00_1.CSV%23row%3D1334"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "12.26",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190882001%2520Fine%257C150328_00_1.CSV%2523row%253D1334%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-22",
+      "sample_id": "2007190882001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1334",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190882001%20Fine%7C150328_00_1.CSV%23row%3D1334"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1417",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190932002%20Fine%7C150328_00_1.CSV%23row%3D1417"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "29.93",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190932002%2520Fine%257C150328_00_1.CSV%2523row%253D1417%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-23",
+      "sample_id": "2007190932002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1417",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190932002%20Fine%7C150328_00_1.CSV%23row%3D1417"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1500",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190992001%20Fine%7C150328_00_1.CSV%23row%3D1500"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "20.32",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190992001%2520Fine%257C150328_00_1.CSV%2523row%253D1500%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-24",
+      "sample_id": "2007190992001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1500",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190992001%20Fine%7C150328_00_1.CSV%23row%3D1500"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1582",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191091001%20Fine%7C150328_00_1.CSV%23row%3D1582"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "23.19",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191091001%2520Fine%257C150328_00_1.CSV%2523row%253D1582%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-25",
+      "sample_id": "2007191091001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1582",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191091001%20Fine%7C150328_00_1.CSV%23row%3D1582"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1665",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191144002%20Fine%7C150328_00_1.CSV%23row%3D1665"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "25.39",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191144002%2520Fine%257C150328_00_1.CSV%2523row%253D1665%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-26",
+      "sample_id": "2007191144002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1665",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191144002%20Fine%7C150328_00_1.CSV%23row%3D1665"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1747",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191204002%20Fine%7C150328_00_1.CSV%23row%3D1747"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "14.71",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191204002%2520Fine%257C150328_00_1.CSV%2523row%253D1747%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-27",
+      "sample_id": "2007191204002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1747",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191204002%20Fine%7C150328_00_1.CSV%23row%3D1747"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1830",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191255001%20Fine%7C150328_00_1.CSV%23row%3D1830"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.33",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191255001%2520Fine%257C150328_00_1.CSV%2523row%253D1830%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-28",
+      "sample_id": "2007191255001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1830",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191255001%20Fine%7C150328_00_1.CSV%23row%3D1830"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1912",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191305001%20Fine%7C150328_00_1.CSV%23row%3D1912"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "38.74",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191305001%2520Fine%257C150328_00_1.CSV%2523row%253D1912%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-29",
+      "sample_id": "2007191305001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1912",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191305001%20Fine%7C150328_00_1.CSV%23row%3D1912"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "150328_00_1.CSV#row=1995",
+          "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191356001%20Fine%7C150328_00_1.CSV%23row%3D1995"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "5.4",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191356001%2520Fine%257C150328_00_1.CSV%2523row%253D1995%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "raw_field_evidence": {},
+      "review_id": "australia-ngsa-mercury-review-30",
+      "sample_id": "2007191356001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "150328_00_1.CSV#row=1995",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191356001%20Fine%7C150328_00_1.CSV%23row%3D1995"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "australia-ngsa-mercury",
+  "status": "automated_audit_complete"
+}

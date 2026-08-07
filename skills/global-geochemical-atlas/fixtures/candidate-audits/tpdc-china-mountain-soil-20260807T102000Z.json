@@ -63,6 +63,7 @@
     }
   },
   "observed_metadata": {
+    "coordinate_reference_system": "unknown_not_declared_by_registered_metadata_or_files",
     "dataset_doi": "10.11888/Terre.tpdc.302620",
     "dataset_pid": "18406.11.Terre.tpdc.302620",
     "dataset_version": "tpdc-file-2025-07-23",
@@ -71,6 +72,9 @@
       "spdx": "CC-BY-4.0",
       "url": "https://creativecommons.org/licenses/by/4.0/"
     },
+    "method_assignment_basis": "linked_publication",
+    "method_missing_reason": "The main workbook has no row-level method, detection-limit or qualifier fields.",
+    "method_scope": "publication",
     "release_date": "2025-07-23",
     "required_fields": [
       "Climaticzones",

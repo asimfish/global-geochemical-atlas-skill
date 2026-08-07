@@ -1,0 +1,1543 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "gemas-europe-review-01",
+        "gemas-europe-review-02",
+        "gemas-europe-review-03",
+        "gemas-europe-review-04",
+        "gemas-europe-review-05",
+        "gemas-europe-review-06",
+        "gemas-europe-review-07",
+        "gemas-europe-review-08",
+        "gemas-europe-review-09",
+        "gemas-europe-review-10",
+        "gemas-europe-review-11",
+        "gemas-europe-review-12",
+        "gemas-europe-review-13",
+        "gemas-europe-review-14",
+        "gemas-europe-review-15",
+        "gemas-europe-review-16",
+        "gemas-europe-review-17",
+        "gemas-europe-review-18",
+        "gemas-europe-review-19",
+        "gemas-europe-review-20",
+        "gemas-europe-review-21",
+        "gemas-europe-review-22",
+        "gemas-europe-review-23",
+        "gemas-europe-review-24",
+        "gemas-europe-review-25",
+        "gemas-europe-review-26",
+        "gemas-europe-review-27",
+        "gemas-europe-review-28",
+        "gemas-europe-review-29",
+        "gemas-europe-review-30"
+      ]
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "gemas-europe-review-09",
+        "gemas-europe-review-11",
+        "gemas-europe-review-22"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "gemas-europe-review-01",
+        "gemas-europe-review-02",
+        "gemas-europe-review-03",
+        "gemas-europe-review-04",
+        "gemas-europe-review-05",
+        "gemas-europe-review-06",
+        "gemas-europe-review-07",
+        "gemas-europe-review-08",
+        "gemas-europe-review-09",
+        "gemas-europe-review-10",
+        "gemas-europe-review-11",
+        "gemas-europe-review-12",
+        "gemas-europe-review-13",
+        "gemas-europe-review-14",
+        "gemas-europe-review-15",
+        "gemas-europe-review-16",
+        "gemas-europe-review-17",
+        "gemas-europe-review-18",
+        "gemas-europe-review-19",
+        "gemas-europe-review-20",
+        "gemas-europe-review-21",
+        "gemas-europe-review-22",
+        "gemas-europe-review-23",
+        "gemas-europe-review-24",
+        "gemas-europe-review-25",
+        "gemas-europe-review-26",
+        "gemas-europe-review-27",
+        "gemas-europe-review-28",
+        "gemas-europe-review-29",
+        "gemas-europe-review-30"
+      ]
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "gemas-europe-review-01",
+        "gemas-europe-review-02",
+        "gemas-europe-review-03",
+        "gemas-europe-review-04",
+        "gemas-europe-review-05",
+        "gemas-europe-review-06",
+        "gemas-europe-review-07",
+        "gemas-europe-review-08",
+        "gemas-europe-review-09",
+        "gemas-europe-review-10",
+        "gemas-europe-review-11",
+        "gemas-europe-review-12",
+        "gemas-europe-review-13",
+        "gemas-europe-review-14",
+        "gemas-europe-review-15",
+        "gemas-europe-review-16",
+        "gemas-europe-review-17",
+        "gemas-europe-review-18",
+        "gemas-europe-review-19",
+        "gemas-europe-review-20",
+        "gemas-europe-review-21",
+        "gemas-europe-review-22",
+        "gemas-europe-review-23",
+        "gemas-europe-review-24",
+        "gemas-europe-review-25",
+        "gemas-europe-review-26",
+        "gemas-europe-review-27",
+        "gemas-europe-review-28",
+        "gemas-europe-review-29",
+        "gemas-europe-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "9.77978099",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CAs%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "As",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "9.77978099",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-01",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "59.32553705",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "59.32553705",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-02",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "25.21869512",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "25.21869512",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-03",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "0.04487129",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CHg%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Hg",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "0.04487129",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-04",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "61.16981515",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "61.16981515",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-05",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "16.46757505",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "16.46757505",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-06",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "49.56256983",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "49.56256983",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-07",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "12.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CAs%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "As",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "12.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-08",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "156.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "156.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-09",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "20.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "20.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-10",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "75.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "75.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-11",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "19.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "19.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-12",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "66.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3022%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D1%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "66.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-13",
+      "sample_id": "GEMAS:Ap:3022",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3022%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "8.15363624",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CAs%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "As",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "8.15363624",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-14",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "29.97150252",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "29.97150252",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-15",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "25.21621359",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "25.21621359",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-16",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "0.01465667",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CHg%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Hg",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "0.01465667",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-17",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "33.76833895",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "33.76833895",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-18",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "16.40954567",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "16.40954567",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-19",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "55.69379032",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "55.69379032",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-20",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "11.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CAs%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "As",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "11.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-21",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "92.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "92.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-22",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "25.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "25.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-23",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "39.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "39.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-24",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "21.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "21.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-25",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "raw_value": "74.00000000",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3023%253AXRF%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D2%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+        "raw_value": "74.00000000",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-26",
+      "sample_id": "GEMAS:Ap:3023",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3023%3AXRF%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "3.12959930",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3024%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D3%7CAs%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "As",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "3.12959930",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-27",
+      "sample_id": "GEMAS:Ap:3024",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "15.48396113",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3024%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D3%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "15.48396113",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-28",
+      "sample_id": "GEMAS:Ap:3024",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "11.38069226",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3024%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D3%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "11.38069226",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-29",
+      "sample_id": "GEMAS:Ap:3024",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+          "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "raw_value": "0.02355131",
+          "record_id": "rec-observation-v2%7Cgemas-europe%7Csrc-source-record-v2%257Cgemas-europe%257CGEMAS%253AAp%253A3024%253AAR%257CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%2521IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%2523record%253D3%7CHg%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Hg",
+        "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+        "raw_value": "0.02355131",
+        "unit": "mg/kg"
+      },
+      "review_id": "gemas-europe-review-30",
+      "sample_id": "GEMAS:Ap:3024",
+      "selection_reasons": [],
+      "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+      "source_record_id": "src-source-record-v2%7Cgemas-europe%7CGEMAS%3AAp%3A3024%3AAR%7CIE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip%21IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf%23record%3D3"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "gemas-europe",
+  "status": "automated_audit_complete"
+}

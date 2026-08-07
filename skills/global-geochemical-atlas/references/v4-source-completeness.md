@@ -5,9 +5,9 @@
 ## 摘要
 
 - 可执行来源：21
-- 有全量候选审计：19
+- 有全量候选审计：21
 - 有明确目标测定分母：21
-- 缺少全量候选审计：2
+- 缺少全量候选审计：0
 - 演示样板记录：1084（仅工程测试）
 - 已完成统一全量逐字段 profile：21
 
@@ -37,10 +37,11 @@
 | `us-wqp-sacramento-river-arsenic` | uniform_full_profile | 189 | 48 | 100.0% | 100.0% |
 | `usgs-conus-soil` | uniform_full_profile | 58284 | 48 | 100.0% | 0.0% |
 
-## 当前阻塞
+## 当前证据缺口
 
-1. 统一全量逐字段 profile 已完成 21/21；任何缺口仍显示 `not_measured`。
-2. 候选来源审计与全量 adapter profile 分开保留，缺候选审计不再用 demo 补位。
-3. 在线实时可用性仍需独立探测；固定缓存的文件身份、字节数、schema、row-count 与离线重放已纳入 profile。
+1. 统一全量逐字段 profile、候选来源审计和 30 条结构化自动审计均完成 21/21；任何缺失字段仍显示 `not_measured` 或明确缺失原因。
+2. GEOROC、USGS CONUS Soil、GSJ 等来源仍缺逐记录方法；这会降低可比较范围，不由自动审计补造。
+3. AfSIS 和 TPDC 的注册文件及关联资料未声明原始 CRS，因此保持 `unknown`；不根据坐标外观推断 EPSG。
+4. 在线实时可用性仍需独立探测；固定缓存的文件身份、字节数、schema、row-count 与离线重放已纳入 profile。
 
 机器可读结果见 `assets/v4-source-completeness.json`。

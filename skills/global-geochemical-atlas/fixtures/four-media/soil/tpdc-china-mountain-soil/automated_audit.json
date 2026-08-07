@@ -1,0 +1,1543 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "tpdc-china-mountain-soil-review-01",
+        "tpdc-china-mountain-soil-review-02",
+        "tpdc-china-mountain-soil-review-03",
+        "tpdc-china-mountain-soil-review-04",
+        "tpdc-china-mountain-soil-review-05",
+        "tpdc-china-mountain-soil-review-06",
+        "tpdc-china-mountain-soil-review-07",
+        "tpdc-china-mountain-soil-review-08",
+        "tpdc-china-mountain-soil-review-09",
+        "tpdc-china-mountain-soil-review-10",
+        "tpdc-china-mountain-soil-review-11",
+        "tpdc-china-mountain-soil-review-12",
+        "tpdc-china-mountain-soil-review-13",
+        "tpdc-china-mountain-soil-review-14",
+        "tpdc-china-mountain-soil-review-15",
+        "tpdc-china-mountain-soil-review-16",
+        "tpdc-china-mountain-soil-review-17",
+        "tpdc-china-mountain-soil-review-18",
+        "tpdc-china-mountain-soil-review-19",
+        "tpdc-china-mountain-soil-review-20",
+        "tpdc-china-mountain-soil-review-21",
+        "tpdc-china-mountain-soil-review-22",
+        "tpdc-china-mountain-soil-review-23",
+        "tpdc-china-mountain-soil-review-24",
+        "tpdc-china-mountain-soil-review-25",
+        "tpdc-china-mountain-soil-review-26",
+        "tpdc-china-mountain-soil-review-27",
+        "tpdc-china-mountain-soil-review-28",
+        "tpdc-china-mountain-soil-review-29",
+        "tpdc-china-mountain-soil-review-30"
+      ]
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "tpdc-china-mountain-soil-review-11",
+        "tpdc-china-mountain-soil-review-15",
+        "tpdc-china-mountain-soil-review-26"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "tpdc-china-mountain-soil-review-01",
+        "tpdc-china-mountain-soil-review-02",
+        "tpdc-china-mountain-soil-review-03",
+        "tpdc-china-mountain-soil-review-04",
+        "tpdc-china-mountain-soil-review-05",
+        "tpdc-china-mountain-soil-review-06",
+        "tpdc-china-mountain-soil-review-07",
+        "tpdc-china-mountain-soil-review-08",
+        "tpdc-china-mountain-soil-review-09",
+        "tpdc-china-mountain-soil-review-10",
+        "tpdc-china-mountain-soil-review-11",
+        "tpdc-china-mountain-soil-review-12",
+        "tpdc-china-mountain-soil-review-13",
+        "tpdc-china-mountain-soil-review-14",
+        "tpdc-china-mountain-soil-review-15",
+        "tpdc-china-mountain-soil-review-16",
+        "tpdc-china-mountain-soil-review-17",
+        "tpdc-china-mountain-soil-review-18",
+        "tpdc-china-mountain-soil-review-19",
+        "tpdc-china-mountain-soil-review-20",
+        "tpdc-china-mountain-soil-review-21",
+        "tpdc-china-mountain-soil-review-22",
+        "tpdc-china-mountain-soil-review-23",
+        "tpdc-china-mountain-soil-review-24",
+        "tpdc-china-mountain-soil-review-25",
+        "tpdc-china-mountain-soil-review-26",
+        "tpdc-china-mountain-soil-review-27",
+        "tpdc-china-mountain-soil-review-28",
+        "tpdc-china-mountain-soil-review-29",
+        "tpdc-china-mountain-soil-review-30"
+      ]
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "tpdc-china-mountain-soil-review-01",
+        "tpdc-china-mountain-soil-review-02",
+        "tpdc-china-mountain-soil-review-03",
+        "tpdc-china-mountain-soil-review-04",
+        "tpdc-china-mountain-soil-review-05",
+        "tpdc-china-mountain-soil-review-06",
+        "tpdc-china-mountain-soil-review-07",
+        "tpdc-china-mountain-soil-review-08",
+        "tpdc-china-mountain-soil-review-09",
+        "tpdc-china-mountain-soil-review-10",
+        "tpdc-china-mountain-soil-review-11",
+        "tpdc-china-mountain-soil-review-12",
+        "tpdc-china-mountain-soil-review-13",
+        "tpdc-china-mountain-soil-review-14",
+        "tpdc-china-mountain-soil-review-15",
+        "tpdc-china-mountain-soil-review-16",
+        "tpdc-china-mountain-soil-review-17",
+        "tpdc-china-mountain-soil-review-18",
+        "tpdc-china-mountain-soil-review-19",
+        "tpdc-china-mountain-soil-review-20",
+        "tpdc-china-mountain-soil-review-21",
+        "tpdc-china-mountain-soil-review-22",
+        "tpdc-china-mountain-soil-review-23",
+        "tpdc-china-mountain-soil-review-24",
+        "tpdc-china-mountain-soil-review-25",
+        "tpdc-china-mountain-soil-review-26",
+        "tpdc-china-mountain-soil-review-27",
+        "tpdc-china-mountain-soil-review-28",
+        "tpdc-china-mountain-soil-review-29",
+        "tpdc-china-mountain-soil-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "tpdc-file-2025-07-23",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=2",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "18.9559163",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D2%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "18.9559163",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-01",
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=2",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "18.81300768",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D2%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "18.81300768",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-02",
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=2",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "8.17407267",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D2%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "8.17407267",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-03",
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=2",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "36.67421791",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D2%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "36.67421791",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-04",
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=2",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "39.75180754",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D2%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "39.75180754",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-05",
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=3",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "55.84411553",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D3%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "55.84411553",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-06",
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=3",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "22.43118242",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D3%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "22.43118242",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-07",
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=3",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "17.43750602",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D3%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "17.43750602",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-08",
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=3",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "49.30315406",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D3%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "49.30315406",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-09",
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=3",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "34.17537681",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D3%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "34.17537681",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-10",
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=4",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "99.99969226",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D4%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "99.99969226",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-11",
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=4",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "32.77009594",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D4%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "32.77009594",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-12",
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=4",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "41.85384863",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D4%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "41.85384863",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-13",
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=4",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "24.34543002",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D4%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "24.34543002",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-14",
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=4",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "66.90938787",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-1%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D4%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "66.90938787",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-15",
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-1%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=5",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "28.53868701",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D5%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "28.53868701",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-16",
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=5",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "13.90534475",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D5%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "13.90534475",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-17",
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=5",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "9.901539015",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D5%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "9.901539015",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-18",
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=5",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "33.18995003",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D5%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "33.18995003",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-19",
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=5",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "27.77236509",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CO%257CSoil%2520dataset.xlsx%2523sheet1-row%253D5%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "27.77236509",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-20",
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CO%7CSoil%20dataset.xlsx%23sheet1-row%3D5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=6",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "42.55520625",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D6%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "42.55520625",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-21",
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=6",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "21.44693577",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D6%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "21.44693577",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-22",
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=6",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "16.03194862",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D6%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "16.03194862",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-23",
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=6",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "56.98719354",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D6%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "56.98719354",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-24",
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=6",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "29.10616827",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CA%257CSoil%2520dataset.xlsx%2523sheet1-row%253D6%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "29.10616827",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-25",
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CA%7CSoil%20dataset.xlsx%23sheet1-row%3D6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=7",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "76.99310803",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D7%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cr",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "76.99310803",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-26",
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=7",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "16.28655465",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D7%7CCu%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Cu",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "16.28655465",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-27",
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=7",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "21.16935796",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D7%7CNi%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Ni",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "21.16935796",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-28",
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=7",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "22.60047706",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D7%7CPb%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Pb",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "22.60047706",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-29",
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Soil dataset.xlsx#sheet1-row=7",
+          "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "missing_coordinate",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "47.87316815",
+          "record_id": "rec-observation-v2%7Ctpdc-china-mountain-soil%7Csrc-source-record-v2%257Ctpdc-china-mountain-soil%257CAL1-2%257CC%257CSoil%2520dataset.xlsx%2523sheet1-row%253D7%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "analyte": "Zn",
+        "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+        "raw_value": "47.87316815",
+        "unit": "mg/kg"
+      },
+      "review_id": "tpdc-china-mountain-soil-review-30",
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [],
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-source-record-v2%7Ctpdc-china-mountain-soil%7CAL1-2%7CC%7CSoil%20dataset.xlsx%23sheet1-row%3D7"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "tpdc-china-mountain-soil",
+  "status": "automated_audit_complete"
+}

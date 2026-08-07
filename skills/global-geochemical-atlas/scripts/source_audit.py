@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit source access boundaries and report V3 progressive evidence scores."""
+"""Audit source access boundaries and report V4 progressive evidence scores."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
 DEFAULT_REGISTRY = SKILL_DIR / "assets" / "source_manifest.json"
 DEFAULT_CANDIDATE_AUDITS = SKILL_DIR / "fixtures" / "candidate-audits"
 
-AUDIT_VERSION = "geochemical-source-audit-v3"
+AUDIT_VERSION = "geochemical-source-audit-v4"
 
 
 def _operational_boundaries(
@@ -92,7 +92,7 @@ def audit_catalog(
         "operationally_restricted_sources": restricted_sources,
         "sources": sources,
         "claim_boundary": (
-            "PASS means the V3 audit completed and exposed access, research-use conditions and evidence gaps. "
+            "PASS means the V4 audit completed and exposed access, research-use conditions and evidence gaps. "
             "It does not mean all sources are equally evidenced, automatically accessible, globally complete, or scientifically comparable."
         ),
     }

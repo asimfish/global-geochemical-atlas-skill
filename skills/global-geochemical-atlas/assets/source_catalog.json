@@ -1,7 +1,7 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-06T10:35:00Z",
-  "claim_boundary": "This catalog records discovered sources and interface facts. V3 routing uses evidence tier, research-use status and use mode; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
+  "reviewed_at": "2026-08-07T12:00:00Z",
+  "claim_boundary": "This catalog records discovered sources and interface facts. V4 routing uses evidence tier, research-use status, use mode and structured Codex audits; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
     "round": 6,
     "status": "in_progress",

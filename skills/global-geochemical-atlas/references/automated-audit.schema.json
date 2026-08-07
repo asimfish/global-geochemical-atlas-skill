@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemical-automated-source-audit:v1",
+  "title": "D1 structured Codex source-record evidence audit",
+  "type": "object",
+  "required": [
+    "audit_version",
+    "source_id",
+    "dataset_version",
+    "status",
+    "required_record_count",
+    "prepared_record_count",
+    "audited_record_count",
+    "auditor",
+    "audit_coverage",
+    "records",
+    "claim_boundary"
+  ],
+  "properties": {
+    "audit_version": {"const": "geochemical-automated-source-audit-v1"},
+    "source_id": {"type": "string", "minLength": 1},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "status": {
+      "type": "string",
+      "enum": ["automated_audit_complete", "evidence_incomplete", "conflict"]
+    },
+    "required_record_count": {"type": "integer", "minimum": 30},
+    "prepared_record_count": {"type": "integer", "minimum": 30},
+    "audited_record_count": {"type": "integer", "minimum": 0},
+    "auditor": {
+      "type": "object",
+      "required": ["reviewer_type", "auditor_id", "audited_at"],
+      "properties": {
+        "reviewer_type": {"const": "codex"},
+        "auditor_id": {"type": "string", "minLength": 1},
+        "audited_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "audit_coverage": {
+      "type": "object",
+      "required": [
+        "ordinary_valid_value",
+        "censored_or_negative_value",
+        "extreme_value",
+        "missing_coordinate",
+        "duplicate_sample_identifier",
+        "method_missing_or_multiple_candidates",
+        "source_or_mapping_conflict"
+      ],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["considered", "record_count", "record_ids", "outcome"],
+        "properties": {
+          "considered": {"const": true},
+          "record_count": {"type": "integer", "minimum": 0},
+          "record_ids": {"type": "array", "items": {"type": "string"}},
+          "outcome": {
+            "type": "string",
+            "enum": ["cases_found", "no_case_in_stratified_sample", "source_limitation_documented"]
+          }
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "minItems": 30,
+      "items": {
+        "type": "object",
+        "required": [
+          "review_id",
+          "source_locator",
+          "source_record_id",
+          "raw_field_evidence",
+          "parsed_result_evidence",
+          "legacy_review_file",
+          "codex_audit"
+        ],
+        "properties": {
+          "review_id": {"type": "string", "minLength": 1},
+          "source_locator": {"type": "string", "minLength": 1},
+          "source_record_id": {"type": "string", "minLength": 1},
+          "raw_field_evidence": {"type": "object"},
+          "parsed_result_evidence": {"type": "array", "items": {"type": "object"}},
+          "legacy_review_file": {"const": "human_review.json"},
+          "codex_audit": {
+            "type": "object",
+            "required": [
+              "reviewer_type",
+              "auditor_id",
+              "audited_at",
+              "decision",
+              "checks",
+              "findings",
+              "evidence_locators",
+              "notes"
+            ],
+            "properties": {
+              "reviewer_type": {"const": "codex"},
+              "auditor_id": {"type": "string", "minLength": 1},
+              "audited_at": {"type": "string", "format": "date-time"},
+              "decision": {"type": "string", "enum": ["pass", "warning", "conflict"]},
+              "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+              "findings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "evidence_locators": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+              "notes": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  }
+}

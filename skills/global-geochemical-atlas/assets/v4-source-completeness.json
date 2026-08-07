@@ -10,15 +10,12 @@
       "source_ids": []
     },
     {
-      "affected_sources": 2,
+      "affected_sources": 0,
       "code": "FULL_AUDIT_MISSING",
       "detail": "These executable sources have no checked-in candidate full-population audit.",
       "next_action": "Add immutable full-source audits without substituting demo rows.",
-      "severity": "high",
-      "source_ids": [
-        "georoc-archaean",
-        "usgs-conus-soil"
-      ]
+      "severity": "info",
+      "source_ids": []
     }
   ],
   "generated_from_registry_verified_at": "2026-08-06T10:05:00Z",
@@ -7376,13 +7373,17 @@
         }
       },
       "candidate_audit": {
-        "audit_path": null,
-        "audit_status": "not_measured",
-        "denominator_status": "not_available",
+        "audit_bytes": 2076,
+        "audit_path": "fixtures/candidate-audits/georoc-archaean-20260807T120000Z.json",
+        "audit_status": "audited_snapshot",
+        "denominator_status": "available",
         "distinct_sample_count": null,
-        "physical_row_count": null,
-        "target_observation_count": null,
-        "warning": "No checked-in full-population audit; demo counts must not be substituted."
+        "field_completeness_status": "not_measured_uniformly",
+        "physical_row_count": 33745,
+        "snapshot_id": null,
+        "target_observation_count": 65988,
+        "target_observation_count_basis": "observed_data.target_observations",
+        "warning": "The audit proves only its explicit counts and metadata. It does not imply row-level completeness for fields whose non-null numerator was not measured."
       },
       "dataset_version": "12.0",
       "demo_fixture": {
@@ -11555,7 +11556,7 @@
         }
       },
       "candidate_audit": {
-        "audit_bytes": 2849,
+        "audit_bytes": 3140,
         "audit_path": "fixtures/candidate-audits/tpdc-china-mountain-soil-20260807T102000Z.json",
         "audit_status": "audited_snapshot",
         "denominator_status": "available",
@@ -12964,13 +12965,17 @@
         }
       },
       "candidate_audit": {
-        "audit_path": null,
-        "audit_status": "not_measured",
-        "denominator_status": "not_available",
+        "audit_bytes": 2350,
+        "audit_path": "fixtures/candidate-audits/usgs-conus-soil-20260807T120000Z.json",
+        "audit_status": "audited_snapshot",
+        "denominator_status": "available",
         "distinct_sample_count": null,
-        "physical_row_count": null,
-        "target_observation_count": null,
-        "warning": "No checked-in full-population audit; demo counts must not be substituted."
+        "field_completeness_status": "not_measured_uniformly",
+        "physical_row_count": 14571,
+        "snapshot_id": null,
+        "target_observation_count": 58284,
+        "target_observation_count_basis": "observed_data.target_observations",
+        "warning": "The audit proves only its explicit counts and metadata. It does not imply row-level completeness for fields whose non-null numerator was not measured."
       },
       "dataset_version": "Data Series 801, 2013 release",
       "demo_fixture": {
@@ -13458,9 +13463,9 @@
   "summary": {
     "demo_record_count": 1084,
     "executable_source_count": 21,
-    "sources_with_full_audit": 19,
+    "sources_with_full_audit": 21,
     "sources_with_target_observation_denominator": 21,
-    "sources_without_full_audit": 2,
+    "sources_without_full_audit": 0,
     "uniform_full_field_profiles": 21
   }
 }

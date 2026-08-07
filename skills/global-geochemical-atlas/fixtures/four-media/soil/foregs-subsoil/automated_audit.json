@@ -1,0 +1,1944 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 27,
+      "record_ids": [
+        "foregs-subsoil-review-01",
+        "foregs-subsoil-review-02",
+        "foregs-subsoil-review-03",
+        "foregs-subsoil-review-05",
+        "foregs-subsoil-review-07",
+        "foregs-subsoil-review-08",
+        "foregs-subsoil-review-09",
+        "foregs-subsoil-review-10",
+        "foregs-subsoil-review-11",
+        "foregs-subsoil-review-12",
+        "foregs-subsoil-review-13",
+        "foregs-subsoil-review-14",
+        "foregs-subsoil-review-15",
+        "foregs-subsoil-review-16",
+        "foregs-subsoil-review-17",
+        "foregs-subsoil-review-18",
+        "foregs-subsoil-review-19",
+        "foregs-subsoil-review-20",
+        "foregs-subsoil-review-21",
+        "foregs-subsoil-review-22",
+        "foregs-subsoil-review-23",
+        "foregs-subsoil-review-24",
+        "foregs-subsoil-review-25",
+        "foregs-subsoil-review-26",
+        "foregs-subsoil-review-27",
+        "foregs-subsoil-review-28",
+        "foregs-subsoil-review-30"
+      ]
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "foregs-subsoil-review-06",
+        "foregs-subsoil-review-16",
+        "foregs-subsoil-review-17"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "foregs-subsoil-review-01",
+        "foregs-subsoil-review-02",
+        "foregs-subsoil-review-03",
+        "foregs-subsoil-review-04",
+        "foregs-subsoil-review-05",
+        "foregs-subsoil-review-06",
+        "foregs-subsoil-review-07",
+        "foregs-subsoil-review-08",
+        "foregs-subsoil-review-09",
+        "foregs-subsoil-review-10",
+        "foregs-subsoil-review-11",
+        "foregs-subsoil-review-12",
+        "foregs-subsoil-review-13",
+        "foregs-subsoil-review-14",
+        "foregs-subsoil-review-15",
+        "foregs-subsoil-review-16",
+        "foregs-subsoil-review-17",
+        "foregs-subsoil-review-18",
+        "foregs-subsoil-review-19",
+        "foregs-subsoil-review-20",
+        "foregs-subsoil-review-21",
+        "foregs-subsoil-review-22",
+        "foregs-subsoil-review-23",
+        "foregs-subsoil-review-24",
+        "foregs-subsoil-review-25",
+        "foregs-subsoil-review-26",
+        "foregs-subsoil-review-27",
+        "foregs-subsoil-review-28",
+        "foregs-subsoil-review-29",
+        "foregs-subsoil-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_AR_data_2v5_8Feb06.csv#row=4",
+          "src-bd6a71760399c8c68e729aff2a2bc3f8231fef1d7ac987147542405071f74e3a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "2.5",
+          "record_id": "rec-3f81ccbe7a9ce95c1074c243f7045ed3b94f4e65e44e9a969c9e0b6dcadc623e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "31",
+          "record_id": "rec-cb215a67181b3c0b9b939243c8e9d130f40131ae56c8e87e9fb3309ab533ccd2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "21",
+          "record_id": "rec-d1e8224f7dabbdc86babd3cc2acec65e3f832247c2a507655450c63a2eed3252",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "53",
+          "record_id": "rec-6567d18ede616cbb5dec59c1695c62cc3598d29db78c9708791d7849ee753dee",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "6",
+          "record_id": "rec-26fd5f8730ad9c3592b616e2cd862a27d49782401d58846218241e4c48bb0834",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "34",
+          "record_id": "rec-13090cc31c66913af973f06e51617cbfb5e2a0c49011a0f238e833e98f8fb596",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.5",
+        "Cr": "31",
+        "Cu": "21",
+        "Ni": "53",
+        "Pb": "6",
+        "Zn": "34"
+      },
+      "review_id": "foregs-subsoil-review-01",
+      "sample_id": "N24E14C1",
+      "selection_reasons": [
+        "member=C_AR_data_2v5_8Feb06.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_locator": "C_AR_data_2v5_8Feb06.csv#row=4",
+      "source_record_id": "src-bd6a71760399c8c68e729aff2a2bc3f8231fef1d7ac987147542405071f74e3a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_AR_data_2v5_8Feb06.csv#row=5",
+          "src-cfc42ba93df169453b3dade03a039605899c775e812973d0bd30fd34f88c0462"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "11",
+          "record_id": "rec-06d6f453a75da04fec00141d877b1d7120ec9be77510b0935f7e8219ee6def2b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "40",
+          "record_id": "rec-62c47233d7a68a195afc6397c349a9c01c8be6693f909156506bf5af4f3a55e9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "20",
+          "record_id": "rec-fd3709e796405517f13c15d11089580a124b6034996bddbd2ead8acec2482e39",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "37",
+          "record_id": "rec-d388dac310efb46542fa862ea2bf30f6e83d352a5a00e37503b937cee14977ab",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "12",
+          "record_id": "rec-1e6df98d03c5e4fe3fb3960815678bd15cb6a6cca0ee6ef4eb819820addc75f7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "35",
+          "record_id": "rec-580e9a33fe2c382a5c65335b996d75556d0900ebe22a62c4d19230cceba05366",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "11",
+        "Cr": "40",
+        "Cu": "20",
+        "Ni": "37",
+        "Pb": "12",
+        "Zn": "35"
+      },
+      "review_id": "foregs-subsoil-review-02",
+      "sample_id": "N24E15C2",
+      "selection_reasons": [
+        "member=C_AR_data_2v5_8Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "C_AR_data_2v5_8Feb06.csv#row=5",
+      "source_record_id": "src-cfc42ba93df169453b3dade03a039605899c775e812973d0bd30fd34f88c0462"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_Hg_data_2v4_9Feb06.csv#row=4",
+          "src-291b173d6a697ca08f1201c7d3cd9bfa6dbfb45cff79b4ba7fb398e426e9cba6"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_subsoil",
+          "raw_value": "0.0147",
+          "record_id": "rec-949e0392fd91a75a73923e0aece796b5521fab4fd18a3f7184d0e97f8dc1af59",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.0147"
+      },
+      "review_id": "foregs-subsoil-review-03",
+      "sample_id": "N24E14C1",
+      "selection_reasons": [
+        "member=C_Hg_data_2v4_9Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "C_Hg_data_2v4_9Feb06.csv#row=4",
+      "source_record_id": "src-291b173d6a697ca08f1201c7d3cd9bfa6dbfb45cff79b4ba7fb398e426e9cba6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "C_XRF_data_2v6_8Feb06.csv#row=73",
+          "src-17e6d86af4b093e3709fc41e22b7bd69918b666dbd8ad77c334f43bec4aaf52a"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "12",
+          "record_id": "rec-5a28affefa6dfde689e677a39daa33a58a9673b95e7d34508801702c6de59341",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "1.5",
+          "record_id": "rec-874f6be114646a66113323e0b772b5f6821850f036201b5f4b8bfff6ba238dc3",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "12",
+        "Zn": "1.5"
+      },
+      "review_id": "foregs-subsoil-review-04",
+      "sample_id": "N27W03C3",
+      "selection_reasons": [
+        "member=C_XRF_data_2v6_8Feb06.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_locator": "C_XRF_data_2v6_8Feb06.csv#row=73",
+      "source_record_id": "src-17e6d86af4b093e3709fc41e22b7bd69918b666dbd8ad77c334f43bec4aaf52a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_XRF_data_2v6_8Feb06.csv#row=4",
+          "src-4c3265943dd26e84b0b299f8ce2d870c9c469e70e080234e9adfafb1c4d0b0bc"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "60",
+          "record_id": "rec-aa553df2ce450c118129124a81d70ee33d63e144fee078eac8b3eade0c1ccbcf",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "36",
+          "record_id": "rec-f8eae993dc5d23ffef081d9bb356f14cfd361e2a9a6441932ea20f17c4d7eb38",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "60",
+        "Zn": "36"
+      },
+      "review_id": "foregs-subsoil-review-05",
+      "sample_id": "N24E14C1",
+      "selection_reasons": [
+        "member=C_XRF_data_2v6_8Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "C_XRF_data_2v6_8Feb06.csv#row=4",
+      "source_record_id": "src-4c3265943dd26e84b0b299f8ce2d870c9c469e70e080234e9adfafb1c4d0b0bc"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "C_icp_data_2v6_9Feb06.csv#row=62",
+          "src-8385a5318b6076b0ccc15d1e95909ea5011ccc6b0708369fa1d646a7d5e0ef0b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "212",
+          "record_id": "rec-695dcc3dbfce1d05cdd7fe2accee33bdea6b5e392be41f4e9788d46bc0d847d3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "1.5",
+          "record_id": "rec-dc44ac02b665a018cb408da0c8ce16ba8d21c99df8971eba48f1641021eef16b",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "212",
+        "Pb": "1.5"
+      },
+      "review_id": "foregs-subsoil-review-06",
+      "sample_id": "N27E13C4",
+      "selection_reasons": [
+        "member=C_icp_data_2v6_9Feb06.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_locator": "C_icp_data_2v6_9Feb06.csv#row=62",
+      "source_record_id": "src-8385a5318b6076b0ccc15d1e95909ea5011ccc6b0708369fa1d646a7d5e0ef0b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icp_data_2v6_9Feb06.csv#row=4",
+          "src-aa6b3d1e605cbad57fc9ed84190cea9f7434a0e4b06de4fcb55771616081fc89"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "57.2",
+          "record_id": "rec-52267dd8aa4ac93efb68addc507f1b137992f572765b6dd7b618d603bf6d5293",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "7.3",
+          "record_id": "rec-ef7371006c03feb8a8754a2a9efd2f962cee35998f6b2000b0b621b26fe07227",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "57.2",
+        "Pb": "7.3"
+      },
+      "review_id": "foregs-subsoil-review-07",
+      "sample_id": "N24E14C1",
+      "selection_reasons": [
+        "member=C_icp_data_2v6_9Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "C_icp_data_2v6_9Feb06.csv#row=4",
+      "source_record_id": "src-aa6b3d1e605cbad57fc9ed84190cea9f7434a0e4b06de4fcb55771616081fc89"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icpadd_data_2v5_9Feb06.csv#row=4",
+          "src-994a70cf18cde908a51f4869487d3b367411db8d2fd75013fb673ddb3b7a7a50"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "3.33",
+          "record_id": "rec-79cc14eda1a3ae8d9c92f26f693c59a1a88c2bfb066bda44681ec487d4eaf4fd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "16.7",
+          "record_id": "rec-4cba7465672302e8e96dccaa890a1858608abac2cd90e601439d29412f62d39d",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "3.33",
+        "Cu": "16.7"
+      },
+      "review_id": "foregs-subsoil-review-08",
+      "sample_id": "N24E14C1",
+      "selection_reasons": [
+        "member=C_icpadd_data_2v5_9Feb06.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "C_icpadd_data_2v5_9Feb06.csv#row=4",
+      "source_record_id": "src-994a70cf18cde908a51f4869487d3b367411db8d2fd75013fb673ddb3b7a7a50"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_AR_data_2v5_8Feb06.csv#row=6",
+          "src-0b10514f6abd16fce17018c7ce359bcc52ce2c2582e31953bc0d94f01bf01325"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "6",
+          "record_id": "rec-3d486c1740e456d61ac50fe93c615a7700af71dfff03016b64022a0868f73894",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "159",
+          "record_id": "rec-54921eefa4d7aac6fdf5bd0978b9fb7faf05245c75810c51f150fe4acdee4a15",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "31",
+          "record_id": "rec-61a342ce097e3d51b069a532bb3956abdb65d2d3638e4b76097b362ff2c0cdb4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "172",
+          "record_id": "rec-37c038ead54350509ebdac3722c152b68995e8c430e697c22c7e5ad4a7da1b59",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "8",
+          "record_id": "rec-bd1bb364b3a6ab48267381be34275ac96252f43304eb4ef5fccf726e05df3f3e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "59",
+          "record_id": "rec-1310f5a7fff98c95bcb2b8e09b76df9d93d393488bc2d81367cdc70f6287ba96",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "6",
+        "Cr": "159",
+        "Cu": "31",
+        "Ni": "172",
+        "Pb": "8",
+        "Zn": "59"
+      },
+      "review_id": "foregs-subsoil-review-09",
+      "sample_id": "N24E15C4",
+      "selection_reasons": [
+        "member=C_AR_data_2v5_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_AR_data_2v5_8Feb06.csv#row=6",
+      "source_record_id": "src-0b10514f6abd16fce17018c7ce359bcc52ce2c2582e31953bc0d94f01bf01325"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_Hg_data_2v4_9Feb06.csv#row=5",
+          "src-bc06984523bbd909bb8995837bc1165ef6eb1926a60f5fd34c7b5ddaee3077d2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_subsoil",
+          "raw_value": "0.05454",
+          "record_id": "rec-c4209da09faaac306899c553c6c44e03ed8a8832eb78aca6b3ab25d907922fbe",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.05454"
+      },
+      "review_id": "foregs-subsoil-review-10",
+      "sample_id": "N24E15C2",
+      "selection_reasons": [
+        "member=C_Hg_data_2v4_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_Hg_data_2v4_9Feb06.csv#row=5",
+      "source_record_id": "src-bc06984523bbd909bb8995837bc1165ef6eb1926a60f5fd34c7b5ddaee3077d2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_XRF_data_2v6_8Feb06.csv#row=5",
+          "src-f3bade3d140222f466d893537c01a1607c82eabd35a6b79a55c79d34a7d33b0b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "75",
+          "record_id": "rec-664f204a984d83fa57ff66b434a0edd9143003baf6ac154e5e442238e09722a6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "43",
+          "record_id": "rec-58664ab0bf12258a6bc8db713db657580e0e75e9bb35744ceadb93b23a9687b8",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "75",
+        "Zn": "43"
+      },
+      "review_id": "foregs-subsoil-review-11",
+      "sample_id": "N24E15C2",
+      "selection_reasons": [
+        "member=C_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_XRF_data_2v6_8Feb06.csv#row=5",
+      "source_record_id": "src-f3bade3d140222f466d893537c01a1607c82eabd35a6b79a55c79d34a7d33b0b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icp_data_2v6_9Feb06.csv#row=5",
+          "src-4176adf524f1f56fad6b0f0405335f1f450b71cfc535a2859c1841dc3b97263a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "48.9",
+          "record_id": "rec-496d922551eacb40aaa38bc2cb669cdca8f23ab5b180e52ab52a01ae91a979db",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "14.2",
+          "record_id": "rec-57fd7518a6cc4c207875ce384f5a35536d58c84c5f56966c4f2aa6788b1218c7",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "48.9",
+        "Pb": "14.2"
+      },
+      "review_id": "foregs-subsoil-review-12",
+      "sample_id": "N24E15C2",
+      "selection_reasons": [
+        "member=C_icp_data_2v6_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icp_data_2v6_9Feb06.csv#row=5",
+      "source_record_id": "src-4176adf524f1f56fad6b0f0405335f1f450b71cfc535a2859c1841dc3b97263a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icpadd_data_2v5_9Feb06.csv#row=5",
+          "src-6d9cd00a711d351c8c5ad7f085a3f9126f6ac970fa4d7274864ff4d61c60d2a9"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "11.1",
+          "record_id": "rec-6283ee9e28fc6f5d482822d44485db9a87c5f9cf98a433993ffc3f923eace2d7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "16.1",
+          "record_id": "rec-c46d7d46165c3f5c77ae093e39670c7221ec190dbe2a7cba7efcf892c6a7cbb7",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "11.1",
+        "Cu": "16.1"
+      },
+      "review_id": "foregs-subsoil-review-13",
+      "sample_id": "N24E15C2",
+      "selection_reasons": [
+        "member=C_icpadd_data_2v5_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icpadd_data_2v5_9Feb06.csv#row=5",
+      "source_record_id": "src-6d9cd00a711d351c8c5ad7f085a3f9126f6ac970fa4d7274864ff4d61c60d2a9"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_AR_data_2v5_8Feb06.csv#row=7",
+          "src-1fd540090318397a573241f37eeed6fc32b7a8ae55cf169914988bf3a31dcda2"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "2.5",
+          "record_id": "rec-206155772afdf895cd9b896a7f1414e5fd71a27c0ed1c9721bed33ae84977f29",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "43",
+          "record_id": "rec-ed55392c7e3c068a6041c044a059738472ce120502f0bab8b30eb645112cfba8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "17",
+          "record_id": "rec-237904acfbee258a07590786df04e07570c7bd02992793c84955964696e96c58",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "53",
+          "record_id": "rec-732033b568114d759a0e49f359dafa8c36c3ad36c2e2962d8a171c2fb788f018",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "1.5",
+          "record_id": "rec-e9323dc4238e86800c9217b775f78611fadc63ae810e11d0cbf418f310f5e26d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "30",
+          "record_id": "rec-19caa899a77ccc3016d12d9afcc5542c6caa406d0b49e767722e212c83e67123",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.5",
+        "Cr": "43",
+        "Cu": "17",
+        "Ni": "53",
+        "Pb": "1.5",
+        "Zn": "30"
+      },
+      "review_id": "foregs-subsoil-review-14",
+      "sample_id": "N24E15C5",
+      "selection_reasons": [
+        "member=C_AR_data_2v5_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_AR_data_2v5_8Feb06.csv#row=7",
+      "source_record_id": "src-1fd540090318397a573241f37eeed6fc32b7a8ae55cf169914988bf3a31dcda2"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_Hg_data_2v4_9Feb06.csv#row=6",
+          "src-9fbc46cc1ead3f5603e1586c489a2a7310e21ae2d31629f00f05307fe1359107"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_subsoil",
+          "raw_value": "0.03445",
+          "record_id": "rec-1aa7fea7ae38a72c4833f29c1e6e5475d672f4652b3c1a101e3e49de4fe584eb",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.03445"
+      },
+      "review_id": "foregs-subsoil-review-15",
+      "sample_id": "N24E15C4",
+      "selection_reasons": [
+        "member=C_Hg_data_2v4_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_Hg_data_2v4_9Feb06.csv#row=6",
+      "source_record_id": "src-9fbc46cc1ead3f5603e1586c489a2a7310e21ae2d31629f00f05307fe1359107"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_XRF_data_2v6_8Feb06.csv#row=6",
+          "src-285493c69290cbd89ecdf8c5b1387ed9d7112889b7dcf71b9e6f6d69486c1e00"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "391",
+          "record_id": "rec-7d5b3e890b841738157b3f587ef2f1dd0b0cc62f6e675a424f259da9639b61a0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "59",
+          "record_id": "rec-39cdb8d7ca1f0f4e69f0101d5487d1dba24ba20d1b1bf0aa7dbebfe4a1e927ea",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "391",
+        "Zn": "59"
+      },
+      "review_id": "foregs-subsoil-review-16",
+      "sample_id": "N24E15C4",
+      "selection_reasons": [
+        "member=C_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_XRF_data_2v6_8Feb06.csv#row=6",
+      "source_record_id": "src-285493c69290cbd89ecdf8c5b1387ed9d7112889b7dcf71b9e6f6d69486c1e00"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icp_data_2v6_9Feb06.csv#row=6",
+          "src-30eacf450edac07e77ceb5f987ae7698832c7a09c1bc68de823206196d3fefd5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "186",
+          "record_id": "rec-893fe99c514ba2f8e7f6034e181ef740db6ec37d19e308aa7aa8cc97dceb02b8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "8.59",
+          "record_id": "rec-8a5f134a0452fadc65bcf8c5defd9b8bc2ffd8e0f3bd0399ebb3d10be4e9ce5a",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "186",
+        "Pb": "8.59"
+      },
+      "review_id": "foregs-subsoil-review-17",
+      "sample_id": "N24E15C4",
+      "selection_reasons": [
+        "member=C_icp_data_2v6_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icp_data_2v6_9Feb06.csv#row=6",
+      "source_record_id": "src-30eacf450edac07e77ceb5f987ae7698832c7a09c1bc68de823206196d3fefd5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icpadd_data_2v5_9Feb06.csv#row=6",
+          "src-a9dafa101313b42b516967c28cd088bd01480b8ec4ed9a0a862f144b8e5034f4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "7.04",
+          "record_id": "rec-eb45edfa0fdff79107e11b5981d620ba470a353d2008baee3a5c5d95520f1d3f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "25.3",
+          "record_id": "rec-ccf8767100e36acf7646b22fa04e12e862c2904195fef3db21c84a7cc0ddd0a4",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "7.04",
+        "Cu": "25.3"
+      },
+      "review_id": "foregs-subsoil-review-18",
+      "sample_id": "N24E15C4",
+      "selection_reasons": [
+        "member=C_icpadd_data_2v5_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icpadd_data_2v5_9Feb06.csv#row=6",
+      "source_record_id": "src-a9dafa101313b42b516967c28cd088bd01480b8ec4ed9a0a862f144b8e5034f4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_AR_data_2v5_8Feb06.csv#row=8",
+          "src-39553da7846f3d05d6974c70b7177e84c7f913a88631b3c4584d89471617a82b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "6",
+          "record_id": "rec-80071e5b9020113ce0e4b259d8fa3369bb9232b59cc020d5f667662d39eb490d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "40",
+          "record_id": "rec-d01bbc92816b4ffad60a05d49725c420b1e98412679e56938b21855750fc8ed5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "21",
+          "record_id": "rec-6ee6377f2b4df2d64b0dd3c70d56eb6e13c9fe774b1979b012839bbd06cf0e61",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "35",
+          "record_id": "rec-bca3691a3d2a2f30f6c7e9160f60ab9a613bc52f36f6bb0526a4cdc6e23e3e02",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "10",
+          "record_id": "rec-d8915752343a63d1141477cdf2a69e6a32f3b324da2514d9b6c4eb5b3409a083",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "47",
+          "record_id": "rec-fa253a36b81e965fb33e4a93e4f2d9733dff531afdbe8df9159e69f957a70238",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "6",
+        "Cr": "40",
+        "Cu": "21",
+        "Ni": "35",
+        "Pb": "10",
+        "Zn": "47"
+      },
+      "review_id": "foregs-subsoil-review-19",
+      "sample_id": "N24E16C3",
+      "selection_reasons": [
+        "member=C_AR_data_2v5_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_AR_data_2v5_8Feb06.csv#row=8",
+      "source_record_id": "src-39553da7846f3d05d6974c70b7177e84c7f913a88631b3c4584d89471617a82b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_Hg_data_2v4_9Feb06.csv#row=7",
+          "src-2f5e268974ef68b02282b1f2f32563e01acb7d09d48df65418ed0d5f7560856c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_subsoil",
+          "raw_value": "0.00824",
+          "record_id": "rec-717e873ef9c5764a834e452b7e7e09ca956da29a084ebe98b46b375896c41fc7",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.00824"
+      },
+      "review_id": "foregs-subsoil-review-20",
+      "sample_id": "N24E15C5",
+      "selection_reasons": [
+        "member=C_Hg_data_2v4_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_Hg_data_2v4_9Feb06.csv#row=7",
+      "source_record_id": "src-2f5e268974ef68b02282b1f2f32563e01acb7d09d48df65418ed0d5f7560856c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_XRF_data_2v6_8Feb06.csv#row=7",
+          "src-a5417484469800d5b3129775b9f5614a076f20345322a118785e936aeda0af0c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "98",
+          "record_id": "rec-c03f53daec2e92a0b76776394286c97eaf85a95b7f181983e74214d06305f79a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "27",
+          "record_id": "rec-0dd091155963e6fac1e2fccbdfa940024ea586b4d236acd85acbea421a255d23",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "98",
+        "Zn": "27"
+      },
+      "review_id": "foregs-subsoil-review-21",
+      "sample_id": "N24E15C5",
+      "selection_reasons": [
+        "member=C_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_XRF_data_2v6_8Feb06.csv#row=7",
+      "source_record_id": "src-a5417484469800d5b3129775b9f5614a076f20345322a118785e936aeda0af0c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icp_data_2v6_9Feb06.csv#row=7",
+          "src-9bda723108dcc8af6392c9204453ed07bd9b39241893768be99b37f43261e7b4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "52.4",
+          "record_id": "rec-9d741faa21f33d946256d89637151961ed1ef8c2069e2befd660f4b9d8a6f88c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "4.85",
+          "record_id": "rec-db228fb178d53982233c2953702d75760482236b3afb3597100565c017e66230",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "52.4",
+        "Pb": "4.85"
+      },
+      "review_id": "foregs-subsoil-review-22",
+      "sample_id": "N24E15C5",
+      "selection_reasons": [
+        "member=C_icp_data_2v6_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icp_data_2v6_9Feb06.csv#row=7",
+      "source_record_id": "src-9bda723108dcc8af6392c9204453ed07bd9b39241893768be99b37f43261e7b4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icpadd_data_2v5_9Feb06.csv#row=7",
+          "src-6f38798a24f5077429f6a69c414684c81b79607633e1124242c2de6411314370"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "4.22",
+          "record_id": "rec-3f60581ea689fc276e9adba8c87598e446549f030e907f5f9ce971d10f727889",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "11",
+          "record_id": "rec-efd171b31034c0e8f57f574b46d79f63b25b1e1658a879d45ee76ca7ec1d1484",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "4.22",
+        "Cu": "11"
+      },
+      "review_id": "foregs-subsoil-review-23",
+      "sample_id": "N24E15C5",
+      "selection_reasons": [
+        "member=C_icpadd_data_2v5_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icpadd_data_2v5_9Feb06.csv#row=7",
+      "source_record_id": "src-6f38798a24f5077429f6a69c414684c81b79607633e1124242c2de6411314370"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_AR_data_2v5_8Feb06.csv#row=9",
+          "src-929917cd841a237c725628db90a9c3ae291db83a23acb2b3d3e1ca3f0e08c16c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "7",
+          "record_id": "rec-851838eae46dd211095d1bf475518dcfae5cc2fc9c705e3b2ad5dbced56d7e88",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "19",
+          "record_id": "rec-0b6ff7ffeb3daeae67dc6bfcde0e94daf42fd6db266bc92315b8042d7cf67b33",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "13",
+          "record_id": "rec-771809559752c94207a7d123e6f03f40c8aec2993f0f1f378c2a43f533d47bee",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "21",
+          "record_id": "rec-2a247a6a6c42e2f2d8ff563a23f4d54b4e02f497f4f197e3a12d85b8d184cb54",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "9",
+          "record_id": "rec-4ecbc7eaed36082fdf3919f9040d847462bef191788d85d23f491bfab015d210",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "44",
+          "record_id": "rec-9b1b7bc3ffd32a0cf75b2071d7f007bd529e80efed90d7363528d279ae8b9ebb",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "7",
+        "Cr": "19",
+        "Cu": "13",
+        "Ni": "21",
+        "Pb": "9",
+        "Zn": "44"
+      },
+      "review_id": "foregs-subsoil-review-24",
+      "sample_id": "N25E08C1",
+      "selection_reasons": [
+        "member=C_AR_data_2v5_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_AR_data_2v5_8Feb06.csv#row=9",
+      "source_record_id": "src-929917cd841a237c725628db90a9c3ae291db83a23acb2b3d3e1ca3f0e08c16c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_Hg_data_2v4_9Feb06.csv#row=8",
+          "src-3af850172896c47ce7f1699a9efcade6fe974d9a4e0e8ccfb3732fc2f6b279e7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_subsoil",
+          "raw_value": "0.02821",
+          "record_id": "rec-f2f2194934b2914814acf07a4ee18d1ffcdc4b92abb230228a52827b192803e7",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.02821"
+      },
+      "review_id": "foregs-subsoil-review-25",
+      "sample_id": "N24E16C3",
+      "selection_reasons": [
+        "member=C_Hg_data_2v4_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_Hg_data_2v4_9Feb06.csv#row=8",
+      "source_record_id": "src-3af850172896c47ce7f1699a9efcade6fe974d9a4e0e8ccfb3732fc2f6b279e7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_XRF_data_2v6_8Feb06.csv#row=8",
+          "src-10c75405ac1f3b514ee2e2ed885366df3d02b94159ceffe1eaa073e279c0e40a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "86",
+          "record_id": "rec-e41298c43fe105b2a023b43225d10705d37756ace6172425d6af3c8469b09887",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "wavelength-dispersive XRF",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "47",
+          "record_id": "rec-ae77fa6ea71be3be1177669eb4e07d8d12621950d136b56ab2759b50318e6837",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "86",
+        "Zn": "47"
+      },
+      "review_id": "foregs-subsoil-review-26",
+      "sample_id": "N24E16C3",
+      "selection_reasons": [
+        "member=C_XRF_data_2v6_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_XRF_data_2v6_8Feb06.csv#row=8",
+      "source_record_id": "src-10c75405ac1f3b514ee2e2ed885366df3d02b94159ceffe1eaa073e279c0e40a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icp_data_2v6_9Feb06.csv#row=8",
+          "src-77eaeddd3a97d9c3928b9fe8558c9be6ee65216dbe7ab424ab0a18e2a81bf37a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "38.1",
+          "record_id": "rec-6106257d99f882c7d9c77561d9ea2a3a8b10b35969f932fb0f524567272954fe",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "10.5",
+          "record_id": "rec-33ba773d5ed038914452f461f1c94e527112120dda89c576bfce561960a50af1",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "38.1",
+        "Pb": "10.5"
+      },
+      "review_id": "foregs-subsoil-review-27",
+      "sample_id": "N24E16C3",
+      "selection_reasons": [
+        "member=C_icp_data_2v6_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icp_data_2v6_9Feb06.csv#row=8",
+      "source_record_id": "src-77eaeddd3a97d9c3928b9fe8558c9be6ee65216dbe7ab424ab0a18e2a81bf37a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_icpadd_data_2v5_9Feb06.csv#row=8",
+          "src-9bcf380eb9caba4faa31493736ca2d54d5d0d366c121b56822cb2a2727e26568"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "8.73",
+          "record_id": "rec-b98eebb28dadfbc9538a2738edc9c3767a3ace62ae8f3e37a472bb27b2b3a174",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "quadrupole ICP-MS",
+          "measurement_basis": "total_selected_<2mm_subsoil",
+          "raw_value": "15",
+          "record_id": "rec-aa6b0043d2f226362b55a734453ce954f6d1a48f907a76f5923004a2507870d4",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "8.73",
+        "Cu": "15"
+      },
+      "review_id": "foregs-subsoil-review-28",
+      "sample_id": "N24E16C3",
+      "selection_reasons": [
+        "member=C_icpadd_data_2v5_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_icpadd_data_2v5_9Feb06.csv#row=8",
+      "source_record_id": "src-9bcf380eb9caba4faa31493736ca2d54d5d0d366c121b56822cb2a2727e26568"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "C_AR_data_2v5_8Feb06.csv#row=10",
+          "src-7d49563e6f3c6667b43bf1d11d8f35593029dd94b54b57c8f8674b1795907538"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "2.5",
+          "record_id": "rec-4245bc5ac571fa5eecffc9af62e0bc9874ae45df77699bfff04b21c718cb66ca",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "71",
+          "record_id": "rec-3c5cb5d62f9d52cce3b5e9833637e137b9dd7c4a3e1ee7e570f97ec1883a7db8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "44",
+          "record_id": "rec-1780abf5f26f96fc8fe6ed5540bb6bdf3c4bcec476b09c13b9e05b99058e9472",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "80",
+          "record_id": "rec-1ce8435f93d3956f462137629733b51d79bd4e65288decadc3df54f5ebdc8e6f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "16",
+          "record_id": "rec-7cbec7a73b70dedc68c002a6ad0ac42c2da734f51fb588f0932bd421e4552ee3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_subsoil",
+          "raw_value": "84",
+          "record_id": "rec-59b86f740bedcf2fd7e82c061d25933316a9e8562ac4ecd281f2c029fa5f3a41",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.5",
+        "Cr": "71",
+        "Cu": "44",
+        "Ni": "80",
+        "Pb": "16",
+        "Zn": "84"
+      },
+      "review_id": "foregs-subsoil-review-29",
+      "sample_id": "N25E09C1",
+      "selection_reasons": [
+        "member=C_AR_data_2v5_8Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_AR_data_2v5_8Feb06.csv#row=10",
+      "source_record_id": "src-7d49563e6f3c6667b43bf1d11d8f35593029dd94b54b57c8f8674b1795907538"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "C_Hg_data_2v4_9Feb06.csv#row=9",
+          "src-af58bd1e485e9996979b3759338b22b99d21eaff0e0902d7b9c91e0683869fc4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_subsoil",
+          "raw_value": "0.0139",
+          "record_id": "rec-e323d0e16ef8209dab657834b0db6a1f712007ebe9245b9b5095ba79e62b93db",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.0139"
+      },
+      "review_id": "foregs-subsoil-review-30",
+      "sample_id": "N25E08C1",
+      "selection_reasons": [
+        "member=C_Hg_data_2v4_9Feb06.csv;round_robin_fill"
+      ],
+      "source_locator": "C_Hg_data_2v4_9Feb06.csv#row=9",
+      "source_record_id": "src-af58bd1e485e9996979b3759338b22b99d21eaff0e0902d7b9c91e0683869fc4"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "foregs-subsoil",
+  "status": "automated_audit_complete"
+}

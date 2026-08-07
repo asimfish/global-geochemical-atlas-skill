@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:ai4s:geochemistry-human-review:v1",
-  "title": "D1 stratified source-record human review",
+  "title": "Deprecated D1 stratified source-record human review",
+  "$comment": "Compatibility schema only. New evidence audits use automated-audit.schema.json and do not require a human signature.",
   "type": "object",
   "additionalProperties": false,
   "required": [
