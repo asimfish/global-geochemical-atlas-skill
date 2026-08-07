@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:self-correction-loop-report:v1",
+  "title": "Self-correction loop report",
+  "description": "Auditable multi-round self-correction record produced by scripts/run_self_correction_loop.py. The loop only performs provably safe autonomous repairs (retrying transient source failures); every other issue is routed to an explicit manual repair plan. Scientific limits are never counted as repairable.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_path",
+    "request_sha256",
+    "mode",
+    "analysis_profile",
+    "max_rounds",
+    "time_budget_seconds",
+    "rounds",
+    "repair_plan",
+    "stop_reason",
+    "status",
+    "next_step",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "self-correction-loop-report-v1"},
+    "request_path": {"type": "string"},
+    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "mode": {"type": "string", "enum": ["demo", "input", "online"]},
+    "analysis_profile": {"type": "string", "enum": ["demo", "production"]},
+    "max_rounds": {"type": "integer", "minimum": 1},
+    "time_budget_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "rounds": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "round",
+          "output_dir",
+          "command",
+          "exit_code",
+          "execution_status",
+          "route_status",
+          "validation_status",
+          "duration_seconds",
+          "input_fingerprints",
+          "counts",
+          "issue_codes",
+          "failed_sources",
+          "gate_events",
+          "delta_vs_previous"
+        ],
+        "properties": {
+          "round": {"type": "integer", "minimum": 1},
+          "output_dir": {"type": "string"},
+          "command": {"type": "array", "items": {"type": "string"}},
+          "exit_code": {"type": ["integer", "null"]},
+          "execution_status": {"type": ["string", "null"]},
+          "route_status": {"type": ["string", "null"]},
+          "validation_status": {
+            "type": "string",
+            "enum": ["valid", "invalid", "not_run"]
+          },
+          "duration_seconds": {"type": "number", "minimum": 0},
+          "input_fingerprints": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["request_sha256", "input_sha256", "evidence_sha256"],
+            "properties": {
+              "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "input_sha256": {
+                "type": ["string", "null"],
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "evidence_sha256": {
+                "type": ["string", "null"],
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          },
+          "counts": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "records",
+              "action_required",
+              "review_required",
+              "scientific_limit",
+              "auto_recheck",
+              "failed_sources",
+              "insufficient_background_groups",
+              "analyzed_background_groups",
+              "candidate_anomalies",
+              "validation_warnings"
+            ],
+            "properties": {
+              "records": {"type": ["integer", "null"], "minimum": 0},
+              "action_required": {"type": ["integer", "null"], "minimum": 0},
+              "review_required": {"type": ["integer", "null"], "minimum": 0},
+              "scientific_limit": {"type": ["integer", "null"], "minimum": 0},
+              "auto_recheck": {"type": ["integer", "null"], "minimum": 0},
+              "failed_sources": {"type": "integer", "minimum": 0},
+              "insufficient_background_groups": {
+                "type": ["integer", "null"],
+                "minimum": 0
+              },
+              "analyzed_background_groups": {
+                "type": ["integer", "null"],
+                "minimum": 0
+              },
+              "candidate_anomalies": {"type": ["integer", "null"], "minimum": 0},
+              "validation_warnings": {"type": ["integer", "null"], "minimum": 0}
+            }
+          },
+          "issue_codes": {
+            "type": "object",
+            "additionalProperties": {"type": "integer", "minimum": 1}
+          },
+          "failed_sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source_id", "error", "retryable"],
+              "properties": {
+                "source_id": {"type": "string"},
+                "error": {"type": "string"},
+                "retryable": {"type": "boolean"}
+              }
+            }
+          },
+          "gate_events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["gate", "status", "detail"],
+              "properties": {
+                "gate": {
+                  "type": "string",
+                  "enum": [
+                    "request_freeze",
+                    "routing_viability",
+                    "input_header",
+                    "run_exit",
+                    "output_validation",
+                    "issue_harvest",
+                    "progress"
+                  ]
+                },
+                "status": {"type": "string", "enum": ["pass", "stop", "info"]},
+                "detail": {"type": "string"}
+              }
+            }
+          },
+          "delta_vs_previous": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["action_required", "failed_sources"],
+            "properties": {
+              "action_required": {"type": ["integer", "null"]},
+              "failed_sources": {"type": ["integer", "null"]}
+            }
+          }
+        }
+      }
+    },
+    "repair_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["autonomous", "manual"],
+      "properties": {
+        "autonomous": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["action", "detail", "source_ids"],
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["retry_failed_sources", "retry_run"]
+              },
+              "detail": {"type": "string"},
+              "source_ids": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "manual": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["stage_owner", "issue_code", "count", "recommended_action"],
+            "properties": {
+              "stage_owner": {"type": "string"},
+              "issue_code": {"type": "string"},
+              "count": {"type": "integer", "minimum": 1},
+              "recommended_action": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "stop_reason": {
+      "type": "string",
+      "description": "in_progress only appears in crash-safe interim writes, never in a terminal report.",
+      "enum": [
+        "converged",
+        "no_autonomous_repair",
+        "no_progress",
+        "round_budget_exhausted",
+        "time_budget_exhausted",
+        "needs_human_review",
+        "contract_validation_failed",
+        "run_failed",
+        "unsupported_scope",
+        "invalid_input",
+        "in_progress"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "partial_success", "needs_human_review", "failed"]
+    },
+    "next_step": {"type": "string"},
+    "claim_boundary": {"type": "string"}
+  }
+}
