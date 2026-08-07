@@ -8,7 +8,7 @@ result, network-download benchmark, or claim of scientific representativeness.
 
 ## Frozen workload
 
-- Measured repository revision: `6c733bf930ee8d452f5d7d1e41d1acaa4a1e42ef`.
+- Measured repository revision: `dca2ce59f88da85e745ae346fab9cf5addc8342b`.
 - Request: `fixtures/production-usgs/request.json`.
 - Demo and analysis profile: `production-usgs` and `production`.
 - Protocol: 3 warm-up runs followed by 10 measured runs.
@@ -44,11 +44,11 @@ CPU_PAIR=0,1
 | Metric | Result |
 |---|---:|
 | Successful measured runs | 10 / 10 |
-| Median elapsed time | 0.498914 s |
-| Mean elapsed time | 0.499149 s |
-| Sample standard deviation | 0.001686 s |
-| Minimum / maximum | 0.496472 s / 0.502118 s |
-| Peak benchmark-process RSS | 55,920 KiB |
+| Median elapsed time | 0.504323 s |
+| Mean elapsed time | 0.504491 s |
+| Sample standard deviation | 0.009565 s |
+| Minimum / maximum | 0.486645 s / 0.518466 s |
+| Peak benchmark-process RSS | 54,784 KiB |
 | Distinct result signatures | 1 |
 | Validated records per run | 996 |
 | Record-evidence entries per run | 996 |
