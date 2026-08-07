@@ -101,7 +101,15 @@ python3 evaluation/docker/campaign.py stage \
 
 ## 6. OpenCode 主 campaign
 
-网关必须兼容 OpenAI API，URL 使用 HTTPS。密钥只通过宿主环境继承，命令、计划和 JSON 均不写密钥值；runner 会在归档前清除日志中的密钥字节。若候选把密钥写入 submission，runner 会等长覆盖该值并以 E1 `74` 失败关闭：
+网关必须兼容 OpenAI API，URL 使用 HTTPS。运行参数不靠命令说明隐式约定，而是由 [`provider_profiles.json`](../docker/provider_profiles.json) 冻结并由 [`provider_profiles.schema.json`](../docker/provider_profiles.schema.json) 描述。每个 profile 都带来源、访问日期、声明边界、独立条目哈希和注册表哈希：
+
+- `local-qwen38-openai-v1`：当前主评测的团队冻结配置；API model ID=`qwen3.8-max`、temperature=`0`、thinking=`not_configured`。这是本地复现实验策略，不冒充主办方尚未公布的 API 参数；
+- `openai-compatible`：开发和补充模型用的通用 HTTPS 配置，仍会记录实际 model、temperature 和 thinking；
+- `competition-qwen-primary-unresolved`：只记录主办方已经确认的展示名，因 endpoint/API model ID/temperature/thinking 未完整公布而故意不可运行。
+
+未知 profile、不可运行 profile、条目/注册表哈希变化，或 model、temperature、thinking 与冻结策略不一致时，宿主 runner 和容器入口都会以环境无效失败关闭。不要原地改写已用于正式实验的 profile；新增版本化 ID，并保留旧条目以便复核历史证据。
+
+密钥只通过宿主环境继承，命令、计划和 JSON 均不写密钥值；runner 会在归档前清除日志中的密钥字节。若候选把密钥写入 submission，runner 会等长覆盖该值并以 E1 `74` 失败关闭：
 
 ```bash
 export EVAL_API_KEY='从密钥管理器注入，不写入仓库'
@@ -110,12 +118,14 @@ python3 evaluation/docker/campaign.py run \
   --image global-geochemical-eval:local \
   --campaign-id qwen-main-v1 \
   --agent opencode \
+  --provider-profile local-qwen38-openai-v1 \
   --network whitelist \
   --provider-base-url https://gateway.example/v1 \
   --api-key-env EVAL_API_KEY \
   --model qwen3.8-max \
   --temperature 0 \
   --supplemental-model qwen3-vl-plus \
+  --supplemental-provider-profile openai-compatible \
   --tasks all \
   --conditions B0,S0 \
   --repeats 3 \
@@ -157,11 +167,12 @@ campaign/
 └── supplemental/...
 ```
 
-记录包含 task/Skill/产物哈希、镜像 ID、资源限制、原始退出码、E1 退出码、运行时长、网络模式和 provider hostname。grader 证据在 submission 外，避免污染候选交卷。
+记录包含 task/Skill/产物哈希、镜像 ID、资源限制、原始退出码、E1 退出码、运行时长、网络模式、provider endpoint、profile/registry 哈希、temperature 和 thinking。`pair_fingerprint_inputs` 明文保存参与哈希的非密钥字段，B0/S0 的配对可独立复算。grader 证据在 submission 外，避免污染候选交卷。
 
 ## 8. 失败关闭
 
 - Docker daemon 或镜像缺失：`73 environment_invalid`；
+- 未知/未解析 provider profile、profile 哈希漂移或冻结参数漂移：`73 environment_invalid`，且在候选执行前终止；
 - 超时：E1 `71`；OOM/137：E1 `72`；缺产物：E1 `74`；
 - grader/finalizer 异常：生成 `ineligible` 分数，不把异常伪装成候选成功分；
 - 完整 B0/S0 × 3 聚合失败：campaign 返回 `2`；

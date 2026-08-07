@@ -52,7 +52,7 @@
       "column": "qc_flags",
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
-      "expected": "latitude_out_of_range",
+      "expected": "latitude_out_of_range;possible_lat_lon_swap",
       "id": "p02_lat",
       "key": {
         "record_id": "P02"

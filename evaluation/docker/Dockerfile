@@ -29,6 +29,7 @@ COPY requirements-sandbox.txt /opt/evaluation/requirements-sandbox.txt
 RUN python -m pip install --no-cache-dir -r /opt/evaluation/requirements-sandbox.txt
 
 COPY container/ /opt/evaluation/container/
+COPY provider_profiles.json provider_profiles.schema.json provider_profiles.py /opt/evaluation/
 
 RUN useradd --create-home --uid 10001 --shell /usr/sbin/nologin candidate \
     && chmod -R a=rX /opt/evaluation

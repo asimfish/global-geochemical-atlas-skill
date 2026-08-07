@@ -19,6 +19,7 @@ class OpenCodeConfigTests(unittest.TestCase):
         self.assertEqual(provider["options"]["apiKey"], "{env:EVAL_API_KEY}")
         self.assertNotIn("secret", str(config).casefold())
         self.assertEqual(config["agent"]["build"]["temperature"], 0.0)
+        self.assertIn("openai-compatible", provider["name"])
 
 
 if __name__ == "__main__":

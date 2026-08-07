@@ -143,7 +143,7 @@ run_manifest.json
 
 ## 5. 执行 B0/S0
 
-每题运行六次：`B0` 三次、`S0` 三次。同一 repeat 的模型、参数、输入、seed、沙箱和资源限制完全一致，并记录相同的 `pair_fingerprint`。
+每题运行六次：`B0` 三次、`S0` 三次。同一 repeat 的 provider profile、模型、temperature、thinking、输入、seed、沙箱和资源限制完全一致，并记录相同的 `pair_fingerprint`。
 
 - B0：候选不能通过 prompt、搜索路径、缓存、环境变量或工作区文件读取 Skill；
 - S0：只增加冻结 Skill 的只读挂载，并记录实际加载证据；
@@ -157,10 +157,12 @@ export EVAL_API_KEY='由密钥管理器注入'
 python3 docker/campaign.py run \
   --image global-geochemical-eval:local \
   --agent opencode --network whitelist \
+  --provider-profile local-qwen38-openai-v1 \
   --provider-base-url https://gateway.example/v1 \
   --model qwen3.8-max \
   --temperature 0 \
   --supplemental-model qwen3-vl-plus \
+  --supplemental-provider-profile openai-compatible \
   --tasks all --conditions B0,S0 --repeats 3 \
   --output-dir /runs/campaign-001
 ```

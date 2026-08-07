@@ -110,7 +110,7 @@ Docker 是 `evaluation` 和 `evaluation_lyf` 共用的运行层。`campaign.py` 
 不得读取其他任务、评分器、gold、rubric、历史结果或 /task 之外的外部目录；不得编造来源未报告的科学事实。
 ```
 
-不要手工改写这段 Prompt。B0 不挂载 Skill，S0 只读挂载同一 Skill；镜像、模型、temperature、资源、网络、题面和运行次数保持一致。
+不要手工改写这段 Prompt。B0 不挂载 Skill，S0 只读挂载同一 Skill；镜像、provider profile、模型、temperature、thinking、资源、网络、题面和运行次数保持一致。
 
 ### Docker runner smoke
 
@@ -150,6 +150,7 @@ python3 evaluation/docker/campaign.py run \
   --image global-geochemical-eval:local \
   --campaign-id qwen-main-v1 \
   --agent opencode \
+  --provider-profile local-qwen38-openai-v1 \
   --network whitelist \
   --provider-base-url https://<兼容 OpenAI API 的网关>/v1 \
   --api-key-env EVAL_API_KEY \

@@ -27,7 +27,7 @@ jobs:
         run: python evaluation_lyf/agent_uplift/test_prompt_contract.py
       - name: Verify independent source truth snapshot
         run: |
-          python -m unittest evaluation/tools/tests/test_source_truth_audit.py -v
+          python -m unittest discover -s evaluation/tools/tests -p 'test_*.py' -v
           python evaluation/tools/audit_source_truth.py --output /tmp/gga-source-truth.json
       - name: Run L0/L1 deterministic preflight
         shell: bash

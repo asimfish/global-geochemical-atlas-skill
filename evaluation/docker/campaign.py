@@ -20,6 +20,7 @@ from typing import Any, Sequence
 from urllib.parse import urlsplit
 
 from common import atomic_json, hash_tree, sha256_file, utc_now
+from provider_profiles import ProviderProfile, load_provider_profile
 
 
 EVALUATION_ROOT = Path(__file__).resolve().parents[1]
@@ -222,6 +223,37 @@ def prepare_task_bundle(question: str, destination: Path) -> tuple[Path, str, st
     return source, split, hash_tree(destination)
 
 
+def pair_fingerprint_inputs(
+    *,
+    task_hash: str,
+    image_id: str,
+    model: str,
+    model_variant: str,
+    temperature: float,
+    repeat: int,
+    profile: RuntimeProfile,
+    network: str,
+    provider_profile: ProviderProfile,
+    provider_base_url: str,
+    thinking_mode: str,
+) -> dict[str, Any]:
+    return {
+        "image_id": image_id,
+        "model": model,
+        "model_variant": model_variant,
+        "temperature": temperature,
+        "thinking": thinking_mode,
+        "provider_base_url": provider_base_url,
+        "provider_profile_id": provider_profile.profile_id,
+        "provider_profile_sha256": provider_profile.profile_sha256,
+        "provider_registry_sha256": provider_profile.registry_sha256,
+        "network": network,
+        "repeat": repeat,
+        "resources": profile.__dict__,
+        "task_hash": task_hash,
+    }
+
+
 def pair_fingerprint(
     *,
     task_hash: str,
@@ -232,17 +264,23 @@ def pair_fingerprint(
     repeat: int,
     profile: RuntimeProfile,
     network: str,
+    provider_profile: ProviderProfile,
+    provider_base_url: str,
+    thinking_mode: str,
 ) -> str:
-    payload = {
-        "image_id": image_id,
-        "model": model,
-        "model_variant": model_variant,
-        "temperature": temperature,
-        "network": network,
-        "repeat": repeat,
-        "resources": profile.__dict__,
-        "task_hash": task_hash,
-    }
+    payload = pair_fingerprint_inputs(
+        task_hash=task_hash,
+        image_id=image_id,
+        model=model,
+        model_variant=model_variant,
+        temperature=temperature,
+        repeat=repeat,
+        profile=profile,
+        network=network,
+        provider_profile=provider_profile,
+        provider_base_url=provider_base_url,
+        thinking_mode=thinking_mode,
+    )
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
@@ -539,8 +577,10 @@ def run_one(
     model: str,
     model_variant: str,
     temperature: float,
+    thinking_mode: str,
     api_key_env: str,
     provider_base_url: str,
+    provider_profile: ProviderProfile,
     agent_command: list[str],
     network: NetworkHandle,
     profile: RuntimeProfile,
@@ -560,7 +600,7 @@ def run_one(
     (submission / "artifacts").mkdir(parents=True)
     stdout_path = run_dir / "candidate.stdout"
     stderr_path = run_dir / "candidate.stderr"
-    fingerprint = pair_fingerprint(
+    fingerprint_inputs = pair_fingerprint_inputs(
         task_hash=task_hash,
         image_id=image_id,
         model=model,
@@ -569,7 +609,13 @@ def run_one(
         repeat=repeat,
         profile=profile,
         network=network.mode,
+        provider_profile=provider_profile,
+        provider_base_url=provider_base_url,
+        thinking_mode=thinking_mode,
     )
+    fingerprint = hashlib.sha256(
+        json.dumps(fingerprint_inputs, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
     environment_names = []
     environment_values: dict[str, str] = {}
     host_environment: dict[str, str] = {}
@@ -584,6 +630,10 @@ def run_one(
                 "EVAL_PROVIDER_MODEL_ID": model,
                 "EVAL_MODEL_VARIANT": model_variant,
                 "EVAL_TEMPERATURE": str(temperature),
+                "EVAL_THINKING_MODE": thinking_mode,
+                "EVAL_PROVIDER_PROFILE_ID": provider_profile.profile_id,
+                "EVAL_PROVIDER_PROFILE_SHA256": provider_profile.profile_sha256,
+                "EVAL_PROVIDER_REGISTRY_SHA256": provider_profile.registry_sha256,
             }
         )
     container_name = f"gga-{safe_slug(run_id)}-{uuid.uuid4().hex[:6]}"
@@ -618,6 +668,7 @@ def run_one(
         "condition": condition,
         "repeat": repeat,
         "pair_fingerprint": fingerprint,
+        "pair_fingerprint_inputs": fingerprint_inputs,
         "task": question,
         "task_bundle_sha256": task_hash,
         "image": image,
@@ -625,6 +676,8 @@ def run_one(
         "model": model,
         "model_variant": model_variant or None,
         "temperature": temperature,
+        "thinking": thinking_mode,
+        "provider_profile": provider_profile.audit_record(thinking_mode=thinking_mode),
         "network_mode": network.mode,
         "resources": profile.__dict__,
         "skill_mounted": condition == "S0",
@@ -642,6 +695,7 @@ def run_one(
         "log_secret_redacted": log_secret_redacted,
         "stdout": stdout_path.name,
         "stderr": stderr_path.name,
+        "provider_base_url": provider_base_url or None,
         "provider_host": urlsplit(provider_base_url).hostname if provider_base_url else None,
         "secret_policy": "API keys are inherited by name or injected in process environment and are never serialized.",
     }
@@ -673,7 +727,13 @@ def run_one(
         "repeat": repeat,
         "pair_fingerprint": fingerprint,
         "model": model,
-        "model_parameters": {"variant": model_variant or None, "temperature": temperature},
+        "provider": provider_profile.audit_record(thinking_mode=thinking_mode),
+        "provider_base_url": provider_base_url or None,
+        "model_parameters": {
+            "variant": model_variant or None,
+            "temperature": temperature,
+            "thinking": thinking_mode,
+        },
         "skill_version": metadata["skill_sha256"],
         "benchmark_version": load_json(ALIGNMENT_PATH)["benchmark_version"],
         "started_at": metadata["started_at"],
@@ -868,6 +928,25 @@ def run_stage(args: argparse.Namespace) -> int:
 
 
 def run_campaign(args: argparse.Namespace) -> int:
+    provider_profile = load_provider_profile(args.provider_profile)
+    thinking_mode = provider_profile.validate_runtime(
+        base_url=args.provider_base_url,
+        model=args.model,
+        temperature=args.temperature,
+        thinking_mode=args.thinking_mode,
+        require_endpoint=args.agent == "opencode",
+    )
+    supplemental_profile = None
+    supplemental_thinking_mode = None
+    if args.supplemental_model:
+        supplemental_profile = load_provider_profile(args.supplemental_provider_profile)
+        supplemental_thinking_mode = supplemental_profile.validate_runtime(
+            base_url=args.provider_base_url,
+            model=args.supplemental_model,
+            temperature=args.temperature,
+            thinking_mode=args.supplemental_thinking_mode,
+            require_endpoint=args.agent == "opencode",
+        )
     docker_available()
     alignment = load_json(ALIGNMENT_PATH)
     required_paths = [item["path"] for item in alignment["submission"]["required_artifacts"]]
@@ -875,8 +954,6 @@ def run_campaign(args: argparse.Namespace) -> int:
     conditions = parse_conditions(args.conditions)
     if not 1 <= args.repeats <= 3:
         raise CampaignError("--repeats must be between 1 and 3")
-    if not 0.0 <= args.temperature <= 2.0:
-        raise CampaignError("--temperature must be between 0 and 2")
     if args.static_review:
         validate_review(args.static_review, "static review")
     if args.llm_report_dir and not args.llm_report_dir.is_dir():
@@ -909,8 +986,18 @@ def run_campaign(args: argparse.Namespace) -> int:
         "model": args.model,
         "model_variant": args.model_variant or None,
         "temperature": args.temperature,
+        "thinking": thinking_mode,
+        "provider_base_url": args.provider_base_url or None,
+        "provider_host": provider_host,
+        "provider_profile": provider_profile.audit_record(thinking_mode=thinking_mode),
         "supplemental_model": args.supplemental_model or None,
         "supplemental_model_variant": args.supplemental_model_variant or None,
+        "supplemental_thinking": supplemental_thinking_mode,
+        "supplemental_provider_profile": (
+            supplemental_profile.audit_record(thinking_mode=supplemental_thinking_mode)
+            if supplemental_profile is not None and supplemental_thinking_mode is not None
+            else None
+        ),
         "image": args.image,
         "image_id": image_id,
         "network": args.network,
@@ -944,8 +1031,10 @@ def run_campaign(args: argparse.Namespace) -> int:
                         model=args.model,
                         model_variant=args.model_variant,
                         temperature=args.temperature,
+                        thinking_mode=thinking_mode,
                         api_key_env=args.api_key_env,
                         provider_base_url=args.provider_base_url,
+                        provider_profile=provider_profile,
                         agent_command=agent_command,
                         network=network,
                         profile=profile,
@@ -955,6 +1044,8 @@ def run_campaign(args: argparse.Namespace) -> int:
                     )
                     records.append(record)
         if args.supplemental_model:
+            if supplemental_profile is None or supplemental_thinking_mode is None:
+                raise CampaignError("supplemental provider profile was not resolved")
             supplemental_campaign_id = f"{campaign_id}-supplemental"
             for question in tasks:
                 for condition in conditions:
@@ -970,8 +1061,10 @@ def run_campaign(args: argparse.Namespace) -> int:
                         model=args.supplemental_model,
                         model_variant=args.supplemental_model_variant,
                         temperature=args.temperature,
+                        thinking_mode=supplemental_thinking_mode,
                         api_key_env=args.api_key_env,
                         provider_base_url=args.provider_base_url,
+                        provider_profile=supplemental_profile,
                         agent_command=agent_command,
                         network=network,
                         profile=profile,
@@ -1069,8 +1162,28 @@ def parser() -> argparse.ArgumentParser:
     campaign.add_argument("--model", default="qwen3.8-max")
     campaign.add_argument("--model-variant", default="")
     campaign.add_argument("--temperature", type=float, default=0.0)
+    campaign.add_argument(
+        "--provider-profile",
+        default="local-qwen38-openai-v1",
+        help="audited profile id from provider_profiles.json",
+    )
+    campaign.add_argument(
+        "--thinking-mode",
+        choices=("not_configured", "provider_default", "enabled", "disabled"),
+        help="must match the selected profile; omitted means the frozen profile value",
+    )
     campaign.add_argument("--supplemental-model", default="", help="optional second model; each selected B0/S0 task runs once")
     campaign.add_argument("--supplemental-model-variant", default="")
+    campaign.add_argument(
+        "--supplemental-provider-profile",
+        default="openai-compatible",
+        help="audited profile id for the optional supplemental model",
+    )
+    campaign.add_argument(
+        "--supplemental-thinking-mode",
+        choices=("not_configured", "provider_default", "enabled", "disabled"),
+        help="must match the supplemental profile; omitted means its frozen value",
+    )
     campaign.add_argument("--provider-base-url", default="")
     campaign.add_argument("--api-key-env", default="EVAL_API_KEY")
     campaign.add_argument("--agent", choices=("opencode", "mock"), default="opencode")
