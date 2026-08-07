@@ -25,7 +25,8 @@ description: 该技能用于构建全球或区域地球化学元素分布图谱�
 6. 可选地质空间匹配；
 7. 计算置信度与候选异常；
 8. 生成数据库、证据报告、异常结果和地图；
-9. 验证全部产物并报告边界。
+9. 验证全部产物并报告边界；
+10. 长时限任务存在可修复缺口且预算允许时，按第 8 节的自我修正循环追加修复轮，再输出最终回复。
 
 不要跳过阶段，不要用后续可视化补造上游证据。
 
@@ -347,6 +348,18 @@ python scripts/validate_human_review.py \
 ```
 
 脚本只验证签署、计数和状态一致性，绝不代填 reviewer。未完成时保持 `normalized_analysis`。
+
+长时限任务（小时级预算）用确定性控制器执行"发现 → 修复 → 重跑 → 对比"的自我修正循环；单轮内部预算仍是 840 秒：
+
+```bash
+python scripts/run_self_correction_loop.py \
+  --request REQUEST.json \
+  --online-source auto \
+  --max-rounds 5 \
+  --output-dir LOOP_DIR
+```
+
+控制器先执行早期门禁（在线模式先验证路由可行，输入模式先验证最低列，续跑时校验冻结请求未变），每轮写入 `LOOP_DIR/rounds/round-NN` 并核验十五文件契约，再从 `iteration_backlog.csv`、逐源 `source_outcomes` 与 `anomaly_report.json` 收割问题。自主修复仅限重试瞬态获取失败；schema map、许可、坐标与方法证据问题分组写入 `loop_report.json` 的 `repair_plan.manual`，按 [references/iteration-loop.md](references/iteration-loop.md) 修复后在同一目录重新调用即可续跑追加轮次。收敛、无自主修复项、连续两轮问题签名相同、轮次或时间预算用尽时诚实停机；`scientific_limit`（如删失观测）永不计入修复率。报告契约见 [references/loop-report.schema.json](references/loop-report.schema.json)。
 
 ## 9. 最终回复
 
