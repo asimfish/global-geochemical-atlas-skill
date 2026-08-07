@@ -1,7 +1,7 @@
 {
   "scope_version": "geochemical-source-discovery-scope-v1",
-  "as_of": "2026-08-06T08:00:00Z",
-  "round": 5,
+  "as_of": "2026-08-06T10:35:00Z",
+  "round": 6,
   "status": "in_progress",
   "saturated": false,
   "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
@@ -28,12 +28,13 @@
     "africa": {
       "status": "in_progress",
       "catalogued_sources": [
+        "afsis-phase-i-wet-chemistry",
         "pangaea-north-africa-soil",
         "soils4africa",
         "south-africa-cgs-geochemistry"
       ],
       "remaining_work": [
-        "Search additional national geological surveys and water-quality portals beyond South Africa and the continental soil program.",
+        "Search additional national geological surveys and water-quality portals beyond South Africa and the implemented AfSIS soil dataset.",
         "Resolve more African rock and water sources, and determine whether CGS map-sheet services expose reusable methods and stable numerical releases."
       ]
     },
@@ -42,10 +43,11 @@
       "catalogued_sources": [
         "india-gsi-ngcm",
         "jamstec-darwin",
-        "japan-gsj-geochemical-map"
+        "japan-gsj-geochemical-map",
+        "tpdc-china-mountain-soil"
       ],
       "remaining_work": [
-        "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals.",
+        "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals beyond the verified TPDC China mountain-soil dataset.",
         "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented national river-sediment CSV pair into separately versioned marine-sediment and surface-soil products.",
         "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI."
       ]

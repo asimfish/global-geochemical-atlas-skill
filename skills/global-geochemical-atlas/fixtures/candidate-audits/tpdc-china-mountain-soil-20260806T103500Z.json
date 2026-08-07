@@ -1,0 +1,140 @@
+{
+  "acquisition": {
+    "cache_status": "online_download",
+    "file_id": "d4c22475-e614-42d2-b8ec-d768f1c26426",
+    "file_inventory_url": "https://data.tpdc.ac.cn/file/file/getRootFileDataList?metadataId=2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+    "metadata_request": {
+      "body": {
+        "metadataId": "2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1"
+      },
+      "method": "POST",
+      "response_sha256": "8aa56c64083862fda1903320513c6f551e8fca18f78b2136256bcc923038ebf4",
+      "url": "https://data.tpdc.ac.cn/view/metadataView/detail/"
+    },
+    "observed_at": "2026-08-06T10:35:00Z",
+    "request_method": "POST",
+    "request_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+  },
+  "archive": {
+    "bytes": 1828683,
+    "members": [
+      {
+        "bytes": 1246886,
+        "name": "Description of the dataset.docx",
+        "sha256": "e923ea91a29793cb224c29c1ff0693e92783c96889fbedb0100c10d48784999b"
+      },
+      {
+        "bytes": 33386,
+        "name": "Soil bulk density.xlsx",
+        "sha256": "bb03ed1ac9f2db514ca740c8a9c8eabe5965da871e9b77ca510942ba5159b682"
+      },
+      {
+        "bytes": 577715,
+        "name": "Soil dataset.xlsx",
+        "sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d"
+      }
+    ],
+    "sha256": "8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a"
+  },
+  "claim_boundary": "This audit proves the official TPDC UUID, DOI, open file API, byte-pinned ZIP and member workbooks, plus the exact 1,314-row field inventory. It does not prove uniform China coverage, an unstated coordinate CRS, row-level detection limits or that the supplemental bulk-density workbook can overwrite the main table.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 0,
+    "required_record_count": 30,
+    "status": "not_started"
+  },
+  "observed_data": {
+    "climatic_zone_counts": {
+      "Cold-temperate": 133,
+      "Subtropical": 580,
+      "Temperate": 298,
+      "Tropical": 24,
+      "Warm-temperate": 279
+    },
+    "complete_and_valid_coordinate_rows": 1314,
+    "distinct_mountains": 30,
+    "distinct_profile_plots": 485,
+    "distinct_sample_horizon_keys": 1314,
+    "distinct_site_labels": 166,
+    "duplicate_sample_horizon_keys": 0,
+    "exact_duplicate_rows": 0,
+    "horizon_counts": {
+      "A": 481,
+      "C": 452,
+      "O": 381
+    },
+    "main_table_missing_values": {
+      "BD": 67,
+      "Thickness": 134
+    },
+    "physical_rows": 1314,
+    "site_labels_with_multiple_coordinate_pairs": [
+      "SN5",
+      "SN6",
+      "SN7"
+    ],
+    "target_analytes": {
+      "Cr": 1314,
+      "Cu": 1314,
+      "Ni": 1314,
+      "Pb": 1314,
+      "Zn": 1314
+    },
+    "target_analytes_absent": [
+      "As",
+      "Hg"
+    ],
+    "target_observations": 6570,
+    "target_value_boundaries_mg_per_kg": {
+      "Cr": {
+        "max": 752.0211324,
+        "min": 1.586725696
+      },
+      "Cu": {
+        "max": 90.98557764,
+        "min": 0.370111218
+      },
+      "Ni": {
+        "max": 90.24240447,
+        "min": 1.000716387
+      },
+      "Pb": {
+        "max": 372.655041190668,
+        "min": 5.586236545
+      },
+      "Zn": {
+        "max": 523.5851671,
+        "min": 4.464897106
+      }
+    }
+  },
+  "observed_metadata": {
+    "bulk_density_supplement": {
+      "main_rows_missing_supplement_lookup": 10,
+      "main_rows_with_fillable_missing_value": 58,
+      "non_missing_value_conflicts": 6,
+      "published_coordinate_conflicts": 5,
+      "supplement_rows": 449,
+      "unique_mountain_site_horizon_keys": 449
+    },
+    "coordinate_collection": "GPS eTrex Venture",
+    "digestion": "concentrated HNO3, HF and HClO4",
+    "grain_fraction": "<2 mm",
+    "major_element_technique": "ICP-AES Optima 2000",
+    "measurement_basis": "acid_digest_air_dry_soil",
+    "medium": "soil",
+    "method_scope": "publication",
+    "quality_control": "Replicates, blanks and GBW-07405; 95-105% recovery; article reports <3% RSD for ICP-AES major elements and <5% for ICP-MS trace elements.",
+    "sample_horizon_mapping": {
+      "A": "surface mineral horizon",
+      "C": "parent material horizon",
+      "O": "organic horizon"
+    },
+    "source_coordinate_crs": "not_reported_in_registered_metadata_or_files",
+    "trace_element_technique": "ICP-MS Agilent 7700x",
+    "units": "mg kg^-1"
+  },
+  "snapshot_id": "tpdc-china-mountain-soil:tpdc-file-2025-07-23:8cf3189b44aa",
+  "source_id": "tpdc-china-mountain-soil",
+  "verification_version": "tpdc-china-mountain-soil-audit-v1"
+}

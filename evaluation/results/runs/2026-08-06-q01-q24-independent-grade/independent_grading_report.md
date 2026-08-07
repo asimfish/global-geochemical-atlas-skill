@@ -7,6 +7,7 @@
 - 评分输出目录：`/tmp/gga-q01-q24-independent-grade`（全新创建，创建前已确认不存在）
 - 冻结时间（UTC）：2026-08-06T14:40:23.102436+00:00
 - 每题 `task.md`、`task.json`、`rubric.json`、`checker/grader_spec.json` 及提交目录 10 个产物的 SHA-256 已记录于 `frozen_identity.json`。
+- 每题提交的只读归档副本位于本目录 `submissions/Qxx/artifacts/`；其内容与 `frozen_identity.json` 中的提交 SHA-256 一致，不再放入待答题的 `ai_visible_public/`。
 - 版本一致性：`ai_visible_public/tasks/Qxx` 与评分源（release/public、evaluator_private/shadow、evaluator_private/final_holdout）逐文件哈希一致，无 `version_mismatch`，无 `version_uncertain`。
 - 评分期间提交与题面均未变化；`SUBMISSIONS_ROOT` 未被修改（全部写入仅发生在 OUTPUT_ROOT）。
 

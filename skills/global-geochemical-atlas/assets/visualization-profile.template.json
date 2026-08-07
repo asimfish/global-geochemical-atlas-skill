@@ -1,17 +1,20 @@
 {
-  "schema_version": "d3-visualization-profile-v1",
+  "schema_version": "d3-visualization-profile-v2",
   "title": "全球地球化学元素图谱",
   "subtitle": "从标准化记录进入分布、覆盖、元素组合和候选异常证据；空白表示当前数据覆盖缺口。",
   "story": "overview",
   "theme": "evidence-dark",
+  "spatial_scope": "global",
   "default_region": "global",
   "custom_region": null,
   "filters": {
     "element": null,
     "medium": null,
+    "sample_type": null,
     "basis": null,
     "geology": null,
     "method": null,
+    "method_scope": null,
     "source": null,
     "confidence": null
   },

@@ -138,7 +138,14 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
             )
     for sample in bundle["samples"]:
         connection.execute(
-            "INSERT INTO samples VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO samples (sample_id, native_sample_id, igsn, parent_sample_id, sampling_event_id, "
+            "medium_raw, material_raw, sample_type_raw, sample_type, sample_type_mapping_status, "
+            "geographic_context_raw, survey_area, map_sheet, cruise_track, lithology_raw, lithology, "
+            "geologic_unit_raw, geologic_age_raw, tectonic_setting_raw, matched_geologic_unit, "
+            "geology_map_source, geology_map_version, match_method, match_scale, boundary_distance_m, "
+            "match_uncertainty, soil_horizon_raw, soil_horizon, sediment_environment, grain_fraction_raw, "
+            "water_body_type, water_fraction, filtered_state_raw, description_raw) "
+            "VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 sample["sample_id"],
                 sample["native_sample_id"],
@@ -146,10 +153,31 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                 sample["sampling_event_id"],
                 sample["medium_raw"],
                 sample["material_raw"],
+                sample.get("sample_type_raw"),
+                sample.get("sample_type"),
+                sample.get("sample_type_mapping_status"),
+                sample.get("geographic_context_raw"),
+                sample.get("survey_area"),
+                sample.get("map_sheet"),
+                sample.get("cruise_track"),
                 sample["lithology_raw"],
+                sample.get("lithology"),
                 sample["geologic_unit_raw"],
+                sample.get("geologic_age_raw"),
+                sample.get("tectonic_setting_raw"),
+                sample.get("matched_geologic_unit"),
+                sample.get("geology_map_source"),
+                sample.get("geology_map_version"),
+                sample.get("match_method"),
+                sample.get("match_scale"),
+                sample.get("boundary_distance_m"),
+                sample.get("match_uncertainty"),
                 sample["soil_horizon_raw"],
+                sample.get("soil_horizon"),
+                sample.get("sediment_environment"),
                 sample["grain_fraction_raw"],
+                sample.get("water_body_type"),
+                sample.get("water_fraction"),
                 sample["filtered_state_raw"],
                 sample["description_raw"],
             ),
@@ -167,8 +195,13 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                             sample["igsn"],
                             sample["medium_raw"],
                             sample["material_raw"],
+                            sample.get("sample_type_raw"),
+                            sample.get("sample_type"),
+                            sample.get("geographic_context_raw"),
                             sample["lithology_raw"],
+                            sample.get("lithology"),
                             sample["geologic_unit_raw"],
+                            sample.get("matched_geologic_unit"),
                             sample["description_raw"],
                         ),
                     )
@@ -183,16 +216,25 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
             )
     for method in bundle["methods"]:
         connection.execute(
-            "INSERT INTO analytical_methods VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO analytical_methods (method_id, method_code_raw, method_scope, method_assignment_basis, "
+            "preparation_raw, digestion_or_extraction_raw, technique_raw, instrument_raw, laboratory_raw, "
+            "calibration_raw, quantitation_limit_raw, blank_qc_raw, replicate_qc_raw, method_source_locator) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 method["method_id"],
                 method["method_code_raw"],
+                method.get("method_scope"),
+                method.get("method_assignment_basis"),
                 method["preparation_raw"],
                 method["digestion_or_extraction_raw"],
                 method["technique_raw"],
                 method["instrument_raw"],
                 method["laboratory_raw"],
                 method["calibration_raw"],
+                method.get("quantitation_limit_raw"),
+                method.get("blank_qc_raw"),
+                method.get("replicate_qc_raw"),
+                method.get("method_source_locator"),
             ),
         )
         for publication_id in method["publication_ids"]:

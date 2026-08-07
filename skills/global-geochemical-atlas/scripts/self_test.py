@@ -10,10 +10,12 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 from pathlib import Path
 from typing import Any
 
 import standardize_geochemistry as standardizer
+import evaluate_batch_qc as batch_qc
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -31,8 +33,13 @@ EXPECTED_OUTPUTS = {
     "confidence_report.json",
     "anomalies.geojson",
     "anomaly_report.json",
+    "anomaly_regions.geojson",
+    "spatial_anomaly_report.json",
+    "batch_acceptance.csv",
+    "batch_qc_report.json",
     "samples.geojson",
     "interactive_map.html",
+    "iteration_backlog.csv",
     "run_summary.json",
 }
 
@@ -95,6 +102,25 @@ def complete_d2_row(**overrides: str) -> dict[str, str]:
     return row
 
 
+def write_test_glim_grid(path: Path) -> str:
+    """Create a tiny-compressed, structurally complete GLiM-compatible test archive."""
+
+    header = (
+        "ncols 720\n"
+        "nrows 360\n"
+        "xllcorner -180\n"
+        "yllcorner -90\n"
+        "cellsize 0.5\n"
+        "NODATA_value -9999\n"
+    )
+    raster = header + (("1 " * 719 + "1\n") * 360)
+    classes = '"OBJECTID";"Value_";"Count_";"xx"\n1;1;259200;"su"\n'
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("Classnames.txt", classes)
+        archive.writestr("glim_wgs84_0point5deg.txt.asc", raster)
+    return standardizer.sha256_file(path)
+
+
 def run_suite() -> dict[str, Any]:
     require(DEMO_INPUT.is_file(), "bundled demo_input.csv is missing")
     for schema_name in (
@@ -120,6 +146,7 @@ def run_suite() -> dict[str, Any]:
         "marchem-candidate-verification.schema.json",
         "visualization-profile.schema.json",
         "visualization-report.schema.json",
+        "iteration-backlog.schema.json",
         "dataset-source.schema.json",
         "publication.schema.json",
         "sampling-event.schema.json",
@@ -128,6 +155,11 @@ def run_suite() -> dict[str, Any]:
         "provenance.schema.json",
         "observation.schema.json",
         "acquisition-run.schema.json",
+        "batch-qc-policy.schema.json",
+        "batch-qc-report.schema.json",
+        "anomaly-regions.schema.json",
+        "spatial-anomaly-report.schema.json",
+        "request-execution.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
@@ -149,6 +181,45 @@ def run_suite() -> dict[str, Any]:
     require(
         all(source["url"].startswith("https://") for source in crosswalk["evidence_sources"]),
         "crosswalk evidence must use stable HTTPS locators",
+    )
+    batch_fixture = SKILL_DIR / "fixtures" / "batch-qc"
+    batch_rows, batch_report = batch_qc.evaluate(
+        batch_fixture / "batch_qc.csv", batch_fixture / "qc_policy.json"
+    )
+    require(
+        batch_report["passed_batch_count"] == 1
+        and batch_rows[0]["batch_id"] == "LAB-A"
+        and batch_rows[0]["batch_pass"] is True
+        and batch_rows[1]["batch_pass"] is False,
+        "batch QC fixture did not preserve all-checks-must-pass semantics",
+    )
+    require(
+        abs(batch_rows[0]["duplicate_rpd_percent"] - 9.523809523809524) < 1e-12
+        and batch_rows[1]["crm_recovery_percent"] == 135.0
+        and batch_rows[1]["blank_value"] == 8.0
+        and batch_rows[1]["duplicate_rpd_percent"] == 40.0,
+        "batch QC controls were not recomputed from observed values",
+    )
+    require(
+        0 < standardizer.hypergeometric_survival(5, 40, 5, 20) < 0.05,
+        "exact spatial-enrichment test mishandled a zero-candidate outside cell",
+    )
+    require(
+        abs(standardizer.hypergeometric_survival(2, 10, 4, 3) - (1 / 3)) < 1e-12
+        and abs(standardizer.hypergeometric_survival(1, 200_000, 100_000, 1) - 0.5)
+        < 1e-9,
+        "exact spatial-enrichment test lost short-tail accuracy or scalability",
+    )
+    _, fractional_grid_report = standardizer.detect_spatial_anomaly_regions(
+        [],
+        {"features": []},
+        {"groups": []},
+        standardizer.DEFAULT_GROUP_BY,
+        grid_degrees=0.1,
+    )
+    require(
+        fractional_grid_report["status"] == "insufficient_spatial_background",
+        "spatial grid validation rejected a valid floating-point divisor",
     )
 
     with tempfile.TemporaryDirectory() as first_temp, tempfile.TemporaryDirectory() as second_temp:
@@ -212,9 +283,38 @@ def run_suite() -> dict[str, Any]:
             "unsupported method_version" in tampered_method_validation.stdout,
             "output validator accepted a tampered D2 anomaly method version",
         )
+        tampered_spatial = first / "tampered-spatial-method"
+        tampered_spatial.mkdir()
+        for filename in EXPECTED_OUTPUTS:
+            shutil.copy2(first / filename, tampered_spatial / filename)
+        tampered_regions_path = tampered_spatial / "anomaly_regions.geojson"
+        tampered_regions = json_value(tampered_regions_path)
+        tampered_regions["method_version"] = "tampered-spatial-v999"
+        tampered_regions_path.write_text(
+            json.dumps(tampered_regions, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        tampered_spatial_validation = run_command(
+            [sys.executable, str(VALIDATOR), "--output-dir", str(tampered_spatial)],
+            expected_code=1,
+        )
+        require(
+            "unsupported interface or method version" in tampered_spatial_validation.stdout,
+            "output validator accepted a tampered empty spatial-region collection",
+        )
 
         rows = read_csv(first / "geochemistry.csv")
         require(len(rows) == 19, "demo should contain 19 canonical records")
+        iteration_rows = read_csv(first / "iteration_backlog.csv")
+        require(
+            any(
+                row["issue_code"] == "CENSORED_OBSERVATION"
+                and row["status"] == "scientific_limit"
+                and row["auto_recheck"] == "false"
+                for row in iteration_rows
+            ),
+            "iteration backlog must preserve censored observations as non-imputed scientific limits",
+        )
         require(float(by_id(rows, "rock-fe-001")["normalized_value"]) == 25_000, "wt% conversion failed")
         spaced_weight_percent = standardizer.normalize_row(
             complete_d2_row(value="1", unit="wt. %", medium="rock"),
@@ -276,7 +376,7 @@ def run_suite() -> dict[str, Any]:
         require(set(normalized_record) == set(record_schema["required"]), "D2 record keys drifted from required schema")
         require(set(normalized_record) == set(record_schema["properties"]), "D2 record keys drifted from schema properties")
         require(
-            normalized_record["operational_confidence"]["version"] == "d2-confidence-v2",
+            normalized_record["operational_confidence"]["version"] == "d2-confidence-v3",
             "D2 confidence version did not advance with the schema",
         )
 
@@ -325,6 +425,27 @@ def run_suite() -> dict[str, Any]:
         )
         require(bad_limit["normalized_censoring_limit"] is None, "invalid detection limit was normalized")
         require("INVALID_DETECTION_LIMIT" in bad_limit["qc_flags"], "invalid detection-limit flag is missing")
+
+        lod = standardizer.normalize_row(
+            complete_d2_row(value="<LOD", detection_limit="0.2", detection_limit_unit="mg/kg"), 9
+        )
+        loq = standardizer.normalize_row(
+            complete_d2_row(value="<LOQ", quantitation_limit="0.4", quantitation_limit_unit="mg/kg"), 10
+        )
+        require(
+            lod["censored"] is True
+            and lod["value_qualifier"] == "bdl"
+            and lod["normalized_value"] is None
+            and lod["normalized_censoring_limit"] == 0.2,
+            "literal <LOD was not preserved as a non-imputed detection-limit censor",
+        )
+        require(
+            loq["censored"] is True
+            and loq["value_qualifier"] == "loq"
+            and loq["normalized_value"] is None
+            and loq["normalized_censoring_limit"] == 0.4,
+            "literal <LOQ was not preserved with its quantitation limit",
+        )
 
         projected = standardizer.normalize_row(complete_d2_row(source_crs="EPSG:3857"), 9)
         transformed = standardizer.normalize_row(
@@ -375,6 +496,89 @@ def run_suite() -> dict[str, Any]:
             all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in duplicate_records),
             "unique provenance row IDs masked duplicate measurement candidates",
         )
+        duplicates_without_sample_ids = standardizer.process_rows([
+            complete_d2_row(record_id="duplicate-3", source_record_id="source-row-3", sample_id=""),
+            complete_d2_row(record_id="duplicate-4", source_record_id="source-row-4", sample_id=""),
+        ])
+        require(
+            all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in duplicates_without_sample_ids),
+            "distinct source row IDs masked duplicates when sample identifiers were absent",
+        )
+        distinct_sampling_times = standardizer.process_rows([
+            complete_d2_row(record_id="time-1", source_record_id="time-row-1", sample_id="", sampled_at="2020-01-01"),
+            complete_d2_row(record_id="time-2", source_record_id="time-row-2", sample_id="", sampled_at="2021-01-01"),
+        ])
+        require(
+            all("DUPLICATE_CANDIDATE" not in record["qc_flags"] for record in distinct_sampling_times),
+            "duplicate fallback collapsed measurements from distinct sampling times",
+        )
+
+        try:
+            standardizer.run_pipeline(
+                DEMO_INPUT,
+                Path(first_temp) / "invalid-production",
+                analysis_profile="production",
+                min_group_size=8,
+            )
+        except standardizer.PipelineError as exc:
+            require("at least 20" in str(exc), "production minimum-group failure is not actionable")
+        else:
+            raise AssertionError("production analysis accepted a background group threshold below 20")
+
+        with tempfile.TemporaryDirectory(prefix="d2-geology-") as geology_temp:
+            geology_root = Path(geology_temp)
+            geology_grid = geology_root / "glim-test.zip"
+            geology_hash = write_test_glim_grid(geology_grid)
+            geology_input = geology_root / "input.csv"
+            geology_rows = [
+                complete_d2_row(
+                    record_id="geo-soil", source_record_id="geo-source-soil",
+                    sample_id="geo-sample-soil", latitude="35.25", longitude="103.25",
+                ),
+                complete_d2_row(
+                    record_id="geo-water", source_record_id="geo-source-water",
+                    sample_id="geo-sample-water", medium="water", unit="ug/L",
+                    latitude="35.25", longitude="103.25",
+                ),
+            ]
+            with geology_input.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=list(geology_rows[0]))
+                writer.writeheader()
+                writer.writerows(geology_rows)
+            geology_outputs = standardizer.run_pipeline(
+                geology_input,
+                geology_root / "output",
+                min_group_size=3,
+                geology_grid_path=geology_grid,
+                geology_grid_sha256=geology_hash,
+            )
+            geology_database = {row["record_id"]: row for row in read_csv(geology_outputs["database"])}
+            geology_qc = json_value(geology_outputs["qc_report"])["geology_matching"]
+            require(
+                geology_database["geo-soil"]["matched_geologic_unit"] == "GLiM:1:su"
+                and geology_database["geo-soil"]["geology_map_source"] == standardizer.GLIM_SOURCE
+                and float(geology_database["geo-soil"]["boundary_distance_m"]) > 20_000,
+                "D2 GLiM point-in-cell did not populate versioned spatial geology evidence",
+            )
+            require(
+                geology_database["geo-water"]["matched_geologic_unit"] == ""
+                and geology_database["geo-water"]["geology_missing_reason"] == "not_applicable_water"
+                and geology_qc["water_records_with_assigned_land_unit"] == 0
+                and geology_qc["grid"]["sha256"] == geology_hash,
+                "D2 GLiM join assigned land geology to water or lost the grid hash",
+            )
+            try:
+                standardizer.run_pipeline(
+                    geology_input,
+                    geology_root / "hash-mismatch",
+                    min_group_size=3,
+                    geology_grid_path=geology_grid,
+                    geology_grid_sha256="0" * 64,
+                )
+            except standardizer.PipelineError as exc:
+                require("SHA-256" in str(exc), "geology hash mismatch error is not actionable")
+            else:
+                raise AssertionError("D2 accepted a geology grid whose SHA-256 did not match")
 
         low_fraction_values = ["8", "9", "10", "11", "12", "13", "500", "<1", "<1", "ND", "trace"]
         low_fraction_records = [
@@ -411,6 +615,27 @@ def run_suite() -> dict[str, Any]:
             small_report["groups"][0]["status"] == "insufficient_group_size",
             "small background group did not fail closed",
         )
+        priority_records = [
+            standardizer.normalize_row(
+                complete_d2_row(
+                    record_id=f"priority-{index}",
+                    source_record_id=f"priority-source-{index}",
+                    sample_id=f"priority-sample-{index}",
+                    value=value,
+                ),
+                index + 34,
+            )
+            for index, value in enumerate(("10", "<1", "ND", "trace"))
+        ]
+        _, priority_report = standardizer.detect_anomalies(
+            priority_records, min_group_size=8, min_quantified_fraction=0.70
+        )
+        require(
+            priority_report["groups"][0]["status"] == "insufficient_group_size"
+            and priority_report["gate_evaluation_order"][:2]
+            == ["independent_record_count", "quantified_fraction"],
+            "anomaly gates did not evaluate total sample size before quantified fraction",
+        )
         flat_records = [
             standardizer.normalize_row(
                 complete_d2_row(
@@ -423,6 +648,45 @@ def run_suite() -> dict[str, Any]:
         ]
         _, flat_report = standardizer.detect_anomalies(flat_records)
         require(flat_report["groups"][0]["status"] == "zero_dispersion", "zero-MAD group was force-scored")
+
+        with tempfile.TemporaryDirectory(prefix="d2-batch-gate-") as batch_temp:
+            batch_root = Path(batch_temp)
+            batch_input = batch_root / "measurements.csv"
+            batch_measurements = [
+                complete_d2_row(
+                    record_id=f"batch-{index}",
+                    source_record_id=f"batch-source-{index}",
+                    sample_id=f"batch-sample-{index}",
+                    analysis_batch_id=batch_id,
+                    value=str(value),
+                )
+                for index, (batch_id, value) in enumerate(
+                    (("LAB-A", 10), ("LAB-A", 11), ("LAB-A", 12),
+                     ("LAB-B", 100), ("LAB-B", 110), ("LAB-B", 120))
+                )
+            ]
+            with batch_input.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=list(batch_measurements[0]))
+                writer.writeheader()
+                writer.writerows(batch_measurements)
+            batch_outputs = standardizer.run_pipeline(
+                batch_input,
+                batch_root / "output",
+                min_group_size=3,
+                batch_qc_input_path=batch_fixture / "batch_qc.csv",
+                batch_qc_policy_path=batch_fixture / "qc_policy.json",
+            )
+            batch_database = read_csv(batch_outputs["database"])
+            batch_anomaly = json_value(batch_outputs["anomaly_report"])
+            batch_gate_report = json_value(batch_outputs["batch_qc_report"])
+            require(
+                batch_gate_report["passed_batch_count"] == 1
+                and sum(row["batch_qc_status"] == "pass" for row in batch_database) == 3
+                and sum(row["batch_qc_status"] == "fail" for row in batch_database) == 3
+                and batch_anomaly["groups"][0]["records_used"] == 3
+                and batch_anomaly["groups"][0]["exclusion_reasons"]["batch_qc_failed"] == 3,
+                "end-to-end batch gate did not retain failed records while excluding their background values",
+            )
 
         with tempfile.TemporaryDirectory() as mapped_temp:
             mapped_root = Path(mapped_temp)
@@ -467,6 +731,13 @@ def run_suite() -> dict[str, Any]:
         require(anomalies["features"][0]["properties"]["record_id"] == "soil-as-012", "wrong anomaly")
         require(anomalies["features"][0]["properties"]["status"] == "candidate_anomaly", "causal overclaim")
         summary = json_value(first / "run_summary.json")
+        result_schema = json_value(SKILL_DIR / "references" / "result.schema.json")
+        require(
+            set(summary["metrics"])
+            == set(result_schema["properties"]["metrics"]["properties"])
+            == set(result_schema["properties"]["metrics"]["required"]),
+            "run summary metrics drifted from the public result Schema",
+        )
         require(summary["input"]["synthetic_demo"] is True, "demo must be labeled synthetic")
         require(summary["coverage"]["interpolation"] is False, "demo must not interpolate blank areas")
         manifest = json_value(first / "source_manifest.json")
@@ -493,6 +764,10 @@ def run_suite() -> dict[str, Any]:
         require("ALL DATA" in html, "map does not default to the complete overview")
         require("Natural Earth 1:110m" in html, "map omits the offline land basemap")
         require(
+            "ai4s-natural-earth-admin0-v1" in html and "pointInCountry" in html,
+            "map omits pinned country boundaries or strict country clipping",
+        )
+        require(
             "全部元素按样品标识去重显示" in html,
             "map does not explain measurement-to-sample deduplication",
         )
@@ -505,13 +780,48 @@ def run_suite() -> dict[str, Any]:
                     'id="colorMode"',
                     'id="comboX"',
                     'id="comboY"',
+                    'id="comboRegionSelect"',
+                    'id="comboCustomBounds"',
+                    'id="applyComboBounds"',
+                    "applyCustomBounds",
                     'id="openAnomalyRegions"',
+                    'id="statisticalRegionSummary"',
+                    "d2-spatial-hypergeometric-fdr-v1",
                     "visual_aggregation_only",
                     "showAnomalyRegion",
                     "focusAnomalyRegion",
+                    "D2 未提供分析方法",
+                    "不是与周围空间点的平均值比较",
+                    'id="deliverableCenter"',
+                    'id="taskContext"',
+                    "task-first-progressive-disclosure-v2",
+                    "d3-visual-question-contract-v1",
+                    "competition-geochemistry-v1",
+                    "可交互元素分布地图",
+                    "标准化地球化学数据库",
+                    "元素组合对比",
+                    "数据来源与置信度说明",
+                    "异常区域识别结果",
+                    "质量控制与自动迭代",
+                    'id="zoomIn"',
+                    "comboQuadrants",
+                    'id="databaseView"',
+                    'id="databaseSearch"',
+                    'id="confidenceSummary"',
+                    'id="confidenceComponents"',
+                    "renderDatabase",
+                    "renderConfidence",
+                    'href="geochemistry.csv"',
+                    'href="confidence_report.json"',
+                    "完整数据库以",
+                    "不是正确概率",
                 )
             ),
             "map omits D3 v3 region, heatmap, combination or anomaly-region controls",
+        )
+        require(
+            'id="storyPreset"' not in html and html.count('class="tabs"') == 1,
+            "map duplicates its task navigation",
         )
         require(
             summary["map_report"]["display_sample_count"] == 17
@@ -584,7 +894,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 68,
+            "tests": 75,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

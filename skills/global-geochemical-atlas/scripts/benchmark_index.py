@@ -35,11 +35,11 @@ def benchmark(record_count: int = 100_000, schema_path: Path = DEFAULT_SCHEMA) -
                     ("benchmark-event", "benchmark-dataset", "SITE-1", "2026-01-01", "synthetic", "39", "-105", "EPSG:4326", 39.0, -105.0, 1.0, None, 0.0, 0.1, "Synthetic benchmark"),
                 )
                 connection.execute(
-                    "INSERT INTO samples VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    "INSERT INTO samples (sample_id, native_sample_id, igsn, parent_sample_id, sampling_event_id, medium_raw, material_raw, lithology_raw, geologic_unit_raw, soil_horizon_raw, grain_fraction_raw, filtered_state_raw, description_raw) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     ("benchmark-sample", "SAMPLE-1", None, None, "benchmark-event", "soil", "synthetic", None, None, None, None, None, "Not scientific data"),
                 )
                 connection.execute(
-                    "INSERT INTO analytical_methods VALUES (?,?,?,?,?,?,?,?)",
+                    "INSERT INTO analytical_methods (method_id, method_code_raw, preparation_raw, digestion_or_extraction_raw, technique_raw, instrument_raw, laboratory_raw, calibration_raw) VALUES (?,?,?,?,?,?,?,?)",
                     ("benchmark-method", "synthetic", None, None, "synthetic", None, None, None),
                 )
                 connection.execute(

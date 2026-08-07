@@ -1,0 +1,8 @@
+{
+  "batch_count": 0,
+  "failed_or_incomplete_batch_count": 0,
+  "passed_batch_count": 0,
+  "schema_version": "geochemical-batch-qc-report-v1",
+  "scientific_boundary": "No batch policy was supplied; batch acceptance was not used as an anomaly-background gate.",
+  "status": "not_supplied"
+}

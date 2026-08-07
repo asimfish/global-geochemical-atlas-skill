@@ -2,6 +2,7 @@
   "recorded_at_utc": "2026-08-06T14:40:23.102436+00:00",
   "evaluation_root": "/home/dataset-assist-0/wangpeishuo/hackson/global-geochemical-atlas-skill/evaluation",
   "submissions_root": "/home/dataset-assist-0/wangpeishuo/hackson/global-geochemical-atlas-skill/evaluation/ai_visible_public/submissions",
+  "archived_submissions_root": "submissions",
   "output_root": "/tmp/gga-q01-q24-independent-grade",
   "benchmark_version": "6.0.0-draft.2",
   "version_sha256": "8778356ee247221acd6e1e90c31bb4fa764234724107fe0a2b030ecfc4d059c9",

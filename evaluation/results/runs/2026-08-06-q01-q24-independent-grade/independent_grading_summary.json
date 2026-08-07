@@ -3,6 +3,7 @@
   "git_commit": "e0a350677c8a7372bf7b9cf90978a11045f847fe",
   "evaluation_root": "/home/dataset-assist-0/wangpeishuo/hackson/global-geochemical-atlas-skill/evaluation",
   "submissions_root": "/home/dataset-assist-0/wangpeishuo/hackson/global-geochemical-atlas-skill/evaluation/ai_visible_public/submissions",
+  "archived_submissions_root": "submissions",
   "output_root": "/tmp/gga-q01-q24-independent-grade",
   "recorded_at_utc": "2026-08-06T14:40:23.102436+00:00",
   "frozen_identity_file": "/tmp/gga-q01-q24-independent-grade/frozen_identity.json",

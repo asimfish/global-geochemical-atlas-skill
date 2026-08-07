@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v1",
+  "$id": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v2",
   "title": "D3 visualization profile",
   "type": "object",
   "required": [
@@ -9,6 +9,7 @@
     "subtitle",
     "story",
     "theme",
+    "spatial_scope",
     "default_region",
     "custom_region",
     "filters",
@@ -16,13 +17,17 @@
     "display"
   ],
   "properties": {
-    "schema_version": {"const": "d3-visualization-profile-v1"},
+    "schema_version": {"const": "d3-visualization-profile-v2"},
     "title": {"type": "string", "minLength": 1, "maxLength": 120},
     "subtitle": {"type": "string", "minLength": 1, "maxLength": 500},
     "story": {
-      "enum": ["overview", "coverage", "anomaly", "comparison", "evidence"]
+      "enum": ["overview", "coverage", "anomaly", "comparison", "database", "evidence"]
     },
     "theme": {"const": "evidence-dark"},
+    "spatial_scope": {
+      "enum": ["global", "regional"],
+      "description": "global generates a world product; regional clips map payloads and GeoJSON to default_region."
+    },
     "default_region": {
       "enum": ["global", "usa", "usa48", "china", "shanghai", "europe", "australia", "custom"]
     },
@@ -52,13 +57,15 @@
     },
     "filters": {
       "type": "object",
-      "required": ["element", "medium", "basis", "geology", "method", "source", "confidence"],
+      "required": ["element", "medium", "sample_type", "basis", "geology", "method", "method_scope", "source", "confidence"],
       "properties": {
         "element": {"type": ["string", "null"]},
         "medium": {"type": ["string", "null"]},
+        "sample_type": {"type": ["string", "null"]},
         "basis": {"type": ["string", "null"]},
         "geology": {"type": ["string", "null"]},
         "method": {"type": ["string", "null"]},
+        "method_scope": {"type": ["string", "null"]},
         "source": {"type": ["string", "null"]},
         "confidence": {"type": ["string", "null"]}
       },
@@ -87,5 +94,44 @@
       "additionalProperties": false
     }
   },
+  "allOf": [
+    {
+      "if": {"properties": {"spatial_scope": {"const": "global"}}},
+      "then": {
+        "properties": {
+          "default_region": {"const": "global"},
+          "custom_region": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"spatial_scope": {"const": "regional"}}},
+      "then": {
+        "properties": {
+          "default_region": {
+            "enum": ["usa", "usa48", "china", "shanghai", "europe", "australia", "custom"]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"default_region": {"const": "custom"}}},
+      "then": {"properties": {"custom_region": {"type": "object"}}},
+      "else": {"properties": {"custom_region": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"story": {"const": "comparison"}}},
+      "then": {
+        "properties": {
+          "comparison": {
+            "properties": {
+              "x": {"type": "string", "minLength": 1},
+              "y": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  ],
   "additionalProperties": false
 }

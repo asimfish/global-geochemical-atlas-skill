@@ -16,6 +16,7 @@ from typing import Any
 
 import build_evidence_bundle as evidence_builder
 import build_interactive_map as map_builder
+import build_iteration_backlog as backlog_builder
 import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
 
@@ -115,9 +116,20 @@ def summary_outputs() -> dict[str, str]:
         "confidence_report": "confidence_report.json",
         "anomalies": "anomalies.geojson",
         "anomaly_report": "anomaly_report.json",
+        "batch_acceptance": "batch_acceptance.csv",
+        "batch_qc_report": "batch_qc_report.json",
+        "anomaly_regions": "anomaly_regions.geojson",
+        "spatial_anomaly_report": "spatial_anomaly_report.json",
         "samples": "samples.geojson",
         "interactive_map": "interactive_map.html",
+        "iteration_backlog": "iteration_backlog.csv",
     }
+
+
+def resolved_minimum_group_size(args: argparse.Namespace) -> int:
+    if args.min_group_size is not None:
+        return int(args.min_group_size)
+    return 20 if args.analysis_profile == "production" else 8
 
 
 def failure_summary(status: str, message: str, input_path: Path, args: argparse.Namespace) -> dict[str, Any]:
@@ -129,7 +141,7 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
             "region_bbox": list(args.region_bbox) if args.region_bbox else None,
             "max_records": args.max_records,
             "group_by": [field.strip() for field in args.group_by.split(",") if field.strip()],
-            "minimum_group_size": args.min_group_size,
+            "minimum_group_size": resolved_minimum_group_size(args),
             "robust_z_threshold": args.robust_z_threshold,
         },
         "input": {
@@ -147,6 +159,10 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
             "valid_coordinate_count": 0,
             "censored_record_count": 0,
             "candidate_anomaly_count": 0,
+            "batch_qc_failed_or_incomplete_count": 0,
+            "candidate_anomaly_region_count": 0,
+            "iteration_action_required_count": 0,
+            "iteration_review_required_count": 0,
         },
         "coverage": {
             "elements": [],
@@ -168,15 +184,25 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     group_by = tuple(field.strip() for field in args.group_by.split(",") if field.strip())
     if not group_by:
         raise WorkflowError("invalid_input", "--group-by must contain at least one canonical field")
+    minimum_group_size = resolved_minimum_group_size(args)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     try:
         outputs = standardizer.run_pipeline(
             args.input,
             args.output_dir,
             group_by=group_by,
-            min_group_size=args.min_group_size,
+            min_group_size=minimum_group_size,
             robust_z_threshold=args.robust_z_threshold,
             region_bbox=args.region_bbox,
+            analysis_profile=args.analysis_profile,
+            geology_grid_path=args.geology_grid,
+            geology_grid_sha256=args.geology_grid_sha256,
+            batch_qc_input_path=args.batch_qc_input,
+            batch_qc_policy_path=args.batch_qc_policy,
+            spatial_grid_degrees=args.spatial_grid_degrees,
+            min_spatial_samples=args.min_spatial_samples,
+            min_spatial_candidates=args.min_spatial_candidates,
+            spatial_fdr_alpha=args.spatial_fdr_alpha,
         )
     except standardizer.PipelineError as exc:
         raise WorkflowError("invalid_input", str(exc)) from exc
@@ -200,6 +226,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     samples_path = args.output_dir / "samples.geojson"
     map_path = args.output_dir / "interactive_map.html"
+    backlog_path = args.output_dir / "iteration_backlog.csv"
+    backlog_report = backlog_builder.build(outputs["database"], backlog_path)
     try:
         map_report = map_builder.build_map(
             outputs["database"],
@@ -211,12 +239,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             confidence_report_path=outputs["confidence_report"],
             source_manifest_path=source_manifest_path,
             anomaly_report_path=outputs["anomaly_report"],
+            anomaly_regions_path=outputs["anomaly_regions"],
+            spatial_anomaly_report_path=outputs["spatial_anomaly_report"],
+            iteration_backlog_path=backlog_path,
         )
     except (map_builder.MapBuildError, OSError) as exc:
         raise WorkflowError("incomplete_retrieval", f"map generation failed: {exc}") from exc
 
     qc_report = json_file(outputs["qc_report"])
     anomaly_report = json_file(outputs["anomaly_report"])
+    batch_qc_report = json_file(outputs["batch_qc_report"])
+    spatial_anomaly_report = json_file(outputs["spatial_anomaly_report"])
     coverage = coverage_from_rows(rows, qc_report)
     severity_counts = qc_report.get("severity_counts", {})
     quality_status = "issues_detected" if sum(int(value) for value in severity_counts.values()) else "no_flags"
@@ -234,6 +267,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         )
     if int(severity_counts.get("error", 0)):
         limitations.append("Some records have error-level QC flags and are capped at low operational confidence.")
+    if args.geology_grid is not None:
+        limitations.append(
+            "GLiM 0.5 degree dominant surface lithology is coarse screening context, not site-scale geology."
+        )
+    failed_or_incomplete_batches = int(
+        batch_qc_report.get("failed_or_incomplete_batch_count", 0)
+    )
+    if batch_qc_report.get("status") == "evaluated" and failed_or_incomplete_batches:
+        limitations.append(
+            f"{failed_or_incomplete_batches} laboratory batch(es) failed or were incomplete; "
+            "their analytical records remain in the database but were excluded from anomaly backgrounds."
+        )
     failed_groups = sum(group.get("status") != "analyzed" for group in anomaly_report.get("groups", []))
     if failed_groups:
         limitations.append(f"{failed_groups} anomaly background group(s) were not analyzed due to explicit failure states.")
@@ -244,16 +289,38 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "valid_coordinate_count": int(qc_report.get("valid_coordinate_count", 0)),
         "censored_record_count": int(qc_report.get("censored_record_count", 0)),
         "candidate_anomaly_count": int(anomaly_report.get("candidate_count", 0)),
+        "batch_qc_failed_or_incomplete_count": failed_or_incomplete_batches,
+        "candidate_anomaly_region_count": int(
+            spatial_anomaly_report.get("candidate_region_count", 0)
+        ),
+        "iteration_action_required_count": int(
+            backlog_report.get("status_counts", {}).get("action_required", 0)
+        ),
+        "iteration_review_required_count": int(
+            backlog_report.get("status_counts", {}).get("review_required", 0)
+        ),
     }
+    partial_reasons: list[str] = []
+    if failed_groups:
+        partial_reasons.append("one_or_more_anomaly_background_groups_not_analyzed")
+    if failed_or_incomplete_batches:
+        partial_reasons.append("one_or_more_laboratory_batches_excluded")
+    if metrics["valid_coordinate_count"] < metrics["record_count"]:
+        partial_reasons.append("one_or_more_records_not_map_eligible")
+    if (
+        metrics["candidate_anomaly_count"]
+        and spatial_anomaly_report.get("status") == "insufficient_spatial_background"
+    ):
+        partial_reasons.append("spatial_candidate_region_background_insufficient")
     summary = {
         "schema_version": SUMMARY_VERSION,
-        "status": "success",
+        "status": "partial_success" if partial_reasons else "success",
         "quality_status": quality_status,
         "request_summary": {
             "region_bbox": list(args.region_bbox) if args.region_bbox else None,
             "max_records": args.max_records,
             "group_by": list(group_by),
-            "minimum_group_size": args.min_group_size,
+            "minimum_group_size": minimum_group_size,
             "robust_z_threshold": args.robust_z_threshold,
         },
         "input": {
@@ -277,6 +344,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         ],
         "map_report": map_report,
     }
+    if partial_reasons:
+        summary["limitations"].append(
+            "Partial-success reasons: " + ", ".join(partial_reasons) + "."
+        )
     summary_path = args.output_dir / "run_summary.json"
     atomic_json(summary_path, summary)
 
@@ -306,6 +377,28 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optional D1 run manifest that binds the input CSV and --evidence-jsonl hashes",
     )
     parser.add_argument(
+        "--batch-qc-input",
+        type=Path,
+        help="Optional normalized CRM/blank/duplicate CSV; requires --batch-qc-policy",
+    )
+    parser.add_argument(
+        "--batch-qc-policy",
+        type=Path,
+        help="Explicit batch acceptance policy; requires --batch-qc-input",
+    )
+    parser.add_argument(
+        "--geology-grid", type=Path,
+        help="Optional official PANGAEA.788537 GLiM 0.5 degree ZIP for D2 screening spatial matching",
+    )
+    parser.add_argument(
+        "--geology-grid-sha256",
+        help="Required SHA-256 pin when --geology-grid is supplied",
+    )
+    parser.add_argument(
+        "--analysis-profile", choices=("demo", "production"), default="demo",
+        help="Production enforces at least 20 usable records per anomaly background group",
+    )
+    parser.add_argument(
         "--region-bbox", type=standardizer.parse_bbox, metavar="W,S,E,N",
         help="Optional WGS84 requested region, used for coordinate QC (dateline crossing supported)",
     )
@@ -314,8 +407,27 @@ def build_parser() -> argparse.ArgumentParser:
         "--group-by", default=",".join(standardizer.DEFAULT_GROUP_BY),
         help="Comma-separated comparable background fields for anomaly screening",
     )
-    parser.add_argument("--min-group-size", type=int, default=8, help="Minimum usable records per anomaly group")
+    parser.add_argument(
+        "--min-group-size", type=int,
+        help="Minimum usable records per anomaly group (default: demo=8, production=20)",
+    )
     parser.add_argument("--robust-z-threshold", type=float, default=3.5, help="Absolute modified z-score threshold")
+    parser.add_argument(
+        "--spatial-grid-degrees", type=float, default=2.0,
+        help="Fixed WGS84 cell size for candidate-region testing (default: 2)",
+    )
+    parser.add_argument(
+        "--min-spatial-samples", type=int,
+        help="Minimum mapped usable records inside and outside each tested cell",
+    )
+    parser.add_argument(
+        "--min-spatial-candidates", type=int, default=2,
+        help="Minimum D2 point candidates required in a reported cell",
+    )
+    parser.add_argument(
+        "--spatial-fdr-alpha", type=float, default=0.10,
+        help="Benjamini-Hochberg FDR threshold for candidate regions",
+    )
     return parser
 
 

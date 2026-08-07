@@ -184,17 +184,22 @@ def render_markdown(matrix: Mapping[str, Any]) -> str:
             f"| {medium} | `{cell['status']}` | {selected} | {candidates} | "
             f"`{cell['source_independence']}` | `{unknowns}` |"
         )
+    lines.extend(["", "## 当前判断", ""])
+    for medium, cell in matrix["cells"].items():
+        selected = "、".join(cell["selected_sources"]) or "无当前可执行来源"
+        if cell["analyte_coverage"] == "none":
+            analyte_note = f"请求元素均缺失：{', '.join(cell['missing_analytes'])}"
+        elif cell["missing_analytes"]:
+            analyte_note = f"缺失元素：{', '.join(cell['missing_analytes'])}"
+        else:
+            analyte_note = "注册目标覆盖本次元素；仍需记录级核验"
+        lines.append(
+            f"- `{medium}`：状态 `{cell['status']}`；来源 {selected}；{analyte_note}；"
+            f"来源独立性 `{cell['source_independence']}`。"
+        )
     lines.extend(
         [
-            "",
-            "## 当前判断",
-            "",
-            "- 岩石只有 GEOROC 太古宙专题来源，因此仍是 `partial`；",
-            "- 土壤已有 USGS、PANGAEA 与 FOREGS topsoil/subsoil/humus；FOREGS 腐殖质不含 As，且温和硝酸浸出、王水和总量不可混用，整体仍为 `partial`；",
-            "- 沉积物已有 MarChem、GSJ 与 FOREGS stream/floodplain sediment；海洋/河流/泛滥平原、粒级和消解基础不同，仍为 `partial`；",
-            "- 水体已有 GEOTRACES 海水、GEMStat 淡水和 FOREGS 欧洲溪流水；目标分析物有多个来源，但海水/淡水、单位和时间尺度不可直接混为同一背景；",
-            "- FOREGS 六类来源已经分别实现适配器并固定文件 hash；这增加了欧洲低密度基线覆盖，不代表欧洲每个位置有实测值；",
-            "- 岩石、土壤和沉积物样板的 As、Cu、Ni、Zn 目标字段已登记；来源数增加不代表方法一致或空间充分，方法、时间和密度仍需逐源审计；",
+            "- 方法、时间与空间密度没有完成记录级审计时保持 `not_yet_audited`；不得用来源数量替代覆盖结论。",
             "- 聚合平台不计作独立证据，必须追溯并去重其上游数据集。",
             "",
             "## 限制",

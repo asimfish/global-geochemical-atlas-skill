@@ -11,6 +11,9 @@
     "sample_id",
     "sample_identity_group",
     "replicate_group_id",
+    "analysis_batch_id",
+    "batch_qc_status",
+    "batch_qc_disposition",
     "igsn",
     "element_or_analyte",
     "analyte_reported",
@@ -41,8 +44,39 @@
     "sample_depth_min_m",
     "sample_depth_max_m",
     "grain_fraction",
+    "sample_type_raw",
+    "sample_type",
+    "sample_type_mapping_status",
+    "sample_type_missing_reason",
+    "geographic_context_raw",
+    "survey_area",
+    "map_sheet",
+    "cruise_track",
+    "lithology_raw",
     "lithology",
+    "soil_horizon_raw",
+    "soil_horizon",
+    "sediment_environment",
+    "water_body_type",
+    "water_fraction",
+    "filtered_state",
     "geologic_unit",
+    "geologic_unit_raw",
+    "geologic_age_raw",
+    "tectonic_setting_raw",
+    "matched_geologic_unit",
+    "geology_map_source",
+    "geology_map_version",
+    "match_method",
+    "match_scale",
+    "boundary_distance_m",
+    "match_uncertainty",
+    "geology_missing_reason",
+    "method_scope",
+    "method_assignment_basis",
+    "preparation",
+    "analytical_technique",
+    "instrument",
     "geologic_unit_id",
     "geologic_context_source",
     "geologic_context_version",
@@ -56,6 +90,21 @@
     "reference_material",
     "detection_limit",
     "detection_limit_unit",
+    "quantitation_limit",
+    "quantitation_limit_unit",
+    "reference_materials",
+    "method_source_locator",
+    "method_publication_id",
+    "method_missing_reason",
+    "citation_id_raw",
+    "publication_id",
+    "publication_doi",
+    "citation_text_raw",
+    "citation_scope",
+    "citation_assignment_basis",
+    "upstream_primary_source_id",
+    "citation_resolution_status",
+    "citation_missing_reason",
     "source_id",
     "dataset_title",
     "dataset_doi",
@@ -65,6 +114,13 @@
     "source_locator",
     "file_sha256",
     "license",
+    "access_status",
+    "research_use_status",
+    "license_url",
+    "license_scope",
+    "attribution_required",
+    "redistribution_status",
+    "terms_verified_at",
     "source_tier",
     "qc_flags",
     "operational_confidence"
@@ -75,6 +131,19 @@
     "sample_id": {"type": ["string", "null"]},
     "sample_identity_group": {"type": ["string", "null"]},
     "replicate_group_id": {"type": ["string", "null"]},
+    "analysis_batch_id": {"type": ["string", "null"]},
+    "batch_qc_status": {
+      "type": "string",
+      "enum": ["not_supplied", "pass", "fail", "incomplete"]
+    },
+    "batch_qc_disposition": {
+      "type": ["string", "null"],
+      "enum": [
+        "accept_for_scientific_analysis",
+        "exclude_batch_and_investigate",
+        null
+      ]
+    },
     "igsn": {"type": ["string", "null"]},
     "element_or_analyte": {"type": "string", "minLength": 1},
     "analyte_reported": {"type": ["string", "null"]},
@@ -91,7 +160,7 @@
     "original_unit": {"type": ["string", "null"]},
     "value_qualifier": {
       "type": "string",
-      "enum": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "nd", "trace", "unknown"]
+      "enum": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "loq", "nd", "trace", "unknown"]
     },
     "censored": {"type": "boolean"},
     "missing_reason": {
@@ -114,8 +183,34 @@
     "sample_depth_min_m": {"type": ["number", "null"], "minimum": 0},
     "sample_depth_max_m": {"type": ["number", "null"], "minimum": 0},
     "grain_fraction": {"type": ["string", "null"]},
+    "sample_type_raw": {"type": ["string", "null"]},
+    "sample_type": {"type": ["string", "null"]},
+    "sample_type_mapping_status": {"type": ["string", "null"]},
+    "sample_type_missing_reason": {"type": ["string", "null"]},
+    "geographic_context_raw": {"type": ["string", "null"]},
+    "survey_area": {"type": ["string", "null"]},
+    "map_sheet": {"type": ["string", "null"]},
+    "cruise_track": {"type": ["string", "null"]},
+    "lithology_raw": {"type": ["string", "null"]},
     "lithology": {"type": ["string", "null"]},
+    "soil_horizon_raw": {"type": ["string", "null"]},
+    "soil_horizon": {"type": ["string", "null"]},
+    "sediment_environment": {"type": ["string", "null"]},
+    "water_body_type": {"type": ["string", "null"]},
+    "water_fraction": {"type": ["string", "null"]},
+    "filtered_state": {"type": ["string", "null"]},
     "geologic_unit": {"type": ["string", "null"]},
+    "geologic_unit_raw": {"type": ["string", "null"]},
+    "geologic_age_raw": {"type": ["string", "null"]},
+    "tectonic_setting_raw": {"type": ["string", "null"]},
+    "matched_geologic_unit": {"type": ["string", "null"]},
+    "geology_map_source": {"type": ["string", "null"]},
+    "geology_map_version": {"type": ["string", "null"]},
+    "match_method": {"type": ["string", "null"]},
+    "match_scale": {"type": ["string", "null"]},
+    "boundary_distance_m": {"type": ["number", "null"], "minimum": 0},
+    "match_uncertainty": {"type": ["string", "null"]},
+    "geology_missing_reason": {"type": ["string", "null"]},
     "geologic_unit_id": {"type": ["string", "null"]},
     "geologic_context_source": {"type": ["string", "null"]},
     "geologic_context_version": {"type": ["string", "null"]},
@@ -126,12 +221,32 @@
       "enum": ["high", "medium", "low", "unknown", null]
     },
     "analytical_method": {"type": ["string", "null"]},
+    "method_scope": {"type": ["string", "null"]},
+    "method_assignment_basis": {"type": ["string", "null"]},
+    "preparation": {"type": ["string", "null"]},
+    "analytical_technique": {"type": ["string", "null"]},
+    "instrument": {"type": ["string", "null"]},
     "method_family": {"type": ["string", "null"]},
     "digestion_or_extraction": {"type": ["string", "null"]},
     "laboratory": {"type": ["string", "null"]},
     "reference_material": {"type": ["string", "null"]},
     "detection_limit": {"type": ["number", "null"], "minimum": 0},
     "detection_limit_unit": {"type": ["string", "null"]},
+    "quantitation_limit": {"type": ["number", "null"], "minimum": 0},
+    "quantitation_limit_unit": {"type": ["string", "null"]},
+    "reference_materials": {"type": ["string", "null"]},
+    "method_source_locator": {"type": ["string", "null"]},
+    "method_publication_id": {"type": ["string", "null"]},
+    "method_missing_reason": {"type": ["string", "null"]},
+    "citation_id_raw": {"type": ["string", "null"]},
+    "publication_id": {"type": ["string", "null"]},
+    "publication_doi": {"type": ["string", "null"]},
+    "citation_text_raw": {"type": ["string", "null"]},
+    "citation_scope": {"type": ["string", "null"]},
+    "citation_assignment_basis": {"type": ["string", "null"]},
+    "upstream_primary_source_id": {"type": ["string", "null"]},
+    "citation_resolution_status": {"type": ["string", "null"]},
+    "citation_missing_reason": {"type": ["string", "null"]},
     "source_id": {"type": ["string", "null"]},
     "dataset_title": {"type": ["string", "null"]},
     "dataset_doi": {"type": ["string", "null"]},
@@ -141,6 +256,13 @@
     "source_locator": {"type": ["string", "null"]},
     "file_sha256": {"type": ["string", "null"]},
     "license": {"type": ["string", "null"]},
+    "access_status": {"type": ["string", "null"]},
+    "research_use_status": {"type": ["string", "null"]},
+    "license_url": {"type": ["string", "null"]},
+    "license_scope": {"type": ["string", "null"]},
+    "attribution_required": {"type": ["string", "null"]},
+    "redistribution_status": {"type": ["string", "null"]},
+    "terms_verified_at": {"type": ["string", "null"]},
     "source_tier": {"type": "string"},
     "qc_flags": {
       "type": "array",
@@ -150,17 +272,54 @@
     "operational_confidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["version", "source", "completeness", "method", "spatial", "qc", "overall", "band"],
+      "required": ["version", "source", "completeness", "method", "spatial", "qc", "overall", "band", "gates_applied"],
       "properties": {
-        "version": {"const": "d2-confidence-v2"},
+        "version": {"const": "d2-confidence-v3"},
         "source": {"type": "number", "minimum": 0, "maximum": 1},
         "completeness": {"type": "number", "minimum": 0, "maximum": 1},
         "method": {"type": "number", "minimum": 0, "maximum": 1},
         "spatial": {"type": "number", "minimum": 0, "maximum": 1},
         "qc": {"type": "number", "minimum": 0, "maximum": 1},
         "overall": {"type": "number", "minimum": 0, "maximum": 1},
-        "band": {"type": "string", "enum": ["high", "medium", "low"]}
+        "band": {"type": "string", "enum": ["high", "medium", "low"]},
+        "gates_applied": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "error_qc_low_cap",
+              "missing_canonical_coordinate_low_cap",
+              "missing_coordinate_uncertainty_medium_cap",
+              "incomplete_method_context_medium_cap",
+              "missing_geologic_context_medium_cap"
+            ]
+          }
+        }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"batch_qc_status": {"const": "not_supplied"}}},
+      "then": {"properties": {"batch_qc_disposition": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"batch_qc_status": {"const": "pass"}}},
+      "then": {
+        "properties": {
+          "analysis_batch_id": {"type": "string", "minLength": 1},
+          "batch_qc_disposition": {"const": "accept_for_scientific_analysis"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"batch_qc_status": {"enum": ["fail", "incomplete"]}}},
+      "then": {
+        "properties": {
+          "batch_qc_disposition": {"const": "exclude_batch_and_investigate"}
+        }
+      }
+    }
+  ]
 }

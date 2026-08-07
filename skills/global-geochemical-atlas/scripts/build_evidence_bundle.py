@@ -91,6 +91,20 @@ def json_object(path: Path, label: str) -> dict[str, Any]:
     return value
 
 
+def source_url_is_evidence_safe(value: Any, file_hash: Any) -> bool:
+    """Accept HTTPS, or a hash-pinned HTTP locator used by a legacy publisher."""
+
+    if not isinstance(value, str):
+        return False
+    if value.startswith("https://"):
+        return True
+    return (
+        value.startswith("http://weppi.gtk.fi/")
+        and isinstance(file_hash, str)
+        and SHA256_RE.fullmatch(file_hash) is not None
+    )
+
+
 def _declared_evidence(rows: Sequence[Mapping[str, str]]) -> tuple[list[dict[str, Any]], bytes]:
     evidence_rows = [
         {
@@ -154,8 +168,11 @@ def load_record_evidence(path: Path) -> tuple[list[dict[str, Any]], bytes]:
         ):
             raise EvidenceError(f"record evidence line {line_number} has unsafe source_file")
         source_url = value.get("source_file_url")
-        if source_url is not None and (not isinstance(source_url, str) or not source_url.startswith("https://")):
-            raise EvidenceError(f"record evidence line {line_number} has a non-HTTPS source_file_url")
+        if source_url is not None and not source_url_is_evidence_safe(source_url, file_hash):
+            raise EvidenceError(
+                f"record evidence line {line_number} has an unsafe source_file_url; "
+                "the allowlisted legacy HTTP publisher requires a pinned SHA-256"
+            )
         for list_field in ("article_citations", "article_dois"):
             items = value.get(list_field)
             if items is not None and (
@@ -266,8 +283,7 @@ def acquisition_binding(
             or filename in acquired_files
             or not isinstance(file_hash, str)
             or not SHA256_RE.fullmatch(file_hash)
-            or not isinstance(source_url, str)
-            or not source_url.startswith("https://")
+            or not source_url_is_evidence_safe(source_url, file_hash)
         ):
             raise EvidenceError("acquisition manifest contains unsafe or incomplete source-file evidence")
         acquired_files[filename] = (file_hash, source_url)

@@ -78,7 +78,7 @@ python3 tools/finalize_score.py \
 - B0/S0 三次配对运行的完整性检查与描述性汇总；
 - Q01–Q24 答题材料白名单导出和评分源隔离检查。
 
-本包不绑定具体模型平台。模型调用、容器调度和 LLM grader 调用仍由赛事 runner 完成；gold smoke test 不能冒充真实模型成绩。
+评分契约不绑定具体模型平台；正式结果仍由赛事 runner 和独立 grader 决定，gold smoke test 不能冒充真实模型成绩。仓库提供 `docker/campaign.py` 作为可复用的本地比赛代理 runner：它绑定 OpenCode、容器资源/网络隔离和 B0/S0 运行记录，但仍不冒充主办方隐藏题或官方最终汇总器。完整命令见 [`docs/docker_usage.md`](docs/docker_usage.md)。
 
 ## 2. 冻结契约
 
@@ -106,6 +106,10 @@ python3 tools/validate_package.py . \
 python3 tools/export_ai_bundle.py --validate-only ai_visible_public
 python3 tools/verify_isolation.py --evaluation-root .
 ```
+
+`--validate-only` 默认要求二十四个 submission 目录为空，只含 `.gitkeep`，防止历史答案进入新会话。
+仅在一次运行结束后检查已经填写的候选包时显式增加 `--allow-submissions`；开始下一轮前必须使用
+`reset_ai_submissions.py` 清空。
 
 预期版本为 `6.0.0-draft.2`，共 24 题。每题 gold smoke 和候选可见契约检查必须通过，错误列表必须为空；答题 bundle 也必须包含 Q01–Q24 且不含任何评分侧路径。
 
@@ -145,6 +149,23 @@ run_manifest.json
 - S0：只增加冻结 Skill 的只读挂载，并记录实际加载证据；
 - 每次捕获开始/结束时间、E1 状态和退出码、stdout/stderr、产物哈希及 runner 元数据；
 - 不把 grader 报告写进 submission，以免混入候选产物。
+
+本地统一执行示例：
+
+```bash
+export EVAL_API_KEY='由密钥管理器注入'
+python3 docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --agent opencode --network whitelist \
+  --provider-base-url https://gateway.example/v1 \
+  --model qwen3.8-max \
+  --temperature 0 \
+  --supplemental-model qwen3-vl-plus \
+  --tasks all --conditions B0,S0 --repeats 3 \
+  --output-dir /runs/campaign-001
+```
+
+补充模型记录单独写入 `supplemental_runs.jsonl`，不进入主模型三次中位数。模型下载、任务数据准备和 candidate execution 必须分阶段记录；当前代理题输入已在容器启动前打包，因此 candidate 元数据中的 `download_seconds` 为零。
 
 候选退出码必须使用 E1：`0` 成功，`2` 部分成功，`10–30` 为输入/科学/写出失败，`70–76` 为 runner、资源、环境、产物、scorer 和取消类错误。原始子进程码写入 `cause_exit_code`，不能覆盖 E1 码。特别注意：grader 自身异常是 `75`，不是 `2`。
 

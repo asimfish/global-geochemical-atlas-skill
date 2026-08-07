@@ -1,0 +1,7 @@
+{
+  "features": [],
+  "interface_version": "d2-interface-v2",
+  "method_version": "d2-spatial-hypergeometric-fdr-v1",
+  "name": "geochemical_candidate_anomaly_regions",
+  "type": "FeatureCollection"
+}

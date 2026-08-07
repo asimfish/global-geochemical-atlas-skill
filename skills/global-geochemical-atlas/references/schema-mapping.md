@@ -1,6 +1,8 @@
 # D1 来源字段与 D2 映射
 
-版本：`d1-schema-mapping-v1`
+版本：`d1-schema-mapping-v2-compatible`
+
+V4 sample/method/geology/citation 迁移规则见 `v4-schema-migration.md`。以下 v1 映射继续作为旧 bundle 的兼容契约。
 
 ## 共同映射
 

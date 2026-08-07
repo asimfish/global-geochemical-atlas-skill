@@ -1,0 +1,16 @@
+{
+  "elements": ["As", "Cu", "Ni", "Zn"],
+  "region": "global",
+  "media": ["soil"],
+  "measurement_basis": null,
+  "time_range": null,
+  "sources": ["usgs-conus-soil"],
+  "output_formats": ["csv", "json", "geojson", "html_map"],
+  "target_crs": "EPSG:4326",
+  "license_policy": "open_only",
+  "research_use_policy": "permitted_research",
+  "minimum_evidence_tier": "A",
+  "minimum_use_mode": "normalized_analysis",
+  "max_records": 1000,
+  "offline": true
+}

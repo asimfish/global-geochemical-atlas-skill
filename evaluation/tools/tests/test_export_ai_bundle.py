@@ -71,6 +71,20 @@ class ExportAiBundleTests(unittest.TestCase):
             with self.assertRaises(MODULE.BundleError):
                 MODULE.validate_bundle(bundle)
 
+    def test_validator_rejects_historical_submissions_by_default(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "ai-visible"
+            MODULE.export_bundle(self.benchmark_root, bundle)
+            answer = bundle / "submissions" / "Q01" / "artifacts" / "run_manifest.json"
+            answer.parent.mkdir()
+            answer.write_text("{}\n", encoding="utf-8")
+
+            with self.assertRaises(MODULE.BundleError):
+                MODULE.validate_bundle(bundle)
+
+            summary = MODULE.validate_bundle(bundle, allow_submissions=True)
+            self.assertEqual(summary["submission_files"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

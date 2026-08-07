@@ -1,0 +1,80 @@
+{
+  "case_version": "qwen-uplift-public-v2",
+  "claim_boundary": "Authority metadata is frozen from DOI/DataCite or publisher records. File hashes prove byte identity, not publisher correctness or regional representativeness.",
+  "resources": [
+    {
+      "id": "glim",
+      "role": "geology",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.788537?format=textfile",
+      "authority_url": "https://doi.org/10.1594/PANGAEA.788537",
+      "file": "geology/pangaea-788537.zip",
+      "bytes": 38670,
+      "sha256": "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e",
+      "doi": "10.1594/PANGAEA.788537"
+    },
+    {
+      "id": "africa_sediment",
+      "role": "geochemistry",
+      "source_id": "pangaea_880617",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.880617?format=textfile",
+      "authority_url": "https://doi.org/10.1594/PANGAEA.880617",
+      "locator_prefix": "https://doi.org/10.1594/PANGAEA.880617#",
+      "file": "africa/pangaea-880617.tab",
+      "bytes": 17018,
+      "sha256": "94aefec747455559fe0c41f66e413c25f70afaf185ff3eaa73c8f104cd552686",
+      "doi": "10.1594/PANGAEA.880617",
+      "dataset_title": "Inorganic geochemistry of surface sediment samples from southeast Africa",
+      "dataset_version": "PANGAEA.880617",
+      "license": "CC-BY-3.0",
+      "medium": "sediment"
+    },
+    {
+      "id": "africa_water",
+      "role": "geochemistry",
+      "source_id": "pangaea_947275",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.947275?format=textfile",
+      "authority_url": "https://doi.org/10.1594/PANGAEA.947275",
+      "locator_prefix": "https://doi.org/10.1594/PANGAEA.947275#",
+      "file": "africa/pangaea-947275.tab",
+      "bytes": 211079,
+      "sha256": "fb62124c276c6cf4eb549899bf30e78c7d8cdde083173662a53e16ea4e0155a6",
+      "doi": "10.1594/PANGAEA.947275",
+      "dataset_title": "Trace metal data from water samples during METEOR cruise M121",
+      "dataset_version": "PANGAEA.947275",
+      "license": "CC-BY-4.0",
+      "medium": "water"
+    },
+    {
+      "id": "oceania_soil",
+      "role": "geochemistry",
+      "source_id": "pangaea_935591",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.935591?format=textfile",
+      "authority_url": "https://doi.org/10.1594/PANGAEA.935591",
+      "locator_prefix": "https://doi.org/10.1594/PANGAEA.935591#",
+      "file": "oceania/pangaea-935591.tab",
+      "bytes": 46792,
+      "sha256": "210d63a02a7bb43cd9537beded803db15de2fdbd55a41583ae9fe3a8ba38de92",
+      "doi": "10.1594/PANGAEA.935591",
+      "dataset_title": "Multielement soil, sediment, and street dust data from Smith's Lake and Charles Veryard Reserves, western Australia in 2017",
+      "dataset_version": "PANGAEA.935591",
+      "license": "CC-BY-4.0",
+      "medium": "soil"
+    },
+    {
+      "id": "antarctica_sediment",
+      "role": "geochemistry",
+      "source_id": "mendeley_cfnhps54h7_v1",
+      "url": "https://data.mendeley.com/public-files/datasets/cfnhps54h7/files/b21a1c0e-0b6f-4d2e-b0df-f1e8bbad0465/file_downloaded",
+      "authority_url": "https://data.mendeley.com/datasets/cfnhps54h7/1",
+      "locator_prefix": "https://data.mendeley.com/datasets/cfnhps54h7/1#",
+      "file": "antarctica/mendeley-cfnhps54h7-v1.xlsx",
+      "bytes": 63214,
+      "sha256": "b913cf4b7d03d38b9b22ffefd29ad1125874d39492d2f14edd569d114c0a1bf3",
+      "doi": "10.17632/cfnhps54h7.1",
+      "dataset_title": "Data for: The geochemical and mineralogical fingerprint of West Antarctica's weak underbelly: Pine Island and Thwaites glaciers",
+      "dataset_version": "Mendeley Data v1; related article 10.1016/j.chemgeo.2020.119649",
+      "license": "CC-BY-4.0",
+      "medium": "sediment"
+    }
+  ]
+}

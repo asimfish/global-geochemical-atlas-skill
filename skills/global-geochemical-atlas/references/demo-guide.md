@@ -1,25 +1,49 @@
-# 离线 demo 指南
+# Demo 指南
 
 ## 目的
 
-使用固定合成数据演示单位换算、删失值、坐标 QC、重复检测、运行级置信度、候选异常和交互地图。该数据不代表真实区域，不能用于科学结论。
+首选生产阈值真实数据演示，证明请求路由、来源证据、D2 地质匹配和 D3 交付闭环；再按需使用合成数据演示刻意构造的失败边界。任何 fixture 都不是代表性抽样，不能用于区域科学结论。
 
-## 运行
+## 首选：一键生产阈值演示
+
+从 Skill 目录执行：
+
+```bash
+python scripts/run_atlas_request.py \
+  --request fixtures/production-usgs/request.json \
+  --demo production-usgs \
+  --analysis-profile production \
+  --generated-at 2026-08-07T00:00:00Z \
+  --output-dir /tmp/geochemical-production-demo
+
+python scripts/validate_outputs.py \
+  --output-dir /tmp/geochemical-production-demo
+```
+
+预期 996 条 USGS 真实测定、996 条有效 WGS84 坐标、996 条固定 GLiM 岩性匹配、12 个达到 `n≥20` 的可比背景组和 6 个 high/low 候选异常；输出验证 0 错误、0 警告。详细边界、hash、许可和复现指标见 [production-demo.md](production-demo.md)。
+
+## 合成边界演示
 
 从 Skill 目录执行：
 
 ```bash
 python scripts/run_workflow.py \
   --input fixtures/demo_input.csv \
-  --output-dir demo_output
+  --output-dir demo_output \
+  --analysis-profile demo \
+  --min-group-size 8
 python scripts/validate_outputs.py --output-dir demo_output
 python scripts/component_test.py --component all
 ```
 
-单独演示 D3 时，不修改 HTML。先复制任务配置，再从标准输出目录生成新的可视化包：
+单独演示 D3 时，不修改 HTML，也不手写整份配置。先把问题转成显式参数，再生成任务配置：
 
 ```bash
-cp assets/visualization-profile.template.json /tmp/task-profile.json
+python scripts/create_visualization_profile.py \
+  --story overview \
+  --spatial-scope global \
+  --output /tmp/task-profile.json
+
 python scripts/render_visualization.py \
   --input-dir demo_output \
   --profile /tmp/task-profile.json \
@@ -27,9 +51,14 @@ python scripts/render_visualization.py \
 python scripts/validate_visualization.py --output-dir visualization_output
 ```
 
-按演示问题修改 `/tmp/task-profile.json` 的 `story`、默认区域、元素、介质或 X/Y；打开
-`visualization_output/interactive_map.html` 时应直接进入该任务视图。检查
-`visualization_report.json`，不要隐藏 `profile_warnings`。
+国家、城市或任意研究框改用 `--spatial-scope regional --region PRESET`，或使用
+`--region custom --bbox W S E N --region-label LABEL`；元素组合使用 `--story comparison --comparison-x X --comparison-y Y`。
+可用 `assets/visualization-profile.comparison-regional.template.json` 查看一份通过 schema 的区域元素组合完整模板，
+但应复制到任务输出目录后修改，不能覆盖 Skill 内的固定资产。
+打开 `visualization_output/interactive_map.html` 时应直接进入该任务视图。检查
+`visualization_report.json`，不要隐藏 `profile_warnings`。全球配置生成世界图；区域配置会将 HTML、
+异常显示和 `samples.geojson` 裁剪并锁定到预设或自定义范围。中国、美国和澳大利亚预设使用离线
+国家多边形严格裁剪；上海、欧洲与自定义范围仍是 bbox。
 这里不要把 `validate_outputs.py` 指向 `visualization_output`：该验证器面向含 `run_summary.json` 的
 核心全流程目录；独立 D3 包由 `validate_visualization.py` 验证。
 
@@ -42,7 +71,9 @@ python scripts/run_workflow.py \
   --input fixtures/source-demos/usgs-conus-soil/demo_input.csv \
   --evidence-jsonl fixtures/source-demos/usgs-conus-soil/sources.jsonl \
   --acquisition-manifest fixtures/source-demos/usgs-conus-soil/run_manifest.json \
-  --output-dir usgs_demo_output
+  --output-dir usgs_demo_output \
+  --analysis-profile demo \
+  --min-group-size 8
 python scripts/validate_outputs.py --output-dir usgs_demo_output
 ```
 
@@ -65,16 +96,17 @@ GEOROC fixture 的 datum 尚无足够证据，故 48 条记录保留 reported co
 ## 三分钟演示顺序
 
 1. 展示用户问题和由 Agent 生成的 `visualization_profile.json`，说明 HTML 是内部模板而非参赛主体。
-2. 运行一键命令并展示标准数据库、证据报告、异常结果和任务可视化清单。
-3. 对比原值、标准值、qualifier、QC 和置信度。
-4. 打开地图，首屏直接进入配置指定的问题视图；使用“任务视图”下拉切换总览、覆盖、异常、元素组合和证据链。
-5. 切换美国或上海范围框：美国显示区域记录；上海若为 0 则展示“覆盖缺口，不是元素不存在”的失败可见化。
-6. 在“分布图 / 热力图 / 组合”之间切换，强调热力底色只统计物理样点密度，不插值浓度。
-7. 筛选 As/soil 并选择“按可比浓度”；只有 basis、方法组和单位收敛后才出现浓度对数色阶。
-8. 点击候选点核对原值、标准值、介质、元素、方法、QC、置信度和来源定位。
-9. 打开“元素组合”，展示最大可比层散点、Spearman 报告门和共测矩阵。
-10. 在全球视图展示简洁的红蓝异常圆环，说明它会随缩放展开且圆环面积不代表地理范围；点击圆环后才显示真实 bbox，并展示方向、候选数量、最大 |z|、来源与记录下钻。再打开“异常结果”，用“地图定位”返回同一 2° 网格，并说明 `visual_aggregation_only`。
-11. 切换“来源与置信度”“质量与边界”，展示证据等级、坐标空洞和解释边界，再展示水体 ppm、坐标交换与小样本组的失败关闭。
+2. 运行一键命令并打开页面首部“比赛四项核心交付物”，核对“标准化地球化学数据库、数据来源与置信度说明、异常区域识别结果、可交互元素分布地图”四张一级入口卡片。
+3. 打开“标准化数据库”，对账完整 CSV 记录数、页面内嵌可上图记录、物理采样点、范围外记录和坐标失败记录；搜索一条 record ID，对比原值、标准值、qualifier、QC 和来源。
+4. 打开“置信度与来源说明”，展示五分量的定义、权重、均值、high/medium/low 分布、错误门控和“不是正确概率”边界，再下钻一个来源卡片。
+5. 打开地图，首屏直接进入配置指定的问题视图；使用唯一主标签导航切换“可交互元素分布地图、标准化地球化学数据库、元素组合对比、数据来源与置信度说明、异常区域识别结果、质量控制与自动迭代”。
+6. 分别演示全球模板、中国国家模板与上海区域模板：全球产物可切换范围；中国产物必须排除日本等 bbox 内邻国记录；上海产物只显示上海 bbox，若为 0 则展示“覆盖缺口，不是元素不存在”的失败可见化。区域数据库页仍须指向完整 CSV，并明确当前页面预览的裁剪口径。
+7. 在“样点分布 / 采样密度 / 组合核查”之间切换，强调热力柔光只统计物理样点密度、不插值浓度，并点击半透明锚点查看记录。
+8. 筛选 As/soil 并选择“按可比浓度”；只有 basis、方法组和单位收敛后才出现浓度对数色阶。
+9. 点击候选点核对原值、标准值、样品类型、元素、方法缺失状态、QC、置信度和来源定位；展开 robust z 阈值、背景组样本量、中位数、MAD 和相对倍数，说明不是邻域平均。
+10. 打开“元素组合对比”，先从组合页选择命名区域或输入自定义 `W,S,E,N`，确认它与地图同步；再展示该范围内最大可比层散点、Spearman 报告门和共测矩阵。点击“导出可复现配置”，把下载的 `d3-visualization-profile-v2` 重新传给 `render_visualization.py`，并用 `validate_visualization.py` 核验正式区域产物及输入/profile/输出哈希。
+11. 在“异常结果”先检查 D2 统计候选区域：说明一侧精确超几何检验、BH-FDR、网格内外样本门槛及空结果不等于不存在异常。再展示红蓝圆环；它只随当前筛选聚合记录级候选，状态为 `visual_aggregation_only`，没有 p/q 值。两类边界都不代表真实地理、地质或污染范围。
+12. 切换“质量与边界”，展示证据等级、坐标空洞和解释边界，再展示水体 ppm、坐标交换与小样本组的失败关闭。
 
 地图中的全元素总览按 `source_id + sample_id + medium + coordinates` 折叠为采样点，顶部 KPI
 仍统计测定记录。没有 `sample_id` 的记录不会仅凭坐标合并。该差异用于避免一个样品的多个元素
@@ -87,11 +119,13 @@ GEOROC fixture 的 datum 尚无足够证据，故 48 条记录保留 reported co
 ```bash
 python scripts/build_four_media_demo.py \
   --output-dir /tmp/four-media-demo \
-  --generated-at 2026-08-05T15:20:00Z
+  --generated-at 2026-08-06T10:05:00Z
 
 python scripts/run_workflow.py \
   --input /tmp/four-media-demo/demo_input.csv \
-  --output-dir /tmp/four-media-output
+  --output-dir /tmp/four-media-output \
+  --analysis-profile demo \
+  --min-group-size 8
 ```
 
-预期为 748 条真实来源最小观测、四介质、十三来源、748/748 标准化、700/748 有效 canonical 坐标、23 条已确认删失值、93 个标准化后隔离背景组及完整十文件输出。GEOROC 的 48 条 reported coordinates 因 datum 未证实而不冒充 WGS84；FOREGS 中可能的 `DL/2` 数值只带证据警告，不冒充已确认删失。演示时先展示覆盖空白和来源范围，再展示地图；16 个候选异常只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。
+预期为 796 条真实来源最小观测、四介质、十四来源、796/796 标准化、700/796 有效 canonical 坐标、23 条已确认删失值、93 个隔离背景组及完整十五文件输出（含批次状态、统计空间报告与 `iteration_backlog.csv`）。GEOROC 与 AfSIS 的 96 条 reported coordinates 因 datum/CRS 未证实而不冒充 WGS84；FOREGS 中可能的 `DL/2` 数值和 AfSIS 中低于来源 DL/QL 的已发布数值只带证据边界。演示时先展示覆盖空白和来源范围，再展示地图；16 个工程异常候选只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。

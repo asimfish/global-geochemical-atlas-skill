@@ -6,4 +6,4 @@
 
 ## 已归档运行
 
-- [`runs/2026-08-06-q01-q24-independent-grade/`](runs/2026-08-06-q01-q24-independent-grade/)：Q01–Q24 候选可见回归题的一次真实答题与独立评分记录。24 题的 `score.json` 均通过 E1 Schema，但由于缺少部分冻结维度证据，`score_status` 全部为 `partial`；Q17 标记为需要人工复核。该记录不是正式隐藏集成绩或完整官方总分，详细限制见 [`independent_grading_report.md`](runs/2026-08-06-q01-q24-independent-grade/independent_grading_report.md)。
+- [`runs/2026-08-06-q01-q24-independent-grade/`](runs/2026-08-06-q01-q24-independent-grade/)：Q01–Q24 候选可见回归题的一次真实答题与独立评分记录，包含 `submissions/Qxx/artifacts/` 只读提交副本及其冻结 SHA-256。24 题的 `score.json` 均通过 E1 Schema，但由于缺少部分冻结维度证据，`score_status` 全部为 `partial`；Q17 标记为需要人工复核。该记录不是正式隐藏集成绩或完整官方总分，详细限制见 [`independent_grading_report.md`](runs/2026-08-06-q01-q24-independent-grade/independent_grading_report.md)。

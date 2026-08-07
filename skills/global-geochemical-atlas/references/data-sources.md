@@ -15,6 +15,7 @@
 | GEMStat portal | water | `https://gemstat.org/data-gemstat/data-portal/` | 门户下载可能要求联系信息或限制站点数；不要自动绕过表单；受限批次不再分发 |
 | Macrostrat | 地质背景 | `https://macrostrat.org/` | 数据通常 CC BY 4.0；同时引用 API 返回的原始地图来源和 source ID；记录比例尺与边界不确定性 |
 | Macrostrat API docs | 点位地质匹配 | `https://dev.macrostrat.org/docs` | API 版本快速演进；固定实际路由和响应字段，不凭记忆构造端点 |
+| GLiM 0.5° raster | 全球表层岩性筛查 | `https://doi.org/10.1594/PANGAEA.788537` | CC BY 3.0；D2 可执行 hash 固定的 point-in-cell，必须标注 0.5° 粗分辨率且不得冒充场地级地层 |
 
 ## MVP 冻结数据源
 
@@ -96,6 +97,29 @@
 - 检出限：CSV 第三行保存表级 DL，但没有逐行 `<` 限定符。适配器对恰好 `DL/2` 的数值只增加 `possible_upstream_dl_over_2_substitution` 证据警告，不自动标成删失或检出；
 - 覆盖：平均约一个样点/4,700 km²，属于欧洲低密度大陆基线；坐标由各国坐标系转换用于大陆尺度展示，不能解释成欧洲每处有数据或本地调查精度；
 - 传输：GTK 旧站的标准 HTTPS 证书验证当前失败，实际归档端点为官方 HTTP。该适配器仅对固定 `weppi.gtk.fi` URL 启用来源级例外，拒绝重定向，并在发布缓存前强制匹配登记 SHA-256；通用下载器仍保持 HTTPS-only。
+
+### `afsis-phase-i-wet-chemistry`
+
+- 数据集：AfSIS Phase I archived soil samples wet chemistry，官方 World Agroforestry Dataverse V2.0；
+- DOI：`10.34725/DVN/66BFOB`；许可：CC BY 4.0；
+- 获取：三个 `format=original` datafile 端点，分别为 847,634-byte CSV、21,024-byte variables XLSX 和 10,445-byte DL/QL XLSX；每个文件同时校验发布方 MD5、登记 SHA-256 和字节数；
+- 对账：2,002 个唯一 SSN/RES.ID、18 个原国家标签、51 个 LDSF 站点、992 个 topsoil、1,010 个 subsoil、1,876 个完整坐标对和六元素共 12,012 条数值；
+- 方法：风干土王水消解准全量；As 为 ICP-MS，Cr/Cu/Ni/Pb/Zn 为 ICP-OES；方法、单位、实验室、DL 和 QL 都从固定工作簿绑定到逐观测证据；
+- 质量边界：126 个样品没有坐标；As/Cu/Pb 存在负数仪器结果；Pb 的大多数发布数值低于全局 DL。原数值保留并分级标记，不静默删除、不当作普通检出；
+- 元数据边界：注册文件和相关论文没有明确 CRS；变量表把 `As.75` 描述成“Arsenic-78”，且变量表与相关论文的采样年份分别为 2009–2013 和 2009–2012。适配器保留冲突，不猜测修复；
+- 命名边界：`SAfrica` 和 `Zimbambwe` 等发布方标签原样保留，规范名只写独立字段；18 个国家标签不代表均匀非洲覆盖。
+
+### `tpdc-china-mountain-soil`（已冻结文件契约，待 V4 适配）
+
+- 数据集：中国山地不同气候区土壤剖面多元素综合数据集；DOI `10.11888/Terre.tpdc.302620`；TPDC metadata UUID `2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1`；
+- 使用条件：TPDC 元数据返回 licence code `1`、`sharePolicy=A`、`shareType=online`；前端许可表把 code `1` 映射为 CC BY 4.0，使用时保留数据作者、数据 DOI 和 TPDC 署名；
+- 获取：官方 metadata POST、文件清单 GET 和 file-ID POST 下载已验证；`Soil dataset.zip` 为 1,828,683 bytes，SHA-256 `8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a`；
+- 成员：`Soil dataset.xlsx`、`Soil bulk density.xlsx`、`Description of the dataset.docx` 三项均登记字节数和 SHA-256；完整第三方文件只进入本地缓存，不提交 Git；
+- 对账：主表 1,314 条唯一“样品号 × 土层”记录，覆盖 30 座山地、166 个站点、O/A/C 三层；Cr/Cu/Ni/Pb/Zn 各 1,314 条，共 6,570 条目标测定，As/Hg 缺失；
+- 背景字段：逐行有母岩类别、母岩组、土纲、土类、海拔、经纬度、气候和植被信息，适合验证 V4 样品类型、地质背景与环境上下文 schema；
+- 方法：风干并过 2 mm 筛，HNO3-HF-HClO4 消解；Zn 用 ICP-AES，Cr/Cu/Ni/Pb 用 ICP-MS；论文报告空白、重复、GBW-07405、95%–105% 回收率和相应 RSD。工作簿没有逐行方法或检出限，因此这些事实只能以 publication scope 连接；
+- 质量边界：元数据和文件未声明坐标 CRS；SN5、SN6、SN7 各有多个发布坐标对；单独 bulk-density 表能补 58 个主表缺失行，但同时有六个非空 BD 冲突和五个坐标冲突，必须保留双来源值和冲突标记，不能覆盖主表；
+- 当前状态：文件契约和字段审计已完成，canonical adapter 尚未接入。按 V4 计划先完成 sample/method/geology schema，再制作 30 条复核和端到端 fixture。
 
 ## D1 适配器和稳定 ID
 

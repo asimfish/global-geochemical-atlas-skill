@@ -105,7 +105,10 @@
           "additionalProperties": false,
           "properties": {
             "concept_doi": {"type": "string", "minLength": 1},
+            "cstr": {"type": "string", "minLength": 1},
             "dataset_doi": {"type": "string", "minLength": 1},
+            "file_id": {"type": "string", "minLength": 1},
+            "metadata_uuid": {"type": "string", "minLength": 1},
             "parent_atlas": {"type": "string", "minLength": 1},
             "parent_dataset_doi": {"type": "string", "minLength": 1},
             "project_doi": {"type": "string", "minLength": 1},
@@ -123,6 +126,7 @@
             "properties": {
               "kind": {"type": "string", "minLength": 1},
               "url": {"type": "string", "minLength": 1},
+              "method": {"type": "string", "enum": ["GET", "POST"]},
               "format": {"type": "string", "minLength": 1},
               "access": {"type": "string", "minLength": 1},
               "server_filters": {"$ref": "#/$defs/uniqueStrings"}

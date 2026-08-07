@@ -152,7 +152,7 @@ def populate_bundle(source_root: Path, bundle_root: Path) -> None:
     )
 
 
-def validate_bundle(bundle_root: Path, *, allow_submissions: bool = True) -> dict[str, object]:
+def validate_bundle(bundle_root: Path, *, allow_submissions: bool = False) -> dict[str, object]:
     """Validate paths, task assets, and content hashes in an exported bundle."""
 
     bundle_root = bundle_root.resolve()
@@ -258,12 +258,22 @@ def main() -> int:
     parser.add_argument("source_root", type=Path, nargs="?", default=Path.cwd())
     parser.add_argument("output_root", type=Path, nargs="?")
     parser.add_argument("--validate-only", type=Path, metavar="BUNDLE_ROOT")
+    parser.add_argument(
+        "--allow-submissions",
+        action="store_true",
+        help="allow answer files during an explicit post-run validation",
+    )
     args = parser.parse_args()
 
     try:
         if args.validate_only:
-            summary = validate_bundle(args.validate_only)
+            summary = validate_bundle(
+                args.validate_only,
+                allow_submissions=args.allow_submissions,
+            )
         else:
+            if args.allow_submissions:
+                parser.error("--allow-submissions is valid only with --validate-only")
             if args.output_root is None:
                 parser.error("output_root is required unless --validate-only is used")
             summary = export_bundle(args.source_root, args.output_root)

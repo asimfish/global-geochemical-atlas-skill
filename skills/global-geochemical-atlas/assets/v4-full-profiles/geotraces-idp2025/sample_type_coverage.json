@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "IDP2025",
+  "media": {
+    "water": 39327
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "water_seawater": 39327
+  },
+  "sediment_environments": {
+    "not_applicable": 39327
+  },
+  "source_id": "geotraces-idp2025",
+  "water_body_types": {
+    "seawater": 39327
+  },
+  "water_fractions": {
+    "dissolved": 39327
+  }
+}

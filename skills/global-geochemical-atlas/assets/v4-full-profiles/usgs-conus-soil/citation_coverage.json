@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "citation_scope_counts": {
+    "dataset": 58284
+  },
+  "citation_text_count": 58284,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_doi": "10.3133/ds801",
+  "dataset_doi_present": true,
+  "dataset_version": "Data Series 801, 2013 release",
+  "observation_denominator": 58284,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "publication_doi_observation_count": 0,
+  "source_id": "usgs-conus-soil",
+  "upstream_primary_source_observation_count": 0
+}

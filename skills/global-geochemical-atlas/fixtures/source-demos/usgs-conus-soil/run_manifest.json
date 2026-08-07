@@ -1,6 +1,7 @@
 {
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v2",
+  "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
   "generated_at": "2026-08-05T06:25:00Z",
   "generation_request": {
@@ -18,9 +19,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 85068,
+      "bytes": 162830,
       "path": "demo_input.csv",
-      "sha256": "fcdfe90941beab0f64fcaa42c7c4277ae50dc719cd6ea8f9abeaed575d205b67"
+      "sha256": "75da16e1c262a7e5b4c97929c5085467d3b5cdb653f1bd7579de15e9c54f1cda"
     },
     {
       "bytes": 229956,
@@ -64,6 +65,7 @@
       "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",

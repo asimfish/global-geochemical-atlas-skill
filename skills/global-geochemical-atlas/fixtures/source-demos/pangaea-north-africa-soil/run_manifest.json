@@ -1,6 +1,7 @@
 {
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
   "generated_at": "2026-08-06T03:13:54Z",
   "generation_request": {
@@ -16,9 +17,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 21842,
+      "bytes": 65298,
       "path": "demo_input.csv",
-      "sha256": "f0c24b3eac42e595df8cce304b735529bdd29f91781d98a11d8724076f0dbb26"
+      "sha256": "dd39cb736869bbc25b903fd6a0912f827be2d054e74b7be331d864a1ecc8b026"
     },
     {
       "bytes": 68328,
@@ -48,6 +49,7 @@
       "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",

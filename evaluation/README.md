@@ -14,6 +14,25 @@
 
 冻结接口见 [`contracts/benchmark-execution-contract.json`](contracts/benchmark-execution-contract.json)，人类可读说明见 [`docs/execution-contract-guide.md`](docs/execution-contract-guide.md)。Docker 环境的连接、构建、测试和当前验收边界见 [`docs/docker_usage.md`](docs/docker_usage.md)。
 
+## 统一 Docker runner
+
+`docker/campaign.py` 将当前 E2 题库接入比赛式执行环境：OpenCode 固定版本、2 CPU、4 GB、无 GPU、900 秒、受控网络、B0/S0 只差一个只读 Skill 挂载。主模型默认每题每条件三次，可选补充模型每题每条件一次；输出直接兼容现有 `grade_task.py`、`finalize_score.py` 和 `aggregate_runs.py`。
+
+```bash
+python3 evaluation/docker/campaign.py build-image \
+  --image global-geochemical-eval:local
+python3 evaluation/docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --agent mock --network offline \
+  --tasks Q01 --conditions B0,S0 --repeats 3 \
+  --output-dir /tmp/gga-docker-smoke
+```
+
+mock 只验证运行器，不是模型成绩。正式 OpenCode 命令、网关密钥规则和证据目录见 [`docs/docker_usage.md`](docs/docker_usage.md)。
+如果目标是让用户只开两个空目录并分别测试纯 Qwen 与 Qwen + Skill，请从 [`evaluation_lyf/agent_uplift/`](../evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md) 选择主机版或 Docker 版的一对固定 Prompt；该公开 uplift case 与 Q01–Q24 的 campaign 分开计分，Docker profile 复用这里的执行环境。
+
+Q01–Q24 也提供显式的[手工 B0 无 Skill Prompt](prompts/QWEN_B0_NO_SKILL_PROMPT.md)和[手工 S0 有 Skill Prompt](prompts/QWEN_S0_WITH_SKILL_PROMPT.md)。它们用于人工观察两个条件；正式可比较成绩仍以 Docker runner 的同题面、同资源、只改变 Skill 挂载为准。
+
 ## E1 交卷文件
 
 每次运行的 submission 根目录必须且只能声明以下物理产物：
@@ -55,10 +74,6 @@ evaluation/
 从 `evaluation/` 目录执行：
 
 ```bash
-# 推荐：按公开评审资源规格在 Docker 中运行 Public Q01-Q08
-bash tools/run_docker_validation.sh
-
-# 宿主机验证完整版本化评测包和 AI 可见投影
 python3 tools/validate_package.py . \
   --report results/validation/package_validation.json
 python3 tools/export_ai_bundle.py --validate-only ai_visible_public
@@ -75,11 +90,7 @@ python3 tools/finalize_score.py \
 
 `grade_task.py` 的点数只是证据覆盖量，不是独立总分。只有符合 E1 schema 的六维 `score.json` 才是单次运行分数。完整执行步骤见 [`RUNBOOK.md`](RUNBOOK.md)。
 
-Docker runner 固定使用 2 CPU、4 GiB、无 GPU、最长 12 小时（43200 秒）、无网络和只读根文件系统，并生成容器 inspect、运行日志、验证报告和 `SHA256SUMS`。详细说明见 [`docs/docker_usage.md`](docs/docker_usage.md)。
-
-赛事 Gateway、Qwen Anthropic Base URL、OpenCode 首选/备用模型和白名单代理的独立 Docker smoke 见 [`model_gateway/README.md`](model_gateway/README.md)。它不会放宽上述 Public 校验的 `--network none` 合同。
-
-## 重新答题前清空结果
+## 保持待答题目录为空
 
 从 `evaluation/` 目录先预览，再执行清理：
 
@@ -88,7 +99,7 @@ python3 tools/reset_ai_submissions.py --dry-run
 python3 tools/reset_ai_submissions.py
 ```
 
-脚本只清理 `ai_visible_public/submissions/Q01` 至 `Q24` 中的答题结果，并确保每题最终只保留空的 `.gitkeep`；题面、输入和评分材料不会被修改。
+仓库中的 `ai_visible_public/submissions/Q01` 至 `Q24` 默认只保留空的 `.gitkeep`。脚本用于清理本地上一次运行结果；题面、输入和评分材料不会被修改。历史运行必须归档到 `results/runs/`，不得留在候选可见目录。`export_ai_bundle.py --validate-only` 默认会拒绝历史答案；只有明确检查一次已经结束的运行时才传入 `--allow-submissions`。
 
 ## 被测 Codex 快速入口
 

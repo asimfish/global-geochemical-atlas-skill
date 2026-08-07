@@ -7,8 +7,8 @@
 | `elements` | string[] | 是 | 无 | 使用元素符号或可无歧义规范化的名称 |
 | `region` | object/string | 是 | 无 | `global`、命名区域或 WGS84 bbox |
 | `media` | string[] | 是 | 无 | rock/soil/sediment/water/mineral/concentrate |
-| `measurement_basis` | string[]/null | 否 | null | total/dissolved/extractable 等 |
-| `time_range` | [string,string]/null | 否 | null | 采样时间而非发布日期 |
+| `measurement_basis` | string[]/null | 否 | null | 非空数组；total/dissolved/extractable 等 |
+| `time_range` | [string,string]/null | 否 | null | 采样时间而非发布日期；两项以四位年份开头且 start ≤ end |
 | `sources` | `auto`/string[] | 否 | auto | 只选择公开科学来源 |
 | `output_formats` | string[] | 否 | csv,json,geojson,html_map | 结构化产物 |
 | `target_crs` | string | 否 | EPSG:4326 | v1 只输出 WGS84 canonical 坐标 |
@@ -23,6 +23,11 @@
 
 顺序固定为 `[west, south, east, north]`。经度为 -180–180，纬度为 -90–90；`west > east` 表示跨越日期变更线。不要猜测经纬顺序。
 
+## 可选实验室批次门禁
+
+若输入记录带 `analysis_batch_id`，可同时向执行器提供 `--batch-qc-input` 和 `--batch-qc-policy`。前者是一行一个 CRM、空白或重复样测定的 UTF-8 CSV；后者必须符合
+[batch-qc-policy.schema.json](batch-qc-policy.schema.json)，显式冻结 CRM 回收率、空白上限、重复样 RPD 与单位。两者必须成对出现。D2 重新计算而不信任来源给出的 pass/fail；任一必需控制缺失或失败，整个批次保留在数据库但从异常背景排除。
+
 ## 稳定产物
 
 | 文件 | 核心用途 |
@@ -32,11 +37,20 @@
 | `record_evidence.jsonl` | 与 canonical `record_id` 一一对应的来源文件、源行、版本、哈希、引用及来源特有证据 |
 | `qc_report.json` | 标准化率、删失、坐标和 flags 汇总 |
 | `confidence_report.json` | 运行级置信度公式、分量和 band 分布 |
+| `batch_acceptance.csv` | 逐分析批次的 CRM 回收率、空白、重复样 RPD、通过状态与处置 |
+| `batch_qc_report.json` | 批次规则、输入/policy hash、失败或不完整批次数及科学边界 |
 | `anomalies.geojson` | 候选异常点；允许 null geometry |
 | `anomaly_report.json` | 背景组、阈值、排除和失败状态 |
+| `anomaly_regions.geojson` | 通过精确超几何富集与 BH-FDR 门禁的固定网格候选区域 |
+| `spatial_anomaly_report.json` | 空间零假设、样本门槛、全部检验数、FDR 与未通过原因 |
 | `samples.geojson` | 可地图化的标准样点，不含无效坐标 |
 | `interactive_map.html` | 自包含交互地图；内嵌固定底图与 D1/D2 报告，不依赖 CDN，不在 D3 重算科学结果 |
+| `iteration_backlog.csv` | D1/D2 证据缺口、处理失败、复核项与删失科学限制的机器可读迭代清单 |
 | `run_summary.json` | 整体状态、请求摘要、产物、coverage 与限制 |
+
+以上是固定十五项核心产物；未提供批次 QC 时仍生成带 `not_supplied` 状态的空批次契约。`anomaly_regions.geojson` 是统计筛查产物；D3 的缩放圆环仍是 `visual_aggregation_only`，二者不得混称。
+
+使用 `run_atlas_request.py` 时还生成 `request_evidence/`，保存冻结的 `request.json`、请求特定 `source_route.json`、`coverage.json/.md` 和符合 [request-execution.schema.json](request-execution.schema.json) 的 `execution.json`。实际用于验证的请求过滤 manifest、父 manifest 与在线逐源 manifest 原字节保存在 `request_evidence/acquisition/`，并由 `execution.json.acquisition_manifests` 的相对路径和 SHA-256 绑定，避免临时目录退出后只剩不可复核的孤立哈希。这些是十五项核心产物之外的请求执行证据；其中实时路由状态与本地 fixture/hash 解析状态分开记录，不能互相覆盖。`--online-source auto` 会按确定性预算逐个获取全部兼容来源、验证各自 manifest，再合并长表和逐记录证据；`execution.json.source_outcomes` 保留每源记录数、manifest hash 与失败。默认允许已验证子集以 `partial_success` 继续；`--require-all-sources` 改为任一来源失败即关闭。
 
 ## 证据链
 

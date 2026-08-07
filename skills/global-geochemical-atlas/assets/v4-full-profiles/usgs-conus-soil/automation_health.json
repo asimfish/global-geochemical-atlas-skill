@@ -1,0 +1,53 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 3,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "Data Series 801, 2013 release",
+  "expected_target_observation_count": null,
+  "files": [
+    {
+      "bytes": 1987189,
+      "cache_status": "cache_hit",
+      "file_id": "a-horizon",
+      "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
+      "sha256": "462821c1164b5b4c27905a3ea62a22fa3f6172da09125d8f80ec5b2f6a69a202"
+    },
+    {
+      "bytes": 1996147,
+      "cache_status": "cache_hit",
+      "file_id": "c-horizon",
+      "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
+      "sha256": "4aa8080f81f690587f762300bada16e33e376eea0003243d5333b47c78b4c90c"
+    },
+    {
+      "bytes": 1450062,
+      "cache_status": "cache_hit",
+      "file_id": "top-0-5cm",
+      "filename": "Appendix_2b_Top5_18Sept2013.txt",
+      "sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-06T13:34:42Z",
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 14571,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "72c95ab4677e5fc3701084701de5a1f57d488ee7ca65f5ef2c2dbc67aa4b7165",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "baseline_recorded_no_registered_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "usgs-conus-soil",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 58284,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

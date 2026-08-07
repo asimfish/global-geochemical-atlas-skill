@@ -1,0 +1,39 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 1,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2022-10-25",
+  "expected_target_observation_count": 258,
+  "files": [
+    {
+      "bytes": 30336,
+      "cache_status": "cache_hit",
+      "file_id": "table-s5",
+      "filename": "Table_S5.tab",
+      "sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-06T03:30:49Z",
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 43,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "ac4e02388d0cf35ba6443bc40d3bb99692240fb10c7310878585dae70bdb4b15",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "pangaea-north-africa-soil",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 258,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

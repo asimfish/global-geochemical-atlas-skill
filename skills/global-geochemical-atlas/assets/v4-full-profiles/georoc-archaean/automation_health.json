@@ -1,0 +1,228 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 28,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "12.0",
+  "expected_target_observation_count": null,
+  "files": [
+    {
+      "bytes": 479724,
+      "cache_status": "cache_hit",
+      "file_id": "0LBXI0",
+      "filename": "2026-06-1KRR1P_ZIMBABWE_CRATON_ARCHEAN.csv",
+      "sha256": "0a57dc6ad45fbfeec7f2fee395b0b43dd96d21c109718267058657e59a7701f2"
+    },
+    {
+      "bytes": 950780,
+      "cache_status": "cache_hit",
+      "file_id": "0YSJJR",
+      "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv",
+      "sha256": "2123a1cba47aa354555582fecdfff7540a9aa8b1527e0ee0a705db8f11d30b57"
+    },
+    {
+      "bytes": 362845,
+      "cache_status": "cache_hit",
+      "file_id": "4PATTX",
+      "filename": "2026-06-1KRR1P_CONGO_CRATON.csv",
+      "sha256": "1880b2971baa9e3c44e312f711a9d6a8da785739b6ec9504bc3d37c3d2d7efc2"
+    },
+    {
+      "bytes": 94925,
+      "cache_status": "cache_hit",
+      "file_id": "7U8BWC",
+      "filename": "2026-06-1KRR1P_BASTAR_CRATON.csv",
+      "sha256": "0fd5dca7583c256a35e91ab81ef120e38bc1fe283dbc16407f9ae2fe73ed5d19"
+    },
+    {
+      "bytes": 4953001,
+      "cache_status": "cache_hit",
+      "file_id": "ATBQZH",
+      "filename": "2026-06-1KRR1P_WEST_AUSTRALIAN_CRATON.csv",
+      "sha256": "b7c774985e0cc5a27e24733ee89f908fa7792aed86a6390ae0637c0bca103da8"
+    },
+    {
+      "bytes": 5874,
+      "cache_status": "cache_hit",
+      "file_id": "AUMPQZ",
+      "filename": "2026-06-1KRR1P_RAE_CRATON.csv",
+      "sha256": "4daf6e0e7e2bdd72e7d4962b85be630db268f8cde23359182e8648dfbcd9f6bb"
+    },
+    {
+      "bytes": 2407194,
+      "cache_status": "cache_hit",
+      "file_id": "AVUWEP",
+      "filename": "2026-06-1KRR1P_DHARWAR_CRATON_ARCHEAN.csv",
+      "sha256": "43a5bd01d590f11313af717d6063dd60d83d110bf905c759737cedafb3e58f6f"
+    },
+    {
+      "bytes": 45706,
+      "cache_status": "cache_hit",
+      "file_id": "BFQKPU",
+      "filename": "2026-06-1KRR1P_LIMPOPO_BELT.csv",
+      "sha256": "6bb6ca5ee6f8890e69116ebd15bcab8fcbe7e52bd615182c425bd6afbd08e99e"
+    },
+    {
+      "bytes": 120031,
+      "cache_status": "cache_hit",
+      "file_id": "GKVOQ9",
+      "filename": "2026-06-1KRR1P_SARMATIAN_CRATON.csv",
+      "sha256": "c514561947a98942151f3f5f2a61aee1dd8b88f8036f7f62c334e0d0f62a4e3f"
+    },
+    {
+      "bytes": 200350,
+      "cache_status": "cache_hit",
+      "file_id": "IN53QT",
+      "filename": "2026-06-1KRR1P_YANGTZE_BLOCK.csv",
+      "sha256": "d91ef95f5f051901c9eb52294de4b6cf3c8aedeef8aa61473eff55b4c8e6c35c"
+    },
+    {
+      "bytes": 348082,
+      "cache_status": "cache_hit",
+      "file_id": "JC6ARO",
+      "filename": "2026-06-1KRR1P_TANZANIA_CRATON_ARCHEAN.csv",
+      "sha256": "222db38a0846b9e4a5e8749f4569aeb009d116190c554d052ea9b4061a6e5f77"
+    },
+    {
+      "bytes": 2407458,
+      "cache_status": "cache_hit",
+      "file_id": "LDWEK2",
+      "filename": "2026-06-1KRR1P_NORTH_ATLANTIC_CRATON_ARCHEAN.csv",
+      "sha256": "c07811dd5f6133fccb531ce7932b17f171822270a750e0a84086d245ec476a0a"
+    },
+    {
+      "bytes": 309858,
+      "cache_status": "cache_hit",
+      "file_id": "NT9GC8",
+      "filename": "2026-06-1KRR1P_BUNDELKHAND_CRATON.csv",
+      "sha256": "013262ec45286f1aed276355e9a34b09159a0694dce6ddcd638ed8f1107c1679"
+    },
+    {
+      "bytes": 3346850,
+      "cache_status": "cache_hit",
+      "file_id": "NXSCT8",
+      "filename": "2026-06-1KRR1P_KAAPVAAL_CRATON_ARCHEAN.csv",
+      "sha256": "d3c433c1d82bd80417bd70bd5e8cbaf81ab3428fe14eb6a9113ee0ebbc2cb45d"
+    },
+    {
+      "bytes": 321067,
+      "cache_status": "cache_hit",
+      "file_id": "OHZY0O",
+      "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
+      "sha256": "6959b5f1d1ce74ba6608d11847cf12e6427535040bc10b5854ec5ef336fcf6aa"
+    },
+    {
+      "bytes": 6215,
+      "cache_status": "cache_hit",
+      "file_id": "PMFEC6",
+      "filename": "2026-06-1KRR1P_OKHOTSK-OMOLON_CRATON.csv",
+      "sha256": "ce00f2a717de68801851a0df36bf17e2f1396d7f05e9925d81dd3f1bfdd545e8"
+    },
+    {
+      "bytes": 768400,
+      "cache_status": "cache_hit",
+      "file_id": "PQ361E",
+      "filename": "2026-06-1KRR1P_SAO_FRANCISCO_CRATON_ARCHEAN.csv",
+      "sha256": "e5b7b7e6bca5c6a3be58891ac44c534616dc46de9f57a48acec8b97d811de676"
+    },
+    {
+      "bytes": 4209880,
+      "cache_status": "cache_hit",
+      "file_id": "Q8QGOY",
+      "filename": "2026-06-1KRR1P_BALTIC_SHIELD_ARCHEAN.csv",
+      "sha256": "4469526c02cbb473fae14e1f69525bf865bb0197387b6368bf99aefdcc055f98"
+    },
+    {
+      "bytes": 727334,
+      "cache_status": "cache_hit",
+      "file_id": "RM6V7B",
+      "filename": "2026-06-1KRR1P_SINGHBHUM_CRATON_ARCHEAN.csv",
+      "sha256": "89406a328f89dc4e2f7796a059cf8d542ea31ca54664e35d466245fb20d5b331"
+    },
+    {
+      "bytes": 93085,
+      "cache_status": "cache_hit",
+      "file_id": "SSDC2V",
+      "filename": "2026-06-1KRR1P_EAST_EUROPEAN_CRATON.csv",
+      "sha256": "d6df9261119b85e9a3941ea8cc5d144eb82651ea687792a6d377afb59d5177e6"
+    },
+    {
+      "bytes": 110489,
+      "cache_status": "cache_hit",
+      "file_id": "TG6QW9",
+      "filename": "2026-06-1KRR1P_SIBERIAN_CRATON_ARCHEAN.csv",
+      "sha256": "6a4d2dbdfc5a097b8f07ff0d73d2df106a98edfe9a4b82f0afbe663d1c3e8534"
+    },
+    {
+      "bytes": 350444,
+      "cache_status": "cache_hit",
+      "file_id": "TS527Q",
+      "filename": "2026-06-1KRR1P_SLAVE_PROVINCE_ARCHEAN.csv",
+      "sha256": "b600a633281da3c4847944642856842b4c322165664ac443a642d00a4d9ca90a"
+    },
+    {
+      "bytes": 263824,
+      "cache_status": "cache_hit",
+      "file_id": "WGALT3",
+      "filename": "2026-06-1KRR1P_CHURCHILL_PROVINCE_ARCHEAN.csv",
+      "sha256": "fb3557f619a82676b2cc72fdc992180e2b233e3cad968aab95c65bb590d49df5"
+    },
+    {
+      "bytes": 259241,
+      "cache_status": "cache_hit",
+      "file_id": "XKVOOV",
+      "filename": "2026-06-1KRR1P_WYOMING_PROVINCE.csv",
+      "sha256": "9488675e5d00b5070a850e96ced7aea4dafea6497b55aa7f9d7d92ff412c7e7a"
+    },
+    {
+      "bytes": 5921367,
+      "cache_status": "cache_hit",
+      "file_id": "YCYFNY",
+      "filename": "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv",
+      "sha256": "5bed283ed7a20e2d8c0b411e801c07df18fd50d2424f5127e074fff9faee6865"
+    },
+    {
+      "bytes": 72890,
+      "cache_status": "cache_hit",
+      "file_id": "YJOPAF",
+      "filename": "2026-06-1KRR1P_GAWLER_CRATON.csv",
+      "sha256": "88bee7dd6ee4ddafaaa918ab985ff56dcef2044ea900e7ae14cc9821dd318de4"
+    },
+    {
+      "bytes": 2505963,
+      "cache_status": "cache_hit",
+      "file_id": "YKDG9C",
+      "filename": "2026-06-1KRR1P_NORTH_CHINA_CRATON.csv",
+      "sha256": "62961707fa44760fa930564c1a0128d8f7570912d6bbf9bcc7a92fec1832f350"
+    },
+    {
+      "bytes": 53291,
+      "cache_status": "cache_hit",
+      "file_id": "ZJ0HM6",
+      "filename": "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv",
+      "sha256": "2197377ae969c9e0245898d16e6c745dbeaef1f28313c19822f9059dec6a96ab"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-06T13:34:27Z",
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 33745,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "7f8e4d908083e06801a60eebccff028782386ac75e726571b2d1e102b160421e",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "baseline_recorded_no_registered_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "georoc-archaean",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 65988,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

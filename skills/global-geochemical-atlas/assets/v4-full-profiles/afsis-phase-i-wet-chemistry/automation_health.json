@@ -1,0 +1,53 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 3,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2.0",
+  "expected_target_observation_count": null,
+  "files": [
+    {
+      "bytes": 10445,
+      "cache_status": "cache_hit",
+      "file_id": "detection-limits",
+      "filename": "AfSIS_Phase_I_wet_chemistry_detection_limits_v2.xlsx",
+      "sha256": "0b373fe17172d32861ebd829083a8f01c1bca7cbbc09e700c95dfb4f043011f1"
+    },
+    {
+      "bytes": 847634,
+      "cache_status": "cache_hit",
+      "file_id": "measurements",
+      "filename": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+      "sha256": "32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605"
+    },
+    {
+      "bytes": 21024,
+      "cache_status": "cache_hit",
+      "file_id": "variables",
+      "filename": "AfSIS_Phase_I_wet_chemistry_variables_v2.xlsx",
+      "sha256": "f2d5ee0b86af7b7d2066d610862e9bf8c97b7544803b201fb492bae61817ad3c"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-06T10:02:30Z",
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 2002,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_fingerprint": "27e987e43495cebfc27f9c7a0c7d4434f52b543f7e9f31cdf0391097b0e0081d",
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "baseline_recorded_no_registered_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "afsis-phase-i-wet-chemistry",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 12012,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}
