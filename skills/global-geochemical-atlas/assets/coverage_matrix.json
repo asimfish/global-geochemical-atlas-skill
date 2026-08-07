@@ -1,13 +1,13 @@
 {
-  "as_of": "2026-08-06T10:35:00Z",
+  "as_of": "2026-08-07T12:00:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 2,
-        "Cu": 2,
-        "Ni": 2,
-        "Zn": 2
+        "As": 3,
+        "Cu": 3,
+        "Ni": 3,
+        "Zn": 3
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -42,9 +42,10 @@
         "petdb",
         "usgs-ngdb"
       ],
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
@@ -57,7 +58,8 @@
       ],
       "selected_sources": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
@@ -76,9 +78,10 @@
         "nz-petlab": "D",
         "pangaea-repository": "D",
         "petdb": "D",
-        "usgs-ngdb": "D"
+        "usgs-ngdb": "D",
+        "usgs-utah-volcanic-whole-rock": "A"
       },
-      "source_independence": "multiple_datasets_single_upstream_lineage",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
         "australia-ozchem": "national_partial",
@@ -96,7 +99,8 @@
         "nz-petlab": "national_plus_selected_global",
         "pangaea-repository": "global_collection",
         "petdb": "global_partial",
-        "usgs-ngdb": "national_partial"
+        "usgs-ngdb": "national_partial",
+        "usgs-utah-volcanic-whole-rock": "regional_partial"
       },
       "source_target_analytes": {
         "georoc-antarctica-intraplate": [
@@ -113,6 +117,15 @@
           "Cu",
           "Ni",
           "Zn"
+        ],
+        "usgs-utah-volcanic-whole-rock": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
         ]
       },
       "source_use_modes": {
@@ -122,8 +135,8 @@
         "earthchem-library": "discovery",
         "earthchem-portal": "discovery",
         "finland-gtk-geochemistry": "discovery",
-        "georoc-antarctica-intraplate": "normalized_analysis",
-        "georoc-archaean": "normalized_analysis",
+        "georoc-antarctica-intraplate": "benchmark_ready",
+        "georoc-archaean": "benchmark_ready",
         "georoc-database": "discovery",
         "iodp-data-systems": "discovery",
         "jamstec-darwin": "discovery",
@@ -132,7 +145,8 @@
         "nz-petlab": "discovery",
         "pangaea-repository": "discovery",
         "petdb": "discovery",
-        "usgs-ngdb": "discovery"
+        "usgs-ngdb": "discovery",
+        "usgs-utah-volcanic-whole-rock": "benchmark_ready"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",
@@ -350,7 +364,7 @@
         "alaska-dggs-webgeochem": "discovery",
         "argentina-segemar-geochemistry": "discovery",
         "australia-ngsa": "discovery",
-        "australia-ngsa-mercury": "normalized_analysis",
+        "australia-ngsa-mercury": "benchmark_ready",
         "australia-ozchem": "discovery",
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
@@ -363,19 +377,19 @@
         "emodnet-chemistry": "discovery",
         "finland-gtk-geochemistry": "discovery",
         "foregs-europe": "discovery",
-        "foregs-floodplain-sediment": "normalized_analysis",
-        "foregs-stream-sediment": "normalized_analysis",
+        "foregs-floodplain-sediment": "benchmark_ready",
+        "foregs-stream-sediment": "benchmark_ready",
         "india-gsi-ngcm": "discovery",
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
         "jamstec-darwin": "discovery",
-        "japan-gsj-geochemical-map": "normalized_analysis",
-        "japan-gsj-marine-sediment": "normalized_analysis",
+        "japan-gsj-geochemical-map": "benchmark_ready",
+        "japan-gsj-marine-sediment": "benchmark_ready",
         "mexico-sgm-geochemical-cartography": "discovery",
         "noaa-ncei-marine-geology": "discovery",
-        "norway-marchem": "normalized_analysis",
+        "norway-marchem": "benchmark_ready",
         "nz-petlab": "discovery",
-        "pangaea-arabian-sea-sediment": "normalized_analysis",
+        "pangaea-arabian-sea-sediment": "benchmark_ready",
         "pangaea-repository": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
         "sweden-sgu-geochemical-atlas": "discovery",
@@ -560,23 +574,23 @@
         ]
       },
       "source_use_modes": {
-        "afsis-phase-i-wet-chemistry": "normalized_analysis",
+        "afsis-phase-i-wet-chemistry": "benchmark_ready",
         "alaska-dggs-webgeochem": "discovery",
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "foregs-europe": "discovery",
-        "foregs-humus": "normalized_analysis",
-        "foregs-subsoil": "normalized_analysis",
-        "foregs-topsoil": "normalized_analysis",
-        "gemas-europe": "normalized_analysis",
+        "foregs-humus": "benchmark_ready",
+        "foregs-subsoil": "benchmark_ready",
+        "foregs-topsoil": "benchmark_ready",
+        "gemas-europe": "benchmark_ready",
         "ireland-tellus": "discovery",
-        "pangaea-north-africa-soil": "normalized_analysis",
+        "pangaea-north-africa-soil": "benchmark_ready",
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
-        "tpdc-china-mountain-soil": "normalized_analysis",
-        "usgs-conus-soil": "normalized_analysis",
+        "tpdc-china-mountain-soil": "benchmark_ready",
+        "usgs-conus-soil": "benchmark_ready",
         "usgs-ngdb": "discovery",
         "wosis": "discovery"
       },
@@ -662,7 +676,7 @@
         "ireland-tellus": "D",
         "pangaea-repository": "D",
         "us-water-quality-portal": "D",
-        "us-wqp-sacramento-river-arsenic": "B"
+        "us-wqp-sacramento-river-arsenic": "A"
       },
       "source_independence": "multiple_independent_lineages",
       "source_scopes": {
@@ -720,15 +734,15 @@
         "eea-waterbase": "discovery",
         "emodnet-chemistry": "discovery",
         "foregs-europe": "discovery",
-        "foregs-stream-water": "normalized_analysis",
-        "gemstat-open-archive": "normalized_analysis",
-        "geotraces-idp2025": "normalized_analysis",
+        "foregs-stream-water": "benchmark_ready",
+        "gemstat-open-archive": "benchmark_ready",
+        "geotraces-idp2025": "benchmark_ready",
         "glorich": "discovery",
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
         "pangaea-repository": "discovery",
         "us-water-quality-portal": "discovery",
-        "us-wqp-sacramento-river-arsenic": "normalized_analysis"
+        "us-wqp-sacramento-river-arsenic": "benchmark_ready"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",

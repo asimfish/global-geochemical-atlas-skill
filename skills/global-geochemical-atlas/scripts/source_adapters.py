@@ -26,6 +26,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import download_data as downloader
+import cdogs_210102_adapter as cdogs_210102
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -3432,6 +3433,110 @@ class UsgsUtahVolcanicRockAdapter(RegistryAdapter):
         return records
 
 
+class Cdogs210102Adapter(RegistryAdapter):
+    """CDoGS survey 21:0102 rows for one explicitly separated medium."""
+
+    source_id = ""
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("CDoGS adapter received another source")
+        if mode == "fixture":
+            path = (
+                SKILL_DIR / "fixtures" / "four-media" / candidate.registry_entry["media"][0]
+                / self.source_id / "raw-fixture.jsonl"
+            )
+            if not path.is_file():
+                raise SourceAdapterError(f"CDoGS fixture is missing: {path}")
+            return [DownloadedFile(
+                source_id=self.source_id,
+                file_id="fixture",
+                path=path,
+                source_url=f"fixture://{self.source_id}/raw-fixture.jsonl",
+                bytes=path.stat().st_size,
+                cache_status="fixture",
+                retrieved_at=None,
+            )]
+        root = self._cache_root(cache_dir)
+        files: list[DownloadedFile] = []
+        try:
+            for file_id in cdogs_210102.SOURCE_CONFIGS[self.source_id]["files"]:
+                contract = cdogs_210102.FILE_CONTRACTS[file_id]
+                path, cache_status = cdogs_210102.acquire_file(
+                    contract, root, offline=mode == "cached", timeout=60, retries=2
+                )
+                if path.stat().st_size != contract.observed_bytes:
+                    raise SourceAdapterError(
+                        f"CDoGS byte-count drift for {contract.filename}: "
+                        f"{path.stat().st_size} != {contract.observed_bytes}"
+                    )
+                files.append(DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=file_id,
+                    path=path,
+                    source_url=contract.url,
+                    bytes=path.stat().st_size,
+                    cache_status=cache_status,
+                    retrieved_at=None,
+                ))
+        except cdogs_210102.CDoGSError as exc:
+            raise SourceAdapterError(str(exc)) from exc
+        return files
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        try:
+            if len(files) == 1 and files[0].file_id == "fixture":
+                observations = cdogs_210102.extract_fixture_source(self.source_id, files[0].path)
+            else:
+                paths = {item.file_id: item.path for item in files}
+                observations, _, _ = cdogs_210102.extract_source(self.source_id, paths)
+        except cdogs_210102.CDoGSError as exc:
+            raise SourceAdapterError(str(exc)) from exc
+        for item in observations:
+            analyte = str(item["analyte_reported"])
+            fields = dict(item)
+            fields.update(
+                _sample_id=str(item.get("field_sample_id") or item.get("lab_sample_id") or item["observation_id"]),
+                _place=f"CDoGS survey {cdogs_210102.SURVEY_KEY} / site {item.get('site_id') or 'not reported'}",
+                _latitude=item.get("latitude_nad83"),
+                _longitude=item.get("longitude_nad83"),
+                _source_crs=item.get("source_crs"),
+                _grain_fraction=item.get("grain_fraction_raw"),
+                _target_observations={
+                    analyte: {
+                        "field": analyte,
+                        "value": item["value_raw"],
+                        "unit": item["unit_raw"],
+                        "value_qualifier": item["value_qualifier"],
+                        "detection_limit": item["detection_limit"],
+                        "detection_limit_unit": item["detection_limit_unit"],
+                        "measurement_basis": item.get("measurement_basis_raw") or "source_native_unspecified_basis",
+                        "analytical_method": item["analytical_technique"],
+                        "variable_metadata_locator": item["method_source_locator"],
+                    }
+                },
+            )
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=str(item["observation_id"]),
+                source_locator=str(item["source_locator"]),
+                fields=fields,
+            )
+
+
+class Cdogs210102LakeSedimentAdapter(Cdogs210102Adapter):
+    source_id = "cdogs-210102-lake-sediment"
+
+
+class Cdogs210102LakeWaterAdapter(Cdogs210102Adapter):
+    source_id = "cdogs-210102-lake-water"
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -3455,6 +3560,8 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     TpdcChinaMountainSoilAdapter.source_id: TpdcChinaMountainSoilAdapter,
     GemasEuropeAdapter.source_id: GemasEuropeAdapter,
     UsgsUtahVolcanicRockAdapter.source_id: UsgsUtahVolcanicRockAdapter,
+    Cdogs210102LakeSedimentAdapter.source_id: Cdogs210102LakeSedimentAdapter,
+    Cdogs210102LakeWaterAdapter.source_id: Cdogs210102LakeWaterAdapter,
 }
 
 

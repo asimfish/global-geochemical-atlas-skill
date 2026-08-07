@@ -4,11 +4,11 @@
 
 ## 摘要
 
-- 可执行来源：21
-- 有全量候选审计：21
-- 有明确目标测定分母：21
+- 可执行来源：22
+- 有全量候选审计：22
+- 有明确目标测定分母：22
 - 缺少全量候选审计：0
-- 演示样板记录：1084（仅工程测试）
+- 演示样板记录：1132（仅工程测试）
 - 已完成统一全量逐字段 profile：21
 
 ## 来源口径
@@ -36,10 +36,11 @@
 | `tpdc-china-mountain-soil` | uniform_full_profile | 6570 | 40 | 100.0% | 100.0% |
 | `us-wqp-sacramento-river-arsenic` | uniform_full_profile | 189 | 48 | 100.0% | 100.0% |
 | `usgs-conus-soil` | uniform_full_profile | 58284 | 48 | 100.0% | 0.0% |
+| `usgs-utah-volcanic-whole-rock` | audited_snapshot | 1447 | 48 | 100.0% | 100.0% |
 
 ## 当前证据缺口
 
-1. 统一全量逐字段 profile、候选来源审计和 30 条结构化自动审计均完成 21/21；任何缺失字段仍显示 `not_measured` 或明确缺失原因。
+1. 统一全量逐字段 profile、候选来源审计和 30 条结构化自动审计均完成 21/22；任何缺失字段仍显示 `not_measured` 或明确缺失原因。
 2. GEOROC、USGS CONUS Soil、GSJ 等来源仍缺逐记录方法；这会降低可比较范围，不由自动审计补造。
 3. AfSIS 和 TPDC 的注册文件及关联资料未声明原始 CRS，因此保持 `unknown`；不根据坐标外观推断 EPSG。
 4. 在线实时可用性仍需独立探测；固定缓存的文件身份、字节数、schema、row-count 与离线重放已纳入 profile。

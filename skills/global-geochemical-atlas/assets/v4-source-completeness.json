@@ -2,12 +2,14 @@
   "claim_boundary": "This report measures full-cache and demo-field completeness. It does not validate scientific accuracy, spatial representativeness or comparability, and it never promotes demo metrics to full-source claims.",
   "findings": [
     {
-      "affected_sources": 0,
+      "affected_sources": 1,
       "code": "FULL_FIELD_COMPLETENESS_NOT_UNIFORM",
-      "detail": "Every executable source has a uniform full-population numerator/denominator.",
+      "detail": "These sources do not yet have uniform V4 full-population field counts.",
       "next_action": "Run adapters over verified full caches and emit per-field non-null, valid and missing-reason counts.",
-      "severity": "info",
-      "source_ids": []
+      "severity": "high",
+      "source_ids": [
+        "usgs-utah-volcanic-whole-rock"
+      ]
     },
     {
       "affected_sources": 0,
@@ -13458,13 +13460,301 @@
         },
         "source_id": "usgs-conus-soil"
       }
+    },
+    "usgs-utah-volcanic-whole-rock": {
+      "automation_health": {
+        "adapter_registered": true,
+        "dataset_version_pinned": true,
+        "download_identity_fields_present": true,
+        "download_mode": "fixed-official-sciencebase-child-csvs",
+        "offline_demo_replay_available": true,
+        "online_fetch_health": "not_checked_by_offline_profile",
+        "row_count_drift_status": "not_measured",
+        "schema_drift_status": "not_measured"
+      },
+      "candidate_audit": {
+        "audit_bytes": 9369,
+        "audit_path": "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json",
+        "audit_status": "audited_snapshot",
+        "denominator_status": "available",
+        "distinct_sample_count": null,
+        "field_completeness_status": "not_measured_uniformly",
+        "physical_row_count": 246,
+        "snapshot_id": null,
+        "target_observation_count": 1447,
+        "target_observation_count_basis": "observed_data.target_observations",
+        "warning": "The audit proves only its explicit counts and metadata. It does not imply row-level completeness for fields whose non-null numerator was not measured."
+      },
+      "dataset_version": "2026-02-09",
+      "demo_fixture": {
+        "analytes": {
+          "As": 8,
+          "Cr": 8,
+          "Cu": 8,
+          "Ni": 8,
+          "Pb": 8,
+          "Zn": 8
+        },
+        "field_completeness": {
+          "analytical_method": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 31,
+            "rate": 0.645833
+          },
+          "citation_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "coordinate_pair": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "element_or_analyte": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "geologic_unit_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "grain_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "license": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "matched_geologic_unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "medium": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "method_assignment_basis": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "method_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_id": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_mapping_status": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sediment_environment": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "soil_horizon_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_locator": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "value": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "water_body_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "water_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          }
+        },
+        "file_bytes": 70691,
+        "manifest_bytes": 5879,
+        "media": {
+          "rock": 48
+        },
+        "record_count": 48,
+        "schema_field_count": 81,
+        "schema_fields": [
+          "record_id",
+          "source_record_id",
+          "sample_id",
+          "element_or_analyte",
+          "value",
+          "unit",
+          "medium",
+          "measurement_basis",
+          "value_qualifier",
+          "detection_limit",
+          "detection_limit_unit",
+          "latitude",
+          "longitude",
+          "source_crs",
+          "coordinate_uncertainty_m",
+          "geologic_unit",
+          "analytical_method",
+          "digestion_or_extraction",
+          "laboratory",
+          "license",
+          "source_tier",
+          "source_id",
+          "source_locator",
+          "sampled_at",
+          "sample_depth_min_m",
+          "sample_depth_max_m",
+          "grain_fraction",
+          "sample_type_raw",
+          "sample_type",
+          "sample_type_mapping_status",
+          "sample_type_missing_reason",
+          "geographic_context_raw",
+          "survey_area",
+          "map_sheet",
+          "cruise_track",
+          "lithology_raw",
+          "lithology",
+          "soil_horizon_raw",
+          "soil_horizon",
+          "sediment_environment",
+          "water_body_type",
+          "water_fraction",
+          "filtered_state",
+          "geologic_unit_raw",
+          "geologic_age_raw",
+          "tectonic_setting_raw",
+          "matched_geologic_unit",
+          "geology_map_source",
+          "geology_map_version",
+          "match_method",
+          "match_scale",
+          "boundary_distance_m",
+          "match_uncertainty",
+          "geology_missing_reason",
+          "method_scope",
+          "method_assignment_basis",
+          "preparation",
+          "analytical_technique",
+          "instrument",
+          "quantitation_limit",
+          "quantitation_limit_unit",
+          "reference_materials",
+          "method_source_locator",
+          "method_publication_id",
+          "method_missing_reason",
+          "citation_id_raw",
+          "publication_id",
+          "publication_doi",
+          "citation_text_raw",
+          "citation_scope",
+          "citation_assignment_basis",
+          "upstream_primary_source_id",
+          "citation_resolution_status",
+          "citation_missing_reason",
+          "access_status",
+          "research_use_status",
+          "license_url",
+          "license_scope",
+          "attribution_required",
+          "redistribution_status",
+          "terms_verified_at"
+        ],
+        "status": "deterministic_demo_only",
+        "warning": "This profile describes a deliberately selected fixture, not the full source population."
+      },
+      "full_population": {
+        "audit_bytes": 9369,
+        "audit_path": "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json",
+        "audit_status": "audited_snapshot",
+        "denominator_status": "available",
+        "distinct_sample_count": null,
+        "field_completeness_status": "not_measured_uniformly",
+        "physical_row_count": 246,
+        "snapshot_id": null,
+        "target_observation_count": 1447,
+        "target_observation_count_basis": "observed_data.target_observations",
+        "warning": "The audit proves only its explicit counts and metadata. It does not imply row-level completeness for fields whose non-null numerator was not measured."
+      },
+      "media": [
+        "rock"
+      ],
+      "source_id": "usgs-utah-volcanic-whole-rock",
+      "usage_rights": {
+        "access_status": "registered_landing_and_download",
+        "attribution_evidence_present": true,
+        "license_id": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "redistribution_note_present": true,
+        "research_use_status": "not_assessed_separately",
+        "warning": "Access, research use and redistribution are separate facts; this report does not infer one from another."
+      }
     }
   },
   "summary": {
-    "demo_record_count": 1084,
-    "executable_source_count": 21,
-    "sources_with_full_audit": 21,
-    "sources_with_target_observation_denominator": 21,
+    "demo_record_count": 1132,
+    "executable_source_count": 22,
+    "sources_with_full_audit": 22,
+    "sources_with_target_observation_denominator": 22,
     "sources_without_full_audit": 0,
     "uniform_full_field_profiles": 21
   }

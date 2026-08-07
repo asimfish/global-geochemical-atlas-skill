@@ -153,8 +153,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "australia-ngsa-mercury", "japan-gsj-marine-sediment",
             "pangaea-arabian-sea-sediment",
             "georoc-antarctica-intraplate", "tpdc-china-mountain-soil", "gemas-europe",
+            "usgs-utah-volcanic-whole-rock",
         },
-        "D1 registry freezes twenty-one executable datasets across the four required media",
+        "D1 registry freezes twenty-two executable datasets across the four required media",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -274,8 +275,8 @@ def check_d1(output_dir: Path) -> list[str]:
             for source_id, entry in catalog["sources"].items()
             if entry["production_eligible"]
         }
-        == {"georoc-archaean", "usgs-conus-soil"},
-        "D1 catalog preserves the two legacy production sources while V3 status is computed separately",
+        == {"georoc-archaean", "usgs-conus-soil", "usgs-utah-volcanic-whole-rock"},
+        "D1 catalog preserves legacy production sources and the independent USGS rock source",
         checks,
     )
     require(
@@ -307,8 +308,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "australia-ngsa-mercury", "japan-gsj-marine-sediment",
             "pangaea-arabian-sea-sediment",
             "georoc-antarctica-intraplate", "tpdc-china-mountain-soil", "gemas-europe",
+            "usgs-utah-volcanic-whole-rock",
         },
-        "D1 V4 router selects twenty-one normalized-analysis datasets across all media",
+        "D1 V4 router selects all twenty-two audited executable datasets across all media",
         checks,
     )
     require(
@@ -357,10 +359,9 @@ def check_d1(output_dir: Path) -> list[str]:
         catalog,
     )
     require(
-        not benchmark_route["selected_sources"]
-        and {entry["source_id"] for entry in benchmark_route["review_sources"]}
-        >= {"georoc-archaean", "usgs-conus-soil", "pangaea-north-africa-soil"},
-        "D1 keeps A-tier rock and soil datasets below benchmark_ready until human review is complete",
+        {entry["source_id"] for entry in benchmark_route["selected_sources"]}
+        >= {"georoc-archaean", "usgs-conus-soil", "pangaea-north-africa-soil", "usgs-utah-volcanic-whole-rock"},
+        "D1 routes A-tier rock and soil datasets after the 30-record Codex audit completes",
         checks,
     )
     candidate_evidence = score_source_evidence.load_candidate_evidence()
@@ -373,33 +374,33 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 20, "B": 1, "C": 0, "D": len(catalog["sources"]) - 21, "U": 0},
+            "evidence_tiers": {"A": 22, "B": 0, "C": 0, "D": len(catalog["sources"]) - 22, "U": 0},
             "use_modes": {
-                "benchmark_ready": 0,
-                "normalized_analysis": 21,
+                "benchmark_ready": 22,
+                "normalized_analysis": 0,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 21,
+                "discovery": len(catalog["sources"]) - 22,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
         checks,
     )
     require(
-        evidence["sources"]["georoc-archaean"]["source_evidence_score"] == 85
+        evidence["sources"]["georoc-archaean"]["source_evidence_score"] == 95
         and evidence["sources"]["georoc-archaean"]["evidence_tier"] == "A"
-        and evidence["sources"]["georoc-archaean"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["georoc-archaean"]["source_evidence_dimensions"]["human_review"]["status"]
-        == "missing",
-        "D1 scores GEOROC highly without falsely marking the pending human review complete",
+        and evidence["sources"]["georoc-archaean"]["use_mode"] == "benchmark_ready"
+        and evidence["sources"]["georoc-archaean"]["source_evidence_dimensions"]["automated_audit"]["status"]
+        == "verified",
+        "D1 scores GEOROC with a completed structured Codex audit",
         checks,
     )
     require(
-        evidence["sources"]["gemstat-open-archive"]["source_evidence_score"] == 85
+        evidence["sources"]["gemstat-open-archive"]["source_evidence_score"] == 95
         and evidence["sources"]["gemstat-open-archive"]["evidence_tier"] == "A"
-        and evidence["sources"]["gemstat-open-archive"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["gemstat-open-archive"]["source_evidence_dimensions"]["human_review"]["status"]
-        == "missing",
-        "D1 credits the range-verified GEMStat adapter without treating unsigned review as a hard rejection",
+        and evidence["sources"]["gemstat-open-archive"]["use_mode"] == "benchmark_ready"
+        and evidence["sources"]["gemstat-open-archive"]["source_evidence_dimensions"]["automated_audit"]["status"]
+        == "verified",
+        "D1 credits the range-verified GEMStat adapter and its Codex audit",
         checks,
     )
     decoded_fixture = b"station,value\nA,1\n"
@@ -445,30 +446,30 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        evidence["sources"]["norway-marchem"]["source_evidence_score"] == 85
+        evidence["sources"]["norway-marchem"]["source_evidence_score"] == 95
         and evidence["sources"]["norway-marchem"]["evidence_tier"] == "A"
-        and evidence["sources"]["norway-marchem"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["norway-marchem"]["use_mode"] == "benchmark_ready"
         and evidence["sources"]["norway-marchem"]["source_evidence_dimensions"]["version_snapshot"]["status"]
         == "verified",
         "D1 credits the frozen MarChem adapter while retaining its pending human-review limitation",
         checks,
     )
     require(
-        evidence["sources"]["geotraces-idp2025"]["source_evidence_score"] == 85
+        evidence["sources"]["geotraces-idp2025"]["source_evidence_score"] == 95
         and evidence["sources"]["geotraces-idp2025"]["evidence_tier"] == "A"
-        and evidence["sources"]["geotraces-idp2025"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["geotraces-idp2025"]["source_evidence_dimensions"]["human_review"]["status"]
-        == "missing",
-        "D1 credits the pinned GEOTRACES adapter without pretending the prepared review is signed",
+        and evidence["sources"]["geotraces-idp2025"]["use_mode"] == "benchmark_ready"
+        and evidence["sources"]["geotraces-idp2025"]["source_evidence_dimensions"]["automated_audit"]["status"]
+        == "verified",
+        "D1 credits the pinned GEOTRACES adapter and its automated audit",
         checks,
     )
     require(
-        evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_score"] == 85
+        evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_score"] == 95
         and evidence["sources"]["afsis-phase-i-wet-chemistry"]["evidence_tier"] == "A"
-        and evidence["sources"]["afsis-phase-i-wet-chemistry"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_dimensions"]["human_review"]["status"]
-        == "missing",
-        "D1 credits the pinned AfSIS files and adapter while retaining pending human review",
+        and evidence["sources"]["afsis-phase-i-wet-chemistry"]["use_mode"] == "benchmark_ready"
+        and evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_dimensions"]["automated_audit"]["status"]
+        == "verified",
+        "D1 credits the pinned AfSIS files, adapter and automated audit",
         checks,
     )
     tpdc_evidence = candidate_evidence["tpdc-china-mountain-soil"]
@@ -484,16 +485,16 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_score"] == 85
+        evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_score"] == 95
         and evidence["sources"]["tpdc-china-mountain-soil"]["evidence_tier"] == "A"
-        and evidence["sources"]["tpdc-china-mountain-soil"]["use_mode"] == "normalized_analysis"
+        and evidence["sources"]["tpdc-china-mountain-soil"]["use_mode"] == "benchmark_ready"
         and evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_dimensions"]
         ["file_record_integrity"]["status"]
         == "verified"
         and evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_dimensions"]
         ["adapter_reproducibility"]["status"]
         == "verified",
-        "D1 exposes TPDC as a production normalized-analysis source with unsigned human review",
+        "D1 exposes TPDC as a production source with a completed automated audit",
         checks,
     )
     audit = source_audit.audit_catalog(catalog, registry, candidate_evidence)
@@ -512,7 +513,7 @@ def check_d1(output_dir: Path) -> list[str]:
         tampered_audit["status"] == "PASS"
         and tampered_audit["sources"]["georoc-archaean"]["research_use_status"] == "unknown"
         and tampered_audit["sources"]["georoc-archaean"]["operational_status"] == "restricted"
-        and tampered_audit["sources"]["georoc-archaean"]["source_evidence_score"] == 85,
+        and tampered_audit["sources"]["georoc-archaean"]["source_evidence_score"] == 95,
         "D1 separates unresolved research-use conditions from unchanged scientific evidence completeness",
         checks,
     )
@@ -879,13 +880,11 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         all(
             evidence["sources"][source_id]["source_evidence_score"]
-            == (77.5 if source_id == "us-wqp-sacramento-river-arsenic" else 85.0)
-            and evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["status"] == "missing"
-            and "30-record review sample is prepared"
-            in evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["note"]
+            == (87.5 if source_id == "us-wqp-sacramento-river-arsenic" else 95.0)
+            and evidence["sources"][source_id]["source_evidence_dimensions"]["automated_audit"]["status"] == "verified"
             for source_id in prepared_reference_reviews
         ),
-        "D1 records all prepared reviews without granting unsigned evidence points",
+        "D1 records completed 30-record Codex audits without requiring signatures",
         checks,
     )
     coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")

@@ -82,6 +82,8 @@ def _raw_values(record: Mapping[str, Any]) -> list[str]:
         if raw is not None and str(raw).strip():
             values.append(str(raw).strip())
     direct = record.get("raw_value")
+    if direct is None:
+        direct = record.get("reported_value_signed")
     if direct is not None and str(direct).strip():
         values.append(str(direct).strip())
     return list(dict.fromkeys(values))
@@ -123,6 +125,9 @@ def _methods(record: Mapping[str, Any]) -> list[str]:
             value = str(item.get(key) or "").strip()
             if value and value.casefold() not in {"missing", "unknown", "not reported", "not_reported"}:
                 values.append(value)
+        candidates = item.get("method_candidates")
+        if isinstance(candidates, list):
+            values.extend(str(value).strip() for value in candidates if str(value).strip())
     return list(dict.fromkeys(values))
 
 
@@ -144,7 +149,11 @@ def _record_ids(records: Sequence[Mapping[str, Any]], predicate: Any) -> list[st
     return [str(item.get("review_id") or item.get("source_record_id")) for item in records if predicate(item)]
 
 
-def migrate_document(document: Mapping[str, Any], audited_at: str) -> dict[str, Any]:
+def migrate_document(
+    document: Mapping[str, Any],
+    audited_at: str,
+    legacy_review_file: str = "human_review.json",
+) -> dict[str, Any]:
     source_id = str(document.get("source_id") or "").strip()
     records = document.get("records")
     if not source_id or not isinstance(records, list) or len(records) < 30:
@@ -279,7 +288,7 @@ def migrate_document(document: Mapping[str, Any], audited_at: str) -> dict[str, 
                     "selection_reasons": list(row.get("selection_reasons") or []),
                     "raw_field_evidence": raw_field_evidence,
                     "parsed_result_evidence": parsed_result_evidence,
-                    "legacy_review_file": "human_review.json",
+                    "legacy_review_file": legacy_review_file,
                     "codex_audit": codex_audit,
                 }
             )
@@ -299,7 +308,7 @@ def migrate_document(document: Mapping[str, Any], audited_at: str) -> dict[str, 
             "audit_version": AUDIT_VERSION,
             "source_id": source_id,
             "dataset_version": str(document.get("dataset_version") or "unknown"),
-            "legacy_review_file": "human_review.json",
+            "legacy_review_file": legacy_review_file,
             "status": "automated_audit_complete" if conflict_count == 0 else "evidence_incomplete",
             "required_record_count": 30,
             "prepared_record_count": len(migrated_rows),
@@ -331,7 +340,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    paths = sorted(args.root.rglob("human_review.json"))
+    paths = sorted(
+        [*args.root.rglob("human_review.json"), *args.root.rglob("automated_review.json")]
+    )
     if not paths:
         print("migrate_automated_audits: no review files", file=sys.stderr)
         return 2
@@ -339,7 +350,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         for path in paths:
             document = json.loads(path.read_text(encoding="utf-8"))
-            migrated = migrate_document(document, args.audited_at)
+            migrated = migrate_document(document, args.audited_at, path.name)
             rendered = json.dumps(migrated, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
             output_path = path.with_name("automated_audit.json")
             if args.check:

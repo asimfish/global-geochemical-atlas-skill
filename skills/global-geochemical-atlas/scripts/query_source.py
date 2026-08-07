@@ -54,6 +54,8 @@ def query_index(
     water_body_types: Sequence[str] | None = None,
     water_fractions: Sequence[str] | None = None,
     geologic_units: Sequence[str] | None = None,
+    geology_statuses: Sequence[str] | None = None,
+    geology_map_sources: Sequence[str] | None = None,
     source_ids: Sequence[str] | None = None,
     methods: Sequence[str] | None = None,
     analytical_techniques: Sequence[str] | None = None,
@@ -122,6 +124,17 @@ def query_index(
             )
             parameters.extend(normalized_geology)
             parameters.extend(normalized_geology)
+        _append_in_filter(clauses, parameters, "match_status", geology_statuses)
+        if geology_map_sources:
+            normalized_sources = [value.strip() for value in geology_map_sources]
+            if any(not value for value in normalized_sources):
+                raise QueryError("geology map source filters must not be empty")
+            placeholders = ",".join("?" for _ in normalized_sources)
+            clauses.append(
+                f"(os.geology_map_source IN ({placeholders}) OR os.geology_map_source_id IN ({placeholders}))"
+            )
+            parameters.extend(normalized_sources)
+            parameters.extend(normalized_sources)
         _append_in_filter(clauses, parameters, "source_id", source_ids)
         technique_filters = list(methods or []) + list(analytical_techniques or [])
         _append_in_filter(clauses, parameters, "technique_raw", technique_filters)
@@ -201,6 +214,8 @@ def query_index(
         "water_body_types": list(water_body_types or []),
         "water_fractions": list(water_fractions or []),
         "geologic_units": list(geologic_units or []),
+        "geology_statuses": list(geology_statuses or []),
+        "geology_map_sources": list(geology_map_sources or []),
         "source_ids": list(source_ids or []),
         "methods": list(methods or []),
         "analytical_techniques": list(analytical_techniques or []),
@@ -238,6 +253,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--water-body-type", action="append", dest="water_body_types")
     parser.add_argument("--water-fraction", action="append", dest="water_fractions")
     parser.add_argument("--geologic-unit", action="append", dest="geologic_units")
+    parser.add_argument("--geology-status", action="append", dest="geology_statuses")
+    parser.add_argument("--geology-map-source", action="append", dest="geology_map_sources")
     parser.add_argument("--source-id", action="append", dest="source_ids")
     parser.add_argument("--method", action="append", dest="methods", help="Exact source-native technique")
     parser.add_argument(
@@ -273,6 +290,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             water_body_types=args.water_body_types,
             water_fractions=args.water_fractions,
             geologic_units=args.geologic_units,
+            geology_statuses=args.geology_statuses,
+            geology_map_sources=args.geology_map_sources,
             source_ids=args.source_ids,
             methods=args.methods,
             analytical_techniques=args.analytical_techniques,

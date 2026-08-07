@@ -170,6 +170,33 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "registered_AR_or_XRF_method_contract",
         "citation_scope": "dataset",
     },
+    "usgs-utah-volcanic-whole-rock": {
+        "sample_type_raw": "whole rock",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_scope": "observation",
+        "method_assignment_basis": "source_method_table_and_row_method_codes",
+        "citation_scope": "dataset",
+    },
+    "cdogs-210102-lake-sediment": {
+        "sample_type_raw": "NGR lake sediment grab sample",
+        "sample_type": "sediment_lake",
+        "sample_type_mapping_status": "exact",
+        "sediment_environment": "lake",
+        "method_scope": "package_column",
+        "method_assignment_basis": "official_cdogs_package_column_method_table",
+        "citation_scope": "dataset",
+    },
+    "cdogs-210102-lake-water": {
+        "sample_type_raw": "Fluid (lake)",
+        "sample_type": "water_lake",
+        "sample_type_mapping_status": "exact",
+        "water_body_type": "lake",
+        "water_fraction": "untreated",
+        "method_scope": "package_column",
+        "method_assignment_basis": "official_cdogs_package_column_method_table",
+        "citation_scope": "dataset",
+    },
 }
 
 SOIL_TYPE_MAP = {
@@ -282,6 +309,13 @@ def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Map
             raise SemanticError(f"unmapped GEMAS soil type: {raw}")
         result.update(sample_type_raw=raw, sample_type=mapped[0], sample_type_mapping_status="exact",
                       soil_horizon_raw=raw, soil_horizon=mapped[1])
+    elif source_id == "usgs-utah-volcanic-whole-rock":
+        raw = _text(evidence.get("sample_type")) or "whole rock"
+        result.update(sample_type_raw=raw, sample_type="rock_whole_rock", sample_type_mapping_status="dataset_constant")
+    elif source_id.startswith("cdogs-210102-"):
+        raw = _text(evidence.get("sample_type_raw"))
+        if raw != _text(contract.get("sample_type_raw")):
+            raise SemanticError(f"unexpected CDoGS sample type: {raw}")
     return result
 
 
@@ -345,6 +379,16 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
     elif source_id == "gemas-europe":
         result["survey_area"] = _text(evidence.get("country_raw"))
         result["geographic_context_raw"] = result["survey_area"]
+    elif source_id == "usgs-utah-volcanic-whole-rock":
+        result["survey_area"] = _text(evidence.get("state"))
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], _text(evidence.get("location"))) if part
+        )
+    elif source_id.startswith("cdogs-210102-"):
+        result["survey_area"] = "CDoGS survey 21:0102"
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], _text(evidence.get("site_id"))) if part
+        )
     return result
 
 
@@ -371,9 +415,11 @@ def enrich_row(
     analytical_method = _text(row.get("analytical_method"))
     if analytical_method:
         result.update(
-            method_scope=_text(contract.get("method_scope")),
-            method_assignment_basis=_text(contract.get("method_assignment_basis")),
-            analytical_technique=analytical_method,
+            method_scope=_text(result.get("method_scope")) or _text(contract.get("method_scope")),
+            method_assignment_basis=(
+                _text(result.get("method_assignment_basis")) or _text(contract.get("method_assignment_basis"))
+            ),
+            analytical_technique=_text(result.get("analytical_technique")) or analytical_method,
             method_source_locator=(
                 _text(evidence.get("method_source_locator"))
                 or _text(evidence.get("metadata_source_locator"))

@@ -14,7 +14,7 @@
   "evidence_version": "geochemical-source-evidence-v4",
   "registry_version": "geochemical-source-registry-v1",
   "scored_at": "2026-08-07T12:00:00Z",
-  "source_count": 54,
+  "source_count": 57,
   "sources": {
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
@@ -902,6 +902,166 @@
       "use_mode_limitations": [
         "record integrity or schema semantics are not sufficiently evidenced"
       ]
+    },
+    "cdogs-210102-lake-sediment": {
+      "access_status": "open",
+      "attribution_note": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/cdogs-210102-lake-sediment/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: cdogs-svy210102-page-2025-05-18",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "cdogs-210102-lake-sediment",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
+    "cdogs-210102-lake-water": {
+      "access_status": "open",
+      "attribution_note": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/water/cdogs-210102-lake-water/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: cdogs-svy210102-page-2025-05-18",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "cdogs-210102-lake-water",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "chile-sernageomin-geochemistry": {
       "access_status": "open",
@@ -4729,6 +4889,95 @@
         "record integrity or schema semantics are not sufficiently evidenced"
       ]
     },
+    "usgs-utah-volcanic-whole-rock": {
+      "access_status": "open",
+      "attribution_note": "The data release identifies CC0 1.0; retain the USGS dataset citation and record-level source locators.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "open_research",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/rock/usgs-utah-volcanic-whole-rock/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+            "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+            "https://doi.org/10.5066/P1NZXUZF"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+            "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+            "https://doi.org/10.5066/P1NZXUZF",
+            "doi:10.5066/P1NZXUZF"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2026-02-09",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "usgs-utah-volcanic-whole-rock",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
     "wosis": {
       "access_status": "open",
       "attribution_note": "Public records can include CC BY and CC BY-NC; license must be retained and filtered at record level.",
@@ -4821,14 +5070,14 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 21,
+      "A": 24,
       "B": 0,
       "C": 0,
       "D": 33,
       "U": 0
     },
     "use_modes": {
-      "benchmark_ready": 21,
+      "benchmark_ready": 24,
       "discovery": 33,
       "normalized_analysis": 0,
       "raw_observation": 0

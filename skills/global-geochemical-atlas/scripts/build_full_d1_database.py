@@ -28,6 +28,7 @@ import build_incremental_profiles
 import build_v4_full_profiles as full_profiles
 import generate_demo_data
 import source_adapters
+import apply_geology_context
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -36,7 +37,7 @@ REPO_DIR = SKILL_DIR.parents[1]
 DEFAULT_REGISTRY = SKILL_DIR / "assets" / "source_manifest.json"
 DEFAULT_CACHE = REPO_DIR / ".cache" / "data"
 DEFAULT_OUTPUT = REPO_DIR / "outputs" / "d1-full"
-STATE_VERSION = "d1-full-source-partition-state-v1"
+STATE_VERSION = "d1-full-source-partition-state-v2-geology-contract"
 FULL_COLUMNS = tuple(generate_demo_data.INPUT_COLUMNS) + (
     "dataset_doi",
     "dataset_pid",
@@ -253,11 +254,74 @@ def _combine_files(paths: Sequence[Path], output: Path, *, keep_first_header: bo
     os.replace(temporary, output)
 
 
+def export_sample_locations(csv_path: Path, output: Path) -> dict[str, Any]:
+    """Write one stable, source-qualified location row per distinct sample."""
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=output.parent, prefix=".sample-locations-", delete=False) as handle:
+        database_path = Path(handle.name)
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=output.parent, prefix=f".{output.name}.", delete=False
+    ) as handle:
+        output_temp = Path(handle.name)
+    try:
+        connection = sqlite3.connect(database_path)
+        connection.execute(
+            "CREATE TABLE locations (qualified_sample_id TEXT PRIMARY KEY, source_id TEXT NOT NULL, "
+            "native_sample_id TEXT NOT NULL, latitude TEXT, longitude TEXT, source_crs TEXT, "
+            "coordinate_uncertainty_m TEXT, geologic_unit_raw TEXT)"
+        )
+        with csv_path.open("r", encoding="utf-8", newline="") as source:
+            for row in csv.DictReader(source):
+                source_id = str(row.get("source_id") or "")
+                sample_id = str(row.get("sample_id") or row.get("source_record_id") or "")
+                qualified = f"{source_id}|{sample_id}"
+                values = (
+                    qualified, source_id, sample_id, row.get("latitude", ""), row.get("longitude", ""),
+                    row.get("source_crs", ""), row.get("coordinate_uncertainty_m", ""),
+                    row.get("geologic_unit_raw", ""),
+                )
+                existing = connection.execute(
+                    "SELECT * FROM locations WHERE qualified_sample_id = ?", (qualified,)
+                ).fetchone()
+                if existing is not None and tuple(existing) != values:
+                    raise FullDatabaseError(f"conflicting location evidence for sample {qualified}")
+                connection.execute("INSERT OR IGNORE INTO locations VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values)
+        connection.commit()
+        with output_temp.open("w", encoding="utf-8", newline="") as output_handle:
+            writer = csv.writer(output_handle)
+            writer.writerow(
+                (
+                    "sample_id", "source_id", "native_sample_id", "latitude", "longitude", "source_crs",
+                    "coordinate_uncertainty_m", "geologic_unit_raw",
+                )
+            )
+            for row in connection.execute("SELECT * FROM locations ORDER BY qualified_sample_id"):
+                writer.writerow(row)
+            output_handle.flush()
+            os.fsync(output_handle.fileno())
+        count = connection.execute("SELECT COUNT(*) FROM locations").fetchone()[0]
+        located = connection.execute(
+            "SELECT COUNT(*) FROM locations WHERE latitude NOT IN ('', 'None') AND longitude NOT IN ('', 'None')"
+        ).fetchone()[0]
+        connection.close()
+        os.replace(output_temp, output)
+    except Exception:
+        output_temp.unlink(missing_ok=True)
+        raise
+    finally:
+        database_path.unlink(missing_ok=True)
+    return {"path": str(output), "bytes": output.stat().st_size, "sample_count": count, "located_sample_count": located}
+
+
 FLAT_COLUMNS = (
     "observation_id", "analyte_reported", "value_raw", "value_qualifier", "unit_raw",
     "measurement_basis_raw", "sample_id", "sampling_event_id", "medium_raw", "sample_type",
     "lithology_raw", "lithology", "soil_horizon", "sediment_environment", "water_body_type",
-    "water_fraction", "geologic_unit_raw", "matched_geologic_unit", "technique_raw", "method_scope",
+    "water_fraction", "geologic_unit_raw", "matched_geologic_unit", "geology_map_source",
+    "geology_map_source_id", "geology_map_version", "match_method", "match_scale", "boundary_distance_m",
+    "match_uncertainty", "match_status", "match_candidates",
+    "technique_raw", "method_scope",
     "sampled_at_raw", "latitude", "longitude", "source_crs", "source_id", "source_locator",
     "dataset_id", "dataset_version", "dataset_doi", "license_id"
 )
@@ -317,6 +381,15 @@ def build_flat_index(csv_path: Path, output: Path) -> dict[str, Any]:
                     "water_fraction": row.get("water_fraction", ""),
                     "geologic_unit_raw": row.get("geologic_unit_raw", ""),
                     "matched_geologic_unit": row.get("matched_geologic_unit", ""),
+                    "geology_map_source": row.get("geology_map_source", ""),
+                    "geology_map_source_id": row.get("geology_map_source_id", ""),
+                    "geology_map_version": row.get("geology_map_version", ""),
+                    "match_method": row.get("match_method", ""),
+                    "match_scale": row.get("match_scale", ""),
+                    "boundary_distance_m": row.get("boundary_distance_m", ""),
+                    "match_uncertainty": row.get("match_uncertainty", ""),
+                    "match_status": row.get("match_status", ""),
+                    "match_candidates": row.get("match_candidates", ""),
                     "technique_raw": row.get("analytical_technique") or row.get("analytical_method", ""),
                     "method_scope": row.get("method_scope", ""),
                     "sampled_at_raw": row.get("sampled_at", ""),
@@ -354,6 +427,8 @@ def build_flat_index(csv_path: Path, output: Path) -> dict[str, Any]:
             CREATE INDEX idx_flat_sample_type ON observation_search(sample_type);
             CREATE INDEX idx_flat_lithology ON observation_search(lithology, lithology_raw);
             CREATE INDEX idx_flat_geology ON observation_search(geologic_unit_raw, matched_geologic_unit);
+            CREATE INDEX idx_flat_geology_status ON observation_search(match_status);
+            CREATE INDEX idx_flat_geology_source ON observation_search(geology_map_source, geology_map_source_id);
             CREATE INDEX idx_flat_method ON observation_search(technique_raw, method_scope);
             CREATE INDEX idx_flat_basis ON observation_search(measurement_basis_raw);
             CREATE INDEX idx_flat_qualifier ON observation_search(value_qualifier);
@@ -380,6 +455,7 @@ def build(
     source_ids: Sequence[str] | None = None,
     forced_sources: Sequence[str] | None = None,
     with_index: bool = False,
+    geology_results: Path | None = None,
 ) -> dict[str, Any]:
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     sources = registry.get("sources")
@@ -409,6 +485,11 @@ def build(
     combined_evidence = output_dir / "sources.jsonl"
     _combine_files(csv_paths, combined_csv, keep_first_header=True)
     _combine_files(evidence_paths, combined_evidence, keep_first_header=False)
+    sample_locations_report = export_sample_locations(combined_csv, output_dir / "sample_locations.csv")
+    geology_report = (
+        apply_geology_context.join(combined_csv, geology_results, combined_csv)
+        if geology_results is not None else None
+    )
     coverage = {
         "coverage_version": "d1-full-database-coverage-v1",
         "source_count": len(states),
@@ -439,6 +520,8 @@ def build(
         "outputs": {
             "raw_observations.csv": {"bytes": combined_csv.stat().st_size, "rows": coverage["observation_count"]},
             "sources.jsonl": {"bytes": combined_evidence.stat().st_size, "rows": coverage["observation_count"]},
+            "sample_locations.csv": sample_locations_report,
+            "geology_context": geology_report,
             "coverage.json": {"bytes": (output_dir / "coverage.json").stat().st_size},
             "index.sqlite": index_report,
         },
@@ -457,6 +540,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--source-id", action="append", dest="source_ids")
     parser.add_argument("--force-source", action="append", dest="forced_sources")
     parser.add_argument("--with-index", action="store_true")
+    parser.add_argument(
+        "--geology-results", type=Path,
+        help="Complete geology-context JSONL keyed by source-qualified sample_id; enrich before indexing",
+    )
     return parser
 
 
@@ -470,6 +557,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             source_ids=args.source_ids,
             forced_sources=args.forced_sources,
             with_index=args.with_index,
+            geology_results=args.geology_results,
         )
     except (OSError, ValueError, json.JSONDecodeError, FullDatabaseError, source_adapters.SourceAdapterError) as exc:
         print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)

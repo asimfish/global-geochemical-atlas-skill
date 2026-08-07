@@ -606,12 +606,16 @@ def write_source_outputs(
     }
     _write_jsonl(source_dir / "observations.jsonl", observations)
     _write_json(source_dir / "full-profile.json", profile)
-    _write_json(source_dir / "automated-audit.json", {
-        "audit_version": "d1-cdogs-210102-codex-audit-v1",
+    _write_json(source_dir / "automated_audit.json", {
+        "audit_version": "geochemical-automated-source-audit-v1",
         "source_id": source_id,
         "reviewer_type": "codex",
-        "status": "PASS",
+        "status": "automated_audit_complete",
         "record_count": len(audit),
+        "required_record_count": 30,
+        "prepared_record_count": len(audit),
+        "audited_record_count": len(audit),
+        "automated_pass_count": len(audit),
         "records": audit,
     })
     _write_jsonl(source_dir / "raw-fixture.jsonl", fixture_rows)

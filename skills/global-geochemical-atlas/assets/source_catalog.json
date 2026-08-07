@@ -219,6 +219,93 @@
         "Aggregated records must retain every original publication reference."
       ]
     },
+    "usgs-utah-volcanic-whole-rock": {
+      "title": "Whole-rock geochemical data for volcanic rocks sampled in northwestern Utah and adjacent states",
+      "publisher": "U.S. Geological Survey",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["rock"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["northwestern-utah", "adjacent-idaho", "adjacent-nevada"],
+        "notes": "A regional volcanic-rock release with 246 sampled rows; it is an independent non-GEOROC lineage but not representative of United States or global rock coverage."
+      },
+      "identifiers": {
+        "dataset_doi": "10.5066/P1NZXUZF",
+        "sciencebase_item_id": "672d2e6dd34ea9e45088e967"
+      },
+      "landing_page": "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+      "interfaces": [
+        {
+          "kind": "fixed_sciencebase_child_files",
+          "url": "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+          "format": "csv_relational_tables",
+          "access": "open",
+          "server_filters": ["sciencebase_child_item_id", "file_id"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "LicenseRef-USGS-Public-Domain",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "notes": "The data release identifies CC0 1.0; retain the USGS dataset citation and record-level source locators."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "2026-02-09",
+        "release_date": "2026-02-16"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "usgs_sciencebase_child_csvs"
+      },
+      "evidence_urls": [
+        "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+        "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+        "https://doi.org/10.5066/P1NZXUZF"
+      ],
+      "limitations": [
+        "Negative target values are publisher encodings for less-than limits and remain qualified observations.",
+        "Some UGS-ALS measurements retain two explicit method candidates rather than an invented winning method.",
+        "The release overlaps NGD-Rock; upstream DOI, sample, analyte and method identities participate in duplicate lineage audits.",
+        "No target Hg observation is present in the four production child data files."
+      ]
+    },
+    "cdogs-210102-lake-sediment": {
+      "title": "CDoGS survey 21:0102 lake-sediment geochemistry",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["sediment"],
+      "coverage": {"extent_class": "regional_partial", "regions": ["southeastern-ontario"], "notes": "Discrete lake-sediment samples from one official reconnaissance survey; not Canadian or global continuous coverage."},
+      "identifiers": {"dataset_pid": "CDoGS:survey:21:0102:lake-sediment", "survey_key": "21:0102"},
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "interfaces": [{"kind": "fixed_official_package_files", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx", "format": "xlsx", "access": "open", "server_filters": ["Survey_Key"]}],
+      "license": {"status": "open", "id": "LicenseRef-Government-of-Canada-Terms", "url": "https://www.canada.ca/en/transparency/terms.html", "notes": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations."},
+      "version": {"status": "pinned", "value": "cdogs-svy210102-page-2025-05-18", "release_date": "1984"},
+      "adapter": {"status": "implemented", "name": "cdogs_210102_xlsx"},
+      "evidence_urls": ["https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm", "https://www.canada.ca/en/transparency/terms.html"],
+      "limitations": ["Lake water and lake sediment share one upstream survey lineage.", "Coordinates are published as NAD83 and remain identified as such.", "Different package columns retain their own analytical method and detection-limit contracts."]
+    },
+    "cdogs-210102-lake-water": {
+      "title": "CDoGS survey 21:0102 lake-water uranium",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["water"],
+      "coverage": {"extent_class": "regional_partial", "regions": ["southeastern-ontario"], "notes": "Discrete lake-water samples from one official reconnaissance survey; uranium only."},
+      "identifiers": {"dataset_pid": "CDoGS:survey:21:0102:lake-water", "survey_key": "21:0102"},
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "interfaces": [{"kind": "fixed_official_package_file", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx", "format": "xlsx", "access": "open", "server_filters": ["Survey_Key"]}],
+      "license": {"status": "open", "id": "LicenseRef-Government-of-Canada-Terms", "url": "https://www.canada.ca/en/transparency/terms.html", "notes": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations."},
+      "version": {"status": "pinned", "value": "cdogs-svy210102-page-2025-05-18", "release_date": "1984"},
+      "adapter": {"status": "implemented", "name": "cdogs_210102_xlsx"},
+      "evidence_urls": ["https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm", "https://www.canada.ca/en/transparency/terms.html"],
+      "limitations": ["The executable water product contains uranium, not all seven earlier target elements.", "Lake water and lake sediment share one upstream survey lineage.", "Official bundle and narrative dates conflict, so the sample year remains unresolved."]
+    },
     "usgs-ngdb": {
       "title": "U.S. Geological Survey National Geochemical Database",
       "publisher": "U.S. Geological Survey",

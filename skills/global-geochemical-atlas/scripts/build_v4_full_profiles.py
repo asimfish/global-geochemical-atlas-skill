@@ -291,6 +291,22 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             _text(fields.get("XCOO")),
             _text(fields.get("_source_crs")) or "EPSG:4326",
         )
+    if source_id == "usgs-utah-volcanic-whole-rock":
+        return (
+            _text(fields.get("StationID")) or _text(fields.get("LAB_ID")),
+            _text(fields.get("State")) or _text(fields.get("LocationDescription")),
+            _text(fields.get("_latitude")),
+            _text(fields.get("_longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id.startswith("cdogs-210102-"):
+        return (
+            _text(fields.get("_sample_id")),
+            _text(fields.get("_place")),
+            _text(fields.get("_latitude")),
+            _text(fields.get("_longitude")),
+            _text(fields.get("_source_crs")),
+        )
     raise FullProfileError(f"no sample/place mapping for {source_id}")
 
 
@@ -329,7 +345,12 @@ def _target_values(
                 continue
             raw = _text(values.get("value"))
             if raw:
-                yield _text(analyte), _text(values.get("field")) or _text(analyte), raw, values
+                yield (
+                    _text(values.get("analyte")) or _text(analyte),
+                    _text(values.get("field")) or _text(analyte),
+                    raw,
+                    values,
+                )
         return
     if source_id == "gemstat-open-archive":
         raw = _text(fields.get("Value"))
@@ -420,6 +441,14 @@ def _semantic_evidence(source_id: str, fields: Mapping[str, Any], record_id: str
     elif source_id == "gemas-europe":
         evidence["sample_type"] = _text(fields.get("TYPE_"))
         evidence["country_raw"] = _text(fields.get("COUNTRY"))
+    elif source_id == "usgs-utah-volcanic-whole-rock":
+        evidence["sample_type"] = _text(fields.get("_sample_type"))
+        evidence["state"] = _text(fields.get("State"))
+        evidence["location"] = _text(fields.get("LocationDescription"))
+    elif source_id.startswith("cdogs-210102-"):
+        evidence["sample_type"] = _text(fields.get("sample_type"))
+        evidence["sample_type_raw"] = _text(fields.get("sample_type_raw"))
+        evidence["site_id"] = _text(fields.get("site_id"))
     return evidence
 
 
@@ -457,14 +486,16 @@ def _observation(
         "sample_id": sample_id,
         "element_or_analyte": analyte,
         "value": value,
+        "value_qualifier": _text(values.get("value_qualifier")),
         "unit": unit,
         "medium": _text((registry_entry.get("media") or [""])[0]),
         "measurement_basis": _text(values.get("measurement_basis")),
         "detection_limit": _text(values.get("detection_limit")),
+        "detection_limit_unit": _text(values.get("detection_limit_unit")),
         "latitude": latitude,
         "longitude": longitude,
         "source_crs": source_crs,
-        "coordinate_uncertainty_m": (
+        "coordinate_uncertainty_m": _text(raw.fields.get("_coordinate_uncertainty_m")) or (
             "20"
             if source_id in {"japan-gsj-geochemical-map", "japan-gsj-marine-sediment"}
             else "15"
@@ -472,13 +503,19 @@ def _observation(
             else ""
         ),
         "analytical_method": method,
+        "method_scope": _text(values.get("method_scope")),
+        "method_assignment_basis": _text(values.get("method_assignment_basis")),
+        "method_candidates": json.dumps(values.get("method_candidates", []), ensure_ascii=False, separators=(",", ":")),
+        "preparation": _text(values.get("preparation")),
+        "analytical_technique": _text(values.get("analytical_technique")) or method,
+        "laboratory": _text(values.get("laboratory")) or _text(raw.fields.get("_laboratory_raw")),
         "license": _text((registry_entry.get("license") or {}).get("spdx")),
         "grain_fraction": _text(raw.fields.get("_grain_fraction")),
-        "material_raw": _text(raw.fields.get("MATERIAL")),
-        "lithology_raw": _text(raw.fields.get("ROCK NAME")) or (
+        "material_raw": _text(raw.fields.get("MATERIAL")) or _text(raw.fields.get("_rock_type_raw")),
+        "lithology_raw": _text(raw.fields.get("ROCK NAME")) or _text(raw.fields.get("_lithology_raw")) or (
             _text(raw.fields.get("Rock Group")) if source_id == "tpdc-china-mountain-soil" else ""
         ),
-        "geologic_age_raw": _text(raw.fields.get("AGE")),
+        "geologic_age_raw": _text(raw.fields.get("AGE")) or _text(raw.fields.get("_geologic_age_raw")),
         "tectonic_setting_raw": _text(raw.fields.get("TECTONIC SETTING")),
     }
     row = v4_semantics.enrich_row(row, evidence, registry_entry, registry_verified_at)

@@ -1,6 +1,6 @@
 {
   "scope_version": "geochemical-source-discovery-scope-v1",
-  "as_of": "2026-08-06T10:35:00Z",
+  "as_of": "2026-08-07T12:00:00Z",
   "round": 6,
   "status": "in_progress",
   "saturated": false,
@@ -86,11 +86,14 @@
         "alaska-dggs-webgeochem",
         "canada-bc-rgs",
         "canada-cdogs",
+        "cdogs-210102-lake-sediment",
+        "cdogs-210102-lake-water",
         "mexico-sgm-geochemical-cartography",
         "us-water-quality-portal",
         "us-wqp-sacramento-river-arsenic",
         "usgs-conus-soil",
-        "usgs-ngdb"
+        "usgs-ngdb",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "remaining_work": [
         "Search additional state, provincial and territorial geological-survey releases beyond Alaska and British Columbia.",

@@ -1,5 +1,9 @@
 {
-  "audit_version": "d1-cdogs-210102-codex-audit-v1",
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "automated_pass_count": 30,
+  "prepared_record_count": 30,
+  "required_record_count": 30,
   "record_count": 30,
   "records": [
     {
@@ -515,5 +519,5 @@
   ],
   "reviewer_type": "codex",
   "source_id": "cdogs-210102-lake-water",
-  "status": "PASS"
+  "status": "automated_audit_complete"
 }

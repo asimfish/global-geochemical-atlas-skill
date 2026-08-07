@@ -120,11 +120,14 @@ CREATE TABLE samples (
   tectonic_setting_raw TEXT,
   matched_geologic_unit TEXT,
   geology_map_source TEXT,
+  geology_map_source_id TEXT,
   geology_map_version TEXT,
   match_method TEXT,
   match_scale TEXT,
   boundary_distance_m REAL,
   match_uncertainty TEXT,
+  match_status TEXT NOT NULL,
+  match_candidates_json TEXT NOT NULL,
   soil_horizon_raw TEXT,
   soil_horizon TEXT,
   sediment_environment TEXT,
@@ -138,6 +141,7 @@ CREATE TABLE samples (
 CREATE INDEX idx_samples_medium ON samples(medium_raw);
 CREATE INDEX idx_samples_type ON samples(sample_type);
 CREATE INDEX idx_samples_geology ON samples(geologic_unit_raw, matched_geologic_unit);
+CREATE INDEX idx_samples_geology_status ON samples(match_status);
 CREATE INDEX idx_samples_lithology ON samples(lithology, lithology_raw);
 CREATE INDEX idx_samples_soil_horizon ON samples(soil_horizon);
 CREATE INDEX idx_samples_sediment_environment ON samples(sediment_environment);
@@ -264,11 +268,14 @@ SELECT
   s.tectonic_setting_raw,
   s.matched_geologic_unit,
   s.geology_map_source,
+  s.geology_map_source_id,
   s.geology_map_version,
   s.match_method,
   s.match_scale,
   s.boundary_distance_m,
   s.match_uncertainty,
+  s.match_status,
+  s.match_candidates_json,
   s.soil_horizon_raw,
   s.soil_horizon,
   s.sediment_environment,
@@ -322,6 +329,7 @@ SELECT
   s.lithology,
   s.geologic_unit_raw,
   s.matched_geologic_unit,
+  s.match_status,
   s.soil_horizon,
   s.sediment_environment,
   s.water_body_type,

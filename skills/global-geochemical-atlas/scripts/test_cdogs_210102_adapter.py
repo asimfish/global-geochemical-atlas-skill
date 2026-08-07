@@ -45,10 +45,10 @@ class CDoGS210102AdapterTests(unittest.TestCase):
 
     def test_each_source_has_thirty_codex_audits(self) -> None:
         for source_id, directory in SOURCE_DIRS.items():
-            audit = json.loads((directory / "automated-audit.json").read_text(encoding="utf-8"))
+            audit = json.loads((directory / "automated_audit.json").read_text(encoding="utf-8"))
             self.assertEqual(audit["source_id"], source_id)
             self.assertEqual(audit["reviewer_type"], "codex")
-            self.assertEqual(audit["status"], "PASS")
+            self.assertEqual(audit["status"], "automated_audit_complete")
             self.assertEqual(audit["record_count"], 30)
             self.assertEqual(len(audit["records"]), 30)
             self.assertEqual({row["status"] for row in audit["records"]}, {"PASS"})

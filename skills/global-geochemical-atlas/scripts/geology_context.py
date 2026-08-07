@@ -59,6 +59,8 @@ class SampleLocation:
     latitude: float | None
     longitude: float | None
     geologic_unit_raw: str | None = None
+    source_crs: str | None = None
+    coordinate_transform: str | None = None
 
 
 def _utc_now() -> str:
@@ -428,6 +430,8 @@ def _base_result(sample: SampleLocation) -> dict[str, Any]:
         "sample_id": sample.sample_id,
         "latitude": sample.latitude,
         "longitude": sample.longitude,
+        "input_source_crs": sample.source_crs,
+        "coordinate_transform": sample.coordinate_transform,
         "geologic_unit_raw": sample.geologic_unit_raw,
         "matched_geologic_unit": None,
         "geology_map_source": None,
@@ -449,6 +453,14 @@ def _base_result(sample: SampleLocation) -> dict[str, Any]:
 
 def match_point(sample: SampleLocation, client: MacrostratClient) -> dict[str, Any]:
     result = _base_result(sample)
+    if sample.coordinate_transform == "unsupported_source_crs":
+        result.update(
+            match_status="failed",
+            cache_status="failed",
+            match_uncertainty="The source CRS could not be transformed to WGS84; no map lookup was attempted.",
+            error=f"unsupported source CRS: {sample.source_crs}",
+        )
+        return result
     if sample.latitude is None or sample.longitude is None:
         result.update(
             match_status="not_attempted_missing_coordinate",
@@ -511,6 +523,14 @@ def match_point(sample: SampleLocation, client: MacrostratClient) -> dict[str, A
 
 def match_tile(sample: SampleLocation, client: MacrostratClient, *, zoom: int = 5) -> dict[str, Any]:
     result = _base_result(sample)
+    if sample.coordinate_transform == "unsupported_source_crs":
+        result.update(
+            match_status="failed",
+            cache_status="failed",
+            match_uncertainty="The source CRS could not be transformed to WGS84; no map lookup was attempted.",
+            error=f"unsupported source CRS: {sample.source_crs}",
+        )
+        return result
     if sample.latitude is None or sample.longitude is None:
         result.update(
             match_status="not_attempted_missing_coordinate",
@@ -530,8 +550,13 @@ def match_tile(sample: SampleLocation, client: MacrostratClient, *, zoom: int = 
         point_x, point_y = local_x * extent, local_y * extent
         covering = [feature for feature in features if _point_in_polygon(point_x, point_y, feature["rings"])]
         version, _ = client.api_version()
-        candidates = [_candidate(feature["properties"]) for feature in covering]
-        candidates = [candidate for candidate in candidates if candidate["unit_name"]]
+        covering_pairs = [
+            (feature, candidate)
+            for feature in covering
+            for candidate in [_candidate(feature["properties"])]
+            if candidate["unit_name"]
+        ]
+        candidates = [candidate for _, candidate in covering_pairs]
         result.update(
             geology_map_source="Macrostrat",
             geology_map_version=version,
@@ -548,7 +573,7 @@ def match_tile(sample: SampleLocation, client: MacrostratClient, *, zoom: int = 
                 match_status="unmatched",
                 match_uncertainty="No polygon in the cached carto tile covered the coordinate.",
             )
-        elif len(candidates) > 1:
+        elif len(covering) > 1 or len(candidates) > 1:
             result.update(
                 match_status="ambiguous",
                 match_uncertainty=(
@@ -557,8 +582,8 @@ def match_tile(sample: SampleLocation, client: MacrostratClient, *, zoom: int = 
                 ),
             )
         else:
-            candidate = candidates[0]
-            distance_units = _boundary_distance_units(point_x, point_y, covering[0]["rings"])
+            matched_feature, candidate = covering_pairs[0]
+            distance_units = _boundary_distance_units(point_x, point_y, matched_feature["rings"])
             latitude_factor = max(0.01, math.cos(math.radians(sample.latitude)))
             tile_width_m = 40075016.686 * latitude_factor / (1 << zoom)
             result.update(
@@ -592,11 +617,14 @@ def sample_patch(sample: Mapping[str, Any], result: Mapping[str, Any]) -> dict[s
     patch.update(
         matched_geologic_unit=result.get("matched_geologic_unit"),
         geology_map_source=result.get("geology_map_source"),
+        geology_map_source_id=result.get("geology_map_source_id"),
         geology_map_version=result.get("geology_map_version"),
         match_method=result.get("match_method"),
         match_scale=result.get("match_scale"),
         boundary_distance_m=result.get("boundary_distance_m"),
         match_uncertainty=result.get("match_uncertainty"),
+        match_status=result.get("match_status"),
+        match_candidates=list(result.get("match_candidates") or []),
     )
     return patch
 
@@ -621,11 +649,26 @@ def _location_from_row(row: Any, index: int) -> SampleLocation:
     sample_id = _optional_text(row.get("sample_id"))
     if not sample_id:
         raise GeologyContextError(f"row {index} lacks sample_id")
+    source_crs = _optional_text(row.get("source_crs"))
+    normalized_crs = (source_crs or "").casefold().replace(" ", "")
+    if normalized_crs in {"epsg:4326", "wgs84", "wgs-84"}:
+        coordinate_transform = "identity_epsg4326"
+    elif any(
+        token in normalized_crs
+        for token in ("epsg:4269", "nad83", "epsg:4283", "gda94", "epsg:4612", "jgd2000")
+    ):
+        coordinate_transform = "axis_preserving_geographic_approximation_for_map_lookup"
+    elif source_crs:
+        coordinate_transform = "unsupported_source_crs"
+    else:
+        coordinate_transform = "source_crs_not_reported_assumed_wgs84_for_map_lookup"
     return SampleLocation(
         sample_id=sample_id,
         latitude=_coordinate(row.get("latitude"), latitude=True),
         longitude=_coordinate(row.get("longitude"), latitude=False),
         geologic_unit_raw=_optional_text(row.get("geologic_unit_raw")),
+        source_crs=source_crs,
+        coordinate_transform=coordinate_transform,
     )
 
 

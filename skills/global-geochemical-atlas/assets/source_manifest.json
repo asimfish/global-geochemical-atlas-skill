@@ -2922,6 +2922,55 @@
         "XRF half-detection-limit substitutions are flagged because original qualifiers cannot be recovered.",
         "GSI is the distribution publisher and GEMAS is the upstream sampling lineage."
       ]
+    },
+    "cdogs-210102-lake-sediment": {
+      "adapter": "cdogs_210102_xlsx",
+      "title": "CDoGS survey 21:0102 lake-sediment geochemistry",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "dataset_doi": null,
+      "dataset_pid": "CDoGS:survey:21:0102:lake-sediment",
+      "dataset_version": "cdogs-svy210102-page-2025-05-18",
+      "release_date": "1984",
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "media": ["sediment"],
+      "upstream_lineage_id": "cdogs-survey-210102",
+      "download": {
+        "mode": "fixed-official-xlsx-package-files",
+        "files": [
+          {"file_id": "pkg-0134c", "filename": "svy210102_pkg_0134c.xlsx", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx", "bytes": 3447178},
+          {"file_id": "pkg-0383c", "filename": "svy210102_pkg_0383c.xlsx", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0383c.xlsx", "bytes": 568509}
+        ]
+      },
+      "required_fields": ["Survey_Key", "Field_Key", "Site_Key", "Latitude_NAD83", "Longitude_NAD83", "Sample_Type_Name_en"],
+      "target_analytes": {"As": "As_Col", "Cr": "Cr_XRF", "Cu": "Cu_AAS", "Hg": "Hg_AAS", "Ni": "Ni_AAS", "Pb": "Pb_AAS", "Zn": "Zn_AAS"},
+      "expected_counts": {"physical_samples": 684, "sites": 580, "target_observations": 4411},
+      "license": {"spdx": "LicenseRef-Government-of-Canada-Terms", "name": "Government of Canada website terms", "url": "https://www.canada.ca/en/transparency/terms.html"},
+      "citation": "Geological Survey of Canada Open Files 405 and 899; CDoGS survey 21:0102.",
+      "scientific_notes": ["Rows are selected only where the authoritative Survey_Key is 21:0102.", "Coordinates remain source-native NAD83 until the coordinate transformation layer runs.", "Lake sediment and lake water share one upstream survey lineage and are not counted as two independent provenances."]
+    },
+    "cdogs-210102-lake-water": {
+      "adapter": "cdogs_210102_xlsx",
+      "title": "CDoGS survey 21:0102 lake-water uranium",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "dataset_doi": null,
+      "dataset_pid": "CDoGS:survey:21:0102:lake-water",
+      "dataset_version": "cdogs-svy210102-page-2025-05-18",
+      "release_date": "1984",
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "media": ["water"],
+      "upstream_lineage_id": "cdogs-survey-210102",
+      "download": {
+        "mode": "fixed-official-xlsx-package-files",
+        "files": [
+          {"file_id": "pkg-0136c", "filename": "svy210102_pkg_0136c.xlsx", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx", "bytes": 563410}
+        ]
+      },
+      "required_fields": ["Survey_Key", "Field_Key", "Site_Key", "Latitude_NAD83", "Longitude_NAD83", "Sample_Type_Name_en", "U_FT"],
+      "target_analytes": {"U": "U_FT"},
+      "expected_counts": {"physical_samples": 655, "sites": 580, "target_observations": 655},
+      "license": {"spdx": "LicenseRef-Government-of-Canada-Terms", "name": "Government of Canada website terms", "url": "https://www.canada.ca/en/transparency/terms.html"},
+      "citation": "Geological Survey of Canada Open File 899; CDoGS survey 21:0102.",
+      "scientific_notes": ["Rows are selected only where the authoritative Survey_Key is 21:0102.", "Coordinates remain source-native NAD83 until the coordinate transformation layer runs.", "The official bundle identifier and survey narrative disagree on the water sampling year; sampled_year_raw remains unresolved."]
     }
   }
 }

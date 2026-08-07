@@ -134,8 +134,9 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
             required_v2_fields = {
                 "sample_type_raw", "sample_type", "sample_type_mapping_status", "geographic_context_raw",
                 "survey_area", "map_sheet", "cruise_track", "lithology", "geologic_age_raw",
-                "tectonic_setting_raw", "matched_geologic_unit", "geology_map_source", "geology_map_version",
-                "match_method", "match_scale", "boundary_distance_m", "match_uncertainty", "soil_horizon",
+                "tectonic_setting_raw", "matched_geologic_unit", "geology_map_source", "geology_map_source_id",
+                "geology_map_version", "match_method", "match_scale", "boundary_distance_m", "match_uncertainty",
+                "match_status", "match_candidates", "soil_horizon",
                 "sediment_environment", "water_body_type", "water_fraction",
             }
             for field in sorted(required_v2_fields - set(sample)):
@@ -145,9 +146,19 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
             }:
                 errors.append(f"{sample_id} has a sample_type without mapping evidence")
             if sample.get("matched_geologic_unit") and not all(
-                sample.get(field) for field in ("geology_map_source", "geology_map_version", "match_method", "match_scale")
+                sample.get(field) for field in (
+                    "geology_map_source", "geology_map_source_id", "geology_map_version", "match_method", "match_scale"
+                )
             ):
                 errors.append(f"{sample_id} has matched geology without map version, method and scale")
+            if sample.get("match_status") not in {
+                "matched", "ambiguous", "unmatched", "failed", "not_attempted_missing_coordinate"
+            }:
+                errors.append(f"{sample_id} has invalid or missing geology match_status")
+            if not isinstance(sample.get("match_candidates"), list):
+                errors.append(f"{sample_id} has non-list geology match_candidates")
+            if sample.get("match_status") == "matched" and not sample.get("matched_geologic_unit"):
+                errors.append(f"{sample_id} is marked matched without a matched geologic unit")
     for publication_id, publication in publications.items():
         for dataset_id in publication.get("dataset_ids", []):
             _require_reference(publication_id, "dataset_ids", dataset_id, datasets, errors)

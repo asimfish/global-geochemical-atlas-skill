@@ -130,6 +130,7 @@ def export_rows(bundle: Mapping[str, Any]) -> list[dict[str, str]]:
                 "tectonic_setting_raw": str(sample.get("tectonic_setting_raw") or ""),
                 "matched_geologic_unit": str(sample.get("matched_geologic_unit") or ""),
                 "geology_map_source": str(sample.get("geology_map_source") or ""),
+                "geology_map_source_id": str(sample.get("geology_map_source_id") or ""),
                 "geology_map_version": str(sample.get("geology_map_version") or ""),
                 "match_method": str(sample.get("match_method") or ""),
                 "match_scale": str(sample.get("match_scale") or ""),
@@ -137,6 +138,10 @@ def export_rows(bundle: Mapping[str, Any]) -> list[dict[str, str]]:
                     sample.get("boundary_distance_m") if sample.get("boundary_distance_m") is not None else ""
                 ),
                 "match_uncertainty": str(sample.get("match_uncertainty") or ""),
+                "match_status": str(sample.get("match_status") or ""),
+                "match_candidates": json.dumps(
+                    sample.get("match_candidates", []), ensure_ascii=False, separators=(",", ":")
+                ),
                 "geology_missing_reason": _missing(sample, "geologic_unit_raw") if not geologic_unit_raw else "",
                 "method_scope": method_scope,
                 "method_assignment_basis": str(method.get("method_assignment_basis") or ""),

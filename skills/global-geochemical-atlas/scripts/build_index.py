@@ -133,10 +133,10 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
             "medium_raw, material_raw, sample_type_raw, sample_type, sample_type_mapping_status, "
             "geographic_context_raw, survey_area, map_sheet, cruise_track, lithology_raw, lithology, "
             "geologic_unit_raw, geologic_age_raw, tectonic_setting_raw, matched_geologic_unit, "
-            "geology_map_source, geology_map_version, match_method, match_scale, boundary_distance_m, "
-            "match_uncertainty, soil_horizon_raw, soil_horizon, sediment_environment, grain_fraction_raw, "
+            "geology_map_source, geology_map_source_id, geology_map_version, match_method, match_scale, boundary_distance_m, "
+            "match_uncertainty, match_status, match_candidates_json, soil_horizon_raw, soil_horizon, sediment_environment, grain_fraction_raw, "
             "water_body_type, water_fraction, filtered_state_raw, description_raw) "
-            "VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 sample["sample_id"],
                 sample["native_sample_id"],
@@ -158,11 +158,14 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                 sample.get("tectonic_setting_raw"),
                 sample.get("matched_geologic_unit"),
                 sample.get("geology_map_source"),
+                sample.get("geology_map_source_id"),
                 sample.get("geology_map_version"),
                 sample.get("match_method"),
                 sample.get("match_scale"),
                 sample.get("boundary_distance_m"),
                 sample.get("match_uncertainty"),
+                sample.get("match_status"),
+                json.dumps(sample.get("match_candidates", []), ensure_ascii=False, sort_keys=True),
                 sample["soil_horizon_raw"],
                 sample.get("soil_horizon"),
                 sample.get("sediment_environment"),
