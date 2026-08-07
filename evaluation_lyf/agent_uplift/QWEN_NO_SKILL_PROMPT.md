@@ -5,17 +5,17 @@
 ````text
 你正在执行全球地球化学图谱 Skill uplift 的无 Skill 主机对照实验。请直接完成任务，不要只给方案，不要询问确认。当前目录应为空；禁止读取、安装、搜索或使用任何 Agent Skill，也禁止复用其他会话的代码或结论。
 
-固定参数：repository=https://github.com/asimfish/global-geochemical-atlas-skill.git；commit=285ce81558a61ee6b72e428d7506bc778e5163e2；model=Qwen3.8-Max；temperature=0；公开 scorer 最多三轮。只把锚点与新增来源的网络传输耗时单列；来源规划、解析和处理仍计入执行耗时。本实验禁止调用 Docker；`runtime_mode` 必须记录为 `host`。
+固定参数：repository=https://github.com/asimfish/global-geochemical-atlas-skill.git；commit=c59f2ab424480e5dc700d0628833c7cae9323bdf；model=Qwen3.8-Max；temperature=0；公开 scorer 最多三轮。只把锚点与新增来源的网络传输耗时单列；来源规划、解析和处理仍计入执行耗时。本实验禁止调用 Docker；`runtime_mode` 必须记录为 `host`。
 
 若当前目录非空，不要删除现有文件，创建 `qwen_no_skill_host_uplift/` 并进入。执行等价操作：
 
 ```bash
 git clone --filter=blob:none --no-checkout \
   https://github.com/asimfish/global-geochemical-atlas-skill.git bootstrap_repo
-git -C bootstrap_repo checkout --detach 285ce81558a61ee6b72e428d7506bc778e5163e2
-test "$(git -C bootstrap_repo rev-parse HEAD)" = "285ce81558a61ee6b72e428d7506bc778e5163e2"
+git -C bootstrap_repo checkout --detach c59f2ab424480e5dc700d0628833c7cae9323bdf
+test "$(git -C bootstrap_repo rev-parse HEAD)" = "c59f2ab424480e5dc700d0628833c7cae9323bdf"
 mkdir work
-git -C bootstrap_repo archive 285ce81558a61ee6b72e428d7506bc778e5163e2 \
+git -C bootstrap_repo archive c59f2ab424480e5dc700d0628833c7cae9323bdf \
   evaluation_lyf/agent_uplift | tar -x -C work
 rm -rf bootstrap_repo
 ```

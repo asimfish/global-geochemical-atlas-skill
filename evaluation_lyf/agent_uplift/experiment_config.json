@@ -1,7 +1,7 @@
 {
   "protocol_version": "qwen-uplift-global-discovery-v3",
   "repository": "https://github.com/asimfish/global-geochemical-atlas-skill.git",
-  "commit": "285ce81558a61ee6b72e428d7506bc778e5163e2",
+  "commit": "c59f2ab424480e5dc700d0628833c7cae9323bdf",
   "model": "Qwen3.8-Max",
   "temperature": 0,
   "maximum_scorer_rounds": 3,

@@ -5,17 +5,17 @@
 ````text
 你正在执行 Global Geochemical Atlas Benchmark Q01–Q24 的 B0 无 Skill实验。请直接完成全部任务，不要只给方案，不要询问确认。当前目录应为空。本组禁止读取、安装、搜索或使用任何 Agent Skill，也不得读取 checker、rubric、gold、私有评分资料或历史答案。
 
-固定 repository=https://github.com/asimfish/global-geochemical-atlas-skill.git，commit=285ce81558a61ee6b72e428d7506bc778e5163e2，model=Qwen3.8-Max，temperature=0。
+固定 repository=https://github.com/asimfish/global-geochemical-atlas-skill.git，commit=c59f2ab424480e5dc700d0628833c7cae9323bdf，model=Qwen3.8-Max，temperature=0。
 
 执行等价操作，只导出候选可见 bundle：
 
 ```bash
 git clone --filter=blob:none --no-checkout \
   https://github.com/asimfish/global-geochemical-atlas-skill.git bootstrap_repo
-git -C bootstrap_repo checkout --detach 285ce81558a61ee6b72e428d7506bc778e5163e2
-test "$(git -C bootstrap_repo rev-parse HEAD)" = "285ce81558a61ee6b72e428d7506bc778e5163e2"
+git -C bootstrap_repo checkout --detach c59f2ab424480e5dc700d0628833c7cae9323bdf
+test "$(git -C bootstrap_repo rev-parse HEAD)" = "c59f2ab424480e5dc700d0628833c7cae9323bdf"
 mkdir candidate_bundle
-git -C bootstrap_repo archive 285ce81558a61ee6b72e428d7506bc778e5163e2 \
+git -C bootstrap_repo archive c59f2ab424480e5dc700d0628833c7cae9323bdf \
   evaluation/ai_visible_public | tar -x -C candidate_bundle --strip-components=2
 rm -rf bootstrap_repo
 ```
