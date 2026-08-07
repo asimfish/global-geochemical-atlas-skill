@@ -27,7 +27,11 @@ REQUIRED_INPUTS = (
     "source_manifest.json",
     "anomaly_report.json",
 )
-OPTIONAL_INPUTS = ("record_evidence.jsonl",)
+OPTIONAL_INPUTS = (
+    "record_evidence.jsonl",
+    "anomaly_regions.geojson",
+    "spatial_anomaly_report.json",
+)
 GENERATED_OUTPUTS = (
     "interactive_map.html",
     "samples.geojson",
@@ -116,6 +120,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     backlog_path = args.output_dir / "iteration_backlog.csv"
     backlog_report = backlog_builder.build(inputs["geochemistry.csv"], backlog_path)
 
+    anomaly_regions_path = args.input_dir / "anomaly_regions.geojson"
+    spatial_anomaly_report_path = args.input_dir / "spatial_anomaly_report.json"
     try:
         profile = map_builder.load_visualization_profile(args.profile)
         map_report = map_builder.build_map(
@@ -128,6 +134,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             confidence_report_path=inputs["confidence_report.json"],
             source_manifest_path=inputs["source_manifest.json"],
             anomaly_report_path=inputs["anomaly_report.json"],
+            anomaly_regions_path=anomaly_regions_path if anomaly_regions_path.is_file() else None,
+            spatial_anomaly_report_path=(
+                spatial_anomaly_report_path if spatial_anomaly_report_path.is_file() else None
+            ),
             iteration_backlog_path=backlog_path,
             visualization_profile_path=args.profile,
         )

@@ -213,6 +213,9 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
 
         globe = driver.execute_script(
             """
+            const context=JSON.parse(document.getElementById('context-data')?.textContent||'{}');
+            if((context.visualization_profile||{}).spatial_scope==='regional')
+              return {tested:false,reason:'regional_scope_hides_globe',regional:true};
             const control=document.getElementById('projectionMode');
             const canvas=document.getElementById('globe');
             if(!control||!canvas)return {tested:false,reason:'globe_controls_missing'};
@@ -221,16 +224,20 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             """
         )
         time.sleep(0.3)
-        globe_pixels = canvas_state("globe")
-        globe_passed = bool(
-            globe.get("tested") and globe.get("display") != "none"
-            and globe_pixels["width"] > 200 and globe_pixels["height"] > 150
-            and globe_pixels["opaque"] > 100 and globe_pixels["colors"] > 20
-        )
-        interactions["global_globe"] = {
-            "passed": globe_passed,
-            "evidence": {**globe, **globe_pixels},
-        }
+        if globe.get("regional"):
+            # 地区产物按契约隐藏三维地球仪，only 全球产物强制该检查。
+            interactions["global_globe"] = {"passed": True, "evidence": globe}
+        else:
+            globe_pixels = canvas_state("globe")
+            globe_passed = bool(
+                globe.get("tested") and globe.get("display") != "none"
+                and globe_pixels["width"] > 200 and globe_pixels["height"] > 150
+                and globe_pixels["opaque"] > 100 and globe_pixels["colors"] > 20
+            )
+            interactions["global_globe"] = {
+                "passed": globe_passed,
+                "evidence": {**globe, **globe_pixels},
+            }
         screenshot("globe")
 
         combination_tab = activate("combinationView")

@@ -37,9 +37,9 @@
         "sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db"
       },
       "interactive_map": {
-        "bytes": 1188383,
+        "bytes": 1190086,
         "filename": "interactive_map.html",
-        "sha256": "d095d41046d620cf5ac731647c8029ef806a182605b714969a458613e4ef29fc"
+        "sha256": "177abb627a285cb90e0a88a8ece0e26cab8144e7e90f25ca8dbe4bd2cf217cdf"
       },
       "iteration_backlog": {
         "bytes": 739091,
@@ -126,7 +126,7 @@
     "artifact_bindings": {
       "anomalies_sha256": "f7717d49b0f7cd8af8bf612d6a45eef4727bebe58f8b44286f6a02b8524c0da7",
       "database_sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db",
-      "interactive_map_sha256": "d095d41046d620cf5ac731647c8029ef806a182605b714969a458613e4ef29fc",
+      "interactive_map_sha256": "177abb627a285cb90e0a88a8ece0e26cab8144e7e90f25ca8dbe4bd2cf217cdf",
       "samples_geojson_sha256": "3364437bffa5db21b4174701ce5c1810fdb7812121983c420ec5680507d89d89"
     },
     "basemap": {
@@ -248,7 +248,7 @@
     "display_sample_count": 226,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1188383,
+    "html_bytes": 1190086,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 808,
@@ -429,7 +429,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-dual-scope-atlas-v4",
-    "template_sha256": "61d21c632bf650e65b2811c953e26be24a9cdf83663e1ee4955034a89f224dcd",
+    "template_sha256": "8c1b69ec5599d8ababc4c90b1957b0b104609ca72692abb31339186a326700b0",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "task-first-progressive-disclosure-v2",
