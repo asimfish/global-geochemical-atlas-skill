@@ -49,8 +49,32 @@ maximum and the dimension_id must exactly match the frozen rubric.
 
 ## 输出 Schema
 
+grader 收到 controller 生成的 `review_binding.json` 后，必须原样复制为 `run_binding`；不得自行重算、删字段或使用其他 run 的绑定。`reviewer.prompt_sha256` 必须等于绑定中的 `grader_protocol_sha256`。
+
 ```json
 {
+  "schema_version": "ai4s-bound-llm-review-v1",
+  "review_type": "llm",
+  "run_binding": {
+    "schema_version": "ai4s-evaluation-review-binding-v1",
+    "run_id": "...",
+    "question_id": "Q01",
+    "rubric_task_id": "GGA-...",
+    "condition": "B0|S0",
+    "repeat": 1,
+    "pair_fingerprint": "sha256",
+    "task_bundle_sha256": "sha256",
+    "submission_artifacts_sha256": "sha256",
+    "objective_report_sha256": "sha256",
+    "rubric_sha256": "sha256",
+    "frozen_skill_sha256": "sha256",
+    "grader_protocol_sha256": "sha256"
+  },
+  "reviewer": {
+    "id": "independent-reviewer-id",
+    "model": "exact-model-id",
+    "prompt_sha256": "same-as-grader_protocol_sha256"
+  },
   "task_id": "GGA-...",
   "criteria": [
     {
@@ -58,7 +82,7 @@ maximum and the dimension_id must exactly match the frozen rubric.
       "dimension_id": "scientific_credibility",
       "score": 0,
       "max": 0,
-      "evidence": ["artifacts/run_manifest.json: benchmark_evidence/..."],
+      "evidence": ["artifacts/run_manifest.json#/benchmark_evidence/..."],
       "reason": "short evidence-bound explanation"
     }
   ],
@@ -71,6 +95,10 @@ maximum and the dimension_id must exactly match the frozen rubric.
 ```
 
 解析器必须验证 criterion ID 与 rubric 完全一致、`dimension_id` 不漂移、单项不超上限。无法解析时保留原始响应，按相同冻结 prompt 最多重试一次；仍失败则人工复核或将对应维度保持 `not_scored`。
+
+`evidence` 只接受无说明文字的安全相对路径和可选 JSON Pointer。每一项必须等于或细化
+`rubric.evidence_paths` 中的冻结范围，或指向当前 `objective_report.json`；不存在的文件名、
+绝对路径、父目录、其他 run 和“路径后追加自然语言”的伪引用均不得计分。
 
 Final 的 LLM 证据建议独立生成两次。分歧、任一红线候选或高不确定性均进入人工复核；复核只能依据同一 rubric 和证据，不能添加新维度。
 `human_review_required=true` 时，`finalize_score.py` 输出 `score_status=not_scored` 与

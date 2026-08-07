@@ -25,7 +25,7 @@ total_score = Σ(dimension.score × dimension.weight)
 
 - 确定性 checker：文件、schema、记录、容差、QC、来源和拒绝状态等可复算事实；
 - LLM rubric：事实/推断/限制是否分开，解释是否被具体字段支持；
-- 静态评审：许可证、文档、样例、依赖、Schema 和复现说明等仓库级证据。
+- 静态评审（预留类型）：许可证、文档、样例、依赖、Schema 和复现说明等仓库级证据。当前没有冻结 rubric 和证据范围，因此执行器拒绝该输入，不能据此补分。
 
 若某个维度没有冻结证据，必须标为 `not_scored`，该次 `score_status` 为 `partial`；不能凭印象补分。只有六维均有合格证据时才是 `complete`。
 
@@ -54,9 +54,11 @@ Public、Shadow、Final 分开报告。聚合结果是描述性证据；是否�
 ```text
 submission/artifacts/*
   -> grade_task.py -> objective_report.json（六维机器证据）
-  -> LLM/static review JSON（六维评审证据，可选）
+  -> 与逐运行 review_binding.json 完全匹配的 LLM review JSON（可选）
   -> finalize_score.py -> score.json（E1 唯一单次总分）
   -> aggregate_runs.py -> B0/S0 描述性汇总
 ```
 
 原始 prompt、模型标识、参数、响应、checker 报告和 `score.json` 都必须保留，不能只保存最终数字。
+
+`aggregate_runs.py` 将“全部分数完整”和“官方就绪”分开。只有 24 题、B0/S0 各三次、正式协议、官方冻结 benchmark/provider、单一 Skill/模型/镜像身份、无红线且全部得分完整时，`official_ready` 才能为 true；本仓库公开回归题始终标记为 `repo_local_regression`，不能冒充官方成绩。
