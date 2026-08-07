@@ -15,6 +15,9 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+import build_iteration_backlog as backlog_builder
+import spatial_scope
+
 
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
@@ -22,9 +25,6 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
-
-import build_iteration_backlog as backlog_builder
-import spatial_scope
 
 
 MAP_VERSION = "d3-interactive-atlas-v3"

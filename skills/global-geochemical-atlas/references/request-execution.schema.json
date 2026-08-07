@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:request-execution:v3",
+  "$id": "urn:global-geochemical-atlas:request-execution:v4",
   "title": "Request-driven atlas execution evidence",
   "type": "object",
   "additionalProperties": false,
@@ -18,10 +18,11 @@
     "coverage_status",
     "route_resolution",
     "execution_coverage_status",
+    "request_coverage",
     "warnings"
   ],
   "properties": {
-    "execution_version": {"const": "geochemical-request-execution-v3"},
+    "execution_version": {"const": "geochemical-request-execution-v4"},
     "status": {"type": "string", "enum": ["success", "partial_success"]},
     "mode": {"type": "string", "minLength": 1},
     "analysis_profile": {"type": "string", "enum": ["demo", "production"]},
@@ -173,9 +174,45 @@
       "type": "string",
       "enum": ["covered", "partial", "uncovered", "unknown"]
     },
+    "request_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "dimensions"],
+      "properties": {
+        "status": {"type": "string", "enum": ["complete", "partial"]},
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["elements", "media"],
+          "properties": {
+            "elements": {"$ref": "#/$defs/requestDimension"},
+            "media": {"$ref": "#/$defs/requestDimension"}
+          }
+        }
+      }
+    },
     "warnings": {
       "type": "array",
       "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "requestDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested", "observed", "missing", "status"],
+      "properties": {
+        "requested": {
+          "type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+        },
+        "observed": {
+          "type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+        },
+        "missing": {
+          "type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+        },
+        "status": {"type": "string", "enum": ["complete", "partial"]}
+      }
     }
   }
 }

@@ -15,6 +15,7 @@ import execution_budget
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+PYTHON_COMMAND = "python3"
 CONTRACT_VERSION = "atlas-task-contract-v1"
 PLAN_VERSION = "atlas-task-plan-v1"
 TASK_TYPES = {
@@ -195,13 +196,13 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
     if task_type == "source_discovery":
         commands = [
             [
-                sys.executable,
+                PYTHON_COMMAND,
                 str(SCRIPT_DIR / "source_router.py"),
                 "--request", str(contract["request"]),
                 "--output", str(Path(output_dir) / "source_route.json"),
             ],
             [
-                sys.executable,
+                PYTHON_COMMAND,
                 str(SCRIPT_DIR / "coverage_report.py"),
                 "--request", str(contract["request"]),
                 "--json-output", str(Path(output_dir) / "coverage.json"),
@@ -210,7 +211,7 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
         ]
     elif task_type in {"normalize_qc", "spatial_geology", "anomaly_screening"}:
         command = [
-            sys.executable,
+            PYTHON_COMMAND,
             str(SCRIPT_DIR / "standardize_geochemistry.py"),
             "--input", str(contract["input"]),
             "--output-dir", output_dir,
@@ -228,7 +229,7 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
     elif task_type in {"visualization", "element_comparison"}:
         commands = [
             [
-                sys.executable,
+                PYTHON_COMMAND,
                 str(SCRIPT_DIR / "render_visualization.py"),
                 "--input-dir", str(contract["input_dir"]),
                 "--profile", str(contract["profile"]),
@@ -237,14 +238,14 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
         ]
         validators = [
             [
-                sys.executable,
+                PYTHON_COMMAND,
                 str(SCRIPT_DIR / "validate_visualization.py"),
                 "--output-dir", output_dir,
             ]
         ]
     else:
         command = [
-            sys.executable,
+            PYTHON_COMMAND,
             str(SCRIPT_DIR / "run_atlas_request.py"),
             "--request", str(contract["request"]),
             "--output-dir", output_dir,
@@ -264,7 +265,7 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
         commands = [command]
         validators = [
             [
-                sys.executable,
+                PYTHON_COMMAND,
                 str(SCRIPT_DIR / "validate_outputs.py"),
                 "--output-dir", output_dir,
             ]

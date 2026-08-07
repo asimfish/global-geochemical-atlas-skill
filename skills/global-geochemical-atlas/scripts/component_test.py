@@ -456,6 +456,23 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 router freezes and echoes every documented optional request default",
         checks,
     )
+    with tempfile.TemporaryDirectory() as coverage_temp:
+        coverage_input = Path(coverage_temp) / "filtered.csv"
+        coverage_input.write_text(
+            "element_or_analyte,medium\nAs,soil\n", encoding="utf-8"
+        )
+        request_coverage, request_warnings = request_runner.request_dimension_coverage(
+            coverage_input,
+            {"elements": ["As", "Cu"], "media": ["soil", "water"]},
+        )
+    require(
+        request_coverage["status"] == "partial"
+        and request_coverage["dimensions"]["elements"]["missing"] == ["Cu"]
+        and request_coverage["dimensions"]["media"]["missing"] == ["water"]
+        and len(request_warnings) == 2,
+        "D1 request execution reports every requested element and medium absent from the result",
+        checks,
+    )
     geology_route = source_router.route_sources(
         {
             "elements": ["Cu"],
@@ -2916,6 +2933,37 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 confidence declares critical-field gates and applies error gates to the boundary fixture",
         checks,
     )
+    synthetic_record = standardizer.normalize_row(
+        {
+            "record_id": "synthetic-confidence",
+            "sample_id": "synthetic-sample",
+            "element_or_analyte": "As",
+            "value": "10",
+            "unit": "mg/kg",
+            "medium": "soil",
+            "measurement_basis": "dry_total",
+            "latitude": "35",
+            "longitude": "103",
+            "source_crs": "EPSG:4326",
+            "coordinate_uncertainty_m": "10",
+            "geologic_unit": "synthetic granite",
+            "analytical_method": "ICP-MS",
+            "method_family": "ICP-MS",
+            "digestion_or_extraction": "four acid",
+            "license": "CC0-1.0",
+            "source_tier": "official_curated",
+            "source_id": "synthetic-demo-v1",
+            "source_locator": "local:fixture",
+        },
+        2,
+    )
+    require(
+        synthetic_record["operational_confidence"]["band"] == "low"
+        and "synthetic_fixture_low_cap"
+        in synthetic_record["operational_confidence"]["gates_applied"],
+        "D2 synthetic fixtures cannot receive high real-world operational confidence",
+        checks,
+    )
     production_dir = output_dir / "production-request"
     run_command(
         [
@@ -2967,7 +3015,7 @@ def check_d2(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        production_execution["execution_version"] == "geochemical-request-execution-v3"
+        production_execution["execution_version"] == "geochemical-request-execution-v4"
         and production_execution["timing"]["official_task_limit_seconds"] == 900.0
         and production_execution["timing"]["internal_budget_seconds"] == 840.0
         and production_execution["timing"]["workflow_reserve_seconds"] == 180.0
@@ -3006,10 +3054,15 @@ def check_d2(output_dir: Path) -> list[str]:
             ],
             expected_code=2,
         )
+        mismatch_summary = json_value(
+            Path(mismatch_temp) / "mismatched-source-output" / "run_summary.json"
+        )
     require(
         '"status": "incomplete_retrieval"' in mismatch_result.stderr
-        and "'source': 996" in mismatch_result.stderr,
-        "Request runner never substitutes a bundled source excluded by the frozen request",
+        and "'source': 996" in mismatch_result.stderr
+        and mismatch_summary["status"] == "incomplete_retrieval"
+        and mismatch_summary["quality_status"] == "not_evaluated",
+        "Request runner never substitutes an excluded source and always emits a structured failure summary",
         checks,
     )
     with tempfile.TemporaryDirectory() as tamper_temp:
@@ -3183,9 +3236,11 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         [Path(command[1]).name for command in source_plan["commands"]]
         == ["source_router.py", "coverage_report.py"]
+        and all(command[0] == "python3" for command in source_plan["commands"])
         and source_plan["required_outputs"]
         == ["source_route.json", "coverage.json", "coverage.md"]
         and Path(full_plan["commands"][0][1]).name == "run_atlas_request.py"
+        and full_plan["commands"][0][0] == "python3"
         and "--total-timeout-seconds" in full_plan["commands"][0]
         and full_plan["validators"]
         and mismatched_task_output_rejected,

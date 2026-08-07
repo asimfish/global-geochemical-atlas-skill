@@ -593,7 +593,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--request", type=Path, required=True, help="Request JSON conforming to request.schema.json")
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG, help="Discovered source catalog JSON")
-    parser.add_argument("--output", type=Path, help="Optional route-result JSON path; stdout is always emitted")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Optional route-result JSON path; stdout emits only a compact receipt when set",
+    )
     return parser
 
 
@@ -607,7 +611,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(rendered, encoding="utf-8")
-        print(rendered, end="")
+            print(
+                json.dumps(
+                    {
+                        "status": result["status"],
+                        "output": str(args.output),
+                        "selected_source_count": len(result["selected_sources"]),
+                        "review_source_count": len(result["review_sources"]),
+                    },
+                    ensure_ascii=False,
+                    sort_keys=True,
+                )
+            )
+        else:
+            print(rendered, end="")
         return 0
     except (OSError, SourceRoutingError) as exc:
         print(json.dumps({"status": "invalid_input", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)

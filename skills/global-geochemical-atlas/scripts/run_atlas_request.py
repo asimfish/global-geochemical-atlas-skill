@@ -351,6 +351,97 @@ def filtered_manifest(
     }
 
 
+def request_dimension_coverage(
+    filtered_input: Path, request: Mapping[str, Any]
+) -> tuple[dict[str, Any], list[str]]:
+    """Report requested element/media dimensions that survived deterministic filtering."""
+
+    try:
+        with filtered_input.open("r", encoding="utf-8-sig", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+    except (OSError, UnicodeError) as exc:
+        raise RequestRunError(
+            "incomplete_retrieval", f"cannot audit filtered request dimensions: {filtered_input}"
+        ) from exc
+    dimensions: dict[str, Any] = {}
+    warnings: list[str] = []
+    for field, request_key, label in (
+        ("element_or_analyte", "elements", "element"),
+        ("medium", "media", "medium"),
+    ):
+        requested = sorted(str(item) for item in request[request_key])
+        observed = sorted(
+            {str(row.get(field) or "") for row in rows if str(row.get(field) or "")}
+        )
+        missing = sorted(set(requested) - set(observed))
+        dimensions[request_key] = {
+            "requested": requested,
+            "observed": observed,
+            "missing": missing,
+            "status": "complete" if not missing else "partial",
+        }
+        if missing:
+            warnings.append(f"request {label} coverage missing: {', '.join(missing)}")
+    return {
+        "status": (
+            "complete"
+            if all(item["status"] == "complete" for item in dimensions.values())
+            else "partial"
+        ),
+        "dimensions": dimensions,
+    }, warnings
+
+
+def request_failure_summary(
+    status: str, message: str, args: argparse.Namespace
+) -> dict[str, Any]:
+    input_path = args.input if isinstance(args.input, Path) else None
+    return {
+        "schema_version": "global-geochemical-atlas-result-v1",
+        "status": status,
+        "quality_status": "not_evaluated",
+        "request_summary": {
+            "region_bbox": None,
+            "max_records": 0,
+            "group_by": list(standardizer.DEFAULT_GROUP_BY),
+            "minimum_group_size": 20 if args.analysis_profile == "production" else 8,
+            "robust_z_threshold": 3.5,
+        },
+        "input": {
+            "filename": input_path.name if input_path is not None else str(args.demo),
+            "sha256": sha256_file(input_path) if input_path is not None and input_path.is_file() else "0" * 64,
+            "record_count": 0,
+            "synthetic_demo": False,
+            "data_mode": "not_evaluated",
+            "not_for_scientific_interpretation": False,
+        },
+        "outputs": {},
+        "metrics": {
+            "record_count": 0,
+            "standardized_record_count": 0,
+            "valid_coordinate_count": 0,
+            "censored_record_count": 0,
+            "candidate_anomaly_count": 0,
+            "batch_qc_failed_or_incomplete_count": 0,
+            "candidate_anomaly_region_count": 0,
+            "iteration_action_required_count": 0,
+            "iteration_review_required_count": 0,
+        },
+        "coverage": {
+            "elements": [],
+            "media": [],
+            "coordinate_rate": 0.0,
+            "standardization_rate": 0.0,
+            "bbox": None,
+            "interpolation": False,
+        },
+        "limitations": [message],
+        "next_actions": [
+            "Correct the reported request failure and rerun; do not infer missing scientific fields."
+        ],
+    }
+
+
 def acquire_online_source(
     source_id: str,
     request: Mapping[str, Any],
@@ -887,6 +978,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             geology_grid=geology_filter_grid,
         )
         warnings = acquisition_warnings + warnings
+        request_coverage, coverage_warnings = request_dimension_coverage(
+            filtered_input, request
+        )
+        warnings.extend(coverage_warnings)
         filtered_acquisition: Path | None = None
         if source_manifest is not None and filtered_evidence is not None:
             filtered_acquisition = work / "request_manifest.json"
@@ -1038,6 +1133,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         workflow_summary.get("status") == "partial_success"
         or route["status"] != "ready"
         or execution_coverage_status != "covered"
+        or request_coverage["status"] != "complete"
         or bool(warnings)
     )
     if deadline.remaining_seconds <= 0:
@@ -1046,7 +1142,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "global execution budget was exhausted during final evidence packaging",
         )
     execution = {
-        "execution_version": "geochemical-request-execution-v3",
+        "execution_version": "geochemical-request-execution-v4",
         "status": "partial_success" if execution_partial else "success",
         "mode": mode,
         "analysis_profile": args.analysis_profile,
@@ -1077,6 +1173,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             else "provided_input_processed"
         ),
         "execution_coverage_status": execution_coverage_status,
+        "request_coverage": request_coverage,
         "warnings": warnings,
     }
     if execution_partial and workflow_summary.get("status") == "success":
@@ -1143,9 +1240,24 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
+        output_owned = not args.output_dir.exists() or (
+            args.output_dir.is_dir() and not any(args.output_dir.iterdir())
+        )
+    except OSError:
+        output_owned = False
+    try:
         result = run(args)
     except (OSError, ValueError, source_router.SourceRoutingError, RequestRunError) as exc:
         status = exc.status if isinstance(exc, RequestRunError) else "invalid_input"
+        if output_owned:
+            try:
+                args.output_dir.mkdir(parents=True, exist_ok=True)
+                write_json(
+                    args.output_dir / "run_summary.json",
+                    request_failure_summary(status, str(exc), args),
+                )
+            except OSError:
+                pass
         print(json.dumps({"status": status, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
         return 2
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
