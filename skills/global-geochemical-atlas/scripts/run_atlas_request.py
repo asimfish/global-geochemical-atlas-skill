@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import build_interactive_map as map_builder
 import coverage_report
 import execution_budget
 import source_adapters
@@ -31,12 +32,35 @@ WORKFLOW = SCRIPT_DIR / "run_workflow.py"
 GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 PRODUCTION_FIXTURE = SKILL_DIR / "fixtures" / "production-usgs"
 FOUR_MEDIA_FIXTURE = SKILL_DIR / "fixtures" / "four-media" / "combined-v3"
+CHINA_FIXTURE = SKILL_DIR / "fixtures" / "china" / "combined-v1"
 DEFAULT_GEOLOGY_GRID = SKILL_DIR / "assets" / "geology" / "pangaea-788537.zip"
 DEFAULT_GEOLOGY_SHA256 = (
     "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e"
 )
 PARAMETERIZED_SOURCES = {"georoc-archaean", "usgs-conus-soil"}
 DEFAULT_WORKFLOW_RESERVE_SECONDS = 180.0
+# Online-acquisition slice sizing. Sources with frozen exact-slice contracts
+# keep their checked-in sizes; every other adapter scales with the request and
+# is bounded by its registered capacity and the generator's 1000-row cap.
+FIXED_SLICE_OBSERVATIONS = {
+    "gemstat-open-archive": 56,
+    "us-wqp-sacramento-river-arsenic": 48,
+    "afsis-phase-i-wet-chemistry": 48,
+    "australia-ngsa-mercury": 48,
+}
+SLICE_DIVISORS = {
+    "norway-marchem": 4,
+    "geotraces-idp2025": 3,
+    "pangaea-north-africa-soil": 4,
+    "japan-gsj-geochemical-map": 4,
+    "japan-gsj-marine-sediment": 7,
+    "pangaea-arabian-sea-sediment": 6,
+    "georoc-antarctica-intraplate": 6,
+    "tpdc-china-mountain-soil": 5,
+    "gemas-europe": 13,
+}
+DEFAULT_PER_ANALYTE_OBSERVATIONS = 96
+GENERATOR_MAX_OBSERVATIONS = 1000
 
 
 class RequestRunError(RuntimeError):
@@ -228,6 +252,7 @@ def filter_bundle(
     output_input: Path,
     output_evidence: Path | None,
     geology_grid: standardizer.GlimGrid | None = None,
+    coordinate_mode: str = "canonical",
 ) -> tuple[int, int, list[str]]:
     try:
         with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
@@ -285,6 +310,7 @@ def filter_bundle(
 
     selected: list[dict[str, str]] = []
     exclusion_counts: dict[str, int] = {}
+    unlocated_kept = 0
     for row in rows:
         reason = None
         if row.get("element_or_analyte") not in request["elements"]:
@@ -303,7 +329,37 @@ def filter_bundle(
         elif resolved_region["key"] != "global" and not _canonical_coordinate_declared(
             row
         ):
-            reason = "bbox_unverified_crs"
+            if coordinate_mode != "reported":
+                reason = "bbox_unverified_crs"
+            else:
+                reported_latitude = str(row.get("original_latitude_raw") or "").strip()
+                reported_longitude = str(
+                    row.get("original_longitude_raw") or ""
+                ).strip()
+                if not reported_latitude and not reported_longitude:
+                    # No coordinates at all: keep for the standardized database;
+                    # the map and spatial screening exclude it downstream.
+                    unlocated_kept += 1
+                else:
+                    try:
+                        latitude = float(reported_latitude)
+                        longitude = float(reported_longitude)
+                    except ValueError:
+                        reason = "region"
+                    else:
+                        if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+                            reason = "region"
+                        else:
+                            try:
+                                inside_region = spatial_scope.coordinate_in_region(
+                                    longitude, latitude, resolved_region
+                                )
+                            except spatial_scope.SpatialScopeError as exc:
+                                raise RequestRunError(
+                                    "conflicting_evidence", str(exc)
+                                ) from exc
+                            if not inside_region:
+                                reason = "region"
         elif resolved_region["key"] != "global":
             try:
                 latitude = float(row.get("latitude") or "")
@@ -350,6 +406,12 @@ def filter_bundle(
     original_selected = len(selected)
     selected = selected[: int(request["max_records"])]
     warnings: list[str] = []
+    if unlocated_kept:
+        warnings.append(
+            f"reported coordinate mode retained {unlocated_kept} record(s) that "
+            "declare no coordinates; they stay in the standardized database but "
+            "cannot be mapped or spatially screened"
+        )
     if len(selected) < original_selected:
         warnings.append(
             f"request max_records truncated {original_selected} matching records to {len(selected)}; coverage is incomplete"
@@ -512,6 +574,63 @@ def request_failure_summary(
     }
 
 
+def declared_slice_capacity(source_id: str) -> int | None:
+    """Return a safe balanced-slice ceiling from the registered source counts."""
+
+    try:
+        entry = source_adapters.load_source_registry()["sources"][source_id]
+    except (KeyError, source_adapters.SourceAdapterError):
+        return None
+    counts = entry.get("expected_counts")
+    if not isinstance(counts, Mapping):
+        return None
+    per_analyte = counts.get("target_value_counts")
+    if isinstance(per_analyte, Mapping) and per_analyte:
+        try:
+            return min(int(item) for item in per_analyte.values()) * len(per_analyte)
+        except (TypeError, ValueError):
+            return None
+    total = counts.get("target_observations")
+    return int(total) if isinstance(total, int) else None
+
+
+def planned_slice_observations(
+    source_id: str,
+    analyte_count: int,
+    max_records: int,
+    per_analyte_observations: int = DEFAULT_PER_ANALYTE_OBSERVATIONS,
+) -> int:
+    """Return the balanced-slice size requested from the demo generator."""
+
+    if source_id in FIXED_SLICE_OBSERVATIONS:
+        balance_size = 1
+        observations = FIXED_SLICE_OBSERVATIONS[source_id]
+    elif source_id == "usgs-conus-soil":
+        balance_size = 3 * analyte_count
+        observations = balance_size * per_analyte_observations
+    elif source_id == "georoc-archaean":
+        balance_size = analyte_count
+        observations = balance_size * per_analyte_observations
+    else:
+        divisor = SLICE_DIVISORS.get(source_id)
+        if divisor is None:
+            # Frozen 48-observation contract for adapters without a registered
+            # expansion divisor (FOREGS members register 1-4 analyte classes
+            # and 48 divides all of them).
+            balance_size = 1
+            observations = 48
+        else:
+            balance_size = divisor
+            observations = max(48, divisor * per_analyte_observations)
+            capacity = declared_slice_capacity(source_id)
+            if capacity is not None:
+                observations = min(observations, capacity)
+    observations = min(observations, max_records, GENERATOR_MAX_OBSERVATIONS)
+    if balance_size > 1 and observations >= balance_size:
+        observations -= observations % balance_size
+    return observations
+
+
 def acquire_online_source(
     source_id: str,
     request: Mapping[str, Any],
@@ -520,20 +639,15 @@ def acquire_online_source(
     acquisition_mode: str,
     generated_at: str,
     timeout_seconds: float = 300.0,
+    per_analyte_observations: int = DEFAULT_PER_ANALYTE_OBSERVATIONS,
 ) -> None:
     analytes = [item for item in request["elements"]]
-    if source_id == "usgs-conus-soil":
-        balance_size = 3 * len(analytes)
-        observations = balance_size * 24
-    elif source_id == "georoc-archaean":
-        balance_size = len(analytes)
-        observations = balance_size * 24
-    else:
-        balance_size = 1
-        observations = max(48, len(analytes) * 24)
-    observations = min(observations, int(request["max_records"]))
-    if balance_size > 1 and observations >= balance_size:
-        observations -= observations % balance_size
+    observations = planned_slice_observations(
+        source_id,
+        len(analytes),
+        int(request["max_records"]),
+        per_analyte_observations,
+    )
     command = [
         sys.executable,
         str(GENERATOR),
@@ -997,6 +1111,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         args.acquisition_mode,
                         generated_at,
                         timeout_seconds=source_timeout,
+                        per_analyte_observations=args.per_analyte_observations,
                     )
                     verify_manifest_outputs(
                         acquired / "run_manifest.json",
@@ -1084,11 +1199,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 else f"online_source:{args.online_source}"
             )
         else:
-            fixture = (
-                PRODUCTION_FIXTURE
-                if args.demo == "production-usgs"
-                else FOUR_MEDIA_FIXTURE
-            )
+            fixture = {
+                "production-usgs": PRODUCTION_FIXTURE,
+                "four-media": FOUR_MEDIA_FIXTURE,
+                "china": CHINA_FIXTURE,
+            }[args.demo]
             source_input = fixture / "demo_input.csv"
             source_evidence = fixture / "sources.jsonl"
             source_manifest = fixture / "run_manifest.json"
@@ -1111,6 +1226,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             filtered_input,
             filtered_evidence,
             geology_grid=geology_filter_grid,
+            coordinate_mode=args.coordinate_mode,
         )
         warnings = acquisition_warnings + warnings
         request_coverage, coverage_warnings = request_dimension_coverage(
@@ -1143,6 +1259,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             args.analysis_profile,
             "--max-records",
             str(request["max_records"]),
+            "--coordinate-mode",
+            args.coordinate_mode,
         ]
         if filtered_evidence is not None:
             command.extend(["--evidence-jsonl", str(filtered_evidence)])
@@ -1357,13 +1475,35 @@ def build_parser() -> argparse.ArgumentParser:
         help="One routed source ID, or 'auto' to acquire and merge every compatible routed source",
     )
     parser.add_argument(
-        "--demo", choices=("production-usgs", "four-media"), default="production-usgs"
+        "--demo",
+        choices=("production-usgs", "four-media", "china"),
+        default="production-usgs",
     )
     parser.add_argument("--evidence-jsonl", type=Path)
     parser.add_argument("--acquisition-manifest", type=Path)
+    parser.add_argument(
+        "--coordinate-mode",
+        choices=map_builder.COORDINATE_MODES,
+        default="canonical",
+        help=(
+            "canonical (default) maps only verified WGS84 coordinates; reported "
+            "additionally maps reported-only coordinates with an unverified datum "
+            "and injects a prominent warning banner into interactive_map.html"
+        ),
+    )
     parser.add_argument("--cache-dir", type=Path, default=Path(".cache/data"))
     parser.add_argument(
         "--acquisition-mode", choices=("online", "cached"), default="online"
+    )
+    parser.add_argument(
+        "--per-analyte-observations",
+        type=int,
+        default=DEFAULT_PER_ANALYTE_OBSERVATIONS,
+        help=(
+            "Balanced-slice observations requested per analyte for expandable "
+            "online sources; bounded by each source's registered capacity, "
+            "max_records and the generator limit"
+        ),
     )
     parser.add_argument(
         "--source-timeout-seconds",

@@ -22,6 +22,12 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 
+# Contracts fulfilled by a hash-pinned combined fixture instead of a per-source
+# generator demo. These sources are not in assets/source_manifest.json and are
+# rebuilt from verified originals by their dedicated builder
+# (fixtures/china/combined-v1 via scripts/build_china_demo.py).
+COMBINED_FIXTURE_CONTRACTS = ("zenodo-yangtze-yellow-river-sediment",)
+
 
 class MigrationError(RuntimeError):
     """Raised when fixture migration cannot preserve one-to-one evidence."""
@@ -144,7 +150,18 @@ def expected_fixture(
 
 def migrate(demo_root: Path, *, check: bool) -> dict[str, Any]:
     registry = source_adapters.load_source_registry()
-    source_ids = sorted(v4_semantics.SOURCE_CONTRACTS)
+    registry_sources = registry.get("sources")
+    if not isinstance(registry_sources, Mapping):
+        raise MigrationError("source registry has no sources object")
+    contract_ids = set(v4_semantics.SOURCE_CONTRACTS)
+    outside_registry = sorted(contract_ids - set(registry_sources))
+    if outside_registry != sorted(COMBINED_FIXTURE_CONTRACTS):
+        raise MigrationError(
+            "source contracts outside the registry must be declared combined-"
+            f"fixture contracts; found {outside_registry}, declared "
+            f"{sorted(COMBINED_FIXTURE_CONTRACTS)}"
+        )
+    source_ids = sorted(contract_ids - set(COMBINED_FIXTURE_CONTRACTS))
     migrated: list[str] = []
     for source_id in source_ids:
         fixture_dir = demo_root / source_id

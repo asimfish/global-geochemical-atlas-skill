@@ -1,6 +1,44 @@
 {
   "schema_version": "geochemical-coordinate-policy-registry-v1",
-  "registry_version": "2026-08-07",
+  "registry_version": "2026-08-08",
+  "datum_evidence_reviews": [
+    {
+      "source_id": "australia-ngsa-mercury",
+      "status": "datum_declared_no_transformation_policy",
+      "declared_datum": "GDA94 geographic (EPSG:4283)",
+      "evidence": "The NGSA mercury CSV declares its datum in the coordinate column names LATITUDE_GDA94 and LONGITUDE_GDA94; the registered source manifest records the same statement.",
+      "citations": [
+        "NGSA total-Hg product file header, columns LATITUDE_GDA94/LONGITUDE_GDA94 (Geoscience Australia eCat 150328, doi:10.26186/150328)",
+        "assets/source_manifest.json sources.australia-ngsa-mercury.scientific_notes: 'Coordinates use GDA94 geographic coordinates (EPSG:4283); the values are retained without an unrecorded transformation.'"
+      ],
+      "fail_closed_behavior": "GDA94 values are retained as reported coordinates. Canonical WGS84 stays empty because no verified GDA94->WGS84 transformation policy is registered; registering one requires documenting the plate-motion epoch offset before any adapter may opt in via coordinate_evidence_scope=platform_policy_declared.",
+      "reviewed_at": "2026-08-08"
+    },
+    {
+      "source_id": "tpdc-china-mountain-soil",
+      "status": "datum_not_declared_indirect_evidence_only",
+      "declared_datum": null,
+      "evidence": "The ESSD data paper states that site coordinates were recorded with a consumer GPS receiver but never names a datum or EPSG code; the TPDC metadata and workbook are also silent.",
+      "citations": [
+        "Wu et al. (2025), ESSD 17, 4779, Sect. 2.1: 'At each site, the geographic coordinate was recorded using a GPS device (eTrex Venture, USA).' (doi:10.5194/essd-17-4779-2025)",
+        "TPDC dataset landing page and 'Description of the dataset.docx' (doi:10.11888/Terre.tpdc.302620): no CRS statement"
+      ],
+      "fail_closed_behavior": "A GPS-device mention is indirect evidence, not a datum declaration; consumer receivers can be configured to non-WGS84 datums. Canonical coordinates stay empty (fail closed); mapping is available only through --coordinate-mode reported with the unverified-datum banner.",
+      "reviewed_at": "2026-08-08"
+    },
+    {
+      "source_id": "georoc-archaean",
+      "status": "datum_not_declared",
+      "declared_datum": null,
+      "evidence": "GEOROC precompiled documentation describes included 'geospatial coordinates' without any datum or CRS declaration; values are compiled from heterogeneous literature sources.",
+      "citations": [
+        "https://georoc.eu/georoc/precompiled/ ('Files include metadata such as geospatial coordinates, analytical methods, ...'; no datum statement)",
+        "assets/source_manifest.json sources.georoc-archaean.scientific_notes: 'Decimal coordinates must not be labeled EPSG:4326 solely from their numeric format.'"
+      ],
+      "fail_closed_behavior": "Coordinates remain reported-only; no WGS84 bbox filtering and no canonical promotion. This also covers georoc-antarctica-intraplate, whose exact-point subset keeps the same undeclared-datum boundary.",
+      "reviewed_at": "2026-08-08"
+    }
+  ],
   "policies": [
     {
       "policy_id": "pangaea-geocode-wgs84-v1",

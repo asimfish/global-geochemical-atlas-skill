@@ -37,9 +37,9 @@
         "sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db"
       },
       "interactive_map": {
-        "bytes": 1221124,
+        "bytes": 1224459,
         "filename": "interactive_map.html",
-        "sha256": "05990c02652c270482ba7477bf4df5220a2c9f578db31cbedb0d86ffa18137fa"
+        "sha256": "b79065ecfc15d0f827b536fe4bde61c22b086c62e2738499b95d37192982208b"
       },
       "iteration_backlog": {
         "bytes": 739091,
@@ -57,9 +57,9 @@
         "sha256": "b2cc9dd4c90bbcadccd34a1538fbff06f19e441d9ff5b7f1eafca8671d4bb46e"
       },
       "samples": {
-        "bytes": 1175907,
+        "bytes": 1205833,
         "filename": "samples.geojson",
-        "sha256": "3364437bffa5db21b4174701ce5c1810fdb7812121983c420ec5680507d89d89"
+        "sha256": "aa49c417dba14011dd80cfb41f6ae2b3ec30150449f1c7dcd31e722a20b14a1f"
       },
       "source_manifest": {
         "bytes": 39820,
@@ -126,8 +126,8 @@
     "artifact_bindings": {
       "anomalies_sha256": "f7717d49b0f7cd8af8bf612d6a45eef4727bebe58f8b44286f6a02b8524c0da7",
       "database_sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db",
-      "interactive_map_sha256": "05990c02652c270482ba7477bf4df5220a2c9f578db31cbedb0d86ffa18137fa",
-      "samples_geojson_sha256": "3364437bffa5db21b4174701ce5c1810fdb7812121983c420ec5680507d89d89"
+      "interactive_map_sha256": "b79065ecfc15d0f827b536fe4bde61c22b086c62e2738499b95d37192982208b",
+      "samples_geojson_sha256": "aa49c417dba14011dd80cfb41f6ae2b3ec30150449f1c7dcd31e722a20b14a1f"
     },
     "basemap": {
       "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
@@ -200,6 +200,18 @@
         "visual_question_contract": "d3-visual-question-contract-v1"
       }
     },
+    "coordinate_mode": "canonical",
+    "coordinate_statistics": {
+      "canonical_coordinate_records": 808,
+      "coordinate_mode": "canonical",
+      "mapped_canonical_records": 808,
+      "mapped_record_count": 808,
+      "mapped_reported_fallback_records": 0,
+      "records_without_plottable_coordinates": 0,
+      "reported_fallback_records": 0,
+      "reported_only_records": 336,
+      "total_records": 1144
+    },
     "country_boundaries": {
       "asset_version": "ai4s-natural-earth-admin0-v1",
       "country_count": 177,
@@ -248,7 +260,7 @@
     "display_sample_count": 226,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1221124,
+    "html_bytes": 1224459,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 808,
@@ -411,7 +423,8 @@
       "australia",
       "custom_bbox"
     ],
-    "samples_geojson_bytes": 1175907,
+    "reported_coordinate_banner": false,
+    "samples_geojson_bytes": 1205833,
     "scope_excluded_mappable_record_count": 0,
     "source_mappable_record_count": 808,
     "spatial_scope": {
@@ -429,7 +442,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-dual-scope-atlas-v4",
-    "template_sha256": "5ce02ad69b9045b31856b4303571c1c4a82c268bfb35fef234c91b12ca802ac4",
+    "template_sha256": "6e60a3aab15ee08b4d723aeefa433f42691de79cda89cd43dc0fe5b9c85ba1e4",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "atlas-progressive-disclosure-v2",

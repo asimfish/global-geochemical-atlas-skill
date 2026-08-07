@@ -171,6 +171,14 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "registered_AR_or_XRF_method_contract",
         "citation_scope": "dataset",
     },
+    "zenodo-yangtze-yellow-river-sediment": {
+        "sample_type_raw": "river sediment size-fraction separate",
+        "sample_type": "sediment_river_fraction",
+        "sample_type_mapping_status": "dataset_constant",
+        "sediment_environment": "river",
+        "method_missing_reason": "workbook_reports_no_analytical_method",
+        "citation_scope": "dataset",
+    },
 }
 
 SOIL_TYPE_MAP = {
@@ -380,6 +388,16 @@ def _geographic_semantics(
         result["geographic_context_raw"] = " / ".join(
             part
             for part in (result["survey_area"], _text(evidence.get("site")))
+            if part
+        )
+    elif source_id == "zenodo-yangtze-yellow-river-sediment":
+        result["survey_area"] = _text(evidence.get("river_system"))
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                result["survey_area"],
+                _text(evidence.get("sample_label")),
+            )
             if part
         )
     elif source_id == "gemas-europe":
