@@ -157,7 +157,7 @@ def _exact_midpoint(fields: Mapping[str, Any], minimum: str, maximum: str) -> st
 def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
     """Return sample_id, region, latitude, longitude and source CRS."""
 
-    if source_id == "georoc-archaean":
+    if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
         return (
             _text(fields.get("SAMPLE NAME")) or _text(fields.get("UNIQUE_ID")),
             _text(fields.get("LOCATION")),
@@ -273,6 +273,22 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             _text(fields.get("Location")) or "Arabian Sea",
             _text(fields.get("Latitude")),
             _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id == "tpdc-china-mountain-soil":
+        return (
+            "|".join((_text(fields.get("Sam.No")), _text(fields.get("Horizons")))),
+            _text(fields.get("Mountain")),
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")),
+        )
+    if source_id == "gemas-europe":
+        return (
+            _text(fields.get("_physical_sample_id")),
+            _text(fields.get("COUNTRY")),
+            _text(fields.get("YCOO")),
+            _text(fields.get("XCOO")),
             _text(fields.get("_source_crs")) or "EPSG:4326",
         )
     raise FullProfileError(f"no sample/place mapping for {source_id}")
@@ -397,6 +413,13 @@ def _semantic_evidence(source_id: str, fields: Mapping[str, Any], record_id: str
     elif source_id == "pangaea-arabian-sea-sediment":
         evidence["event"] = _text(fields.get("Event"))
         evidence["location"] = _text(fields.get("Location")) or "Arabian Sea"
+    elif source_id == "tpdc-china-mountain-soil":
+        evidence["reported_horizon"] = _text(fields.get("Horizons"))
+        evidence["mountain"] = _text(fields.get("Mountain"))
+        evidence["site"] = _text(fields.get("site"))
+    elif source_id == "gemas-europe":
+        evidence["sample_type"] = _text(fields.get("TYPE_"))
+        evidence["country_raw"] = _text(fields.get("COUNTRY"))
     return evidence
 
 
@@ -452,7 +475,9 @@ def _observation(
         "license": _text((registry_entry.get("license") or {}).get("spdx")),
         "grain_fraction": _text(raw.fields.get("_grain_fraction")),
         "material_raw": _text(raw.fields.get("MATERIAL")),
-        "lithology_raw": _text(raw.fields.get("ROCK NAME")),
+        "lithology_raw": _text(raw.fields.get("ROCK NAME")) or (
+            _text(raw.fields.get("Rock Group")) if source_id == "tpdc-china-mountain-soil" else ""
+        ),
         "geologic_age_raw": _text(raw.fields.get("AGE")),
         "tectonic_setting_raw": _text(raw.fields.get("TECTONIC SETTING")),
     }

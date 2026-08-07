@@ -2576,6 +2576,172 @@
         "One sample label occurs twice as separate analytical rows; source row identity is retained so the replicate is not overwritten.",
         "Core type, water depth and sediment depth are retained independently from elemental values."
       ]
+    },
+    "georoc-antarctica-intraplate": {
+      "adapter": "georoc_dataverse_member",
+      "title": "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member",
+      "publisher": "DIGIS Team, Göttingen University",
+      "dataset_doi": "10.25625/RZZ9VM",
+      "dataset_version": "12.0",
+      "release_date": "2026-06-11",
+      "data_generated_at": "2026-06-01",
+      "landing_page": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
+      "metadata_url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/RZZ9VM&version=12.0",
+      "media": ["rock"],
+      "geographic_scope": "antarctica-intraplate-volcanics-partial",
+      "download": {
+        "mode": "versioned-dataverse-member",
+        "max_bytes": 1000000,
+        "accepted_content_types": ["text/csv", "application/octet-stream"],
+        "encoding": "Windows-1252",
+        "files": [{
+          "file_id": "UYO5XO",
+          "dataverse_file_id": 173608,
+          "file_doi": "10.25625/RZZ9VM/UYO5XO",
+          "filename": "2026-06-RZZ9VM_ANTARCTICA.csv",
+          "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original",
+          "bytes": 367799
+        }]
+      },
+      "required_fields": ["CITATIONS", "TECTONIC SETTING", "LOCATION", "LATITUDE MIN", "LATITUDE MAX", "LONGITUDE MIN", "LONGITUDE MAX", "SAMPLE NAME", "ROCK NAME", "AGE", "ROCK TYPE", "MATERIAL", "AS(PPM)", "CR(PPM)", "CU(PPM)", "HG(PPM)", "NI(PPM)", "PB(PPM)", "ZN(PPM)", "UNIQUE_ID"],
+      "target_analytes": {"As": "AS(PPM)", "Cr": "CR(PPM)", "Cu": "CU(PPM)", "Hg": "HG(PPM)", "Ni": "NI(PPM)", "Pb": "PB(PPM)", "Zn": "ZN(PPM)"},
+      "expected_counts": {
+        "source_rows": 424,
+        "unique_ids": 424,
+        "distinct_sample_names": 407,
+        "rows_with_any_target": 313,
+        "rows_without_targets": 111,
+        "target_observations": 1183,
+        "complete_coordinate_rows": 424,
+        "exact_point_rows": 423,
+        "exact_point_target_observations": 1181,
+        "citation_ids": 18,
+        "references_with_doi": 15,
+        "age_rows": 396,
+        "rock_types": {"MET": 175, "PER": 9, "PLU": 161, "VOL": 79},
+        "target_observations_by_analyte": {"As": 15, "Cr": 241, "Cu": 187, "Hg": 0, "Ni": 267, "Pb": 276, "Zn": 197}
+      },
+      "license": {"spdx": "CC-BY-SA-4.0", "name": "Creative Commons Attribution-ShareAlike 4.0 International", "url": "https://creativecommons.org/licenses/by-sa/4.0/"},
+      "citation": "DIGIS Team (2026). GEOROC Compilation: Intraplate Volcanic Rocks, Version 12.0. GRO.data. https://doi.org/10.25625/RZZ9VM",
+      "redistribution": "Research analysis with attribution under CC BY-SA 4.0; the full publisher member remains outside Git.",
+      "scientific_notes": [
+        "The member contains discrete published Antarctica samples, not a regular continental grid.",
+        "Only 423 rows are exact points; the remaining coordinate range is retained as an area and is not converted to an invented midpoint.",
+        "The precompiled member does not encode the winning row-level analytical method, so method_missing_reason remains explicit.",
+        "Numeric zero is retained as reported because the member has no qualifier or detection-limit fields."
+      ]
+    },
+    "tpdc-china-mountain-soil": {
+      "adapter": "tpdc_china_mountain_soil",
+      "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains",
+      "publisher": "National Tibetan Plateau / Third Pole Environment Data Center",
+      "dataset_doi": "10.11888/Terre.tpdc.302620",
+      "publication_doi": "10.5194/essd-17-4779-2025",
+      "dataset_pid": "18406.11.Terre.tpdc.302620",
+      "dataset_version": "tpdc-file-2025-07-23",
+      "release_date": "2025-07-23",
+      "landing_page": "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+      "metadata_url": "https://data.tpdc.ac.cn/view/metadataView/detail/",
+      "media": ["soil"],
+      "geographic_scope": "china-30-mountain-ecosystems-partial",
+      "download": {
+        "mode": "official-post-bundle-extracted-members",
+        "bundle_file_id": "d4c22475-e614-42d2-b8ec-d768f1c26426",
+        "bundle_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426",
+        "bundle_bytes": 1828683,
+        "files": [
+          {"file_id": "soil-dataset", "filename": "Soil dataset.xlsx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 577715},
+          {"file_id": "bulk-density-supplement", "filename": "Soil bulk density.xlsx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 33386},
+          {"file_id": "dataset-description", "filename": "Description of the dataset.docx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 1246886}
+        ]
+      },
+      "required_fields": ["Climaticzones", "Mountain", "site", "Sam.No", "Horizons", "Latitude", "Longitude", "Rock Class", "Rock Group", "Soil Order", "Great Soil Group", "Cr", "Cu", "Ni", "Pb", "Zn"],
+      "target_analytes": {"Cr": "Cr", "Cu": "Cu", "Ni": "Ni", "Pb": "Pb", "Zn": "Zn"},
+      "expected_counts": {
+        "physical_rows": 1314,
+        "distinct_profiles": 485,
+        "distinct_sites": 166,
+        "distinct_mountains": 30,
+        "horizon_counts": {"A": 481, "C": 452, "O": 381},
+        "target_observations": 6570,
+        "target_value_counts": {"Cr": 1314, "Cu": 1314, "Ni": 1314, "Pb": 1314, "Zn": 1314}
+      },
+      "license": {"spdx": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0 International", "url": "https://creativecommons.org/licenses/by/4.0/"},
+      "citation": "Zhang et al. (2025). A multi-element dataset of soil profiles across climatic zones in China's mountains. ESSD 17, 4779–4797. https://doi.org/10.5194/essd-17-4779-2025; dataset https://doi.org/10.11888/Terre.tpdc.302620",
+      "redistribution": "Research analysis with attribution under CC BY 4.0; full workbooks remain outside Git.",
+      "scientific_notes": [
+        "The 166 sites in 30 mountain ecosystems are not uniform nationwide coverage.",
+        "O, A and C horizons remain separate comparison groups.",
+        "Rock Group is retained as lithology_raw and is not silently promoted to a mapped geologic unit.",
+        "The source CRS is not declared; coordinates are preserved without an inferred EPSG code.",
+        "The bulk-density supplement has conflicts and never silently overwrites the main workbook."
+      ]
+    },
+    "gemas-europe": {
+      "adapter": "gemas_gsi_dbf",
+      "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)",
+      "publisher": "Geological Survey Ireland distribution of the EuroGeoSurveys GEMAS project",
+      "dataset_doi": null,
+      "dataset_pid": "data.gov.ie:0c6c5bbc-20a7-4011-8585-7befb511a4b4",
+      "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+      "release_date": "2024-04-02",
+      "landing_page": "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
+      "metadata_url": "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer",
+      "media": ["soil"],
+      "geographic_scope": "europe-low-density-agricultural-and-grazing-soil",
+      "download": {
+        "mode": "pinned-official-zip-dbf-members",
+        "max_bytes": 10000000,
+        "accepted_content_types": ["application/zip", "application/octet-stream"],
+        "files": [{
+          "file_id": "1725dd24-1b2f-46d5-bf24-ad2db5ee176e",
+          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+          "bytes": 4307359,
+          "required_members": ["IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf", "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf"],
+          "member_contracts": [
+            {"filename": "IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf", "sample_type": "Ap", "record_count": 2113, "field_count": 138},
+            {"filename": "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf", "sample_type": "Gr", "record_count": 2024, "field_count": 130}
+          ]
+        }]
+      },
+      "required_fields": ["ID", "COUNTRY", "TYPE_", "TYPE2", "XCOO", "YCOO", "AS_", "CR", "CU", "HG", "NI", "PB", "ZN", "AS_XRF", "CR_XRF", "CU_XRF", "NI_XRF", "PB_XRF", "ZN_XRF"],
+      "analysis_groups": {
+        "AR": {
+          "target_analytes": {"As": "AS_", "Cr": "CR", "Cu": "CU", "Hg": "HG", "Ni": "NI", "Pb": "PB", "Zn": "ZN"},
+          "detection_limits": {"As": 0.1, "Cr": 0.5, "Cu": 0.01, "Hg": 0.005, "Ni": 0.1, "Pb": 0.01, "Zn": 0.1},
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "digestion_or_extraction": "15 g soil; 90 mL aqua regia; 95 C for one hour; diluted to 300 mL with 5% HCl",
+          "grain_fraction": "<2 mm"
+        },
+        "XRF": {
+          "target_analytes": {"As": "AS_XRF", "Cr": "CR_XRF", "Cu": "CU_XRF", "Ni": "NI_XRF", "Pb": "PB_XRF", "Zn": "ZN_XRF"},
+          "detection_limits": {"As": 3, "Cr": 4, "Cu": 5, "Ni": 3, "Pb": 3, "Zn": 3},
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "digestion_or_extraction": "fused bead preparation after milling",
+          "grain_fraction": "<63 um"
+        }
+      },
+      "expected_counts": {
+        "physical_samples": 4131,
+        "analysis_records": 8262,
+        "country_labels": 33,
+        "target_observations": 53703,
+        "analysis_group_observations": {"AR": 28917, "XRF": 24786},
+        "target_value_counts": {"As": 8262, "Cr": 8262, "Cu": 8262, "Hg": 4131, "Ni": 8262, "Pb": 8262, "Zn": 8262}
+      },
+      "license": {"spdx": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0 International", "url": "https://creativecommons.org/licenses/by/4.0/"},
+      "citation": "Geological Survey Ireland (2024), GSI GEMAS European Geochemical Data; EuroGeoSurveys GEMAS project.",
+      "redistribution": "Research analysis with attribution under CC BY 4.0; full source ZIP remains outside Git.",
+      "scientific_notes": [
+        "Ap and Gr are low-density coordinated European sampling campaigns, not continuous soil coverage.",
+        "Modified aqua-regia and XRF values are separate measurement bases and comparison partitions.",
+        "Six blank DBF placeholders are excluded by TYPE_, country and coordinate validation.",
+        "XRF half-detection-limit substitutions are flagged because original qualifiers cannot be recovered.",
+        "GSI is the distribution publisher and GEMAS is the upstream sampling lineage."
+      ]
     }
   }
 }

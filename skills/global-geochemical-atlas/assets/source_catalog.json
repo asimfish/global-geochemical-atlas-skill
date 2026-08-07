@@ -85,6 +85,38 @@
         "Precompiled selected values are not an unfiltered set of every replicate determination."
       ]
     },
+    "georoc-antarctica-intraplate": {
+      "title": "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member",
+      "publisher": "DIGIS Team, Goettingen University",
+      "source_kind": "disciplinary_repository",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock"],
+      "coverage": {
+        "extent_class": "continental_partial",
+        "regions": ["antarctica-intraplate-volcanics"],
+        "notes": "424 literature-linked whole-rock rows; a discrete compilation, not uniform Antarctica coverage."
+      },
+      "identifiers": {"dataset_doi": "10.25625/RZZ9VM", "file_doi": "10.25625/RZZ9VM/UYO5XO", "dataverse_file_id": 173608},
+      "landing_page": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
+      "interfaces": [{
+        "kind": "versioned_dataverse_member",
+        "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original",
+        "format": "cp1252_csv",
+        "access": "open",
+        "server_filters": ["dataset_doi", "dataset_version", "file_doi"]
+      }],
+      "license": {"status": "open", "id": "CC-BY-SA-4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/", "notes": "Retain GEOROC and original-publication citations."},
+      "version": {"status": "pinned", "value": "12.0", "release_date": "2026-06-11"},
+      "adapter": {"status": "implemented", "name": "georoc_dataverse_member"},
+      "evidence_urls": ["https://georoc.eu/georoc/precompiled/", "https://doi.org/10.25625/RZZ9VM", "https://doi.org/10.25625/RZZ9VM/UYO5XO"],
+      "limitations": [
+        "The compilation follows published sampling and is spatially uneven.",
+        "One coordinate range is not an exact point and is not converted to a midpoint.",
+        "The winning row-level analytical method is absent from the precompiled member.",
+        "This member shares the GEOROC compilation lineage and is not an independent rock-source family."
+      ]
+    },
     "usgs-conus-soil": {
       "title": "Geochemical and mineralogical data for soils of the conterminous United States",
       "publisher": "U.S. Geological Survey",
@@ -405,9 +437,9 @@
     },
     "gemas-europe": {
       "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)",
-      "publisher": "EuroGeoSurveys Geochemistry Expert Group",
+      "publisher": "Geological Survey Ireland distribution of the EuroGeoSurveys GEMAS project",
       "source_kind": "official_regional_program",
-      "status": "metadata_only",
+      "status": "needs_human_review",
       "production_eligible": false,
       "media": ["soil"],
       "coverage": {
@@ -415,37 +447,42 @@
         "regions": ["europe"],
         "notes": "Harmonised agricultural and grazing land soil survey for Europe."
       },
-      "identifiers": {},
-      "landing_page": "https://gemas.eurogeosurveys.org/",
+      "identifiers": {"catalog_uuid": "0c6c5bbc-20a7-4011-8585-7befb511a4b4", "resource_id": "1725dd24-1b2f-46d5-bf24-ad2db5ee176e", "arcgis_item_id": "0ce25b11e8f3412da84ff65a35fb62c7"},
+      "landing_page": "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
       "interfaces": [
         {
-          "kind": "wms_and_product_links",
-          "url": "https://gemas.eurogeosurveys.org/Links_GEMAS.htm",
-          "format": "wms_or_dataset_specific",
-          "access": "metadata_open_data_terms_to_verify",
-          "server_filters": ["map_layer"]
+          "kind": "official_bulk_download",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+          "format": "zip_shapefile_dbf",
+          "access": "open",
+          "server_filters": ["resource_id"]
         }
       ],
       "license": {
-        "status": "unresolved",
-        "id": null,
-        "url": null,
-        "notes": "Numeric data redistribution and dataset-level license require verification."
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "GSI catalogue terms are CC BY 4.0; retain GSI distribution and upstream GEMAS attribution."
       },
       "version": {
-        "status": "unresolved",
-        "value": null,
-        "release_date": null
+        "status": "pinned",
+        "value": "GSI-ArcGIS-Enterprise-republication-2024",
+        "release_date": "2024-04-02"
       },
       "adapter": {
-        "status": "not_implemented",
-        "name": null
+        "status": "implemented",
+        "name": "gemas_gsi_dbf"
       },
       "evidence_urls": [
-        "https://gemas.eurogeosurveys.org/Links_GEMAS.htm"
+        "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
+        "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer",
+        "https://gemas.eurogeosurveys.org/"
       ],
       "limitations": [
-        "Current discovery evidence identifies map services and project links but not a verified open bulk numeric release."
+        "The 4,131 valid samples are a low-density European survey, not continuous coverage.",
+        "Modified aqua-regia and XRF results are separate measurement bases.",
+        "XRF half-detection-limit substitutions cannot recover original censor qualifiers.",
+        "GSI distribution is not an independent field-sampling lineage from GEMAS."
       ]
     },
     "petdb": {
@@ -2409,8 +2446,8 @@
         "release_date": "2025-07-23"
       },
       "adapter": {
-        "status": "not_implemented",
-        "name": null
+        "status": "implemented",
+        "name": "tpdc_china_mountain_soil"
       },
       "evidence_urls": [
         "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",

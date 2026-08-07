@@ -2924,7 +2924,7 @@ class GemasEuropeAdapter(RegistryAdapter):
         try:
             with zipfile.ZipFile(output) as archive:
                 names = set(archive.namelist())
-                missing = set(entry["required_members"]) - names
+                missing = set(file_entry["required_members"]) - names
                 if missing:
                     raise SourceAdapterError(f"GEMAS ZIP member inventory changed: {sorted(missing)}")
         except zipfile.BadZipFile as exc:

@@ -18,6 +18,13 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_missing_reason": "not_reported",
         "citation_scope": "observation",
     },
+    "georoc-antarctica-intraplate": {
+        "sample_type_raw": "WR",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_missing_reason": "winning_method_not_encoded_in_precompiled_member",
+        "citation_scope": "observation",
+    },
     "usgs-conus-soil": {
         "method_missing_reason": "not_available",
         "citation_scope": "dataset",
@@ -153,6 +160,16 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "pangaea_parameter_method_metadata",
         "citation_scope": "dataset",
     },
+    "tpdc-china-mountain-soil": {
+        "method_scope": "publication",
+        "method_assignment_basis": "article_element_method_mapping",
+        "citation_scope": "dataset",
+    },
+    "gemas-europe": {
+        "method_scope": "dataset_analysis_group",
+        "method_assignment_basis": "registered_AR_or_XRF_method_contract",
+        "citation_scope": "dataset",
+    },
 }
 
 SOIL_TYPE_MAP = {
@@ -251,6 +268,20 @@ def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Map
             sample_type=mapped,
             sample_type_mapping_status="exact",
         )
+    elif source_id == "tpdc-china-mountain-soil":
+        raw = _text(evidence.get("reported_horizon"))
+        mapped = {"O": "soil_organic_horizon", "A": "soil_a_horizon", "C": "soil_c_horizon"}.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped TPDC soil horizon: {raw}")
+        result.update(sample_type_raw=raw, sample_type=mapped, sample_type_mapping_status="exact",
+                      soil_horizon_raw=raw, soil_horizon=raw)
+    elif source_id == "gemas-europe":
+        raw = _text(evidence.get("sample_type"))
+        mapped = {"Ap": ("soil_agricultural_ploughed", "Ap"), "Gr": ("soil_grazing_land", "Gr")}.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped GEMAS soil type: {raw}")
+        result.update(sample_type_raw=raw, sample_type=mapped[0], sample_type_mapping_status="exact",
+                      soil_horizon_raw=raw, soil_horizon=mapped[1])
     return result
 
 
@@ -266,7 +297,7 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
         "map_sheet": _text(row.get("map_sheet")),
         "cruise_track": _text(row.get("cruise_track")),
     }
-    if source_id == "georoc-archaean":
+    if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
         result["geographic_context_raw"] = result["geographic_context_raw"] or legacy
     elif source_id == "geotraces-idp2025":
         result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
@@ -306,6 +337,14 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
         result["geographic_context_raw"] = " / ".join(
             part for part in (result["survey_area"], result["cruise_track"]) if part
         )
+    elif source_id == "tpdc-china-mountain-soil":
+        result["survey_area"] = _text(evidence.get("mountain"))
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], _text(evidence.get("site"))) if part
+        )
+    elif source_id == "gemas-europe":
+        result["survey_area"] = _text(evidence.get("country_raw"))
+        result["geographic_context_raw"] = result["survey_area"]
     return result
 
 
