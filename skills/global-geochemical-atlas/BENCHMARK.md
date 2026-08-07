@@ -8,7 +8,7 @@ result, network-download benchmark, or claim of scientific representativeness.
 
 ## Frozen workload
 
-- Executable revision: `150c02e841859c2c6042aba5088fae955504bcbd`.
+- Measured repository revision: `6c733bf930ee8d452f5d7d1e41d1acaa4a1e42ef`.
 - Request: `fixtures/production-usgs/request.json`.
 - Demo and analysis profile: `production-usgs` and `production`.
 - Protocol: 3 warm-up runs followed by 10 measured runs.
@@ -25,15 +25,30 @@ python scripts/benchmark_workflow.py \
   --output /tmp/gga-workflow-benchmark.json
 ```
 
+For the recorded Linux compatibility run, set `CPU_PAIR` to two CPUs allowed by the
+host, then apply the official resource ceiling:
+
+```bash
+CPU_PAIR=0,1
+(
+  ulimit -v 4194304
+  /usr/bin/time -v taskset -c "$CPU_PAIR" python3.11 \
+    scripts/benchmark_workflow.py \
+    --warmups 3 --runs 10 \
+    --output /tmp/gga-workflow-benchmark.json
+)
+```
+
 ## Recorded result
 
 | Metric | Result |
 |---|---:|
 | Successful measured runs | 10 / 10 |
-| Median elapsed time | 0.504235 s |
-| Mean elapsed time | 0.506052 s |
-| Sample standard deviation | 0.005604 s |
-| Minimum / maximum | 0.500016 s / 0.517357 s |
+| Median elapsed time | 0.498914 s |
+| Mean elapsed time | 0.499149 s |
+| Sample standard deviation | 0.001686 s |
+| Minimum / maximum | 0.496472 s / 0.502118 s |
+| Peak benchmark-process RSS | 55,920 KiB |
 | Distinct result signatures | 1 |
 | Validated records per run | 996 |
 | Record-evidence entries per run | 996 |
@@ -46,14 +61,15 @@ proves the workflow but does not claim complete spatial coverage for the request
 
 ## Environment
 
-- Python 3.13.9.
+- Python 3.11.15.
 - Linux 6.8 series, x86-64.
-- 32 logical CPUs visible to the process.
+- CPU affinity restricted to 2 logical CPUs; 32 logical CPUs were present on the host.
+- Virtual-memory limit set to 4 GiB for the benchmark process and its children.
 - No network, GPU, model call, or non-standard Python runtime dependency.
 
-This is not the official 2 CPU / 4 GB evaluation container. Use the recorded result
-as a reproducible regression reference, not as a guaranteed runtime on another
-machine.
+This reproduces the official CPU count, memory ceiling, and Python compatibility on
+the local host, but it is not the official Docker image. Use the result as a
+regression reference, not as a guaranteed runtime on another machine.
 
 ## Interpretation limits
 
