@@ -105,6 +105,24 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             """
         )
 
+    def canvas_state(canvas_id: str) -> dict[str, int]:
+        return driver.execute_script(
+            """
+            const canvas=document.getElementById(arguments[0]);
+            if(!canvas||!canvas.getContext)return {width:0,height:0,opaque:0,colors:0};
+            const data=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+            const colors=new Set();let opaque=0;
+            const stride=Math.max(4,Math.floor(data.length/80000/4)*4);
+            for(let i=0;i<data.length;i+=stride){
+              if(data[i+3])opaque++;
+              colors.add(`${data[i]},${data[i+1]},${data[i+2]},${data[i+3]}`);
+              if(colors.size>500)break;
+            }
+            return {width:canvas.width,height:canvas.height,opaque,colors:colors.size};
+            """,
+            canvas_id,
+        )
+
     def activate(view: str) -> bool:
         activated = driver.execute_script(
             "const n=document.querySelector('.tab[data-view=\"'+arguments[0]+'\"]');"
@@ -163,6 +181,53 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         }
         screenshot("heatmap")
 
+        concentration = driver.execute_script(
+            """
+            const element=document.getElementById('element');
+            const color=document.getElementById('colorMode');
+            if(!element||!color)return {tested:false,reason:'controls_missing'};
+            const mode=document.getElementById('mapMode');
+            if(mode){mode.value='distribution';mode.dispatchEvent(new Event('change',{bubbles:true}));}
+            for(const option of [...element.options]){
+              if(!option.value)continue;
+              element.value=option.value;
+              element.dispatchEvent(new Event('change',{bubbles:true}));
+              color.value='value';
+              color.dispatchEvent(new Event('change',{bubbles:true}));
+              const legend=document.getElementById('legendTitle')?.innerText||'';
+              if(legend.includes('含量')||legend.includes('浓度'))
+                return {tested:true,element:option.value,legend};
+            }
+            return {tested:false,legend:document.getElementById('legendTitle')?.innerText||''};
+            """
+        )
+        interactions["concentration_encoding"] = {
+            "passed": bool(concentration.get("tested")), "evidence": concentration,
+        }
+        screenshot("concentration")
+
+        globe = driver.execute_script(
+            """
+            const control=document.getElementById('projectionMode');
+            const canvas=document.getElementById('globe');
+            if(!control||!canvas)return {tested:false,reason:'globe_controls_missing'};
+            control.value='globe';control.dispatchEvent(new Event('change',{bubbles:true}));
+            return {tested:true,display:getComputedStyle(canvas).display};
+            """
+        )
+        time.sleep(0.3)
+        globe_pixels = canvas_state("globe")
+        globe_passed = bool(
+            globe.get("tested") and globe.get("display") != "none"
+            and globe_pixels["width"] > 200 and globe_pixels["height"] > 150
+            and globe_pixels["opaque"] > 100 and globe_pixels["colors"] > 20
+        )
+        interactions["global_globe"] = {
+            "passed": globe_passed,
+            "evidence": {**globe, **globe_pixels},
+        }
+        screenshot("globe")
+
         combination_tab = activate("combinationView")
         combination = driver.execute_script(
             """
@@ -182,6 +247,30 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         }
         screenshot("combination")
 
+        database_tab = activate("databaseView")
+        time.sleep(0.2)
+        database_distribution = canvas_state("databaseDistributionCanvas")
+        database = driver.execute_script(
+            """
+            return {
+              coverage_rows:document.querySelectorAll('#databaseCoverageMatrix tbody tr').length,
+              completeness_rows:document.querySelectorAll('#databaseCompletenessChart .completeness-row').length,
+              preview_rows:document.querySelectorAll('#databaseTableBody tr').length
+            };
+            """
+        )
+        interactions["database_visuals"] = {
+            "passed": bool(
+                database_tab and database_distribution["width"] > 100
+                and database_distribution["opaque"] > 50
+                and database["coverage_rows"] > 0
+                and database["completeness_rows"] >= 5
+                and database["preview_rows"] > 0
+            ),
+            "evidence": {**database, "distribution": database_distribution},
+        }
+        screenshot("database")
+
         source_tab = activate("sourceView")
         source_rows = len(driver.find_elements("css selector", "#sourceTableBody tr"))
         source_detail = driver.execute_script(
@@ -199,10 +288,18 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             "return document.getElementById('anomalySummary')?.innerText||''"
         )
         candidate_count = initial.get("candidate_measurements") or 0
+        anomaly_density = canvas_state("anomalyDensityCanvas")
         interactions["anomaly_view"] = {
-            "passed": anomaly_tab and bool(anomaly_summary.strip()) and anomaly_rows > 0,
+            "passed": (
+                anomaly_tab and bool(anomaly_summary.strip()) and anomaly_rows > 0
+                and anomaly_density["width"] > 100
+                and anomaly_density["opaque"] > 50
+            ),
             "applicable_candidate_count": candidate_count,
-            "evidence": {"table_rows": anomaly_rows, "summary_chars": len(anomaly_summary)},
+            "evidence": {
+                "table_rows": anomaly_rows, "summary_chars": len(anomaly_summary),
+                "density": anomaly_density,
+            },
         }
         screenshot("anomalies")
 
@@ -212,7 +309,8 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             for item in logs if item.get("level") == "SEVERE"
         ]
         required_interactions = (
-            "filter_changes_result", "heatmap", "element_combination",
+            "filter_changes_result", "heatmap", "concentration_encoding",
+            "global_globe", "database_visuals", "element_combination",
             "source_drilldown", "anomaly_view",
         )
         loaded = initial["canvas_width"] > 200 and initial["canvas_height"] > 150

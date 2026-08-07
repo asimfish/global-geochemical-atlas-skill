@@ -52,7 +52,7 @@ python3 evaluation/reporting/generate_report.py \
 ```
 
 浏览器验收固定检查：页面加载与 JS error、Natural Earth 底图、可见样点、筛选是否改变结果、密度热力图、
-元素组合、来源下钻、异常页和截图。`browser_audit.json` 绑定提交 HTML 的 bytes 与 SHA-256；缺少外部审计时，
+单元素浓度编码、三维地球仪、数据库三类图表、元素组合、来源下钻、异常密度图/记录表和至少八张截图。`browser_audit.json` 绑定提交 HTML 的 bytes 与 SHA-256；缺少外部审计时，
 静态 HTML 无法获得完整 D3 分数。截图必须与审计 JSON 相邻，且每张截图的文件大小和 SHA-256 也会重新验证。
 
 统一报告把 D1 的候选/入选/拒绝/失败来源、检索平台、四介质与字段完整率，D2 的转换证据、坐标、地质、

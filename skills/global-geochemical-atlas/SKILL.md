@@ -209,13 +209,13 @@ policy 服从 [references/batch-qc-policy.schema.json](references/batch-qc-polic
 
 `anomaly_report.json` 必须包含方向、robust z、组内 n、quantified fraction、log10 median/MAD、阈值、分组键和排除原因。记录级候选之后，`d2-spatial-hypergeometric-fdr-v1` 在同一背景组内以候选总数为条件做一侧精确超几何网格富集检验，再对全部可检验网格/方向执行 BH-FDR；默认网格内外各需 demo `n≥5`/production `n≥20`、候选数≥2、`q≤0.10`。输出 `anomaly_regions.geojson` 与 `spatial_anomaly_report.json`。
 
-统计 Polygon 是固定筛查单元，不是插值面、地质/行政/污染边界。D3 另有 `visual_aggregation_only` 圆环，只做显示聚合且没有统计显著性；两者不得混称。所有异常均是 screening-only；自然背景、采样偏差、空间自相关、方法差异和人为输入都是竞争解释。任何后续解释都须回看原记录与 QC，做尺度敏感性，并取得独立的采样设计、分析质量、地质/矿物学及环境过程证据，不能直接宣称成因。
+统计 Polygon 是固定筛查单元，不是插值面、地质/行政/污染边界。D3 的候选密度图与圆环只做显示聚合，没有统计显著性；两者不得与 FDR 区域混称。所有异常均是 screening-only；自然背景、采样偏差、空间自相关、方法差异和人为输入都是竞争解释。任何后续解释都须回看原记录与 QC，做尺度敏感性，并取得独立的采样设计、分析质量、地质/矿物学及环境过程证据，不能直接宣称成因。
 
 ## 6. D3：地图与研究视图
 
-核心工作流固定生成自包含 `interactive_map.html`，不依赖 CDN。页面由真实 CSV/GeoJSON 驱动，支持元素、区域、介质、样品类型、方法、地质单元、置信度和 high/low 候选筛选；热力图编码物理采样点密度，不插值浓度。无坐标记录留在数据库/QC 中，不放到 `(0,0)`。
+核心工作流固定生成自包含 `interactive_map.html`，不依赖 CDN。页面由真实 CSV/GeoJSON 驱动，支持元素、区域、介质、样品类型、方法、地质单元、置信度和 high/low 候选筛选；全球产物提供二维世界地图与可旋转三维地球仪，区域产物锁定配置范围并隐藏全球入口。热力图编码物理采样点密度，不插值浓度；异常密度面只编码候选观测聚集，不预测未采样区。无坐标记录留在数据库/QC 中，不放到 `(0,0)`。
 
-已有 D1/D2 产物时，先生成版本化 profile，再渲染，不手写或修改 HTML 模板：
+已有 D1/D2 产物时，先生成版本化 profile，再渲染，不手写、复制或修改 HTML 模板。Agent 只负责准备合规 D1/D2 数据和少量任务参数；渲染器必须记录 `d3-dual-scope-atlas-v4`、模板 SHA-256 与 `global_globe`/`regional_focus` 变体，校验失败时不得用临时 HTML 替代：
 
 ```bash
 python scripts/create_visualization_profile.py \
@@ -237,7 +237,7 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 
 按问题选 `story`：`overview` 数据/介质，`coverage` 覆盖，`anomaly` 候选，`comparison` 组合，`database` 标准记录，`evidence` 证据链。全球请求保持 global；命名区域使用固定多边形，自定义 bbox 不冒充行政/地质边界。区域产物不得内嵌区外记录，只裁剪 HTML 与 `samples.geojson`，不改写完整 `geochemistry.csv`，并显示完整与预览口径差异。
 
-GeoJSON 必须是确定性排序的 RFC 7946 `[lon,lat]`。热力图只表示 `sample_count` 密度；删失记录计入密度与 censored fraction，但不计入浓度中位数，且禁止空间插值。数据库视图只允许输出非破坏性 `geochemistry-research-patch-v1`，不得覆盖 canonical 数据或证据。
+GeoJSON 必须是确定性排序的 RFC 7946 `[lon,lat]`。热力图只表示 `sample_count` 密度；删失记录计入密度与 censored fraction，但不计入浓度中位数，且禁止空间插值。单元素浓度色带只能使用样本量最大的同介质、basis、方法和单位可比层，其他记录以灰色区分，不能混合着色。数据库视图必须显示含量直方图、元素×介质覆盖矩阵和关键字段完整率，并只允许输出非破坏性 `geochemistry-research-patch-v1`，不得覆盖 canonical 数据或证据。
 
 元素组合只在同一物理样品和可比层内计算 log10 配对、Spearman ρ、四象限与共测覆盖；正式结论须导出 profile 及输入/profile/输出 hash，瞬时 UI 状态不算复现。REE spider 仅在明确归一化参考与元素集时启用；ternary/CLR 仅在闭合组成和删失条件成立时启用。关联不等于因果。迭代项按 [references/iteration-backlog.schema.json](references/iteration-backlog.schema.json) 标 `scientific_limit`、`action_required` 或 `review_required`。完整规则见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 

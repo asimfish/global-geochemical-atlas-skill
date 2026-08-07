@@ -144,6 +144,20 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                 errors.append("visualization map_version is unsupported")
             if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v2":
                 errors.append("visualization UI hierarchy contract is unsupported")
+            if map_report.get("template_contract_version") != map_builder.TEMPLATE_CONTRACT_VERSION:
+                errors.append("visualization template contract is unsupported")
+            expected_template_hash = workflow_validator.sha256_file(map_builder.DEFAULT_TEMPLATE)
+            if map_report.get("template_sha256") != expected_template_hash:
+                errors.append("visualization template hash differs from the canonical Skill asset")
+            expected_variant = (
+                "regional_focus"
+                if isinstance(profile, dict) and profile.get("spatial_scope") == "regional"
+                else "global_globe"
+            )
+            if map_report.get("template_variant") != expected_variant:
+                errors.append("visualization template variant does not match the spatial scope")
+            if map_report.get("database_visual_summary_schema") != "d3-database-visual-summary-v1":
+                errors.append("visualization database summary contract is unsupported")
             if map_report.get("terminology_contract") != "competition-geochemistry-v1":
                 errors.append("visualization professional terminology contract is unsupported")
             interaction_design = map_report.get("capability_matrix", {}).get(
@@ -163,6 +177,23 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                         "visualization interaction contract is missing required capability: "
                         + capability
                     )
+            if interaction_design.get("template_contract_version") != map_builder.TEMPLATE_CONTRACT_VERSION:
+                errors.append("visualization interaction template contract is unsupported")
+            output_capabilities = map_report.get("capability_matrix", {}).get("outputs", {})
+            for capability in (
+                "concentration_classified_points",
+                "database_distribution_charts",
+                "anomaly_candidate_density_surface",
+            ):
+                if output_capabilities.get(capability) is not True:
+                    errors.append(
+                        "visualization output contract is missing required capability: "
+                        + capability
+                    )
+            if expected_variant == "global_globe" and output_capabilities.get(
+                "global_interactive_globe"
+            ) is not True:
+                errors.append("global visualization does not declare the interactive globe")
             question_contract = map_report.get("visual_question_contract")
             expected_views = {"map", "database", "combination", "sources", "anomalies", "quality"}
             if not isinstance(question_contract, dict) or question_contract.get("schema_version") != "d3-visual-question-contract-v1":

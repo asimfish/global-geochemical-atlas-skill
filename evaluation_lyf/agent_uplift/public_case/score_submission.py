@@ -401,7 +401,8 @@ def browser_audit_metrics(path: Path | None, html: Path) -> tuple[bool, dict[str
         return False, {"status": "invalid", "error": str(exc)}
     interactions = audit.get("interactions") if isinstance(audit, dict) else None
     required = {
-        "filter_changes_result", "heatmap", "element_combination",
+        "filter_changes_result", "heatmap", "concentration_encoding",
+        "global_globe", "database_visuals", "element_combination",
         "source_drilldown", "anomaly_view",
     }
     interaction_pass = (
@@ -420,7 +421,7 @@ def browser_audit_metrics(path: Path | None, html: Path) -> tuple[bool, dict[str
         and isinstance(screenshots, list)
     ):
         screenshot_root = path.parent / screenshot_directory
-        screenshot_files_ok = len(screenshots) >= 5
+        screenshot_files_ok = len(screenshots) >= 8
         for item in screenshots:
             filename = item.get("file") if isinstance(item, dict) else None
             candidate = screenshot_root / str(filename or "")

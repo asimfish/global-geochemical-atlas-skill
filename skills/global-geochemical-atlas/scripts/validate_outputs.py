@@ -434,12 +434,15 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "comparisonProfile",
         "导出可复现配置",
         'id="openAnomalyRegions"',
-        "visual_aggregation_only",
+        "d3-dual-scope-atlas-v4",
+        'id="projectionMode"',
+        'id="globe"',
         'id="statisticalRegionTable"',
+        'id="anomalyDensityCanvas"',
         "spatial_anomaly_report.json",
         "样点密度热力图",
         "D2 未提供分析方法",
-        "不是与周围空间点的平均值比较",
+        "该结果比较同类样品的统计背景",
         "showAnomalyRegion",
         'id="deliverableCenter"',
         'id="taskContext"',
@@ -451,14 +454,17 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "元素组合对比",
         "数据来源与置信度说明",
         "异常区域识别结果",
-        "质量控制与自动迭代",
+        "质量控制与数据复核",
         'id="databaseView"',
+        'id="databaseDistributionCanvas"',
+        'id="databaseCoverageMatrix"',
+        'id="databaseCompletenessChart"',
+        "d3-database-visual-summary-v1",
         'id="databaseSearch"',
         'id="confidenceSummary"',
         'id="confidenceComponents"',
         'href="geochemistry.csv"',
         'href="confidence_report.json"',
-        "完整数据库以",
         "不是正确概率",
         'id="backView"',
         'id="zoomIn"',
@@ -561,6 +567,16 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors.append("run_summary candidate count does not match anomalies.geojson")
         if metrics.get("candidate_anomaly_region_count") != anomaly_region_count:
             errors.append("run_summary candidate-region count does not match anomaly_regions.geojson")
+        map_report = summary.get("map_report")
+        template_path = Path(__file__).resolve().parent.parent / "assets" / "interactive-atlas-v3.html"
+        if not isinstance(map_report, dict):
+            errors.append("run_summary map_report is missing")
+        elif (
+            map_report.get("template_contract_version") != "d3-dual-scope-atlas-v4"
+            or map_report.get("template_variant") != "global_globe"
+            or map_report.get("template_sha256") != sha256_file(template_path)
+        ):
+            errors.append("run_summary map template identity is invalid")
         transaction = summary.get("artifact_transaction")
         if (
             not isinstance(transaction, dict)

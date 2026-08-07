@@ -37,9 +37,9 @@
         "sha256": "cea0ab6aa67d3f5eb12c5b89094d193e17209fdf9884f5ab33afca2d2cdb0dbe"
       },
       "interactive_map": {
-        "bytes": 1058264,
+        "bytes": 1082945,
         "filename": "interactive_map.html",
-        "sha256": "65728e24c72de113710afb61ef3266b23a1072d8acd5f15447d84148c4fd30b4"
+        "sha256": "cbad464fdc5a69811f7f4cd77d34c58a2f9071ce3e4b15d67362cdd9d7321f70"
       },
       "iteration_backlog": {
         "bytes": 413747,
@@ -121,7 +121,7 @@
     "artifact_bindings": {
       "anomalies_sha256": "cb665d07ea297a1434abf3939da4326a40842604f0453f9e29a2e31bb68d6a0e",
       "database_sha256": "cea0ab6aa67d3f5eb12c5b89094d193e17209fdf9884f5ab33afca2d2cdb0dbe",
-      "interactive_map_sha256": "65728e24c72de113710afb61ef3266b23a1072d8acd5f15447d84148c4fd30b4",
+      "interactive_map_sha256": "cbad464fdc5a69811f7f4cd77d34c58a2f9071ce3e4b15d67362cdd9d7321f70",
       "samples_geojson_sha256": "392590e55204e6f802c1a30493573b4fd8641cafb7cdb7f95a83f3d778bcb9fe"
     },
     "basemap": {
@@ -168,18 +168,26 @@
         "regional_pan_without_scope_expansion": true,
         "research_patch_crud": "proposal_only_no_direct_mutation",
         "single_primary_navigation": true,
+        "template_contract_version": "d3-dual-scope-atlas-v4",
         "terminology_contract": "competition-geochemistry-v1"
       },
       "outputs": {
+        "anomaly_candidate_density_surface": true,
         "clickable_sample_density_heatmap": true,
+        "concentration_classified_points": true,
+        "database_distribution_charts": true,
         "element_pair_comparison": true,
         "enrichment_and_depletion_candidates": true,
+        "global_interactive_globe": true,
         "global_or_regional_distribution_map": true,
+        "regional_focus_template": true,
         "statistically_screened_anomaly_regions": true
       },
       "scientific_semantics": {
         "anomaly_basis": "D2 robust z within declared comparable background groups",
         "anomaly_contrast": "candidate_vs_comparable_group_median_and_robust_thresholds",
+        "anomaly_density_surface_encodes": "candidate observation density only",
+        "anomaly_density_surface_interpolates_concentration": false,
         "anomaly_region_semantics": "D2 fixed-cell candidate over-representation with BH-FDR is supplied separately; D3 zoom bubbles remain count-only visual aggregation",
         "element_pair_analysis": "log10_scatter_median_quadrant_shares_spearman_and_coverage_matrix",
         "heatmap_encodes": "physical_sample_density",
@@ -230,11 +238,12 @@
       "method_missing_record_count": 96,
       "sample_type_field": "medium"
     },
+    "database_visual_summary_schema": "d3-database-visual-summary-v1",
     "default_view": "all_data_sample_deduplicated",
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1058264,
+    "html_bytes": 1082945,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -404,6 +413,9 @@
       "region_key": "global",
       "region_label": "全球"
     },
+    "template_contract_version": "d3-dual-scope-atlas-v4",
+    "template_sha256": "9ffdbaf6421e9d23986a693d097da0607ed5ca0b7d6d1a308bdf790cdf88a34c",
+    "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "task-first-progressive-disclosure-v2",
     "unmappable_record_count": 96,
@@ -472,6 +484,12 @@
     "visualization_modes": [
       "distribution_points",
       "sample_density_heatmap",
+      "classified_concentration_points",
+      "database_concentration_histogram",
+      "database_element_medium_coverage_matrix",
+      "database_field_completeness",
+      "anomaly_candidate_density_surface",
+      "interactive_orthographic_globe",
       "element_pair_comparison",
       "candidate_anomaly_region_aggregation",
       "fdr_screened_candidate_anomaly_regions"
@@ -486,7 +504,7 @@
       "default_region": "global",
       "display": {
         "anomaly_grid_degrees": 2,
-        "color_by": "medium",
+        "color_by": "value",
         "map_mode": "combined",
         "show_anomaly_points": false,
         "show_anomaly_regions": true

@@ -45,7 +45,7 @@ def default_display(story: str, spatial_scope: str) -> dict[str, Any]:
         anomaly_regions = True
     return {
         "map_mode": map_mode,
-        "color_by": "medium",
+        "color_by": "value",
         "anomaly_grid_degrees": 1 if spatial_scope == "regional" else 2,
         "show_anomaly_points": False,
         "show_anomaly_regions": anomaly_regions,
@@ -114,9 +114,9 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
     scope_summary = "全球" if args.spatial_scope == "global" else region_label
     title = optional_text(args.title) or f"{scope_summary}地球化学{STORY_LABELS[args.story]}"
     subtitle = optional_text(args.subtitle) or (
-        "由标准 D1/D2 产物按任务配置确定性生成"
-        + ("；" + "，".join(filter_summary) if filter_summary else "")
-        + "。空白表示当前输入覆盖缺口，不表示元素不存在或含量为零。"
+        f"{scope_summary}范围的标准化地球化学观测"
+        + ("；筛选：" + "，".join(filter_summary) if filter_summary else "")
+        + "。空白区域表示当前数据未覆盖。"
     )
     return {
         "schema_version": map_builder.PROFILE_VERSION,

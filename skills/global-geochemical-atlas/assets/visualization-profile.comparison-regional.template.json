@@ -25,7 +25,7 @@
   },
   "display": {
     "map_mode": "combined",
-    "color_by": "medium",
+    "color_by": "value",
     "anomaly_grid_degrees": 1,
     "show_anomaly_points": false,
     "show_anomaly_regions": true

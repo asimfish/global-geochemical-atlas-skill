@@ -13,6 +13,8 @@
 `public_case/benchmark_export_crosswalk.json`、`public_case/prepare_case.py`。按 TASK 和 Skill 执行 global 有界
 多平台发现；五个锚点不是来源上限。冻结采集字节后断网完成 D1/D2/D3、五项产物和 `run.sh` clean rebuild。
 不得猜单位、CRS、方法、地质或坐标精度；删失值不插补；异常只称筛查候选。
+D3 必须按 Skill 的 profile → 官方 renderer → validator 流程生成；官方模板可用时不得另写替代 HTML，并在报告中
+保存模板契约、模板 SHA-256 和全球/区域变体。
 
 formal bundle 不含 scorer；不要自评分或伪造浏览器审计。外部控制器会执行隐藏 scorer、真实 Chromium 和统一
 报告。输出到 `submission/`，并在 `agent_report.json/md` 记录 `skill_used=true`、Skill 文件、环境、模型参数、

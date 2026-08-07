@@ -177,7 +177,7 @@ class SourceTruthScoringTest(unittest.TestCase):
             screenshot_root = root / "screenshots"
             screenshot_root.mkdir()
             screenshots = []
-            for index in range(1, 6):
+            for index in range(1, 9):
                 screenshot = screenshot_root / f"shot-{index}.png"
                 screenshot.write_bytes(f"screen-{index}".encode())
                 screenshots.append({
@@ -188,7 +188,8 @@ class SourceTruthScoringTest(unittest.TestCase):
             interactions = {
                 name: {"passed": True}
                 for name in (
-                    "filter_changes_result", "heatmap", "element_combination",
+                    "filter_changes_result", "heatmap", "concentration_encoding",
+                    "global_globe", "database_visuals", "element_combination",
                     "source_drilldown", "anomaly_view",
                 )
             }

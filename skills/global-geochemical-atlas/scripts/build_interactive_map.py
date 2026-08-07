@@ -30,6 +30,7 @@ PAYLOAD_VERSION = "d3-compact-payload-v1"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
 PROFILE_VERSION = "d3-visualization-profile-v2"
 UI_HIERARCHY_VERSION = "task-first-progressive-disclosure-v2"
+TEMPLATE_CONTRACT_VERSION = "d3-dual-scope-atlas-v4"
 VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
 TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
@@ -318,6 +319,115 @@ def load_records(
                     f"({max_points}); filter the input first"
                 )
     return records, total_records, source_mappable_records
+
+
+def database_visual_summary(path: Path) -> dict[str, Any]:
+    """Aggregate the complete canonical CSV for D3 charts without embedding every row."""
+    coverage: dict[str, dict[str, int]] = {}
+    strata: dict[tuple[str, str, str, str, str], list[float]] = {}
+    complete = {
+        "standardized": 0,
+        "coordinates": 0,
+        "method": 0,
+        "geology": 0,
+        "provenance": 0,
+        "qc": 0,
+    }
+    total = 0
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            total += 1
+            element = str(row.get("element_or_analyte") or "").strip()
+            medium = str(row.get("medium") or "").strip()
+            if element and medium:
+                coverage.setdefault(element, {})[medium] = (
+                    coverage.setdefault(element, {}).get(medium, 0) + 1
+                )
+            value = optional_float(row.get("normalized_value"))
+            unit = str(row.get("normalized_unit") or "").strip()
+            basis = str(row.get("measurement_basis") or "").strip()
+            method = str(
+                row.get("method_family") or row.get("analytical_method") or ""
+            ).strip()
+            if value is not None and unit:
+                complete["standardized"] += 1
+            latitude = optional_float(row.get("latitude"))
+            longitude = optional_float(row.get("longitude"))
+            if (
+                latitude is not None
+                and longitude is not None
+                and -90 <= latitude <= 90
+                and -180 <= longitude <= 180
+            ):
+                complete["coordinates"] += 1
+            if method:
+                complete["method"] += 1
+            if row.get("matched_geologic_unit") or row.get("geologic_unit") or row.get("lithology"):
+                complete["geology"] += 1
+            if row.get("source_id") and row.get("source_locator"):
+                complete["provenance"] += 1
+            if str(row.get("qc_flags") or "").strip():
+                complete["qc"] += 1
+            if (
+                element
+                and medium
+                and basis
+                and method
+                and unit
+                and value is not None
+                and value > 0
+                and not parse_bool_cell(row.get("censored"))
+            ):
+                strata.setdefault((element, medium, basis, method, unit), []).append(value)
+
+    distributions: dict[str, dict[str, Any]] = {}
+    by_element: dict[str, list[tuple[tuple[str, str, str, str, str], list[float]]]] = {}
+    for key, values in strata.items():
+        by_element.setdefault(key[0], []).append((key, values))
+    for element, candidates in by_element.items():
+        key, values = sorted(candidates, key=lambda item: (-len(item[1]), item[0]))[0]
+        if len(values) < 2:
+            continue
+        ordered = sorted(values)
+
+        def quantile(fraction: float) -> float:
+            index = (len(ordered) - 1) * fraction
+            lower = math.floor(index)
+            upper = min(len(ordered) - 1, lower + 1)
+            return ordered[lower] + (ordered[upper] - ordered[lower]) * (index - lower)
+
+        logs = [math.log10(value) for value in values]
+        low, high = min(logs), max(logs)
+        span = max(high - low, 1e-12)
+        bins = [0] * 16
+        for value in logs:
+            index = min(15, math.floor((value - low) / span * 16))
+            bins[index] += 1
+        distributions[element] = {
+            "element": element,
+            "medium": key[1],
+            "basis": key[2],
+            "method": key[3],
+            "unit": key[4],
+            "record_count": len(values),
+            "p10": quantile(0.1),
+            "median": quantile(0.5),
+            "p90": quantile(0.9),
+            "log10_min": low,
+            "log10_max": high,
+            "histogram": bins,
+        }
+    return {
+        "schema_version": "d3-database-visual-summary-v1",
+        "record_count": total,
+        "coverage": coverage,
+        "completeness": {
+            key: {"count": count, "rate": count / total if total else 0.0}
+            for key, count in complete.items()
+        },
+        "distributions": distributions,
+    }
 
 
 def load_json_object(path: Path | None, label: str) -> dict[str, Any]:
@@ -1023,11 +1133,18 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         ANOMALY_RENDER_MODE,
         PROFILE_VERSION,
         UI_HIERARCHY_VERSION,
+        TEMPLATE_CONTRACT_VERSION,
         VISUAL_QUESTION_VERSION,
         'id="deliverableCenter"',
         'id="databaseView"',
         'id="confidenceSummary"',
-        "完整数据库以",
+        'id="databaseDistributionCanvas"',
+        'id="databaseCoverageMatrix"',
+        'id="databaseCompletenessChart"',
+        "d3-database-visual-summary-v1",
+        'id="projectionMode"',
+        'id="globe"',
+        'id="anomalyDensityCanvas"',
         "不是正确概率",
         'id="backView"',
         'id="databaseEditor"',
@@ -1067,6 +1184,7 @@ def build_map(
         raise MapBuildError("--max-points must be between 1 and 200000")
     profile = load_visualization_profile(visualization_profile_path)
     scope_region = selected_region(profile)
+    database_summary = database_visual_summary(database)
     boundaries = load_country_boundaries(boundaries_path)
     countries_by_code = {
         str(country["iso_a3"]): country for country in boundaries["countries"]
@@ -1118,7 +1236,12 @@ def build_map(
         },
         "outputs": {
             "global_or_regional_distribution_map": True,
+            "global_interactive_globe": True,
+            "regional_focus_template": True,
             "clickable_sample_density_heatmap": True,
+            "concentration_classified_points": True,
+            "database_distribution_charts": True,
+            "anomaly_candidate_density_surface": True,
             "element_pair_comparison": True,
             "enrichment_and_depletion_candidates": True,
             "statistically_screened_anomaly_regions": anomaly_regions_path is not None,
@@ -1132,6 +1255,7 @@ def build_map(
         },
         "interaction_design": {
             "hierarchy_version": UI_HIERARCHY_VERSION,
+            "template_contract_version": TEMPLATE_CONTRACT_VERSION,
             "terminology_contract": TERMINOLOGY_CONTRACT,
             "single_primary_navigation": True,
             "compact_deliverable_dock": True,
@@ -1156,6 +1280,8 @@ def build_map(
             "visual_question_contract": VISUAL_QUESTION_VERSION,
             "heatmap_encodes": "physical_sample_density",
             "heatmap_interpolates_concentration": False,
+            "anomaly_density_surface_encodes": "candidate observation density only",
+            "anomaly_density_surface_interpolates_concentration": False,
             "anomaly_basis": "D2 robust z within declared comparable background groups",
             "anomaly_region_semantics": (
                 "D2 fixed-cell candidate over-representation with BH-FDR is supplied separately; "
@@ -1165,9 +1291,17 @@ def build_map(
             "element_pair_analysis": "log10_scatter_median_quadrant_shares_spearman_and_coverage_matrix",
         },
     }
+    template = load_html_template()
+    template_sha256 = hashlib.sha256(template.encode("utf-8")).hexdigest()
+    template_variant = (
+        "regional_focus" if profile["spatial_scope"] == "regional" else "global_globe"
+    )
     context = {
         "map_version": MAP_VERSION,
         "ui_hierarchy_version": UI_HIERARCHY_VERSION,
+        "template_contract_version": TEMPLATE_CONTRACT_VERSION,
+        "template_sha256": template_sha256,
+        "template_variant": template_variant,
         "terminology_contract": TERMINOLOGY_CONTRACT,
         "anomaly_region_render_mode": ANOMALY_RENDER_MODE,
         "visualization_profile": profile,
@@ -1178,6 +1312,7 @@ def build_map(
         "total_record_count": total_records,
         "source_mappable_record_count": source_mappable_records,
         "mappable_record_count": len(records),
+        "database_visual_summary": database_summary,
         "region_presets": REGION_PRESETS,
         "qc_report": load_json_object(qc_report_path, "QC report"),
         "confidence_report": load_json_object(confidence_report_path, "confidence report"),
@@ -1190,7 +1325,7 @@ def build_map(
         "iteration_backlog": backlog_builder.load(iteration_backlog_path) if iteration_backlog_path else backlog_builder.load(Path("")),
     }
     html = (
-        load_html_template().replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
+        template.replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
         .replace("__ANOMALIES_JSON__", safe_embedded_json(scoped_anomalies))
         .replace("__BASEMAP_JSON__", safe_embedded_json(basemap))
         .replace("__BOUNDARIES_JSON__", safe_embedded_json(boundaries))
@@ -1218,6 +1353,9 @@ def build_map(
     return {
         "map_version": MAP_VERSION,
         "ui_hierarchy_version": UI_HIERARCHY_VERSION,
+        "template_contract_version": TEMPLATE_CONTRACT_VERSION,
+        "template_sha256": template_sha256,
+        "template_variant": template_variant,
         "terminology_contract": TERMINOLOGY_CONTRACT,
         "mapped_record_count": len(records),
         "source_mappable_record_count": source_mappable_records,
@@ -1246,6 +1384,16 @@ def build_map(
         "visualization_modes": [
             "distribution_points",
             "sample_density_heatmap",
+            "classified_concentration_points",
+            "database_concentration_histogram",
+            "database_element_medium_coverage_matrix",
+            "database_field_completeness",
+            "anomaly_candidate_density_surface",
+            *(
+                ["interactive_orthographic_globe"]
+                if profile["spatial_scope"] == "global"
+                else []
+            ),
             "element_pair_comparison",
             "candidate_anomaly_region_aggregation",
             "fdr_screened_candidate_anomaly_regions",
@@ -1254,6 +1402,7 @@ def build_map(
         "region_presets": [*REGION_PRESETS, "custom_bbox"],
         "region_coverage": region_coverage(records, countries_by_code),
         "data_coverage_diagnostics": data_coverage_diagnostics(records),
+        "database_visual_summary_schema": database_summary["schema_version"],
         "external_assets": 0,
         "interpolation": False,
         "html_bytes": html_bytes,

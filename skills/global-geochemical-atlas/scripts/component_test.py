@@ -3019,7 +3019,17 @@ def check_d3(output_dir: Path) -> list[str]:
                 "applyCustomBounds",
                 'id="comboMatrix"',
                 'id="openAnomalyRegions"',
-                "visual_aggregation_only",
+                "d3-dual-scope-atlas-v4",
+                'id="projectionMode"',
+                'id="globe"',
+                "drawGlobe",
+                "polarClosure=dateLineJump",
+                'id="databaseDistributionCanvas"',
+                'id="databaseCoverageMatrix"',
+                'id="databaseCompletenessChart"',
+                "d3-database-visual-summary-v1",
+                'id="anomalyDensityCanvas"',
+                "drawAnomalyDensity",
                 "样点密度热力图",
                 "showAnomalyRegion",
                 "focusAnomalyRegion",
@@ -3035,14 +3045,14 @@ def check_d3(output_dir: Path) -> list[str]:
                 "元素组合对比",
                 "数据来源与置信度说明",
                 "异常区域识别结果",
-                "质量控制与自动迭代",
+                "质量控制与数据复核",
                 'id="zoomIn"',
                 "comboQuadrants",
                 "d3-visualization-profile-v2",
                 'id="boundaries-data"',
                 "pointInCountry",
                 "D2 未提供分析方法",
-                "不是与周围空间点的平均值比较",
+                "该结果比较同类样品的统计背景",
                 "renderPoints(true)",
                 'id="modeExplainer"',
             )
@@ -3086,7 +3096,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 'href="geochemistry.csv"',
                 'href="confidence_report.json"',
                 'href="source_manifest.json"',
-                "完整数据库以",
+                'id="databaseDistributionCanvas"',
+                'id="databaseCoverageMatrix"',
+                'id="databaseCompletenessChart"',
                 "不是正确概率",
             )
         ),
@@ -3133,8 +3145,8 @@ def check_d3(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        "全部元素按样品标识去重显示" in html
-        and "不跨元素、介质或单位比较浓度" in html,
+        "选择单个元素后显示可比浓度色带" in html
+        and "灰色：其他方法或测量基准" in html,
         "D3 defaults to a scientifically valid all-data sample overview",
         checks,
     )
@@ -3167,14 +3179,19 @@ def check_d3(output_dir: Path) -> list[str]:
         and map_report.get("spatial_scope", {}).get("output_clipped") is False
         and map_report.get("scope_excluded_mappable_record_count") == 0
         and isinstance(map_report.get("visualization_profile_warnings"), list)
-        and set(map_report.get("visualization_modes", []))
-        == {
+        and {
             "distribution_points",
             "sample_density_heatmap",
             "element_pair_comparison",
             "candidate_anomaly_region_aggregation",
             "fdr_screened_candidate_anomaly_regions",
-        }
+            "interactive_orthographic_globe",
+            "classified_concentration_points",
+            "database_concentration_histogram",
+            "database_element_medium_coverage_matrix",
+            "database_field_completeness",
+            "anomaly_candidate_density_surface",
+        }.issubset(set(map_report.get("visualization_modes", [])))
         and map_report.get("external_assets") == 0
         and map_report.get("interpolation") is False
         and all(
@@ -3184,6 +3201,13 @@ def check_d3(output_dir: Path) -> list[str]:
         and all(map_report.get("capability_matrix", {}).get("deliverables", {}).values())
         and map_report.get("ui_hierarchy_version")
         == "task-first-progressive-disclosure-v2"
+        and map_report.get("template_contract_version")
+        == "d3-dual-scope-atlas-v4"
+        and map_report.get("template_variant") == "global_globe"
+        and map_report.get("database_visual_summary_schema")
+        == "d3-database-visual-summary-v1"
+        and map_report.get("template_sha256")
+        == sha256_file(SKILL_DIR / "assets" / "interactive-atlas-v3.html")
         and map_report.get("terminology_contract")
         == "competition-geochemistry-v1"
         and map_report.get("visual_question_contract", {}).get("schema_version")

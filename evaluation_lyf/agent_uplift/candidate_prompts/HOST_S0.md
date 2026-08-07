@@ -15,6 +15,8 @@ temperature=0，`runtime_mode=host`，`skill_used=true`。
 按 TASK 冻结 global 请求执行：准备真实性锚点，主动完成有界多平台来源发现并冻结新增来源，按 Skill 断网完成
 D1/D2/D3、五项产物和 `run.sh` 干净重建。五个锚点不是来源上限；只处理四个地球化学锚点属于未完成 D1。
 不得猜单位、CRS、方法、地质或坐标精度；删失值不变成零；异常只称筛查候选。
+D3 必须按 Skill 的 profile → 官方 renderer → validator 流程生成；官方模板可用时不得另写替代 HTML，并在报告中
+保存模板契约、模板 SHA-256 和全球/区域变体。
 
 formal bundle 没有 scorer；不要自评分或伪造浏览器审计。若 development bundle 提供公开 scorer，最多三轮并
 原样保存每轮证据。外部控制器会在你退出后运行隐藏门禁、真实 Chromium、统一报告和三次独立聚合。
