@@ -29,6 +29,8 @@ python3 evaluation/docker/campaign.py run \
 ```
 
 mock 只验证运行器，不是模型成绩。正式 OpenCode 命令、网关密钥规则和证据目录见 [`docs/docker_usage.md`](docs/docker_usage.md)。
+赛事 Anthropic-compatible Qwen 地址使用 `--provider-profile qwen-anthropic`；
+该 profile 固定 `temperature=0.6` 和 `thinking=disabled`，不会自动切换备用模型。
 如果目标是让用户只开两个空目录并分别测试纯 Qwen 与 Qwen + Skill，请从 [`evaluation_lyf/agent_uplift/`](../evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md) 选择主机版或 Docker 版的一对固定 Prompt；该公开 uplift case 与 Q01–Q24 的 campaign 分开计分，Docker profile 复用这里的执行环境。
 
 Q01–Q24 也提供显式的[手工 B0 无 Skill Prompt](prompts/QWEN_B0_NO_SKILL_PROMPT.md)和[手工 S0 有 Skill Prompt](prompts/QWEN_S0_WITH_SKILL_PROMPT.md)。它们用于人工观察两个条件；正式可比较成绩仍以 Docker runner 的同题面、同资源、只改变 Skill 挂载为准。

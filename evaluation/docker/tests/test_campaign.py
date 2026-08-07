@@ -21,6 +21,7 @@ from campaign import (  # noqa: E402
     prepare_task_bundle,
     redact_file,
     redact_tree,
+    validate_provider_profile,
 )
 
 
@@ -47,6 +48,7 @@ class CampaignTests(unittest.TestCase):
             model="model",
             model_variant="",
             temperature=0.0,
+            provider_profile="openai-compatible",
             repeat=1,
             profile=profile,
             network="offline",
@@ -57,11 +59,50 @@ class CampaignTests(unittest.TestCase):
             model="model",
             model_variant="",
             temperature=0.0,
+            provider_profile="openai-compatible",
             repeat=1,
             profile=profile,
             network="offline",
         )
         self.assertEqual(first, second)
+
+    def test_qwen_anthropic_profile_is_explicit(self) -> None:
+        args = parser().parse_args(
+            [
+                "run",
+                "--provider-profile",
+                "qwen-anthropic",
+                "--provider-base-url",
+                "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+                "--temperature",
+                "0.6",
+                "--output-dir",
+                "/tmp/qwen-campaign",
+            ]
+        )
+        self.assertEqual(args.provider_profile, "qwen-anthropic")
+        self.assertEqual(args.model, "qwen3.8-max")
+        self.assertEqual(args.temperature, 0.6)
+        validate_provider_profile(
+            args.provider_profile,
+            args.provider_base_url,
+            args.model,
+            args.temperature,
+        )
+
+    def test_qwen_anthropic_profile_rejects_parameter_drift(self) -> None:
+        base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic"
+        with self.assertRaises(ValueError):
+            validate_provider_profile("qwen-anthropic", base_url, "qwen3.8-max", 0.0)
+        with self.assertRaises(ValueError):
+            validate_provider_profile("qwen-anthropic", base_url, "other-model", 0.6)
+        with self.assertRaises(ValueError):
+            validate_provider_profile(
+                "qwen-anthropic",
+                "https://example.com/apps/anthropic",
+                "qwen3.8-max",
+                0.6,
+            )
 
     def test_task_bundle_contains_only_public_projection(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
