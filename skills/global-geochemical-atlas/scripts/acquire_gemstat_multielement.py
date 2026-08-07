@@ -64,7 +64,9 @@ MEMBERS = ELEMENT_MEMBERS + base.MEMBERS[1:]
 def registered_members() -> tuple[dict[str, Any], ...]:
     """Bind range and decoded payload hashes to the checked source registry."""
 
-    registry_path = Path(__file__).resolve().parents[1] / "assets" / "source_manifest.json"
+    registry_path = (
+        Path(__file__).resolve().parents[1] / "assets" / "source_manifest.json"
+    )
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     configured = {
         item["filename"]: item
@@ -74,7 +76,9 @@ def registered_members() -> tuple[dict[str, Any], ...]:
     for specification in MEMBERS:
         registered = configured.get(specification["name"])
         if not isinstance(registered, dict):
-            raise base.AcquisitionError(f"GEMStat member is not registered: {specification['name']}")
+            raise base.AcquisitionError(
+                f"GEMStat member is not registered: {specification['name']}"
+            )
         output.append(
             {
                 **specification,
@@ -101,7 +105,9 @@ def run(cache_dir: Path, mode: str, timeout: float) -> dict[str, Any]:
     try:
         metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise base.AcquisitionError("cached Zenodo metadata is missing or invalid") from exc
+        raise base.AcquisitionError(
+            "cached Zenodo metadata is missing or invalid"
+        ) from exc
     base.validate_metadata(metadata)
 
     selected: list[dict[str, Any]] = []
@@ -114,7 +120,9 @@ def run(cache_dir: Path, mode: str, timeout: float) -> dict[str, Any]:
             try:
                 fragment = range_path.read_bytes()
             except OSError as exc:
-                raise base.AcquisitionError(f"cached range is missing: {range_path}") from exc
+                raise base.AcquisitionError(
+                    f"cached range is missing: {range_path}"
+                ) from exc
             decoded = base.parse_range_fragment(fragment, specification)
         member_path = root / "members" / specification["name"]
         base.atomic_bytes(member_path, decoded)
@@ -167,14 +175,21 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = build_parser().parse_args()
     if not args.accept_cc_by:
-        print("acquire_gemstat_multielement: --accept-cc-by is required", file=sys.stderr)
+        print(
+            "acquire_gemstat_multielement: --accept-cc-by is required", file=sys.stderr
+        )
         return 2
     try:
         manifest = run(args.cache_dir, args.mode, args.timeout)
     except (base.AcquisitionError, OSError, ValueError) as exc:
         print(f"acquire_gemstat_multielement: {exc}", file=sys.stderr)
         return 2
-    print(json.dumps({"status": "PASS", "selected_members": len(manifest["selected_members"])}, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "PASS", "selected_members": len(manifest["selected_members"])},
+            sort_keys=True,
+        )
+    )
     return 0
 
 

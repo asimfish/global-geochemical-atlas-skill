@@ -119,19 +119,25 @@ def _text(value: Any) -> str:
 
 def _atomic_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         handle.write(content)
         temporary = Path(handle.name)
     os.replace(temporary, path)
 
 
 def _atomic_json(path: Path, value: Any) -> None:
-    _atomic_text(path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    _atomic_text(
+        path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    )
 
 
 def _numeric(value: Any) -> float | None:
     text = _text(value)
-    match = re.fullmatch(r"[<>]?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)", text)
+    match = re.fullmatch(
+        r"[<>]?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)", text
+    )
     if not match:
         return None
     number = float(match.group(1))
@@ -157,7 +163,9 @@ def _exact_midpoint(fields: Mapping[str, Any], minimum: str, maximum: str) -> st
     return format(low, ".12g")
 
 
-def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
+def _sample_and_place(
+    source_id: str, fields: Mapping[str, Any]
+) -> tuple[str, str, str, str, str]:
     """Return sample_id, region, latitude, longitude and source CRS."""
 
     if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
@@ -170,7 +178,9 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
         )
     if source_id == "usgs-conus-soil":
         layer = _text(fields.get("_soil_layer"))
-        prefix = {"top-0-5cm": "Top5_", "a-horizon": "A_", "c-horizon": "C_"}.get(layer, "")
+        prefix = {"top-0-5cm": "Top5_", "a-horizon": "A_", "c-horizon": "C_"}.get(
+            layer, ""
+        )
         return (
             _text(fields.get(prefix + "LabID")) or _text(fields.get("SiteID")),
             _text(fields.get("StateID")),
@@ -206,7 +216,13 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
         )
     if source_id == "geotraces-idp2025":
         return (
-            "|".join((_text(fields.get("Cruise")), _text(fields.get("Station")), _text(fields.get("DEPTH [m]")))),
+            "|".join(
+                (
+                    _text(fields.get("Cruise")),
+                    _text(fields.get("Station")),
+                    _text(fields.get("DEPTH [m]")),
+                )
+            ),
             _text(fields.get("Cruise")),
             _text(fields.get("Latitude [degrees_north]")),
             _text(fields.get("Longitude [degrees_east]")),
@@ -252,7 +268,8 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             "California / Sacramento River at Freeport",
             _text(station.get("LatitudeMeasure")),
             _text(station.get("LongitudeMeasure")),
-            _text(station.get("HorizontalCoordinateReferenceSystemDatumName")) or "NAD83",
+            _text(station.get("HorizontalCoordinateReferenceSystemDatumName"))
+            or "NAD83",
         )
     if source_id == "australia-ngsa-mercury":
         return (
@@ -297,7 +314,12 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
     raise FullProfileError(f"no sample/place mapping for {source_id}")
 
 
-def _method(source_id: str, fields: Mapping[str, Any], field_name: str, values: Mapping[str, Any]) -> tuple[str, str]:
+def _method(
+    source_id: str,
+    fields: Mapping[str, Any],
+    field_name: str,
+    values: Mapping[str, Any],
+) -> tuple[str, str]:
     method = _text(values.get("analytical_method"))
     locator = _text(values.get("variable_metadata_locator"))
     if source_id == "norway-marchem":
@@ -311,7 +333,9 @@ def _method(source_id: str, fields: Mapping[str, Any], field_name: str, values: 
         item = fields.get("_method_metadata")
         item = item if isinstance(item, Mapping) else {}
         if _text(fields.get("Analysis Method Code")) != "0":
-            method = _text(item.get("Method Name")) or _text(item.get("Method Description"))
+            method = _text(item.get("Method Name")) or _text(
+                item.get("Method Description")
+            )
             locator = _text(item.get("_metadata_source_locator"))
     elif source_id == "pangaea-north-africa-soil":
         method = _text(fields.get("_analytical_method"))
@@ -332,19 +356,31 @@ def _target_values(
                 continue
             raw = _text(values.get("value"))
             if raw:
-                yield _text(analyte), _text(values.get("field")) or _text(analyte), raw, values
+                yield (
+                    _text(analyte),
+                    _text(values.get("field")) or _text(analyte),
+                    raw,
+                    values,
+                )
         return
     if source_id == "gemstat-open-archive":
         raw = _text(fields.get("Value"))
         if raw:
             unit = _text(fields.get("Unit"))
-            unit_basis = unit.lower().replace("µ", "u").replace("/", "_per_").replace(" ", "_")
+            unit_basis = (
+                unit.lower().replace("µ", "u").replace("/", "_per_").replace(" ", "_")
+            )
             element = _text(fields.get("_element"))
             fraction = _text(fields.get("_water_fraction"))
-            yield element, _text(fields.get("Parameter Code")), raw, {
-                "unit": _text(fields.get("Unit")),
-                "measurement_basis": f"freshwater_{fraction}_operational_fraction_{unit_basis}",
-            }
+            yield (
+                element,
+                _text(fields.get("Parameter Code")),
+                raw,
+                {
+                    "unit": _text(fields.get("Unit")),
+                    "measurement_basis": f"freshwater_{fraction}_operational_fraction_{unit_basis}",
+                },
+            )
         return
     targets = registry_entry.get("target_analytes")
     if not isinstance(targets, Mapping):
@@ -365,7 +401,11 @@ def _target_values(
                 unit = "ppm"
             elif source_id == "japan-gsj-geochemical-map":
                 target_units = fields.get("_target_units")
-                unit = _text(target_units.get(analyte)) if isinstance(target_units, Mapping) else ""
+                unit = (
+                    _text(target_units.get(analyte))
+                    if isinstance(target_units, Mapping)
+                    else ""
+                )
             elif "[mg/kg]" in candidate:
                 unit = "mg/kg"
             values: dict[str, Any] = {"unit": unit}
@@ -376,14 +416,18 @@ def _target_values(
             elif source_id == "japan-gsj-geochemical-map":
                 values["measurement_basis"] = "published_river_sediment_concentration"
             elif source_id == "pangaea-north-africa-soil":
-                values["measurement_basis"] = "HF-HNO3_digested_deflatable_surface_soil_fraction"
+                values["measurement_basis"] = (
+                    "HF-HNO3_digested_deflatable_surface_soil_fraction"
+                )
             elif source_id == "georoc-archaean":
                 values["measurement_basis"] = "reported_whole_rock_concentration"
             yield _text(analyte), candidate, raw, values
             break
 
 
-def _semantic_evidence(source_id: str, fields: Mapping[str, Any], record_id: str) -> dict[str, Any]:
+def _semantic_evidence(
+    source_id: str, fields: Mapping[str, Any], record_id: str
+) -> dict[str, Any]:
     evidence: dict[str, Any] = {"source_id": source_id, "record_id": record_id}
     if source_id.startswith("foregs-"):
         evidence["sample_type"] = _text(fields.get("_sample_type"))
@@ -437,7 +481,9 @@ def _observation(
     values: Mapping[str, Any],
     ordinal: int,
 ) -> Observation:
-    sample_id, region, latitude, longitude, source_crs = _sample_and_place(source_id, raw.fields)
+    sample_id, region, latitude, longitude, source_crs = _sample_and_place(
+        source_id, raw.fields
+    )
     latitude, longitude, reported_spatial_cell = _coordinate(latitude, longitude)
     spatial_cell = reported_spatial_cell if source_crs == "EPSG:4326" else ""
     record_id = f"profile:{raw.source_record_id}:{analyte}:{ordinal}"
@@ -446,8 +492,12 @@ def _observation(
     if method_locator:
         evidence["method_source_locator"] = method_locator
     evidence["dataset_doi"] = registry_entry.get("dataset_doi")
-    evidence["article_citations"] = [registry_entry.get("citation")] if registry_entry.get("citation") else []
-    evidence["article_dois"] = [registry_entry.get("dataset_doi")] if registry_entry.get("dataset_doi") else []
+    evidence["article_citations"] = (
+        [registry_entry.get("citation")] if registry_entry.get("citation") else []
+    )
+    evidence["article_dois"] = (
+        [registry_entry.get("dataset_doi")] if registry_entry.get("dataset_doi") else []
+    )
     unit = _text(values.get("unit"))
     if not unit and source_id == "norway-marchem":
         methods = raw.fields.get("_lab_parameters")
@@ -479,8 +529,11 @@ def _observation(
         "license": _text((registry_entry.get("license") or {}).get("spdx")),
         "grain_fraction": _text(raw.fields.get("_grain_fraction")),
         "material_raw": _text(raw.fields.get("MATERIAL")),
-        "lithology_raw": _text(raw.fields.get("ROCK NAME")) or (
-            _text(raw.fields.get("Rock Group")) if source_id == "tpdc-china-mountain-soil" else ""
+        "lithology_raw": _text(raw.fields.get("ROCK NAME"))
+        or (
+            _text(raw.fields.get("Rock Group"))
+            if source_id == "tpdc-china-mountain-soil"
+            else ""
         ),
         "geologic_age_raw": _text(raw.fields.get("AGE")),
         "tectonic_setting_raw": _text(raw.fields.get("TECTONIC SETTING")),
@@ -506,11 +559,19 @@ def _observation(
     )
 
 
-def _marchem_payload_equivalent_files(cache_root: Path, registry_entry: Mapping[str, Any]) -> list[source_adapters.DownloadedFile]:
-    archive = cache_root / "norway-marchem" / "current" / "marchem-inorganic-current.zip"
+def _marchem_payload_equivalent_files(
+    cache_root: Path, registry_entry: Mapping[str, Any]
+) -> list[source_adapters.DownloadedFile]:
+    archive = (
+        cache_root / "norway-marchem" / "current" / "marchem-inorganic-current.zip"
+    )
     if not archive.is_file():
-        raise FullProfileError("MarChem frozen archive unavailable and no current audit archive is present")
-    expected_by_id = {item["file_id"]: item for item in registry_entry["download"]["members"]}
+        raise FullProfileError(
+            "MarChem frozen archive unavailable and no current audit archive is present"
+        )
+    expected_by_id = {
+        item["file_id"]: item for item in registry_entry["download"]["members"]
+    }
     extract_dir = cache_root / "norway-marchem" / "current" / "profile-members"
     extract_dir.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(archive) as handle:
@@ -530,7 +591,9 @@ def _marchem_payload_equivalent_files(cache_root: Path, registry_entry: Mapping[
             payload = handle.read(info)
             expected = expected_by_id[file_id]
             if file_id in {"data", "metadata"} and len(payload) != expected["bytes"]:
-                raise FullProfileError(f"MarChem scientific payload byte count changed: {file_id}")
+                raise FullProfileError(
+                    f"MarChem scientific payload byte count changed: {file_id}"
+                )
             path = extract_dir / Path(info.filename).name
             path.write_bytes(payload)
             files.append(
@@ -547,21 +610,36 @@ def _marchem_payload_equivalent_files(cache_root: Path, registry_entry: Mapping[
     return files
 
 
-def _downloaded_files(source_id: str, registry_entry: Mapping[str, Any], cache_root: Path) -> tuple[list[source_adapters.DownloadedFile], dict[str, Any]]:
+def _downloaded_files(
+    source_id: str, registry_entry: Mapping[str, Any], cache_root: Path
+) -> tuple[list[source_adapters.DownloadedFile], dict[str, Any]]:
     adapter = source_adapters.get_adapter(source_id)
     candidate = adapter.discover({"sources": [source_id]})[0]
-    cache = cache_root / "foregs-adapters" if source_id.startswith("foregs-") else cache_root
+    cache = (
+        cache_root / "foregs-adapters"
+        if source_id.startswith("foregs-")
+        else cache_root
+    )
     try:
         files = adapter.download(candidate, cache, mode="cached")
         drift = {"status": "matches_registered_snapshot", "outer_archive_drift": False}
     except source_adapters.SourceAdapterError as exc:
         if source_id != "norway-marchem":
-            raise FullProfileError(f"{source_id} cache verification failed: {exc}") from exc
+            raise FullProfileError(
+                f"{source_id} cache verification failed: {exc}"
+            ) from exc
         files = _marchem_payload_equivalent_files(cache_root, registry_entry)
         drift = {
             "status": "scientific_payload_structure_equivalent_outer_archive_drift",
             "outer_archive_drift": True,
-            "current_archive_bytes": (cache_root / "norway-marchem" / "current" / "marchem-inorganic-current.zip").stat().st_size,
+            "current_archive_bytes": (
+                cache_root
+                / "norway-marchem"
+                / "current"
+                / "marchem-inorganic-current.zip"
+            )
+            .stat()
+            .st_size,
             "data_and_method_member_bytes_match": True,
             "non_scientific_info_member_changed": True,
         }
@@ -576,7 +654,10 @@ def _field_profile(observations: Sequence[Observation]) -> dict[str, Any]:
             non_empty = sum(bool(item.reported_spatial_cell) for item in observations)
         elif field == "method_or_missing_reason":
             non_empty = sum(
-                bool(_text(item.row.get("analytical_method")) or _text(item.row.get("method_missing_reason")))
+                bool(
+                    _text(item.row.get("analytical_method"))
+                    or _text(item.row.get("method_missing_reason"))
+                )
                 for item in observations
             )
         else:
@@ -716,7 +797,10 @@ def _profile_one(
                 if field == "coordinate_pair":
                     present = bool(item.reported_spatial_cell)
                 elif field == "method_or_missing_reason":
-                    present = bool(_text(row.get("analytical_method")) or _text(row.get("method_missing_reason")))
+                    present = bool(
+                        _text(row.get("analytical_method"))
+                        or _text(row.get("method_missing_reason"))
+                    )
                 else:
                     present = bool(_text(row.get(field)))
                 if present:
@@ -727,7 +811,9 @@ def _profile_one(
             media[_text(row.get("medium")) or "missing"] += 1
             water_types[_text(row.get("water_body_type")) or "not_applicable"] += 1
             water_fractions[_text(row.get("water_fraction")) or "not_applicable"] += 1
-            sediment_environments[_text(row.get("sediment_environment")) or "not_applicable"] += 1
+            sediment_environments[
+                _text(row.get("sediment_environment")) or "not_applicable"
+            ] += 1
             for field in (
                 "lithology_raw",
                 "geologic_age_raw",
@@ -745,13 +831,17 @@ def _profile_one(
                 element_comparable[element] += 1
             region_counts[item.region] += 1
             source_crs_counts[_text(row.get("source_crs")) or "not_reported"] += 1
-            uncertainty_counts[_text(row.get("coordinate_uncertainty_m")) or "not_reported"] += 1
+            uncertainty_counts[
+                _text(row.get("coordinate_uncertainty_m")) or "not_reported"
+            ] += 1
             access_status_counts[_text(row.get("access_status"))] += 1
             research_use_status_counts[_text(row.get("research_use_status"))] += 1
             attribution_required_counts[_text(row.get("attribution_required"))] += 1
             redistribution_status_counts[_text(row.get("redistribution_status"))] += 1
             publication_doi_count += bool(_text(row.get("publication_doi")))
-            upstream_primary_source_count += bool(_text(row.get("upstream_primary_source_id")))
+            upstream_primary_source_count += bool(
+                _text(row.get("upstream_primary_source_id"))
+            )
             if item.spatial_cell:
                 spatial_cells.add(item.spatial_cell)
                 element_cells[element].add(item.spatial_cell)
@@ -799,12 +889,19 @@ def _profile_one(
             if item.sample_id:
                 has_reported_coordinate = int(bool(item.reported_spatial_cell))
                 has_coordinate = int(bool(item.spatial_cell))
-                sample_batch.append((item.sample_id, has_reported_coordinate, has_coordinate))
+                sample_batch.append(
+                    (item.sample_id, has_reported_coordinate, has_coordinate)
+                )
                 element_sample_batch.append(
                     (element, item.sample_id, has_reported_coordinate, has_coordinate)
                 )
                 cube_sample_batch.append(
-                    (cube_cell["cube_id"], item.sample_id, has_reported_coordinate, has_coordinate)
+                    (
+                        cube_cell["cube_id"],
+                        item.sample_id,
+                        has_reported_coordinate,
+                        has_coordinate,
+                    )
                 )
                 if len(sample_batch) >= 25_000:
                     flush_distinct_batches()
@@ -827,10 +924,12 @@ def _profile_one(
             for field in PROFILE_FIELDS
         },
     }
-    distinct_sample_count, reported_coordinate_sample_count, coordinate_sample_count = distinct_db.execute(
-        "SELECT COUNT(*), COALESCE(SUM(has_reported_coordinate), 0), "
-        "COALESCE(SUM(has_coordinate), 0) FROM samples"
-    ).fetchone()
+    distinct_sample_count, reported_coordinate_sample_count, coordinate_sample_count = (
+        distinct_db.execute(
+            "SELECT COUNT(*), COALESCE(SUM(has_reported_coordinate), 0), "
+            "COALESCE(SUM(has_coordinate), 0) FROM samples"
+        ).fetchone()
+    )
     element_sample_counts = {
         element: (count, reported_coordinates, coordinates)
         for element, count, reported_coordinates, coordinates in distinct_db.execute(
@@ -847,7 +946,9 @@ def _profile_one(
     }
     element_details: dict[str, dict[str, Any]] = {}
     for element in sorted(elements):
-        sample_count, reported_count, coordinate_count = element_sample_counts.get(element, (0, 0, 0))
+        sample_count, reported_count, coordinate_count = element_sample_counts.get(
+            element, (0, 0, 0)
+        )
         element_details[element] = {
             "observation_count": elements[element],
             "distinct_sample_count": sample_count,
@@ -860,8 +961,8 @@ def _profile_one(
         }
     cube_rows = []
     for key, value in sorted(cube.items()):
-        cube_sample_count, cube_reported_count, cube_coordinate_count = cube_sample_counts.get(
-            value["cube_id"], (0, 0, 0)
+        cube_sample_count, cube_reported_count, cube_coordinate_count = (
+            cube_sample_counts.get(value["cube_id"], (0, 0, 0))
         )
         cube_rows.append(
             {
@@ -886,10 +987,13 @@ def _profile_one(
     distinct_db.close()
 
     expected = registry_entry.get("expected_counts")
-    expected_observations = expected.get("target_observations") if isinstance(expected, Mapping) else None
+    expected_observations = (
+        expected.get("target_observations") if isinstance(expected, Mapping) else None
+    )
     count_status = (
         "matches_registered_expected_count"
-        if isinstance(expected_observations, int) and expected_observations == observation_count
+        if isinstance(expected_observations, int)
+        and expected_observations == observation_count
         else "baseline_recorded_no_registered_count"
         if expected_observations is None
         else "drift"
@@ -944,7 +1048,9 @@ def _profile_one(
             "region_count": len(region_counts),
             "region_observation_counts": dict(sorted(region_counts.items())),
             "source_crs_observation_counts": dict(sorted(source_crs_counts.items())),
-            "coordinate_uncertainty_m_observation_counts": dict(sorted(uncertainty_counts.items())),
+            "coordinate_uncertainty_m_observation_counts": dict(
+                sorted(uncertainty_counts.items())
+            ),
         },
         "geology_coverage": {
             **{
@@ -971,11 +1077,17 @@ def _profile_one(
         },
         "usage_rights_coverage": {
             "access_status_counts": dict(sorted(access_status_counts.items())),
-            "research_use_status_counts": dict(sorted(research_use_status_counts.items())),
+            "research_use_status_counts": dict(
+                sorted(research_use_status_counts.items())
+            ),
             "license_id": _text((registry_entry.get("license") or {}).get("spdx")),
             "license_url": _text((registry_entry.get("license") or {}).get("url")),
-            "attribution_required_counts": dict(sorted(attribution_required_counts.items())),
-            "redistribution_status_counts": dict(sorted(redistribution_status_counts.items())),
+            "attribution_required_counts": dict(
+                sorted(attribution_required_counts.items())
+            ),
+            "redistribution_status_counts": dict(
+                sorted(redistribution_status_counts.items())
+            ),
             "redistribution_is_not_a_research_use_gate": True,
         },
         "automation_health": {
@@ -986,7 +1098,10 @@ def _profile_one(
             # Cache validation timestamps change on every offline replay and are
             # not acquisition evidence. Keep the publisher/source observation
             # time from the registry so checked-in profiles remain reproducible.
-            "last_successful_fetch_at": _text((registry_entry.get("download") or {}).get("observed_at")) or None,
+            "last_successful_fetch_at": _text(
+                (registry_entry.get("download") or {}).get("observed_at")
+            )
+            or None,
             "last_successful_parse_at": registry_verified_at,
             "online_fetch_health": (
                 "drift_detected_payload_equivalent"
@@ -1085,11 +1200,11 @@ def _markdown(summary: Mapping[str, Any]) -> str:
         )
     lines.extend(
         [
-        "",
-        "## 分来源",
-        "",
-        "| 来源 | 介质 | 测定 | 样品 | 来源坐标样品 | canonical 坐标样品 | 可比较测定 | canonical 1°格网 | 方法完整率 |",
-        "|---|---|---:|---:|---:|---:|---:|---:|---:|",
+            "",
+            "## 分来源",
+            "",
+            "| 来源 | 介质 | 测定 | 样品 | 来源坐标样品 | canonical 坐标样品 | 可比较测定 | canonical 1°格网 | 方法完整率 |",
+            "|---|---|---:|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for source in summary["sources"]:
@@ -1124,7 +1239,9 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
         metrics = profile["coverage_metrics"]
         medium_counts = profile["sample_type_coverage"]["media"]
         if len(medium_counts) != 1:
-            raise FullProfileError(f"{source_id} full profile must resolve to exactly one medium")
+            raise FullProfileError(
+                f"{source_id} full profile must resolve to exactly one medium"
+            )
         medium = next(iter(medium_counts))
         target = media.setdefault(
             medium,
@@ -1145,10 +1262,18 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
         lineage_id = source_adapters.source_lineage_id(source_id)
         target["lineages"].add(lineage_id)
         target["source_ids"].add(source_id)
-        target["reported_coordinate_sample_count"] += metrics["reported_coordinate_sample_count"]
-        target["valid_coordinate_sample_count"] += metrics["valid_coordinate_sample_count"]
-        target["comparable_observation_count"] += metrics["comparable_observation_count"]
-        target["reported_cells"].update(profile["spatial_coverage"]["reported_spatial_cell_ids"])
+        target["reported_coordinate_sample_count"] += metrics[
+            "reported_coordinate_sample_count"
+        ]
+        target["valid_coordinate_sample_count"] += metrics[
+            "valid_coordinate_sample_count"
+        ]
+        target["comparable_observation_count"] += metrics[
+            "comparable_observation_count"
+        ]
+        target["reported_cells"].update(
+            profile["spatial_coverage"]["reported_spatial_cell_ids"]
+        )
         target["cells"].update(profile["spatial_coverage"]["spatial_cell_ids"])
         for element, values in metrics["by_element"].items():
             cell = medium_elements.setdefault(
@@ -1169,9 +1294,15 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
             cell["distinct_sample_count"] += values["distinct_sample_count"]
             cell["lineages"].add(lineage_id)
             cell["source_ids"].add(source_id)
-            cell["reported_coordinate_sample_count"] += values["reported_coordinate_sample_count"]
-            cell["valid_coordinate_sample_count"] += values["valid_coordinate_sample_count"]
-            cell["comparable_observation_count"] += values["comparable_observation_count"]
+            cell["reported_coordinate_sample_count"] += values[
+                "reported_coordinate_sample_count"
+            ]
+            cell["valid_coordinate_sample_count"] += values[
+                "valid_coordinate_sample_count"
+            ]
+            cell["comparable_observation_count"] += values[
+                "comparable_observation_count"
+            ]
             cell["reported_cells"].update(values["reported_spatial_cell_ids"])
             cell["cells"].update(values["spatial_cell_ids"])
 
@@ -1182,7 +1313,9 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
             "independent_lineage_count": len(value["lineages"]),
             "source_ids": sorted(value["source_ids"]),
             "lineage_ids": sorted(value["lineages"]),
-            "reported_coordinate_sample_count": value["reported_coordinate_sample_count"],
+            "reported_coordinate_sample_count": value[
+                "reported_coordinate_sample_count"
+            ],
             "valid_coordinate_sample_count": value["valid_coordinate_sample_count"],
             "comparable_observation_count": value["comparable_observation_count"],
             "covered_spatial_cells": len(value["cells"]),
@@ -1195,7 +1328,11 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
         "denominator_definition": "full-cache target observations; sample IDs are deduplicated within source, not across sources",
         "media": {medium: publish(value) for medium, value in sorted(media.items())},
         "medium_elements": {
-            f"{medium}|{element}": {"medium": medium, "element": element, **publish(value)}
+            f"{medium}|{element}": {
+                "medium": medium,
+                "element": element,
+                **publish(value),
+            }
             for (medium, element), value in sorted(medium_elements.items())
         },
         "claim_boundary": (
@@ -1209,7 +1346,9 @@ def build(
     registry_path: Path,
     cache_root: Path,
     selected_source_ids: Sequence[str] | None = None,
-) -> tuple[dict[str, Any], dict[str, dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+) -> tuple[
+    dict[str, Any], dict[str, dict[str, Any]], list[dict[str, Any]], dict[str, Any]
+]:
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     sources = registry.get("sources")
     if not isinstance(sources, Mapping):
@@ -1241,14 +1380,17 @@ def build(
             {
                 "source_id": source_id,
                 "medium": _text((entry.get("media") or [""])[0]),
-                **{key: metrics[key] for key in (
-                    "observation_count",
-                    "distinct_sample_count",
-                    "reported_coordinate_sample_count",
-                    "valid_coordinate_sample_count",
-                    "comparable_observation_count",
-                    "covered_spatial_cells",
-                )},
+                **{
+                    key: metrics[key]
+                    for key in (
+                        "observation_count",
+                        "distinct_sample_count",
+                        "reported_coordinate_sample_count",
+                        "valid_coordinate_sample_count",
+                        "comparable_observation_count",
+                        "covered_spatial_cells",
+                    )
+                },
                 "method_rate": method_field["rate"],
             }
         )
@@ -1259,14 +1401,24 @@ def build(
         "as_of": registry.get("verified_at"),
         "registered_source_count": len(sources),
         "source_count": len(profiles),
-        "observation_count": sum(item["observation_count"] for item in source_summaries),
-        "distinct_sample_count": sum(item["distinct_sample_count"] for item in source_summaries),
+        "observation_count": sum(
+            item["observation_count"] for item in source_summaries
+        ),
+        "distinct_sample_count": sum(
+            item["distinct_sample_count"] for item in source_summaries
+        ),
         "reported_coordinate_sample_count": sum(
             item["reported_coordinate_sample_count"] for item in source_summaries
         ),
-        "valid_coordinate_sample_count": sum(item["valid_coordinate_sample_count"] for item in source_summaries),
-        "comparable_observation_count": sum(item["comparable_observation_count"] for item in source_summaries),
-        "covered_spatial_cells_source_sum": sum(item["covered_spatial_cells"] for item in source_summaries),
+        "valid_coordinate_sample_count": sum(
+            item["valid_coordinate_sample_count"] for item in source_summaries
+        ),
+        "comparable_observation_count": sum(
+            item["comparable_observation_count"] for item in source_summaries
+        ),
+        "covered_spatial_cells_source_sum": sum(
+            item["covered_spatial_cells"] for item in source_summaries
+        ),
         "coverage_cube_rows": len(cube_rows),
         "media": balance["media"],
         "sources": source_summaries,
@@ -1287,7 +1439,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--sources",
         help="optional comma-separated source IDs for a bounded profile rebuild",
     )
-    parser.add_argument("--check", action="store_true", help="fail if checked-in profiles differ from verified caches")
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="fail if checked-in profiles differ from verified caches",
+    )
     return parser
 
 
@@ -1306,13 +1462,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         expected_outputs: dict[Path, str] = {
             args.coverage_cube: _csv_text(cube_rows),
-            args.coverage_balance: json.dumps(balance, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            args.coverage_balance: json.dumps(
+                balance, ensure_ascii=False, indent=2, sort_keys=True
+            )
+            + "\n",
             args.report: _markdown(summary),
         }
         for source_id, profile in profiles.items():
             for filename, value in _split_profile(profile).items():
                 expected_outputs[args.output_dir / source_id / filename] = (
-                    json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+                    json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
+                    + "\n"
                 )
         manifest = {
             **summary,
@@ -1322,7 +1482,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                     "bytes": len(content.encode("utf-8")),
                     "sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
                 }
-                for path, content in sorted(expected_outputs.items(), key=lambda item: str(item[0]))
+                for path, content in sorted(
+                    expected_outputs.items(), key=lambda item: str(item[0])
+                )
             ],
         }
         expected_outputs[args.output_dir / "manifest.json"] = (
@@ -1335,10 +1497,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         else:
             for path, content in expected_outputs.items():
                 _atomic_text(path, content)
-    except (OSError, ValueError, json.JSONDecodeError, FullProfileError, source_adapters.SourceAdapterError) as exc:
+    except (
+        OSError,
+        ValueError,
+        json.JSONDecodeError,
+        FullProfileError,
+        source_adapters.SourceAdapterError,
+    ) as exc:
         print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False))
         return 1
-    print(json.dumps({"status": "PASS", "summary": summary}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "PASS", "summary": summary}, ensure_ascii=False, sort_keys=True
+        )
+    )
     return 0
 
 

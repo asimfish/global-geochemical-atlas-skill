@@ -36,7 +36,9 @@ def sha256_file(path: Path) -> str:
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -53,7 +55,9 @@ def optional_float(value: Any) -> float | None:
 
 def collection_audit(path: Path | None) -> dict[str, Any]:
     if path is None:
-        raise AuditError("--collection-info is required to prove parameter and QC coverage")
+        raise AuditError(
+            "--collection-info is required to prove parameter and QC coverage"
+        )
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -67,7 +71,11 @@ def collection_audit(path: Path | None) -> dict[str, Any]:
     if not all(isinstance(item, list) for item in (names, units, counts, schemas)):
         raise AuditError("GEOTRACES collection metadata lacks aligned variable arrays")
     targets: dict[str, Any] = {}
-    for analyte, expected_name in {"Cu": "Cu_D_CONC", "Ni": "Ni_D_CONC", "Zn": "Zn_D_CONC"}.items():
+    for analyte, expected_name in {
+        "Cu": "Cu_D_CONC",
+        "Ni": "Ni_D_CONC",
+        "Zn": "Zn_D_CONC",
+    }.items():
         try:
             index = names.index(expected_name)
         except ValueError as exc:
@@ -81,7 +89,9 @@ def collection_audit(path: Path | None) -> dict[str, Any]:
             "quality_schema_id": schemas[index],
         }
     arsenic_matches = [
-        name for name in names if re.search(r"(^|_)As(_|$)|Arsenic", str(name), flags=re.IGNORECASE)
+        name
+        for name in names
+        if re.search(r"(^|_)As(_|$)|Arsenic", str(name), flags=re.IGNORECASE)
     ]
     return {
         "source_file_sha256": sha256_file(path),
@@ -97,7 +107,9 @@ def collection_audit(path: Path | None) -> dict[str, Any]:
     }
 
 
-def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+def audit(
+    cache_dir: Path, collection_info: Path | None
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     adapter = source_adapters.get_adapter("geotraces-idp2025")
     candidate = adapter.discover({"sources": ["geotraces-idp2025"]})[0]
     downloaded = adapter.download(candidate, cache_dir, mode="cached")
@@ -122,7 +134,10 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
         reported = 0
         for analyte in TARGETS:
             values = observations.get(analyte)
-            if not isinstance(values, Mapping) or not str(values.get("value") or "").strip():
+            if (
+                not isinstance(values, Mapping)
+                or not str(values.get("value") or "").strip()
+            ):
                 continue
             reported += 1
             target_counts[analyte] += 1
@@ -153,15 +168,21 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
         "selected_cruise_station_pairs": len(stations),
         "target_value_counts": dict(sorted(target_counts.items())),
         "target_quality_flag_counts": {
-            analyte: dict(sorted(counts.items())) for analyte, counts in qc_counts.items()
+            analyte: dict(sorted(counts.items()))
+            for analyte, counts in qc_counts.items()
         },
     }
     checks = {
-        "physical_rows_match": observed_counts["physical_rows"] == expected["physical_rows"],
-        "target_rows_match": observed_counts["target_bearing_rows"] == expected["target_bearing_rows"],
-        "target_observations_match": observed_counts["target_observations"] == expected["target_observations"],
-        "target_counts_match": observed_counts["target_value_counts"] == expected["target_value_counts"],
-        "selected_cruises_match": observed_counts["selected_cruises"] == expected["selected_cruises"],
+        "physical_rows_match": observed_counts["physical_rows"]
+        == expected["physical_rows"],
+        "target_rows_match": observed_counts["target_bearing_rows"]
+        == expected["target_bearing_rows"],
+        "target_observations_match": observed_counts["target_observations"]
+        == expected["target_observations"],
+        "target_counts_match": observed_counts["target_value_counts"]
+        == expected["target_value_counts"],
+        "selected_cruises_match": observed_counts["selected_cruises"]
+        == expected["selected_cruises"],
         "selected_stations_match": observed_counts["selected_cruise_station_pairs"]
         == expected["selected_cruise_station_pairs"],
         "all_target_units_preserved": all(
@@ -175,7 +196,9 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
 
     parameter_audit = collection_audit(collection_info)
     if parameter_audit["arsenic_variable_matches"]:
-        raise AuditError("the collection inventory unexpectedly contains an arsenic variable")
+        raise AuditError(
+            "the collection inventory unexpectedly contains an arsenic variable"
+        )
     archive_members = [
         {
             "name": str(path.relative_to(data_file.path.parent)),
@@ -185,7 +208,9 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
         for path in sorted(data_file.path.parent.rglob("*"))
         if path.is_file()
     ]
-    snapshot_id = f"geotraces-idp2025:{candidate.version}:{sha256_file(archive_path)[:12]}"
+    snapshot_id = (
+        f"geotraces-idp2025:{candidate.version}:{sha256_file(archive_path)[:12]}"
+    )
     snapshot = {
         "snapshot_version": "geochemical-source-snapshot-v1",
         "source_id": candidate.source_id,
@@ -246,7 +271,9 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
         "verification_version": AUDIT_VERSION,
         "source_id": candidate.source_id,
         "acquisition": {
-            "request_url": candidate.registry_entry["download"]["exporter_landing_page"],
+            "request_url": candidate.registry_entry["download"][
+                "exporter_landing_page"
+            ],
             "observed_at": candidate.registry_entry["download"]["observed_at"],
             "selection": candidate.registry_entry["download"]["selection"],
         },
@@ -287,11 +314,18 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
-        snapshot, reconciliation, candidate_audit = audit(args.cache_dir, args.collection_info)
+        snapshot, reconciliation, candidate_audit = audit(
+            args.cache_dir, args.collection_info
+        )
         atomic_json(args.snapshot_output, snapshot)
         atomic_json(args.reconciliation_output, reconciliation)
         atomic_json(args.candidate_audit_output, candidate_audit)
-        print(json.dumps({"status": "PASS", "snapshot_id": snapshot["snapshot_id"]}, sort_keys=True))
+        print(
+            json.dumps(
+                {"status": "PASS", "snapshot_id": snapshot["snapshot_id"]},
+                sort_keys=True,
+            )
+        )
         return 0
     except (AuditError, OSError, ValueError, source_adapters.SourceAdapterError) as exc:
         print(f"audit_geotraces_snapshot: {exc}", file=sys.stderr)

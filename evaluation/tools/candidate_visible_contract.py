@@ -60,12 +60,16 @@ def _merge_schema(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]
         properties: dict[str, Any] = {}
         for key in sorted(set(left_properties) | set(right_properties)):
             if key in left_properties and key in right_properties:
-                properties[key] = _merge_schema(left_properties[key], right_properties[key])
+                properties[key] = _merge_schema(
+                    left_properties[key], right_properties[key]
+                )
             elif key in left_properties:
                 properties[key] = deepcopy(left_properties[key])
             else:
                 properties[key] = deepcopy(right_properties[key])
-        required = sorted(set(left.get("required", [])) & set(right.get("required", [])))
+        required = sorted(
+            set(left.get("required", [])) & set(right.get("required", []))
+        )
         return {"type": "object", "required": required, "properties": properties}
     if left_type == "array":
         return {
@@ -107,7 +111,11 @@ def _output_contract(path: Path) -> dict[str, Any]:
         value = json.loads(path.read_text(encoding="utf-8"))
         return {"format": "json", "json_shape": json_shape(value)}
     if suffix == ".jsonl":
-        rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        rows = [
+            json.loads(line)
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
         shape = json_shape(rows[0]) if rows else {}
         for row in rows[1:]:
             shape = _merge_schema(shape, json_shape(row))
@@ -130,20 +138,34 @@ def build_candidate_visible_contract(
     for relative in legacy_outputs:
         source = task_dir / "gold" / relative
         if not source.is_file():
-            raise FileNotFoundError(f"{task_dir.name}: missing legacy gold evidence {relative}")
+            raise FileNotFoundError(
+                f"{task_dir.name}: missing legacy gold evidence {relative}"
+            )
         contract = _output_contract(source)
         declared = constraints.get(relative, {})
         if not isinstance(declared, dict):
-            raise TypeError(f"{task_dir.name}: constraints for {relative} must be an object")
+            raise TypeError(
+                f"{task_dir.name}: constraints for {relative} must be an object"
+            )
         unknown = sorted(set(declared) - {"row_count"})
         if unknown:
-            raise ValueError(f"{task_dir.name}: unsupported public contract constraints for {relative}: {unknown}")
+            raise ValueError(
+                f"{task_dir.name}: unsupported public contract constraints for {relative}: {unknown}"
+            )
         if "row_count" in declared:
             if contract.get("format") not in {"csv", "jsonl"}:
-                raise ValueError(f"{task_dir.name}: row_count is only valid for CSV/JSONL evidence")
+                raise ValueError(
+                    f"{task_dir.name}: row_count is only valid for CSV/JSONL evidence"
+                )
             row_count = declared["row_count"]
-            if isinstance(row_count, bool) or not isinstance(row_count, int) or row_count < 0:
-                raise ValueError(f"{task_dir.name}: row_count for {relative} must be a nonnegative integer")
+            if (
+                isinstance(row_count, bool)
+                or not isinstance(row_count, int)
+                or row_count < 0
+            ):
+                raise ValueError(
+                    f"{task_dir.name}: row_count for {relative} must be a nonnegative integer"
+                )
             contract["row_count"] = row_count
         logical_outputs[relative] = contract
     return {
@@ -158,7 +180,10 @@ def _schema_at_path(schema: dict[str, Any], path: str) -> dict[str, Any] | None:
     current = schema
     for token in path.removeprefix("$.").split(".") if path not in {"", "$"} else []:
         if "anyOf" in current:
-            options = [_schema_at_path(option, ".".join([token])) for option in current["anyOf"]]
+            options = [
+                _schema_at_path(option, ".".join([token]))
+                for option in current["anyOf"]
+            ]
             current = next((option for option in options if option is not None), {})
             continue
         if current.get("type") == "array":
@@ -189,10 +214,15 @@ def validate_candidate_visible_contract(
     if contract.get("container") != metadata.get("benchmark_evidence_container"):
         errors.append(f"{question}: candidate contract container mismatch")
     if contract.get("field") != "benchmark_evidence":
-        errors.append(f"{question}: candidate contract field must be benchmark_evidence")
+        errors.append(
+            f"{question}: candidate contract field must be benchmark_evidence"
+        )
     outputs = contract.get("logical_outputs")
     if not isinstance(outputs, dict):
-        return [*errors, f"{question}: candidate contract logical_outputs must be an object"]
+        return [
+            *errors,
+            f"{question}: candidate contract logical_outputs must be an object",
+        ]
     expected_outputs = set(metadata.get("legacy_logical_outputs", []))
     if set(outputs) != expected_outputs:
         errors.append(
@@ -205,7 +235,9 @@ def validate_candidate_visible_contract(
         declared_constraints = {}
     for relative, constraint in declared_constraints.items():
         if relative not in outputs or not isinstance(constraint, dict):
-            errors.append(f"{question}: invalid candidate contract constraint target {relative!r}")
+            errors.append(
+                f"{question}: invalid candidate contract constraint target {relative!r}"
+            )
             continue
         for field, expected in constraint.items():
             if outputs[relative].get(field) != expected:
@@ -216,22 +248,30 @@ def validate_candidate_visible_contract(
 
     task_text = (task_dir / "task.md").read_text(encoding="utf-8")
     if MARKER_START not in task_text or MARKER_END not in task_text:
-        errors.append(f"{question}: task.md missing candidate-visible contract marker block")
+        errors.append(
+            f"{question}: task.md missing candidate-visible contract marker block"
+        )
 
     for check in [*grader_spec.get("checks", []), *grader_spec.get("redlines", [])]:
         relative = check.get("path")
         if relative not in outputs:
-            errors.append(f"{question}: checker {check.get('id')} path {relative!r} is not candidate-visible")
+            errors.append(
+                f"{question}: checker {check.get('id')} path {relative!r} is not candidate-visible"
+            )
             continue
         output = outputs[relative]
         check_type = str(check.get("type", ""))
         fmt = output.get("format")
         if check_type.startswith("csv_"):
             if fmt != "csv":
-                errors.append(f"{question}: checker {check.get('id')} requires CSV but contract says {fmt}")
+                errors.append(
+                    f"{question}: checker {check.get('id')} requires CSV but contract says {fmt}"
+                )
                 continue
             if output.get("row_encoding") != CSV_ROW_ENCODING:
-                errors.append(f"{question}: {relative} does not require object-encoded CSV rows")
+                errors.append(
+                    f"{question}: {relative} does not require object-encoded CSV rows"
+                )
             declared = set(output.get("columns", []))
             referenced: set[str] = set()
             referenced.update(str(item) for item in check.get("required", []))
@@ -246,23 +286,38 @@ def validate_candidate_visible_contract(
                 )
         elif check_type.startswith("jsonl_"):
             if fmt != "jsonl":
-                errors.append(f"{question}: checker {check.get('id')} requires JSONL but contract says {fmt}")
+                errors.append(
+                    f"{question}: checker {check.get('id')} requires JSONL but contract says {fmt}"
+                )
         elif check_type.startswith("json_"):
             if fmt != "json":
-                errors.append(f"{question}: checker {check.get('id')} requires JSON but contract says {fmt}")
+                errors.append(
+                    f"{question}: checker {check.get('id')} requires JSON but contract says {fmt}"
+                )
                 continue
             if check_type == "json_array_item_value":
                 array_path = str(check.get("array_path", ""))
                 array_schema = _schema_at_path(output.get("json_shape", {}), array_path)
-                item_schema = array_schema.get("items", {}) if isinstance(array_schema, dict) else {}
-                if not isinstance(array_schema, dict) or array_schema.get("type") != "array":
+                item_schema = (
+                    array_schema.get("items", {})
+                    if isinstance(array_schema, dict)
+                    else {}
+                )
+                if (
+                    not isinstance(array_schema, dict)
+                    or array_schema.get("type") != "array"
+                ):
                     errors.append(
                         f"{question}: checker {check.get('id')} array path {array_path!r} "
                         f"is absent or not an array in the candidate schema"
                     )
                     continue
                 key_fields = set(str(item) for item in check.get("key", {}))
-                item_properties = set(item_schema.get("properties", {})) if isinstance(item_schema, dict) else set()
+                item_properties = (
+                    set(item_schema.get("properties", {}))
+                    if isinstance(item_schema, dict)
+                    else set()
+                )
                 missing_keys = sorted(key_fields - item_properties)
                 if missing_keys:
                     errors.append(
@@ -285,7 +340,9 @@ def validate_candidate_visible_contract(
                 )
                 continue
             required_keys = set(str(item) for item in check.get("required", []))
-            properties = set(target.get("properties", {})) if isinstance(target, dict) else set()
+            properties = (
+                set(target.get("properties", {})) if isinstance(target, dict) else set()
+            )
             missing = sorted(required_keys - properties)
             if missing:
                 errors.append(

@@ -16,7 +16,12 @@ import source_adapters
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
-DEFAULT_CANDIDATE = SKILL_DIR / "fixtures" / "candidate-audits" / "marchem-inorganic-20260805T102709Z.json"
+DEFAULT_CANDIDATE = (
+    SKILL_DIR
+    / "fixtures"
+    / "candidate-audits"
+    / "marchem-inorganic-20260805T102709Z.json"
+)
 REVIEW_VERSION = "geochemical-human-review-v1"
 ANALYTES = ("As", "Cu", "Ni", "Zn")
 
@@ -27,7 +32,9 @@ class ReviewPreparationError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -38,10 +45,14 @@ def _candidate(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise ReviewPreparationError(f"candidate evidence is unreadable: {path}") from exc
+        raise ReviewPreparationError(
+            f"candidate evidence is unreadable: {path}"
+        ) from exc
     rows = value.get("prepared_human_review_sample")
     if not isinstance(rows, list) or len(rows) != 30:
-        raise ReviewPreparationError("candidate evidence must contain the frozen 30-record review sample")
+        raise ReviewPreparationError(
+            "candidate evidence must contain the frozen 30-record review sample"
+        )
     return value
 
 
@@ -49,7 +60,9 @@ def prepare(archive: Path, candidate_path: Path = DEFAULT_CANDIDATE) -> dict[str
     candidate_evidence = _candidate(candidate_path)
     adapter = source_adapters.get_adapter("norway-marchem")
     if not isinstance(adapter, source_adapters.MarchemSnapshotAdapter):
-        raise ReviewPreparationError("norway-marchem does not resolve to the canonical adapter")
+        raise ReviewPreparationError(
+            "norway-marchem does not resolve to the canonical adapter"
+        )
     with tempfile.TemporaryDirectory(prefix="marchem-review-") as temporary:
         files = adapter.files_from_archive(archive, Path(temporary) / "members")
         records = list(adapter.parse(files))
@@ -59,17 +72,26 @@ def prepare(archive: Path, candidate_path: Path = DEFAULT_CANDIDATE) -> dict[str
         if row_text.isdigit():
             by_row[int(row_text)] = record
 
-    target_fields: Mapping[str, str] = adapter.candidate.registry_entry["target_analytes"]
+    target_fields: Mapping[str, str] = adapter.candidate.registry_entry[
+        "target_analytes"
+    ]
     review_records: list[dict[str, Any]] = []
-    for position, prepared in enumerate(candidate_evidence["prepared_human_review_sample"], start=1):
+    for position, prepared in enumerate(
+        candidate_evidence["prepared_human_review_sample"], start=1
+    ):
         source_row = prepared["source_row_number"]
         record = by_row.get(source_row)
         if record is None:
             raise ReviewPreparationError(f"prepared source row is absent: {source_row}")
         methods = record.fields.get("_lab_parameters")
         if not isinstance(methods, Mapping):
-            raise ReviewPreparationError(f"method map is absent at source row {source_row}")
-        published_values = {analyte: str(record.fields.get(target_fields[analyte]) or "") for analyte in ANALYTES}
+            raise ReviewPreparationError(
+                f"method map is absent at source row {source_row}"
+            )
+        published_values = {
+            analyte: str(record.fields.get(target_fields[analyte]) or "")
+            for analyte in ANALYTES
+        }
         observations: list[dict[str, Any]] = []
         for analyte in ANALYTES:
             field_name = target_fields[analyte]
@@ -103,16 +125,25 @@ def prepare(archive: Path, candidate_path: Path = DEFAULT_CANDIDATE) -> dict[str
                 }
             )
         expected_values = prepared["target_raw_values"]
-        expected_target_count = sum(bool(str(value or "")) for value in expected_values.values())
+        expected_target_count = sum(
+            bool(str(value or "")) for value in expected_values.values()
+        )
         automated_checks = {
-            "sample_id_matches": str(record.fields.get("Sample_code") or "") == prepared["sample_code"],
-            "batch_code_matches": str(record.fields.get("Batch_code") or "") == prepared["batch_code"],
-            "cruise_year_matches": str(record.fields.get("Cruise_year") or "") == prepared["cruise_year"],
-            "latitude_matches": str(record.fields.get("Latitude") or "") == prepared["latitude"],
-            "longitude_matches": str(record.fields.get("Longitude") or "") == prepared["longitude"],
+            "sample_id_matches": str(record.fields.get("Sample_code") or "")
+            == prepared["sample_code"],
+            "batch_code_matches": str(record.fields.get("Batch_code") or "")
+            == prepared["batch_code"],
+            "cruise_year_matches": str(record.fields.get("Cruise_year") or "")
+            == prepared["cruise_year"],
+            "latitude_matches": str(record.fields.get("Latitude") or "")
+            == prepared["latitude"],
+            "longitude_matches": str(record.fields.get("Longitude") or "")
+            == prepared["longitude"],
             "target_raw_values_match": published_values == expected_values,
-            "target_row_classification_matches": len(observations) == expected_target_count,
-            "method_links_complete": len(observations) == sum(
+            "target_row_classification_matches": len(observations)
+            == expected_target_count,
+            "method_links_complete": len(observations)
+            == sum(
                 field_name in methods
                 for field_name in target_fields.values()
                 if str(record.fields.get(field_name) or "")
@@ -121,7 +152,9 @@ def prepare(archive: Path, candidate_path: Path = DEFAULT_CANDIDATE) -> dict[str
                 item["unit"] == "mg/kg" and item["weight_basis"] == "Dry weight"
                 for item in observations
             ),
-            "partial_digestion_preserved": all(item["digestion_scope"] == "partial" for item in observations),
+            "partial_digestion_preserved": all(
+                item["digestion_scope"] == "partial" for item in observations
+            ),
         }
         review_records.append(
             {
@@ -134,7 +167,9 @@ def prepare(archive: Path, candidate_path: Path = DEFAULT_CANDIDATE) -> dict[str
                 "published_target_raw_values": published_values,
                 "adapter_observations": observations,
                 "automated_checks": automated_checks,
-                "automated_status": "PASS" if all(automated_checks.values()) else "FAIL",
+                "automated_status": "PASS"
+                if all(automated_checks.values())
+                else "FAIL",
                 "reviewer": {
                     "decision": None,
                     "reviewer": None,
@@ -143,7 +178,9 @@ def prepare(archive: Path, candidate_path: Path = DEFAULT_CANDIDATE) -> dict[str
                 },
             }
         )
-    automated_pass_count = sum(record["automated_status"] == "PASS" for record in review_records)
+    automated_pass_count = sum(
+        record["automated_status"] == "PASS" for record in review_records
+    )
     return {
         "review_version": REVIEW_VERSION,
         "source_id": adapter.source_id,
@@ -181,8 +218,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.output:
             atomic_json(args.output, review)
         print(json.dumps(review, ensure_ascii=False, sort_keys=True))
-        return 0 if review["automated_pass_count"] == review["prepared_record_count"] else 1
-    except (OSError, ValueError, ReviewPreparationError, source_adapters.SourceAdapterError) as exc:
+        return (
+            0
+            if review["automated_pass_count"] == review["prepared_record_count"]
+            else 1
+        )
+    except (
+        OSError,
+        ValueError,
+        ReviewPreparationError,
+        source_adapters.SourceAdapterError,
+    ) as exc:
         print(f"prepare_marchem_human_review: {exc}", file=sys.stderr)
         return 2
 

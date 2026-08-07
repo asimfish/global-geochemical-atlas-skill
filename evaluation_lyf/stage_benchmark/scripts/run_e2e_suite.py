@@ -99,7 +99,9 @@ def parse_d2_database(path: Path) -> list[dict[str, Any]]:
 
 def values_equal(actual: Any, expected: Any) -> bool:
     if isinstance(expected, float):
-        return isinstance(actual, (int, float)) and math.isclose(actual, expected, rel_tol=1e-10, abs_tol=1e-12)
+        return isinstance(actual, (int, float)) and math.isclose(
+            actual, expected, rel_tol=1e-10, abs_tol=1e-12
+        )
     return actual == expected
 
 
@@ -142,7 +144,9 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         ]
     )
     stages["d1"] = {
-        key: value for key, value in d1_result.items() if key not in {"stdout", "stderr", "payload"}
+        key: value
+        for key, value in d1_result.items()
+        if key not in {"stdout", "stderr", "payload"}
     }
     stages["d1"]["stderr_tail"] = d1_result["stderr"][-500:]
     checks.add(
@@ -152,7 +156,10 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         and d1_result["parse_error"] is None,
         category="stage_execution",
         expected={"returncode": 0, "stdout": "one JSON object"},
-        actual={"returncode": d1_result["returncode"], "parse_error": d1_result["parse_error"]},
+        actual={
+            "returncode": d1_result["returncode"],
+            "parse_error": d1_result["parse_error"],
+        },
     )
     if d1_result["returncode"] != 0 or not isinstance(d1_result["payload"], dict):
         return write_early_report(output_dir, checks, stages, "d1")
@@ -164,7 +171,10 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         d1_manifest["source"]["sha256"] == sha256_file(D2_FIXTURE)
         and d1_manifest["source"]["record_count"] == expectations["input_row_count"],
         category="evidence_chain",
-        expected={"sha256": sha256_file(D2_FIXTURE), "rows": expectations["input_row_count"]},
+        expected={
+            "sha256": sha256_file(D2_FIXTURE),
+            "rows": expectations["input_row_count"],
+        },
         actual={
             "sha256": d1_manifest["source"]["sha256"],
             "rows": d1_manifest["source"]["record_count"],
@@ -173,7 +183,8 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
     checks.add(
         "d1_export_and_schema_map_hashes_match_manifest",
         d1_manifest["export"]["sha256"] == sha256_file(d1_dir / "d1_export.csv")
-        and d1_manifest["schema_map"]["sha256"] == sha256_file(d1_dir / "schema_map.json"),
+        and d1_manifest["schema_map"]["sha256"]
+        == sha256_file(d1_dir / "schema_map.json"),
         category="evidence_chain",
     )
     with (d1_dir / "d1_export.csv").open(encoding="utf-8", newline="") as handle:
@@ -198,9 +209,12 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
     checks.add(
         "d1_preserves_values_units_qualifiers_and_row_count",
         len(d1_rows) == len(seed_rows)
-        and [row["ReportedResult"] for row in d1_rows] == [row["value"] for row in seed_rows]
-        and [row["ReportedUnit"] for row in d1_rows] == [row["unit"] for row in seed_rows]
-        and [row["LegacyQualifier"] for row in d1_rows] == [row["value_qualifier"] for row in seed_rows],
+        and [row["ReportedResult"] for row in d1_rows]
+        == [row["value"] for row in seed_rows]
+        and [row["ReportedUnit"] for row in d1_rows]
+        == [row["unit"] for row in seed_rows]
+        and [row["LegacyQualifier"] for row in d1_rows]
+        == [row["value_qualifier"] for row in seed_rows],
         category="d1_to_d2_contract",
         expected=len(seed_rows),
         actual=len(d1_rows),
@@ -231,7 +245,9 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         ]
     )
     stages["d2"] = {
-        key: value for key, value in d2_result.items() if key not in {"stdout", "stderr", "payload"}
+        key: value
+        for key, value in d2_result.items()
+        if key not in {"stdout", "stderr", "payload"}
     }
     stages["d2"]["stderr_tail"] = d2_result["stderr"][-500:]
     checks.add(
@@ -241,7 +257,10 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         and d2_result["parse_error"] is None,
         category="stage_execution",
         expected={"returncode": 0, "stdout": "one JSON object"},
-        actual={"returncode": d2_result["returncode"], "parse_error": d2_result["parse_error"]},
+        actual={
+            "returncode": d2_result["returncode"],
+            "parse_error": d2_result["parse_error"],
+        },
     )
     if d2_result["returncode"] != 0 or not isinstance(d2_result["payload"], dict):
         return write_early_report(output_dir, checks, stages, "d2")
@@ -258,7 +277,8 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
     checks.add(
         "d1_to_d2_hash_chain_is_continuous",
         d2_manifest["input"]["sha256"] == d1_manifest["export"]["sha256"]
-        and d2_manifest["input"]["schema_map_sha256"] == d1_manifest["schema_map"]["sha256"],
+        and d2_manifest["input"]["schema_map_sha256"]
+        == d1_manifest["schema_map"]["sha256"],
         category="evidence_chain",
         expected={
             "input": d1_manifest["export"]["sha256"],
@@ -314,8 +334,10 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
     checks.add(
         "qc_counts_match_full_flow_expectations",
         qc_report.get("record_count") == expectations["input_row_count"]
-        and qc_report.get("valid_coordinate_count") == expectations["valid_coordinate_count"]
-        and qc_report.get("censored_record_count") == expectations["censored_record_count"]
+        and qc_report.get("valid_coordinate_count")
+        == expectations["valid_coordinate_count"]
+        and qc_report.get("censored_record_count")
+        == expectations["censored_record_count"]
         and all(
             qc_report.get("flag_counts", {}).get(flag) == count
             for flag, count in expectations["expected_flag_counts"].items()
@@ -337,7 +359,8 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
     anomaly_report = load_json(d2_dir / "anomaly_report.json")
     anomalies = load_json(d2_dir / "anomalies.geojson")
     candidate_ids = sorted(
-        feature.get("properties", {}).get("record_id") for feature in anomalies.get("features", [])
+        feature.get("properties", {}).get("record_id")
+        for feature in anomalies.get("features", [])
     )
     checks.add(
         "candidate_anomalies_match_demo_gold",
@@ -351,17 +374,24 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
     checks.add(
         "demo_override_does_not_change_production_default",
         anomaly_report.get("minimum_group_size") == 8
-        and interface_contract["d2_to_e2"]["default_anomaly_gates"]["minimum_group_size"] == 20,
+        and interface_contract["d2_to_e2"]["default_anomaly_gates"][
+            "minimum_group_size"
+        ]
+        == 20,
         category="scientific_boundary",
         expected={"demo": 8, "production": 20},
         actual={
             "demo": anomaly_report.get("minimum_group_size"),
-            "production": interface_contract["d2_to_e2"]["default_anomaly_gates"]["minimum_group_size"],
+            "production": interface_contract["d2_to_e2"]["default_anomaly_gates"][
+                "minimum_group_size"
+            ],
         },
     )
 
     duplicate_ids = {"water-pb-001", "water-pb-duplicate"}
-    duplicate_flags = {record_id: rows_by_id[record_id]["qc_flags"] for record_id in duplicate_ids}
+    duplicate_flags = {
+        record_id: rows_by_id[record_id]["qc_flags"] for record_id in duplicate_ids
+    }
     checks.add(
         "d1_unique_source_row_ids_do_not_hide_duplicate_candidates",
         all("DUPLICATE_CANDIDATE" in flags for flags in duplicate_flags.values()),
@@ -396,7 +426,9 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         ]
     )
     stages["d2_repeat"] = {
-        key: value for key, value in d2_repeat_result.items() if key not in {"stdout", "stderr", "payload"}
+        key: value
+        for key, value in d2_repeat_result.items()
+        if key not in {"stdout", "stderr", "payload"}
     }
     byte_mismatches = []
     if d2_repeat_result["returncode"] == 0:
@@ -410,7 +442,10 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         d2_repeat_result["returncode"] == 0 and not byte_mismatches,
         category="determinism",
         expected="all nine files byte-identical",
-        actual={"returncode": d2_repeat_result["returncode"], "mismatches": sorted(byte_mismatches)},
+        actual={
+            "returncode": d2_repeat_result["returncode"],
+            "mismatches": sorted(byte_mismatches),
+        },
     )
 
     d3_result = run_json_command(
@@ -424,7 +459,9 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         ]
     )
     stages["d3"] = {
-        key: value for key, value in d3_result.items() if key not in {"stdout", "stderr", "payload"}
+        key: value
+        for key, value in d3_result.items()
+        if key not in {"stdout", "stderr", "payload"}
     }
     stages["d3"]["stderr_tail"] = d3_result["stderr"][-500:]
     checks.add(
@@ -434,9 +471,15 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         and d3_result["parse_error"] is None,
         category="stage_execution",
         expected={"returncode": 0, "stdout": "one JSON object"},
-        actual={"returncode": d3_result["returncode"], "parse_error": d3_result["parse_error"]},
+        actual={
+            "returncode": d3_result["returncode"],
+            "parse_error": d3_result["parse_error"],
+        },
     )
-    if d3_result["returncode"] != 0 or not (d3_dir / "d3_consumer_report.json").is_file():
+    if (
+        d3_result["returncode"] != 0
+        or not (d3_dir / "d3_consumer_report.json").is_file()
+    ):
         return write_early_report(output_dir, checks, stages, "d3")
 
     d3_report = load_json(d3_dir / "d3_consumer_report.json")
@@ -449,14 +492,17 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
     )
     checks.add(
         "d3_renders_valid_missing_and_censored_counts",
-        d3_report.get("metrics", {}).get("rendered_sample_points") == expectations["valid_coordinate_count"]
+        d3_report.get("metrics", {}).get("rendered_sample_points")
+        == expectations["valid_coordinate_count"]
         and d3_report.get("metrics", {}).get("missing_coordinate_records")
         == expectations["input_row_count"] - expectations["valid_coordinate_count"]
-        and d3_report.get("metrics", {}).get("candidate_anomalies") == len(expectations["candidate_record_ids"]),
+        and d3_report.get("metrics", {}).get("candidate_anomalies")
+        == len(expectations["candidate_record_ids"]),
         category="consumer_contract",
         expected={
             "points": expectations["valid_coordinate_count"],
-            "missing": expectations["input_row_count"] - expectations["valid_coordinate_count"],
+            "missing": expectations["input_row_count"]
+            - expectations["valid_coordinate_count"],
             "anomalies": len(expectations["candidate_record_ids"]),
         },
         actual=d3_report.get("metrics"),
@@ -471,7 +517,10 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
         and "not probability" in atlas_text,
         category="offline_demo",
         expected="single-file HTML with no remote runtime and both disclaimers",
-        actual={"exists": atlas_path.is_file(), "bytes": len(atlas_text.encode("utf-8"))},
+        actual={
+            "exists": atlas_path.is_file(),
+            "bytes": len(atlas_text.encode("utf-8")),
+        },
     )
     checks.add(
         "d2_to_d3_hash_chain_is_continuous",
@@ -513,8 +562,15 @@ def run_e2e(output_dir: Path) -> dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the minimal D1-D2-D3 full-flow validation suite.")
-    parser.add_argument("--output-dir", type=Path, required=True, help="New or empty directory for all test evidence")
+    parser = argparse.ArgumentParser(
+        description="Run the minimal D1-D2-D3 full-flow validation suite."
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="New or empty directory for all test evidence",
+    )
     return parser
 
 
@@ -528,7 +584,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     result = {
         "status": report["status"],
         "report": str(args.output_dir / "e2e_report.json"),
-        "atlas": str(args.output_dir / "d3" / "atlas.html") if (args.output_dir / "d3" / "atlas.html").is_file() else None,
+        "atlas": str(args.output_dir / "d3" / "atlas.html")
+        if (args.output_dir / "d3" / "atlas.html").is_file()
+        else None,
         "blocking_failed": report["counts"]["blocking"]["failed"],
         "review_failed": report["counts"]["review"]["failed"],
     }

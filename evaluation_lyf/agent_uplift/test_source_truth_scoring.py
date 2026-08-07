@@ -87,15 +87,22 @@ class SourceTruthScoringTest(unittest.TestCase):
             hashlib.sha256(contract.read_bytes()).hexdigest(),
         )
 
-    def test_benchmark_crosswalk_is_pinned_and_keeps_canonical_fields_primary(self) -> None:
+    def test_benchmark_crosswalk_is_pinned_and_keeps_canonical_fields_primary(
+        self,
+    ) -> None:
         path = SCORER_PATH.with_name("benchmark_export_crosswalk.json")
         self.assertEqual(
             SCORER.BENCHMARK_CROSSWALK_SHA256,
             hashlib.sha256(path.read_bytes()).hexdigest(),
         )
         value = SCORER.load_benchmark_crosswalk(path)
-        self.assertEqual("matched_geologic_unit", value["canonical_contract"]["matched_unit"])
-        self.assertIn("never write", value["legacy_read_only_aliases"]["spatial_geology_version"]["rule"])
+        self.assertEqual(
+            "matched_geologic_unit", value["canonical_contract"]["matched_unit"]
+        )
+        self.assertIn(
+            "never write",
+            value["legacy_read_only_aliases"]["spatial_geology_version"]["rule"],
+        )
 
     def test_exact_record_scores_one_hundred(self) -> None:
         metrics = SCORER.source_truth_metrics([valid_row()], {"a" * 64: RESOURCE})
@@ -128,9 +135,13 @@ class SourceTruthScoringTest(unittest.TestCase):
         digest = hashlib.sha256(payload).hexdigest()
         discovered = {**DISCOVERED_RESOURCE, "bytes": len(payload), "sha256": digest}
         resources = {"a" * 64: RESOURCE, digest: discovered}
-        metrics = SCORER.source_truth_metrics([valid_row(), valid_discovered_row(digest)], resources)
+        metrics = SCORER.source_truth_metrics(
+            [valid_row(), valid_discovered_row(digest)], resources
+        )
         self.assertEqual(100.0, metrics["source_truth_score"])
-        self.assertEqual(["earthchem_example", "example"], metrics["covered_resource_ids"])
+        self.assertEqual(
+            ["earthchem_example", "example"], metrics["covered_resource_ids"]
+        )
 
     def test_discovered_manifest_is_bound_to_local_bytes(self) -> None:
         payload = b"sample_id,As\nrock-1,12\n"
@@ -142,7 +153,9 @@ class SourceTruthScoringTest(unittest.TestCase):
             data_path.write_bytes(payload)
             manifest = {
                 "schema_version": "qwen-uplift-discovered-manifest-v1",
-                "resources": [{**DISCOVERED_RESOURCE, "bytes": len(payload), "sha256": digest}],
+                "resources": [
+                    {**DISCOVERED_RESOURCE, "bytes": len(payload), "sha256": digest}
+                ],
             }
             (case_dir / "discovered_manifest.json").write_text(
                 json.dumps(manifest), encoding="utf-8"
@@ -151,7 +164,9 @@ class SourceTruthScoringTest(unittest.TestCase):
                 case_dir, SCORER_PATH.with_name("discovery_contract.json")
             )
             self.assertEqual([], errors)
-            self.assertEqual(DISCOVERED_RESOURCE["source_id"], resources[digest]["source_id"])
+            self.assertEqual(
+                DISCOVERED_RESOURCE["source_id"], resources[digest]["source_id"]
+            )
 
             data_path.write_bytes(payload + b"tampered")
             resources, errors = SCORER.discovered_source_contract(
@@ -161,9 +176,22 @@ class SourceTruthScoringTest(unittest.TestCase):
             self.assertTrue(any("byte identity mismatch" in error for error in errors))
 
     def test_unknown_units_need_explicit_failure_disposition(self) -> None:
-        guessed = {"normalized_value": "1", "normalized_unit": "mg/kg", "qc_flags": "[\"UNIT_INFERRED\"]"}
-        rejected = {"normalized_value": "", "normalized_unit": "", "qc_flags": "[\"UNSUPPORTED_UNIT\"]"}
-        censored = {"normalized_value": "", "normalized_unit": "", "value_qualifier": "<", "censored": "true"}
+        guessed = {
+            "normalized_value": "1",
+            "normalized_unit": "mg/kg",
+            "qc_flags": '["UNIT_INFERRED"]',
+        }
+        rejected = {
+            "normalized_value": "",
+            "normalized_unit": "",
+            "qc_flags": '["UNSUPPORTED_UNIT"]',
+        }
+        censored = {
+            "normalized_value": "",
+            "normalized_unit": "",
+            "value_qualifier": "<",
+            "censored": "true",
+        }
         self.assertFalse(SCORER.explicit_unit_disposition(guessed))
         self.assertTrue(SCORER.explicit_unit_disposition(rejected))
         self.assertTrue(SCORER.explicit_unit_disposition(censored))
@@ -180,17 +208,24 @@ class SourceTruthScoringTest(unittest.TestCase):
             for index in range(1, 9):
                 screenshot = screenshot_root / f"shot-{index}.png"
                 screenshot.write_bytes(f"screen-{index}".encode())
-                screenshots.append({
-                    "file": screenshot.name,
-                    "bytes": screenshot.stat().st_size,
-                    "sha256": hashlib.sha256(screenshot.read_bytes()).hexdigest(),
-                })
+                screenshots.append(
+                    {
+                        "file": screenshot.name,
+                        "bytes": screenshot.stat().st_size,
+                        "sha256": hashlib.sha256(screenshot.read_bytes()).hexdigest(),
+                    }
+                )
             interactions = {
                 name: {"passed": True}
                 for name in (
-                    "filter_changes_result", "heatmap", "concentration_encoding",
-                    "global_globe", "database_visuals", "element_combination",
-                    "source_drilldown", "anomaly_view",
+                    "filter_changes_result",
+                    "heatmap",
+                    "concentration_encoding",
+                    "global_globe",
+                    "database_visuals",
+                    "element_combination",
+                    "source_drilldown",
+                    "anomaly_view",
                 )
             }
             audit = {
@@ -205,8 +240,10 @@ class SourceTruthScoringTest(unittest.TestCase):
                     "sha256": hashlib.sha256(html.read_bytes()).hexdigest(),
                 },
                 "metrics": {
-                    "embedded_measurements": 5, "visible_symbols": 5,
-                    "basemap_shapes": 128, "country_boundaries": 177,
+                    "embedded_measurements": 5,
+                    "visible_symbols": 5,
+                    "basemap_shapes": 128,
+                    "country_boundaries": 177,
                 },
                 "interactions": interactions,
                 "screenshot_directory": "screenshots",
@@ -227,20 +264,34 @@ class SourceTruthScoringTest(unittest.TestCase):
             self.assertFalse(passed)
             self.assertFalse(metrics["hash_bound"])
 
-    def test_discovery_report_proves_bounded_continuation_not_five_file_stop(self) -> None:
-        contract = json.loads(SCORER_PATH.with_name("discovery_contract.json").read_text(encoding="utf-8"))
+    def test_discovery_report_proves_bounded_continuation_not_five_file_stop(
+        self,
+    ) -> None:
+        contract = json.loads(
+            SCORER_PATH.with_name("discovery_contract.json").read_text(encoding="utf-8")
+        )
         candidates = []
         for index in range(8):
             selected = index == 0
-            candidates.append({
-                "source_id": "earthchem_example" if selected else f"candidate_{index}",
-                "platform": f"platform_{index % 5}",
-                "status": "selected" if selected else "rejected",
-                "authority_url": f"https://example.org/dataset/{index}",
-                "query": f"query {index}",
-                "reason": "adds verified rock coverage" if selected else "not selected after evidence audit",
-                **({"marginal_contribution": ["rock", "new_platform"]} if selected else {}),
-            })
+            candidates.append(
+                {
+                    "source_id": "earthchem_example"
+                    if selected
+                    else f"candidate_{index}",
+                    "platform": f"platform_{index % 5}",
+                    "status": "selected" if selected else "rejected",
+                    "authority_url": f"https://example.org/dataset/{index}",
+                    "query": f"query {index}",
+                    "reason": "adds verified rock coverage"
+                    if selected
+                    else "not selected after evidence audit",
+                    **(
+                        {"marginal_contribution": ["rock", "new_platform"]}
+                        if selected
+                        else {}
+                    ),
+                }
+            )
         report = {
             "schema_version": "qwen-uplift-discovery-report-v1",
             "request": contract["request"],
@@ -249,17 +300,25 @@ class SourceTruthScoringTest(unittest.TestCase):
             "active_discovery_seconds": 240,
             "stop_reason": "discovery_budget_exhausted",
             "remaining_candidates": ["candidate_8"],
-            "selection_policy": contract["continuation_policy"]["maximum_records_selection"],
+            "selection_policy": contract["continuation_policy"][
+                "maximum_records_selection"
+            ],
             "candidates": candidates,
             "claim_boundary": "Not exhaustive; coverage gaps remain.",
         }
-        metrics = SCORER.discovery_report_metrics(report, contract, {"earthchem_example"})
+        metrics = SCORER.discovery_report_metrics(
+            report, contract, {"earthchem_example"}
+        )
         self.assertTrue(metrics["valid"])
         self.assertEqual(8, metrics["candidate_source_count"])
         self.assertEqual(5, metrics["searched_platform_count"])
 
         report["candidates"][0].pop("marginal_contribution")
-        self.assertFalse(SCORER.discovery_report_metrics(report, contract, {"earthchem_example"})["valid"])
+        self.assertFalse(
+            SCORER.discovery_report_metrics(report, contract, {"earthchem_example"})[
+                "valid"
+            ]
+        )
 
 
 if __name__ == "__main__":

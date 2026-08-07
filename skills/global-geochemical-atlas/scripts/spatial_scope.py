@@ -65,10 +65,16 @@ def normalize_alias(value: str) -> str:
 def longitude_in_interval(longitude: float, west: float, east: float) -> bool:
     """Return containment for ordinary or antimeridian-crossing longitude intervals."""
 
-    return west <= longitude <= east if west <= east else longitude >= west or longitude <= east
+    return (
+        west <= longitude <= east
+        if west <= east
+        else longitude >= west or longitude <= east
+    )
 
 
-def coordinate_in_bbox(longitude: float, latitude: float, bbox: Sequence[float]) -> bool:
+def coordinate_in_bbox(
+    longitude: float, latitude: float, bbox: Sequence[float]
+) -> bool:
     west, south, east, north = bbox
     return longitude_in_interval(longitude, west, east) and south <= latitude <= north
 
@@ -99,9 +105,9 @@ def geometry_polygons(geometry: Mapping[str, Any]) -> Sequence[Any]:
 def point_on_segment(
     longitude: float, latitude: float, start: Sequence[float], end: Sequence[float]
 ) -> bool:
-    cross = (longitude - start[0]) * (end[1] - start[1]) - (
-        latitude - start[1]
-    ) * (end[0] - start[0])
+    cross = (longitude - start[0]) * (end[1] - start[1]) - (latitude - start[1]) * (
+        end[0] - start[0]
+    )
     if abs(cross) > 1e-9:
         return False
     return (
@@ -110,7 +116,9 @@ def point_on_segment(
     )
 
 
-def point_in_ring(longitude: float, latitude: float, ring: Sequence[Sequence[float]]) -> bool:
+def point_in_ring(
+    longitude: float, latitude: float, ring: Sequence[Sequence[float]]
+) -> bool:
     if not ring:
         return False
     inside = False
@@ -128,7 +136,9 @@ def point_in_ring(longitude: float, latitude: float, ring: Sequence[Sequence[flo
     return inside
 
 
-def point_in_country(longitude: float, latitude: float, country: Mapping[str, Any]) -> bool:
+def point_in_country(
+    longitude: float, latitude: float, country: Mapping[str, Any]
+) -> bool:
     for polygon in geometry_polygons(country.get("geometry") or {}):
         if not polygon or not point_in_ring(longitude, latitude, polygon[0]):
             continue
@@ -171,7 +181,12 @@ def country_bbox(country: Mapping[str, Any]) -> list[float]:
     if not points:
         raise SpatialScopeError("country boundary has no polygon coordinates")
     west, east = _minimum_longitude_interval([point[0] for point in points])
-    return [west, min(point[1] for point in points), east, max(point[1] for point in points)]
+    return [
+        west,
+        min(point[1] for point in points),
+        east,
+        max(point[1] for point in points),
+    ]
 
 
 def _validate_bbox(raw: Sequence[Any]) -> list[float]:
@@ -184,7 +199,9 @@ def _validate_bbox(raw: Sequence[Any]) -> list[float]:
         raise SpatialScopeError("bbox must contain four finite numbers")
     west, south, east, north = (float(value) for value in raw)
     if not (-180 <= west <= 180 and -180 <= east <= 180 and -90 <= south < north <= 90):
-        raise SpatialScopeError("bbox is outside WGS84 bounds or latitude order is invalid")
+        raise SpatialScopeError(
+            "bbox is outside WGS84 bounds or latitude order is invalid"
+        )
     return [west, south, east, north]
 
 
@@ -194,9 +211,13 @@ def load_country_registry(path_text: str = str(DEFAULT_BOUNDARIES)) -> dict[str,
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as exc:
-        raise SpatialScopeError(f"country boundary asset does not exist: {path}") from exc
+        raise SpatialScopeError(
+            f"country boundary asset does not exist: {path}"
+        ) from exc
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise SpatialScopeError(f"country boundary asset is unreadable: {path}") from exc
+        raise SpatialScopeError(
+            f"country boundary asset is unreadable: {path}"
+        ) from exc
     countries = value.get("countries") if isinstance(value, dict) else None
     if (
         value.get("asset_version") != BOUNDARY_ASSET_VERSION
@@ -204,7 +225,9 @@ def load_country_registry(path_text: str = str(DEFAULT_BOUNDARIES)) -> dict[str,
         or not isinstance(countries, list)
         or not countries
     ):
-        raise SpatialScopeError("country boundary asset provenance or structure is invalid")
+        raise SpatialScopeError(
+            "country boundary asset provenance or structure is invalid"
+        )
     by_code: dict[str, dict[str, Any]] = {}
     aliases: dict[str, str] = {}
     for country in countries:
@@ -221,7 +244,9 @@ def load_country_registry(path_text: str = str(DEFAULT_BOUNDARIES)) -> dict[str,
             or not name
             or not geometry_polygons(country.get("geometry") or {})
         ):
-            raise SpatialScopeError("country boundary contains invalid identifiers or geometry")
+            raise SpatialScopeError(
+                "country boundary contains invalid identifiers or geometry"
+            )
         normalized = dict(country)
         normalized["bbox"] = country_bbox(country)
         by_code[code] = normalized
@@ -244,12 +269,16 @@ def load_country_registry(path_text: str = str(DEFAULT_BOUNDARIES)) -> dict[str,
     }
 
 
-def resolve_region(value: Any, boundaries_path: Path = DEFAULT_BOUNDARIES) -> dict[str, Any]:
+def resolve_region(
+    value: Any, boundaries_path: Path = DEFAULT_BOUNDARIES
+) -> dict[str, Any]:
     """Resolve global, bbox, frozen named bbox, or a Natural Earth country."""
 
     if isinstance(value, Mapping):
         if set(value) != {"bbox"} or not isinstance(value.get("bbox"), list):
-            raise SpatialScopeError("region object must contain exactly bbox=[west,south,east,north]")
+            raise SpatialScopeError(
+                "region object must contain exactly bbox=[west,south,east,north]"
+            )
         bbox = _validate_bbox(value["bbox"])
         return {
             "key": "custom",
@@ -259,9 +288,15 @@ def resolve_region(value: Any, boundaries_path: Path = DEFAULT_BOUNDARIES) -> di
             "clip_method": "bbox_wrapped" if bbox[0] > bbox[2] else "bbox",
         }
     if not isinstance(value, str) or not value.strip():
-        raise SpatialScopeError("region must be a non-empty name, global, or bbox object")
+        raise SpatialScopeError(
+            "region must be a non-empty name, global, or bbox object"
+        )
     alias = normalize_alias(value)
-    if alias in {normalize_alias("global"), normalize_alias("world"), normalize_alias("全球")}:
+    if alias in {
+        normalize_alias("global"),
+        normalize_alias("world"),
+        normalize_alias("全球"),
+    }:
         return {
             "key": "global",
             "label": "全球",
@@ -279,7 +314,9 @@ def resolve_region(value: Any, boundaries_path: Path = DEFAULT_BOUNDARIES) -> di
             "label": item["label"],
             "bbox": bbox,
             "country_code": item.get("country_code"),
-            "clip_method": "country_polygon_and_bbox" if item.get("country_code") else "bbox",
+            "clip_method": "country_polygon_and_bbox"
+            if item.get("country_code")
+            else "bbox",
         }
     code = registry["country_aliases"].get(alias)
     if code is None:

@@ -69,13 +69,17 @@ def searchable_text(data: bytes, format_name: str) -> str:
                     member_data = archive.read(member)
                 except (KeyError, RuntimeError):
                     continue
-                if member.lower().endswith((".xml", ".rels", ".csv", ".txt", ".tab", ".html")):
+                if member.lower().endswith(
+                    (".xml", ".rels", ".csv", ".txt", ".tab", ".html")
+                ):
                     chunks.append(decode_text(member_data))
             return "\n".join(chunks)
     return decode_text(data)
 
 
-def verify_required_tokens(data: bytes, format_name: str, required_tokens: Sequence[str], label: str) -> None:
+def verify_required_tokens(
+    data: bytes, format_name: str, required_tokens: Sequence[str], label: str
+) -> None:
     if not required_tokens:
         return
     haystack = searchable_text(data, format_name)
@@ -88,10 +92,14 @@ def verify_blob(data: bytes, resource: Mapping[str, Any], label: str) -> None:
     expected_bytes = int(resource["bytes"])
     expected_hash = str(resource["sha256"])
     if len(data) != expected_bytes:
-        raise FixtureError(f"byte mismatch for {label}: {len(data)} != {expected_bytes}")
+        raise FixtureError(
+            f"byte mismatch for {label}: {len(data)} != {expected_bytes}"
+        )
     actual_hash = sha256_bytes(data)
     if actual_hash != expected_hash:
-        raise FixtureError(f"SHA-256 mismatch for {label}: {actual_hash} != {expected_hash}")
+        raise FixtureError(
+            f"SHA-256 mismatch for {label}: {actual_hash} != {expected_hash}"
+        )
     verify_required_tokens(
         data,
         str(resource.get("format", "")),
@@ -100,7 +108,9 @@ def verify_blob(data: bytes, resource: Mapping[str, Any], label: str) -> None:
     )
 
 
-def verify_archive_members(path: Path, resource: Mapping[str, Any]) -> list[dict[str, Any]]:
+def verify_archive_members(
+    path: Path, resource: Mapping[str, Any]
+) -> list[dict[str, Any]]:
     verified: list[dict[str, Any]] = []
     members = resource.get("members", [])
     if not members:
@@ -111,7 +121,9 @@ def verify_archive_members(path: Path, resource: Mapping[str, Any]) -> list[dict
             try:
                 data = archive.read(member_path)
             except KeyError as exc:
-                raise FixtureError(f"archive member missing: {path.name}:{member_path}") from exc
+                raise FixtureError(
+                    f"archive member missing: {path.name}:{member_path}"
+                ) from exc
             verify_blob(data, member, f"{path.name}:{member_path}")
             verified.append(
                 {
@@ -159,7 +171,9 @@ def verify_fixtures(fixture_dir: Path = DEFAULT_FIXTURE_DIR) -> dict[str, Any]:
     }
 
 
-def request_bytes(url: str, *, method: str = "GET", json_body: Mapping[str, Any] | None = None) -> bytes:
+def request_bytes(
+    url: str, *, method: str = "GET", json_body: Mapping[str, Any] | None = None
+) -> bytes:
     body = None
     headers = {"User-Agent": f"{BUILDER_VERSION} (+reproducible-scientific-fixture)"}
     if json_body is not None:
@@ -169,7 +183,9 @@ def request_bytes(url: str, *, method: str = "GET", json_body: Mapping[str, Any]
     with urllib.request.urlopen(request, timeout=120) as response:
         declared = response.headers.get("Content-Length")
         if declared and int(declared) > MAX_DOWNLOAD_BYTES:
-            raise FixtureError(f"upstream resource exceeds {MAX_DOWNLOAD_BYTES} bytes: {url}")
+            raise FixtureError(
+                f"upstream resource exceeds {MAX_DOWNLOAD_BYTES} bytes: {url}"
+            )
         chunks: list[bytes] = []
         total = 0
         while True:
@@ -178,7 +194,9 @@ def request_bytes(url: str, *, method: str = "GET", json_body: Mapping[str, Any]
                 break
             total += len(chunk)
             if total > MAX_DOWNLOAD_BYTES:
-                raise FixtureError(f"upstream resource exceeds {MAX_DOWNLOAD_BYTES} bytes: {url}")
+                raise FixtureError(
+                    f"upstream resource exceeds {MAX_DOWNLOAD_BYTES} bytes: {url}"
+                )
             chunks.append(chunk)
     return b"".join(chunks)
 
@@ -191,7 +209,9 @@ def atomic_replace_bytes(path: Path, data: bytes) -> None:
     os.replace(temporary, path)
 
 
-def verified_replace(fixture_dir: Path, resource: Mapping[str, Any], data: bytes) -> None:
+def verified_replace(
+    fixture_dir: Path, resource: Mapping[str, Any], data: bytes
+) -> None:
     verify_blob(data, resource, str(resource["local_file"]))
     if resource.get("members"):
         with tempfile.NamedTemporaryFile("wb", delete=False) as handle:
@@ -206,15 +226,27 @@ def verified_replace(fixture_dir: Path, resource: Mapping[str, Any], data: bytes
 
 def extract_tpdc_payload(wrapper: bytes) -> tuple[bytes, bytes]:
     with zipfile.ZipFile(io.BytesIO(wrapper)) as outer:
-        candidates = [name for name in outer.namelist() if name.lower().endswith(".zip")]
+        candidates = [
+            name for name in outer.namelist() if name.lower().endswith(".zip")
+        ]
         if len(candidates) != 1:
-            raise FixtureError(f"TPDC wrapper should contain one inner zip, found {candidates}")
+            raise FixtureError(
+                f"TPDC wrapper should contain one inner zip, found {candidates}"
+            )
         inner_data = outer.read(candidates[0])
     with zipfile.ZipFile(io.BytesIO(inner_data)) as inner:
-        xlsx_names = [name for name in inner.namelist() if name.endswith("Soil dataset.xlsx")]
-        docx_names = [name for name in inner.namelist() if name.endswith("Description of the dataset.docx")]
+        xlsx_names = [
+            name for name in inner.namelist() if name.endswith("Soil dataset.xlsx")
+        ]
+        docx_names = [
+            name
+            for name in inner.namelist()
+            if name.endswith("Description of the dataset.docx")
+        ]
         if len(xlsx_names) != 1 or len(docx_names) != 1:
-            raise FixtureError("TPDC archive is missing the expected data workbook or description")
+            raise FixtureError(
+                "TPDC archive is missing the expected data workbook or description"
+            )
         return inner.read(xlsx_names[0]), inner.read(docx_names[0])
 
 
@@ -226,15 +258,23 @@ def refresh_fixtures(fixture_dir: Path = DEFAULT_FIXTURE_DIR) -> dict[str, Any]:
         method="POST",
         json_body={"userId": "", "metadataId": TPDC_METADATA_ID},
     )
-    verified_replace(fixture_dir, resource_by_id(contract, "tpdc_china_metadata"), metadata)
+    verified_replace(
+        fixture_dir, resource_by_id(contract, "tpdc_china_metadata"), metadata
+    )
     wrapper = request_bytes(
         f"https://data.tpdc.ac.cn/file/file/batchDownloadFile?metadataId={TPDC_METADATA_ID}",
         method="POST",
         json_body={"noToken": True},
     )
     workbook, description = extract_tpdc_payload(wrapper)
-    verified_replace(fixture_dir, resource_by_id(contract, "tpdc_china_soil_data"), workbook)
-    verified_replace(fixture_dir, resource_by_id(contract, "tpdc_china_soil_description"), description)
+    verified_replace(
+        fixture_dir, resource_by_id(contract, "tpdc_china_soil_data"), workbook
+    )
+    verified_replace(
+        fixture_dir,
+        resource_by_id(contract, "tpdc_china_soil_description"),
+        description,
+    )
 
     for resource in contract.get("resources", []):
         if str(resource["id"]).startswith("tpdc_"):
@@ -255,8 +295,14 @@ def build_parser() -> argparse.ArgumentParser:
         description="Refresh or offline-verify the expanded China/Africa/Europe/Japan fixtures."
     )
     mode = parser.add_mutually_exclusive_group(required=True)
-    mode.add_argument("--offline", action="store_true", help="verify bundled files without network")
-    mode.add_argument("--refresh", action="store_true", help="redownload official files and require frozen hashes")
+    mode.add_argument(
+        "--offline", action="store_true", help="verify bundled files without network"
+    )
+    mode.add_argument(
+        "--refresh",
+        action="store_true",
+        help="redownload official files and require frozen hashes",
+    )
     parser.add_argument("--fixture-dir", type=Path, default=DEFAULT_FIXTURE_DIR)
     return parser
 
@@ -265,8 +311,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
-        result = refresh_fixtures(args.fixture_dir) if args.refresh else verify_fixtures(args.fixture_dir)
-    except (FixtureError, OSError, ValueError, zipfile.BadZipFile, json.JSONDecodeError) as exc:
+        result = (
+            refresh_fixtures(args.fixture_dir)
+            if args.refresh
+            else verify_fixtures(args.fixture_dir)
+        )
+    except (
+        FixtureError,
+        OSError,
+        ValueError,
+        zipfile.BadZipFile,
+        json.JSONDecodeError,
+    ) as exc:
         parser.error(str(exc))
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     return 0

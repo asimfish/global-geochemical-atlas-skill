@@ -84,7 +84,11 @@ def run_json_command(command: list[str]) -> dict[str, Any]:
 
 
 def stage_succeeded(result: Mapping[str, Any]) -> bool:
-    return result.get("returncode") == 0 and isinstance(result.get("payload"), dict) and not result.get("parse_error")
+    return (
+        result.get("returncode") == 0
+        and isinstance(result.get("payload"), dict)
+        and not result.get("parse_error")
+    )
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -105,13 +109,16 @@ def parse_d2_database(path: Path) -> tuple[list[str], list[dict[str, Any]]]:
         rows: list[dict[str, Any]] = []
         for raw in reader:
             row: dict[str, Any] = {
-                key: (value if value not in (None, "") else None) for key, value in raw.items()
+                key: (value if value not in (None, "") else None)
+                for key, value in raw.items()
             }
             for field in NUMERIC_FIELDS:
                 row[field] = parse_optional_number(row.get(field))
             row["censored"] = str(raw.get("censored", "")).casefold() == "true"
             row["qc_flags"] = json.loads(raw.get("qc_flags") or "[]")
-            row["operational_confidence"] = json.loads(raw.get("operational_confidence") or "{}")
+            row["operational_confidence"] = json.loads(
+                raw.get("operational_confidence") or "{}"
+            )
             rows.append(row)
     return headers, rows
 
@@ -130,7 +137,10 @@ def add_stage_check(checks: CheckBook, name: str, result: Mapping[str, Any]) -> 
         stage_succeeded(result),
         category="stage_execution",
         expected={"returncode": 0, "stdout": "one JSON object"},
-        actual={"returncode": result.get("returncode"), "parse_error": result.get("parse_error")},
+        actual={
+            "returncode": result.get("returncode"),
+            "parse_error": result.get("parse_error"),
+        },
     )
 
 
@@ -160,7 +170,9 @@ def source_data_hashes(contract: Mapping[str, Any]) -> dict[str, str]:
     }
 
 
-def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int) -> dict[str, Any]:
+def run_real_suite(
+    output_dir: Path, fixture_dir: Path, max_source_samples: int
+) -> dict[str, Any]:
     prepare_empty_output_dir(output_dir)
     checks = CheckBook()
     stages: dict[str, Any] = {}
@@ -183,8 +195,12 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
 
     fixture_manifest_path = fixture_dir / "source_manifest.json"
     fixture_manifest = load_json(fixture_manifest_path)
-    expected_resources = {resource["id"]: resource for resource in source_contract["resources"]}
-    actual_resources = {resource["id"]: resource for resource in fixture_manifest["resources"]}
+    expected_resources = {
+        resource["id"]: resource for resource in source_contract["resources"]
+    }
+    actual_resources = {
+        resource["id"]: resource for resource in fixture_manifest["resources"]
+    }
     resource_mismatches = []
     for resource_id, expected in expected_resources.items():
         actual = actual_resources.get(resource_id, {})
@@ -199,7 +215,10 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         len(actual_resources) == len(expected_resources) and not resource_mismatches,
         category="source_evidence",
         expected=sorted(expected_resources),
-        actual={"resources": sorted(actual_resources), "mismatches": resource_mismatches},
+        actual={
+            "resources": sorted(actual_resources),
+            "mismatches": resource_mismatches,
+        },
     )
     checks.add(
         "four_real_datasets_cover_rock_soil_sediment_and_water",
@@ -271,7 +290,10 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         d1_manifest["export"]["sha256"] == sha256_file(d1_dir / "d1_real_export.csv")
         and d1_manifest["export"]["record_count"] == len(d1_rows),
         category="evidence_chain",
-        expected={"records": len(d1_rows), "sha256": sha256_file(d1_dir / "d1_real_export.csv")},
+        expected={
+            "records": len(d1_rows),
+            "sha256": sha256_file(d1_dir / "d1_real_export.csv"),
+        },
         actual={
             "records": d1_manifest["export"]["record_count"],
             "sha256": d1_manifest["export"]["sha256"],
@@ -346,7 +368,10 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         d2_manifest["input"]["sha256"] == d1_manifest["export"]["sha256"]
         and not bad_output_hashes,
         category="evidence_chain",
-        actual={"input": d2_manifest["input"]["sha256"], "bad_outputs": bad_output_hashes},
+        actual={
+            "input": d2_manifest["input"]["sha256"],
+            "bad_outputs": bad_output_hashes,
+        },
     )
 
     d2_headers, d2_rows = parse_d2_database(d2_dir / "geochemistry.csv")
@@ -366,7 +391,9 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
             for field, expected in expectations.items():
                 if field == "required_flags":
                     actual_fields[field] = row["qc_flags"]
-                    passed = passed and all(flag in row["qc_flags"] for flag in expected)
+                    passed = passed and all(
+                        flag in row["qc_flags"] for flag in expected
+                    )
                 else:
                     actual_fields[field] = row.get(field)
                     passed = passed and values_equal(row.get(field), expected)
@@ -392,7 +419,9 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         actual=bad_d2_provenance[:20],
     )
     censored_as_values = [
-        row["record_id"] for row in d2_rows if row["censored"] and row["normalized_value"] is not None
+        row["record_id"]
+        for row in d2_rows
+        if row["censored"] and row["normalized_value"] is not None
     ]
     checks.add(
         "real_censored_and_nondetect_results_are_never_imputed_as_values",
@@ -426,17 +455,28 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
     soil_rows = [row for row in d2_rows if row.get("source_id") == "usgs_ds801"]
     checks.add(
         "published_wgs84_soil_coordinates_remain_mappable",
-        bool(soil_rows) and all(row["latitude"] is not None and row["longitude"] is not None for row in soil_rows),
+        bool(soil_rows)
+        and all(
+            row["latitude"] is not None and row["longitude"] is not None
+            for row in soil_rows
+        ),
         category="scientific_semantics",
         expected=len(soil_rows),
-        actual=sum(row["latitude"] is not None and row["longitude"] is not None for row in soil_rows),
+        actual=sum(
+            row["latitude"] is not None and row["longitude"] is not None
+            for row in soil_rows
+        ),
     )
 
     qc_report = load_json(d2_dir / "qc_report.json")
     confidence_report = load_json(d2_dir / "confidence_report.json")
     anomaly_report = load_json(d2_dir / "anomaly_report.json")
     anomalies = load_json(d2_dir / "anomalies.geojson")
-    analyzed_groups = [group for group in anomaly_report.get("groups", []) if group.get("status") == "analyzed"]
+    analyzed_groups = [
+        group
+        for group in anomaly_report.get("groups", [])
+        if group.get("status") == "analyzed"
+    ]
     checks.add(
         "real_data_exercises_at_least_one_anomaly_background_group",
         bool(analyzed_groups),
@@ -461,11 +501,13 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         for feature in anomaly_features
         if not feature.get("properties", {}).get("source_locator")
         or feature.get("properties", {}).get("status") != "candidate_anomaly"
-        or "no causal claim" not in feature.get("properties", {}).get("interpretation_limit", "")
+        or "no causal claim"
+        not in feature.get("properties", {}).get("interpretation_limit", "")
     ]
     checks.add(
         "real_candidate_anomalies_remain_traceable_and_noncausal",
-        len(anomaly_features) == anomaly_report.get("candidate_count") and not bad_anomalies,
+        len(anomaly_features) == anomaly_report.get("candidate_count")
+        and not bad_anomalies,
         category="scientific_boundary",
         actual={"candidate_count": len(anomaly_features), "bad": bad_anomalies[:20]},
     )
@@ -484,7 +526,11 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         ),
         note="RASS L, Taylor < and WQP detection-condition wording must remain available beside the canonical qualifier.",
     )
-    mappable_media = {row["medium"] for row in d2_rows if row["latitude"] is not None and row["longitude"] is not None}
+    mappable_media = {
+        row["medium"]
+        for row in d2_rows
+        if row["latitude"] is not None and row["longitude"] is not None
+    }
     checks.add(
         "all_real_media_are_available_to_d3_as_canonical_wgs84_points",
         mappable_media == {"rock", "soil", "sediment", "water"},
@@ -513,7 +559,9 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
             "D1 must bind an explicit source-dictionary mass basis before mapping it to wt.%/mg/kg."
         ),
     )
-    method_fraction = sum(bool(row.get("analytical_method")) for row in d2_rows) / len(d2_rows)
+    method_fraction = sum(bool(row.get("analytical_method")) for row in d2_rows) / len(
+        d2_rows
+    )
     checks.add(
         "all_real_measurements_have_explicit_analytical_method",
         method_fraction == 1.0,
@@ -523,7 +571,9 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         actual=round(method_fraction, 6),
         note="The frozen WQP historical query legitimately omits methods for many rows; confidence and UI must expose this.",
     )
-    geologic_fraction = sum(bool(row.get("geologic_unit")) for row in d2_rows) / len(d2_rows)
+    geologic_fraction = sum(bool(row.get("geologic_unit")) for row in d2_rows) / len(
+        d2_rows
+    )
     checks.add(
         "real_holdout_has_versioned_geologic_context_for_spatial_backgrounds",
         geologic_fraction > 0,
@@ -557,7 +607,9 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         and d3_report.get("atlas", {}).get("offline") is True,
         category="d3_interface",
         actual={
-            "blocking_failed": d3_report.get("counts", {}).get("blocking", {}).get("failed"),
+            "blocking_failed": d3_report.get("counts", {})
+            .get("blocking", {})
+            .get("failed"),
             "atlas": (d3_dir / "atlas.html").is_file(),
         },
     )
@@ -575,7 +627,9 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
     deliverable_hash_mismatches = []
     for name, item in deliverables.items():
         artifact_path = (d3_dir / str(item.get("path", ""))).resolve()
-        if not artifact_path.is_file() or sha256_file(artifact_path) != item.get("sha256"):
+        if not artifact_path.is_file() or sha256_file(artifact_path) != item.get(
+            "sha256"
+        ):
             deliverable_hash_mismatches.append(name)
     checks.add(
         "real_showcase_emits_four_hashed_competition_deliverables",
@@ -592,7 +646,8 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
     }
     checks.add(
         "real_source_confidence_covers_all_sources_with_components_and_limits",
-        source_confidence_showcase.get("global_confidence", {}).get("not_a_probability") is True
+        source_confidence_showcase.get("global_confidence", {}).get("not_a_probability")
+        is True
         and source_ids_in_showcase == set(source_counts)
         and all(
             item.get("confidence", {}).get("component_means")
@@ -614,7 +669,8 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
     checks.add(
         "real_anomaly_regions_reconcile_all_candidates_without_silent_loss",
         anomaly_region_report.get("candidate_point_count") == len(anomaly_features)
-        and anomaly_region_report.get("mappable_candidate_point_count") == len(region_record_ids)
+        and anomaly_region_report.get("mappable_candidate_point_count")
+        == len(region_record_ids)
         and anomaly_region_report.get("unmappable_candidate_point_count")
         + len(region_record_ids)
         == len(anomaly_features)
@@ -638,15 +694,24 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
         },
     )
 
-    confidence_bands = Counter(row["operational_confidence"].get("band") for row in d2_rows)
-    total_elapsed = sum(float(stage.get("elapsed_seconds", 0)) for stage in stages.values())
-    d2_output_bytes = sum(path.stat().st_size for path in d2_dir.iterdir() if path.is_file())
+    confidence_bands = Counter(
+        row["operational_confidence"].get("band") for row in d2_rows
+    )
+    total_elapsed = sum(
+        float(stage.get("elapsed_seconds", 0)) for stage in stages.values()
+    )
+    d2_output_bytes = sum(
+        path.stat().st_size for path in d2_dir.iterdir() if path.is_file()
+    )
     checks.add(
         "real_flow_stays_inside_competition_runtime_and_repository_budgets",
         total_elapsed < 900 and fixture_bytes < 250_000_000,
         category="resource_budget",
         expected={"runtime_seconds": "<900", "frozen_fixture_bytes": "<250000000"},
-        actual={"runtime_seconds": round(total_elapsed, 3), "frozen_fixture_bytes": fixture_bytes},
+        actual={
+            "runtime_seconds": round(total_elapsed, 3),
+            "frozen_fixture_bytes": fixture_bytes,
+        },
     )
 
     summary = checks.summary()
@@ -676,19 +741,22 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
             "d1_record_count": len(d1_rows),
             "records_by_source": dict(sorted(source_counts.items())),
             "records_by_medium": dict(sorted(medium_counts.items())),
-            "d2_standardized_value_count": sum(row["normalized_value"] is not None for row in d2_rows),
+            "d2_standardized_value_count": sum(
+                row["normalized_value"] is not None for row in d2_rows
+            ),
             "d2_censored_record_count": sum(row["censored"] for row in d2_rows),
             "d2_mappable_record_count": sum(
-                row["latitude"] is not None and row["longitude"] is not None for row in d2_rows
+                row["latitude"] is not None and row["longitude"] is not None
+                for row in d2_rows
             ),
             "d2_qc_flag_counts": qc_report.get("flag_counts", {}),
             "confidence_band_counts": dict(sorted(confidence_bands.items())),
             "analyzed_background_groups": len(analyzed_groups),
             "candidate_anomalies": len(anomaly_features),
             "anomaly_region_cells": len(region_features),
-            "candidate_anomaly_clusters": anomaly_region_report.get("status_counts", {}).get(
-                "candidate_cluster", 0
-            ),
+            "candidate_anomaly_clusters": anomaly_region_report.get(
+                "status_counts", {}
+            ).get("candidate_cluster", 0),
             "unmappable_candidate_anomalies": anomaly_region_report.get(
                 "unmappable_candidate_point_count", 0
             ),
@@ -730,8 +798,12 @@ def run_real_suite(output_dir: Path, fixture_dir: Path, max_source_samples: int)
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the offline real-data D1 -> D2 -> D3 validation suite.")
-    parser.add_argument("--output-dir", type=Path, required=True, help="New or empty result directory")
+    parser = argparse.ArgumentParser(
+        description="Run the offline real-data D1 -> D2 -> D3 validation suite."
+    )
+    parser.add_argument(
+        "--output-dir", type=Path, required=True, help="New or empty result directory"
+    )
     parser.add_argument("--fixture-dir", type=Path, default=DEFAULT_FIXTURE_DIR)
     parser.add_argument(
         "--max-source-samples",
@@ -746,9 +818,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.max_source_samples != 0 and args.max_source_samples < 20:
-        parser.error("--max-source-samples must be 0 (full) or at least 20 for gold/anomaly coverage")
+        parser.error(
+            "--max-source-samples must be 0 (full) or at least 20 for gold/anomaly coverage"
+        )
     try:
-        report = run_real_suite(args.output_dir, args.fixture_dir, args.max_source_samples)
+        report = run_real_suite(
+            args.output_dir, args.fixture_dir, args.max_source_samples
+        )
     except (OSError, ValueError, csv.Error, json.JSONDecodeError) as exc:
         parser.error(str(exc))
     print(
@@ -756,8 +832,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             {
                 "status": report["status"],
                 "report": str(args.output_dir / "real_data_report.json"),
-                "blocking_failed": report.get("counts", {}).get("blocking", {}).get("failed"),
-                "review_failed": report.get("counts", {}).get("review", {}).get("failed"),
+                "blocking_failed": report.get("counts", {})
+                .get("blocking", {})
+                .get("failed"),
+                "review_failed": report.get("counts", {})
+                .get("review", {})
+                .get("failed"),
                 "atlas": str(args.output_dir / "d3" / "atlas.html"),
             },
             ensure_ascii=False,

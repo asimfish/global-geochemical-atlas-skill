@@ -11,7 +11,14 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-IGNORED_TREE_PARTS = {"__pycache__", ".git", ".pytest_cache", ".ruff_cache", ".venv", "node_modules"}
+IGNORED_TREE_PARTS = {
+    "__pycache__",
+    ".git",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "node_modules",
+}
 IGNORED_TREE_SUFFIXES = {".pyc", ".pyo", ".log", ".tmp"}
 
 
@@ -44,7 +51,9 @@ def hash_tree(root: Path) -> str:
         if (
             path.is_file()
             and not path.is_symlink()
-            and not any(part in IGNORED_TREE_PARTS for part in path.relative_to(root).parts)
+            and not any(
+                part in IGNORED_TREE_PARTS for part in path.relative_to(root).parts
+            )
             and path.suffix.casefold() not in IGNORED_TREE_SUFFIXES
         )
     )

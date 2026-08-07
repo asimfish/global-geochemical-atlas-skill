@@ -82,12 +82,16 @@ class AggregateRunsTests(unittest.TestCase):
                 record["frozen_skill_sha256"] = "b" * 64
                 if record["variant"] == "S0":
                     record["skill_version"] = "b" * 64
-        with self.assertRaisesRegex(AggregateError, "more than one frozen Skill identity"):
+        with self.assertRaisesRegex(
+            AggregateError, "more than one frozen Skill identity"
+        ):
             aggregate(records)
 
     def test_s0_must_bind_the_frozen_skill(self) -> None:
         records = records_for_one_task()
-        next(record for record in records if record["variant"] == "S0")["skill_version"] = "b" * 64
+        next(record for record in records if record["variant"] == "S0")[
+            "skill_version"
+        ] = "b" * 64
         with self.assertRaisesRegex(AggregateError, "does not match the frozen Skill"):
             aggregate(records)
 

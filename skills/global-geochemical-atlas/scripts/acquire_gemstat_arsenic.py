@@ -105,7 +105,12 @@ def atomic_bytes(path: Path, value: bytes) -> None:
 
 
 def atomic_json(path: Path, value: Any) -> None:
-    atomic_bytes(path, (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode())
+    atomic_bytes(
+        path,
+        (
+            json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        ).encode(),
+    )
 
 
 def read_limited(response: Any, maximum: int) -> bytes:
@@ -115,21 +120,29 @@ def read_limited(response: Any, maximum: int) -> bytes:
     return value
 
 
-def fetch(request: urllib.request.Request, maximum: int, timeout: float, retries: int = 3) -> bytes:
+def fetch(
+    request: urllib.request.Request, maximum: int, timeout: float, retries: int = 3
+) -> bytes:
     context = ssl.create_default_context()
     last_error: Exception | None = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(request, timeout=timeout, context=context) as response:
+            with urllib.request.urlopen(
+                request, timeout=timeout, context=context
+            ) as response:
                 final = urllib.parse.urlparse(response.geturl())
                 if final.scheme != "https" or final.hostname != "zenodo.org":
-                    raise AcquisitionError("Zenodo request resolved to an unexpected host")
+                    raise AcquisitionError(
+                        "Zenodo request resolved to an unexpected host"
+                    )
                 return read_limited(response, maximum)
         except (OSError, urllib.error.URLError, AcquisitionError) as exc:
             last_error = exc
             if attempt + 1 < retries:
                 time.sleep(1 + attempt)
-    raise AcquisitionError(f"official request failed after {retries} attempts: {last_error}")
+    raise AcquisitionError(
+        f"official request failed after {retries} attempts: {last_error}"
+    )
 
 
 def validate_metadata(value: Mapping[str, Any]) -> None:
@@ -137,7 +150,14 @@ def validate_metadata(value: Mapping[str, Any]) -> None:
     files = value.get("files")
     if not isinstance(metadata, Mapping) or not isinstance(files, list):
         raise AcquisitionError("Zenodo record metadata has an unexpected shape")
-    archive = next((item for item in files if isinstance(item, Mapping) and item.get("key") == ARCHIVE_NAME), None)
+    archive = next(
+        (
+            item
+            for item in files
+            if isinstance(item, Mapping) and item.get("key") == ARCHIVE_NAME
+        ),
+        None,
+    )
     if (
         value.get("id") != RECORD_ID
         or value.get("doi") != DATASET_DOI
@@ -148,18 +168,33 @@ def validate_metadata(value: Mapping[str, Any]) -> None:
         or archive.get("size") != ARCHIVE_BYTES
         or archive.get("checksum") != f"md5:{ARCHIVE_MD5}"
     ):
-        raise AcquisitionError("Zenodo record no longer matches the pinned GEMStat v3 release")
+        raise AcquisitionError(
+            "Zenodo record no longer matches the pinned GEMStat v3 release"
+        )
 
 
 def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> bytes:
     expected_range_bytes = specification["range_end"] - specification["range_start"] + 1
-    if len(value) != expected_range_bytes or sha256_bytes(value) != specification["range_sha256"]:
+    if (
+        len(value) != expected_range_bytes
+        or sha256_bytes(value) != specification["range_sha256"]
+    ):
         raise AcquisitionError(f"range fragment changed: {specification['name']}")
     if len(value) < 30:
         raise AcquisitionError(f"range fragment is truncated: {specification['name']}")
-    signature, _, flags, method, _, _, crc, compressed, uncompressed, name_length, extra_length = struct.unpack(
-        "<IHHHHHIIIHH", value[:30]
-    )
+    (
+        signature,
+        _,
+        flags,
+        method,
+        _,
+        _,
+        crc,
+        compressed,
+        uncompressed,
+        name_length,
+        extra_length,
+    ) = struct.unpack("<IHHHHHIIIHH", value[:30])
     filename = value[30 : 30 + name_length].decode("utf-8")
     payload_start = 30 + name_length + extra_length
     payload = value[payload_start : payload_start + compressed]
@@ -179,7 +214,9 @@ def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> byte
     try:
         decoded = zlib.decompress(payload, -15)
     except zlib.error as exc:
-        raise AcquisitionError(f"compressed member is corrupt: {specification['name']}") from exc
+        raise AcquisitionError(
+            f"compressed member is corrupt: {specification['name']}"
+        ) from exc
     if (
         len(decoded) != uncompressed
         or f"{binascii.crc32(decoded) & 0xFFFFFFFF:08x}" != expected_crc32
@@ -189,7 +226,9 @@ def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> byte
     return decoded
 
 
-def fetch_verified_range(specification: Mapping[str, Any], timeout: float, retries: int = 3) -> tuple[bytes, bytes]:
+def fetch_verified_range(
+    specification: Mapping[str, Any], timeout: float, retries: int = 3
+) -> tuple[bytes, bytes]:
     """Retry short or corrupt partial responses as well as transport exceptions."""
 
     expected_bytes = specification["range_end"] - specification["range_start"] + 1
@@ -220,7 +259,9 @@ def run(cache_dir: Path, mode: str, timeout: float) -> dict[str, Any]:
     metadata_path = root / "zenodo-record.json"
     if mode == "online":
         metadata_bytes = fetch(
-            urllib.request.Request(RECORD_API, headers={"User-Agent": "global-geochemical-atlas-skill/1"}),
+            urllib.request.Request(
+                RECORD_API, headers={"User-Agent": "global-geochemical-atlas-skill/1"}
+            ),
             200_000,
             timeout,
         )
@@ -241,7 +282,9 @@ def run(cache_dir: Path, mode: str, timeout: float) -> dict[str, Any]:
             try:
                 fragment = range_path.read_bytes()
             except OSError as exc:
-                raise AcquisitionError(f"cached range is missing: {range_path}") from exc
+                raise AcquisitionError(
+                    f"cached range is missing: {range_path}"
+                ) from exc
             decoded = parse_range_fragment(fragment, specification)
         member_path = root / "members" / specification["name"]
         atomic_bytes(member_path, decoded)
@@ -293,11 +336,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         print("acquire_gemstat_arsenic: --accept-cc-by is required", file=sys.stderr)
         return 2
     if not 1 <= args.timeout <= 300:
-        print("acquire_gemstat_arsenic: timeout is outside the safety range", file=sys.stderr)
+        print(
+            "acquire_gemstat_arsenic: timeout is outside the safety range",
+            file=sys.stderr,
+        )
         return 2
     try:
         manifest = run(args.cache_dir, args.mode, args.timeout)
-        print(json.dumps({"status": "PASS", "selected_members": len(manifest["selected_members"])}, sort_keys=True))
+        print(
+            json.dumps(
+                {
+                    "status": "PASS",
+                    "selected_members": len(manifest["selected_members"]),
+                },
+                sort_keys=True,
+            )
+        )
         return 0
     except (AcquisitionError, OSError, ValueError) as exc:
         print(f"acquire_gemstat_arsenic: {exc}", file=sys.stderr)

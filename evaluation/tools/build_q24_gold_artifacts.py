@@ -51,18 +51,26 @@ def logical_sqlite_sha256(path: Path) -> str:
             "WHERE name NOT LIKE 'sqlite_%' ORDER BY type, name"
         ).fetchall()
         tables: dict[str, Any] = {}
-        for table_name, in connection.execute(
+        for (table_name,) in connection.execute(
             "SELECT name FROM sqlite_schema WHERE type='table' "
             "AND name NOT LIKE 'sqlite_%' ORDER BY name"
         ):
             quoted = '"' + table_name.replace('"', '""') + '"'
-            columns = [row[1] for row in connection.execute(f"PRAGMA table_info({quoted})")]
+            columns = [
+                row[1] for row in connection.execute(f"PRAGMA table_info({quoted})")
+            ]
             rows = connection.execute(f"SELECT * FROM {quoted}").fetchall()
-            rows.sort(key=lambda row: json.dumps(row, ensure_ascii=False, separators=(",", ":")))
+            rows.sort(
+                key=lambda row: json.dumps(
+                    row, ensure_ascii=False, separators=(",", ":")
+                )
+            )
             tables[table_name] = {"columns": columns, "rows": rows}
         payload = {"schema": schema, "tables": tables}
         return hashlib.sha256(
-            json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            json.dumps(
+                payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")
         ).hexdigest()
     finally:
         connection.close()
@@ -79,7 +87,9 @@ def _csv_value(value: Any) -> Any:
     if isinstance(value, bool):
         return str(value).lower()
     if isinstance(value, (list, dict)):
-        return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        return json.dumps(
+            value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        )
     return value
 
 
@@ -87,10 +97,17 @@ def _write_csv(path: Path, columns: list[str], rows: list[dict[str, Any]]) -> No
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
-        writer.writerows({column: _csv_value(row.get(column)) for column in columns} for row in rows)
+        writer.writerows(
+            {column: _csv_value(row.get(column)) for column in columns} for row in rows
+        )
 
 
-def _write_sqlite(path: Path, observations: list[dict[str, Any]], sources: list[dict[str, Any]], confidence: dict[str, Any]) -> None:
+def _write_sqlite(
+    path: Path,
+    observations: list[dict[str, Any]],
+    sources: list[dict[str, Any]],
+    confidence: dict[str, Any],
+) -> None:
     path.unlink(missing_ok=True)
     columns = list(observations[0])
     connection = sqlite3.connect(path)
@@ -98,19 +115,30 @@ def _write_sqlite(path: Path, observations: list[dict[str, Any]], sources: list[
         connection.execute("PRAGMA journal_mode=DELETE")
         connection.execute("PRAGMA synchronous=FULL")
         connection.execute(
-            "CREATE TABLE observations (" + ",".join(f'"{column}" TEXT' for column in columns) + ", PRIMARY KEY(record_id))"
+            "CREATE TABLE observations ("
+            + ",".join(f'"{column}" TEXT' for column in columns)
+            + ", PRIMARY KEY(record_id))"
         )
         placeholders = ",".join("?" for _ in columns)
         connection.executemany(
             f"INSERT INTO observations VALUES ({placeholders})",
-            [[str(_csv_value(row.get(column))) for column in columns] for row in observations],
+            [
+                [str(_csv_value(row.get(column))) for column in columns]
+                for row in observations
+            ],
         )
         connection.execute(
             "CREATE TABLE sources (source_id TEXT PRIMARY KEY, evidence_json TEXT NOT NULL)"
         )
         connection.executemany(
             "INSERT INTO sources VALUES (?, ?)",
-            [(str(row["source_id"]), json.dumps(row, sort_keys=True, separators=(",", ":"))) for row in sources],
+            [
+                (
+                    str(row["source_id"]),
+                    json.dumps(row, sort_keys=True, separators=(",", ":")),
+                )
+                for row in sources
+            ],
         )
         connection.execute(
             "CREATE TABLE workflow_confidence (schema_version TEXT, overall_score REAL, band TEXT, interpretation TEXT, evidence_json TEXT)"
@@ -118,8 +146,11 @@ def _write_sqlite(path: Path, observations: list[dict[str, Any]], sources: list[
         connection.execute(
             "INSERT INTO workflow_confidence VALUES (?, ?, ?, ?, ?)",
             (
-                confidence["schema_version"], confidence["overall_score"], confidence["band"],
-                confidence["interpretation"], json.dumps(confidence, sort_keys=True, separators=(",", ":")),
+                confidence["schema_version"],
+                confidence["overall_score"],
+                confidence["band"],
+                confidence["interpretation"],
+                json.dumps(confidence, sort_keys=True, separators=(",", ":")),
             ),
         )
         connection.commit()
@@ -129,10 +160,17 @@ def _write_sqlite(path: Path, observations: list[dict[str, Any]], sources: list[
 
 
 def _chunk(kind: bytes, payload: bytes) -> bytes:
-    return struct.pack(">I", len(payload)) + kind + payload + struct.pack(">I", binascii.crc32(kind + payload) & 0xFFFFFFFF)
+    return (
+        struct.pack(">I", len(payload))
+        + kind
+        + payload
+        + struct.pack(">I", binascii.crc32(kind + payload) & 0xFFFFFFFF)
+    )
 
 
-def _write_png(path: Path, map_geojson: dict[str, Any], anomaly_geojson: dict[str, Any]) -> None:
+def _write_png(
+    path: Path, map_geojson: dict[str, Any], anomaly_geojson: dict[str, Any]
+) -> None:
     width, height = 900, 450
     pixels = bytearray([248, 250, 252] * width * height)
 
@@ -142,7 +180,9 @@ def _write_png(path: Path, map_geojson: dict[str, Any], anomaly_geojson: dict[st
             pixels[offset : offset + 3] = bytes(color)
 
     def project(lon: float, lat: float) -> tuple[int, int]:
-        return round((lon + 180) / 360 * (width - 1)), round((90 - lat) / 180 * (height - 1))
+        return round((lon + 180) / 360 * (width - 1)), round(
+            (90 - lat) / 180 * (height - 1)
+        )
 
     for lon in range(-180, 181, 30):
         x, _ = project(lon, 0)
@@ -163,9 +203,16 @@ def _write_png(path: Path, map_geojson: dict[str, Any], anomaly_geojson: dict[st
         for radius in (7, 8):
             for dx in range(-radius, radius + 1):
                 for dy in range(-radius, radius + 1):
-                    if radius * radius - radius <= dx * dx + dy * dy <= radius * radius + radius:
+                    if (
+                        radius * radius - radius
+                        <= dx * dx + dy * dy
+                        <= radius * radius + radius
+                    ):
                         pixel(x + dx, y + dy, (220, 38, 38))
-    raw = b"".join(b"\x00" + bytes(pixels[y * width * 3 : (y + 1) * width * 3]) for y in range(height))
+    raw = b"".join(
+        b"\x00" + bytes(pixels[y * width * 3 : (y + 1) * width * 3])
+        for y in range(height)
+    )
     png = b"\x89PNG\r\n\x1a\n"
     png += _chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
     png += _chunk(b"IDAT", zlib.compress(raw, 9))
@@ -174,8 +221,12 @@ def _write_png(path: Path, map_geojson: dict[str, Any], anomaly_geojson: dict[st
 
 
 def _map_html(map_geojson: dict[str, Any], anomaly_geojson: dict[str, Any]) -> str:
-    points = json.dumps(map_geojson, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    anomalies = json.dumps(anomaly_geojson, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    points = json.dumps(
+        map_geojson, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    anomalies = json.dumps(
+        anomaly_geojson, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
     return f"""<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><title>Q24 interactive geochemical map</title>
 <style>body{{font:14px system-ui;margin:16px;color:#172033}}canvas{{border:1px solid #94a3b8;background:#f8fafc}}button,label{{margin:0 6px 8px 0}}pre{{max-width:900px;background:#f1f5f9;padding:8px;min-height:48px}}</style></head>
@@ -212,20 +263,50 @@ def build(manifest_path: Path, output: Path) -> dict[str, Any]:
     _write_csv(output / "observations.csv", observations_entry["columns"], observations)
     _write_sqlite(output / "geochemical.sqlite", observations, sources, confidence)
     (output / "sources.jsonl").write_text(
-        "".join(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n" for row in sources),
+        "".join(
+            json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            + "\n"
+            for row in sources
+        ),
         encoding="utf-8",
     )
-    (output / "qc_report.json").write_text(json.dumps(qc, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (output / "anomalies.geojson").write_text(json.dumps(anomaly_geojson, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (output / "qc_report.json").write_text(
+        json.dumps(qc, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (output / "anomalies.geojson").write_text(
+        json.dumps(anomaly_geojson, ensure_ascii=False, indent=2, sort_keys=True)
+        + "\n",
+        encoding="utf-8",
+    )
     anomaly_rows = [
-        {**feature.get("properties", {}), "record_id": feature.get("properties", {}).get("record_id") or feature.get("id")}
+        {
+            **feature.get("properties", {}),
+            "record_id": feature.get("properties", {}).get("record_id")
+            or feature.get("id"),
+        }
         for feature in anomaly_geojson["features"]
     ]
-    anomaly_columns = ["record_id", "source_id", "group_id", "anomaly_type", "robust_z", "center_log10", "scale_log10", "n"]
+    anomaly_columns = [
+        "record_id",
+        "source_id",
+        "group_id",
+        "anomaly_type",
+        "robust_z",
+        "center_log10",
+        "scale_log10",
+        "n",
+    ]
     _write_csv(output / "anomaly_results.csv", anomaly_columns, anomaly_rows)
-    _write_csv(output / "h3_cells.csv", ["h3_index", "resolution", "element", "medium", "measurement_count"], [])
+    _write_csv(
+        output / "h3_cells.csv",
+        ["h3_index", "resolution", "element", "medium", "measurement_count"],
+        [],
+    )
     _write_png(output / "map.png", map_geojson, anomaly_geojson)
-    (output / "map.html").write_text(_map_html(map_geojson, anomaly_geojson), encoding="utf-8")
+    (output / "map.html").write_text(
+        _map_html(map_geojson, anomaly_geojson), encoding="utf-8"
+    )
 
     manifest["artifacts"] = []
     for name, artifact_id in ARTIFACT_IDS.items():
@@ -236,10 +317,23 @@ def build(manifest_path: Path, output: Path) -> dict[str, Any]:
     manifest["physical_artifact_profile"] = {
         "profile_version": "q24-physical-product-v1",
         "source": "benchmark_evidence",
-        "interactive_map_requirements": ["zoom_or_pan", "anomaly_toggle", "record_source_drilldown"],
+        "interactive_map_requirements": [
+            "zoom_or_pan",
+            "anomaly_toggle",
+            "record_source_drilldown",
+        ],
     }
-    (output / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    return {"status": "PASS", "artifacts": {name: sha256_file(output / name) for name in [*ARTIFACT_IDS, "run_manifest.json"]}}
+    (output / "run_manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "status": "PASS",
+        "artifacts": {
+            name: sha256_file(output / name)
+            for name in [*ARTIFACT_IDS, "run_manifest.json"]
+        },
+    }
 
 
 def main() -> int:

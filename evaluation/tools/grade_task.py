@@ -22,7 +22,11 @@ from typing import Any
 
 
 GRADER_VERSION = "6.0.0-draft.3"
-ALIGNMENT_PATH = Path(__file__).resolve().parents[1] / "contracts" / "benchmark-execution-contract.json"
+ALIGNMENT_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "contracts"
+    / "benchmark-execution-contract.json"
+)
 
 
 class GradeError(Exception):
@@ -58,13 +62,18 @@ def _virtual_entry(root: Path, relative: str) -> dict[str, Any] | None:
         manifest = _load_json(manifest_path)
     except (FileNotFoundError, json.JSONDecodeError, OSError, TypeError):
         return None
-    evidence = manifest.get("benchmark_evidence") if isinstance(manifest, dict) else None
+    evidence = (
+        manifest.get("benchmark_evidence") if isinstance(manifest, dict) else None
+    )
     entry = evidence.get(relative) if isinstance(evidence, dict) else None
     return entry if isinstance(entry, dict) else None
 
 
 def _resource_exists(root: Path, relative: str) -> bool:
-    return _virtual_entry(root, relative) is not None or _safe_path(root, relative).is_file()
+    return (
+        _virtual_entry(root, relative) is not None
+        or _safe_path(root, relative).is_file()
+    )
 
 
 def _resource_bytes(root: Path, relative: str) -> bytes:
@@ -78,7 +87,9 @@ def _resource_bytes(root: Path, relative: str) -> bytes:
         return base64.b64decode(str(entry.get("value", "")), validate=True)
     if fmt == "text":
         return str(entry.get("value", "")).encode("utf-8")
-    return json.dumps(entry, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return json.dumps(
+        entry, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
 
 
 def _resource_json(root: Path, relative: str) -> Any:
@@ -103,11 +114,16 @@ def _resource_csv(root: Path, relative: str) -> tuple[list[str], list[dict[str, 
         raise ValueError(f"logical evidence {relative} is not CSV")
     columns = entry.get("columns")
     rows = entry.get("rows")
-    if not isinstance(columns, list) or not all(isinstance(item, str) for item in columns):
+    if not isinstance(columns, list) or not all(
+        isinstance(item, str) for item in columns
+    ):
         raise ValueError(f"logical evidence {relative} has invalid CSV columns")
     if not isinstance(rows, list) or not all(isinstance(item, dict) for item in rows):
         raise ValueError(f"logical evidence {relative} has invalid CSV rows")
-    normalized = [{str(key): "" if value is None else str(value) for key, value in row.items()} for row in rows]
+    normalized = [
+        {str(key): "" if value is None else str(value) for key, value in row.items()}
+        for row in rows
+    ]
     return columns, normalized
 
 
@@ -125,14 +141,23 @@ def _resource_text(root: Path, relative: str) -> str:
         writer.writerows(rows)
         return stream.getvalue()
     if entry.get("format") == "jsonl":
-        return "".join(json.dumps(item, ensure_ascii=False, separators=(",", ":")) + "\n" for item in entry.get("rows", []))
+        return "".join(
+            json.dumps(item, ensure_ascii=False, separators=(",", ":")) + "\n"
+            for item in entry.get("rows", [])
+        )
     return json.dumps(entry.get("value", entry), ensure_ascii=False, sort_keys=True)
 
 
 def _resource_jsonl(root: Path, relative: str) -> list[Any]:
     entry = _virtual_entry(root, relative)
     if entry is None:
-        return [json.loads(line) for line in _safe_path(root, relative).read_text(encoding="utf-8").splitlines() if line.strip()]
+        return [
+            json.loads(line)
+            for line in _safe_path(root, relative)
+            .read_text(encoding="utf-8")
+            .splitlines()
+            if line.strip()
+        ]
     if entry.get("format") != "jsonl" or not isinstance(entry.get("rows"), list):
         raise ValueError(f"logical evidence {relative} is not JSONL")
     return entry["rows"]
@@ -165,7 +190,9 @@ def _to_number(value: Any) -> float | None:
     return None
 
 
-def _equivalent(actual: Any, expected: Any, tolerance: float = 0.0, unordered: bool = False) -> bool:
+def _equivalent(
+    actual: Any, expected: Any, tolerance: float = 0.0, unordered: bool = False
+) -> bool:
     if expected is None:
         return actual is None or actual == ""
     if isinstance(expected, bool):
@@ -175,10 +202,14 @@ def _equivalent(actual: Any, expected: Any, tolerance: float = 0.0, unordered: b
     expected_number = _to_number(expected)
     actual_number = _to_number(actual)
     if expected_number is not None and actual_number is not None:
-        return math.isclose(actual_number, expected_number, rel_tol=0.0, abs_tol=tolerance)
+        return math.isclose(
+            actual_number, expected_number, rel_tol=0.0, abs_tol=tolerance
+        )
     if isinstance(expected, list) and isinstance(actual, list):
         if unordered:
-            return sorted(json.dumps(x, sort_keys=True, ensure_ascii=False) for x in actual) == sorted(
+            return sorted(
+                json.dumps(x, sort_keys=True, ensure_ascii=False) for x in actual
+            ) == sorted(
                 json.dumps(x, sort_keys=True, ensure_ascii=False) for x in expected
             )
         return actual == expected
@@ -186,9 +217,15 @@ def _equivalent(actual: Any, expected: Any, tolerance: float = 0.0, unordered: b
 
 
 def _find_csv_row(rows: list[dict[str, str]], key: dict[str, Any]) -> dict[str, str]:
-    matches = [row for row in rows if all(_equivalent(row.get(column), value) for column, value in key.items())]
+    matches = [
+        row
+        for row in rows
+        if all(_equivalent(row.get(column), value) for column, value in key.items())
+    ]
     if len(matches) != 1:
-        raise LookupError(f"expected exactly one row for key {key}, found {len(matches)}")
+        raise LookupError(
+            f"expected exactly one row for key {key}, found {len(matches)}"
+        )
     return matches[0]
 
 
@@ -201,10 +238,14 @@ def _find_json_array_item(items: Any, key: dict[str, Any]) -> dict[str, Any]:
         item
         for item in items
         if isinstance(item, dict)
-        and all(_equivalent(item.get(field), expected) for field, expected in key.items())
+        and all(
+            _equivalent(item.get(field), expected) for field, expected in key.items()
+        )
     ]
     if len(matches) != 1:
-        raise LookupError(f"expected exactly one JSON item for key {key}, found {len(matches)}")
+        raise LookupError(
+            f"expected exactly one JSON item for key {key}, found {len(matches)}"
+        )
     return matches[0]
 
 
@@ -227,12 +268,18 @@ def evaluate_check(root: Path, check: dict[str, Any]) -> dict[str, Any]:
     try:
         if check_type == "file_exists":
             passed = _resource_exists(root, relative)
-            return _result(check, passed, f"{relative}: {'file' if passed else 'missing'}")
+            return _result(
+                check, passed, f"{relative}: {'file' if passed else 'missing'}"
+            )
 
         if check_type == "file_min_bytes":
             size = len(_resource_bytes(root, relative))
             minimum = int(check["minimum"])
-            return _result(check, size >= minimum, f"{relative}: {size} bytes; required >= {minimum}")
+            return _result(
+                check,
+                size >= minimum,
+                f"{relative}: {size} bytes; required >= {minimum}",
+            )
 
         if check_type == "file_sha256":
             digest = hashlib.sha256(_resource_bytes(root, relative)).hexdigest()
@@ -248,14 +295,26 @@ def evaluate_check(root: Path, check: dict[str, Any]) -> dict[str, Any]:
             _, rows = _resource_csv(root, relative)
             count = len(rows)
             expected = int(check["expected"])
-            return _result(check, count == expected, f"{relative}: rows={count}; expected={expected}")
+            return _result(
+                check,
+                count == expected,
+                f"{relative}: rows={count}; expected={expected}",
+            )
 
         if check_type == "csv_key_set":
             _, rows = _resource_csv(root, relative)
             columns = check["columns"]
-            actual = sorted(tuple(row.get(column, "") for column in columns) for row in rows)
-            expected = sorted(tuple(str(value) for value in item) for item in check["expected"])
-            return _result(check, actual == expected, f"{relative}: actual keys={actual}; expected={expected}")
+            actual = sorted(
+                tuple(row.get(column, "") for column in columns) for row in rows
+            )
+            expected = sorted(
+                tuple(str(value) for value in item) for item in check["expected"]
+            )
+            return _result(
+                check,
+                actual == expected,
+                f"{relative}: actual keys={actual}; expected={expected}",
+            )
 
         if check_type == "csv_cell":
             _, rows = _resource_csv(root, relative)
@@ -274,7 +333,12 @@ def evaluate_check(root: Path, check: dict[str, Any]) -> dict[str, Any]:
             actual = _json_path(_resource_json(root, relative), check["json_path"])
             expected = check.get("expected")
             tolerance = float(check.get("tolerance", 0.0))
-            passed = _equivalent(actual, expected, tolerance=tolerance, unordered=bool(check.get("unordered")))
+            passed = _equivalent(
+                actual,
+                expected,
+                tolerance=tolerance,
+                unordered=bool(check.get("unordered")),
+            )
             return _result(
                 check,
                 passed,
@@ -307,23 +371,43 @@ def evaluate_check(root: Path, check: dict[str, Any]) -> dict[str, Any]:
             actual = _json_path(_resource_json(root, relative), check["json_path"])
             length = len(actual)
             expected = int(check["expected"])
-            return _result(check, length == expected, f"{relative} path={check['json_path']} length={length}; expected={expected}")
+            return _result(
+                check,
+                length == expected,
+                f"{relative} path={check['json_path']} length={length}; expected={expected}",
+            )
 
         if check_type == "json_array_contains":
             actual = _json_path(_resource_json(root, relative), check["json_path"])
             expected = check["expected"]
             missing = [item for item in expected if item not in actual]
-            return _result(check, not missing, f"{relative} path={check['json_path']} missing={missing}")
+            return _result(
+                check,
+                not missing,
+                f"{relative} path={check['json_path']} missing={missing}",
+            )
 
         if check_type == "json_object_has_keys":
             actual = _json_path(_resource_json(root, relative), check["json_path"])
-            missing = [key for key in check["required"] if not isinstance(actual, dict) or key not in actual]
-            return _result(check, not missing, f"{relative} path={check['json_path']} missing keys={missing}")
+            missing = [
+                key
+                for key in check["required"]
+                if not isinstance(actual, dict) or key not in actual
+            ]
+            return _result(
+                check,
+                not missing,
+                f"{relative} path={check['json_path']} missing keys={missing}",
+            )
 
         if check_type == "jsonl_row_count":
             lines = _resource_jsonl(root, relative)
             expected = int(check["expected"])
-            return _result(check, len(lines) == expected, f"{relative}: JSONL rows={len(lines)}; expected={expected}")
+            return _result(
+                check,
+                len(lines) == expected,
+                f"{relative}: JSONL rows={len(lines)}; expected={expected}",
+            )
 
         if check_type == "text_contains_all":
             content = _resource_text(root, relative).lower()
@@ -332,13 +416,26 @@ def evaluate_check(root: Path, check: dict[str, Any]) -> dict[str, Any]:
 
         if check_type == "text_regex_forbidden":
             content = _resource_text(root, relative)
-            matches = re.findall(check["pattern"], content, flags=re.IGNORECASE | re.MULTILINE)
-            return _result(check, not matches, f"{relative}: forbidden matches={matches[:5]}")
+            matches = re.findall(
+                check["pattern"], content, flags=re.IGNORECASE | re.MULTILINE
+            )
+            return _result(
+                check, not matches, f"{relative}: forbidden matches={matches[:5]}"
+            )
 
         raise GradeError(f"unsupported check type: {check_type}")
     except (FileNotFoundError, IsADirectoryError) as exc:
-        return _result(check, False, f"{relative}: unavailable ({exc.__class__.__name__})")
-    except (json.JSONDecodeError, csv.Error, KeyError, ValueError, LookupError, TypeError) as exc:
+        return _result(
+            check, False, f"{relative}: unavailable ({exc.__class__.__name__})"
+        )
+    except (
+        json.JSONDecodeError,
+        csv.Error,
+        KeyError,
+        ValueError,
+        LookupError,
+        TypeError,
+    ) as exc:
         return _result(check, False, f"{relative}: evaluation error: {exc}")
 
 
@@ -346,14 +443,18 @@ def grade(task_dir: Path, submission_dir: Path) -> dict[str, Any]:
     spec_path = task_dir / "checker" / "grader_spec.json"
     spec = _load_json(spec_path)
     alignment = _load_json(ALIGNMENT_PATH)
-    allowed_dimensions = {item["dimension_id"]: item for item in alignment["dimensions"]}
+    allowed_dimensions = {
+        item["dimension_id"]: item for item in alignment["dimensions"]
+    }
     for item in [*spec.get("checks", []), *spec.get("redlines", [])]:
         if item.get("dimension_id") not in allowed_dimensions:
             raise GradeError(f"unknown or missing E1 dimension_id for {item.get('id')}")
     checks = [evaluate_check(submission_dir, check) for check in spec["checks"]]
     points_possible = sum(item["points_possible"] for item in checks)
     if points_possible != int(spec.get("evidence_points", -1)):
-        raise GradeError(f"check points sum to {points_possible}, expected evidence_points={spec.get('evidence_points')}")
+        raise GradeError(
+            f"check points sum to {points_possible}, expected evidence_points={spec.get('evidence_points')}"
+        )
 
     redline_events: list[dict[str, Any]] = []
     for rule in spec.get("redlines", []):
@@ -361,7 +462,10 @@ def grade(task_dir: Path, submission_dir: Path) -> dict[str, Any]:
         # A missing or unparsable artifact already loses its objective checks;
         # it is not evidence that a scientific red line actually occurred.
         # Red lines require affirmative, evaluable output evidence.
-        if "unavailable (" in result["evidence"] or "evaluation error:" in result["evidence"]:
+        if (
+            "unavailable (" in result["evidence"]
+            or "evaluation error:" in result["evidence"]
+        ):
             continue
         if not result["passed"]:
             redline_events.append(
@@ -383,7 +487,9 @@ def grade(task_dir: Path, submission_dir: Path) -> dict[str, Any]:
                 "weight": dimension["weight"],
                 "evidence_points_awarded": awarded,
                 "evidence_points_possible": possible,
-                "evidence_score": round(awarded / possible * 100, 6) if possible else None,
+                "evidence_score": round(awarded / possible * 100, 6)
+                if possible
+                else None,
                 "status": "scored" if possible else "not_scored",
             }
         )
@@ -392,7 +498,10 @@ def grade(task_dir: Path, submission_dir: Path) -> dict[str, Any]:
         "task_id": spec["task_id"],
         "scoring_contract": "e1-six-dimension-v1",
         "score_status": "evidence_only",
-        "hard_gate_passed": not any(event["consequence"] in {"task_zero", "acceptance_fail"} for event in redline_events),
+        "hard_gate_passed": not any(
+            event["consequence"] in {"task_zero", "acceptance_fail"}
+            for event in redline_events
+        ),
         "evidence_points_awarded": sum(item["points_awarded"] for item in checks),
         "evidence_points_possible": points_possible,
         "dimensions": dimensions,

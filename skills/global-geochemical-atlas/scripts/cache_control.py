@@ -20,7 +20,9 @@ class CacheControlError(ValueError):
     """Raised when a cache target is ambiguous or unsafe."""
 
 
-def stable_request_cache_key(source_id: str, dataset_version: str, request: Mapping[str, Any]) -> str:
+def stable_request_cache_key(
+    source_id: str, dataset_version: str, request: Mapping[str, Any]
+) -> str:
     """Hash source, immutable version and canonical request parameters."""
 
     if not source_id.strip() or not dataset_version.strip():
@@ -32,7 +34,9 @@ def stable_request_cache_key(source_id: str, dataset_version: str, request: Mapp
         "source_id": source_id,
     }
     try:
-        canonical = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+        canonical = json.dumps(
+            payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True
+        )
     except (TypeError, ValueError) as exc:
         raise CacheControlError(f"request is not canonical JSON: {exc}") from exc
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
@@ -47,8 +51,12 @@ def _sha256(path: Path) -> str:
 
 
 def _target(cache_dir: Path, source_id: str, dataset_version: str) -> Path:
-    if not SAFE_COMPONENT.fullmatch(source_id) or not SAFE_COMPONENT.fullmatch(dataset_version):
-        raise CacheControlError("source_id and dataset_version must be explicit safe path components")
+    if not SAFE_COMPONENT.fullmatch(source_id) or not SAFE_COMPONENT.fullmatch(
+        dataset_version
+    ):
+        raise CacheControlError(
+            "source_id and dataset_version must be explicit safe path components"
+        )
     root = cache_dir.resolve()
     source_root = root / source_id
     target = source_root / dataset_version
@@ -65,32 +73,51 @@ def _target(cache_dir: Path, source_id: str, dataset_version: str) -> Path:
 
 
 def inspect_cache(
-    cache_dir: Path, source_id: str, dataset_version: str, request: Mapping[str, Any] | None = None
+    cache_dir: Path,
+    source_id: str,
+    dataset_version: str,
+    request: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     target = _target(cache_dir, source_id, dataset_version)
     if target.is_symlink():
         raise CacheControlError("versioned cache target must not be a symlink")
-    files = sorted(path for path in target.rglob("*") if path.is_file()) if target.is_dir() else []
+    files = (
+        sorted(path for path in target.rglob("*") if path.is_file())
+        if target.is_dir()
+        else []
+    )
     manifests: list[dict[str, Any]] = []
     verified = 0
     invalid = 0
-    for manifest_path in (path for path in files if path.name.endswith(".download.json")):
+    for manifest_path in (
+        path for path in files if path.name.endswith(".download.json")
+    ):
         state: dict[str, Any] = {"path": str(manifest_path.relative_to(target))}
         try:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
             output_name = manifest.get("output_filename")
-            data_path = manifest_path.parent / output_name if isinstance(output_name, str) else None
+            data_path = (
+                manifest_path.parent / output_name
+                if isinstance(output_name, str)
+                else None
+            )
             if not data_path or not data_path.is_file() or not manifest.get("sha256"):
-                raise CacheControlError("manifest lacks a present output file or SHA-256")
+                raise CacheControlError(
+                    "manifest lacks a present output file or SHA-256"
+                )
             if manifest.get("dataset_version") != dataset_version:
-                raise CacheControlError("manifest dataset version does not match the requested version")
+                raise CacheControlError(
+                    "manifest dataset version does not match the requested version"
+                )
             observed = _sha256(data_path)
             state.update(
                 {
                     "output_filename": output_name,
                     "recorded_sha256": manifest["sha256"],
                     "observed_sha256": observed,
-                    "status": "verified" if observed == manifest["sha256"] else "invalid",
+                    "status": "verified"
+                    if observed == manifest["sha256"]
+                    else "invalid",
                 }
             )
         except (OSError, json.JSONDecodeError, CacheControlError) as exc:
@@ -117,11 +144,17 @@ def inspect_cache(
         "manifests": manifests,
         "verified_manifest_count": verified,
         "invalid_manifest_count": invalid,
-        "request_cache_key": stable_request_cache_key(source_id, dataset_version, request) if request else None,
+        "request_cache_key": stable_request_cache_key(
+            source_id, dataset_version, request
+        )
+        if request
+        else None,
     }
 
 
-def delete_cache(cache_dir: Path, source_id: str, dataset_version: str, confirmation: str) -> dict[str, Any]:
+def delete_cache(
+    cache_dir: Path, source_id: str, dataset_version: str, confirmation: str
+) -> dict[str, Any]:
     target = _target(cache_dir, source_id, dataset_version)
     expected = f"{source_id}@{dataset_version}"
     if confirmation != expected:
@@ -131,7 +164,9 @@ def delete_cache(cache_dir: Path, source_id: str, dataset_version: str, confirma
     if not target.is_dir():
         raise CacheControlError(f"versioned cache does not exist: {target}")
     file_count = sum(1 for path in target.rglob("*") if path.is_file())
-    byte_count = sum(path.stat().st_size for path in target.rglob("*") if path.is_file())
+    byte_count = sum(
+        path.stat().st_size for path in target.rglob("*") if path.is_file()
+    )
     shutil.rmtree(target)
     return {
         "cache_control_version": "d1-cache-control-v1",
@@ -173,11 +208,23 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         if args.command == "status":
-            report = inspect_cache(args.cache_dir, args.source_id, args.dataset_version, _request(args.request))
+            report = inspect_cache(
+                args.cache_dir,
+                args.source_id,
+                args.dataset_version,
+                _request(args.request),
+            )
         else:
-            report = delete_cache(args.cache_dir, args.source_id, args.dataset_version, args.confirm)
+            report = delete_cache(
+                args.cache_dir, args.source_id, args.dataset_version, args.confirm
+            )
     except (OSError, json.JSONDecodeError, CacheControlError) as exc:
-        print(json.dumps({"status": "invalid_input", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                {"status": "invalid_input", "error": str(exc)}, ensure_ascii=False
+            ),
+            file=sys.stderr,
+        )
         return 2
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0

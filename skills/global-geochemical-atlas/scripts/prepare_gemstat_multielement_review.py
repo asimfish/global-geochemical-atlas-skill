@@ -27,7 +27,9 @@ class ReviewError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -97,8 +99,12 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
                 else:
                     current[1].add(category)
         if len(chosen) != QUOTAS[element]:
-            raise ReviewError(f"{element} review produced {len(chosen)} rows, expected {QUOTAS[element]}")
-        selected.extend((record, sorted(reasons)) for record, reasons in chosen.values())
+            raise ReviewError(
+                f"{element} review produced {len(chosen)} rows, expected {QUOTAS[element]}"
+            )
+        selected.extend(
+            (record, sorted(reasons)) for record, reasons in chosen.values()
+        )
 
     records: list[dict[str, Any]] = []
     for position, (record, reasons) in enumerate(selected, start=1):
@@ -135,19 +141,24 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
             "record_id": output_record_id,
         }
         checks = {
-            "registered_member_bytes_match": source_file.bytes == source_file.path.stat().st_size,
+            "registered_member_bytes_match": source_file.bytes
+            == source_file.path.stat().st_size,
             "element_mapping_preserved": source_adapters.GemstatOpenArchiveAdapter.PARAMETER_MAP[
                 fields["Parameter Code"]
-            ][0] == element,
-            "station_join_preserved": station["GEMS Station Number"] == fields["GEMS Station Number"],
-            "coordinates_preserved": finite(station["Latitude"]) and finite(station["Longitude"]),
+            ][0]
+            == element,
+            "station_join_preserved": station["GEMS Station Number"]
+            == fields["GEMS Station Number"],
+            "coordinates_preserved": finite(station["Latitude"])
+            and finite(station["Longitude"]),
             "sample_depth_preserved": finite(fields["Depth"]),
             "raw_value_qualifier_and_unit_preserved": finite(raw_value)
             and fields["Value Flags"] in {"", "<", ">"}
             and unit in {"mg/l", "µg/l", "ng/l", "µg/g"},
             "fraction_preserved": fields["_water_fraction"]
             in {"dissolved", "extractable", "suspended", "total"},
-            "method_join_preserved": method["Parameter Code"] == fields["Parameter Code"]
+            "method_join_preserved": method["Parameter Code"]
+            == fields["Parameter Code"]
             and method["Analysis Method Code"] == fields["Analysis Method Code"]
             and method["Unit"] == unit,
             "stable_observation_id_present": output_record_id.startswith("rec-"),
@@ -170,7 +181,12 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
                 "adapter_observations": [observation],
                 "automated_checks": checks,
                 "automated_status": "PASS" if all(checks.values()) else "FAIL",
-                "reviewer": {"decision": None, "reviewer": None, "reviewed_at": None, "notes": None},
+                "reviewer": {
+                    "decision": None,
+                    "reviewer": None,
+                    "reviewed_at": None,
+                    "notes": None,
+                },
             }
         )
     pass_count = sum(record["automated_status"] == "PASS" for record in records)
@@ -209,9 +225,23 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         review = prepare(args.cache_dir)
         atomic_json(args.output, review)
-        print(json.dumps({"status": "PASS", "prepared": review["prepared_record_count"]}, sort_keys=True))
-        return 0 if review["automated_pass_count"] == review["prepared_record_count"] == 30 else 1
-    except (OSError, ValueError, ReviewError, source_adapters.SourceAdapterError) as exc:
+        print(
+            json.dumps(
+                {"status": "PASS", "prepared": review["prepared_record_count"]},
+                sort_keys=True,
+            )
+        )
+        return (
+            0
+            if review["automated_pass_count"] == review["prepared_record_count"] == 30
+            else 1
+        )
+    except (
+        OSError,
+        ValueError,
+        ReviewError,
+        source_adapters.SourceAdapterError,
+    ) as exc:
         print(f"prepare_gemstat_multielement_review: {exc}", file=sys.stderr)
         return 2
 

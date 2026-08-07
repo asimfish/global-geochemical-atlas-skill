@@ -16,7 +16,9 @@ import source_router
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
-DEFAULT_REQUEST = SKILL_DIR / "fixtures" / "source-routing" / "global-all-media-request.json"
+DEFAULT_REQUEST = (
+    SKILL_DIR / "fixtures" / "source-routing" / "global-all-media-request.json"
+)
 
 COVERAGE_VERSION = "geochemical-coverage-matrix-v3"
 
@@ -40,10 +42,15 @@ def build_matrix(
 ) -> dict[str, Any]:
     """Summarize route coverage while keeping unverified dimensions unknown."""
 
-    resolved_registry = dict(registry) if registry is not None else source_adapters.load_source_registry()
+    resolved_registry = (
+        dict(registry)
+        if registry is not None
+        else source_adapters.load_source_registry()
+    )
     route = source_router.route_sources(request, catalog, resolved_registry)
     routed_sources = {
-        item["source_id"]: item for item in [*route["selected_sources"], *route["review_sources"]]
+        item["source_id"]: item
+        for item in [*route["selected_sources"], *route["review_sources"]]
     }
     cells: dict[str, Any] = {}
     for medium in route["request"]["media"]:
@@ -55,7 +62,9 @@ def build_matrix(
             for source_id in [*selected, *candidates]
         }
         source_target_analytes = {
-            source_id: sorted(resolved_registry["sources"][source_id].get("target_analytes", {}))
+            source_id: sorted(
+                resolved_registry["sources"][source_id].get("target_analytes", {})
+            )
             for source_id in selected
             if source_id in resolved_registry.get("sources", {})
         }
@@ -68,7 +77,9 @@ def build_matrix(
         )
         requested_analytes = list(route["request"]["elements"])
         analyte_source_counts = {
-            analyte: sum(analyte in analytes for analytes in source_target_analytes.values())
+            analyte: sum(
+                analyte in analytes for analytes in source_target_analytes.values()
+            )
             for analyte in requested_analytes
         }
         analytes_with_single_source = sorted(
@@ -77,7 +88,9 @@ def build_matrix(
         analytes_with_multiple_sources = sorted(
             analyte for analyte, count in analyte_source_counts.items() if count > 1
         )
-        lineage_ids = sorted({source_adapters.source_lineage_id(source_id) for source_id in selected})
+        lineage_ids = sorted(
+            {source_adapters.source_lineage_id(source_id) for source_id in selected}
+        )
         if len(selected) == 1:
             independence = "single_source_dependency"
         elif len(lineage_ids) == 1:
@@ -111,10 +124,12 @@ def build_matrix(
             "candidate_sources": candidates,
             "source_scopes": source_scopes,
             "source_evidence_tiers": {
-                source_id: routed_sources[source_id]["evidence_tier"] for source_id in source_scopes
+                source_id: routed_sources[source_id]["evidence_tier"]
+                for source_id in source_scopes
             },
             "source_use_modes": {
-                source_id: routed_sources[source_id]["use_mode"] for source_id in source_scopes
+                source_id: routed_sources[source_id]["use_mode"]
+                for source_id in source_scopes
             },
             "source_independence": independence,
             "independent_lineage_count": len(lineage_ids),
@@ -183,7 +198,11 @@ def render_markdown(matrix: Mapping[str, Any]) -> str:
         selected = ", ".join(cell["selected_sources"]) or "无"
         candidates = ", ".join(cell["candidate_sources"]) or "无"
         unknowns = "/".join(
-            (cell["analyte_coverage"], cell["method_metadata_coverage"], cell["spatial_density_coverage"])
+            (
+                cell["analyte_coverage"],
+                cell["method_metadata_coverage"],
+                cell["spatial_density_coverage"],
+            )
         )
         lines.append(
             f"| {medium} | `{cell['status']}` | {selected} | {candidates} | "
@@ -239,7 +258,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         request = _read_json(args.request, "request")
         registry = source_adapters.load_source_registry()
         matrix = build_matrix(catalog, request, registry)
-        rendered_json = json.dumps(matrix, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        rendered_json = (
+            json.dumps(matrix, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        )
         rendered_markdown = render_markdown(matrix)
         if args.json_output:
             args.json_output.parent.mkdir(parents=True, exist_ok=True)
@@ -250,7 +271,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(rendered_json, end="")
         return 0
     except (OSError, ValueError, source_adapters.SourceAdapterError) as exc:
-        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 2
 
 

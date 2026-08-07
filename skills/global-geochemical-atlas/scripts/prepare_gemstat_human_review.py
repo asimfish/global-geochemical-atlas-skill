@@ -26,7 +26,9 @@ class ReviewPreparationError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -49,13 +51,19 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
     observation_file = by_id["arsenic-observations"]
     total = candidate.registry_entry["expected_counts"]["arsenic_observations"]
     even_positions = {round(index * (total - 1) / 29) for index in range(30)}
-    priority: OrderedDict[str, tuple[source_adapters.RawRecord, set[str]]] = OrderedDict()
+    priority: OrderedDict[str, tuple[source_adapters.RawRecord, set[str]]] = (
+        OrderedDict()
+    )
     fill: OrderedDict[str, tuple[source_adapters.RawRecord, set[str]]] = OrderedDict()
     boundaries: dict[str, tuple[float, source_adapters.RawRecord]] = {}
     previous_key: tuple[str, ...] | None = None
 
-    def add(record: source_adapters.RawRecord, reason: str, *, high_priority: bool = True) -> None:
-        current = priority.get(record.source_record_id) or fill.get(record.source_record_id)
+    def add(
+        record: source_adapters.RawRecord, reason: str, *, high_priority: bool = True
+    ) -> None:
+        current = priority.get(record.source_record_id) or fill.get(
+            record.source_record_id
+        )
         if current is None:
             target = priority if high_priority else fill
             target[record.source_record_id] = (record, {reason})
@@ -66,9 +74,19 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
                 priority[record.source_record_id] = current
 
     key_fields = (
-        "GEMS Station Number", "Sample Date", "Sample Time", "Depth", "Parameter Code",
-        "Analysis Method Code", "Value Flags", "Value", "Unit", "Data Quality",
-        "Integrated Value", "Remark", "License Information",
+        "GEMS Station Number",
+        "Sample Date",
+        "Sample Time",
+        "Depth",
+        "Parameter Code",
+        "Analysis Method Code",
+        "Value Flags",
+        "Value",
+        "Unit",
+        "Data Quality",
+        "Integrated Value",
+        "Remark",
+        "License Information",
     )
     seen_categories: set[str] = set()
     seen_special_cases: set[str] = set()
@@ -80,7 +98,9 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
         longitude = reported_float(station["Longitude"])
         depth = reported_float(fields["Depth"])
         if value is None or latitude is None or longitude is None or depth is None:
-            raise ReviewPreparationError(f"numeric source fact missing at {record.source_locator}")
+            raise ReviewPreparationError(
+                f"numeric source fact missing at {record.source_locator}"
+            )
         categories = {
             f"fraction={fields['_water_fraction']}",
             f"value_flag={fields['Value Flags'] or 'reported'}",
@@ -97,16 +117,27 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
             if "pending_review_negative_sentinel" not in seen_special_cases:
                 add(record, "pending_review_negative_sentinel")
                 seen_special_cases.add("pending_review_negative_sentinel")
-        if fields["Data Quality"] == "Pending review" and fields["Unit"] == "mg/l" and value >= 1000:
+        if (
+            fields["Data Quality"] == "Pending review"
+            and fields["Unit"] == "mg/l"
+            and value >= 1000
+        ):
             if "pending_review_extreme_mg_l" not in seen_special_cases:
                 add(record, "pending_review_extreme_mg_l")
                 seen_special_cases.add("pending_review_extreme_mg_l")
         current_key = tuple(str(fields.get(name) or "") for name in key_fields)
-        if current_key == previous_key and "adjacent_exact_duplicate_observation" not in seen_special_cases:
+        if (
+            current_key == previous_key
+            and "adjacent_exact_duplicate_observation" not in seen_special_cases
+        ):
             add(record, "adjacent_exact_duplicate_observation")
             seen_special_cases.add("adjacent_exact_duplicate_observation")
         previous_key = current_key
-        for label, numeric in (("longitude", longitude), ("latitude", latitude), ("depth", depth)):
+        for label, numeric in (
+            ("longitude", longitude),
+            ("latitude", latitude),
+            ("depth", depth),
+        ):
             low = boundaries.get(f"{label}_min")
             high = boundaries.get(f"{label}_max")
             if low is None or numeric < low[0]:
@@ -119,12 +150,18 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
     for reason, (_, record) in sorted(boundaries.items()):
         add(record, f"{reason}_boundary")
     selected = list(priority.values())
-    selected.extend(item for source_id, item in fill.items() if source_id not in priority)
+    selected.extend(
+        item for source_id, item in fill.items() if source_id not in priority
+    )
     selected = selected[:30]
     if len(selected) != 30:
-        raise ReviewPreparationError(f"GEMStat selection produced {len(selected)} rows, expected 30")
+        raise ReviewPreparationError(
+            f"GEMStat selection produced {len(selected)} rows, expected 30"
+        )
 
-    known_qualities = set(candidate.registry_entry["expected_counts"]["data_quality_counts"])
+    known_qualities = set(
+        candidate.registry_entry["expected_counts"]["data_quality_counts"]
+    )
     records: list[dict[str, Any]] = []
     for position, (record, selection_reasons) in enumerate(selected, start=1):
         fields = record.fields
@@ -159,16 +196,22 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
             "record_id": output_record_id,
         }
         checks = {
-            "registered_member_hash_matches": observation_file.sha256 == demos.sha256_file(observation_file.path),
-            "station_join_preserved": bool(station["GEMS Station Number"] == fields["GEMS Station Number"]),
+            "registered_member_hash_matches": observation_file.sha256
+            == demos.sha256_file(observation_file.path),
+            "station_join_preserved": bool(
+                station["GEMS Station Number"] == fields["GEMS Station Number"]
+            ),
             "coordinates_preserved": reported_float(station["Latitude"]) is not None
             and reported_float(station["Longitude"]) is not None,
             "sample_depth_preserved": reported_float(fields["Depth"]) is not None,
-            "raw_value_qualifier_and_unit_preserved": reported_float(raw_value) is not None
+            "raw_value_qualifier_and_unit_preserved": reported_float(raw_value)
+            is not None
             and fields["Value Flags"] in {"", "<", ">"}
             and unit in {"mg/l", "µg/l"},
-            "fraction_preserved": fields["_water_fraction"] in {"dissolved", "suspended", "total"},
-            "method_join_preserved": method["Parameter Code"] == fields["Parameter Code"]
+            "fraction_preserved": fields["_water_fraction"]
+            in {"dissolved", "suspended", "total"},
+            "method_join_preserved": method["Parameter Code"]
+            == fields["Parameter Code"]
             and method["Analysis Method Code"] == fields["Analysis Method Code"]
             and method["Unit"] == unit,
             "source_quality_preserved": fields["Data Quality"] in known_qualities,
@@ -185,7 +228,12 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
                 "adapter_observations": [observation],
                 "automated_checks": checks,
                 "automated_status": "PASS" if all(checks.values()) else "FAIL",
-                "reviewer": {"decision": None, "reviewer": None, "reviewed_at": None, "notes": None},
+                "reviewer": {
+                    "decision": None,
+                    "reviewer": None,
+                    "reviewed_at": None,
+                    "notes": None,
+                },
             }
         )
     pass_count = sum(record["automated_status"] == "PASS" for record in records)
@@ -223,9 +271,23 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         review = prepare(args.cache_dir)
         atomic_json(args.output, review)
-        print(json.dumps({"status": "PASS", "prepared": review["prepared_record_count"]}, sort_keys=True))
-        return 0 if review["automated_pass_count"] == review["prepared_record_count"] == 30 else 1
-    except (OSError, ValueError, ReviewPreparationError, source_adapters.SourceAdapterError) as exc:
+        print(
+            json.dumps(
+                {"status": "PASS", "prepared": review["prepared_record_count"]},
+                sort_keys=True,
+            )
+        )
+        return (
+            0
+            if review["automated_pass_count"] == review["prepared_record_count"] == 30
+            else 1
+        )
+    except (
+        OSError,
+        ValueError,
+        ReviewPreparationError,
+        source_adapters.SourceAdapterError,
+    ) as exc:
         print(f"prepare_gemstat_human_review: {exc}", file=sys.stderr)
         return 2
 

@@ -25,10 +25,15 @@ class FixtureError(RuntimeError):
 
 def download(url: str, destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
-    with urllib.request.urlopen(request, timeout=120) as response, tempfile.NamedTemporaryFile(
-        "wb", dir=destination.parent, delete=False
-    ) as handle:
+    request = urllib.request.Request(
+        url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"}
+    )
+    with (
+        urllib.request.urlopen(request, timeout=120) as response,
+        tempfile.NamedTemporaryFile(
+            "wb", dir=destination.parent, delete=False
+        ) as handle,
+    ):
         temporary = Path(handle.name)
         while chunk := response.read(1024 * 1024):
             handle.write(chunk)
@@ -41,7 +46,9 @@ def validate(path: Path, resource: dict[str, object]) -> None:
     actual_size = path.stat().st_size
     actual_hash = sha256_file(path)
     if actual_size != int(resource["bytes"]):
-        raise FixtureError(f"size mismatch for {path.name}: {actual_size} != {resource['bytes']}")
+        raise FixtureError(
+            f"size mismatch for {path.name}: {actual_size} != {resource['bytes']}"
+        )
     if actual_hash != resource["sha256"]:
         raise FixtureError(f"sha256 mismatch for {path.name}: {actual_hash}")
 
@@ -79,7 +86,11 @@ def build(output_dir: Path, refresh: bool) -> dict[str, object]:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--refresh", action="store_true", help="Redownload every resource before verification")
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Redownload every resource before verification",
+    )
     args = parser.parse_args(argv)
     try:
         manifest = build(args.output_dir, args.refresh)

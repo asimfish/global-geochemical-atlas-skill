@@ -50,8 +50,12 @@ def require(condition: bool, message: str) -> None:
         raise AssertionError(message)
 
 
-def run_command(arguments: list[str], expected_code: int = 0) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(arguments, capture_output=True, text=True, check=False, timeout=60)
+def run_command(
+    arguments: list[str], expected_code: int = 0
+) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(
+        arguments, capture_output=True, text=True, check=False, timeout=60
+    )
     if result.returncode != expected_code:
         raise AssertionError(
             f"unexpected exit {result.returncode}, expected {expected_code}\nstdout={result.stdout}\nstderr={result.stderr}"
@@ -166,9 +170,14 @@ def run_suite() -> dict[str, Any]:
         "concentration-grid.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
-        require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
+        require(
+            schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema",
+            f"bad {schema_name}",
+        )
 
-    record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+    record_schema = json_value(
+        SKILL_DIR / "references" / "geochemistry-record.schema.json"
+    )
     coordinate_registry = json_value(
         SKILL_DIR / "references" / "coordinate-policy-registry.json"
     )
@@ -180,19 +189,29 @@ def run_suite() -> dict[str, Any]:
     )
     crosswalk = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.json")
     mapped_fields = [item["canonical_field"] for item in crosswalk["field_mappings"]]
-    non_core_fields = [field for group in crosswalk["non_core_fields"] for field in group["fields"]]
-    require(crosswalk["crosswalk_version"] == "d2-platform-crosswalk-v1", "bad D2 crosswalk version")
+    non_core_fields = [
+        field for group in crosswalk["non_core_fields"] for field in group["fields"]
+    ]
     require(
-        len(mapped_fields) == len(set(mapped_fields)) and len(non_core_fields) == len(set(non_core_fields)),
+        crosswalk["crosswalk_version"] == "d2-platform-crosswalk-v1",
+        "bad D2 crosswalk version",
+    )
+    require(
+        len(mapped_fields) == len(set(mapped_fields))
+        and len(non_core_fields) == len(set(non_core_fields)),
         "crosswalk contains duplicate canonical fields",
     )
     require(
         set(mapped_fields).isdisjoint(non_core_fields)
-        and set(mapped_fields) | set(non_core_fields) == set(record_schema["properties"]),
+        and set(mapped_fields) | set(non_core_fields)
+        == set(record_schema["properties"]),
         "crosswalk drifted from the D2 record schema",
     )
     require(
-        all(source["url"].startswith("https://") for source in crosswalk["evidence_sources"]),
+        all(
+            source["url"].startswith("https://")
+            for source in crosswalk["evidence_sources"]
+        ),
         "crosswalk evidence must use stable HTTPS locators",
     )
     batch_fixture = SKILL_DIR / "fixtures" / "batch-qc"
@@ -235,20 +254,43 @@ def run_suite() -> dict[str, Any]:
         "spatial grid validation rejected a valid floating-point divisor",
     )
 
-    with tempfile.TemporaryDirectory() as first_temp, tempfile.TemporaryDirectory() as second_temp:
+    with (
+        tempfile.TemporaryDirectory() as first_temp,
+        tempfile.TemporaryDirectory() as second_temp,
+    ):
         first = Path(first_temp)
         second = Path(second_temp)
-        command = [sys.executable, str(WORKFLOW), "--input", str(DEMO_INPUT), "--output-dir"]
+        command = [
+            sys.executable,
+            str(WORKFLOW),
+            "--input",
+            str(DEMO_INPUT),
+            "--output-dir",
+        ]
         run_command([*command, str(first)])
         run_command([*command, str(second)])
-        require({path.name for path in first.iterdir()} == EXPECTED_OUTPUTS, "first run output set is unstable")
-        require({path.name for path in second.iterdir()} == EXPECTED_OUTPUTS, "second run output set is unstable")
+        require(
+            {path.name for path in first.iterdir()} == EXPECTED_OUTPUTS,
+            "first run output set is unstable",
+        )
+        require(
+            {path.name for path in second.iterdir()} == EXPECTED_OUTPUTS,
+            "second run output set is unstable",
+        )
         for filename in EXPECTED_OUTPUTS:
-            require((first / filename).read_bytes() == (second / filename).read_bytes(), f"{filename} is not deterministic")
+            require(
+                (first / filename).read_bytes() == (second / filename).read_bytes(),
+                f"{filename} is not deterministic",
+            )
 
-        validation = run_command([sys.executable, str(VALIDATOR), "--output-dir", str(first)])
+        validation = run_command(
+            [sys.executable, str(VALIDATOR), "--output-dir", str(first)]
+        )
         validation_report = json.loads(validation.stdout)
-        require(validation_report["status"] == "valid", "output validator did not return valid")
+        require(
+            validation_report["status"] == "valid",
+            "output validator did not return valid",
+        )
         tampered_transaction = first / "tampered-transaction"
         tampered_transaction.mkdir()
         for filename in EXPECTED_OUTPUTS:
@@ -274,7 +316,8 @@ def run_suite() -> dict[str, Any]:
         tampered_report = json_value(tampered_report_path)
         tampered_report.pop("interface_version")
         tampered_report_path.write_text(
-            json.dumps(tampered_report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            json.dumps(tampered_report, ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n",
             encoding="utf-8",
         )
         tampered_validation = run_command(
@@ -293,7 +336,10 @@ def run_suite() -> dict[str, Any]:
         tampered_method_report = json_value(tampered_method_report_path)
         tampered_method_report["method_version"] = "tampered-method-v999"
         tampered_method_report_path.write_text(
-            json.dumps(tampered_method_report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            json.dumps(
+                tampered_method_report, ensure_ascii=False, indent=2, sort_keys=True
+            )
+            + "\n",
             encoding="utf-8",
         )
         tampered_anomalies_path = tampered_method / "anomalies.geojson"
@@ -302,7 +348,13 @@ def run_suite() -> dict[str, Any]:
         for feature in tampered_anomalies["features"]:
             feature["properties"]["method_version"] = "tampered-method-v999"
         tampered_anomalies_path.write_text(
-            json.dumps(tampered_anomalies, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n",
+            json.dumps(
+                tampered_anomalies,
+                ensure_ascii=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
+            + "\n",
             encoding="utf-8",
         )
         tampered_method_validation = run_command(
@@ -321,7 +373,8 @@ def run_suite() -> dict[str, Any]:
         tampered_regions = json_value(tampered_regions_path)
         tampered_regions["method_version"] = "tampered-spatial-v999"
         tampered_regions_path.write_text(
-            json.dumps(tampered_regions, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            json.dumps(tampered_regions, ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n",
             encoding="utf-8",
         )
         tampered_spatial_validation = run_command(
@@ -329,7 +382,8 @@ def run_suite() -> dict[str, Any]:
             expected_code=1,
         )
         require(
-            "unsupported interface or method version" in tampered_spatial_validation.stdout,
+            "unsupported interface or method version"
+            in tampered_spatial_validation.stdout,
             "output validator accepted a tampered empty spatial-region collection",
         )
 
@@ -345,7 +399,10 @@ def run_suite() -> dict[str, Any]:
             ),
             "iteration backlog must preserve censored observations as non-imputed scientific limits",
         )
-        require(float(by_id(rows, "rock-fe-001")["normalized_value"]) == 25_000, "wt% conversion failed")
+        require(
+            float(by_id(rows, "rock-fe-001")["normalized_value"]) == 25_000,
+            "wt% conversion failed",
+        )
         spaced_weight_percent = standardizer.normalize_row(
             complete_d2_row(value="1", unit="wt. %", medium="rock"),
             2,
@@ -354,11 +411,17 @@ def run_suite() -> dict[str, Any]:
             spaced_weight_percent["normalized_value"] == 10_000,
             "wt. % alias conversion failed",
         )
-        require(float(by_id(rows, "water-pb-001")["normalized_value"]) == 20, "water mg/L conversion failed")
+        require(
+            float(by_id(rows, "water-pb-001")["normalized_value"]) == 20,
+            "water mg/L conversion failed",
+        )
         molar_ni = standardizer.normalize_row(
             complete_d2_row(
-                element_or_analyte="Ni", value="20.814", unit="nmol/L",
-                medium="water", measurement_basis="dissolved",
+                element_or_analyte="Ni",
+                value="20.814",
+                unit="nmol/L",
+                medium="water",
+                measurement_basis="dissolved",
             ),
             2,
         )
@@ -370,8 +433,11 @@ def run_suite() -> dict[str, Any]:
         )
         molar_unknown = standardizer.normalize_row(
             complete_d2_row(
-                element_or_analyte="U", value="2", unit="nmol/L",
-                medium="water", measurement_basis="dissolved",
+                element_or_analyte="U",
+                value="2",
+                unit="nmol/L",
+                medium="water",
+                measurement_basis="dissolved",
             ),
             2,
         )
@@ -382,8 +448,11 @@ def run_suite() -> dict[str, Any]:
         )
         molar_per_mass = standardizer.normalize_row(
             complete_d2_row(
-                element_or_analyte="Ni", value="2", unit="nmol/kg",
-                medium="water", measurement_basis="dissolved",
+                element_or_analyte="Ni",
+                value="2",
+                unit="nmol/kg",
+                medium="water",
+                measurement_basis="dissolved",
             ),
             2,
         )
@@ -393,22 +462,48 @@ def run_suite() -> dict[str, Any]:
             "nmol/kg must remain a same-unit canonical value without density inference",
         )
         ambiguous = by_id(rows, "water-as-ambiguous")
-        require(ambiguous["normalized_value"] == "", "ambiguous water ppm must not be converted")
-        require("AMBIGUOUS_AQUEOUS_RATIO_UNIT" in ambiguous["qc_flags"], "ambiguous water flag missing")
+        require(
+            ambiguous["normalized_value"] == "",
+            "ambiguous water ppm must not be converted",
+        )
+        require(
+            "AMBIGUOUS_AQUEOUS_RATIO_UNIT" in ambiguous["qc_flags"],
+            "ambiguous water flag missing",
+        )
         censored = by_id(rows, "soil-as-013")
         require(censored["normalized_value"] == "", "censored value was imputed")
-        require(float(censored["normalized_censoring_limit"]) == 0.1, "censoring limit was not preserved")
+        require(
+            float(censored["normalized_censoring_limit"]) == 0.1,
+            "censoring limit was not preserved",
+        )
         swapped = by_id(rows, "swap-coord-001")
-        require(swapped["latitude"] == "" and swapped["longitude"] == "", "coordinate swap was silently applied")
-        require("POSSIBLE_COORDINATE_SWAP" in swapped["qc_flags"], "coordinate swap flag missing")
+        require(
+            swapped["latitude"] == "" and swapped["longitude"] == "",
+            "coordinate swap was silently applied",
+        )
+        require(
+            "POSSIBLE_COORDINATE_SWAP" in swapped["qc_flags"],
+            "coordinate swap flag missing",
+        )
         duplicates = [row for row in rows if "DUPLICATE_CANDIDATE" in row["qc_flags"]]
-        require(len(duplicates) == 2, "duplicate candidates should be retained and flagged")
-        require(censored["censored"] == "true", "censored state was not serialized explicitly")
-        require(by_id(rows, "soil-as-001")["method_family"] == "icp_ms", "method family normalization failed")
+        require(
+            len(duplicates) == 2, "duplicate candidates should be retained and flagged"
+        )
+        require(
+            censored["censored"] == "true",
+            "censored state was not serialized explicitly",
+        )
+        require(
+            by_id(rows, "soil-as-001")["method_family"] == "icp_ms",
+            "method family normalization failed",
+        )
         source_qualified = standardizer.normalize_row(
             complete_d2_row(
-                value="0.6", value_qualifier="", source_qualifier_raw="<",
-                detection_limit="0.6", detection_limit_unit="mg/kg",
+                value="0.6",
+                value_qualifier="",
+                source_qualifier_raw="<",
+                detection_limit="0.6",
+                detection_limit_unit="mg/kg",
             ),
             2,
         )
@@ -425,8 +520,11 @@ def run_suite() -> dict[str, Any]:
         )
         embedded_nd = standardizer.normalize_row(
             complete_d2_row(
-                value="N", value_qualifier="", source_qualifier_raw="",
-                detection_limit="0.2", detection_limit_unit="mg/kg",
+                value="N",
+                value_qualifier="",
+                source_qualifier_raw="",
+                detection_limit="0.2",
+                detection_limit_unit="mg/kg",
             ),
             2,
         )
@@ -438,30 +536,52 @@ def run_suite() -> dict[str, Any]:
             "qualifiers embedded in value were not retained in the dedicated raw field",
         )
 
-        record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+        record_schema = json_value(
+            SKILL_DIR / "references" / "geochemistry-record.schema.json"
+        )
         normalized_record = standardizer.normalize_row(complete_d2_row(), 2)
-        require(set(normalized_record) == set(record_schema["required"]), "D2 record keys drifted from required schema")
-        require(set(normalized_record) == set(record_schema["properties"]), "D2 record keys drifted from schema properties")
         require(
-            normalized_record["operational_confidence"]["version"] == "d2-confidence-v3",
+            set(normalized_record) == set(record_schema["required"]),
+            "D2 record keys drifted from required schema",
+        )
+        require(
+            set(normalized_record) == set(record_schema["properties"]),
+            "D2 record keys drifted from schema properties",
+        )
+        require(
+            normalized_record["operational_confidence"]["version"]
+            == "d2-confidence-v3",
             "D2 confidence version did not advance with the schema",
         )
 
         oxide = standardizer.normalize_row(
             complete_d2_row(
-                element_or_analyte="Ni", analyte_reported="NiO", species_or_oxide="NiO",
-                value="0.018", unit="wt%", medium="rock",
+                element_or_analyte="Ni",
+                analyte_reported="NiO",
+                species_or_oxide="NiO",
+                value="0.018",
+                unit="wt%",
+                medium="rock",
             ),
             3,
         )
         expected_ni = 0.018 * 10_000 * 58.6934 / (58.6934 + 15.999)
-        require(abs(oxide["normalized_value"] - expected_ni) < 1e-9, "audited NiO-to-Ni conversion failed")
-        require("d2-atomic-weights-v1" in oxide["conversion_formula"], "oxide conversion lacks version evidence")
+        require(
+            abs(oxide["normalized_value"] - expected_ni) < 1e-9,
+            "audited NiO-to-Ni conversion failed",
+        )
+        require(
+            "d2-atomic-weights-v1" in oxide["conversion_formula"],
+            "oxide conversion lacks version evidence",
+        )
         unsupported_species = standardizer.normalize_row(
             complete_d2_row(element_or_analyte="Fe2O3T", value="1", unit="wt%"),
             4,
         )
-        require(unsupported_species["normalized_value"] is None, "ambiguous total-iron conversion did not fail closed")
+        require(
+            unsupported_species["normalized_value"] is None,
+            "ambiguous total-iron conversion did not fail closed",
+        )
         require(
             "UNSUPPORTED_SPECIES_CONVERSION" in unsupported_species["qc_flags"],
             "ambiguous species conversion flag is missing",
@@ -472,32 +592,60 @@ def run_suite() -> dict[str, Any]:
             "error-level species ambiguity escaped the confidence gate",
         )
         oxide_mismatch = standardizer.normalize_row(
-            complete_d2_row(element_or_analyte="Fe", species_or_oxide="NiO", value="1", unit="wt%"),
+            complete_d2_row(
+                element_or_analyte="Fe", species_or_oxide="NiO", value="1", unit="wt%"
+            ),
             5,
         )
-        require(oxide_mismatch["normalized_value"] is None, "oxide-element mismatch was converted")
-        require("OXIDE_ELEMENT_MISMATCH" in oxide_mismatch["qc_flags"], "oxide-element mismatch flag is missing")
+        require(
+            oxide_mismatch["normalized_value"] is None,
+            "oxide-element mismatch was converted",
+        )
+        require(
+            "OXIDE_ELEMENT_MISMATCH" in oxide_mismatch["qc_flags"],
+            "oxide-element mismatch flag is missing",
+        )
 
         trace = standardizer.normalize_row(complete_d2_row(value="trace"), 6)
         not_analyzed = standardizer.normalize_row(complete_d2_row(value="N/A"), 7)
-        require(trace["censored"] is True and trace["value_qualifier"] == "trace", "trace semantics were lost")
-        require("UNQUANTIFIED_TRACE" in trace["qc_flags"], "trace quality flag is missing")
         require(
-            not_analyzed["censored"] is False and not_analyzed["missing_reason"] == "not_analyzed",
+            trace["censored"] is True and trace["value_qualifier"] == "trace",
+            "trace semantics were lost",
+        )
+        require(
+            "UNQUANTIFIED_TRACE" in trace["qc_flags"], "trace quality flag is missing"
+        )
+        require(
+            not_analyzed["censored"] is False
+            and not_analyzed["missing_reason"] == "not_analyzed",
             "missing reason was conflated with censoring",
         )
         bad_limit = standardizer.normalize_row(
-            complete_d2_row(value="ND", detection_limit="-0.1", detection_limit_unit="mg/kg"),
+            complete_d2_row(
+                value="ND", detection_limit="-0.1", detection_limit_unit="mg/kg"
+            ),
             8,
         )
-        require(bad_limit["normalized_censoring_limit"] is None, "invalid detection limit was normalized")
-        require("INVALID_DETECTION_LIMIT" in bad_limit["qc_flags"], "invalid detection-limit flag is missing")
+        require(
+            bad_limit["normalized_censoring_limit"] is None,
+            "invalid detection limit was normalized",
+        )
+        require(
+            "INVALID_DETECTION_LIMIT" in bad_limit["qc_flags"],
+            "invalid detection-limit flag is missing",
+        )
 
         lod = standardizer.normalize_row(
-            complete_d2_row(value="<LOD", detection_limit="0.2", detection_limit_unit="mg/kg"), 9
+            complete_d2_row(
+                value="<LOD", detection_limit="0.2", detection_limit_unit="mg/kg"
+            ),
+            9,
         )
         loq = standardizer.normalize_row(
-            complete_d2_row(value="<LOQ", quantitation_limit="0.4", quantitation_limit_unit="mg/kg"), 10
+            complete_d2_row(
+                value="<LOQ", quantitation_limit="0.4", quantitation_limit_unit="mg/kg"
+            ),
+            10,
         )
         require(
             lod["censored"] is True
@@ -514,7 +662,9 @@ def run_suite() -> dict[str, Any]:
             "literal <LOQ was not preserved with its quantitation limit",
         )
 
-        projected = standardizer.normalize_row(complete_d2_row(source_crs="EPSG:3857"), 9)
+        projected = standardizer.normalize_row(
+            complete_d2_row(source_crs="EPSG:3857"), 9
+        )
         transformed = standardizer.normalize_row(
             complete_d2_row(
                 original_latitude_raw="4163881.144",
@@ -524,9 +674,18 @@ def run_suite() -> dict[str, Any]:
             ),
             10,
         )
-        require(projected["latitude"] is None and projected["longitude"] is None, "projected CRS was mislabeled WGS84")
-        require("UNSUPPORTED_SOURCE_CRS" in projected["qc_flags"], "missing coordinate-transform evidence was not flagged")
-        require(transformed["latitude"] == 35 and transformed["longitude"] == 103, "declared coordinate transform was rejected")
+        require(
+            projected["latitude"] is None and projected["longitude"] is None,
+            "projected CRS was mislabeled WGS84",
+        )
+        require(
+            "UNSUPPORTED_SOURCE_CRS" in projected["qc_flags"],
+            "missing coordinate-transform evidence was not flagged",
+        )
+        require(
+            transformed["latitude"] == 35 and transformed["longitude"] == 103,
+            "declared coordinate transform was rejected",
+        )
         require(
             transformed["original_latitude_raw"] == "4163881.144"
             and transformed["original_longitude_raw"] == "11465907.552",
@@ -534,8 +693,11 @@ def run_suite() -> dict[str, Any]:
         )
         reported_only = standardizer.normalize_row(
             complete_d2_row(
-                latitude="", longitude="", source_crs="",
-                original_latitude_raw="35", original_longitude_raw="103",
+                latitude="",
+                longitude="",
+                source_crs="",
+                original_latitude_raw="35",
+                original_longitude_raw="103",
             ),
             11,
         )
@@ -556,7 +718,8 @@ def run_suite() -> dict[str, Any]:
         )
         pangaea_policy = standardizer.normalize_row(
             complete_d2_row(
-                source_crs="", dataset_doi="10.1594/PANGAEA.947275",
+                source_crs="",
+                dataset_doi="10.1594/PANGAEA.947275",
                 coordinate_evidence_scope="platform_policy_declared",
                 coordinate_policy_id="pangaea-geocode-wgs84-v1",
                 coordinate_latitude_field="LATITUDE",
@@ -575,7 +738,8 @@ def run_suite() -> dict[str, Any]:
         )
         non_pangaea_policy = standardizer.normalize_row(
             complete_d2_row(
-                source_crs="", dataset_doi="10.17632/example.1",
+                source_crs="",
+                dataset_doi="10.17632/example.1",
                 coordinate_evidence_scope="platform_policy_declared",
                 coordinate_policy_id="pangaea-geocode-wgs84-v1",
                 coordinate_latitude_field="LATITUDE",
@@ -604,28 +768,65 @@ def run_suite() -> dict[str, Any]:
             "iteration backlog IDs collide or are not deterministically normalized",
         )
 
-        duplicate_records = standardizer.process_rows([
-            complete_d2_row(record_id="duplicate-1", source_record_id="source-row-1"),
-            complete_d2_row(record_id="duplicate-2", source_record_id="source-row-2"),
-        ])
+        duplicate_records = standardizer.process_rows(
+            [
+                complete_d2_row(
+                    record_id="duplicate-1", source_record_id="source-row-1"
+                ),
+                complete_d2_row(
+                    record_id="duplicate-2", source_record_id="source-row-2"
+                ),
+            ]
+        )
         require(
-            all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in duplicate_records),
+            all(
+                "DUPLICATE_CANDIDATE" in record["qc_flags"]
+                for record in duplicate_records
+            ),
             "unique provenance row IDs masked duplicate measurement candidates",
         )
-        duplicates_without_sample_ids = standardizer.process_rows([
-            complete_d2_row(record_id="duplicate-3", source_record_id="source-row-3", sample_id=""),
-            complete_d2_row(record_id="duplicate-4", source_record_id="source-row-4", sample_id=""),
-        ])
+        duplicates_without_sample_ids = standardizer.process_rows(
+            [
+                complete_d2_row(
+                    record_id="duplicate-3",
+                    source_record_id="source-row-3",
+                    sample_id="",
+                ),
+                complete_d2_row(
+                    record_id="duplicate-4",
+                    source_record_id="source-row-4",
+                    sample_id="",
+                ),
+            ]
+        )
         require(
-            all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in duplicates_without_sample_ids),
+            all(
+                "DUPLICATE_CANDIDATE" in record["qc_flags"]
+                for record in duplicates_without_sample_ids
+            ),
             "distinct source row IDs masked duplicates when sample identifiers were absent",
         )
-        distinct_sampling_times = standardizer.process_rows([
-            complete_d2_row(record_id="time-1", source_record_id="time-row-1", sample_id="", sampled_at="2020-01-01"),
-            complete_d2_row(record_id="time-2", source_record_id="time-row-2", sample_id="", sampled_at="2021-01-01"),
-        ])
+        distinct_sampling_times = standardizer.process_rows(
+            [
+                complete_d2_row(
+                    record_id="time-1",
+                    source_record_id="time-row-1",
+                    sample_id="",
+                    sampled_at="2020-01-01",
+                ),
+                complete_d2_row(
+                    record_id="time-2",
+                    source_record_id="time-row-2",
+                    sample_id="",
+                    sampled_at="2021-01-01",
+                ),
+            ]
+        )
         require(
-            all("DUPLICATE_CANDIDATE" not in record["qc_flags"] for record in distinct_sampling_times),
+            all(
+                "DUPLICATE_CANDIDATE" not in record["qc_flags"]
+                for record in distinct_sampling_times
+            ),
             "duplicate fallback collapsed measurements from distinct sampling times",
         )
 
@@ -637,9 +838,14 @@ def run_suite() -> dict[str, Any]:
                 min_group_size=8,
             )
         except standardizer.PipelineError as exc:
-            require("at least 20" in str(exc), "production minimum-group failure is not actionable")
+            require(
+                "at least 20" in str(exc),
+                "production minimum-group failure is not actionable",
+            )
         else:
-            raise AssertionError("production analysis accepted a background group threshold below 20")
+            raise AssertionError(
+                "production analysis accepted a background group threshold below 20"
+            )
 
         with tempfile.TemporaryDirectory(prefix="d2-geology-") as geology_temp:
             geology_root = Path(geology_temp)
@@ -648,13 +854,20 @@ def run_suite() -> dict[str, Any]:
             geology_input = geology_root / "input.csv"
             geology_rows = [
                 complete_d2_row(
-                    record_id="geo-soil", source_record_id="geo-source-soil",
-                    sample_id="geo-sample-soil", latitude="35.25", longitude="103.25",
+                    record_id="geo-soil",
+                    source_record_id="geo-source-soil",
+                    sample_id="geo-sample-soil",
+                    latitude="35.25",
+                    longitude="103.25",
                 ),
                 complete_d2_row(
-                    record_id="geo-water", source_record_id="geo-source-water",
-                    sample_id="geo-sample-water", medium="water", unit="ug/L",
-                    latitude="35.25", longitude="103.25",
+                    record_id="geo-water",
+                    source_record_id="geo-source-water",
+                    sample_id="geo-sample-water",
+                    medium="water",
+                    unit="ug/L",
+                    latitude="35.25",
+                    longitude="103.25",
                 ),
             ]
             with geology_input.open("w", encoding="utf-8", newline="") as handle:
@@ -668,17 +881,21 @@ def run_suite() -> dict[str, Any]:
                 geology_grid_path=geology_grid,
                 geology_grid_sha256=geology_hash,
             )
-            geology_database = {row["record_id"]: row for row in read_csv(geology_outputs["database"])}
+            geology_database = {
+                row["record_id"]: row for row in read_csv(geology_outputs["database"])
+            }
             geology_qc = json_value(geology_outputs["qc_report"])["geology_matching"]
             require(
                 geology_database["geo-soil"]["matched_geologic_unit"] == "GLiM:1:su"
-                and geology_database["geo-soil"]["geology_map_source"] == standardizer.GLIM_SOURCE
+                and geology_database["geo-soil"]["geology_map_source"]
+                == standardizer.GLIM_SOURCE
                 and float(geology_database["geo-soil"]["boundary_distance_m"]) > 20_000,
                 "D2 GLiM point-in-cell did not populate versioned spatial geology evidence",
             )
             require(
                 geology_database["geo-water"]["matched_geologic_unit"] == ""
-                and geology_database["geo-water"]["geology_missing_reason"] == "not_applicable_water"
+                and geology_database["geo-water"]["geology_missing_reason"]
+                == "not_applicable_water"
                 and geology_qc["water_records_with_assigned_land_unit"] == 0
                 and geology_qc["grid"]["sha256"] == geology_hash,
                 "D2 GLiM join assigned land geology to water or lost the grid hash",
@@ -692,16 +909,35 @@ def run_suite() -> dict[str, Any]:
                     geology_grid_sha256="0" * 64,
                 )
             except standardizer.PipelineError as exc:
-                require("SHA-256" in str(exc), "geology hash mismatch error is not actionable")
+                require(
+                    "SHA-256" in str(exc),
+                    "geology hash mismatch error is not actionable",
+                )
             else:
-                raise AssertionError("D2 accepted a geology grid whose SHA-256 did not match")
+                raise AssertionError(
+                    "D2 accepted a geology grid whose SHA-256 did not match"
+                )
 
-        low_fraction_values = ["8", "9", "10", "11", "12", "13", "500", "<1", "<1", "ND", "trace"]
+        low_fraction_values = [
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "500",
+            "<1",
+            "<1",
+            "ND",
+            "trace",
+        ]
         low_fraction_records = [
             standardizer.normalize_row(
                 complete_d2_row(
-                    record_id=f"fraction-{index}", source_record_id=f"source-{index}",
-                    sample_id=f"sample-{index}", value=value,
+                    record_id=f"fraction-{index}",
+                    source_record_id=f"source-{index}",
+                    sample_id=f"sample-{index}",
+                    value=value,
                 ),
                 index + 10,
             )
@@ -710,7 +946,10 @@ def run_suite() -> dict[str, Any]:
         low_geojson, low_report = standardizer.detect_anomalies(
             low_fraction_records, min_group_size=3, min_quantified_fraction=0.70
         )
-        require(not low_geojson["features"], "low quantified fraction still produced an anomaly")
+        require(
+            not low_geojson["features"],
+            "low quantified fraction still produced an anomaly",
+        )
         require(
             low_report["groups"][0]["status"] == "insufficient_quantified_fraction",
             "low quantified fraction did not produce an explicit failure state",
@@ -719,8 +958,10 @@ def run_suite() -> dict[str, Any]:
         small_records = [
             standardizer.normalize_row(
                 complete_d2_row(
-                    record_id=f"small-{index}", source_record_id=f"small-source-{index}",
-                    sample_id=f"small-sample-{index}", value=str(10 + index),
+                    record_id=f"small-{index}",
+                    source_record_id=f"small-source-{index}",
+                    sample_id=f"small-sample-{index}",
+                    value=str(10 + index),
                 ),
                 index + 30,
             )
@@ -755,15 +996,20 @@ def run_suite() -> dict[str, Any]:
         flat_records = [
             standardizer.normalize_row(
                 complete_d2_row(
-                    record_id=f"flat-{index}", source_record_id=f"flat-source-{index}",
-                    sample_id=f"flat-sample-{index}", value="10",
+                    record_id=f"flat-{index}",
+                    source_record_id=f"flat-source-{index}",
+                    sample_id=f"flat-sample-{index}",
+                    value="10",
                 ),
                 index + 40,
             )
             for index in range(8)
         ]
         _, flat_report = standardizer.detect_anomalies(flat_records)
-        require(flat_report["groups"][0]["status"] == "zero_dispersion", "zero-MAD group was force-scored")
+        require(
+            flat_report["groups"][0]["status"] == "zero_dispersion",
+            "zero-MAD group was force-scored",
+        )
 
         with tempfile.TemporaryDirectory(prefix="d2-batch-gate-") as batch_temp:
             batch_root = Path(batch_temp)
@@ -777,8 +1023,14 @@ def run_suite() -> dict[str, Any]:
                     value=str(value),
                 )
                 for index, (batch_id, value) in enumerate(
-                    (("LAB-A", 10), ("LAB-A", 11), ("LAB-A", 12),
-                     ("LAB-B", 100), ("LAB-B", 110), ("LAB-B", 120))
+                    (
+                        ("LAB-A", 10),
+                        ("LAB-A", 11),
+                        ("LAB-A", 12),
+                        ("LAB-B", 100),
+                        ("LAB-B", 110),
+                        ("LAB-B", 120),
+                    )
                 )
             ]
             with batch_input.open("w", encoding="utf-8", newline="") as handle:
@@ -800,26 +1052,40 @@ def run_suite() -> dict[str, Any]:
                 and sum(row["batch_qc_status"] == "pass" for row in batch_database) == 3
                 and sum(row["batch_qc_status"] == "fail" for row in batch_database) == 3
                 and batch_anomaly["groups"][0]["records_used"] == 3
-                and batch_anomaly["groups"][0]["exclusion_reasons"]["batch_qc_failed"] == 3,
+                and batch_anomaly["groups"][0]["exclusion_reasons"]["batch_qc_failed"]
+                == 3,
                 "end-to-end batch gate did not retain failed records while excluding their background values",
             )
 
         with tempfile.TemporaryDirectory() as mapped_temp:
             mapped_root = Path(mapped_temp)
             mapped_input = mapped_root / "mapped.csv"
-            mapped_input.write_text("Analyte,Result,Units,Matrix\nAs,10,mg/kg,soil\n", encoding="utf-8")
+            mapped_input.write_text(
+                "Analyte,Result,Units,Matrix\nAs,10,mg/kg,soil\n", encoding="utf-8"
+            )
             schema_map_path = mapped_root / "schema-map.json"
             schema_map_path.write_text(
-                json.dumps({
-                    "element_or_analyte": "Analyte", "value": "Result", "unit": "Units", "medium": "Matrix"
-                }),
+                json.dumps(
+                    {
+                        "element_or_analyte": "Analyte",
+                        "value": "Result",
+                        "unit": "Units",
+                        "medium": "Matrix",
+                    }
+                ),
                 encoding="utf-8",
             )
             mapped_outputs = standardizer.run_pipeline(
-                mapped_input, mapped_root / "outputs", schema_map_path=schema_map_path, min_group_size=3
+                mapped_input,
+                mapped_root / "outputs",
+                schema_map_path=schema_map_path,
+                min_group_size=3,
             )
             mapped_rows = read_csv(mapped_outputs["database"])
-            require(mapped_rows[0]["element_or_analyte"] == "As", "D1-to-D2 schema map was not applied")
+            require(
+                mapped_rows[0]["element_or_analyte"] == "As",
+                "D1-to-D2 schema map was not applied",
+            )
             mapped_confidence = json_value(mapped_outputs["confidence_report"])
             require(
                 mapped_confidence["run_metadata"]["schema_map_sha256"] is not None,
@@ -829,12 +1095,21 @@ def run_suite() -> dict[str, Any]:
             bad_map.write_text('{"invented_field":"Analyte"}', encoding="utf-8")
             run_command(
                 [
-                    sys.executable, str(STANDARDIZER), "--input", str(mapped_input),
-                    "--output-dir", str(mapped_root / "bad-outputs"), "--schema-map", str(bad_map),
+                    sys.executable,
+                    str(STANDARDIZER),
+                    "--input",
+                    str(mapped_input),
+                    "--output-dir",
+                    str(mapped_root / "bad-outputs"),
+                    "--schema-map",
+                    str(bad_map),
                 ],
                 expected_code=2,
             )
-            require(not (mapped_root / "bad-outputs").exists(), "invalid schema map produced partial outputs")
+            require(
+                not (mapped_root / "bad-outputs").exists(),
+                "invalid schema map produced partial outputs",
+            )
 
         anomaly_report = json_value(first / "anomaly_report.json")
         anomalies = json_value(first / "anomalies.geojson")
@@ -843,9 +1118,18 @@ def run_suite() -> dict[str, Any]:
             and anomalies["interface_version"] == "d2-interface-v2",
             "D2 anomaly interface version is missing",
         )
-        require(anomaly_report["candidate_count"] == 1, "demo should contain one anomaly candidate")
-        require(anomalies["features"][0]["properties"]["record_id"] == "soil-as-012", "wrong anomaly")
-        require(anomalies["features"][0]["properties"]["status"] == "candidate_anomaly", "causal overclaim")
+        require(
+            anomaly_report["candidate_count"] == 1,
+            "demo should contain one anomaly candidate",
+        )
+        require(
+            anomalies["features"][0]["properties"]["record_id"] == "soil-as-012",
+            "wrong anomaly",
+        )
+        require(
+            anomalies["features"][0]["properties"]["status"] == "candidate_anomaly",
+            "causal overclaim",
+        )
         summary = json_value(first / "run_summary.json")
         result_schema = json_value(SKILL_DIR / "references" / "result.schema.json")
         require(
@@ -854,16 +1138,34 @@ def run_suite() -> dict[str, Any]:
             == set(result_schema["properties"]["metrics"]["required"]),
             "run summary metrics drifted from the public result Schema",
         )
-        require(summary["input"]["synthetic_demo"] is True, "demo must be labeled synthetic")
-        require(summary["coverage"]["interpolation"] is False, "demo must not interpolate blank areas")
+        require(
+            summary["input"]["synthetic_demo"] is True, "demo must be labeled synthetic"
+        )
+        require(
+            summary["coverage"]["interpolation"] is False,
+            "demo must not interpolate blank areas",
+        )
         manifest = json_value(first / "source_manifest.json")
-        confidence_hash = hashlib.sha256((first / "confidence_report.json").read_bytes()).hexdigest()
-        require(manifest["confidence_report"]["sha256"] == confidence_hash, "confidence evidence hash mismatch")
-        require(manifest["coverage"]["source_locator_rate"] == 1.0, "demo provenance coverage should be complete")
-        require(manifest["manifest_version"] == "geochemical-source-manifest-v2", "source manifest version drifted")
+        confidence_hash = hashlib.sha256(
+            (first / "confidence_report.json").read_bytes()
+        ).hexdigest()
+        require(
+            manifest["confidence_report"]["sha256"] == confidence_hash,
+            "confidence evidence hash mismatch",
+        )
+        require(
+            manifest["coverage"]["source_locator_rate"] == 1.0,
+            "demo provenance coverage should be complete",
+        )
+        require(
+            manifest["manifest_version"] == "geochemical-source-manifest-v2",
+            "source manifest version drifted",
+        )
         require(
             manifest["record_evidence"]["sha256"]
-            == hashlib.sha256((first / "record_evidence.jsonl").read_bytes()).hexdigest(),
+            == hashlib.sha256(
+                (first / "record_evidence.jsonl").read_bytes()
+            ).hexdigest(),
             "record evidence hash mismatch",
         )
         confidence = json_value(first / "confidence_report.json")
@@ -874,7 +1176,10 @@ def run_suite() -> dict[str, Any]:
         )
 
         html = (first / "interactive_map.html").read_text(encoding="utf-8")
-        require("<script src=" not in html.casefold(), "map has an external script dependency")
+        require(
+            "<script src=" not in html.casefold(),
+            "map has an external script dependency",
+        )
         require("候选异常不代表污染" in html, "map omits interpretation boundary")
         require("d3-interactive-atlas-v3" in html, "map version is missing")
         require("ALL DATA" in html, "map does not default to the complete overview")
@@ -964,15 +1269,31 @@ def run_suite() -> dict[str, Any]:
             and coverage["shanghai"]["administrative_clip"] is False,
             "map region coverage does not reconcile records or bbox semantics",
         )
-        require("\\u003c/script\\u003e" in __import__("build_interactive_map").safe_embedded_json("</script>"), "unsafe JSON embedding")
+        require(
+            "\\u003c/script\\u003e"
+            in __import__("build_interactive_map").safe_embedded_json("</script>"),
+            "unsafe JSON embedding",
+        )
 
         limited = first / "limited"
         run_command(
-            [sys.executable, str(WORKFLOW), "--input", str(DEMO_INPUT), "--output-dir", str(limited), "--max-records", "5"],
+            [
+                sys.executable,
+                str(WORKFLOW),
+                "--input",
+                str(DEMO_INPUT),
+                "--output-dir",
+                str(limited),
+                "--max-records",
+                "5",
+            ],
             expected_code=2,
         )
         limited_summary = json_value(limited / "run_summary.json")
-        require(limited_summary["status"] == "unsupported_scope", "record limit must fail closed")
+        require(
+            limited_summary["status"] == "unsupported_scope",
+            "record limit must fail closed",
+        )
 
         no_provenance_input = first / "no-provenance.csv"
         no_provenance_input.write_text(
@@ -982,13 +1303,18 @@ def run_suite() -> dict[str, Any]:
         no_provenance_output = first / "no-provenance-output"
         run_command(
             [
-                sys.executable, str(WORKFLOW), "--input", str(no_provenance_input),
-                "--output-dir", str(no_provenance_output),
+                sys.executable,
+                str(WORKFLOW),
+                "--input",
+                str(no_provenance_input),
+                "--output-dir",
+                str(no_provenance_output),
             ],
             expected_code=2,
         )
         require(
-            json_value(no_provenance_output / "run_summary.json")["status"] == "conflicting_evidence",
+            json_value(no_provenance_output / "run_summary.json")["status"]
+            == "conflicting_evidence",
             "full workflow must fail closed when core provenance is absent",
         )
 
@@ -1010,7 +1336,10 @@ def run_suite() -> dict[str, Any]:
             ],
             expected_code=2,
         )
-        require(not (first / "should-not-exist.csv").exists(), "unsafe downloader wrote an output")
+        require(
+            not (first / "should-not-exist.csv").exists(),
+            "unsafe downloader wrote an output",
+        )
 
         return {
             "status": "PASS",
@@ -1025,7 +1354,10 @@ def main() -> int:
     try:
         report = run_suite()
     except (AssertionError, OSError, ValueError, subprocess.SubprocessError) as exc:
-        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 1
     print(json.dumps(report, ensure_ascii=False, sort_keys=True))
     return 0

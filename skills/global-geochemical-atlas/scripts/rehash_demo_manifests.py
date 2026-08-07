@@ -26,7 +26,9 @@ def sha256_file(path: Path) -> str:
 
 def atomic_json(path: Path, value: object) -> None:
     rendered = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         handle.write(rendered)
         temporary = Path(handle.name)
     os.replace(temporary, path)
@@ -56,13 +58,19 @@ def update(root: Path, *, check: bool) -> dict[str, int | str]:
                 item.update(expected)
                 changed += 1
         checked += 1
-        rendered = json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        rendered = (
+            json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        )
         if check:
             if manifest_path.read_text(encoding="utf-8") != rendered:
                 raise ValueError(f"demo manifest is not SHA-256 bound: {manifest_path}")
         else:
             atomic_json(manifest_path, manifest)
-    return {"status": "PASS", "manifest_count": checked, "updated_output_count": changed}
+    return {
+        "status": "PASS",
+        "manifest_count": checked,
+        "updated_output_count": changed,
+    }
 
 
 def main() -> int:

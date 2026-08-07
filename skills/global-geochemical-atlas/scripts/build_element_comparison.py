@@ -54,7 +54,9 @@ def sha256_file(path: Path) -> str:
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -129,7 +131,10 @@ def _profile_record_matches(row: Mapping[str, str], profile: Mapping[str, Any]) 
             confidence = json.loads(row.get("operational_confidence") or "{}")
         except json.JSONDecodeError:
             return False
-        if not isinstance(confidence, dict) or confidence.get("band") != requested_confidence:
+        if (
+            not isinstance(confidence, dict)
+            or confidence.get("band") != requested_confidence
+        ):
             return False
     comparison_medium = profile["comparison"].get("medium")
     return not comparison_medium or row.get("medium") == comparison_medium
@@ -145,7 +150,9 @@ def _in_profile_region(
         latitude = float(row.get("latitude") or "")
     except ValueError:
         return False
-    return map_builder.coordinate_in_region(longitude, latitude, region, countries_by_code)
+    return map_builder.coordinate_in_region(
+        longitude, latitude, region, countries_by_code
+    )
 
 
 def build_comparison(database: Path, profile: Mapping[str, Any]) -> dict[str, Any]:
@@ -159,15 +166,25 @@ def build_comparison(database: Path, profile: Mapping[str, Any]) -> dict[str, An
     }
     region = map_builder.selected_region(profile)
     required = {
-        "record_id", "sample_id", "source_id", "element_or_analyte", "normalized_value",
-        "normalized_unit", "censored", "latitude", "longitude", *COMPARABILITY_FIELDS,
+        "record_id",
+        "sample_id",
+        "source_id",
+        "element_or_analyte",
+        "normalized_value",
+        "normalized_unit",
+        "censored",
+        "latitude",
+        "longitude",
+        *COMPARABILITY_FIELDS,
     }
     try:
         with database.open("r", encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
             if reader.fieldnames is None or not required.issubset(reader.fieldnames):
                 missing = sorted(required - set(reader.fieldnames or []))
-                raise ComparisonError("canonical database lacks comparison fields: " + ", ".join(missing))
+                raise ComparisonError(
+                    "canonical database lacks comparison fields: " + ", ".join(missing)
+                )
             raw_rows = [dict(row) for row in reader]
     except (OSError, UnicodeError) as exc:
         raise ComparisonError(f"canonical database is unreadable: {database}") from exc
@@ -199,7 +216,9 @@ def build_comparison(database: Path, profile: Mapping[str, Any]) -> dict[str, An
         if value is None:
             exclusions["nonpositive_or_unstandardized"] += 1
             continue
-        comparison_key = tuple(str(row.get(field) or "") for field in COMPARABILITY_FIELDS)
+        comparison_key = tuple(
+            str(row.get(field) or "") for field in COMPARABILITY_FIELDS
+        )
         key = (source_id, sample_id, *comparison_key)
         grouped[key][element].append({"row": row, "value": value})
         observed_by_element[element] += 1
@@ -305,13 +324,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         report = build_comparison(args.database, profile)
         atomic_json(args.output, report)
     except (ComparisonError, map_builder.MapBuildError, OSError) as exc:
-        print(json.dumps({"status": "invalid_input", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                {"status": "invalid_input", "error": str(exc)}, ensure_ascii=False
+            ),
+            file=sys.stderr,
+        )
         return 2
     print(
         json.dumps(
             {
                 "status": report["status"],
-                "paired_sample_layer_count": report["coverage"]["paired_sample_layer_count"],
+                "paired_sample_layer_count": report["coverage"][
+                    "paired_sample_layer_count"
+                ],
                 "output": str(args.output),
             },
             ensure_ascii=False,

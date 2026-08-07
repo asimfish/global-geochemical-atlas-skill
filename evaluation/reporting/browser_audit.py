@@ -60,8 +60,11 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
     screenshots.mkdir(parents=True, exist_ok=True)
     options = Options()
     for argument in (
-        "--headless=new", "--no-sandbox", "--disable-dev-shm-usage",
-        "--allow-file-access-from-files", "--window-size=1440,1100",
+        "--headless=new",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--allow-file-access-from-files",
+        "--window-size=1440,1100",
     ):
         options.add_argument(argument)
     options.set_capability("goog:loggingPrefs", {"browser": "ALL"})
@@ -69,7 +72,9 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
     driver_path = shutil.which("chromedriver")
     if not driver_path:
         raise RuntimeError("browser audit requires chromedriver on PATH")
-    driver = webdriver.Chrome(service=Service(executable_path=driver_path), options=options)
+    driver = webdriver.Chrome(
+        service=Service(executable_path=driver_path), options=options
+    )
     interactions: dict[str, dict[str, Any]] = {}
     shot_records: list[dict[str, Any]] = []
 
@@ -77,8 +82,12 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         path = screenshots / f"{name}.png"
         driver.save_screenshot(str(path))
         shot_records.append(
-            {"name": name, "file": path.name, "bytes": path.stat().st_size,
-             "sha256": sha256_file(path)}
+            {
+                "name": name,
+                "file": path.name,
+                "bytes": path.stat().st_size,
+                "sha256": sha256_file(path),
+            }
         )
 
     def state() -> dict[str, Any]:
@@ -131,7 +140,8 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
     def activate(view: str) -> bool:
         activated = driver.execute_script(
             "const n=document.querySelector('.tab[data-view=\"'+arguments[0]+'\"]');"
-            "if(n)n.click();return Boolean(n)", view
+            "if(n)n.click();return Boolean(n)",
+            view,
         )
         time.sleep(0.2)
         return bool(activated)
@@ -169,7 +179,8 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             """
         )
         interactions["filter_changes_result"] = {
-            "passed": bool(filter_result.get("tested")), "evidence": filter_result
+            "passed": bool(filter_result.get("tested")),
+            "evidence": filter_result,
         }
         screenshot("filtered")
         heat_control = driver.execute_script(
@@ -207,7 +218,8 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             """
         )
         interactions["concentration_encoding"] = {
-            "passed": bool(concentration.get("tested")), "evidence": concentration,
+            "passed": bool(concentration.get("tested")),
+            "evidence": concentration,
         }
         screenshot("concentration")
 
@@ -230,9 +242,12 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         else:
             globe_pixels = canvas_state("globe")
             globe_passed = bool(
-                globe.get("tested") and globe.get("display") != "none"
-                and globe_pixels["width"] > 200 and globe_pixels["height"] > 150
-                and globe_pixels["opaque"] > 100 and globe_pixels["colors"] > 20
+                globe.get("tested")
+                and globe.get("display") != "none"
+                and globe_pixels["width"] > 200
+                and globe_pixels["height"] > 150
+                and globe_pixels["opaque"] > 100
+                and globe_pixels["colors"] > 20
             )
             interactions["global_globe"] = {
                 "passed": globe_passed,
@@ -251,10 +266,14 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             """
         )
         interactions["element_combination"] = {
-            "passed": bool(combination_tab and combination["x"] and combination["y"]
-                           and combination["x"] != combination["y"]
-                           and combination["matrix_rows"] > 0
-                           and combination["canvas_width"] > 100),
+            "passed": bool(
+                combination_tab
+                and combination["x"]
+                and combination["y"]
+                and combination["x"] != combination["y"]
+                and combination["matrix_rows"] > 0
+                and combination["canvas_width"] > 100
+            ),
             "evidence": combination,
         }
         screenshot("combination")
@@ -273,7 +292,8 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         )
         interactions["database_visuals"] = {
             "passed": bool(
-                database_tab and database_distribution["width"] > 100
+                database_tab
+                and database_distribution["width"] > 100
                 and database_distribution["opaque"] > 50
                 and database_box["width"] > 100 and database_box["opaque"] > 50
                 and database["coverage_rows"] > 0
@@ -294,7 +314,10 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         )
         interactions["source_drilldown"] = {
             "passed": source_tab and source_rows > 0 and bool(source_detail.strip()),
-            "evidence": {"source_rows": source_rows, "detail_chars": len(source_detail)},
+            "evidence": {
+                "source_rows": source_rows,
+                "detail_chars": len(source_detail),
+            },
         }
         screenshot("sources")
 
@@ -307,13 +330,16 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         anomaly_density = canvas_state("anomalyDensityCanvas")
         interactions["anomaly_view"] = {
             "passed": (
-                anomaly_tab and bool(anomaly_summary.strip()) and anomaly_rows > 0
+                anomaly_tab
+                and bool(anomaly_summary.strip())
+                and anomaly_rows > 0
                 and anomaly_density["width"] > 100
                 and anomaly_density["opaque"] > 50
             ),
             "applicable_candidate_count": candidate_count,
             "evidence": {
-                "table_rows": anomaly_rows, "summary_chars": len(anomaly_summary),
+                "table_rows": anomaly_rows,
+                "summary_chars": len(anomaly_summary),
                 "density": anomaly_density,
             },
         }
@@ -322,12 +348,18 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         logs = driver.get_log("browser")
         severe = [
             {"level": item.get("level"), "message": item.get("message")}
-            for item in logs if item.get("level") == "SEVERE"
+            for item in logs
+            if item.get("level") == "SEVERE"
         ]
         required_interactions = (
-            "filter_changes_result", "heatmap", "concentration_encoding",
-            "global_globe", "database_visuals", "element_combination",
-            "source_drilldown", "anomaly_view",
+            "filter_changes_result",
+            "heatmap",
+            "concentration_encoding",
+            "global_globe",
+            "database_visuals",
+            "element_combination",
+            "source_drilldown",
+            "anomaly_view",
         )
         loaded = initial["canvas_width"] > 200 and initial["canvas_height"] > 150
         rendered = (
@@ -337,8 +369,11 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             and (initial["visible_symbols"] or 0) > 0
             and (initial["country_boundaries"] or 0) > 0
         )
-        passed = loaded and rendered and not severe and all(
-            interactions[name]["passed"] for name in required_interactions
+        passed = (
+            loaded
+            and rendered
+            and not severe
+            and all(interactions[name]["passed"] for name in required_interactions)
         )
         report = {
             "schema_version": SCHEMA_VERSION,
@@ -352,7 +387,9 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             "browser": {
                 "name": "chromium",
                 "version": driver.capabilities.get("browserVersion"),
-                "driver_version": driver.capabilities.get("chrome", {}).get("chromedriverVersion"),
+                "driver_version": driver.capabilities.get("chrome", {}).get(
+                    "chromedriverVersion"
+                ),
                 "headless": True,
                 "network": "offline_file",
             },
@@ -375,7 +412,9 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Audit an interactive atlas in Chromium.")
+    parser = argparse.ArgumentParser(
+        description="Audit an interactive atlas in Chromium."
+    )
     parser.add_argument("--html", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--screenshots", type=Path, required=True)

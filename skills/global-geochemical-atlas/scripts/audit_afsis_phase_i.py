@@ -33,7 +33,9 @@ def _features(record: source_adapters.RawRecord) -> set[str]:
         features.add("coordinates=missing_both")
     observations = fields.get("_target_observations")
     if not isinstance(observations, Mapping):
-        raise AuditError(f"AfSIS record lacks target observations: {record.source_locator}")
+        raise AuditError(
+            f"AfSIS record lacks target observations: {record.source_locator}"
+        )
     for analyte, observation in observations.items():
         if not isinstance(observation, Mapping):
             continue
@@ -52,19 +54,41 @@ def _features(record: source_adapters.RawRecord) -> set[str]:
     return features
 
 
-def _select(records: Sequence[source_adapters.RawRecord], count: int) -> list[tuple[source_adapters.RawRecord, list[str]]]:
+def _select(
+    records: Sequence[source_adapters.RawRecord], count: int
+) -> list[tuple[source_adapters.RawRecord, list[str]]]:
     all_features = set().union(*(_features(record) for record in records))
     required = {
-        feature for feature in all_features
-        if feature.startswith(("country=", "depth=", "coordinates=", "As=", "Cr=", "Cu=", "Ni=", "Pb=", "Zn="))
+        feature
+        for feature in all_features
+        if feature.startswith(
+            (
+                "country=",
+                "depth=",
+                "coordinates=",
+                "As=",
+                "Cr=",
+                "Cu=",
+                "Ni=",
+                "Pb=",
+                "Zn=",
+            )
+        )
     }
     selected: list[tuple[source_adapters.RawRecord, list[str]]] = []
     selected_ids: set[str] = set()
     uncovered = set(required)
     while uncovered and len(selected) < count:
         best = max(
-            (record for record in records if record.source_record_id not in selected_ids),
-            key=lambda item: (len(_features(item) & uncovered), -int(item.source_locator.rsplit("=", 1)[-1])),
+            (
+                record
+                for record in records
+                if record.source_record_id not in selected_ids
+            ),
+            key=lambda item: (
+                len(_features(item) & uncovered),
+                -int(item.source_locator.rsplit("=", 1)[-1]),
+            ),
         )
         covered = sorted(_features(best) & uncovered)
         if not covered:
@@ -73,7 +97,9 @@ def _select(records: Sequence[source_adapters.RawRecord], count: int) -> list[tu
         selected_ids.add(best.source_record_id)
         uncovered.difference_update(covered)
     if uncovered:
-        raise AuditError(f"30-row review cannot cover required AfSIS strata: {sorted(uncovered)}")
+        raise AuditError(
+            f"30-row review cannot cover required AfSIS strata: {sorted(uncovered)}"
+        )
     for record in records:
         if len(selected) >= count:
             break
@@ -112,7 +138,9 @@ def _review(
         fields = record.fields
         observations = fields.get("_target_observations")
         if not isinstance(observations, Mapping):
-            raise AuditError(f"AfSIS review row lacks observations: {record.source_locator}")
+            raise AuditError(
+                f"AfSIS review row lacks observations: {record.source_locator}"
+            )
         adapter_observations: list[dict[str, Any]] = []
         for analyte, observation in observations.items():
             if not isinstance(observation, Mapping):
@@ -129,12 +157,24 @@ def _review(
                     "threshold_category": _threshold_category(observation),
                     "measurement_basis": str(observation["measurement_basis"]),
                     "analytical_method": str(observation["analytical_method"]),
-                    "digestion_or_extraction": str(observation["digestion_or_extraction"]),
-                    "source_variable_description": str(observation["source_variable_description"]),
-                    "variable_metadata_locator": str(observation["variable_metadata_locator"]),
-                    "threshold_metadata_locator": str(observation["threshold_metadata_locator"]),
+                    "digestion_or_extraction": str(
+                        observation["digestion_or_extraction"]
+                    ),
+                    "source_variable_description": str(
+                        observation["source_variable_description"]
+                    ),
+                    "variable_metadata_locator": str(
+                        observation["variable_metadata_locator"]
+                    ),
+                    "threshold_metadata_locator": str(
+                        observation["threshold_metadata_locator"]
+                    ),
                     "record_id": source_adapters.stable_record_id(
-                        SOURCE_ID, record.source_record_id, str(analyte), raw_value, unit
+                        SOURCE_ID,
+                        record.source_record_id,
+                        str(analyte),
+                        raw_value,
+                        unit,
                     ),
                 }
             )
@@ -153,7 +193,9 @@ def _review(
                 "longitude": str(fields.get("Longitude") or ""),
                 "source_file_sha256": measurement.sha256,
                 "metadata_file_sha256": by_filename[
-                    next(item.path.name for item in files if item.file_id == "variables")
+                    next(
+                        item.path.name for item in files if item.file_id == "variables"
+                    )
                 ].sha256,
                 "adapter_observations": adapter_observations,
                 "selection_reasons": reasons,
@@ -168,7 +210,8 @@ def _review(
                     "negative_and_below_limit_values_flagged_without_imputation": True,
                     "stable_observation_ids_unique": len(
                         {item["record_id"] for item in adapter_observations}
-                    ) == len(adapter_observations),
+                    )
+                    == len(adapter_observations),
                 },
                 "automated_status": "PASS",
                 "reviewer": {
@@ -186,7 +229,9 @@ def _review(
         "prepared_at": prepared_at,
         "status": "prepared",
         "prepared_record_count": len(review_records),
-        "automated_pass_count": sum(item["automated_status"] == "PASS" for item in review_records),
+        "automated_pass_count": sum(
+            item["automated_status"] == "PASS" for item in review_records
+        ),
         "completed_record_count": 0,
         "all_records_reviewed": False,
         "records": review_records,
@@ -203,7 +248,9 @@ def _audit(
     records: Sequence[source_adapters.RawRecord],
     observed_at: str,
 ) -> dict[str, Any]:
-    country_counts = Counter(str(record.fields.get("Country") or "") for record in records)
+    country_counts = Counter(
+        str(record.fields.get("Country") or "") for record in records
+    )
     depth_counts = Counter(str(record.fields.get("Depth") or "") for record in records)
     target_counts: Counter[str] = Counter()
     threshold_counts: dict[str, Counter[str]] = {}
@@ -220,17 +267,22 @@ def _audit(
             missing_coordinates += 1
         observations = record.fields.get("_target_observations")
         if not isinstance(observations, Mapping):
-            raise AuditError(f"AfSIS audit row lacks observations: {record.source_locator}")
+            raise AuditError(
+                f"AfSIS audit row lacks observations: {record.source_locator}"
+            )
         for analyte, observation in observations.items():
             if isinstance(observation, Mapping):
                 target_counts[str(analyte)] += 1
-                threshold_counts.setdefault(str(analyte), Counter())[_threshold_category(observation)] += 1
+                threshold_counts.setdefault(str(analyte), Counter())[
+                    _threshold_category(observation)
+                ] += 1
     members = [
         {"name": item.path.name, "bytes": item.bytes, "sha256": item.sha256}
         for item in sorted(files, key=lambda value: value.file_id)
     ]
     aggregate_hash = source_adapters._canonical_hash(
-        "afsis-original-files-v1", [item["name"] + ":" + item["sha256"] for item in members]
+        "afsis-original-files-v1",
+        [item["name"] + ":" + item["sha256"] for item in members],
     )
     return {
         "verification_version": AUDIT_VERSION,
@@ -253,20 +305,36 @@ def _audit(
         },
         "observed_data": {
             "physical_rows": len(records),
-            "distinct_ssn": len({str(item.fields.get("SSN") or "") for item in records}),
-            "distinct_res_id": len({str(item.fields.get("RES.ID") or "") for item in records}),
+            "distinct_ssn": len(
+                {str(item.fields.get("SSN") or "") for item in records}
+            ),
+            "distinct_res_id": len(
+                {str(item.fields.get("RES.ID") or "") for item in records}
+            ),
             "country_label_counts": dict(sorted(country_counts.items())),
-            "country_site_pairs": len({
-                (str(item.fields.get("Country") or ""), str(item.fields.get("Site") or "")) for item in records
-            }),
+            "country_site_pairs": len(
+                {
+                    (
+                        str(item.fields.get("Country") or ""),
+                        str(item.fields.get("Site") or ""),
+                    )
+                    for item in records
+                }
+            ),
             "depth_counts": dict(sorted(depth_counts.items())),
             "complete_coordinate_pairs": len(latitudes),
             "missing_coordinate_pairs": missing_coordinates,
-            "bbox_wgs84": [min(longitudes), min(latitudes), max(longitudes), max(latitudes)],
+            "bbox_wgs84": [
+                min(longitudes),
+                min(latitudes),
+                max(longitudes),
+                max(latitudes),
+            ],
             "target_analytes": dict(sorted(target_counts.items())),
             "target_observations": sum(target_counts.values()),
             "threshold_category_counts": {
-                analyte: dict(sorted(counts.items())) for analyte, counts in sorted(threshold_counts.items())
+                analyte: dict(sorted(counts.items()))
+                for analyte, counts in sorted(threshold_counts.items())
             },
         },
         "observed_metadata": {
@@ -305,7 +373,9 @@ def build(cache_dir: Path, prepared_at: str) -> tuple[dict[str, Any], dict[str, 
     adapter = source_adapters.get_adapter(SOURCE_ID)
     files = adapter.download(adapter.candidate, cache_dir, mode="cached")
     records = list(adapter.parse(files))
-    return _audit(adapter, files, records, prepared_at), _review(adapter, files, records, prepared_at)
+    return _audit(adapter, files, records, prepared_at), _review(
+        adapter, files, records, prepared_at
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -326,7 +396,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     except (OSError, AuditError, source_adapters.SourceAdapterError) as exc:
         print(f"audit_afsis_phase_i: {exc}", file=sys.stderr)
         return 2
-    print(json.dumps({"status": "PASS", "source_id": SOURCE_ID, "prepared": 30}, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "PASS", "source_id": SOURCE_ID, "prepared": 30}, sort_keys=True
+        )
+    )
     return 0
 
 

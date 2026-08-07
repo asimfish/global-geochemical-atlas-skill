@@ -21,7 +21,9 @@ class OpenCodeConfigTests(unittest.TestCase):
         self.assertEqual(config["agent"]["build"]["temperature"], 0.0)
         self.assertIn("openai-compatible", provider["name"])
 
-    def test_manual_compose_supplies_frozen_fields_and_isolated_b0_s0_mounts(self) -> None:
+    def test_manual_compose_supplies_frozen_fields_and_isolated_b0_s0_mounts(
+        self,
+    ) -> None:
         compose = (CONTAINER_ROOT.parent / "compose.yaml").read_text(encoding="utf-8")
         for name in (
             "EVAL_PROVIDER_MODEL_ID",

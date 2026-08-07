@@ -29,7 +29,11 @@ class ProviderProfileTests(unittest.TestCase):
 
     def test_repository_evidence_hash_is_current(self) -> None:
         profile = load_provider_profile("local-qwen38-openai-v1")
-        evidence = next(item for item in profile.entry["evidence"] if item["locator"].startswith("repo:"))
+        evidence = next(
+            item
+            for item in profile.entry["evidence"]
+            if item["locator"].startswith("repo:")
+        )
         repository_root = DOCKER_ROOT.parents[1]
         evidence_path = repository_root / evidence["locator"].removeprefix("repo:")
         self.assertTrue(evidence_path.is_file())
@@ -61,7 +65,10 @@ class ProviderProfileTests(unittest.TestCase):
             "https://user:pass@gateway.example/v1",
             "https://gateway.example/v1?token=secret",
         ):
-            with self.subTest(endpoint=endpoint), self.assertRaises(ProviderProfileError):
+            with (
+                self.subTest(endpoint=endpoint),
+                self.assertRaises(ProviderProfileError),
+            ):
                 profile.validate_runtime(
                     base_url=endpoint,
                     model="vendor/model",

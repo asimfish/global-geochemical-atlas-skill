@@ -40,7 +40,9 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
 
 
 def _canonical_sha256(value: Any) -> str:
-    rendered = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    rendered = json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
     return hashlib.sha256(rendered.encode("utf-8")).hexdigest()
 
 
@@ -51,7 +53,11 @@ def _require_mapping(value: Any, label: str) -> Mapping[str, Any]:
 
 
 def _require_sha256(value: Any, label: str) -> str:
-    if not isinstance(value, str) or len(value) != 64 or any(char not in "0123456789abcdef" for char in value):
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or any(char not in "0123456789abcdef" for char in value)
+    ):
         raise SnapshotError(f"{label} must be a lowercase SHA-256")
     return value
 
@@ -60,7 +66,10 @@ def _request_contract(url: str) -> dict[str, Any]:
     parts = urlsplit(url)
     if parts.scheme != "https" or not parts.netloc:
         raise SnapshotError("snapshot request URL must be an absolute HTTPS URL")
-    parameters = [{"name": key, "value": value} for key, value in parse_qsl(parts.query, keep_blank_values=True)]
+    parameters = [
+        {"name": key, "value": value}
+        for key, value in parse_qsl(parts.query, keep_blank_values=True)
+    ]
     contract = {
         "method": "GET",
         "url": url,
@@ -68,7 +77,11 @@ def _request_contract(url: str) -> dict[str, Any]:
         "parameters": parameters,
     }
     contract["canonical_request_sha256"] = _canonical_sha256(
-        {"method": contract["method"], "endpoint": contract["endpoint"], "parameters": parameters}
+        {
+            "method": contract["method"],
+            "endpoint": contract["endpoint"],
+            "parameters": parameters,
+        }
     )
     return contract
 
@@ -85,9 +98,13 @@ def build_snapshot(
     if not isinstance(source_id, str) or source_id not in catalog.get("sources", {}):
         raise SnapshotError("candidate source_id is missing from the source catalog")
     entry = catalog["sources"][source_id]
-    acquisition = _require_mapping(candidate.get("acquisition"), "candidate acquisition")
+    acquisition = _require_mapping(
+        candidate.get("acquisition"), "candidate acquisition"
+    )
     archive = _require_mapping(candidate.get("archive"), "candidate archive")
-    observed_data = _require_mapping(candidate.get("observed_data"), "candidate observed_data")
+    observed_data = _require_mapping(
+        candidate.get("observed_data"), "candidate observed_data"
+    )
     observed_at = acquisition.get("observed_at")
     request_url = acquisition.get("request_url")
     if not isinstance(observed_at, str) or not observed_at.endswith("Z"):
@@ -103,21 +120,36 @@ def build_snapshot(
         item = _require_mapping(member, f"archive member {index}")
         name = item.get("name")
         size = item.get("bytes")
-        if not isinstance(name, str) or not name or not isinstance(size, int) or size < 0:
+        if (
+            not isinstance(name, str)
+            or not name
+            or not isinstance(size, int)
+            or size < 0
+        ):
             raise SnapshotError(f"archive member {index} has invalid name or size")
         normalized_members.append(
-            {"name": name, "bytes": size, "sha256": _require_sha256(item.get("sha256"), f"member {name} sha256")}
+            {
+                "name": name,
+                "bytes": size,
+                "sha256": _require_sha256(item.get("sha256"), f"member {name} sha256"),
+            }
         )
 
     record_count = observed_data.get("data_record_count")
     distinct_samples = observed_data.get("distinct_sample_code_count")
     target_rows = observed_data.get("target_bearing_row_count")
-    if not all(isinstance(value, int) and value >= 0 for value in (record_count, distinct_samples, target_rows)):
-        raise SnapshotError("candidate record and sample counts must be non-negative integers")
+    if not all(
+        isinstance(value, int) and value >= 0
+        for value in (record_count, distinct_samples, target_rows)
+    ):
+        raise SnapshotError(
+            "candidate record and sample counts must be non-negative integers"
+        )
     invalid_values = sum(
         profile.get("invalid_count", 0)
         for profile in observed_data.get("target_analytes", {}).values()
-        if isinstance(profile, Mapping) and isinstance(profile.get("invalid_count", 0), int)
+        if isinstance(profile, Mapping)
+        and isinstance(profile.get("invalid_count", 0), int)
     )
     research_use_status = score_source_evidence.derive_research_use_status(entry)
     request = _request_contract(request_url)
@@ -135,7 +167,9 @@ def build_snapshot(
             "content_type": acquisition.get("response_content_type"),
             "bytes": archive.get("bytes"),
             "sha256": archive_sha256,
-            "publisher_checksum_available": bool(acquisition.get("publisher_checksum_available")),
+            "publisher_checksum_available": bool(
+                acquisition.get("publisher_checksum_available")
+            ),
         },
         "archive": {
             "filename": archive.get("filename"),
@@ -169,7 +203,9 @@ def build_snapshot(
         "evidence": {
             "candidate_evidence_path": evidence_path,
             "candidate_evidence_sha256": _canonical_sha256(candidate),
-            "publisher_checksum_status": "missing" if not acquisition.get("publisher_checksum_available") else "verified",
+            "publisher_checksum_status": "missing"
+            if not acquisition.get("publisher_checksum_available")
+            else "verified",
             "content_addressed_snapshot": True,
         },
         "limitations": list(entry.get("limitations", [])),
@@ -180,7 +216,9 @@ def build_snapshot(
     }
 
 
-def build_snapshot_from_paths(candidate_path: Path, catalog_path: Path = DEFAULT_CATALOG) -> dict[str, Any]:
+def build_snapshot_from_paths(
+    candidate_path: Path, catalog_path: Path = DEFAULT_CATALOG
+) -> dict[str, Any]:
     candidate = _read_json(candidate_path, "candidate evidence")
     catalog = source_router.load_catalog(catalog_path)
     try:
@@ -190,13 +228,19 @@ def build_snapshot_from_paths(candidate_path: Path, catalog_path: Path = DEFAULT
     return build_snapshot(candidate, catalog, evidence_path=evidence_path)
 
 
-def diff_snapshots(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[str, Any]:
+def diff_snapshots(
+    before: Mapping[str, Any], after: Mapping[str, Any]
+) -> dict[str, Any]:
     """Report content, request and count changes without overwriting either snapshot."""
 
     if before.get("source_id") != after.get("source_id"):
         raise SnapshotError("snapshot diff requires the same source_id")
-    before_members = {item["name"]: item for item in before.get("archive", {}).get("members", [])}
-    after_members = {item["name"]: item for item in after.get("archive", {}).get("members", [])}
+    before_members = {
+        item["name"]: item for item in before.get("archive", {}).get("members", [])
+    }
+    after_members = {
+        item["name"]: item for item in after.get("archive", {}).get("members", [])
+    }
     added = sorted(set(after_members) - set(before_members))
     removed = sorted(set(before_members) - set(after_members))
     changed_members = sorted(
@@ -207,11 +251,13 @@ def diff_snapshots(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[
     comparisons = {
         "request_changed": before.get("request", {}).get("canonical_request_sha256")
         != after.get("request", {}).get("canonical_request_sha256"),
-        "response_changed": before.get("response", {}).get("sha256") != after.get("response", {}).get("sha256"),
+        "response_changed": before.get("response", {}).get("sha256")
+        != after.get("response", {}).get("sha256"),
         "counts_changed": before.get("counts") != after.get("counts"),
         "research_use_changed": before.get("research_use") != after.get("research_use"),
         "limitations_changed": before.get("limitations") != after.get("limitations"),
-        "observation_time_changed": before.get("observed_at") != after.get("observed_at"),
+        "observation_time_changed": before.get("observed_at")
+        != after.get("observed_at"),
     }
     content_changed = any(
         (
@@ -227,7 +273,9 @@ def diff_snapshots(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[
     )
     if content_changed:
         status = "changed"
-    elif comparisons["observation_time_changed"] or before.get("snapshot_id") != after.get("snapshot_id"):
+    elif comparisons["observation_time_changed"] or before.get(
+        "snapshot_id"
+    ) != after.get("snapshot_id"):
         status = "content_unchanged_new_observation"
     else:
         status = "identical"
@@ -258,7 +306,9 @@ def _write_or_print(value: Mapping[str, Any], output: Path | None) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    create = subparsers.add_parser("create", help="Create a snapshot manifest from candidate evidence")
+    create = subparsers.add_parser(
+        "create", help="Create a snapshot manifest from candidate evidence"
+    )
     create.add_argument("--candidate-evidence", type=Path, required=True)
     create.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
     create.add_argument("--output", type=Path)
@@ -275,11 +325,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.command == "create":
             result = build_snapshot_from_paths(args.candidate_evidence, args.catalog)
         else:
-            result = diff_snapshots(_read_json(args.before, "before snapshot"), _read_json(args.after, "after snapshot"))
+            result = diff_snapshots(
+                _read_json(args.before, "before snapshot"),
+                _read_json(args.after, "after snapshot"),
+            )
         _write_or_print(result, args.output)
         return 0
     except (OSError, SnapshotError, source_router.SourceRoutingError) as exc:
-        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 2
 
 

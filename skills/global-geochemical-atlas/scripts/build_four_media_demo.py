@@ -84,14 +84,18 @@ def sha256_file(path: Path) -> str:
 
 def atomic_text(path: Path, value: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         handle.write(value)
         temporary = Path(handle.name)
     os.replace(temporary, path)
 
 
 def atomic_json(path: Path, value: Any) -> None:
-    atomic_text(path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    atomic_text(
+        path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    )
 
 
 def load_json(path: Path, label: str) -> dict[str, Any]:
@@ -106,7 +110,12 @@ def load_json(path: Path, label: str) -> dict[str, Any]:
 
 def csv_text(rows: Sequence[Mapping[str, str]]) -> str:
     with tempfile.TemporaryFile("w+", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=demos.INPUT_COLUMNS, extrasaction="ignore", lineterminator="\n")
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=demos.INPUT_COLUMNS,
+            extrasaction="ignore",
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
         handle.seek(0)
@@ -115,7 +124,8 @@ def csv_text(rows: Sequence[Mapping[str, str]]) -> str:
 
 def jsonl_text(rows: Sequence[Mapping[str, Any]]) -> str:
     return "".join(
-        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + "\n"
         for row in rows
     )
 
@@ -124,7 +134,13 @@ def comparison_key(row: Mapping[str, str]) -> tuple[str, ...]:
     return tuple(str(row.get(field) or "") for field in standardizer.DEFAULT_GROUP_BY)
 
 
-def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at: str, overwrite: bool) -> dict[str, Any]:
+def build(
+    request_path: Path,
+    source_demos: Path,
+    output_dir: Path,
+    generated_at: str,
+    overwrite: bool,
+) -> dict[str, Any]:
     output_paths = {
         "input": output_dir / "demo_input.csv",
         "sources": output_dir / "sources.jsonl",
@@ -132,7 +148,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     }
     existing = [str(path) for path in output_paths.values() if path.exists()]
     if existing and not overwrite:
-        raise CombinedDemoError(f"outputs already exist; use --overwrite after review: {existing}")
+        raise CombinedDemoError(
+            f"outputs already exist; use --overwrite after review: {existing}"
+        )
 
     request = load_json(request_path, "combined request")
     catalog = source_router.load_catalog()
@@ -164,23 +182,37 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
         evidence_path = fixture_dir / "sources.jsonl"
         manifest_path = fixture_dir / "run_manifest.json"
         manifest = load_json(manifest_path, f"{source_id} demo manifest")
-        expected_hashes = {item["path"]: item["sha256"] for item in manifest.get("outputs", [])}
+        expected_hashes = {
+            item["path"]: item["sha256"] for item in manifest.get("outputs", [])
+        }
         if expected_hashes != {
             "demo_input.csv": sha256_file(input_path),
             "sources.jsonl": sha256_file(evidence_path),
         }:
-            raise CombinedDemoError(f"{source_id} fixture hashes no longer match its manifest")
+            raise CombinedDemoError(
+                f"{source_id} fixture hashes no longer match its manifest"
+            )
         with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
             source_rows = [dict(row) for row in csv.DictReader(handle)]
         source_evidence = [
-            json.loads(line) for line in evidence_path.read_text(encoding="utf-8").splitlines() if line.strip()
+            json.loads(line)
+            for line in evidence_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
         ]
         if len(source_rows) != len(source_evidence) or not source_rows:
-            raise CombinedDemoError(f"{source_id} fixture lacks one-to-one observation evidence")
+            raise CombinedDemoError(
+                f"{source_id} fixture lacks one-to-one observation evidence"
+            )
         row_ids = {row.get("record_id", "") for row in source_rows}
-        evidence_ids = {str(row.get("record_id") or "") for row in source_evidence if isinstance(row, Mapping)}
+        evidence_ids = {
+            str(row.get("record_id") or "")
+            for row in source_evidence
+            if isinstance(row, Mapping)
+        }
         if row_ids != evidence_ids or "" in row_ids or record_ids.intersection(row_ids):
-            raise CombinedDemoError(f"{source_id} fixture record IDs are missing, mismatched or duplicated")
+            raise CombinedDemoError(
+                f"{source_id} fixture record IDs are missing, mismatched or duplicated"
+            )
         if {row.get("source_id") for row in source_rows} != {source_id}:
             raise CombinedDemoError(f"{source_id} fixture source IDs changed")
         if {row.get("medium") for row in source_rows} != {EXPECTED_MEDIA[source_id]}:
@@ -193,10 +225,14 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "source_id": source_id,
                 "input_path": str(input_path.relative_to(source_demos.parent.parent)),
                 "input_sha256": sha256_file(input_path),
-                "evidence_path": str(evidence_path.relative_to(source_demos.parent.parent)),
+                "evidence_path": str(
+                    evidence_path.relative_to(source_demos.parent.parent)
+                ),
                 "evidence_sha256": sha256_file(evidence_path),
                 "record_count": len(source_rows),
-                "source_evidence_score": evidence_report["sources"][source_id]["source_evidence_score"],
+                "source_evidence_score": evidence_report["sources"][source_id][
+                    "source_evidence_score"
+                ],
                 "evidence_tier": evidence_report["sources"][source_id]["evidence_tier"],
                 "use_mode": evidence_report["sources"][source_id]["use_mode"],
             }
@@ -235,7 +271,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
         medium: {
             "status": "partial",
             "selected_sources": sorted(
-                item["source_id"] for item in route_entries if medium in item["matching_media"]
+                item["source_id"]
+                for item in route_entries
+                if medium in item["matching_media"]
             ),
             "candidate_sources": [],
             "note": (
@@ -253,7 +291,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
         "not_for_scientific_interpretation": True,
         "request": request,
         "route": {
-            "status": "offline_fixtures_verified" if request.get("offline") else route["status"],
+            "status": "offline_fixtures_verified"
+            if request.get("offline")
+            else route["status"],
             "source_router_status": route["status"],
             "selection_context": (
                 "checked_in_fixtures_hash_verified"
@@ -328,10 +368,13 @@ def build_parser() -> argparse.ArgumentParser:
     skill_dir = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--request", type=Path,
+        "--request",
+        type=Path,
         default=skill_dir / "fixtures" / "four-media" / "combined-v3" / "request.json",
     )
-    parser.add_argument("--source-demos", type=Path, default=skill_dir / "fixtures" / "source-demos")
+    parser.add_argument(
+        "--source-demos", type=Path, default=skill_dir / "fixtures" / "source-demos"
+    )
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--generated-at", required=True)
     parser.add_argument("--overwrite", action="store_true")
@@ -342,20 +385,31 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         manifest = build(
-            args.request, args.source_demos, args.output_dir, args.generated_at, args.overwrite
+            args.request,
+            args.source_demos,
+            args.output_dir,
+            args.generated_at,
+            args.overwrite,
         )
         print(
             json.dumps(
                 {
                     "status": "PASS",
                     "record_count": manifest["record_counts"]["total"],
-                    "partition_count": manifest["comparison_isolation"]["partition_count"],
+                    "partition_count": manifest["comparison_isolation"][
+                        "partition_count"
+                    ],
                 },
                 sort_keys=True,
             )
         )
         return 0
-    except (CombinedDemoError, OSError, ValueError, source_adapters.SourceAdapterError) as exc:
+    except (
+        CombinedDemoError,
+        OSError,
+        ValueError,
+        source_adapters.SourceAdapterError,
+    ) as exc:
         print(f"build_four_media_demo: {exc}", file=sys.stderr)
         return 2
 

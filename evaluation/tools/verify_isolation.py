@@ -24,7 +24,9 @@ def verify(evaluation_root: Path, bundle_root: Path | None = None) -> dict[str, 
 
     evaluator_root = evaluation_root / "evaluator_private"
     if evaluator_root.is_symlink() or not evaluator_root.is_dir():
-        raise IsolationError("evaluation/evaluator_private must be a real repo-local directory")
+        raise IsolationError(
+            "evaluation/evaluator_private must be a real repo-local directory"
+        )
     expected_sources = {
         "shadow": {f"Q{number:02d}" for number in range(9, 17)},
         "final_holdout": {f"Q{number:02d}" for number in range(17, 25)},

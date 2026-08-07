@@ -60,7 +60,9 @@ class ResetAiSubmissionsTests(unittest.TestCase):
             self.assertEqual(summary["status"], "PASS")
             self.assertEqual(summary["removed_entries"], 2)
             for question in QUESTIONS:
-                remaining = {path.name for path in (bundle / "submissions" / question).iterdir()}
+                remaining = {
+                    path.name for path in (bundle / "submissions" / question).iterdir()
+                }
                 self.assertEqual(remaining, {".gitkeep"})
                 self.assertEqual(
                     (bundle / "submissions" / question / ".gitkeep").read_bytes(), b""
@@ -98,7 +100,9 @@ class ResetAiSubmissionsTests(unittest.TestCase):
             answer = bundle / "submissions" / "Q01" / "answer.md"
             answer.write_text("must survive\n", encoding="utf-8")
             (bundle / "BUNDLE_MANIFEST.json").write_text(
-                json.dumps({"bundle_type": "some-other-bundle", "questions": list(QUESTIONS)}),
+                json.dumps(
+                    {"bundle_type": "some-other-bundle", "questions": list(QUESTIONS)}
+                ),
                 encoding="utf-8",
             )
 

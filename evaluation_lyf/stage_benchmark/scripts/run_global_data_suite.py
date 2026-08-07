@@ -101,7 +101,9 @@ def add_spot_check(
             if isinstance(value, float):
                 passed = passed and close_enough(record.get(field), value)
             elif field == "required_flags":
-                passed = passed and all(flag in record.get("qc_flags", []) for flag in value)
+                passed = passed and all(
+                    flag in record.get("qc_flags", []) for flag in value
+                )
             else:
                 passed = passed and record.get(field) == value
     checks.add(
@@ -156,7 +158,9 @@ def run_global_suite(
         ]
     )
     stages["fixture_verification"] = fixture_result
-    add_stage_check(checks, "global_fixture_verification_succeeds_offline", fixture_result)
+    add_stage_check(
+        checks, "global_fixture_verification_succeeds_offline", fixture_result
+    )
     if not stage_succeeded(fixture_result):
         return write_early_report(
             output_dir, checks, stages, "fixture_verification", candidate_label
@@ -181,16 +185,22 @@ def run_global_suite(
         )
         if not stage_succeeded(expanded_fixture_result):
             return write_early_report(
-                output_dir, checks, stages, "expanded_fixture_verification", candidate_label
+                output_dir,
+                checks,
+                stages,
+                "expanded_fixture_verification",
+                candidate_label,
             )
         expanded_payload = expanded_fixture_result["payload"]
-        fixture_payload["resource_count"] = int(fixture_payload["resource_count"]) + int(
-            expanded_payload["resource_count"]
-        )
+        fixture_payload["resource_count"] = int(
+            fixture_payload["resource_count"]
+        ) + int(expanded_payload["resource_count"])
         fixture_payload["total_bytes"] = int(fixture_payload["total_bytes"]) + int(
             expanded_payload["total_bytes"]
         )
-        fixture_payload["expanded_resource_count"] = int(expanded_payload["resource_count"])
+        fixture_payload["expanded_resource_count"] = int(
+            expanded_payload["resource_count"]
+        )
         fixture_payload["expanded_total_bytes"] = int(expanded_payload["total_bytes"])
     fixture_bytes = int(fixture_payload["total_bytes"])
     checks.add(
@@ -210,12 +220,16 @@ def run_global_suite(
         == {"rock", "sediment", "soil", "water"},
         category="source_coverage",
         expected={
-            "minimum_datasets": source_contract["coverage_acceptance"]["minimum_source_datasets"],
+            "minimum_datasets": source_contract["coverage_acceptance"][
+                "minimum_source_datasets"
+            ],
             "media": ["rock", "sediment", "soil", "water"],
         },
         actual={
             "datasets": len(source_contract["datasets"]),
-            "media": sorted({dataset["medium"] for dataset in source_contract["datasets"]}),
+            "media": sorted(
+                {dataset["medium"] for dataset in source_contract["datasets"]}
+            ),
         },
     )
     checks.add(
@@ -251,13 +265,13 @@ def run_global_suite(
             "--output-dir",
             str(d1_dir),
         ]
-    d1_result = run_json_command(
-        d1_command
-    )
+    d1_result = run_json_command(d1_command)
     stages["d1_global_adapters"] = d1_result
     add_stage_check(checks, "global_d1_adapters_succeed", d1_result)
     if not stage_succeeded(d1_result):
-        return write_early_report(output_dir, checks, stages, "d1_global_adapters", candidate_label)
+        return write_early_report(
+            output_dir, checks, stages, "d1_global_adapters", candidate_label
+        )
 
     d1_manifest_path = d1_dir / "d1_global_manifest.json"
     d1_export_path = d1_dir / "d1_global_export.csv"
@@ -267,7 +281,9 @@ def run_global_suite(
     medium_counts = Counter(row["medium"] for row in d1_rows)
     element_counts = Counter(row["element_or_analyte"] for row in d1_rows)
     continent_counts = Counter(row["benchmark_continent"] for row in d1_rows)
-    required_continents = set(source_contract["coverage_acceptance"]["required_continents"])
+    required_continents = set(
+        source_contract["coverage_acceptance"]["required_continents"]
+    )
     checks.add(
         "d1_export_hash_and_record_count_match_manifest",
         d1_manifest["record_count"] == len(d1_rows)
@@ -313,7 +329,9 @@ def run_global_suite(
         expected=f">={core_contract['coverage_acceptance']['minimum_explicit_country_labels']}",
         actual=d1_manifest.get("gemstat_country_count"),
     )
-    country_counts = Counter(row["benchmark_country"] for row in d1_rows if row["benchmark_country"])
+    country_counts = Counter(
+        row["benchmark_country"] for row in d1_rows if row["benchmark_country"]
+    )
     if expanded:
         required_focus_countries = set(
             source_contract["coverage_acceptance"].get("required_focus_countries", [])
@@ -328,7 +346,9 @@ def run_global_suite(
         checks.add(
             "expanded_d1_has_at_least_55_explicit_country_labels",
             len(country_counts)
-            >= source_contract["coverage_acceptance"]["minimum_explicit_country_labels"],
+            >= source_contract["coverage_acceptance"][
+                "minimum_explicit_country_labels"
+            ],
             category="geographic_coverage",
             expected=f">={source_contract['coverage_acceptance']['minimum_explicit_country_labels']}",
             actual=len(country_counts),
@@ -342,7 +362,10 @@ def run_global_suite(
         <= source_contract["coverage_acceptance"]["maximum_single_country_share"],
         category="geographic_coverage",
         expected=f"<={source_contract['coverage_acceptance']['maximum_single_country_share']}",
-        actual={"country_label": largest_country, "share": round(largest_country_share, 6)},
+        actual={
+            "country_label": largest_country,
+            "share": round(largest_country_share, 6),
+        },
     )
     bad_d1_evidence = [
         row["record_id"]
@@ -374,7 +397,9 @@ def run_global_suite(
             expected=str(candidate_d2_script),
             actual="missing",
         )
-        return write_early_report(output_dir, checks, stages, "candidate_d2_missing", candidate_label)
+        return write_early_report(
+            output_dir, checks, stages, "candidate_d2_missing", candidate_label
+        )
 
     d2_dir = output_dir / "d2"
     d2_result = run_json_command(
@@ -390,7 +415,9 @@ def run_global_suite(
     stages["candidate_d2"] = d2_result
     add_stage_check(checks, "candidate_d2_cli_succeeds", d2_result)
     if not stage_succeeded(d2_result):
-        return write_early_report(output_dir, checks, stages, "candidate_d2", candidate_label)
+        return write_early_report(
+            output_dir, checks, stages, "candidate_d2", candidate_label
+        )
 
     present_d2_files = {path.name for path in d2_dir.iterdir() if path.is_file()}
     checks.add(
@@ -442,7 +469,9 @@ def run_global_suite(
         actual=bad_d2_evidence[:20],
     )
     censored_as_values = [
-        row["record_id"] for row in d2_rows if row["censored"] and row["normalized_value"] is not None
+        row["record_id"]
+        for row in d2_rows
+        if row["censored"] and row["normalized_value"] is not None
     ]
     checks.add(
         "censored_global_water_results_are_not_imputed",
@@ -456,12 +485,16 @@ def run_global_suite(
     invalid_coordinate_rows = [
         row
         for row in d2_rows
-        if "INVALID_COORDINATE" in row["qc_flags"] or "INCOMPLETE_COORDINATE" in row["qc_flags"]
+        if "INVALID_COORDINATE" in row["qc_flags"]
+        or "INCOMPLETE_COORDINATE" in row["qc_flags"]
     ]
     checks.add(
         "invalid_source_coordinates_remain_in_database_but_are_not_mapped",
         bool(invalid_coordinate_rows)
-        and all(row["latitude"] is None and row["longitude"] is None for row in invalid_coordinate_rows),
+        and all(
+            row["latitude"] is None and row["longitude"] is None
+            for row in invalid_coordinate_rows
+        ),
         category="scientific_semantics",
         expected=">=1 retained, unmapped invalid coordinate",
         actual=len(invalid_coordinate_rows),
@@ -469,7 +502,8 @@ def run_global_suite(
     mappable_continents = {
         d1_by_id[str(row["record_id"])]["benchmark_continent"]
         for row in d2_rows
-        if row["latitude"] is not None and row["longitude"] is not None
+        if row["latitude"] is not None
+        and row["longitude"] is not None
         and str(row["record_id"]) in d1_by_id
     }
     checks.add(
@@ -591,7 +625,9 @@ def run_global_suite(
     anomalies = load_json(d2_dir / "anomalies.geojson")
     samples = load_json(d2_dir / "samples.geojson")
     analyzed_groups = [
-        group for group in anomaly_report.get("groups", []) if group.get("status") == "analyzed"
+        group
+        for group in anomaly_report.get("groups", [])
+        if group.get("status") == "analyzed"
     ]
     checks.add(
         "global_data_exercises_multiple_anomaly_background_groups",
@@ -622,24 +658,36 @@ def run_global_suite(
         for feature in anomaly_features
         if not feature.get("properties", {}).get("source_locator")
         or feature.get("properties", {}).get("status") != "candidate_anomaly"
-        or "no causal claim" not in feature.get("properties", {}).get("interpretation_limit", "")
+        or "no causal claim"
+        not in feature.get("properties", {}).get("interpretation_limit", "")
     ]
     checks.add(
         "candidate_anomalies_are_traceable_and_explicitly_noncausal",
-        len(anomaly_features) == anomaly_report.get("candidate_count") and not bad_anomalies,
+        len(anomaly_features) == anomaly_report.get("candidate_count")
+        and not bad_anomalies,
         category="scientific_boundary",
         actual={"candidate_count": len(anomaly_features), "bad": bad_anomalies[:20]},
     )
-    coordinates = [feature.get("geometry", {}).get("coordinates", []) for feature in samples.get("features", [])]
+    coordinates = [
+        feature.get("geometry", {}).get("coordinates", [])
+        for feature in samples.get("features", [])
+    ]
     valid_coordinates = [item for item in coordinates if len(item) == 2]
-    longitude_span = max(item[0] for item in valid_coordinates) - min(item[0] for item in valid_coordinates)
-    latitude_span = max(item[1] for item in valid_coordinates) - min(item[1] for item in valid_coordinates)
+    longitude_span = max(item[0] for item in valid_coordinates) - min(
+        item[0] for item in valid_coordinates
+    )
+    latitude_span = max(item[1] for item in valid_coordinates) - min(
+        item[1] for item in valid_coordinates
+    )
     checks.add(
         "sample_map_has_world_scale_longitude_and_latitude_extent",
         longitude_span >= 250 and latitude_span >= 130,
         category="map_semantics",
         expected={"longitude_span": ">=250", "latitude_span": ">=130"},
-        actual={"longitude_span": round(longitude_span, 6), "latitude_span": round(latitude_span, 6)},
+        actual={
+            "longitude_span": round(longitude_span, 6),
+            "latitude_span": round(latitude_span, 6),
+        },
     )
 
     d3_dir = output_dir / "d3"
@@ -658,7 +706,9 @@ def run_global_suite(
     stages["d3_global_products"] = d3_result
     add_stage_check(checks, "global_d3_consumer_succeeds", d3_result)
     if not stage_succeeded(d3_result):
-        return write_early_report(output_dir, checks, stages, "d3_global_products", candidate_label)
+        return write_early_report(
+            output_dir, checks, stages, "d3_global_products", candidate_label
+        )
 
     d3_report = load_json(d3_dir / "d3_consumer_report.json")
     showcase_manifest = load_json(d3_dir / "showcase_manifest.json")
@@ -681,7 +731,8 @@ def run_global_suite(
     hash_failures = deliverable_hash_failures(d3_dir, showcase_manifest)
     checks.add(
         "global_showcase_emits_four_hashed_competition_deliverables",
-        set(showcase_manifest.get("deliverables", {})) == expected_deliverables and not hash_failures,
+        set(showcase_manifest.get("deliverables", {})) == expected_deliverables
+        and not hash_failures,
         category="product_acceptance",
         expected=sorted(expected_deliverables),
         actual={
@@ -694,7 +745,8 @@ def run_global_suite(
         "source_confidence_embeds_seven_continent_matrix_and_blind_spots",
         set(geographic_coverage.get("coverage_matrix", {})) == required_continents
         and len(geographic_coverage.get("declared_blind_spots", [])) >= 3
-        and source_confidence.get("global_confidence", {}).get("not_a_probability") is True,
+        and source_confidence.get("global_confidence", {}).get("not_a_probability")
+        is True,
         category="product_acceptance",
         actual={
             "continents": sorted(geographic_coverage.get("coverage_matrix", {})),
@@ -725,8 +777,10 @@ def run_global_suite(
     checks.add(
         "anomaly_region_output_reconciles_every_candidate_point",
         anomaly_region_report.get("candidate_point_count") == len(anomaly_features)
-        and anomaly_region_report.get("mappable_candidate_point_count") == len(region_record_ids)
-        and anomaly_region_report.get("unmappable_candidate_point_count") + len(region_record_ids)
+        and anomaly_region_report.get("mappable_candidate_point_count")
+        == len(region_record_ids)
+        and anomaly_region_report.get("unmappable_candidate_point_count")
+        + len(region_record_ids)
         == len(anomaly_features)
         and all(
             "not a geological boundary"
@@ -744,7 +798,9 @@ def run_global_suite(
     # Review findings are expected source-coverage gaps. They must stay visible instead of being scored as D2 defects.
     coverage_matrix = d1_manifest["coverage_matrix"]
     nonempty_cells = sum(
-        count > 0 for media_counts in coverage_matrix.values() for count in media_counts.values()
+        count > 0
+        for media_counts in coverage_matrix.values()
+        for count in media_counts.values()
     )
     checks.add(
         "all_seven_continents_have_all_four_media",
@@ -755,7 +811,9 @@ def run_global_suite(
         actual=f"{nonempty_cells}/28",
         note="The benchmark is global in union coverage, not a claim that every medium exists on every continent.",
     )
-    method_fraction = sum(bool(row.get("analytical_method")) for row in d2_rows) / len(d2_rows)
+    method_fraction = sum(bool(row.get("analytical_method")) for row in d2_rows) / len(
+        d2_rows
+    )
     checks.add(
         "all_measurements_publish_an_explicit_analytical_method",
         method_fraction == 1.0,
@@ -765,7 +823,9 @@ def run_global_suite(
         actual=round(method_fraction, 6),
         note="GEOROC precompiled rows and most GEMStat historical rows legitimately omit method detail; confidence must expose it.",
     )
-    uncertainty_fraction = sum(row.get("coordinate_uncertainty_m") is not None for row in d2_rows) / len(d2_rows)
+    uncertainty_fraction = sum(
+        row.get("coordinate_uncertainty_m") is not None for row in d2_rows
+    ) / len(d2_rows)
     checks.add(
         "all_measurements_publish_coordinate_uncertainty",
         uncertainty_fraction == 1.0,
@@ -777,7 +837,10 @@ def run_global_suite(
     )
     checks.add(
         "all_geographic_sources_declare_a_geodetic_datum",
-        not any("datum not declared" in str(row.get("source_crs") or "").casefold() for row in d2_rows),
+        not any(
+            "datum not declared" in str(row.get("source_crs") or "").casefold()
+            for row in d2_rows
+        ),
         category="source_completeness",
         severity="review",
         expected="declared datum for every coordinate",
@@ -797,15 +860,24 @@ def run_global_suite(
         note="The openly licensed GEMStat v3 subset used here has target-element results in four continents only.",
     )
 
-    confidence_bands = Counter(row["operational_confidence"].get("band") for row in d2_rows)
-    total_elapsed = sum(float(stage.get("elapsed_seconds", 0)) for stage in stages.values())
-    d2_output_bytes = sum(path.stat().st_size for path in d2_dir.iterdir() if path.is_file())
+    confidence_bands = Counter(
+        row["operational_confidence"].get("band") for row in d2_rows
+    )
+    total_elapsed = sum(
+        float(stage.get("elapsed_seconds", 0)) for stage in stages.values()
+    )
+    d2_output_bytes = sum(
+        path.stat().st_size for path in d2_dir.iterdir() if path.is_file()
+    )
     checks.add(
         "global_flow_stays_inside_competition_runtime_and_repository_budgets",
         total_elapsed < 900 and fixture_bytes < 250_000_000,
         category="resource_budget",
         expected={"runtime_seconds": "<900", "fixture_bytes": "<250000000"},
-        actual={"runtime_seconds": round(total_elapsed, 3), "fixture_bytes": fixture_bytes},
+        actual={
+            "runtime_seconds": round(total_elapsed, 3),
+            "fixture_bytes": fixture_bytes,
+        },
     )
 
     summary = checks.summary()
@@ -843,7 +915,9 @@ def run_global_suite(
             "media": sorted(medium_counts),
             "coverage_matrix": coverage_matrix,
             "gemstat_country_count": d1_manifest["gemstat_country_count"],
-            "explicit_country_label_count": d1_manifest.get("explicit_country_label_count"),
+            "explicit_country_label_count": d1_manifest.get(
+                "explicit_country_label_count"
+            ),
             "explicit_country_labels": d1_manifest.get("explicit_country_labels", []),
             "declared_blind_spots": d1_manifest["declared_blind_spots"],
         },
@@ -854,19 +928,22 @@ def run_global_suite(
             "records_by_source": dict(sorted(source_counts.items())),
             "records_by_medium": dict(sorted(medium_counts.items())),
             "records_by_element": dict(sorted(element_counts.items())),
-            "standardized_value_count": sum(row["normalized_value"] is not None for row in d2_rows),
+            "standardized_value_count": sum(
+                row["normalized_value"] is not None for row in d2_rows
+            ),
             "censored_record_count": sum(row["censored"] for row in d2_rows),
             "mappable_record_count": sum(
-                row["latitude"] is not None and row["longitude"] is not None for row in d2_rows
+                row["latitude"] is not None and row["longitude"] is not None
+                for row in d2_rows
             ),
             "qc_flag_counts": qc_report.get("flag_counts", {}),
             "confidence_band_counts": dict(sorted(confidence_bands.items())),
             "analyzed_background_groups": len(analyzed_groups),
             "candidate_anomalies": len(anomaly_features),
             "anomaly_region_cells": len(region_features),
-            "candidate_anomaly_clusters": anomaly_region_report.get("status_counts", {}).get(
-                "candidate_cluster", 0
-            ),
+            "candidate_anomaly_clusters": anomaly_region_report.get(
+                "status_counts", {}
+            ).get("candidate_cluster", 0),
             "d2_output_bytes": d2_output_bytes,
             "d3_atlas_bytes": (d3_dir / "atlas.html").stat().st_size,
             "stage_elapsed_seconds": {
@@ -909,7 +986,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run the offline seven-continent D1 -> candidate D2 -> D3 benchmark."
     )
-    parser.add_argument("--output-dir", type=Path, required=True, help="New or empty benchmark result directory")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="New or empty benchmark result directory",
+    )
     parser.add_argument("--fixture-dir", type=Path, default=DEFAULT_FIXTURE_DIR)
     parser.add_argument(
         "--expanded",
@@ -952,12 +1034,20 @@ def main(argv: Sequence[str] | None = None) -> int:
             {
                 "status": report["status"],
                 "report": str(args.output_dir / "global_data_report.json"),
-                "blocking_failed": report.get("counts", {}).get("blocking", {}).get("failed"),
-                "review_failed": report.get("counts", {}).get("review", {}).get("failed"),
+                "blocking_failed": report.get("counts", {})
+                .get("blocking", {})
+                .get("failed"),
+                "review_failed": report.get("counts", {})
+                .get("review", {})
+                .get("failed"),
                 "atlas": str(args.output_dir / "d3" / "atlas.html"),
                 "database": str(args.output_dir / "d2" / "geochemistry.csv"),
-                "source_confidence": str(args.output_dir / "d3" / "source_confidence.json"),
-                "anomaly_regions": str(args.output_dir / "d3" / "anomaly_regions.geojson"),
+                "source_confidence": str(
+                    args.output_dir / "d3" / "source_confidence.json"
+                ),
+                "anomaly_regions": str(
+                    args.output_dir / "d3" / "anomaly_regions.geojson"
+                ),
                 "profile": "expanded" if args.expanded else "core",
                 "wall_seconds": wall_seconds,
             },

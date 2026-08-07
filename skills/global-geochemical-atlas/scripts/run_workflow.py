@@ -35,7 +35,9 @@ class WorkflowError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -46,7 +48,9 @@ def count_input_rows(path: Path, max_records: int) -> int:
     if not path.is_file():
         raise WorkflowError("invalid_input", f"input CSV does not exist: {path}")
     if path.stat().st_size > MAX_INPUT_BYTES:
-        raise WorkflowError("unsupported_scope", f"input exceeds {MAX_INPUT_BYTES} byte safety limit")
+        raise WorkflowError(
+            "unsupported_scope", f"input exceeds {MAX_INPUT_BYTES} byte safety limit"
+        )
     try:
         with path.open("r", encoding="utf-8-sig", newline="") as handle:
             reader = csv.reader(handle)
@@ -71,12 +75,18 @@ def count_input_rows(path: Path, max_records: int) -> int:
 def json_file(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
-        raise WorkflowError("incomplete_retrieval", f"expected JSON object in {path.name}")
+        raise WorkflowError(
+            "incomplete_retrieval", f"expected JSON object in {path.name}"
+        )
     return value
 
 
-def coverage_from_rows(rows: Sequence[Mapping[str, str]], qc_report: Mapping[str, Any]) -> dict[str, Any]:
-    elements = sorted({row.get("element_or_analyte") for row in rows if row.get("element_or_analyte")})
+def coverage_from_rows(
+    rows: Sequence[Mapping[str, str]], qc_report: Mapping[str, Any]
+) -> dict[str, Any]:
+    elements = sorted(
+        {row.get("element_or_analyte") for row in rows if row.get("element_or_analyte")}
+    )
     media = sorted({row.get("medium") for row in rows if row.get("medium")})
     coordinates: list[tuple[float, float]] = []
     for row in rows:
@@ -100,7 +110,9 @@ def coverage_from_rows(rows: Sequence[Mapping[str, str]], qc_report: Mapping[str
     return {
         "elements": elements,
         "media": media,
-        "coordinate_rate": round(valid_coordinate_count / record_count, 6) if record_count else 0.0,
+        "coordinate_rate": round(valid_coordinate_count / record_count, 6)
+        if record_count
+        else 0.0,
         "standardization_rate": float(qc_report.get("standardization_rate", 0.0)),
         "bbox": bbox,
         "interpolation": False,
@@ -134,7 +146,9 @@ def artifact_transaction(output_dir: Path, input_sha256: str) -> dict[str, Any]:
     for logical_name, filename in summary_outputs().items():
         path = output_dir / filename
         if not path.is_file():
-            raise WorkflowError("incomplete_retrieval", f"transaction artifact is missing: {filename}")
+            raise WorkflowError(
+                "incomplete_retrieval", f"transaction artifact is missing: {filename}"
+            )
         artifacts[logical_name] = {
             "filename": filename,
             "bytes": path.stat().st_size,
@@ -159,7 +173,9 @@ def resolved_minimum_group_size(args: argparse.Namespace) -> int:
     return 20 if args.analysis_profile == "production" else 8
 
 
-def failure_summary(status: str, message: str, input_path: Path, args: argparse.Namespace) -> dict[str, Any]:
+def failure_summary(
+    status: str, message: str, input_path: Path, args: argparse.Namespace
+) -> dict[str, Any]:
     return {
         "schema_version": SUMMARY_VERSION,
         "status": status,
@@ -167,13 +183,17 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
         "request_summary": {
             "region_bbox": list(args.region_bbox) if args.region_bbox else None,
             "max_records": args.max_records,
-            "group_by": [field.strip() for field in args.group_by.split(",") if field.strip()],
+            "group_by": [
+                field.strip() for field in args.group_by.split(",") if field.strip()
+            ],
             "minimum_group_size": resolved_minimum_group_size(args),
             "robust_z_threshold": args.robust_z_threshold,
         },
         "input": {
             "filename": input_path.name,
-            "sha256": evidence_builder.sha256_file(input_path) if input_path.is_file() else "0" * 64,
+            "sha256": evidence_builder.sha256_file(input_path)
+            if input_path.is_file()
+            else "0" * 64,
             "record_count": 0,
             "synthetic_demo": False,
             "data_mode": "not_evaluated",
@@ -200,17 +220,25 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
             "interpolation": False,
         },
         "limitations": [message],
-        "next_actions": ["Correct the reported failure and rerun; do not infer missing scientific fields."],
+        "next_actions": [
+            "Correct the reported failure and rerun; do not infer missing scientific fields."
+        ],
     }
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
     if args.max_records < 1 or args.max_records > 200_000:
-        raise WorkflowError("unsupported_scope", "--max-records must be between 1 and 200000")
+        raise WorkflowError(
+            "unsupported_scope", "--max-records must be between 1 and 200000"
+        )
     count_input_rows(args.input, args.max_records)
-    group_by = tuple(field.strip() for field in args.group_by.split(",") if field.strip())
+    group_by = tuple(
+        field.strip() for field in args.group_by.split(",") if field.strip()
+    )
     if not group_by:
-        raise WorkflowError("invalid_input", "--group-by must contain at least one canonical field")
+        raise WorkflowError(
+            "invalid_input", "--group-by must contain at least one canonical field"
+        )
     minimum_group_size = resolved_minimum_group_size(args)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     try:
@@ -249,7 +277,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             args.acquisition_manifest,
         )
     except evidence_builder.EvidenceError as exc:
-        raise WorkflowError("conflicting_evidence", f"evidence packaging failed: {exc}") from exc
+        raise WorkflowError(
+            "conflicting_evidence", f"evidence packaging failed: {exc}"
+        ) from exc
 
     samples_path = args.output_dir / "samples.geojson"
     map_path = args.output_dir / "interactive_map.html"
@@ -272,7 +302,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             visualization_profile_path=args.visualization_profile,
         )
     except (map_builder.MapBuildError, OSError) as exc:
-        raise WorkflowError("incomplete_retrieval", f"map generation failed: {exc}") from exc
+        raise WorkflowError(
+            "incomplete_retrieval", f"map generation failed: {exc}"
+        ) from exc
 
     qc_report = json_file(outputs["qc_report"])
     anomaly_report = json_file(outputs["anomaly_report"])
@@ -280,13 +312,20 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     spatial_anomaly_report = json_file(outputs["spatial_anomaly_report"])
     coverage = coverage_from_rows(rows, qc_report)
     severity_counts = qc_report.get("severity_counts", {})
-    quality_status = "issues_detected" if sum(int(value) for value in severity_counts.values()) else "no_flags"
+    quality_status = (
+        "issues_detected"
+        if sum(int(value) for value in severity_counts.values())
+        else "no_flags"
+    )
     limitations = [
         "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
         "Map density uses observed points only; no interpolation is performed across unsampled areas.",
     ]
     if synthetic_present:
-        limitations.insert(0, "The bundled demo is synthetic CC0 validation data and supports no real-world claim.")
+        limitations.insert(
+            0,
+            "The bundled demo is synthetic CC0 validation data and supports no real-world claim.",
+        )
     elif source_manifest.get("not_for_scientific_interpretation") is True:
         limitations.insert(
             0,
@@ -294,7 +333,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "scientific sample and not for scientific interpretation.",
         )
     if int(severity_counts.get("error", 0)):
-        limitations.append("Some records have error-level QC flags and are capped at low operational confidence.")
+        limitations.append(
+            "Some records have error-level QC flags and are capped at low operational confidence."
+        )
     if args.geology_grid is not None:
         limitations.append(
             "GLiM 0.5 degree dominant surface lithology is coarse screening context, not site-scale geology."
@@ -307,9 +348,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             f"{failed_or_incomplete_batches} laboratory batch(es) failed or were incomplete; "
             "their analytical records remain in the database but were excluded from anomaly backgrounds."
         )
-    failed_groups = sum(group.get("status") != "analyzed" for group in anomaly_report.get("groups", []))
+    failed_groups = sum(
+        group.get("status") != "analyzed" for group in anomaly_report.get("groups", [])
+    )
     if failed_groups:
-        limitations.append(f"{failed_groups} anomaly background group(s) were not analyzed due to explicit failure states.")
+        limitations.append(
+            f"{failed_groups} anomaly background group(s) were not analyzed due to explicit failure states."
+        )
 
     metrics = {
         "record_count": int(qc_report.get("record_count", 0)),
@@ -383,7 +428,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     validation = output_validator.validate_dir(args.output_dir)
     if validation["status"] != "valid":
         summary["status"] = "incomplete_retrieval"
-        summary["limitations"].append("Output validation failed: " + "; ".join(validation["errors"]))
+        summary["limitations"].append(
+            "Output validation failed: " + "; ".join(validation["errors"])
+        )
         atomic_json(summary_path, summary)
         raise WorkflowError("incomplete_retrieval", "output validation failed")
     return summary
@@ -393,8 +440,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Standardize geochemical CSV data, screen candidate anomalies, and build auditable map outputs."
     )
-    parser.add_argument("--input", required=True, type=Path, help="UTF-8 CSV; one row per sample-analyte determination")
-    parser.add_argument("--output-dir", required=True, type=Path, help="Destination directory for stable outputs")
+    parser.add_argument(
+        "--input",
+        required=True,
+        type=Path,
+        help="UTF-8 CSV; one row per sample-analyte determination",
+    )
+    parser.add_argument(
+        "--output-dir",
+        required=True,
+        type=Path,
+        help="Destination directory for stable outputs",
+    )
     parser.add_argument(
         "--evidence-jsonl",
         type=Path,
@@ -416,7 +473,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="Explicit batch acceptance policy; requires --batch-qc-input",
     )
     parser.add_argument(
-        "--geology-grid", type=Path,
+        "--geology-grid",
+        type=Path,
         help="Optional official PANGAEA.788537 GLiM 0.5 degree ZIP for D2 screening spatial matching",
     )
     parser.add_argument(
@@ -424,11 +482,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Required SHA-256 pin when --geology-grid is supplied",
     )
     parser.add_argument(
-        "--analysis-profile", choices=("demo", "production"), default="demo",
+        "--analysis-profile",
+        choices=("demo", "production"),
+        default="demo",
         help="Production enforces at least 20 usable records per anomaly background group",
     )
     parser.add_argument(
-        "--region-bbox", type=standardizer.parse_bbox, metavar="W,S,E,N",
+        "--region-bbox",
+        type=standardizer.parse_bbox,
+        metavar="W,S,E,N",
         help="Optional WGS84 requested region, used for coordinate QC (dateline crossing supported)",
     )
     parser.add_argument(
@@ -436,30 +498,49 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Optional validated D3 profile used to scope and configure the generated map",
     )
-    parser.add_argument("--max-records", type=int, default=50_000, help="Fail closed above this input count")
     parser.add_argument(
-        "--group-by", default=",".join(standardizer.DEFAULT_GROUP_BY),
+        "--max-records",
+        type=int,
+        default=50_000,
+        help="Fail closed above this input count",
+    )
+    parser.add_argument(
+        "--group-by",
+        default=",".join(standardizer.DEFAULT_GROUP_BY),
         help="Comma-separated comparable background fields for anomaly screening",
     )
     parser.add_argument(
-        "--min-group-size", type=int,
+        "--min-group-size",
+        type=int,
         help="Minimum usable records per anomaly group (default: demo=8, production=20)",
     )
-    parser.add_argument("--robust-z-threshold", type=float, default=3.5, help="Absolute modified z-score threshold")
     parser.add_argument(
-        "--spatial-grid-degrees", type=float, default=2.0,
+        "--robust-z-threshold",
+        type=float,
+        default=3.5,
+        help="Absolute modified z-score threshold",
+    )
+    parser.add_argument(
+        "--spatial-grid-degrees",
+        type=float,
+        default=2.0,
         help="Fixed WGS84 cell size for candidate-region testing (default: 2)",
     )
     parser.add_argument(
-        "--min-spatial-samples", type=int,
+        "--min-spatial-samples",
+        type=int,
         help="Minimum mapped usable records inside and outside each tested cell",
     )
     parser.add_argument(
-        "--min-spatial-candidates", type=int, default=2,
+        "--min-spatial-candidates",
+        type=int,
+        default=2,
         help="Minimum D2 point candidates required in a reported cell",
     )
     parser.add_argument(
-        "--spatial-fdr-alpha", type=float, default=0.10,
+        "--spatial-fdr-alpha",
+        type=float,
+        default=0.10,
         help="Benjamini-Hochberg FDR threshold for candidate regions",
     )
     return parser
@@ -477,7 +558,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
     print(
         json.dumps(
-            {"status": summary["status"], "output_dir": str(args.output_dir), "metrics": summary["metrics"]},
+            {
+                "status": summary["status"],
+                "output_dir": str(args.output_dir),
+                "metrics": summary["metrics"],
+            },
             ensure_ascii=False,
             sort_keys=True,
         )

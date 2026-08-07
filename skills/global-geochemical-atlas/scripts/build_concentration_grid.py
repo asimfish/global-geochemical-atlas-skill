@@ -50,7 +50,9 @@ def sha256_file(path: Path) -> str:
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -93,19 +95,26 @@ def _profile_matches(row: Mapping[str, str], profile: Mapping[str, Any]) -> bool
             confidence = json.loads(row.get("operational_confidence") or "{}")
         except json.JSONDecodeError:
             return False
-        if not isinstance(confidence, dict) or confidence.get("band") != filters["confidence"]:
+        if (
+            not isinstance(confidence, dict)
+            or confidence.get("band") != filters["confidence"]
+        ):
             return False
     return True
 
 
-def _cell(value: float, size: int, minimum: float, maximum: float) -> tuple[float, float]:
+def _cell(
+    value: float, size: int, minimum: float, maximum: float
+) -> tuple[float, float]:
     lower = minimum + math.floor((value - minimum) / size) * size
     if math.isclose(value, maximum):
         lower = maximum - size
     return lower, min(maximum, lower + size)
 
 
-def build_grid(database: Path, profile: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+def build_grid(
+    database: Path, profile: Mapping[str, Any]
+) -> tuple[dict[str, Any], dict[str, Any]]:
     element = profile["filters"].get("element")
     if not element:
         raise ConcentrationGridError(
@@ -118,23 +127,37 @@ def build_grid(database: Path, profile: Mapping[str, Any]) -> tuple[dict[str, An
     }
     region = map_builder.selected_region(profile)
     required = {
-        "record_id", "sample_id", "source_id", "element_or_analyte", "latitude", "longitude",
-        "normalized_value", "normalized_unit", "censored", *LAYER_FIELDS,
+        "record_id",
+        "sample_id",
+        "source_id",
+        "element_or_analyte",
+        "latitude",
+        "longitude",
+        "normalized_value",
+        "normalized_unit",
+        "censored",
+        *LAYER_FIELDS,
     }
     try:
         with database.open("r", encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
             if reader.fieldnames is None or not required.issubset(reader.fieldnames):
                 missing = sorted(required - set(reader.fieldnames or []))
-                raise ConcentrationGridError("canonical database lacks grid fields: " + ", ".join(missing))
+                raise ConcentrationGridError(
+                    "canonical database lacks grid fields: " + ", ".join(missing)
+                )
             rows = [dict(row) for row in reader]
     except (OSError, UnicodeError) as exc:
-        raise ConcentrationGridError(f"canonical database is unreadable: {database}") from exc
+        raise ConcentrationGridError(
+            f"canonical database is unreadable: {database}"
+        ) from exc
 
     groups: dict[tuple[Any, ...], list[dict[str, str]]] = defaultdict(list)
     excluded = defaultdict(int)
     for row in rows:
-        if row.get("element_or_analyte") != element or not _profile_matches(row, profile):
+        if row.get("element_or_analyte") != element or not _profile_matches(
+            row, profile
+        ):
             continue
         try:
             longitude = float(row.get("longitude") or "")
@@ -142,7 +165,9 @@ def build_grid(database: Path, profile: Mapping[str, Any]) -> tuple[dict[str, An
         except ValueError:
             excluded["unmappable"] += 1
             continue
-        if not map_builder.coordinate_in_region(longitude, latitude, region, countries_by_code):
+        if not map_builder.coordinate_in_region(
+            longitude, latitude, region, countries_by_code
+        ):
             excluded["outside_scope"] += 1
             continue
         west, east = _cell(longitude, grid_degrees, -180.0, 180.0)
@@ -153,7 +178,9 @@ def build_grid(database: Path, profile: Mapping[str, Any]) -> tuple[dict[str, An
     features: list[dict[str, Any]] = []
     for key in sorted(groups):
         west, south, east, north = (float(item) for item in key[:4])
-        layer = {field: key[index + 4] or None for index, field in enumerate(LAYER_FIELDS)}
+        layer = {
+            field: key[index + 4] or None for index, field in enumerate(LAYER_FIELDS)
+        }
         group_rows = groups[key]
         values: list[float] = []
         censored_count = 0
@@ -184,9 +211,15 @@ def build_grid(database: Path, profile: Mapping[str, Any]) -> tuple[dict[str, An
                 "id": f"cell-{feature_id}",
                 "geometry": {
                     "type": "Polygon",
-                    "coordinates": [[
-                        [west, south], [east, south], [east, north], [west, north], [west, south]
-                    ]],
+                    "coordinates": [
+                        [
+                            [west, south],
+                            [east, south],
+                            [east, north],
+                            [west, north],
+                            [west, south],
+                        ]
+                    ],
                 },
                 "properties": {
                     "element": element,
@@ -251,9 +284,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         collection, summary = build_grid(args.database, profile)
         atomic_json(args.output, collection)
     except (ConcentrationGridError, map_builder.MapBuildError, OSError) as exc:
-        print(json.dumps({"status": "invalid_input", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                {"status": "invalid_input", "error": str(exc)}, ensure_ascii=False
+            ),
+            file=sys.stderr,
+        )
         return 2
-    print(json.dumps({"status": "success", "output": str(args.output), **summary}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "success", "output": str(args.output), **summary},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

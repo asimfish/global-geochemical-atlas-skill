@@ -40,7 +40,9 @@ def reset_submissions(bundle_root: Path, *, dry_run: bool = False) -> dict[str, 
         if question_root.is_symlink() or not question_root.is_dir():
             raise ResetError(f"unsafe or missing submission directory: {question_root}")
         placeholder = question_root / ".gitkeep"
-        if placeholder.is_symlink() or (placeholder.exists() and not placeholder.is_file()):
+        if placeholder.is_symlink() or (
+            placeholder.exists() and not placeholder.is_file()
+        ):
             raise ResetError(f"unsafe .gitkeep placeholder: {placeholder}")
 
     removed_entries: list[str] = []

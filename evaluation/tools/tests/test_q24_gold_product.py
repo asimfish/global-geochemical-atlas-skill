@@ -41,12 +41,26 @@ class Q24PhysicalGoldTests(unittest.TestCase):
                 BUILDER.logical_sqlite_sha256(output / "geochemical.sqlite"),
                 BUILDER.logical_sqlite_sha256(self.gold / "geochemical.sqlite"),
             )
-            rebuilt_manifest = json.loads((output / "run_manifest.json").read_text(encoding="utf-8"))
-            gold_manifest = json.loads((self.gold / "run_manifest.json").read_text(encoding="utf-8"))
-            rebuilt_artifacts = {item["artifact_id"]: item for item in rebuilt_manifest["artifacts"]}
-            gold_artifacts = {item["artifact_id"]: item for item in gold_manifest["artifacts"]}
-            self.assertEqual(rebuilt_manifest["benchmark_evidence"], gold_manifest["benchmark_evidence"])
-            self.assertEqual(rebuilt_manifest["physical_artifact_profile"], gold_manifest["physical_artifact_profile"])
+            rebuilt_manifest = json.loads(
+                (output / "run_manifest.json").read_text(encoding="utf-8")
+            )
+            gold_manifest = json.loads(
+                (self.gold / "run_manifest.json").read_text(encoding="utf-8")
+            )
+            rebuilt_artifacts = {
+                item["artifact_id"]: item for item in rebuilt_manifest["artifacts"]
+            }
+            gold_artifacts = {
+                item["artifact_id"]: item for item in gold_manifest["artifacts"]
+            }
+            self.assertEqual(
+                rebuilt_manifest["benchmark_evidence"],
+                gold_manifest["benchmark_evidence"],
+            )
+            self.assertEqual(
+                rebuilt_manifest["physical_artifact_profile"],
+                gold_manifest["physical_artifact_profile"],
+            )
             for name, artifact_id in BUILDER.ARTIFACT_IDS.items():
                 self.assertEqual(
                     rebuilt_artifacts[artifact_id]["sha256"],
@@ -57,30 +71,51 @@ class Q24PhysicalGoldTests(unittest.TestCase):
                     BUILDER.sha256_file(self.gold / name),
                 )
                 if name != "geochemical.sqlite":
-                    self.assertEqual(rebuilt_artifacts[artifact_id], gold_artifacts[artifact_id])
+                    self.assertEqual(
+                        rebuilt_artifacts[artifact_id], gold_artifacts[artifact_id]
+                    )
             self.assertEqual(
                 rebuilt_artifacts["database"]["logical_sha256"],
                 gold_artifacts["database"]["logical_sha256"],
             )
 
     def test_database_map_and_manifest_form_one_q24_evidence_chain(self) -> None:
-        manifest = json.loads((self.gold / "run_manifest.json").read_text(encoding="utf-8"))
+        manifest = json.loads(
+            (self.gold / "run_manifest.json").read_text(encoding="utf-8")
+        )
         logical_rows = manifest["benchmark_evidence"]["observations.csv"]["rows"]
         logical_sources = manifest["benchmark_evidence"]["sources.jsonl"]["rows"]
         connection = sqlite3.connect(self.gold / "geochemical.sqlite")
         try:
-            self.assertEqual(connection.execute("SELECT COUNT(*) FROM observations").fetchone()[0], len(logical_rows))
-            self.assertEqual(connection.execute("SELECT COUNT(*) FROM sources").fetchone()[0], len(logical_sources))
-            self.assertEqual(connection.execute("PRAGMA quick_check").fetchone()[0], "ok")
+            self.assertEqual(
+                connection.execute("SELECT COUNT(*) FROM observations").fetchone()[0],
+                len(logical_rows),
+            )
+            self.assertEqual(
+                connection.execute("SELECT COUNT(*) FROM sources").fetchone()[0],
+                len(logical_sources),
+            )
+            self.assertEqual(
+                connection.execute("PRAGMA quick_check").fetchone()[0], "ok"
+            )
         finally:
             connection.close()
         html = (self.gold / "map.html").read_text(encoding="utf-8")
-        for token in ("zoomBy", "showAnom", "record_id", "source_id", "POINTS", "ANOMALIES"):
+        for token in (
+            "zoomBy",
+            "showAnom",
+            "record_id",
+            "source_id",
+            "POINTS",
+            "ANOMALIES",
+        ):
             self.assertIn(token, html)
         hashes = {item["artifact_id"]: item["sha256"] for item in manifest["artifacts"]}
         for name, artifact_id in BUILDER.ARTIFACT_IDS.items():
             self.assertEqual(hashes[artifact_id], BUILDER.sha256_file(self.gold / name))
-        database = next(item for item in manifest["artifacts"] if item["artifact_id"] == "database")
+        database = next(
+            item for item in manifest["artifacts"] if item["artifact_id"] == "database"
+        )
         self.assertEqual(
             database["logical_sha256"],
             BUILDER.logical_sqlite_sha256(self.gold / "geochemical.sqlite"),

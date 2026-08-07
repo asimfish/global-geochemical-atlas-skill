@@ -43,11 +43,16 @@ class ReviewIntegrityError(ValueError):
 
 def validate_binding(value: Any) -> dict[str, Any]:
     if not isinstance(value, dict) or set(value) != BINDING_FIELDS:
-        raise ReviewIntegrityError("review binding fields do not match the frozen schema")
+        raise ReviewIntegrityError(
+            "review binding fields do not match the frozen schema"
+        )
     if value.get("schema_version") != BINDING_SCHEMA:
         raise ReviewIntegrityError("unsupported review binding schema")
     for field in (
-        "run_id", "question_id", "rubric_task_id", "condition",
+        "run_id",
+        "question_id",
+        "rubric_task_id",
+        "condition",
     ):
         if not isinstance(value.get(field), str) or not value[field].strip():
             raise ReviewIntegrityError(f"review binding {field} must be non-empty")
@@ -56,30 +61,52 @@ def validate_binding(value: Any) -> dict[str, Any]:
     if value.get("repeat") not in {1, 2, 3}:
         raise ReviewIntegrityError("review binding repeat must be 1..3")
     for field in BINDING_FIELDS - {
-        "schema_version", "run_id", "question_id", "rubric_task_id", "condition", "repeat",
+        "schema_version",
+        "run_id",
+        "question_id",
+        "rubric_task_id",
+        "condition",
+        "repeat",
     }:
         if not isinstance(value.get(field), str) or not SHA256.fullmatch(value[field]):
-            raise ReviewIntegrityError(f"review binding {field} must be lowercase SHA-256")
+            raise ReviewIntegrityError(
+                f"review binding {field} must be lowercase SHA-256"
+            )
     return value
 
 
-def validate_llm_review_envelope(value: Any, expected_binding: dict[str, Any]) -> dict[str, Any]:
+def validate_llm_review_envelope(
+    value: Any, expected_binding: dict[str, Any]
+) -> dict[str, Any]:
     validate_binding(expected_binding)
     if not isinstance(value, dict) or set(value) != REPORT_FIELDS:
         raise ReviewIntegrityError("LLM review fields do not match the frozen envelope")
-    if value.get("schema_version") != REVIEW_SCHEMA or value.get("review_type") != "llm":
+    if (
+        value.get("schema_version") != REVIEW_SCHEMA
+        or value.get("review_type") != "llm"
+    ):
         raise ReviewIntegrityError("unsupported LLM review envelope")
     binding = validate_binding(value.get("run_binding"))
     if binding != expected_binding:
         raise ReviewIntegrityError("LLM review binding does not match the current run")
     if value.get("task_id") != expected_binding["rubric_task_id"]:
-        raise ReviewIntegrityError("LLM review task_id does not match the current rubric")
+        raise ReviewIntegrityError(
+            "LLM review task_id does not match the current rubric"
+        )
     reviewer = value.get("reviewer")
-    if not isinstance(reviewer, dict) or set(reviewer) != {"id", "model", "prompt_sha256"}:
-        raise ReviewIntegrityError("LLM reviewer identity fields do not match the frozen schema")
+    if not isinstance(reviewer, dict) or set(reviewer) != {
+        "id",
+        "model",
+        "prompt_sha256",
+    }:
+        raise ReviewIntegrityError(
+            "LLM reviewer identity fields do not match the frozen schema"
+        )
     for field in ("id", "model"):
         if not isinstance(reviewer.get(field), str) or not reviewer[field].strip():
             raise ReviewIntegrityError(f"LLM reviewer {field} must be non-empty")
     if reviewer.get("prompt_sha256") != expected_binding["grader_protocol_sha256"]:
-        raise ReviewIntegrityError("LLM reviewer prompt is not the frozen grader protocol")
+        raise ReviewIntegrityError(
+            "LLM reviewer prompt is not the frozen grader protocol"
+        )
     return value

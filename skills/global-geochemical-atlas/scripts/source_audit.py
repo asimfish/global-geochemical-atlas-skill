@@ -35,11 +35,23 @@ def _operational_boundaries(
     if access_status != "open":
         boundaries.append(f"normal automatic access is unavailable: {access_status}")
     if research_use_status in {"permission_required", "unknown"}:
-        boundaries.append(f"research-use conditions do not yet permit automatic analysis: {research_use_status}")
-    if score["source_evidence_dimensions"]["identity_publisher"]["status"] == "conflict":
-        boundaries.append("source identity is unresolved; retain only as an unverified discovery lead")
-    if score["source_evidence_dimensions"]["file_record_integrity"]["status"] == "conflict":
-        boundaries.append("registered file integrity is contradictory; do not present the response as complete")
+        boundaries.append(
+            f"research-use conditions do not yet permit automatic analysis: {research_use_status}"
+        )
+    if (
+        score["source_evidence_dimensions"]["identity_publisher"]["status"]
+        == "conflict"
+    ):
+        boundaries.append(
+            "source identity is unresolved; retain only as an unverified discovery lead"
+        )
+    if (
+        score["source_evidence_dimensions"]["file_record_integrity"]["status"]
+        == "conflict"
+    ):
+        boundaries.append(
+            "registered file integrity is contradictory; do not present the response as complete"
+        )
     return ("restricted" if boundaries else "available"), boundaries
 
 
@@ -50,7 +62,9 @@ def audit_catalog(
 ) -> dict[str, Any]:
     """Audit every source without rejecting useful data for missing soft evidence."""
 
-    evidence_report = score_source_evidence.score_catalog(catalog, registry, candidate_evidence)
+    evidence_report = score_source_evidence.score_catalog(
+        catalog, registry, candidate_evidence
+    )
     sources: dict[str, Any] = {}
     for source_id, score in evidence_report["sources"].items():
         entry = catalog["sources"][source_id]
@@ -71,9 +85,13 @@ def audit_catalog(
             "dimensions": score["source_evidence_dimensions"],
         }
 
-    operational_counts = Counter(item["operational_status"] for item in sources.values())
+    operational_counts = Counter(
+        item["operational_status"] for item in sources.values()
+    )
     restricted_sources = [
-        source_id for source_id, item in sources.items() if item["operational_status"] == "restricted"
+        source_id
+        for source_id, item in sources.items()
+        if item["operational_status"] == "restricted"
     ]
     return {
         "audit_version": AUDIT_VERSION,
@@ -86,7 +104,8 @@ def audit_catalog(
             "evidence_tiers": evidence_report["summary"]["evidence_tiers"],
             "use_modes": evidence_report["summary"]["use_modes"],
             "operational_statuses": {
-                status: operational_counts.get(status, 0) for status in ("available", "restricted")
+                status: operational_counts.get(status, 0)
+                for status in ("available", "restricted")
             },
         },
         "operationally_restricted_sources": restricted_sources,
@@ -113,7 +132,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
-    parser.add_argument("--candidate-audits", type=Path, default=DEFAULT_CANDIDATE_AUDITS)
+    parser.add_argument(
+        "--candidate-audits", type=Path, default=DEFAULT_CANDIDATE_AUDITS
+    )
     parser.add_argument("--output", type=Path)
     return parser
 
@@ -122,7 +143,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         report = run(args.catalog, args.registry, args.candidate_audits)
-        rendered = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        rendered = (
+            json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        )
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(rendered, encoding="utf-8")
@@ -134,7 +157,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         score_source_evidence.EvidenceScoringError,
         source_adapters.SourceAdapterError,
     ) as exc:
-        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 2
 
 

@@ -20,7 +20,15 @@ PUBLIC_FILES = (
     "public_case/prepare_case.py",
 )
 DEVELOPMENT_FILES = ("public_case/score_submission.py",)
-FORBIDDEN_PARTS = {".git", "gold", "checker", "private", "reference_implementation", "stage_benchmark", "experiment"}
+FORBIDDEN_PARTS = {
+    ".git",
+    "gold",
+    "checker",
+    "private",
+    "reference_implementation",
+    "stage_benchmark",
+    "experiment",
+}
 
 
 class BundleError(RuntimeError):
@@ -44,8 +52,16 @@ def regular_copy(source: Path, destination: Path) -> None:
 
 def git_blob(repo_root: Path, relative: Path) -> bytes:
     completed = subprocess.run(
-        ["git", "-c", f"safe.directory={repo_root}", "show", f"HEAD:{relative.as_posix()}"],
-        cwd=repo_root, check=False, capture_output=True,
+        [
+            "git",
+            "-c",
+            f"safe.directory={repo_root}",
+            "show",
+            f"HEAD:{relative.as_posix()}",
+        ],
+        cwd=repo_root,
+        check=False,
+        capture_output=True,
     )
     if completed.returncode != 0:
         raise BundleError(f"file is not a blob in the frozen commit: {relative}")
@@ -57,23 +73,38 @@ def tracked_copy(repo_root: Path, relative: Path, destination: Path) -> None:
     destination.write_bytes(git_blob(repo_root, relative))
 
 
-def copy_tracked_skill(repo_root: Path, source_relative: Path, destination: Path) -> None:
+def copy_tracked_skill(
+    repo_root: Path, source_relative: Path, destination: Path
+) -> None:
     completed = subprocess.run(
         [
-            "git", "-c", f"safe.directory={repo_root}", "ls-tree", "-r", "-z", "HEAD", "--",
+            "git",
+            "-c",
+            f"safe.directory={repo_root}",
+            "ls-tree",
+            "-r",
+            "-z",
+            "HEAD",
+            "--",
             source_relative.as_posix(),
         ],
-        cwd=repo_root, check=True, capture_output=True,
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
     )
     entries = [entry for entry in completed.stdout.split(b"\0") if entry]
     if not entries:
-        raise BundleError(f"Skill has no tracked files at frozen commit: {source_relative}")
+        raise BundleError(
+            f"Skill has no tracked files at frozen commit: {source_relative}"
+        )
     for entry in entries:
         metadata, raw_path = entry.split(b"\t", 1)
         mode, object_type, _object_id = metadata.decode("ascii").split()
         relative = Path(raw_path.decode("utf-8"))
         if object_type != "blob" or mode not in {"100644", "100755"}:
-            raise BundleError(f"unsupported tracked Skill entry: {relative} ({mode} {object_type})")
+            raise BundleError(
+                f"unsupported tracked Skill entry: {relative} ({mode} {object_type})"
+            )
         inside = relative.relative_to(source_relative)
         tracked_copy(repo_root, relative, destination / inside)
 
@@ -83,11 +114,13 @@ def manifest_entries(root: Path) -> list[dict[str, object]]:
     for path in sorted(item for item in root.rglob("*") if item.is_file()):
         if path.name == "BUNDLE_MANIFEST.json":
             continue
-        result.append({
-            "path": path.relative_to(root).as_posix(),
-            "bytes": path.stat().st_size,
-            "sha256": sha256_file(path),
-        })
+        result.append(
+            {
+                "path": path.relative_to(root).as_posix(),
+                "bytes": path.stat().st_size,
+                "sha256": sha256_file(path),
+            }
+        )
     return result
 
 
@@ -98,7 +131,9 @@ def validate(root: Path) -> dict[str, object]:
     except (OSError, json.JSONDecodeError) as exc:
         raise BundleError(f"invalid bundle manifest: {exc}") from exc
     entries = manifest.get("files")
-    if manifest.get("schema_version") != "qwen-uplift-candidate-bundle-v1" or not isinstance(entries, list):
+    if manifest.get(
+        "schema_version"
+    ) != "qwen-uplift-candidate-bundle-v1" or not isinstance(entries, list):
         raise BundleError("invalid bundle schema")
     expected = {item["path"]: item for item in entries}
     actual = {}
@@ -114,8 +149,8 @@ def validate(root: Path) -> dict[str, object]:
         actual[relative] = path
     if set(actual) != set(expected):
         raise BundleError(
-            f"bundle file set mismatch; missing={sorted(set(expected)-set(actual))}; "
-            f"extra={sorted(set(actual)-set(expected))}"
+            f"bundle file set mismatch; missing={sorted(set(expected) - set(actual))}; "
+            f"extra={sorted(set(actual) - set(expected))}"
         )
     for relative, path in actual.items():
         item = expected[relative]
@@ -128,29 +163,45 @@ def validate(root: Path) -> dict[str, object]:
     if (condition == "S0") != skill_exists:
         raise BundleError("Skill visibility does not match B0/S0")
     return {
-        "status": "PASS", "condition": condition, "mode": manifest.get("mode"),
-        "file_count": len(actual), "content_manifest_sha256": manifest.get("content_manifest_sha256"),
+        "status": "PASS",
+        "condition": condition,
+        "mode": manifest.get("mode"),
+        "file_count": len(actual),
+        "content_manifest_sha256": manifest.get("content_manifest_sha256"),
     }
 
 
-def export(repo_root: Path, output: Path, condition: str, mode: str, prompt: Path) -> dict[str, object]:
+def export(
+    repo_root: Path, output: Path, condition: str, mode: str, prompt: Path
+) -> dict[str, object]:
     repo_root, output = repo_root.resolve(), output.resolve()
     source = repo_root / "evaluation_lyf/agent_uplift"
     if output.exists():
         raise BundleError(f"refusing to overwrite: {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
-    staging = Path(tempfile.mkdtemp(prefix=f".{output.name}.staging-", dir=output.parent))
+    staging = Path(
+        tempfile.mkdtemp(prefix=f".{output.name}.staging-", dir=output.parent)
+    )
     try:
-        for relative in (*PUBLIC_FILES, *(DEVELOPMENT_FILES if mode == "development" else ())):
+        for relative in (
+            *PUBLIC_FILES,
+            *(DEVELOPMENT_FILES if mode == "development" else ()),
+        ):
             if mode == "formal":
-                tracked_copy(repo_root, Path("evaluation_lyf/agent_uplift") / relative, staging / relative)
+                tracked_copy(
+                    repo_root,
+                    Path("evaluation_lyf/agent_uplift") / relative,
+                    staging / relative,
+                )
             else:
                 regular_copy(source / relative, staging / relative)
         if mode == "formal":
             try:
                 prompt_relative = prompt.resolve().relative_to(repo_root)
             except ValueError as exc:
-                raise BundleError("formal prompt must be a tracked file inside the repository") from exc
+                raise BundleError(
+                    "formal prompt must be a tracked file inside the repository"
+                ) from exc
             tracked_copy(repo_root, prompt_relative, staging / "AGENT_PROMPT.md")
         else:
             regular_copy(prompt, staging / "AGENT_PROMPT.md")
@@ -165,8 +216,10 @@ def export(repo_root: Path, output: Path, condition: str, mode: str, prompt: Pat
         canonical = json.dumps(entries, sort_keys=True, separators=(",", ":")).encode()
         commit = subprocess.run(
             ["git", "-c", f"safe.directory={repo_root}", "rev-parse", "HEAD"],
-            cwd=repo_root, check=True,
-            capture_output=True, text=True,
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
         ).stdout.strip()
         manifest = {
             "schema_version": "qwen-uplift-candidate-bundle-v1",
@@ -208,8 +261,12 @@ def main() -> int:
             result = validate(args.validate_only)
         else:
             if args.output is None or args.condition is None or args.prompt is None:
-                parser.error("--output, --condition and --prompt are required for export")
-            result = export(args.repo_root, args.output, args.condition, args.mode, args.prompt)
+                parser.error(
+                    "--output, --condition and --prompt are required for export"
+                )
+            result = export(
+                args.repo_root, args.output, args.condition, args.mode, args.prompt
+            )
     except BundleError as exc:
         parser.exit(1, f"bundle error: {exc}\n")
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))

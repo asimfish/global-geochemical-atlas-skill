@@ -97,7 +97,9 @@ def main() -> int:
             raise ValueError("prompt is empty")
         WORKSPACE.mkdir(parents=True, exist_ok=True)
         config = build_config(base_url, model_id, temperature, profile.profile_id)
-        CONFIG.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        CONFIG.write_text(
+            json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
         command = [
             "opencode",
             "run",
@@ -116,7 +118,10 @@ def main() -> int:
         command.append(prompt)
         return subprocess.run(command, check=False).returncode
     except (OSError, ValueError, json.JSONDecodeError) as exc:
-        print(json.dumps({"status": "environment_invalid", "error": str(exc)}), file=sys.stderr)
+        print(
+            json.dumps({"status": "environment_invalid", "error": str(exc)}),
+            file=sys.stderr,
+        )
         return 73
 
 

@@ -32,8 +32,18 @@ REQUIRED_FILES = {
 }
 
 ITERATION_BACKLOG_COLUMNS = {
-    "item_id", "record_id", "source_id", "stage_owner", "severity", "status",
-    "issue_code", "field", "observed_value", "detail", "recommended_action", "auto_recheck",
+    "item_id",
+    "record_id",
+    "source_id",
+    "stage_owner",
+    "severity",
+    "status",
+    "issue_code",
+    "field",
+    "observed_value",
+    "detail",
+    "recommended_action",
+    "auto_recheck",
 }
 
 REQUIRED_DATABASE_COLUMNS = {
@@ -106,7 +116,9 @@ def valid_coordinate_pair(coordinates: Any) -> bool:
     )
 
 
-def validate_database(path: Path, errors: list[str], warnings: list[str]) -> dict[str, int]:
+def validate_database(
+    path: Path, errors: list[str], warnings: list[str]
+) -> dict[str, int]:
     metrics = {"record_count": 0, "source_locator_missing": 0, "invalid_json_cells": 0}
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -121,48 +133,73 @@ def validate_database(path: Path, errors: list[str], warnings: list[str]) -> dic
             if not record_id:
                 errors.append(f"geochemistry.csv:{line_number} has no record_id")
             elif record_id in record_ids:
-                errors.append(f"geochemistry.csv:{line_number} repeats record_id {record_id}")
+                errors.append(
+                    f"geochemistry.csv:{line_number} repeats record_id {record_id}"
+                )
             record_ids.add(record_id)
             if not (row.get("source_locator") or "").strip():
                 metrics["source_locator_missing"] += 1
-            for column, expected in (("qc_flags", list), ("operational_confidence", dict)):
+            for column, expected in (
+                ("qc_flags", list),
+                ("operational_confidence", dict),
+            ):
                 try:
                     value = json.loads(row.get(column) or "null")
                 except json.JSONDecodeError:
                     metrics["invalid_json_cells"] += 1
-                    errors.append(f"geochemistry.csv:{line_number} has invalid {column} JSON")
+                    errors.append(
+                        f"geochemistry.csv:{line_number} has invalid {column} JSON"
+                    )
                     continue
                 if not isinstance(value, expected):
                     metrics["invalid_json_cells"] += 1
-                    errors.append(f"geochemistry.csv:{line_number} has wrong {column} type")
+                    errors.append(
+                        f"geochemistry.csv:{line_number} has wrong {column} type"
+                    )
     if metrics["record_count"] == 0:
         errors.append("geochemistry.csv contains no records")
     if metrics["source_locator_missing"]:
-        warnings.append(f"{metrics['source_locator_missing']} record(s) lack source_locator")
+        warnings.append(
+            f"{metrics['source_locator_missing']} record(s) lack source_locator"
+        )
     return metrics
 
 
-def validate_iteration_backlog(path: Path, canonical_ids: set[str], errors: list[str]) -> int:
+def validate_iteration_backlog(
+    path: Path, canonical_ids: set[str], errors: list[str]
+) -> int:
     item_ids: set[str] = set()
     count = 0
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         missing = sorted(ITERATION_BACKLOG_COLUMNS - set(reader.fieldnames or []))
         if missing:
-            errors.append("iteration_backlog.csv missing columns: " + ", ".join(missing))
+            errors.append(
+                "iteration_backlog.csv missing columns: " + ", ".join(missing)
+            )
             return 0
         for line_number, row in enumerate(reader, start=2):
             count += 1
             item_id = (row.get("item_id") or "").strip()
             record_id = (row.get("record_id") or "").strip()
             if not item_id or item_id in item_ids:
-                errors.append(f"iteration_backlog.csv:{line_number} has missing or duplicate item_id")
+                errors.append(
+                    f"iteration_backlog.csv:{line_number} has missing or duplicate item_id"
+                )
             item_ids.add(item_id)
             if record_id not in canonical_ids:
-                errors.append(f"iteration_backlog.csv:{line_number} references unknown record_id {record_id}")
+                errors.append(
+                    f"iteration_backlog.csv:{line_number} references unknown record_id {record_id}"
+                )
             if row.get("stage_owner") not in {"D1", "D2"}:
-                errors.append(f"iteration_backlog.csv:{line_number} has invalid stage_owner")
-            if row.get("status") not in {"action_required", "review_required", "scientific_limit"}:
+                errors.append(
+                    f"iteration_backlog.csv:{line_number} has invalid stage_owner"
+                )
+            if row.get("status") not in {
+                "action_required",
+                "review_required",
+                "scientific_limit",
+            }:
                 errors.append(f"iteration_backlog.csv:{line_number} has invalid status")
     return count
 
@@ -171,8 +208,15 @@ def validate_batch_acceptance(
     path: Path, errors: list[str]
 ) -> tuple[int, int, dict[str, bool]]:
     required = {
-        "batch_id", "crm_recovery_percent", "crm_pass", "blank_value", "blank_pass",
-        "duplicate_rpd_percent", "duplicate_pass", "batch_pass", "disposition",
+        "batch_id",
+        "crm_recovery_percent",
+        "crm_pass",
+        "blank_value",
+        "blank_pass",
+        "duplicate_rpd_percent",
+        "duplicate_pass",
+        "batch_pass",
+        "disposition",
     }
     count = 0
     passed = 0
@@ -188,11 +232,15 @@ def validate_batch_acceptance(
             count += 1
             batch_id = (row.get("batch_id") or "").strip()
             if not batch_id or batch_id in batch_ids:
-                errors.append(f"batch_acceptance.csv:{line_number} has missing or duplicate batch_id")
+                errors.append(
+                    f"batch_acceptance.csv:{line_number} has missing or duplicate batch_id"
+                )
             batch_ids.add(batch_id)
             for field in ("crm_pass", "blank_pass", "duplicate_pass", "batch_pass"):
                 if row.get(field) not in {"true", "false"}:
-                    errors.append(f"batch_acceptance.csv:{line_number} has invalid {field}")
+                    errors.append(
+                        f"batch_acceptance.csv:{line_number} has invalid {field}"
+                    )
             batch_pass = row.get("batch_pass") == "true"
             checks_pass = all(
                 row.get(field) == "true"
@@ -208,7 +256,9 @@ def validate_batch_acceptance(
                 else "exclude_batch_and_investigate"
             )
             if row.get("disposition") != expected:
-                errors.append(f"batch_acceptance.csv:{line_number} has inconsistent disposition")
+                errors.append(
+                    f"batch_acceptance.csv:{line_number} has inconsistent disposition"
+                )
             decisions[batch_id] = batch_pass
             passed += int(batch_pass)
     return count, passed, decisions
@@ -229,15 +279,18 @@ def validate_database_batch_gate(
                 expected_status, expected_disposition = "not_supplied", ""
             elif not batch_id or batch_id not in decisions:
                 expected_status, expected_disposition = (
-                    "incomplete", "exclude_batch_and_investigate"
+                    "incomplete",
+                    "exclude_batch_and_investigate",
                 )
             elif decisions[batch_id]:
                 expected_status, expected_disposition = (
-                    "pass", "accept_for_scientific_analysis"
+                    "pass",
+                    "accept_for_scientific_analysis",
                 )
             else:
                 expected_status, expected_disposition = (
-                    "fail", "exclude_batch_and_investigate"
+                    "fail",
+                    "exclude_batch_and_investigate",
                 )
             if (status, disposition) != (expected_status, expected_disposition):
                 errors.append(
@@ -247,12 +300,23 @@ def validate_database_batch_gate(
 
 def database_evidence_index(path: Path) -> dict[str, dict[str, str]]:
     fields = (
-        "source_record_id", "source_id", "source_locator", "license", "analyte_reported",
-        "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row", "file_sha256",
+        "source_record_id",
+        "source_id",
+        "source_locator",
+        "license",
+        "analyte_reported",
+        "dataset_title",
+        "dataset_doi",
+        "dataset_version",
+        "source_file",
+        "source_row",
+        "file_sha256",
     )
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         return {
-            (row.get("record_id") or "").strip(): {field: (row.get(field) or "").strip() for field in fields}
+            (row.get("record_id") or "").strip(): {
+                field: (row.get(field) or "").strip() for field in fields
+            }
             for row in csv.DictReader(handle)
             if (row.get("record_id") or "").strip()
         }
@@ -283,44 +347,65 @@ def validate_record_evidence(
             errors.append(f"record_evidence.jsonl:{line_number} has no record_id")
             continue
         if record_id in record_ids:
-            errors.append(f"record_evidence.jsonl:{line_number} repeats record_id {record_id}")
+            errors.append(
+                f"record_evidence.jsonl:{line_number} repeats record_id {record_id}"
+            )
         record_ids.add(record_id)
         for field in ("source_id", "source_locator", "license", "analyte_reported"):
             if value.get(field) in (None, ""):
                 errors.append(f"record_evidence.jsonl:{line_number} lacks {field}")
-            elif record_id in canonical and str(value[field]).strip() != canonical[record_id][field]:
-                errors.append(f"record_evidence.jsonl:{line_number} conflicts with geochemistry.csv on {field}")
+            elif (
+                record_id in canonical
+                and str(value[field]).strip() != canonical[record_id][field]
+            ):
+                errors.append(
+                    f"record_evidence.jsonl:{line_number} conflicts with geochemistry.csv on {field}"
+                )
         comparable = {
-            "source_record_id": "source_record_id", "dataset_title": "dataset_title",
-            "dataset_doi": "dataset_doi", "dataset_version": "dataset_version",
-            "source_file": "source_file", "source_row": "source_row", "source_file_sha256": "file_sha256",
+            "source_record_id": "source_record_id",
+            "dataset_title": "dataset_title",
+            "dataset_doi": "dataset_doi",
+            "dataset_version": "dataset_version",
+            "source_file": "source_file",
+            "source_row": "source_row",
+            "source_file_sha256": "file_sha256",
         }
         for evidence_field, canonical_field in comparable.items():
             evidence_value = value.get(evidence_field)
             canonical_value = canonical.get(record_id, {}).get(canonical_field)
-            if evidence_value not in (None, "") and canonical_value and str(evidence_value).strip() != canonical_value:
+            if (
+                evidence_value not in (None, "")
+                and canonical_value
+                and str(evidence_value).strip() != canonical_value
+            ):
                 errors.append(
                     f"record_evidence.jsonl:{line_number} conflicts with geochemistry.csv on {evidence_field}"
                 )
         file_hash = value.get("source_file_sha256")
-        if file_hash is not None and (not isinstance(file_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", file_hash)):
-            errors.append(f"record_evidence.jsonl:{line_number} has invalid source_file_sha256")
+        if file_hash is not None and (
+            not isinstance(file_hash, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", file_hash)
+        ):
+            errors.append(
+                f"record_evidence.jsonl:{line_number} has invalid source_file_sha256"
+            )
         source_url = value.get("source_file_url")
-        source_url_safe = (
-            isinstance(source_url, str)
-            and (
-                source_url.startswith("https://")
-                or (
-                    source_url.startswith("http://weppi.gtk.fi/")
-                    and isinstance(file_hash, str)
-                    and re.fullmatch(r"[0-9a-f]{64}", file_hash) is not None
-                )
+        source_url_safe = isinstance(source_url, str) and (
+            source_url.startswith("https://")
+            or (
+                source_url.startswith("http://weppi.gtk.fi/")
+                and isinstance(file_hash, str)
+                and re.fullmatch(r"[0-9a-f]{64}", file_hash) is not None
             )
         )
         if source_url is not None and not source_url_safe:
-            errors.append(f"record_evidence.jsonl:{line_number} has invalid source_file_url")
+            errors.append(
+                f"record_evidence.jsonl:{line_number} has invalid source_file_url"
+            )
     if record_ids != set(canonical):
-        errors.append("record_evidence.jsonl record IDs do not exactly match geochemistry.csv")
+        errors.append(
+            "record_evidence.jsonl record IDs do not exactly match geochemistry.csv"
+        )
     return len(record_ids)
 
 
@@ -345,15 +430,21 @@ def validate_feature_collection(
         geometry = feature.get("geometry")
         if geometry is None and allow_null_geometry:
             pass
-        elif not isinstance(geometry, dict) or geometry.get("type") != "Point" or not valid_coordinate_pair(
-            geometry.get("coordinates")
+        elif (
+            not isinstance(geometry, dict)
+            or geometry.get("type") != "Point"
+            or not valid_coordinate_pair(geometry.get("coordinates"))
         ):
             errors.append(f"{name}.features[{index}] has invalid Point geometry")
         properties = feature.get("properties")
         if not isinstance(properties, dict):
             errors.append(f"{name}.features[{index}] has invalid properties")
-        elif require_candidate_status and properties.get("status") != "candidate_anomaly":
-            errors.append(f"{name}.features[{index}] overstates or omits candidate_anomaly status")
+        elif (
+            require_candidate_status and properties.get("status") != "candidate_anomaly"
+        ):
+            errors.append(
+                f"{name}.features[{index}] overstates or omits candidate_anomaly status"
+            )
     return len(features)
 
 
@@ -365,7 +456,9 @@ def validate_anomaly_regions(value: Any, errors: list[str]) -> int:
         value.get("interface_version") != "d2-interface-v2"
         or value.get("method_version") != "d2-spatial-hypergeometric-fdr-v1"
     ):
-        errors.append("anomaly_regions.geojson has an unsupported interface or method version")
+        errors.append(
+            "anomaly_regions.geojson has an unsupported interface or method version"
+        )
     features = value.get("features")
     if not isinstance(features, list):
         errors.append("anomaly_regions.geojson.features is not an array")
@@ -374,8 +467,15 @@ def validate_anomaly_regions(value: Any, errors: list[str]) -> int:
         geometry = feature.get("geometry") if isinstance(feature, dict) else None
         properties = feature.get("properties") if isinstance(feature, dict) else None
         rings = geometry.get("coordinates") if isinstance(geometry, dict) else None
-        if geometry is None or geometry.get("type") != "Polygon" or not isinstance(rings, list) or not rings:
-            errors.append(f"anomaly_regions.geojson feature {index} has invalid Polygon geometry")
+        if (
+            geometry is None
+            or geometry.get("type") != "Polygon"
+            or not isinstance(rings, list)
+            or not rings
+        ):
+            errors.append(
+                f"anomaly_regions.geojson feature {index} has invalid Polygon geometry"
+            )
             continue
         ring = rings[0]
         if (
@@ -397,7 +497,9 @@ def validate_anomaly_regions(value: Any, errors: list[str]) -> int:
             or not isinstance(properties.get("fdr_q_value"), (int, float))
             or not 0 <= float(properties["fdr_q_value"]) <= 1
         ):
-            errors.append(f"anomaly_regions.geojson feature {index} overstates or omits screening status")
+            errors.append(
+                f"anomaly_regions.geojson feature {index} overstates or omits screening status"
+            )
     return len(features)
 
 
@@ -405,7 +507,12 @@ def validate_html(path: Path, errors: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     if '<script id="samples-data" type="application/json">' not in text:
         errors.append("interactive_map.html does not embed the samples data block")
-    for block_id in ("anomalies-data", "basemap-data", "boundaries-data", "context-data"):
+    for block_id in (
+        "anomalies-data",
+        "basemap-data",
+        "boundaries-data",
+        "context-data",
+    ):
         if f'<script id="{block_id}" type="application/json">' not in text:
             errors.append(f"interactive_map.html does not embed the {block_id} block")
     if re.search(r"<script\b[^>]*\bsrc\s*=", text, re.IGNORECASE):
@@ -415,11 +522,15 @@ def validate_html(path: Path, errors: list[str]) -> None:
     if "候选异常不代表污染" not in text:
         errors.append("interactive_map.html omits the causal interpretation boundary")
     if "d3-interactive-atlas-v3" not in text or "ALL DATA" not in text:
-        errors.append("interactive_map.html omits the D3 map version or all-data default view")
+        errors.append(
+            "interactive_map.html omits the D3 map version or all-data default view"
+        )
     if "Natural Earth 1:110m" not in text or "public domain" not in text:
         errors.append("interactive_map.html omits offline basemap provenance")
     if "ai4s-natural-earth-admin0-v1" not in text or "pointInCountry" not in text:
-        errors.append("interactive_map.html omits strict offline country boundary support")
+        errors.append(
+            "interactive_map.html omits strict offline country boundary support"
+        )
     for marker in (
         'id="region"',
         'id="mapMode"',
@@ -480,12 +591,25 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "comboConclusion",
     ):
         if marker not in text:
-            errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")
+            errors.append(
+                f"interactive_map.html omits required D3 v3 capability: {marker}"
+            )
     if 'id="storyPreset"' in text or text.count('class="tabs"') != 1:
-        errors.append("interactive_map.html duplicates task navigation or story selection")
-    for informal_label in (">看分布<", ">查记录<", ">比元素<", ">核来源<", ">懂异常<", ">修质量<"):
+        errors.append(
+            "interactive_map.html duplicates task navigation or story selection"
+        )
+    for informal_label in (
+        ">看分布<",
+        ">查记录<",
+        ">比元素<",
+        ">核来源<",
+        ">懂异常<",
+        ">修质量<",
+    ):
         if informal_label in text:
-            errors.append(f"interactive_map.html uses an informal primary navigation label: {informal_label}")
+            errors.append(
+                f"interactive_map.html uses an informal primary navigation label: {informal_label}"
+            )
 
 
 def summary_outputs_for_validation(paths: Mapping[str, Path]) -> dict[str, str]:
@@ -506,23 +630,40 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         elif path.stat().st_size == 0:
             errors.append(f"required output is empty: {path.name}")
         elif path.stat().st_size > 100_000_000:
-            errors.append(f"output exceeds the 100 MB runtime safety limit: {path.name}")
+            errors.append(
+                f"output exceeds the 100 MB runtime safety limit: {path.name}"
+            )
     if errors:
-        return {"status": "invalid", "errors": errors, "warnings": warnings, "metrics": {}}
+        return {
+            "status": "invalid",
+            "errors": errors,
+            "warnings": warnings,
+            "metrics": {},
+        }
 
     database_metrics = validate_database(paths["database"], errors, warnings)
     canonical_evidence = database_evidence_index(paths["database"])
     iteration_count = validate_iteration_backlog(
         paths["iteration_backlog"], set(canonical_evidence), errors
     )
-    evidence_count = validate_record_evidence(paths["record_evidence"], canonical_evidence, errors)
+    evidence_count = validate_record_evidence(
+        paths["record_evidence"], canonical_evidence, errors
+    )
     batch_count, passed_batch_count, batch_decisions = validate_batch_acceptance(
         paths["batch_acceptance"], errors
     )
     parsed: dict[str, Any] = {}
     for key in (
-        "source_manifest", "qc_report", "confidence_report", "anomalies", "anomaly_report",
-        "batch_qc_report", "anomaly_regions", "spatial_anomaly_report", "samples", "run_summary",
+        "source_manifest",
+        "qc_report",
+        "confidence_report",
+        "anomalies",
+        "anomaly_report",
+        "batch_qc_report",
+        "anomaly_regions",
+        "spatial_anomaly_report",
+        "samples",
+        "run_summary",
     ):
         try:
             parsed[key] = strict_json(paths[key])
@@ -534,16 +675,24 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     anomaly_region_count = 0
     if "anomalies" in parsed:
         anomaly_count = validate_feature_collection(
-            parsed["anomalies"], "anomalies.geojson", errors, allow_null_geometry=True, require_candidate_status=True
+            parsed["anomalies"],
+            "anomalies.geojson",
+            errors,
+            allow_null_geometry=True,
+            require_candidate_status=True,
         )
     if "samples" in parsed:
         sample_count = validate_feature_collection(
             parsed["samples"], "samples.geojson", errors, allow_null_geometry=False
         )
     if "anomaly_regions" in parsed:
-        anomaly_region_count = validate_anomaly_regions(parsed["anomaly_regions"], errors)
+        anomaly_region_count = validate_anomaly_regions(
+            parsed["anomaly_regions"], errors
+        )
     if sample_count > database_metrics["record_count"]:
-        errors.append("samples.geojson contains more features than geochemistry.csv records")
+        errors.append(
+            "samples.geojson contains more features than geochemistry.csv records"
+        )
 
     summary = parsed.get("run_summary")
     if isinstance(summary, dict):
@@ -553,24 +702,38 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         if not isinstance(outputs, dict):
             errors.append("run_summary.json outputs is not an object")
         else:
-            expected = {key: path.name for key, path in paths.items() if key != "run_summary"}
+            expected = {
+                key: path.name for key, path in paths.items() if key != "run_summary"
+            }
             for key, filename in expected.items():
                 if outputs.get(key) != filename:
-                    errors.append(f"run_summary.json outputs.{key} must equal {filename}")
+                    errors.append(
+                        f"run_summary.json outputs.{key} must equal {filename}"
+                    )
         metrics = summary.get("metrics", {})
         if metrics.get("record_count") != database_metrics["record_count"]:
             errors.append("run_summary record_count does not match geochemistry.csv")
         if metrics.get("candidate_anomaly_count") != anomaly_count:
-            errors.append("run_summary candidate count does not match anomalies.geojson")
+            errors.append(
+                "run_summary candidate count does not match anomalies.geojson"
+            )
         if metrics.get("candidate_anomaly_region_count") != anomaly_region_count:
-            errors.append("run_summary candidate-region count does not match anomaly_regions.geojson")
+            errors.append(
+                "run_summary candidate-region count does not match anomaly_regions.geojson"
+            )
         map_report = summary.get("map_report")
-        template_path = Path(__file__).resolve().parent.parent / "assets" / "interactive-atlas-v3.html"
+        template_path = (
+            Path(__file__).resolve().parent.parent
+            / "assets"
+            / "interactive-atlas-v3.html"
+        )
         if not isinstance(map_report, dict):
             errors.append("run_summary map_report is missing")
         else:
             spatial_scope = map_report.get("spatial_scope")
-            scope_mode = spatial_scope.get("mode") if isinstance(spatial_scope, dict) else None
+            scope_mode = (
+                spatial_scope.get("mode") if isinstance(spatial_scope, dict) else None
+            )
             expected_variant = None
             if scope_mode == "global":
                 expected_variant = "global_globe"
@@ -597,7 +760,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             if not isinstance(transaction_artifacts, dict):
                 errors.append("run_summary artifact transaction has no artifact index")
             else:
-                for logical_name, filename in summary_outputs_for_validation(paths).items():
+                for logical_name, filename in summary_outputs_for_validation(
+                    paths
+                ).items():
                     binding = transaction_artifacts.get(logical_name)
                     path = paths[logical_name]
                     if (
@@ -616,8 +781,13 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     if not isinstance(manifest, dict) or not isinstance(manifest.get("sources"), list):
         errors.append("source_manifest.json must contain a sources array")
     confidence = parsed.get("confidence_report")
-    if not isinstance(confidence, dict) or confidence.get("not_a_probability") is not True:
-        errors.append("confidence_report.json must state that operational confidence is not a probability")
+    if (
+        not isinstance(confidence, dict)
+        or confidence.get("not_a_probability") is not True
+    ):
+        errors.append(
+            "confidence_report.json must state that operational confidence is not a probability"
+        )
     if isinstance(manifest, dict) and isinstance(confidence, dict):
         if manifest.get("manifest_version") != "geochemical-source-manifest-v2":
             errors.append("source_manifest.json has an unsupported manifest_version")
@@ -633,20 +803,34 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             if manifest.get("not_for_scientific_interpretation") != summary_input.get(
                 "not_for_scientific_interpretation"
             ):
-                errors.append("source manifest scientific-interpretation boundary does not match run summary")
+                errors.append(
+                    "source manifest scientific-interpretation boundary does not match run summary"
+                )
         binding = manifest.get("confidence_report")
         if not isinstance(binding, dict):
             errors.append("source_manifest.json must bind confidence_report.json")
         else:
             if binding.get("sha256") != sha256_file(paths["confidence_report"]):
-                errors.append("source manifest confidence hash does not match confidence_report.json")
+                errors.append(
+                    "source manifest confidence hash does not match confidence_report.json"
+                )
             if binding.get("not_a_probability") is not True:
-                errors.append("source manifest must preserve the confidence interpretation boundary")
-            if binding.get("confidence_version") != confidence.get("confidence_version"):
-                errors.append("source manifest confidence_version does not match confidence_report.json")
+                errors.append(
+                    "source manifest must preserve the confidence interpretation boundary"
+                )
+            if binding.get("confidence_version") != confidence.get(
+                "confidence_version"
+            ):
+                errors.append(
+                    "source manifest confidence_version does not match confidence_report.json"
+                )
             run_metadata = confidence.get("run_metadata")
-            if not isinstance(run_metadata, dict) or binding.get("input_sha256") != run_metadata.get("input_sha256"):
-                errors.append("source manifest confidence input hash does not match D2 run metadata")
+            if not isinstance(run_metadata, dict) or binding.get(
+                "input_sha256"
+            ) != run_metadata.get("input_sha256"):
+                errors.append(
+                    "source manifest confidence input hash does not match D2 run metadata"
+                )
         evidence_binding = manifest.get("record_evidence")
         if not isinstance(evidence_binding, dict):
             errors.append("source_manifest.json must bind record_evidence.jsonl")
@@ -654,16 +838,29 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             if evidence_binding.get("filename") != paths["record_evidence"].name:
                 errors.append("source manifest record evidence filename is invalid")
             if evidence_binding.get("sha256") != sha256_file(paths["record_evidence"]):
-                errors.append("source manifest record evidence hash does not match record_evidence.jsonl")
+                errors.append(
+                    "source manifest record evidence hash does not match record_evidence.jsonl"
+                )
             if evidence_binding.get("record_count") != evidence_count:
-                errors.append("source manifest record evidence count does not match record_evidence.jsonl")
+                errors.append(
+                    "source manifest record evidence count does not match record_evidence.jsonl"
+                )
             if evidence_binding.get("exact_record_id_match") is not True:
-                errors.append("source manifest must declare exact record evidence linkage")
-            if evidence_binding.get("schema_version") != "geochemical-record-evidence-v1":
-                errors.append("source manifest has an unsupported record evidence schema_version")
+                errors.append(
+                    "source manifest must declare exact record evidence linkage"
+                )
+            if (
+                evidence_binding.get("schema_version")
+                != "geochemical-record-evidence-v1"
+            ):
+                errors.append(
+                    "source manifest has an unsupported record evidence schema_version"
+                )
             evidence_level = evidence_binding.get("evidence_level")
             if evidence_level not in {
-                "source_declared_in_input", "validated_record_evidence", "verified_record_evidence"
+                "source_declared_in_input",
+                "validated_record_evidence",
+                "verified_record_evidence",
             }:
                 errors.append("source manifest has an unsupported evidence_level")
             coverage = manifest.get("coverage")
@@ -675,14 +872,21 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                     or coverage.get("verified_evidence_rate") != 1.0
                     or evidence_binding.get("acquisition_manifest") is None
                 ):
-                    errors.append("verified evidence coverage is inconsistent with the acquisition binding")
+                    errors.append(
+                        "verified evidence coverage is inconsistent with the acquisition binding"
+                    )
             elif (
                 coverage.get("records_with_verified_evidence") != 0
                 or coverage.get("verified_evidence_rate") != 0.0
             ):
-                errors.append("unverified evidence must not contribute to verified coverage")
+                errors.append(
+                    "unverified evidence must not contribute to verified coverage"
+                )
     anomaly_report = parsed.get("anomaly_report")
-    if not isinstance(anomaly_report, dict) or anomaly_report.get("scientific_status") != "screening_baseline_only":
+    if (
+        not isinstance(anomaly_report, dict)
+        or anomaly_report.get("scientific_status") != "screening_baseline_only"
+    ):
         errors.append("anomaly_report.json must declare screening_baseline_only")
     elif anomaly_report.get("interface_version") != "d2-interface-v2":
         errors.append("anomaly_report.json has an unsupported interface_version")
@@ -695,11 +899,21 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         if anomalies.get("method_version") != "d2-robust-mad-v2":
             errors.append("anomalies.geojson has an unsupported method_version")
         for index, feature in enumerate(anomalies.get("features", [])):
-            properties = feature.get("properties") if isinstance(feature, dict) else None
-            if not isinstance(properties, dict) or properties.get("method_version") != "d2-robust-mad-v2":
-                errors.append(f"anomalies.geojson feature {index} has an unsupported method_version")
+            properties = (
+                feature.get("properties") if isinstance(feature, dict) else None
+            )
+            if (
+                not isinstance(properties, dict)
+                or properties.get("method_version") != "d2-robust-mad-v2"
+            ):
+                errors.append(
+                    f"anomalies.geojson feature {index} has an unsupported method_version"
+                )
     batch_report = parsed.get("batch_qc_report")
-    if not isinstance(batch_report, dict) or batch_report.get("schema_version") != "geochemical-batch-qc-report-v1":
+    if (
+        not isinstance(batch_report, dict)
+        or batch_report.get("schema_version") != "geochemical-batch-qc-report-v1"
+    ):
         errors.append("batch_qc_report.json has an unsupported schema_version")
     elif batch_report.get("status") not in {"not_supplied", "evaluated"}:
         errors.append("batch_qc_report.json has an unsupported status")
@@ -728,7 +942,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         or spatial_report.get("hypothesis_count", -1) < anomaly_region_count
         or spatial_report.get("candidate_region_count") != anomaly_region_count
     ):
-        errors.append("spatial_anomaly_report.json is missing the screened-region contract")
+        errors.append(
+            "spatial_anomaly_report.json is missing the screened-region contract"
+        )
 
     qc_report = parsed.get("qc_report")
     if isinstance(batch_report, dict) and isinstance(qc_report, dict):
@@ -766,8 +982,12 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Validate all global geochemical atlas workflow outputs.")
-    parser.add_argument("--output-dir", required=True, type=Path, help="Workflow output directory")
+    parser = argparse.ArgumentParser(
+        description="Validate all global geochemical atlas workflow outputs."
+    )
+    parser.add_argument(
+        "--output-dir", required=True, type=Path, help="Workflow output directory"
+    )
     return parser
 
 
@@ -776,7 +996,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         report = validate_dir(args.output_dir)
     except OSError as exc:
-        report = {"status": "invalid", "errors": [str(exc)], "warnings": [], "metrics": {}}
+        report = {
+            "status": "invalid",
+            "errors": [str(exc)],
+            "warnings": [],
+            "metrics": {},
+        }
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if report["status"] == "valid" else 1
 
