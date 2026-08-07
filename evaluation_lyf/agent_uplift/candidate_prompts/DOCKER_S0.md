@@ -8,7 +8,7 @@
 另一实验臂；唯一 Skill 为 `.agents/skills/global-geochemical-atlas/SKILL.md`。禁止访问父目录、克隆仓库或寻找
 评分器。隔离不符时保留失败证据并停止。
 
-完整读取 SKILL.md，按路由只读取任务所需 references/scripts/assets，记录实际文件和哈希。再完整读取并哈希
+完整读取 SKILL.md，按路由只读取任务所需 references/scripts/assets，记录实际文件和哈希；对适用脚本必须实际调用并记录命令，不能只复述 Skill 或重新实现已有能力。不适用时记录输入/接口不匹配的具体原因。再完整读取并哈希
 `TASK.md`、`public_case/sources.json`、`public_case/discovery_contract.json`、
 `public_case/benchmark_export_crosswalk.json`、`public_case/prepare_case.py`。按 TASK 和 Skill 执行 global 有界
 多平台发现；五个锚点不是来源上限。冻结采集字节后断网完成 D1/D2/D3、五项产物和 `run.sh` clean rebuild。

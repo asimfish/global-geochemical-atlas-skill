@@ -411,11 +411,32 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
 
 def render(report: dict[str, Any]) -> str:
     exp, d1, d2, d3 = report["experiment"], report["d1"], report["d2"], report["d3"]
+    descriptive = report["score"].get("descriptive_partial_mean")
     lines = [
         "# 全球地球化学图谱统一评测报告", "",
         f"- 运行：`{exp['runtime']}` / `{exp['condition']}` / `{exp['run_id']}`",
         f"- 独立 Agent 会话：`{str(exp['independent_agent_session']).lower()}`",
-        f"- 观测分：`{report['score']['observed']}`；天花板饱和：`{str(report['score']['ceiling_saturated']).lower()}`",
+        f"- 正式观测分：`{report['score']['observed']}`；描述性 partial 均值：`{descriptive}`；天花板饱和：`{str(report['score']['ceiling_saturated']).lower()}`",
+        f"- 正式 uplift 单次资格：`{str(report['fairness']['eligible_run_component']).lower()}`",
+    ]
+    if report["fairness"].get("ineligibility_reasons"):
+        lines.append(f"- 不合格原因：{'；'.join(report['fairness']['ineligibility_reasons'])}")
+    benchmark = report.get("benchmark")
+    if isinstance(benchmark, dict):
+        lines.extend([
+            "", "## Q01–Q24 基准概览", "",
+            f"- 范围：`{benchmark['scope']}`；报告 `{benchmark['task_report_count']}/{benchmark['question_count']}`；完整六维分 `{benchmark['complete_score_count']}/{benchmark['question_count']}`。",
+            f"- 产品题：`{benchmark['product_question']}`；最终运行产物门禁：`{str(benchmark['product_gate_usable']).lower()}`。",
+            f"- 结论边界：{benchmark['claim_boundary']}",
+            "", "| 阶段 | 题数 | machine | LLM | 描述性 partial 均值 | 失败检查 |",
+            "|---|---:|---:|---:|---:|---:|",
+        ])
+        for stage, item in benchmark["stage_summaries"].items():
+            lines.append(
+                f"| {stage} | {item['question_count']} | {item['machine_awarded']}/{item['machine_possible']} "
+                f"| {item['llm_awarded']}/{item['llm_possible']} | {item['descriptive_partial_mean']} | {item['failed_check_count']} |"
+            )
+    lines.extend([
         "", "## D1 采集与覆盖", "",
         "| 测定记录 | 唯一样品 | 唯一坐标 | 来源 | 元素 | 四介质缺口 |",
         "|---:|---:|---:|---:|---:|---|",
@@ -432,7 +453,7 @@ def render(report: dict[str, Any]) -> str:
         "", "## 五项产物", "",
         "| 产物 | present | valid | usable |",
         "|---|---:|---:|---:|",
-    ]
+    ])
     labels = {
         "interactive_map": "可交互元素分布地图",
         "standardized_database": "标准化地球化学数据库",
@@ -443,6 +464,18 @@ def render(report: dict[str, Any]) -> str:
     for key, label in labels.items():
         item = report["deliverables"][key]
         lines.append(f"| {label} | {item['present']} | {item['valid']} | {item['usable']} |")
+    if isinstance(benchmark, dict):
+        lines.extend([
+            "", "## Q01–Q24 逐题结果", "",
+            "| 题号 | 阶段 | machine | LLM | score_status | 描述性 partial | 失败检查 |",
+            "|---|---|---:|---:|---|---:|---:|",
+        ])
+        for item in benchmark["task_results"]:
+            lines.append(
+                f"| {item['question_id']} | {item['stage']} | {item['machine_awarded']}/{item['machine_possible']} "
+                f"| {item['llm_awarded']}/{item['llm_possible']} | {item['score_status']} "
+                f"| {item['descriptive_total_score']} | {len(item['failed_checks'])} |"
+            )
     lines.extend(["", "## 科学红线", ""])
     if report["scientific_red_lines"]:
         lines.extend(f"- `{item['code']}`：{item}" for item in report["scientific_red_lines"])
@@ -463,13 +496,21 @@ def main() -> int:
     parser.add_argument("--independent-session", action="store_true")
     parser.add_argument("--blind-bundle", action="store_true")
     parser.add_argument("--score", type=Path)
+    parser.add_argument("--results-dir", type=Path, help="Q01-Q24 directory containing Qxx score/objective/LLM reports")
     parser.add_argument("--browser-audit", type=Path)
     parser.add_argument("--experiment-manifest", type=Path)
     parser.add_argument("--skill-document", type=Path)
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--output-md", type=Path, required=True)
     args = parser.parse_args()
-    report = build(args)
+    if args.runtime == "q01-q24":
+        if args.results_dir is None:
+            parser.error("--runtime q01-q24 requires --results-dir")
+        from q01_report import build as build_q01_report
+
+        report = build_q01_report(args)
+    else:
+        report = build(args)
     args.output_json.parent.mkdir(parents=True, exist_ok=True)
     args.output_json.write_text(
         json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",

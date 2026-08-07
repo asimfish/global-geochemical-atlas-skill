@@ -1,6 +1,6 @@
 # Q09–Q24 repo-local evaluator source
 
-本目录保存 Benchmark `6.0.0-draft.2` 的 Q09–Q24 完整评分源，并随 repo 一起维护。
+本目录保存 Benchmark `6.0.0-draft.3` 的 Q09–Q24 完整评分源，并随 repo 一起维护。
 
 - `shadow/Q09`–`Q16`：八道历史 Shadow 回归题；
 - `final_holdout/Q17`–`Q24`：八道历史已暴露的旧 Final 回归题，不是严格 holdout；

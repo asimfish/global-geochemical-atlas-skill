@@ -135,16 +135,26 @@
       "type": "csv_cell"
     },
     {
+      "column": "normalized_unit",
       "dimension_id": "platform_reusability",
       "evidence_location": "run_manifest.benchmark_evidence",
-      "id": "normalized_units",
+      "expected": "mg/kg",
+      "id": "a_normalized_unit",
+      "key": {"source_record_id": "A-001"},
       "path": "observations.csv",
-      "points": 6,
-      "terms": [
-        "A-001,SA1,40,-110,soil,Cu,12,ppm,12,mg/kg",
-        "B-101,SB1,35,-100,sediment,Cu,30,mg/kg,30,mg/kg"
-      ],
-      "type": "text_contains_all"
+      "points": 3,
+      "type": "csv_cell"
+    },
+    {
+      "column": "normalized_unit",
+      "dimension_id": "platform_reusability",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "mg/kg",
+      "id": "b_normalized_unit",
+      "key": {"source_record_id": "B-101"},
+      "path": "observations.csv",
+      "points": 3,
+      "type": "csv_cell"
     }
   ],
   "evidence_points": 80,

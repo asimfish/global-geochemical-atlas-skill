@@ -24,5 +24,5 @@ rm -rf bootstrap_repo
 
 进入 `candidate_bundle/`，完整阅读 `AGENT_PROMPT.md` 和 `public_interface.md`，严格执行相同核心题面。自主完成 Q01–Q24：每题只读取 `tasks/Qxx/task.md`、`task.json` 和 `inputs/`，把 `task.json.required_outputs` 的十个文件写入 `submissions/Qxx/artifacts/`。不得自行寻找评分器、修分或编造来源未报告的科学事实。
 
-完成后检查二十四个 submission 的必需文件全部存在、JSON 均可解析，并报告 commit、`condition=B0`、`skill_used=false`、完成/失败题号、总耗时和所有生成路径。不要自行宣称分数；评分应交给独立评分会话。
+完成后运行 `python3 validate_submission_contract.py --bundle-root .`。若返回 `FAIL`，只按公开契约修正后重跑；该工具不含 gold、分值或隐藏 checker。通过后报告 commit、`condition=B0`、`skill_used=false`、完成/失败题号、总耗时和所有生成路径。不要自行宣称分数；评分应交给独立评分会话。
 ````

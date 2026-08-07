@@ -25,9 +25,9 @@ rmdir skill_export
 rm -rf bootstrap_repo
 ```
 
-确认 `candidate_bundle/` 中不存在 `.git`、checker、rubric、gold、历史 submission 或其他 Skill。完整读取 `.opencode/skills/global-geochemical-atlas/SKILL.md`，按路由规则只读取每道题需要的 references/scripts/assets，并记录实际使用文件。
+确认 `candidate_bundle/` 中不存在 `.git`、checker、rubric、gold、历史 submission 或其他 Skill。完整读取 `.opencode/skills/global-geochemical-atlas/SKILL.md`，按路由规则只读取每道题需要的 references/scripts/assets；存在适用脚本时必须实际调用并记录命令与文件，不能只复述 SKILL.md 或重新实现已有能力。若脚本不适用于冻结输入结构，应在 `run_manifest.json` 中记录具体不适用原因，不能伪称已使用。
 
 然后完整阅读 `AGENT_PROMPT.md` 和 `public_interface.md`，严格执行与 B0 相同的核心题面。自主完成 Q01–Q24：每题只读取 `tasks/Qxx/task.md`、`task.json` 和 `inputs/`，把 `task.json.required_outputs` 的十个文件写入 `submissions/Qxx/artifacts/`。不得自行寻找评分器、修分或编造来源未报告的科学事实。
 
-完成后检查二十四个 submission 的必需文件全部存在、JSON 均可解析，并报告 commit、`condition=S0`、`skill_used=true`、实际使用的 Skill 文件、完成/失败题号、总耗时和所有生成路径。不要自行宣称分数；评分应交给独立评分会话。
+完成后运行 `python3 validate_submission_contract.py --bundle-root .`。若返回 `FAIL`，只按公开契约修正后重跑；该工具不含 gold、分值或隐藏 checker。通过后报告 commit、`condition=S0`、`skill_used=true`、实际使用的 Skill 文件、完成/失败题号、总耗时和所有生成路径。不要自行宣称分数；评分应交给独立评分会话。
 ````

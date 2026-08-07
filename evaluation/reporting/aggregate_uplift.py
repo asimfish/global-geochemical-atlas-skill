@@ -39,6 +39,81 @@ def summarize(values: list[float]) -> dict[str, float | list[float]]:
     }
 
 
+def diagnostic_comparison(arms: dict[str, list[dict[str, Any]]]) -> dict[str, Any]:
+    """Compare incomplete/development runs without promoting them to formal uplift."""
+
+    arm_summary: dict[str, Any] = {}
+    task_values: dict[str, dict[str, list[float]]] = {"B0": {}, "S0": {}}
+    stages: dict[str, dict[str, list[float]]] = {"B0": {}, "S0": {}}
+    deliverables: dict[str, dict[str, float]] = {}
+    for condition, reports in arms.items():
+        partial = [
+            float(report.get("score", {}).get("descriptive_partial_mean"))
+            for report in reports
+            if isinstance(report.get("score", {}).get("descriptive_partial_mean"), (int, float))
+        ]
+        arm_summary[condition] = {
+            "run_count": len(reports),
+            "descriptive_partial": summarize(partial) if partial else None,
+            "formal_observed_count": sum(
+                isinstance(report.get("score", {}).get("observed"), (int, float))
+                and not isinstance(report.get("score", {}).get("observed"), bool)
+                for report in reports
+            ),
+        }
+        for report in reports:
+            benchmark = report.get("benchmark") or {}
+            for item in benchmark.get("task_results", []):
+                value = item.get("descriptive_total_score")
+                question = item.get("question_id")
+                if question and isinstance(value, (int, float)):
+                    task_values[condition].setdefault(str(question), []).append(float(value))
+            for stage, item in (benchmark.get("stage_summaries") or {}).items():
+                value = item.get("descriptive_partial_mean")
+                if isinstance(value, (int, float)):
+                    stages[condition].setdefault(str(stage), []).append(float(value))
+        names = sorted({name for report in reports for name in report.get("deliverables", {})})
+        deliverables[condition] = {
+            name: (
+                sum(report.get("deliverables", {}).get(name, {}).get("usable") is True for report in reports)
+                / len(reports)
+                if reports else 0.0
+            )
+            for name in names
+        }
+
+    per_task = []
+    wins = ties = losses = 0
+    for question in sorted(set(task_values["B0"]) | set(task_values["S0"])):
+        b_values, s_values = task_values["B0"].get(question, []), task_values["S0"].get(question, [])
+        b_median = statistics.median(b_values) if b_values else None
+        s_median = statistics.median(s_values) if s_values else None
+        delta = s_median - b_median if b_median is not None and s_median is not None else None
+        if delta is not None:
+            if delta > 1e-9:
+                wins += 1
+            elif delta < -1e-9:
+                losses += 1
+            else:
+                ties += 1
+        per_task.append({"question_id": question, "b0_median": b_median, "s0_median": s_median, "delta_s0_minus_b0": delta})
+    stage_delta = {}
+    for stage in sorted(set(stages["B0"]) | set(stages["S0"])):
+        b_values, s_values = stages["B0"].get(stage, []), stages["S0"].get(stage, [])
+        stage_delta[stage] = (
+            statistics.median(s_values) - statistics.median(b_values)
+            if b_values and s_values else None
+        )
+    return {
+        "claim_boundary": "Diagnostic partial totals compare observed artifacts only; they are not a formal competition score or Skill uplift claim.",
+        "arms": arm_summary,
+        "stage_partial_delta_s0_minus_b0": stage_delta,
+        "task_partial_comparison": per_task,
+        "task_win_tie_loss": {"S0_win": wins, "tie": ties, "S0_loss": losses},
+        "deliverable_usable_run_rates": deliverables,
+    }
+
+
 def aggregate(reports: list[dict[str, Any]]) -> dict[str, Any]:
     arms = {"B0": [], "S0": []}
     errors: list[str] = []
@@ -116,6 +191,7 @@ def aggregate(reports: list[dict[str, Any]]) -> dict[str, Any]:
         "ceiling_saturated": ceiling,
         "valid_uplift_evidence": eligible and not ceiling and not both_full,
         "both_arms_full_score": both_full,
+        "diagnostic_comparison": diagnostic_comparison(arms),
         "interpretation": (
             "A ceiling-saturated task is retained as a regression check but cannot establish Skill uplift."
         ),
@@ -126,6 +202,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--reports", type=Path, nargs="+", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--diagnostic",
+        action="store_true",
+        help="return success after writing an explicitly non-formal comparison of incomplete runs",
+    )
     args = parser.parse_args()
     result = aggregate([load(path) for path in args.reports])
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -134,7 +215,7 @@ def main() -> int:
         encoding="utf-8",
     )
     print(json.dumps({"status": result["status"], "uplift": result["median_uplift_s0_minus_b0"]}, sort_keys=True))
-    return 0 if result["status"] == "eligible" else 1
+    return 0 if result["status"] == "eligible" or args.diagnostic else 1
 
 
 if __name__ == "__main__":

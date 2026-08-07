@@ -1,12 +1,15 @@
 {
-  "checks": [
-    {
-      "check_id": "synthetic-input",
-      "evidence": "artifacts/observations.csv",
-      "status": "pass"
-    }
+  "accepted_database_rows": 24,
+  "anomaly_eligible_rows": 21,
+  "anomaly_features": 1,
+  "censored_rows": 1,
+  "excluded_integrity_rows": 1,
+  "groups_not_scored": [
+    "water|aqueous|dissolved|Pb|ICP-MS"
   ],
-  "limitations": [],
-  "schema_version": "p05.qc.v1",
-  "warnings": []
+  "invalid_coordinate_rows": 1,
+  "mapped_features": 23,
+  "policy_version": "q24-policy-1",
+  "raw_input_rows": 25,
+  "task_id": "GGA-E2E-001"
 }

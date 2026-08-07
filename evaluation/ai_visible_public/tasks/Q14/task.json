@@ -42,7 +42,7 @@
     "ANOMALY_THRESHOLD_WRONG"
   ],
   "fixture_type": "synthetic_adversarial_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "values.csv",
     "anomaly_policy.json"

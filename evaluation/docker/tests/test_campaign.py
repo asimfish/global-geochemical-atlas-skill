@@ -180,6 +180,7 @@ class CampaignTests(unittest.TestCase):
             self.assertEqual(split, "shadow")
             self.assertEqual(len(digest), 64)
             self.assertTrue((destination / "task.md").is_file())
+            self.assertTrue((destination / "validate_submission_contract.py").is_file())
             self.assertFalse((destination / "rubric.json").exists())
             self.assertFalse(any(path.name in {"gold", "checker.py"} for path in destination.rglob("*")))
 

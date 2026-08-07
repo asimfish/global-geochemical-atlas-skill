@@ -2,43 +2,43 @@
   "artifacts": [
     {
       "artifact_id": "observations",
-      "sha256": "43797fc6029b58089f3eef515116c2c0ffb66c350293107aba272e569e8e1063"
+      "sha256": "7fa97e342e7d19d4c9188c478c62cd5782c1a33df961652158031e6b7a9751ac"
     },
     {
       "artifact_id": "database",
-      "sha256": "95cdf0b3ee1bad2217f28317959ecfe37c5d8a081624512e4737ea7d84b198de"
+      "sha256": "bf07470ad906de81e45439fd60a016a665be028bba84c647a7fdafdf462b906d"
     },
     {
       "artifact_id": "sources",
-      "sha256": "ccf847565fb617da7b73ad04550401dc19d30029512ea39edeab81f6d03ee787"
+      "sha256": "8e745a71cee3bb99780151edc9a3e093525e84f01bf78d93f441dc088cd1efae"
     },
     {
       "artifact_id": "qc",
-      "sha256": "20608255b1a1fe5ce063b886fe731c5451fd825225e597ac2d4d5a36bda68897"
+      "sha256": "9e898ac577ee7178ae4c2452cd3fc3af3231d6f244ba9c5862f49eb0f3b303c4"
     },
     {
       "artifact_id": "anomaly_table",
-      "sha256": "61b1fde0c27ae3f83d6e989b44fd1a6dc2bdeaaf24749bc05302167a272367ea"
+      "sha256": "093c5c772a44630789f2e37a34f624c414d6abed19183ae04a9ef7a6ece210b0"
     },
     {
       "artifact_id": "anomaly_geojson",
-      "sha256": "e20bad366465d022fac3e05e723e5402d5408234383dc1f24280a7d796d5b0a5"
+      "sha256": "4d57361d66c08769154d9d01391899b9027f7ca396fb8bfdbf65c15ac0fdf6f2"
     },
     {
       "artifact_id": "h3_cells",
-      "sha256": "7b29e0f20533a6f86d83a613284c535b5ac5d98e791923b84418b920fd6bd0ff"
+      "sha256": "c325b14e31ac6db62b0b0ee50044218b9813ceb81b0da830576aa62d6e5694ce"
     },
     {
       "artifact_id": "static_map",
-      "sha256": "aa559670f446e58c9c23c906627671eccbac269aaddaf572fd573513be8fb7b5"
+      "sha256": "550e33c888208480f79b410727ee03f83fde93e19bde83165f7bc0bfef8780a1"
     },
     {
       "artifact_id": "interactive_map",
-      "sha256": "71e25f0d9035c5eee07580429d874a364c3f163d57e5749310ee3c68d089c53e"
+      "sha256": "32c58d28f857c33583f8824fc75302bcaa815920148abc64ed4751e0c44308fb"
     }
   ],
   "benchmark_contract": {
-    "benchmark_version": "6.0.0-draft.2",
+    "benchmark_version": "6.0.0-draft.3",
     "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
     "question_id": "Q24",
     "schema_version": "e2.e1-alignment.v1",
@@ -73,6 +73,38 @@
           }
         ],
         "type": "FeatureCollection"
+      }
+    },
+    "confidence_report.json": {
+      "format": "json",
+      "value": {
+        "aggregation": "unweighted mean of five evidence-completeness components",
+        "band": "medium",
+        "components": {
+          "normalization": {
+            "evidence": "reported and normalized values remain linked in observations.csv",
+            "score": 1.0
+          },
+          "provenance": {
+            "evidence": "record_id and source_id are retained in database, map and anomaly outputs",
+            "score": 1.0
+          },
+          "quality_control": {
+            "evidence": "censoring, invalid coordinates and batch status are explicit",
+            "score": 1.0
+          },
+          "source_integrity": {
+            "evidence": "one of two source files failed SHA-256 verification and was excluded",
+            "score": 0.5
+          },
+          "spatial": {
+            "evidence": "valid coordinates are mapped; no external geologic-unit join was supplied",
+            "score": 0.5
+          }
+        },
+        "interpretation": "Workflow confidence summarizes auditable evidence completeness; it is not a probability that a measurement or anomaly is scientifically true.",
+        "overall_score": 0.8,
+        "schema_version": "q24.workflow-confidence.v1"
       }
     },
     "map.geojson": {
@@ -1127,6 +1159,15 @@
   },
   "config_sha256": "435b9858860af4a7724c13bbdf94bbe5ccce4616ff51438252293f5ab7c1b1e2",
   "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "physical_artifact_profile": {
+    "interactive_map_requirements": [
+      "zoom_or_pan",
+      "anomaly_toggle",
+      "record_source_drilldown"
+    ],
+    "profile_version": "q24-physical-product-v1",
+    "source": "benchmark_evidence"
+  },
   "provenance": {
     "generated_at": "2026-08-05T00:00:01Z",
     "generated_by": "eval/tests/scorer/build_fixtures.py"

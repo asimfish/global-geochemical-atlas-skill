@@ -30,7 +30,7 @@
     "LICENSE_CONFIDENCE_PENALTY_MISSING"
   ],
   "fixture_type": "synthetic_policy_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "sources.json",
     "license_policy.json"
