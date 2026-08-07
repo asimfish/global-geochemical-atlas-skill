@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import time
 from pathlib import Path
 from typing import Any
@@ -40,6 +41,7 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
     try:
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
+        from selenium.webdriver.chrome.service import Service
         from selenium.webdriver.support.ui import WebDriverWait
     except ModuleNotFoundError as exc:
         raise RuntimeError(
@@ -64,7 +66,10 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         options.add_argument(argument)
     options.set_capability("goog:loggingPrefs", {"browser": "ALL"})
 
-    driver = webdriver.Chrome(options=options)
+    driver_path = shutil.which("chromedriver")
+    if not driver_path:
+        raise RuntimeError("browser audit requires chromedriver on PATH")
+    driver = webdriver.Chrome(service=Service(executable_path=driver_path), options=options)
     interactions: dict[str, dict[str, Any]] = {}
     shot_records: list[dict[str, Any]] = []
 

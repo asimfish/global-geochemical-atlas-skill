@@ -43,6 +43,11 @@ python3 evaluation/docker/campaign.py build-image \
   --image global-geochemical-eval:local
 ```
 
+`build-image` 会读取宿主机 `HTTP_PROXY`、`HTTPS_PROXY`、`NO_PROXY`。当代理绑定在
+`127.0.0.1`、`localhost` 或 `::1` 时，构建器自动切换到 host network，使 `apt`、
+`npm` 与 `pip` 能访问该代理；含用户名或密码的代理 URL 会失败关闭，避免凭据出现在
+构建命令或审计记录中。Docker daemon 自身的镜像拉取代理仍应在 daemon 配置中设置。
+
 默认固定 Python `3.11.9-slim-bookworm`、OpenCode `1.18.14` 和科学 Python 依赖。构建结果输出 image ID，campaign 再次记录该 ID。受控离线主机可显式使用已有基础镜像：
 
 ```bash

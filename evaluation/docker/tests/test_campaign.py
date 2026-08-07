@@ -15,7 +15,9 @@ sys.path.insert(0, str(DOCKER_ROOT))
 
 from campaign import (  # noqa: E402
     RuntimeProfile,
+    apply_q24_browser_gate,
     candidate_status,
+    docker_build_proxy_options,
     locate_llm_report,
     pair_fingerprint,
     parser,
@@ -111,6 +113,43 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(candidate_status(0, False, ["artifacts/map.png"]), (74, "failed"))
         self.assertEqual(candidate_status(137, False, []), (72, "resource_exceeded"))
         self.assertEqual(candidate_status(0, True, []), (71, "timed_out"))
+
+    def test_q24_browser_audit_is_an_acceptance_gate(self) -> None:
+        self.assertEqual(
+            apply_q24_browser_gate("Q24", {"status": "pass"}, 0, "success"),
+            (0, "success"),
+        )
+        self.assertEqual(
+            apply_q24_browser_gate("Q24", {"status": "fail"}, 0, "success"),
+            (70, "failed"),
+        )
+        self.assertEqual(
+            apply_q24_browser_gate("Q24", None, 0, "success"),
+            (70, "failed"),
+        )
+        self.assertEqual(
+            apply_q24_browser_gate("Q23", None, 0, "success"),
+            (0, "success"),
+        )
+        self.assertEqual(
+            apply_q24_browser_gate("Q24", {"status": "fail"}, 71, "timed_out"),
+            (71, "timed_out"),
+        )
+
+    def test_loopback_proxy_uses_host_build_network_without_serializing_secrets(self) -> None:
+        options, network, forwarded = docker_build_proxy_options({
+            "HTTP_PROXY": "http://127.0.0.1:7897",
+            "HTTPS_PROXY": "http://127.0.0.1:7897",
+            "NO_PROXY": "localhost,127.0.0.1",
+        })
+        self.assertEqual(network, "host")
+        self.assertEqual(forwarded, ["HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY"])
+        self.assertEqual(options[:2], ["--network", "host"])
+        self.assertNotIn("password", " ".join(options))
+
+    def test_credentialed_build_proxy_fails_closed(self) -> None:
+        with self.assertRaisesRegex(Exception, "contains credentials"):
+            docker_build_proxy_options({"HTTPS_PROXY": "http://user:password@proxy.example:8080"})
 
     def test_pair_fingerprint_is_shared_by_b0_and_s0_inputs(self) -> None:
         profile = RuntimeProfile()

@@ -88,6 +88,43 @@ def image_identity(image: str) -> str:
     return run_checked(["docker", "image", "inspect", image, "--format", "{{.Id}}"]).stdout.strip()
 
 
+def docker_build_proxy_options(environment: dict[str, str]) -> tuple[list[str], str, list[str]]:
+    """Translate a safe host proxy environment into Docker build options.
+
+    A proxy bound to host loopback is unreachable from BuildKit's bridge
+    network, so use the host network for that build.  Proxy URLs containing
+    credentials are rejected because command-line build arguments are visible
+    to local process inspection even though Docker excludes predefined proxy
+    arguments from image history.
+    """
+
+    options: list[str] = []
+    forwarded: list[str] = []
+    loopback_proxy = False
+    for canonical, fallback in (
+        ("HTTP_PROXY", "http_proxy"),
+        ("HTTPS_PROXY", "https_proxy"),
+        ("NO_PROXY", "no_proxy"),
+    ):
+        value = environment.get(canonical) or environment.get(fallback)
+        if not value:
+            continue
+        if canonical != "NO_PROXY":
+            parsed = urlsplit(value)
+            if parsed.username is not None or parsed.password is not None:
+                raise CampaignError(
+                    f"{canonical} contains credentials; configure a credential-free local proxy "
+                    "or Docker daemon proxy instead of exposing credentials as build arguments"
+                )
+            loopback_proxy = loopback_proxy or parsed.hostname in {"localhost", "127.0.0.1", "::1"}
+        options.extend(["--build-arg", f"{canonical}={value}"])
+        forwarded.append(canonical)
+    network = "host" if loopback_proxy else "default"
+    if loopback_proxy:
+        options[0:0] = ["--network", "host"]
+    return options, network, forwarded
+
+
 def task_source(question: str) -> tuple[Path, str]:
     if not re.fullmatch(r"Q(?:0[1-9]|1[0-9]|2[0-4])", question):
         raise CampaignError(f"invalid question id: {question}")
@@ -485,6 +522,26 @@ def candidate_status(raw_exit: int, timed_out: bool, missing: list[str]) -> tupl
     return 0, "success"
 
 
+def apply_q24_browser_gate(
+    question: str,
+    report: dict[str, Any] | None,
+    exit_code: int,
+    status: str,
+) -> tuple[int, str]:
+    """Make the externally rendered Q24 product an acceptance gate.
+
+    Preserve a more specific pre-existing failure (timeout, resource limit,
+    missing artifact, etc.).  A candidate that otherwise succeeded is not
+    eligible for scoring unless the controller-side Chromium audit passed.
+    """
+
+    if question != "Q24" or status != "success":
+        return exit_code, status
+    if not isinstance(report, dict) or report.get("status") != "pass":
+        return 70, "failed"
+    return exit_code, status
+
+
 def ineligible_score(run_id: str, status: str, rubric: Path, reason_path: str) -> dict[str, Any]:
     alignment = load_json(ALIGNMENT_PATH)
     return {
@@ -714,6 +771,9 @@ def run_one(
     exit_code, status = candidate_status(raw_exit, timed_out, missing)
     if secret_redaction_files:
         exit_code, status = 74, "failed"
+    exit_code, status = apply_q24_browser_gate(
+        question, q24_browser, exit_code, status
+    )
     metadata = {
         "schema_version": "ai4s-docker-runner-metadata-v1",
         "run_id": run_id,
@@ -779,6 +839,17 @@ def run_one(
     metadata["exit_code"] = effective_exit_code
     metadata["status"] = effective_status
     atomic_json(run_dir / "runner_metadata.json", metadata)
+    redline_events = []
+    if secret_redaction_files:
+        redline_events.append(
+            {"id": "secret_material_in_submission", "consequence": "acceptance_fail"}
+        )
+    if question == "Q24" and (
+        not isinstance(q24_browser, dict) or q24_browser.get("status") != "pass"
+    ):
+        redline_events.append(
+            {"id": "q24_browser_interaction_gate", "consequence": "acceptance_fail"}
+        )
     record = {
         "run_id": run_id,
         "task_id": question,
@@ -816,11 +887,7 @@ def run_one(
         ),
         "score_path": str(score_path.relative_to(campaign_root)),
         "score": score,
-        "redline_events": (
-            [{"id": "secret_material_in_submission", "consequence": "acceptance_fail"}]
-            if secret_redaction_files
-            else []
-        ),
+        "redline_events": redline_events,
         "notes": ["local competition-proxy task; current Q01-Q24 are not a strict hidden set"],
     }
     if question == "Q24" and isinstance(q24_browser, dict) and q24_browser.get("status") != "pass":
@@ -831,9 +898,14 @@ def run_one(
 
 def build_image(args: argparse.Namespace) -> int:
     docker_available()
-    command = [
-        "docker",
-        "build",
+    proxy_options, build_network, forwarded_proxy_variables = docker_build_proxy_options(os.environ)
+    command = ["docker", "build"]
+    if not args.no_pull:
+        command.append("--pull")
+    if args.no_cache:
+        command.append("--no-cache")
+    command.extend(proxy_options)
+    command.extend([
         "--build-arg",
         f"OPENCODE_VERSION={args.opencode_version}",
         "--build-arg",
@@ -841,15 +913,17 @@ def build_image(args: argparse.Namespace) -> int:
         "--tag",
         args.image,
         str(DOCKER_ROOT),
-    ]
-    if not args.no_pull:
-        command.insert(2, "--pull")
-    if args.no_cache:
-        command.insert(2, "--no-cache")
+    ])
     completed = subprocess.run(command, check=False)
     if completed.returncode != 0:
         return 73
-    print(json.dumps({"status": "PASS", "image": args.image, "image_id": image_identity(args.image)}))
+    print(json.dumps({
+        "status": "PASS",
+        "image": args.image,
+        "image_id": image_identity(args.image),
+        "build_network": build_network,
+        "forwarded_proxy_variables": forwarded_proxy_variables,
+    }))
     return 0
 
 

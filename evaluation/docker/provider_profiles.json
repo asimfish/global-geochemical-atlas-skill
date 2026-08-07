@@ -77,7 +77,7 @@
           "title": "Frozen team uplift experiment configuration",
           "locator": "repo:evaluation_lyf/agent_uplift/experiment_config.json",
           "accessed_at": "2026-08-07",
-          "sha256": "ad6c13514f3291d84fc64c10778817a42e7aad34887855b966ed96f24bf1b711",
+          "sha256": "8edd825def69d47c5fe0b09b9a986594e349bf1616aac5b18524c6c94342946f",
           "supports": [
             "api_model_id",
             "temperature",
