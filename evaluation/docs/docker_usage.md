@@ -101,7 +101,11 @@ python3 evaluation/docker/campaign.py stage \
 
 ## 6. OpenCode 主 campaign
 
-网关必须兼容 OpenAI API，URL 使用 HTTPS。密钥只通过宿主环境继承，命令、计划和 JSON 均不写密钥值；runner 会在归档前清除日志中的密钥字节。若候选把密钥写入 submission，runner 会等长覆盖该值并以 E1 `74` 失败关闭：
+默认网关兼容 OpenAI API；赛事 Qwen Token Plan 使用显式的
+`qwen-anthropic` profile。两种 URL 都必须使用 HTTPS。密钥只通过宿主环境
+继承，命令、计划和 JSON 均不写密钥值；runner 会在归档前清除日志中的密钥
+字节。若候选把密钥写入 submission，runner 会等长覆盖该值并以 E1 `74`
+失败关闭：
 
 ```bash
 export EVAL_API_KEY='从密钥管理器注入，不写入仓库'
@@ -122,6 +126,62 @@ python3 evaluation/docker/campaign.py run \
   --timeout-seconds 900 \
   --output-dir /runs/qwen-main-v1
 ```
+
+赛事首选 Qwen3.8-Max 的 Anthropic-compatible 配置使用：
+
+```bash
+export EVAL_API_KEY='从密钥管理器注入，不写入仓库'
+
+python3 evaluation/docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --campaign-id qwen38-main \
+  --agent opencode \
+  --network whitelist \
+  --provider-profile qwen-anthropic \
+  --provider-base-url https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic \
+  --api-key-env EVAL_API_KEY \
+  --model qwen3.8-max \
+  --temperature 0.6 \
+  --tasks all \
+  --conditions B0,S0 \
+  --repeats 3 \
+  --timeout-seconds 900 \
+  --output-dir /runs/qwen38-main
+```
+
+该 profile 固定原生 OpenCode `1.18.14`、Anthropic Messages transport 和
+`thinking=disabled`，并把赛事提供的 SDK base URL 规范化到 `/v1/messages`。
+它要求主模型为 `qwen3.8-max`、`temperature=0.6`，不会自动启用备用模型。
+
+首次诊断可以先跑 Q03 的 B0/S0 两次，再跑 Q01–Q08 的 16 次矩阵；两个阶段
+使用不同的全新输出目录：
+
+```bash
+# 2 次：Q03 × B0/S0
+python3 evaluation/docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --campaign-id qwen38-smoke \
+  --agent opencode --network whitelist \
+  --provider-profile qwen-anthropic \
+  --provider-base-url https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic \
+  --api-key-env EVAL_API_KEY --model qwen3.8-max --temperature 0.6 \
+  --tasks Q03 --conditions B0,S0 --repeats 1 \
+  --output-dir /runs/qwen38-smoke
+
+# 16 次：Q01–Q08 × B0/S0
+python3 evaluation/docker/campaign.py run \
+  --image global-geochemical-eval:local \
+  --campaign-id qwen38-matrix \
+  --agent opencode --network whitelist \
+  --provider-profile qwen-anthropic \
+  --provider-base-url https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic \
+  --api-key-env EVAL_API_KEY --model qwen3.8-max --temperature 0.6 \
+  --tasks Q01,Q02,Q03,Q04,Q05,Q06,Q07,Q08 \
+  --conditions B0,S0 --repeats 1 \
+  --output-dir /runs/qwen38-matrix
+```
+
+这两个单次阶段只用于诊断；正式 uplift 仍要求同一冻结 profile 下每组独立三次。
 
 网关 hostname 会自动加入本次 allowlist；科学数据域名来自 `allowlist.txt`，新增域名用重复的 `--allow-host` 显式声明。禁止使用 `--network host`。
 

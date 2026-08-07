@@ -151,10 +151,11 @@ python3 evaluation/docker/campaign.py run \
   --campaign-id qwen-main-v1 \
   --agent opencode \
   --network whitelist \
-  --provider-base-url https://<兼容 OpenAI API 的网关>/v1 \
+  --provider-profile qwen-anthropic \
+  --provider-base-url https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic \
   --api-key-env EVAL_API_KEY \
   --model qwen3.8-max \
-  --temperature 0 \
+  --temperature 0.6 \
   --tasks all \
   --conditions B0,S0 \
   --repeats 3 \

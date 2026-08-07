@@ -29,6 +29,7 @@ ALIGNMENT_PATH = EVALUATION_ROOT / "contracts" / "benchmark-execution-contract.j
 PUBLIC_INTERFACE = EVALUATION_ROOT / "ai_visible_public" / "public_interface.md"
 SKILL_DIR = REPO_ROOT / "skills" / "global-geochemical-atlas"
 SAFE_NAME = re.compile(r"[^a-z0-9_.-]+")
+QWEN_ANTHROPIC_HOST = "token-plan.cn-beijing.maas.aliyuncs.com"
 E1_STATUS = {
     0: "success",
     2: "partial_success",
@@ -229,6 +230,7 @@ def pair_fingerprint(
     model: str,
     model_variant: str,
     temperature: float,
+    provider_profile: str = "openai-compatible",
     repeat: int,
     profile: RuntimeProfile,
     network: str,
@@ -238,6 +240,7 @@ def pair_fingerprint(
         "model": model,
         "model_variant": model_variant,
         "temperature": temperature,
+        "provider_profile": provider_profile,
         "network": network,
         "repeat": repeat,
         "resources": profile.__dict__,
@@ -539,6 +542,7 @@ def run_one(
     model: str,
     model_variant: str,
     temperature: float,
+    provider_profile: str,
     api_key_env: str,
     provider_base_url: str,
     agent_command: list[str],
@@ -566,6 +570,7 @@ def run_one(
         model=model,
         model_variant=model_variant,
         temperature=temperature,
+        provider_profile=provider_profile,
         repeat=repeat,
         profile=profile,
         network=network.mode,
@@ -582,6 +587,7 @@ def run_one(
             {
                 "EVAL_PROVIDER_BASE_URL": provider_base_url,
                 "EVAL_PROVIDER_MODEL_ID": model,
+                "EVAL_PROVIDER_PROFILE": provider_profile,
                 "EVAL_MODEL_VARIANT": model_variant,
                 "EVAL_TEMPERATURE": str(temperature),
             }
@@ -625,6 +631,8 @@ def run_one(
         "model": model,
         "model_variant": model_variant or None,
         "temperature": temperature,
+        "provider_profile": provider_profile,
+        "thinking": "disabled" if provider_profile == "qwen-anthropic" else None,
         "network_mode": network.mode,
         "resources": profile.__dict__,
         "skill_mounted": condition == "S0",
@@ -673,7 +681,11 @@ def run_one(
         "repeat": repeat,
         "pair_fingerprint": fingerprint,
         "model": model,
-        "model_parameters": {"variant": model_variant or None, "temperature": temperature},
+        "model_parameters": {
+            "variant": model_variant or None,
+            "temperature": temperature,
+            "thinking": "disabled" if provider_profile == "qwen-anthropic" else None,
+        },
         "skill_version": metadata["skill_sha256"],
         "benchmark_version": load_json(ALIGNMENT_PATH)["benchmark_version"],
         "started_at": metadata["started_at"],
@@ -877,6 +889,25 @@ def run_campaign(args: argparse.Namespace) -> int:
         raise CampaignError("--repeats must be between 1 and 3")
     if not 0.0 <= args.temperature <= 2.0:
         raise CampaignError("--temperature must be between 0 and 2")
+    if args.provider_profile == "qwen-anthropic":
+        parsed_provider = urlsplit(args.provider_base_url)
+        if (
+            parsed_provider.scheme != "https"
+            or parsed_provider.hostname != QWEN_ANTHROPIC_HOST
+            or parsed_provider.username is not None
+            or parsed_provider.password is not None
+            or parsed_provider.port is not None
+            or parsed_provider.path.rstrip("/") != "/apps/anthropic"
+            or parsed_provider.query
+            or parsed_provider.fragment
+        ):
+            raise CampaignError(
+                "qwen-anthropic requires the approved HTTPS /apps/anthropic SDK base URL"
+            )
+        if args.temperature != 0.6:
+            raise CampaignError("qwen-anthropic requires --temperature 0.6")
+        if args.model != "qwen3.8-max":
+            raise CampaignError("qwen-anthropic primary --model must be qwen3.8-max")
     if args.static_review:
         validate_review(args.static_review, "static review")
     if args.llm_report_dir and not args.llm_report_dir.is_dir():
@@ -909,6 +940,8 @@ def run_campaign(args: argparse.Namespace) -> int:
         "model": args.model,
         "model_variant": args.model_variant or None,
         "temperature": args.temperature,
+        "provider_profile": args.provider_profile,
+        "thinking": "disabled" if args.provider_profile == "qwen-anthropic" else None,
         "supplemental_model": args.supplemental_model or None,
         "supplemental_model_variant": args.supplemental_model_variant or None,
         "image": args.image,
@@ -944,6 +977,7 @@ def run_campaign(args: argparse.Namespace) -> int:
                         model=args.model,
                         model_variant=args.model_variant,
                         temperature=args.temperature,
+                        provider_profile=args.provider_profile,
                         api_key_env=args.api_key_env,
                         provider_base_url=args.provider_base_url,
                         agent_command=agent_command,
@@ -970,6 +1004,7 @@ def run_campaign(args: argparse.Namespace) -> int:
                         model=args.supplemental_model,
                         model_variant=args.supplemental_model_variant,
                         temperature=args.temperature,
+                        provider_profile=args.provider_profile,
                         api_key_env=args.api_key_env,
                         provider_base_url=args.provider_base_url,
                         agent_command=agent_command,
@@ -1072,6 +1107,12 @@ def parser() -> argparse.ArgumentParser:
     campaign.add_argument("--supplemental-model", default="", help="optional second model; each selected B0/S0 task runs once")
     campaign.add_argument("--supplemental-model-variant", default="")
     campaign.add_argument("--provider-base-url", default="")
+    campaign.add_argument(
+        "--provider-profile",
+        choices=("openai-compatible", "qwen-anthropic"),
+        default="openai-compatible",
+        help="freeze the OpenCode transport and model options for the selected gateway",
+    )
     campaign.add_argument("--api-key-env", default="EVAL_API_KEY")
     campaign.add_argument("--agent", choices=("opencode", "mock"), default="opencode")
     campaign.add_argument("--network", choices=("offline", "whitelist"), default="whitelist")
