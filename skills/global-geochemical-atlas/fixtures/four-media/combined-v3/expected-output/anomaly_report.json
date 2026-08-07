@@ -1,5 +1,5 @@
 {
-  "candidate_count": 11,
+  "candidate_count": 12,
   "caveat": "Candidates are relative to the declared background group and do not establish pollution, mineralization, provenance, or cause.",
   "group_by": [
     "element_or_analyte",
@@ -492,60 +492,6 @@
     {
       "candidate_count": 0,
       "exclusion_reasons": {
-        "censored": 2
-      },
-      "group": {
-        "analytical_method": "Extractable elements in acid preserved samples are analyzed by ICP-MS.",
-        "digestion_or_extraction": "GEMStat suspended operational fraction",
-        "element_or_analyte": "As",
-        "geologic_unit_raw": null,
-        "grain_fraction": null,
-        "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_suspended_fraction",
-        "medium": "water",
-        "method_scope": "observation",
-        "sample_type": "water_lake",
-        "sediment_environment": null,
-        "soil_horizon": null,
-        "water_fraction": "suspended"
-      },
-      "group_id": "grp-7f305c4cdbdb",
-      "log10_mad": null,
-      "log10_median": null,
-      "records_excluded": 2,
-      "records_total": 7,
-      "records_used": 5,
-      "status": "insufficient_group_size"
-    },
-    {
-      "candidate_count": 0,
-      "exclusion_reasons": {},
-      "group": {
-        "analytical_method": "Extractable metals by inductively coupled plasma-collision/reaction cell-mass spectrometry",
-        "digestion_or_extraction": "GEMStat suspended operational fraction",
-        "element_or_analyte": "As",
-        "geologic_unit_raw": null,
-        "grain_fraction": null,
-        "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_suspended_fraction",
-        "medium": "water",
-        "method_scope": "observation",
-        "sample_type": "water_lake",
-        "sediment_environment": null,
-        "soil_horizon": null,
-        "water_fraction": "suspended"
-      },
-      "group_id": "grp-5c0e993ad4e7",
-      "log10_mad": null,
-      "log10_median": null,
-      "records_excluded": 0,
-      "records_total": 1,
-      "records_used": 1,
-      "status": "insufficient_group_size"
-    },
-    {
-      "candidate_count": 0,
-      "exclusion_reasons": {
         "censored": 1
       },
       "group": {
@@ -555,7 +501,7 @@
         "geologic_unit_raw": null,
         "grain_fraction": null,
         "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_dissolved_fraction",
+        "measurement_basis": "freshwater_dissolved_operational_fraction_mg_per_l",
         "medium": "water",
         "method_scope": "observation",
         "sample_type": "water_river",
@@ -563,12 +509,12 @@
         "soil_horizon": null,
         "water_fraction": "dissolved"
       },
-      "group_id": "grp-c25782a7f128",
+      "group_id": "grp-e9ad7bed2829",
       "log10_mad": null,
       "log10_median": null,
       "records_excluded": 1,
-      "records_total": 4,
-      "records_used": 3,
+      "records_total": 1,
+      "records_used": 0,
       "status": "insufficient_group_size"
     },
     {
@@ -577,41 +523,13 @@
         "censored": 2
       },
       "group": {
-        "analytical_method": "Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS",
-        "digestion_or_extraction": "GEMStat dissolved operational fraction",
-        "element_or_analyte": "As",
-        "geologic_unit_raw": null,
-        "grain_fraction": null,
-        "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_dissolved_fraction",
-        "medium": "water",
-        "method_scope": "observation",
-        "sample_type": "water_river",
-        "sediment_environment": null,
-        "soil_horizon": null,
-        "water_fraction": "dissolved"
-      },
-      "group_id": "grp-080daedcad59",
-      "log10_mad": null,
-      "log10_median": null,
-      "records_excluded": 2,
-      "records_total": 8,
-      "records_used": 6,
-      "status": "insufficient_group_size"
-    },
-    {
-      "candidate_count": 0,
-      "exclusion_reasons": {
-        "censored": 1
-      },
-      "group": {
         "analytical_method": "Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion",
         "digestion_or_extraction": "GEMStat dissolved operational fraction",
         "element_or_analyte": "As",
         "geologic_unit_raw": null,
         "grain_fraction": null,
         "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_dissolved_fraction",
+        "measurement_basis": "freshwater_dissolved_operational_fraction_mg_per_l",
         "medium": "water",
         "method_scope": "observation",
         "sample_type": "water_river",
@@ -619,12 +537,12 @@
         "soil_horizon": null,
         "water_fraction": "dissolved"
       },
-      "group_id": "grp-7b92e2ffa0f8",
+      "group_id": "grp-0d4da247d24a",
       "log10_mad": null,
       "log10_median": null,
-      "records_excluded": 1,
-      "records_total": 4,
-      "records_used": 3,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
       "status": "insufficient_group_size"
     },
     {
@@ -639,7 +557,7 @@
         "geologic_unit_raw": null,
         "grain_fraction": null,
         "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_suspended_fraction",
+        "measurement_basis": "freshwater_suspended_operational_fraction_ug_per_l",
         "medium": "water",
         "method_scope": "observation",
         "sample_type": "water_river",
@@ -647,7 +565,7 @@
         "soil_horizon": null,
         "water_fraction": "suspended"
       },
-      "group_id": "grp-da2007746a18",
+      "group_id": "grp-c93b8a5f1a01",
       "log10_mad": null,
       "log10_median": null,
       "records_excluded": 2,
@@ -657,116 +575,8 @@
     },
     {
       "candidate_count": 0,
-      "exclusion_reasons": {},
-      "group": {
-        "analytical_method": "Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)",
-        "digestion_or_extraction": "GEMStat suspended operational fraction",
-        "element_or_analyte": "As",
-        "geologic_unit_raw": null,
-        "grain_fraction": null,
-        "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_suspended_fraction",
-        "medium": "water",
-        "method_scope": "observation",
-        "sample_type": "water_river",
-        "sediment_environment": null,
-        "soil_horizon": null,
-        "water_fraction": "suspended"
-      },
-      "group_id": "grp-ed7194d6344c",
-      "log10_mad": null,
-      "log10_median": null,
-      "records_excluded": 0,
-      "records_total": 6,
-      "records_used": 6,
-      "status": "insufficient_group_size"
-    },
-    {
-      "candidate_count": 0,
       "exclusion_reasons": {
-        "censored": 1
-      },
-      "group": {
-        "analytical_method": "Determination of total arsenic, antimony and selenium by inductively coupled argon plasma",
-        "digestion_or_extraction": "GEMStat total operational fraction",
-        "element_or_analyte": "As",
-        "geologic_unit_raw": null,
-        "grain_fraction": null,
-        "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_total_fraction",
-        "medium": "water",
-        "method_scope": "observation",
-        "sample_type": "water_river",
-        "sediment_environment": null,
-        "soil_horizon": null,
-        "water_fraction": "total"
-      },
-      "group_id": "grp-3529dafad3b9",
-      "log10_mad": null,
-      "log10_median": null,
-      "records_excluded": 1,
-      "records_total": 3,
-      "records_used": 2,
-      "status": "insufficient_group_size"
-    },
-    {
-      "candidate_count": 0,
-      "exclusion_reasons": {
-        "censored": 1
-      },
-      "group": {
-        "analytical_method": "Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion",
-        "digestion_or_extraction": "GEMStat total operational fraction",
-        "element_or_analyte": "As",
-        "geologic_unit_raw": null,
-        "grain_fraction": null,
-        "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_total_fraction",
-        "medium": "water",
-        "method_scope": "observation",
-        "sample_type": "water_river",
-        "sediment_environment": null,
-        "soil_horizon": null,
-        "water_fraction": "total"
-      },
-      "group_id": "grp-127b54b9b56a",
-      "log10_mad": null,
-      "log10_median": null,
-      "records_excluded": 1,
-      "records_total": 4,
-      "records_used": 3,
-      "status": "insufficient_group_size"
-    },
-    {
-      "candidate_count": 0,
-      "exclusion_reasons": {},
-      "group": {
-        "analytical_method": "Inductively-Coupled Plasma Sector Field Mass Spectrometry with Closed Vessel Digestion",
-        "digestion_or_extraction": "GEMStat total operational fraction",
-        "element_or_analyte": "As",
-        "geologic_unit_raw": null,
-        "grain_fraction": null,
-        "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_total_fraction",
-        "medium": "water",
-        "method_scope": "observation",
-        "sample_type": "water_river",
-        "sediment_environment": null,
-        "soil_horizon": null,
-        "water_fraction": "total"
-      },
-      "group_id": "grp-2102b9689a2a",
-      "log10_mad": null,
-      "log10_median": null,
-      "records_excluded": 0,
-      "records_total": 1,
-      "records_used": 1,
-      "status": "insufficient_group_size"
-    },
-    {
-      "candidate_count": 0,
-      "exclusion_reasons": {
-        "censored": 2
+        "censored": 3
       },
       "group": {
         "analytical_method": "Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer",
@@ -775,7 +585,7 @@
         "geologic_unit_raw": null,
         "grain_fraction": null,
         "matched_geologic_unit": null,
-        "measurement_basis": "freshwater_total_fraction",
+        "measurement_basis": "freshwater_total_operational_fraction_ug_per_l",
         "medium": "water",
         "method_scope": "observation",
         "sample_type": "water_river",
@@ -783,13 +593,41 @@
         "soil_horizon": null,
         "water_fraction": "total"
       },
-      "group_id": "grp-7083491cbe55",
+      "group_id": "grp-4f054815ca7a",
       "log10_mad": null,
       "log10_median": null,
-      "records_excluded": 2,
-      "records_total": 8,
-      "records_used": 6,
+      "records_excluded": 3,
+      "records_total": 3,
+      "records_used": 0,
       "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 1,
+      "exclusion_reasons": {
+        "censored": 1
+      },
+      "group": {
+        "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+        "digestion_or_extraction": "dissolved water; USGS filtered-water method",
+        "element_or_analyte": "As",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "dissolved_surface_freshwater_mass_per_volume",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_stream",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "dissolved"
+      },
+      "group_id": "grp-ac58476fc29c",
+      "log10_mad": 0.096910013008,
+      "log10_median": 0.176091259056,
+      "records_excluded": 1,
+      "records_total": 48,
+      "records_used": 47,
+      "status": "analyzed"
     },
     {
       "candidate_count": 0,
@@ -816,6 +654,118 @@
       "records_total": 12,
       "records_used": 12,
       "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 3
+      },
+      "group": {
+        "analytical_method": "Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "Cr",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "dissolved"
+      },
+      "group_id": "grp-a9b16faf9bf5",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 3,
+      "records_total": 3,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization",
+        "digestion_or_extraction": "GEMStat extractable operational fraction",
+        "element_or_analyte": "Cr",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_extractable_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "extractable"
+      },
+      "group_id": "grp-4f43b52ef36b",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "Cr",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_total_operational_fraction_mg_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "total"
+      },
+      "group_id": "grp-bd7fd3e192e9",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 1
+      },
+      "group": {
+        "analytical_method": "Total metals by inductively coupled argon plasma emission spectrometry with external nebulizer.",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "Cr",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_total_operational_fraction_mg_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "total"
+      },
+      "group_id": "grp-50251bef1031",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 1,
+      "records_total": 1,
+      "records_used": 0,
+      "status": "insufficient_group_size"
     },
     {
       "candidate_count": 0,
@@ -1315,23 +1265,135 @@
     },
     {
       "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Dissolved metals by inductively coupled argon plasma/mass spectrometer with pneumatic nebulization",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "Cu",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "dissolved"
+      },
+      "group_id": "grp-e9c2ef0fd445",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Extractable elements in acid preserved samples are analyzed by ICP-MS.",
+        "digestion_or_extraction": "GEMStat extractable operational fraction",
+        "element_or_analyte": "Cu",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_extractable_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "extractable"
+      },
+      "group_id": "grp-5a2c28b6587a",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "not_standardized": 2
+      },
+      "group": {
+        "analytical_method": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "Cu",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_operational_fraction_ug_per_g",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "suspended"
+      },
+      "group_id": "grp-c06c3b6391b4",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "Cu",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_total_operational_fraction_mg_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "total"
+      },
+      "group_id": "grp-462308fa71bf",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
-        "analytical_method": null,
-        "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+        "analytical_method": "BODC originator and methods record 326861",
+        "digestion_or_extraction": "dissolved_fraction; linked BODC cruise-analyte method record",
         "element_or_analyte": "Cu",
         "geologic_unit_raw": null,
         "grain_fraction": null,
         "matched_geologic_unit": null,
         "measurement_basis": "dissolved_seawater_molar_per_mass",
         "medium": "water",
-        "method_scope": null,
+        "method_scope": "cruise_analyte",
         "sample_type": "water_seawater",
         "sediment_environment": null,
         "soil_horizon": null,
         "water_fraction": "dissolved"
       },
-      "group_id": "grp-9b6857317f76",
+      "group_id": "grp-1787445ab080",
       "log10_mad": 0.029600516951,
       "log10_median": 0.08182454288,
       "records_excluded": 0,
@@ -1364,6 +1426,118 @@
       "records_total": 12,
       "records_used": 12,
       "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Cold-Vapor Atomic Absorption Spectrometric Method with H2SO4, KMnO4 and K2S2O8 Digestion",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "Hg",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "dissolved"
+      },
+      "group_id": "grp-39ee14116121",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Mercury by flameless atomic absorption on autoanalyzer",
+        "digestion_or_extraction": "GEMStat extractable operational fraction",
+        "element_or_analyte": "Hg",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_extractable_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "extractable"
+      },
+      "group_id": "grp-deb0b5007d2e",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Total mercury in water is analyzed by atomic fluorescence.",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "Hg",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "suspended"
+      },
+      "group_id": "grp-fdb1461769f3",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Determination of mercury concentration using flameless atomic absorption on an autoanalyser.",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "Hg",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_total_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "total"
+      },
+      "group_id": "grp-5c2f40e65c04",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
     },
     {
       "candidate_count": 0,
@@ -1863,23 +2037,135 @@
     },
     {
       "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "Ni",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "dissolved"
+      },
+      "group_id": "grp-cc628f3fbedb",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization",
+        "digestion_or_extraction": "GEMStat extractable operational fraction",
+        "element_or_analyte": "Ni",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_extractable_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "extractable"
+      },
+      "group_id": "grp-8bf91fd4fe55",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "not_standardized": 2
+      },
+      "group": {
+        "analytical_method": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "Ni",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_operational_fraction_ug_per_g",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "suspended"
+      },
+      "group_id": "grp-1647c1d833fe",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "Ni",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_total_operational_fraction_mg_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "total"
+      },
+      "group_id": "grp-2e37c07a1943",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
-        "analytical_method": null,
-        "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+        "analytical_method": "BODC originator and methods record 571336",
+        "digestion_or_extraction": "dissolved_fraction; linked BODC cruise-analyte method record",
         "element_or_analyte": "Ni",
         "geologic_unit_raw": null,
         "grain_fraction": null,
         "matched_geologic_unit": null,
         "measurement_basis": "dissolved_seawater_molar_per_mass",
         "medium": "water",
-        "method_scope": null,
+        "method_scope": "cruise_analyte",
         "sample_type": "water_seawater",
         "sediment_environment": null,
         "soil_horizon": null,
         "water_fraction": "dissolved"
       },
-      "group_id": "grp-4cb8885d276c",
+      "group_id": "grp-6be3c751d412",
       "log10_mad": 0.098118884321,
       "log10_median": 0.534228007878,
       "records_excluded": 0,
@@ -1912,6 +2198,118 @@
       "records_total": 12,
       "records_used": 12,
       "status": "analyzed"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "Pb",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "dissolved"
+      },
+      "group_id": "grp-a63c54b6670e",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)",
+        "digestion_or_extraction": "GEMStat extractable operational fraction",
+        "element_or_analyte": "Pb",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_extractable_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "extractable"
+      },
+      "group_id": "grp-5b81358120f9",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "not_standardized": 2
+      },
+      "group": {
+        "analytical_method": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "Pb",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_operational_fraction_ug_per_g",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "suspended"
+      },
+      "group_id": "grp-640729ced3da",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "Pb",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_total_operational_fraction_mg_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "total"
+      },
+      "group_id": "grp-bf82eb3221ca",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
     },
     {
       "candidate_count": 0,
@@ -2411,23 +2809,135 @@
     },
     {
       "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization",
+        "digestion_or_extraction": "GEMStat dissolved operational fraction",
+        "element_or_analyte": "Zn",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_dissolved_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "dissolved"
+      },
+      "group_id": "grp-c9833bab97d8",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)",
+        "digestion_or_extraction": "GEMStat extractable operational fraction",
+        "element_or_analyte": "Zn",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_extractable_operational_fraction_ug_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "extractable"
+      },
+      "group_id": "grp-cb09e239b259",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "not_standardized": 2
+      },
+      "group": {
+        "analytical_method": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+        "digestion_or_extraction": "GEMStat suspended operational fraction",
+        "element_or_analyte": "Zn",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_suspended_operational_fraction_ug_per_g",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "suspended"
+      },
+      "group_id": "grp-c08e7d04a1fb",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
+      "exclusion_reasons": {
+        "censored": 2
+      },
+      "group": {
+        "analytical_method": "Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)",
+        "digestion_or_extraction": "GEMStat total operational fraction",
+        "element_or_analyte": "Zn",
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "matched_geologic_unit": null,
+        "measurement_basis": "freshwater_total_operational_fraction_mg_per_l",
+        "medium": "water",
+        "method_scope": "observation",
+        "sample_type": "water_river",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "water_fraction": "total"
+      },
+      "group_id": "grp-931cfb28337c",
+      "log10_mad": null,
+      "log10_median": null,
+      "records_excluded": 2,
+      "records_total": 2,
+      "records_used": 0,
+      "status": "insufficient_group_size"
+    },
+    {
+      "candidate_count": 0,
       "exclusion_reasons": {},
       "group": {
-        "analytical_method": null,
-        "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+        "analytical_method": "BODC originator and methods record 571336",
+        "digestion_or_extraction": "dissolved_fraction; linked BODC cruise-analyte method record",
         "element_or_analyte": "Zn",
         "geologic_unit_raw": null,
         "grain_fraction": null,
         "matched_geologic_unit": null,
         "measurement_basis": "dissolved_seawater_molar_per_mass",
         "medium": "water",
-        "method_scope": null,
+        "method_scope": "cruise_analyte",
         "sample_type": "water_seawater",
         "sediment_environment": null,
         "soil_horizon": null,
         "water_fraction": "dissolved"
       },
-      "group_id": "grp-c38b4614dcbe",
+      "group_id": "grp-7872ea43ac63",
       "log10_mad": 0.328301682081,
       "log10_median": 0.128376601752,
       "records_excluded": 0,
@@ -2487,10 +2997,10 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 736,
-    "input_sha256": "edcd1d2456322b73ec80fd81a2a3230082acf3b8ae6cdd938c1ec455701d66f8",
+    "input_row_count": 792,
+    "input_sha256": "effec52383c77e6031f976c9aab077bc40f109d4c632c9f715dc77af91c32838",
     "missing_recommended_input_columns": [],
-    "run_id": "8a00ff9d70115206"
+    "run_id": "093e2caaae29eea5"
   },
   "scientific_status": "screening_baseline_only"
 }

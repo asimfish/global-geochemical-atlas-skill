@@ -120,8 +120,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "foregs-topsoil", "foregs-subsoil", "foregs-humus",
             "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
+            "us-wqp-sacramento-river-arsenic",
         },
-        "D1 registry freezes fourteen executable datasets across the four required media",
+        "D1 registry freezes fifteen executable datasets across the four required media",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -133,10 +134,10 @@ def check_d1(output_dir: Path) -> list[str]:
     gemstat = source_contracts.registry_candidate("gemstat-open-archive")
     require(
         gemstat.version == "v3"
-        and set(gemstat.registry_entry["target_analytes"]) == {"As"}
-        and gemstat.registry_entry["expected_counts"]["arsenic_observations"] == 492999
-        and len(gemstat.registry_entry["download"]["selected_members"]) == 5,
-        "D1 GEMStat candidate pins the official v3 arsenic and metadata member subset",
+        and set(gemstat.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
+        and gemstat.registry_entry["expected_counts"]["target_observations"] == 3739180
+        and len(gemstat.registry_entry["download"]["selected_members"]) == 11,
+        "D1 GEMStat candidate pins the official v3 seven-element and metadata member subset",
         checks,
     )
     usgs = source_contracts.registry_candidate("usgs-conus-soil")
@@ -270,8 +271,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "foregs-topsoil", "foregs-subsoil", "foregs-humus",
             "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
+            "us-wqp-sacramento-river-arsenic",
         },
-        "D1 V3 router selects fourteen normalized-analysis datasets across all media",
+        "D1 V4 router selects fifteen normalized-analysis datasets across all media",
         checks,
     )
     require(
@@ -334,12 +336,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 14, "B": 0, "C": 1, "D": len(catalog["sources"]) - 15, "U": 0},
+            "evidence_tiers": {"A": 14, "B": 1, "C": 1, "D": len(catalog["sources"]) - 16, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 14,
+                "normalized_analysis": 15,
                 "raw_observation": 1,
-                "discovery": len(catalog["sources"]) - 15,
+                "discovery": len(catalog["sources"]) - 16,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -760,6 +762,9 @@ def check_d1(output_dir: Path) -> list[str]:
         "afsis-phase-i-wet-chemistry": json_value(
             SKILL_DIR / "fixtures" / "four-media" / "soil" / "afsis-phase-i-wet-chemistry" / "human_review.json"
         ),
+        "us-wqp-sacramento-river-arsenic": json_value(
+            SKILL_DIR / "fixtures" / "four-media" / "water" / "us-wqp-sacramento-river-arsenic" / "human_review.json"
+        ),
     }
     require(
         all(
@@ -800,13 +805,13 @@ def check_d1(output_dir: Path) -> list[str]:
             for record in prepared_reference_reviews["gemstat-open-archive"]["records"]
             for item in record["adapter_observations"]
         }
-        == {"dissolved", "suspended", "total"}
+        == {"dissolved", "extractable", "suspended", "total"}
         and {
             item["data_quality"]
             for record in prepared_reference_reviews["gemstat-open-archive"]["records"]
             for item in record["adapter_observations"]
         }
-        == {"Fair", "Good", "Pending review", "Suspect", "Unknown"}
+        == {"Fair", "Good", "Pending review", "Suspect"}
         and {
             item["analyte"]
             for record in prepared_reference_reviews["pangaea-north-africa-soil"]["records"]
@@ -854,7 +859,8 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         all(
-            evidence["sources"][source_id]["source_evidence_score"] == 85.0
+            evidence["sources"][source_id]["source_evidence_score"]
+            == (77.5 if source_id == "us-wqp-sacramento-river-arsenic" else 85.0)
             and evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["status"] == "missing"
             and "30-record review sample is prepared"
             in evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["note"]
@@ -878,20 +884,20 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         completeness_profile == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
         and completeness_profile["summary"] == {
-            "executable_source_count": 14,
-            "sources_with_full_audit": 12,
-            "sources_with_target_observation_denominator": 14,
+            "executable_source_count": 15,
+            "sources_with_full_audit": 13,
+            "sources_with_target_observation_denominator": 15,
             "sources_without_full_audit": 2,
-            "demo_record_count": 736,
-            "uniform_full_field_profiles": 14,
+            "demo_record_count": 792,
+            "uniform_full_field_profiles": 15,
         }
         and completeness_profile["sources"]["georoc-archaean"]["full_population"]["audit_status"]
         == "uniform_full_profile"
         and completeness_profile["sources"]["georoc-archaean"]["candidate_audit"]["audit_status"]
         == "not_measured"
         and completeness_profile["sources"]["gemstat-open-archive"]["full_population"]
-        ["target_observation_count"] == 492999,
-        "D1 V4 completeness profile separates uniform full-cache profiles, candidate audits and 736 demo rows",
+        ["target_observation_count"] == 3739180,
+        "D1 V4 completeness profile separates uniform full-cache profiles, candidate audits and 792 demo rows",
         checks,
     )
     full_profile_root = SKILL_DIR / "assets" / "v4-full-profiles"
@@ -904,14 +910,14 @@ def check_d1(output_dir: Path) -> list[str]:
     }
     marchem_health = json_value(full_profile_root / "norway-marchem" / "automation_health.json")
     require(
-        full_manifest["source_count"] == full_manifest["registered_source_count"] == 14
-        and full_manifest["observation_count"] == 742060
-        and full_manifest["distinct_sample_count"] == 554429
-        and full_manifest["valid_coordinate_sample_count"] == 549510
-        and full_manifest["comparable_observation_count"] == 105279
-        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 5773
-        and sum(int(row["observation_count"]) for row in cube_rows) == 742060
-        and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 105279
+        full_manifest["source_count"] == full_manifest["registered_source_count"] == 15
+        and full_manifest["observation_count"] == 3988430
+        and full_manifest["distinct_sample_count"] == 758237
+        and full_manifest["valid_coordinate_sample_count"] == 753318
+        and full_manifest["comparable_observation_count"] == 363662
+        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 6651
+        and sum(int(row["observation_count"]) for row in cube_rows) == 3988430
+        and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 363662
         and all(
             profile["profile_scope"] == "full_population"
             and profile["observation_count"] > 0
@@ -924,8 +930,8 @@ def check_d1(output_dir: Path) -> list[str]:
         and marchem_health["version_drift"]["outer_archive_drift"] is True
         and marchem_health["version_drift"]["data_and_method_member_hashes_match"] is True
         and set(coverage_balance["media"]) == {"rock", "soil", "sediment", "water"}
-        and coverage_balance["media"]["water"]["observation_count"] == 537174
-        and coverage_balance["media"]["water"]["independent_lineage_count"] == 3
+        and coverage_balance["media"]["water"]["observation_count"] == 3783544
+        and coverage_balance["media"]["water"]["independent_lineage_count"] == 4
         and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 4
         and all(
             (SKILL_DIR / item["path"]).is_file()
@@ -933,7 +939,7 @@ def check_d1(output_dir: Path) -> list[str]:
             and sha256_file(SKILL_DIR / item["path"]) == item["sha256"]
             for item in full_manifest["artifacts"]
         ),
-        "D1 V4 full profiles prove fourteen full-cache denominators and all six coverage-cube metrics",
+        "D1 V4 full profiles prove fifteen full-cache denominators and all six coverage-cube metrics",
         checks,
     )
     require(
@@ -970,7 +976,7 @@ def check_d1(output_dir: Path) -> list[str]:
         and matrix["cells"]["water"]["source_independence"]
         == "multiple_sources_lineage_not_yet_deduplicated"
         and matrix["cells"]["water"]["analyte_source_counts"]
-        == {"As": 2, "Cu": 2, "Ni": 2, "Zn": 2},
+        == {"As": 3, "Cu": 3, "Ni": 3, "Zn": 3},
         "D1 coverage matrix keeps rock, soil, sediment and water source independence explicit",
         checks,
     )
@@ -1234,10 +1240,11 @@ def check_d1(output_dir: Path) -> list[str]:
         "usgs-conus-soil": 48,
         "norway-marchem": 112,
         "geotraces-idp2025": 48,
-        "gemstat-open-archive": 48,
+        "gemstat-open-archive": 56,
         "japan-gsj-geochemical-map": 48,
         "pangaea-north-africa-soil": 48,
         "afsis-phase-i-wet-chemistry": 48,
+        "us-wqp-sacramento-river-arsenic": 48,
     }
     for source_id, expected_demo_count in expected_demo_counts.items():
         demo_dir = SOURCE_DEMOS / source_id
@@ -1274,7 +1281,8 @@ def check_d1(output_dir: Path) -> list[str]:
         )
         demo_analytes = (
             ("Cu", "Ni", "Zn") if source_id == "geotraces-idp2025"
-            else ("As",) if source_id == "gemstat-open-archive"
+            else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn") if source_id == "gemstat-open-archive"
+            else ("As",) if source_id == "us-wqp-sacramento-river-arsenic"
             else ("As", "Cu", "Ni", "Zn")
         )
         per_analyte_count = expected_demo_count // len(demo_analytes)
@@ -1302,15 +1310,11 @@ def check_d1(output_dir: Path) -> list[str]:
         for line in (SOURCE_DEMOS / "gemstat-open-archive" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
     ]
     require(
-        Counter(row["measurement_basis"] for row in gemstat_demo_rows)
-        == Counter(
-            {
-                "freshwater_dissolved_fraction": 16,
-                "freshwater_suspended_fraction": 16,
-                "freshwater_total_fraction": 16,
-            }
-        )
-        and {row["unit"] for row in gemstat_demo_rows} == {"mg/l", "µg/l"}
+        Counter(row["element_or_analyte"] for row in gemstat_demo_rows)
+        == Counter({element: 8 for element in ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")})
+        and {row["water_fraction"] for row in gemstat_demo_rows}
+        == {"dissolved", "extractable", "suspended", "total"}
+        and {row["unit"] for row in gemstat_demo_rows} == {"mg/l", "µg/l", "µg/g"}
         and {row["value_qualifier"] for row in gemstat_demo_rows} == {"", "<"}
         and {item["source_data_quality"] for item in gemstat_evidence} <= {"Good", "Fair"}
         and all(item["analysis_method_code"] != "0" for item in gemstat_evidence),
@@ -1414,8 +1418,8 @@ def check_d1(output_dir: Path) -> list[str]:
 
     migration_check = migrate_v4_source_demos.migrate(SOURCE_DEMOS, check=True)
     require(
-        migration_check["status"] == "PASS" and migration_check["source_count"] == 14,
-        "D1 V4 source-demo migration is byte-stable across all fourteen sources",
+        migration_check["status"] == "PASS" and migration_check["source_count"] == 15,
+        "D1 V4 source-demo migration is byte-stable across all fifteen sources",
         checks,
     )
 
@@ -1426,12 +1430,12 @@ def check_d1(output_dir: Path) -> list[str]:
         for line in (COMBINED_DEMO / "sources.jsonl").read_text(encoding="utf-8").splitlines()
     ]
     require(
-        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 736
+        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 792
         and combined_manifest["record_counts"]["by_medium"]
-        == {"rock": 48, "sediment": 256, "soil": 288, "water": 144}
+        == {"rock": 48, "sediment": 256, "soil": 288, "water": 200}
         and combined_manifest["record_counts"]["by_source"]
         == {
-            "gemstat-open-archive": 48,
+            "gemstat-open-archive": 56,
             "georoc-archaean": 48,
             "geotraces-idp2025": 48,
             "japan-gsj-geochemical-map": 48,
@@ -1445,14 +1449,15 @@ def check_d1(output_dir: Path) -> list[str]:
             "foregs-stream-sediment": 48,
             "foregs-floodplain-sediment": 48,
             "afsis-phase-i-wet-chemistry": 48,
+            "us-wqp-sacramento-river-arsenic": 48,
         },
-        "D1 combined fixture binds all fourteen datasets to one 736-observation four-media request",
+        "D1 combined fixture binds all fifteen datasets to one 792-observation four-media request",
         checks,
     )
     require(
         combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
-        and combined_manifest["comparison_isolation"]["partition_count"] == 93
-        and combined_manifest["comparison_isolation"]["water_partition_count"] == 18,
+        and combined_manifest["comparison_isolation"]["partition_count"] == 111
+        and combined_manifest["comparison_isolation"]["water_partition_count"] == 36,
         "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
         checks,
     )
@@ -1474,19 +1479,19 @@ def check_d1(output_dir: Path) -> list[str]:
             or (not row["analytical_method"] and not row["method_scope"] and row["method_missing_reason"])
             for row in combined_rows
         )
-        and sum(bool(row["method_scope"]) for row in combined_rows) == 544
-        and sum(bool(row["method_missing_reason"]) for row in combined_rows) == 192,
+        and sum(bool(row["method_scope"]) for row in combined_rows) == 648
+        and sum(bool(row["method_missing_reason"]) for row in combined_rows) == 144,
         "D1 V4 gives every present method a scope and every absent method a reason",
         checks,
     )
     water_rows = [row for row in combined_rows if row["medium"] == "water"]
     sediment_rows = [row for row in combined_rows if row["medium"] == "sediment"]
     require(
-        len(water_rows) == 144
+        len(water_rows) == 200
         and all(row["water_body_type"] and row["water_fraction"] for row in water_rows)
         and len(sediment_rows) == 256
         and all(row["sediment_environment"] for row in sediment_rows)
-        and {row["water_fraction"] for row in water_rows} == {"dissolved", "suspended", "total"},
+        and {row["water_fraction"] for row in water_rows} == {"dissolved", "extractable", "suspended", "total"},
         "D1 V4 carries water type/fraction and sediment environment into the exchange rows",
         checks,
     )
@@ -1515,12 +1520,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         output_validator.validate_dir(combined_output)["status"] == "valid"
         and combined_summary["status"] == "success"
-        and combined_summary["metrics"]["record_count"] == 736
-        and combined_summary["metrics"]["standardized_record_count"] == 736
-        and combined_summary["metrics"]["valid_coordinate_count"] == 736
+        and combined_summary["metrics"]["record_count"] == 792
+        and combined_summary["metrics"]["standardized_record_count"] == 784
+        and combined_summary["metrics"]["valid_coordinate_count"] == 792
         and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
         and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
-        and len(combined_anomaly["groups"]) == 93
+        and len(combined_anomaly["groups"]) == 111
         and all(len(sources) == 1 for sources in grouped_sources.values()),
         "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
         checks,
@@ -1540,7 +1545,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 (rebuilt_dir / filename).read_bytes() == (COMBINED_DEMO / filename).read_bytes()
                 for filename in ("demo_input.csv", "sources.jsonl", "run_manifest.json")
             ),
-            "D1 combined fixture rebuilds byte-for-byte from the fourteen checked-in source demos",
+            "D1 combined fixture rebuilds byte-for-byte from the fifteen checked-in source demos",
             checks,
         )
         rebuilt_output = temporary_root / "output"

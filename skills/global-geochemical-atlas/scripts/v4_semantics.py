@@ -37,7 +37,9 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "sample_type_mapping_status": "dataset_constant",
         "water_body_type": "seawater",
         "water_fraction": "dissolved",
-        "method_missing_reason": "not_available",
+        "method_scope": "cruise_analyte",
+        "method_assignment_basis": "cruise_and_analyte_to_exported_originator_method_record",
+        "method_missing_reason": "multiple_linked_method_records_unresolved_to_observation",
         "citation_scope": "dataset",
     },
     "gemstat-open-archive": {
@@ -116,6 +118,17 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_scope": "dataset",
         "method_assignment_basis": "dataset_variable_and_threshold_metadata",
         "citation_scope": "dataset",
+    },
+    "us-wqp-sacramento-river-arsenic": {
+        "sample_type_raw": "Water / Surface Water / Stream",
+        "sample_type": "water_stream",
+        "sample_type_mapping_status": "exact",
+        "water_body_type": "stream",
+        "water_fraction": "dissolved",
+        "filtered_state": "filtered_water_method",
+        "method_scope": "observation",
+        "method_assignment_basis": "result_row_analytical_method_fields",
+        "citation_scope": "observation",
     },
 }
 

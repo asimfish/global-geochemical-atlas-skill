@@ -272,7 +272,13 @@ QUALIFIER_ALIASES = {
     "nd": "nd", "n.d.": "nd", "not detected": "nd", "n": "nd",
 }
 CENSORED_QUALIFIERS = {"lt", "le", "gt", "ge", "bdl", "nd"}
-WGS84_CRS_ALIASES = {"epsg:4326", "4326", "wgs84", "wgs 84", "ogc:crs84", "crs84"}
+# NAD83 geographic coordinates are map-ready at this workflow's declared 15 m
+# uncertainty floor. The original datum is retained in source_crs; no claim of
+# sub-metre WGS84 equivalence is made.
+WGS84_CRS_ALIASES = {
+    "epsg:4326", "4326", "wgs84", "wgs 84", "ogc:crs84", "crs84",
+    "epsg:4269", "4269", "nad83", "nad 83",
+}
 NUMBER_RE = re.compile(r"^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$")
 PREFIXED_NUMBER_RE = re.compile(r"^(<=|>=|<|>|≤|≥|~)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)$")
 

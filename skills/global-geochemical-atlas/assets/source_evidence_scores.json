@@ -14,7 +14,7 @@
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
   "scored_at": "2026-08-06T10:35:00Z",
-  "source_count": 49,
+  "source_count": 50,
   "sources": {
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
@@ -2087,7 +2087,7 @@
         "adapter_reproducibility": {
           "awarded_points": 10.0,
           "evidence": [
-            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+            "fixtures/candidate-audits/gemstat-open-archive-20260806T143000Z.json"
           ],
           "note": "Adapter, registry and catalog resolve the same frozen version.",
           "status": "verified",
@@ -2124,7 +2124,7 @@
         "method_qc_metadata": {
           "awarded_points": 5.0,
           "evidence": [
-            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+            "fixtures/candidate-audits/gemstat-open-archive-20260806T143000Z.json"
           ],
           "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
           "status": "partial",
@@ -2146,7 +2146,7 @@
         "schema_semantics": {
           "awarded_points": 15.0,
           "evidence": [
-            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+            "fixtures/candidate-audits/gemstat-open-archive-20260806T143000Z.json"
           ],
           "note": "The production registry freezes required source fields and a parsed output contract.",
           "status": "verified",
@@ -4126,6 +4126,105 @@
         "research_use_status=permission_required"
       ]
     },
+    "us-wqp-sacramento-river-arsenic": {
+      "access_status": "open",
+      "attribution_note": "The pinned records are USGS/NWIS data. Retain USGS, WQP, station, query, access time and result identifiers.",
+      "conflicts": [],
+      "evidence_tier": "B",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "open_research",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/snapshot_manifest.json",
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [
+            "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.waterqualitydata.us/",
+            "https://www.waterqualitydata.us/webservices_documentation/",
+            "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://www.waterqualitydata.us/",
+            "https://www.waterqualitydata.us/webservices_documentation/",
+            "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
+          "note": "Core analyte, value, unit and coordinate fields were inspected; canonical adapter mapping is pending.",
+          "status": "partial",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/snapshot_manifest.json",
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json",
+            "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+          ],
+          "note": "A dynamic API response is frozen by exact request, observation time and SHA-256.",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 77.5,
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "usgs-conus-soil": {
       "access_status": "open",
       "attribution_note": "USGS-produced data are public domain; credit and dataset citation are retained.",
@@ -4387,7 +4486,7 @@
   "summary": {
     "evidence_tiers": {
       "A": 14,
-      "B": 0,
+      "B": 1,
       "C": 1,
       "D": 34,
       "U": 0
@@ -4395,7 +4494,7 @@
     "use_modes": {
       "benchmark_ready": 0,
       "discovery": 34,
-      "normalized_analysis": 14,
+      "normalized_analysis": 15,
       "raw_observation": 1
     }
   }

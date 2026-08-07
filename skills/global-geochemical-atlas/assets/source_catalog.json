@@ -235,7 +235,7 @@
       ]
     },
     "gemstat-open-archive": {
-      "title": "UNEP GEMS/Water Global Freshwater Quality Archive v3",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive v3 seven-element subset",
       "publisher": "UNEP GEMS/Water Programme, GEMS/Water Data Centre and German Federal Institute of Hydrology",
       "source_kind": "official_international_database",
       "status": "needs_human_review",
@@ -244,7 +244,7 @@
       "coverage": {
         "extent_class": "global_partial",
         "regions": ["global"],
-        "notes": "The v3 archive describes 42 contributing countries. The audited arsenic subset contains 492,999 observations at 15,621 stations in 33 countries across river, lake, groundwater, reservoir and wetland station types; spatial and temporal coverage is uneven."
+        "notes": "The audited As/Cr/Cu/Hg/Ni/Pb/Zn subset contains 3,739,180 target observations representing 689,291 station-date-time-depth sampling events at 17,248 stations in 35 countries. River, lake, groundwater, reservoir and wetland coverage is spatially and temporally uneven."
       },
       "identifiers": {
         "dataset_doi": "10.5281/zenodo.18459694",
@@ -280,7 +280,7 @@
       },
       "adapter": {
         "status": "implemented",
-        "name": "gemstat_v3_arsenic_range"
+        "name": "gemstat_v3_seven_element_ranges"
       },
       "evidence_urls": [
         "https://zenodo.org/records/18459694",
@@ -289,13 +289,13 @@
         "https://gemstat.org/data-gemstat/data-submission/"
       ],
       "limitations": [
-        "The audited arsenic subset covers 33 voluntarily contributing countries and is not a uniform global freshwater grid.",
-        "Dissolved, suspended and total arsenic fractions must remain separate.",
-        "Most arsenic observations use undefined analysis method code 0, so method-comparable subsets are substantially smaller.",
-        "The source contains censoring, 5,655 extra exact duplicate observations, and Pending review/Suspect values that must remain traceable and filtered according to use.",
-        "Three -999.999 sentinels and 78 values at or above 1000 mg/l are Pending review and cannot support anomaly claims.",
+        "The seven-element subset covers 35 voluntarily contributing countries and is not a uniform global freshwater grid.",
+        "Dissolved, extractable, suspended and total operational fractions must remain separate; Cr-VI is excluded from elemental chromium.",
+        "Only 279,225 of 3,739,180 target observations have a defined analysis method, so method-comparable subsets are substantially smaller.",
+        "The source contains 1,836,306 censored values plus Pending review and Suspect rows that remain traceable and must be filtered according to use.",
+        "Rows for different elements or fractions at the same station, date, time and depth are one physical sampling event, not independent evidence.",
         "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 rows and 621 parameters.",
-        "Only five required ZIP members were locally range-verified; the complete 201 MB publisher archive MD5 is recorded but was not independently recomputed."
+        "Eleven required ZIP members were locally range-verified; the complete 201 MB publisher archive MD5 is recorded but was not independently recomputed."
       ]
     },
     "wosis": {
@@ -1005,6 +1005,51 @@
       "limitations": [
         "Discovery located official legacy documentation but not a verified current bulk numeric endpoint.",
         "Contributed state-survey records may overlap upstream releases."
+      ]
+    },
+    "us-wqp-sacramento-river-arsenic": {
+      "title": "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal",
+      "publisher": "U.S. Geological Survey California Water Science Center via the Water Quality Portal",
+      "source_kind": "official_primary_via_official_aggregator",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["water"],
+      "coverage": {
+        "extent_class": "single_station_time_series",
+        "regions": ["california-sacramento-river-freeport"],
+        "notes": "One USGS stream station with 189 dissolved-As observations from 2010-2023; method-rich independent freshwater validation, not national coverage."
+      },
+      "identifiers": {
+        "monitoring_location_identifier": "USGS-11447650"
+      },
+      "landing_page": "https://www.waterqualitydata.us/",
+      "interfaces": [
+        {
+          "kind": "content_addressed_query_pair",
+          "url": "https://www.waterqualitydata.us/webservices_documentation/",
+          "format": "csv",
+          "access": "open",
+          "server_filters": ["site", "provider", "sample_media", "characteristic", "date"]
+        }
+      ],
+      "license": {
+        "status": "public_domain_with_acknowledgement",
+        "id": "LicenseRef-USGS-Public-Domain",
+        "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
+        "notes": "The pinned records are USGS/NWIS data. Retain USGS, WQP, station, query, access time and result identifiers."
+      },
+      "version": {"status": "content_addressed", "value": "content-snapshot-2026-08-06", "release_date": null},
+      "adapter": {"status": "implemented", "name": "wqp_pinned_usgs_station_results"},
+      "evidence_urls": [
+        "https://www.waterqualitydata.us/webservices_documentation/",
+        "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+      ],
+      "limitations": [
+        "The exact query repeated As, Cu, Ni and Zn parameters, but the response contained only dissolved arsenic; unreturned elements are not claimed.",
+        "This is one station and cannot fill the geographic coverage gap of a national or global river network.",
+        "Fifty-seven results are preliminary and ten are field-replicate QC samples; both statuses remain explicit.",
+        "The one Not Detected result is left-censored at its reported limit and is not converted to zero.",
+        "Portal aggregation is not independent evidence from the upstream USGS/NWIS provider."
       ]
     },
     "us-water-quality-portal": {

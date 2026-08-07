@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import html
 import ipaddress
 import json
 import os
@@ -18,6 +19,7 @@ import urllib.request
 import zipfile
 import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
+from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -771,10 +773,46 @@ class MarchemSnapshotAdapter(RegistryAdapter):
 
 
 class GemstatOpenArchiveAdapter(RegistryAdapter):
-    """Pinned GEMStat v3 arsenic observations plus station and method metadata."""
+    """Pinned GEMStat v3 seven-element observations plus station/method metadata."""
 
     source_id = "gemstat-open-archive"
-    FRACTIONS = {"As-Dis": "dissolved", "As-Sus": "suspended", "As-Tot": "total"}
+    PARAMETER_MAP = {
+        "As-Dis": ("As", "dissolved"),
+        "As-Sus": ("As", "suspended"),
+        "As-Tot": ("As", "total"),
+        "Cr-Dis": ("Cr", "dissolved"),
+        "Cr-Ext": ("Cr", "extractable"),
+        "Cr-Tot": ("Cr", "total"),
+        "Cu-Dis": ("Cu", "dissolved"),
+        "Cu-Ext": ("Cu", "extractable"),
+        "Cu-Sus": ("Cu", "suspended"),
+        "Cu-Tot": ("Cu", "total"),
+        "Hg-Dis": ("Hg", "dissolved"),
+        "Hg-Ext": ("Hg", "extractable"),
+        "Hg-Sus": ("Hg", "suspended"),
+        "Hg-Tot": ("Hg", "total"),
+        "Ni-Dis": ("Ni", "dissolved"),
+        "Ni-Ext": ("Ni", "extractable"),
+        "Ni-Sus": ("Ni", "suspended"),
+        "Ni-Tot": ("Ni", "total"),
+        "Pb-Dis": ("Pb", "dissolved"),
+        "Pb-Ext": ("Pb", "extractable"),
+        "Pb-Sus": ("Pb", "suspended"),
+        "Pb-Tot": ("Pb", "total"),
+        "Zn-Dis": ("Zn", "dissolved"),
+        "Zn-Ext": ("Zn", "extractable"),
+        "Zn-Sus": ("Zn", "suspended"),
+        "Zn-Tot": ("Zn", "total"),
+    }
+    OBSERVATION_FILE_IDS = (
+        "arsenic-observations",
+        "chromium-observations",
+        "copper-observations",
+        "mercury-observations",
+        "nickel-observations",
+        "lead-observations",
+        "zinc-observations",
+    )
 
     @staticmethod
     def _csv_rows(path: Path, required_fields: Sequence[str]) -> Iterable[tuple[int, dict[str, str]]]:
@@ -808,8 +846,8 @@ class GemstatOpenArchiveAdapter(RegistryAdapter):
         root = self._cache_root(cache_dir)
         entries = candidate.registry_entry["download"]["selected_members"]
         if any(not (root / "members" / entry["filename"]).is_file() for entry in entries):
-            action = "Run acquire_gemstat_arsenic.py first" if mode == "online" else "Populate the verified cache"
-            raise SourceAdapterError(f"{action}; the pinned GEMStat v3 arsenic subset is incomplete at {root}")
+            action = "Run acquire_gemstat_multielement.py first" if mode == "online" else "Populate the verified cache"
+            raise SourceAdapterError(f"{action}; the pinned GEMStat v3 seven-element subset is incomplete at {root}")
         files: list[DownloadedFile] = []
         for entry in entries:
             path = root / "members" / entry["filename"]
@@ -831,9 +869,9 @@ class GemstatOpenArchiveAdapter(RegistryAdapter):
 
     def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
         by_id = {item.file_id: item for item in files}
-        expected_ids = {"arsenic-observations", "methods", "parameters", "stations", "readme"}
+        expected_ids = {*self.OBSERVATION_FILE_IDS, "methods", "parameters", "stations", "readme"}
         if set(by_id) != expected_ids:
-            raise SourceAdapterError(f"GEMStat adapter requires five selected members; received={sorted(by_id)}")
+            raise SourceAdapterError(f"GEMStat adapter requires eleven selected members; received={sorted(by_id)}")
 
         station_rows = list(
             self._csv_rows(by_id["stations"].path, self.candidate.registry_entry["station_required_fields"])
@@ -879,59 +917,143 @@ class GemstatOpenArchiveAdapter(RegistryAdapter):
         if len(parameter_rows) != self.candidate.registry_entry["expected_counts"]["parameter_metadata_rows"]:
             raise SourceAdapterError("GEMStat parameter metadata row count changed")
         parameter_codes = {values["Parameter Code"] for _, values in parameter_rows}
-        if set(self.FRACTIONS) - parameter_codes:
-            raise SourceAdapterError("GEMStat parameter metadata no longer defines all arsenic fractions")
+        if set(self.PARAMETER_MAP) - parameter_codes:
+            raise SourceAdapterError("GEMStat parameter metadata no longer defines every registered element fraction")
 
         emitted = 0
-        for line_number, values in self._csv_rows(
-            by_id["arsenic-observations"].path,
-            self.candidate.registry_entry["required_fields"],
-        ):
-            parameter_code = values.get("Parameter Code", "")
-            if parameter_code not in self.FRACTIONS:
-                raise SourceAdapterError(f"unexpected parameter in Arsenic.csv: {parameter_code}")
-            station_id = values.get("GEMS Station Number", "")
-            station = stations.get(station_id)
-            if station is None:
-                raise SourceAdapterError(f"GEMStat observation has no station metadata: {station_id}")
-            method_key = (parameter_code, values.get("Analysis Method Code", ""), values.get("Unit", ""))
-            method = methods.get(method_key)
-            if method is None:
-                raise SourceAdapterError(f"GEMStat observation has no method metadata: {method_key}")
-            source_locator = f"{by_id['arsenic-observations'].path.name}#row={line_number}"
-            native_id = "|".join(
-                values.get(field, "")
-                for field in (
-                    "GEMS Station Number",
-                    "Sample Date",
-                    "Sample Time",
-                    "Depth",
-                    "Parameter Code",
-                    "Analysis Method Code",
+        emitted_by_element: Counter[str] = Counter()
+        excluded: Counter[str] = Counter()
+        expected_counts = self.candidate.registry_entry["expected_counts"]
+        for file_id in self.OBSERVATION_FILE_IDS:
+            downloaded = by_id[file_id]
+            source_rows = 0
+            for line_number, values in self._csv_rows(
+                downloaded.path,
+                self.candidate.registry_entry["required_fields"],
+            ):
+                source_rows += 1
+                parameter_code = values.get("Parameter Code", "")
+                mapping = self.PARAMETER_MAP.get(parameter_code)
+                if mapping is None:
+                    if parameter_code in expected_counts["excluded_parameter_counts"]:
+                        excluded[parameter_code] += 1
+                        continue
+                    raise SourceAdapterError(f"unexpected parameter in {downloaded.path.name}: {parameter_code}")
+                element, fraction = mapping
+                station_id = values.get("GEMS Station Number", "")
+                station = stations.get(station_id)
+                if station is None:
+                    raise SourceAdapterError(f"GEMStat observation has no station metadata: {station_id}")
+                method_key = (parameter_code, values.get("Analysis Method Code", ""), values.get("Unit", ""))
+                method = methods.get(method_key)
+                if method is None:
+                    raise SourceAdapterError(f"GEMStat observation has no method metadata: {method_key}")
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                native_id = "|".join(
+                    values.get(field, "")
+                    for field in (
+                        "GEMS Station Number",
+                        "Sample Date",
+                        "Sample Time",
+                        "Depth",
+                        "Parameter Code",
+                        "Analysis Method Code",
+                    )
                 )
-            )
-            emitted += 1
-            yield RawRecord(
-                source_id=self.source_id,
-                source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
-                source_locator=source_locator,
-                fields={
-                    **values,
-                    "_station_metadata": station,
-                    "_method_metadata": method,
-                    "_water_fraction": self.FRACTIONS[parameter_code],
-                    "_source_file": by_id["arsenic-observations"].path.name,
-                    "_dataset_version": self.candidate.version,
-                },
-            )
-        if emitted != self.candidate.registry_entry["expected_counts"]["arsenic_observations"]:
-            raise SourceAdapterError(f"GEMStat arsenic row count changed: {emitted}")
+                emitted += 1
+                emitted_by_element[element] += 1
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_station_metadata": station,
+                        "_method_metadata": method,
+                        "_element": element,
+                        "_water_fraction": fraction,
+                        "_source_file": downloaded.path.name,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+            if source_rows != expected_counts["source_file_rows"][downloaded.path.name]:
+                raise SourceAdapterError(f"GEMStat source row count changed for {downloaded.path.name}: {source_rows}")
+        if dict(sorted(emitted_by_element.items())) != expected_counts["target_value_counts"]:
+            raise SourceAdapterError(f"GEMStat element counts changed: {dict(sorted(emitted_by_element.items()))}")
+        if dict(sorted(excluded.items())) != expected_counts["excluded_parameter_counts"]:
+            raise SourceAdapterError(f"GEMStat excluded parameter counts changed: {dict(sorted(excluded.items()))}")
+        if emitted != expected_counts["target_observations"]:
+            raise SourceAdapterError(f"GEMStat seven-element target row count changed: {emitted}")
 
 
 class GeotracesIdp2025Adapter(RegistryAdapter):
     """Content-addressed webODV export of the IDP2025 discrete seawater collection."""
 
     source_id = "geotraces-idp2025"
+
+    def _method_index(self, data_path: Path) -> dict[tuple[str, str], list[dict[str, Any]]]:
+        info_root = data_path.parent / f"{data_path.stem}.misc" / "infos"
+        info_paths = sorted(info_root.glob("*.html"))
+        expected = self.candidate.registry_entry["method_metadata"]
+        if len(info_paths) != expected["html_member_count"]:
+            raise SourceAdapterError(f"GEOTRACES contributor/method member count changed: {len(info_paths)}")
+        inventory = hashlib.sha256()
+        total_bytes = 0
+        index: dict[tuple[str, str], list[dict[str, Any]]] = {}
+        for path in info_paths:
+            try:
+                payload = path.read_bytes()
+                text = payload.decode("utf-8")
+            except (OSError, UnicodeError) as exc:
+                raise SourceAdapterError(f"GEOTRACES method metadata is unreadable: {path.name}") from exc
+            relative = path.relative_to(data_path.parent).as_posix()
+            total_bytes += len(payload)
+            inventory.update(relative.encode("utf-8"))
+            inventory.update(b"\0")
+            inventory.update(hashlib.sha256(payload).digest())
+            title_match = re.search(r"<h2>(.*?)</h2>", text, flags=re.DOTALL)
+            if title_match is None:
+                raise SourceAdapterError(f"GEOTRACES method metadata lacks h2 identity: {path.name}")
+            title = html.unescape(re.sub(r"<[^>]+>", "", title_match.group(1))).strip()
+            identity = re.fullmatch(r"(Cu|Ni|Zn)_D_CONC @ (.*?) \((.*?)\)", title)
+            if identity is None:
+                raise SourceAdapterError(f"GEOTRACES method identity changed: {title}")
+            element, cruise, operator_cruise = identity.groups()
+            originators = [
+                {"name": html.unescape(re.sub(r"<[^>]+>", "", name)).strip(), "orcid_url": url}
+                for url, name in re.findall(
+                    r'<a href="(https://orcid\.org/[^"]+)">(.*?)</a>', text, flags=re.DOTALL
+                )
+            ]
+            method_urls = re.findall(
+                r'href="(https://www\.bodc\.ac\.uk/data/documents/nodb/[^"]+)', text
+            )
+            publication_urls = re.findall(
+                r'href="(https://geotraces-portal\.sedoo\.fr/[^"]+)', text
+            )
+            if not method_urls or len(publication_urls) != 1 or not originators:
+                raise SourceAdapterError(f"GEOTRACES method links changed: {path.name}")
+            device_match = re.search(r"_CONC_([A-Z_]+)_\d+\.html$", path.name)
+            if device_match is None:
+                raise SourceAdapterError(f"GEOTRACES method device identity changed: {path.name}")
+            item = {
+                "element": element,
+                "cruise": cruise,
+                "operator_cruise": operator_cruise,
+                "sampling_device_class": device_match.group(1).lower(),
+                "originators": originators,
+                "method_urls": sorted(set(method_urls)),
+                "publication_search_url": publication_urls[0],
+                "source_locator": f"{data_path.parent.name}/{relative}",
+            }
+            index.setdefault((cruise, element), []).append(item)
+        if total_bytes != expected["html_uncompressed_bytes"]:
+            raise SourceAdapterError(f"GEOTRACES method metadata byte count changed: {total_bytes}")
+        if inventory.hexdigest() != expected["html_inventory_sha256"]:
+            raise SourceAdapterError("GEOTRACES contributor/method metadata inventory changed")
+        if len(index) != expected["cruise_analyte_groups"]:
+            raise SourceAdapterError(f"GEOTRACES cruise-analyte method groups changed: {len(index)}")
+        return index
 
     def files_from_archive(
         self,
@@ -1004,6 +1126,7 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
 
     def _rows(self, path: Path) -> Iterable[tuple[int, dict[str, Any]]]:
         target_fields: Mapping[str, str] = self.candidate.registry_entry["target_analytes"]
+        method_index = self._method_index(path)
         required = set(self.candidate.registry_entry["required_fields"])
         expected_rows = int(self.candidate.registry_entry["expected_counts"]["physical_rows"])
         try:
@@ -1034,14 +1157,43 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
                 observations: dict[str, dict[str, str]] = {}
                 for analyte, value_index in target_indices.items():
                     field_name = target_fields[analyte]
-                    observations[analyte] = {
+                    candidates = method_index.get((fields["Cruise"], analyte), [])
+                    raw_target_value = padded[value_index]
+                    if raw_target_value and not candidates:
+                        raise SourceAdapterError(
+                            f"GEOTRACES observation has no cruise-analyte method metadata: {fields['Cruise']} {analyte}"
+                        )
+                    linked_method_urls = sorted(
+                        {
+                            url
+                            for candidate in candidates
+                            for url in candidate.get("method_urls", [])
+                        }
+                    )
+                    observation: dict[str, Any] = {
                         "field": field_name,
-                        "value": padded[value_index],
+                        "value": raw_target_value,
                         "standard_deviation": padded[value_index + 1],
                         "quality_flag": padded[value_index + 2],
                         "quality_schema": "SEADATANET",
                         "unit": "nmol/kg",
+                        "measurement_basis": "dissolved_seawater_molar_per_mass",
+                        "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+                        "method_metadata_candidates": candidates,
+                        "method_metadata_status": (
+                            "single_linked_record"
+                            if len(linked_method_urls) == 1
+                            else "multiple_linked_records_unresolved"
+                        ),
+                        "linked_method_urls": linked_method_urls,
                     }
+                    if len(linked_method_urls) == 1:
+                        method_id = linked_method_urls[0].rstrip("/").rsplit("/", 1)[-1]
+                        observation["analytical_method"] = f"BODC originator and methods record {method_id}"
+                        observation["variable_metadata_locator"] = ";".join(
+                            candidate["source_locator"] for candidate in candidates
+                        )
+                    observations[analyte] = observation
                     fields[field_name] = padded[value_index]
                     fields[f"{field_name}_STANDARD_DEV"] = padded[value_index + 1]
                     fields[f"{field_name}_QC"] = padded[value_index + 2]
@@ -1995,6 +2147,211 @@ class AfsisPhaseIWetChemistryAdapter(RegistryAdapter):
             raise SourceAdapterError(f"AfSIS reconciliation changed: {reconciled!r} != {expected!r}")
 
 
+class WqpSacramentoRiverArsenicAdapter(RegistryAdapter):
+    """Content-addressed USGS/NWIS dissolved-As station series from WQP."""
+
+    source_id = "us-wqp-sacramento-river-arsenic"
+
+    @staticmethod
+    def _rows(path: Path, required_fields: Sequence[str]) -> list[tuple[int, dict[str, str]]]:
+        try:
+            handle = path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"WQP CSV is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.DictReader(handle)
+            missing = sorted(set(required_fields) - set(reader.fieldnames or []))
+            if missing:
+                raise SourceAdapterError(f"WQP CSV {path.name} lacks fields: {', '.join(missing)}")
+            return [
+                (
+                    reader.line_num,
+                    {str(key): str(value or "").strip() for key, value in row.items() if key is not None},
+                )
+                for row in reader
+            ]
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("WQP adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in WQP demo directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        entry = candidate.registry_entry["download"]
+        results: list[DownloadedFile] = []
+        for file_entry in entry["files"]:
+            path = root / file_entry["filename"]
+            if mode == "online":
+                args = _download_args(
+                    url=file_entry["url"],
+                    output=path,
+                    manifest=root / f"{file_entry['file_id']}.download.json",
+                    license_id=candidate.license_id,
+                    expected_sha256=file_entry["expected_sha256"],
+                    max_bytes=int(entry["max_bytes_per_file"]),
+                    dataset_doi=candidate.dataset_doi,
+                    dataset_version=candidate.version,
+                    offline=False,
+                )
+                try:
+                    observed = downloader.run(args)
+                except (downloader.DownloadError, OSError) as exc:
+                    raise SourceAdapterError(f"WQP download failed for {file_entry['file_id']}: {exc}") from exc
+                sha256 = observed["sha256"]
+                cache_status = observed["status"]
+                retrieved_at = observed.get("accessed_at") or observed.get("cache_verified_at")
+            else:
+                if not path.is_file():
+                    raise SourceAdapterError(f"WQP verified cache is missing: {path}")
+                sha256 = downloader.sha256_file(path)
+                cache_status = "cache_verified"
+                retrieved_at = entry["observed_at"]
+            if path.stat().st_size != file_entry["bytes"] or sha256 != file_entry["expected_sha256"]:
+                raise SourceAdapterError(f"WQP content-addressed snapshot changed: {file_entry['filename']}")
+            results.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=file_entry["file_id"],
+                    path=path,
+                    source_url=file_entry["url"],
+                    sha256=sha256,
+                    bytes=path.stat().st_size,
+                    cache_status=cache_status,
+                    retrieved_at=retrieved_at,
+                )
+            )
+        return results
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        if set(by_id) != {"results", "station"}:
+            raise SourceAdapterError(f"WQP adapter requires result and station CSVs; received={sorted(by_id)}")
+        registry = self.candidate.registry_entry
+        station_rows = self._rows(by_id["station"].path, registry["required_station_fields"])
+        if len(station_rows) != 1:
+            raise SourceAdapterError(f"WQP station query returned {len(station_rows)} rows")
+        station_line, station = station_rows[0]
+        if (
+            station["MonitoringLocationIdentifier"] != "USGS-11447650"
+            or station["OrganizationIdentifier"] != "USGS-CA"
+            or station["ProviderName"] != "NWIS"
+            or station["MonitoringLocationTypeName"] != "Stream"
+        ):
+            raise SourceAdapterError("WQP station identity changed")
+        station["_metadata_source_locator"] = f"{by_id['station'].path.name}#row={station_line}"
+
+        result_rows = self._rows(by_id["results"].path, registry["required_result_fields"])
+        expected = registry["expected_counts"]
+        result_ids: set[str] = set()
+        activity_ids: set[str] = set()
+        statuses: Counter[str] = Counter()
+        activity_types: Counter[str] = Counter()
+        method_ids: Counter[str] = Counter()
+        numeric_results = 0
+        not_detected = 0
+        for line_number, values in result_rows:
+            if (
+                values["MonitoringLocationIdentifier"] != station["MonitoringLocationIdentifier"]
+                or values["OrganizationIdentifier"] != "USGS-CA"
+                or values["ProviderName"] != "NWIS"
+                or values["CharacteristicName"] != "Arsenic"
+                or values["ResultSampleFractionText"] != "Dissolved"
+                or values["ActivityMediaName"] != "Water"
+            ):
+                raise SourceAdapterError(f"WQP result identity or medium changed at row {line_number}")
+            result_id = values["ResultIdentifier"]
+            activity_id = values["ActivityIdentifier"]
+            if not result_id or result_id in result_ids or not activity_id or activity_id in activity_ids:
+                raise SourceAdapterError(f"WQP result/activity identifier is missing or duplicated at row {line_number}")
+            result_ids.add(result_id)
+            activity_ids.add(activity_id)
+            raw_value = values["ResultMeasureValue"]
+            unit = values["ResultMeasure/MeasureUnitCode"]
+            detection_condition = values["ResultDetectionConditionText"]
+            qualifier = ""
+            if raw_value:
+                try:
+                    float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(f"WQP result is not numeric at row {line_number}") from exc
+                if unit != "ug/l":
+                    raise SourceAdapterError(f"WQP result unit changed at row {line_number}: {unit}")
+                numeric_results += 1
+            elif detection_condition == "Not Detected":
+                raw_value = values["DetectionQuantitationLimitMeasure/MeasureValue"]
+                unit = values["DetectionQuantitationLimitMeasure/MeasureUnitCode"]
+                qualifier = "<"
+                if not raw_value or unit != "ug/l":
+                    raise SourceAdapterError(f"WQP censored result lacks a usable limit at row {line_number}")
+                not_detected += 1
+            else:
+                raise SourceAdapterError(f"WQP result lacks both value and detection condition at row {line_number}")
+            method_id = (
+                f"{values['ResultAnalyticalMethod/MethodIdentifierContext']}:"
+                f"{values['ResultAnalyticalMethod/MethodIdentifier']}"
+            )
+            method_name = values["ResultAnalyticalMethod/MethodName"]
+            if not method_id or not method_name:
+                raise SourceAdapterError(f"WQP analytical method is missing at row {line_number}")
+            statuses[values["ResultStatusIdentifier"]] += 1
+            activity_types[values["ActivityTypeCode"]] += 1
+            method_ids[method_id] += 1
+            source_locator = f"{by_id['results'].path.name}#row={line_number}"
+            method_description = values["ResultAnalyticalMethod/MethodDescriptionText"]
+            analytical_method = f"{method_id}: {method_name}"
+            if method_description:
+                analytical_method += f" ({method_description})"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(self.source_id, result_id, source_locator),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "_station_metadata": station,
+                    "_source_file": by_id["results"].path.name,
+                    "_target_observations": {
+                        "As": {
+                            "field": "ResultMeasureValue",
+                            "value": raw_value,
+                            "unit": unit,
+                            "value_qualifier": qualifier,
+                            "detection_limit": values["DetectionQuantitationLimitMeasure/MeasureValue"],
+                            "detection_limit_unit": values["DetectionQuantitationLimitMeasure/MeasureUnitCode"],
+                            "detection_limit_type": values["DetectionQuantitationLimitTypeName"],
+                            "measurement_basis": "dissolved_surface_freshwater_mass_per_volume",
+                            "analytical_method": analytical_method,
+                            "digestion_or_extraction": "dissolved water; USGS filtered-water method",
+                            "laboratory": values["LaboratoryName"],
+                            "variable_metadata_locator": source_locator,
+                            "source_result_status": values["ResultStatusIdentifier"],
+                            "activity_type": values["ActivityTypeCode"],
+                        }
+                    },
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        reconciled = {
+            "physical_rows": len(result_rows),
+            "target_observations": len(result_rows),
+            "numeric_results": numeric_results,
+            "not_detected_results": not_detected,
+            "unique_activity_ids": len(activity_ids),
+            "unique_result_ids": len(result_ids),
+            "accepted_results": statuses["Accepted"],
+            "preliminary_results": statuses["Preliminary"],
+            "routine_samples": activity_types["Sample-Routine"],
+            "field_replicates": activity_types["Quality Control Sample-Field Replicate"],
+            "analytical_method_ids": dict(sorted(method_ids.items())),
+        }
+        if reconciled != expected:
+            raise SourceAdapterError(f"WQP reconciliation changed: {reconciled!r} != {expected!r}")
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -2010,6 +2367,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     ForegsStreamSedimentAdapter.source_id: ForegsStreamSedimentAdapter,
     ForegsFloodplainSedimentAdapter.source_id: ForegsFloodplainSedimentAdapter,
     AfsisPhaseIWetChemistryAdapter.source_id: AfsisPhaseIWetChemistryAdapter,
+    WqpSacramentoRiverArsenicAdapter.source_id: WqpSacramentoRiverArsenicAdapter,
 }
 
 

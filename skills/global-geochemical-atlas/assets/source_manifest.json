@@ -483,8 +483,8 @@
       ]
     },
     "gemstat-open-archive": {
-      "adapter": "gemstat_v3_arsenic_range",
-      "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 arsenic subset",
+      "adapter": "gemstat_v3_seven_element_ranges",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 seven-element subset",
       "publisher": "UNEP GEMS/Water Programme, GEMS/Water Data Centre and German Federal Institute of Hydrology",
       "dataset_doi": "10.5281/zenodo.18459694",
       "concept_doi": "10.5281/zenodo.13881899",
@@ -516,6 +516,60 @@
             "range_sha256": "64d67a154816b58c06569c38d74c5d1c1cf3fe4a265a7127f6248a0a06b2386f",
             "bytes": 30585144,
             "expected_sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+          },
+          {
+            "file_id": "chromium-observations",
+            "filename": "Chromium.csv",
+            "range_start": 21099972,
+            "range_end": 23395931,
+            "range_sha256": "362df9fd528b7eab5cff03aadceffa330b83eed0d94b71b6e129b89adea4cc97",
+            "bytes": 34359149,
+            "expected_sha256": "164294931268c7427cb7c768f23e20484db9c4130044d99c766483fb881cc62c"
+          },
+          {
+            "file_id": "copper-observations",
+            "filename": "Copper.csv",
+            "range_start": 24122334,
+            "range_end": 26169314,
+            "range_sha256": "cfb499687474fcb4575fd1eaecb33f40be7e4f528ca86430623661d9d6a709cd",
+            "bytes": 28448872,
+            "expected_sha256": "82fb42ce1bba413a197825017727c8b2c04aa7042f92b07466f81fab3e93c451"
+          },
+          {
+            "file_id": "mercury-observations",
+            "filename": "Mercury.csv",
+            "range_start": 54591798,
+            "range_end": 56488526,
+            "range_sha256": "76c512c12cdcfdd3bf3d0edec0c4f83d5ba88f7176c9b96e313fb1a2039371bc",
+            "bytes": 31175171,
+            "expected_sha256": "13805529f39c9ff6c90a84b341491af9739c72c43d3ec0eba07165957058906f"
+          },
+          {
+            "file_id": "nickel-observations",
+            "filename": "Nickel.csv",
+            "range_start": 57019516,
+            "range_end": 59767178,
+            "range_sha256": "e26717aeed36f3ba7781a670170954ad40e877ea1f2f9cbbf784041938f746a0",
+            "bytes": 39456553,
+            "expected_sha256": "fef4cc062e06ea4e3eafd8257b6849ed1d7ece2ac6522c5f9bfdef73ea206b8f"
+          },
+          {
+            "file_id": "lead-observations",
+            "filename": "Lead.csv",
+            "range_start": 47619799,
+            "range_end": 50275481,
+            "range_sha256": "f2d7044ecc01d887429fb989f9b4d3e2f311d2100cf95157af4976b90dd9c683",
+            "bytes": 40765015,
+            "expected_sha256": "6c7edbf736a32985394967ff30c175e4618c6914b7c8a77b38d40c255af7b9f0"
+          },
+          {
+            "file_id": "zinc-observations",
+            "filename": "Zinc.csv",
+            "range_start": 199286587,
+            "range_end": 201270727,
+            "range_sha256": "12e36f17cab48a074abd284dde218df739f4fec27b6db22dc5301b3b8e72b786",
+            "bytes": 26785044,
+            "expected_sha256": "0d77884198cdb0c01fa9f0ad8e101e086c709bdbc36ca80dc955a1c6172a192d"
           },
           {
             "file_id": "methods",
@@ -554,7 +608,7 @@
             "expected_sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d"
           }
         ],
-        "acquisition_script": "scripts/acquire_gemstat_arsenic.py",
+        "acquisition_script": "scripts/acquire_gemstat_multielement.py",
         "snapshot_manifest": "fixtures/four-media/water/gemstat-open-archive/snapshot_manifest.json"
       },
       "required_fields": [
@@ -592,9 +646,66 @@
           "As-Dis",
           "As-Sus",
           "As-Tot"
+        ],
+        "Cr": [
+          "Cr-Dis",
+          "Cr-Ext",
+          "Cr-Tot"
+        ],
+        "Cu": [
+          "Cu-Dis",
+          "Cu-Ext",
+          "Cu-Sus",
+          "Cu-Tot"
+        ],
+        "Hg": [
+          "Hg-Dis",
+          "Hg-Ext",
+          "Hg-Sus",
+          "Hg-Tot"
+        ],
+        "Ni": [
+          "Ni-Dis",
+          "Ni-Ext",
+          "Ni-Sus",
+          "Ni-Tot"
+        ],
+        "Pb": [
+          "Pb-Dis",
+          "Pb-Ext",
+          "Pb-Sus",
+          "Pb-Tot"
+        ],
+        "Zn": [
+          "Zn-Dis",
+          "Zn-Ext",
+          "Zn-Sus",
+          "Zn-Tot"
         ]
       },
       "expected_counts": {
+        "target_observations": 3739180,
+        "target_value_counts": {
+          "As": 492999,
+          "Cr": 537761,
+          "Cu": 460529,
+          "Hg": 517471,
+          "Ni": 638547,
+          "Pb": 654669,
+          "Zn": 437204
+        },
+        "source_file_rows": {
+          "Arsenic.csv": 492999,
+          "Chromium.csv": 553616,
+          "Copper.csv": 460529,
+          "Mercury.csv": 517471,
+          "Nickel.csv": 638547,
+          "Lead.csv": 654669,
+          "Zinc.csv": 437204
+        },
+        "excluded_parameter_counts": {
+          "Cr-VI": 15855
+        },
         "arsenic_observations": 492999,
         "arsenic_station_count": 15621,
         "arsenic_country_count": 33,
@@ -647,15 +758,16 @@
         "url": "https://creativecommons.org/licenses/by/4.0/"
       },
       "citation": "Heinle, M., Lisniak, D., and Saile, P. (2026). UNEP GEMS/Water Global Freshwater Quality Archive, v3. Zenodo. https://doi.org/10.5281/zenodo.18459694",
-      "redistribution": "Use for attributed research analysis. The complete third-party archive remains outside Git; this project materializes only a verified arsenic and metadata subset.",
+      "redistribution": "Use for attributed research analysis. The complete third-party archive remains outside Git; this project materializes only seven verified element members and the required metadata subset.",
       "scientific_notes": [
-        "As-Dis, As-Sus and As-Tot are distinct dissolved, suspended and total fractions and must not be merged silently.",
-        "The arsenic subset contains both mg/l and µg/l and preserves less-than and greater-than censoring flags.",
-        "Most arsenic rows use undefined analysis method code 0; method completeness therefore remains a material comparison limitation.",
+        "Dissolved, suspended, extractable and total fractions remain separate comparison bases and must not be merged silently.",
+        "The seven element files contain mg/l, µg/l, ng/l and suspended-particle µg/g values; units and fractions remain coupled.",
+        "Cr-VI is retained in Chromium.csv but excluded from elemental Cr output because a species-specific measurement is not interchangeable with total chromium.",
+        "Most rows use undefined analysis method code 0; method completeness therefore remains a material comparison limitation.",
         "Three -999.999 and 78 values at or above 1000 mg/l are marked Pending review and must not enter normalized demos or anomaly claims.",
         "Station metadata contain 35 exact duplicate rows across 35 IDs; the adapter preserves both source locators but uses one identical station fact set.",
         "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 station rows and 621 parameter rows; the one-record differences remain explicit.",
-        "GEMStat is voluntarily contributed and geographically uneven; the arsenic subset covers 33 countries and is not uniform global freshwater coverage."
+        "GEMStat is voluntarily contributed and geographically uneven; the seven-element subset is not uniform global freshwater coverage."
       ]
     },
     "geotraces-idp2025": {
@@ -769,6 +881,21 @@
           "B": "nominal value",
           "Q": "value below limit of quantification"
         }
+      },
+      "method_metadata": {
+        "scope": "cruise_analyte_candidate_set",
+        "assignment_basis": "Cruise and target analyte joined to exported WebODV info HTML",
+        "html_member_count": 241,
+        "html_uncompressed_bytes": 288142,
+        "html_inventory_sha256": "a1af8be2f33b70637efeacf35274e8cadbb6decd2bd832ab79bdf8b8e6506890",
+        "cruise_analyte_groups": 96,
+        "originator_count": 89,
+        "unique_bodc_method_record_count": 71,
+        "observations_with_method_metadata_candidates": 39327,
+        "observations_with_single_method_record": 22254,
+        "observations_with_multiple_method_records": 17073,
+        "observations_without_method_metadata": 0,
+        "scientific_boundary": "A single linked record may be assigned at cruise-analyte scope. Multiple exported records remain an unresolved candidate set and are not promoted to one observation-level analytical method."
       },
       "expected_counts": {
         "collection_station_count": 4094,
@@ -2057,6 +2184,118 @@
         "Raw country labels including SAfrica and Zimbambwe are preserved; normalized names are stored separately.",
         "The registered files and related article do not state a coordinate reference system; latitude and longitude are preserved but source_crs remains missing.",
         "The variable workbook labels field As.75 as Arsenic-78 and gives sampling years 2009-2013, while the related article reports 2009-2012; both conflicts remain explicit."
+      ]
+    },
+    "us-wqp-sacramento-river-arsenic": {
+      "adapter": "wqp_pinned_usgs_station_results",
+      "title": "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal",
+      "publisher": "U.S. Geological Survey California Water Science Center via the Water Quality Portal",
+      "dataset_doi": null,
+      "dataset_version": "content-snapshot-2026-08-06",
+      "release_date": null,
+      "landing_page": "https://www.waterqualitydata.us/",
+      "metadata_url": "https://www.waterqualitydata.us/webservices_documentation/",
+      "media": [
+        "water"
+      ],
+      "geographic_scope": "single-usgs-river-station-california-2010-2023",
+      "download": {
+        "mode": "content-addressed-wqp-query-pair",
+        "observed_at": "2026-08-06T14:50:00Z",
+        "max_bytes_per_file": 500000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "results",
+            "filename": "results.csv",
+            "url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem",
+            "request_interpretation": "The service response contained only Arsenic rows. The exact multi-valued query and observed response are retained rather than claiming the other requested characteristics were returned.",
+            "bytes": 123432,
+            "expected_sha256": "916f17a851b0597c55b4dfd78ace1ad65c13d2c30935b05b2e74b18910d28fcd"
+          },
+          {
+            "file_id": "station",
+            "filename": "station.csv",
+            "url": "https://www.waterqualitydata.us/data/Station/search?siteid=USGS-11447650&providers=NWIS&mimeType=csv&zip=no",
+            "bytes": 1241,
+            "expected_sha256": "74e51e3081133eedf1598127cd942c35353d397b9129fba711f1540e61af5c17"
+          }
+        ],
+        "snapshot_manifest": "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/snapshot_manifest.json"
+      },
+      "required_result_fields": [
+        "OrganizationIdentifier",
+        "ActivityIdentifier",
+        "ActivityTypeCode",
+        "ActivityMediaName",
+        "ActivityMediaSubdivisionName",
+        "ActivityStartDate",
+        "MonitoringLocationIdentifier",
+        "ResultIdentifier",
+        "ResultDetectionConditionText",
+        "CharacteristicName",
+        "ResultSampleFractionText",
+        "ResultMeasureValue",
+        "ResultMeasure/MeasureUnitCode",
+        "ResultStatusIdentifier",
+        "ResultAnalyticalMethod/MethodIdentifier",
+        "ResultAnalyticalMethod/MethodIdentifierContext",
+        "ResultAnalyticalMethod/MethodName",
+        "ResultAnalyticalMethod/MethodDescriptionText",
+        "LaboratoryName",
+        "DetectionQuantitationLimitTypeName",
+        "DetectionQuantitationLimitMeasure/MeasureValue",
+        "DetectionQuantitationLimitMeasure/MeasureUnitCode",
+        "ProviderName"
+      ],
+      "required_station_fields": [
+        "OrganizationIdentifier",
+        "MonitoringLocationIdentifier",
+        "MonitoringLocationName",
+        "MonitoringLocationTypeName",
+        "LatitudeMeasure",
+        "LongitudeMeasure",
+        "HorizontalAccuracyMeasure/MeasureValue",
+        "HorizontalAccuracyMeasure/MeasureUnitCode",
+        "HorizontalCollectionMethodName",
+        "HorizontalCoordinateReferenceSystemDatumName",
+        "ProviderName"
+      ],
+      "target_analytes": {
+        "As": "ResultMeasureValue"
+      },
+      "expected_counts": {
+        "physical_rows": 189,
+        "target_observations": 189,
+        "numeric_results": 188,
+        "not_detected_results": 1,
+        "unique_activity_ids": 189,
+        "unique_result_ids": 189,
+        "accepted_results": 132,
+        "preliminary_results": 57,
+        "routine_samples": 179,
+        "field_replicates": 10,
+        "analytical_method_ids": {
+          "USGS:PLM10": 189
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-USGS-Public-Domain",
+        "name": "USGS-authored NWIS records are public-domain U.S. Government data; retain source acknowledgement",
+        "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+      },
+      "citation": "U.S. Geological Survey and National Water Quality Monitoring Council. Water Quality Portal result and station services, USGS-11447650, accessed 2026-08-06.",
+      "redistribution": "Research analysis of this USGS/NWIS snapshot is permitted. Retain USGS, WQP, station, query, access time, file hashes and result identifiers.",
+      "scientific_notes": [
+        "This is a method-rich single-station time series, not national or global river coverage.",
+        "The response contains dissolved arsenic only even though the exact request repeated four characteristicName parameters; unreturned elements are not claimed.",
+        "All rows are linked to USGS method PLM10 (Elements, wf, cICP-MS), laboratory, result status and a reported detection/quantitation limit.",
+        "The one Not Detected row is represented as a censored value at its 0.10 ug/l detection limit; no zero is invented.",
+        "Ten field-replicate quality-control samples remain distinguishable from 179 routine samples and are not counted as independent routine evidence."
       ]
     }
   }

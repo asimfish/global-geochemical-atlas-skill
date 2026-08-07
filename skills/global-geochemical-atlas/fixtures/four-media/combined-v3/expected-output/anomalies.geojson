@@ -69,6 +69,39 @@
     {
       "geometry": {
         "coordinates": [
+          -121.5016167,
+          38.45566389
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-ac58476fc29c",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "dissolved_surface_freshwater_mass_per_volume",
+        "medium": "water",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "ug/L",
+        "normalized_value": 0.21,
+        "record_id": "rec-9a486fb72f66adf0f1507096724a8db49cd682b75243583b397cdc307f360dde",
+        "robust_z": -5.942914,
+        "sample_id": "nwisca.01.01401191",
+        "sample_type": "water_stream",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": "dissolved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
           6.25,
           65.0408
         ],

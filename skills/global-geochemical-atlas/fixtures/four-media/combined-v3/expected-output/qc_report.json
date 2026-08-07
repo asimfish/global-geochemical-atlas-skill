@@ -1,20 +1,21 @@
 {
-  "censored_record_count": 20,
+  "censored_record_count": 57,
   "definitions": {
     "coordinate_valid": "both canonical latitude and longitude are present and range-valid",
     "records_are_not_dropped": true,
     "standardized_record": "normalized_value or normalized_censoring_limit is available"
   },
   "flag_counts": {
-    "CENSORED_VALUE": 20,
-    "MISSING_ANALYTICAL_METHOD": 192,
-    "MISSING_COORDINATE_UNCERTAINTY": 688,
+    "AMBIGUOUS_AQUEOUS_RATIO_UNIT": 8,
+    "CENSORED_VALUE": 57,
+    "MISSING_ANALYTICAL_METHOD": 144,
+    "MISSING_COORDINATE_UNCERTAINTY": 696,
     "MISSING_DIGESTION_OR_EXTRACTION": 144,
     "MISSING_SOURCE_CRS": 48
   },
   "pipeline_version": "d2-pipeline-v1",
-  "record_count": 736,
-  "records_with_numeric_value_or_limit": 736,
+  "record_count": 792,
+  "records_with_numeric_value_or_limit": 792,
   "run_metadata": {
     "configuration": {
       "group_by": [
@@ -36,16 +37,17 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 736,
-    "input_sha256": "edcd1d2456322b73ec80fd81a2a3230082acf3b8ae6cdd938c1ec455701d66f8",
+    "input_row_count": 792,
+    "input_sha256": "effec52383c77e6031f976c9aab077bc40f109d4c632c9f715dc77af91c32838",
     "missing_recommended_input_columns": [],
-    "run_id": "8a00ff9d70115206"
+    "run_id": "093e2caaae29eea5"
   },
   "severity_counts": {
-    "info": 20,
-    "warning": 1072
+    "error": 8,
+    "info": 57,
+    "warning": 1032
   },
-  "standardization_rate": 1.0,
-  "standardized_record_count": 736,
-  "valid_coordinate_count": 736
+  "standardization_rate": 0.989899,
+  "standardized_record_count": 784,
+  "valid_coordinate_count": 792
 }

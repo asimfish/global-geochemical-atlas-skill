@@ -64,6 +64,7 @@
 - 许可：CC BY 4.0，并遵守 Fair Data Use 的数据集和原贡献者引用要求；
 - 内容：从 QC 1/2、坐标和深度有效的 dissolved 观测中平衡选择 Cu、Ni、Zn 各 16 条，共 48 条；
 - 单位边界：原始 `nmol/kg` 保持不变；没有明确元素原子量和海水密度时不换算为 `ug/L`；
+- 方法边界：39,327 条目标观测均连接到航次×元素 contributor metadata；只有唯一 BODC 方法记录时才赋值，多候选记录只保留候选集，不猜成行级方法；
 - 覆盖边界：样点来自海洋航次，不是规则全球网格；官方离散海水变量表没有 As，必须用其他水体来源补齐。
 
 ## GEMStat demo
@@ -72,9 +73,18 @@
 
 - 来源：UNEP GEMS/Water Global Freshwater Quality Archive v3，版本 DOI `10.5281/zenodo.18459694`；
 - 许可：CC BY 4.0，保留 archive 引用；
-- 内容：只从 Good/Fair、方法代码明确、非负且非极端的记录中选择 dissolved、suspended、total As 各 16 条；在来源具备时平衡 `mg/l`/`µg/l`、湖泊/河流和 `<` 删失值；
-- 质量边界：原始 492,999 条观测中的方法代码 0、Pending review、Suspect、重复和异常哨兵仍保留在全量适配器与审计报告中，但不进入演示；
-- 覆盖边界：As 子集只涉及 33 个贡献国家，不是规则全球淡水网格，也不能与 GEOTRACES 海水背景直接混算。
+- 内容：只从 Good/Fair、方法代码明确、非负且非极端的记录中为 As、Cr、Cu、Hg、Ni、Pb、Zn 各选择 8 条，共 56 条；dissolved、extractable、suspended、total 分相和 `<` 删失值保持独立；
+- 质量边界：全量 3,739,180 条七元素观测中只有 279,225 条方法代码明确；Pending review、Suspect、重复、异常哨兵和 1,836,306 条删失观测仍保留在全量适配器与审计报告中；
+- 覆盖边界：七元素子集涉及 35 个贡献国家、17,248 个站点和 689,291 个物理采样事件，不是规则全球淡水网格，也不能与 GEOTRACES 海水背景直接混算。Cr-VI 不计作元素 Cr。
+
+## USGS/WQP Sacramento River dissolved As demo
+
+目录：`us-wqp-sacramento-river-arsenic/`。
+
+- 来源：Water Quality Portal 固定的 USGS/NWIS 结果与站点查询响应，站点 `USGS-11447650`；
+- 内容：189 条 2010–2023 dissolved As 记录中确定性选择 48 条，覆盖 Not Detected、field replicate、Preliminary 和 Accepted routine 状态；
+- 方法与 QC：逐行保留 `USGS:PLM10`、实验室、检出限类型和值、结果状态与活动类型；Not Detected 以 `<0.10 ug/l` 保留，不填零；
+- 覆盖边界：这是一个方法丰富的独立淡水时间序列，不是美国或全球河流水质覆盖。WQP 是交付入口，USGS/NWIS 是上游证据，不重复计作两条血缘。
 
 ## FOREGS 六介质 demo
 
@@ -169,6 +179,6 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将以上十四个来源合并到同一个 `sources=auto` 请求：736 条观测包括 rock 48、soil 288、sediment 256、water 144。`run_manifest.json` 绑定十四个输入 fixture 的 hash、来源证据等级、路由结果和 89 个 D2 比较分区；`expected-output/` 是可字节级重建的九文件工作流结果。
+`fixtures/four-media/combined-v3/` 将以上十五个来源合并到同一个 `sources=auto` 请求：792 条观测包括 rock 48、soil 288、sediment 256、water 200。`run_manifest.json` 绑定十五个输入 fixture 的 hash、来源证据等级、路由结果和 111 个 D2 比较分区；`expected-output/` 是可字节级重建的九文件工作流结果。
 
-这只是接口联合测试。89 个背景组按元素、介质、measurement basis、地质单元、方法和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 16 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。
+这只是接口联合测试。111 个背景组按元素、介质、样品类型、分相、measurement basis、地质单元、方法和消解/提取方法隔离；当前没有一个组跨越不兼容来源。输出中的 12 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。8 条 suspended `µg/g` 记录因不是水体质量/体积单位而明确不作 `µg/L` 标准化。

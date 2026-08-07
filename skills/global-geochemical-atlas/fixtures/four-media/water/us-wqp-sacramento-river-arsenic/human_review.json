@@ -1,0 +1,1545 @@
+{
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS verifies preservation only. Unsigned human review adds confidence and is not a research-use permission gate.",
+  "completed_record_count": 0,
+  "dataset_version": "content-snapshot-2026-08-06",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.10",
+          "detection_limit_type": "Detection limit by DQCALC",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "0.10",
+          "record_id": "rec-fdbf9d1e9f0bc813c136ff0c51520dcf8c37e55ce1319d8daca6339b2a2b703c",
+          "result_status": "Accepted",
+          "sampled_at": "2015-05-08",
+          "unit": "ug/l",
+          "value_qualifier": "<",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": null
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01503736",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=<"
+      ],
+      "source_locator": "results.csv#row=76",
+      "source_record_id": "src-8ba6787d96516c377696ef6354ff323d2e7b376a1c0ed1856a7a36cd4c4f6782"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.04",
+          "detection_limit_type": "Laboratory Reporting Level",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.9",
+          "record_id": "rec-cbcb2169d20af4807d2e5a8b2d9a7ce9c400921331df49512ddb4299410c930d",
+          "result_status": "Accepted",
+          "sampled_at": "2010-02-16",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.9"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01000415",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=4",
+      "source_record_id": "src-4d934f1c70dec54b8f75eae2f289c5baaa0559b8e9107d38f3ed843eeb47ca17"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.10",
+          "detection_limit_type": "Long Term Method Detection Level",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "2.4",
+          "record_id": "rec-df3526a737ced7328d0b72ea833f85c2c0c7d052b65e1e68032cff89e86391f5",
+          "result_status": "Accepted",
+          "sampled_at": "2014-03-20",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.4"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01402175",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=55",
+      "source_record_id": "src-81b38a6bc7df39bb6fec549c84c47936dcf6578a5ea6cb54195c630a0f7ce9a3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.10",
+          "detection_limit_type": "Detection limit by DQCALC",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.1",
+          "record_id": "rec-fc11f36fa496995e33a1c342744cc2c166f6a3008509701ca8ea734459e5a722",
+          "result_status": "Accepted",
+          "sampled_at": "2016-05-26",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01604135",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=84",
+      "source_record_id": "src-f8608a372d92528d03c129afc10e3d5508048de1a1b1aedae5ff8559a5122a8b"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.05",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.3",
+          "record_id": "rec-fbb1bea4cc3768840f0b4fe70cca1ee554ea9a76988bfbb62fe2e58ebb320bc2",
+          "result_status": "Accepted",
+          "sampled_at": "2018-02-28",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01802017",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=110",
+      "source_record_id": "src-01b22d2d769c30b4ce89cf0afd02c71cd97a71bab2d0c3e76767dcf02d7f7c70"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.05",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.3",
+          "record_id": "rec-eedd5454e7cdb0fd771ed6ad76b8a27c56aba5136be79f51aabaab3db3f8c0ba",
+          "result_status": "Accepted",
+          "sampled_at": "2018-02-28",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01802496",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=119",
+      "source_record_id": "src-c3c5119f8e7b4a8366471d26feccf9aaa7af958c17c39f9c78d474eb1617eaad"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "0.99",
+          "record_id": "rec-81d67f34cf19df7b49334d2759ca3f2720d27b451667c8387024ce903c9128c6",
+          "result_status": "Accepted",
+          "sampled_at": "2019-04-18",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "0.99"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01904258",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=124",
+      "source_record_id": "src-4fbbae0d7cf5304d8843d4e5a4292ea3bda9874f5303e3fe235216218867c2c9"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.3",
+          "record_id": "rec-df729185ab4e6cb4c33b3f529c975d97b4a8426b7bab61d29162168ba4f68980",
+          "result_status": "Preliminary",
+          "sampled_at": "2020-06-30",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02004378",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=144",
+      "source_record_id": "src-0cbe740c07606be3efa30e7f837ea6e20c7aceef067d2164fef2fe032df939e3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.9",
+          "record_id": "rec-a8e03abb576e29af7fd61dc30e6ff9d22d55f9b5ffc4bf0549ad59d534f6ef00",
+          "result_status": "Preliminary",
+          "sampled_at": "2021-04-21",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.9"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02102978",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=157",
+      "source_record_id": "src-c600a0346f30b90aec5410668b3a7d9f73680a02192aaff189ba259d4c3603c4"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.8",
+          "record_id": "rec-d545b2df4130e0c5e94baf02b6f0979f3caf9b96028c1dcf8730a6d472c11bc3",
+          "result_status": "Preliminary",
+          "sampled_at": "2022-03-17",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.8"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02202614",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=174",
+      "source_record_id": "src-ff392e2ec0acb70c6dda7dc72e7f6b34186bbe8effa5331e044202067edd4f87"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Quality Control Sample-Field Replicate",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.1",
+          "record_id": "rec-dba0a42b02e37a564f48c536d8109e1d4c716096a39ea6546128313420fa52af",
+          "result_status": "Preliminary",
+          "sampled_at": "2023-05-10",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02304264",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=183",
+      "source_record_id": "src-72e10d6d841628900fd4b390f584440424521c9c76395117a1f22f004fc45a33"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.0",
+          "record_id": "rec-1e30101c6b86207780edbfc4df2a8a6ed03b644d1fcc9d40fe73b55e38f40f10",
+          "result_status": "Preliminary",
+          "sampled_at": "2019-10-09",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.0"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02000150",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=129",
+      "source_record_id": "src-d87b9a97142127f058e5bd1de2dbca662333ff28a7b378a7326106c27dc76efb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.8",
+          "record_id": "rec-37d5e0490ff5db4ecb2b94628b847be611acbf4a29882428656b041a0066d47c",
+          "result_status": "Preliminary",
+          "sampled_at": "2020-05-27",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.8"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02002747",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=140",
+      "source_record_id": "src-a57bf507c1669dbc73dcac5c217e4caa9aadbd806090c944658b6a3b07752bf6"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.6",
+          "record_id": "rec-04ab81f30c5d1799b8bfa2d4c3a9cdd0b40c67179d60a11e5d03ee255119bdbe",
+          "result_status": "Preliminary",
+          "sampled_at": "2020-01-24",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.6"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02001804",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=146",
+      "source_record_id": "src-09be66269c47d62717bc89f20b106d2603b90fc94f6effedf763655c26ae5793"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "2.1",
+          "record_id": "rec-9f830c54e4b0716bd6991c11e7965ea2c0fce25ceb7bee32f459c9cca8fb7606",
+          "result_status": "Preliminary",
+          "sampled_at": "2021-01-06",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02100975",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=153",
+      "source_record_id": "src-913d1bd21095c944d56a7a7842eaee5dfc79e49419701d49cf0000f5cd9b2ff9"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "2.1",
+          "record_id": "rec-21591300e3ad80c4e9af26c7b174fb576589aa6418f86ebe7a76e704b9b44cf2",
+          "result_status": "Preliminary",
+          "sampled_at": "2021-05-05",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "2.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02103093",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=159",
+      "source_record_id": "src-56873699108c467c9498f7de35663407f98e8306c4eef888553d30f1fc2fed7a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.2",
+          "record_id": "rec-1f590b6dfd734e0eebaf352bd27a74b5dd6e7a1ae51f3d75b656cf1fb9867f9e",
+          "result_status": "Preliminary",
+          "sampled_at": "2022-07-14",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.2"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02204666",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=165",
+      "source_record_id": "src-4a8d5e27dbfed92df9f5d504a653e9f5fb3887510d7ddfc87307c777fbdf92d0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.6",
+          "record_id": "rec-1719974eae6bcfb7316f76817a7fd81e0a3f3683ffc8df98f587e0397e29d241",
+          "result_status": "Preliminary",
+          "sampled_at": "2022-02-16",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.6"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02201984",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=171",
+      "source_record_id": "src-cd6ab66d0ae97c1df54f73cb85548af270b4dd2ddae2a9afc13f16ef01cbcf2c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.4",
+          "record_id": "rec-02a8888d2ce767047296e10f3d2488fe7e1f2ba0d46a24d10ea991050a15fc5a",
+          "result_status": "Preliminary",
+          "sampled_at": "2023-01-31",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.4"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02301410",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=178",
+      "source_record_id": "src-465067d3857b3fd2917ec3957236a7d0defbe43b58abed87c5e4701c83962656"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.0",
+          "record_id": "rec-5d3c37a55a8b24bff821394eb8ba0f8333e18746914743c86eb538f39cac8205",
+          "result_status": "Preliminary",
+          "sampled_at": "2023-04-20",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.0"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02303554",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=184",
+      "source_record_id": "src-78b1f068d6d3b44555b44aa46a806b25b88421df9c8d9a4be3f02c35877ec70c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.1",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.1",
+          "record_id": "rec-14961653fb6d9bf89b4c00fa406ba9e9b4af280a33189a720ec77474a8339b29",
+          "result_status": "Preliminary",
+          "sampled_at": "2023-10-18",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.02400087",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=190",
+      "source_record_id": "src-854bc91065f64fff9131ada21fa6e17feb0455c6eb9d00dc3d974792035a0376"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.02",
+          "detection_limit_type": "Long Term Method Detection Level",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.1",
+          "record_id": "rec-c2ca8253bab5a3a8f1ce9a551c6ea7e391e2361b6b69c3d66c8f008b664915aa",
+          "result_status": "Accepted",
+          "sampled_at": "2010-12-28",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01100588",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=2",
+      "source_record_id": "src-029af1bce0c1f3305ca6b4b3a3708e06b3a5650b66bda136bff18eca3a6d0935"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.02",
+          "detection_limit_type": "Long Term Method Detection Level",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "0.97",
+          "record_id": "rec-d2806612fa3f1a99a7cbbdd4f798ae3d6fbc15368181bb0917e5e6713058ea4e",
+          "result_status": "Accepted",
+          "sampled_at": "2011-02-22",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "0.97"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01102809",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=17",
+      "source_record_id": "src-e50e6b224f095ac39683ca15196a0a027ab2a406f69877d5cb2bee3a4859ef3e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.04",
+          "detection_limit_type": "Long Term Method Detection Level",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.3",
+          "record_id": "rec-520056d468d538f33f108092acb10d5c3d28653ad869ba6619e818ea200843a4",
+          "result_status": "Accepted",
+          "sampled_at": "2012-10-18",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01300096",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=31",
+      "source_record_id": "src-5deaa7d9750c52236a1a776c1d269d512fbfd945081fdb1c6c2cf52111cb1320"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.04",
+          "detection_limit_type": "Long Term Method Detection Level",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.5",
+          "record_id": "rec-e6bf0faa37ea18e059db864c6d81fd5f73065022b457d43d7c60bcacb70cbd67",
+          "result_status": "Accepted",
+          "sampled_at": "2013-02-05",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.5"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01302426",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=46",
+      "source_record_id": "src-58f24b27db43b702dbe71ac06a4ceb36eb85c1847a163a05fe0a9f441a9b4551"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.10",
+          "detection_limit_type": "Long Term Method Detection Level",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.7",
+          "record_id": "rec-1868d1dc3458bb0183c1dbc40f74d8867771dfd67d4e46ed10c4da79ad53e524",
+          "result_status": "Accepted",
+          "sampled_at": "2014-08-13",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.7"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01404172",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=60",
+      "source_record_id": "src-ed5a59a1307022d08eb36f2c79908d2887d235d6fedc5999db6c816fe17d86ff"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.10",
+          "detection_limit_type": "Detection limit by DQCALC",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.7",
+          "record_id": "rec-2b711db568a8ea0b5df950f632481d428e18f118fcc54e830f7d38b7975ef1ba",
+          "result_status": "Accepted",
+          "sampled_at": "2015-01-27",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.7"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01501814",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=75",
+      "source_record_id": "src-7a915752f89bd9691a11a709a53244cfc6d788e63ee15b5ca628bbd9a3d0868a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.05",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.7",
+          "record_id": "rec-92639adad0e12a1f9778a9afd142b782142efce772285751c2546a11da3c4742",
+          "result_status": "Accepted",
+          "sampled_at": "2016-12-07",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.7"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01700683",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=89",
+      "source_record_id": "src-03f620d3c340db95eeed00521c7226b8a050ef7494403c712d1b78eea5dea7c1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.05",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "0.61",
+          "record_id": "rec-f99ced05d4de96de10a57438e7401e4e4a11fbb566bf6ccec8ddd93509201f0e",
+          "result_status": "Accepted",
+          "sampled_at": "2017-05-23",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "0.61"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01705363",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=104",
+      "source_record_id": "src-9115772e350cbd9411837e7b566bc08bc441ad49de203cfa793ceab884450a3b"
+    },
+    {
+      "adapter_observations": [
+        {
+          "activity_type": "Sample-Routine",
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "detection_limit": "0.05",
+          "detection_limit_type": "Blank-adjusted method detect limit",
+          "latitude": "38.45566389000000",
+          "longitude": "-121.5016167000000",
+          "medium": "water",
+          "raw_value": "1.8",
+          "record_id": "rec-45fdb0cf10b2284bbc8de09668a61958149752ff9ddc7ebac9aabbf11efaf9ba",
+          "result_status": "Accepted",
+          "sampled_at": "2018-01-17",
+          "unit": "ug/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved"
+        }
+      ],
+      "automated_checks": {
+        "activity_type_preserved": true,
+        "coordinates_preserved": true,
+        "method_preserved": true,
+        "raw_value_or_censor_limit_preserved": true,
+        "registered_result_hash_matches": true,
+        "result_status_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true,
+        "unit_and_fraction_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "1.8"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "nwisca.01.01801106",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=118",
+      "source_record_id": "src-8736ff59b9403a11ffa5ba1f4aff40a5648344425131ed419199c1994b622f4e"
+    }
+  ],
+  "required_record_count": 30,
+  "review_version": "geochemical-human-review-v1",
+  "selection_strategy": "Stratified across censoring, field replicates, preliminary and accepted routine results, then distributed through source order.",
+  "snapshot_id": "us-wqp-sacramento-river-arsenic:content-snapshot-2026-08-06:e4c8487141ad",
+  "source_id": "us-wqp-sacramento-river-arsenic",
+  "status": "prepared"
+}

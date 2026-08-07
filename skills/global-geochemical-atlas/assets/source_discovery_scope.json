@@ -85,13 +85,14 @@
         "canada-cdogs",
         "mexico-sgm-geochemical-cartography",
         "us-water-quality-portal",
+        "us-wqp-sacramento-river-arsenic",
         "usgs-conus-soil",
         "usgs-ngdb"
       ],
       "remaining_work": [
         "Search additional state, provincial and territorial geological-survey releases beyond Alaska and British Columbia.",
         "Determine whether Mexico SGM exposes raw sample measurements behind the interpreted national layer and reconcile its two licence notices.",
-        "Resolve WQP records to NWIS, WQX and the original monitoring organization."
+        "Expand beyond the implemented single-station USGS/NWIS WQP snapshot while resolving every WQP record to NWIS, WQX and the original monitoring organization."
       ]
     },
     "south-america": {

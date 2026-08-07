@@ -1,10 +1,10 @@
 {
   "access_status_counts": {
-    "public_download": 492999
+    "public_download": 3739180
   },
   "as_of": "2026-08-06T10:05:00Z",
   "attribution_required_counts": {
-    "true": 492999
+    "true": 3739180
   },
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "v3",
@@ -13,10 +13,10 @@
   "profile_version": "d1-v4-full-population-profile-v1",
   "redistribution_is_not_a_research_use_gate": true,
   "redistribution_status_counts": {
-    "not_evaluated_for_project_output": 492999
+    "not_evaluated_for_project_output": 3739180
   },
   "research_use_status_counts": {
-    "permitted_research": 492999
+    "permitted_research": 3739180
   },
   "source_id": "gemstat-open-archive"
 }

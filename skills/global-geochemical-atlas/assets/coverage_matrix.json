@@ -501,10 +501,10 @@
     "water": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 2,
-        "Cu": 2,
-        "Ni": 2,
-        "Zn": 2
+        "As": 3,
+        "Cu": 3,
+        "Ni": 3,
+        "Zn": 3
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -517,6 +517,7 @@
         "As",
         "Cr",
         "Cu",
+        "Hg",
         "Ni",
         "Pb",
         "Zn"
@@ -548,7 +549,8 @@
       "selected_sources": [
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
       ],
       "source_evidence_tiers": {
         "bgs-gbase": "D",
@@ -566,7 +568,8 @@
         "iodp-data-systems": "D",
         "ireland-tellus": "D",
         "pangaea-repository": "D",
-        "us-water-quality-portal": "D"
+        "us-water-quality-portal": "D",
+        "us-wqp-sacramento-river-arsenic": "B"
       },
       "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
       "source_scopes": {
@@ -585,7 +588,8 @@
         "iodp-data-systems": "global_partial",
         "ireland-tellus": "national_partial",
         "pangaea-repository": "global_collection",
-        "us-water-quality-portal": "national_partial"
+        "us-water-quality-portal": "national_partial",
+        "us-wqp-sacramento-river-arsenic": "single_station_time_series"
       },
       "source_target_analytes": {
         "foregs-stream-water": [
@@ -597,12 +601,21 @@
           "Zn"
         ],
         "gemstat-open-archive": [
-          "As"
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
         ],
         "geotraces-idp2025": [
           "Cu",
           "Ni",
           "Zn"
+        ],
+        "us-wqp-sacramento-river-arsenic": [
+          "As"
         ]
       },
       "source_use_modes": {
@@ -621,7 +634,8 @@
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
         "pangaea-repository": "discovery",
-        "us-water-quality-portal": "discovery"
+        "us-water-quality-portal": "discovery",
+        "us-wqp-sacramento-river-arsenic": "normalized_analysis"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",

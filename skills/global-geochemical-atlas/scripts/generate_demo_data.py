@@ -623,6 +623,10 @@ def geotraces_demo(
             unit = str(values.get("unit") or "").strip()
             if _reported_float(raw_value) is None or quality_flag not in accepted_qc or unit != "nmol/kg":
                 continue
+            analytical_method = str(values.get("analytical_method") or "")
+            method_candidates = values.get("method_metadata_candidates")
+            if not isinstance(method_candidates, list) or not method_candidates:
+                raise DemoError(f"GEOTRACES contributor/method connection is missing: {record.source_locator}")
             record_id = stable_record_id(
                 record.source_id,
                 record.source_record_id,
@@ -648,8 +652,12 @@ def geotraces_demo(
                     "source_crs": "EPSG:4326",
                     "coordinate_uncertainty_m": "",
                     "geologic_unit": "global_ocean_cruise_track",
-                    "analytical_method": "",
-                    "digestion_or_extraction": "dissolved_fraction; contributor-specific protocol",
+                    "analytical_method": analytical_method,
+                    "digestion_or_extraction": (
+                        "dissolved_fraction; linked BODC cruise-analyte method record"
+                        if analytical_method
+                        else "dissolved_fraction; multiple linked BODC method records unresolved to observation"
+                    ),
                     "laboratory": "",
                     "license": candidate.license_id,
                     "source_tier": "official_curated",
@@ -675,8 +683,12 @@ def geotraces_demo(
                     "seadatanet_quality_flag": quality_flag,
                     "standard_deviation": str(values.get("standard_deviation") or ""),
                     "water_fraction": "dissolved",
+                    "method_metadata_status": str(values.get("method_metadata_status") or ""),
+                    "method_metadata_candidates": method_candidates,
+                    "method_source_locator": str(values.get("variable_metadata_locator") or ""),
                     "scientific_note": (
-                        "nmol/kg is preserved. Do not mix with ug/L without an explicit atomic-mass and seawater-density conversion."
+                        "nmol/kg is preserved. A single cruise-analyte method record is assigned only when the export "
+                        "contains exactly one candidate; multi-record candidate sets remain unresolved."
                     ),
                 }
             )
@@ -694,20 +706,33 @@ def gemstat_demo(
     candidate: Any,
     observation_limit: int,
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
-    if observation_limit != 48:
-        raise DemoError("GEMStat demo is fixed at 48 observations for balanced fraction/unit coverage")
-    observation_file = files.get("Arsenic.csv")
-    if observation_file is None:
-        raise DemoError("GEMStat arsenic member is missing")
-    bucket_targets = {
-        ("As-Dis", "mg/l"): 8,
-        ("As-Dis", "µg/l"): 8,
-        ("As-Sus", "Lake station"): 8,
-        ("As-Sus", "River station"): 8,
-        ("As-Tot", "mg/l"): 8,
-        ("As-Tot", "µg/l"): 8,
+    if observation_limit != 56:
+        raise DemoError("GEMStat demo is fixed at 56 observations: eight for each of seven elements")
+    expected_files = {
+        "Arsenic.csv",
+        "Chromium.csv",
+        "Copper.csv",
+        "Mercury.csv",
+        "Nickel.csv",
+        "Lead.csv",
+        "Zinc.csv",
     }
-    buckets: dict[tuple[str, str], dict[str, list[RawRecord]]] = {
+    if expected_files - set(files):
+        raise DemoError(f"GEMStat observation members are missing: {sorted(expected_files - set(files))}")
+    bucket_targets = {
+        "As-Dis": 3,
+        "As-Sus": 2,
+        "As-Tot": 3,
+        "Cr-Dis": 3,
+        "Cr-Ext": 2,
+        "Cr-Tot": 3,
+        **{
+            f"{element}-{fraction}": 2
+            for element in ("Cu", "Hg", "Ni", "Pb", "Zn")
+            for fraction in ("Dis", "Ext", "Sus", "Tot")
+        },
+    }
+    buckets: dict[str, dict[str, list[RawRecord]]] = {
         key: {"censored": [], "reported": []} for key in bucket_targets
     }
     for record in records:
@@ -725,24 +750,28 @@ def gemstat_demo(
         ):
             continue
         parameter = str(fields.get("Parameter Code") or "")
-        dimension = str(station.get("Water Type") if parameter == "As-Sus" else fields.get("Unit") or "")
-        key = (parameter, dimension)
-        if key not in buckets:
+        if parameter not in buckets:
             continue
         qualifier_bucket = "censored" if fields.get("Value Flags") == "<" else "reported"
-        capacity = 2 if qualifier_bucket == "censored" else bucket_targets[key]
-        if len(buckets[key][qualifier_bucket]) < capacity:
-            buckets[key][qualifier_bucket].append(record)
+        capacity = bucket_targets[parameter]
+        if len(buckets[parameter][qualifier_bucket]) < capacity:
+            buckets[parameter][qualifier_bucket].append(record)
 
     selected: list[RawRecord] = []
     for key, target in bucket_targets.items():
-        censored = buckets[key]["censored"][:2]
+        censored = buckets[key]["censored"][:target]
         reported = buckets[key]["reported"][: target - len(censored)]
         cell = [*censored, *reported]
         if len(cell) != target:
             raise DemoError(f"GEMStat demo bucket {key} produced {len(cell)} rows, expected {target}")
         selected.extend(cell)
-    selected.sort(key=lambda item: int(item.source_locator.partition("#row=")[2]))
+    element_order = {element: index for index, element in enumerate(("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"))}
+    selected.sort(
+        key=lambda item: (
+            element_order[str(item.fields["_element"])],
+            int(item.source_locator.partition("#row=")[2]),
+        )
+    )
 
     rows: list[dict[str, str]] = []
     evidence_rows: list[dict[str, Any]] = []
@@ -752,6 +781,7 @@ def gemstat_demo(
         method = fields["_method_metadata"]
         raw_value = str(fields["Value"])
         unit = str(fields["Unit"])
+        unit_basis = unit.lower().replace("µ", "u").replace("/", "_per_").replace(" ", "_")
         qualifier = str(fields["Value Flags"])
         fraction = str(fields["_water_fraction"])
         depth = str(fields["Depth"])
@@ -759,10 +789,11 @@ def gemstat_demo(
         if fields.get("Sample Time"):
             sampled_at += "T" + str(fields["Sample Time"])
         sample_id = "|".join(
-            (str(fields["GEMS Station Number"]), sampled_at, depth, str(fields["Parameter Code"]))
+            (str(fields["GEMS Station Number"]), sampled_at, depth)
         )
+        element = str(fields["_element"])
         record_id = stable_record_id(
-            record.source_id, record.source_record_id, "As", raw_value, unit
+            record.source_id, record.source_record_id, element, raw_value, unit
         )
         method_name = str(method.get("Method Name") or method.get("Method Description") or "")
         rows.append(
@@ -770,11 +801,11 @@ def gemstat_demo(
                 "record_id": record_id,
                 "source_record_id": record.source_record_id,
                 "sample_id": sample_id,
-                "element_or_analyte": "As",
+                "element_or_analyte": element,
                 "value": raw_value,
                 "unit": unit,
                 "medium": "water",
-                "measurement_basis": f"freshwater_{fraction}_fraction",
+                "measurement_basis": f"freshwater_{fraction}_operational_fraction_{unit_basis}",
                 "value_qualifier": qualifier,
                 "detection_limit": raw_value if qualifier == "<" else "",
                 "detection_limit_unit": unit if qualifier == "<" else "",
@@ -796,14 +827,14 @@ def gemstat_demo(
                 "grain_fraction": "",
             }
         )
-        entry = _base_evidence(record, observation_file, candidate, record_id, "As")
+        entry = _base_evidence(record, files[str(fields["_source_file"])], candidate, record_id, element)
         entry.update(
             {
                 "article_citations": [candidate.registry_entry["citation"]],
                 "article_dois": [candidate.dataset_doi],
                 "selection_rule": (
-                    "Good/Fair source quality; defined method; nonnegative and nonextreme; balanced dissolved/suspended/total, "
-                    "mg/l and µg/l where available, lake/river suspended fraction, and up to two censored values per cell"
+                    "Good/Fair source quality; defined method; nonnegative and nonextreme; eight observations per element; "
+                    "registered operational fractions balanced within each element; up to one censored value per parameter"
                 ),
                 "station_id": fields["GEMS Station Number"],
                 "country": station["Country Name"],
@@ -818,12 +849,140 @@ def gemstat_demo(
                 "source_value_flag": qualifier,
                 "source_data_quality": fields["Data Quality"],
                 "scientific_note": (
-                    "Dissolved, suspended and total arsenic fractions are not interchangeable. Censored values retain their limits."
+                    "Dissolved, extractable, suspended and total operational fractions are not interchangeable. "
+                    "Cr-VI is excluded from elemental chromium, and censored values retain their limits."
                 ),
             }
         )
         evidence_rows.append(entry)
     return rows, evidence_rows, len({record.source_record_id for record in selected})
+
+
+def wqp_sacramento_demo(
+    records: Iterable[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    if observation_limit != 48:
+        raise DemoError("WQP Sacramento demo is fixed at 48 observations")
+    source_records = list(records)
+    if len(source_records) != 189:
+        raise DemoError(f"WQP Sacramento produced {len(source_records)} source rows, expected 189")
+
+    selected: list[RawRecord] = []
+    selected_ids: set[str] = set()
+
+    def add_first(predicate: Any) -> None:
+        for record in source_records:
+            if predicate(record.fields) and record.source_record_id not in selected_ids:
+                selected.append(record)
+                selected_ids.add(record.source_record_id)
+                return
+        raise DemoError("WQP Sacramento could not satisfy a required demo stratum")
+
+    add_first(lambda fields: fields.get("ResultDetectionConditionText") == "Not Detected")
+    add_first(lambda fields: fields.get("ActivityTypeCode") == "Quality Control Sample-Field Replicate")
+    add_first(lambda fields: fields.get("ResultStatusIdentifier") == "Preliminary")
+    add_first(
+        lambda fields: fields.get("ResultStatusIdentifier") == "Accepted"
+        and fields.get("ActivityTypeCode") == "Sample-Routine"
+    )
+    for index in (round(i * (len(source_records) - 1) / 47) for i in range(48)):
+        record = source_records[index]
+        if record.source_record_id not in selected_ids:
+            selected.append(record)
+            selected_ids.add(record.source_record_id)
+        if len(selected) == observation_limit:
+            break
+    for record in source_records:
+        if len(selected) == observation_limit:
+            break
+        if record.source_record_id not in selected_ids:
+            selected.append(record)
+            selected_ids.add(record.source_record_id)
+    if len(selected) != observation_limit:
+        raise DemoError(f"WQP Sacramento selected {len(selected)} observations, expected {observation_limit}")
+    selected.sort(key=lambda record: str(record.fields["ActivityStartDate"]) + str(record.fields.get("ActivityStartTime/Time") or ""))
+
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    result_file = files["results.csv"]
+    for record in selected:
+        fields = record.fields
+        values = fields["_target_observations"]["As"]
+        station = fields["_station_metadata"]
+        sampled_at = str(fields["ActivityStartDate"])
+        sample_time = str(fields.get("ActivityStartTime/Time") or "")
+        if sample_time:
+            sampled_at += "T" + sample_time
+        raw_value = str(values["value"])
+        unit = str(values["unit"])
+        record_id = stable_record_id(record.source_id, record.source_record_id, "As", raw_value, unit)
+        rows.append(
+            {
+                "record_id": record_id,
+                "source_record_id": record.source_record_id,
+                "sample_id": str(fields["ActivityIdentifier"]),
+                "element_or_analyte": "As",
+                "value": raw_value,
+                "unit": unit,
+                "medium": "water",
+                "measurement_basis": str(values["measurement_basis"]),
+                "value_qualifier": str(values["value_qualifier"]),
+                "detection_limit": str(values["detection_limit"]),
+                "detection_limit_unit": str(values["detection_limit_unit"]),
+                "latitude": str(station["LatitudeMeasure"]),
+                "longitude": str(station["LongitudeMeasure"]),
+                "source_crs": str(station["HorizontalCoordinateReferenceSystemDatumName"]),
+                "coordinate_uncertainty_m": "15",
+                "geologic_unit": "",
+                "analytical_method": str(values["analytical_method"]),
+                "digestion_or_extraction": str(values["digestion_or_extraction"]),
+                "laboratory": str(values["laboratory"]),
+                "license": candidate.license_id,
+                "source_tier": "government",
+                "source_id": record.source_id,
+                "source_locator": record.source_locator,
+                "sampled_at": sampled_at,
+                "sample_depth_min_m": "",
+                "sample_depth_max_m": "",
+                "grain_fraction": "",
+            }
+        )
+        entry = _base_evidence(record, result_file, candidate, record_id, "As")
+        entry.update(
+            {
+                "article_citations": [candidate.registry_entry["citation"]],
+                "article_dois": [],
+                "selection_rule": (
+                    "One censored result, one field replicate, one preliminary result and one accepted routine result "
+                    "are required; remaining rows are deterministic evenly spaced observations across source order."
+                ),
+                "monitoring_location_identifier": fields["MonitoringLocationIdentifier"],
+                "monitoring_location_name": station["MonitoringLocationName"],
+                "provider_name": fields["ProviderName"],
+                "organization_identifier": fields["OrganizationIdentifier"],
+                "result_identifier": fields["ResultIdentifier"],
+                "result_status": values["source_result_status"],
+                "activity_type": values["activity_type"],
+                "water_fraction": "dissolved",
+                "detection_limit_type": values["detection_limit_type"],
+                "method_source_locator": values["variable_metadata_locator"],
+                "station_source_locator": station["_metadata_source_locator"],
+                "horizontal_accuracy_source": (
+                    f"{station['HorizontalAccuracyMeasure/MeasureValue']} "
+                    f"{station['HorizontalAccuracyMeasure/MeasureUnitCode']}"
+                ),
+                "horizontal_collection_method": station["HorizontalCollectionMethodName"],
+                "scientific_note": (
+                    "A single-station dissolved-arsenic time series is useful for method and temporal validation, "
+                    "but it is not evidence of national or global river coverage. Field replicates remain QC samples."
+                ),
+            }
+        )
+        evidence_rows.append(entry)
+    return rows, evidence_rows, len(selected)
 
 
 def pangaea_north_africa_demo(
@@ -1302,6 +1461,10 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             rows, evidence, selected_source_rows = gemstat_demo(
                 raw_records, files, candidate, args.observations
             )
+        elif args.source == "us-wqp-sacramento-river-arsenic":
+            rows, evidence, selected_source_rows = wqp_sacramento_demo(
+                raw_records, files, candidate, args.observations
+            )
         elif args.source == "pangaea-north-africa-soil":
             rows, evidence, selected_source_rows = pangaea_north_africa_demo(
                 raw_records, files, candidate, args.observations
@@ -1362,7 +1525,8 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             "observations": args.observations,
             "analytes": list(
                 ("Cu", "Ni", "Zn") if args.source == "geotraces-idp2025"
-                else ("As",) if args.source == "gemstat-open-archive"
+                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn") if args.source == "gemstat-open-archive"
+                else ("As",) if args.source == "us-wqp-sacramento-river-arsenic"
                 else sorted({row["element_or_analyte"] for row in rows})
                 if args.source.startswith("foregs-")
                 else ANALYTES
@@ -1381,7 +1545,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         ],
         "record_counts": {
             "raw_source_rows": (
-                candidate.registry_entry["expected_counts"]["arsenic_observations"]
+                candidate.registry_entry["expected_counts"]["target_observations"]
                 if args.source == "gemstat-open-archive"
                 else len(raw_records)
             ),
@@ -1413,11 +1577,22 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             ),
             *(
                 [
-                    "GEMStat v3 arsenic covers 33 contributing countries unevenly and is not a uniform global freshwater grid.",
-                    "Dissolved, suspended and total arsenic fractions remain separate; this demo uses only rows with a defined method and Good/Fair source quality.",
+                    "GEMStat v3 seven-element observations come from voluntary contributors and do not form a uniform global freshwater grid.",
+                    "Dissolved, extractable, suspended and total operational fractions remain separate; this demo uses only rows with a defined method and Good/Fair source quality.",
+                    "Cr-VI is a chemical species rather than interchangeable elemental chromium and is excluded from the Cr target count.",
                     "Censored observations retain their source limits; Pending review, Suspect, negative sentinel and extreme mg/l rows are excluded.",
                 ]
                 if args.source == "gemstat-open-archive"
+                else []
+            ),
+            *(
+                [
+                    "This is one USGS river station, not national or global freshwater coverage.",
+                    "The retained response contains dissolved arsenic only; unreturned elements from the exact repeated-parameter query are not claimed.",
+                    "Preliminary results and field-replicate QC samples remain explicitly labeled and must not be treated as accepted independent routine observations.",
+                    "The Not Detected result remains left-censored at its reported 0.10 ug/l limit; no zero is invented.",
+                ]
+                if args.source == "us-wqp-sacramento-river-arsenic"
                 else []
             ),
             *(
@@ -1480,6 +1655,7 @@ def build_parser() -> argparse.ArgumentParser:
             "foregs-topsoil", "foregs-subsoil", "foregs-humus",
             "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
+            "us-wqp-sacramento-river-arsenic",
         ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)

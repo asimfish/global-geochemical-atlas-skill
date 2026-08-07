@@ -48,18 +48,19 @@
       "valid_coordinate_sample_count": 18343
     },
     "water": {
-      "comparable_observation_count": 48133,
-      "covered_spatial_cells": 2370,
-      "distinct_sample_count": 504797,
-      "independent_lineage_count": 3,
-      "observation_count": 537174,
+      "comparable_observation_count": 306516,
+      "covered_spatial_cells": 2440,
+      "distinct_sample_count": 708605,
+      "independent_lineage_count": 4,
+      "observation_count": 3783544,
       "source_ids": [
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 504797
+      "valid_coordinate_sample_count": 708605
     }
   },
   "medium_elements": {
@@ -362,92 +363,112 @@
       "valid_coordinate_sample_count": 18313
     },
     "water|As": {
-      "comparable_observation_count": 44093,
+      "comparable_observation_count": 44282,
       "covered_spatial_cells": 1219,
-      "distinct_sample_count": 486480,
+      "distinct_sample_count": 458213,
       "element": "As",
+      "independent_lineage_count": 3,
+      "medium": "water",
+      "observation_count": 493996,
+      "source_ids": [
+        "foregs-stream-water",
+        "gemstat-open-archive",
+        "us-wqp-sacramento-river-arsenic"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 458213
+    },
+    "water|Cr": {
+      "comparable_observation_count": 47456,
+      "covered_spatial_cells": 1187,
+      "distinct_sample_count": 494384,
+      "element": "Cr",
       "independent_lineage_count": 2,
       "medium": "water",
-      "observation_count": 493807,
+      "observation_count": 538569,
       "source_ids": [
         "foregs-stream-water",
         "gemstat-open-archive"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 486480
-    },
-    "water|Cr": {
-      "comparable_observation_count": 808,
-      "covered_spatial_cells": 489,
-      "distinct_sample_count": 808,
-      "element": "Cr",
-      "independent_lineage_count": 1,
-      "medium": "water",
-      "observation_count": 808,
-      "source_ids": [
-        "foregs-stream-water"
-      ],
-      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 808
+      "valid_coordinate_sample_count": 494384
     },
     "water|Cu": {
-      "comparable_observation_count": 808,
-      "covered_spatial_cells": 975,
-      "distinct_sample_count": 7057,
+      "comparable_observation_count": 51377,
+      "covered_spatial_cells": 1661,
+      "distinct_sample_count": 425125,
       "element": "Cu",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 3,
       "medium": "water",
-      "observation_count": 7083,
+      "observation_count": 467612,
       "source_ids": [
         "foregs-stream-water",
+        "gemstat-open-archive",
         "geotraces-idp2025"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 7057
+      "valid_coordinate_sample_count": 425125
     },
-    "water|Ni": {
-      "comparable_observation_count": 808,
-      "covered_spatial_cells": 1553,
-      "distinct_sample_count": 17071,
-      "element": "Ni",
-      "independent_lineage_count": 2,
-      "medium": "water",
-      "observation_count": 17843,
-      "source_ids": [
-        "foregs-stream-water",
-        "geotraces-idp2025"
-      ],
-      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 17071
-    },
-    "water|Pb": {
-      "comparable_observation_count": 808,
-      "covered_spatial_cells": 489,
-      "distinct_sample_count": 808,
-      "element": "Pb",
+    "water|Hg": {
+      "comparable_observation_count": 2229,
+      "covered_spatial_cells": 903,
+      "distinct_sample_count": 486882,
+      "element": "Hg",
       "independent_lineage_count": 1,
       "medium": "water",
-      "observation_count": 808,
+      "observation_count": 517471,
       "source_ids": [
-        "foregs-stream-water"
+        "gemstat-open-archive"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 808
+      "valid_coordinate_sample_count": 486882
     },
-    "water|Zn": {
-      "comparable_observation_count": 808,
-      "covered_spatial_cells": 1398,
-      "distinct_sample_count": 16034,
-      "element": "Zn",
-      "independent_lineage_count": 2,
+    "water|Ni": {
+      "comparable_observation_count": 58108,
+      "covered_spatial_cells": 2244,
+      "distinct_sample_count": 610877,
+      "element": "Ni",
+      "independent_lineage_count": 3,
       "medium": "water",
-      "observation_count": 16825,
+      "observation_count": 656390,
       "source_ids": [
         "foregs-stream-water",
+        "gemstat-open-archive",
         "geotraces-idp2025"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 16034
+      "valid_coordinate_sample_count": 610877
+    },
+    "water|Pb": {
+      "comparable_observation_count": 47911,
+      "covered_spatial_cells": 1266,
+      "distinct_sample_count": 611042,
+      "element": "Pb",
+      "independent_lineage_count": 2,
+      "medium": "water",
+      "observation_count": 655477,
+      "source_ids": [
+        "foregs-stream-water",
+        "gemstat-open-archive"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 611042
+    },
+    "water|Zn": {
+      "comparable_observation_count": 55153,
+      "covered_spatial_cells": 2089,
+      "distinct_sample_count": 410190,
+      "element": "Zn",
+      "independent_lineage_count": 3,
+      "medium": "water",
+      "observation_count": 454029,
+      "source_ids": [
+        "foregs-stream-water",
+        "gemstat-open-archive",
+        "geotraces-idp2025"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 410190
     }
   }
 }

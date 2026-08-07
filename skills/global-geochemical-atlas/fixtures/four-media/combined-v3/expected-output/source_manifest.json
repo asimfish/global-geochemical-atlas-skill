@@ -4,25 +4,25 @@
     "confidence_version": "d2-confidence-v1",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "edcd1d2456322b73ec80fd81a2a3230082acf3b8ae6cdd938c1ec455701d66f8",
+    "input_sha256": "effec52383c77e6031f976c9aab077bc40f109d4c632c9f715dc77af91c32838",
     "not_a_probability": true,
-    "run_id": "8a00ff9d70115206",
-    "sha256": "f06552d55be38ef2218d07b0cd1502c8a12f611022b44ee1ba23ca09b68d4dee"
+    "run_id": "093e2caaae29eea5",
+    "sha256": "b3049dd7ed1da04f69af851d93af540d4850f6a0661d6853fa0473ee8e83d207"
   },
   "coverage": {
     "declared_license_rate": 1.0,
-    "records_with_declared_license": 736,
-    "records_with_source_locator": 736,
+    "records_with_declared_license": 792,
+    "records_with_source_locator": 792,
     "source_locator_rate": 1.0
   },
   "input": {
-    "bytes": 770930,
+    "bytes": 851251,
     "filename": "demo_input.csv",
-    "record_count": 736,
-    "sha256": "edcd1d2456322b73ec80fd81a2a3230082acf3b8ae6cdd938c1ec455701d66f8"
+    "record_count": 792,
+    "sha256": "effec52383c77e6031f976c9aab077bc40f109d4c632c9f715dc77af91c32838"
   },
   "manifest_version": "geochemical-source-manifest-v1",
-  "source_count": 14,
+  "source_count": 15,
   "sources": [
     {
       "all_records_license_declared": true,
@@ -190,19 +190,19 @@
       "all_records_located": true,
       "evidence_type": "source_declared_in_input",
       "example_locators": [
-        "Arsenic.csv#row=25632",
-        "Arsenic.csv#row=25633",
-        "Arsenic.csv#row=25634",
-        "Arsenic.csv#row=25635",
-        "Arsenic.csv#row=25636"
+        "Arsenic.csv#row=26008",
+        "Arsenic.csv#row=26052",
+        "Arsenic.csv#row=26290",
+        "Arsenic.csv#row=28756",
+        "Arsenic.csv#row=28757"
       ],
       "license_review": "verify_source_terms",
       "licenses": [
         "CC-BY-4.0"
       ],
-      "located_record_count": 48,
-      "locator_count": 48,
-      "record_count": 48,
+      "located_record_count": 56,
+      "locator_count": 56,
+      "record_count": 56,
       "source_id": "gemstat-open-archive",
       "source_tiers": [
         "official_curated"
@@ -321,6 +321,29 @@
       "source_id": "pangaea-north-africa-soil",
       "source_tiers": [
         "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "results.csv#row=10",
+        "results.csv#row=102",
+        "results.csv#row=106",
+        "results.csv#row=110",
+        "results.csv#row=114"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-USGS-Public-Domain"
+      ],
+      "located_record_count": 48,
+      "locator_count": 48,
+      "record_count": 48,
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "source_tiers": [
+        "government"
       ]
     },
     {

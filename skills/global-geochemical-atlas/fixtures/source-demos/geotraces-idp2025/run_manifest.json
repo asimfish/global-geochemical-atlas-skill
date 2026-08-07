@@ -16,14 +16,14 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 51751,
+      "bytes": 65415,
       "path": "demo_input.csv",
-      "sha256": "3494e80f1701074dd7cd5d75a7db182031eb1855806d08cab82e9a61b5a9fe8a"
+      "sha256": "ea9dded49287187a7a3f1349f657083a282a7048b89a985602d68625ee70b3ab"
     },
     {
-      "bytes": 84339,
+      "bytes": 142243,
       "path": "sources.jsonl",
-      "sha256": "9c17eb16f44005aba88da55daaf0108986a6075e408d0bf74ae205e6102de163"
+      "sha256": "4b8b52938ffd41ad276d4870beb6fcccbe3fe00ad6cb9b2fd082cea0fc1ba0ee"
     }
   ],
   "record_counts": {
@@ -52,6 +52,7 @@
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
     "GEOTRACES IDP2025 seawater has no arsenic variable; a separate water source is required for As.",
     "Values remain in nmol/kg because mass-per-volume conversion requires explicit atomic-mass and seawater-density assumptions.",
     "Only SeaDataNet QC 1 and 2 values are included in this demo; all source flags remain available in the raw adapter."

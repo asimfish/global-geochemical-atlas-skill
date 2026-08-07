@@ -12,9 +12,9 @@
     },
     "analytical_method": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 17073,
+      "non_empty": 22254,
+      "rate": 0.565871
     },
     "citation_resolution_status": {
       "denominator": 39327,
@@ -102,15 +102,15 @@
     },
     "measurement_basis": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 0,
+      "non_empty": 39327,
+      "rate": 1.0
     },
     "method_assignment_basis": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 17073,
+      "non_empty": 22254,
+      "rate": 0.565871
     },
     "method_or_missing_reason": {
       "denominator": 39327,
@@ -120,9 +120,9 @@
     },
     "method_scope": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 17073,
+      "non_empty": 22254,
+      "rate": 0.565871
     },
     "research_use_status": {
       "denominator": 39327,

@@ -10,8 +10,11 @@
     "coverage_claim": "Observed sample locations only; blank regions are not inferred as absence.",
     "elements": [
       "As",
+      "Cr",
       "Cu",
+      "Hg",
       "Ni",
+      "Pb",
       "Zn"
     ],
     "interpolation": false,
@@ -21,32 +24,33 @@
       "soil",
       "water"
     ],
-    "standardization_rate": 1.0
+    "standardization_rate": 0.989899
   },
   "input": {
     "filename": "demo_input.csv",
-    "record_count": 736,
-    "sha256": "edcd1d2456322b73ec80fd81a2a3230082acf3b8ae6cdd938c1ec455701d66f8",
+    "record_count": 792,
+    "sha256": "effec52383c77e6031f976c9aab077bc40f109d4c632c9f715dc77af91c32838",
     "synthetic_demo": false
   },
   "limitations": [
     "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
     "Map density uses observed points only; no interpolation is performed across unsampled areas.",
-    "63 anomaly background group(s) were not analyzed due to explicit failure states."
+    "Some records have error-level QC flags and are capped at low operational confidence.",
+    "80 anomaly background group(s) were not analyzed due to explicit failure states."
   ],
   "map_report": {
-    "candidate_record_count": 11,
+    "candidate_record_count": 12,
     "external_assets": 0,
     "interpolation": false,
     "map_version": "self-contained-svg-v1",
-    "mapped_record_count": 736
+    "mapped_record_count": 792
   },
   "metrics": {
-    "candidate_anomaly_count": 11,
-    "censored_record_count": 20,
-    "record_count": 736,
-    "standardized_record_count": 736,
-    "valid_coordinate_count": 736
+    "candidate_anomaly_count": 12,
+    "censored_record_count": 57,
+    "record_count": 792,
+    "standardized_record_count": 784,
+    "valid_coordinate_count": 792
   },
   "next_actions": [
     "Inspect source_manifest.json and record-level source locators before scientific reuse.",

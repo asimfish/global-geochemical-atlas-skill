@@ -1,14 +1,14 @@
 {
   "artifacts": [
     {
-      "bytes": 14471,
+      "bytes": 15209,
       "path": "assets/v4-coverage-balance.json",
-      "sha256": "c2e0ea428419b15e3f0157cd1db4cc870a0733275b0035dc10ccb8975130fc8d"
+      "sha256": "e295d08d579607f21632583f10f83ee303e2e74325d1ffb244c50f0585cbe36e"
     },
     {
-      "bytes": 1264579,
+      "bytes": 1455542,
       "path": "assets/v4-coverage-cube.csv",
-      "sha256": "4ede955fc24b725b44e8b1d3772743a542ac8e460332bfd5000aff785cfd5f5e"
+      "sha256": "7c0411f87bef57a07110f69f2466653cd690ba7b0675f88fd37ec8bf31eec7b0"
     },
     {
       "bytes": 2057,
@@ -291,44 +291,44 @@
       "sha256": "772a38eff052ae2f318a8e8f4d7ade704e66121870ba7ed7cf190bbb9a023b32"
     },
     {
-      "bytes": 2479,
+      "bytes": 3877,
       "path": "assets/v4-full-profiles/gemstat-open-archive/automation_health.json",
-      "sha256": "5813431a27729f6fd378a452761e0e6c2ad0021516c0b284aeee4e120d97e17a"
+      "sha256": "459060e15bc6b9c9ff0ef6969bc5ab5460283d9771707666dc8b8e273a000252"
     },
     {
-      "bytes": 684,
+      "bytes": 687,
       "path": "assets/v4-full-profiles/gemstat-open-archive/citation_coverage.json",
-      "sha256": "40e7d87b03fc07f85aa8ad2f9e8d39e626778e6f757a7d5e5b455e8b9d7932e0"
+      "sha256": "c059d7796704b035960ce05380cb860226e157cd2e925def536b79bf0eb997ec"
     },
     {
-      "bytes": 4919,
+      "bytes": 4991,
       "path": "assets/v4-full-profiles/gemstat-open-archive/field_completeness.json",
-      "sha256": "b17c541c469f18b13ce21fc1abcf6e71cc1a776544ebfee2019bdf887573a93e"
+      "sha256": "a55b36de615b221e61bdd5f8067f8b1443d2ae83a66305ce6be5d5f3260504ca"
     },
     {
-      "bytes": 622,
+      "bytes": 623,
       "path": "assets/v4-full-profiles/gemstat-open-archive/geology_coverage.json",
-      "sha256": "ca4959c490edd40ae22806269a4dc646fcaca2780ef1929676634138f6dd6a1d"
+      "sha256": "3fa252ca73bf2ace52021642be4238b8b72503c8371f37f0aa8dc59b42fb545a"
     },
     {
-      "bytes": 2520,
+      "bytes": 4910,
       "path": "assets/v4-full-profiles/gemstat-open-archive/method_completeness.json",
-      "sha256": "a2cc0a00468ea54596eedb41f6ca07d90b2b62c3230d873d1c34411e1113c101"
+      "sha256": "669958478325dae451b1d8c2e6d8d3763c3958d097780a14b25e6dc80c79c790"
     },
     {
-      "bytes": 892,
+      "bytes": 930,
       "path": "assets/v4-full-profiles/gemstat-open-archive/sample_type_coverage.json",
-      "sha256": "ffd09d22edbb5ddf137d9e9cdd711a818df7d060195402f903f8f7f0689e65a5"
+      "sha256": "90e970c135c6c5bdeac94458507970614d286661ab0a760fbfcae84aebe0022a"
     },
     {
-      "bytes": 18761,
+      "bytes": 20185,
       "path": "assets/v4-full-profiles/gemstat-open-archive/spatial_coverage.json",
-      "sha256": "ece235a4a6dc43b297c813b32214a48f299a175f8c2c3420347ced70aea7b45e"
+      "sha256": "cfe41dc50271254617831fb810b6a11cc237568d217cca8b768f9d1a4f01f62c"
     },
     {
-      "bytes": 820,
+      "bytes": 824,
       "path": "assets/v4-full-profiles/gemstat-open-archive/usage_rights_coverage.json",
-      "sha256": "e4c5b1e3c16f8d45303c25aa0ea88e1c10353f34f3c33691e508649e44010120"
+      "sha256": "186cd6609aba191bf63386acee259d0bfbfd19576e4d8bfba896bb037b5a159e"
     },
     {
       "bytes": 8053,
@@ -381,9 +381,9 @@
       "sha256": "c813d6472997d5357461735c7e0536b07cda682c15a3400ab80d5c5e5e7f7738"
     },
     {
-      "bytes": 4825,
+      "bytes": 4852,
       "path": "assets/v4-full-profiles/geotraces-idp2025/field_completeness.json",
-      "sha256": "014522a04c0073fa87725117e849322813ee6297041b8577f3f450d5bcd594b0"
+      "sha256": "b4108dc4aec520a6e376cd4428aa0a856ac9fd96d6e9722afb905290128cac90"
     },
     {
       "bytes": 623,
@@ -391,9 +391,9 @@
       "sha256": "c7c97f8cc3e48e7fe13e4f2366ff5bd692fc87c6a0255a10342d4bb07e0c50ee"
     },
     {
-      "bytes": 534,
+      "bytes": 2778,
       "path": "assets/v4-full-profiles/geotraces-idp2025/method_completeness.json",
-      "sha256": "0d246620a0e384135537ac75584c2c0216442f4e0c49d6f17011827a48f74b3f"
+      "sha256": "cf9c54e47394121e11d9c8b07ecd5a70a12a53c6b40b9caf96869fabc0a7926f"
     },
     {
       "bytes": 647,
@@ -531,6 +531,46 @@
       "sha256": "1edd3cb3b6e7db3d862e9618f857d98f8cad1dcacad252346f2f33e7433a54fa"
     },
     {
+      "bytes": 1758,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/automation_health.json",
+      "sha256": "994d1f6ad4f893effd621273f70000478eb88596cc7e9ba0ba2e09110ba0b2be"
+    },
+    {
+      "bytes": 695,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/citation_coverage.json",
+      "sha256": "0558ea6d7445b2a60121775ba82cf5e26f50ca1e62f75c6a2461e64b5f2d101a"
+    },
+    {
+      "bytes": 4721,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/field_completeness.json",
+      "sha256": "af6dbf75a635c0e9a9855a7116d19f36fb4142ea6b72febd8d8add62290e18f8"
+    },
+    {
+      "bytes": 655,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/geology_coverage.json",
+      "sha256": "644d0e2101379c92b125c9a7d6271c27d060ce4645fbc767c16cb616094cf293"
+    },
+    {
+      "bytes": 608,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/method_completeness.json",
+      "sha256": "ee81cfbfea1b09beb3dadd393d543190da793556301ff2e36c09e52158504586"
+    },
+    {
+      "bytes": 667,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/sample_type_coverage.json",
+      "sha256": "4419cf1e1e74462e64ebdf7bb1325ea46a674fbf9497a712954a071b00098933"
+    },
+    {
+      "bytes": 970,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/spatial_coverage.json",
+      "sha256": "293fba4cb22098ff73f2e07679b189f7206ee8b2b0c9e1983f2932082534744a"
+    },
+    {
+      "bytes": 902,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/usage_rights_coverage.json",
+      "sha256": "c0900e416bb767537174314f9ca733f63d5fa74e417715d79ccdab05529105ef"
+    },
+    {
       "bytes": 2037,
       "path": "assets/v4-full-profiles/usgs-conus-soil/automation_health.json",
       "sha256": "8692b07929fbba51c59a52a20f529f0b4105bed811bfb4754e5ce4cae02bc3dd"
@@ -571,18 +611,18 @@
       "sha256": "1a5fb5b14263ef980011961945064342d6de83bd2dc9171f64f120d2a57ec9ee"
     },
     {
-      "bytes": 2651,
+      "bytes": 2748,
       "path": "references/v4-full-population-profile.md",
-      "sha256": "6af7089488eabee70de5ecfad3a55aeac9f26ccf1b2b081aba01336f1ade1312"
+      "sha256": "2c336e4d44def2c131b2d5814551970beedeb27cdefce272c66cf1b308b23e74"
     }
   ],
   "as_of": "2026-08-06T10:05:00Z",
-  "comparable_observation_count": 105279,
-  "coverage_cube_rows": 5773,
+  "comparable_observation_count": 363662,
+  "coverage_cube_rows": 6651,
   "coverage_cube_version": "d1-v4-coverage-cube-v1",
-  "covered_spatial_cells_source_sum": 6481,
+  "covered_spatial_cells_source_sum": 6564,
   "denominator_definition": "all non-empty registered target observations parsed from verified full caches",
-  "distinct_sample_count": 554429,
+  "distinct_sample_count": 758237,
   "media": {
     "rock": {
       "comparable_observation_count": 0,
@@ -629,24 +669,25 @@
       "valid_coordinate_sample_count": 18343
     },
     "water": {
-      "comparable_observation_count": 48133,
-      "covered_spatial_cells": 2370,
-      "distinct_sample_count": 504797,
-      "independent_lineage_count": 3,
-      "observation_count": 537174,
+      "comparable_observation_count": 306516,
+      "covered_spatial_cells": 2440,
+      "distinct_sample_count": 708605,
+      "independent_lineage_count": 4,
+      "observation_count": 3783544,
       "source_ids": [
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 504797
+      "valid_coordinate_sample_count": 708605
     }
   },
-  "observation_count": 742060,
+  "observation_count": 3988430,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "registered_source_count": 14,
-  "source_count": 14,
+  "registered_source_count": 15,
+  "source_count": 15,
   "sources": [
     {
       "comparable_observation_count": 11256,
@@ -719,14 +760,14 @@
       "valid_coordinate_sample_count": 862
     },
     {
-      "comparable_observation_count": 43285,
-      "covered_spatial_cells": 1071,
-      "distinct_sample_count": 485672,
+      "comparable_observation_count": 279225,
+      "covered_spatial_cells": 1153,
+      "distinct_sample_count": 689291,
       "medium": "water",
-      "method_rate": 0.087799,
-      "observation_count": 492999,
+      "method_rate": 0.074675,
+      "observation_count": 3739180,
       "source_id": "gemstat-open-archive",
-      "valid_coordinate_sample_count": 485672
+      "valid_coordinate_sample_count": 689291
     },
     {
       "comparable_observation_count": 0,
@@ -739,11 +780,11 @@
       "valid_coordinate_sample_count": 20866
     },
     {
-      "comparable_observation_count": 0,
+      "comparable_observation_count": 22254,
       "covered_spatial_cells": 1166,
       "distinct_sample_count": 18317,
       "medium": "water",
-      "method_rate": 0.0,
+      "method_rate": 0.565871,
       "observation_count": 39327,
       "source_id": "geotraces-idp2025",
       "valid_coordinate_sample_count": 18317
@@ -779,6 +820,16 @@
       "valid_coordinate_sample_count": 43
     },
     {
+      "comparable_observation_count": 189,
+      "covered_spatial_cells": 1,
+      "distinct_sample_count": 189,
+      "medium": "water",
+      "method_rate": 1.0,
+      "observation_count": 189,
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "valid_coordinate_sample_count": 189
+    },
+    {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 884,
       "distinct_sample_count": 14380,
@@ -789,5 +840,5 @@
       "valid_coordinate_sample_count": 14380
     }
   ],
-  "valid_coordinate_sample_count": 549510
+  "valid_coordinate_sample_count": 753318
 }

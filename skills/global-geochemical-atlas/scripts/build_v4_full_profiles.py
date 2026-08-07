@@ -16,6 +16,7 @@ import json
 import math
 import os
 import re
+import sqlite3
 import tempfile
 import zipfile
 from collections import Counter, defaultdict
@@ -200,7 +201,6 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
                 _text(fields.get("Sample Date")),
                 _text(fields.get("Sample Time")),
                 _text(fields.get("Depth")),
-                _text(fields.get("Parameter Code")),
             )
         )
         return (
@@ -250,6 +250,16 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             _text(fields.get("Longitude")),
             _text(fields.get("_source_crs")),
         )
+    if source_id == "us-wqp-sacramento-river-arsenic":
+        station = fields.get("_station_metadata")
+        station = station if isinstance(station, Mapping) else {}
+        return (
+            _text(fields.get("ActivityIdentifier")),
+            "California / Sacramento River at Freeport",
+            _text(station.get("LatitudeMeasure")),
+            _text(station.get("LongitudeMeasure")),
+            _text(station.get("HorizontalCoordinateReferenceSystemDatumName")) or "NAD83",
+        )
     raise FullProfileError(f"no sample/place mapping for {source_id}")
 
 
@@ -293,13 +303,13 @@ def _target_values(
     if source_id == "gemstat-open-archive":
         raw = _text(fields.get("Value"))
         if raw:
-            yield "As", _text(fields.get("Parameter Code")), raw, {
+            unit = _text(fields.get("Unit"))
+            unit_basis = unit.lower().replace("µ", "u").replace("/", "_per_").replace(" ", "_")
+            element = _text(fields.get("_element"))
+            fraction = _text(fields.get("_water_fraction"))
+            yield element, _text(fields.get("Parameter Code")), raw, {
                 "unit": _text(fields.get("Unit")),
-                "measurement_basis": {
-                    "As-Dis": "dissolved_freshwater",
-                    "As-Sus": "suspended_freshwater",
-                    "As-Tot": "total_freshwater",
-                }.get(_text(fields.get("Parameter Code")), ""),
+                "measurement_basis": f"freshwater_{fraction}_operational_fraction_{unit_basis}",
             }
         return
     targets = registry_entry.get("target_analytes")
@@ -406,7 +416,13 @@ def _observation(
         "latitude": latitude,
         "longitude": longitude,
         "source_crs": source_crs,
-        "coordinate_uncertainty_m": "20" if source_id == "japan-gsj-geochemical-map" else "",
+        "coordinate_uncertainty_m": (
+            "20"
+            if source_id == "japan-gsj-geochemical-map"
+            else "15"
+            if source_id == "us-wqp-sacramento-river-arsenic"
+            else ""
+        ),
         "analytical_method": method,
         "license": _text((registry_entry.get("license") or {}).get("spdx")),
         "grain_fraction": _text(raw.fields.get("_grain_fraction")),
@@ -529,108 +545,238 @@ def _profile_one(
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     files, drift = _downloaded_files(source_id, registry_entry, cache_root)
     adapter = source_adapters.get_adapter(source_id)
-    observations: list[Observation] = []
     parsed_records = 0
+    observation_count = 0
     raw_schema_keys: set[str] = set()
+    field_non_empty: Counter[str] = Counter()
+    method_scopes: Counter[str] = Counter()
+    methods: Counter[str] = Counter()
+    sample_types: Counter[str] = Counter()
+    media: Counter[str] = Counter()
+    water_types: Counter[str] = Counter()
+    water_fractions: Counter[str] = Counter()
+    sediment_environments: Counter[str] = Counter()
+    geology: Counter[str] = Counter()
+    citations: Counter[str] = Counter()
+    elements: Counter[str] = Counter()
+    comparable_count = 0
+    region_counts: Counter[str] = Counter()
+    source_crs_counts: Counter[str] = Counter()
+    uncertainty_counts: Counter[str] = Counter()
+    access_status_counts: Counter[str] = Counter()
+    research_use_status_counts: Counter[str] = Counter()
+    attribution_required_counts: Counter[str] = Counter()
+    redistribution_status_counts: Counter[str] = Counter()
+    publication_doi_count = 0
+    upstream_primary_source_count = 0
+    spatial_cells: set[str] = set()
+    element_cells: dict[str, set[str]] = defaultdict(set)
+    element_comparable: Counter[str] = Counter()
+    bbox: list[float] | None = None
+    cube: dict[tuple[str, ...], dict[str, Any]] = {}
+
+    # Distinct sample counts are exact but disk-backed.  This keeps the 3.7M-row
+    # GEMStat profile bounded in memory while preserving sample-level deduplication.
+    distinct_db = sqlite3.connect("")
+    distinct_db.executescript(
+        """
+        PRAGMA journal_mode=OFF;
+        PRAGMA synchronous=OFF;
+        PRAGMA temp_store=MEMORY;
+        CREATE TABLE samples(sample_id TEXT PRIMARY KEY, has_coordinate INTEGER NOT NULL) WITHOUT ROWID;
+        CREATE TABLE element_samples(
+            element TEXT NOT NULL,
+            sample_id TEXT NOT NULL,
+            has_coordinate INTEGER NOT NULL,
+            PRIMARY KEY(element, sample_id)
+        ) WITHOUT ROWID;
+        CREATE TABLE cube_samples(
+            cube_id INTEGER NOT NULL,
+            sample_id TEXT NOT NULL,
+            has_coordinate INTEGER NOT NULL,
+            PRIMARY KEY(cube_id, sample_id)
+        ) WITHOUT ROWID;
+        """
+    )
+    sample_batch: list[tuple[str, int]] = []
+    element_sample_batch: list[tuple[str, str, int]] = []
+    cube_sample_batch: list[tuple[int, str, int]] = []
+
+    def flush_distinct_batches() -> None:
+        if not sample_batch:
+            return
+        distinct_db.executemany(
+            "INSERT INTO samples VALUES (?, ?) ON CONFLICT(sample_id) DO UPDATE SET "
+            "has_coordinate=MAX(has_coordinate, excluded.has_coordinate)",
+            sample_batch,
+        )
+        distinct_db.executemany(
+            "INSERT INTO element_samples VALUES (?, ?, ?) ON CONFLICT(element, sample_id) DO UPDATE SET "
+            "has_coordinate=MAX(has_coordinate, excluded.has_coordinate)",
+            element_sample_batch,
+        )
+        distinct_db.executemany(
+            "INSERT INTO cube_samples VALUES (?, ?, ?) ON CONFLICT(cube_id, sample_id) DO UPDATE SET "
+            "has_coordinate=MAX(has_coordinate, excluded.has_coordinate)",
+            cube_sample_batch,
+        )
+        sample_batch.clear()
+        element_sample_batch.clear()
+        cube_sample_batch.clear()
+
     for raw in adapter.parse(files):
         parsed_records += 1
         raw_schema_keys.update(str(key) for key in raw.fields)
         for ordinal, (analyte, field_name, value, values) in enumerate(
             _target_values(source_id, raw.fields, registry_entry)
         ):
-            observations.append(
-                _observation(
-                    source_id,
-                    raw,
-                    registry_entry,
-                    registry_verified_at,
-                    analyte,
-                    field_name,
-                    value,
-                    values,
-                    ordinal,
-                )
+            item = _observation(
+                source_id,
+                raw,
+                registry_entry,
+                registry_verified_at,
+                analyte,
+                field_name,
+                value,
+                values,
+                ordinal,
             )
-    if not observations:
+            observation_count += 1
+            row = item.row
+            for field in PROFILE_FIELDS:
+                if field == "coordinate_pair":
+                    present = bool(item.spatial_cell)
+                elif field == "method_or_missing_reason":
+                    present = bool(_text(row.get("analytical_method")) or _text(row.get("method_missing_reason")))
+                else:
+                    present = bool(_text(row.get(field)))
+                if present:
+                    field_non_empty[field] += 1
+            method_scopes[_text(row.get("method_scope")) or "missing"] += 1
+            methods[_text(row.get("analytical_method")) or "missing"] += 1
+            sample_types[_text(row.get("sample_type")) or "missing"] += 1
+            media[_text(row.get("medium")) or "missing"] += 1
+            water_types[_text(row.get("water_body_type")) or "not_applicable"] += 1
+            water_fractions[_text(row.get("water_fraction")) or "not_applicable"] += 1
+            sediment_environments[_text(row.get("sediment_environment")) or "not_applicable"] += 1
+            for field in (
+                "lithology_raw",
+                "geologic_age_raw",
+                "tectonic_setting_raw",
+                "geologic_unit_raw",
+                "matched_geologic_unit",
+            ):
+                if _text(row.get(field)):
+                    geology[field] += 1
+            citations[_text(row.get("citation_scope")) or "missing"] += 1
+            element = _text(row.get("element_or_analyte"))
+            elements[element] += 1
+            if item.comparable:
+                comparable_count += 1
+                element_comparable[element] += 1
+            region_counts[item.region] += 1
+            source_crs_counts[_text(row.get("source_crs")) or "not_reported"] += 1
+            uncertainty_counts[_text(row.get("coordinate_uncertainty_m")) or "not_reported"] += 1
+            access_status_counts[_text(row.get("access_status"))] += 1
+            research_use_status_counts[_text(row.get("research_use_status"))] += 1
+            attribution_required_counts[_text(row.get("attribution_required"))] += 1
+            redistribution_status_counts[_text(row.get("redistribution_status"))] += 1
+            publication_doi_count += bool(_text(row.get("publication_doi")))
+            upstream_primary_source_count += bool(_text(row.get("upstream_primary_source_id")))
+            if item.spatial_cell:
+                spatial_cells.add(item.spatial_cell)
+                element_cells[element].add(item.spatial_cell)
+                latitude = _numeric(row.get("latitude"))
+                longitude = _numeric(row.get("longitude"))
+                if latitude is not None and longitude is not None:
+                    if bbox is None:
+                        bbox = [longitude, latitude, longitude, latitude]
+                    else:
+                        bbox = [
+                            min(bbox[0], longitude),
+                            min(bbox[1], latitude),
+                            max(bbox[2], longitude),
+                            max(bbox[3], latitude),
+                        ]
+
+            cube_key = (
+                source_id,
+                _text(row.get("medium")) or "missing",
+                element or "missing",
+                _text(row.get("sample_type")) or "missing",
+                _text(row.get("method_scope")) or "missing",
+                item.region,
+                _text(row.get("measurement_basis")) or "missing",
+            )
+            cube_cell = cube.get(cube_key)
+            if cube_cell is None:
+                cube_cell = {
+                    "cube_id": len(cube),
+                    "observation_count": 0,
+                    "comparable": 0,
+                    "cells": set(),
+                }
+                cube[cube_key] = cube_cell
+            cube_cell["observation_count"] += 1
+            cube_cell["comparable"] += item.comparable
+            if item.spatial_cell:
+                cube_cell["cells"].add(item.spatial_cell)
+            if item.sample_id:
+                has_coordinate = int(bool(item.spatial_cell))
+                sample_batch.append((item.sample_id, has_coordinate))
+                element_sample_batch.append((element, item.sample_id, has_coordinate))
+                cube_sample_batch.append((cube_cell["cube_id"], item.sample_id, has_coordinate))
+                if len(sample_batch) >= 25_000:
+                    flush_distinct_batches()
+    flush_distinct_batches()
+    distinct_db.commit()
+    if not observation_count:
         raise FullProfileError(f"{source_id} produced no target observations")
 
-    fields = _field_profile(observations)
-    method_scopes = Counter(_text(item.row.get("method_scope")) or "missing" for item in observations)
-    methods = Counter(_text(item.row.get("analytical_method")) or "missing" for item in observations)
-    sample_types = Counter(_text(item.row.get("sample_type")) or "missing" for item in observations)
-    media = Counter(_text(item.row.get("medium")) or "missing" for item in observations)
-    water_types = Counter(_text(item.row.get("water_body_type")) or "not_applicable" for item in observations)
-    water_fractions = Counter(_text(item.row.get("water_fraction")) or "not_applicable" for item in observations)
-    sediment_environments = Counter(
-        _text(item.row.get("sediment_environment")) or "not_applicable" for item in observations
-    )
-    geology = {
-        field: sum(bool(_text(item.row.get(field))) for item in observations)
-        for field in (
-            "lithology_raw",
-            "geologic_age_raw",
-            "tectonic_setting_raw",
-            "geologic_unit_raw",
-            "matched_geologic_unit",
+    fields = {
+        "profile_scope": "full_population",
+        "denominator_definition": "all non-empty target-analyte observations emitted by the verified source adapter",
+        "observation_count": observation_count,
+        "fields": {
+            field: {
+                "non_empty": field_non_empty[field],
+                "missing": observation_count - field_non_empty[field],
+                "denominator": observation_count,
+                "rate": round(field_non_empty[field] / observation_count, 6),
+            }
+            for field in PROFILE_FIELDS
+        },
+    }
+    distinct_sample_count, coordinate_sample_count = distinct_db.execute(
+        "SELECT COUNT(*), COALESCE(SUM(has_coordinate), 0) FROM samples"
+    ).fetchone()
+    element_sample_counts = {
+        element: (count, coordinates)
+        for element, count, coordinates in distinct_db.execute(
+            "SELECT element, COUNT(*), COALESCE(SUM(has_coordinate), 0) FROM element_samples GROUP BY element"
         )
     }
-    citations = Counter(_text(item.row.get("citation_scope")) or "missing" for item in observations)
-    distinct_samples = {item.sample_id for item in observations if item.sample_id}
-    coordinate_samples = {item.sample_id for item in observations if item.sample_id and item.spatial_cell}
-    spatial_cells = {item.spatial_cell for item in observations if item.spatial_cell}
-    elements = Counter(_text(item.row.get("element_or_analyte")) for item in observations)
-    comparable_count = sum(item.comparable for item in observations)
-    region_counts = Counter(item.region for item in observations)
-    source_crs_counts = Counter(_text(item.row.get("source_crs")) or "not_reported" for item in observations)
-    uncertainty_counts = Counter(
-        _text(item.row.get("coordinate_uncertainty_m")) or "not_reported" for item in observations
-    )
-    coordinate_pairs = [
-        (_numeric(item.row.get("latitude")), _numeric(item.row.get("longitude")))
-        for item in observations
-        if item.spatial_cell
-    ]
+    cube_sample_counts = {
+        cube_id: (count, coordinates)
+        for cube_id, count, coordinates in distinct_db.execute(
+            "SELECT cube_id, COUNT(*), COALESCE(SUM(has_coordinate), 0) FROM cube_samples GROUP BY cube_id"
+        )
+    }
     element_details: dict[str, dict[str, Any]] = {}
     for element in sorted(elements):
-        selected = [item for item in observations if _text(item.row.get("element_or_analyte")) == element]
+        sample_count, coordinate_count = element_sample_counts.get(element, (0, 0))
         element_details[element] = {
-            "observation_count": len(selected),
-            "distinct_sample_count": len({item.sample_id for item in selected if item.sample_id}),
-            "valid_coordinate_sample_count": len(
-                {item.sample_id for item in selected if item.sample_id and item.spatial_cell}
-            ),
-            "comparable_observation_count": sum(item.comparable for item in selected),
-            "covered_spatial_cells": len({item.spatial_cell for item in selected if item.spatial_cell}),
-            "spatial_cell_ids": sorted({item.spatial_cell for item in selected if item.spatial_cell}),
+            "observation_count": elements[element],
+            "distinct_sample_count": sample_count,
+            "valid_coordinate_sample_count": coordinate_count,
+            "comparable_observation_count": element_comparable[element],
+            "covered_spatial_cells": len(element_cells[element]),
+            "spatial_cell_ids": sorted(element_cells[element]),
         }
 
-    cube: dict[tuple[str, ...], dict[str, Any]] = {}
-    for item in observations:
-        row = item.row
-        key = (
-            source_id,
-            _text(row.get("medium")) or "missing",
-            _text(row.get("element_or_analyte")) or "missing",
-            _text(row.get("sample_type")) or "missing",
-            _text(row.get("method_scope")) or "missing",
-            item.region,
-            _text(row.get("measurement_basis")) or "missing",
-        )
-        cell = cube.setdefault(
-            key,
-            {"observation_count": 0, "samples": set(), "coordinate_samples": set(), "comparable": 0, "cells": set()},
-        )
-        cell["observation_count"] += 1
-        if item.sample_id:
-            cell["samples"].add(item.sample_id)
-            if item.spatial_cell:
-                cell["coordinate_samples"].add(item.sample_id)
-        if item.comparable:
-            cell["comparable"] += 1
-        if item.spatial_cell:
-            cell["cells"].add(item.spatial_cell)
     cube_rows = []
     for key, value in sorted(cube.items()):
+        cube_sample_count, cube_coordinate_count = cube_sample_counts.get(value["cube_id"], (0, 0))
         cube_rows.append(
             {
                 "cube_version": CUBE_VERSION,
@@ -642,27 +788,28 @@ def _profile_one(
                 "region": key[5],
                 "measurement_basis": key[6],
                 "observation_count": value["observation_count"],
-                "distinct_sample_count": len(value["samples"]),
+                "distinct_sample_count": cube_sample_count,
                 "independent_lineage_count": 1,
-                "valid_coordinate_sample_count": len(value["coordinate_samples"]),
+                "valid_coordinate_sample_count": cube_coordinate_count,
                 "comparable_observation_count": value["comparable"],
                 "covered_spatial_cells": len(value["cells"]),
                 "spatial_grid": "WGS84-like 1-degree floor cell; observation coverage only",
             }
         )
+    distinct_db.close()
 
     expected = registry_entry.get("expected_counts")
     expected_observations = expected.get("target_observations") if isinstance(expected, Mapping) else None
     count_status = (
         "matches_registered_expected_count"
-        if isinstance(expected_observations, int) and expected_observations == len(observations)
+        if isinstance(expected_observations, int) and expected_observations == observation_count
         else "baseline_recorded_no_registered_count"
         if expected_observations is None
         else "drift"
     )
     if count_status == "drift":
         raise FullProfileError(
-            f"{source_id} target observation drift: {len(observations)} != {expected_observations}"
+            f"{source_id} target observation drift: {observation_count} != {expected_observations}"
         )
     file_inventory = [
         {
@@ -681,7 +828,7 @@ def _profile_one(
         "as_of": registry_verified_at,
         "field_completeness": fields,
         "method_completeness": {
-            "observation_count": len(observations),
+            "observation_count": observation_count,
             "method_scope_counts": dict(sorted(method_scopes.items())),
             "analytical_method_counts": dict(sorted(methods.items())),
         },
@@ -693,55 +840,47 @@ def _profile_one(
             "sediment_environments": dict(sorted(sediment_environments.items())),
         },
         "spatial_coverage": {
-            "distinct_sample_count": len(distinct_samples),
-            "valid_coordinate_sample_count": len(coordinate_samples),
+            "distinct_sample_count": distinct_sample_count,
+            "valid_coordinate_sample_count": coordinate_sample_count,
             "covered_spatial_cells": len(spatial_cells),
             "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
             "spatial_cell_ids": sorted(spatial_cells),
-            "bbox": (
-                [
-                    min(pair[1] for pair in coordinate_pairs if pair[1] is not None),
-                    min(pair[0] for pair in coordinate_pairs if pair[0] is not None),
-                    max(pair[1] for pair in coordinate_pairs if pair[1] is not None),
-                    max(pair[0] for pair in coordinate_pairs if pair[0] is not None),
-                ]
-                if coordinate_pairs
-                else None
-            ),
+            "bbox": bbox,
             "region_count": len(region_counts),
             "region_observation_counts": dict(sorted(region_counts.items())),
             "source_crs_observation_counts": dict(sorted(source_crs_counts.items())),
             "coordinate_uncertainty_m_observation_counts": dict(sorted(uncertainty_counts.items())),
         },
         "geology_coverage": {
-            **geology,
-            "observation_denominator": len(observations),
+            **{
+                field: geology[field]
+                for field in (
+                    "lithology_raw",
+                    "geologic_age_raw",
+                    "tectonic_setting_raw",
+                    "geologic_unit_raw",
+                    "matched_geologic_unit",
+                )
+            },
+            "observation_denominator": observation_count,
             "geographic_context_is_not_counted_as_geologic_unit": True,
         },
         "citation_coverage": {
             "citation_scope_counts": dict(sorted(citations.items())),
             "citation_text_count": fields["fields"]["citation_text_raw"]["non_empty"],
-            "observation_denominator": len(observations),
+            "observation_denominator": observation_count,
             "dataset_doi": registry_entry.get("dataset_doi"),
             "dataset_doi_present": bool(registry_entry.get("dataset_doi")),
-            "publication_doi_observation_count": sum(
-                bool(_text(item.row.get("publication_doi"))) for item in observations
-            ),
-            "upstream_primary_source_observation_count": sum(
-                bool(_text(item.row.get("upstream_primary_source_id"))) for item in observations
-            ),
+            "publication_doi_observation_count": publication_doi_count,
+            "upstream_primary_source_observation_count": upstream_primary_source_count,
         },
         "usage_rights_coverage": {
-            "access_status_counts": dict(sorted(Counter(_text(item.row.get("access_status")) for item in observations).items())),
-            "research_use_status_counts": dict(sorted(Counter(_text(item.row.get("research_use_status")) for item in observations).items())),
+            "access_status_counts": dict(sorted(access_status_counts.items())),
+            "research_use_status_counts": dict(sorted(research_use_status_counts.items())),
             "license_id": _text((registry_entry.get("license") or {}).get("spdx")),
             "license_url": _text((registry_entry.get("license") or {}).get("url")),
-            "attribution_required_counts": dict(
-                sorted(Counter(_text(item.row.get("attribution_required")) for item in observations).items())
-            ),
-            "redistribution_status_counts": dict(
-                sorted(Counter(_text(item.row.get("redistribution_status")) for item in observations).items())
-            ),
+            "attribution_required_counts": dict(sorted(attribution_required_counts.items())),
+            "redistribution_status_counts": dict(sorted(redistribution_status_counts.items())),
             "redistribution_is_not_a_research_use_gate": True,
         },
         "automation_health": {
@@ -762,7 +901,7 @@ def _profile_one(
             "retry_health": "not_measured_in_offline_profile",
             "cache_hit_count": sum(item.cache_status != "downloaded" for item in files),
             "parsed_source_record_count": parsed_records,
-            "target_observation_count": len(observations),
+            "target_observation_count": observation_count,
             "expected_target_observation_count": expected_observations,
             "row_count_drift_status": count_status,
             "raw_schema_fingerprint": hashlib.sha256("\n".join(sorted(raw_schema_keys)).encode()).hexdigest(),
@@ -771,10 +910,10 @@ def _profile_one(
             "version_drift": drift,
         },
         "coverage_metrics": {
-            "observation_count": len(observations),
-            "distinct_sample_count": len(distinct_samples),
+            "observation_count": observation_count,
+            "distinct_sample_count": distinct_sample_count,
             "independent_lineage_count": 1,
-            "valid_coordinate_sample_count": len(coordinate_samples),
+            "valid_coordinate_sample_count": coordinate_sample_count,
             "comparable_observation_count": comparable_count,
             "covered_spatial_cells": len(spatial_cells),
             "elements": dict(sorted(elements.items())),

@@ -1,0 +1,41 @@
+{
+  "assignment_rule": "Cruise and analyte resolve every target observation to one or more exported WebODV info records. Only the 22,254 observations whose candidate set resolves to one unique BODC method record receive an analytical_method at cruise-analyte scope. The remaining 17,073 retain their complete candidate set and an explicit unresolved reason; no observation-level method is guessed.",
+  "audit_version": "geotraces-idp2025-method-metadata-v1",
+  "by_element": {
+    "Cu": {
+      "multiple_linked_records_unresolved": 1966,
+      "single_linked_record": 4309
+    },
+    "Ni": {
+      "multiple_linked_records_unresolved": 7086,
+      "single_linked_record": 9949
+    },
+    "Zn": {
+      "multiple_linked_records_unresolved": 8021,
+      "single_linked_record": 7996
+    }
+  },
+  "checks": {
+    "all_observations_linked": true,
+    "cruise_analyte_groups_match": true,
+    "info_members_match": true,
+    "method_records_match": true,
+    "multiple_method_observations_match": true,
+    "originators_match": true,
+    "single_method_observations_match": true,
+    "target_observations_match": true
+  },
+  "claim_boundary": "The linked BODC pages are originator-and-method records. This audit proves the exported connection and assignment cardinality, not that one protocol can be inferred when several contributors supplied a cruise-analyte.",
+  "cruise_analyte_group_count": 96,
+  "dataset_version": "IDP2025",
+  "exported_info_member_count": 241,
+  "method_metadata_status_counts": {
+    "multiple_linked_records_unresolved": 17073,
+    "single_linked_record": 22254
+  },
+  "observation_denominator": 39327,
+  "originator_count": 89,
+  "source_id": "geotraces-idp2025",
+  "status": "PASS",
+  "unique_bodc_method_record_count": 71
+}
