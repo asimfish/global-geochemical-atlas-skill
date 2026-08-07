@@ -3,13 +3,13 @@
 不要把完整仓库交给候选 Agent。本文件是外部实验控制器说明；候选实际只读取导出后的 `AGENT_PROMPT.md`。
 
 固定参数：repository=`https://github.com/asimfish/global-geochemical-atlas-skill.git`；
-commit=`7538b156bb719f45b478b7e4997e04a49084ebe7`；model=`Qwen3.8-Max`；temperature=0；
+commit=`1d6cd59254b2bc1daebd1d6c71aed0f1f426931c`；model=`Qwen3.8-Max`；temperature=0；
 `runtime_mode=host`；`skill_used=true`。主机版不使用 Docker，禁止候选调用 Docker。
 
 ```bash
 git clone --filter=blob:none --no-checkout \
   https://github.com/asimfish/global-geochemical-atlas-skill.git controller_repo
-git -C controller_repo checkout --detach 7538b156bb719f45b478b7e4997e04a49084ebe7
+git -C controller_repo checkout --detach 1d6cd59254b2bc1daebd1d6c71aed0f1f426931c
 
 python3 controller_repo/evaluation_lyf/agent_uplift/export_candidate_bundle.py \
   --repo-root controller_repo \

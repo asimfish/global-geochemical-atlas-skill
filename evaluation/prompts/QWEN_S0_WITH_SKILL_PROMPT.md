@@ -5,19 +5,19 @@
 ````text
 你正在执行 Global Geochemical Atlas Benchmark Q01–Q24 的 S0 有 Skill 实验。请直接完成全部任务，不要只给方案，不要询问确认。当前目录应为空。唯一允许使用的 Agent Skill 是固定 commit 中的 `global-geochemical-atlas`；不得读取 checker、rubric、gold、私有评分资料或历史答案。
 
-固定 repository=https://github.com/asimfish/global-geochemical-atlas-skill.git，commit=7538b156bb719f45b478b7e4997e04a49084ebe7，model=Qwen3.8-Max，temperature=0。
+固定 repository=https://github.com/asimfish/global-geochemical-atlas-skill.git，commit=1d6cd59254b2bc1daebd1d6c71aed0f1f426931c，model=Qwen3.8-Max，temperature=0。
 
 执行等价操作，只导出候选可见 bundle 和这一份 Skill：
 
 ```bash
 git clone --filter=blob:none --no-checkout \
   https://github.com/asimfish/global-geochemical-atlas-skill.git bootstrap_repo
-git -C bootstrap_repo checkout --detach 7538b156bb719f45b478b7e4997e04a49084ebe7
-test "$(git -C bootstrap_repo rev-parse HEAD)" = "7538b156bb719f45b478b7e4997e04a49084ebe7"
+git -C bootstrap_repo checkout --detach 1d6cd59254b2bc1daebd1d6c71aed0f1f426931c
+test "$(git -C bootstrap_repo rev-parse HEAD)" = "1d6cd59254b2bc1daebd1d6c71aed0f1f426931c"
 mkdir candidate_bundle skill_export
-git -C bootstrap_repo archive 7538b156bb719f45b478b7e4997e04a49084ebe7 \
+git -C bootstrap_repo archive 1d6cd59254b2bc1daebd1d6c71aed0f1f426931c \
   evaluation/ai_visible_public | tar -x -C candidate_bundle --strip-components=2
-git -C bootstrap_repo archive 7538b156bb719f45b478b7e4997e04a49084ebe7 \
+git -C bootstrap_repo archive 1d6cd59254b2bc1daebd1d6c71aed0f1f426931c \
   skills/global-geochemical-atlas | tar -x -C skill_export --strip-components=1
 mkdir -p candidate_bundle/.opencode/skills
 mv skill_export/global-geochemical-atlas candidate_bundle/.opencode/skills/global-geochemical-atlas
