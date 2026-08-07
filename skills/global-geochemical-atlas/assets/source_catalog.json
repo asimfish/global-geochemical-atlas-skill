@@ -1885,11 +1885,11 @@
         "notes": "Systematic national bedrock geochemistry sampled on an approximately 9 by 9 kilometre grid, with major, trace and rare-earth element methods."
       },
       "identifiers": {},
-      "landing_page": "https://www.ngu.no/geologisk-kartlegging/lito-geokjemisk-kartlegging-av-norges-berggrunn",
+      "landing_page": "https://www.ngu.no/geologisk%2Dkartlegging/lito-geokjemisk%2Dkartlegging-av-norges-berggrunn",
       "interfaces": [
         {
           "kind": "versioned_spreadsheet_download",
-          "url": "https://www.ngu.no/geologisk-kartlegging/lito-geokjemisk-kartlegging-av-norges-berggrunn",
+          "url": "https://www.ngu.no/geologisk%2Dkartlegging/lito-geokjemisk%2Dkartlegging-av-norges-berggrunn",
           "format": "xlsx",
           "access": "public_preliminary_release",
           "server_filters": ["release"]
@@ -1904,7 +1904,7 @@
       "version": {"status": "pinned", "value": "June 2026 preliminary", "release_date": "2026-06"},
       "adapter": {"status": "not_implemented", "name": null},
       "evidence_urls": [
-        "https://www.ngu.no/geologisk-kartlegging/lito-geokjemisk-kartlegging-av-norges-berggrunn",
+        "https://www.ngu.no/geologisk%2Dkartlegging/lito-geokjemisk%2Dkartlegging-av-norges-berggrunn",
         "https://static.ngu.no/lito/"
       ],
       "limitations": [

@@ -446,7 +446,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "showAnomalyRegion",
         'id="deliverableCenter"',
         'id="taskContext"',
-        "task-first-progressive-disclosure-v2",
+        "atlas-progressive-disclosure-v2",
         "d3-visual-question-contract-v1",
         "competition-geochemistry-v1",
         "可交互元素分布地图",

@@ -3585,7 +3585,7 @@
         "identity_publisher": {
           "awarded_points": 10.0,
           "evidence": [
-            "https://www.ngu.no/geologisk-kartlegging/lito-geokjemisk-kartlegging-av-norges-berggrunn",
+            "https://www.ngu.no/geologisk%2Dkartlegging/lito-geokjemisk%2Dkartlegging-av-norges-berggrunn",
             "https://static.ngu.no/lito/"
           ],
           "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
@@ -3602,7 +3602,7 @@
         "provenance": {
           "awarded_points": 7.5,
           "evidence": [
-            "https://www.ngu.no/geologisk-kartlegging/lito-geokjemisk-kartlegging-av-norges-berggrunn",
+            "https://www.ngu.no/geologisk%2Dkartlegging/lito-geokjemisk%2Dkartlegging-av-norges-berggrunn",
             "https://static.ngu.no/lito/"
           ],
           "note": "Dataset-level provenance is known, but record-level locators have not been verified.",

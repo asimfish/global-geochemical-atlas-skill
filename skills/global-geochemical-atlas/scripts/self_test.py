@@ -913,7 +913,7 @@ def run_suite() -> dict[str, Any]:
                     "该结果比较同类样品的统计背景",
                     'id="deliverableCenter"',
                     'id="taskContext"',
-                    "task-first-progressive-disclosure-v2",
+                    "atlas-progressive-disclosure-v2",
                     "d3-visual-question-contract-v1",
                     "competition-geochemistry-v1",
                     "可交互元素分布地图",

@@ -228,7 +228,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         else:
             if map_report.get("map_version") != "d3-interactive-atlas-v3":
                 errors.append("visualization map_version is unsupported")
-            if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v2":
+            if map_report.get("ui_hierarchy_version") != "atlas-progressive-disclosure-v2":
                 errors.append("visualization UI hierarchy contract is unsupported")
             if map_report.get("template_contract_version") != map_builder.TEMPLATE_CONTRACT_VERSION:
                 errors.append("visualization template contract is unsupported")

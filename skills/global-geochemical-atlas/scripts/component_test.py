@@ -4026,7 +4026,7 @@ def check_d3(output_dir: Path) -> list[str]:
                 "layoutAnomalyBubbles",
                 "conic-gradient",
                 'id="taskContext"',
-                "task-first-progressive-disclosure-v2",
+                "atlas-progressive-disclosure-v2",
                 "d3-visual-question-contract-v1",
                 "competition-geochemistry-v1",
                 "可交互元素分布地图",
@@ -4198,7 +4198,7 @@ def check_d3(output_dir: Path) -> list[str]:
             map_report.get("capability_matrix", {}).get("deliverables", {}).values()
         )
         and map_report.get("ui_hierarchy_version")
-        == "task-first-progressive-disclosure-v2"
+        == "atlas-progressive-disclosure-v2"
         and map_report.get("template_contract_version") == "d3-dual-scope-atlas-v4"
         and map_report.get("template_variant") == "global_globe"
         and map_report.get("database_visual_summary_schema")
