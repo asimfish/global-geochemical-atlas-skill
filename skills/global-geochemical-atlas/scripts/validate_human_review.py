@@ -18,29 +18,31 @@ def _date_time(value: Any) -> bool:
     if not _text(value):
         return False
     try:
-        datetime.fromisoformat(value.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
     except ValueError:
         return False
-    return True
+    return parsed.utcoffset() is not None
 
 
-def validate(path: Path) -> dict[str, Any]:
-    try:
-        document = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        return {
-            "status": "invalid",
-            "path": str(path),
-            "errors": [f"unreadable JSON: {exc}"],
-        }
+def validate_document(document: Any, *, path: str = "<memory>") -> dict[str, Any]:
+    """Validate review decisions and derive trusted aggregate counts."""
+
     if not isinstance(document, dict):
-        return {
-            "status": "invalid",
-            "path": str(path),
-            "errors": ["root must be an object"],
-        }
+        return {"status": "invalid", "path": path, "errors": ["root must be an object"]}
 
     errors: list[str] = []
+    if document.get("review_version") not in {
+        "afsis-phase-i-human-review-v1",
+        "geochemical-human-review-v1",
+        "foregs-human-review-v1",
+    }:
+        errors.append("review_version is unsupported")
+    for field in ("source_id", "dataset_version", "claim_boundary"):
+        if not _text(document.get(field)):
+            errors.append(f"{field} is missing")
+    if "prepared_at" in document and not _date_time(document.get("prepared_at")):
+        errors.append("prepared_at must be a timezone-aware date-time")
+
     records = document.get("records")
     if not isinstance(records, list):
         records = []
@@ -64,12 +66,16 @@ def validate(path: Path) -> dict[str, Any]:
         review_id = record.get("review_id")
         if not _text(review_id):
             errors.append(f"records[{position}].review_id is missing")
+        elif not isinstance(review_id, str):
+            errors.append(f"records[{position}].review_id must be a string")
         elif review_id in identifiers:
             errors.append(f"records[{position}].review_id is duplicated: {review_id}")
         else:
             identifiers.add(review_id)
         checks = record.get("automated_checks")
         check_values = list(checks.values()) if isinstance(checks, dict) else []
+        if not check_values or not all(isinstance(item, bool) for item in check_values):
+            errors.append(f"records[{position}].automated_checks must contain booleans")
         machine_pass = (
             record.get("automated_status") == "PASS"
             and bool(check_values)
@@ -79,12 +85,20 @@ def validate(path: Path) -> dict[str, Any]:
         reviewer = record.get("reviewer")
         reviewer = reviewer if isinstance(reviewer, dict) else {}
         decision = reviewer.get("decision")
+        reviewer_started = any(
+            value is not None and (not isinstance(value, str) or bool(value.strip()))
+            for value in reviewer.values()
+        )
         signed = (
             decision in {"pass", "fail"}
             and _text(reviewer.get("reviewer"))
             and _date_time(reviewer.get("reviewed_at"))
             and _text(reviewer.get("notes"))
         )
+        if reviewer_started and not signed:
+            errors.append(
+                f"records[{position}].reviewer is incomplete or has a naive timestamp"
+            )
         completed += int(signed)
         human_pass += int(signed and decision == "pass")
         human_fail += int(signed and decision == "fail")
@@ -120,7 +134,7 @@ def validate(path: Path) -> dict[str, Any]:
 
     return {
         "status": "invalid" if errors else "passed" if passed else "pending",
-        "path": str(path),
+        "path": path,
         "source_id": document.get("source_id"),
         "required_record_count": required,
         "prepared_record_count": len(records),
@@ -131,6 +145,18 @@ def validate(path: Path) -> dict[str, Any]:
         "benchmark_ready_review": passed and not errors,
         "errors": errors,
     }
+
+
+def validate(path: Path) -> dict[str, Any]:
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return {
+            "status": "invalid",
+            "path": str(path),
+            "errors": [f"unreadable JSON: {exc}"],
+        }
+    return validate_document(document, path=str(path))
 
 
 def main(argv: Sequence[str] | None = None) -> int:

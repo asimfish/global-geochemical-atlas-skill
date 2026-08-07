@@ -1349,6 +1349,7 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         all(
             required_review_fields <= set(review) <= allowed_review_fields
+            and human_review_validator.validate_document(review)["status"] == "pending"
             and all(
                 required_review_record_fields
                 <= set(record)
@@ -1387,6 +1388,49 @@ def check_d1(output_dir: Path) -> list[str]:
         and review_validation["benchmark_ready_review"] is False
         and not review_validation["errors"],
         "D1 human-review gate validates prepared sheets without inventing benchmark readiness",
+        checks,
+    )
+    forged_candidate = copy.deepcopy(candidate_evidence["usgs-conus-soil"])
+    forged_review = forged_candidate["human_review"]
+    forged_review["completed_record_count"] = 30
+    forged_review["status"] = "passed"
+    forged_review["all_records_reviewed"] = True
+    forged_score = score_source_evidence.score_source(
+        "usgs-conus-soil",
+        catalog["sources"]["usgs-conus-soil"],
+        registry["sources"]["usgs-conus-soil"],
+        forged_candidate,
+    )
+    require(
+        forged_score["source_evidence_dimensions"]["human_review"]["status"]
+        == "conflict"
+        and forged_score["use_mode"] != "benchmark_ready",
+        "D1 rejects aggregate-only review promotion without signed record decisions",
+        checks,
+    )
+    signed_candidate = copy.deepcopy(candidate_evidence["usgs-conus-soil"])
+    signed_review = signed_candidate["human_review"]
+    for record in signed_review["records"]:
+        record["reviewer"] = {
+            "decision": "pass",
+            "reviewer": "independent-reviewer",
+            "reviewed_at": "2026-08-08T00:00:00Z",
+            "notes": "Compared source evidence and adapter output; no discrepancy found.",
+        }
+    signed_review["completed_record_count"] = len(signed_review["records"])
+    signed_review["status"] = "passed"
+    signed_review["all_records_reviewed"] = True
+    signed_score = score_source_evidence.score_source(
+        "usgs-conus-soil",
+        catalog["sources"]["usgs-conus-soil"],
+        registry["sources"]["usgs-conus-soil"],
+        signed_candidate,
+    )
+    require(
+        signed_score["source_evidence_dimensions"]["human_review"]["status"]
+        == "verified"
+        and signed_score["use_mode"] == "benchmark_ready",
+        "D1 promotes only a complete set of signed passing review decisions",
         checks,
     )
     require(

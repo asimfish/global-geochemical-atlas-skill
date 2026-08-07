@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import source_adapters
+import validate_human_review
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -256,7 +257,9 @@ def _registry_integrity(registry_entry: Mapping[str, Any] | None) -> dict[str, A
     )
 
 
-def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, Any]:
+def _human_review_dimension(
+    source_id: str, candidate: Mapping[str, Any] | None
+) -> dict[str, Any]:
     weight = DIMENSION_WEIGHTS["human_review"]
     review = candidate.get("human_review") if isinstance(candidate, Mapping) else None
     evidence = (
@@ -268,24 +271,33 @@ def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, An
         return _dimension(
             "missing", weight, "No checked-in human review record is available."
         )
-    completed = review.get("completed_record_count", 0)
-    if review.get("status") in {"complete", "passed"} and not completed:
-        completed = review.get(
-            "reviewed_record_count", review.get("required_record_count", 0)
-        )
-    if not isinstance(completed, int) or completed < 0:
-        return _dimension("conflict", weight, "Human review count is invalid.")
-    if review.get("status") == "conflict":
+    validation = validate_human_review.validate_document(
+        dict(review), path=evidence[0] or "<candidate-human-review>"
+    )
+    if validation.get("source_id") != source_id:
         return _dimension(
             "conflict",
             weight,
-            "Human review found an unresolved systematic mapping error.",
+            "Human review source_id does not match the source being scored.",
             evidence,
         )
-    if completed >= 30 or (
-        review.get("all_records_reviewed") is True
-        and review.get("status") in {"complete", "passed"}
-    ):
+    if validation["status"] == "invalid":
+        summary = "; ".join(validation["errors"][:3])
+        return _dimension(
+            "conflict",
+            weight,
+            f"Human review failed integrity validation: {summary}",
+            evidence,
+        )
+    if validation["human_fail_count"]:
+        return _dimension(
+            "conflict",
+            weight,
+            f"Human review contains {validation['human_fail_count']} failed record decisions.",
+            evidence,
+        )
+    completed = validation["completed_record_count"]
+    if validation["benchmark_ready_review"]:
         return _dimension(
             "verified",
             weight,
@@ -308,7 +320,7 @@ def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, An
             evidence,
             awarded_points=2,
         )
-    prepared = review.get("prepared_record_count", 0)
+    prepared = validation["prepared_record_count"]
     return _dimension(
         "missing",
         weight,
@@ -602,7 +614,7 @@ def score_source(
         adapter_note,
         [candidate.get("_evidence_path", "")] if isinstance(candidate, Mapping) else [],
     )
-    dimensions["human_review"] = _human_review_dimension(candidate)
+    dimensions["human_review"] = _human_review_dimension(source_id, candidate)
 
     denominator = sum(
         item["weight"]
