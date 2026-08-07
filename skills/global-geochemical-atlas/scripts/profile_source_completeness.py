@@ -76,14 +76,18 @@ def _sha256(path: Path) -> str:
 
 def _atomic_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         handle.write(content)
         temporary = Path(handle.name)
     os.replace(temporary, path)
 
 
 def _atomic_json(path: Path, value: Any) -> None:
-    _atomic_text(path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    _atomic_text(
+        path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    )
 
 
 def _latest_audits(audit_dir: Path) -> dict[str, tuple[Path, dict[str, Any]]]:
@@ -106,7 +110,9 @@ def _nested(mapping: Mapping[str, Any], *keys: str) -> Any:
     return value
 
 
-def _first_int(mapping: Mapping[str, Any], paths: Sequence[Sequence[str]]) -> int | None:
+def _first_int(
+    mapping: Mapping[str, Any], paths: Sequence[Sequence[str]]
+) -> int | None:
     for path in paths:
         value = _nested(mapping, *path)
         if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
@@ -115,7 +121,9 @@ def _first_int(mapping: Mapping[str, Any], paths: Sequence[Sequence[str]]) -> in
 
 
 def _target_observations(observed: Mapping[str, Any]) -> tuple[int | None, str | None]:
-    direct = _first_int(observed, (("target_observations",), ("counts", "target_observations")))
+    direct = _first_int(
+        observed, (("target_observations",), ("counts", "target_observations"))
+    )
     if direct is not None:
         return direct, "observed_data.target_observations"
     counts = observed.get("counts")
@@ -144,7 +152,9 @@ def _target_observations(observed: Mapping[str, Any]) -> tuple[int | None, str |
     return None, None
 
 
-def _full_population(audit_path: Path | None, audit: Mapping[str, Any] | None) -> dict[str, Any]:
+def _full_population(
+    audit_path: Path | None, audit: Mapping[str, Any] | None
+) -> dict[str, Any]:
     if audit_path is None or audit is None:
         return {
             "audit_status": "not_measured",
@@ -161,7 +171,12 @@ def _full_population(audit_path: Path | None, audit: Mapping[str, Any] | None) -
     target_count, target_basis = _target_observations(observed)
     physical_rows = _first_int(
         observed,
-        (("physical_rows",), ("counts", "physical_rows"), ("data_record_count",), ("sample_rows",)),
+        (
+            ("physical_rows",),
+            ("counts", "physical_rows"),
+            ("data_record_count",),
+            ("sample_rows",),
+        ),
     )
     distinct_samples = _first_int(
         observed,
@@ -180,7 +195,9 @@ def _full_population(audit_path: Path | None, audit: Mapping[str, Any] | None) -
         "audit_path": str(audit_path.relative_to(SKILL_DIR)),
         "audit_sha256": _sha256(audit_path),
         "snapshot_id": audit.get("snapshot_id"),
-        "denominator_status": "available" if target_count is not None else "not_available",
+        "denominator_status": "available"
+        if target_count is not None
+        else "not_available",
         "target_observation_count": target_count,
         "target_observation_count_basis": target_basis,
         "physical_row_count": physical_rows,
@@ -228,13 +245,19 @@ def _uniform_full_profile(profile_dir: Path, source_id: str) -> dict[str, Any] |
 
 def _present(row: Mapping[str, str], field: str) -> bool:
     if field == "coordinate_pair":
-        return bool((row.get("latitude") or "").strip() and (row.get("longitude") or "").strip())
+        return bool(
+            (row.get("latitude") or "").strip() and (row.get("longitude") or "").strip()
+        )
     return bool((row.get(field) or "").strip())
 
 
 def _demo_profile(path: Path, manifest_path: Path) -> dict[str, Any]:
     if not path.is_file() or not manifest_path.is_file():
-        return {"status": "missing_fixture", "record_count": 0, "field_completeness": {}}
+        return {
+            "status": "missing_fixture",
+            "record_count": 0,
+            "field_completeness": {},
+        }
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         headers = list(reader.fieldnames or [])
@@ -249,8 +272,13 @@ def _demo_profile(path: Path, manifest_path: Path) -> dict[str, Any]:
             "rate": round(numerator / denominator, 6) if denominator else 0.0,
             "column_present": field == "coordinate_pair" or field in headers,
         }
-    media = Counter((row.get("medium") or "missing").strip() or "missing" for row in rows)
-    analytes = Counter((row.get("element_or_analyte") or "missing").strip() or "missing" for row in rows)
+    media = Counter(
+        (row.get("medium") or "missing").strip() or "missing" for row in rows
+    )
+    analytes = Counter(
+        (row.get("element_or_analyte") or "missing").strip() or "missing"
+        for row in rows
+    )
     return {
         "status": "deterministic_demo_only",
         "record_count": denominator,
@@ -268,8 +296,12 @@ def _rights(source: Mapping[str, Any]) -> dict[str, Any]:
     license_value = source.get("license")
     license_value = license_value if isinstance(license_value, Mapping) else {}
     return {
-        "access_status": "registered_landing_and_download" if source.get("landing_page") and source.get("download") else "not_assessed",
-        "research_use_status": source.get("research_use_status", "not_assessed_separately"),
+        "access_status": "registered_landing_and_download"
+        if source.get("landing_page") and source.get("download")
+        else "not_assessed",
+        "research_use_status": source.get(
+            "research_use_status", "not_assessed_separately"
+        ),
         "license_id": license_value.get("spdx"),
         "license_url": license_value.get("url"),
         "attribution_evidence_present": bool(source.get("citation")),
@@ -287,8 +319,10 @@ def _automation(source: Mapping[str, Any], demo: Mapping[str, Any]) -> dict[str,
         "adapter_registered": bool(source.get("adapter")),
         "dataset_version_pinned": bool(version),
         "download_mode": download.get("mode"),
-        "download_contract_has_hash": "sha256" in expected_hash_text or "checksum" in expected_hash_text,
-        "offline_demo_replay_available": demo.get("status") == "deterministic_demo_only",
+        "download_contract_has_hash": "sha256" in expected_hash_text
+        or "checksum" in expected_hash_text,
+        "offline_demo_replay_available": demo.get("status")
+        == "deterministic_demo_only",
         "online_fetch_health": "not_checked_by_offline_profile",
         "schema_drift_status": "not_measured",
         "row_count_drift_status": "not_measured",
@@ -311,7 +345,10 @@ def build_profile(
         source = sources[source_id]
         if not isinstance(source, Mapping):
             raise ProfileError(f"invalid source registry entry: {source_id}")
-        demo = _demo_profile(demo_dir / source_id / "demo_input.csv", demo_dir / source_id / "run_manifest.json")
+        demo = _demo_profile(
+            demo_dir / source_id / "demo_input.csv",
+            demo_dir / source_id / "run_manifest.json",
+        )
         audit_item = audits.get(source_id)
         candidate_audit = _full_population(*(audit_item or (None, None)))
         full = _uniform_full_profile(full_profile_dir, source_id) or candidate_audit
@@ -324,24 +361,38 @@ def build_profile(
             "full_population": full,
             "candidate_audit": candidate_audit,
             "demo_fixture": demo,
-            "usage_rights": _load_json(full_rights_path) if full_rights_path.is_file() else _rights(source),
+            "usage_rights": _load_json(full_rights_path)
+            if full_rights_path.is_file()
+            else _rights(source),
             "automation_health": (
-                _load_json(full_automation_path) if full_automation_path.is_file() else _automation(source, demo)
+                _load_json(full_automation_path)
+                if full_automation_path.is_file()
+                else _automation(source, demo)
             ),
         }
-    audited = sum(value["candidate_audit"]["audit_status"] == "audited_snapshot" for value in profiles.values())
+    audited = sum(
+        value["candidate_audit"]["audit_status"] == "audited_snapshot"
+        for value in profiles.values()
+    )
     uniform = sum(
         value["full_population"]["field_completeness_status"] == "measured_uniformly"
         for value in profiles.values()
     )
-    denominators = sum(value["full_population"]["denominator_status"] == "available" for value in profiles.values())
-    demo_records = sum(value["demo_fixture"]["record_count"] for value in profiles.values())
+    denominators = sum(
+        value["full_population"]["denominator_status"] == "available"
+        for value in profiles.values()
+    )
+    demo_records = sum(
+        value["demo_fixture"]["record_count"] for value in profiles.values()
+    )
     missing_audits = sorted(
-        source_id for source_id, value in profiles.items()
+        source_id
+        for source_id, value in profiles.items()
         if value["candidate_audit"]["audit_status"] == "not_measured"
     )
     missing_uniform_profiles = sorted(
-        source_id for source_id, value in profiles.items()
+        source_id
+        for source_id, value in profiles.items()
         if value["full_population"]["field_completeness_status"] != "measured_uniformly"
     )
     findings = [
@@ -450,28 +501,46 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--full-profile-dir", type=Path, default=DEFAULT_FULL_PROFILES)
     parser.add_argument("--output-json", type=Path, default=DEFAULT_JSON)
     parser.add_argument("--output-markdown", type=Path, default=DEFAULT_MARKDOWN)
-    parser.add_argument("--check", action="store_true", help="Fail if checked-in outputs differ from a fresh profile")
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Fail if checked-in outputs differ from a fresh profile",
+    )
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
-        profile = build_profile(args.registry, args.audit_dir, args.demo_dir, args.full_profile_dir)
-        json_text = json.dumps(profile, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        profile = build_profile(
+            args.registry, args.audit_dir, args.demo_dir, args.full_profile_dir
+        )
+        json_text = (
+            json.dumps(profile, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        )
         markdown_text = _markdown(profile)
         if args.check:
             if args.output_json.read_text(encoding="utf-8") != json_text:
-                raise ProfileError(f"checked-in JSON profile is stale: {args.output_json}")
+                raise ProfileError(
+                    f"checked-in JSON profile is stale: {args.output_json}"
+                )
             if args.output_markdown.read_text(encoding="utf-8") != markdown_text:
-                raise ProfileError(f"checked-in Markdown profile is stale: {args.output_markdown}")
+                raise ProfileError(
+                    f"checked-in Markdown profile is stale: {args.output_markdown}"
+                )
         else:
             _atomic_json(args.output_json, profile)
             _atomic_text(args.output_markdown, markdown_text)
     except (OSError, ProfileError) as exc:
         print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False))
         return 1
-    print(json.dumps({"status": "PASS", "summary": profile["summary"]}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "PASS", "summary": profile["summary"]},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

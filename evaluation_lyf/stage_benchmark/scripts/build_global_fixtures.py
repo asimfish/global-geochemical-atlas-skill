@@ -24,7 +24,13 @@ from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from lab_common import CONTRACT_ROOT, LAB_ROOT, atomic_write_json, load_json, sha256_file
+from lab_common import (
+    CONTRACT_ROOT,
+    LAB_ROOT,
+    atomic_write_json,
+    load_json,
+    sha256_file,
+)
 
 BUILDER_VERSION = "global-fixture-builder-v1"
 SOURCE_CONTRACT = CONTRACT_ROOT / "global-sources.json"
@@ -39,7 +45,9 @@ GEOROC_ANTARCTICA_METADATA_URL = (
     "https://data.goettingen-research-online.de/api/datasets/:persistentId/"
     "?persistentId=doi:10.25625/RZZ9VM"
 )
-GEOROC_FILE_URL = "https://data.goettingen-research-online.de/api/access/datafile/:persistentId"
+GEOROC_FILE_URL = (
+    "https://data.goettingen-research-online.de/api/access/datafile/:persistentId"
+)
 GEMSTAT_RECORD_URL = "https://zenodo.org/api/records/13881899"
 GEMAS_SERVICE = (
     "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/"
@@ -48,14 +56,19 @@ GEMAS_SERVICE = (
 GEMAS_LAYER_METADATA_URL = f"{GEMAS_SERVICE}/3?f=pjson"
 GEMAS_QUERY_PARAMETERS = (
     ("where", "1=1"),
-    ("outFields", "OBJECTID,ID,COUNTRY,TYPE_,TYPE2,XCOO,YCOO,ALT,SOILTYPE,SOILCLASS,AS_,CU,PB,ZN"),
+    (
+        "outFields",
+        "OBJECTID,ID,COUNTRY,TYPE_,TYPE2,XCOO,YCOO,ALT,SOILTYPE,SOILCLASS,AS_,CU,PB,ZN",
+    ),
     ("returnGeometry", "true"),
     ("outSR", "4326"),
     ("resultRecordCount", "2200"),
     ("orderByFields", "OBJECTID ASC"),
     ("f", "geojson"),
 )
-GEMAS_QUERY_URL = f"{GEMAS_SERVICE}/3/query?{urllib.parse.urlencode(GEMAS_QUERY_PARAMETERS)}"
+GEMAS_QUERY_URL = (
+    f"{GEMAS_SERVICE}/3/query?{urllib.parse.urlencode(GEMAS_QUERY_PARAMETERS)}"
+)
 NGSA_CSV_URL = "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
 NGSA_METADATA_URL = (
     "https://data.gov.au/data/api/3/action/package_show"
@@ -178,12 +191,18 @@ def download_if_missing(url: str, destination: Path, max_bytes: int) -> Path:
     if destination.is_file():
         return destination
     destination.parent.mkdir(parents=True, exist_ok=True)
-    request = urllib.request.Request(url, headers={"User-Agent": f"{BUILDER_VERSION} (+offline-benchmark)"})
+    request = urllib.request.Request(
+        url, headers={"User-Agent": f"{BUILDER_VERSION} (+offline-benchmark)"}
+    )
     with urllib.request.urlopen(request, timeout=120) as response:
         length = response.headers.get("Content-Length")
         if length and int(length) > max_bytes:
-            raise FixtureError(f"source exceeds byte limit ({length} > {max_bytes}): {url}")
-        with tempfile.NamedTemporaryFile("wb", dir=destination.parent, delete=False) as handle:
+            raise FixtureError(
+                f"source exceeds byte limit ({length} > {max_bytes}): {url}"
+            )
+        with tempfile.NamedTemporaryFile(
+            "wb", dir=destination.parent, delete=False
+        ) as handle:
             temporary = Path(handle.name)
             total = 0
             while True:
@@ -194,7 +213,9 @@ def download_if_missing(url: str, destination: Path, max_bytes: int) -> Path:
                 if total > max_bytes:
                     handle.close()
                     temporary.unlink(missing_ok=True)
-                    raise FixtureError(f"download exceeds byte limit ({total} > {max_bytes}): {url}")
+                    raise FixtureError(
+                        f"download exceeds byte limit ({total} > {max_bytes}): {url}"
+                    )
                 handle.write(chunk)
     os.replace(temporary, destination)
     return destination
@@ -202,7 +223,9 @@ def download_if_missing(url: str, destination: Path, max_bytes: int) -> Path:
 
 def copy_file(source: Path, destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("wb", dir=destination.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "wb", dir=destination.parent, delete=False
+    ) as handle:
         temporary = Path(handle.name)
         with source.open("rb") as source_handle:
             shutil.copyfileobj(source_handle, handle)
@@ -220,7 +243,9 @@ def dataverse_files(metadata: Mapping[str, Any]) -> list[dict[str, Any]]:
     try:
         files = metadata["data"]["latestVersion"]["files"]
     except (KeyError, TypeError) as exc:
-        raise FixtureError("GEOROC Dataverse metadata has no latestVersion.files") from exc
+        raise FixtureError(
+            "GEOROC Dataverse metadata has no latestVersion.files"
+        ) from exc
     result: list[dict[str, Any]] = []
     for item in files:
         data_file = item.get("dataFile", {})
@@ -232,14 +257,18 @@ def dataverse_files(metadata: Mapping[str, Any]) -> list[dict[str, Any]]:
                 "filename": filename,
                 "persistent_id": str(data_file.get("persistentId") or ""),
                 "bytes": int(data_file.get("filesize") or 0),
-                "md5": str((data_file.get("checksum") or {}).get("value") or "").lower(),
+                "md5": str(
+                    (data_file.get("checksum") or {}).get("value") or ""
+                ).lower(),
             }
         )
     return result
 
 
 def persistent_file_url(persistent_id: str) -> str:
-    return f"{GEOROC_FILE_URL}?{urllib.parse.urlencode({'persistentId': persistent_id})}"
+    return (
+        f"{GEOROC_FILE_URL}?{urllib.parse.urlencode({'persistentId': persistent_id})}"
+    )
 
 
 def verify_parent(path: Path, metadata: Mapping[str, Any]) -> None:
@@ -275,7 +304,10 @@ def valid_georoc_coordinates(row: Mapping[str, str]) -> bool:
 def select_evenly(rows: Sequence[dict[str, Any]], maximum: int) -> list[dict[str, Any]]:
     if maximum <= 0 or len(rows) <= maximum:
         return list(rows)
-    indices = [min(len(rows) - 1, math.floor((index + 0.5) * len(rows) / maximum)) for index in range(maximum)]
+    indices = [
+        min(len(rows) - 1, math.floor((index + 0.5) * len(rows) / maximum))
+        for index in range(maximum)
+    ]
     return [rows[index] for index in indices]
 
 
@@ -299,9 +331,14 @@ def georoc_rows(
         with path.open("r", encoding="latin-1", newline="") as handle:
             reader = csv.DictReader(handle)
             for source_row, row in enumerate(reader, start=2):
-                if not (row.get("UNIQUE_ID") or "").strip() or not valid_georoc_coordinates(row):
+                if not (
+                    row.get("UNIQUE_ID") or ""
+                ).strip() or not valid_georoc_coordinates(row):
                     continue
-                if not any((row.get(source_field) or "").strip() for source_field in TARGET_ELEMENTS):
+                if not any(
+                    (row.get(source_field) or "").strip()
+                    for source_field in TARGET_ELEMENTS
+                ):
                     continue
                 record: dict[str, Any] = {
                     "parent_file": filename,
@@ -330,11 +367,17 @@ def georoc_rows(
     return output, parent_evidence
 
 
-def write_csv(path: Path, fields: Sequence[str], rows: Iterable[Mapping[str, Any]]) -> int:
+def write_csv(
+    path: Path, fields: Sequence[str], rows: Iterable[Mapping[str, Any]]
+) -> int:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         temporary = Path(handle.name)
-        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
+        writer = csv.DictWriter(
+            handle, fieldnames=fields, extrasaction="ignore", lineterminator="\n"
+        )
         writer.writeheader()
         count = 0
         for row in rows:
@@ -344,13 +387,21 @@ def write_csv(path: Path, fields: Sequence[str], rows: Iterable[Mapping[str, Any
     return count
 
 
-def zip_member_to_cache(archive: zipfile.ZipFile, member: str, destination: Path) -> Path:
-    if destination.is_file() and destination.stat().st_size == archive.getinfo(member).file_size:
+def zip_member_to_cache(
+    archive: zipfile.ZipFile, member: str, destination: Path
+) -> Path:
+    if (
+        destination.is_file()
+        and destination.stat().st_size == archive.getinfo(member).file_size
+    ):
         return destination
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with archive.open(member) as source, tempfile.NamedTemporaryFile(
-        "wb", dir=destination.parent, delete=False
-    ) as handle:
+    with (
+        archive.open(member) as source,
+        tempfile.NamedTemporaryFile(
+            "wb", dir=destination.parent, delete=False
+        ) as handle,
+    ):
         temporary = Path(handle.name)
         shutil.copyfileobj(source, handle)
     os.replace(temporary, destination)
@@ -363,7 +414,9 @@ def read_csv_cp1252(path: Path) -> Iterable[tuple[int, dict[str, str]]]:
 
 
 def supported_water_unit(value: str) -> bool:
-    canonical = value.strip().casefold().replace("µ", "u").replace("μ", "u").replace(" ", "")
+    canonical = (
+        value.strip().casefold().replace("µ", "u").replace("μ", "u").replace(" ", "")
+    )
     return canonical in {"mg/l", "ug/l", "ng/l", "g/l"}
 
 
@@ -382,7 +435,9 @@ def gemstat_rows(
     extracted: dict[str, Path] = {}
     with zipfile.ZipFile(archive_path) as archive:
         for key, member in required.items():
-            extracted[key] = zip_member_to_cache(archive, member, cache_dir / "gemstat" / member)
+            extracted[key] = zip_member_to_cache(
+                archive, member, cache_dir / "gemstat" / member
+            )
 
     stations: dict[str, dict[str, str]] = {}
     for _, row in read_csv_cp1252(extracted["station"]):
@@ -409,7 +464,12 @@ def gemstat_rows(
             station = stations.get(station_id)
             value = optional_float(row.get("Value"))
             qualifier = (row.get("Value Flags") or "").strip()
-            if station is None or value is None or value < 0 or qualifier not in {"", "<", ">"}:
+            if (
+                station is None
+                or value is None
+                or value < 0
+                or qualifier not in {"", "<", ">"}
+            ):
                 continue
             if not supported_water_unit(row.get("Unit", "")):
                 continue
@@ -435,7 +495,10 @@ def gemstat_rows(
         for country in sorted(grouped):
             candidates = sorted(grouped[country], key=lambda item: item[0])
             selected = select_evenly(
-                [{"station_id": station_id, "parent_row": parent_row, "row": row} for station_id, parent_row, row in candidates],
+                [
+                    {"station_id": station_id, "parent_row": parent_row, "row": row}
+                    for station_id, parent_row, row in candidates
+                ],
                 maximum_per_country_element,
             )
             for item in selected:
@@ -445,7 +508,9 @@ def gemstat_rows(
                 station = stations[station_id]
                 method = methods.get(
                     (row["Parameter Code"], row["Analysis Method Code"], row["Unit"])
-                ) or methods_fallback.get((row["Parameter Code"], row["Analysis Method Code"]), {})
+                ) or methods_fallback.get(
+                    (row["Parameter Code"], row["Analysis Method Code"]), {}
+                )
                 output.append(
                     {
                         "parent_member": path.name,
@@ -458,7 +523,9 @@ def gemstat_rows(
                         "station_identifier": station.get("Station Identifier", ""),
                         "water_body_name": station.get("Water Body Name", ""),
                         "main_basin": station.get("Main Basin", ""),
-                        "responsible_agency": station.get("Responsible Collection Agency", ""),
+                        "responsible_agency": station.get(
+                            "Responsible Collection Agency", ""
+                        ),
                         "latitude": station.get("Latitude", ""),
                         "longitude": station.get("Longitude", ""),
                         "sample_date": row.get("Sample Date", ""),
@@ -479,7 +546,13 @@ def gemstat_rows(
                         "method_description": method.get("Method Description", ""),
                     }
                 )
-    output.sort(key=lambda row: (str(row["element"]), str(row["country"]), str(row["station_id"])))
+    output.sort(
+        key=lambda row: (
+            str(row["element"]),
+            str(row["country"]),
+            str(row["station_id"]),
+        )
+    )
     return output, member_hashes
 
 
@@ -518,11 +591,21 @@ def refresh_fixtures(
         copy_file(cached, fixture_dir / filename)
         metadata_paths[filename] = cached
 
-    archaean = dataverse_files(json_data(metadata_paths["georoc_archaean_metadata.json"]))
-    antarctica_files = dataverse_files(json_data(metadata_paths["georoc_antarctica_metadata.json"]))
-    antarctica = [item for item in antarctica_files if item["filename"] == "2026-06-RZZ9VM_ANTARCTICA.csv"]
+    archaean = dataverse_files(
+        json_data(metadata_paths["georoc_archaean_metadata.json"])
+    )
+    antarctica_files = dataverse_files(
+        json_data(metadata_paths["georoc_antarctica_metadata.json"])
+    )
+    antarctica = [
+        item
+        for item in antarctica_files
+        if item["filename"] == "2026-06-RZZ9VM_ANTARCTICA.csv"
+    ]
     if len(archaean) != 28 or len(antarctica) != 1:
-        raise FixtureError(f"unexpected GEOROC source inventory: archaean={len(archaean)}, antarctica={len(antarctica)}")
+        raise FixtureError(
+            f"unexpected GEOROC source inventory: archaean={len(archaean)}, antarctica={len(antarctica)}"
+        )
     georoc_parents: list[tuple[Mapping[str, Any], Path]] = []
     for parent in [*archaean, *antarctica]:
         path = download_if_missing(
@@ -532,10 +615,16 @@ def refresh_fixtures(
         )
         verify_parent(path, parent)
         georoc_parents.append((parent, path))
-    rocks, georoc_parent_evidence = georoc_rows(georoc_parents, maximum_georoc_per_region)
-    rock_count = write_csv(fixture_dir / "georoc_global_rocks.csv", GEOROC_OUTPUT_FIELDS, rocks)
+    rocks, georoc_parent_evidence = georoc_rows(
+        georoc_parents, maximum_georoc_per_region
+    )
+    rock_count = write_csv(
+        fixture_dir / "georoc_global_rocks.csv", GEOROC_OUTPUT_FIELDS, rocks
+    )
 
-    gemas_path = download_if_missing(GEMAS_QUERY_URL, cache_dir / "gemas_ap.geojson", 10_000_000)
+    gemas_path = download_if_missing(
+        GEMAS_QUERY_URL, cache_dir / "gemas_ap.geojson", 10_000_000
+    )
     gemas_payload = json_data(gemas_path)
     gemas_count = len(gemas_payload.get("features", []))
     if gemas_count != 2113 or gemas_payload.get("type") != "FeatureCollection":
@@ -557,13 +646,20 @@ def refresh_fixtures(
     archive_url = str((archive_metadata.get("links") or {}).get("self") or "")
     archive_bytes = int(archive_metadata.get("size") or 0)
     archive_md5 = str(archive_metadata.get("checksum") or "").removeprefix("md5:")
-    archive_path = download_if_missing(archive_url, cache_dir / "GFQA_v3.zip", 250_000_000)
-    if archive_path.stat().st_size != archive_bytes or md5_file(archive_path) != archive_md5:
+    archive_path = download_if_missing(
+        archive_url, cache_dir / "GFQA_v3.zip", 250_000_000
+    )
+    if (
+        archive_path.stat().st_size != archive_bytes
+        or md5_file(archive_path) != archive_md5
+    ):
         raise FixtureError("GEMStat archive does not match the Zenodo record")
     waters, member_hashes = gemstat_rows(
         archive_path, cache_dir, maximum_gemstat_per_country_element
     )
-    water_count = write_csv(fixture_dir / "gemstat_global_water.csv", GEMSTAT_OUTPUT_FIELDS, waters)
+    water_count = write_csv(
+        fixture_dir / "gemstat_global_water.csv", GEMSTAT_OUTPUT_FIELDS, waters
+    )
     readme_path = cache_dir / "gemstat" / "README_output_format.txt"
     copy_file(readme_path, fixture_dir / "gemstat_readme.txt")
 
@@ -608,12 +704,20 @@ def refresh_fixtures(
                 "archive_sha256": sha256_file(archive_path),
                 "member_sha256": dict(sorted(member_hashes.items())),
             },
-            "gemas": {"query_url": GEMAS_QUERY_URL, "source_sha256": sha256_file(gemas_path)},
-            "ngsa": {"download_url": NGSA_CSV_URL, "source_sha256": sha256_file(ngsa_path)},
+            "gemas": {
+                "query_url": GEMAS_QUERY_URL,
+                "source_sha256": sha256_file(gemas_path),
+            },
+            "ngsa": {
+                "download_url": NGSA_CSV_URL,
+                "source_sha256": sha256_file(ngsa_path),
+            },
         },
         "record_counts": resource_counts,
         "fixture_resources": fixture_resources,
-        "total_fixture_bytes_excluding_manifest": sum(item["bytes"] for item in fixture_resources),
+        "total_fixture_bytes_excluding_manifest": sum(
+            item["bytes"] for item in fixture_resources
+        ),
     }
     atomic_write_json(fixture_dir / "source_manifest.json", manifest)
     return manifest
@@ -640,7 +744,11 @@ def verify_fixtures(fixture_dir: Path) -> dict[str, Any]:
         total_bytes += path.stat().st_size
         actual_sha = sha256_file(path)
         missing_tokens = verify_tokens(path, resource.get("required_tokens", []))
-        if path.stat().st_size != resource["bytes"] or actual_sha != resource["sha256"] or missing_tokens:
+        if (
+            path.stat().st_size != resource["bytes"]
+            or actual_sha != resource["sha256"]
+            or missing_tokens
+        ):
             failures.append(
                 {
                     "resource": resource["id"],
@@ -651,7 +759,11 @@ def verify_fixtures(fixture_dir: Path) -> dict[str, Any]:
                 }
             )
     if failures:
-        raise FixtureError(json.dumps({"fixture_failures": failures}, ensure_ascii=False, sort_keys=True))
+        raise FixtureError(
+            json.dumps(
+                {"fixture_failures": failures}, ensure_ascii=False, sort_keys=True
+            )
+        )
     return {
         "status": "pass",
         "offline": True,
@@ -663,10 +775,20 @@ def verify_fixtures(fixture_dir: Path) -> dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Build or verify frozen global geochemical benchmark fixtures.")
+    parser = argparse.ArgumentParser(
+        description="Build or verify frozen global geochemical benchmark fixtures."
+    )
     mode = parser.add_mutually_exclusive_group()
-    mode.add_argument("--offline", action="store_true", help="Verify checked-in files without network access (default)")
-    mode.add_argument("--refresh", action="store_true", help="Download parents into an external cache and rebuild an empty fixture directory")
+    mode.add_argument(
+        "--offline",
+        action="store_true",
+        help="Verify checked-in files without network access (default)",
+    )
+    mode.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Download parents into an external cache and rebuild an empty fixture directory",
+    )
     parser.add_argument("--fixture-dir", type=Path, default=DEFAULT_FIXTURE_DIR)
     parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE_DIR)
     parser.add_argument("--max-georoc-per-region", type=int, default=80)

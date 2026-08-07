@@ -1,35 +1,47 @@
-## 变更归属
+# What
 
-- [ ] D1 数据源、证据链与数据工程
-- [ ] D2 地球化学标准化与分析
-- [ ] D3 Skill 架构、地图与 demo 总集成
-- [ ] 跨组件接口变更（请列出受影响的生产者和消费者）
+<!-- 用一句话描述已经实现且可验证的结果。 -->
 
-## 交付物影响
+- Scope: <!-- D1 | D2 | D3 | evaluation | cross-component -->
+- Deliverables affected: <!-- map | database | provenance/confidence | anomalies | Skill docs | none -->
 
-- [ ] **可交互元素分布地图**
-- [ ] **标准化地球化学数据库**
-- [ ] **数据来源与置信度说明**
-- [ ] **异常区域识别结果**
-- [ ] **可复用 Skill 文档**
-- [ ] 不影响上述交付物
+# Why
 
-## 契约与证据
+<!-- 说明问题、用户/评测价值，以及它对应的验收条件。 -->
 
-- 变更摘要：
-- 输入/输出或 Schema 是否变化：
-- 科学依据、适用条件与失败边界：
-- 数据来源、许可、版本与 SHA-256（如适用）：
-- 是否需要 D1/D2/D3 交叉复核：
+# How
 
-## 复现
+<!-- 说明关键设计、D1/D2/D3 边界、失败关闭行为和被否决的主要替代方案。 -->
+
+# Changes
+
+- <!-- 具体且可审查的变更 -->
+- Contract or Schema impact: <!-- None，或列出生产者、消费者和迁移方式 -->
+- Generated artifacts: <!-- None，或列出生成命令和绑定的输入/hash -->
+
+# Risk Assessment
+
+- Scientific claim risk: <!-- None，或适用条件、竞争解释与人工复核要求 -->
+- Security/data risk: <!-- None，或不可信输入、网络、凭据、许可和数据边界 -->
+- Compatibility/rollback: <!-- None，或兼容性影响与最小回退方式 -->
+- Performance risk: <!-- None，或基准工作负载和前后结果 -->
+
+# Testing
 
 ```bash
+ruff check .
+ruff format --check .
+mypy --config-file mypy-critical.ini
+uv run pytest -x --tb=short
 python skills/global-geochemical-atlas/scripts/component_test.py --component all
 python skills/global-geochemical-atlas/scripts/self_test.py
 ```
 
-- [ ] 上述命令通过
-- [ ] 未新增第二个 Skill、密钥、缓存、生成输出或大文件
-- [ ] 新增脚本的 `--help` 可运行
-- [ ] README、引用和 Demo 已同步更新
+- Results: <!-- 命令、通过数量、关键产物或日志 -->
+- Unavailable checks: <!-- Docker/OpenCode/官方模型/人工复核；没有则写 None -->
+
+# Breaking Changes
+
+None.
+
+<!-- 若存在，改为说明 BREAKING CHANGE、受影响接口和迁移要求。互不依赖的改动应拆成不同 PR。 -->

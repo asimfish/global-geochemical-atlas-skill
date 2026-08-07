@@ -18,7 +18,13 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from lab_common import LAB_ROOT, atomic_write_json, atomic_write_text, load_json, sha256_file
+from lab_common import (
+    LAB_ROOT,
+    atomic_write_json,
+    atomic_write_text,
+    load_json,
+    sha256_file,
+)
 
 SHOWCASE_VERSION = "d3-evaluation-showcase-v3"
 ANOMALY_REGION_VERSION = "d3-fixed-grid-screening-v1"
@@ -30,9 +36,9 @@ BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 
 
 def compact_json(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).replace(
-        "</", "<\\/"
-    )
+    return json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).replace("</", "<\\/")
 
 
 def optional_float(value: Any) -> float | None:
@@ -131,9 +137,13 @@ def source_confidence_summary(
                 "dataset_version": first.get("dataset_version"),
                 "license": first.get("license"),
                 "source_tier": first.get("source_tier"),
-                "media": sorted({str(row.get("medium")) for row in rows if row.get("medium")}),
+                "media": sorted(
+                    {str(row.get("medium")) for row in rows if row.get("medium")}
+                ),
                 "record_count": len(rows),
-                "normalized_count": sum(row.get("normalized_value") is not None for row in rows),
+                "normalized_count": sum(
+                    row.get("normalized_value") is not None for row in rows
+                ),
                 "censored_count": sum(bool(row.get("censored")) for row in rows),
                 "mappable_count": sum(
                     row.get("latitude") is not None and row.get("longitude") is not None
@@ -143,13 +153,15 @@ def source_confidence_summary(
                     sum(bool(row.get("analytical_method")) for row in rows) / len(rows)
                 ),
                 "digestion_coverage": rounded(
-                    sum(bool(row.get("digestion_or_extraction")) for row in rows) / len(rows)
+                    sum(bool(row.get("digestion_or_extraction")) for row in rows)
+                    / len(rows)
                 ),
                 "geologic_context_coverage": rounded(
                     sum(bool(row.get("geologic_unit")) for row in rows) / len(rows)
                 ),
                 "spatial_geology_match_coverage": rounded(
-                    sum(row.get("spatial_geology_status") == "matched" for row in rows) / len(rows)
+                    sum(row.get("spatial_geology_status") == "matched" for row in rows)
+                    / len(rows)
                 ),
                 "confidence": {
                     "median_overall": rounded(statistics.median(overall_values))
@@ -160,7 +172,8 @@ def source_confidence_summary(
                     "component_means": components,
                 },
                 "top_qc_flags": [
-                    {"flag": flag, "count": count} for flag, count in flag_counts.most_common(8)
+                    {"flag": flag, "count": count}
+                    for flag, count in flag_counts.most_common(8)
                 ],
                 "source_files": sorted(
                     source_files.values(), key=lambda item: str(item["source_file"])
@@ -211,14 +224,17 @@ def source_confidence_summary(
     }
 
 
-def grid_key(longitude: float, latitude: float, element: str, medium: str) -> tuple[Any, ...]:
+def grid_key(
+    longitude: float, latitude: float, element: str, medium: str
+) -> tuple[Any, ...]:
     west = math.floor(longitude / GRID_DEGREES) * GRID_DEGREES
     south = math.floor(latitude / GRID_DEGREES) * GRID_DEGREES
     return element, medium, west, south
 
 
 def anomaly_region_outputs(
-    sample_features: Sequence[Mapping[str, Any]], anomaly_features: Sequence[Mapping[str, Any]]
+    sample_features: Sequence[Mapping[str, Any]],
+    anomaly_features: Sequence[Mapping[str, Any]],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     observation_counts: Counter[tuple[Any, ...]] = Counter()
     for feature in sample_features:
@@ -288,7 +304,9 @@ def anomaly_region_outputs(
             for value in (optional_float(item.get("robust_z")) for item in properties)
             if value is not None
         ]
-        directions = Counter(str(item.get("direction") or "unknown") for item in properties)
+        directions = Counter(
+            str(item.get("direction") or "unknown") for item in properties
+        )
         region_payload = f"{element}|{medium}|{west:.6f}|{south:.6f}"
         region_id = "region-" + hashlib.sha256(region_payload.encode()).hexdigest()[:12]
         features.append(
@@ -325,15 +343,29 @@ def anomaly_region_outputs(
                     if robust_z_values
                     else None,
                     "source_ids": sorted(
-                        {str(item.get("source_id")) for item in properties if item.get("source_id")}
+                        {
+                            str(item.get("source_id"))
+                            for item in properties
+                            if item.get("source_id")
+                        }
                     ),
                     "group_ids": sorted(
-                        {str(item.get("group_id")) for item in properties if item.get("group_id")}
+                        {
+                            str(item.get("group_id"))
+                            for item in properties
+                            if item.get("group_id")
+                        }
                     ),
                     "record_ids": sorted(
-                        {str(item.get("record_id")) for item in properties if item.get("record_id")}
+                        {
+                            str(item.get("record_id"))
+                            for item in properties
+                            if item.get("record_id")
+                        }
                     ),
-                    "method_version": properties[0].get("method_version") if properties else None,
+                    "method_version": properties[0].get("method_version")
+                    if properties
+                    else None,
                     "interpretation_limit": (
                         "Fixed-grid screening aggregation of candidate anomaly points; the polygon is not "
                         "a geological boundary and makes no causal, pollution, or mineralization claim."
@@ -436,7 +468,8 @@ def compact_map_payload(
                 pools.index("original_unit", properties.get("original_unit")),
                 pools.index(
                     "geology",
-                    properties.get("spatial_geologic_unit") or properties.get("geologic_unit"),
+                    properties.get("spatial_geologic_unit")
+                    or properties.get("geologic_unit"),
                 ),
                 pools.index("geology_status", properties.get("spatial_geology_status")),
             ]
@@ -466,16 +499,23 @@ def compact_map_payload(
                 str(properties.get("group_id") or ""),
                 pools.index(
                     "geology",
-                    properties.get("spatial_geologic_unit") or properties.get("geologic_unit"),
+                    properties.get("spatial_geologic_unit")
+                    or properties.get("geologic_unit"),
                 ),
             ]
         )
 
     missing_rows = [
-        row for row in database if row.get("latitude") is None or row.get("longitude") is None
+        row
+        for row in database
+        if row.get("latitude") is None or row.get("longitude") is None
     ]
-    missing_by_source = Counter(str(row.get("source_id") or "unknown") for row in missing_rows)
-    missing_by_medium = Counter(str(row.get("medium") or "unknown") for row in missing_rows)
+    missing_by_source = Counter(
+        str(row.get("source_id") or "unknown") for row in missing_rows
+    )
+    missing_by_medium = Counter(
+        str(row.get("medium") or "unknown") for row in missing_rows
+    )
     missing_examples = [
         {
             "record_id": row.get("record_id"),
@@ -518,7 +558,7 @@ def compact_map_payload(
     }
 
 
-HTML_TEMPLATE = r'''<!doctype html>
+HTML_TEMPLATE = r"""<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -598,7 +638,7 @@ function renderRegions(){const rows=[...D.regions].sort((a,b)=>(b.properties.sta
 function renderQuality(){const flags=Object.entries(D.quality.qc.flag_counts||{}).sort((a,b)=>b[1]-a[1]),mx=Math.max(1,...flags.map(x=>x[1]));$("qcBars").innerHTML=flags.map(([n,v])=>`<div class="bar-row"><span class="mono">${esc(n)}</span><div class="bar"><span style="width:${v/mx*100}%"></span></div><b>${fmt.format(v)}</b></div>`).join("");const m=D.quality.missing_coordinates;$("missingCount").textContent=fmt.format(m.count);$("missingSummary").innerHTML=`<div class="mini-grid">${Object.entries(m.by_medium).map(([k,v])=>`<div class="mini"><b>${fmt.format(v)}</b><span>${esc(k)}</span></div>`).join("")}</div><p class="muted">以下仅展示前 ${m.examples.length} 条；完整记录仍在标准化数据库中。</p>`;$("missingList").innerHTML=m.examples.map(x=>`<div class="missing-item"><b class="mono">${esc(x.record_id)}</b><br>${esc(x.medium)} · ${esc(x.element)} · ${esc(x.original_value)} ${esc(x.original_unit)}<br><span class="muted">${esc((x.qc_flags||[]).join(", "))}</span></div>`).join("");const g=D.sources.geographic_coverage;if(g){$("coverageCard").style.display="block";const media=["rock","soil","sediment","water"],rows=Object.entries(g.coverage_matrix||{});$("coverageMatrix").innerHTML=`<div class="table-wrap" style="max-height:none"><table><thead><tr><th>洲</th>${media.map(x=>`<th>${esc(x)}</th>`).join("")}<th>合计</th></tr></thead><tbody>${rows.map(([c,v])=>`<tr><td><b>${esc(c)}</b></td>${media.map(x=>`<td>${fmt.format(v[x]||0)}</td>`).join("")}<td>${fmt.format(media.reduce((n,x)=>n+(v[x]||0),0))}</td></tr>`).join("")}</tbody></table></div><p class="muted">GEMStat 明确国家数：${fmt.format(g.gemstat_country_count||0)}。七洲仅表示至少一种介质有记录，不表示 7×4 单元完整。</p><div class="callout"><strong>已知空洞</strong><ul>${(g.declared_blind_spots||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`}$("disclaimers").innerHTML=[...D.disclaimers,...(g?.interpretation_limits||[])].map(x=>`<li>${esc(x)}</li>`).join("")}
 renderSources();renderRegions();renderQuality();resize();
 </script>
-</body></html>'''
+</body></html>"""
 
 
 def build_showcase(
@@ -618,10 +658,14 @@ def build_showcase(
     if coverage_context is not None:
         source_summary["geographic_coverage"] = {
             "scientific_scope": coverage_context.get("scientific_scope"),
-            "continent_mapping_version": coverage_context.get("continent_mapping_version"),
+            "continent_mapping_version": coverage_context.get(
+                "continent_mapping_version"
+            ),
             "records_by_continent": coverage_context.get("records_by_continent", {}),
             "coverage_matrix": coverage_context.get("coverage_matrix", {}),
-            "explicit_country_label_count": coverage_context.get("explicit_country_label_count"),
+            "explicit_country_label_count": coverage_context.get(
+                "explicit_country_label_count"
+            ),
             "gemstat_country_count": coverage_context.get("gemstat_country_count"),
             "declared_blind_spots": coverage_context.get("declared_blind_spots", []),
             "interpretation_limits": coverage_context.get("interpretation_limits", []),
@@ -649,7 +693,9 @@ def build_showcase(
         disclaimers,
     )
     atlas_path = output_dir / "atlas.html"
-    atomic_write_text(atlas_path, HTML_TEMPLATE.replace("__ATLAS_PAYLOAD__", compact_json(payload)))
+    atomic_write_text(
+        atlas_path, HTML_TEMPLATE.replace("__ATLAS_PAYLOAD__", compact_json(payload))
+    )
 
     standardized_database = d2_output_dir / "geochemistry.csv"
     deliverables = {
@@ -716,7 +762,9 @@ def build_showcase(
         "showcase_version": SHOWCASE_VERSION,
         "source_count": source_summary["source_count"],
         "anomaly_region_count": len(anomaly_regions["features"]),
-        "candidate_cluster_count": region_report["status_counts"].get("candidate_cluster", 0),
+        "candidate_cluster_count": region_report["status_counts"].get(
+            "candidate_cluster", 0
+        ),
         "atlas_bytes": atlas_path.stat().st_size,
         "deliverables": deliverables,
     }

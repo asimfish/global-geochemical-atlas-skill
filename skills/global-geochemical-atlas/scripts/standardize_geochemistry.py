@@ -33,11 +33,15 @@ SPATIAL_ANOMALY_VERSION = "d2-spatial-hypergeometric-fdr-v1"
 ATOMIC_WEIGHT_VERSION = "d2-atomic-weights-v1"
 MOLAR_MASS_VERSION = "d2-ciaaw-abridged-2024-v1"
 COORDINATE_POLICY_REGISTRY = (
-    Path(__file__).resolve().parent.parent / "references" / "coordinate-policy-registry.json"
+    Path(__file__).resolve().parent.parent
+    / "references"
+    / "coordinate-policy-registry.json"
 )
 GEOLOGY_JOIN_VERSION = "d2-glim-05deg-cell-join-v1"
 GLIM_SOURCE = "https://doi.org/10.1594/PANGAEA.788537"
-GLIM_VERSION = "PANGAEA.788537; 2012 publication; 0.5 degree dominant surface lithology raster"
+GLIM_VERSION = (
+    "PANGAEA.788537; 2012 publication; 0.5 degree dominant surface lithology raster"
+)
 GLIM_LICENSE = "CC-BY-3.0"
 GLIM_RESOLUTION_DEG = 0.5
 MAX_GEOLOGY_ARCHIVE_BYTES = 10_000_000
@@ -213,26 +217,84 @@ SCHEMA_COLUMNS = (
 )
 
 INPUT_FIELDS = {
-    "record_id", "source_record_id", "sample_id", "sample_identity_group", "replicate_group_id",
-    "analysis_batch_id", "igsn",
-    "element_or_analyte", "analyte_reported", "species_or_oxide", "value", "unit", "value_qualifier",
+    "record_id",
+    "source_record_id",
+    "sample_id",
+    "sample_identity_group",
+    "replicate_group_id",
+    "analysis_batch_id",
+    "igsn",
+    "element_or_analyte",
+    "analyte_reported",
+    "species_or_oxide",
+    "value",
+    "unit",
+    "value_qualifier",
     "source_qualifier_raw",
-    "missing_reason", "medium", "material", "measurement_basis", "original_latitude_raw",
-    "original_longitude_raw", "latitude", "longitude", "source_crs",
-    "coordinate_transform_method", "coordinate_evidence_scope", "coordinate_policy_id",
-    "coordinate_latitude_field", "coordinate_longitude_field", "coordinate_uncertainty_m",
-    "sampled_at", "sample_depth_min_m",
-    "sample_depth_max_m", "grain_fraction", "lithology", "geologic_unit", "geologic_unit_id",
-    "geologic_context_source", "geologic_context_version", "geologic_match_method",
-    "distance_to_geologic_boundary_m", "geologic_match_confidence", "analytical_method", "method_family",
-    "digestion_or_extraction", "laboratory", "reference_material", "detection_limit", "detection_limit_unit",
-    "source_id", "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row",
-    "source_locator", "file_sha256", "license", "source_tier",
+    "missing_reason",
+    "medium",
+    "material",
+    "measurement_basis",
+    "original_latitude_raw",
+    "original_longitude_raw",
+    "latitude",
+    "longitude",
+    "source_crs",
+    "coordinate_transform_method",
+    "coordinate_evidence_scope",
+    "coordinate_policy_id",
+    "coordinate_latitude_field",
+    "coordinate_longitude_field",
+    "coordinate_uncertainty_m",
+    "sampled_at",
+    "sample_depth_min_m",
+    "sample_depth_max_m",
+    "grain_fraction",
+    "lithology",
+    "geologic_unit",
+    "geologic_unit_id",
+    "geologic_context_source",
+    "geologic_context_version",
+    "geologic_match_method",
+    "distance_to_geologic_boundary_m",
+    "geologic_match_confidence",
+    "analytical_method",
+    "method_family",
+    "digestion_or_extraction",
+    "laboratory",
+    "reference_material",
+    "detection_limit",
+    "detection_limit_unit",
+    "source_id",
+    "dataset_title",
+    "dataset_doi",
+    "dataset_version",
+    "source_file",
+    "source_row",
+    "source_locator",
+    "file_sha256",
+    "license",
+    "source_tier",
 }
 RECOMMENDED_INPUT_COLUMNS = {
-    "record_id", "source_record_id", "sample_id", "measurement_basis", "source_id", "source_locator",
-    "dataset_title", "dataset_version", "source_file", "source_row", "latitude", "longitude", "source_crs",
-    "coordinate_uncertainty_m", "analytical_method", "method_family", "digestion_or_extraction", "license",
+    "record_id",
+    "source_record_id",
+    "sample_id",
+    "measurement_basis",
+    "source_id",
+    "source_locator",
+    "dataset_title",
+    "dataset_version",
+    "source_file",
+    "source_row",
+    "latitude",
+    "longitude",
+    "source_crs",
+    "coordinate_uncertainty_m",
+    "analytical_method",
+    "method_family",
+    "digestion_or_extraction",
+    "license",
     "source_tier",
 }
 
@@ -289,34 +351,213 @@ FLAG_SEVERITY = {
 }
 
 ELEMENT_SYMBOLS = {
-    "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S",
-    "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge",
-    "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd",
-    "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd",
-    "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg",
-    "Tl", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm",
-    "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn",
-    "Nh", "Fl", "Mc", "Lv", "Ts", "Og",
+    "H",
+    "He",
+    "Li",
+    "Be",
+    "B",
+    "C",
+    "N",
+    "O",
+    "F",
+    "Ne",
+    "Na",
+    "Mg",
+    "Al",
+    "Si",
+    "P",
+    "S",
+    "Cl",
+    "Ar",
+    "K",
+    "Ca",
+    "Sc",
+    "Ti",
+    "V",
+    "Cr",
+    "Mn",
+    "Fe",
+    "Co",
+    "Ni",
+    "Cu",
+    "Zn",
+    "Ga",
+    "Ge",
+    "As",
+    "Se",
+    "Br",
+    "Kr",
+    "Rb",
+    "Sr",
+    "Y",
+    "Zr",
+    "Nb",
+    "Mo",
+    "Tc",
+    "Ru",
+    "Rh",
+    "Pd",
+    "Ag",
+    "Cd",
+    "In",
+    "Sn",
+    "Sb",
+    "Te",
+    "I",
+    "Xe",
+    "Cs",
+    "Ba",
+    "La",
+    "Ce",
+    "Pr",
+    "Nd",
+    "Pm",
+    "Sm",
+    "Eu",
+    "Gd",
+    "Tb",
+    "Dy",
+    "Ho",
+    "Er",
+    "Tm",
+    "Yb",
+    "Lu",
+    "Hf",
+    "Ta",
+    "W",
+    "Re",
+    "Os",
+    "Ir",
+    "Pt",
+    "Au",
+    "Hg",
+    "Tl",
+    "Pb",
+    "Bi",
+    "Po",
+    "At",
+    "Rn",
+    "Fr",
+    "Ra",
+    "Ac",
+    "Th",
+    "Pa",
+    "U",
+    "Np",
+    "Pu",
+    "Am",
+    "Cm",
+    "Bk",
+    "Cf",
+    "Es",
+    "Fm",
+    "Md",
+    "No",
+    "Lr",
+    "Rf",
+    "Db",
+    "Sg",
+    "Bh",
+    "Hs",
+    "Mt",
+    "Ds",
+    "Rg",
+    "Cn",
+    "Nh",
+    "Fl",
+    "Mc",
+    "Lv",
+    "Ts",
+    "Og",
 }
 
 ELEMENT_NAMES = {
-    "aluminium": "Al", "aluminum": "Al", "antimony": "Sb", "arsenic": "As", "barium": "Ba",
-    "beryllium": "Be", "bismuth": "Bi", "boron": "B", "cadmium": "Cd", "calcium": "Ca",
-    "carbon": "C", "cerium": "Ce", "cesium": "Cs", "caesium": "Cs", "chromium": "Cr",
-    "cobalt": "Co", "copper": "Cu", "dysprosium": "Dy", "erbium": "Er", "europium": "Eu",
-    "fluorine": "F", "gadolinium": "Gd", "gallium": "Ga", "germanium": "Ge", "gold": "Au",
-    "hafnium": "Hf", "holmium": "Ho", "indium": "In", "iodine": "I", "iron": "Fe",
-    "lanthanum": "La", "lead": "Pb", "lithium": "Li", "lutetium": "Lu", "magnesium": "Mg",
-    "manganese": "Mn", "mercury": "Hg", "molybdenum": "Mo", "neodymium": "Nd", "nickel": "Ni",
-    "niobium": "Nb", "palladium": "Pd", "phosphorus": "P", "platinum": "Pt", "potassium": "K",
-    "praseodymium": "Pr", "rhenium": "Re", "rubidium": "Rb", "samarium": "Sm", "scandium": "Sc",
-    "selenium": "Se", "silicon": "Si", "silver": "Ag", "sodium": "Na", "strontium": "Sr",
-    "sulfur": "S", "sulphur": "S", "tantalum": "Ta", "tellurium": "Te", "terbium": "Tb",
-    "thallium": "Tl", "thorium": "Th", "thulium": "Tm", "tin": "Sn", "titanium": "Ti",
-    "tungsten": "W", "uranium": "U", "vanadium": "V", "ytterbium": "Yb", "yttrium": "Y",
-    "zinc": "Zn", "zirconium": "Zr",
-    "砷": "As", "铅": "Pb", "镉": "Cd", "汞": "Hg", "铜": "Cu", "锌": "Zn", "铁": "Fe",
-    "锰": "Mn", "铬": "Cr", "镍": "Ni", "钴": "Co", "金": "Au", "银": "Ag", "铀": "U",
+    "aluminium": "Al",
+    "aluminum": "Al",
+    "antimony": "Sb",
+    "arsenic": "As",
+    "barium": "Ba",
+    "beryllium": "Be",
+    "bismuth": "Bi",
+    "boron": "B",
+    "cadmium": "Cd",
+    "calcium": "Ca",
+    "carbon": "C",
+    "cerium": "Ce",
+    "cesium": "Cs",
+    "caesium": "Cs",
+    "chromium": "Cr",
+    "cobalt": "Co",
+    "copper": "Cu",
+    "dysprosium": "Dy",
+    "erbium": "Er",
+    "europium": "Eu",
+    "fluorine": "F",
+    "gadolinium": "Gd",
+    "gallium": "Ga",
+    "germanium": "Ge",
+    "gold": "Au",
+    "hafnium": "Hf",
+    "holmium": "Ho",
+    "indium": "In",
+    "iodine": "I",
+    "iron": "Fe",
+    "lanthanum": "La",
+    "lead": "Pb",
+    "lithium": "Li",
+    "lutetium": "Lu",
+    "magnesium": "Mg",
+    "manganese": "Mn",
+    "mercury": "Hg",
+    "molybdenum": "Mo",
+    "neodymium": "Nd",
+    "nickel": "Ni",
+    "niobium": "Nb",
+    "palladium": "Pd",
+    "phosphorus": "P",
+    "platinum": "Pt",
+    "potassium": "K",
+    "praseodymium": "Pr",
+    "rhenium": "Re",
+    "rubidium": "Rb",
+    "samarium": "Sm",
+    "scandium": "Sc",
+    "selenium": "Se",
+    "silicon": "Si",
+    "silver": "Ag",
+    "sodium": "Na",
+    "strontium": "Sr",
+    "sulfur": "S",
+    "sulphur": "S",
+    "tantalum": "Ta",
+    "tellurium": "Te",
+    "terbium": "Tb",
+    "thallium": "Tl",
+    "thorium": "Th",
+    "thulium": "Tm",
+    "tin": "Sn",
+    "titanium": "Ti",
+    "tungsten": "W",
+    "uranium": "U",
+    "vanadium": "V",
+    "ytterbium": "Yb",
+    "yttrium": "Y",
+    "zinc": "Zn",
+    "zirconium": "Zr",
+    "砷": "As",
+    "铅": "Pb",
+    "镉": "Cd",
+    "汞": "Hg",
+    "铜": "Cu",
+    "锌": "Zn",
+    "铁": "Fe",
+    "锰": "Mn",
+    "铬": "Cr",
+    "镍": "Ni",
+    "钴": "Co",
+    "金": "Au",
+    "银": "Ag",
+    "铀": "U",
 }
 
 # Fixed conventional atomic weights for a deliberately small, auditable oxide whitelist.
@@ -358,22 +599,50 @@ OXIDE_RULES: dict[str, tuple[str, str, dict[str, int]]] = {
 }
 
 MEDIUM_ALIASES = {
-    "rock": "rock", "rocks": "rock", "bedrock": "rock", "岩石": "rock",
-    "soil": "soil", "soils": "soil", "topsoil": "soil", "subsoil": "soil", "土壤": "soil",
-    "sediment": "sediment", "sediments": "sediment", "stream sediment": "sediment",
-    "stream_sediment": "sediment", "河流沉积物": "sediment", "沉积物": "sediment",
-    "water": "water", "groundwater": "water", "surface water": "water", "surface_water": "water",
-    "seawater": "water", "porewater": "water", "river water": "water", "水": "water", "水体": "water",
-    "mineral": "mineral", "minerals": "mineral", "矿物": "mineral",
-    "concentrate": "concentrate", "heavy mineral concentrate": "concentrate", "精矿": "concentrate",
+    "rock": "rock",
+    "rocks": "rock",
+    "bedrock": "rock",
+    "岩石": "rock",
+    "soil": "soil",
+    "soils": "soil",
+    "topsoil": "soil",
+    "subsoil": "soil",
+    "土壤": "soil",
+    "sediment": "sediment",
+    "sediments": "sediment",
+    "stream sediment": "sediment",
+    "stream_sediment": "sediment",
+    "河流沉积物": "sediment",
+    "沉积物": "sediment",
+    "water": "water",
+    "groundwater": "water",
+    "surface water": "water",
+    "surface_water": "water",
+    "seawater": "water",
+    "porewater": "water",
+    "river water": "water",
+    "水": "water",
+    "水体": "water",
+    "mineral": "mineral",
+    "minerals": "mineral",
+    "矿物": "mineral",
+    "concentrate": "concentrate",
+    "heavy mineral concentrate": "concentrate",
+    "精矿": "concentrate",
 }
 
 SOLID_MEDIA = {"rock", "soil", "sediment", "mineral", "concentrate"}
 SOLID_FACTORS = {
-    "mg/kg": 1.0, "ppm": 1.0, "ug/g": 1.0, "g/t": 1.0,
+    "mg/kg": 1.0,
+    "ppm": 1.0,
+    "ug/g": 1.0,
+    "g/t": 1.0,
     "wt%": 10_000.0,
-    "ppb": 0.001, "ug/kg": 0.001, "ng/g": 0.001,
-    "g/kg": 1_000.0, "mg/g": 1_000.0,
+    "ppb": 0.001,
+    "ug/kg": 0.001,
+    "ng/g": 0.001,
+    "g/kg": 1_000.0,
+    "mg/g": 1_000.0,
 }
 WATER_FACTORS = {"ug/l": 1.0, "mg/l": 1_000.0, "ng/l": 0.001, "g/l": 1_000_000.0}
 # Frozen conventional/abridged atomic weights used only for explicit elemental
@@ -387,7 +656,17 @@ AQUEOUS_MOLAR_MASSES = {
     "Zn": 65.38,
 }
 AQUEOUS_AMBIGUOUS_UNITS = {
-    "ppm", "ppb", "wt%", "%", "percent", "mg/kg", "ug/kg", "g/kg", "ug/g", "ng/g", "mg/g",
+    "ppm",
+    "ppb",
+    "wt%",
+    "%",
+    "percent",
+    "mg/kg",
+    "ug/kg",
+    "g/kg",
+    "ug/g",
+    "ng/g",
+    "mg/g",
 }
 
 SOURCE_TIER_SCORES = {
@@ -400,35 +679,77 @@ SOURCE_TIER_SCORES = {
     "unknown": 0.30,
 }
 SOURCE_TIER_ALIASES = {
-    "official": "official_curated", "official curated": "official_curated", "official_curated": "official_curated",
-    "government": "government", "gov": "government", "government agency": "government",
-    "peer reviewed": "peer_reviewed", "peer-reviewed": "peer_reviewed", "peer_reviewed": "peer_reviewed",
-    "journal": "peer_reviewed", "institutional repository": "institutional_repository",
-    "institutional_repository": "institutional_repository", "author supplement": "author_supplement",
-    "author_supplement": "author_supplement", "supplement": "author_supplement",
-    "aggregator": "aggregator", "unknown": "unknown", "": "unknown",
+    "official": "official_curated",
+    "official curated": "official_curated",
+    "official_curated": "official_curated",
+    "government": "government",
+    "gov": "government",
+    "government agency": "government",
+    "peer reviewed": "peer_reviewed",
+    "peer-reviewed": "peer_reviewed",
+    "peer_reviewed": "peer_reviewed",
+    "journal": "peer_reviewed",
+    "institutional repository": "institutional_repository",
+    "institutional_repository": "institutional_repository",
+    "author supplement": "author_supplement",
+    "author_supplement": "author_supplement",
+    "supplement": "author_supplement",
+    "aggregator": "aggregator",
+    "unknown": "unknown",
+    "": "unknown",
 }
 
 QUALIFIER_ALIASES = {
-    "": "reported", "=": "reported", "reported": "reported", "exact": "reported",
-    "~": "approximate", "approx": "approximate", "approximate": "approximate",
-    "<": "lt", "lt": "lt", "<=": "le", "≤": "le", "le": "le",
-    ">": "gt", "gt": "gt", ">=": "ge", "≥": "ge", "ge": "ge",
-    "bdl": "bdl", "below detection limit": "bdl", "l": "bdl",
-    "lod": "bdl", "<lod": "bdl",
-    "loq": "loq", "<loq": "loq", "bql": "loq",
-    "below quantitation limit": "loq", "below quantification limit": "loq",
+    "": "reported",
+    "=": "reported",
+    "reported": "reported",
+    "exact": "reported",
+    "~": "approximate",
+    "approx": "approximate",
+    "approximate": "approximate",
+    "<": "lt",
+    "lt": "lt",
+    "<=": "le",
+    "≤": "le",
+    "le": "le",
+    ">": "gt",
+    "gt": "gt",
+    ">=": "ge",
+    "≥": "ge",
+    "ge": "ge",
+    "bdl": "bdl",
+    "below detection limit": "bdl",
+    "l": "bdl",
+    "lod": "bdl",
+    "<lod": "bdl",
+    "loq": "loq",
+    "<loq": "loq",
+    "bql": "loq",
+    "below quantitation limit": "loq",
+    "below quantification limit": "loq",
     "g": "gt",
-    "nd": "nd", "n.d.": "nd", "not detected": "nd", "n": "nd",
-    "trace": "trace", "tr": "trace",
+    "nd": "nd",
+    "n.d.": "nd",
+    "not detected": "nd",
+    "n": "nd",
+    "trace": "trace",
+    "tr": "trace",
 }
 CENSORED_QUALIFIERS = {"lt", "le", "gt", "ge", "bdl", "loq", "nd", "trace"}
 MISSING_REASON_ALIASES = {
-    "not_reported": "not_reported", "not reported": "not_reported", "nr": "not_reported",
-    "not_analyzed": "not_analyzed", "not analysed": "not_analyzed", "not analyzed": "not_analyzed",
-    "na": "not_analyzed", "n/a": "not_analyzed",
-    "insufficient_sample": "insufficient_sample", "insufficient sample": "insufficient_sample", "ins": "insufficient_sample",
-    "invalid_value": "invalid_value", "invalid value": "invalid_value",
+    "not_reported": "not_reported",
+    "not reported": "not_reported",
+    "nr": "not_reported",
+    "not_analyzed": "not_analyzed",
+    "not analysed": "not_analyzed",
+    "not analyzed": "not_analyzed",
+    "na": "not_analyzed",
+    "n/a": "not_analyzed",
+    "insufficient_sample": "insufficient_sample",
+    "insufficient sample": "insufficient_sample",
+    "ins": "insufficient_sample",
+    "invalid_value": "invalid_value",
+    "invalid value": "invalid_value",
     "unknown": "unknown",
 }
 METHOD_FAMILY_PATTERNS = (
@@ -443,7 +764,9 @@ METHOD_FAMILY_PATTERNS = (
 WGS84_CRS_ALIASES = {"epsg:4326", "4326", "wgs84", "wgs 84", "ogc:crs84", "crs84"}
 SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 NUMBER_RE = re.compile(r"^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$")
-PREFIXED_NUMBER_RE = re.compile(r"^(<=|>=|<|>|≤|≥|~)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)$")
+PREFIXED_NUMBER_RE = re.compile(
+    r"^(<=|>=|<|>|≤|≥|~)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)$"
+)
 
 
 class PipelineError(ValueError):
@@ -458,7 +781,9 @@ def blank_to_none(value: Any) -> str | None:
 
 
 def extract_source_qualifier_raw(row: Mapping[str, Any]) -> str | None:
-    explicit = blank_to_none(row.get("source_qualifier_raw")) or blank_to_none(row.get("value_qualifier"))
+    explicit = blank_to_none(row.get("source_qualifier_raw")) or blank_to_none(
+        row.get("value_qualifier")
+    )
     if explicit is not None:
         return explicit
     raw = blank_to_none(row.get("value"))
@@ -505,8 +830,12 @@ def canonical_species_key(value: Any) -> str | None:
     return re.sub(r"[^A-Za-z0-9]", "", translated).upper() or None
 
 
-def resolve_analyte(row: Mapping[str, Any], flags: list[str]) -> tuple[str, bool, str | None, str | None]:
-    reported = blank_to_none(row.get("analyte_reported")) or blank_to_none(row.get("element_or_analyte"))
+def resolve_analyte(
+    row: Mapping[str, Any], flags: list[str]
+) -> tuple[str, bool, str | None, str | None]:
+    reported = blank_to_none(row.get("analyte_reported")) or blank_to_none(
+        row.get("element_or_analyte")
+    )
     explicit_species = blank_to_none(row.get("species_or_oxide"))
     species_key = canonical_species_key(explicit_species)
     reported_key = canonical_species_key(reported)
@@ -541,7 +870,9 @@ def species_conversion_factor(
     species_or_oxide: str | None, analyte: str, flags: list[str]
 ) -> tuple[float | None, str | None]:
     species_key = canonical_species_key(species_or_oxide)
-    if species_key is None or (species_key == analyte.upper() and analyte in ELEMENT_SYMBOLS):
+    if species_key is None or (
+        species_key == analyte.upper() and analyte in ELEMENT_SYMBOLS
+    ):
         return 1.0, None
     rule = OXIDE_RULES.get(species_key)
     if rule is None:
@@ -551,12 +882,12 @@ def species_conversion_factor(
     if analyte != expected_element:
         add_flag(flags, "OXIDE_ELEMENT_MISMATCH")
         return None, None
-    molecular_mass = sum(ATOMIC_WEIGHTS[element] * count for element, count in composition.items())
+    molecular_mass = sum(
+        ATOMIC_WEIGHTS[element] * count for element, count in composition.items()
+    )
     element_mass = ATOMIC_WEIGHTS[expected_element] * composition[expected_element]
     fraction = element_mass / molecular_mass
-    formula_text = (
-        f"{formula}_to_{expected_element}; fraction={fraction:.12g}; atomic_weights={ATOMIC_WEIGHT_VERSION}"
-    )
+    formula_text = f"{formula}_to_{expected_element}; fraction={fraction:.12g}; atomic_weights={ATOMIC_WEIGHT_VERSION}"
     return fraction, formula_text
 
 
@@ -597,14 +928,31 @@ def canonicalize_unit(value: Any) -> str | None:
     text = blank_to_none(value)
     if text is None:
         return None
-    unit = text.casefold().replace("μ", "u").replace("µ", "u").replace("−", "-").replace("·", "")
-    unit = unit.replace("micrograms", "ug").replace("microgram", "ug").replace("mcg", "ug")
+    unit = (
+        text.casefold()
+        .replace("μ", "u")
+        .replace("µ", "u")
+        .replace("−", "-")
+        .replace("·", "")
+    )
+    unit = (
+        unit.replace("micrograms", "ug").replace("microgram", "ug").replace("mcg", "ug")
+    )
     unit = unit.replace("milligrams", "mg").replace("milligram", "mg")
     unit = unit.replace("nanograms", "ng").replace("nanogram", "ng")
     unit = unit.replace("grams", "g").replace("gram", "g")
-    unit = unit.replace("kilograms", "kg").replace("kilogram", "kg").replace("litres", "l").replace("liters", "l")
+    unit = (
+        unit.replace("kilograms", "kg")
+        .replace("kilogram", "kg")
+        .replace("litres", "l")
+        .replace("liters", "l")
+    )
     unit = unit.replace("litre", "l").replace("liter", "l").replace("tonne", "t")
-    unit = unit.replace("weightpercent", "wt%").replace("weight%", "wt%").replace("wt.%", "wt%")
+    unit = (
+        unit.replace("weightpercent", "wt%")
+        .replace("weight%", "wt%")
+        .replace("wt.%", "wt%")
+    )
     unit = re.sub(r"\s+", "", unit)
     unit = unit.replace("per", "/")
     unit = re.sub(r"kg\^?-?1$", "/kg", unit)
@@ -612,10 +960,19 @@ def canonicalize_unit(value: Any) -> str | None:
     unit = re.sub(r"l\^?-?1$", "/l", unit)
     unit = unit.replace("//", "/")
     aliases = {
-        "wtpercent": "wt%", "wt.%": "wt%",
-        "mgkg": "mg/kg", "ugkg": "ug/kg", "gkg": "g/kg",
-        "ugg": "ug/g", "ngg": "ng/g", "mgg": "mg/g", "gt": "g/t",
-        "ugl": "ug/l", "mgl": "mg/l", "ngl": "ng/l", "gl": "g/l",
+        "wtpercent": "wt%",
+        "wt.%": "wt%",
+        "mgkg": "mg/kg",
+        "ugkg": "ug/kg",
+        "gkg": "g/kg",
+        "ugg": "ug/g",
+        "ngg": "ng/g",
+        "mgg": "mg/g",
+        "gt": "g/t",
+        "ugl": "ug/l",
+        "mgl": "mg/l",
+        "ngl": "ng/l",
+        "gl": "g/l",
     }
     return aliases.get(unit, unit)
 
@@ -625,7 +982,9 @@ def parse_measurement(
 ) -> tuple[float | None, str, float | None, float | None, float | None, str | None]:
     raw = blank_to_none(row.get("value"))
     source_qualifier_raw = extract_source_qualifier_raw(row)
-    explicit_qualifier = blank_to_none(row.get("value_qualifier")) or source_qualifier_raw
+    explicit_qualifier = (
+        blank_to_none(row.get("value_qualifier")) or source_qualifier_raw
+    )
     missing_reason = normalize_missing_reason(row.get("missing_reason"), flags)
     qualifier: str | None = None
     number: float | None = None
@@ -639,7 +998,9 @@ def parse_measurement(
             qualifier = "unknown"
             flags.append("MISSING_VALUE")
         elif match:
-            qualifier = QUALIFIER_ALIASES.get((match.group(1) or "").casefold(), "reported")
+            qualifier = QUALIFIER_ALIASES.get(
+                (match.group(1) or "").casefold(), "reported"
+            )
             number = float(match.group(2))
         else:
             qualifier = QUALIFIER_ALIASES.get(compact.casefold())
@@ -664,12 +1025,16 @@ def parse_measurement(
         missing_reason = None
     detection_limit_raw = blank_to_none(row.get("detection_limit"))
     detection_limit = parse_optional_float(detection_limit_raw)
-    if detection_limit_raw is not None and (detection_limit is None or detection_limit < 0):
+    if detection_limit_raw is not None and (
+        detection_limit is None or detection_limit < 0
+    ):
         detection_limit = None
         flags.append("INVALID_DETECTION_LIMIT")
     quantitation_limit_raw = blank_to_none(row.get("quantitation_limit"))
     quantitation_limit = parse_optional_float(quantitation_limit_raw)
-    if quantitation_limit_raw is not None and (quantitation_limit is None or quantitation_limit < 0):
+    if quantitation_limit_raw is not None and (
+        quantitation_limit is None or quantitation_limit < 0
+    ):
         quantitation_limit = None
         flags.append("INVALID_QUANTITATION_LIMIT")
     if qualifier in {"lt", "le", "gt", "ge"} and number is not None:
@@ -687,7 +1052,14 @@ def parse_measurement(
             flags.append("NONDETECT_WITHOUT_LIMIT")
     if number is not None and number < 0:
         flags.append("NEGATIVE_CONCENTRATION")
-    return number, qualifier, censoring_limit, detection_limit, quantitation_limit, missing_reason
+    return (
+        number,
+        qualifier,
+        censoring_limit,
+        detection_limit,
+        quantitation_limit,
+        missing_reason,
+    )
 
 
 def conversion_for(
@@ -725,9 +1097,13 @@ def load_coordinate_policies() -> dict[str, dict[str, Any]]:
     try:
         registry = json.loads(COORDINATE_POLICY_REGISTRY.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise PipelineError("coordinate policy registry is unavailable or invalid") from exc
+        raise PipelineError(
+            "coordinate policy registry is unavailable or invalid"
+        ) from exc
     if registry.get("schema_version") != "geochemical-coordinate-policy-registry-v1":
-        raise PipelineError("coordinate policy registry has an unsupported schema version")
+        raise PipelineError(
+            "coordinate policy registry has an unsupported schema version"
+        )
     policies = registry.get("policies")
     if not isinstance(policies, list):
         raise PipelineError("coordinate policy registry policies must be an array")
@@ -736,7 +1112,9 @@ def load_coordinate_policies() -> dict[str, dict[str, Any]]:
         if not isinstance(policy, dict) or not isinstance(policy.get("policy_id"), str):
             raise PipelineError("coordinate policy registry contains an invalid policy")
         if policy["policy_id"] in indexed:
-            raise PipelineError("coordinate policy registry contains duplicate policy IDs")
+            raise PipelineError(
+                "coordinate policy registry contains duplicate policy IDs"
+            )
         indexed[policy["policy_id"]] = policy
     return indexed
 
@@ -750,13 +1128,18 @@ def coordinate_evidence(
     method = blank_to_none(row.get("coordinate_transform_method"))
     requested_scope = blank_to_none(row.get("coordinate_evidence_scope"))
     metadata: dict[str, str | None] = {
-        "coordinate_evidence_scope": requested_scope or ("file_declared" if source_crs else None),
+        "coordinate_evidence_scope": requested_scope
+        or ("file_declared" if source_crs else None),
         "coordinate_policy_id": None,
         "coordinate_policy_version": None,
         "coordinate_policy_url": None,
         "coordinate_policy_sha256": None,
-        "coordinate_latitude_field": blank_to_none(row.get("coordinate_latitude_field")),
-        "coordinate_longitude_field": blank_to_none(row.get("coordinate_longitude_field")),
+        "coordinate_latitude_field": blank_to_none(
+            row.get("coordinate_latitude_field")
+        ),
+        "coordinate_longitude_field": blank_to_none(
+            row.get("coordinate_longitude_field")
+        ),
     }
     if source_crs is not None:
         if requested_scope == "platform_policy_declared":
@@ -772,13 +1155,17 @@ def coordinate_evidence(
     longitude_field = metadata["coordinate_longitude_field"] or ""
     valid = bool(
         policy
-        and re.fullmatch(str(policy.get("dataset_doi_pattern") or "(?!)"), doi, re.IGNORECASE)
+        and re.fullmatch(
+            str(policy.get("dataset_doi_pattern") or "(?!)"), doi, re.IGNORECASE
+        )
         and latitude_field.casefold()
         in {str(value).casefold() for value in policy.get("latitude_fields", [])}
         and longitude_field.casefold()
         in {str(value).casefold() for value in policy.get("longitude_fields", [])}
         and policy.get("target_crs") == "EPSG:4326"
-        and re.fullmatch(r"[0-9a-f]{64}", str(policy.get("authority_page_sha256") or ""))
+        and re.fullmatch(
+            r"[0-9a-f]{64}", str(policy.get("authority_page_sha256") or "")
+        )
     )
     if not valid:
         add_flag(flags, "INVALID_COORDINATE_POLICY")
@@ -805,12 +1192,18 @@ def is_wgs84_crs(value: str) -> bool:
 
 
 def normalize_coordinates(
-    row: Mapping[str, Any], flags: list[str], region_bbox: tuple[float, float, float, float] | None
+    row: Mapping[str, Any],
+    flags: list[str],
+    region_bbox: tuple[float, float, float, float] | None,
 ) -> tuple[str | None, str | None, float | None, float | None]:
     canonical_lat_raw = blank_to_none(row.get("latitude"))
     canonical_lon_raw = blank_to_none(row.get("longitude"))
-    original_lat_raw = blank_to_none(row.get("original_latitude_raw")) or canonical_lat_raw
-    original_lon_raw = blank_to_none(row.get("original_longitude_raw")) or canonical_lon_raw
+    original_lat_raw = (
+        blank_to_none(row.get("original_latitude_raw")) or canonical_lat_raw
+    )
+    original_lon_raw = (
+        blank_to_none(row.get("original_longitude_raw")) or canonical_lon_raw
+    )
     lat = parse_optional_float(canonical_lat_raw)
     lon = parse_optional_float(canonical_lon_raw)
 
@@ -828,7 +1221,12 @@ def normalize_coordinates(
             add_flag(flags, "INCOMPLETE_COORDINATE")
             add_flag(flags, "INVALID_COORDINATE")
         return original_lat_raw, original_lon_raw, None, None
-    if canonical_lat_raw is None or canonical_lon_raw is None or lat is None or lon is None:
+    if (
+        canonical_lat_raw is None
+        or canonical_lon_raw is None
+        or lat is None
+        or lon is None
+    ):
         add_flag(flags, "INCOMPLETE_COORDINATE")
         add_flag(flags, "INVALID_COORDINATE")
         return original_lat_raw, original_lon_raw, None, None
@@ -844,7 +1242,9 @@ def normalize_coordinates(
         add_flag(flags, "ZERO_ISLAND_COORDINATE")
     if region_bbox is not None:
         west, south, east, north = region_bbox
-        longitude_inside = west <= lon <= east if west <= east else lon >= west or lon <= east
+        longitude_inside = (
+            west <= lon <= east if west <= east else lon >= west or lon <= east
+        )
         if not (longitude_inside and south <= lat <= north):
             add_flag(flags, "OUTSIDE_REQUEST_REGION")
     return original_lat_raw, original_lon_raw, lat, lon
@@ -858,14 +1258,21 @@ def normalize_source_tier(value: Any, flags: list[str]) -> str:
     return tier
 
 
-def normalize_depth(row: Mapping[str, Any], flags: list[str]) -> tuple[float | None, float | None]:
+def normalize_depth(
+    row: Mapping[str, Any], flags: list[str]
+) -> tuple[float | None, float | None]:
     depth_min = parse_optional_float(row.get("sample_depth_min_m"))
     depth_max = parse_optional_float(row.get("sample_depth_max_m"))
     invalid_raw = (
-        (blank_to_none(row.get("sample_depth_min_m")) is not None and depth_min is None)
-        or (blank_to_none(row.get("sample_depth_max_m")) is not None and depth_max is None)
+        blank_to_none(row.get("sample_depth_min_m")) is not None and depth_min is None
+    ) or (
+        blank_to_none(row.get("sample_depth_max_m")) is not None and depth_max is None
     )
-    if invalid_raw or (depth_min is not None and depth_min < 0) or (depth_max is not None and depth_max < 0):
+    if (
+        invalid_raw
+        or (depth_min is not None and depth_min < 0)
+        or (depth_max is not None and depth_max < 0)
+    ):
         add_flag(flags, "DEPTH_RANGE_INVALID")
         return None, None
     if depth_min is not None and depth_max is not None and depth_min > depth_max:
@@ -884,7 +1291,9 @@ def stable_record_id(row: Mapping[str, Any], row_number: int) -> str:
         "unit": blank_to_none(row.get("unit")),
         "row_number": row_number,
     }
-    digest = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:16]
+    digest = hashlib.sha256(
+        json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()[:16]
     return f"gen-{digest}"
 
 
@@ -905,17 +1314,37 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
     source = max(0.0, min(1.0, source))
 
     completeness_fields = (
-        "sample_id", "element_or_analyte", "analyte_reported", "medium", "measurement_basis", "original_unit",
-        "source_id", "source_locator", "dataset_title", "dataset_version", "source_file", "source_row",
-        "analytical_method", "method_family", "digestion_or_extraction", "license",
+        "sample_id",
+        "element_or_analyte",
+        "analyte_reported",
+        "medium",
+        "measurement_basis",
+        "original_unit",
+        "source_id",
+        "source_locator",
+        "dataset_title",
+        "dataset_version",
+        "source_file",
+        "source_row",
+        "analytical_method",
+        "method_family",
+        "digestion_or_extraction",
+        "license",
     )
-    present = sum(record[field] not in (None, "", "unknown") for field in completeness_fields)
+    present = sum(
+        record[field] not in (None, "", "unknown") for field in completeness_fields
+    )
     present += int(record["latitude"] is not None and record["longitude"] is not None)
     completeness = present / (len(completeness_fields) + 1)
 
     method = statistics.fmean(
         float(record[field] not in (None, ""))
-        for field in ("measurement_basis", "analytical_method", "method_family", "digestion_or_extraction")
+        for field in (
+            "measurement_basis",
+            "analytical_method",
+            "method_family",
+            "digestion_or_extraction",
+        )
     )
 
     if record["latitude"] is None or record["longitude"] is None:
@@ -944,7 +1373,9 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
         - 0.08 * severity_counts["warning"]
         - 0.02 * severity_counts["info"],
     )
-    overall = 0.30 * source + 0.20 * completeness + 0.20 * method + 0.15 * spatial + 0.15 * qc
+    overall = (
+        0.30 * source + 0.20 * completeness + 0.20 * method + 0.15 * spatial + 0.15 * qc
+    )
     gates_applied: list[str] = []
     if severity_counts["error"]:
         overall = min(overall, 0.59)
@@ -957,16 +1388,28 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
         gates_applied.append("missing_coordinate_uncertainty_medium_cap")
     if any(
         record[field] in (None, "")
-        for field in ("measurement_basis", "analytical_method", "method_family", "digestion_or_extraction")
+        for field in (
+            "measurement_basis",
+            "analytical_method",
+            "method_family",
+            "digestion_or_extraction",
+        )
     ):
         overall = min(overall, 0.79)
         gates_applied.append("incomplete_method_context_medium_cap")
     geologic_context_present = any(
         record.get(field) not in (None, "")
-        for field in ("matched_geologic_unit", "geologic_unit_raw", "geologic_unit", "lithology_raw", "lithology")
+        for field in (
+            "matched_geologic_unit",
+            "geologic_unit_raw",
+            "geologic_unit",
+            "lithology_raw",
+            "lithology",
+        )
     )
     geology_required = record.get("medium") in {"rock", "soil"} or (
-        record.get("medium") == "sediment" and record.get("sediment_environment") != "marine"
+        record.get("medium") == "sediment"
+        and record.get("sediment_environment") != "marine"
     )
     if geology_required and not geologic_context_present:
         overall = min(overall, 0.79)
@@ -989,10 +1432,14 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def normalize_row(
-    row: Mapping[str, Any], row_number: int, region_bbox: tuple[float, float, float, float] | None = None
+    row: Mapping[str, Any],
+    row_number: int,
+    region_bbox: tuple[float, float, float, float] | None = None,
 ) -> dict[str, Any]:
     flags: list[str] = []
-    analyte, analyte_recognized, analyte_reported, species_or_oxide = resolve_analyte(row, flags)
+    analyte, analyte_recognized, analyte_reported, species_or_oxide = resolve_analyte(
+        row, flags
+    )
     if not analyte_recognized:
         add_flag(flags, "UNRECOGNIZED_ANALYTE")
     medium, medium_recognized = normalize_medium(row.get("medium"))
@@ -1040,8 +1487,14 @@ def normalize_row(
     unit_factor, normalized_unit = conversion_for(
         medium, row.get("unit"), flags, analyte, species_or_oxide
     )
-    species_factor, species_formula = species_conversion_factor(species_or_oxide, analyte, flags)
-    factor = unit_factor * species_factor if unit_factor is not None and species_factor is not None else None
+    species_factor, species_formula = species_conversion_factor(
+        species_or_oxide, analyte, flags
+    )
+    factor = (
+        unit_factor * species_factor
+        if unit_factor is not None and species_factor is not None
+        else None
+    )
     conversion_formula = None
     if factor is not None:
         conversion_formula = f"normalized = original * {unit_factor:g}"
@@ -1055,9 +1508,17 @@ def normalize_row(
     normalized_value: float | None = None
     normalized_censoring_limit: float | None = None
     if factor is not None:
-        if qualifier not in CENSORED_QUALIFIERS and original_value is not None and original_value >= 0:
+        if (
+            qualifier not in CENSORED_QUALIFIERS
+            and original_value is not None
+            and original_value >= 0
+        ):
             normalized_value = original_value * factor
-        if qualifier in CENSORED_QUALIFIERS and censoring_limit is not None and censoring_limit >= 0:
+        if (
+            qualifier in CENSORED_QUALIFIERS
+            and censoring_limit is not None
+            and censoring_limit >= 0
+        ):
             limit_unit = blank_to_none(row.get("detection_limit_unit"))
             if qualifier == "loq":
                 limit_unit = blank_to_none(row.get("quantitation_limit_unit"))
@@ -1066,16 +1527,26 @@ def normalize_row(
                 limit_factor, limit_target = conversion_for(
                     medium, limit_unit, limit_flags, analyte, species_or_oxide
                 )
-                if limit_factor is not None and limit_target == normalized_unit and species_factor is not None:
-                    normalized_censoring_limit = censoring_limit * limit_factor * species_factor
+                if (
+                    limit_factor is not None
+                    and limit_target == normalized_unit
+                    and species_factor is not None
+                ):
+                    normalized_censoring_limit = (
+                        censoring_limit * limit_factor * species_factor
+                    )
                 else:
                     for flag in limit_flags:
                         add_flag(flags, flag)
             else:
                 normalized_censoring_limit = censoring_limit * factor
 
-    lat_raw, lon_raw, latitude, longitude = normalize_coordinates(row, flags, region_bbox)
-    source_crs, coordinate_transform_method, coordinate_metadata = coordinate_evidence(row, flags)
+    lat_raw, lon_raw, latitude, longitude = normalize_coordinates(
+        row, flags, region_bbox
+    )
+    source_crs, coordinate_transform_method, coordinate_metadata = coordinate_evidence(
+        row, flags
+    )
     if source_crs is None:
         add_flag(flags, "MISSING_SOURCE_CRS")
         if latitude is not None or longitude is not None:
@@ -1101,7 +1572,9 @@ def normalize_row(
     depth_min, depth_max = normalize_depth(row, flags)
     boundary_distance = parse_optional_float(row.get("distance_to_geologic_boundary_m"))
     boundary_distance_raw = blank_to_none(row.get("distance_to_geologic_boundary_m"))
-    if boundary_distance_raw is not None and (boundary_distance is None or boundary_distance < 0):
+    if boundary_distance_raw is not None and (
+        boundary_distance is None or boundary_distance < 0
+    ):
         boundary_distance = None
         add_flag(flags, "INVALID_GEOLOGIC_DISTANCE")
     geologic_match_confidence = blank_to_none(row.get("geologic_match_confidence"))
@@ -1140,10 +1613,14 @@ def normalize_row(
         "value_qualifier": qualifier,
         "censored": qualifier in CENSORED_QUALIFIERS,
         "missing_reason": missing_reason,
-        "normalized_value": round(normalized_value, 12) if normalized_value is not None else None,
+        "normalized_value": round(normalized_value, 12)
+        if normalized_value is not None
+        else None,
         "normalized_unit": normalized_unit,
         "normalized_censoring_limit": (
-            round(normalized_censoring_limit, 12) if normalized_censoring_limit is not None else None
+            round(normalized_censoring_limit, 12)
+            if normalized_censoring_limit is not None
+            else None
         ),
         "conversion_factor": factor,
         "conversion_formula": conversion_formula,
@@ -1161,8 +1638,12 @@ def normalize_row(
         "grain_fraction": blank_to_none(row.get("grain_fraction")),
         "sample_type_raw": blank_to_none(row.get("sample_type_raw")),
         "sample_type": blank_to_none(row.get("sample_type")),
-        "sample_type_mapping_status": blank_to_none(row.get("sample_type_mapping_status")),
-        "sample_type_missing_reason": blank_to_none(row.get("sample_type_missing_reason")),
+        "sample_type_mapping_status": blank_to_none(
+            row.get("sample_type_mapping_status")
+        ),
+        "sample_type_missing_reason": blank_to_none(
+            row.get("sample_type_missing_reason")
+        ),
         "geographic_context_raw": blank_to_none(row.get("geographic_context_raw")),
         "survey_area": blank_to_none(row.get("survey_area")),
         "map_sheet": blank_to_none(row.get("map_sheet")),
@@ -1216,9 +1697,15 @@ def normalize_row(
         "publication_doi": blank_to_none(row.get("publication_doi")),
         "citation_text_raw": blank_to_none(row.get("citation_text_raw")),
         "citation_scope": blank_to_none(row.get("citation_scope")),
-        "citation_assignment_basis": blank_to_none(row.get("citation_assignment_basis")),
-        "upstream_primary_source_id": blank_to_none(row.get("upstream_primary_source_id")),
-        "citation_resolution_status": blank_to_none(row.get("citation_resolution_status")),
+        "citation_assignment_basis": blank_to_none(
+            row.get("citation_assignment_basis")
+        ),
+        "upstream_primary_source_id": blank_to_none(
+            row.get("upstream_primary_source_id")
+        ),
+        "citation_resolution_status": blank_to_none(
+            row.get("citation_resolution_status")
+        ),
         "citation_missing_reason": blank_to_none(row.get("citation_missing_reason")),
         "source_id": source_id,
         "dataset_title": blank_to_none(row.get("dataset_title")),
@@ -1250,16 +1737,31 @@ def duplicate_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
         # physical sample. Fall back to conservative sample context so separate
         # source rows cannot mask otherwise identical measurement candidates.
         sample_identity = (
-            record["original_latitude_raw"], record["original_longitude_raw"], record["sampled_at"],
-            record["sample_depth_min_m"], record["sample_depth_max_m"], record["material"],
-            record["sample_type"], record["soil_horizon"], record["sediment_environment"],
-            record["water_fraction"], record["grain_fraction"],
+            record["original_latitude_raw"],
+            record["original_longitude_raw"],
+            record["sampled_at"],
+            record["sample_depth_min_m"],
+            record["sample_depth_max_m"],
+            record["material"],
+            record["sample_type"],
+            record["soil_horizon"],
+            record["sediment_environment"],
+            record["water_fraction"],
+            record["grain_fraction"],
         )
     return (
-        record["source_id"], sample_identity, record["replicate_group_id"], record["element_or_analyte"],
-        record["species_or_oxide"], record["original_value_raw"], record["original_unit"],
-        record["method_family"], record["analytical_method"], record["measurement_basis"],
-        record["original_latitude_raw"], record["original_longitude_raw"],
+        record["source_id"],
+        sample_identity,
+        record["replicate_group_id"],
+        record["element_or_analyte"],
+        record["species_or_oxide"],
+        record["original_value_raw"],
+        record["original_unit"],
+        record["method_family"],
+        record["analytical_method"],
+        record["measurement_basis"],
+        record["original_latitude_raw"],
+        record["original_longitude_raw"],
     )
 
 
@@ -1276,9 +1778,13 @@ def mark_duplicate_candidates(records: list[dict[str, Any]]) -> None:
 
 
 def process_rows(
-    rows: Iterable[Mapping[str, Any]], region_bbox: tuple[float, float, float, float] | None = None
+    rows: Iterable[Mapping[str, Any]],
+    region_bbox: tuple[float, float, float, float] | None = None,
 ) -> list[dict[str, Any]]:
-    records = [normalize_row(row, index, region_bbox) for index, row in enumerate(rows, start=2)]
+    records = [
+        normalize_row(row, index, region_bbox)
+        for index, row in enumerate(rows, start=2)
+    ]
     mark_duplicate_candidates(records)
     return records
 
@@ -1297,7 +1803,9 @@ def apply_batch_acceptance(
     for item in acceptance_rows:
         batch_id = str(item.get("batch_id") or "").strip()
         if not batch_id or batch_id in decisions:
-            raise PipelineError("batch acceptance contains a missing or duplicate batch_id")
+            raise PipelineError(
+                "batch acceptance contains a missing or duplicate batch_id"
+            )
         decisions[batch_id] = item
     status_counts: Counter[str] = Counter()
     for record in records:
@@ -1327,10 +1835,14 @@ def apply_batch_acceptance(
         "decision_count": len(decisions),
         "record_status_counts": dict(sorted(status_counts.items())),
         "accepted_batch_ids": sorted(
-            batch_id for batch_id, item in decisions.items() if bool(item.get("batch_pass"))
+            batch_id
+            for batch_id, item in decisions.items()
+            if bool(item.get("batch_pass"))
         ),
         "excluded_batch_ids": sorted(
-            batch_id for batch_id, item in decisions.items() if not bool(item.get("batch_pass"))
+            batch_id
+            for batch_id, item in decisions.items()
+            if not bool(item.get("batch_pass"))
         ),
     }
 
@@ -1358,17 +1870,29 @@ class GlimGrid:
                 required = {"Classnames.txt", "glim_wgs84_0point5deg.txt.asc"}
                 names = [item.filename for item in archive.infolist()]
                 if any(names.count(name) != 1 for name in required):
-                    raise PipelineError("GLiM archive must contain each required member exactly once")
+                    raise PipelineError(
+                        "GLiM archive must contain each required member exactly once"
+                    )
                 for name in required:
                     info = archive.getinfo(name)
                     if info.file_size > MAX_GEOLOGY_MEMBER_BYTES:
-                        raise PipelineError(f"GLiM member exceeds the extraction safety limit: {name}")
-                class_lines = archive.read("Classnames.txt").decode("utf-8").splitlines()[1:]
-                grid_lines = archive.read("glim_wgs84_0point5deg.txt.asc").decode("ascii").splitlines()
+                        raise PipelineError(
+                            f"GLiM member exceeds the extraction safety limit: {name}"
+                        )
+                class_lines = (
+                    archive.read("Classnames.txt").decode("utf-8").splitlines()[1:]
+                )
+                grid_lines = (
+                    archive.read("glim_wgs84_0point5deg.txt.asc")
+                    .decode("ascii")
+                    .splitlines()
+                )
         except PipelineError:
             raise
         except (OSError, zipfile.BadZipFile, KeyError, UnicodeDecodeError) as exc:
-            raise PipelineError(f"invalid GLiM 0.5 degree archive: {archive_path}") from exc
+            raise PipelineError(
+                f"invalid GLiM 0.5 degree archive: {archive_path}"
+            ) from exc
 
         try:
             self.class_codes: dict[int, str] = {}
@@ -1381,14 +1905,19 @@ class GlimGrid:
                 if class_id in self.class_codes or not class_code:
                     raise ValueError("duplicate or empty class")
                 self.class_codes[class_id] = class_code
-            header = {line.split()[0].casefold(): float(line.split()[1]) for line in grid_lines[:6]}
+            header = {
+                line.split()[0].casefold(): float(line.split()[1])
+                for line in grid_lines[:6]
+            }
             self.ncols = int(header["ncols"])
             self.nrows = int(header["nrows"])
             self.xllcorner = header["xllcorner"]
             self.yllcorner = header["yllcorner"]
             self.cellsize = header["cellsize"]
             self.nodata = int(header["nodata_value"])
-            self.values = [tuple(int(value) for value in line.split()) for line in grid_lines[6:]]
+            self.values = [
+                tuple(int(value) for value in line.split()) for line in grid_lines[6:]
+            ]
         except (IndexError, KeyError, TypeError, ValueError) as exc:
             raise PipelineError("invalid GLiM class table or raster values") from exc
 
@@ -1400,15 +1929,21 @@ class GlimGrid:
             GLIM_RESOLUTION_DEG,
         ):
             raise PipelineError("unexpected GLiM grid geometry")
-        if len(self.values) != self.nrows or any(len(row) != self.ncols for row in self.values):
+        if len(self.values) != self.nrows or any(
+            len(row) != self.ncols for row in self.values
+        ):
             raise PipelineError("GLiM grid dimensions do not match its header")
         allowed_values = set(self.class_codes) | {self.nodata}
         if any(value not in allowed_values for row in self.values for value in row):
             raise PipelineError("GLiM grid contains a class absent from Classnames.txt")
 
-    def lookup(self, latitude: float, longitude: float) -> tuple[int, str, float] | None:
+    def lookup(
+        self, latitude: float, longitude: float
+    ) -> tuple[int, str, float] | None:
         row = min(self.nrows - 1, max(0, math.floor((90.0 - latitude) / self.cellsize)))
-        column = min(self.ncols - 1, max(0, math.floor((longitude + 180.0) / self.cellsize)))
+        column = min(
+            self.ncols - 1, max(0, math.floor((longitude + 180.0) / self.cellsize))
+        )
         value = self.values[row][column]
         code = self.class_codes.get(value)
         if value == self.nodata or code is None or code == "nd":
@@ -1431,7 +1966,10 @@ class GlimGrid:
 
 
 def apply_spatial_geology(
-    records: Sequence[dict[str, Any]], grid: GlimGrid, grid_path: Path, expected_sha256: str
+    records: Sequence[dict[str, Any]],
+    grid: GlimGrid,
+    grid_path: Path,
+    expected_sha256: str,
 ) -> dict[str, Any]:
     statuses: Counter[str] = Counter()
     for record in records:
@@ -1449,7 +1987,8 @@ def apply_spatial_geology(
         )
         medium = str(record.get("medium") or "")
         sediment_context = " ".join(
-            str(record.get(field) or "") for field in ("material", "sediment_environment")
+            str(record.get(field) or "")
+            for field in ("material", "sediment_environment")
         ).casefold()
         if medium == "water":
             statuses["not_applicable_water"] += 1
@@ -1471,14 +2010,20 @@ def apply_spatial_geology(
                 record["boundary_distance_m"] = round(boundary_distance, 3)
                 coordinate_uncertainty = record.get("coordinate_uncertainty_m")
                 if coordinate_uncertainty is None:
-                    record["match_uncertainty"] = "coordinate_uncertainty_unknown; coarse_screening_grid"
+                    record["match_uncertainty"] = (
+                        "coordinate_uncertainty_unknown; coarse_screening_grid"
+                    )
                     statuses["matched_coordinate_uncertainty_unknown"] += 1
                 elif boundary_distance <= float(coordinate_uncertainty):
-                    record["match_uncertainty"] = "coordinate_uncertainty_crosses_cell_boundary"
+                    record["match_uncertainty"] = (
+                        "coordinate_uncertainty_crosses_cell_boundary"
+                    )
                     statuses["matched_boundary_uncertain"] += 1
                     add_flag(record["qc_flags"], "GEOLOGY_BOUNDARY_UNCERTAIN")
                 else:
-                    record["match_uncertainty"] = "stable_within_coordinate_uncertainty; coarse_screening_grid"
+                    record["match_uncertainty"] = (
+                        "stable_within_coordinate_uncertainty; coarse_screening_grid"
+                    )
                     statuses["matched"] += 1
                 # Retain the official class integer in the provenance-bearing value without
                 # overwriting source-reported geologic_unit or geologic_unit_raw.
@@ -1490,7 +2035,9 @@ def apply_spatial_geology(
         for status, count in statuses.items()
         if status not in {"not_applicable_water", "not_applicable_marine_sediment"}
     )
-    matched = sum(count for status, count in statuses.items() if status.startswith("matched"))
+    matched = sum(
+        count for status, count in statuses.items() if status.startswith("matched")
+    )
     return {
         "join_version": GEOLOGY_JOIN_VERSION,
         "grid_supplied": True,
@@ -1503,12 +2050,15 @@ def apply_spatial_geology(
             "resolution_degrees": GLIM_RESOLUTION_DEG,
         },
         "status_counts": dict(sorted(statuses.items())),
-        "disposition_coverage": round(sum(statuses.values()) / len(records), 6) if records else 1.0,
+        "disposition_coverage": round(sum(statuses.values()) / len(records), 6)
+        if records
+        else 1.0,
         "eligible_record_count": eligible,
         "matched_record_count": matched,
         "eligible_match_rate": round(matched / eligible, 6) if eligible else 0.0,
         "water_records_with_assigned_land_unit": sum(
-            record["medium"] == "water" and record.get("matched_geologic_unit") is not None
+            record["medium"] == "water"
+            and record.get("matched_geologic_unit") is not None
             for record in records
         ),
         "scientific_limit": (
@@ -1520,13 +2070,18 @@ def apply_spatial_geology(
 
 def group_identifier(group_by: Sequence[str], key: Sequence[Any]) -> str:
     payload = dict(zip(group_by, key, strict=True))
-    digest = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:12]
+    digest = hashlib.sha256(
+        json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()[:12]
     return f"grp-{digest}"
 
 
 def detect_anomalies(
-    records: Sequence[Mapping[str, Any]], group_by: Sequence[str] = DEFAULT_GROUP_BY,
-    min_group_size: int = 8, robust_z_threshold: float = 3.5, min_quantified_fraction: float = 0.70,
+    records: Sequence[Mapping[str, Any]],
+    group_by: Sequence[str] = DEFAULT_GROUP_BY,
+    min_group_size: int = 8,
+    robust_z_threshold: float = 3.5,
+    min_quantified_fraction: float = 0.70,
     batch_qc_gate_applied: bool = False,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     grouped: dict[tuple[Any, ...], list[Mapping[str, Any]]] = defaultdict(list)
@@ -1535,7 +2090,10 @@ def detect_anomalies(
 
     features: list[dict[str, Any]] = []
     group_reports: list[dict[str, Any]] = []
-    for key in sorted(grouped, key=lambda item: tuple("" if value is None else str(value) for value in item)):
+    for key in sorted(
+        grouped,
+        key=lambda item: tuple("" if value is None else str(value) for value in item),
+    ):
         group_records = grouped[key]
         usable: list[Mapping[str, Any]] = []
         exclusions: Counter[str] = Counter()
@@ -1560,10 +2118,18 @@ def detect_anomalies(
         group_id = group_identifier(group_by, key)
         independent_total = len(group_records) - sum(
             exclusions[reason]
-            for reason in ("duplicate_candidate", "batch_qc_failed", "batch_qc_incomplete")
+            for reason in (
+                "duplicate_candidate",
+                "batch_qc_failed",
+                "batch_qc_incomplete",
+            )
         )
-        quantified_fraction = len(usable) / independent_total if independent_total else 0.0
-        censored_fraction = exclusions["censored"] / independent_total if independent_total else 0.0
+        quantified_fraction = (
+            len(usable) / independent_total if independent_total else 0.0
+        )
+        censored_fraction = (
+            exclusions["censored"] / independent_total if independent_total else 0.0
+        )
         report: dict[str, Any] = {
             "group_id": group_id,
             "group": dict(zip(group_by, key, strict=True)),
@@ -1591,7 +2157,9 @@ def detect_anomalies(
             group_reports.append(report)
             continue
 
-        log_values = [math.log10(float(record["normalized_value"])) for record in usable]
+        log_values = [
+            math.log10(float(record["normalized_value"])) for record in usable
+        ]
         median = statistics.median(log_values)
         mad = statistics.median(abs(value - median) for value in log_values)
         report["log10_median"] = round(median, 12)
@@ -1608,7 +2176,9 @@ def detect_anomalies(
             if abs(robust_z) >= robust_z_threshold:
                 candidates.append((record, robust_z))
         report["candidate_count"] = len(candidates)
-        for record, robust_z in sorted(candidates, key=lambda item: str(item[0]["record_id"])):
+        for record, robust_z in sorted(
+            candidates, key=lambda item: str(item[0]["record_id"])
+        ):
             longitude, latitude = record.get("longitude"), record.get("latitude")
             geometry = None
             if longitude is not None and latitude is not None:
@@ -1634,7 +2204,9 @@ def detect_anomalies(
                         "matched_geologic_unit": record["matched_geologic_unit"],
                         "normalized_value": record["normalized_value"],
                         "normalized_unit": record["normalized_unit"],
-                        "operational_confidence_band": record["operational_confidence"]["band"],
+                        "operational_confidence_band": record["operational_confidence"][
+                            "band"
+                        ],
                         "source_id": record["source_id"],
                         "source_locator": record["source_locator"],
                         "group_id": group_id,
@@ -1722,8 +2294,7 @@ def hypergeometric_survival(
         anchor = max(log_probability(value) for value in value_range)
         return anchor + math.log(
             math.fsum(
-                math.exp(log_probability(value) - anchor)
-                for value in value_range
+                math.exp(log_probability(value) - anchor) for value in value_range
             )
         )
 
@@ -1759,11 +2330,22 @@ def spatial_cell(
 ) -> tuple[int, int, float, float, float, float]:
     longitude_cells = int(round(360.0 / grid_degrees))
     latitude_cells = int(round(180.0 / grid_degrees))
-    longitude_index = min(longitude_cells - 1, max(0, int(math.floor((longitude + 180) / grid_degrees))))
-    latitude_index = min(latitude_cells - 1, max(0, int(math.floor((latitude + 90) / grid_degrees))))
+    longitude_index = min(
+        longitude_cells - 1, max(0, int(math.floor((longitude + 180) / grid_degrees)))
+    )
+    latitude_index = min(
+        latitude_cells - 1, max(0, int(math.floor((latitude + 90) / grid_degrees)))
+    )
     west = -180.0 + longitude_index * grid_degrees
     south = -90.0 + latitude_index * grid_degrees
-    return longitude_index, latitude_index, west, south, west + grid_degrees, south + grid_degrees
+    return (
+        longitude_index,
+        latitude_index,
+        west,
+        south,
+        west + grid_degrees,
+        south + grid_degrees,
+    )
 
 
 def detect_spatial_anomaly_regions(
@@ -1794,7 +2376,9 @@ def detect_spatial_anomaly_regions(
         or not math.isclose(longitude_cells, round(longitude_cells), abs_tol=1e-9)
         or not math.isclose(latitude_cells, round(latitude_cells), abs_tol=1e-9)
     ):
-        raise PipelineError("--spatial-grid-degrees must divide both 180 and 360 and be in (0, 30]")
+        raise PipelineError(
+            "--spatial-grid-degrees must divide both 180 and 360 and be in (0, 30]"
+        )
     if minimum_spatial_samples < 3:
         raise PipelineError("--min-spatial-samples must be at least 3")
     if minimum_spatial_candidates < 1:
@@ -1845,16 +2429,26 @@ def detect_spatial_anomaly_regions(
         group_records = grouped[group_id]
         cells: dict[tuple[int, int], dict[str, Any]] = {}
         for record in group_records:
-            cell = spatial_cell(float(record["longitude"]), float(record["latitude"]), grid_degrees)
+            cell = spatial_cell(
+                float(record["longitude"]), float(record["latitude"]), grid_degrees
+            )
             key = (cell[0], cell[1])
-            bucket = cells.setdefault(key, {
-                "bounds": cell[2:], "records": [], "candidate_ids": {"high": [], "low": []}
-            })
+            bucket = cells.setdefault(
+                key,
+                {
+                    "bounds": cell[2:],
+                    "records": [],
+                    "candidate_ids": {"high": [], "low": []},
+                },
+            )
             bucket["records"].append(record)
             direction = candidate_direction.get(str(record.get("record_id")))
             if direction in {"high", "low"}:
                 bucket["candidate_ids"][direction].append(str(record["record_id"]))
-        direction_counts = Counter(candidate_direction.get(str(item.get("record_id"))) for item in group_records)
+        direction_counts = Counter(
+            candidate_direction.get(str(item.get("record_id")))
+            for item in group_records
+        )
         eligible_cell_count = 0
         for direction in ("high", "low"):
             total_candidates = int(direction_counts.get(direction, 0))
@@ -1864,7 +2458,10 @@ def detect_spatial_anomaly_regions(
                 cell = cells[cell_key]
                 cell_total = len(cell["records"])
                 outside_total = len(group_records) - cell_total
-                if cell_total < minimum_spatial_samples or outside_total < minimum_spatial_samples:
+                if (
+                    cell_total < minimum_spatial_samples
+                    or outside_total < minimum_spatial_samples
+                ):
                     continue
                 eligible_cell_count += 1
                 cell_candidates = len(cell["candidate_ids"][direction])
@@ -1876,28 +2473,34 @@ def detect_spatial_anomaly_regions(
                     total_candidates,
                     cell_total,
                 )
-                hypotheses.append({
-                    "group_id": group_id,
-                    "group": group_payloads[group_id],
-                    "direction": direction,
-                    "cell_key": cell_key,
-                    "bounds": cell["bounds"],
-                    "sample_count": cell_total,
-                    "candidate_count": cell_candidates,
-                    "candidate_record_ids": sorted(cell["candidate_ids"][direction]),
-                    "outside_sample_count": outside_total,
-                    "outside_candidate_count": outside_candidates,
-                    "outside_candidate_rate": outside_rate,
-                    "p_value": p_value,
-                })
-        group_summaries.append({
-            "group_id": group_id,
-            "mapped_usable_record_count": len(group_records),
-            "mapped_cell_count": len(cells),
-            "high_candidate_count": int(direction_counts.get("high", 0)),
-            "low_candidate_count": int(direction_counts.get("low", 0)),
-            "eligible_hypothesis_count": eligible_cell_count,
-        })
+                hypotheses.append(
+                    {
+                        "group_id": group_id,
+                        "group": group_payloads[group_id],
+                        "direction": direction,
+                        "cell_key": cell_key,
+                        "bounds": cell["bounds"],
+                        "sample_count": cell_total,
+                        "candidate_count": cell_candidates,
+                        "candidate_record_ids": sorted(
+                            cell["candidate_ids"][direction]
+                        ),
+                        "outside_sample_count": outside_total,
+                        "outside_candidate_count": outside_candidates,
+                        "outside_candidate_rate": outside_rate,
+                        "p_value": p_value,
+                    }
+                )
+        group_summaries.append(
+            {
+                "group_id": group_id,
+                "mapped_usable_record_count": len(group_records),
+                "mapped_cell_count": len(cells),
+                "high_candidate_count": int(direction_counts.get("high", 0)),
+                "low_candidate_count": int(direction_counts.get("low", 0)),
+                "eligible_hypothesis_count": eligible_cell_count,
+            }
+        )
 
     adjusted = benjamini_hochberg([float(item["p_value"]) for item in hypotheses])
     features: list[dict[str, Any]] = []
@@ -1905,14 +2508,23 @@ def detect_spatial_anomaly_regions(
     for item, q_value in zip(hypotheses, adjusted, strict=True):
         item["fdr_q_value"] = q_value
         if item["candidate_count"]:
-            reported_tests.append({
-                key: item[key]
-                for key in (
-                    "group_id", "direction", "cell_key", "sample_count", "candidate_count",
-                    "outside_sample_count", "outside_candidate_count", "outside_candidate_rate",
-                    "p_value", "fdr_q_value",
-                )
-            })
+            reported_tests.append(
+                {
+                    key: item[key]
+                    for key in (
+                        "group_id",
+                        "direction",
+                        "cell_key",
+                        "sample_count",
+                        "candidate_count",
+                        "outside_sample_count",
+                        "outside_candidate_count",
+                        "outside_candidate_rate",
+                        "p_value",
+                        "fdr_q_value",
+                    )
+                }
+            )
         observed_rate = item["candidate_count"] / item["sample_count"]
         if (
             item["candidate_count"] < minimum_spatial_candidates
@@ -1926,44 +2538,59 @@ def detect_spatial_anomaly_regions(
             "direction": item["direction"],
             "cell": [west, south, east, north],
         }
-        region_id = "region-" + hashlib.sha256(
-            json.dumps(region_payload, sort_keys=True, separators=(",", ":")).encode()
-        ).hexdigest()[:16]
+        region_id = (
+            "region-"
+            + hashlib.sha256(
+                json.dumps(
+                    region_payload, sort_keys=True, separators=(",", ":")
+                ).encode()
+            ).hexdigest()[:16]
+        )
         outside_rate = item["outside_candidate_rate"]
-        features.append({
-            "type": "Feature",
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [[
-                    [west, south], [east, south], [east, north], [west, north], [west, south]
-                ]],
-            },
-            "properties": {
-                "region_id": region_id,
-                "status": "candidate_anomaly_region",
-                "scientific_status": "screening_candidate_only",
-                "direction": item["direction"],
-                "group_id": item["group_id"],
-                "group": item["group"],
-                "grid_degrees": grid_degrees,
-                "sample_count": item["sample_count"],
-                "candidate_count": item["candidate_count"],
-                "candidate_record_ids": item["candidate_record_ids"],
-                "observed_candidate_rate": round(observed_rate, 12),
-                "outside_candidate_rate": round(outside_rate, 12),
-                "enrichment_ratio": (
-                    round(observed_rate / outside_rate, 12) if outside_rate > 0 else None
-                ),
-                "p_value": round(float(item["p_value"]), 12),
-                "fdr_q_value": round(float(q_value), 12),
-                "method_version": SPATIAL_ANOMALY_VERSION,
-                "boundary_model": "fixed_wgs84_grid_cell_not_geologic_boundary",
-                "interpretation_limit": (
-                    "Candidate co-location cell after FDR control; not an interpolated concentration surface, "
-                    "site boundary, pollution claim, mineralization claim, or causal attribution."
-                ),
-            },
-        })
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [west, south],
+                            [east, south],
+                            [east, north],
+                            [west, north],
+                            [west, south],
+                        ]
+                    ],
+                },
+                "properties": {
+                    "region_id": region_id,
+                    "status": "candidate_anomaly_region",
+                    "scientific_status": "screening_candidate_only",
+                    "direction": item["direction"],
+                    "group_id": item["group_id"],
+                    "group": item["group"],
+                    "grid_degrees": grid_degrees,
+                    "sample_count": item["sample_count"],
+                    "candidate_count": item["candidate_count"],
+                    "candidate_record_ids": item["candidate_record_ids"],
+                    "observed_candidate_rate": round(observed_rate, 12),
+                    "outside_candidate_rate": round(outside_rate, 12),
+                    "enrichment_ratio": (
+                        round(observed_rate / outside_rate, 12)
+                        if outside_rate > 0
+                        else None
+                    ),
+                    "p_value": round(float(item["p_value"]), 12),
+                    "fdr_q_value": round(float(q_value), 12),
+                    "method_version": SPATIAL_ANOMALY_VERSION,
+                    "boundary_model": "fixed_wgs84_grid_cell_not_geologic_boundary",
+                    "interpretation_limit": (
+                        "Candidate co-location cell after FDR control; not an interpolated concentration surface, "
+                        "site boundary, pollution claim, mineralization claim, or causal attribution."
+                    ),
+                },
+            }
+        )
 
     geojson = {
         "type": "FeatureCollection",
@@ -1999,9 +2626,15 @@ def detect_spatial_anomaly_regions(
     return geojson, report
 
 
-def build_qc_report(records: Sequence[Mapping[str, Any]], run_metadata: Mapping[str, Any]) -> dict[str, Any]:
+def build_qc_report(
+    records: Sequence[Mapping[str, Any]], run_metadata: Mapping[str, Any]
+) -> dict[str, Any]:
     flags = Counter(flag for record in records for flag in record["qc_flags"])
-    severity = Counter(FLAG_SEVERITY.get(flag, "warning") for record in records for flag in record["qc_flags"])
+    severity = Counter(
+        FLAG_SEVERITY.get(flag, "warning")
+        for record in records
+        for flag in record["qc_flags"]
+    )
     numeric_or_limit = sum(
         record["original_value"] is not None
         or record["detection_limit"] is not None
@@ -2009,15 +2642,22 @@ def build_qc_report(records: Sequence[Mapping[str, Any]], run_metadata: Mapping[
         for record in records
     )
     standardized = sum(
-        record["normalized_value"] is not None or record["normalized_censoring_limit"] is not None
+        record["normalized_value"] is not None
+        or record["normalized_censoring_limit"] is not None
         for record in records
     )
     flagged = sum(bool(record["qc_flags"]) for record in records)
     error_flagged = sum(
-        any(FLAG_SEVERITY.get(flag, "warning") == "error" for flag in record["qc_flags"])
+        any(
+            FLAG_SEVERITY.get(flag, "warning") == "error" for flag in record["qc_flags"]
+        )
         for record in records
     )
-    missing_reasons = Counter(record["missing_reason"] for record in records if record["missing_reason"] is not None)
+    missing_reasons = Counter(
+        record["missing_reason"]
+        for record in records
+        if record["missing_reason"] is not None
+    )
     return {
         "pipeline_version": PIPELINE_VERSION,
         "run_metadata": dict(run_metadata),
@@ -2037,11 +2677,14 @@ def build_qc_report(records: Sequence[Mapping[str, Any]], run_metadata: Mapping[
         },
         "records_with_numeric_value_or_limit": numeric_or_limit,
         "standardized_record_count": standardized,
-        "standardization_rate": round(standardized / len(records), 6) if records else 0.0,
+        "standardization_rate": round(standardized / len(records), 6)
+        if records
+        else 0.0,
         "censored_record_count": sum(bool(record["censored"]) for record in records),
         "missing_reason_counts": dict(sorted(missing_reasons.items())),
         "valid_coordinate_count": sum(
-            record["latitude"] is not None and record["longitude"] is not None for record in records
+            record["latitude"] is not None and record["longitude"] is not None
+            for record in records
         ),
         "flag_counts": dict(sorted(flags.items())),
         "severity_counts": dict(sorted(severity.items())),
@@ -2054,8 +2697,13 @@ def build_confidence_report(
     components = ("source", "completeness", "method", "spatial", "qc", "overall")
     means = {
         component: round(
-            statistics.fmean(float(record["operational_confidence"][component]) for record in records), 6
-        ) if records else 0.0
+            statistics.fmean(
+                float(record["operational_confidence"][component]) for record in records
+            ),
+            6,
+        )
+        if records
+        else 0.0
         for component in components
     }
     bands = Counter(str(record["operational_confidence"]["band"]) for record in records)
@@ -2070,7 +2718,13 @@ def build_confidence_report(
         "not_a_probability": True,
         "meaning": "Record usability for this workflow; not truth probability, statistical confidence, or accuracy.",
         "run_metadata": dict(run_metadata),
-        "weights": {"source": 0.30, "completeness": 0.20, "method": 0.20, "spatial": 0.15, "qc": 0.15},
+        "weights": {
+            "source": 0.30,
+            "completeness": 0.20,
+            "method": 0.20,
+            "spatial": 0.15,
+            "qc": 0.15,
+        },
         "component_definitions": {
             "source": "Registry tier score minus explicit penalties for missing source ID, locator, license, or invalid file hash.",
             "completeness": "Fraction of required scientific, method, spatial, dataset, file and license fields present.",
@@ -2092,7 +2746,11 @@ def build_confidence_report(
                 "acquisition manifest is supplied, binds the input and record-evidence hashes."
             ),
         },
-        "band_thresholds": {"high": ">=0.80", "medium": ">=0.60 and <0.80", "low": "<0.60"},
+        "band_thresholds": {
+            "high": ">=0.80",
+            "medium": ">=0.60 and <0.80",
+            "low": "<0.60",
+        },
         "gates": {
             "error_qc_low_cap": "Any error-level QC flag caps overall at 0.59 (low).",
             "missing_canonical_coordinate_low_cap": "Missing canonical WGS84 coordinates cap overall at 0.59 (low).",
@@ -2116,7 +2774,9 @@ def parse_bbox(value: str) -> tuple[float, float, float, float]:
         raise argparse.ArgumentTypeError("bbox must be west,south,east,north")
     west, south, east, north = parts
     if not (-180 <= west <= 180 and -180 <= east <= 180 and -90 <= south < north <= 90):
-        raise argparse.ArgumentTypeError("bbox values are outside valid longitude/latitude ranges")
+        raise argparse.ArgumentTypeError(
+            "bbox values are outside valid longitude/latitude ranges"
+        )
     return west, south, east, north
 
 
@@ -2131,18 +2791,26 @@ def load_schema_map(path: Path | None) -> tuple[dict[str, str], str | None]:
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise PipelineError(f"schema map is not valid UTF-8 JSON: {path}") from exc
     if not isinstance(value, dict):
-        raise PipelineError("schema map must be a JSON object of canonical_field -> source_column")
+        raise PipelineError(
+            "schema map must be a JSON object of canonical_field -> source_column"
+        )
     mapping: dict[str, str] = {}
     for canonical, source_column in value.items():
         if canonical not in INPUT_FIELDS:
-            raise PipelineError(f"schema map contains unknown canonical field: {canonical}")
+            raise PipelineError(
+                f"schema map contains unknown canonical field: {canonical}"
+            )
         if not isinstance(source_column, str) or not source_column.strip():
-            raise PipelineError(f"schema map source column for {canonical} must be a non-empty string")
+            raise PipelineError(
+                f"schema map source column for {canonical} must be a non-empty string"
+            )
         mapping[canonical] = source_column.strip()
     return mapping, hashlib.sha256(raw).hexdigest()
 
 
-def load_csv(path: Path, schema_map: Mapping[str, str] | None = None) -> tuple[list[dict[str, str]], list[str]]:
+def load_csv(
+    path: Path, schema_map: Mapping[str, str] | None = None
+) -> tuple[list[dict[str, str]], list[str]]:
     if not path.is_file():
         raise PipelineError(f"input CSV does not exist: {path}")
     mapping = dict(schema_map or {})
@@ -2152,17 +2820,27 @@ def load_csv(path: Path, schema_map: Mapping[str, str] | None = None) -> tuple[l
             raise PipelineError("input CSV has no header")
         headers = [header.strip() for header in reader.fieldnames]
         if len(headers) != len(set(headers)):
-            raise PipelineError("input CSV contains duplicate column names after trimming whitespace")
+            raise PipelineError(
+                "input CSV contains duplicate column names after trimming whitespace"
+            )
         missing_source_columns = sorted(set(mapping.values()) - set(headers))
         if missing_source_columns:
-            raise PipelineError(f"schema map references missing source columns: {', '.join(missing_source_columns)}")
+            raise PipelineError(
+                f"schema map references missing source columns: {', '.join(missing_source_columns)}"
+            )
         available_canonical = set(headers) | set(mapping)
         missing = sorted(MINIMUM_INPUT_COLUMNS - available_canonical)
         if missing:
-            raise PipelineError(f"input CSV missing minimum columns: {', '.join(missing)}")
+            raise PipelineError(
+                f"input CSV missing minimum columns: {', '.join(missing)}"
+            )
         rows: list[dict[str, str]] = []
         for raw_row in reader:
-            trimmed_row = {header.strip(): value for header, value in raw_row.items() if header is not None}
+            trimmed_row = {
+                header.strip(): value
+                for header, value in raw_row.items()
+                if header is not None
+            }
             canonical_row = dict(trimmed_row)
             for canonical, source_column in mapping.items():
                 canonical_row[canonical] = trimmed_row.get(source_column, "")
@@ -2174,7 +2852,9 @@ def load_csv(path: Path, schema_map: Mapping[str, str] | None = None) -> tuple[l
 
 def atomic_write_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         handle.write(content)
         temporary = Path(handle.name)
     os.replace(temporary, path)
@@ -2182,17 +2862,27 @@ def atomic_write_text(path: Path, content: str) -> None:
 
 def write_csv(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         writer = csv.DictWriter(
-            handle, fieldnames=SCHEMA_COLUMNS, extrasaction="ignore", lineterminator="\n"
+            handle,
+            fieldnames=SCHEMA_COLUMNS,
+            extrasaction="ignore",
+            lineterminator="\n",
         )
         writer.writeheader()
         for record in records:
             row = dict(record)
             row["censored"] = "true" if row["censored"] else "false"
-            row["qc_flags"] = json.dumps(row["qc_flags"], ensure_ascii=False, separators=(",", ":"))
+            row["qc_flags"] = json.dumps(
+                row["qc_flags"], ensure_ascii=False, separators=(",", ":")
+            )
             row["operational_confidence"] = json.dumps(
-                row["operational_confidence"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
+                row["operational_confidence"],
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
             )
             writer.writerow(row)
         temporary = Path(handle.name)
@@ -2204,15 +2894,23 @@ def json_text(value: Any) -> str:
 
 
 def run_pipeline(
-    input_path: Path, output_dir: Path, group_by: Sequence[str] = DEFAULT_GROUP_BY,
+    input_path: Path,
+    output_dir: Path,
+    group_by: Sequence[str] = DEFAULT_GROUP_BY,
     min_group_size: int | None = None,
-    robust_z_threshold: float = 3.5, region_bbox: tuple[float, float, float, float] | None = None,
-    schema_map_path: Path | None = None, min_quantified_fraction: float = 0.70,
-    analysis_profile: str = "demo", geology_grid_path: Path | None = None,
+    robust_z_threshold: float = 3.5,
+    region_bbox: tuple[float, float, float, float] | None = None,
+    schema_map_path: Path | None = None,
+    min_quantified_fraction: float = 0.70,
+    analysis_profile: str = "demo",
+    geology_grid_path: Path | None = None,
     geology_grid_sha256: str | None = None,
-    batch_qc_input_path: Path | None = None, batch_qc_policy_path: Path | None = None,
-    spatial_grid_degrees: float = 2.0, min_spatial_samples: int | None = None,
-    min_spatial_candidates: int = 2, spatial_fdr_alpha: float = 0.10,
+    batch_qc_input_path: Path | None = None,
+    batch_qc_policy_path: Path | None = None,
+    spatial_grid_degrees: float = 2.0,
+    min_spatial_samples: int | None = None,
+    min_spatial_candidates: int = 2,
+    spatial_fdr_alpha: float = 0.10,
 ) -> dict[str, Path]:
     if analysis_profile not in {"demo", "production"}:
         raise PipelineError("--analysis-profile must be demo or production")
@@ -2222,23 +2920,40 @@ def run_pipeline(
         min_spatial_samples = 20 if analysis_profile == "production" else 5
     unknown_group_fields = sorted(set(group_by) - GROUPABLE_FIELDS)
     if unknown_group_fields:
-        raise PipelineError(f"unknown --group-by fields: {', '.join(unknown_group_fields)}")
+        raise PipelineError(
+            f"unknown --group-by fields: {', '.join(unknown_group_fields)}"
+        )
     if min_group_size < 3:
         raise PipelineError("--min-group-size must be at least 3")
     if analysis_profile == "production" and min_group_size < 20:
-        raise PipelineError("production analysis requires --min-group-size of at least 20")
+        raise PipelineError(
+            "production analysis requires --min-group-size of at least 20"
+        )
     if not math.isfinite(robust_z_threshold) or robust_z_threshold <= 0:
         raise PipelineError("--robust-z-threshold must be positive")
-    if not math.isfinite(min_quantified_fraction) or not 0 <= min_quantified_fraction <= 1:
+    if (
+        not math.isfinite(min_quantified_fraction)
+        or not 0 <= min_quantified_fraction <= 1
+    ):
         raise PipelineError("--min-quantified-fraction must be between 0 and 1")
     if (batch_qc_input_path is None) != (batch_qc_policy_path is None):
-        raise PipelineError("--batch-qc-input and --batch-qc-policy must be supplied together")
+        raise PipelineError(
+            "--batch-qc-input and --batch-qc-policy must be supplied together"
+        )
 
     if (geology_grid_path is None) != (geology_grid_sha256 is None):
-        raise PipelineError("--geology-grid and --geology-grid-sha256 must be supplied together")
-    normalized_grid_sha256 = geology_grid_sha256.casefold() if geology_grid_sha256 is not None else None
-    if normalized_grid_sha256 is not None and not SHA256_RE.fullmatch(normalized_grid_sha256):
-        raise PipelineError("--geology-grid-sha256 must contain exactly 64 hexadecimal characters")
+        raise PipelineError(
+            "--geology-grid and --geology-grid-sha256 must be supplied together"
+        )
+    normalized_grid_sha256 = (
+        geology_grid_sha256.casefold() if geology_grid_sha256 is not None else None
+    )
+    if normalized_grid_sha256 is not None and not SHA256_RE.fullmatch(
+        normalized_grid_sha256
+    ):
+        raise PipelineError(
+            "--geology-grid-sha256 must contain exactly 64 hexadecimal characters"
+        )
 
     input_bytes = input_path.read_bytes() if input_path.is_file() else b""
     schema_map, schema_map_hash = load_schema_map(schema_map_path)
@@ -2276,7 +2991,9 @@ def run_pipeline(
             raise PipelineError(f"geology grid does not exist: {geology_grid_path}")
         observed_grid_sha256 = sha256_file(geology_grid_path)
         if observed_grid_sha256 != normalized_grid_sha256:
-            raise PipelineError("geology grid SHA-256 does not match --geology-grid-sha256")
+            raise PipelineError(
+                "geology grid SHA-256 does not match --geology-grid-sha256"
+            )
         geology_grid = GlimGrid(geology_grid_path)
         geology_summary = apply_spatial_geology(
             records, geology_grid, geology_grid_path, normalized_grid_sha256
@@ -2304,7 +3021,9 @@ def run_pipeline(
         config["batch_qc_policy_sha256"] = sha256_file(batch_qc_policy_path)
     input_hash = hashlib.sha256(input_bytes).hexdigest()
     run_id = hashlib.sha256(
-        (input_hash + json.dumps(config, sort_keys=True, separators=(",", ":"))).encode()
+        (
+            input_hash + json.dumps(config, sort_keys=True, separators=(",", ":"))
+        ).encode()
     ).hexdigest()[:16]
     run_metadata = {
         "run_id": run_id,
@@ -2367,7 +3086,9 @@ def run_pipeline(
     batch_qc.write_csv(outputs["batch_acceptance"], batch_acceptance_rows)
     batch_qc.write_report(outputs["batch_qc_report"], batch_report)
     atomic_write_text(outputs["anomaly_regions"], json_text(anomaly_regions))
-    atomic_write_text(outputs["spatial_anomaly_report"], json_text(spatial_anomaly_report))
+    atomic_write_text(
+        outputs["spatial_anomaly_report"], json_text(spatial_anomaly_report)
+    )
     return outputs
 
 
@@ -2375,22 +3096,36 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Standardize geochemical CSV records, run QC, score operational confidence, and screen anomalies."
     )
-    parser.add_argument("--input", required=True, type=Path, help="Input CSV from the D1 acquisition/provenance stage")
-    parser.add_argument("--output-dir", required=True, type=Path, help="Directory for nine deterministic D2 outputs")
     parser.add_argument(
-        "--schema-map", type=Path,
+        "--input",
+        required=True,
+        type=Path,
+        help="Input CSV from the D1 acquisition/provenance stage",
+    )
+    parser.add_argument(
+        "--output-dir",
+        required=True,
+        type=Path,
+        help="Directory for nine deterministic D2 outputs",
+    )
+    parser.add_argument(
+        "--schema-map",
+        type=Path,
         help="Optional JSON object mapping canonical D2 input fields to source CSV column names",
     )
     parser.add_argument(
-        "--batch-qc-input", type=Path,
+        "--batch-qc-input",
+        type=Path,
         help="Optional normalized CRM/blank/duplicate CSV; requires --batch-qc-policy",
     )
     parser.add_argument(
-        "--batch-qc-policy", type=Path,
+        "--batch-qc-policy",
+        type=Path,
         help="Explicit laboratory acceptance policy; requires --batch-qc-input",
     )
     parser.add_argument(
-        "--geology-grid", type=Path,
+        "--geology-grid",
+        type=Path,
         help="Optional official PANGAEA.788537 GLiM 0.5 degree ZIP for screening point-in-cell matching",
     )
     parser.add_argument(
@@ -2398,40 +3133,60 @@ def build_parser() -> argparse.ArgumentParser:
         help="Required SHA-256 pin when --geology-grid is supplied",
     )
     parser.add_argument(
-        "--analysis-profile", choices=("demo", "production"), default="demo",
+        "--analysis-profile",
+        choices=("demo", "production"),
+        default="demo",
         help="Production enforces at least 20 usable records per anomaly background group",
     )
     parser.add_argument(
-        "--group-by", default=",".join(DEFAULT_GROUP_BY),
+        "--group-by",
+        default=",".join(DEFAULT_GROUP_BY),
         help="Comma-separated canonical background fields (default also separates method family and extraction)",
     )
     parser.add_argument(
-        "--min-group-size", type=int,
+        "--min-group-size",
+        type=int,
         help="Minimum usable records per group (default: demo=8, production=20)",
     )
     parser.add_argument(
-        "--min-quantified-fraction", type=float, default=0.70,
+        "--min-quantified-fraction",
+        type=float,
+        default=0.70,
         help="Minimum usable noncensored fraction per independent background group (default: 0.70)",
     )
-    parser.add_argument("--robust-z-threshold", type=float, default=3.5, help="Absolute modified z threshold")
     parser.add_argument(
-        "--spatial-grid-degrees", type=float, default=2.0,
+        "--robust-z-threshold",
+        type=float,
+        default=3.5,
+        help="Absolute modified z threshold",
+    )
+    parser.add_argument(
+        "--spatial-grid-degrees",
+        type=float,
+        default=2.0,
         help="Fixed WGS84 screening-cell size; must divide 180 and 360 (default: 2)",
     )
     parser.add_argument(
-        "--min-spatial-samples", type=int,
+        "--min-spatial-samples",
+        type=int,
         help="Minimum mapped usable records inside and outside a tested cell (demo=5, production=20)",
     )
     parser.add_argument(
-        "--min-spatial-candidates", type=int, default=2,
+        "--min-spatial-candidates",
+        type=int,
+        default=2,
         help="Minimum record-level candidates before a significant cell is reported (default: 2)",
     )
     parser.add_argument(
-        "--spatial-fdr-alpha", type=float, default=0.10,
+        "--spatial-fdr-alpha",
+        type=float,
+        default=0.10,
         help="Benjamini-Hochberg FDR threshold for candidate regions (default: 0.10)",
     )
     parser.add_argument(
-        "--region-bbox", type=parse_bbox, metavar="W,S,E,N",
+        "--region-bbox",
+        type=parse_bbox,
+        metavar="W,S,E,N",
         help="Optional requested region; dateline-crossing west > east is supported",
     )
     return parser
@@ -2440,7 +3195,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    group_by = tuple(field.strip() for field in args.group_by.split(",") if field.strip())
+    group_by = tuple(
+        field.strip() for field in args.group_by.split(",") if field.strip()
+    )
     if not group_by:
         parser.error("--group-by must contain at least one field")
     try:
@@ -2465,7 +3222,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     except (PipelineError, OSError) as exc:
         parser.error(str(exc))
-    print(json.dumps({name: str(path) for name, path in outputs.items()}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {name: str(path) for name, path in outputs.items()},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

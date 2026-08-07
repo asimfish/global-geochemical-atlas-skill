@@ -61,7 +61,11 @@ def _shape_errors(value: Any, schema: dict[str, Any], location: str) -> list[str
         return []
     variants = schema.get("anyOf")
     if isinstance(variants, list):
-        attempts = [_shape_errors(value, item, location) for item in variants if isinstance(item, dict)]
+        attempts = [
+            _shape_errors(value, item, location)
+            for item in variants
+            if isinstance(item, dict)
+        ]
         if any(not errors for errors in attempts):
             return []
         return [f"{location}: value does not match any declared type"]
@@ -93,7 +97,9 @@ def _validate_physical(path: Path, relative: str) -> list[str]:
         if suffix in {".json", ".geojson"}:
             _load_json(path)
         elif suffix == ".jsonl":
-            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+            for number, line in enumerate(
+                path.read_text(encoding="utf-8").splitlines(), start=1
+            ):
                 if line.strip():
                     json.loads(line)
         elif suffix == ".csv":
@@ -118,18 +124,28 @@ def _validate_physical(path: Path, relative: str) -> list[str]:
             text = path.read_text(encoding="utf-8")
             if "<html" not in text.casefold() or "</html>" not in text.casefold():
                 return [f"{relative}: incomplete HTML document"]
-    except (OSError, UnicodeError, csv.Error, json.JSONDecodeError, sqlite3.Error) as exc:
+    except (
+        OSError,
+        UnicodeError,
+        csv.Error,
+        json.JSONDecodeError,
+        sqlite3.Error,
+    ) as exc:
         return [f"{relative}: parse failed ({exc})"]
     return []
 
 
-def _validate_logical_entry(relative: str, entry: Any, contract: dict[str, Any]) -> list[str]:
+def _validate_logical_entry(
+    relative: str, entry: Any, contract: dict[str, Any]
+) -> list[str]:
     location = f"benchmark_evidence[{relative!r}]"
     if not isinstance(entry, dict):
         return [f"{location}: entry must be an object"]
     expected_format = contract.get("format")
     if entry.get("format") != expected_format:
-        return [f"{location}: expected format {expected_format!r}, got {entry.get('format')!r}"]
+        return [
+            f"{location}: expected format {expected_format!r}, got {entry.get('format')!r}"
+        ]
     errors: list[str] = []
     if expected_format == "csv":
         expected_columns = contract.get("columns", [])
@@ -144,23 +160,37 @@ def _validate_logical_entry(relative: str, entry: Any, contract: dict[str, Any])
                 if not isinstance(row, dict):
                     errors.append(f"{location}.rows[{index}]: row must be an object")
                 elif set(row) != expected_keys:
-                    errors.append(f"{location}.rows[{index}]: keys must exactly match declared columns")
+                    errors.append(
+                        f"{location}.rows[{index}]: keys must exactly match declared columns"
+                    )
             if "row_count" in contract and len(rows) != int(contract["row_count"]):
-                errors.append(f"{location}: expected {contract['row_count']} rows, got {len(rows)}")
+                errors.append(
+                    f"{location}: expected {contract['row_count']} rows, got {len(rows)}"
+                )
     elif expected_format == "json":
         if "value" not in entry:
             errors.append(f"{location}: missing value")
         else:
-            errors.extend(_shape_errors(entry["value"], contract.get("json_shape", {}), f"{location}.value"))
+            errors.extend(
+                _shape_errors(
+                    entry["value"], contract.get("json_shape", {}), f"{location}.value"
+                )
+            )
     elif expected_format == "jsonl":
         rows = entry.get("rows")
         if not isinstance(rows, list):
             errors.append(f"{location}: rows must be an array")
         else:
             for index, row in enumerate(rows):
-                errors.extend(_shape_errors(row, contract.get("row_shape", {}), f"{location}.rows[{index}]"))
+                errors.extend(
+                    _shape_errors(
+                        row, contract.get("row_shape", {}), f"{location}.rows[{index}]"
+                    )
+                )
             if "row_count" in contract and len(rows) != int(contract["row_count"]):
-                errors.append(f"{location}: expected {contract['row_count']} rows, got {len(rows)}")
+                errors.append(
+                    f"{location}: expected {contract['row_count']} rows, got {len(rows)}"
+                )
     elif expected_format == "text":
         if not isinstance(entry.get("value"), str):
             errors.append(f"{location}: value must be a UTF-8 text string")
@@ -181,10 +211,14 @@ def validate_task(task_root: Path, submission_root: Path) -> dict[str, Any]:
     question = str(metadata.get("question_id", task_root.name))
     errors: list[str] = []
     required = metadata.get("required_outputs", [])
-    if not isinstance(required, list) or not all(isinstance(item, str) for item in required):
+    if not isinstance(required, list) or not all(
+        isinstance(item, str) for item in required
+    ):
         raise ContractError(f"{question}: task.json.required_outputs is invalid")
     for relative in required:
-        errors.extend(_validate_physical(_safe_path(submission_root, relative), relative))
+        errors.extend(
+            _validate_physical(_safe_path(submission_root, relative), relative)
+        )
 
     visible = metadata.get("candidate_visible_contract")
     if not isinstance(visible, dict):
@@ -205,12 +239,20 @@ def validate_task(task_root: Path, submission_root: Path) -> dict[str, Any]:
                 missing = sorted(set(outputs) - set(evidence))
                 extra = sorted(set(evidence) - set(outputs))
                 if missing:
-                    errors.append(f"{container}.{field}: missing logical outputs {missing}")
+                    errors.append(
+                        f"{container}.{field}: missing logical outputs {missing}"
+                    )
                 if extra:
-                    errors.append(f"{container}.{field}: undeclared logical outputs {extra}")
+                    errors.append(
+                        f"{container}.{field}: undeclared logical outputs {extra}"
+                    )
                 for relative, contract in outputs.items():
                     if relative in evidence and isinstance(contract, dict):
-                        errors.extend(_validate_logical_entry(relative, evidence[relative], contract))
+                        errors.extend(
+                            _validate_logical_entry(
+                                relative, evidence[relative], contract
+                            )
+                        )
     return {
         "question_id": question,
         "status": "PASS" if not errors else "FAIL",
@@ -223,11 +265,15 @@ def validate_bundle(bundle_root: Path) -> dict[str, Any]:
     bundle_root = bundle_root.resolve()
     results = []
     for task_root in sorted((bundle_root / "tasks").glob("Q??")):
-        results.append(validate_task(task_root, bundle_root / "submissions" / task_root.name))
+        results.append(
+            validate_task(task_root, bundle_root / "submissions" / task_root.name)
+        )
     if not results:
         raise ContractError(f"no tasks/Qxx directories found under {bundle_root}")
     return {
-        "status": "PASS" if all(item["status"] == "PASS" for item in results) else "FAIL",
+        "status": "PASS"
+        if all(item["status"] == "PASS" for item in results)
+        else "FAIL",
         "tasks_checked": len(results),
         "task_results": results,
     }

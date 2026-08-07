@@ -56,11 +56,15 @@ class ExecutionBudget:
         minimum_seconds: float = 0.05,
     ) -> float:
         if reserve_seconds < 0 or minimum_seconds <= 0:
-            raise ExecutionBudgetError("deadline reserve must be non-negative and minimum must be positive")
+            raise ExecutionBudgetError(
+                "deadline reserve must be non-negative and minimum must be positive"
+            )
         available = self.remaining_seconds - reserve_seconds
         if cap_seconds is not None:
             if cap_seconds <= 0 or not math.isfinite(cap_seconds):
-                raise ExecutionBudgetError(f"{stage} timeout cap must be positive and finite")
+                raise ExecutionBudgetError(
+                    f"{stage} timeout cap must be positive and finite"
+                )
             available = min(available, cap_seconds)
         if available < minimum_seconds:
             raise ExecutionBudgetError(

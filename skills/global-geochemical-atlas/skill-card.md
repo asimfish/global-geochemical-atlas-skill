@@ -71,19 +71,13 @@ of causal, pollution, resource, or global-completeness claims.
   `evaluation/docker/preflight.py` from the repository root.
 - Scientific and end-to-end checks: `scripts/component_test.py --component all` and
   `scripts/self_test.py`.
+- Repeatable offline workflow timing and its claim boundary: `BENCHMARK.md` and
+  `scripts/benchmark_workflow.py`.
 
-## Static scanner disposition
+## Static scanner verification
 
-Owner: repository maintainers. Review expires 2026-09-01 or immediately when the
-scanner pattern changes.
-
-Forge's 2026-08-08 dependency-free scan reports `SKILL-HARDCODED-CREDENTIAL` for
-exactly two non-secret substrings. Its generic `sk-[A-Za-z0-9_-]{24,}` expression
-starts across the joined contract tokens `task-` + `first-progressive-disclosure-v2`
-and across the official NGU URL tokens `geologisk-` +
-`kartlegging-av-norges-berggrunn`. The affected generated assets,
-schemas, tests, scripts, source registry, and source evidence contain those same
-public contract/URL strings; none contains a credential value. This is a narrow
-false-positive disposition for those two literal matches only, not a broad rule or
-path suppression. The repository preflight independently scans the entire checkout
-for actual provider-key forms and fails closed on any match.
+Run Forge's dependency-free scanner against a clean tracked copy of this Skill with
+`--fail-on high`. The package contains no scanner suppression or ignored path; every
+finding must be investigated before release. Repository preflight independently
+scans the complete submission package for provider-key forms and fails closed on a
+match. Passing either scanner is evidence for its rules only, not a security proof.

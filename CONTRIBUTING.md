@@ -25,7 +25,7 @@ D2 标准化 + QC + 置信度算法 + 候选异常
           │ geochemistry / qc / confidence / anomalies
           ├──────────────► D1 证据打包与哈希绑定 ──► source_manifest
           ▼
-D3 工作流编排 + 地图 + 输出校验 ──► 十一个稳定交付文件
+D3 工作流编排 + 地图 + 输出校验 ──► 十五个稳定交付文件
 ```
 
 `run_workflow.py` 只负责调用顺序和最终状态，不复制 D1/D2 算法。D1 的证据模块只验证 D2 置信度报告的版本、输入哈希和文件哈希，不重新计算置信度。
@@ -35,7 +35,7 @@ D3 工作流编排 + 地图 + 输出校验 ──► 十一个稳定交付文件
 - D1 → D2：CSV 至少提供 `element_or_analyte,value,unit,medium`；正式数据还应携带样品、basis、坐标、方法、来源定位与许可。分层归档先按 `validate_acquisition.py` 校验，再依 `schema-mapping.md` 展开为一行一个 observation；派生 SQLite 只用于 D1 原值检索。
 - D2 → D1/D3：固定生成五个分析产物，记录结构以 `geochemistry-record.schema.json` 为准，置信度版本当前为 `d2-confidence-v3`；D1 非 canonical 列名可按 `schema-map.schema.json` 显式映射。
 - D1 → D3：固定生成 `source_manifest.json` 和 `record_evidence.jsonl`；输入 SHA-256 必须与 D2 run metadata 相同，sidecar 的 record ID 必须与 canonical database 完全一致，并绑定 acquisition manifest 与 `confidence_report.json` 的 SHA-256。
-- D3 → 用户：固定生成 README 所列十一个文件（含 `iteration_backlog.csv`）；更名、删减或改变语义属于破坏性接口变更。
+- D3 → 用户：固定生成 README 所列十五个文件；更名、删减或改变语义属于破坏性接口变更。
 - 任何 Schema、版本号、输出文件名或 CLI 参数变更，都要在同一 PR 中更新文档、组件测试和完整回归测试。
 
 ## 分支与 PR
@@ -49,6 +49,22 @@ D3 工作流编排 + 地图 + 输出校验 ──► 十一个稳定交付文件
 - 不把完整全球数据、下载缓存、运行输出、视频、虚拟环境、密钥或评测金标准提交到仓库。
 
 当前未写死 CODEOWNERS，因为还缺 D1、D3 的 GitHub 用户名。获得三人的用户名后再启用真实 CODEOWNERS，避免无效占位账号造成虚假的审核保护。
+
+## Forge 提交与 PR 硬标准
+
+所有提交标题必须使用：
+
+```text
+[scope/op]: concise imperative title
+```
+
+- `op` 只能是 `feat`、`fix`、`refactor`、`docs`、`test`、`chore`、`perf`、`style`、`ci`、`build` 或 `revert`；
+- `scope` 使用小写字母、数字、`_`、`-` 或 `/`，准确描述受影响边界；
+- 标题使用简洁祈使句，不超过 72 个字符；
+- 破坏性变更使用 `[scope/feat!]: ...`，并在正文添加 `BREAKING CHANGE:` 与迁移要求；
+- 一个 commit 只表达一个可独立审查和回退的意图，机械格式化与功能逻辑分开提交。
+
+PR 正文必须按顺序包含 `What`、`Why`、`How`、`Changes`、`Risk Assessment`、`Testing` 和 `Breaking Changes`。无风险或无破坏性变更时明确写 `None`，不得删除小节。互不依赖的 D1、D2、D3、评测、格式化或生成产物变更应拆分；只有同一契约变更要求同步更新生产者、消费者、测试和 fixture 时才放在一个 PR。
 
 ## 最小验收
 
@@ -81,3 +97,4 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 3. 新数据有来源、许可与哈希；新科学规则有适用边界与失败状态。
 4. 没有第二个 Skill 目录，没有密钥、缓存、生成输出或大文件。
 5. PR 模板中的交付物、接口影响和复现命令填写完整。
+6. `ruff check .`、`ruff format --check .`、`mypy --config-file mypy-critical.ini` 和仓库 CI 通过；已执行的测试与无法执行的外部检查均如实记录。类型门当前明确覆盖评测关键与公共契约边界，其他历史适配器在完成类型化后再加入，不得把“关键边界通过”误写成“全仓严格类型化”。

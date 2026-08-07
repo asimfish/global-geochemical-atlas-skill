@@ -46,7 +46,9 @@ REPO_ROOT = EVALUATION_ROOT.parent
 DOCKER_ROOT = Path(__file__).resolve().parent
 ALIGNMENT_PATH = EVALUATION_ROOT / "contracts" / "benchmark-execution-contract.json"
 PUBLIC_INTERFACE = EVALUATION_ROOT / "ai_visible_public" / "public_interface.md"
-PUBLIC_CONTRACT_VALIDATOR = EVALUATION_ROOT / "ai_visible_public" / "validate_submission_contract.py"
+PUBLIC_CONTRACT_VALIDATOR = (
+    EVALUATION_ROOT / "ai_visible_public" / "validate_submission_contract.py"
+)
 SKILL_DIR = REPO_ROOT / "skills" / "global-geochemical-atlas"
 GRADER_PROTOCOL = EVALUATION_ROOT / "docs" / "llm_grader_protocol.md"
 SAFE_NAME = re.compile(r"[^a-z0-9_.-]+")
@@ -97,9 +99,15 @@ def run_checked(
     capture: bool = True,
     environment: dict[str, str] | None = None,
 ) -> subprocess.CompletedProcess[str]:
-    completed = subprocess.run(command, check=False, capture_output=capture, text=True, env=environment)
+    completed = subprocess.run(
+        command, check=False, capture_output=capture, text=True, env=environment
+    )
     if completed.returncode != 0:
-        message = completed.stderr.strip() or completed.stdout.strip() or f"exit {completed.returncode}"
+        message = (
+            completed.stderr.strip()
+            or completed.stdout.strip()
+            or f"exit {completed.returncode}"
+        )
         raise CampaignError(f"command failed: {' '.join(command[:4])}: {message}")
     return completed
 
@@ -116,7 +124,9 @@ def docker_available() -> dict[str, Any]:
 
 
 def image_identity(image: str) -> str:
-    return run_checked(["docker", "image", "inspect", image, "--format", "{{.Id}}"]).stdout.strip()
+    return run_checked(
+        ["docker", "image", "inspect", image, "--format", "{{.Id}}"]
+    ).stdout.strip()
 
 
 def freeze_skill_snapshot(source: Path, destination: Path) -> str:
@@ -152,7 +162,9 @@ def freeze_skill_snapshot(source: Path, destination: Path) -> str:
     return snapshot_sha256
 
 
-def docker_build_proxy_options(environment: dict[str, str]) -> tuple[list[str], str, list[str]]:
+def docker_build_proxy_options(
+    environment: dict[str, str],
+) -> tuple[list[str], str, list[str]]:
     """Translate a safe host proxy environment into Docker build options.
 
     A proxy bound to host loopback is unreachable from BuildKit's bridge
@@ -180,7 +192,11 @@ def docker_build_proxy_options(environment: dict[str, str]) -> tuple[list[str], 
                     f"{canonical} contains credentials; configure a credential-free local proxy "
                     "or Docker daemon proxy instead of exposing credentials as build arguments"
                 )
-            loopback_proxy = loopback_proxy or parsed.hostname in {"localhost", "127.0.0.1", "::1"}
+            loopback_proxy = loopback_proxy or parsed.hostname in {
+                "localhost",
+                "127.0.0.1",
+                "::1",
+            }
         options.extend(["--build-arg", f"{canonical}={value}"])
         forwarded.append(canonical)
     network = "host" if loopback_proxy else "default"
@@ -197,7 +213,10 @@ def task_source(question: str) -> tuple[Path, str]:
         return EVALUATION_ROOT / "release" / "public" / question, "public"
     if number <= 16:
         return EVALUATION_ROOT / "evaluator_private" / "shadow" / question, "shadow"
-    return EVALUATION_ROOT / "evaluator_private" / "final_holdout" / question, "final_holdout"
+    return (
+        EVALUATION_ROOT / "evaluator_private" / "final_holdout" / question,
+        "final_holdout",
+    )
 
 
 def parse_tasks(value: str) -> list[str]:
@@ -245,7 +264,9 @@ def safe_slug(value: str) -> str:
     return slug[:48] or "campaign"
 
 
-def start_network(image: str, campaign_id: str, rules: tuple[str, ...], mode: str) -> NetworkHandle:
+def start_network(
+    image: str, campaign_id: str, rules: tuple[str, ...], mode: str
+) -> NetworkHandle:
     if mode == "offline":
         return NetworkHandle(mode="offline")
     suffix = f"{safe_slug(campaign_id)}-{uuid.uuid4().hex[:8]}"
@@ -282,21 +303,33 @@ def start_network(image: str, campaign_id: str, rules: tuple[str, ...], mode: st
         )
         run_checked(["docker", "network", "connect", egress, proxy])
         time.sleep(0.5)
-        running = run_checked(["docker", "inspect", proxy, "--format", "{{.State.Running}}"]).stdout.strip()
+        running = run_checked(
+            ["docker", "inspect", proxy, "--format", "{{.State.Running}}"]
+        ).stdout.strip()
         if running != "true":
             raise CampaignError("allowlist proxy failed to start")
-        return NetworkHandle(mode="whitelist", internal=internal, egress=egress, proxy=proxy)
+        return NetworkHandle(
+            mode="whitelist", internal=internal, egress=egress, proxy=proxy
+        )
     except Exception:
-        cleanup_network(NetworkHandle(mode="whitelist", internal=internal, egress=egress, proxy=proxy))
+        cleanup_network(
+            NetworkHandle(
+                mode="whitelist", internal=internal, egress=egress, proxy=proxy
+            )
+        )
         raise
 
 
 def cleanup_network(handle: NetworkHandle) -> None:
     if handle.proxy:
-        subprocess.run(["docker", "rm", "--force", handle.proxy], check=False, capture_output=True)
+        subprocess.run(
+            ["docker", "rm", "--force", handle.proxy], check=False, capture_output=True
+        )
     for network in (handle.internal, handle.egress):
         if network:
-            subprocess.run(["docker", "network", "rm", network], check=False, capture_output=True)
+            subprocess.run(
+                ["docker", "network", "rm", network], check=False, capture_output=True
+            )
 
 
 def start_provider_relay(
@@ -312,23 +345,53 @@ def start_provider_relay(
     timeout_seconds: int,
 ) -> ProviderRelayHandle:
     if network.mode != "whitelist" or not network.internal or not network.egress:
-        raise CampaignError("OpenCode evaluation requires the isolated whitelist network")
+        raise CampaignError(
+            "OpenCode evaluation requires the isolated whitelist network"
+        )
     container = f"gga-provider-{safe_slug(run_id)}-{uuid.uuid4().hex[:6]}"
     token = uuid.uuid4().hex + uuid.uuid4().hex
     command = [
-        "docker", "run", "--detach", "--name", container,
-        "--network", network.internal, "--network-alias", "eval-provider-relay",
-        "--cpus", "1", "--memory", "512m", "--memory-swap", "512m", "--pids-limit", "64",
-        "--read-only", "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
-        "--tmpfs", "/tmp:rw,nosuid,nodev,size=16m",
-        "--env", "EVAL_RELAY_TOKEN",
-        "--env", "EVAL_UPSTREAM_BASE_URL",
-        "--env", "EVAL_UPSTREAM_API_KEY",
-        "--env", "EVAL_UPSTREAM_MODEL_ID",
-        "--env", "EVAL_UPSTREAM_TEMPERATURE",
-        "--env", "EVAL_UPSTREAM_THINKING_MODE",
-        "--env", "EVAL_RELAY_MAX_SECONDS",
-        image, "python", "/opt/evaluation/container/provider_relay.py",
+        "docker",
+        "run",
+        "--detach",
+        "--name",
+        container,
+        "--network",
+        network.internal,
+        "--network-alias",
+        "eval-provider-relay",
+        "--cpus",
+        "1",
+        "--memory",
+        "512m",
+        "--memory-swap",
+        "512m",
+        "--pids-limit",
+        "64",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nosuid,nodev,size=16m",
+        "--env",
+        "EVAL_RELAY_TOKEN",
+        "--env",
+        "EVAL_UPSTREAM_BASE_URL",
+        "--env",
+        "EVAL_UPSTREAM_API_KEY",
+        "--env",
+        "EVAL_UPSTREAM_MODEL_ID",
+        "--env",
+        "EVAL_UPSTREAM_TEMPERATURE",
+        "--env",
+        "EVAL_UPSTREAM_THINKING_MODE",
+        "--env",
+        "EVAL_RELAY_MAX_SECONDS",
+        image,
+        "python",
+        "/opt/evaluation/container/provider_relay.py",
     ]
     child_environment = os.environ.copy()
     child_environment["EVAL_RELAY_TOKEN"] = token
@@ -349,7 +412,9 @@ def start_provider_relay(
             raise CampaignError("provider relay failed to start")
         return ProviderRelayHandle(container=container, token=token)
     except Exception:
-        subprocess.run(["docker", "rm", "--force", container], check=False, capture_output=True)
+        subprocess.run(
+            ["docker", "rm", "--force", container], check=False, capture_output=True
+        )
         raise
 
 
@@ -382,7 +447,9 @@ def prepare_task_bundle(question: str, destination: Path) -> tuple[Path, str, st
         raise CampaignError(f"task source is missing for {question}")
     destination.mkdir(parents=True, exist_ok=False)
     shutil.copy2(PUBLIC_INTERFACE, destination / "public_interface.md")
-    shutil.copy2(PUBLIC_CONTRACT_VALIDATOR, destination / "validate_submission_contract.py")
+    shutil.copy2(
+        PUBLIC_CONTRACT_VALIDATOR, destination / "validate_submission_contract.py"
+    )
     for name in ("task.md", "task.json"):
         shutil.copy2(public_task / name, destination / name)
     shutil.copytree(public_task / "inputs", destination / "inputs")
@@ -467,10 +534,14 @@ def pair_fingerprint(
         thinking_mode=thinking_mode,
         skill_sha256=skill_sha256,
     )
-    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
 
 
-def artifact_inventory(submission: Path, required_paths: list[str]) -> tuple[list[dict[str, Any]], list[str]]:
+def artifact_inventory(
+    submission: Path, required_paths: list[str]
+) -> tuple[list[dict[str, Any]], list[str]]:
     artifacts = []
     missing = []
     for relative in required_paths:
@@ -478,7 +549,13 @@ def artifact_inventory(submission: Path, required_paths: list[str]) -> tuple[lis
         if not path.is_file() or path.is_symlink():
             missing.append(relative)
         else:
-            artifacts.append({"path": relative, "bytes": path.stat().st_size, "sha256": sha256_file(path)})
+            artifacts.append(
+                {
+                    "path": relative,
+                    "bytes": path.stat().st_size,
+                    "sha256": sha256_file(path),
+                }
+            )
     return artifacts, missing
 
 
@@ -492,34 +569,70 @@ def audit_q24_map(image: str, run_dir: Path, submission: Path) -> dict[str, Any]
     stderr = controller / "q24_browser_audit.stderr"
     name = f"gga-q24-audit-{uuid.uuid4().hex[:8]}"
     command = [
-        "docker", "run", "--rm", "--name", name,
-        "--user", f"{os.getuid()}:{os.getgid()}",
-        "--cpus", "1", "--memory", "2g", "--memory-swap", "2g",
-        "--pids-limit", "128", "--network", "none", "--read-only",
-        "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
-        "--tmpfs", "/tmp:rw,nosuid,nodev,size=512m",
-        "--volume", f"{REPO_ROOT.resolve()}:/repo:ro",
-        "--volume", f"{submission.resolve()}:/submission:ro",
-        "--volume", f"{controller.resolve()}:/controller:rw",
-        image, "python", "/repo/evaluation/reporting/q24_browser_audit.py",
-        "--html", "/submission/artifacts/map.html",
-        "--output", "/controller/q24_browser_audit.json",
-        "--screenshots", "/controller/q24_screenshots",
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        name,
+        "--user",
+        f"{os.getuid()}:{os.getgid()}",
+        "--cpus",
+        "1",
+        "--memory",
+        "2g",
+        "--memory-swap",
+        "2g",
+        "--pids-limit",
+        "128",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--tmpfs",
+        "/tmp:rw,nosuid,nodev,size=512m",
+        "--volume",
+        f"{REPO_ROOT.resolve()}:/repo:ro",
+        "--volume",
+        f"{submission.resolve()}:/submission:ro",
+        "--volume",
+        f"{controller.resolve()}:/controller:rw",
+        image,
+        "python",
+        "/repo/evaluation/reporting/q24_browser_audit.py",
+        "--html",
+        "/submission/artifacts/map.html",
+        "--output",
+        "/controller/q24_browser_audit.json",
+        "--screenshots",
+        "/controller/q24_screenshots",
     ]
     try:
-        completed = subprocess.run(command, check=False, capture_output=True, text=True, timeout=120)
+        completed = subprocess.run(
+            command, check=False, capture_output=True, text=True, timeout=120
+        )
         stdout.write_text(completed.stdout, encoding="utf-8")
         stderr.write_text(completed.stderr, encoding="utf-8")
     except subprocess.TimeoutExpired as exc:
-        subprocess.run(["docker", "rm", "--force", name], check=False, capture_output=True)
+        subprocess.run(
+            ["docker", "rm", "--force", name], check=False, capture_output=True
+        )
         stdout.write_text(exc.stdout or "", encoding="utf-8")
-        stderr.write_text((exc.stderr or "") + "\ncontroller timeout\n", encoding="utf-8")
-    report = load_json(output) if output.is_file() else {
-        "schema_version": "geochemical-q24-browser-audit-v1",
-        "status": "error",
-        "generated_by": "external_evaluation_controller",
-        "error": "browser audit did not produce its JSON result",
-    }
+        stderr.write_text(
+            (exc.stderr or "") + "\ncontroller timeout\n", encoding="utf-8"
+        )
+    report = (
+        load_json(output)
+        if output.is_file()
+        else {
+            "schema_version": "geochemical-q24-browser-audit-v1",
+            "status": "error",
+            "generated_by": "external_evaluation_controller",
+            "error": "browser audit did not produce its JSON result",
+        }
+    )
     return report
 
 
@@ -635,7 +748,10 @@ def execute_container(
         docker_command.extend(["--env", f"{key}={value}"])
     if condition == "S0":
         docker_command.extend(
-            ["--volume", f"{skill_dir.resolve()}:/workspace/.opencode/skills/global-geochemical-atlas:ro"]
+            [
+                "--volume",
+                f"{skill_dir.resolve()}:/workspace/.opencode/skills/global-geochemical-atlas:ro",
+            ]
         )
     docker_command.append(image)
     docker_command.extend(command)
@@ -643,8 +759,13 @@ def execute_container(
     child_env.update(host_environment)
     started = time.monotonic()
     timed_out = False
-    with stdout_path.open("w", encoding="utf-8") as stdout, stderr_path.open("w", encoding="utf-8") as stderr:
-        process = subprocess.Popen(docker_command, stdout=stdout, stderr=stderr, text=True, env=child_env)
+    with (
+        stdout_path.open("w", encoding="utf-8") as stdout,
+        stderr_path.open("w", encoding="utf-8") as stderr,
+    ):
+        process = subprocess.Popen(
+            docker_command, stdout=stdout, stderr=stderr, text=True, env=child_env
+        )
         try:
             raw_exit = process.wait(timeout=profile.timeout_seconds)
         except subprocess.TimeoutExpired:
@@ -654,13 +775,17 @@ def execute_container(
     return raw_exit, timed_out, round(time.monotonic() - started, 6)
 
 
-def candidate_status(raw_exit: int, timed_out: bool, missing: list[str]) -> tuple[int, str]:
+def candidate_status(
+    raw_exit: int, timed_out: bool, missing: list[str]
+) -> tuple[int, str]:
     if timed_out:
         return 71, "timed_out"
     if raw_exit in {137, 143}:
         return 72, "resource_exceeded"
     if raw_exit != 0:
-        return (raw_exit if raw_exit in E1_CODES else 70), E1_STATUS.get(raw_exit, "failed")
+        return (raw_exit if raw_exit in E1_CODES else 70), E1_STATUS.get(
+            raw_exit, "failed"
+        )
     if missing:
         return 74, "failed"
     return 0, "success"
@@ -686,7 +811,9 @@ def apply_q24_browser_gate(
     return exit_code, status
 
 
-def ineligible_score(run_id: str, status: str, rubric: Path, reason_path: str) -> dict[str, Any]:
+def ineligible_score(
+    run_id: str, status: str, rubric: Path, reason_path: str
+) -> dict[str, Any]:
     alignment = load_json(ALIGNMENT_PATH)
     return {
         "schema_version": "1.0.0",
@@ -740,7 +867,8 @@ def locate_llm_report(
         if candidate.is_file():
             return candidate
     raise CampaignError(
-        "LLM grader report is missing; expected one of: " + ", ".join(str(path) for path in candidates)
+        "LLM grader report is missing; expected one of: "
+        + ", ".join(str(path) for path in candidates)
     )
 
 
@@ -762,10 +890,19 @@ def grade_run(
         score = ineligible_score(run_id, status, rubric, "runner_metadata.json")
         atomic_json(score_path, score)
         (run_dir / "grader.stdout").write_text("", encoding="utf-8")
-        (run_dir / "grader.stderr").write_text("candidate was ineligible; grader not run\n", encoding="utf-8")
+        (run_dir / "grader.stderr").write_text(
+            "candidate was ineligible; grader not run\n", encoding="utf-8"
+        )
         return score, None, None, False
     grade = subprocess.run(
-        [sys.executable, str(EVALUATION_ROOT / "tools" / "grade_task.py"), str(source), str(run_dir / "submission"), "--output", str(objective)],
+        [
+            sys.executable,
+            str(EVALUATION_ROOT / "tools" / "grade_task.py"),
+            str(source),
+            str(run_dir / "submission"),
+            "--output",
+            str(objective),
+        ],
         check=False,
         capture_output=True,
         text=True,
@@ -810,9 +947,12 @@ def grade_run(
         shutil.copy2(llm_report, run_dir / llm_name)
         finalize_command.extend(
             [
-                "--llm-report", str(run_dir / llm_name),
-                "--review-binding", str(review_binding_path),
-                "--llm-evidence", llm_name,
+                "--llm-report",
+                str(run_dir / llm_name),
+                "--review-binding",
+                str(review_binding_path),
+                "--llm-evidence",
+                llm_name,
             ]
         )
     static_name = None
@@ -969,9 +1109,7 @@ def run_one(
         exit_code, status = 74, "failed"
     if not provider_relay_revoked:
         exit_code, status = 73, "failed"
-    exit_code, status = apply_q24_browser_gate(
-        question, q24_browser, exit_code, status
-    )
+    exit_code, status = apply_q24_browser_gate(question, q24_browser, exit_code, status)
     metadata = {
         "schema_version": "ai4s-docker-runner-metadata-v1",
         "run_id": run_id,
@@ -1009,7 +1147,8 @@ def run_one(
                 "status": q24_browser.get("status"),
                 "html_sha256": q24_browser.get("html", {}).get("sha256"),
             }
-            if isinstance(q24_browser, dict) else None
+            if isinstance(q24_browser, dict)
+            else None
         ),
         "secret_redaction_files": secret_redaction_files,
         "workspace_secret_redaction_files": workspace_secret_redaction_files,
@@ -1018,7 +1157,9 @@ def run_one(
         "stdout": stdout_path.name,
         "stderr": stderr_path.name,
         "provider_base_url": provider_base_url or None,
-        "provider_host": urlsplit(provider_base_url).hostname if provider_base_url else None,
+        "provider_host": urlsplit(provider_base_url).hostname
+        if provider_base_url
+        else None,
         "secret_policy": (
             "The provider key exists only in the short-lived runner-owned relay environment; "
             "the candidate receives a per-run relay token through process environment, the relay "
@@ -1027,7 +1168,9 @@ def run_one(
     }
     atomic_json(run_dir / "runner_metadata.json", metadata)
     score_path = run_dir / "score.json"
-    llm_source = locate_llm_report(llm_report_dir, run_id, group, question, condition, repeat)
+    llm_source = locate_llm_report(
+        llm_report_dir, run_id, group, question, condition, repeat
+    )
     score, llm_name, static_name, scorer_failed = grade_run(
         source,
         run_dir,
@@ -1066,7 +1209,10 @@ def run_one(
         )
     if not provider_relay_revoked:
         redline_events.append(
-            {"id": "provider_relay_revocation_unverified", "consequence": "acceptance_fail"}
+            {
+                "id": "provider_relay_revocation_unverified",
+                "consequence": "acceptance_fail",
+            }
         )
     if question == "Q24" and (
         not isinstance(q24_browser, dict) or q24_browser.get("status") != "pass"
@@ -1104,64 +1250,89 @@ def run_one(
         "artifact_dir": str((run_dir / "submission").relative_to(campaign_root)),
         "stdout_log": str(stdout_path.relative_to(campaign_root)),
         "stderr_log": str(stderr_path.relative_to(campaign_root)),
-        "objective_report": str((run_dir / "objective_report.json").relative_to(campaign_root)),
+        "objective_report": str(
+            (run_dir / "objective_report.json").relative_to(campaign_root)
+        ),
         "llm_grader_prompt": None,
         "llm_grader_raw": None,
         "llm_grader_report": (
-            str((run_dir / llm_name).relative_to(campaign_root)) if llm_name is not None else None
+            str((run_dir / llm_name).relative_to(campaign_root))
+            if llm_name is not None
+            else None
         ),
         "review_binding": (
             str((run_dir / "review_binding.json").relative_to(campaign_root))
-            if (run_dir / "review_binding.json").is_file() else None
+            if (run_dir / "review_binding.json").is_file()
+            else None
         ),
         "static_review": (
-            str((run_dir / static_name).relative_to(campaign_root)) if static_name is not None else None
+            str((run_dir / static_name).relative_to(campaign_root))
+            if static_name is not None
+            else None
         ),
         "score_path": str(score_path.relative_to(campaign_root)),
         "score": score,
         "redline_events": redline_events,
-        "notes": ["local competition-proxy task; current Q01-Q24 are not a strict hidden set"],
+        "notes": [
+            "local competition-proxy task; current Q01-Q24 are not a strict hidden set"
+        ],
     }
-    if question == "Q24" and isinstance(q24_browser, dict) and q24_browser.get("status") != "pass":
-        record["notes"].append("Q24 physical map failed the external Chromium interaction gate")
+    if (
+        question == "Q24"
+        and isinstance(q24_browser, dict)
+        and q24_browser.get("status") != "pass"
+    ):
+        record["notes"].append(
+            "Q24 physical map failed the external Chromium interaction gate"
+        )
     atomic_json(run_dir / "run_record.json", record)
     return record
 
 
 def build_image(args: argparse.Namespace) -> int:
     docker_available()
-    proxy_options, build_network, forwarded_proxy_variables = docker_build_proxy_options(os.environ)
+    proxy_options, build_network, forwarded_proxy_variables = (
+        docker_build_proxy_options(os.environ)
+    )
     command = ["docker", "build"]
     if not args.no_pull:
         command.append("--pull")
     if args.no_cache:
         command.append("--no-cache")
     command.extend(proxy_options)
-    command.extend([
-        "--build-arg",
-        f"OPENCODE_VERSION={args.opencode_version}",
-        "--build-arg",
-        f"PYTHON_IMAGE={args.python_image}",
-        "--tag",
-        args.image,
-        str(DOCKER_ROOT),
-    ])
+    command.extend(
+        [
+            "--build-arg",
+            f"OPENCODE_VERSION={args.opencode_version}",
+            "--build-arg",
+            f"PYTHON_IMAGE={args.python_image}",
+            "--tag",
+            args.image,
+            str(DOCKER_ROOT),
+        ]
+    )
     completed = subprocess.run(command, check=False)
     if completed.returncode != 0:
         return 73
-    print(json.dumps({
-        "status": "PASS",
-        "image": args.image,
-        "image_id": image_identity(args.image),
-        "build_network": build_network,
-        "forwarded_proxy_variables": forwarded_proxy_variables,
-    }))
+    print(
+        json.dumps(
+            {
+                "status": "PASS",
+                "image": args.image,
+                "image_id": image_identity(args.image),
+                "build_network": build_network,
+                "forwarded_proxy_variables": forwarded_proxy_variables,
+            }
+        )
+    )
     return 0
 
 
 def run_stage(args: argparse.Namespace) -> int:
     if args.refresh_downloads and args.network != "whitelist" and not args.host:
-        raise CampaignError("--refresh-downloads requires --network whitelist in Docker mode")
+        raise CampaignError(
+            "--refresh-downloads requires --network whitelist in Docker mode"
+        )
     adapter_command = [
         sys.executable,
         str(REPO_ROOT / "evaluation_lyf" / "suite_adapter.py"),
@@ -1249,7 +1420,9 @@ def run_stage(args: argparse.Namespace) -> int:
         "/repo",
     ]
     if candidate_mount:
-        docker_command.extend(["--volume", f"{candidate_mount}:/candidate/candidate_d2.py:ro"])
+        docker_command.extend(
+            ["--volume", f"{candidate_mount}:/candidate/candidate_d2.py:ro"]
+        )
     if network.mode == "offline":
         docker_command.extend(["--network", "none"])
     else:
@@ -1271,10 +1444,14 @@ def run_stage(args: argparse.Namespace) -> int:
     docker_command.extend(container_adapter)
     try:
         try:
-            completed = subprocess.run(docker_command, check=False, timeout=args.timeout_seconds + 60)
+            completed = subprocess.run(
+                docker_command, check=False, timeout=args.timeout_seconds + 60
+            )
             cause_exit_code = completed.returncode
         except subprocess.TimeoutExpired:
-            subprocess.run(["docker", "kill", container_name], check=False, capture_output=True)
+            subprocess.run(
+                ["docker", "kill", container_name], check=False, capture_output=True
+            )
             cause_exit_code = 71
     finally:
         cleanup_network(network)
@@ -1316,12 +1493,18 @@ def run_campaign(args: argparse.Namespace) -> int:
             require_endpoint=args.agent == "opencode",
         )
     alignment = load_json(ALIGNMENT_PATH)
-    required_paths = [item["path"] for item in alignment["submission"]["required_artifacts"]]
+    required_paths = [
+        item["path"] for item in alignment["submission"]["required_artifacts"]
+    ]
     tasks = parse_tasks(args.tasks)
     conditions = parse_conditions(args.conditions)
     if not 1 <= args.repeats <= 3:
         raise CampaignError("--repeats must be between 1 and 3")
-    if set(conditions) == {"B0", "S0"} and args.repeats != 3 and not args.development_run:
+    if (
+        set(conditions) == {"B0", "S0"}
+        and args.repeats != 3
+        and not args.development_run
+    ):
         raise CampaignError(
             "formal paired uplift requires exactly --repeats 3; use --development-run only for diagnostics"
         )
@@ -1341,10 +1524,14 @@ def run_campaign(args: argparse.Namespace) -> int:
     image_id = image_identity(args.image)
     source_skill_sha256 = hash_tree(SKILL_DIR)
     frozen_skill_dir = args.output_dir / "controller" / "frozen-skill"
-    provider_host = urlsplit(args.provider_base_url).hostname if args.provider_base_url else None
+    provider_host = (
+        urlsplit(args.provider_base_url).hostname if args.provider_base_url else None
+    )
     if args.agent == "opencode":
         if not provider_host or urlsplit(args.provider_base_url).scheme != "https":
-            raise CampaignError("OpenCode runs require an absolute HTTPS --provider-base-url")
+            raise CampaignError(
+                "OpenCode runs require an absolute HTTPS --provider-base-url"
+            )
         agent_command = ["python", "/opt/evaluation/container/run_opencode.py"]
         if args.network == "offline":
             raise CampaignError("OpenCode model calls require --network whitelist")
@@ -1375,7 +1562,8 @@ def run_campaign(args: argparse.Namespace) -> int:
         "supplemental_thinking": supplemental_thinking_mode,
         "supplemental_provider_profile": (
             supplemental_profile.audit_record(thinking_mode=supplemental_thinking_mode)
-            if supplemental_profile is not None and supplemental_thinking_mode is not None
+            if supplemental_profile is not None
+            and supplemental_thinking_mode is not None
             else None
         ),
         "image": args.image,
@@ -1472,12 +1660,21 @@ def run_campaign(args: argparse.Namespace) -> int:
     finally:
         cleanup_network(network)
     raw_path = args.output_dir / "runs.jsonl"
-    raw_path.write_text("".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in records), encoding="utf-8")
+    raw_path.write_text(
+        "".join(
+            json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
+            for item in records
+        ),
+        encoding="utf-8",
+    )
     supplemental_path = None
     if supplemental_records:
         supplemental_path = args.output_dir / "supplemental_runs.jsonl"
         supplemental_path.write_text(
-            "".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in supplemental_records),
+            "".join(
+                json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n"
+                for item in supplemental_records
+            ),
             encoding="utf-8",
         )
     aggregate_status = "not_requested"
@@ -1496,8 +1693,12 @@ def run_campaign(args: argparse.Namespace) -> int:
             capture_output=True,
             text=True,
         )
-        (args.output_dir / "aggregate.stdout").write_text(aggregate.stdout, encoding="utf-8")
-        (args.output_dir / "aggregate.stderr").write_text(aggregate.stderr, encoding="utf-8")
+        (args.output_dir / "aggregate.stdout").write_text(
+            aggregate.stdout, encoding="utf-8"
+        )
+        (args.output_dir / "aggregate.stderr").write_text(
+            aggregate.stderr, encoding="utf-8"
+        )
         aggregate_status = "pass" if aggregate.returncode == 0 else "fail"
     summary = {
         "schema_version": "ai4s-docker-campaign-result-v1",
@@ -1505,7 +1706,9 @@ def run_campaign(args: argparse.Namespace) -> int:
         "runs": len(records),
         "successful_runs": sum(item["status"] == "success" for item in records),
         "supplemental_runs": len(supplemental_records),
-        "successful_supplemental_runs": sum(item["status"] == "success" for item in supplemental_records),
+        "successful_supplemental_runs": sum(
+            item["status"] == "success" for item in supplemental_records
+        ),
         "aggregate_status": aggregate_status,
         "completed_at": utc_now(),
         "records": raw_path.name,
@@ -1514,7 +1717,12 @@ def run_campaign(args: argparse.Namespace) -> int:
     atomic_json(args.output_dir / "campaign_result.json", summary)
     print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
     all_records = records + supplemental_records
-    return 0 if all(item["status"] == "success" for item in all_records) and aggregate_status != "fail" else 2
+    return (
+        0
+        if all(item["status"] == "success" for item in all_records)
+        and aggregate_status != "fail"
+        else 2
+    )
 
 
 def _campaign_path(root: Path, relative: Any, label: str) -> Path:
@@ -1532,12 +1740,16 @@ def _campaign_path(root: Path, relative: Any, label: str) -> Path:
 
 def _write_jsonl(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", dir=path.parent
+    )
     temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
             for record in records:
-                handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+                handle.write(
+                    json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n"
+                )
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temporary, path)
@@ -1573,9 +1785,13 @@ def _validate_bound_run_evidence(
     missing = [label for label, path in required_files.items() if not path.exists()]
     if missing:
         raise CampaignError(f"bound run evidence is missing: {missing}")
-    file_symlinks = [label for label, path in required_files.items() if path.is_symlink()]
+    file_symlinks = [
+        label for label, path in required_files.items() if path.is_symlink()
+    ]
     if file_symlinks:
-        raise CampaignError(f"bound run evidence refuses symlinked files: {file_symlinks}")
+        raise CampaignError(
+            f"bound run evidence refuses symlinked files: {file_symlinks}"
+        )
     nested_symlinks = sorted(
         f"{label}/{path.relative_to(root).as_posix()}"
         for label, root in (("task bundle", task_dir), ("frozen Skill", frozen_skill))
@@ -1587,7 +1803,9 @@ def _validate_bound_run_evidence(
 
     artifacts, missing_artifacts = artifact_inventory(submission, required_paths)
     if missing_artifacts:
-        raise CampaignError(f"bound submission artifacts are missing: {missing_artifacts}")
+        raise CampaignError(
+            f"bound submission artifacts are missing: {missing_artifacts}"
+        )
     current = {
         "task_bundle_sha256": hash_tree(task_dir),
         "submission_artifacts_sha256": hash_records(
@@ -1600,7 +1818,9 @@ def _validate_bound_run_evidence(
     }
     drift = sorted(key for key, value in current.items() if binding.get(key) != value)
     if drift:
-        raise CampaignError(f"bound run evidence drift for {record.get('run_id')}: {drift}")
+        raise CampaignError(
+            f"bound run evidence drift for {record.get('run_id')}: {drift}"
+        )
 
     fingerprint_inputs = metadata.get("pair_fingerprint_inputs")
     if not isinstance(fingerprint_inputs, dict):
@@ -1638,7 +1858,9 @@ def _validate_bound_run_evidence(
         "frozen_skill_sha256": current["frozen_skill_sha256"],
     }
     if metadata_identity != expected_metadata:
-        raise CampaignError(f"runner metadata identity drift for {record.get('run_id')}")
+        raise CampaignError(
+            f"runner metadata identity drift for {record.get('run_id')}"
+        )
 
 
 def finalize_campaign_reviews(args: argparse.Namespace) -> int:
@@ -1648,7 +1870,9 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
     if not campaign_root.is_dir():
         raise CampaignError(f"campaign directory does not exist: {campaign_root}")
     if not args.llm_report_dir.is_dir():
-        raise CampaignError(f"LLM report directory does not exist: {args.llm_report_dir}")
+        raise CampaignError(
+            f"LLM report directory does not exist: {args.llm_report_dir}"
+        )
     report_root = args.llm_report_dir.resolve()
     controller = campaign_root / "controller"
     controller.mkdir(exist_ok=True)
@@ -1657,7 +1881,10 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
         for item in load_json(ALIGNMENT_PATH)["submission"]["required_artifacts"]
     ]
     record_sets: list[tuple[str, Path, list[dict[str, Any]]]] = []
-    for group, filename in (("main", "runs.jsonl"), ("supplemental", "supplemental_runs.jsonl")):
+    for group, filename in (
+        ("main", "runs.jsonl"),
+        ("supplemental", "supplemental_runs.jsonl"),
+    ):
         path = campaign_root / filename
         if not path.is_file():
             if group == "main":
@@ -1678,15 +1905,21 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
     run_ids = [record.get("run_id") for record in all_records]
     score_paths = [record.get("score_path") for record in all_records]
     if len(run_ids) != len(set(run_ids)) or len(score_paths) != len(set(score_paths)):
-        raise CampaignError("campaign review targets must have unique run_id and score_path values")
+        raise CampaignError(
+            "campaign review targets must have unique run_id and score_path values"
+        )
     resolved_score_paths = [
         _campaign_path(campaign_root, value, "score_path") for value in score_paths
     ]
     if len(resolved_score_paths) != len(set(resolved_score_paths)):
-        raise CampaignError("campaign review score_path values resolve to duplicate targets")
+        raise CampaignError(
+            "campaign review score_path values resolve to duplicate targets"
+        )
 
     staged: list[dict[str, Any]] = []
-    with tempfile.TemporaryDirectory(prefix="review-stage-", dir=controller) as temporary:
+    with tempfile.TemporaryDirectory(
+        prefix="review-stage-", dir=controller
+    ) as temporary:
         staging = Path(temporary)
         for group, _, records in record_sets:
             for record in records:
@@ -1694,16 +1927,28 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
                 question = str(record.get("task_id") or "")
                 condition = str(record.get("variant") or "")
                 repeat = record.get("repeat")
-                if not run_id or condition not in {"B0", "S0"} or repeat not in {1, 2, 3}:
+                if (
+                    not run_id
+                    or condition not in {"B0", "S0"}
+                    or repeat not in {1, 2, 3}
+                ):
                     raise CampaignError("campaign run identity is incomplete")
-                score_path = _campaign_path(campaign_root, record.get("score_path"), "score_path")
+                score_path = _campaign_path(
+                    campaign_root, record.get("score_path"), "score_path"
+                )
                 run_dir = score_path.parent
                 metadata_path = run_dir / "runner_metadata.json"
                 if metadata_path.is_symlink():
-                    raise CampaignError(f"runner metadata must not be a symlink for {run_id}")
+                    raise CampaignError(
+                        f"runner metadata must not be a symlink for {run_id}"
+                    )
                 metadata = load_json(metadata_path)
-                candidate_status = metadata.get("candidate_status", metadata.get("status"))
-                candidate_exit_code = metadata.get("candidate_exit_code", metadata.get("exit_code"))
+                candidate_status = metadata.get(
+                    "candidate_status", metadata.get("status")
+                )
+                candidate_exit_code = metadata.get(
+                    "candidate_exit_code", metadata.get("exit_code")
+                )
                 if candidate_status not in {"success", "partial_success"}:
                     if (
                         record.get("status") != candidate_status
@@ -1715,7 +1960,9 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
                 if not binding_path.is_file():
                     raise CampaignError(f"review binding is missing for {run_id}")
                 if binding_path.is_symlink():
-                    raise CampaignError(f"review binding must not be a symlink for {run_id}")
+                    raise CampaignError(
+                        f"review binding must not be a symlink for {run_id}"
+                    )
                 binding = validate_binding(load_json(binding_path))
                 report_source = locate_llm_report(
                     args.llm_report_dir, run_id, group, question, condition, int(repeat)
@@ -1723,8 +1970,13 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
                 if report_source is None:
                     raise CampaignError(f"LLM grader report is missing for {run_id}")
                 report_resolved = report_source.resolve()
-                if report_source.is_symlink() or report_root not in report_resolved.parents:
-                    raise CampaignError(f"LLM grader report escapes its report directory for {run_id}")
+                if (
+                    report_source.is_symlink()
+                    or report_root not in report_resolved.parents
+                ):
+                    raise CampaignError(
+                        f"LLM grader report escapes its report directory for {run_id}"
+                    )
                 validate_review(report_source, "LLM grader report", binding)
                 source, _ = task_source(question)
                 _validate_bound_run_evidence(
@@ -1744,15 +1996,24 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
                     [
                         sys.executable,
                         str(EVALUATION_ROOT / "tools" / "finalize_score.py"),
-                        "--objective-report", str(run_dir / "objective_report.json"),
-                        "--rubric", str(source / "rubric.json"),
-                        "--run-id", run_id,
-                        "--candidate-status", str(candidate_status),
-                        "--objective-evidence", "objective_report.json",
-                        "--llm-report", str(staged_report),
-                        "--review-binding", str(binding_path),
-                        "--llm-evidence", "llm_grader_report.json",
-                        "--output", str(staged_score),
+                        "--objective-report",
+                        str(run_dir / "objective_report.json"),
+                        "--rubric",
+                        str(source / "rubric.json"),
+                        "--run-id",
+                        run_id,
+                        "--candidate-status",
+                        str(candidate_status),
+                        "--objective-evidence",
+                        "objective_report.json",
+                        "--llm-report",
+                        str(staged_report),
+                        "--review-binding",
+                        str(binding_path),
+                        "--llm-evidence",
+                        "llm_grader_report.json",
+                        "--output",
+                        str(staged_score),
                     ],
                     check=False,
                     capture_output=True,
@@ -1807,8 +2068,10 @@ def finalize_campaign_reviews(args: argparse.Namespace) -> int:
                 sys.executable,
                 str(EVALUATION_ROOT / "tools" / "aggregate_runs.py"),
                 str(main_records),
-                "--csv-output", str(summary_csv),
-                "--json-output", str(summary_json),
+                "--csv-output",
+                str(summary_csv),
+                "--json-output",
+                str(summary_json),
             ],
             check=False,
             capture_output=True,
@@ -1827,12 +2090,16 @@ def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     sub = root.add_subparsers(dest="command", required=True)
 
-    build = sub.add_parser("build-image", help="build the frozen OpenCode sandbox image")
+    build = sub.add_parser(
+        "build-image", help="build the frozen OpenCode sandbox image"
+    )
     build.add_argument("--image", default="global-geochemical-eval:local")
     build.add_argument("--opencode-version", default="1.18.14")
     build.add_argument("--python-image", default="python:3.11.9-slim-bookworm")
     build.add_argument("--no-cache", action="store_true")
-    build.add_argument("--no-pull", action="store_true", help="use only locally available base images")
+    build.add_argument(
+        "--no-pull", action="store_true", help="use only locally available base images"
+    )
     build.set_defaults(func=build_image)
 
     stage = sub.add_parser("stage", help="run an evaluation_lyf scientific gate")
@@ -1852,7 +2119,11 @@ def parser() -> argparse.ArgumentParser:
     stage.add_argument("--network", choices=("offline", "whitelist"), default="offline")
     stage.add_argument("--allowlist", type=Path, default=DOCKER_ROOT / "allowlist.txt")
     stage.add_argument("--allow-host", action="append", default=[])
-    stage.add_argument("--host", action="store_true", help="diagnostic fallback: bypass Docker isolation")
+    stage.add_argument(
+        "--host",
+        action="store_true",
+        help="diagnostic fallback: bypass Docker isolation",
+    )
     stage.set_defaults(func=run_stage)
 
     campaign = sub.add_parser("run", help="run an isolated competition-proxy campaign")
@@ -1862,7 +2133,8 @@ def parser() -> argparse.ArgumentParser:
     campaign.add_argument("--conditions", default="B0,S0")
     campaign.add_argument("--repeats", type=int, default=3)
     campaign.add_argument(
-        "--development-run", action="store_true",
+        "--development-run",
+        action="store_true",
         help="allow an incomplete diagnostic pair; output is not valid uplift evidence",
     )
     campaign.add_argument("--model", default="qwen3.8-max")
@@ -1878,7 +2150,11 @@ def parser() -> argparse.ArgumentParser:
         choices=("not_configured", "provider_default", "enabled", "disabled"),
         help="must match the selected profile; omitted means the frozen profile value",
     )
-    campaign.add_argument("--supplemental-model", default="", help="optional second model; each selected B0/S0 task runs once")
+    campaign.add_argument(
+        "--supplemental-model",
+        default="",
+        help="optional second model; each selected B0/S0 task runs once",
+    )
     campaign.add_argument("--supplemental-model-variant", default="")
     campaign.add_argument(
         "--supplemental-provider-profile",
@@ -1893,15 +2169,21 @@ def parser() -> argparse.ArgumentParser:
     campaign.add_argument("--provider-base-url", default="")
     campaign.add_argument("--api-key-env", default="EVAL_API_KEY")
     campaign.add_argument("--agent", choices=("opencode", "mock"), default="opencode")
-    campaign.add_argument("--network", choices=("offline", "whitelist"), default="whitelist")
-    campaign.add_argument("--allowlist", type=Path, default=DOCKER_ROOT / "allowlist.txt")
+    campaign.add_argument(
+        "--network", choices=("offline", "whitelist"), default="whitelist"
+    )
+    campaign.add_argument(
+        "--allowlist", type=Path, default=DOCKER_ROOT / "allowlist.txt"
+    )
     campaign.add_argument("--allow-host", action="append", default=[])
     campaign.add_argument(
-        "--llm-report-dir", type=Path,
+        "--llm-report-dir",
+        type=Path,
         help="disabled inline; run first, then use finalize-reviews with bound reports",
     )
     campaign.add_argument(
-        "--static-review", type=Path,
+        "--static-review",
+        type=Path,
         help="disabled until a frozen static rubric and evidence scope exist",
     )
     campaign.add_argument("--timeout-seconds", type=int, default=900)
@@ -1924,7 +2206,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         return args.func(args)
     except (CampaignError, OSError, ValueError, json.JSONDecodeError) as exc:
-        print(json.dumps({"status": "environment_invalid", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                {"status": "environment_invalid", "error": str(exc)}, ensure_ascii=False
+            ),
+            file=sys.stderr,
+        )
         return 73
 
 

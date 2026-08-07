@@ -26,11 +26,24 @@ INJECTION_PATTERNS = (
     re.compile(r"ignore\s+(?:all\s+)?previous\s+instructions", re.IGNORECASE),
     re.compile(r"(?:绕过|规避).{0,12}(?:评测|评分|检查)"),
 )
-SKIP_PARTS = {"__pycache__", ".git", ".pytest_cache", ".ruff_cache", ".venv", "node_modules"}
+SKIP_PARTS = {
+    "__pycache__",
+    ".git",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "node_modules",
+}
 SKIP_SUFFIXES = {".pyc", ".pyo", ".log", ".tmp"}
 TOTAL_LIMIT = 200 * 1024 * 1024
 FILE_LIMIT = 100 * 1024 * 1024
-ACTIVATION_RUBRICS = {"discoverability", "correctness", "security", "effectiveness", "efficiency"}
+ACTIVATION_RUBRICS = {
+    "discoverability",
+    "correctness",
+    "security",
+    "effectiveness",
+    "efficiency",
+}
 SKILL_CARD_SECTIONS = (
     "## Purpose",
     "## Inputs and outputs",
@@ -60,7 +73,9 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, str], str]:
     if not lines or lines[0].strip() != "---":
         raise FrontmatterError("SKILL.md must start with YAML frontmatter")
     try:
-        end = next(index for index, line in enumerate(lines[1:], 1) if line.strip() == "---")
+        end = next(
+            index for index, line in enumerate(lines[1:], 1) if line.strip() == "---"
+        )
     except StopIteration as exc:
         raise FrontmatterError("SKILL.md frontmatter is not closed") from exc
     fields: dict[str, str] = {}
@@ -71,7 +86,7 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, str], str]:
             raise FrontmatterError(f"unsupported frontmatter line: {line}")
         key, value = line.split(":", 1)
         key = key.strip()
-        value = value.strip().strip('"\'')
+        value = value.strip().strip("\"'")
         if not key or not value or key in fields:
             raise FrontmatterError(f"invalid or duplicate frontmatter field: {key}")
         fields[key] = value
@@ -146,16 +161,20 @@ def validate_agent_metadata(skill_dir: Path, skill_name: str) -> list[str]:
             flags=re.MULTILINE,
         )
     }
-    errors = [f"interface.{key} is missing or not a quoted string" for key in (
-        "display_name", "short_description", "default_prompt"
-    ) if key not in fields]
+    errors = [
+        f"interface.{key} is missing or not a quoted string"
+        for key in ("display_name", "short_description", "default_prompt")
+        if key not in fields
+    ]
     short_description = fields.get("short_description", "")
     if short_description and not 25 <= len(short_description) <= 64:
         errors.append("interface.short_description must contain 25..64 characters")
     default_prompt = fields.get("default_prompt", "")
     if default_prompt and f"${skill_name}" not in default_prompt:
         errors.append(f"interface.default_prompt must mention ${skill_name}")
-    if not re.search(r"^  allow_implicit_invocation: (?:true|false)\s*$", text, re.MULTILINE):
+    if not re.search(
+        r"^  allow_implicit_invocation: (?:true|false)\s*$", text, re.MULTILINE
+    ):
         errors.append("policy.allow_implicit_invocation must be an explicit boolean")
     return errors
 
@@ -165,7 +184,11 @@ def validate_skill_card(skill_dir: Path) -> list[str]:
     if not path.is_file():
         return ["skill-card.md is missing"]
     text = path.read_text(encoding="utf-8")
-    errors = [f"missing section: {heading}" for heading in SKILL_CARD_SECTIONS if heading not in text]
+    errors = [
+        f"missing section: {heading}"
+        for heading in SKILL_CARD_SECTIONS
+        if heading not in text
+    ]
     errors.extend(
         f"missing capability declaration: {capability}"
         for capability in SKILL_CARD_CAPABILITIES
@@ -215,12 +238,18 @@ def validate_activation_eval(skill_dir: Path, skill_name: str) -> list[str]:
         else:
             errors.append(f"activation case {index} should_activate must be boolean")
         behavior = case.get("expected_behavior")
-        if not isinstance(behavior, list) or not behavior or not all(
-            isinstance(item, str) and item.strip() for item in behavior
+        if (
+            not isinstance(behavior, list)
+            or not behavior
+            or not all(isinstance(item, str) and item.strip() for item in behavior)
         ):
-            errors.append(f"activation case {index} needs non-empty expected_behavior strings")
+            errors.append(
+                f"activation case {index} needs non-empty expected_behavior strings"
+            )
     if positive < 2 or negative < 2:
-        errors.append("activation eval requires at least two positive and two adjacent negative cases")
+        errors.append(
+            "activation eval requires at least two positive and two adjacent negative cases"
+        )
     rubrics = document.get("rubrics")
     if not isinstance(rubrics, dict):
         errors.append("activation eval rubrics must be an object")
@@ -234,47 +263,114 @@ def validate_activation_eval(skill_dir: Path, skill_name: str) -> list[str]:
     return errors
 
 
-def check(checks: list[dict[str, Any]], check_id: str, status: str, evidence: str, detail: Any) -> None:
-    checks.append({"id": check_id, "status": status, "evidence": evidence, "detail": detail})
+def check(
+    checks: list[dict[str, Any]], check_id: str, status: str, evidence: str, detail: Any
+) -> None:
+    checks.append(
+        {"id": check_id, "status": status, "evidence": evidence, "detail": detail}
+    )
 
 
 def evaluate(repo: Path, topic: str) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     skills_root = repo / "skills"
-    skill_dirs = sorted(path for path in skills_root.iterdir() if path.is_dir()) if skills_root.is_dir() else []
-    check(checks, "l0.single_skill", "pass" if len(skill_dirs) == 1 else "fail", "skills/", len(skill_dirs))
+    skill_dirs = (
+        sorted(path for path in skills_root.iterdir() if path.is_dir())
+        if skills_root.is_dir()
+        else []
+    )
+    check(
+        checks,
+        "l0.single_skill",
+        "pass" if len(skill_dirs) == 1 else "fail",
+        "skills/",
+        len(skill_dirs),
+    )
     if len(skill_dirs) != 1:
         return result(repo, topic, checks, [])
     skill_dir = skill_dirs[0]
     skill_file = skill_dir / "SKILL.md"
-    check(checks, "l0.skill_file", "pass" if skill_file.is_file() else "fail", str(skill_file.relative_to(repo)), skill_file.is_file())
+    check(
+        checks,
+        "l0.skill_file",
+        "pass" if skill_file.is_file() else "fail",
+        str(skill_file.relative_to(repo)),
+        skill_file.is_file(),
+    )
     if not skill_file.is_file():
         return result(repo, topic, checks, [])
 
     try:
         fields, body = parse_frontmatter(skill_file)
     except (OSError, UnicodeError, FrontmatterError) as exc:
-        check(checks, "l0.frontmatter", "fail", str(skill_file.relative_to(repo)), str(exc))
+        check(
+            checks,
+            "l0.frontmatter",
+            "fail",
+            str(skill_file.relative_to(repo)),
+            str(exc),
+        )
         return result(repo, topic, checks, [])
     allowed_fields = {"name", "description"}
-    check(checks, "l0.frontmatter_fields", "pass" if set(fields) == allowed_fields else "fail", str(skill_file.relative_to(repo)), sorted(fields))
+    check(
+        checks,
+        "l0.frontmatter_fields",
+        "pass" if set(fields) == allowed_fields else "fail",
+        str(skill_file.relative_to(repo)),
+        sorted(fields),
+    )
     name = fields.get("name", "")
     description = fields.get("description", "")
-    valid_name = bool(NAME.fullmatch(name)) and len(name) <= 64 and name == skill_dir.name
-    check(checks, "l0.name", "pass" if valid_name else "fail", str(skill_file.relative_to(repo)), name)
+    valid_name = (
+        bool(NAME.fullmatch(name)) and len(name) <= 64 and name == skill_dir.name
+    )
+    check(
+        checks,
+        "l0.name",
+        "pass" if valid_name else "fail",
+        str(skill_file.relative_to(repo)),
+        name,
+    )
     valid_description = 1 <= len(description) <= 1024
-    check(checks, "l0.description", "pass" if valid_description else "fail", str(skill_file.relative_to(repo)), len(description))
+    check(
+        checks,
+        "l0.description",
+        "pass" if valid_description else "fail",
+        str(skill_file.relative_to(repo)),
+        len(description),
+    )
 
     files = package_files(repo)
     total = sum(path.stat().st_size for path in files)
     largest = max((path.stat().st_size for path in files), default=0)
-    check(checks, "l0.package_size", "pass" if total <= TOTAL_LIMIT else "fail", "submission package", {"bytes": total, "limit": TOTAL_LIMIT})
-    check(checks, "l0.single_file_size", "pass" if largest <= FILE_LIMIT else "fail", "submission package", {"largest_bytes": largest, "limit": FILE_LIMIT})
+    check(
+        checks,
+        "l0.package_size",
+        "pass" if total <= TOTAL_LIMIT else "fail",
+        "submission package",
+        {"bytes": total, "limit": TOTAL_LIMIT},
+    )
+    check(
+        checks,
+        "l0.single_file_size",
+        "pass" if largest <= FILE_LIMIT else "fail",
+        "submission package",
+        {"largest_bytes": largest, "limit": FILE_LIMIT},
+    )
 
     secret_hits = []
     injection_hits = []
     for path in repository_files(repo):
-        if path.suffix.casefold() not in {".md", ".py", ".json", ".jsonl", ".txt", ".yaml", ".yml", ".toml"}:
+        if path.suffix.casefold() not in {
+            ".md",
+            ".py",
+            ".json",
+            ".jsonl",
+            ".txt",
+            ".yaml",
+            ".yml",
+            ".toml",
+        }:
             continue
         try:
             text = path.read_text(encoding="utf-8")
@@ -282,27 +378,69 @@ def evaluate(repo: Path, topic: str) -> dict[str, Any]:
             continue
         for label, pattern in SECRET_PATTERNS:
             for match in pattern.finditer(text):
-                secret_hits.append({"file": path.relative_to(repo).as_posix(), "kind": label, "offset": match.start()})
+                secret_hits.append(
+                    {
+                        "file": path.relative_to(repo).as_posix(),
+                        "kind": label,
+                        "offset": match.start(),
+                    }
+                )
         if path in files:
             for pattern in INJECTION_PATTERNS:
                 for match in pattern.finditer(text):
-                    injection_hits.append({"file": path.relative_to(repo).as_posix(), "offset": match.start()})
-    check(checks, "l0.secrets", "pass" if not secret_hits else "fail", "repository text files", secret_hits)
-    check(checks, "l0.scoring_injection", "pass" if not injection_hits else "review", "submission text files", injection_hits)
+                    injection_hits.append(
+                        {
+                            "file": path.relative_to(repo).as_posix(),
+                            "offset": match.start(),
+                        }
+                    )
+    check(
+        checks,
+        "l0.secrets",
+        "pass" if not secret_hits else "fail",
+        "repository text files",
+        secret_hits,
+    )
+    check(
+        checks,
+        "l0.scoring_injection",
+        "pass" if not injection_hits else "review",
+        "submission text files",
+        injection_hits,
+    )
 
     line_count = len(skill_file.read_text(encoding="utf-8").splitlines())
-    check(checks, "l1.skill_length", "pass" if line_count < 500 else "review", str(skill_file.relative_to(repo)), line_count)
+    check(
+        checks,
+        "l1.skill_length",
+        "pass" if line_count < 500 else "review",
+        str(skill_file.relative_to(repo)),
+        line_count,
+    )
     references, reference_errors = direct_local_references(skill_dir, body)
-    check(checks, "l1.reference_targets", "pass" if not reference_errors else "fail", str(skill_file.relative_to(repo)), reference_errors)
+    check(
+        checks,
+        "l1.reference_targets",
+        "pass" if not reference_errors else "fail",
+        str(skill_file.relative_to(repo)),
+        reference_errors,
+    )
     unlinked = []
     references_dir = skill_dir / "references"
     if references_dir.is_dir():
         unlinked = [
             path.relative_to(skill_dir).as_posix()
             for path in references_dir.iterdir()
-            if path.is_file() and path.relative_to(skill_dir).as_posix() not in references
+            if path.is_file()
+            and path.relative_to(skill_dir).as_posix() not in references
         ]
-    check(checks, "l1.direct_reachability", "pass" if not unlinked else "review", str(skill_file.relative_to(repo)), sorted(unlinked))
+    check(
+        checks,
+        "l1.direct_reachability",
+        "pass" if not unlinked else "review",
+        str(skill_file.relative_to(repo)),
+        sorted(unlinked),
+    )
     agent_errors = validate_agent_metadata(skill_dir, name)
     check(
         checks,
@@ -328,22 +466,69 @@ def evaluate(repo: Path, topic: str) -> dict[str, Any]:
         activation_errors,
     )
     lower = body.casefold()
-    check(checks, "l1.structured_contract", "pass" if ("schema" in lower and ("json" in lower or "csv" in lower)) else "review", str(skill_file.relative_to(repo)), "Schema plus JSON/CSV expected")
-    check(checks, "l1.examples", "pass" if "```" in body else "review", str(skill_file.relative_to(repo)), "at least one fenced example expected")
+    check(
+        checks,
+        "l1.structured_contract",
+        "pass"
+        if ("schema" in lower and ("json" in lower or "csv" in lower))
+        else "review",
+        str(skill_file.relative_to(repo)),
+        "Schema plus JSON/CSV expected",
+    )
+    check(
+        checks,
+        "l1.examples",
+        "pass" if "```" in body else "review",
+        str(skill_file.relative_to(repo)),
+        "at least one fenced example expected",
+    )
     scientific_terms = ("不确定", "失败", "限制", "置信", "禁止", "边界")
     present = [term for term in scientific_terms if term in body]
-    check(checks, "l1.scientific_boundaries", "pass" if len(present) >= 3 else "review", str(skill_file.relative_to(repo)), present)
+    check(
+        checks,
+        "l1.scientific_boundaries",
+        "pass" if len(present) >= 3 else "review",
+        str(skill_file.relative_to(repo)),
+        present,
+    )
     topic_terms = {
-        "global-geochemical-atlas": ("地球化学", "元素", "岩石", "土壤", "沉积物", "水体"),
+        "global-geochemical-atlas": (
+            "地球化学",
+            "元素",
+            "岩石",
+            "土壤",
+            "沉积物",
+            "水体",
+        ),
     }.get(topic, ())
     topic_hits = [term for term in topic_terms if term in f"{description}\n{body}"]
-    check(checks, "l0.topic_relevance", "pass" if topic_terms and len(topic_hits) >= 3 else "review", str(skill_file.relative_to(repo)), topic_hits)
-    check(checks, "l0.originality", "manual", "external corpus required", "automatic similarity screening cannot establish originality")
-    check(checks, "l1.llm_static_review", "manual", "independent frozen reviewer required", "deterministic checks prepare evidence but do not replace the L1 reviewer")
+    check(
+        checks,
+        "l0.topic_relevance",
+        "pass" if topic_terms and len(topic_hits) >= 3 else "review",
+        str(skill_file.relative_to(repo)),
+        topic_hits,
+    )
+    check(
+        checks,
+        "l0.originality",
+        "manual",
+        "external corpus required",
+        "automatic similarity screening cannot establish originality",
+    )
+    check(
+        checks,
+        "l1.llm_static_review",
+        "manual",
+        "independent frozen reviewer required",
+        "deterministic checks prepare evidence but do not replace the L1 reviewer",
+    )
     return result(repo, topic, checks, files)
 
 
-def result(repo: Path, topic: str, checks: list[dict[str, Any]], files: list[Path]) -> dict[str, Any]:
+def result(
+    repo: Path, topic: str, checks: list[dict[str, Any]], files: list[Path]
+) -> dict[str, Any]:
     failures = [item["id"] for item in checks if item["status"] == "fail"]
     reviews = [item["id"] for item in checks if item["status"] in {"review", "manual"}]
     return {
@@ -360,7 +545,9 @@ def result(repo: Path, topic: str, checks: list[dict[str, Any]], files: list[Pat
             "bytes": sum(path.stat().st_size for path in files),
             "sha256": hash_records(
                 (path.relative_to(repo).as_posix(), sha256_file(path)) for path in files
-            ) if files else None,
+            )
+            if files
+            else None,
         },
     }
 
@@ -376,9 +563,16 @@ def main() -> int:
         if args.output:
             atomic_json(args.output, report)
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
-        return 74 if report["status"] == "fail" else (2 if report["status"] == "review" else 0)
+        return (
+            74
+            if report["status"] == "fail"
+            else (2 if report["status"] == "review" else 0)
+        )
     except (OSError, ValueError, StopIteration) as exc:
-        print(json.dumps({"status": "environment_invalid", "error": str(exc)}), file=sys.stderr)
+        print(
+            json.dumps({"status": "environment_invalid", "error": str(exc)}),
+            file=sys.stderr,
+        )
         return 73
 
 

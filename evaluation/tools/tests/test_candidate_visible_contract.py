@@ -22,31 +22,48 @@ class CandidateVisibleContractTests(unittest.TestCase):
 
     def test_all_contracts_cover_checker_structure(self) -> None:
         task_dirs = sorted((self.evaluation_root / "release" / "public").glob("Q??"))
-        task_dirs.extend(sorted((self.evaluation_root / "evaluator_private" / "shadow").glob("Q??")))
-        task_dirs.extend(sorted((self.evaluation_root / "evaluator_private" / "final_holdout").glob("Q??")))
+        task_dirs.extend(
+            sorted((self.evaluation_root / "evaluator_private" / "shadow").glob("Q??"))
+        )
+        task_dirs.extend(
+            sorted(
+                (self.evaluation_root / "evaluator_private" / "final_holdout").glob(
+                    "Q??"
+                )
+            )
+        )
         self.assertEqual(len(task_dirs), 24)
         for task_dir in task_dirs:
             metadata = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
-            grader = json.loads((task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8"))
-            self.assertEqual(MODULE.validate_candidate_visible_contract(task_dir, metadata, grader), [])
+            grader = json.loads(
+                (task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(
+                MODULE.validate_candidate_visible_contract(task_dir, metadata, grader),
+                [],
+            )
 
     def test_csv_positional_rows_contract_is_rejected(self) -> None:
         task_dir = self.evaluation_root / "release" / "public" / "Q03"
         metadata = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
-        grader = json.loads((task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8"))
-        metadata["candidate_visible_contract"]["logical_outputs"]["normalized_elements.csv"][
-            "row_encoding"
-        ] = "positional_arrays"
+        grader = json.loads(
+            (task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8")
+        )
+        metadata["candidate_visible_contract"]["logical_outputs"][
+            "normalized_elements.csv"
+        ]["row_encoding"] = "positional_arrays"
         errors = MODULE.validate_candidate_visible_contract(task_dir, metadata, grader)
         self.assertTrue(any("object-encoded CSV rows" in error for error in errors))
 
     def test_json_checker_path_must_be_candidate_visible(self) -> None:
         task_dir = self.evaluation_root / "release" / "public" / "Q01"
         metadata = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
-        grader = json.loads((task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8"))
-        properties = metadata["candidate_visible_contract"]["logical_outputs"]["provenance_plan.json"][
-            "json_shape"
-        ]["properties"]
+        grader = json.loads(
+            (task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8")
+        )
+        properties = metadata["candidate_visible_contract"]["logical_outputs"][
+            "provenance_plan.json"
+        ]["json_shape"]["properties"]
         properties.pop("record_fields")
         errors = MODULE.validate_candidate_visible_contract(task_dir, metadata, grader)
         self.assertTrue(any("record_fields" in error for error in errors))
@@ -54,8 +71,12 @@ class CandidateVisibleContractTests(unittest.TestCase):
     def test_json_array_selector_must_use_declared_item_key(self) -> None:
         task_dir = self.evaluation_root / "evaluator_private" / "shadow" / "Q13"
         metadata = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
-        grader = json.loads((task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8"))
-        keyed_check = next(item for item in grader["checks"] if item["type"] == "json_array_item_value")
+        grader = json.loads(
+            (task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8")
+        )
+        keyed_check = next(
+            item for item in grader["checks"] if item["type"] == "json_array_item_value"
+        )
         keyed_check["key"] = {"undeclared_identity": "SMALL"}
         errors = MODULE.validate_candidate_visible_contract(task_dir, metadata, grader)
         self.assertTrue(any("undeclared JSON keys" in error for error in errors))

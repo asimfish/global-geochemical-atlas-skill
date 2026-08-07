@@ -108,7 +108,10 @@ def verified_path(fixture_dir: Path, resource: Mapping[str, Any]) -> Path:
     path = fixture_dir / str(resource["local_file"])
     if not path.is_file():
         raise AdapterError(f"global fixture is missing: {path}")
-    if path.stat().st_size != int(resource["bytes"]) or sha256_file(path) != resource["sha256"]:
+    if (
+        path.stat().st_size != int(resource["bytes"])
+        or sha256_file(path) != resource["sha256"]
+    ):
         raise AdapterError(f"global fixture contract mismatch: {path}")
     return path
 
@@ -133,7 +136,9 @@ def coordinate_uncertainty(row: Mapping[str, str]) -> str:
         return ""
     latitude = (lat_min + lat_max) / 2
     north_south = abs(lat_max - lat_min) * 111_320 / 2
-    east_west = abs(lon_max - lon_min) * 111_320 * abs(math.cos(math.radians(latitude))) / 2
+    east_west = (
+        abs(lon_max - lon_min) * 111_320 * abs(math.cos(math.radians(latitude))) / 2
+    )
     return f"{math.hypot(north_south, east_west):.6f}"
 
 
@@ -151,13 +156,19 @@ def common_provenance(dataset: Mapping[str, Any]) -> dict[str, str]:
     }
 
 
-def read_georoc(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_georoc(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     resource = resource_by_id(contract, "georoc_global_rocks_slice")
     path = verified_path(fixture_dir, resource)
     with path.open("r", encoding="utf-8", newline="") as handle:
         for derivative_row, raw in enumerate(csv.DictReader(handle), start=2):
             is_antarctica = raw["continent"] == "Antarctica"
-            dataset_id = "georoc_antarctica_intraplate" if is_antarctica else "georoc_archaean_cratons"
+            dataset_id = (
+                "georoc_antarctica_intraplate"
+                if is_antarctica
+                else "georoc_archaean_cratons"
+            )
             dataset = dataset_by_id(contract, dataset_id)
             dataset_pid = str(dataset["persistent_identifier"]).removeprefix("doi:")
             latitude = midpoint(raw["latitude_min"], raw["latitude_max"])
@@ -213,12 +224,17 @@ def read_georoc(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict
                 yield row
 
 
-def read_gemas(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_gemas(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "gemas_europe_soil")
     resource = resource_by_id(contract, "gemas_europe_soil")
     path = verified_path(fixture_dir, resource)
     payload = json.loads(path.read_text(encoding="utf-8"))
-    features = sorted(payload.get("features", []), key=lambda item: int(item["properties"]["OBJECTID"]))
+    features = sorted(
+        payload.get("features", []),
+        key=lambda item: int(item["properties"]["OBJECTID"]),
+    )
     for feature in features:
         properties = feature["properties"]
         object_id = clean_identifier(properties.get("OBJECTID"))
@@ -282,7 +298,9 @@ def parse_australian_date(value: str) -> str:
         return ""
 
 
-def read_ngsa(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_ngsa(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "ngsa_australia_hg")
     resource = resource_by_id(contract, "ngsa_australia_hg")
     path = verified_path(fixture_dir, resource)
@@ -357,7 +375,10 @@ def gemstat_measurement_basis(parameter_code: str) -> str:
 
 def gemstat_method(raw: Mapping[str, str]) -> str:
     description = raw.get("method_description", "").strip()
-    if raw.get("analysis_method_code", "").strip() == "0" or "undefined analysis method" in description.casefold():
+    if (
+        raw.get("analysis_method_code", "").strip() == "0"
+        or "undefined analysis method" in description.casefold()
+    ):
         return ""
     parts = [
         raw.get("method_name", "").strip(),
@@ -376,7 +397,9 @@ def valid_depth(value: str) -> str:
     return str(depth) if math.isfinite(depth) and depth >= 0 else ""
 
 
-def read_gemstat(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_gemstat(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "gemstat_global_freshwater_v3")
     resource = resource_by_id(contract, "gemstat_global_water_slice")
     path = verified_path(fixture_dir, resource)
@@ -385,7 +408,9 @@ def read_gemstat(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dic
             country = raw["country"].strip()
             continent = GEMSTAT_CONTINENTS.get(country)
             if continent is None:
-                raise AdapterError(f"GEMStat country missing from frozen continent map: {country}")
+                raise AdapterError(
+                    f"GEMStat country missing from frozen continent map: {country}"
+                )
             element = raw["element"].strip()
             station_id = raw["station_id"].strip()
             parent_member = raw["parent_member"].strip()
@@ -408,7 +433,9 @@ def read_gemstat(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dic
                     "source_qualifier_raw": raw["value_qualifier"].strip(),
                     "medium": "water",
                     "material": raw["water_type"].strip(),
-                    "measurement_basis": gemstat_measurement_basis(raw["parameter_code"].strip()),
+                    "measurement_basis": gemstat_measurement_basis(
+                        raw["parameter_code"].strip()
+                    ),
                     "latitude": raw["latitude"].strip(),
                     "longitude": raw["longitude"].strip(),
                     "source_crs": "WGS84",
@@ -421,7 +448,9 @@ def read_gemstat(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dic
                     "geologic_match_method": "source_reported_station_metadata",
                     "geologic_match_confidence": "unknown",
                     "analytical_method": method,
-                    "method_family": "" if not method else "source_reported_water_analysis",
+                    "method_family": ""
+                    if not method
+                    else "source_reported_water_analysis",
                     "laboratory": "",
                     "source_id": "gemstat_global_freshwater_v3",
                     "source_file": parent_member,
@@ -434,7 +463,8 @@ def read_gemstat(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dic
                     "source_tier": "official_curated",
                     "benchmark_continent": continent,
                     "benchmark_country": country,
-                    "benchmark_region": raw["main_basin"].strip() or raw["station_identifier"].strip(),
+                    "benchmark_region": raw["main_basin"].strip()
+                    or raw["station_identifier"].strip(),
                     **common_provenance(dataset),
                 }
             )
@@ -443,9 +473,13 @@ def read_gemstat(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dic
 
 def write_csv(path: Path, rows: Sequence[Mapping[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         temporary = Path(handle.name)
-        writer = csv.DictWriter(handle, fieldnames=GLOBAL_OUTPUT_FIELDS, lineterminator="\n")
+        writer = csv.DictWriter(
+            handle, fieldnames=GLOBAL_OUTPUT_FIELDS, lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
     os.replace(temporary, path)
@@ -456,7 +490,10 @@ def coverage_matrix(rows: Sequence[Mapping[str, str]]) -> dict[str, dict[str, in
     for row in rows:
         matrix[row["benchmark_continent"]][row["medium"]] += 1
     return {
-        continent: {medium: counts.get(medium, 0) for medium in ("rock", "soil", "sediment", "water")}
+        continent: {
+            medium: counts.get(medium, 0)
+            for medium in ("rock", "soil", "sediment", "water")
+        }
         for continent, counts in sorted(matrix.items())
     }
 
@@ -486,9 +523,15 @@ def run_adapter(fixture_dir: Path, output_dir: Path) -> dict[str, Any]:
     medium_counts = Counter(row["medium"] for row in rows)
     element_counts = Counter(row["element_or_analyte"] for row in rows)
     continent_counts = Counter(row["benchmark_continent"] for row in rows)
-    country_labels = sorted({row["benchmark_country"] for row in rows if row["benchmark_country"]})
+    country_labels = sorted(
+        {row["benchmark_country"] for row in rows if row["benchmark_country"]}
+    )
     gemstat_countries = sorted(
-        {row["benchmark_country"] for row in rows if row["source_id"] == "gemstat_global_freshwater_v3"}
+        {
+            row["benchmark_country"]
+            for row in rows
+            if row["source_id"] == "gemstat_global_freshwater_v3"
+        }
     )
     manifest = {
         "manifest_version": "d1-global-real-manifest-v1",
@@ -526,7 +569,9 @@ def run_adapter(fixture_dir: Path, output_dir: Path) -> dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Adapt frozen global real sources to the D2 canonical input CSV.")
+    parser = argparse.ArgumentParser(
+        description="Adapt frozen global real sources to the D2 canonical input CSV."
+    )
     parser.add_argument("--fixture-dir", type=Path, default=DEFAULT_FIXTURE_DIR)
     parser.add_argument("--output-dir", type=Path, required=True)
     return parser

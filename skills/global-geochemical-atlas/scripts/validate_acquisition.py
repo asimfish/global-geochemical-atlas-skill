@@ -19,18 +19,40 @@ DEFAULT_BUNDLE = SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json"
 ENTITY_CONTRACTS = {
     "datasets": ("dataset_id", "d1-dataset-source-v1", "dataset-source.schema.json"),
     "publications": ("publication_id", "d1-publication-v1", "publication.schema.json"),
-    "sampling_events": ("sampling_event_id", "d1-sampling-event-v1", "sampling-event.schema.json"),
+    "sampling_events": (
+        "sampling_event_id",
+        "d1-sampling-event-v1",
+        "sampling-event.schema.json",
+    ),
     "samples": ("sample_id", "d1-sample-v1", "sample.schema.json"),
-    "methods": ("method_id", "d1-analytical-method-v1", "analytical-method.schema.json"),
+    "methods": (
+        "method_id",
+        "d1-analytical-method-v1",
+        "analytical-method.schema.json",
+    ),
     "provenance": ("provenance_id", "d1-provenance-v1", "provenance.schema.json"),
     "observations": ("observation_id", "d1-observation-v1", "observation.schema.json"),
-    "acquisition_runs": ("acquisition_run_id", "d1-acquisition-run-v1", "acquisition-run.schema.json"),
+    "acquisition_runs": (
+        "acquisition_run_id",
+        "d1-acquisition-run-v1",
+        "acquisition-run.schema.json",
+    ),
 }
 V2_ENTITY_OVERRIDES = {
     "samples": ("sample_id", "d1-sample-v2", "sample-v2.schema.json"),
-    "methods": ("method_id", "d1-analytical-method-v2", "analytical-method-v2.schema.json"),
+    "methods": (
+        "method_id",
+        "d1-analytical-method-v2",
+        "analytical-method-v2.schema.json",
+    ),
 }
-MISSING_REASONS = {"not_reported", "not_applicable", "not_available", "redacted", "parse_failed"}
+MISSING_REASONS = {
+    "not_reported",
+    "not_applicable",
+    "not_available",
+    "redacted",
+    "parse_failed",
+}
 
 
 def _matches_json_type(value: Any, expected: str) -> bool:
@@ -76,7 +98,9 @@ def _validate_schema_value(
     expected = schema.get("type")
     if expected is not None:
         expected_types = [expected] if isinstance(expected, str) else expected
-        if not isinstance(expected_types, list) or not all(isinstance(item, str) for item in expected_types):
+        if not isinstance(expected_types, list) or not all(
+            isinstance(item, str) for item in expected_types
+        ):
             errors.append(f"{path} has an invalid schema type declaration")
             return
         if not any(_matches_json_type(value, item) for item in expected_types):
@@ -115,18 +139,27 @@ def _validate_schema_value(
         if isinstance(minimum_items, int) and len(value) < minimum_items:
             errors.append(f"{path} has fewer than minItems={minimum_items} entries")
         if schema.get("uniqueItems") is True:
-            encoded = [json.dumps(item, ensure_ascii=False, separators=(",", ":"), sort_keys=True) for item in value]
+            encoded = [
+                json.dumps(
+                    item, ensure_ascii=False, separators=(",", ":"), sort_keys=True
+                )
+                for item in value
+            ]
             if len(encoded) != len(set(encoded)):
                 errors.append(f"{path} contains duplicate entries")
         item_schema = schema.get("items")
         if isinstance(item_schema, dict):
             for position, item in enumerate(value):
-                _validate_schema_value(item, item_schema, root_schema, f"{path}[{position}]", errors)
+                _validate_schema_value(
+                    item, item_schema, root_schema, f"{path}[{position}]", errors
+                )
 
     if isinstance(value, dict):
         minimum_properties = schema.get("minProperties")
         if isinstance(minimum_properties, int) and len(value) < minimum_properties:
-            errors.append(f"{path} has fewer than minProperties={minimum_properties} fields")
+            errors.append(
+                f"{path} has fewer than minProperties={minimum_properties} fields"
+            )
         required = schema.get("required", [])
         if isinstance(required, list):
             for field in required:
@@ -137,14 +170,18 @@ def _validate_schema_value(
             properties = {}
         for field, field_schema in properties.items():
             if field in value and isinstance(field_schema, dict):
-                _validate_schema_value(value[field], field_schema, root_schema, f"{path}.{field}", errors)
+                _validate_schema_value(
+                    value[field], field_schema, root_schema, f"{path}.{field}", errors
+                )
         extras = sorted(set(value) - set(properties))
         additional = schema.get("additionalProperties", True)
         if additional is False and extras:
             errors.append(f"{path} contains unsupported fields: {', '.join(extras)}")
         elif isinstance(additional, dict):
             for field in extras:
-                _validate_schema_value(value[field], additional, root_schema, f"{path}.{field}", errors)
+                _validate_schema_value(
+                    value[field], additional, root_schema, f"{path}.{field}", errors
+                )
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -159,7 +196,9 @@ def _load(path: Path) -> dict[str, Any]:
     return value
 
 
-def _index_entities(bundle: Mapping[str, Any], errors: list[str]) -> dict[str, dict[str, Mapping[str, Any]]]:
+def _index_entities(
+    bundle: Mapping[str, Any], errors: list[str]
+) -> dict[str, dict[str, Mapping[str, Any]]]:
     indexes: dict[str, dict[str, Mapping[str, Any]]] = {}
     contracts = dict(ENTITY_CONTRACTS)
     if bundle.get("bundle_version") == "d1-archive-fixture-v2":
@@ -185,7 +224,9 @@ def _index_entities(bundle: Mapping[str, Any], errors: list[str]) -> dict[str, d
                 errors.append(f"{collection}[{position}] is not an object")
                 continue
             if isinstance(schema, dict):
-                _validate_schema_value(entity, schema, schema, f"{collection}[{position}]", errors)
+                _validate_schema_value(
+                    entity, schema, schema, f"{collection}[{position}]", errors
+                )
             entity_id = entity.get(id_field)
             if not isinstance(entity_id, str) or not entity_id:
                 errors.append(f"{collection}[{position}] has no {id_field}")
@@ -194,18 +235,26 @@ def _index_entities(bundle: Mapping[str, Any], errors: list[str]) -> dict[str, d
                 errors.append(f"duplicate {id_field}: {entity_id}")
             indexed[entity_id] = entity
             if entity.get("schema_version") != expected_version:
-                errors.append(f"{entity_id} has schema_version={entity.get('schema_version')}, expected {expected_version}")
+                errors.append(
+                    f"{entity_id} has schema_version={entity.get('schema_version')}, expected {expected_version}"
+                )
             missing = entity.get("missing_reasons", {})
             if not isinstance(missing, dict):
                 errors.append(f"{entity_id} missing_reasons must be an object")
             else:
                 for field, reason in missing.items():
                     if reason not in MISSING_REASONS:
-                        errors.append(f"{entity_id} has invalid missing reason for {field}: {reason}")
+                        errors.append(
+                            f"{entity_id} has invalid missing reason for {field}: {reason}"
+                        )
                     if field not in entity:
-                        errors.append(f"{entity_id} missing reason names an unknown field: {field}")
+                        errors.append(
+                            f"{entity_id} missing reason names an unknown field: {field}"
+                        )
                     elif entity[field] is not None:
-                        errors.append(f"{entity_id} marks non-null field {field} as missing")
+                        errors.append(
+                            f"{entity_id} marks non-null field {field} as missing"
+                        )
         indexes[collection] = indexed
     return indexes
 
@@ -227,7 +276,10 @@ def _require_reference(
 
 def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
-    if bundle.get("bundle_version") not in {"d1-archive-fixture-v1", "d1-archive-fixture-v2"}:
+    if bundle.get("bundle_version") not in {
+        "d1-archive-fixture-v1",
+        "d1-archive-fixture-v2",
+    }:
         errors.append("unsupported or missing bundle_version")
     indexes = _index_entities(bundle, errors)
     datasets = indexes["datasets"]
@@ -240,10 +292,25 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
     runs = indexes["acquisition_runs"]
 
     for event_id, event in events.items():
-        _require_reference(event_id, "dataset_id", event.get("dataset_id"), datasets, errors)
+        _require_reference(
+            event_id, "dataset_id", event.get("dataset_id"), datasets, errors
+        )
     for sample_id, sample in samples.items():
-        _require_reference(sample_id, "sampling_event_id", sample.get("sampling_event_id"), events, errors)
-        _require_reference(sample_id, "parent_sample_id", sample.get("parent_sample_id"), samples, errors, nullable=True)
+        _require_reference(
+            sample_id,
+            "sampling_event_id",
+            sample.get("sampling_event_id"),
+            events,
+            errors,
+        )
+        _require_reference(
+            sample_id,
+            "parent_sample_id",
+            sample.get("parent_sample_id"),
+            samples,
+            errors,
+            nullable=True,
+        )
         if sample.get("parent_sample_id") == sample_id:
             errors.append(f"{sample_id} cannot be its own parent")
         seen = {sample_id}
@@ -256,44 +323,97 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
             parent_id = samples[parent_id].get("parent_sample_id")
         if sample.get("schema_version") == "d1-sample-v2":
             required_v2_fields = {
-                "sample_type_raw", "sample_type", "sample_type_mapping_status", "geographic_context_raw",
-                "survey_area", "map_sheet", "cruise_track", "lithology", "geologic_age_raw",
-                "tectonic_setting_raw", "matched_geologic_unit", "geology_map_source", "geology_map_version",
-                "match_method", "match_scale", "boundary_distance_m", "match_uncertainty", "soil_horizon",
-                "sediment_environment", "water_body_type", "water_fraction",
+                "sample_type_raw",
+                "sample_type",
+                "sample_type_mapping_status",
+                "geographic_context_raw",
+                "survey_area",
+                "map_sheet",
+                "cruise_track",
+                "lithology",
+                "geologic_age_raw",
+                "tectonic_setting_raw",
+                "matched_geologic_unit",
+                "geology_map_source",
+                "geology_map_version",
+                "match_method",
+                "match_scale",
+                "boundary_distance_m",
+                "match_uncertainty",
+                "soil_horizon",
+                "sediment_environment",
+                "water_body_type",
+                "water_fraction",
             }
             for field in sorted(required_v2_fields - set(sample)):
                 errors.append(f"{sample_id} lacks V2 sample field: {field}")
-            if sample.get("sample_type") and sample.get("sample_type_mapping_status") not in {
-                "exact", "dataset_constant", "mapped"
-            }:
+            if sample.get("sample_type") and sample.get(
+                "sample_type_mapping_status"
+            ) not in {"exact", "dataset_constant", "mapped"}:
                 errors.append(f"{sample_id} has a sample_type without mapping evidence")
             if sample.get("matched_geologic_unit") and not all(
-                sample.get(field) for field in ("geology_map_source", "geology_map_version", "match_method", "match_scale")
+                sample.get(field)
+                for field in (
+                    "geology_map_source",
+                    "geology_map_version",
+                    "match_method",
+                    "match_scale",
+                )
             ):
-                errors.append(f"{sample_id} has matched geology without map version, method and scale")
+                errors.append(
+                    f"{sample_id} has matched geology without map version, method and scale"
+                )
     for publication_id, publication in publications.items():
         for dataset_id in publication.get("dataset_ids", []):
-            _require_reference(publication_id, "dataset_ids", dataset_id, datasets, errors)
+            _require_reference(
+                publication_id, "dataset_ids", dataset_id, datasets, errors
+            )
     for method_id, method in methods.items():
         for publication_id in method.get("publication_ids", []):
-            _require_reference(method_id, "publication_ids", publication_id, publications, errors)
+            _require_reference(
+                method_id, "publication_ids", publication_id, publications, errors
+            )
         if method.get("schema_version") == "d1-analytical-method-v2":
-            if method.get("method_scope") not in {"observation", "sample", "batch", "file", "dataset", "publication"}:
+            if method.get("method_scope") not in {
+                "observation",
+                "sample",
+                "batch",
+                "file",
+                "dataset",
+                "publication",
+            }:
                 errors.append(f"{method_id} has invalid or missing method_scope")
             if not method.get("method_assignment_basis"):
                 errors.append(f"{method_id} lacks method_assignment_basis")
             if not method.get("method_source_locator"):
                 errors.append(f"{method_id} lacks method_source_locator")
     for provenance_id, item in provenance.items():
-        _require_reference(provenance_id, "dataset_id", item.get("dataset_id"), datasets, errors)
-        _require_reference(provenance_id, "acquisition_run_id", item.get("acquisition_run_id"), runs, errors)
+        _require_reference(
+            provenance_id, "dataset_id", item.get("dataset_id"), datasets, errors
+        )
+        _require_reference(
+            provenance_id,
+            "acquisition_run_id",
+            item.get("acquisition_run_id"),
+            runs,
+            errors,
+        )
         if not item.get("source_locator") or not item.get("input_sha256"):
             errors.append(f"{provenance_id} lacks a record locator or input hash")
     for observation_id, observation in observations.items():
-        _require_reference(observation_id, "sample_id", observation.get("sample_id"), samples, errors)
-        _require_reference(observation_id, "method_id", observation.get("method_id"), methods, errors)
-        _require_reference(observation_id, "provenance_id", observation.get("provenance_id"), provenance, errors)
+        _require_reference(
+            observation_id, "sample_id", observation.get("sample_id"), samples, errors
+        )
+        _require_reference(
+            observation_id, "method_id", observation.get("method_id"), methods, errors
+        )
+        _require_reference(
+            observation_id,
+            "provenance_id",
+            observation.get("provenance_id"),
+            provenance,
+            errors,
+        )
         if not observation.get("analyte_reported") or not observation.get("value_raw"):
             errors.append(f"{observation_id} lacks raw analyte or value")
         raw = str(observation.get("value_raw", "")).strip()
@@ -331,7 +451,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         report = validate_bundle(_load(args.bundle))
     except (OSError, ValueError) as exc:
-        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 2
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if report["status"] == "PASS" else 1

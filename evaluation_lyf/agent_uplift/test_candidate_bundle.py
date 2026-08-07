@@ -35,24 +35,43 @@ class CandidateBundleTests(unittest.TestCase):
             b0, s0 = root / "b0", root / "s0"
             MODULE.export(self.repo, b0, "B0", "formal", self.prompt)
             MODULE.export(self.repo, s0, "S0", "formal", self.prompt)
-            self.assertTrue((s0 / ".agents/skills/global-geochemical-atlas/SKILL.md").is_file())
+            self.assertTrue(
+                (s0 / ".agents/skills/global-geochemical-atlas/SKILL.md").is_file()
+            )
             self.assertFalse(any("__pycache__" in path.parts for path in s0.rglob("*")))
             tracked = subprocess.run(
-                ["git", "-c", f"safe.directory={self.repo}", "ls-tree", "-r", "--name-only", "HEAD", "--", "skills/global-geochemical-atlas"],
-                cwd=self.repo, check=True, capture_output=True, text=True,
+                [
+                    "git",
+                    "-c",
+                    f"safe.directory={self.repo}",
+                    "ls-tree",
+                    "-r",
+                    "--name-only",
+                    "HEAD",
+                    "--",
+                    "skills/global-geochemical-atlas",
+                ],
+                cwd=self.repo,
+                check=True,
+                capture_output=True,
+                text=True,
             ).stdout.splitlines()
             exported_skill = [
-                path for path in (s0 / ".agents/skills/global-geochemical-atlas").rglob("*")
+                path
+                for path in (s0 / ".agents/skills/global-geochemical-atlas").rglob("*")
                 if path.is_file()
             ]
             self.assertEqual(len(tracked), len(exported_skill))
             common_b0 = {
-                path.relative_to(b0).as_posix() for path in b0.rglob("*")
+                path.relative_to(b0).as_posix()
+                for path in b0.rglob("*")
                 if path.is_file() and path.name != "BUNDLE_MANIFEST.json"
             }
             common_s0 = {
-                path.relative_to(s0).as_posix() for path in s0.rglob("*")
-                if path.is_file() and path.name != "BUNDLE_MANIFEST.json"
+                path.relative_to(s0).as_posix()
+                for path in s0.rglob("*")
+                if path.is_file()
+                and path.name != "BUNDLE_MANIFEST.json"
                 and ".agents" not in path.parts
             }
             self.assertEqual(common_b0, common_s0)

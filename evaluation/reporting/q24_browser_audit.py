@@ -26,7 +26,10 @@ def sha256_file(path: Path) -> str:
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     temporary.replace(path)
 
 
@@ -37,30 +40,46 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         from selenium.webdriver.chrome.service import Service
         from selenium.webdriver.support.ui import WebDriverWait
     except ModuleNotFoundError as exc:
-        raise RuntimeError("Q24 browser audit requires Selenium and Chromium/ChromeDriver") from exc
+        raise RuntimeError(
+            "Q24 browser audit requires Selenium and Chromium/ChromeDriver"
+        ) from exc
     if not html.is_file():
         raise RuntimeError(f"Q24 map HTML does not exist: {html}")
     if screenshots.resolve().parent != output.resolve().parent:
-        raise RuntimeError("screenshots must be a direct sibling directory of the audit JSON")
+        raise RuntimeError(
+            "screenshots must be a direct sibling directory of the audit JSON"
+        )
     screenshots.mkdir(parents=True, exist_ok=True)
 
     options = Options()
     for argument in (
-        "--headless=new", "--no-sandbox", "--disable-dev-shm-usage",
-        "--allow-file-access-from-files", "--window-size=1280,900",
+        "--headless=new",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--allow-file-access-from-files",
+        "--window-size=1280,900",
     ):
         options.add_argument(argument)
     options.set_capability("goog:loggingPrefs", {"browser": "ALL"})
     driver_path = shutil.which("chromedriver")
     if not driver_path:
         raise RuntimeError("Q24 browser audit requires chromedriver on PATH")
-    driver = webdriver.Chrome(service=Service(executable_path=driver_path), options=options)
+    driver = webdriver.Chrome(
+        service=Service(executable_path=driver_path), options=options
+    )
     shots: list[dict[str, Any]] = []
 
     def screenshot(name: str) -> None:
         path = screenshots / f"{name}.png"
         driver.save_screenshot(str(path))
-        shots.append({"name": name, "file": path.name, "bytes": path.stat().st_size, "sha256": sha256_file(path)})
+        shots.append(
+            {
+                "name": name,
+                "file": path.name,
+                "bytes": path.stat().st_size,
+                "sha256": sha256_file(path),
+            }
+        )
 
     def state() -> dict[str, Any]:
         return driver.execute_script(
@@ -103,7 +122,10 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
     interactions: dict[str, Any] = {}
     try:
         driver.get(html.resolve().as_uri())
-        WebDriverWait(driver, 20).until(lambda current: current.execute_script("return document.readyState") == "complete")
+        WebDriverWait(driver, 20).until(
+            lambda current: current.execute_script("return document.readyState")
+            == "complete"
+        )
         time.sleep(0.4)
         initial = state()
         screenshot("overview")
@@ -118,8 +140,18 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         time.sleep(0.25)
         zoomed = state()
         interactions["zoom_or_pan"] = {
-            "passed": bool(zoom.get("available") and (zoomed["render_signature"] != initial["render_signature"] or zoomed["status_text"] != initial["status_text"])),
-            "evidence": {"control": zoom, "before": initial["render_signature"], "after": zoomed["render_signature"]},
+            "passed": bool(
+                zoom.get("available")
+                and (
+                    zoomed["render_signature"] != initial["render_signature"]
+                    or zoomed["status_text"] != initial["status_text"]
+                )
+            ),
+            "evidence": {
+                "control": zoom,
+                "before": initial["render_signature"],
+                "after": zoomed["render_signature"],
+            },
         }
         screenshot("zoomed")
 
@@ -133,7 +165,11 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         time.sleep(0.25)
         toggled = state()
         interactions["anomaly_toggle"] = {
-            "passed": bool(toggle.get("available") and toggle.get("before") != toggle.get("after") and toggled["render_signature"] != zoomed["render_signature"]),
+            "passed": bool(
+                toggle.get("available")
+                and toggle.get("before") != toggle.get("after")
+                and toggled["render_signature"] != zoomed["render_signature"]
+            ),
             "evidence": toggle,
         }
         screenshot("anomaly_toggled")
@@ -154,25 +190,51 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         time.sleep(0.2)
         drilled = state()
         interactions["record_source_drilldown"] = {
-            "passed": bool(drill.get("available") and drilled["detail_text"] and "source" in drilled["detail_text"].casefold() and "record" in drilled["detail_text"].casefold()),
+            "passed": bool(
+                drill.get("available")
+                and drilled["detail_text"]
+                and "source" in drilled["detail_text"].casefold()
+                and "record" in drilled["detail_text"].casefold()
+            ),
             "evidence": {"control": drill, "detail": drilled["detail_text"][:500]},
         }
         screenshot("record_detail")
 
         severe = [
             {"level": item.get("level"), "message": item.get("message")}
-            for item in driver.get_log("browser") if item.get("level") == "SEVERE"
+            for item in driver.get_log("browser")
+            if item.get("level") == "SEVERE"
         ]
-        loaded = initial["kind"] != "none" and initial["width"] >= 300 and initial["height"] >= 180
-        rendered = loaded and initial["point_count"] > 0 and initial["unique_colors"] >= 3
-        passed = loaded and rendered and not severe and all(item["passed"] for item in interactions.values())
+        loaded = (
+            initial["kind"] != "none"
+            and initial["width"] >= 300
+            and initial["height"] >= 180
+        )
+        rendered = (
+            loaded and initial["point_count"] > 0 and initial["unique_colors"] >= 3
+        )
+        passed = (
+            loaded
+            and rendered
+            and not severe
+            and all(item["passed"] for item in interactions.values())
+        )
         report = {
             "schema_version": SCHEMA_VERSION,
             "status": "pass" if passed else "fail",
             "generated_by": "external_evaluation_controller",
             "profile": "q24-interactive-map",
-            "html": {"filename": html.name, "bytes": html.stat().st_size, "sha256": sha256_file(html)},
-            "browser": {"name": "chromium", "version": driver.capabilities.get("browserVersion"), "headless": True, "network": "offline_file"},
+            "html": {
+                "filename": html.name,
+                "bytes": html.stat().st_size,
+                "sha256": sha256_file(html),
+            },
+            "browser": {
+                "name": "chromium",
+                "version": driver.capabilities.get("browserVersion"),
+                "headless": True,
+                "network": "offline_file",
+            },
             "loaded": loaded,
             "rendered_product": rendered,
             "javascript_errors": severe,
@@ -198,11 +260,22 @@ def main() -> int:
         report = run_audit(args.html, args.output, args.screenshots)
     except Exception as exc:
         report = {
-            "schema_version": SCHEMA_VERSION, "status": "error",
-            "generated_by": "external_evaluation_controller", "profile": "q24-interactive-map",
-            "html": {"filename": args.html.name, "bytes": args.html.stat().st_size if args.html.is_file() else 0, "sha256": sha256_file(args.html) if args.html.is_file() else None},
-            "error": str(exc), "loaded": False, "rendered_product": False,
-            "javascript_errors": [], "metrics": {}, "interactions": {}, "screenshots": [],
+            "schema_version": SCHEMA_VERSION,
+            "status": "error",
+            "generated_by": "external_evaluation_controller",
+            "profile": "q24-interactive-map",
+            "html": {
+                "filename": args.html.name,
+                "bytes": args.html.stat().st_size if args.html.is_file() else 0,
+                "sha256": sha256_file(args.html) if args.html.is_file() else None,
+            },
+            "error": str(exc),
+            "loaded": False,
+            "rendered_product": False,
+            "javascript_errors": [],
+            "metrics": {},
+            "interactions": {},
+            "screenshots": [],
         }
         atomic_json(args.output, report)
     print(json.dumps({"status": report["status"]}, sort_keys=True))

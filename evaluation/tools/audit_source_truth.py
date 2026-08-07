@@ -15,8 +15,16 @@ from urllib.parse import urlparse
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONTRACT = REPO_ROOT / "evaluation" / "evaluator_private" / "source_truth" / "source_truth_contract.json"
-DEFAULT_DEMOS = REPO_ROOT / "skills" / "global-geochemical-atlas" / "fixtures" / "source-demos"
+DEFAULT_CONTRACT = (
+    REPO_ROOT
+    / "evaluation"
+    / "evaluator_private"
+    / "source_truth"
+    / "source_truth_contract.json"
+)
+DEFAULT_DEMOS = (
+    REPO_ROOT / "skills" / "global-geochemical-atlas" / "fixtures" / "source-demos"
+)
 SOURCE_METADATA_FIELDS = (
     "source_id",
     "dataset_title",
@@ -67,24 +75,38 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 def validate_contract(contract: dict[str, Any]) -> list[dict[str, Any]]:
     errors: list[dict[str, Any]] = []
     if contract.get("schema_version") != "source-truth-contract-v1":
-        errors.append(mismatch("schema_version", "source-truth-contract-v1", contract.get("schema_version")))
+        errors.append(
+            mismatch(
+                "schema_version",
+                "source-truth-contract-v1",
+                contract.get("schema_version"),
+            )
+        )
     sources = contract.get("sources")
     if not isinstance(sources, list) or not sources:
         errors.append(mismatch("sources", "non-empty array", type(sources).__name__))
         return errors
     required_source_count = contract.get("required_source_count")
     if required_source_count is not None and len(sources) != required_source_count:
-        errors.append(mismatch("required_source_count", required_source_count, len(sources)))
+        errors.append(
+            mismatch("required_source_count", required_source_count, len(sources))
+        )
     ids = [item.get("source_id") for item in sources if isinstance(item, dict)]
     if len(ids) != len(set(ids)):
         errors.append(mismatch("sources[].source_id", "unique", ids))
     media = {item.get("medium") for item in sources if isinstance(item, dict)}
     required_media = set(contract.get("required_media") or [])
     if not required_media <= media:
-        errors.append(mismatch("required_media coverage", sorted(required_media), sorted(media)))
+        errors.append(
+            mismatch("required_media coverage", sorted(required_media), sorted(media))
+        )
     required = set(SOURCE_METADATA_FIELDS) | {
-        "source_file", "source_file_sha256",
-        "authority_url", "allowed_resolution_hosts", "medium", "spot_record"
+        "source_file",
+        "source_file_sha256",
+        "authority_url",
+        "allowed_resolution_hosts",
+        "medium",
+        "spot_record",
     }
     for index, item in enumerate(sources):
         if not isinstance(item, dict):
@@ -104,7 +126,13 @@ def validate_contract(contract: dict[str, Any]) -> list[dict[str, Any]]:
             )
         authority = urlparse(str(item.get("authority_url") or ""))
         if authority.scheme != "https" or not authority.hostname:
-            errors.append(mismatch(f"sources[{index}].authority_url", "absolute HTTPS URL", item.get("authority_url")))
+            errors.append(
+                mismatch(
+                    f"sources[{index}].authority_url",
+                    "absolute HTTPS URL",
+                    item.get("authority_url"),
+                )
+            )
     return errors
 
 
@@ -112,53 +140,135 @@ def audit_demo(source: dict[str, Any], demos_root: Path) -> dict[str, Any]:
     source_id = source["source_id"]
     root = demos_root / source_id
     errors: list[dict[str, Any]] = []
-    required_files = [root / "sources.jsonl", root / "demo_input.csv", root / "run_manifest.json"]
-    missing = [str(path.relative_to(demos_root)) for path in required_files if not path.is_file()]
+    required_files = [
+        root / "sources.jsonl",
+        root / "demo_input.csv",
+        root / "run_manifest.json",
+    ]
+    missing = [
+        str(path.relative_to(demos_root))
+        for path in required_files
+        if not path.is_file()
+    ]
     if missing:
-        return {"source_id": source_id, "status": "conflict", "mismatches": [mismatch("files", [], missing)]}
+        return {
+            "source_id": source_id,
+            "status": "conflict",
+            "mismatches": [mismatch("files", [], missing)],
+        }
 
     try:
         source_rows = read_jsonl(required_files[0])
         demo_rows = read_csv(required_files[1])
         manifest = load_json(required_files[2])
     except (OSError, ValueError, json.JSONDecodeError) as exc:
-        return {"source_id": source_id, "status": "conflict", "mismatches": [{"path": "parse", "error": str(exc)}]}
+        return {
+            "source_id": source_id,
+            "status": "conflict",
+            "mismatches": [{"path": "parse", "error": str(exc)}],
+        }
     if not source_rows or not demo_rows:
-        errors.append(mismatch("record_count", "non-zero source and demo rows", {"sources": len(source_rows), "demo": len(demo_rows)}))
+        errors.append(
+            mismatch(
+                "record_count",
+                "non-zero source and demo rows",
+                {"sources": len(source_rows), "demo": len(demo_rows)},
+            )
+        )
 
-    for row_kind, rows in (("sources.jsonl", source_rows), ("demo_input.csv", demo_rows)):
+    for row_kind, rows in (
+        ("sources.jsonl", source_rows),
+        ("demo_input.csv", demo_rows),
+    ):
         for row_index, row in enumerate(rows, 1):
             for field in SOURCE_METADATA_FIELDS:
                 expected = display(source.get(field))
                 actual = display(row.get(field))
                 if actual != expected:
-                    errors.append(mismatch(f"{row_kind}[{row_index}].{field}", expected, actual))
-            if row_kind == "demo_input.csv" and display(row.get("medium")) != display(source["medium"]):
-                errors.append(mismatch(f"{row_kind}[{row_index}].medium", source["medium"], row.get("medium")))
-            hash_field = "source_file_sha256" if row_kind == "sources.jsonl" else "file_sha256"
+                    errors.append(
+                        mismatch(f"{row_kind}[{row_index}].{field}", expected, actual)
+                    )
+            if row_kind == "demo_input.csv" and display(row.get("medium")) != display(
+                source["medium"]
+            ):
+                errors.append(
+                    mismatch(
+                        f"{row_kind}[{row_index}].medium",
+                        source["medium"],
+                        row.get("medium"),
+                    )
+                )
+            hash_field = (
+                "source_file_sha256" if row_kind == "sources.jsonl" else "file_sha256"
+            )
             record_hash = display(row.get(hash_field))
             if not re.fullmatch(r"[0-9a-f]{64}", record_hash):
-                errors.append(mismatch(f"{row_kind}[{row_index}].{hash_field}", "lowercase SHA-256", record_hash))
+                errors.append(
+                    mismatch(
+                        f"{row_kind}[{row_index}].{hash_field}",
+                        "lowercase SHA-256",
+                        record_hash,
+                    )
+                )
             locator = display(row.get("source_locator"))
             if not locator or not re.search(r"#(?:[^#]*row|record)=", locator):
-                errors.append(mismatch(f"{row_kind}[{row_index}].source_locator", "row-addressable locator", locator))
+                errors.append(
+                    mismatch(
+                        f"{row_kind}[{row_index}].source_locator",
+                        "row-addressable locator",
+                        locator,
+                    )
+                )
 
-    expected_spot = {key: display(value) for key, value in source["spot_record"].items()}
-    spot = next((row for row in demo_rows if row.get("source_record_id") == expected_spot["source_record_id"]), None)
+    expected_spot = {
+        key: display(value) for key, value in source["spot_record"].items()
+    }
+    spot = next(
+        (
+            row
+            for row in demo_rows
+            if row.get("source_record_id") == expected_spot["source_record_id"]
+        ),
+        None,
+    )
     if spot is None:
-        errors.append(mismatch("spot_record.source_record_id", expected_spot["source_record_id"], None))
+        errors.append(
+            mismatch(
+                "spot_record.source_record_id", expected_spot["source_record_id"], None
+            )
+        )
     else:
         for field in SPOT_FIELDS:
             if display(spot.get(field)) != expected_spot[field]:
-                errors.append(mismatch(f"spot_record.{field}", expected_spot[field], spot.get(field)))
+                errors.append(
+                    mismatch(
+                        f"spot_record.{field}", expected_spot[field], spot.get(field)
+                    )
+                )
         if display(spot.get("source_file")) != source["source_file"]:
-            errors.append(mismatch("spot_record.source_file", source["source_file"], spot.get("source_file")))
+            errors.append(
+                mismatch(
+                    "spot_record.source_file",
+                    source["source_file"],
+                    spot.get("source_file"),
+                )
+            )
         if display(spot.get("file_sha256")) != source["source_file_sha256"]:
-            errors.append(mismatch("spot_record.file_sha256", source["source_file_sha256"], spot.get("file_sha256")))
+            errors.append(
+                mismatch(
+                    "spot_record.file_sha256",
+                    source["source_file_sha256"],
+                    spot.get("file_sha256"),
+                )
+            )
 
     manifest_text = json.dumps(manifest, ensure_ascii=False, sort_keys=True)
     if source["source_file_sha256"] not in manifest_text:
-        errors.append(mismatch("run_manifest source hash", source["source_file_sha256"], "not found"))
+        errors.append(
+            mismatch(
+                "run_manifest source hash", source["source_file_sha256"], "not found"
+            )
+        )
     if source_id not in manifest_text:
         errors.append(mismatch("run_manifest source_id", source_id, "not found"))
 
@@ -174,7 +284,9 @@ def audit_demo(source: dict[str, Any], demos_root: Path) -> dict[str, Any]:
 
 def online_resolution(source: dict[str, Any], timeout: float) -> dict[str, Any]:
     url = source["authority_url"]
-    request = urllib.request.Request(url, headers={"User-Agent": "gga-source-truth-audit/1.0"})
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "gga-source-truth-audit/1.0"}
+    )
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
             final_url = response.geturl()
@@ -190,19 +302,35 @@ def online_resolution(source: dict[str, Any], timeout: float) -> dict[str, Any]:
             "final_url": final_url,
             "error": f"redirected to unapproved host: {final_host}",
         }
-    return {"status": "verified", "authority_url": url, "final_url": final_url, "http_status": status_code}
+    return {
+        "status": "verified",
+        "authority_url": url,
+        "final_url": final_url,
+        "http_status": status_code,
+    }
 
 
-def run_audit(contract_path: Path, demos_root: Path, online: bool, timeout: float) -> dict[str, Any]:
+def run_audit(
+    contract_path: Path, demos_root: Path, online: bool, timeout: float
+) -> dict[str, Any]:
     contract = load_json(contract_path)
     contract_errors = validate_contract(contract)
-    source_results = [] if contract_errors else [audit_demo(source, demos_root) for source in contract["sources"]]
+    source_results = (
+        []
+        if contract_errors
+        else [audit_demo(source, demos_root) for source in contract["sources"]]
+    )
     if online and not contract_errors:
         for result, source in zip(source_results, contract["sources"]):
             result["online_resolution"] = online_resolution(source, timeout)
 
-    offline_conflict = bool(contract_errors) or any(item["status"] == "conflict" for item in source_results)
-    online_conflict = any((item.get("online_resolution") or {}).get("status") == "conflict" for item in source_results)
+    offline_conflict = bool(contract_errors) or any(
+        item["status"] == "conflict" for item in source_results
+    )
+    online_conflict = any(
+        (item.get("online_resolution") or {}).get("status") == "conflict"
+        for item in source_results
+    )
     unreachable = [
         item["source_id"]
         for item in source_results
@@ -236,15 +364,37 @@ def main() -> int:
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT)
     parser.add_argument("--demos-root", type=Path, default=DEFAULT_DEMOS)
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--online", action="store_true", help="also resolve authority URLs; network failures require review")
+    parser.add_argument(
+        "--online",
+        action="store_true",
+        help="also resolve authority URLs; network failures require review",
+    )
     parser.add_argument("--timeout-seconds", type=float, default=15.0)
     args = parser.parse_args()
-    report = run_audit(args.contract.resolve(), args.demos_root.resolve(), args.online, args.timeout_seconds)
+    report = run_audit(
+        args.contract.resolve(),
+        args.demos_root.resolve(),
+        args.online,
+        args.timeout_seconds,
+    )
     payload = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(payload, encoding="utf-8")
-    print(json.dumps({key: report[key] for key in ("status", "blocking_gate_passed", "human_review_required", "sources_checked")}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                key: report[key]
+                for key in (
+                    "status",
+                    "blocking_gate_passed",
+                    "human_review_required",
+                    "sources_checked",
+                )
+            },
+            sort_keys=True,
+        )
+    )
     if report["status"] == "conflict":
         return 74
     if report["status"] == "needs_human_review":

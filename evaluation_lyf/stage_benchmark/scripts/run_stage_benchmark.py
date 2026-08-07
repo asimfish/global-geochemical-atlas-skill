@@ -102,8 +102,12 @@ def run_command(command: Sequence[str], timeout: int = 900) -> dict[str, Any]:
             "command": list(command),
             "elapsed_seconds": round(time.perf_counter() - started, 6),
             "returncode": 124,
-            "stdout_tail": (exc.stdout or "")[-4000:] if isinstance(exc.stdout, str) else "",
-            "stderr_tail": (exc.stderr or "")[-4000:] if isinstance(exc.stderr, str) else "",
+            "stdout_tail": (exc.stdout or "")[-4000:]
+            if isinstance(exc.stdout, str)
+            else "",
+            "stderr_tail": (exc.stderr or "")[-4000:]
+            if isinstance(exc.stderr, str)
+            else "",
             "timeout": timeout,
         }
 
@@ -127,7 +131,11 @@ def materialize_reference_gold(root: Path, *, include_d2: bool) -> tuple[Path, P
     if d1_execution["returncode"] != 0:
         raise ValueError(
             "could not materialize reference D1: "
-            + (d1_execution.get("stderr_tail") or d1_execution.get("stdout_tail") or "unknown error")
+            + (
+                d1_execution.get("stderr_tail")
+                or d1_execution.get("stdout_tail")
+                or "unknown error"
+            )
         )
     d2_dir = root / "d2"
     if include_d2:
@@ -300,7 +308,11 @@ def run_d1_benchmark(
         )
 
     expected_files = set(contract["required_outputs"])
-    present_files = {path.name for path in candidate_dir.iterdir()} if candidate_dir.is_dir() else set()
+    present_files = (
+        {path.name for path in candidate_dir.iterdir()}
+        if candidate_dir.is_dir()
+        else set()
+    )
     checks.add(
         "candidate_d1_emits_required_outputs",
         expected_files <= present_files,
@@ -338,13 +350,24 @@ def run_d1_benchmark(
             len(ids) == len(set(ids)) and set(ids) == gold_ids,
             category="collection_completeness",
             expected={"unique": True, "record_id_count": len(gold_ids)},
-            actual={"unique": len(ids) == len(set(ids)), "record_id_count": len(set(ids))},
+            actual={
+                "unique": len(ids) == len(set(ids)),
+                "record_id_count": len(set(ids)),
+            },
         )
         source_counts = Counter(row.get("source_id", "") for row in rows)
         medium_counts = Counter(row.get("medium", "") for row in rows)
         element_counts = Counter(row.get("element_or_analyte", "") for row in rows)
-        continents = {row.get("benchmark_continent", "") for row in rows if row.get("benchmark_continent")}
-        countries = {row.get("benchmark_country", "") for row in rows if row.get("benchmark_country")}
+        continents = {
+            row.get("benchmark_continent", "")
+            for row in rows
+            if row.get("benchmark_continent")
+        }
+        countries = {
+            row.get("benchmark_country", "")
+            for row in rows
+            if row.get("benchmark_country")
+        }
         checks.add(
             "d1_source_counts_match_frozen_contract",
             dict(sorted(source_counts.items())) == expected["records_by_source"],
@@ -400,7 +423,10 @@ def run_d1_benchmark(
             "license",
         ]
         rates["record_provenance"] = (
-            sum(all(nonempty(row, field) for field in provenance_fields) for row in rows) / len(rows)
+            sum(
+                all(nonempty(row, field) for field in provenance_fields) for row in rows
+            )
+            / len(rows)
             if rows
             else 0.0
         )
@@ -417,7 +443,9 @@ def run_d1_benchmark(
             all(SHA256_RE.fullmatch(row.get("file_sha256", "")) for row in rows),
             category="evidence_chain",
             expected="64 lowercase hexadecimal characters on every record",
-            actual=sum(bool(SHA256_RE.fullmatch(row.get("file_sha256", ""))) for row in rows),
+            actual=sum(
+                bool(SHA256_RE.fullmatch(row.get("file_sha256", ""))) for row in rows
+            ),
         )
         by_id = {row.get("record_id", ""): row for row in rows}
         for record_id, expected_fields in contract["spot_checks"].items():
@@ -430,7 +458,10 @@ def run_d1_benchmark(
             checks.add(
                 f"d1_spot_{record_id}",
                 actual_row is not None
-                and all(actual_row.get(field) == value for field, value in expected_fields.items()),
+                and all(
+                    actual_row.get(field) == value
+                    for field, value in expected_fields.items()
+                ),
                 category="scientific_spot_check",
                 expected=expected_fields,
                 actual=actual,
@@ -456,7 +487,9 @@ def run_d1_benchmark(
             (row.get("benchmark_continent", ""), row.get("medium", "")) for row in rows
         }
         water_continents = {
-            row.get("benchmark_continent", "") for row in rows if row.get("medium") == "water"
+            row.get("benchmark_continent", "")
+            for row in rows
+            if row.get("medium") == "water"
         }
         checks.add(
             "d1_all_seven_continents_have_all_four_media",
@@ -648,7 +681,10 @@ def run_d2_benchmark(
         ]
         provenance_preserved = all(
             record_id in d2_by_id
-            and all(d2_by_id[record_id].get(field, "") == row.get(field, "") for field in source_fields)
+            and all(
+                d2_by_id[record_id].get(field, "") == row.get(field, "")
+                for field in source_fields
+            )
             for record_id, row in d1_by_id.items()
         )
         checks.add(
@@ -669,7 +705,10 @@ def run_d2_benchmark(
             "geologic_match_method",
             "geologic_match_confidence",
         ]
-        def spatial_value_preserved(d1_row: Mapping[str, str], d2_row: Mapping[str, str], field: str) -> bool:
+
+        def spatial_value_preserved(
+            d1_row: Mapping[str, str], d2_row: Mapping[str, str], field: str
+        ) -> bool:
             source_value = d1_row.get(field, "")
             if not source_value:
                 return True
@@ -704,7 +743,8 @@ def run_d2_benchmark(
         quantified_rows = [
             row
             for row in rows
-            if row.get("normalized_value", "") or row.get("normalized_censoring_limit", "")
+            if row.get("normalized_value", "")
+            or row.get("normalized_censoring_limit", "")
         ]
         wrong_solid_units = [
             row.get("record_id")
@@ -727,7 +767,9 @@ def run_d2_benchmark(
                 "wrong_water_count": len(wrong_water_units),
             },
         )
-        censored_rows = [row for row in rows if row.get("censored", "").lower() == "true"]
+        censored_rows = [
+            row for row in rows if row.get("censored", "").lower() == "true"
+        ]
         checks.add(
             "d2_censored_values_are_not_imputed",
             len(censored_rows) == expected["censored_record_count"]
@@ -782,7 +824,10 @@ def run_d2_benchmark(
         anomaly_path = d2_dir / "anomaly_report.json"
         anomalies_path = d2_dir / "anomalies.geojson"
         samples_path = d2_dir / "samples.geojson"
-        if all(path.is_file() for path in (confidence_path, anomaly_path, anomalies_path, samples_path)):
+        if all(
+            path.is_file()
+            for path in (confidence_path, anomaly_path, anomalies_path, samples_path)
+        ):
             confidence = read_json(confidence_path)
             anomaly_report = read_json(anomaly_path)
             anomalies = read_json(anomalies_path)
@@ -798,7 +843,8 @@ def run_d2_benchmark(
             )
             checks.add(
                 "d2_anomaly_groups_keep_scientific_comparability_fields",
-                set(expected["group_by_required"]) <= set(anomaly_report.get("group_by", [])),
+                set(expected["group_by_required"])
+                <= set(anomaly_report.get("group_by", [])),
                 category="anomaly",
                 expected=expected["group_by_required"],
                 actual=anomaly_report.get("group_by", []),
@@ -853,14 +899,28 @@ def build_d3_source_manifest(target: Path, gold_d1_dir: Path) -> dict[str, Any]:
             {
                 "source_id": source_id,
                 "record_count": len(rows),
-                "dataset_titles": sorted({row["dataset_title"] for row in rows if row.get("dataset_title")}),
-                "dataset_dois": sorted({row["dataset_doi"] for row in rows if row.get("dataset_doi")}),
-                "dataset_versions": sorted(
-                    {row["dataset_version"] for row in rows if row.get("dataset_version")}
+                "dataset_titles": sorted(
+                    {row["dataset_title"] for row in rows if row.get("dataset_title")}
                 ),
-                "licenses": sorted({row["license"] for row in rows if row.get("license")}),
-                "source_tiers": sorted({row["source_tier"] for row in rows if row.get("source_tier")}),
-                "located_record_count": sum(bool(row.get("source_locator")) for row in rows),
+                "dataset_dois": sorted(
+                    {row["dataset_doi"] for row in rows if row.get("dataset_doi")}
+                ),
+                "dataset_versions": sorted(
+                    {
+                        row["dataset_version"]
+                        for row in rows
+                        if row.get("dataset_version")
+                    }
+                ),
+                "licenses": sorted(
+                    {row["license"] for row in rows if row.get("license")}
+                ),
+                "source_tiers": sorted(
+                    {row["source_tier"] for row in rows if row.get("source_tier")}
+                ),
+                "located_record_count": sum(
+                    bool(row.get("source_locator")) for row in rows
+                ),
                 "source_files": list(source_files.values()),
             }
         )
@@ -876,7 +936,9 @@ def build_d3_source_manifest(target: Path, gold_d1_dir: Path) -> dict[str, Any]:
             "records_by_element": d1_manifest.get("records_by_element"),
             "records_by_continent": d1_manifest.get("records_by_continent"),
             "coverage_matrix": d1_manifest.get("coverage_matrix"),
-            "explicit_country_label_count": d1_manifest.get("explicit_country_label_count"),
+            "explicit_country_label_count": d1_manifest.get(
+                "explicit_country_label_count"
+            ),
         },
         "claim_boundary": (
             "This manifest describes a frozen evaluation slice. Source presence is not proof of national "
@@ -892,7 +954,9 @@ def build_d3_source_manifest(target: Path, gold_d1_dir: Path) -> dict[str, Any]:
     return manifest
 
 
-def stage_d3_inputs(input_dir: Path, gold_d1_dir: Path, gold_d2_dir: Path) -> dict[str, Path]:
+def stage_d3_inputs(
+    input_dir: Path, gold_d1_dir: Path, gold_d2_dir: Path
+) -> dict[str, Path]:
     input_dir.mkdir(parents=True, exist_ok=False)
     required = [
         "geochemistry.csv",
@@ -958,7 +1022,11 @@ def run_d3_benchmark(
             actual=execution["returncode"],
             note=execution.get("stderr_tail") or None,
         )
-    present = {path.name for path in candidate_dir.iterdir()} if candidate_dir.is_dir() else set()
+    present = (
+        {path.name for path in candidate_dir.iterdir()}
+        if candidate_dir.is_dir()
+        else set()
+    )
     preferred = set(contract["preferred_outputs"])
     map_names = set(contract["compatibility_map_names"])
     evidence_outputs = preferred - {"interactive_map.html"}
@@ -966,11 +1034,21 @@ def run_d3_benchmark(
         "d3_emits_complete_portable_product_bundle",
         evidence_outputs <= present and bool(map_names & present),
         category="product_deliverables",
-        expected={"evidence_outputs": sorted(evidence_outputs), "map_one_of": sorted(map_names)},
+        expected={
+            "evidence_outputs": sorted(evidence_outputs),
+            "map_one_of": sorted(map_names),
+        },
         actual=sorted(present),
     )
     metrics: dict[str, Any] = {}
-    map_path = next((candidate_dir / name for name in contract["compatibility_map_names"] if (candidate_dir / name).is_file()), None)
+    map_path = next(
+        (
+            candidate_dir / name
+            for name in contract["compatibility_map_names"]
+            if (candidate_dir / name).is_file()
+        ),
+        None,
+    )
     report_path = candidate_dir / "visualization_report.json"
     if map_path is not None and report_path.is_file():
         report = read_json(report_path)
@@ -985,7 +1063,8 @@ def run_d3_benchmark(
             output_path = candidate_dir / name
             checks.add(
                 f"d3_preserves_{name}_byte_for_byte",
-                output_path.is_file() and sha256_file(output_path) == sha256_file(input_path),
+                output_path.is_file()
+                and sha256_file(output_path) == sha256_file(input_path),
                 category="evidence_preservation",
                 expected=sha256_file(input_path),
                 actual=sha256_file(output_path) if output_path.is_file() else "missing",
@@ -995,8 +1074,10 @@ def run_d3_benchmark(
         checks.add(
             "d3_map_counts_match_frozen_d2",
             map_report.get("mapped_record_count") == expected["mappable_record_count"]
-            and map_report.get("candidate_record_count") == expected["candidate_anomaly_count"]
-            and map_report.get("display_sample_count") == expected["display_sample_count"],
+            and map_report.get("candidate_record_count")
+            == expected["candidate_anomaly_count"]
+            and map_report.get("display_sample_count")
+            == expected["display_sample_count"],
             category="product_correctness",
             expected={
                 "mapped_record_count": expected["mappable_record_count"],
@@ -1033,7 +1114,8 @@ def run_d3_benchmark(
         )
         checks.add(
             "d3_has_no_external_runtime_assets",
-            map_report.get("external_assets") == expected["external_runtime_asset_count"],
+            map_report.get("external_assets")
+            == expected["external_runtime_asset_count"],
             category="offline_reproducibility",
             expected=expected["external_runtime_asset_count"],
             actual=map_report.get("external_assets"),
@@ -1087,7 +1169,9 @@ def run_d3_benchmark(
             contains_all(html_text, evidence_terms),
             category="professional_workflow",
             expected=evidence_terms,
-            actual={term: term.casefold() in html_text.casefold() for term in evidence_terms},
+            actual={
+                term: term.casefold() in html_text.casefold() for term in evidence_terms
+            },
         )
         boundary_terms = [
             "覆盖缺口",
@@ -1105,19 +1189,22 @@ def run_d3_benchmark(
         )
         checks.add(
             "d3_has_basic_accessibility_and_responsive_layout",
-            "aria-label=" in html_text and "@media" in html_text and "role=\"img\"" in html_text,
+            "aria-label=" in html_text
+            and "@media" in html_text
+            and 'role="img"' in html_text,
             category="usability",
             expected=["aria-label", "role=img", "responsive media rules"],
             actual={
                 "aria_label": "aria-label=" in html_text,
-                "role_img": "role=\"img\"" in html_text,
+                "role_img": 'role="img"' in html_text,
                 "responsive": "@media" in html_text,
             },
         )
         oversized = {
             path.name: path.stat().st_size
             for path in candidate_dir.iterdir()
-            if path.is_file() and path.stat().st_size > expected["maximum_single_file_bytes"]
+            if path.is_file()
+            and path.stat().st_size > expected["maximum_single_file_bytes"]
         }
         checks.add(
             "d3_single_files_stay_below_competition_limit",
@@ -1175,10 +1262,18 @@ def run_d3_benchmark(
 
 
 def aggregate(stage_reports: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
-    blocking_total = sum(report["counts"]["blocking"]["total"] for report in stage_reports.values())
-    blocking_failed = sum(report["counts"]["blocking"]["failed"] for report in stage_reports.values())
-    review_total = sum(report["counts"]["review"]["total"] for report in stage_reports.values())
-    review_failed = sum(report["counts"]["review"]["failed"] for report in stage_reports.values())
+    blocking_total = sum(
+        report["counts"]["blocking"]["total"] for report in stage_reports.values()
+    )
+    blocking_failed = sum(
+        report["counts"]["blocking"]["failed"] for report in stage_reports.values()
+    )
+    review_total = sum(
+        report["counts"]["review"]["total"] for report in stage_reports.values()
+    )
+    review_failed = sum(
+        report["counts"]["review"]["failed"] for report in stage_reports.values()
+    )
     if blocking_failed:
         status = "fail"
     elif review_failed:
@@ -1201,7 +1296,9 @@ def aggregate(stage_reports: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
                 "failed": review_failed,
             },
         },
-        "stage_status": {name: report["status"] for name, report in stage_reports.items()},
+        "stage_status": {
+            name: report["status"] for name, report in stage_reports.items()
+        },
         "stage_reports": {
             name: f"{name}/{name}_stage_report.json" for name in stage_reports
         },
@@ -1256,12 +1353,18 @@ def main(argv: Sequence[str] | None = None) -> int:
                     gold_d1_dir, gold_d2_dir = gold_root / "d1", gold_root / "d2"
                 validate_gold_inputs(gold_d1_dir, gold_d2_dir, include_d2=needs_gold_d2)
             else:
-                gold_d1_dir, gold_d2_dir = Path(temporary) / "d1", Path(temporary) / "d2"
+                gold_d1_dir, gold_d2_dir = (
+                    Path(temporary) / "d1",
+                    Path(temporary) / "d2",
+                )
 
             reports: dict[str, dict[str, Any]] = {}
             if "d1" in selected:
                 reports["d1"] = run_d1_benchmark(
-                    args.output_dir, args.d1_script.resolve(), contract["d1"], gold_d1_dir
+                    args.output_dir,
+                    args.d1_script.resolve(),
+                    contract["d1"],
+                    gold_d1_dir,
                 )
             if "d2" in selected:
                 reports["d2"] = run_d2_benchmark(

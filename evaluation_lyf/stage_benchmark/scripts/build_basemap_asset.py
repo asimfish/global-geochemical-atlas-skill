@@ -18,7 +18,9 @@ from lab_common import LAB_ROOT, atomic_write_json
 SOURCE_URL = "https://naturalearth.s3.amazonaws.com/110m_physical/ne_110m_land.zip"
 SOURCE_PAGE = "https://www.naturalearthdata.com/downloads/110m-physical-vectors/"
 TERMS_URL = "https://www.naturalearthdata.com/about/terms-of-use/"
-EXPECTED_ARCHIVE_SHA256 = "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de"
+EXPECTED_ARCHIVE_SHA256 = (
+    "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de"
+)
 MAXIMUM_DOWNLOAD_BYTES = 1_000_000
 DEFAULT_OUTPUT = LAB_ROOT / "assets" / "natural-earth-110m-land.json"
 DEFAULT_CACHE = Path(tempfile.gettempdir()) / "natural-earth-110m-land.zip"
@@ -45,7 +47,9 @@ def download_archive(destination: Path) -> Path:
     if len(content) > MAXIMUM_DOWNLOAD_BYTES:
         raise BasemapError("basemap archive exceeds download byte limit")
     if sha256_bytes(content) != EXPECTED_ARCHIVE_SHA256:
-        raise BasemapError("Natural Earth archive SHA-256 does not match the pinned version")
+        raise BasemapError(
+            "Natural Earth archive SHA-256 does not match the pinned version"
+        )
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(content)
     return destination
@@ -58,7 +62,9 @@ def verified_archive(path: Path) -> Path:
     if len(content) > MAXIMUM_DOWNLOAD_BYTES:
         raise BasemapError("basemap archive exceeds byte limit")
     if sha256_bytes(content) != EXPECTED_ARCHIVE_SHA256:
-        raise BasemapError("Natural Earth archive SHA-256 does not match the pinned version")
+        raise BasemapError(
+            "Natural Earth archive SHA-256 does not match the pinned version"
+        )
     return path
 
 
@@ -148,9 +154,15 @@ def build_asset(archive_path: Path, output_path: Path) -> dict[str, object]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Build the pinned Natural Earth offline land asset.")
-    parser.add_argument("--archive", type=Path, help="Existing pinned Natural Earth ZIP")
-    parser.add_argument("--download", action="store_true", help="Download the pinned ZIP to --cache")
+    parser = argparse.ArgumentParser(
+        description="Build the pinned Natural Earth offline land asset."
+    )
+    parser.add_argument(
+        "--archive", type=Path, help="Existing pinned Natural Earth ZIP"
+    )
+    parser.add_argument(
+        "--download", action="store_true", help="Download the pinned ZIP to --cache"
+    )
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     return parser
@@ -162,7 +174,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.archive and args.download:
         parser.error("use either --archive or --download")
     try:
-        archive = args.archive or (download_archive(args.cache) if args.download else args.cache)
+        archive = args.archive or (
+            download_archive(args.cache) if args.download else args.cache
+        )
         payload = build_asset(archive, args.output)
     except (BasemapError, OSError, KeyError, zipfile.BadZipFile) as exc:
         parser.error(str(exc))

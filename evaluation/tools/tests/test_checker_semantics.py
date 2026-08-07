@@ -10,7 +10,9 @@ from pathlib import Path
 
 
 TOOLS_ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location("grade_task", TOOLS_ROOT / "grade_task.py")
+SPEC = importlib.util.spec_from_file_location(
+    "grade_task", TOOLS_ROOT / "grade_task.py"
+)
 assert SPEC and SPEC.loader
 GRADER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(GRADER)
@@ -21,7 +23,9 @@ class CheckerSemanticsTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.evaluation_root = Path(__file__).resolve().parents[2]
 
-    def _copy_gold(self, task_dir: Path) -> tuple[tempfile.TemporaryDirectory[str], Path]:
+    def _copy_gold(
+        self, task_dir: Path
+    ) -> tuple[tempfile.TemporaryDirectory[str], Path]:
         holder = tempfile.TemporaryDirectory()
         submission = Path(holder.name) / "submission"
         shutil.copytree(task_dir / "gold", submission)
@@ -51,8 +55,12 @@ class CheckerSemanticsTests(unittest.TestCase):
 
     def test_q10_uses_declared_columns_instead_of_undeclared_row_snippets(self) -> None:
         task_dir = self.evaluation_root / "evaluator_private" / "shadow" / "Q10"
-        spec = json.loads((task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8"))
-        self.assertFalse(any(item["type"] == "text_contains_all" for item in spec["checks"]))
+        spec = json.loads(
+            (task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8")
+        )
+        self.assertFalse(
+            any(item["type"] == "text_contains_all" for item in spec["checks"])
+        )
         holder, submission = self._copy_gold(task_dir)
         self.addCleanup(holder.cleanup)
         report = GRADER.grade(task_dir, submission)
@@ -65,7 +73,9 @@ class CheckerSemanticsTests(unittest.TestCase):
         path = submission / "eligibility.json"
         document = json.loads(path.read_text(encoding="utf-8"))
         document["groups"].reverse()
-        path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        path.write_text(
+            json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
 
         report = GRADER.grade(task_dir, submission)
         self.assertEqual(report["evidence_points_awarded"], 80)

@@ -11,7 +11,13 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from lab_common import CheckBook, atomic_write_json, load_json, prepare_empty_output_dir, sha256_file
+from lab_common import (
+    CheckBook,
+    atomic_write_json,
+    load_json,
+    prepare_empty_output_dir,
+    sha256_file,
+)
 from showcase_builder import build_showcase
 
 D3_VERSION = "d3-validation-consumer-v2"
@@ -67,11 +73,16 @@ def nested_value(value: dict[str, Any], dotted_path: str) -> tuple[bool, Any]:
 
 
 def javascript_json(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=True, sort_keys=True, separators=(",", ":")).replace("</", "<\\/")
+    return json.dumps(
+        value, ensure_ascii=True, sort_keys=True, separators=(",", ":")
+    ).replace("</", "<\\/")
 
 
 def build_html(
-    samples: dict[str, Any], anomalies: dict[str, Any], missing_coordinate_rows: list[dict[str, Any]], disclaimers: list[str]
+    samples: dict[str, Any],
+    anomalies: dict[str, Any],
+    missing_coordinate_rows: list[dict[str, Any]],
+    disclaimers: list[str],
 ) -> str:
     samples_json = javascript_json(samples.get("features", []))
     anomalies_json = javascript_json(anomalies.get("features", []))
@@ -184,7 +195,11 @@ def build_d3_package(
 ) -> tuple[dict[str, Path], dict[str, Any]]:
     prepare_empty_output_dir(output_dir)
     checks = CheckBook()
-    present_names = {path.name for path in d2_output_dir.iterdir()} if d2_output_dir.is_dir() else set()
+    present_names = (
+        {path.name for path in d2_output_dir.iterdir()}
+        if d2_output_dir.is_dir()
+        else set()
+    )
     missing_files = sorted(REQUIRED_D2_FILES - present_names)
     checks.add(
         "all_nine_d2_files_exist",
@@ -227,7 +242,9 @@ def build_d3_package(
 
     data_references = map_spec.get("data", {})
     missing_references = sorted(
-        str(name) for name in data_references.values() if not (d2_output_dir / str(name)).is_file()
+        str(name)
+        for name in data_references.values()
+        if not (d2_output_dir / str(name)).is_file()
     )
     checks.add(
         "map_spec_references_existing_files",
@@ -238,7 +255,11 @@ def build_d3_package(
 
     sample_features = samples.get("features", [])
     anomaly_features = anomalies.get("features", [])
-    valid_rows = [row for row in database if row["latitude"] is not None and row["longitude"] is not None]
+    valid_rows = [
+        row
+        for row in database
+        if row["latitude"] is not None and row["longitude"] is not None
+    ]
     missing_coordinate_rows = [
         row for row in database if row["latitude"] is None or row["longitude"] is None
     ]
@@ -251,7 +272,8 @@ def build_d3_package(
     )
     checks.add(
         "missing_coordinates_remain_in_database",
-        len(database) == int(qc_report.get("record_count", -1)) and bool(missing_coordinate_rows),
+        len(database) == int(qc_report.get("record_count", -1))
+        and bool(missing_coordinate_rows),
         category="map_semantics",
         expected=qc_report.get("record_count"),
         actual=len(database),
@@ -288,10 +310,15 @@ def build_d3_package(
         actual={"numeric_color_values": len(color_values)},
     )
 
-    censored_point_count = sum(bool(feature.get("properties", {}).get("censored")) for feature in sample_features)
+    censored_point_count = sum(
+        bool(feature.get("properties", {}).get("censored"))
+        for feature in sample_features
+    )
     checks.add(
         "censored_points_have_distinct_layer_contract",
-        censored_point_count > 0 and "censored_observations" in {layer.get("id") for layer in map_spec.get("layers", [])},
+        censored_point_count > 0
+        and "censored_observations"
+        in {layer.get("id") for layer in map_spec.get("layers", [])},
         category="map_semantics",
         actual=censored_point_count,
     )
@@ -330,7 +357,12 @@ def build_d3_package(
 
     unsupported_filters = []
     for filter_name in map_spec.get("filters", []):
-        if sample_features and not nested_value(sample_features[0].get("properties", {}), str(filter_name))[0]:
+        if (
+            sample_features
+            and not nested_value(
+                sample_features[0].get("properties", {}), str(filter_name)
+            )[0]
+        ):
             unsupported_filters.append(filter_name)
     checks.add(
         "map_filters_exist_on_sample_properties",
@@ -354,7 +386,9 @@ def build_d3_package(
         actual=confidence_report.get("not_a_probability"),
     )
 
-    coverage_context = load_json(coverage_context_path) if coverage_context_path is not None else None
+    coverage_context = (
+        load_json(coverage_context_path) if coverage_context_path is not None else None
+    )
     showcase_paths, showcase_metrics = build_showcase(
         database=database,
         samples=samples,
@@ -369,7 +403,10 @@ def build_d3_package(
     )
     html_path = showcase_paths["html"]
     html_document = html_path.read_text(encoding="utf-8")
-    remote_asset_tags = "<script src=" in html_document.casefold() or "<link href=\"http" in html_document.casefold()
+    remote_asset_tags = (
+        "<script src=" in html_document.casefold()
+        or '<link href="http' in html_document.casefold()
+    )
     checks.add(
         "html_has_no_remote_runtime_assets",
         not remote_asset_tags,
@@ -457,9 +494,14 @@ def build_d3_package(
             "color_domain_values": len(color_values),
         },
         "consumed_sha256": {
-            name: sha256_file(d2_output_dir / name) for name in sorted(REQUIRED_D2_FILES)
+            name: sha256_file(d2_output_dir / name)
+            for name in sorted(REQUIRED_D2_FILES)
         },
-        "atlas": {"path": html_path.name, "sha256": sha256_file(html_path), "offline": True},
+        "atlas": {
+            "path": html_path.name,
+            "sha256": sha256_file(html_path),
+            "offline": True,
+        },
         "showcase": showcase_metrics,
         **summary,
     }
@@ -472,8 +514,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Build polished offline D3 evaluation deliverables from D2 public outputs."
     )
-    parser.add_argument("--d2-output-dir", type=Path, required=True, help="Directory containing all nine D2 outputs")
-    parser.add_argument("--output-dir", type=Path, required=True, help="New or empty D3 output directory")
+    parser.add_argument(
+        "--d2-output-dir",
+        type=Path,
+        required=True,
+        help="Directory containing all nine D2 outputs",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="New or empty D3 output directory",
+    )
     parser.add_argument(
         "--coverage-context",
         type=Path,
@@ -493,7 +545,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     except (OSError, ValueError, csv.Error, json.JSONDecodeError) as exc:
         parser.error(str(exc))
-    print(json.dumps({key: str(path) for key, path in outputs.items()}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {key: str(path) for key, path in outputs.items()},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0 if report["status"] != "fail" else 1
 
 

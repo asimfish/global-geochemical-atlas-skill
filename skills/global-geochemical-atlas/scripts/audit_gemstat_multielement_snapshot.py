@@ -25,7 +25,9 @@ class AuditError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -94,27 +96,46 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         if method_code == "0":
             undefined_methods[element] += 1
         physical_samples.add(
-            "|".join((station_id, date, str(fields["Sample Time"]), str(fields["Depth"])))
+            "|".join(
+                (station_id, date, str(fields["Sample Time"]), str(fields["Depth"]))
+            )
         )
         bbox = (
             [longitude, latitude, longitude, latitude]
             if bbox is None
-            else [min(bbox[0], longitude), min(bbox[1], latitude), max(bbox[2], longitude), max(bbox[3], latitude)]
+            else [
+                min(bbox[0], longitude),
+                min(bbox[1], latitude),
+                max(bbox[2], longitude),
+                max(bbox[3], latitude),
+            ]
         )
-        depth_range = [depth, depth] if depth_range is None else [min(depth_range[0], depth), max(depth_range[1], depth)]
-        date_range = [date, date] if date_range is None else [min(date_range[0], date), max(date_range[1], date)]
+        depth_range = (
+            [depth, depth]
+            if depth_range is None
+            else [min(depth_range[0], depth), max(depth_range[1], depth)]
+        )
+        date_range = (
+            [date, date]
+            if date_range is None
+            else [min(date_range[0], date), max(date_range[1], date)]
+        )
 
     checks = {
         "target_observations_match": count == expected["target_observations"],
-        "target_value_counts_match": dict(sorted(elements.items())) == expected["target_value_counts"],
-        "excluded_parameter_counts_registered": expected["excluded_parameter_counts"] == {"Cr-VI": 15855},
+        "target_value_counts_match": dict(sorted(elements.items()))
+        == expected["target_value_counts"],
+        "excluded_parameter_counts_registered": expected["excluded_parameter_counts"]
+        == {"Cr-VI": 15855},
         "all_joined_rows_have_station_metadata": True,
         "all_joined_rows_have_method_metadata": True,
     }
     if not all(checks.values()):
         raise AuditError(f"GEMStat seven-element reconciliation failed: {checks}")
 
-    registered_members = {item["file_id"]: item for item in registry["download"]["selected_members"]}
+    registered_members = {
+        item["file_id"]: item for item in registry["download"]["selected_members"]
+    }
     selected_members = [
         {
             "file_id": item.file_id,
@@ -125,7 +146,9 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         }
         for item in downloaded
     ]
-    snapshot_id = f"gemstat-open-archive:v3-seven-elements:{registry['download']['observed_at']}"
+    snapshot_id = (
+        f"gemstat-open-archive:v3-seven-elements:{registry['download']['observed_at']}"
+    )
     observed = {
         "target_observations": count,
         "target_value_counts": dict(sorted(elements.items())),
@@ -221,7 +244,9 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "observed_metadata": {
             "station_rows": expected["station_metadata_rows"],
             "station_unique_ids": expected["station_metadata_unique_ids"],
-            "station_exact_duplicates": expected["station_metadata_exact_duplicate_rows"],
+            "station_exact_duplicates": expected[
+                "station_metadata_exact_duplicate_rows"
+            ],
             "parameter_rows": expected["parameter_metadata_rows"],
             "method_rows": expected["method_metadata_rows"],
         },
@@ -248,7 +273,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         atomic_json(args.snapshot_output, snapshot)
         atomic_json(args.reconciliation_output, reconciliation)
         atomic_json(args.candidate_audit_output, candidate_audit)
-        print(json.dumps({"status": "PASS", "snapshot_id": snapshot["snapshot_id"]}, sort_keys=True))
+        print(
+            json.dumps(
+                {"status": "PASS", "snapshot_id": snapshot["snapshot_id"]},
+                sort_keys=True,
+            )
+        )
         return 0
     except (AuditError, OSError, ValueError, source_adapters.SourceAdapterError) as exc:
         print(f"audit_gemstat_multielement_snapshot: {exc}", file=sys.stderr)

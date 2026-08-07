@@ -9,7 +9,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-from lab_common import LAB_ROOT, atomic_write_json, prepare_empty_output_dir, sha256_file
+from lab_common import (
+    LAB_ROOT,
+    atomic_write_json,
+    prepare_empty_output_dir,
+    sha256_file,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 CONTRACT = LAB_ROOT / "contracts" / "stage-benchmark-v2.json"
@@ -18,7 +23,9 @@ CONTRACT = LAB_ROOT / "contracts" / "stage-benchmark-v2.json"
 def run(command: list[str]) -> None:
     completed = subprocess.run(command, cwd=REPO_ROOT, text=True, capture_output=True)
     if completed.returncode:
-        raise RuntimeError(f"command failed ({completed.returncode}): {' '.join(command)}\n{completed.stderr}")
+        raise RuntimeError(
+            f"command failed ({completed.returncode}): {' '.join(command)}\n{completed.stderr}"
+        )
 
 
 def main() -> int:
@@ -79,7 +86,9 @@ def main() -> int:
             str(d3),
         ]
     )
-    d1_report = json.loads((d1 / "d1_completion_manifest.json").read_text(encoding="utf-8"))
+    d1_report = json.loads(
+        (d1 / "d1_completion_manifest.json").read_text(encoding="utf-8")
+    )
     qc = json.loads((d2 / "qc_report.json").read_text(encoding="utf-8"))
     geology = json.loads((d2 / "geology_report.json").read_text(encoding="utf-8"))
     anomaly = json.loads((d2 / "anomaly_report.json").read_text(encoding="utf-8"))
@@ -92,7 +101,9 @@ def main() -> int:
         "d1": {
             "record_count": d1_report["record_count"],
             "source_dataset_count": d1_report["source_dataset_count"],
-            "nonempty_continent_medium_cells": d1_report["nonempty_continent_medium_cells"],
+            "nonempty_continent_medium_cells": d1_report[
+                "nonempty_continent_medium_cells"
+            ],
             "water_continent_count": d1_report["water_continent_count"],
             "field_coverage": d1_report["field_coverage"],
         },

@@ -54,7 +54,9 @@ def build(source: Path, output: Path) -> None:
             f"({EXPECTED_SOURCE_SHA256})"
         )
     raw = json.loads(source_bytes)
-    if raw.get("type") != "FeatureCollection" or not isinstance(raw.get("features"), list):
+    if raw.get("type") != "FeatureCollection" or not isinstance(
+        raw.get("features"), list
+    ):
         raise ValueError("source must be a GeoJSON FeatureCollection")
     countries = []
     for feature in raw["features"]:
@@ -77,7 +79,9 @@ def build(source: Path, output: Path) -> None:
             }
         )
     countries.sort(key=lambda item: (item["iso_a3"], item["name"]))
-    total_points = sum(point_count(item["geometry"]["coordinates"]) for item in countries)
+    total_points = sum(
+        point_count(item["geometry"]["coordinates"]) for item in countries
+    )
     asset = {
         "asset_version": ASSET_VERSION,
         "title": "Natural Earth 1:110m Admin 0 Countries",

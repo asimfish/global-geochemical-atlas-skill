@@ -53,12 +53,18 @@ def _atomic_bytes(path: Path, value: bytes) -> None:
 
 
 def _atomic_json(path: Path, value: Any) -> None:
-    _atomic_bytes(path, (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode())
+    _atomic_bytes(
+        path,
+        (
+            json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        ).encode(),
+    )
 
 
 def _jsonl_bytes(rows: Sequence[Mapping[str, Any]]) -> bytes:
     return "".join(
-        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + "\n"
         for row in rows
     ).encode("utf-8")
 
@@ -73,9 +79,15 @@ def expected_fixture(
     manifest_path = fixture_dir / "run_manifest.json"
     with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    evidence = [json.loads(line) for line in evidence_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    evidence = [
+        json.loads(line)
+        for line in evidence_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
     if len(rows) != len(evidence) or not rows:
-        raise MigrationError(f"{source_id} does not have one evidence row per observation")
+        raise MigrationError(
+            f"{source_id} does not have one evidence row per observation"
+        )
     registry_sources = registry.get("sources")
     if not isinstance(registry_sources, Mapping) or source_id not in registry_sources:
         raise MigrationError(f"{source_id} is absent from source registry")
@@ -83,7 +95,9 @@ def expected_fixture(
     hash_by_filename = {
         str(item.get("filename")): str(item.get("expected_sha256"))
         for item in (source_entry.get("download", {}).get("files", []))
-        if isinstance(item, Mapping) and item.get("filename") and item.get("expected_sha256")
+        if isinstance(item, Mapping)
+        and item.get("filename")
+        and item.get("expected_sha256")
     }
     normalized_evidence: list[dict[str, Any]] = []
     for item in evidence:
@@ -104,7 +118,9 @@ def expected_fixture(
             normalized["source_file"] = normalized["source_file"].split("#", 1)[0]
         normalized_rows.append(normalized)
     enriched = [
-        v4_semantics.enrich_row(row, item, source_entry, str(registry.get("verified_at") or ""))
+        v4_semantics.enrich_row(
+            row, item, source_entry, str(registry.get("verified_at") or "")
+        )
         for row, item in zip(normalized_rows, normalized_evidence, strict=True)
     ]
     content = _csv_bytes(enriched)
@@ -132,11 +148,15 @@ def migrate(demo_root: Path, *, check: bool) -> dict[str, Any]:
     migrated: list[str] = []
     for source_id in source_ids:
         fixture_dir = demo_root / source_id
-        content, evidence_content, manifest = expected_fixture(source_id, fixture_dir, registry)
+        content, evidence_content, manifest = expected_fixture(
+            source_id, fixture_dir, registry
+        )
         input_path = fixture_dir / "demo_input.csv"
         evidence_path = fixture_dir / "sources.jsonl"
         manifest_path = fixture_dir / "run_manifest.json"
-        manifest_bytes = (json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
+        manifest_bytes = (
+            json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        ).encode()
         if check:
             if input_path.read_bytes() != content:
                 raise MigrationError(f"stale V4 demo CSV: {source_id}")
@@ -149,7 +169,12 @@ def migrate(demo_root: Path, *, check: bool) -> dict[str, Any]:
             _atomic_bytes(evidence_path, evidence_content)
             _atomic_json(manifest_path, manifest)
         migrated.append(source_id)
-    return {"status": "PASS", "source_count": len(migrated), "sources": migrated, "mode": "check" if check else "write"}
+    return {
+        "status": "PASS",
+        "source_count": len(migrated),
+        "sources": migrated,
+        "mode": "check" if check else "write",
+    }
 
 
 def build_parser() -> argparse.ArgumentParser:

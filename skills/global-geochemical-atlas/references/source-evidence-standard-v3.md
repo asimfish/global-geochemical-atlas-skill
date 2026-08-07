@@ -2,7 +2,7 @@
 
 版本：`geochemical-source-evidence-v3`
 
-本文件定义 `scripts/score_source_evidence.py` 的机器判定契约。科研解释与操作边界见 [source-acceptance-standard.md](source-acceptance-standard.md)，JSON 输出见 [source-evidence-report.schema.json](source-evidence-report.schema.json)。
+本文件定义 `scripts/score_source_evidence.py` 的机器判定契约。科研解释、操作边界和 JSON 输出分别由 Skill 直接路由到 `source-acceptance-standard.md` 与 `source-evidence-report.schema.json`。
 
 ## 输入
 

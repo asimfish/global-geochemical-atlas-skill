@@ -28,7 +28,9 @@ def _append_in_filter(
     parameters.extend(normalized)
 
 
-def _text_entity_filters(connection: sqlite3.Connection, text: str) -> dict[str, list[str]]:
+def _text_entity_filters(
+    connection: sqlite3.Connection, text: str
+) -> dict[str, list[str]]:
     try:
         rows = connection.execute(
             "SELECT entity_type, entity_id FROM archive_fts WHERE archive_fts MATCH ? LIMIT 10000",
@@ -73,18 +75,28 @@ def query_index(
         if len(bbox) != 4:
             raise QueryError("bbox must contain west south east north")
         west, south, east, north = (float(value) for value in bbox)
-        if not (-180 <= west <= 180 and -180 <= east <= 180 and -90 <= south <= north <= 90):
-            raise QueryError("bbox is outside WGS84 bounds or has invalid latitude order")
+        if not (
+            -180 <= west <= 180 and -180 <= east <= 180 and -90 <= south <= north <= 90
+        ):
+            raise QueryError(
+                "bbox is outside WGS84 bounds or has invalid latitude order"
+            )
 
     uri = f"file:{index_path.resolve().as_posix()}?mode=ro"
     connection = sqlite3.connect(uri, uri=True)
     connection.row_factory = sqlite3.Row
     try:
-        required = {"observation_search", "provenance_trace", "sampling_event_rtree", "archive_fts"}
+        required = {
+            "observation_search",
+            "provenance_trace",
+            "sampling_event_rtree",
+            "archive_fts",
+        }
         existing = {
             row[0]
             for row in connection.execute(
-                "SELECT name FROM sqlite_master WHERE name IN (?,?,?,?)", tuple(sorted(required))
+                "SELECT name FROM sqlite_master WHERE name IN (?,?,?,?)",
+                tuple(sorted(required)),
             )
         }
         missing = sorted(required - existing)
@@ -97,7 +109,9 @@ def query_index(
         _append_in_filter(clauses, parameters, "medium_raw", media)
         _append_in_filter(clauses, parameters, "sample_type", sample_types)
         _append_in_filter(clauses, parameters, "soil_horizon", soil_horizons)
-        _append_in_filter(clauses, parameters, "sediment_environment", sediment_environments)
+        _append_in_filter(
+            clauses, parameters, "sediment_environment", sediment_environments
+        )
         _append_in_filter(clauses, parameters, "water_body_type", water_body_types)
         _append_in_filter(clauses, parameters, "water_fraction", water_fractions)
         if geologic_units:
@@ -119,12 +133,16 @@ def query_index(
         if sampled_after:
             clauses.append("os.sampled_at_raw >= ?")
             parameters.append(sampled_after)
-            warnings.append("Time filtering compares source-native sampled_at_raw strings; use ISO dates only.")
+            warnings.append(
+                "Time filtering compares source-native sampled_at_raw strings; use ISO dates only."
+            )
         if sampled_before:
             clauses.append("os.sampled_at_raw <= ?")
             parameters.append(sampled_before)
             if not warnings:
-                warnings.append("Time filtering compares source-native sampled_at_raw strings; use ISO dates only.")
+                warnings.append(
+                    "Time filtering compares source-native sampled_at_raw strings; use ISO dates only."
+                )
 
         if bbox is not None:
             west, south, east, north = (float(value) for value in bbox)
@@ -154,7 +172,9 @@ def query_index(
             for entity_type, column in entity_columns.items():
                 identifiers = sorted(set(grouped.get(entity_type, [])))
                 if identifiers:
-                    text_clauses.append(f"os.{column} IN ({','.join('?' for _ in identifiers)})")
+                    text_clauses.append(
+                        f"os.{column} IN ({','.join('?' for _ in identifiers)})"
+                    )
                     text_parameters.extend(identifiers)
             publication_ids = sorted(set(grouped.get("publication", [])))
             if publication_ids:
@@ -214,18 +234,34 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--medium", action="append", dest="media")
     parser.add_argument("--sample-type", action="append", dest="sample_types")
     parser.add_argument("--soil-horizon", action="append", dest="soil_horizons")
-    parser.add_argument("--sediment-environment", action="append", dest="sediment_environments")
+    parser.add_argument(
+        "--sediment-environment", action="append", dest="sediment_environments"
+    )
     parser.add_argument("--water-body-type", action="append", dest="water_body_types")
     parser.add_argument("--water-fraction", action="append", dest="water_fractions")
     parser.add_argument("--geologic-unit", action="append", dest="geologic_units")
     parser.add_argument("--source-id", action="append", dest="source_ids")
-    parser.add_argument("--method", action="append", dest="methods", help="Exact source-native technique")
+    parser.add_argument(
+        "--method",
+        action="append",
+        dest="methods",
+        help="Exact source-native technique",
+    )
     parser.add_argument("--method-scope", action="append", dest="method_scopes")
     parser.add_argument("--license-id", action="append", dest="license_ids")
-    parser.add_argument("--bbox", nargs=4, type=float, metavar=("WEST", "SOUTH", "EAST", "NORTH"))
-    parser.add_argument("--sampled-after", help="Inclusive source-native ISO date lower bound")
-    parser.add_argument("--sampled-before", help="Inclusive source-native ISO date upper bound")
-    parser.add_argument("--text", help="FTS5 expression over dataset, publication, event, sample and method text")
+    parser.add_argument(
+        "--bbox", nargs=4, type=float, metavar=("WEST", "SOUTH", "EAST", "NORTH")
+    )
+    parser.add_argument(
+        "--sampled-after", help="Inclusive source-native ISO date lower bound"
+    )
+    parser.add_argument(
+        "--sampled-before", help="Inclusive source-native ISO date upper bound"
+    )
+    parser.add_argument(
+        "--text",
+        help="FTS5 expression over dataset, publication, event, sample and method text",
+    )
     parser.add_argument("--limit", type=int, default=1000)
     parser.add_argument("--output", type=Path)
     return parser
@@ -255,7 +291,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             limit=args.limit,
         )
     except (OSError, sqlite3.Error, QueryError) as exc:
-        print(json.dumps({"status": "invalid_query", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                {"status": "invalid_query", "error": str(exc)}, ensure_ascii=False
+            ),
+            file=sys.stderr,
+        )
         return 2
     rendered = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if args.output:

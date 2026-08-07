@@ -57,7 +57,12 @@ def command_for(args: argparse.Namespace, suite_output: Path) -> list[str]:
             str(args.stress_records),
         ]
     if args.suite == "real":
-        command = [python, str(SCRIPTS / "run_real_data_suite.py"), "--output-dir", str(suite_output)]
+        command = [
+            python,
+            str(SCRIPTS / "run_real_data_suite.py"),
+            "--output-dir",
+            str(suite_output),
+        ]
         if args.runtime_fixture_dir:
             command.extend(["--fixture-dir", str(args.runtime_fixture_dir)])
         if args.real_max_source_samples:
@@ -78,7 +83,12 @@ def command_for(args: argparse.Namespace, suite_output: Path) -> list[str]:
             command.append("--expanded")
         return command
     if args.suite == "completion":
-        command = [python, str(SCRIPTS / "run_completion_reference.py"), "--output-dir", str(suite_output)]
+        command = [
+            python,
+            str(SCRIPTS / "run_completion_reference.py"),
+            "--output-dir",
+            str(suite_output),
+        ]
         if args.refresh_downloads:
             command.append("--refresh-downloads")
         return command
@@ -150,14 +160,19 @@ def main(argv: Sequence[str] | None = None) -> int:
         "stderr_log": stderr_path.name,
         "output": suite_output.name,
         "runtime_fixture_copy": (
-            str(args.runtime_fixture_dir.relative_to(args.output_dir)) if args.runtime_fixture_dir else None
+            str(args.runtime_fixture_dir.relative_to(args.output_dir))
+            if args.runtime_fixture_dir
+            else None
         ),
         "claim_boundary": (
             "This is a development scientific gate. It is not an official hidden-task score, "
             "an uplift result, or a substitute for the competition Docker campaign."
         ),
     }
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    report_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     print(json.dumps(report, ensure_ascii=False, sort_keys=True))
     return 71 if timed_out else (0 if cause_exit_code == 0 else 2)
 

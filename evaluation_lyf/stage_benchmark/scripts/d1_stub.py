@@ -59,9 +59,13 @@ SOURCE_COLUMN_NAMES = {
 }
 
 
-def write_csv_atomic(path: Path, fieldnames: list[str], rows: list[dict[str, str]]) -> None:
+def write_csv_atomic(
+    path: Path, fieldnames: list[str], rows: list[dict[str, str]]
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
@@ -97,7 +101,9 @@ def build_d1_package(seed_path: Path, output_dir: Path) -> dict[str, Path]:
 
     unknown_columns = sorted(set(canonical_order) - set(SOURCE_COLUMN_NAMES))
     if unknown_columns:
-        raise ValueError(f"D1 stub has no source-column mapping for: {', '.join(unknown_columns)}")
+        raise ValueError(
+            f"D1 stub has no source-column mapping for: {', '.join(unknown_columns)}"
+        )
 
     source_rows: list[dict[str, str]] = []
     for source_row_number, seed_row in enumerate(seed_rows, start=2):
@@ -111,7 +117,10 @@ def build_d1_package(seed_path: Path, output_dir: Path) -> dict[str, Path]:
         canonical["source_row"] = str(source_row_number)
         canonical["file_sha256"] = seed_hash
         source_rows.append(
-            {SOURCE_COLUMN_NAMES[field]: canonical.get(field, "") for field in canonical_order}
+            {
+                SOURCE_COLUMN_NAMES[field]: canonical.get(field, "")
+                for field in canonical_order
+            }
         )
 
     schema_map = {field: SOURCE_COLUMN_NAMES[field] for field in canonical_order}
@@ -152,13 +161,26 @@ def build_d1_package(seed_path: Path, output_dir: Path) -> dict[str, Path]:
         ],
     }
     atomic_write_json(manifest_path, manifest)
-    return {"export": export_path, "schema_map": schema_map_path, "manifest": manifest_path}
+    return {
+        "export": export_path,
+        "schema_map": schema_map_path,
+        "manifest": manifest_path,
+    }
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Build the deterministic D1 package used by D2 full-flow tests.")
-    parser.add_argument("--seed", type=Path, default=D2_FIXTURE, help="Licensed local synthetic seed CSV")
-    parser.add_argument("--output-dir", type=Path, required=True, help="New or empty output directory")
+    parser = argparse.ArgumentParser(
+        description="Build the deterministic D1 package used by D2 full-flow tests."
+    )
+    parser.add_argument(
+        "--seed",
+        type=Path,
+        default=D2_FIXTURE,
+        help="Licensed local synthetic seed CSV",
+    )
+    parser.add_argument(
+        "--output-dir", type=Path, required=True, help="New or empty output directory"
+    )
     return parser
 
 
@@ -169,7 +191,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         outputs = build_d1_package(args.seed, args.output_dir)
     except (OSError, ValueError, csv.Error) as exc:
         parser.error(str(exc))
-    print(json.dumps({key: str(path) for key, path in outputs.items()}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {key: str(path) for key, path in outputs.items()},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

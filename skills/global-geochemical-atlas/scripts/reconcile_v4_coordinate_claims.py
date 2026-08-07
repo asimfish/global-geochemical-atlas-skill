@@ -70,7 +70,9 @@ def _json_text(value: Any) -> str:
 
 def _atomic_text(path: Path, value: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         handle.write(value)
         temporary = Path(handle.name)
     os.replace(temporary, path)
@@ -93,10 +95,21 @@ def _spatial_outputs() -> tuple[dict[Path, str], dict[str, dict[str, Any]]]:
             value["claim_boundary"] = CLAIM_BOUNDARY
             if path.name == "spatial_coverage.json":
                 reported_samples = int(
-                    value.get("reported_coordinate_sample_count", value["valid_coordinate_sample_count"])
+                    value.get(
+                        "reported_coordinate_sample_count",
+                        value["valid_coordinate_sample_count"],
+                    )
                 )
-                reported_cells = int(value.get("reported_covered_spatial_cells", value["covered_spatial_cells"]))
-                reported_ids = list(value.get("reported_spatial_cell_ids", value.get("spatial_cell_ids", [])))
+                reported_cells = int(
+                    value.get(
+                        "reported_covered_spatial_cells", value["covered_spatial_cells"]
+                    )
+                )
+                reported_ids = list(
+                    value.get(
+                        "reported_spatial_cell_ids", value.get("spatial_cell_ids", [])
+                    )
+                )
                 value.update(
                     reported_coordinate_sample_count=reported_samples,
                     reported_covered_spatial_cells=reported_cells,
@@ -119,8 +132,13 @@ def _spatial_outputs() -> tuple[dict[Path, str], dict[str, dict[str, Any]]]:
                         bbox=None,
                     )
                 if source_id == "georoc-archaean":
-                    denominator = sum(int(item) for item in value["source_crs_observation_counts"].values())
-                    value["source_crs_observation_counts"] = {"not_reported": denominator}
+                    denominator = sum(
+                        int(item)
+                        for item in value["source_crs_observation_counts"].values()
+                    )
+                    value["source_crs_observation_counts"] = {
+                        "not_reported": denominator
+                    }
                 spatial[source_id] = value
             outputs[path] = _json_text(value)
     return outputs, spatial
@@ -142,11 +160,19 @@ def _cube_output() -> tuple[str, list[dict[str, str]], bool]:
     )
     fields = original_fields or list(rows[0])
     if "reported_coordinate_sample_count" not in fields:
-        fields.insert(fields.index("valid_coordinate_sample_count"), "reported_coordinate_sample_count")
+        fields.insert(
+            fields.index("valid_coordinate_sample_count"),
+            "reported_coordinate_sample_count",
+        )
     for row in rows:
-        reported = row.get("reported_coordinate_sample_count") or row["valid_coordinate_sample_count"]
+        reported = (
+            row.get("reported_coordinate_sample_count")
+            or row["valid_coordinate_sample_count"]
+        )
         row["reported_coordinate_sample_count"] = reported
-        row["spatial_grid"] = "canonical EPSG:4326 1-degree floor cell; observation coverage only"
+        row["spatial_grid"] = (
+            "canonical EPSG:4326 1-degree floor cell; observation coverage only"
+        )
         if row["source_id"] in NON_CANONICAL:
             row["valid_coordinate_sample_count"] = "0"
             row["comparable_observation_count"] = "0"
@@ -164,23 +190,42 @@ def _balance_output(
     balance = _load_json(BALANCE_PATH)
     for metrics in [*balance["media"].values(), *balance["medium_elements"].values()]:
         metrics["reported_coordinate_sample_count"] = int(
-            metrics.get("reported_coordinate_sample_count", metrics["valid_coordinate_sample_count"])
+            metrics.get(
+                "reported_coordinate_sample_count",
+                metrics["valid_coordinate_sample_count"],
+            )
         )
         metrics["reported_covered_spatial_cells"] = int(
-            metrics.get("reported_covered_spatial_cells", metrics["covered_spatial_cells"])
+            metrics.get(
+                "reported_covered_spatial_cells", metrics["covered_spatial_cells"]
+            )
         )
         metrics["reported_comparable_observation_count"] = int(
-            metrics.get("reported_comparable_observation_count", metrics["comparable_observation_count"])
+            metrics.get(
+                "reported_comparable_observation_count",
+                metrics["comparable_observation_count"],
+            )
         )
-        metrics["spatial_grid"] = "canonical EPSG:4326 1-degree floor cell; no interpolation"
+        metrics["spatial_grid"] = (
+            "canonical EPSG:4326 1-degree floor cell; no interpolation"
+        )
     if not already_canonical:
-        for metrics in [*balance["media"].values(), *balance["medium_elements"].values()]:
-            metrics["valid_coordinate_sample_count"] = metrics["reported_coordinate_sample_count"]
+        for metrics in [
+            *balance["media"].values(),
+            *balance["medium_elements"].values(),
+        ]:
+            metrics["valid_coordinate_sample_count"] = metrics[
+                "reported_coordinate_sample_count"
+            ]
             metrics["covered_spatial_cells"] = metrics["reported_covered_spatial_cells"]
-            metrics["comparable_observation_count"] = metrics["reported_comparable_observation_count"]
+            metrics["comparable_observation_count"] = metrics[
+                "reported_comparable_observation_count"
+            ]
         for source_id in NON_CANONICAL:
             medium = SOURCE_MEDIA[source_id]
-            reported_samples = int(spatial[source_id]["reported_coordinate_sample_count"])
+            reported_samples = int(
+                spatial[source_id]["reported_coordinate_sample_count"]
+            )
             reported_cells = int(spatial[source_id]["reported_covered_spatial_cells"])
             medium_metrics = balance["media"][medium]
             medium_metrics["valid_coordinate_sample_count"] -= reported_samples
@@ -299,7 +344,9 @@ def _report(manifest: Mapping[str, Any]) -> str:
 def expected_outputs() -> dict[Path, str]:
     outputs, spatial = _spatial_outputs()
     cube_text, cube_rows, already_canonical = _cube_output()
-    balance_text, balance = _balance_output(spatial, already_canonical=already_canonical)
+    balance_text, balance = _balance_output(
+        spatial, already_canonical=already_canonical
+    )
     outputs[CUBE_PATH] = cube_text
     outputs[BALANCE_PATH] = balance_text
 
@@ -320,7 +367,9 @@ def expected_outputs() -> dict[Path, str]:
     source_rows = {item["source_id"]: item for item in manifest["sources"]}
     for source_id, item in spatial.items():
         source = source_rows[source_id]
-        source["reported_coordinate_sample_count"] = item["reported_coordinate_sample_count"]
+        source["reported_coordinate_sample_count"] = item[
+            "reported_coordinate_sample_count"
+        ]
         source["valid_coordinate_sample_count"] = item["valid_coordinate_sample_count"]
         source["covered_spatial_cells"] = item["covered_spatial_cells"]
         source["comparable_observation_count"] = sum(
@@ -360,13 +409,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         for path, content in outputs.items():
             if args.check:
                 if not path.is_file() or path.read_text(encoding="utf-8") != content:
-                    raise ReconciliationError(f"stale coordinate claim artifact: {path}")
+                    raise ReconciliationError(
+                        f"stale coordinate claim artifact: {path}"
+                    )
             else:
                 _atomic_text(path, content)
-    except (OSError, ValueError, KeyError, json.JSONDecodeError, ReconciliationError) as exc:
+    except (
+        OSError,
+        ValueError,
+        KeyError,
+        json.JSONDecodeError,
+        ReconciliationError,
+    ) as exc:
         print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False))
         return 1
-    print(json.dumps({"status": "PASS", "artifact_count": len(outputs)}, sort_keys=True))
+    print(
+        json.dumps({"status": "PASS", "artifact_count": len(outputs)}, sort_keys=True)
+    )
     return 0
 
 

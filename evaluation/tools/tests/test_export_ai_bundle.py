@@ -29,7 +29,9 @@ class ExportAiBundleTests(unittest.TestCase):
             self.assertTrue((bundle / "AGENT_PROMPT.md").is_file())
             self.assertEqual(
                 (bundle / "AGENT_PROMPT.md").read_bytes(),
-                (self.benchmark_root / "prompts" / "answering_agent_prompt.md").read_bytes(),
+                (
+                    self.benchmark_root / "prompts" / "answering_agent_prompt.md"
+                ).read_bytes(),
             )
             q01_metadata = json.loads(
                 (bundle / "tasks" / "Q01" / "task.json").read_text(encoding="utf-8")
@@ -42,7 +44,9 @@ class ExportAiBundleTests(unittest.TestCase):
                 "array_of_objects_keyed_by_column_name",
                 (bundle / "tasks" / "Q03" / "task.json").read_text(encoding="utf-8"),
             )
-            self.assertTrue((bundle / "tasks" / "Q01" / "inputs" / "data_sources.json").is_file())
+            self.assertTrue(
+                (bundle / "tasks" / "Q01" / "inputs" / "data_sources.json").is_file()
+            )
             q24_metadata = json.loads(
                 (bundle / "tasks" / "Q24" / "task.json").read_text(encoding="utf-8")
             )
@@ -50,9 +54,19 @@ class ExportAiBundleTests(unittest.TestCase):
             self.assertTrue((bundle / "submissions" / "Q24").is_dir())
             self.assertTrue((bundle / "submissions" / "Q24" / ".gitkeep").is_file())
 
-            relative_paths = {path.relative_to(bundle).as_posix() for path in bundle.rglob("*")}
-            for forbidden in ("gold", "checker", "rubric.json", "evaluator_private", "results"):
-                self.assertFalse(any(forbidden in path.split("/") for path in relative_paths))
+            relative_paths = {
+                path.relative_to(bundle).as_posix() for path in bundle.rglob("*")
+            }
+            for forbidden in (
+                "gold",
+                "checker",
+                "rubric.json",
+                "evaluator_private",
+                "results",
+            ):
+                self.assertFalse(
+                    any(forbidden in path.split("/") for path in relative_paths)
+                )
 
     def test_export_refuses_to_overwrite_existing_directory(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

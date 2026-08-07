@@ -33,8 +33,12 @@ def main() -> int:
     manifest = {
         "case_version": contract["case_version"],
         "resource_semantics": contract["resource_semantics"],
-        "anchor_contract_sha256": hashlib.sha256(contract_path.read_bytes()).hexdigest(),
-        "discovery_contract_sha256": hashlib.sha256(discovery_contract_path.read_bytes()).hexdigest(),
+        "anchor_contract_sha256": hashlib.sha256(
+            contract_path.read_bytes()
+        ).hexdigest(),
+        "discovery_contract_sha256": hashlib.sha256(
+            discovery_contract_path.read_bytes()
+        ).hexdigest(),
         "discovery_contract_version": discovery_contract["schema_version"],
         "resources": [],
     }
@@ -42,13 +46,18 @@ def main() -> int:
         destination = args.output_dir / item["file"]
         destination.parent.mkdir(parents=True, exist_ok=True)
         if not destination.is_file():
-            request = urllib.request.Request(item["url"], headers={"User-Agent": "geochem-qwen-uplift/3.0"})
+            request = urllib.request.Request(
+                item["url"], headers={"User-Agent": "geochem-qwen-uplift/3.0"}
+            )
             last_error: Exception | None = None
             for attempt in range(3):
                 try:
-                    with urllib.request.urlopen(request, timeout=120) as response, tempfile.NamedTemporaryFile(
-                        "wb", dir=destination.parent, delete=False
-                    ) as handle:
+                    with (
+                        urllib.request.urlopen(request, timeout=120) as response,
+                        tempfile.NamedTemporaryFile(
+                            "wb", dir=destination.parent, delete=False
+                        ) as handle,
+                    ):
                         temporary = Path(handle.name)
                         while chunk := response.read(1024 * 1024):
                             handle.write(chunk)
@@ -58,9 +67,11 @@ def main() -> int:
                 except (TimeoutError, urllib.error.URLError) as exc:
                     last_error = exc
                     if attempt < 2:
-                        time.sleep(2 ** attempt)
+                        time.sleep(2**attempt)
             if last_error is not None:
-                parser.error(f"download failed after 3 attempts for {item['id']}: {last_error}")
+                parser.error(
+                    f"download failed after 3 attempts for {item['id']}: {last_error}"
+                )
         actual = {"bytes": destination.stat().st_size, "sha256": sha256(destination)}
         if actual != {"bytes": item["bytes"], "sha256": item["sha256"]}:
             parser.error(f"fixture mismatch: {destination}")
@@ -68,7 +79,8 @@ def main() -> int:
         # the scorer can perform exact record-level provenance checks offline.
         manifest["resources"].append({**item, **actual})
     (args.output_dir / "case_manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
     )
     print(json.dumps(manifest, sort_keys=True))
     return 0

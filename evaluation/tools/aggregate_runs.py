@@ -30,7 +30,11 @@ def _load(path: Path) -> Any:
 
 
 def _finite(value: Any, field: str, minimum: float = 0, maximum: float = 100) -> float:
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(float(value)):
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(float(value))
+    ):
         raise AggregateError(f"{field} must be a finite number")
     result = float(value)
     if not minimum <= result <= maximum:
@@ -53,89 +57,150 @@ def _summary(values: list[float]) -> dict[str, Any]:
     }
 
 
-def _validate_record(record: dict[str, Any], alignment: dict[str, Any], dimensions: dict[str, float]) -> dict[str, Any]:
+def _validate_record(
+    record: dict[str, Any], alignment: dict[str, Any], dimensions: dict[str, float]
+) -> dict[str, Any]:
     required = {
-        "run_id", "task_id", "split", "variant", "repeat", "pair_fingerprint",
-        "status", "exit_code", "score", "provider", "skill_version",
-        "frozen_skill_sha256", "benchmark_version", "protocol_mode",
-        "benchmark_scope", "formal_result_eligible", "sandbox_image", "model",
+        "run_id",
+        "task_id",
+        "split",
+        "variant",
+        "repeat",
+        "pair_fingerprint",
+        "status",
+        "exit_code",
+        "score",
+        "provider",
+        "skill_version",
+        "frozen_skill_sha256",
+        "benchmark_version",
+        "protocol_mode",
+        "benchmark_scope",
+        "formal_result_eligible",
+        "sandbox_image",
+        "model",
     }
     missing = sorted(required - set(record))
     if missing:
         raise AggregateError(f"run record missing fields: {missing}")
     if record["variant"] not in {"B0", "S0"} or record["repeat"] not in {1, 2, 3}:
-        raise AggregateError(f"{record['run_id']}: variant/repeat must be B0|S0 and 1..3")
+        raise AggregateError(
+            f"{record['run_id']}: variant/repeat must be B0|S0 and 1..3"
+        )
     if record["split"] not in {"public", "shadow", "final_holdout"}:
         raise AggregateError(f"{record['run_id']}: invalid split")
     if record["benchmark_version"] != alignment["benchmark_version"]:
         raise AggregateError(f"{record['run_id']}: benchmark version drift")
-    if not isinstance(record["pair_fingerprint"], str) or not SHA256.fullmatch(record["pair_fingerprint"]):
-        raise AggregateError(f"{record['run_id']}: pair_fingerprint must be lowercase SHA-256")
+    if not isinstance(record["pair_fingerprint"], str) or not SHA256.fullmatch(
+        record["pair_fingerprint"]
+    ):
+        raise AggregateError(
+            f"{record['run_id']}: pair_fingerprint must be lowercase SHA-256"
+        )
     skill_sha256 = record["frozen_skill_sha256"]
     if not isinstance(skill_sha256, str) or not SHA256.fullmatch(skill_sha256):
-        raise AggregateError(f"{record['run_id']}: frozen_skill_sha256 must be lowercase SHA-256")
+        raise AggregateError(
+            f"{record['run_id']}: frozen_skill_sha256 must be lowercase SHA-256"
+        )
     if record["variant"] == "S0" and record["skill_version"] != skill_sha256:
-        raise AggregateError(f"{record['run_id']}: S0 skill_version does not match the frozen Skill")
+        raise AggregateError(
+            f"{record['run_id']}: S0 skill_version does not match the frozen Skill"
+        )
     if record["variant"] == "B0" and record["skill_version"] is not None:
-        raise AggregateError(f"{record['run_id']}: B0 must not expose a mounted skill_version")
+        raise AggregateError(
+            f"{record['run_id']}: B0 must not expose a mounted skill_version"
+        )
     if record["protocol_mode"] not in {"development", "formal"}:
         raise AggregateError(f"{record['run_id']}: invalid protocol_mode")
     if not isinstance(record["benchmark_scope"], str) or not record["benchmark_scope"]:
         raise AggregateError(f"{record['run_id']}: benchmark_scope must be non-empty")
     if not isinstance(record["formal_result_eligible"], bool):
-        raise AggregateError(f"{record['run_id']}: formal_result_eligible must be boolean")
+        raise AggregateError(
+            f"{record['run_id']}: formal_result_eligible must be boolean"
+        )
     if not isinstance(record["provider"], dict):
         raise AggregateError(f"{record['run_id']}: provider must be an audit object")
     exit_meanings = {int(key): value for key, value in alignment["exit_codes"].items()}
     if record["exit_code"] not in exit_meanings:
         raise AggregateError(f"{record['run_id']}: exit code is outside E1")
     expected_status = {
-        0: "success", 2: "partial_success", 71: "timed_out", 72: "resource_exceeded", 76: "cancelled"
+        0: "success",
+        2: "partial_success",
+        71: "timed_out",
+        72: "resource_exceeded",
+        76: "cancelled",
     }.get(record["exit_code"], "failed")
     if record["status"] != expected_status:
         raise AggregateError(f"{record['run_id']}: status and E1 exit_code disagree")
     score = record["score"]
-    if not isinstance(score, dict) or score.get("contract_sha256") != alignment["e1_contract_sha256"]:
-        raise AggregateError(f"{record['run_id']}: score is not bound to the frozen E1 contract")
-    if score.get("run_id") != record["run_id"] or score.get("candidate_status") != record["status"]:
+    if (
+        not isinstance(score, dict)
+        or score.get("contract_sha256") != alignment["e1_contract_sha256"]
+    ):
+        raise AggregateError(
+            f"{record['run_id']}: score is not bound to the frozen E1 contract"
+        )
+    if (
+        score.get("run_id") != record["run_id"]
+        or score.get("candidate_status") != record["status"]
+    ):
         raise AggregateError(f"{record['run_id']}: score identity/status mismatch")
     score_status = score.get("score_status")
     total = score.get("total_score")
     if score_status in {"complete", "partial"}:
         total_value = _finite(total, f"{record['run_id']}.total_score")
         if not score.get("hard_gate_passed"):
-            raise AggregateError(f"{record['run_id']}: scored run failed the E1 hard gate")
+            raise AggregateError(
+                f"{record['run_id']}: scored run failed the E1 hard gate"
+            )
     elif score_status in {"not_scored", "ineligible"}:
         if total is not None:
-            raise AggregateError(f"{record['run_id']}: unscored run exposes total_score")
+            raise AggregateError(
+                f"{record['run_id']}: unscored run exposes total_score"
+            )
         total_value = None
     else:
         raise AggregateError(f"{record['run_id']}: invalid score_status")
     dimension_scores: dict[str, float] = {}
     if score_status in {"complete", "partial"}:
         supplied = score.get("dimensions")
-        if not isinstance(supplied, list) or {item.get("dimension_id") for item in supplied if isinstance(item, dict)} != set(dimensions):
-            raise AggregateError(f"{record['run_id']}: score must contain the exact six E1 dimensions")
+        if not isinstance(supplied, list) or {
+            item.get("dimension_id") for item in supplied if isinstance(item, dict)
+        } != set(dimensions):
+            raise AggregateError(
+                f"{record['run_id']}: score must contain the exact six E1 dimensions"
+            )
         for item in supplied:
             if item.get("weight") != dimensions[item["dimension_id"]]:
                 raise AggregateError(f"{record['run_id']}: E1 dimension weight drift")
-            value = _finite(item.get("score"), f"{record['run_id']}.{item['dimension_id']}")
+            value = _finite(
+                item.get("score"), f"{record['run_id']}.{item['dimension_id']}"
+            )
             metrics = item.get("metrics")
             dimension_fully_scored = (
                 isinstance(metrics, list)
                 and bool(metrics)
-                and all(isinstance(metric, dict) and metric.get("status") == "scored" for metric in metrics)
+                and all(
+                    isinstance(metric, dict) and metric.get("status") == "scored"
+                    for metric in metrics
+                )
             )
             if score_status == "complete" and not dimension_fully_scored:
-                raise AggregateError(f"{record['run_id']}: complete score has an unscored E1 dimension")
+                raise AggregateError(
+                    f"{record['run_id']}: complete score has an unscored E1 dimension"
+                )
             if dimension_fully_scored:
                 dimension_scores[item["dimension_id"]] = value
     return {**record, "total": total_value, "dimension_scores": dimension_scores}
 
 
-def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def aggregate(
+    records: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     alignment = _load(ALIGNMENT_PATH)
-    dimensions = {item["dimension_id"]: item["weight"] for item in alignment["dimensions"]}
+    dimensions = {
+        item["dimension_id"]: item["weight"] for item in alignment["dimensions"]
+    }
     if not records:
         raise AggregateError("raw run file is empty")
     normalized = [_validate_record(record, alignment, dimensions) for record in records]
@@ -152,14 +217,26 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
     task_results = []
     for (task_id, split), members in sorted(grouped.items()):
         slots = {(item["variant"], item["repeat"]) for item in members}
-        expected_slots = {(variant, repeat) for variant in ("B0", "S0") for repeat in (1, 2, 3)}
+        expected_slots = {
+            (variant, repeat) for variant in ("B0", "S0") for repeat in (1, 2, 3)
+        }
         if slots != expected_slots or len(members) != 6:
-            raise AggregateError(f"{task_id}: campaign must contain exactly B0/S0 x repeats 1..3")
+            raise AggregateError(
+                f"{task_id}: campaign must contain exactly B0/S0 x repeats 1..3"
+            )
         for repeat in (1, 2, 3):
             pair = [item for item in members if item["repeat"] == repeat]
             if len({item["pair_fingerprint"] for item in pair}) != 1:
-                raise AggregateError(f"{task_id} repeat {repeat}: B0/S0 pair_fingerprint mismatch")
-        by_variant = {variant: sorted((item for item in members if item["variant"] == variant), key=lambda item: item["repeat"]) for variant in ("B0", "S0")}
+                raise AggregateError(
+                    f"{task_id} repeat {repeat}: B0/S0 pair_fingerprint mismatch"
+                )
+        by_variant = {
+            variant: sorted(
+                (item for item in members if item["variant"] == variant),
+                key=lambda item: item["repeat"],
+            )
+            for variant in ("B0", "S0")
+        }
         variant_summaries = {}
         for variant, items in by_variant.items():
             values = [item["total"] for item in items if item["total"] is not None]
@@ -172,7 +249,10 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
                     "task_id": task_id,
                     "split": split,
                     "variant": variant,
-                    "runs": "|".join("NA" if item["total"] is None else f"{item['total']:g}" for item in items),
+                    "runs": "|".join(
+                        "NA" if item["total"] is None else f"{item['total']:g}"
+                        for item in items
+                    ),
                     "median": summary["median"],
                     "range": summary["range"],
                     "mad": summary["mad"],
@@ -181,12 +261,27 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
                     "uplift": "",
                 }
             )
-        b0 = variant_summaries["B0"]["median"] if variant_summaries["B0"]["scored_runs"] == 3 else None
-        s0 = variant_summaries["S0"]["median"] if variant_summaries["S0"]["scored_runs"] == 3 else None
+        b0 = (
+            variant_summaries["B0"]["median"]
+            if variant_summaries["B0"]["scored_runs"] == 3
+            else None
+        )
+        s0 = (
+            variant_summaries["S0"]["median"]
+            if variant_summaries["S0"]["scored_runs"] == 3
+            else None
+        )
         uplift = None if b0 is None or s0 is None else s0 - b0
         rows[-2]["uplift"] = "" if uplift is None else uplift
         rows[-1]["uplift"] = "" if uplift is None else uplift
-        task_results.append({"task_id": task_id, "split": split, "variants": variant_summaries, "uplift": uplift})
+        task_results.append(
+            {
+                "task_id": task_id,
+                "split": split,
+                "variants": variant_summaries,
+                "uplift": uplift,
+            }
+        )
 
     split_metrics: dict[str, Any] = {}
     dimension_metrics: dict[str, Any] = {}
@@ -194,14 +289,28 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
         tasks = [item for item in task_results if item["split"] == split]
         if not tasks:
             continue
-        b0 = [item["variants"]["B0"]["median"] for item in tasks if item["variants"]["B0"]["median"] is not None]
-        s0 = [item["variants"]["S0"]["median"] for item in tasks if item["variants"]["S0"]["median"] is not None]
+        b0 = [
+            item["variants"]["B0"]["median"]
+            for item in tasks
+            if item["variants"]["B0"]["median"] is not None
+        ]
+        s0 = [
+            item["variants"]["S0"]["median"]
+            for item in tasks
+            if item["variants"]["S0"]["median"] is not None
+        ]
         uplifts = [item["uplift"] for item in tasks if item["uplift"] is not None]
         split_metrics[split] = {
             "task_count": len(tasks),
-            "b0_mean_of_task_medians": statistics.mean(b0) if len(b0) == len(tasks) else None,
-            "s0_mean_of_task_medians": statistics.mean(s0) if len(s0) == len(tasks) else None,
-            "mean_uplift": statistics.mean(uplifts) if len(uplifts) == len(tasks) else None,
+            "b0_mean_of_task_medians": statistics.mean(b0)
+            if len(b0) == len(tasks)
+            else None,
+            "s0_mean_of_task_medians": statistics.mean(s0)
+            if len(s0) == len(tasks)
+            else None,
+            "mean_uplift": statistics.mean(uplifts)
+            if len(uplifts) == len(tasks)
+            else None,
         }
         split_dimensions: dict[str, Any] = {}
         for dimension_id, weight in dimensions.items():
@@ -214,12 +323,14 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
                 b0_values = [
                     item["dimension_scores"][dimension_id]
                     for item in members
-                    if item["variant"] == "B0" and dimension_id in item["dimension_scores"]
+                    if item["variant"] == "B0"
+                    and dimension_id in item["dimension_scores"]
                 ]
                 s0_values = [
                     item["dimension_scores"][dimension_id]
                     for item in members
-                    if item["variant"] == "S0" and dimension_id in item["dimension_scores"]
+                    if item["variant"] == "S0"
+                    and dimension_id in item["dimension_scores"]
                 ]
                 if len(b0_values) == 3 and len(s0_values) == 3:
                     b0_median = statistics.median(b0_values)
@@ -230,12 +341,20 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
             split_dimensions[dimension_id] = {
                 "weight": weight,
                 "complete_task_pairs": len(dimension_uplifts),
-                "b0_mean_of_task_medians": statistics.mean(b0_medians) if len(b0_medians) == len(tasks) else None,
-                "s0_mean_of_task_medians": statistics.mean(s0_medians) if len(s0_medians) == len(tasks) else None,
-                "mean_uplift": statistics.mean(dimension_uplifts) if len(dimension_uplifts) == len(tasks) else None,
+                "b0_mean_of_task_medians": statistics.mean(b0_medians)
+                if len(b0_medians) == len(tasks)
+                else None,
+                "s0_mean_of_task_medians": statistics.mean(s0_medians)
+                if len(s0_medians) == len(tasks)
+                else None,
+                "mean_uplift": statistics.mean(dimension_uplifts)
+                if len(dimension_uplifts) == len(tasks)
+                else None,
             }
         dimension_metrics[split] = split_dimensions
-    complete_scores = sum(record["score"].get("score_status") == "complete" for record in normalized)
+    complete_scores = sum(
+        record["score"].get("score_status") == "complete" for record in normalized
+    )
     task_ids = {record["task_id"] for record in normalized}
     expected_splits = {
         f"Q{number:02d}": (
@@ -245,16 +364,23 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
     }
     readiness_checks = {
         "all_scores_complete": complete_scores == len(normalized),
-        "all_runs_successful": all(record["status"] == "success" for record in normalized),
+        "all_runs_successful": all(
+            record["status"] == "success" for record in normalized
+        ),
         "full_24_task_campaign": task_ids == OFFICIAL_TASKS and len(normalized) == 144,
         "official_split_assignment": all(
-            expected_splits.get(record["task_id"]) == record["split"] for record in normalized
+            expected_splits.get(record["task_id"]) == record["split"]
+            for record in normalized
         ),
-        "formal_protocol": all(record["protocol_mode"] == "formal" for record in normalized),
+        "formal_protocol": all(
+            record["protocol_mode"] == "formal" for record in normalized
+        ),
         "official_frozen_benchmark": all(
             record["benchmark_scope"] == "official_frozen" for record in normalized
         ),
-        "formal_result_eligibility": all(record["formal_result_eligible"] for record in normalized),
+        "formal_result_eligibility": all(
+            record["formal_result_eligible"] for record in normalized
+        ),
         "official_provider_identity": all(
             record["provider"].get("official_claim") is True
             and record["provider"].get("verification_status") == "official_frozen"
@@ -262,8 +388,13 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
         ),
         "single_skill_identity": len(skill_hashes) == 1,
         "single_model_identity": len({record["model"] for record in normalized}) == 1,
-        "single_sandbox_identity": len({record["sandbox_image"] for record in normalized}) == 1,
-        "no_redline_events": all(not record.get("redline_events") for record in normalized),
+        "single_sandbox_identity": len(
+            {record["sandbox_image"] for record in normalized}
+        )
+        == 1,
+        "no_redline_events": all(
+            not record.get("redline_events") for record in normalized
+        ),
     }
     return rows, {
         "schema_version": "e2.e1-campaign-aggregate.v1",
@@ -290,19 +421,48 @@ def main() -> int:
     parser.add_argument("--json-output", type=Path, required=True)
     args = parser.parse_args()
     try:
-        records = [json.loads(line) for line in args.raw_jsonl.read_text(encoding="utf-8").splitlines() if line.strip()]
+        records = [
+            json.loads(line)
+            for line in args.raw_jsonl.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
         rows, summary = aggregate(records)
         args.csv_output.parent.mkdir(parents=True, exist_ok=True)
         with args.csv_output.open("w", encoding="utf-8", newline="") as handle:
-            writer = csv.DictWriter(handle, fieldnames=["task_id", "split", "variant", "runs", "median", "range", "mad", "low_confidence", "scored_runs", "uplift"])
+            writer = csv.DictWriter(
+                handle,
+                fieldnames=[
+                    "task_id",
+                    "split",
+                    "variant",
+                    "runs",
+                    "median",
+                    "range",
+                    "mad",
+                    "low_confidence",
+                    "scored_runs",
+                    "uplift",
+                ],
+            )
             writer.writeheader()
             writer.writerows(rows)
         args.json_output.parent.mkdir(parents=True, exist_ok=True)
-        args.json_output.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        args.json_output.write_text(
+            json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
     except (AggregateError, OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
         print(f"artifact error: {exc}", file=sys.stderr)
         return 74
-    print(json.dumps({"records": summary["records"], "tasks": len(summary["tasks"]), "status": "PASS"}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {
+                "records": summary["records"],
+                "tasks": len(summary["tasks"]),
+                "status": "PASS",
+            },
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 

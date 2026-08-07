@@ -7,7 +7,7 @@ import argparse
 import json
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import build_interactive_map as map_builder
 import render_visualization as renderer
@@ -30,12 +30,19 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         elif path.stat().st_size > MAX_OUTPUT_BYTES:
             errors.append(f"D3 output exceeds the 100 MB runtime safety limit: {name}")
     if errors:
-        return {"status": "invalid", "errors": errors, "warnings": warnings, "metrics": {}}
+        return {
+            "status": "invalid",
+            "errors": errors,
+            "warnings": warnings,
+            "metrics": {},
+        }
 
     database_metrics = workflow_validator.validate_database(
         paths["geochemistry.csv"], errors, warnings
     )
-    canonical_ids = set(workflow_validator.database_evidence_index(paths["geochemistry.csv"]))
+    canonical_ids = set(
+        workflow_validator.database_evidence_index(paths["geochemistry.csv"])
+    )
     iteration_count = workflow_validator.validate_iteration_backlog(
         paths["iteration_backlog.csv"], canonical_ids, errors
     )
@@ -85,7 +92,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             if feature.get("properties", {}).get("record_id") is not None
         )
     if sample_count > database_metrics["record_count"]:
-        errors.append("samples.geojson contains more features than geochemistry.csv records")
+        errors.append(
+            "samples.geojson contains more features than geochemistry.csv records"
+        )
     workflow_validator.validate_html(paths["interactive_map.html"], errors)
 
     profile = parsed.get("visualization_profile.json")
@@ -95,7 +104,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                 paths["visualization_profile.json"]
             )
         except map_builder.MapBuildError as exc:
-            errors.append(f"visualization_profile.json violates the D3 profile contract: {exc}")
+            errors.append(
+                f"visualization_profile.json violates the D3 profile contract: {exc}"
+            )
         else:
             if validated_profile != profile:
                 errors.append("visualization_profile.json is not in canonical D3 form")
@@ -107,11 +118,15 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         errors.append("visualization_report.json must contain an object")
     else:
         if report.get("interface_version") != renderer.INTERFACE_VERSION:
-            errors.append("visualization_report.json has an unsupported interface_version")
+            errors.append(
+                "visualization_report.json has an unsupported interface_version"
+            )
         if report.get("status") != "success":
             errors.append("visualization_report.json does not report success")
         if report.get("profile") != profile:
-            errors.append("visualization_report.json profile differs from visualization_profile.json")
+            errors.append(
+                "visualization_report.json profile differs from visualization_profile.json"
+            )
         if not isinstance(report.get("profile_warnings"), list):
             errors.append("visualization_report.json profile_warnings must be an array")
         expected_outputs = {
@@ -124,50 +139,73 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             expected_outputs["element_comparison"] = "element_comparison.json"
             comparison_path = output_dir / "element_comparison.json"
             if not comparison_path.is_file() or comparison_path.stat().st_size == 0:
-                errors.append("comparison visualization is missing element_comparison.json")
+                errors.append(
+                    "comparison visualization is missing element_comparison.json"
+                )
             else:
                 try:
                     comparison = workflow_validator.strict_json(comparison_path)
                 except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
                     errors.append(f"element_comparison.json is invalid JSON: {exc}")
                 else:
-                    if comparison.get("comparison_version") != "d3-element-comparison-v1":
-                        errors.append("element_comparison.json has an unsupported version")
+                    if (
+                        comparison.get("comparison_version")
+                        != "d3-element-comparison-v1"
+                    ):
+                        errors.append(
+                            "element_comparison.json has an unsupported version"
+                        )
                     expected_elements = {
                         "x": profile.get("comparison", {}).get("x"),
                         "y": profile.get("comparison", {}).get("y"),
                     }
                     if comparison.get("elements") != expected_elements:
-                        errors.append("element_comparison.json elements differ from the profile")
+                        errors.append(
+                            "element_comparison.json elements differ from the profile"
+                        )
                     pairs = comparison.get("paired_records")
                     coverage = comparison.get("coverage")
                     statistics = comparison.get("statistics")
                     if not isinstance(pairs, list) or not isinstance(coverage, dict):
-                        errors.append("element_comparison.json lacks pair and coverage arrays")
+                        errors.append(
+                            "element_comparison.json lacks pair and coverage arrays"
+                        )
                     elif coverage.get("paired_sample_layer_count") != len(pairs):
-                        errors.append("element_comparison.json pair count is inconsistent")
+                        errors.append(
+                            "element_comparison.json pair count is inconsistent"
+                        )
                     elif comparison.get("status") != (
                         "success" if len(pairs) >= 8 else "insufficient_pairs"
                     ):
-                        errors.append("element_comparison.json status violates the eight-pair gate")
+                        errors.append(
+                            "element_comparison.json status violates the eight-pair gate"
+                        )
                     if (
                         isinstance(pairs, list)
                         and len(pairs) < 8
                         and isinstance(statistics, dict)
                         and statistics.get("spearman_rho") is not None
                     ):
-                        errors.append("element_comparison.json reports Spearman below eight pairs")
+                        errors.append(
+                            "element_comparison.json reports Spearman below eight pairs"
+                        )
                     if comparison.get("input_sha256") != workflow_validator.sha256_file(
                         paths["geochemistry.csv"]
                     ):
-                        errors.append("element_comparison.json input hash differs from geochemistry.csv")
+                        errors.append(
+                            "element_comparison.json input hash differs from geochemistry.csv"
+                        )
                     if report.get("element_comparison") != comparison:
-                        errors.append("visualization_report.json comparison differs from its artifact")
+                        errors.append(
+                            "visualization_report.json comparison differs from its artifact"
+                        )
         if isinstance(profile, dict) and profile.get("filters", {}).get("element"):
             expected_outputs["concentration_grid"] = "concentration_grid.geojson"
             grid_path = output_dir / "concentration_grid.geojson"
             if not grid_path.is_file() or grid_path.stat().st_size == 0:
-                errors.append("element-filtered visualization is missing concentration_grid.geojson")
+                errors.append(
+                    "element-filtered visualization is missing concentration_grid.geojson"
+                )
             else:
                 try:
                     grid = workflow_validator.strict_json(grid_path)
@@ -176,28 +214,45 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                 else:
                     if (
                         grid.get("type") != "FeatureCollection"
-                        or grid.get("grid_version") != "d3-observed-concentration-grid-v1"
-                        or grid.get("element") != profile.get("filters", {}).get("element")
+                        or grid.get("grid_version")
+                        != "d3-observed-concentration-grid-v1"
+                        or grid.get("element")
+                        != profile.get("filters", {}).get("element")
                         or grid.get("interpolation") is not False
                         or grid.get("feature_count") != len(grid.get("features", []))
                     ):
-                        errors.append("concentration_grid.geojson violates its observed-cell contract")
+                        errors.append(
+                            "concentration_grid.geojson violates its observed-cell contract"
+                        )
                     if grid.get("input_sha256") != workflow_validator.sha256_file(
                         paths["geochemistry.csv"]
                     ):
-                        errors.append("concentration_grid.geojson input hash differs from geochemistry.csv")
+                        errors.append(
+                            "concentration_grid.geojson input hash differs from geochemistry.csv"
+                        )
                     for feature in grid.get("features", []):
-                        properties = feature.get("properties", {}) if isinstance(feature, dict) else {}
+                        properties = (
+                            feature.get("properties", {})
+                            if isinstance(feature, dict)
+                            else {}
+                        )
                         count_fields = (
                             properties.get("quantified_count"),
                             properties.get("censored_count"),
                             properties.get("unquantified_count"),
                         )
-                        if (
-                            not all(isinstance(value, int) and value >= 0 for value in count_fields)
-                            or sum(count_fields) != properties.get("record_count")
-                        ):
-                            errors.append("concentration grid feature counts do not reconcile")
+                        valid_counts = all(
+                            isinstance(value, int)
+                            and not isinstance(value, bool)
+                            and value >= 0
+                            for value in count_fields
+                        )
+                        if not valid_counts or sum(
+                            cast(int, value) for value in count_fields
+                        ) != properties.get("record_count"):
+                            errors.append(
+                                "concentration grid feature counts do not reconcile"
+                            )
                     summary = report.get("concentration_grid_summary", {})
                     if (
                         summary.get("grid_version") != grid.get("grid_version")
@@ -205,47 +260,79 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                         or summary.get("feature_count") != grid.get("feature_count")
                         or summary.get("interpolation") is not False
                     ):
-                        errors.append("visualization_report.json concentration summary differs from its artifact")
+                        errors.append(
+                            "visualization_report.json concentration summary differs from its artifact"
+                        )
         if report.get("outputs") != expected_outputs:
-            errors.append("visualization_report.json outputs do not match the D3 contract")
+            errors.append(
+                "visualization_report.json outputs do not match the D3 contract"
+            )
         for name, expected_hash in report.get("inputs", {}).items():
             if name not in renderer.REQUIRED_INPUTS:
-                errors.append(f"visualization_report.json contains an unknown input hash: {name}")
+                errors.append(
+                    f"visualization_report.json contains an unknown input hash: {name}"
+                )
             elif expected_hash != workflow_validator.sha256_file(paths[name]):
-                errors.append(f"visualization_report.json input hash differs for {name}")
+                errors.append(
+                    f"visualization_report.json input hash differs for {name}"
+                )
         if set(report.get("inputs", {})) != set(renderer.REQUIRED_INPUTS):
-            errors.append("visualization_report.json does not hash every required D1/D2 input")
+            errors.append(
+                "visualization_report.json does not hash every required D1/D2 input"
+            )
         output_hashes = report.get("output_sha256")
         if not isinstance(output_hashes, dict):
             errors.append("visualization_report.json output_sha256 must be an object")
         else:
             for name in expected_outputs.values():
-                if output_hashes.get(name) != workflow_validator.sha256_file(output_dir / name):
-                    errors.append(f"visualization_report.json output hash differs for {name}")
+                if output_hashes.get(name) != workflow_validator.sha256_file(
+                    output_dir / name
+                ):
+                    errors.append(
+                        f"visualization_report.json output hash differs for {name}"
+                    )
         map_report = report.get("map_report")
         if not isinstance(map_report, dict):
             errors.append("visualization_report.json map_report must be an object")
         else:
             if map_report.get("map_version") != "d3-interactive-atlas-v3":
                 errors.append("visualization map_version is unsupported")
-            if map_report.get("ui_hierarchy_version") != "task-first-progressive-disclosure-v2":
+            if (
+                map_report.get("ui_hierarchy_version")
+                != "atlas-progressive-disclosure-v2"
+            ):
                 errors.append("visualization UI hierarchy contract is unsupported")
-            if map_report.get("template_contract_version") != map_builder.TEMPLATE_CONTRACT_VERSION:
+            if (
+                map_report.get("template_contract_version")
+                != map_builder.TEMPLATE_CONTRACT_VERSION
+            ):
                 errors.append("visualization template contract is unsupported")
-            expected_template_hash = workflow_validator.sha256_file(map_builder.DEFAULT_TEMPLATE)
+            expected_template_hash = workflow_validator.sha256_file(
+                map_builder.DEFAULT_TEMPLATE
+            )
             if map_report.get("template_sha256") != expected_template_hash:
-                errors.append("visualization template hash differs from the canonical Skill asset")
+                errors.append(
+                    "visualization template hash differs from the canonical Skill asset"
+                )
             expected_variant = (
                 "regional_focus"
-                if isinstance(profile, dict) and profile.get("spatial_scope") == "regional"
+                if isinstance(profile, dict)
+                and profile.get("spatial_scope") == "regional"
                 else "global_globe"
             )
             if map_report.get("template_variant") != expected_variant:
-                errors.append("visualization template variant does not match the spatial scope")
-            if map_report.get("database_visual_summary_schema") != "d3-database-visual-summary-v1":
+                errors.append(
+                    "visualization template variant does not match the spatial scope"
+                )
+            if (
+                map_report.get("database_visual_summary_schema")
+                != "d3-database-visual-summary-v1"
+            ):
                 errors.append("visualization database summary contract is unsupported")
             if map_report.get("terminology_contract") != "competition-geochemistry-v1":
-                errors.append("visualization professional terminology contract is unsupported")
+                errors.append(
+                    "visualization professional terminology contract is unsupported"
+                )
             interaction_design = map_report.get("capability_matrix", {}).get(
                 "interaction_design", {}
             )
@@ -263,9 +350,16 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                         "visualization interaction contract is missing required capability: "
                         + capability
                     )
-            if interaction_design.get("template_contract_version") != map_builder.TEMPLATE_CONTRACT_VERSION:
-                errors.append("visualization interaction template contract is unsupported")
-            output_capabilities = map_report.get("capability_matrix", {}).get("outputs", {})
+            if (
+                interaction_design.get("template_contract_version")
+                != map_builder.TEMPLATE_CONTRACT_VERSION
+            ):
+                errors.append(
+                    "visualization interaction template contract is unsupported"
+                )
+            output_capabilities = map_report.get("capability_matrix", {}).get(
+                "outputs", {}
+            )
             for capability in (
                 "concentration_classified_points",
                 "database_distribution_charts",
@@ -276,37 +370,80 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                         "visualization output contract is missing required capability: "
                         + capability
                     )
-            if expected_variant == "global_globe" and output_capabilities.get(
-                "global_interactive_globe"
-            ) is not True:
-                errors.append("global visualization does not declare the interactive globe")
+            if (
+                expected_variant == "global_globe"
+                and output_capabilities.get("global_interactive_globe") is not True
+            ):
+                errors.append(
+                    "global visualization does not declare the interactive globe"
+                )
             question_contract = map_report.get("visual_question_contract")
-            expected_views = {"map", "database", "combination", "sources", "anomalies", "quality"}
-            if not isinstance(question_contract, dict) or question_contract.get("schema_version") != "d3-visual-question-contract-v1":
-                errors.append("visualization visual-question contract is missing or unsupported")
+            expected_views = {
+                "map",
+                "database",
+                "combination",
+                "sources",
+                "anomalies",
+                "quality",
+            }
+            if (
+                not isinstance(question_contract, dict)
+                or question_contract.get("schema_version")
+                != "d3-visual-question-contract-v1"
+            ):
+                errors.append(
+                    "visualization visual-question contract is missing or unsupported"
+                )
             elif set(question_contract.get("views", {})) != expected_views:
-                errors.append("visualization visual-question contract does not cover every primary view")
+                errors.append(
+                    "visualization visual-question contract does not cover every primary view"
+                )
             else:
                 for view_name, view_contract in question_contract["views"].items():
                     if not isinstance(view_contract, dict) or set(view_contract) != {
-                        "question", "comparison_baseline", "encoding", "boundary"
+                        "question",
+                        "comparison_baseline",
+                        "encoding",
+                        "boundary",
                     }:
-                        errors.append(f"visualization question contract is malformed for {view_name}")
-                    elif not view_contract["question"] or not view_contract["comparison_baseline"] or not view_contract["encoding"] or not view_contract["boundary"]:
-                        errors.append(f"visualization question contract is incomplete for {view_name}")
-            if map_report.get("external_assets") != 0 or map_report.get("interpolation") is not False:
-                errors.append("visualization report violates the offline/no-interpolation boundary")
+                        errors.append(
+                            f"visualization question contract is malformed for {view_name}"
+                        )
+                    elif (
+                        not view_contract["question"]
+                        or not view_contract["comparison_baseline"]
+                        or not view_contract["encoding"]
+                        or not view_contract["boundary"]
+                    ):
+                        errors.append(
+                            f"visualization question contract is incomplete for {view_name}"
+                        )
+            if (
+                map_report.get("external_assets") != 0
+                or map_report.get("interpolation") is not False
+            ):
+                errors.append(
+                    "visualization report violates the offline/no-interpolation boundary"
+                )
             if map_report.get("mapped_record_count") != sample_count:
-                errors.append("visualization mapped_record_count differs from samples.geojson")
+                errors.append(
+                    "visualization mapped_record_count differs from samples.geojson"
+                )
             if map_report.get("candidate_record_count") != scoped_anomaly_count:
                 errors.append(
                     "visualization candidate_record_count differs from the anomalies linked "
                     "to scoped samples.geojson records"
                 )
             if map_report.get("visualization_profile") != profile:
-                errors.append("map_report profile differs from visualization_profile.json")
-            if map_report.get("visualization_profile_warnings") != report.get("profile_warnings"):
-                errors.append("map_report warnings differ from visualization_report.json")
+                errors.append(
+                    "map_report profile differs from visualization_profile.json"
+                )
+            if map_report.get("visualization_profile_warnings") != report.get(
+                "profile_warnings"
+            ):
+                errors.append(
+                    "map_report warnings differ from visualization_report.json"
+                )
 
     evidence_path = output_dir / "record_evidence.jsonl"
     evidence_count = 0
@@ -317,7 +454,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors,
         )
     else:
-        warnings.append("record_evidence.jsonl was not present in the D1/D2 input and was not carried into D3")
+        warnings.append(
+            "record_evidence.jsonl was not present in the D1/D2 input and was not carried into D3"
+        )
 
     return {
         "status": "valid" if not errors else "invalid",
@@ -336,7 +475,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", required=True, type=Path, help="Standalone D3 bundle")
+    parser.add_argument(
+        "--output-dir", required=True, type=Path, help="Standalone D3 bundle"
+    )
     return parser
 
 
@@ -345,7 +486,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         report = validate_dir(args.output_dir)
     except OSError as exc:
-        report = {"status": "invalid", "errors": [str(exc)], "warnings": [], "metrics": {}}
+        report = {
+            "status": "invalid",
+            "errors": [str(exc)],
+            "warnings": [],
+            "metrics": {},
+        }
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if report["status"] == "valid" else 1
 

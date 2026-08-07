@@ -34,7 +34,9 @@ def sha256_file(path: Path) -> str:
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -76,9 +78,19 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
     count = 0
 
     key_fields = (
-        "GEMS Station Number", "Sample Date", "Sample Time", "Depth", "Parameter Code",
-        "Analysis Method Code", "Value Flags", "Value", "Unit", "Data Quality",
-        "Integrated Value", "Remark", "License Information",
+        "GEMS Station Number",
+        "Sample Date",
+        "Sample Time",
+        "Depth",
+        "Parameter Code",
+        "Analysis Method Code",
+        "Value Flags",
+        "Value",
+        "Unit",
+        "Data Quality",
+        "Integrated Value",
+        "Remark",
+        "License Information",
     )
     for record in adapter.parse(downloaded):
         count += 1
@@ -103,7 +115,10 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         methods.add((parameter, method_code, unit))
         observation_keys[tuple(str(fields.get(name) or "") for name in key_fields)] += 1
         coordinates.append(
-            (finite_float(station["Longitude"], "longitude"), finite_float(station["Latitude"], "latitude"))
+            (
+                finite_float(station["Longitude"], "longitude"),
+                finite_float(station["Latitude"], "latitude"),
+            )
         )
         depths.append(finite_float(fields["Depth"], "depth"))
         dates.append(str(fields["Sample Date"]))
@@ -114,8 +129,12 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         if quality == "Pending review" and unit == "mg/l" and value >= 1000:
             pending_extreme_mg_l += 1
 
-    duplicate_extra = sum(multiplicity - 1 for multiplicity in observation_keys.values())
-    duplicate_groups = sum(multiplicity > 1 for multiplicity in observation_keys.values())
+    duplicate_extra = sum(
+        multiplicity - 1 for multiplicity in observation_keys.values()
+    )
+    duplicate_groups = sum(
+        multiplicity > 1 for multiplicity in observation_keys.values()
+    )
     maximum_multiplicity = max(observation_keys.values())
     observed = {
         "arsenic_observations": count,
@@ -136,7 +155,11 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "pending_review_negative_sentinels": pending_negative_sentinels,
         "pending_review_extreme_mg_l": pending_extreme_mg_l,
     }
-    checks = {f"{key}_match": observed[key] == value for key, value in expected.items() if key in observed}
+    checks = {
+        f"{key}_match": observed[key] == value
+        for key, value in expected.items()
+        if key in observed
+    }
     if not all(checks.values()):
         raise AuditError(f"GEMStat arsenic reconciliation failed: {checks}")
 
@@ -147,15 +170,18 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
             "bytes": item.bytes,
             "sha256": item.sha256,
             "range_start": next(
-                entry["range_start"] for entry in registry["download"]["selected_members"]
+                entry["range_start"]
+                for entry in registry["download"]["selected_members"]
                 if entry["file_id"] == item.file_id
             ),
             "range_end": next(
-                entry["range_end"] for entry in registry["download"]["selected_members"]
+                entry["range_end"]
+                for entry in registry["download"]["selected_members"]
                 if entry["file_id"] == item.file_id
             ),
             "range_sha256": next(
-                entry["range_sha256"] for entry in registry["download"]["selected_members"]
+                entry["range_sha256"]
+                for entry in registry["download"]["selected_members"]
                 if entry["file_id"] == item.file_id
             ),
         }
@@ -166,8 +192,10 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "country_count": len(countries),
         "water_types": dict(sorted(water_types.items())),
         "bbox": [
-            min(item[0] for item in coordinates), min(item[1] for item in coordinates),
-            max(item[0] for item in coordinates), max(item[1] for item in coordinates),
+            min(item[0] for item in coordinates),
+            min(item[1] for item in coordinates),
+            max(item[0] for item in coordinates),
+            max(item[1] for item in coordinates),
         ],
         "sample_depth_range_m": [min(depths), max(depths)],
         "sample_date_range": [min(dates), max(dates)],
@@ -241,7 +269,9 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "observed_metadata": {
             "station_rows": expected["station_metadata_rows"],
             "station_unique_ids": expected["station_metadata_unique_ids"],
-            "station_exact_duplicates": expected["station_metadata_exact_duplicate_rows"],
+            "station_exact_duplicates": expected[
+                "station_metadata_exact_duplicate_rows"
+            ],
             "parameter_rows": expected["parameter_metadata_rows"],
             "method_rows": expected["method_metadata_rows"],
         },
@@ -268,7 +298,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         atomic_json(args.snapshot_output, snapshot)
         atomic_json(args.reconciliation_output, reconciliation)
         atomic_json(args.candidate_audit_output, candidate_audit)
-        print(json.dumps({"status": "PASS", "snapshot_id": snapshot["snapshot_id"]}, sort_keys=True))
+        print(
+            json.dumps(
+                {"status": "PASS", "snapshot_id": snapshot["snapshot_id"]},
+                sort_keys=True,
+            )
+        )
         return 0
     except (AuditError, OSError, ValueError, source_adapters.SourceAdapterError) as exc:
         print(f"audit_gemstat_arsenic_snapshot: {exc}", file=sys.stderr)

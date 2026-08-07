@@ -30,7 +30,9 @@ class AuditError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -55,7 +57,9 @@ def target_observations(record: source_adapters.RawRecord) -> list[dict[str, Any
         raw_value = str(values.get("value") or "")
         unit = str(values.get("unit") or "")
         if not raw_value or not unit or not finite(raw_value):
-            raise AuditError(f"{record.source_id} target value is incomplete at {record.source_locator}")
+            raise AuditError(
+                f"{record.source_id} target value is incomplete at {record.source_locator}"
+            )
         observations.append(
             {
                 "analyte": str(analyte),
@@ -76,7 +80,9 @@ def target_observations(record: source_adapters.RawRecord) -> list[dict[str, Any
     return observations
 
 
-def sample_metadata(source_id: str, record: source_adapters.RawRecord) -> dict[str, Any]:
+def sample_metadata(
+    source_id: str, record: source_adapters.RawRecord
+) -> dict[str, Any]:
     fields = record.fields
     if source_id == "australia-ngsa-mercury":
         return {
@@ -109,14 +115,21 @@ def sample_metadata(source_id: str, record: source_adapters.RawRecord) -> dict[s
     }
 
 
-def coverage(source_id: str, records: Sequence[source_adapters.RawRecord]) -> dict[str, Any]:
+def coverage(
+    source_id: str, records: Sequence[source_adapters.RawRecord]
+) -> dict[str, Any]:
     points = []
     regions: Counter[str] = Counter()
     for record in records:
         meta = sample_metadata(source_id, record)
         if finite(meta.get("latitude")) and finite(meta.get("longitude")):
             points.append((float(meta["longitude"]), float(meta["latitude"])))
-        region = str(meta.get("state") or meta.get("region") or meta.get("location") or "not_reported")
+        region = str(
+            meta.get("state")
+            or meta.get("region")
+            or meta.get("location")
+            or "not_reported"
+        )
         regions[region] += 1
     return {
         "bbox": [
@@ -130,29 +143,47 @@ def coverage(source_id: str, records: Sequence[source_adapters.RawRecord]) -> di
     }
 
 
-def review_records(source_id: str, records: Sequence[source_adapters.RawRecord]) -> list[dict[str, Any]]:
+def review_records(
+    source_id: str, records: Sequence[source_adapters.RawRecord]
+) -> list[dict[str, Any]]:
     selected: list[tuple[source_adapters.RawRecord, str | None, list[str]]] = []
     if source_id == "japan-gsj-marine-sediment":
         negative = [
-            record for record in records
+            record
+            for record in records
             if finite(record.fields.get("Hg")) and float(record.fields["Hg"]) < 0
         ]
-        missing = [record for record in records if not str(record.fields.get("Hg") or "").strip()]
-        selected.extend((record, None, ["negative_hg_source_value"]) for record in negative)
-        selected.extend((record, None, ["missing_hg_source_value"]) for record in missing)
+        missing = [
+            record
+            for record in records
+            if not str(record.fields.get("Hg") or "").strip()
+        ]
+        selected.extend(
+            (record, None, ["negative_hg_source_value"]) for record in negative
+        )
+        selected.extend(
+            (record, None, ["missing_hg_source_value"]) for record in missing
+        )
     elif source_id == "australia-ngsa-mercury":
         for depth in ("TOS", "BOS"):
             for duplicate in ("", "Duplicate 1", "Duplicate 2"):
                 match = next(
                     (
-                        record for record in records
+                        record
+                        for record in records
                         if record.fields["DEPTH"] == depth
                         and record.fields["DUPLICATE_CODE"] == duplicate
                     ),
                     None,
                 )
                 if match is not None:
-                    selected.append((match, None, [f"depth={depth}", f"duplicate={duplicate or 'none'}"]))
+                    selected.append(
+                        (
+                            match,
+                            None,
+                            [f"depth={depth}", f"duplicate={duplicate or 'none'}"],
+                        )
+                    )
     used = {(item.source_record_id, analyte) for item, analyte, _ in selected}
     for index in range(30):
         record = records[round(index * (len(records) - 1) / 29)]
@@ -173,13 +204,17 @@ def review_records(source_id: str, records: Sequence[source_adapters.RawRecord])
                 break
     selected = selected[:30]
     if len(selected) != 30:
-        raise AuditError(f"{source_id} review selection produced {len(selected)} records")
+        raise AuditError(
+            f"{source_id} review selection produced {len(selected)} records"
+        )
     result = []
     for index, (record, analyte_only, reasons) in enumerate(selected, start=1):
         metadata = sample_metadata(source_id, record)
         observations = target_observations(record)
         if analyte_only:
-            observations = [item for item in observations if item["analyte"] == analyte_only]
+            observations = [
+                item for item in observations if item["analyte"] == analyte_only
+            ]
         for observation in observations:
             observation["source_metadata"] = metadata
         result.append(
@@ -195,7 +230,10 @@ def review_records(source_id: str, records: Sequence[source_adapters.RawRecord])
                     "source_identity_preserved": True,
                     "coordinates_preserved": True,
                     "target_values_and_units_preserved": True,
-                    "stable_observation_ids_unique": len({item["record_id"] for item in observations}) == len(observations),
+                    "stable_observation_ids_unique": len(
+                        {item["record_id"] for item in observations}
+                    )
+                    == len(observations),
                     "method_not_inferred_beyond_registered_evidence": True,
                 },
                 "automated_status": "PASS",
@@ -210,7 +248,9 @@ def review_records(source_id: str, records: Sequence[source_adapters.RawRecord])
     return result
 
 
-def audit(source_id: str, cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+def audit(
+    source_id: str, cache_dir: Path
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     adapter = source_adapters.get_adapter(source_id)
     candidate = adapter.discover({"sources": [source_id]})[0]
     files = adapter.download(candidate, cache_dir, mode="cached")
@@ -227,7 +267,9 @@ def audit(source_id: str, cache_dir: Path) -> tuple[dict[str, Any], dict[str, An
         }
         for item in files
     ]
-    snapshot_id = f"{source_id}:{candidate.version}:{registry['download']['observed_at']}:01"
+    snapshot_id = (
+        f"{source_id}:{candidate.version}:{registry['download']['observed_at']}:01"
+    )
     observed_coverage = coverage(source_id, records)
     limitations = list(registry["scientific_notes"])
     claim_boundary = (
@@ -240,7 +282,10 @@ def audit(source_id: str, cache_dir: Path) -> tuple[dict[str, Any], dict[str, An
         "snapshot_id": snapshot_id,
         "observed_at": registry["download"]["observed_at"],
         "request": {"url": files[0].source_url},
-        "response": {"bytes": sum(item.bytes for item in files), "sha256": files[0].sha256},
+        "response": {
+            "bytes": sum(item.bytes for item in files),
+            "sha256": files[0].sha256,
+        },
         "archive": {"members": members},
         "counts": expected,
         "coverage": observed_coverage,
@@ -254,7 +299,9 @@ def audit(source_id: str, cache_dir: Path) -> tuple[dict[str, Any], dict[str, An
             for index, item in enumerate(files)
         ),
         "adapter_parse_nonempty": bool(records),
-        "target_count_matches_registry": sum(len(target_observations(record)) for record in records)
+        "target_count_matches_registry": sum(
+            len(target_observations(record)) for record in records
+        )
         == expected["target_observations"],
         "coordinates_parse": observed_coverage["valid_coordinate_rows"] == len(records),
         "review_sample_prepared": True,
@@ -304,7 +351,9 @@ def audit(source_id: str, cache_dir: Path) -> tuple[dict[str, Any], dict[str, An
         "status": "prepared",
         "required_record_count": 30,
         "prepared_record_count": len(reviews),
-        "automated_pass_count": sum(item["automated_status"] == "PASS" for item in reviews),
+        "automated_pass_count": sum(
+            item["automated_status"] == "PASS" for item in reviews
+        ),
         "completed_record_count": 0,
         "all_records_reviewed": False,
         "selection_strategy": "Thirty stratified source records or explicit analyte mappings spanning source order and documented edge cases.",
@@ -321,23 +370,35 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", required=True, choices=sorted(SUPPORTED))
     parser.add_argument("--cache-dir", required=True, type=Path)
-    parser.add_argument("--skill-dir", type=Path, default=Path(__file__).resolve().parent.parent)
+    parser.add_argument(
+        "--skill-dir", type=Path, default=Path(__file__).resolve().parent.parent
+    )
     parser.add_argument("--audit-stamp", default="20260806T163000Z")
     args = parser.parse_args(argv)
     try:
-        snapshot, reconciliation, candidate_audit, human_review = audit(args.source, args.cache_dir)
+        snapshot, reconciliation, candidate_audit, human_review = audit(
+            args.source, args.cache_dir
+        )
         root = args.skill_dir / "fixtures" / "four-media" / "sediment" / args.source
         atomic_json(root / "snapshot_manifest.json", snapshot)
         atomic_json(root / "adapter_reconciliation.json", reconciliation)
         atomic_json(root / "human_review.json", human_review)
         atomic_json(
-            args.skill_dir / "fixtures" / "candidate-audits" / f"{args.source}-{args.audit_stamp}.json",
+            args.skill_dir
+            / "fixtures"
+            / "candidate-audits"
+            / f"{args.source}-{args.audit_stamp}.json",
             candidate_audit,
         )
     except (AuditError, OSError, ValueError, source_adapters.SourceAdapterError) as exc:
         print(f"audit_v4_sediment_sources: {exc}", file=sys.stderr)
         return 2
-    print(json.dumps({"status": "PASS", "source_id": args.source, "prepared_reviews": 30}, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "PASS", "source_id": args.source, "prepared_reviews": 30},
+            sort_keys=True,
+        )
+    )
     return 0
 
 

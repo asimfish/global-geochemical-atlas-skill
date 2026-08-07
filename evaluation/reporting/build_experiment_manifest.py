@@ -37,7 +37,9 @@ def load(path: Path) -> dict[str, Any]:
 
 
 def canonical_sha256(value: Any) -> str:
-    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    payload = json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
     return hashlib.sha256(payload).hexdigest()
 
 
@@ -46,7 +48,8 @@ def public_projection(bundle: dict[str, Any]) -> list[dict[str, Any]]:
     if not isinstance(files, list):
         raise ManifestError("candidate bundle has no file manifest")
     return [
-        item for item in files
+        item
+        for item in files
         if isinstance(item, dict)
         and item.get("path") != "AGENT_PROMPT.md"
         and not str(item.get("path") or "").startswith(".agents/skills/")
@@ -54,8 +57,14 @@ def public_projection(bundle: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def build(
-    config: dict[str, Any], b0: dict[str, Any], s0: dict[str, Any], *,
-    condition: str, runtime: str, run_id: str, provider_base_url: str,
+    config: dict[str, Any],
+    b0: dict[str, Any],
+    s0: dict[str, Any],
+    *,
+    condition: str,
+    runtime: str,
+    run_id: str,
+    provider_base_url: str,
     expected_commit: str | None = None,
 ) -> dict[str, Any]:
     if condition not in {"B0", "S0"} or runtime not in {"host-uplift", "docker-uplift"}:
@@ -73,9 +82,16 @@ def build(
             raise ManifestError(f"{expected} bundle is not the frozen formal bundle")
     b0_public, s0_public = public_projection(b0), public_projection(s0)
     if b0_public != s0_public:
-        raise ManifestError("B0/S0 public task bytes differ outside prompt and Skill visibility")
+        raise ManifestError(
+            "B0/S0 public task bytes differ outside prompt and Skill visibility"
+        )
     endpoint = urlsplit(provider_base_url)
-    if endpoint.scheme != "https" or not endpoint.hostname or endpoint.username or endpoint.password:
+    if (
+        endpoint.scheme != "https"
+        or not endpoint.hostname
+        or endpoint.username
+        or endpoint.password
+    ):
         raise ManifestError("provider endpoint must be credential-free HTTPS")
     profile_id = str(config.get("provider_profile") or "")
     profile = load_provider_profile(profile_id)
@@ -101,7 +117,9 @@ def build(
         "runtime": runtime,
         "task_request": config.get("task_request"),
         "public_case": config.get("public_case"),
-        "runtime_resources": config.get("docker") if runtime == "docker-uplift" else {"mode": "host"},
+        "runtime_resources": config.get("docker")
+        if runtime == "docker-uplift"
+        else {"mode": "host"},
         "public_bundle_projection_sha256": canonical_sha256(b0_public),
         "provider": provider,
     }
@@ -113,12 +131,16 @@ def build(
         "condition": condition,
         "run_id": run_id,
         "pair_fingerprint": pair_fingerprint,
-        "run_fingerprint": canonical_sha256({
-            "pair_fingerprint": pair_fingerprint,
-            "condition": condition,
-            "run_id": run_id,
-            "candidate_bundle_content_sha256": selected.get("content_manifest_sha256"),
-        }),
+        "run_fingerprint": canonical_sha256(
+            {
+                "pair_fingerprint": pair_fingerprint,
+                "condition": condition,
+                "run_id": run_id,
+                "candidate_bundle_content_sha256": selected.get(
+                    "content_manifest_sha256"
+                ),
+            }
+        ),
         "common_experiment": common,
         "candidate_bundle": {
             "condition": condition,
@@ -139,7 +161,9 @@ def main() -> int:
     parser.add_argument("--b0-bundle-manifest", type=Path, required=True)
     parser.add_argument("--s0-bundle-manifest", type=Path, required=True)
     parser.add_argument("--condition", choices=("B0", "S0"), required=True)
-    parser.add_argument("--runtime", choices=("host-uplift", "docker-uplift"), required=True)
+    parser.add_argument(
+        "--runtime", choices=("host-uplift", "docker-uplift"), required=True
+    )
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--provider-base-url", required=True)
     parser.add_argument(
@@ -150,8 +174,12 @@ def main() -> int:
     args = parser.parse_args()
     try:
         result = build(
-            load(args.config), load(args.b0_bundle_manifest), load(args.s0_bundle_manifest),
-            condition=args.condition, runtime=args.runtime, run_id=args.run_id,
+            load(args.config),
+            load(args.b0_bundle_manifest),
+            load(args.s0_bundle_manifest),
+            condition=args.condition,
+            runtime=args.runtime,
+            run_id=args.run_id,
             provider_base_url=args.provider_base_url,
             expected_commit=args.expected_commit,
         )
@@ -162,7 +190,12 @@ def main() -> int:
         json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(json.dumps({"status": "PASS", "pair_fingerprint": result["pair_fingerprint"]}, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "PASS", "pair_fingerprint": result["pair_fingerprint"]},
+            sort_keys=True,
+        )
+    )
     return 0
 
 

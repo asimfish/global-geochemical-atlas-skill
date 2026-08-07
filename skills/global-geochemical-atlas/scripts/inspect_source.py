@@ -15,17 +15,25 @@ from typing import Any
 from source_adapters import ADAPTERS, SourceAdapterError, get_adapter
 
 
-def inspect_source(source_id: str, cache_dir: Path, mode: str, sample_records: int) -> dict[str, Any]:
+def inspect_source(
+    source_id: str, cache_dir: Path, mode: str, sample_records: int
+) -> dict[str, Any]:
     adapter = get_adapter(source_id)
     candidates = adapter.discover({"sources": [source_id]})
     if len(candidates) != 1:
-        raise SourceAdapterError(f"expected exactly one registered candidate for {source_id}")
+        raise SourceAdapterError(
+            f"expected exactly one registered candidate for {source_id}"
+        )
     candidate = candidates[0]
     downloaded = adapter.download(candidate, cache_dir, mode=mode)  # type: ignore[arg-type]
     records = list(itertools.islice(adapter.parse(downloaded), sample_records))
     field_presence: Counter[str] = Counter()
     for record in records:
-        field_presence.update(key for key, value in record.fields.items() if value not in (None, "", [], {}))
+        field_presence.update(
+            key
+            for key, value in record.fields.items()
+            if value not in (None, "", [], {})
+        )
     return {
         "status": "success",
         "source_id": source_id,
@@ -58,17 +66,24 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--cache-dir", required=True, type=Path)
     parser.add_argument("--mode", choices=("online", "cached"), default="cached")
     parser.add_argument("--sample-records", type=int, default=20)
-    parser.add_argument("--output", type=Path, help="Optional JSON report; stdout is always printed")
+    parser.add_argument(
+        "--output", type=Path, help="Optional JSON report; stdout is always printed"
+    )
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.sample_records < 1 or args.sample_records > 1000:
-        print("inspect_source: --sample-records must be between 1 and 1000", file=sys.stderr)
+        print(
+            "inspect_source: --sample-records must be between 1 and 1000",
+            file=sys.stderr,
+        )
         return 2
     try:
-        report = inspect_source(args.source, args.cache_dir, args.mode, args.sample_records)
+        report = inspect_source(
+            args.source, args.cache_dir, args.mode, args.sample_records
+        )
     except (SourceAdapterError, OSError, ValueError) as exc:
         print(f"inspect_source: {exc}", file=sys.stderr)
         return 2

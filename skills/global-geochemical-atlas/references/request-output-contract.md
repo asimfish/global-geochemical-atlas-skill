@@ -52,7 +52,7 @@
 
 以上是固定十五项核心产物；未提供批次 QC 时仍生成带 `not_supplied` 状态的空批次契约。`anomaly_regions.geojson` 是统计筛查产物；D3 的缩放圆环仍是 `visual_aggregation_only`，二者不得混称。
 
-使用 `run_atlas_request.py` 时还生成 `request_evidence/`，保存冻结的 `request.json`、请求特定 `source_route.json`、`coverage.json/.md` 和符合 [request-execution.schema.json](request-execution.schema.json) 的 `execution.json`。实际用于验证的请求过滤 manifest、父 manifest 与在线逐源 manifest 原字节保存在 `request_evidence/acquisition/`，并由 `execution.json.acquisition_manifests` 的相对路径和 SHA-256 绑定，避免临时目录退出后只剩不可复核的孤立哈希。这些是十五项核心产物之外的请求执行证据；其中实时路由状态与本地 fixture/hash 解析状态分开记录，不能互相覆盖。`--online-source auto` 会按确定性预算逐个获取全部兼容来源、验证各自 manifest，再合并长表和逐记录证据；`execution.json.source_outcomes` 保留每源记录数、manifest hash 与失败。默认允许已验证子集以 `partial_success` 继续；`--require-all-sources` 改为任一来源失败即关闭。
+使用 `run_atlas_request.py` 时还生成 `request_evidence/`，保存冻结的 `request.json`、请求特定 `source_route.json`、`coverage.json/.md` 和符合 `request-execution.schema.json` 的 `execution.json`；该 schema 由 Skill 直接路由。实际用于验证的请求过滤 manifest、父 manifest 与在线逐源 manifest 原字节保存在 `request_evidence/acquisition/`，并由 `execution.json.acquisition_manifests` 的相对路径和 SHA-256 绑定，避免临时目录退出后只剩不可复核的孤立哈希。这些是十五项核心产物之外的请求执行证据；其中实时路由状态与本地 fixture/hash 解析状态分开记录，不能互相覆盖。`--online-source auto` 会按确定性预算逐个获取全部兼容来源、验证各自 manifest，再合并长表和逐记录证据；`execution.json.source_outcomes` 保留每源记录数、manifest hash 与失败。默认允许已验证子集以 `partial_success` 继续；`--require-all-sources` 改为任一来源失败即关闭。
 
 ## 证据链
 

@@ -59,15 +59,20 @@ class SourceTruthAuditTest(unittest.TestCase):
             for key, value in {**source, **source["spot_record"]}.items()
             if key not in {"spot_record", "authority_url", "allowed_resolution_hosts"}
         }
-        (demo / "sources.jsonl").write_text(json.dumps(source_row) + "\n", encoding="utf-8")
+        (demo / "sources.jsonl").write_text(
+            json.dumps(source_row) + "\n", encoding="utf-8"
+        )
         demo_row = dict(source_row)
         demo_row["file_sha256"] = demo_row.pop("source_file_sha256")
-        with (demo / "demo_input.csv").open("w", encoding="utf-8", newline="") as handle:
+        with (demo / "demo_input.csv").open(
+            "w", encoding="utf-8", newline=""
+        ) as handle:
             writer = csv.DictWriter(handle, fieldnames=list(demo_row))
             writer.writeheader()
             writer.writerow(demo_row)
         (demo / "run_manifest.json").write_text(
-            json.dumps({"source_id": "test-source", "source_file_sha256": "a" * 64}), encoding="utf-8"
+            json.dumps({"source_id": "test-source", "source_file_sha256": "a" * 64}),
+            encoding="utf-8",
         )
 
     def tearDown(self) -> None:

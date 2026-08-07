@@ -210,12 +210,20 @@ def _json_list(values: Any) -> str:
     return json.dumps(values, ensure_ascii=False, separators=(",", ":"))
 
 
-def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Mapping[str, Any]) -> dict[str, str]:
+def _sample_semantics(
+    source_id: str, evidence: Mapping[str, Any], contract: Mapping[str, Any]
+) -> dict[str, str]:
     result = {
         key: _text(contract.get(key))
         for key in (
-            "sample_type_raw", "sample_type", "sample_type_mapping_status", "soil_horizon",
-            "sediment_environment", "water_body_type", "water_fraction", "filtered_state",
+            "sample_type_raw",
+            "sample_type",
+            "sample_type_mapping_status",
+            "soil_horizon",
+            "sediment_environment",
+            "water_body_type",
+            "water_fraction",
+            "filtered_state",
         )
     }
     if source_id.startswith("foregs-"):
@@ -271,22 +279,41 @@ def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Map
         )
     elif source_id == "tpdc-china-mountain-soil":
         raw = _text(evidence.get("reported_horizon"))
-        mapped = {"O": "soil_organic_horizon", "A": "soil_a_horizon", "C": "soil_c_horizon"}.get(raw)
+        mapped = {
+            "O": "soil_organic_horizon",
+            "A": "soil_a_horizon",
+            "C": "soil_c_horizon",
+        }.get(raw)
         if mapped is None:
             raise SemanticError(f"unmapped TPDC soil horizon: {raw}")
-        result.update(sample_type_raw=raw, sample_type=mapped, sample_type_mapping_status="exact",
-                      soil_horizon_raw=raw, soil_horizon=raw)
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped,
+            sample_type_mapping_status="exact",
+            soil_horizon_raw=raw,
+            soil_horizon=raw,
+        )
     elif source_id == "gemas-europe":
         raw = _text(evidence.get("sample_type"))
-        mapped = {"Ap": ("soil_agricultural_ploughed", "Ap"), "Gr": ("soil_grazing_land", "Gr")}.get(raw)
+        mapped = {
+            "Ap": ("soil_agricultural_ploughed", "Ap"),
+            "Gr": ("soil_grazing_land", "Gr"),
+        }.get(raw)
         if mapped is None:
             raise SemanticError(f"unmapped GEMAS soil type: {raw}")
-        result.update(sample_type_raw=raw, sample_type=mapped[0], sample_type_mapping_status="exact",
-                      soil_horizon_raw=raw, soil_horizon=mapped[1])
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped[0],
+            sample_type_mapping_status="exact",
+            soil_horizon_raw=raw,
+            soil_horizon=mapped[1],
+        )
     return result
 
 
-def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapping[str, Any]) -> dict[str, str]:
+def _geographic_semantics(
+    source_id: str, row: Mapping[str, Any], evidence: Mapping[str, Any]
+) -> dict[str, str]:
     legacy = _text(row.get("geologic_unit"))
     result = {
         "geologic_unit": "",
@@ -303,10 +330,14 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
     elif source_id == "geotraces-idp2025":
         result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
         result["geographic_context_raw"] = " / ".join(
-            part for part in (_text(evidence.get("cruise")), _text(evidence.get("station"))) if part
+            part
+            for part in (_text(evidence.get("cruise")), _text(evidence.get("station")))
+            if part
         )
     elif source_id == "japan-gsj-geochemical-map":
-        result["map_sheet"] = _text(evidence.get("map_sheet")) or result["map_sheet"] or legacy
+        result["map_sheet"] = (
+            _text(evidence.get("map_sheet")) or result["map_sheet"] or legacy
+        )
         result["geographic_context_raw"] = " / ".join(
             part
             for part in (
@@ -317,14 +348,20 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
             if part
         )
     elif source_id == "pangaea-north-africa-soil":
-        result["survey_area"] = _text(evidence.get("potential_source_area")) or result["survey_area"] or legacy
+        result["survey_area"] = (
+            _text(evidence.get("potential_source_area"))
+            or result["survey_area"]
+            or legacy
+        )
         result["geographic_context_raw"] = (
             _text(evidence.get("reported_location")) or result["geographic_context_raw"]
         )
     elif source_id == "australia-ngsa-mercury":
         result["survey_area"] = _text(evidence.get("state")) or result["survey_area"]
         result["geographic_context_raw"] = " / ".join(
-            part for part in (_text(evidence.get("state")), _text(evidence.get("site_id"))) if part
+            part
+            for part in (_text(evidence.get("state")), _text(evidence.get("site_id")))
+            if part
         )
     elif source_id == "japan-gsj-marine-sediment":
         result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
@@ -341,7 +378,9 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
     elif source_id == "tpdc-china-mountain-soil":
         result["survey_area"] = _text(evidence.get("mountain"))
         result["geographic_context_raw"] = " / ".join(
-            part for part in (result["survey_area"], _text(evidence.get("site"))) if part
+            part
+            for part in (result["survey_area"], _text(evidence.get("site")))
+            if part
         )
     elif source_id == "gemas-europe":
         result["survey_area"] = _text(evidence.get("country_raw"))
@@ -367,21 +406,27 @@ def enrich_row(
         raise SemanticError(f"no V4 semantic contract for source: {source_id}")
     result = {key: _text(value) for key, value in row.items()}
     result.update(
-        analyte_reported=_text(row.get("analyte_reported")) or _text(evidence.get("analyte_reported")),
-        dataset_title=_text(row.get("dataset_title")) or _text(evidence.get("dataset_title")),
+        analyte_reported=_text(row.get("analyte_reported"))
+        or _text(evidence.get("analyte_reported")),
+        dataset_title=_text(row.get("dataset_title"))
+        or _text(evidence.get("dataset_title")),
         dataset_doi=(
             _text(row.get("dataset_doi"))
             or _text(evidence.get("dataset_doi"))
             or _text(registry_entry.get("dataset_doi"))
         ),
-        dataset_version=_text(row.get("dataset_version")) or _text(evidence.get("dataset_version")),
+        dataset_version=_text(row.get("dataset_version"))
+        or _text(evidence.get("dataset_version")),
         source_file=_text(row.get("source_file")) or _text(evidence.get("source_file")),
         source_row=_text(row.get("source_row")) or _text(evidence.get("source_row")),
-        file_sha256=_text(row.get("file_sha256")) or _text(evidence.get("source_file_sha256")),
+        file_sha256=_text(row.get("file_sha256"))
+        or _text(evidence.get("source_file_sha256")),
     )
     if source_id == "georoc-archaean":
         coordinate_evidence = evidence.get("coordinate_evidence")
-        coordinate_evidence = coordinate_evidence if isinstance(coordinate_evidence, Mapping) else {}
+        coordinate_evidence = (
+            coordinate_evidence if isinstance(coordinate_evidence, Mapping) else {}
+        )
         result.update(
             original_latitude_raw=(
                 _text(row.get("original_latitude_raw"))
@@ -416,20 +461,29 @@ def enrich_row(
             method_missing_reason="",
         )
         if not result["method_scope"] or not result["method_assignment_basis"]:
-            raise SemanticError(f"method contract is incomplete for source: {source_id}")
+            raise SemanticError(
+                f"method contract is incomplete for source: {source_id}"
+            )
     else:
         result.update(
             method_scope="",
             method_assignment_basis="",
             analytical_technique="",
             method_source_locator="",
-            method_missing_reason=_text(contract.get("method_missing_reason")) or "not_reported",
+            method_missing_reason=_text(contract.get("method_missing_reason"))
+            or "not_reported",
         )
 
     article_dois = evidence.get("article_dois")
-    dataset_doi = _text(evidence.get("dataset_doi")) or _text(registry_entry.get("dataset_doi"))
+    dataset_doi = _text(evidence.get("dataset_doi")) or _text(
+        registry_entry.get("dataset_doi")
+    )
     first_doi = _first(article_dois)
-    publication_doi = first_doi if first_doi and first_doi.casefold() != dataset_doi.casefold() else ""
+    publication_doi = (
+        first_doi
+        if first_doi and first_doi.casefold() != dataset_doi.casefold()
+        else ""
+    )
     citation_scope = _text(contract.get("citation_scope"))
     citation_ids = evidence.get("citation_ids")
     result.update(
@@ -437,17 +491,25 @@ def enrich_row(
         publication_id=f"doi:{publication_doi}" if publication_doi else "",
         publication_doi=publication_doi,
         citation_text_raw=(
-            _json_list(evidence.get("article_citations")) or _text(registry_entry.get("citation"))
+            _json_list(evidence.get("article_citations"))
+            or _text(registry_entry.get("citation"))
         ),
         citation_scope=citation_scope,
         citation_assignment_basis=(
-            "record_citation_ids" if citation_scope == "observation" else "dataset_metadata"
+            "record_citation_ids"
+            if citation_scope == "observation"
+            else "dataset_metadata"
         ),
         citation_resolution_status=(
-            "resolved" if _first(evidence.get("article_citations")) or registry_entry.get("citation") else "not_reported"
+            "resolved"
+            if _first(evidence.get("article_citations"))
+            or registry_entry.get("citation")
+            else "not_reported"
         ),
         citation_missing_reason="",
-        method_publication_id=f"doi:{publication_doi}" if publication_doi and analytical_method else "",
+        method_publication_id=f"doi:{publication_doi}"
+        if publication_doi and analytical_method
+        else "",
     )
     if not result["citation_text_raw"]:
         result["citation_missing_reason"] = "not_reported"
@@ -460,7 +522,9 @@ def enrich_row(
         license_url=_text(license_value.get("url")),
         license_scope="dataset",
         attribution_required=(
-            "false" if _text(license_value.get("spdx")) == "LicenseRef-USGS-Public-Domain" else "true"
+            "false"
+            if _text(license_value.get("spdx")) == "LicenseRef-USGS-Public-Domain"
+            else "true"
         ),
         redistribution_status="not_evaluated_for_project_output",
         terms_verified_at=registry_verified_at,

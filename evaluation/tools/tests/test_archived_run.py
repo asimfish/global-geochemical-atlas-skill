@@ -25,7 +25,9 @@ class ArchivedRunTests(unittest.TestCase):
             (cls.archive / "frozen_identity.json").read_text(encoding="utf-8")
         )
         cls.summary = json.loads(
-            (cls.archive / "independent_grading_summary.json").read_text(encoding="utf-8")
+            (cls.archive / "independent_grading_summary.json").read_text(
+                encoding="utf-8"
+            )
         )
 
     def test_archive_contains_every_hash_pinned_submission(self) -> None:

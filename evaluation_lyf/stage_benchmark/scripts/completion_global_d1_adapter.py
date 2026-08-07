@@ -29,7 +29,13 @@ from expanded_global_d1_adapter import (
     run_adapter as run_expanded_adapter,
 )
 from global_d1_adapter import GLOBAL_OUTPUT_FIELDS, base_row, coverage_matrix, write_csv
-from lab_common import CONTRACT_ROOT, LAB_ROOT, atomic_write_json, prepare_empty_output_dir, sha256_file
+from lab_common import (
+    CONTRACT_ROOT,
+    LAB_ROOT,
+    atomic_write_json,
+    prepare_empty_output_dir,
+    sha256_file,
+)
 from real_d1_adapter import DEFAULT_FIXTURE_DIR as DEFAULT_REAL_FIXTURE_DIR
 from real_d1_adapter import adapt_sources as adapt_real_sources
 
@@ -57,7 +63,11 @@ def resource(contract: Mapping[str, Any], resource_id: str) -> Mapping[str, Any]
 
 def verified_path(root: Path, item: Mapping[str, Any]) -> Path:
     path = root / str(item["local_file"])
-    if not path.is_file() or path.stat().st_size != int(item["bytes"]) or sha256_file(path) != item["sha256"]:
+    if (
+        not path.is_file()
+        or path.stat().st_size != int(item["bytes"])
+        or sha256_file(path) != item["sha256"]
+    ):
         raise AdapterError(f"completion fixture contract mismatch: {path}")
     return path
 
@@ -72,7 +82,9 @@ def pangaea_table(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     try:
         split = lines.index("*/")
     except ValueError as exc:
-        raise AdapterError(f"PANGAEA textfile lacks metadata terminator: {path}") from exc
+        raise AdapterError(
+            f"PANGAEA textfile lacks metadata terminator: {path}"
+        ) from exc
     return lines[:split], list(csv.DictReader(lines[split + 1 :], delimiter="\t"))
 
 
@@ -95,7 +107,12 @@ def clean_measurement(value: Any) -> tuple[str, str, str, str]:
         return "", "", "", "not_reported"
     folded = text.casefold()
     if folded in {"nd", "n.d.", "na", "n.a.", "nan", "-"}:
-        return "", "nd" if folded.startswith("n") and "d" in folded else "", text, "not_reported"
+        return (
+            "",
+            "nd" if folded.startswith("n") and "d" in folded else "",
+            text,
+            "not_reported",
+        )
     if text[0] in "<>":
         return text[1:].strip(), "lt" if text[0] == "<" else "gt", text[0], ""
     try:
@@ -107,7 +124,11 @@ def clean_measurement(value: Any) -> tuple[str, str, str, str]:
 
 def iso_date(value: Any) -> str:
     if isinstance(value, (datetime, date)):
-        return value.date().isoformat() if isinstance(value, datetime) else value.isoformat()
+        return (
+            value.date().isoformat()
+            if isinstance(value, datetime)
+            else value.isoformat()
+        )
     return str(value or "").strip()
 
 
@@ -139,7 +160,12 @@ def row_resolution_m(latitude: str, longitude: str) -> str:
 
 def finalize_status(row: dict[str, str]) -> dict[str, str]:
     method = row.get("analytical_method", "").strip()
-    partial_markers = ("not exposed", "not repeated", "unspecified", "varies by analyte")
+    partial_markers = (
+        "not exposed",
+        "not repeated",
+        "unspecified",
+        "varies by analyte",
+    )
     if not row.get("analytical_method_status"):
         if not method:
             row["analytical_method_status"] = "unknown_not_reported_by_source"
@@ -150,31 +176,51 @@ def finalize_status(row: dict[str, str]) -> dict[str, str]:
     if not row.get("geologic_context_status"):
         has_context = any(
             row.get(field, "").strip()
-            for field in ("lithology", "geologic_unit", "geologic_unit_id", "geologic_context_source")
+            for field in (
+                "lithology",
+                "geologic_unit",
+                "geologic_unit_id",
+                "geologic_context_source",
+            )
         )
         row["geologic_context_status"] = (
             "source_reported" if has_context else "unknown_not_reported_by_source"
         )
     if not row.get("coordinate_uncertainty_status"):
         row["coordinate_uncertainty_status"] = (
-            "source_or_metadata_reported" if row.get("coordinate_uncertainty_m", "").strip()
+            "source_or_metadata_reported"
+            if row.get("coordinate_uncertainty_m", "").strip()
             else "unknown_not_reported_by_source"
         )
-    if row.get("coordinate_uncertainty_m") and not row.get("coordinate_uncertainty_basis"):
+    if row.get("coordinate_uncertainty_m") and not row.get(
+        "coordinate_uncertainty_basis"
+    ):
         if row.get("source_id") == "usgs_taylor_mountains_rock":
-            row["coordinate_uncertainty_basis"] = "dataset metadata: approximately 20 feet"
+            row["coordinate_uncertainty_basis"] = (
+                "dataset metadata: approximately 20 feet"
+            )
         else:
-            row["coordinate_uncertainty_basis"] = "source metadata field; see source locator"
+            row["coordinate_uncertainty_basis"] = (
+                "source metadata field; see source locator"
+            )
     if not row.get("coordinate_resolution_m"):
-        row["coordinate_resolution_m"] = row_resolution_m(row.get("latitude", ""), row.get("longitude", ""))
-    if row.get("coordinate_resolution_m") and not row.get("coordinate_resolution_basis"):
-        row["coordinate_resolution_basis"] = "derived from displayed decimal precision; not positional accuracy"
+        row["coordinate_resolution_m"] = row_resolution_m(
+            row.get("latitude", ""), row.get("longitude", "")
+        )
+    if row.get("coordinate_resolution_m") and not row.get(
+        "coordinate_resolution_basis"
+    ):
+        row["coordinate_resolution_basis"] = (
+            "derived from displayed decimal precision; not positional accuracy"
+        )
     return {field: str(row.get(field, "") or "") for field in GLOBAL_OUTPUT_FIELDS}
 
 
 def event_positions(metadata: Sequence[str]) -> dict[str, tuple[str, str]]:
     positions: dict[str, tuple[str, str]] = {}
-    event_re = re.compile(r"^(?:Event\(s\):\s*|\t)(.+?) \* LATITUDE: ([+-]?\d+(?:\.\d+)?) \* LONGITUDE: ([+-]?\d+(?:\.\d+)?)")
+    event_re = re.compile(
+        r"^(?:Event\(s\):\s*|\t)(.+?) \* LATITUDE: ([+-]?\d+(?:\.\d+)?) \* LONGITUDE: ([+-]?\d+(?:\.\d+)?)"
+    )
     for line in metadata:
         match = event_re.match(line)
         if not match:
@@ -188,12 +234,16 @@ def event_positions(metadata: Sequence[str]) -> dict[str, tuple[str, str]]:
     return positions
 
 
-def read_africa_sediment(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_africa_sediment(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     item = resource(contract, "africa_sediment")
     metadata, source_rows = pangaea_table(verified_path(root, item))
     positions = event_positions(metadata)
     fields = {element: f"{element} [mg/kg]" for element in ("Cr", "Cu", "Ni", "Zn")}
-    common = source_common(item, "Inorganic geochemistry of surface sediment samples from southeast Africa")
+    common = source_common(
+        item, "Inorganic geochemistry of surface sediment samples from southeast Africa"
+    )
     for source_row, raw in enumerate(source_rows, start=90):
         event = raw["Event"]
         if event not in positions:
@@ -254,7 +304,9 @@ def read_pangaea_water(
     for source_row, raw in enumerate(rows, start=107):
         sample = raw.get("Sample label", "") or raw.get("Event", "")
         for element, (field, std_field, flag_field) in mapping.items():
-            value, qualifier, raw_qualifier, missing = clean_measurement(raw.get(field, ""))
+            value, qualifier, raw_qualifier, missing = clean_measurement(
+                raw.get(field, "")
+            )
             qf = raw.get(flag_field, "").strip()
             row = base_row()
             row.update(
@@ -262,13 +314,17 @@ def read_pangaea_water(
                     "record_id": f"pangaea-947275:{sample}:{source_row}:{element}",
                     "source_record_id": f"row={source_row}:{field}",
                     "sample_id": sample,
-                    "sample_identity_group": f"pangaea-947275:{raw.get('Event','')}:{sample}",
+                    "sample_identity_group": f"pangaea-947275:{raw.get('Event', '')}:{sample}",
                     "element_or_analyte": element,
                     "analyte_reported": field,
                     "value": value,
                     "unit": "nmol/L",
                     "value_qualifier": qualifier,
-                    "source_qualifier_raw": " | ".join(part for part in (raw_qualifier, f"GEOTRACES_QF={qf}" if qf else "") if part),
+                    "source_qualifier_raw": " | ".join(
+                        part
+                        for part in (raw_qualifier, f"GEOTRACES_QF={qf}" if qf else "")
+                        if part
+                    ),
                     "missing_reason": missing,
                     "medium": "water",
                     "material": "filtered seawater; dissolved fraction",
@@ -297,19 +353,25 @@ def read_pangaea_water(
             yield row
 
 
-def read_brazil_sediment(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_brazil_sediment(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     item = resource(contract, "brazil_sediment")
     path = verified_path(root, item)
     wb = load_workbook(path, read_only=True, data_only=True)
     ws = wb["Sedimento de corrente"]
     rows = ws.iter_rows(values_only=True)
     headers = [str(value or "") for value in next(rows)]
-    common = source_common(item, "Geochemical stream-sediment data, Folha Avelino Lopes")
+    common = source_common(
+        item, "Geochemical stream-sediment data, Folha Avelino Lopes"
+    )
     for source_row, values in enumerate(rows, start=2):
         raw = dict(zip(headers, values, strict=True))
         sample = str(raw["NÚMERO_DE_CAMPO"])
         for element in TARGET_ELEMENTS:
-            value, qualifier, raw_qualifier, missing = clean_measurement(raw[f"{element}_ppm"])
+            value, qualifier, raw_qualifier, missing = clean_measurement(
+                raw[f"{element}_ppm"]
+            )
             row = base_row()
             row.update(
                 {
@@ -348,15 +410,21 @@ def read_brazil_sediment(root: Path, contract: Mapping[str, Any]) -> Iterable[di
             yield row
 
 
-def read_brazil_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_brazil_soil(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     chemistry_item = resource(contract, "brazil_soil_chemistry")
     location_item = resource(contract, "brazil_soil_locations")
     archive_path = verified_path(root, chemistry_item)
     location_path = verified_path(root, location_item)
     locations_raw = json.loads(location_path.read_text(encoding="utf-8"))
-    locations = {f["attributes"]["NUM_CAMPO"].strip(): f for f in locations_raw["features"]}
+    locations = {
+        f["attributes"]["NUM_CAMPO"].strip(): f for f in locations_raw["features"]
+    }
     with zipfile.ZipFile(archive_path) as archive:
-        member = next(name for name in archive.namelist() if name.endswith("Geoq_Solo.xlsx"))
+        member = next(
+            name for name in archive.namelist() if name.endswith("Geoq_Solo.xlsx")
+        )
         with tempfile.NamedTemporaryFile(suffix=".xlsx") as handle:
             handle.write(archive.read(member))
             handle.flush()
@@ -364,7 +432,10 @@ def read_brazil_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[s
             ws = wb["Analise_Solo"]
             rows = ws.iter_rows(values_only=True)
             headers = [str(value or "") for value in next(rows)]
-            chemistry_rows = [(source_row, dict(zip(headers, values, strict=True))) for source_row, values in enumerate(rows, start=2)]
+            chemistry_rows = [
+                (source_row, dict(zip(headers, values, strict=True)))
+                for source_row, values in enumerate(rows, start=2)
+            ]
     common = source_common(chemistry_item, "Área L - BE soil geochemistry")
     for source_row, raw in chemistry_rows:
         sample = str(raw["num_campo"]).strip()
@@ -373,7 +444,9 @@ def read_brazil_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[s
             raise AdapterError(f"SGB soil location join failed for {sample}")
         attrs, geometry = feature["attributes"], feature["geometry"]
         for element in TARGET_ELEMENTS:
-            value, qualifier, raw_qualifier, missing = clean_measurement(raw[f"{element}_ppm"])
+            value, qualifier, raw_qualifier, missing = clean_measurement(
+                raw[f"{element}_ppm"]
+            )
             row = base_row()
             row.update(
                 {
@@ -404,7 +477,10 @@ def read_brazil_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[s
                     "analytical_method": str(raw["leitura"]),
                     "analytical_method_status": "source_reported",
                     "method_family": "emission_spectrography",
-                    "digestion_or_extraction": str(raw["abertura"] or "none reported; solid optical emission method"),
+                    "digestion_or_extraction": str(
+                        raw["abertura"]
+                        or "none reported; solid optical emission method"
+                    ),
                     "source_row": str(source_row),
                     "source_locator": f"https://rigeo.sgb.gov.br/handle/doc/11157#member={member}&row={source_row}&NUM_CAMPO={sample}&field={element}_ppm",
                     "benchmark_continent": "South America",
@@ -416,25 +492,38 @@ def read_brazil_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[s
             yield row
 
 
-def read_australia_water(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_australia_water(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     item = resource(contract, "australia_water")
     path = verified_path(root, item)
     # Normal mode makes repeated access to the seven-row metadata header O(1).
     # Read-only ``ws.cell`` reparses the XML for every call and is quadratic here.
     wb = load_workbook(path, read_only=False, data_only=True)
-    common = source_common(item, "Northern Australia Hydrogeochemical Survey final data release")
+    common = source_common(
+        item, "Northern Australia Hydrogeochemical Survey final data release"
+    )
     for ws in wb.worksheets:
         if ws.title == "Abbreviations and Acronyms":
             continue
-        analytes = {str(ws.cell(1, col).value): col for col in range(29, ws.max_column + 1) if ws.cell(1, col).value}
+        analytes = {
+            str(ws.cell(1, col).value): col
+            for col in range(29, ws.max_column + 1)
+            if ws.cell(1, col).value
+        }
         for source_row in range(8, ws.max_row + 1):
             sample = str(ws.cell(source_row, 1).value or "").strip()
             if not sample:
                 continue
-            latitude, longitude = str(ws.cell(source_row, 3).value), str(ws.cell(source_row, 2).value)
+            latitude, longitude = (
+                str(ws.cell(source_row, 3).value),
+                str(ws.cell(source_row, 2).value),
+            )
             for element in (*TARGET_ELEMENTS, "Hg"):
                 col = analytes[element]
-                value, qualifier, raw_qualifier, missing = clean_measurement(ws.cell(source_row, col).value)
+                value, qualifier, raw_qualifier, missing = clean_measurement(
+                    ws.cell(source_row, col).value
+                )
                 filtration = ws.cell(7, col).value
                 row = base_row()
                 row.update(
@@ -452,7 +541,9 @@ def read_australia_water(root: Path, contract: Mapping[str, Any]) -> Iterable[di
                         "missing_reason": missing,
                         "medium": "water",
                         "material": f"groundwater; filtration={filtration}",
-                        "measurement_basis": "dissolved_0.45um" if filtration == 0.45 else "source_reported_unfiltered",
+                        "measurement_basis": "dissolved_0.45um"
+                        if filtration == 0.45
+                        else "source_reported_unfiltered",
                         "latitude": latitude,
                         "longitude": longitude,
                         "source_crs": str(ws.cell(source_row, 4).value),
@@ -461,7 +552,9 @@ def read_australia_water(root: Path, contract: Mapping[str, Any]) -> Iterable[di
                         "sample_depth_max_m": str(ws.cell(source_row, 19).value or ""),
                         "analytical_method": str(ws.cell(5, col).value),
                         "analytical_method_status": "source_reported",
-                        "method_family": "icp_ms" if str(ws.cell(5, col).value).upper() == "ICP-MS" else "sorbent_collection",
+                        "method_family": "icp_ms"
+                        if str(ws.cell(5, col).value).upper() == "ICP-MS"
+                        else "sorbent_collection",
                         "digestion_or_extraction": f"filtration={filtration}",
                         "laboratory": str(ws.cell(4, col).value),
                         "detection_limit": str(ws.cell(6, col).value or ""),
@@ -477,15 +570,21 @@ def read_australia_water(root: Path, contract: Mapping[str, Any]) -> Iterable[di
                 yield row
 
 
-def read_oceania_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_oceania_soil(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     item = resource(contract, "oceania_soil")
     _metadata, rows = pangaea_table(verified_path(root, item))
-    common = source_common(item, "Geochemistry of soil, sediment and street dust in Western Australia")
+    common = source_common(
+        item, "Geochemistry of soil, sediment and street dust in Western Australia"
+    )
     for source_row, raw in enumerate(rows, start=148):
         if raw["Samp type"] != "Soil":
             continue
         for element in TARGET_ELEMENTS:
-            field = next(field for field in raw if field.startswith(f"{element} [mg/kg]"))
+            field = next(
+                field for field in raw if field.startswith(f"{element} [mg/kg]")
+            )
             value, qualifier, raw_qualifier, missing = clean_measurement(raw[field])
             sample = raw["Sample ID"]
             row = base_row()
@@ -526,10 +625,17 @@ def read_oceania_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[
             yield row
 
 
-def read_antarctica_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_antarctica_soil(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     item = resource(contract, "antarctica_soil")
     _metadata, rows = pangaea_table(verified_path(root, item))
-    fields = {"Ca": "Ca2+ [mg/kg]", "Mg": "Mg2+ [mg/kg]", "Na": "Na [mg/kg]", "K": "K [mg/kg]"}
+    fields = {
+        "Ca": "Ca2+ [mg/kg]",
+        "Mg": "Mg2+ [mg/kg]",
+        "Na": "Na [mg/kg]",
+        "K": "K [mg/kg]",
+    }
     common = source_common(item, "Chemical properties of Antarctic soils")
     for source_row, raw in enumerate(rows, start=34):
         sample = f"{raw['Event']}:{raw['Profile ID']}:{raw['Soil hori']}"
@@ -572,13 +678,17 @@ def read_antarctica_soil(root: Path, contract: Mapping[str, Any]) -> Iterable[di
             yield row
 
 
-def read_antarctica_sediment(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_antarctica_sediment(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     item = resource(contract, "antarctica_sediment")
     wb = load_workbook(verified_path(root, item), read_only=True, data_only=True)
     ws = wb["Appendix Table 1"]
     headers = [str(ws.cell(4, col).value or "") for col in range(1, ws.max_column + 1)]
     common = source_common(item, "West Antarctic sediment geochemistry compilation")
-    for source_row, values in enumerate(ws.iter_rows(min_row=5, values_only=True), start=5):
+    for source_row, values in enumerate(
+        ws.iter_rows(min_row=5, values_only=True), start=5
+    ):
         raw = dict(zip(headers, values, strict=True))
         if raw["Number"] is None:
             continue
@@ -626,14 +736,21 @@ def read_antarctica_sediment(root: Path, contract: Mapping[str, Any]) -> Iterabl
             yield row
 
 
-def read_antarctica_water(root: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_antarctica_water(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     item = resource(contract, "antarctica_water")
     path = verified_path(root, item)
-    common = source_common(item, "Total dissolved trace metals in Amundsen and Ross Sea waters")
+    common = source_common(
+        item, "Total dissolved trace metals in Amundsen and Ross Sea waters"
+    )
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         for source_row, raw in enumerate(csv.DictReader(handle), start=2):
             for element in ("Ni", "Cu", "Zn"):
-                field, flag_field = f"{element}_D_CONC_BOTTLE", f"{element}_D_CONC_BOTTLE_FLAG"
+                field, flag_field = (
+                    f"{element}_D_CONC_BOTTLE",
+                    f"{element}_D_CONC_BOTTLE_FLAG",
+                )
                 value, qualifier, raw_qualifier, missing = clean_measurement(raw[field])
                 sample = raw["Bottle"]
                 row = base_row()
@@ -652,7 +769,9 @@ def read_antarctica_water(root: Path, contract: Mapping[str, Any]) -> Iterable[d
                             part
                             for part in (
                                 raw_qualifier,
-                                f"GEOTRACES_QF={raw[flag_field]}" if raw[flag_field] else "",
+                                f"GEOTRACES_QF={raw[flag_field]}"
+                                if raw[flag_field]
+                                else "",
                             )
                             if part
                         ),
@@ -681,7 +800,9 @@ def read_antarctica_water(root: Path, contract: Mapping[str, Any]) -> Iterable[d
                 yield row
 
 
-def completion_readers(root: Path, contract: Mapping[str, Any]) -> Iterable[tuple[str, Iterable[dict[str, str]]]]:
+def completion_readers(
+    root: Path, contract: Mapping[str, Any]
+) -> Iterable[tuple[str, Iterable[dict[str, str]]]]:
     return (
         ("africa_sediment", read_africa_sediment(root, contract)),
         ("africa_water", read_pangaea_water(root, contract, "africa_water", "Africa")),
@@ -698,10 +819,17 @@ def completion_readers(root: Path, contract: Mapping[str, Any]) -> Iterable[tupl
 def status_metrics(rows: Sequence[Mapping[str, str]]) -> dict[str, Any]:
     count = len(rows)
     method_specific = sum(
-        row["analytical_method_status"] in {"source_reported", "dataset_documented_specific", "source_or_dataset_documented_specific"}
+        row["analytical_method_status"]
+        in {
+            "source_reported",
+            "dataset_documented_specific",
+            "source_or_dataset_documented_specific",
+        }
         for row in rows
     )
-    geology_source = sum(row["geologic_context_status"] == "source_reported" for row in rows)
+    geology_source = sum(
+        row["geologic_context_status"] == "source_reported" for row in rows
+    )
     uncertainty_numeric = sum(bool(row["coordinate_uncertainty_m"]) for row in rows)
     resolution_numeric = sum(bool(row["coordinate_resolution_m"]) for row in rows)
     return {
@@ -710,10 +838,13 @@ def status_metrics(rows: Sequence[Mapping[str, str]]) -> dict[str, Any]:
         ),
         "analytical_method_specific_value_coverage": round(method_specific / count, 6),
         "source_geologic_context_value_coverage": round(geology_source / count, 6),
-        "coordinate_uncertainty_numeric_coverage": round(uncertainty_numeric / count, 6),
+        "coordinate_uncertainty_numeric_coverage": round(
+            uncertainty_numeric / count, 6
+        ),
         "coordinate_resolution_numeric_coverage": round(resolution_numeric / count, 6),
         "explicit_status_coverage": {
-            field: round(sum(bool(row[field]) for row in rows) / count, 6) for field in STATUS_FIELDS
+            field: round(sum(bool(row[field]) for row in rows) / count, 6)
+            for field in STATUS_FIELDS
         },
     }
 
@@ -729,23 +860,34 @@ def run_adapter(
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
     manifest_path = completion_fixture_dir / "source_manifest.json"
     if not manifest_path.is_file():
-        raise AdapterError("completion source_manifest.json missing; run build_completion_fixtures.py")
+        raise AdapterError(
+            "completion source_manifest.json missing; run build_completion_fixtures.py"
+        )
     with tempfile.TemporaryDirectory() as temporary_name:
         temporary = Path(temporary_name)
-        expanded = run_expanded_adapter(core_fixture_dir, expanded_fixture_dir, temporary / "expanded")
+        expanded = run_expanded_adapter(
+            core_fixture_dir, expanded_fixture_dir, temporary / "expanded"
+        )
         real = adapt_real_sources(real_fixture_dir, temporary / "real", 0)
         rows = read_csv_rows(expanded["exchange"])
         real_rows = read_csv_rows(real["export"])
     for row in real_rows:
         row.update(
             {
-                "benchmark_continent": "Antarctica" if row["source_id"] == "usgs_taylor_mountains_rock" else "North America",
-                "benchmark_country": "Antarctica" if row["source_id"] == "usgs_taylor_mountains_rock" else "United States",
+                "benchmark_continent": "Antarctica"
+                if row["source_id"] == "usgs_taylor_mountains_rock"
+                else "North America",
+                "benchmark_country": "Antarctica"
+                if row["source_id"] == "usgs_taylor_mountains_rock"
+                else "United States",
                 "benchmark_region": row["source_id"],
             }
         )
     rows.extend(real_rows)
-    adapter_counts: dict[str, int] = {"expanded_reference": len(rows) - len(real_rows), "north_america_real": len(real_rows)}
+    adapter_counts: dict[str, int] = {
+        "expanded_reference": len(rows) - len(real_rows),
+        "north_america_real": len(real_rows),
+    }
     for name, generated in completion_readers(completion_fixture_dir, contract):
         selected = list(generated)
         adapter_counts[name] = len(selected)
@@ -756,15 +898,31 @@ def run_adapter(
     if duplicates:
         raise AdapterError(f"duplicate record IDs: {duplicates[:10]}")
     matrix = coverage_matrix(finalized)
-    continents = ("Africa", "Antarctica", "Asia", "Europe", "North America", "Oceania", "South America")
+    continents = (
+        "Africa",
+        "Antarctica",
+        "Asia",
+        "Europe",
+        "North America",
+        "Oceania",
+        "South America",
+    )
     media = ("rock", "soil", "sediment", "water")
-    nonempty = sum(matrix.get(continent, {}).get(medium, 0) > 0 for continent in continents for medium in media)
+    nonempty = sum(
+        matrix.get(continent, {}).get(medium, 0) > 0
+        for continent in continents
+        for medium in media
+    )
     if nonempty != 28:
-        raise AdapterError(f"structural continent-medium coverage is {nonempty}/28, expected 28/28")
+        raise AdapterError(
+            f"structural continent-medium coverage is {nonempty}/28, expected 28/28"
+        )
     export = output_dir / "d1_completion_export.csv"
     write_csv(export, finalized)
     source_counts = Counter(row["source_id"] for row in finalized)
-    water_continents = sorted({row["benchmark_continent"] for row in finalized if row["medium"] == "water"})
+    water_continents = sorted(
+        {row["benchmark_continent"] for row in finalized if row["medium"] == "water"}
+    )
     summary = {
         "manifest_version": "d1-stage-completion-manifest-v2",
         "adapter_version": ADAPTER_VERSION,
@@ -781,7 +939,11 @@ def run_adapter(
         "field_coverage": status_metrics(finalized),
         "completion_contract_sha256": sha256_file(CONTRACT),
         "fixture_manifest_sha256": sha256_file(manifest_path),
-        "output": {"path": export.name, "bytes": export.stat().st_size, "sha256": sha256_file(export)},
+        "output": {
+            "path": export.name,
+            "bytes": export.stat().st_size,
+            "sha256": sha256_file(export),
+        },
         "interpretation_limits": contract["scientific_limits"],
     }
     manifest = output_dir / "d1_completion_manifest.json"
@@ -791,10 +953,18 @@ def run_adapter(
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--core-fixture-dir", type=Path, default=DEFAULT_CORE_FIXTURE_DIR)
-    parser.add_argument("--expanded-fixture-dir", type=Path, default=DEFAULT_EXPANDED_FIXTURE_DIR)
-    parser.add_argument("--real-fixture-dir", type=Path, default=DEFAULT_REAL_FIXTURE_DIR)
-    parser.add_argument("--completion-fixture-dir", type=Path, default=DEFAULT_COMPLETION_FIXTURE_DIR)
+    parser.add_argument(
+        "--core-fixture-dir", type=Path, default=DEFAULT_CORE_FIXTURE_DIR
+    )
+    parser.add_argument(
+        "--expanded-fixture-dir", type=Path, default=DEFAULT_EXPANDED_FIXTURE_DIR
+    )
+    parser.add_argument(
+        "--real-fixture-dir", type=Path, default=DEFAULT_REAL_FIXTURE_DIR
+    )
+    parser.add_argument(
+        "--completion-fixture-dir", type=Path, default=DEFAULT_COMPLETION_FIXTURE_DIR
+    )
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
@@ -805,7 +975,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.completion_fixture_dir,
             args.output_dir,
         )
-    except (AdapterError, OSError, ValueError, KeyError, csv.Error, json.JSONDecodeError, zipfile.BadZipFile) as exc:
+    except (
+        AdapterError,
+        OSError,
+        ValueError,
+        KeyError,
+        csv.Error,
+        json.JSONDecodeError,
+        zipfile.BadZipFile,
+    ) as exc:
         parser.error(str(exc))
     print(json.dumps(result["summary"], ensure_ascii=False, sort_keys=True))
     return 0

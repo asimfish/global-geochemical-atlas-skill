@@ -20,7 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 ALIGNMENT_PATH = ROOT / "contracts" / "benchmark-execution-contract.json"
 sys.path.insert(0, str(ROOT))
 
-from review_integrity import ReviewIntegrityError, validate_binding, validate_llm_review_envelope  # noqa: E402
+from review_integrity import (  # noqa: E402
+    ReviewIntegrityError,
+    validate_binding,
+    validate_llm_review_envelope,
+)
 
 
 class FinalizeError(ValueError):
@@ -48,7 +52,9 @@ def _safe_relative(value: str, field: str) -> str:
 
 def _atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", dir=path.parent
+    )
     temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
@@ -62,7 +68,11 @@ def _atomic_json(path: Path, value: Any) -> None:
 
 
 def _finite_score(value: Any, maximum: float, field: str) -> float:
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(float(value)):
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(float(value))
+    ):
         raise FinalizeError(f"{field} must be a finite number")
     result = float(value)
     if result < 0 or result > maximum:
@@ -86,18 +96,26 @@ def _frozen_criteria(rubric: dict[str, Any]) -> dict[str, dict[str, Any]]:
             raise FinalizeError("rubric criterion id must be a non-empty string")
         if criterion_id in frozen:
             raise FinalizeError(f"rubric repeats criterion id {criterion_id}")
-        points = _finite_score(criterion.get("points"), 1_000_000, f"rubric.{criterion_id}.points")
+        points = _finite_score(
+            criterion.get("points"), 1_000_000, f"rubric.{criterion_id}.points"
+        )
         if points <= 0:
-            raise FinalizeError(f"rubric criterion {criterion_id} points must be positive")
+            raise FinalizeError(
+                f"rubric criterion {criterion_id} points must be positive"
+            )
         frozen[criterion_id] = criterion
         total += points
-    declared = _finite_score(rubric.get("evidence_points"), 1_000_000, "rubric.evidence_points")
+    declared = _finite_score(
+        rubric.get("evidence_points"), 1_000_000, "rubric.evidence_points"
+    )
     if not math.isclose(total, declared, rel_tol=0.0, abs_tol=1e-12):
         raise FinalizeError("rubric evidence_points do not equal the criterion maxima")
     return frozen
 
 
-def _objective_metrics(report: dict[str, Any], evidence_path: str, dimensions: set[str]) -> list[dict[str, Any]]:
+def _objective_metrics(
+    report: dict[str, Any], evidence_path: str, dimensions: set[str]
+) -> list[dict[str, Any]]:
     metrics = []
     checks = report.get("checks")
     if not isinstance(checks, list):
@@ -117,15 +135,23 @@ def _objective_metrics(report: dict[str, Any], evidence_path: str, dimensions: s
         dimension_id = check.get("dimension_id")
         if dimension_id not in dimensions:
             raise FinalizeError(f"objective check {check_id} has invalid dimension_id")
-        possible = _finite_score(check.get("points_possible"), 1_000_000, "points_possible")
+        possible = _finite_score(
+            check.get("points_possible"), 1_000_000, "points_possible"
+        )
         if possible <= 0:
-            raise FinalizeError(f"objective check {check_id} points_possible must be positive")
+            raise FinalizeError(
+                f"objective check {check_id} points_possible must be positive"
+            )
         awarded = _finite_score(check.get("points_awarded"), possible, "points_awarded")
         passed = check.get("passed")
         if not isinstance(passed, bool):
             raise FinalizeError(f"objective check {check_id} passed must be boolean")
-        if not math.isclose(awarded, possible if passed else 0.0, rel_tol=0.0, abs_tol=1e-12):
-            raise FinalizeError(f"objective check {check_id} points disagree with passed")
+        if not math.isclose(
+            awarded, possible if passed else 0.0, rel_tol=0.0, abs_tol=1e-12
+        ):
+            raise FinalizeError(
+                f"objective check {check_id} points disagree with passed"
+            )
         awarded_total += awarded
         possible_total += possible
         metrics.append(
@@ -137,17 +163,25 @@ def _objective_metrics(report: dict[str, Any], evidence_path: str, dimensions: s
                 "status": "scored",
                 "value": awarded,
                 "expected": possible,
-                "normalized_score": round(awarded / possible * 100, 6) if possible else 0.0,
+                "normalized_score": round(awarded / possible * 100, 6)
+                if possible
+                else 0.0,
                 "passed": passed,
                 "evidence": [evidence_path],
-                "reason": None if check.get("passed") else str(check.get("evidence", "check failed"))[:1000],
+                "reason": None
+                if check.get("passed")
+                else str(check.get("evidence", "check failed"))[:1000],
             }
         )
     declared_awarded = _finite_score(
-        report.get("evidence_points_awarded"), 1_000_000, "objective.evidence_points_awarded"
+        report.get("evidence_points_awarded"),
+        1_000_000,
+        "objective.evidence_points_awarded",
     )
     declared_possible = _finite_score(
-        report.get("evidence_points_possible"), 1_000_000, "objective.evidence_points_possible"
+        report.get("evidence_points_possible"),
+        1_000_000,
+        "objective.evidence_points_possible",
     )
     if not math.isclose(awarded_total, declared_awarded, rel_tol=0.0, abs_tol=1e-12):
         raise FinalizeError("objective awarded total does not match its checks")
@@ -185,18 +219,30 @@ def _review_metrics(
         seen.add(criterion_id)
         dimension_id = criterion.get("dimension_id")
         if dimension_id not in dimensions:
-            raise FinalizeError(f"{prefix} criterion {criterion_id} has invalid dimension_id")
+            raise FinalizeError(
+                f"{prefix} criterion {criterion_id} has invalid dimension_id"
+            )
         maximum = _finite_score(criterion.get("max"), 1_000_000, f"{prefix}.max")
         if maximum <= 0:
-            raise FinalizeError(f"{prefix} criterion {criterion_id} max must be positive")
+            raise FinalizeError(
+                f"{prefix} criterion {criterion_id} max must be positive"
+            )
         if frozen_criteria is not None:
             frozen = frozen_criteria.get(criterion_id)
             if frozen is None:
-                raise FinalizeError(f"{prefix} criterion {criterion_id} is not in the frozen rubric")
+                raise FinalizeError(
+                    f"{prefix} criterion {criterion_id} is not in the frozen rubric"
+                )
             if dimension_id != frozen.get("dimension_id"):
-                raise FinalizeError(f"{prefix} criterion {criterion_id} dimension drifted from the rubric")
-            if not math.isclose(maximum, float(frozen["points"]), rel_tol=0.0, abs_tol=1e-12):
-                raise FinalizeError(f"{prefix} criterion {criterion_id} max drifted from the rubric")
+                raise FinalizeError(
+                    f"{prefix} criterion {criterion_id} dimension drifted from the rubric"
+                )
+            if not math.isclose(
+                maximum, float(frozen["points"]), rel_tol=0.0, abs_tol=1e-12
+            ):
+                raise FinalizeError(
+                    f"{prefix} criterion {criterion_id} max drifted from the rubric"
+                )
         score = _finite_score(criterion.get("score"), maximum, f"{prefix}.score")
         evidence = criterion.get("evidence")
         if not isinstance(evidence, list) or not evidence:
@@ -204,7 +250,9 @@ def _review_metrics(
         for index, item in enumerate(evidence):
             field = f"{prefix}.{criterion_id}.evidence[{index}]"
             if not isinstance(item, str) or not item:
-                raise FinalizeError(f"{prefix} criterion {criterion_id} evidence must be strings")
+                raise FinalizeError(
+                    f"{prefix} criterion {criterion_id} evidence must be strings"
+                )
             path_part, separator, pointer = item.partition("#")
             _safe_relative(path_part, field)
             if separator and not pointer.startswith("/"):
@@ -223,7 +271,9 @@ def _review_metrics(
                 )
         reason = criterion.get("reason")
         if not isinstance(reason, str) or not reason.strip():
-            raise FinalizeError(f"{prefix} criterion {criterion_id} reason must be non-empty")
+            raise FinalizeError(
+                f"{prefix} criterion {criterion_id} reason must be non-empty"
+            )
         metrics.append(
             {
                 "metric_id": f"{prefix}.{criterion_id}",
@@ -269,8 +319,10 @@ def finalize(
         raise FinalizeError("objective report task_id does not match the frozen rubric")
     frozen_criteria = _frozen_criteria(rubric)
     rubric_evidence_paths = rubric.get("evidence_paths")
-    if not isinstance(rubric_evidence_paths, list) or not rubric_evidence_paths or not all(
-        isinstance(item, str) and item for item in rubric_evidence_paths
+    if (
+        not isinstance(rubric_evidence_paths, list)
+        or not rubric_evidence_paths
+        or not all(isinstance(item, str) and item for item in rubric_evidence_paths)
     ):
         raise FinalizeError("rubric evidence_paths must be a non-empty string array")
     for index, item in enumerate(rubric_evidence_paths):
@@ -290,11 +342,17 @@ def finalize(
     )
     if objective.get("hard_gate_passed") is not expected_hard_gate:
         raise FinalizeError("objective hard gate disagrees with its redline events")
-    metrics = _objective_metrics(objective, _safe_relative(objective_evidence, "objective_evidence"), dimension_ids)
+    metrics = _objective_metrics(
+        objective,
+        _safe_relative(objective_evidence, "objective_evidence"),
+        dimension_ids,
+    )
     review_pending = False
     if llm_path:
         if review_binding_path is None:
-            raise FinalizeError("LLM evidence requires a controller-owned review binding")
+            raise FinalizeError(
+                "LLM evidence requires a controller-owned review binding"
+            )
         llm_report = _load(llm_path)
         expected_binding = validate_binding(_load(review_binding_path))
         validate_llm_review_envelope(llm_report, expected_binding)
@@ -307,7 +365,10 @@ def finalize(
             raise FinalizeError("llm redline_candidates must be an array")
         if redline_candidates and not llm_report["human_review_required"]:
             raise FinalizeError("llm redline candidates require human review")
-        if llm_report["grader_uncertainty"] == "high" and not llm_report["human_review_required"]:
+        if (
+            llm_report["grader_uncertainty"] == "high"
+            and not llm_report["human_review_required"]
+        ):
             raise FinalizeError("high LLM grader uncertainty requires human review")
         metrics.extend(
             _review_metrics(
@@ -331,7 +392,10 @@ def finalize(
             "static review scoring is disabled until a frozen static rubric and evidence scope exist"
         )
 
-    hard_gate = bool(objective.get("hard_gate_passed")) and candidate_status in {"success", "partial_success"}
+    hard_gate = bool(objective.get("hard_gate_passed")) and candidate_status in {
+        "success",
+        "partial_success",
+    }
     if not hard_gate:
         return {
             "schema_version": "1.0.0",
@@ -346,7 +410,10 @@ def finalize(
             "dimensions": [],
             "total_score": None,
             "checks_path": _safe_relative(objective_evidence, "checks_path"),
-            "evidence": sorted({item for metric in metrics for item in metric["evidence"]}) or [_safe_relative(objective_evidence, "evidence")],
+            "evidence": sorted(
+                {item for metric in metrics for item in metric["evidence"]}
+            )
+            or [_safe_relative(objective_evidence, "evidence")],
             "computed_at": _timestamp(),
         }
 
@@ -364,14 +431,18 @@ def finalize(
             "dimensions": [],
             "total_score": None,
             "checks_path": _safe_relative(objective_evidence, "checks_path"),
-            "evidence": sorted({item for metric in metrics for item in metric["evidence"]}),
+            "evidence": sorted(
+                {item for metric in metrics for item in metric["evidence"]}
+            ),
             "computed_at": _timestamp(),
         }
 
     dimensions = []
     missing = False
     for dimension_id, spec in dimension_specs.items():
-        members = [dict(metric) for metric in metrics if metric["dimension_id"] == dimension_id]
+        members = [
+            dict(metric) for metric in metrics if metric["dimension_id"] == dimension_id
+        ]
         possible = sum(metric.pop("points") for metric in members)
         if not members or possible <= 0:
             missing = True
@@ -401,7 +472,13 @@ def finalize(
             denominator = sum(denominators)
             for metric, value in zip(body_metrics, denominators):
                 metric["weight"] = round(value / denominator, 12)
-            score = round(sum(metric["weight"] * float(metric["normalized_score"]) for metric in body_metrics), 6)
+            score = round(
+                sum(
+                    metric["weight"] * float(metric["normalized_score"])
+                    for metric in body_metrics
+                ),
+                6,
+            )
         dimensions.append(
             {
                 "dimension_id": dimension_id,
@@ -412,7 +489,10 @@ def finalize(
             }
         )
 
-    if any(event.get("consequence") == "task_cap_20" for event in objective.get("redline_events", [])):
+    if any(
+        event.get("consequence") == "task_cap_20"
+        for event in objective.get("redline_events", [])
+    ):
         for dimension in dimensions:
             if dimension["dimension_id"] == "scientific_credibility":
                 dimension["score"] = min(dimension["score"], 20.0)
@@ -430,7 +510,8 @@ def finalize(
         "dimensions": dimensions,
         "total_score": total,
         "checks_path": _safe_relative(objective_evidence, "checks_path"),
-        "evidence": sorted({item for metric in metrics for item in metric["evidence"]}) or [_safe_relative(objective_evidence, "evidence")],
+        "evidence": sorted({item for metric in metrics for item in metric["evidence"]})
+        or [_safe_relative(objective_evidence, "evidence")],
         "computed_at": _timestamp(),
     }
 
@@ -440,7 +521,18 @@ def main() -> int:
     parser.add_argument("--objective-report", required=True, type=Path)
     parser.add_argument("--rubric", required=True, type=Path)
     parser.add_argument("--run-id", required=True)
-    parser.add_argument("--candidate-status", required=True, choices=("success", "partial_success", "failed", "timed_out", "resource_exceeded", "cancelled"))
+    parser.add_argument(
+        "--candidate-status",
+        required=True,
+        choices=(
+            "success",
+            "partial_success",
+            "failed",
+            "timed_out",
+            "resource_exceeded",
+            "cancelled",
+        ),
+    )
     parser.add_argument("--objective-evidence", default="objective_report.json")
     parser.add_argument("--llm-report", type=Path)
     parser.add_argument("--review-binding", type=Path)
@@ -457,16 +549,35 @@ def main() -> int:
             candidate_status=args.candidate_status,
             objective_evidence=args.objective_evidence,
             llm_path=args.llm_report.resolve() if args.llm_report else None,
-            review_binding_path=args.review_binding.resolve() if args.review_binding else None,
+            review_binding_path=args.review_binding.resolve()
+            if args.review_binding
+            else None,
             llm_evidence=args.llm_evidence,
             static_path=args.static_review.resolve() if args.static_review else None,
             static_evidence=args.static_evidence,
         )
         _atomic_json(args.output, score)
-    except (OSError, json.JSONDecodeError, KeyError, TypeError, FinalizeError, ReviewIntegrityError) as exc:
+    except (
+        OSError,
+        json.JSONDecodeError,
+        KeyError,
+        TypeError,
+        FinalizeError,
+        ReviewIntegrityError,
+    ) as exc:
         print(f"scorer error: {exc}")
         return 75
-    print(json.dumps({"status": "scored", "run_id": score["run_id"], "score_status": score["score_status"], "total_score": score["total_score"]}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {
+                "status": "scored",
+                "run_id": score["run_id"],
+                "score_status": score["score_status"],
+                "total_score": score["total_score"],
+            },
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 

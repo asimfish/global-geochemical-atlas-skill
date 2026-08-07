@@ -15,26 +15,48 @@ UPLIFT = ROOT / "evaluation_lyf" / "agent_uplift"
 class PromptContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.config = json.loads((UPLIFT / "experiment_config.json").read_text(encoding="utf-8"))
+        cls.config = json.loads(
+            (UPLIFT / "experiment_config.json").read_text(encoding="utf-8")
+        )
         cls.prompts = {
             key: (UPLIFT / filename).read_text(encoding="utf-8")
             for key, filename in cls.config["prompt_files"].items()
         }
         cls.candidate_prompts = {
-            "host_no_skill": (UPLIFT / "candidate_prompts/HOST_B0.md").read_text(encoding="utf-8"),
-            "host_with_skill": (UPLIFT / "candidate_prompts/HOST_S0.md").read_text(encoding="utf-8"),
-            "docker_no_skill": (UPLIFT / "candidate_prompts/DOCKER_B0.md").read_text(encoding="utf-8"),
-            "docker_with_skill": (UPLIFT / "candidate_prompts/DOCKER_S0.md").read_text(encoding="utf-8"),
+            "host_no_skill": (UPLIFT / "candidate_prompts/HOST_B0.md").read_text(
+                encoding="utf-8"
+            ),
+            "host_with_skill": (UPLIFT / "candidate_prompts/HOST_S0.md").read_text(
+                encoding="utf-8"
+            ),
+            "docker_no_skill": (UPLIFT / "candidate_prompts/DOCKER_B0.md").read_text(
+                encoding="utf-8"
+            ),
+            "docker_with_skill": (UPLIFT / "candidate_prompts/DOCKER_S0.md").read_text(
+                encoding="utf-8"
+            ),
         }
         cls.evaluation_prompts = {
-            "b0": (ROOT / "evaluation/prompts/QWEN_B0_NO_SKILL_PROMPT.md").read_text(encoding="utf-8"),
-            "s0": (ROOT / "evaluation/prompts/QWEN_S0_WITH_SKILL_PROMPT.md").read_text(encoding="utf-8"),
+            "b0": (ROOT / "evaluation/prompts/QWEN_B0_NO_SKILL_PROMPT.md").read_text(
+                encoding="utf-8"
+            ),
+            "s0": (ROOT / "evaluation/prompts/QWEN_S0_WITH_SKILL_PROMPT.md").read_text(
+                encoding="utf-8"
+            ),
         }
 
     def test_all_four_uplift_prompts_share_fixed_experiment(self) -> None:
         commit = self.config["commit"]
         self.assertRegex(commit, r"^[0-9a-f]{40}$")
-        self.assertEqual(set(self.prompts), {"host_no_skill", "host_with_skill", "docker_no_skill", "docker_with_skill"})
+        self.assertEqual(
+            set(self.prompts),
+            {
+                "host_no_skill",
+                "host_with_skill",
+                "docker_no_skill",
+                "docker_with_skill",
+            },
+        )
         for name, prompt in self.prompts.items():
             with self.subTest(prompt=name):
                 self.assertIn(self.config["repository"], prompt)
@@ -87,8 +109,12 @@ class PromptContractTests(unittest.TestCase):
             self.assertIn("skill_used=false", no_prompt)
             self.assertIn("只额外", with_prompt)
             self.assertNotIn("git -C bootstrap_repo archive", with_prompt + no_prompt)
-            self.assertIn("skill_used=true", self.candidate_prompts[f"{profile}_with_skill"])
-            self.assertIn("skill_used=false", self.candidate_prompts[f"{profile}_no_skill"])
+            self.assertIn(
+                "skill_used=true", self.candidate_prompts[f"{profile}_with_skill"]
+            )
+            self.assertIn(
+                "skill_used=false", self.candidate_prompts[f"{profile}_no_skill"]
+            )
 
     def test_evaluation_has_explicit_b0_and_s0_launch_prompts(self) -> None:
         common = (
@@ -107,7 +133,9 @@ class PromptContractTests(unittest.TestCase):
                 self.assertIn("checker", prompt)
                 self.assertIn("rubric", prompt)
                 self.assertIn("gold", prompt)
-        self.assertNotIn("skills/global-geochemical-atlas", self.evaluation_prompts["b0"])
+        self.assertNotIn(
+            "skills/global-geochemical-atlas", self.evaluation_prompts["b0"]
+        )
         self.assertIn("skills/global-geochemical-atlas", self.evaluation_prompts["s0"])
         self.assertIn("skill_used=false", self.evaluation_prompts["b0"])
         self.assertIn("skill_used=true", self.evaluation_prompts["s0"])

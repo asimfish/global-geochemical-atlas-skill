@@ -49,7 +49,14 @@ from lab_common import atomic_write_json, prepare_empty_output_dir, sha256_file
 ADAPTER_VERSION = "d1-expanded-global-real-adapter-v1"
 TARGET_ELEMENTS = ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
 
-AFSIS_ELEMENTS = {"As.75": "As", "Cr": "Cr", "Cu": "Cu", "Ni": "Ni", "Pb": "Pb", "Zn": "Zn"}
+AFSIS_ELEMENTS = {
+    "As.75": "As",
+    "Cr": "Cr",
+    "Cu": "Cu",
+    "Ni": "Ni",
+    "Pb": "Pb",
+    "Zn": "Zn",
+}
 AFSIS_DETECTION_LIMITS = {
     "As": "0.60460311943378309",
     "Cr": "0.4273241689678684",
@@ -96,7 +103,18 @@ FOREGS_CONFIG = (
         "material": "FOREGS topsoil",
         "medium": "soil",
         "components": (
-            ("Topsoil/T_AR_data_2v4_8Feb06.csv", {"AS_AR": "As", "CR_AR": "Cr", "CU_AR": "Cu", "NI_AR": "Ni", "PB_AR": "Pb", "ZN_AR": "Zn"}, "aqua_regia"),
+            (
+                "Topsoil/T_AR_data_2v4_8Feb06.csv",
+                {
+                    "AS_AR": "As",
+                    "CR_AR": "Cr",
+                    "CU_AR": "Cu",
+                    "NI_AR": "Ni",
+                    "PB_AR": "Pb",
+                    "ZN_AR": "Zn",
+                },
+                "aqua_regia",
+            ),
             ("Topsoil/T_Hg_data_2v4_8Feb06.csv", {"HG": "Hg"}, "mercury"),
         ),
     },
@@ -106,7 +124,18 @@ FOREGS_CONFIG = (
         "material": "FOREGS subsoil",
         "medium": "soil",
         "components": (
-            ("Subsoil/C_AR_data_2v5_8Feb06.csv", {"AS_AR_C": "As", "CR_AR_C": "Cr", "CU_AR_C": "Cu", "NI_AR_C": "Ni", "PB_AR_C": "Pb", "ZN_AR_C": "Zn"}, "aqua_regia"),
+            (
+                "Subsoil/C_AR_data_2v5_8Feb06.csv",
+                {
+                    "AS_AR_C": "As",
+                    "CR_AR_C": "Cr",
+                    "CU_AR_C": "Cu",
+                    "NI_AR_C": "Ni",
+                    "PB_AR_C": "Pb",
+                    "ZN_AR_C": "Zn",
+                },
+                "aqua_regia",
+            ),
             ("Subsoil/C_Hg_data_2v4_9Feb06.csv", {"HG_C": "Hg"}, "mercury"),
         ),
     },
@@ -116,7 +145,11 @@ FOREGS_CONFIG = (
         "material": "FOREGS humus organic surface layer",
         "medium": "soil",
         "components": (
-            ("Humus/H_icp_data_2v2_11Mar04.csv", {"NI": "Ni", "CU": "Cu", "ZN": "Zn"}, "source_icp"),
+            (
+                "Humus/H_icp_data_2v2_11Mar04.csv",
+                {"NI": "Ni", "CU": "Cu", "ZN": "Zn"},
+                "source_icp",
+            ),
             ("Humus/H_icpadd_data_2v0.csv", {"PB": "Pb"}, "source_icp"),
             ("Humus/H_Hg_data_2v3_7Aug2007.csv", {"HG": "Hg"}, "mercury"),
         ),
@@ -127,7 +160,18 @@ FOREGS_CONFIG = (
         "material": "FOREGS stream water",
         "medium": "water",
         "components": (
-            ("Stream Water/W_all_data_2v8_17Sep07.csv", {"AS": "As", "CR": "Cr", "CU": "Cu", "NI": "Ni", "PB": "Pb", "ZN": "Zn"}, "stream_water"),
+            (
+                "Stream Water/W_all_data_2v8_17Sep07.csv",
+                {
+                    "AS": "As",
+                    "CR": "Cr",
+                    "CU": "Cu",
+                    "NI": "Ni",
+                    "PB": "Pb",
+                    "ZN": "Zn",
+                },
+                "stream_water",
+            ),
         ),
     },
     {
@@ -136,7 +180,18 @@ FOREGS_CONFIG = (
         "material": "FOREGS stream sediment",
         "medium": "sediment",
         "components": (
-            ("Stream Sediment/S_AR_data_2v5_30Nov2006.csv", {"AS": "As", "CR": "Cr", "CU": "Cu", "NI": "Ni", "PB": "Pb", "ZN": "Zn"}, "aqua_regia"),
+            (
+                "Stream Sediment/S_AR_data_2v5_30Nov2006.csv",
+                {
+                    "AS": "As",
+                    "CR": "Cr",
+                    "CU": "Cu",
+                    "NI": "Ni",
+                    "PB": "Pb",
+                    "ZN": "Zn",
+                },
+                "aqua_regia",
+            ),
             ("Stream Sediment/S_Hg_data_2v5_30Nov06.csv", {"HG": "Hg"}, "mercury"),
         ),
     },
@@ -146,7 +201,18 @@ FOREGS_CONFIG = (
         "material": "FOREGS floodplain sediment",
         "medium": "sediment",
         "components": (
-            ("Floodplain Sediment/F_AR_data_2v6_7Aug07.csv", {"AS": "As", "CR": "Cr", "CU": "Cu", "NI": "Ni", "PB": "Pb", "ZN": "Zn"}, "aqua_regia"),
+            (
+                "Floodplain Sediment/F_AR_data_2v6_7Aug07.csv",
+                {
+                    "AS": "As",
+                    "CR": "Cr",
+                    "CU": "Cu",
+                    "NI": "Ni",
+                    "PB": "Pb",
+                    "ZN": "Zn",
+                },
+                "aqua_regia",
+            ),
             ("Floodplain Sediment/F_Hg_data_2v3_7Aug2007.csv", {"HG": "Hg"}, "mercury"),
         ),
     },
@@ -167,7 +233,10 @@ def expanded_verified_path(
     path = fixture_dir / str(resource["local_file"])
     if not path.is_file():
         raise AdapterError(f"expanded fixture is missing: {path}")
-    if path.stat().st_size != int(resource["bytes"]) or sha256_file(path) != resource["sha256"]:
+    if (
+        path.stat().st_size != int(resource["bytes"])
+        or sha256_file(path) != resource["sha256"]
+    ):
         raise AdapterError(f"expanded fixture contract mismatch: {path}")
     return path, resource
 
@@ -193,7 +262,9 @@ def read_first_xlsx_sheet(path: Path) -> list[tuple[int, dict[str, str]]]:
         if "xl/sharedStrings.xml" in archive.namelist():
             root = ET.fromstring(archive.read("xl/sharedStrings.xml"))
             for item in root.findall(f"{namespace}si"):
-                shared.append("".join(node.text or "" for node in item.iter(f"{namespace}t")))
+                shared.append(
+                    "".join(node.text or "" for node in item.iter(f"{namespace}t"))
+                )
         worksheet = ET.fromstring(archive.read("xl/worksheets/sheet1.xml"))
     physical_rows: list[tuple[int, dict[str, str]]] = []
     for row_node in worksheet.iter(f"{namespace}row"):
@@ -217,15 +288,22 @@ def read_first_xlsx_sheet(path: Path) -> list[tuple[int, dict[str, str]]]:
         result.append(
             (
                 physical_row,
-                {header: cells.get(column, "") for column, header in header_by_column.items()},
+                {
+                    header: cells.get(column, "")
+                    for column, header in header_by_column.items()
+                },
             )
         )
     return result
 
 
-def read_china(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_china(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "tpdc_china_mountain_soil")
-    path, resource = expanded_verified_path(fixture_dir, contract, "tpdc_china_soil_data")
+    path, resource = expanded_verified_path(
+        fixture_dir, contract, "tpdc_china_soil_data"
+    )
     for source_row, raw in read_first_xlsx_sheet(path):
         sample_number = raw["Sam.No"]
         horizon = raw["Horizons"]
@@ -278,14 +356,25 @@ def read_china(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[
             yield row
 
 
-def read_afsis(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_afsis(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "afsis_phase1_wet_chemistry")
-    path, resource = expanded_verified_path(fixture_dir, contract, "afsis_wet_chemistry")
+    path, resource = expanded_verified_path(
+        fixture_dir, contract, "afsis_wet_chemistry"
+    )
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        indexed = [(source_row, raw) for source_row, raw in enumerate(csv.DictReader(handle, delimiter="\t"), start=2)]
+        indexed = [
+            (source_row, raw)
+            for source_row, raw in enumerate(
+                csv.DictReader(handle, delimiter="\t"), start=2
+            )
+        ]
     grouped: dict[tuple[str, str], list[tuple[int, dict[str, str]]]] = defaultdict(list)
     for source_row, raw in indexed:
-        grouped[(raw["Country"].strip(), raw["Depth"].strip())].append((source_row, raw))
+        grouped[(raw["Country"].strip(), raw["Depth"].strip())].append(
+            (source_row, raw)
+        )
     selected: list[tuple[int, dict[str, str]]] = []
     for key in sorted(grouped):
         selected.extend(sorted(grouped[key], key=lambda item: item[1]["SSN"])[:40])
@@ -317,7 +406,9 @@ def read_afsis(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[
                     "coordinate_transform_method": "identity screening assumption to OGC:CRS84; source datum not declared",
                     "sample_depth_min_m": depth_min,
                     "sample_depth_max_m": depth_max,
-                    "analytical_method": "Aqua-regia soil digest; Perkin Elmer NexION ICP-MS" if is_arsenic else "Aqua-regia soil digest; Perkin Elmer Optima ICP-OES",
+                    "analytical_method": "Aqua-regia soil digest; Perkin Elmer NexION ICP-MS"
+                    if is_arsenic
+                    else "Aqua-regia soil digest; Perkin Elmer Optima ICP-OES",
                     "method_family": "icp_ms" if is_arsenic else "icp_oes",
                     "digestion_or_extraction": "aqua_regia",
                     "detection_limit": AFSIS_DETECTION_LIMITS[element],
@@ -338,20 +429,39 @@ def read_afsis(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[
 
 
 def normalized_foregs_row(raw: Mapping[str, str]) -> dict[str, str]:
-    return {str(key).strip().upper(): (value or "").strip() for key, value in raw.items() if key is not None}
+    return {
+        str(key).strip().upper(): (value or "").strip()
+        for key, value in raw.items()
+        if key is not None
+    }
 
 
-def foregs_component_rows(data: bytes) -> tuple[dict[str, str], dict[str, str], list[tuple[int, dict[str, str]]]]:
+def foregs_component_rows(
+    data: bytes,
+) -> tuple[dict[str, str], dict[str, str], list[tuple[int, dict[str, str]]]]:
     lines = data.decode("cp1252").splitlines()
     if len(lines) < 4:
         raise AdapterError("FOREGS component has fewer than four rows")
     headers = next(csv.reader([lines[0]]))
     units = next(csv.reader([lines[1]]))
     limits = next(csv.reader([lines[2]]))
-    unit_by_field = {headers[index].strip().upper(): units[index].strip() if index < len(units) else "" for index in range(len(headers))}
-    limit_by_field = {headers[index].strip().upper(): limits[index].strip() if index < len(limits) else "" for index in range(len(headers))}
+    unit_by_field = {
+        headers[index].strip().upper(): units[index].strip()
+        if index < len(units)
+        else ""
+        for index in range(len(headers))
+    }
+    limit_by_field = {
+        headers[index].strip().upper(): limits[index].strip()
+        if index < len(limits)
+        else ""
+        for index in range(len(headers))
+    }
     reader = csv.DictReader(lines[3:], fieldnames=headers)
-    rows = [(source_row, normalized_foregs_row(raw)) for source_row, raw in enumerate(reader, start=4)]
+    rows = [
+        (source_row, normalized_foregs_row(raw))
+        for source_row, raw in enumerate(reader, start=4)
+    ]
     return unit_by_field, limit_by_field, rows
 
 
@@ -385,19 +495,42 @@ def foregs_method(method_kind: str) -> tuple[str, str, str, str]:
     )
 
 
-def read_foregs(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_foregs(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     for config in FOREGS_CONFIG:
         dataset_id = str(config["dataset_id"])
         dataset = dataset_by_id(contract, dataset_id)
-        path, resource = expanded_verified_path(fixture_dir, contract, str(config["resource_id"]))
-        parsed_components: list[tuple[str, Mapping[str, str], str, Mapping[str, str], Mapping[str, str], list[tuple[int, dict[str, str]]]]] = []
+        path, resource = expanded_verified_path(
+            fixture_dir, contract, str(config["resource_id"])
+        )
+        parsed_components: list[
+            tuple[
+                str,
+                Mapping[str, str],
+                str,
+                Mapping[str, str],
+                Mapping[str, str],
+                list[tuple[int, dict[str, str]]],
+            ]
+        ] = []
         sites_by_country: dict[str, set[str]] = defaultdict(set)
         with zipfile.ZipFile(path) as archive:
             for member_path, elements, method_kind in config["components"]:
                 member = archive_member(resource, member_path)
                 data = archive.read(member_path)
                 unit_by_field, limit_by_field, rows = foregs_component_rows(data)
-                parsed_components.append((member_path, elements, method_kind, member, unit_by_field, limit_by_field, rows))
+                parsed_components.append(
+                    (
+                        member_path,
+                        elements,
+                        method_kind,
+                        member,
+                        unit_by_field,
+                        limit_by_field,
+                        rows,
+                    )
+                )
                 for _, raw in rows:
                     country_code = raw.get("COUNTRY", "")
                     site_id = raw.get("GTN", "")
@@ -408,8 +541,18 @@ def read_foregs(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict
             for country_code in sorted(sites_by_country)
             for site in sorted(sites_by_country[country_code])[:12]
         }
-        for member_path, elements, method_kind, member, unit_by_field, limit_by_field, rows in parsed_components:
-            analytical_method, method_family, extraction, basis = foregs_method(method_kind)
+        for (
+            member_path,
+            elements,
+            method_kind,
+            member,
+            unit_by_field,
+            limit_by_field,
+            rows,
+        ) in parsed_components:
+            analytical_method, method_family, extraction, basis = foregs_method(
+                method_kind
+            )
             for source_row, raw in rows:
                 site_id = raw.get("GTN", "")
                 if site_id not in selected_sites:
@@ -433,7 +576,9 @@ def read_foregs(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict
                             "analyte_reported": source_field,
                             "value": "" if missing else raw_value,
                             "unit": unit,
-                            "source_qualifier_raw": "source_missing_sentinel_-1" if missing else "source_dataset_may_encode_below_DL_as_DL_over_2",
+                            "source_qualifier_raw": "source_missing_sentinel_-1"
+                            if missing
+                            else "source_dataset_may_encode_below_DL_as_DL_over_2",
                             "missing_reason": "not_reported" if missing else "",
                             "medium": str(config["medium"]),
                             "material": str(config["material"]),
@@ -466,7 +611,9 @@ def normalized_numeric_id(value: str) -> str:
     return str(int(text)) if text.isdigit() else text
 
 
-def with_occurrence(rows: Sequence[tuple[int, dict[str, str]]], id_field: str) -> dict[str, list[tuple[int, dict[str, str]]]]:
+def with_occurrence(
+    rows: Sequence[tuple[int, dict[str, str]]], id_field: str
+) -> dict[str, list[tuple[int, dict[str, str]]]]:
     grouped: dict[str, list[tuple[int, dict[str, str]]]] = defaultdict(list)
     for source_row, raw in rows:
         native_id = normalized_numeric_id(raw.get(id_field, ""))
@@ -481,24 +628,57 @@ def even_indices(size: int, count: int) -> list[int]:
     return sorted({round(index * (size - 1) / (count - 1)) for index in range(count)})
 
 
-def read_gsj(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_gsj(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "gsj_japan_river_sediment")
-    sample_path, sample_resource = expanded_verified_path(fixture_dir, contract, "gsj_japan_sample_information")
-    chemistry_path, chemistry_resource = expanded_verified_path(fixture_dir, contract, "gsj_japan_concentrations")
+    sample_path, sample_resource = expanded_verified_path(
+        fixture_dir, contract, "gsj_japan_sample_information"
+    )
+    chemistry_path, chemistry_resource = expanded_verified_path(
+        fixture_dir, contract, "gsj_japan_concentrations"
+    )
     with sample_path.open("r", encoding="shift_jis", newline="") as handle:
-        sample_rows = [(row_number, raw) for row_number, raw in enumerate(csv.DictReader(handle), start=2)]
+        sample_rows = [
+            (row_number, raw)
+            for row_number, raw in enumerate(csv.DictReader(handle), start=2)
+        ]
     with chemistry_path.open("r", encoding="shift_jis", newline="") as handle:
-        chemistry_rows = [(row_number, raw) for row_number, raw in enumerate(csv.DictReader(handle), start=2)]
+        chemistry_rows = [
+            (row_number, raw)
+            for row_number, raw in enumerate(csv.DictReader(handle), start=2)
+        ]
     samples = with_occurrence(sample_rows, "試料番号")
     chemistry = with_occurrence(chemistry_rows, "番号2")
     paired: list[tuple[str, int, int, dict[str, str], int, dict[str, str]]] = []
-    for native_id in sorted(set(samples) & set(chemistry), key=lambda value: (not value.isdigit(), int(value) if value.isdigit() else value)):
-        for occurrence, (sample_item, chemistry_item) in enumerate(zip(samples[native_id], chemistry[native_id], strict=True), start=1):
-            paired.append((native_id, occurrence, sample_item[0], sample_item[1], chemistry_item[0], chemistry_item[1]))
+    for native_id in sorted(
+        set(samples) & set(chemistry),
+        key=lambda value: (
+            not value.isdigit(),
+            int(value) if value.isdigit() else value,
+        ),
+    ):
+        for occurrence, (sample_item, chemistry_item) in enumerate(
+            zip(samples[native_id], chemistry[native_id], strict=True), start=1
+        ):
+            paired.append(
+                (
+                    native_id,
+                    occurrence,
+                    sample_item[0],
+                    sample_item[1],
+                    chemistry_item[0],
+                    chemistry_item[1],
+                )
+            )
     if len(paired) != 3024:
-        raise AdapterError(f"GSJ occurrence-aware join expected 3024 samples, found {len(paired)}")
+        raise AdapterError(
+            f"GSJ occurrence-aware join expected 3024 samples, found {len(paired)}"
+        )
     for selected_index in even_indices(len(paired), 600):
-        native_id, occurrence, sample_row, sample, chemistry_row, chemistry_values = paired[selected_index]
+        native_id, occurrence, sample_row, sample, chemistry_row, chemistry_values = (
+            paired[selected_index]
+        )
         occurrence_key = f"{native_id}-occ{occurrence}"
         for element in TARGET_ELEMENTS:
             unit = "ppb" if element == "Hg" else "ppm"
@@ -564,17 +744,26 @@ def pangaea_country(location: str) -> str:
     return ""
 
 
-def read_pangaea(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_pangaea(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "pangaea_north_africa_soils")
-    path, resource = expanded_verified_path(fixture_dir, contract, "pangaea_north_africa_archive")
+    path, resource = expanded_verified_path(
+        fixture_dir, contract, "pangaea_north_africa_archive"
+    )
     member = archive_member(resource, "datasets/Table_S5.tab")
     with zipfile.ZipFile(path) as archive:
         lines = archive.read("datasets/Table_S5.tab").decode("utf-8").splitlines()
     header_index = next(
-        index for index, line in enumerate(lines) if line.startswith("Event\tArea\tLocation\tLatitude\tLongitude\t")
+        index
+        for index, line in enumerate(lines)
+        if line.startswith("Event\tArea\tLocation\tLatitude\tLongitude\t")
     )
     reader = csv.DictReader(lines[header_index:], delimiter="\t")
-    element_fields = {f"{element} [mg/kg]": element for element in ("As", "Cr", "Cu", "Ni", "Pb", "Zn")}
+    element_fields = {
+        f"{element} [mg/kg]": element
+        for element in ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
+    }
     for offset, raw in enumerate(reader, start=1):
         source_row = header_index + 1 + offset
         sample_id = raw["Sample ID"].strip()
@@ -648,9 +837,13 @@ def run_adapter(
     if not rows:
         raise AdapterError("expanded global adapters produced no D1 records")
     record_ids = [row["record_id"] for row in rows]
-    duplicate_ids = [record_id for record_id, count in Counter(record_ids).items() if count > 1]
+    duplicate_ids = [
+        record_id for record_id, count in Counter(record_ids).items() if count > 1
+    ]
     if duplicate_ids:
-        raise AdapterError(f"expanded adapters produced duplicate record ids: {duplicate_ids[:10]}")
+        raise AdapterError(
+            f"expanded adapters produced duplicate record ids: {duplicate_ids[:10]}"
+        )
 
     export_path = output_dir / "d1_global_export.csv"
     write_csv(export_path, rows)
@@ -658,11 +851,17 @@ def run_adapter(
     medium_counts = Counter(row["medium"] for row in rows)
     element_counts = Counter(row["element_or_analyte"] for row in rows)
     continent_counts = Counter(row["benchmark_continent"] for row in rows)
-    country_counts = Counter(row["benchmark_country"] for row in rows if row["benchmark_country"])
+    country_counts = Counter(
+        row["benchmark_country"] for row in rows if row["benchmark_country"]
+    )
     countries_by_source: dict[str, list[str]] = {}
     for source_id in sorted(source_counts):
         countries_by_source[source_id] = sorted(
-            {row["benchmark_country"] for row in rows if row["source_id"] == source_id and row["benchmark_country"]}
+            {
+                row["benchmark_country"]
+                for row in rows
+                if row["source_id"] == source_id and row["benchmark_country"]
+            }
         )
     gemstat_countries = countries_by_source.get("gemstat_global_freshwater_v3", [])
     manifest = {
@@ -687,7 +886,9 @@ def run_adapter(
         "gemstat_countries": gemstat_countries,
         "selection_is_value_independent": True,
         "selection_policies": expanded_contract["fixture_build"],
-        "declared_blind_spots": expanded_contract["coverage_acceptance"]["required_blind_spots"],
+        "declared_blind_spots": expanded_contract["coverage_acceptance"][
+            "required_blind_spots"
+        ],
         "output": {
             "path": export_path.name,
             "bytes": export_path.stat().st_size,
@@ -707,9 +908,15 @@ def run_adapter(
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Adapt core plus expanded frozen real sources to the D2 input CSV.")
-    parser.add_argument("--core-fixture-dir", type=Path, default=DEFAULT_CORE_FIXTURE_DIR)
-    parser.add_argument("--expanded-fixture-dir", type=Path, default=DEFAULT_EXPANDED_FIXTURE_DIR)
+    parser = argparse.ArgumentParser(
+        description="Adapt core plus expanded frozen real sources to the D2 input CSV."
+    )
+    parser.add_argument(
+        "--core-fixture-dir", type=Path, default=DEFAULT_CORE_FIXTURE_DIR
+    )
+    parser.add_argument(
+        "--expanded-fixture-dir", type=Path, default=DEFAULT_EXPANDED_FIXTURE_DIR
+    )
     parser.add_argument("--output-dir", type=Path, required=True)
     return parser
 
@@ -718,8 +925,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
-        result = run_adapter(args.core_fixture_dir, args.expanded_fixture_dir, args.output_dir)
-    except (AdapterError, OSError, ValueError, csv.Error, zipfile.BadZipFile, json.JSONDecodeError, ET.ParseError) as exc:
+        result = run_adapter(
+            args.core_fixture_dir, args.expanded_fixture_dir, args.output_dir
+        )
+    except (
+        AdapterError,
+        OSError,
+        ValueError,
+        csv.Error,
+        zipfile.BadZipFile,
+        json.JSONDecodeError,
+        ET.ParseError,
+    ) as exc:
         parser.error(str(exc))
     print(
         json.dumps(
@@ -729,7 +946,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "manifest": str(result["manifest"]),
                 "record_count": result["summary"]["record_count"],
                 "source_dataset_count": result["summary"]["source_dataset_count"],
-                "explicit_country_label_count": result["summary"]["explicit_country_label_count"],
+                "explicit_country_label_count": result["summary"][
+                    "explicit_country_label_count"
+                ],
             },
             ensure_ascii=False,
             sort_keys=True,

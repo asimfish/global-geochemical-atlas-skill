@@ -27,12 +27,15 @@ def _folded(fields: Mapping[str, Any]) -> dict[str, str]:
 def _has_possible_dl2(record: source_adapters.RawRecord) -> bool:
     observations = record.fields.get("_target_observations")
     return isinstance(observations, Mapping) and any(
-        isinstance(value, Mapping) and value.get("possible_upstream_dl_over_2_substitution") is True
+        isinstance(value, Mapping)
+        and value.get("possible_upstream_dl_over_2_substitution") is True
         for value in observations.values()
     )
 
 
-def _select(records: Sequence[source_adapters.RawRecord], count: int) -> list[tuple[source_adapters.RawRecord, list[str]]]:
+def _select(
+    records: Sequence[source_adapters.RawRecord], count: int
+) -> list[tuple[source_adapters.RawRecord, list[str]]]:
     by_file: dict[str, list[source_adapters.RawRecord]] = defaultdict(list)
     for record in records:
         by_file[str(record.fields.get("_source_file") or "")].append(record)
@@ -47,10 +50,14 @@ def _select(records: Sequence[source_adapters.RawRecord], count: int) -> list[tu
             selected_ids.add(record.source_record_id)
 
     for filename, file_records in by_file.items():
-        possible = next((record for record in file_records if _has_possible_dl2(record)), None)
+        possible = next(
+            (record for record in file_records if _has_possible_dl2(record)), None
+        )
         if possible is not None:
             add(possible, f"member={filename};possible_upstream_dl_over_2_substitution")
-        ordinary = next((record for record in file_records if not _has_possible_dl2(record)), None)
+        ordinary = next(
+            (record for record in file_records if not _has_possible_dl2(record)), None
+        )
         if ordinary is not None:
             add(ordinary, f"member={filename};ordinary_numeric_row")
 
@@ -89,7 +96,9 @@ def build(source_id: str, cache_dir: Path, prepared_at: str) -> dict[str, Any]:
             raise ReviewError(f"review row references an unknown member: {source_file}")
         observations = fields.get("_target_observations")
         if not isinstance(observations, Mapping):
-            raise ReviewError(f"review row lacks target observations: {record.source_locator}")
+            raise ReviewError(
+                f"review row lacks target observations: {record.source_locator}"
+            )
         adapter_observations: list[dict[str, Any]] = []
         for analyte, value in observations.items():
             if not isinstance(value, Mapping):
@@ -104,12 +113,18 @@ def build(source_id: str, cache_dir: Path, prepared_at: str) -> dict[str, Any]:
                     "detection_limit": str(value.get("detection_limit") or ""),
                     "measurement_basis": str(value.get("measurement_basis") or ""),
                     "analytical_method": str(value.get("analytical_method") or ""),
-                    "digestion_or_extraction": str(value.get("digestion_or_extraction") or ""),
+                    "digestion_or_extraction": str(
+                        value.get("digestion_or_extraction") or ""
+                    ),
                     "possible_upstream_dl_over_2_substitution": bool(
                         value.get("possible_upstream_dl_over_2_substitution")
                     ),
                     "record_id": source_adapters.stable_record_id(
-                        source_id, record.source_record_id, str(analyte), raw_value, unit
+                        source_id,
+                        record.source_record_id,
+                        str(analyte),
+                        raw_value,
+                        unit,
                     ),
                 }
             )
@@ -121,12 +136,19 @@ def build(source_id: str, cache_dir: Path, prepared_at: str) -> dict[str, Any]:
                 "review_id": f"{source_id}-review-{index:02d}",
                 "source_record_id": record.source_record_id,
                 "source_locator": record.source_locator,
-                "sample_id": str(fields.get(sample_field) or "") if sample_field else "",
-                "latitude": str(fields.get(latitude_field) or "") if latitude_field else "",
-                "longitude": str(fields.get(longitude_field) or "") if longitude_field else "",
+                "sample_id": str(fields.get(sample_field) or "")
+                if sample_field
+                else "",
+                "latitude": str(fields.get(latitude_field) or "")
+                if latitude_field
+                else "",
+                "longitude": str(fields.get(longitude_field) or "")
+                if longitude_field
+                else "",
                 "source_file_sha256": file_evidence.sha256,
                 "published_target_raw_values": {
-                    str(item["analyte"]): str(item["raw_value"]) for item in adapter_observations
+                    str(item["analyte"]): str(item["raw_value"])
+                    for item in adapter_observations
                 },
                 "adapter_observations": adapter_observations,
                 "selection_reasons": reasons,
@@ -139,7 +161,8 @@ def build(source_id: str, cache_dir: Path, prepared_at: str) -> dict[str, Any]:
                     "possible_dl2_is_warning_not_censoring_assertion": True,
                     "stable_observation_ids_unique": len(
                         {item["record_id"] for item in adapter_observations}
-                    ) == len(adapter_observations),
+                    )
+                    == len(adapter_observations),
                 },
                 "automated_status": "PASS",
                 "reviewer": {
@@ -157,7 +180,9 @@ def build(source_id: str, cache_dir: Path, prepared_at: str) -> dict[str, Any]:
         "prepared_at": prepared_at,
         "status": "prepared",
         "prepared_record_count": len(review_records),
-        "automated_pass_count": sum(item["automated_status"] == "PASS" for item in review_records),
+        "automated_pass_count": sum(
+            item["automated_status"] == "PASS" for item in review_records
+        ),
         "completed_record_count": 0,
         "all_records_reviewed": False,
         "records": review_records,
@@ -185,7 +210,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     except (OSError, ReviewError, source_adapters.SourceAdapterError) as exc:
         print(f"prepare_foregs_review: {exc}", file=sys.stderr)
         return 2
-    print(json.dumps({"status": "PASS", "source_id": args.source, "prepared": 30}, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "PASS", "source_id": args.source, "prepared": 30}, sort_keys=True
+        )
+    )
     return 0
 
 

@@ -29,9 +29,25 @@ description: 该技能用于构建全球或区域地球化学元素分布图谱�
 
 不要跳过阶段，不要用后续可视化补造上游证据。
 
+把每个关键选择、排除、降级和拒绝的 `status`、理由、证据定位、限制与 `next_action` 写入用户要求的结构化产物；最终聊天摘要不能替代产物内证据。hash 只证明固定字节一致，规则通过只证明该规则已满足，两者都不能单独证明测量值真实或科学结论正确。
+
 ## 先路由，再加载
 
-只执行用户问题所需的最小路径。先把任务冻结为符合 [references/task-contract.schema.json](references/task-contract.schema.json) 的 `atlas-task-contract-v1`，再运行：
+只执行用户问题所需的最小路径。先把任务冻结为符合 [references/task-contract.schema.json](references/task-contract.schema.json) 的 `atlas-task-contract-v1`。处理用户文件的完整图谱任务可写为：
+
+```json
+{
+  "contract_version": "atlas-task-contract-v1",
+  "task_type": "full_atlas",
+  "request": "REQUEST.json",
+  "input": "INPUT.csv",
+  "evidence_jsonl": "RECORD_EVIDENCE.jsonl",
+  "acquisition_manifest": "ACQUISITION_MANIFEST.json",
+  "output_dir": "OUTPUT_DIR"
+}
+```
+
+再运行：
 
 ```bash
 python scripts/task_router.py --contract TASK.json --output TASK_PLAN.json
@@ -131,7 +147,14 @@ python scripts/run_atlas_request.py \
   --output-dir OUTPUT_DIR
 ```
 
-`auto` 先按证据等级、介质增益、来源 ID 做确定性排序；当 `max_records` 足够覆盖逐源最低配额时保留全部兼容来源，否则选择满足记录预算且尽量覆盖请求介质的最小高证据子集，并在 execution evidence 中显式记录跳过项。逐源使用剩余 acquisition window 的公平份额，验证 manifest/hash、命名空间化源文件，再合并长表与逐记录证据；绝不静默选择第一项。每源结果写入 `request_evidence/execution.json.source_outcomes`，实际参与验证的请求、父级和逐源 manifest 原字节保留在 `request_evidence/acquisition/` 并由 `acquisition_manifests` 绑定。默认单源失败时以已验证子集继续并返回 `partial_success`；任务要求全源完整时加 `--require-all-sources` 失败关闭。也可把 `auto` 换为一个已路由 `SOURCE_ID`。所有阶段共享默认 840 秒内部 deadline；单源 timeout 只是上限，不能延长总预算。
+`auto` 按以下规则确定性执行：
+
+1. 按证据等级、介质增益和来源 ID 排序；
+2. `max_records` 足以覆盖逐源最低配额时保留全部兼容来源；
+3. 否则选择满足记录预算、尽量覆盖请求介质的最小高证据子集，并在 execution evidence 中记录跳过项；
+4. 给每个来源分配剩余 acquisition window 的公平份额，验证 manifest/hash，命名空间化源文件，再合并长表与逐记录证据。
+
+不得静默选择第一项。每源结果写入 `request_evidence/execution.json.source_outcomes`；实际参与验证的请求、父级和逐源 manifest 原字节保留在 `request_evidence/acquisition/`，并由 `acquisition_manifests` 绑定。默认在单源失败时用已验证子集继续并返回 `partial_success`；任务要求全源完整时加 `--require-all-sources` 失败关闭。也可把 `auto` 换为一个已路由 `SOURCE_ID`。所有阶段共享默认 840 秒内部 deadline；单源 timeout 只是上限，不能延长总预算。
 
 ### 独立阶段入口
 
@@ -166,7 +189,13 @@ python scripts/coverage_report.py \
 
 用 [references/source-evidence-standard-v3.md](references/source-evidence-standard-v3.md) 解释八维评分，用 [references/source-interface-cards.md](references/source-interface-cards.md) 判断逐源边界。区分 `source_declared_in_input`、`validated_record_evidence`、`verified_record_evidence`；hash 只证明链路一致，标识符对账只验证书目信息，两者都不证明测量值真实。证据分数不是正确概率；旧 `approved`/`production_eligible` 不覆盖当前路由。
 
-每个来源至少保存：标题、机构、DOI/稳定 ID、版本、许可与科研使用条件、精确 URL/参数、获取时间、服务端及本地过滤、响应字节/记录数/SHA-256、字段映射、失败和未覆盖范围。逐记录 sidecar 必须以 `record_id` 绑定 `source_id + source_locator + source_record_id + source_file_sha256`；run manifest 再绑定输入和 sidecar hash。标准见 [references/record-evidence.schema.json](references/record-evidence.schema.json) 与 [references/acquisition-run-manifest.schema.json](references/acquisition-run-manifest.schema.json)。
+每个来源至少保存：
+
+- 标题、机构、DOI/稳定 ID、版本、许可与科研使用条件；
+- 精确 URL/参数、获取时间、服务端及本地过滤；
+- 响应字节、记录数、SHA-256、字段映射、失败和未覆盖范围。
+
+逐记录 sidecar 必须以 `record_id` 绑定 `source_id + source_locator + source_record_id + source_file_sha256`；run manifest 再绑定输入和 sidecar hash。标准见 [references/record-evidence.schema.json](references/record-evidence.schema.json) 与 [references/acquisition-run-manifest.schema.json](references/acquisition-run-manifest.schema.json)。
 
 只访问公开科研来源。搜索摘要只能发现数据集，不能充当测量证据。需要登录、人工同意或科研使用条件不清时返回 `source_not_accessible`/`needs_human_review`，不得绕过。动态 API 按 [references/dynamic-snapshot-policy.md](references/dynamic-snapshot-policy.md) 固定请求、UTC、成员清单和响应 hash；新快照不覆盖旧快照。
 
@@ -230,7 +259,16 @@ policy 服从 [references/batch-qc-policy.schema.json](references/batch-qc-polic
 
 仅对通过单位、坐标、删失值、重复和批次门禁的可比正值，在 `log10` 空间计算 `z=0.67448975*(log10(x)-median)/MAD`；以 `|z|≥3.5` 分别输出 `direction=high`（富集）和 `direction=low`（亏损）。禁止插补后参与计算。
 
-背景键至少隔离：元素、介质、material/sample type、层位/环境/分相/粒级、measurement basis、地质、方法/方法族/method scope 和消解/提取。先检查总组数，再要求 quantified fraction `≥70%`；生产 `n≥20`，demo 可用 `n≥8` 并标明。MAD=0 绝不加 epsilon；只有任务冻结且扩展实现了经验分位数 fallback 时才使用，否则返回 `zero_dispersion`。样本不足返回 `insufficient_background`，不降低阈值或生成分数；仍输出描述统计，并建议增加达到门槛所需的可定量独立样品。输出 `interface_version=d2-interface-v2`、`method_version=d2-robust-mad-v2`。
+背景键至少隔离：元素、介质、material/sample type、层位/环境/分相/粒级、measurement basis、地质、方法/方法族/method scope 和消解/提取。
+
+门禁顺序如下：
+
+1. 先检查总组数，再要求 quantified fraction `≥70%`；
+2. production 要求 `n≥20`，demo 可用 `n≥8`，但必须标明；
+3. MAD=0 时绝不加 epsilon；只有任务已冻结且扩展明确实现经验分位数 fallback 时才使用，否则返回 `zero_dispersion`；
+4. 样本不足时返回 `insufficient_background`，不降低阈值或生成分数，但仍输出描述统计，并建议补充达到门槛所需的可定量独立样品。
+
+输出 `interface_version=d2-interface-v2`、`method_version=d2-robust-mad-v2`。
 
 `anomaly_report.json` 必须包含方向、robust z、组内 n、quantified fraction、log10 median/MAD、阈值、分组键和排除原因。记录级候选之后，`d2-spatial-hypergeometric-fdr-v1` 在同一背景组内以候选总数为条件做一侧精确超几何网格富集检验，再对全部可检验网格/方向执行 BH-FDR；默认网格内外各需 demo `n≥5`/production `n≥20`、候选数≥2、`q≤0.10`。输出 `anomaly_regions.geojson` 与 `spatial_anomaly_report.json`。
 
@@ -262,9 +300,15 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 
 按问题选 `story`：`overview` 数据/介质，`coverage` 覆盖，`anomaly` 候选，`comparison` 组合，`database` 标准记录，`evidence` 证据链。全球请求保持 global；任意 Natural Earth 国家名称/别名/ISO-3 使用冻结多边形，自定义 bbox 不冒充行政/地质边界。区域产物不得内嵌区外记录，只裁剪 HTML 与 `samples.geojson`，不改写完整 `geochemistry.csv`，并显示完整与预览口径差异。
 
-GeoJSON 必须是确定性排序的 RFC 7946 `[lon,lat]`。无元素筛选时热力图只表示 `sample_count` 密度；删失记录计入密度与 censored fraction，但不计入浓度中位数，且禁止空间插值。冻结单元素 profile 时额外生成符合 [references/concentration-grid.schema.json](references/concentration-grid.schema.json) 的 `concentration_grid.geojson`：固定 WGS84 观测格网只使用样本量最大的同介质、basis、方法和单位可比层，报告 sample count、删失比例和可定量值中位数/IQR；其他记录只能灰显，不插值、不跨层混合着色。数据库视图必须显示含量直方图、元素×介质覆盖矩阵和关键字段完整率，并只允许输出非破坏性 `geochemistry-research-patch-v1`，不得覆盖 canonical 数据或证据。
+GeoJSON 必须是确定性排序的 RFC 7946 `[lon,lat]`。无元素筛选时，热力图只表示 `sample_count` 密度；删失记录计入密度与 censored fraction，但不计入浓度中位数，且禁止空间插值。
 
-元素组合只在同一来源、同一稳定物理样品和同一可比层内计算 log10 配对、tie-corrected Spearman ρ、四象限与排除统计；`story=comparison` 必须生成符合 [references/element-comparison.schema.json](references/element-comparison.schema.json) 的 `element_comparison.json` 并绑定输入/profile/输出 hash，瞬时 UI 状态不算复现。REE spider 仅在明确归一化参考与元素集时启用；ternary/CLR 仅在闭合组成和删失条件成立时启用。关联不等于因果。迭代项按 [references/iteration-backlog.schema.json](references/iteration-backlog.schema.json) 标 `scientific_limit`、`action_required` 或 `review_required`。完整规则见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
+冻结单元素 profile 时，额外生成符合 [references/concentration-grid.schema.json](references/concentration-grid.schema.json) 的 `concentration_grid.geojson`。固定 WGS84 观测格网只使用样本量最大的同介质、basis、方法和单位可比层，报告 sample count、删失比例和可定量值中位数/IQR；其他记录只能灰显，不插值、不跨层混合着色。
+
+数据库视图必须显示含量直方图、元素×介质覆盖矩阵和关键字段完整率，并只允许输出非破坏性 `geochemistry-research-patch-v1`，不得覆盖 canonical 数据或证据。
+
+元素组合只在同一来源、同一稳定物理样品和同一可比层内计算 log10 配对、tie-corrected Spearman ρ、四象限与排除统计。`story=comparison` 必须生成符合 [references/element-comparison.schema.json](references/element-comparison.schema.json) 的 `element_comparison.json`，并绑定输入/profile/输出 hash；瞬时 UI 状态不算复现。
+
+REE spider 仅在明确归一化参考与元素集时启用；ternary/CLR 仅在闭合组成和删失条件成立时启用。关联不等于因果。迭代项按 [references/iteration-backlog.schema.json](references/iteration-backlog.schema.json) 标 `scientific_limit`、`action_required` 或 `review_required`。完整规则见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 
 ## 7. 验证五项交付
 
@@ -290,7 +334,9 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 
 ## 8. 失败关闭与人工门禁
 
-全部必需范围和验证通过才用 `success`；若冻结任务要求的来源、批次、空间记录或背景组被门禁排除，但已验证子集仍可交付，则用 `partial_success` 并列出缺口。阶段码使用 `invalid_input`、`unsupported_scope`、`network_unavailable`、`source_not_accessible`、`incomplete_retrieval`、`conflicting_evidence`、`insufficient_background`、`needs_human_review`。保留事实、失败阶段和下一步；“未检索到”不等于“不存在”。完整矩阵见 [references/failures.md](references/failures.md)。
+全部必需范围和验证通过才用 `success`。若冻结任务要求的来源、批次、空间记录或背景组被门禁排除，但已验证子集仍可交付，则用 `partial_success` 并列出缺口。
+
+阶段码使用 `invalid_input`、`unsupported_scope`、`network_unavailable`、`source_not_accessible`、`incomplete_retrieval`、`conflicting_evidence`、`insufficient_background`、`needs_human_review`。保留事实、失败阶段和下一步；“未检索到”不等于“不存在”。完整矩阵见 [references/failures.md](references/failures.md)。
 
 来源达到 A 级且适配器通过，仍不自动成为 `benchmark_ready`。30 条准备记录必须由具名人员逐条检查源定位、原值、单位、qualifier、方法和 canonical 映射：
 
@@ -318,5 +364,6 @@ python scripts/validate_human_review.py \
 - D2 实体与溯源：[观测 v1](references/observation.schema.json)、[样品 v1](references/sample.schema.json)、[样品 v2](references/sample-v2.schema.json)、[采样事件](references/sampling-event.schema.json)、[分析方法 v1](references/analytical-method.schema.json)、[分析方法 v2](references/analytical-method-v2.schema.json)、[出版物](references/publication.schema.json)、[溯源](references/provenance.schema.json)、[SQLite schema](references/sqlite-schema.sql)；
 - D3：[可视化契约](references/d3-visualization-contract.md)、[profile schema](references/visualization-profile.schema.json)、[报告 schema](references/visualization-report.schema.json)、[元素组合 schema](references/element-comparison.schema.json)、[浓度格网 schema](references/concentration-grid.schema.json)、[迭代闭环](references/iteration-loop.md)。
 - V4 迁移与覆盖：[迁移说明](references/v4-schema-migration.md)、[全量 profile](references/v4-full-population-profile.md)、[profile schema](references/v4-full-profile.schema.json)、[覆盖立方体行 schema](references/v4-coverage-cube-row.schema.json)、[覆盖平衡 schema](references/v4-coverage-balance.schema.json)、[来源完整率](references/v4-source-completeness.md)、[V4 自审](references/v4-self-audit-2026-08-06.md)、[存储与性能](references/storage-and-performance.md)。
+- 性能与适用边界：[离线工作流基准](BENCHMARK.md)。
 
 只读取当前阶段所需项。schema 是机器契约，本文门禁是执行顺序；冲突时失败关闭并报告版本，不猜测。

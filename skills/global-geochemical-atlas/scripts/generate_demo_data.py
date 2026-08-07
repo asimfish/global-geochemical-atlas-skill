@@ -198,16 +198,21 @@ def sha256_file(path: Path) -> str:
             digest.update(chunk)
     return digest.hexdigest()
 
+
 def atomic_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         handle.write(content)
         temporary = Path(handle.name)
     os.replace(temporary, path)
 
 
 def atomic_json(path: Path, value: Any) -> None:
-    atomic_text(path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    atomic_text(
+        path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    )
 
 
 def _reported_float(value: Any) -> float | None:
@@ -224,7 +229,9 @@ def _parse_analytes(value: str) -> tuple[str, ...]:
     for token in value.split(","):
         text = token.strip()
         if not re.fullmatch(r"[A-Z][a-z]?", text):
-            raise argparse.ArgumentTypeError(f"invalid element symbol: {text or '<blank>'}")
+            raise argparse.ArgumentTypeError(
+                f"invalid element symbol: {text or '<blank>'}"
+            )
         if text not in analytes:
             analytes.append(text)
     if not analytes:
@@ -244,7 +251,9 @@ def _parse_bbox(value: str) -> tuple[float, float, float, float]:
     return west, south, east, north
 
 
-def _inside_bbox(latitude: str, longitude: str, bbox: tuple[float, float, float, float] | None) -> bool:
+def _inside_bbox(
+    latitude: str, longitude: str, bbox: tuple[float, float, float, float] | None
+) -> bool:
     if bbox is None:
         return True
     lat = _reported_float(latitude)
@@ -252,7 +261,9 @@ def _inside_bbox(latitude: str, longitude: str, bbox: tuple[float, float, float,
     if lat is None or lon is None:
         return False
     west, south, east, north = bbox
-    longitude_inside = west <= lon <= east if west <= east else lon >= west or lon <= east
+    longitude_inside = (
+        west <= lon <= east if west <= east else lon >= west or lon <= east
+    )
     return longitude_inside and south <= lat <= north
 
 
@@ -261,7 +272,9 @@ def _validate_generated_at(value: str) -> str:
     try:
         parsed = datetime.fromisoformat(candidate.replace("Z", "+00:00"))
     except ValueError as exc:
-        raise argparse.ArgumentTypeError("generated-at must be an ISO-8601 timestamp") from exc
+        raise argparse.ArgumentTypeError(
+            "generated-at must be an ISO-8601 timestamp"
+        ) from exc
     if parsed.tzinfo is None:
         raise argparse.ArgumentTypeError("generated-at must include a timezone")
     return candidate
@@ -270,7 +283,9 @@ def _validate_generated_at(value: str) -> str:
 def _source_row(record: RawRecord) -> tuple[str, str]:
     file_locator, separator, row_text = record.source_locator.partition("#row=")
     if not separator or not row_text.isdigit():
-        raise DemoError(f"source locator has no numeric row fragment: {record.source_locator}")
+        raise DemoError(
+            f"source locator has no numeric row fragment: {record.source_locator}"
+        )
     return file_locator, row_text
 
 
@@ -302,7 +317,9 @@ def _reported_measurement(value: Any) -> tuple[str, str, str, str] | None:
     if not raw:
         return None
     compact = raw.replace(",", "").replace("−", "-")
-    match = re.fullmatch(r"(<=|>=|<|>)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)", compact)
+    match = re.fullmatch(
+        r"(<=|>=|<|>)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)", compact
+    )
     if match:
         number = _reported_float(match.group(2))
         if number is None:
@@ -393,7 +410,9 @@ def georoc_demo(
     bbox: tuple[float, float, float, float] | None,
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int, int]:
     if observation_limit % len(analytes) != 0:
-        raise DemoError("GEOROC observation limit must be divisible by the element count")
+        raise DemoError(
+            "GEOROC observation limit must be divisible by the element count"
+        )
     per_analyte_limit = observation_limit // len(analytes)
     selected_per_analyte: Counter[str] = Counter()
     rows: list[dict[str, str]] = []
@@ -407,8 +426,12 @@ def georoc_demo(
         material = _strip_citation_suffix(record.fields.get("MATERIAL")).upper()
         if material != "WR":
             continue
-        reported_latitude = _exact_georoc_coordinate(record, "LATITUDE MIN", "LATITUDE MAX")
-        reported_longitude = _exact_georoc_coordinate(record, "LONGITUDE MIN", "LONGITUDE MAX")
+        reported_latitude = _exact_georoc_coordinate(
+            record, "LATITUDE MIN", "LATITUDE MAX"
+        )
+        reported_longitude = _exact_georoc_coordinate(
+            record, "LONGITUDE MIN", "LONGITUDE MAX"
+        )
         if not reported_latitude or not reported_longitude:
             continue
         if not _inside_bbox(reported_latitude, reported_longitude, bbox):
@@ -418,11 +441,15 @@ def georoc_demo(
             continue
         downloaded = files.get(str(record.fields.get("_source_file")))
         if downloaded is None:
-            raise DemoError(f"GEOROC record references an unknown member: {record.source_locator}")
+            raise DemoError(
+                f"GEOROC record references an unknown member: {record.source_locator}"
+            )
         for analyte in analytes:
             if selected_per_analyte[analyte] >= per_analyte_limit:
                 continue
-            original_value = str(record.fields.get(f"{analyte.upper()}(PPM)") or "").strip()
+            original_value = str(
+                record.fields.get(f"{analyte.upper()}(PPM)") or ""
+            ).strip()
             if _reported_float(original_value) is None:
                 continue
             record_id = stable_record_id(
@@ -468,21 +495,31 @@ def georoc_demo(
                     "material_raw": str(record.fields.get("MATERIAL") or "").strip(),
                     "lithology_raw": str(record.fields.get("ROCK NAME") or "").strip(),
                     "geologic_age_raw": str(record.fields.get("AGE") or "").strip(),
-                    "tectonic_setting_raw": str(record.fields.get("TECTONIC SETTING") or "").strip(),
+                    "tectonic_setting_raw": str(
+                        record.fields.get("TECTONIC SETTING") or ""
+                    ).strip(),
                     **_provenance_fields(record, downloaded, candidate, analyte),
                 }
             )
             entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
-            citation_ids = re.findall(r"\[([^\]]+)\]", str(record.fields.get("CITATIONS") or ""))
+            citation_ids = re.findall(
+                r"\[([^\]]+)\]", str(record.fields.get("CITATIONS") or "")
+            )
             article_citations = [
-                references.get(downloaded.path.name, {}).get(citation_id, f"[{citation_id}] unresolved")
+                references.get(downloaded.path.name, {}).get(
+                    citation_id, f"[{citation_id}] unresolved"
+                )
                 for citation_id in citation_ids
             ]
             article_dois = sorted(
                 {
                     match.group(1).rstrip(".,;)")
                     for citation in article_citations
-                    for match in [re.search(r"\bdoi:\s*(10\.\d{4,9}/\S+)", citation, flags=re.IGNORECASE)]
+                    for match in [
+                        re.search(
+                            r"\bdoi:\s*(10\.\d{4,9}/\S+)", citation, flags=re.IGNORECASE
+                        )
+                    ]
                     if match
                 }
             )
@@ -497,7 +534,9 @@ def georoc_demo(
                     "material_raw": str(record.fields.get("MATERIAL") or "").strip(),
                     "lithology_raw": str(record.fields.get("ROCK NAME") or "").strip(),
                     "geologic_age_raw": str(record.fields.get("AGE") or "").strip(),
-                    "tectonic_setting_raw": str(record.fields.get("TECTONIC SETTING") or "").strip(),
+                    "tectonic_setting_raw": str(
+                        record.fields.get("TECTONIC SETTING") or ""
+                    ).strip(),
                     "scientific_note": "GEOROC precompiled selected value; not every replicate determination.",
                     "coordinate_evidence": {
                         "reported_latitude": reported_latitude,
@@ -512,7 +551,9 @@ def georoc_demo(
             selected_source_rows.add(record.source_record_id)
             selected_per_analyte[analyte] += 1
     if len(rows) != observation_limit:
-        raise DemoError(f"GEOROC produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"GEOROC produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence, len(selected_source_rows), raw_source_rows
 
 
@@ -525,7 +566,9 @@ def _depth_m(record: RawRecord) -> tuple[str, str]:
     match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*", text)
     if not match:
         return "", ""
-    return format(float(match.group(1)) / 100, ".12g"), format(float(match.group(2)) / 100, ".12g")
+    return format(float(match.group(1)) / 100, ".12g"), format(
+        float(match.group(2)) / 100, ".12g"
+    )
 
 
 def usgs_demo(
@@ -540,16 +583,21 @@ def usgs_demo(
     unsupported = sorted(set(analytes) - set(USGS_METHODS))
     if unsupported:
         raise DemoError(
-            "USGS method metadata has not been encoded for requested elements: " + ", ".join(unsupported)
+            "USGS method metadata has not been encoded for requested elements: "
+            + ", ".join(unsupported)
         )
     if observation_limit % (len(layers) * len(analytes)) != 0:
-        raise DemoError("USGS observation limit must be divisible by layer count times element count")
+        raise DemoError(
+            "USGS observation limit must be divisible by layer count times element count"
+        )
     site_limit = observation_limit // (len(layers) * len(analytes))
-    candidates: dict[str, list[tuple[RawRecord, DownloadedFile, list[tuple[str, str, str, str, str]]]]] = {
-        layer: [] for layer in layers
-    }
+    candidates: dict[
+        str,
+        list[tuple[RawRecord, DownloadedFile, list[tuple[str, str, str, str, str]]]],
+    ] = {layer: [] for layer in layers}
     first_censored: dict[
-        str, tuple[RawRecord, DownloadedFile, list[tuple[str, str, str, str, str]]] | None
+        str,
+        tuple[RawRecord, DownloadedFile, list[tuple[str, str, str, str, str]]] | None,
     ] = {layer: None for layer in layers}
     raw_source_rows = 0
     for record in records:
@@ -566,7 +614,9 @@ def usgs_demo(
         prefix = {"top-0-5cm": "Top5_", "a-horizon": "A_", "c-horizon": "C_"}[layer]
         downloaded = files.get(str(record.fields.get("_source_file")))
         if downloaded is None:
-            raise DemoError(f"USGS record references an unknown file: {record.source_locator}")
+            raise DemoError(
+                f"USGS record references an unknown file: {record.source_locator}"
+            )
         units = record.fields.get("_units")
         if not isinstance(units, Mapping):
             raise DemoError("USGS record has no units mapping")
@@ -590,10 +640,15 @@ def usgs_demo(
     # Exercise the censored-value path when the source offers a suitable row, without inventing a limit.
     for layer in layers:
         if len(candidates[layer]) != site_limit:
-            raise DemoError(f"USGS produced only {len(candidates[layer])} usable sites for {layer}")
+            raise DemoError(
+                f"USGS produced only {len(candidates[layer])} usable sites for {layer}"
+            )
         if not any(any(value[3] for value in item[2]) for item in candidates[layer]):
             replacement = first_censored[layer]
-            if replacement is not None and all(replacement[0].source_record_id != item[0].source_record_id for item in candidates[layer]):
+            if replacement is not None and all(
+                replacement[0].source_record_id != item[0].source_record_id
+                for item in candidates[layer]
+            ):
                 candidates[layer][-1] = replacement
 
     rows: list[dict[str, str]] = []
@@ -605,8 +660,16 @@ def usgs_demo(
             latitude = str(record.fields.get("Latitude") or "").strip()
             longitude = str(record.fields.get("Longitude") or "").strip()
             depth_min, depth_max = _depth_m(record)
-            sample_id = str(record.fields.get(f"{prefix}LabID") or record.fields.get("SiteID") or "").strip()
-            for analyte, original_value, unit, qualifier, detection_limit in analyte_values:
+            sample_id = str(
+                record.fields.get(f"{prefix}LabID") or record.fields.get("SiteID") or ""
+            ).strip()
+            for (
+                analyte,
+                original_value,
+                unit,
+                qualifier,
+                detection_limit,
+            ) in analyte_values:
                 method = USGS_METHODS[analyte]
                 record_id = stable_record_id(
                     record.source_id,
@@ -651,7 +714,9 @@ def usgs_demo(
                         **_provenance_fields(record, downloaded, candidate, analyte),
                     }
                 )
-                entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+                entry = _base_evidence(
+                    record, downloaded, candidate, record_id, analyte
+                )
                 entry.update(
                     {
                         "article_citations": [candidate.registry_entry["citation"]],
@@ -678,7 +743,9 @@ def usgs_demo(
                 evidence.append(entry)
                 selected_source_rows.add(record.source_record_id)
     if len(rows) != observation_limit:
-        raise DemoError(f"USGS produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"USGS produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence, len(selected_source_rows), raw_source_rows
 
 
@@ -697,7 +764,9 @@ def _marchem_review_rows() -> list[dict[str, Any]]:
         raise DemoError("MarChem prepared review sample is unreadable") from exc
     rows = evidence.get("prepared_human_review_sample")
     if not isinstance(rows, list) or len(rows) != 30:
-        raise DemoError("MarChem prepared review sample must contain exactly 30 records")
+        raise DemoError(
+            "MarChem prepared review sample must contain exactly 30 records"
+        )
     return rows
 
 
@@ -713,10 +782,15 @@ def marchem_demo(
     review_rows = [
         row
         for row in _marchem_review_rows()
-        if any(str(value or "").strip() for value in row.get("target_raw_values", {}).values())
+        if any(
+            str(value or "").strip()
+            for value in row.get("target_raw_values", {}).values()
+        )
     ]
     if sample_limit > len(review_rows):
-        raise DemoError("MarChem fixture is capped at the 28 target-bearing prepared review rows")
+        raise DemoError(
+            "MarChem fixture is capped at the 28 target-bearing prepared review rows"
+        )
     by_source_row: dict[int, RawRecord] = {}
     for record in records:
         _, _, row_text = record.source_locator.partition("#row=")
@@ -739,16 +813,22 @@ def marchem_demo(
             raise DemoError(f"MarChem review sample changed at source row {source_row}")
         methods = record.fields.get("_lab_parameters")
         if not isinstance(methods, Mapping):
-            raise DemoError(f"MarChem method mapping is missing at source row {source_row}")
+            raise DemoError(
+                f"MarChem method mapping is missing at source row {source_row}"
+            )
         depth_min, depth_max = _marchem_depth_m(record)
         for analyte in ANALYTES:
             field_name = target_fields[analyte]
             raw_value = str(record.fields.get(field_name) or "").strip()
             if raw_value != prepared.get("target_raw_values", {}).get(analyte):
-                raise DemoError(f"MarChem prepared {analyte} value changed at source row {source_row}")
+                raise DemoError(
+                    f"MarChem prepared {analyte} value changed at source row {source_row}"
+                )
             method = methods.get(field_name)
             if not isinstance(method, Mapping):
-                raise DemoError(f"MarChem {analyte} method is missing at source row {source_row}")
+                raise DemoError(
+                    f"MarChem {analyte} method is missing at source row {source_row}"
+                )
             unit = str(method.get("Unit") or "").strip()
             record_id = stable_record_id(
                 record.source_id,
@@ -776,7 +856,9 @@ def marchem_demo(
                     "coordinate_uncertainty_m": "",
                     "geologic_unit": "",
                     "analytical_method": str(method.get("Analysis_method") or ""),
-                    "digestion_or_extraction": str(method.get("Sample_preparation_method") or ""),
+                    "digestion_or_extraction": str(
+                        method.get("Sample_preparation_method") or ""
+                    ),
                     "laboratory": str(method.get("Laboratory") or ""),
                     "license": candidate.license_id,
                     "source_tier": "government",
@@ -797,11 +879,15 @@ def marchem_demo(
                     "snapshot_id": candidate.version,
                     "batch_code": str(record.fields.get("Batch_code") or ""),
                     "cruise_year": str(record.fields.get("Cruise_year") or ""),
-                    "station_event_code": str(record.fields.get("Station_event_code") or ""),
+                    "station_event_code": str(
+                        record.fields.get("Station_event_code") or ""
+                    ),
                     "sampling_tool": str(record.fields.get("Sampling_tool") or ""),
                     "core_code": str(record.fields.get("Core_code") or ""),
                     "metadata_source_locator": method.get("_metadata_source_locator"),
-                    "metadata_batch_expression": method.get("_metadata_batch_expression"),
+                    "metadata_batch_expression": method.get(
+                        "_metadata_batch_expression"
+                    ),
                     "lab_parameter_code": method.get("Lab_parameter_code"),
                     "wet_or_dry_weight": method.get("Wet_or_dry_weight"),
                     "llq": method.get("LLQ"),
@@ -814,7 +900,9 @@ def marchem_demo(
             evidence_rows.append(entry)
             selected_source_rows.add(record.source_record_id)
     if len(rows) != observation_limit:
-        raise DemoError(f"MarChem produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"MarChem produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_source_rows)
 
 
@@ -838,16 +926,22 @@ def geotraces_demo(
             break
         observations = record.fields.get("_target_observations")
         if not isinstance(observations, Mapping):
-            raise DemoError(f"GEOTRACES target mapping is missing: {record.source_locator}")
+            raise DemoError(
+                f"GEOTRACES target mapping is missing: {record.source_locator}"
+            )
         latitude = str(record.fields.get("Latitude [degrees_north]") or "").strip()
         longitude = str(record.fields.get("Longitude [degrees_east]") or "").strip()
         depth = str(record.fields.get("DEPTH [m]") or "").strip()
-        if any(_reported_float(value) is None for value in (latitude, longitude, depth)):
+        if any(
+            _reported_float(value) is None for value in (latitude, longitude, depth)
+        ):
             continue
         filename = str(record.fields.get("_source_file") or "")
         downloaded = files.get(filename)
         if downloaded is None:
-            raise DemoError(f"GEOTRACES record references an unknown file: {record.source_locator}")
+            raise DemoError(
+                f"GEOTRACES record references an unknown file: {record.source_locator}"
+            )
         cruise = str(record.fields.get("Cruise") or "").strip()
         station = str(record.fields.get("Station") or "").strip()
         sample_id = f"{cruise}|{station}|{depth}m"
@@ -860,12 +954,18 @@ def geotraces_demo(
             raw_value = str(values.get("value") or "").strip()
             quality_flag = str(values.get("quality_flag") or "").strip()
             unit = str(values.get("unit") or "").strip()
-            if _reported_float(raw_value) is None or quality_flag not in accepted_qc or unit != "nmol/kg":
+            if (
+                _reported_float(raw_value) is None
+                or quality_flag not in accepted_qc
+                or unit != "nmol/kg"
+            ):
                 continue
             analytical_method = str(values.get("analytical_method") or "")
             method_candidates = values.get("method_metadata_candidates")
             if not isinstance(method_candidates, list) or not method_candidates:
-                raise DemoError(f"GEOTRACES contributor/method connection is missing: {record.source_locator}")
+                raise DemoError(
+                    f"GEOTRACES contributor/method connection is missing: {record.source_locator}"
+                )
             record_id = stable_record_id(
                 record.source_id,
                 record.source_record_id,
@@ -902,7 +1002,9 @@ def geotraces_demo(
                     "source_tier": "official_curated",
                     "source_id": record.source_id,
                     "source_locator": record.source_locator,
-                    "sampled_at": str(record.fields.get("yyyy-mm-ddThh:mm:ss.sss") or ""),
+                    "sampled_at": str(
+                        record.fields.get("yyyy-mm-ddThh:mm:ss.sss") or ""
+                    ),
                     "sample_depth_min_m": depth,
                     "sample_depth_max_m": depth,
                     "grain_fraction": "",
@@ -917,14 +1019,22 @@ def geotraces_demo(
                     "cruise": cruise,
                     "station": station,
                     "sample_depth_m": depth,
-                    "sampling_devices": str(record.fields.get("Sampling Devices") or ""),
-                    "cruise_information_link": str(record.fields.get("Cruise Information Link") or ""),
+                    "sampling_devices": str(
+                        record.fields.get("Sampling Devices") or ""
+                    ),
+                    "cruise_information_link": str(
+                        record.fields.get("Cruise Information Link") or ""
+                    ),
                     "seadatanet_quality_flag": quality_flag,
                     "standard_deviation": str(values.get("standard_deviation") or ""),
                     "water_fraction": "dissolved",
-                    "method_metadata_status": str(values.get("method_metadata_status") or ""),
+                    "method_metadata_status": str(
+                        values.get("method_metadata_status") or ""
+                    ),
                     "method_metadata_candidates": method_candidates,
-                    "method_source_locator": str(values.get("variable_metadata_locator") or ""),
+                    "method_source_locator": str(
+                        values.get("variable_metadata_locator") or ""
+                    ),
                     "scientific_note": (
                         "nmol/kg is preserved. A single cruise-analyte method record is assigned only when the export "
                         "contains exactly one candidate; multi-record candidate sets remain unresolved."
@@ -935,7 +1045,9 @@ def geotraces_demo(
             selected_source_rows.add(record.source_record_id)
             selected_per_analyte[analyte] += 1
     if len(rows) != observation_limit:
-        raise DemoError(f"GEOTRACES produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"GEOTRACES produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_source_rows)
 
 
@@ -946,7 +1058,9 @@ def gemstat_demo(
     observation_limit: int,
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
     if observation_limit != 56:
-        raise DemoError("GEMStat demo is fixed at 56 observations: eight for each of seven elements")
+        raise DemoError(
+            "GEMStat demo is fixed at 56 observations: eight for each of seven elements"
+        )
     expected_files = {
         "Arsenic.csv",
         "Chromium.csv",
@@ -957,7 +1071,9 @@ def gemstat_demo(
         "Zinc.csv",
     }
     if expected_files - set(files):
-        raise DemoError(f"GEMStat observation members are missing: {sorted(expected_files - set(files))}")
+        raise DemoError(
+            f"GEMStat observation members are missing: {sorted(expected_files - set(files))}"
+        )
     bucket_targets = {
         "As-Dis": 3,
         "As-Sus": 2,
@@ -991,7 +1107,9 @@ def gemstat_demo(
         parameter = str(fields.get("Parameter Code") or "")
         if parameter not in buckets:
             continue
-        qualifier_bucket = "censored" if fields.get("Value Flags") == "<" else "reported"
+        qualifier_bucket = (
+            "censored" if fields.get("Value Flags") == "<" else "reported"
+        )
         capacity = bucket_targets[parameter]
         if len(buckets[parameter][qualifier_bucket]) < capacity:
             buckets[parameter][qualifier_bucket].append(record)
@@ -1002,9 +1120,14 @@ def gemstat_demo(
         reported = buckets[key]["reported"][: target - len(censored)]
         cell = [*censored, *reported]
         if len(cell) != target:
-            raise DemoError(f"GEMStat demo bucket {key} produced {len(cell)} rows, expected {target}")
+            raise DemoError(
+                f"GEMStat demo bucket {key} produced {len(cell)} rows, expected {target}"
+            )
         selected.extend(cell)
-    element_order = {element: index for index, element in enumerate(("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"))}
+    element_order = {
+        element: index
+        for index, element in enumerate(("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"))
+    }
     selected.sort(
         key=lambda item: (
             element_order[str(item.fields["_element"])],
@@ -1020,21 +1143,23 @@ def gemstat_demo(
         method = fields["_method_metadata"]
         raw_value = str(fields["Value"])
         unit = str(fields["Unit"])
-        unit_basis = unit.lower().replace("µ", "u").replace("/", "_per_").replace(" ", "_")
+        unit_basis = (
+            unit.lower().replace("µ", "u").replace("/", "_per_").replace(" ", "_")
+        )
         qualifier = str(fields["Value Flags"])
         fraction = str(fields["_water_fraction"])
         depth = str(fields["Depth"])
         sampled_at = str(fields["Sample Date"])
         if fields.get("Sample Time"):
             sampled_at += "T" + str(fields["Sample Time"])
-        sample_id = "|".join(
-            (str(fields["GEMS Station Number"]), sampled_at, depth)
-        )
+        sample_id = "|".join((str(fields["GEMS Station Number"]), sampled_at, depth))
         element = str(fields["_element"])
         record_id = stable_record_id(
             record.source_id, record.source_record_id, element, raw_value, unit
         )
-        method_name = str(method.get("Method Name") or method.get("Method Description") or "")
+        method_name = str(
+            method.get("Method Name") or method.get("Method Description") or ""
+        )
         rows.append(
             {
                 "record_id": record_id,
@@ -1066,7 +1191,9 @@ def gemstat_demo(
                 "grain_fraction": "",
             }
         )
-        entry = _base_evidence(record, files[str(fields["_source_file"])], candidate, record_id, element)
+        entry = _base_evidence(
+            record, files[str(fields["_source_file"])], candidate, record_id, element
+        )
         entry.update(
             {
                 "article_citations": [candidate.registry_entry["citation"]],
@@ -1107,7 +1234,9 @@ def wqp_sacramento_demo(
         raise DemoError("WQP Sacramento demo is fixed at 48 observations")
     source_records = list(records)
     if len(source_records) != 189:
-        raise DemoError(f"WQP Sacramento produced {len(source_records)} source rows, expected 189")
+        raise DemoError(
+            f"WQP Sacramento produced {len(source_records)} source rows, expected 189"
+        )
 
     selected: list[RawRecord] = []
     selected_ids: set[str] = set()
@@ -1120,8 +1249,13 @@ def wqp_sacramento_demo(
                 return
         raise DemoError("WQP Sacramento could not satisfy a required demo stratum")
 
-    add_first(lambda fields: fields.get("ResultDetectionConditionText") == "Not Detected")
-    add_first(lambda fields: fields.get("ActivityTypeCode") == "Quality Control Sample-Field Replicate")
+    add_first(
+        lambda fields: fields.get("ResultDetectionConditionText") == "Not Detected"
+    )
+    add_first(
+        lambda fields: fields.get("ActivityTypeCode")
+        == "Quality Control Sample-Field Replicate"
+    )
     add_first(lambda fields: fields.get("ResultStatusIdentifier") == "Preliminary")
     add_first(
         lambda fields: fields.get("ResultStatusIdentifier") == "Accepted"
@@ -1141,8 +1275,13 @@ def wqp_sacramento_demo(
             selected.append(record)
             selected_ids.add(record.source_record_id)
     if len(selected) != observation_limit:
-        raise DemoError(f"WQP Sacramento selected {len(selected)} observations, expected {observation_limit}")
-    selected.sort(key=lambda record: str(record.fields["ActivityStartDate"]) + str(record.fields.get("ActivityStartTime/Time") or ""))
+        raise DemoError(
+            f"WQP Sacramento selected {len(selected)} observations, expected {observation_limit}"
+        )
+    selected.sort(
+        key=lambda record: str(record.fields["ActivityStartDate"])
+        + str(record.fields.get("ActivityStartTime/Time") or "")
+    )
 
     rows: list[dict[str, str]] = []
     evidence_rows: list[dict[str, Any]] = []
@@ -1157,7 +1296,9 @@ def wqp_sacramento_demo(
             sampled_at += "T" + sample_time
         raw_value = str(values["value"])
         unit = str(values["unit"])
-        record_id = stable_record_id(record.source_id, record.source_record_id, "As", raw_value, unit)
+        record_id = stable_record_id(
+            record.source_id, record.source_record_id, "As", raw_value, unit
+        )
         rows.append(
             {
                 "record_id": record_id,
@@ -1200,7 +1341,9 @@ def wqp_sacramento_demo(
                     "One censored result, one field replicate, one preliminary result and one accepted routine result "
                     "are required; remaining rows are deterministic evenly spaced observations across source order."
                 ),
-                "monitoring_location_identifier": fields["MonitoringLocationIdentifier"],
+                "monitoring_location_identifier": fields[
+                    "MonitoringLocationIdentifier"
+                ],
                 "monitoring_location_name": station["MonitoringLocationName"],
                 "provider_name": fields["ProviderName"],
                 "organization_identifier": fields["OrganizationIdentifier"],
@@ -1215,7 +1358,9 @@ def wqp_sacramento_demo(
                     f"{station['HorizontalAccuracyMeasure/MeasureValue']} "
                     f"{station['HorizontalAccuracyMeasure/MeasureUnitCode']}"
                 ),
-                "horizontal_collection_method": station["HorizontalCollectionMethodName"],
+                "horizontal_collection_method": station[
+                    "HorizontalCollectionMethodName"
+                ],
                 "scientific_note": (
                     "A single-station dissolved-arsenic time series is useful for method and temporal validation, "
                     "but it is not evidence of national or global river coverage. Field replicates remain QC samples."
@@ -1246,13 +1391,19 @@ def pangaea_north_africa_demo(
         sample_id = str(record.fields.get("Sample ID") or "").strip()
         latitude = str(record.fields.get("Latitude") or "").strip()
         longitude = str(record.fields.get("Longitude") or "").strip()
-        if not sample_id or any(_reported_float(value) is None for value in (latitude, longitude)):
-            raise DemoError(f"PANGAEA sample identity or coordinates are invalid: {record.source_locator}")
+        if not sample_id or any(
+            _reported_float(value) is None for value in (latitude, longitude)
+        ):
+            raise DemoError(
+                f"PANGAEA sample identity or coordinates are invalid: {record.source_locator}"
+            )
         for analyte in ANALYTES:
             field_name = target_fields[analyte]
             raw_value = str(record.fields.get(field_name) or "").strip()
             if _reported_float(raw_value) is None:
-                raise DemoError(f"PANGAEA {analyte} value is invalid: {record.source_locator}")
+                raise DemoError(
+                    f"PANGAEA {analyte} value is invalid: {record.source_locator}"
+                )
             record_id = stable_record_id(
                 record.source_id, record.source_record_id, analyte, raw_value, "mg/kg"
             )
@@ -1278,8 +1429,12 @@ def pangaea_north_africa_demo(
                     "coordinate_longitude_field": "Longitude",
                     "coordinate_uncertainty_m": "",
                     "geologic_unit": str(record.fields.get("Area") or "").strip(),
-                    "analytical_method": str(record.fields.get("_analytical_method") or ""),
-                    "digestion_or_extraction": str(record.fields.get("_digestion_or_extraction") or ""),
+                    "analytical_method": str(
+                        record.fields.get("_analytical_method") or ""
+                    ),
+                    "digestion_or_extraction": str(
+                        record.fields.get("_digestion_or_extraction") or ""
+                    ),
                     "laboratory": "",
                     "license": candidate.license_id,
                     "source_tier": "official_curated",
@@ -1309,7 +1464,9 @@ def pangaea_north_africa_demo(
             evidence_rows.append(entry)
             selected_source_rows.add(record.source_record_id)
     if len(rows) != observation_limit:
-        raise DemoError(f"PANGAEA produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"PANGAEA produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_source_rows)
 
 
@@ -1337,14 +1494,20 @@ def gsj_japan_demo(
         sample_id = raw_id if occurrence == 1 else f"{raw_id}#{occurrence}"
         latitude = str(record.fields.get("緯度(JGD2000)") or "").strip()
         longitude = str(record.fields.get("経度(JGD2000)") or "").strip()
-        if not sample_id or any(_reported_float(value) is None for value in (latitude, longitude)):
-            raise DemoError(f"GSJ sample identity or coordinates are invalid: {record.source_locator}")
+        if not sample_id or any(
+            _reported_float(value) is None for value in (latitude, longitude)
+        ):
+            raise DemoError(
+                f"GSJ sample identity or coordinates are invalid: {record.source_locator}"
+            )
         for analyte in ANALYTES:
             field_name = target_fields[analyte]
             raw_value = str(record.fields.get(field_name) or "").strip()
             unit = target_units[analyte]
             if _reported_float(raw_value) is None:
-                raise DemoError(f"GSJ {analyte} value is invalid: {record.source_locator}")
+                raise DemoError(
+                    f"GSJ {analyte} value is invalid: {record.source_locator}"
+                )
             record_id = stable_record_id(
                 record.source_id, record.source_record_id, analyte, raw_value, unit
             )
@@ -1379,14 +1542,18 @@ def gsj_japan_demo(
                     "grain_fraction": "<180 µm fine stream sediment",
                 }
             )
-            entry = _base_evidence(record, concentration_file, candidate, record_id, analyte)
+            entry = _base_evidence(
+                record, concentration_file, candidate, record_id, analyte
+            )
             entry.update(
                 {
                     "article_citations": [candidate.registry_entry["citation"]],
                     "article_dois": [],
                     "selection_rule": "first ordinal-joined samples with valid coordinates; balanced As/Cu/Ni/Zn",
                     "sample_source_locator": record.fields["_sample_source_locator"],
-                    "concentration_source_locator": record.fields["_concentration_source_locator"],
+                    "concentration_source_locator": record.fields[
+                        "_concentration_source_locator"
+                    ],
                     "sample_file_bytes": sample_file.bytes,
                     "reported_sample_id": raw_id,
                     "sample_id_occurrence": occurrence,
@@ -1407,7 +1574,9 @@ def gsj_japan_demo(
             evidence_rows.append(entry)
             selected_source_rows.add(record.source_record_id)
     if len(rows) != observation_limit:
-        raise DemoError(f"GSJ produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"GSJ produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_source_rows)
 
 
@@ -1438,29 +1607,42 @@ def foregs_demo(
             break
         observations = record.fields.get("_target_observations")
         if not isinstance(observations, Mapping):
-            raise DemoError(f"FOREGS target mapping is missing: {record.source_locator}")
+            raise DemoError(
+                f"FOREGS target mapping is missing: {record.source_locator}"
+            )
         folded = {str(field).casefold(): field for field in record.fields}
         sample_field = folded.get("gtn")
         latitude_field = folded.get("lat")
         longitude_field = folded.get("long")
         if not sample_field or not latitude_field or not longitude_field:
-            raise DemoError(f"FOREGS identity or coordinate fields are missing: {record.source_locator}")
+            raise DemoError(
+                f"FOREGS identity or coordinate fields are missing: {record.source_locator}"
+            )
         sample_id = str(record.fields.get(sample_field) or "").strip()
         latitude = str(record.fields.get(latitude_field) or "").strip()
         longitude = str(record.fields.get(longitude_field) or "").strip()
-        if not sample_id or any(_reported_float(value) is None for value in (latitude, longitude)):
+        if not sample_id or any(
+            _reported_float(value) is None for value in (latitude, longitude)
+        ):
             continue
         downloaded = files.get(str(record.fields.get("_source_file") or ""))
         if downloaded is None:
-            raise DemoError(f"FOREGS record references an unknown file: {record.source_locator}")
+            raise DemoError(
+                f"FOREGS record references an unknown file: {record.source_locator}"
+            )
         country_field = folded.get("country")
-        reported_country = str(record.fields.get(country_field) or "").strip() if country_field else ""
+        reported_country = (
+            str(record.fields.get(country_field) or "").strip() if country_field else ""
+        )
         for analyte, values in observations.items():
             if analyte not in ANALYTES or not isinstance(values, Mapping):
                 continue
             measurement_basis = str(values.get("measurement_basis") or "")
             observation_class = (analyte, measurement_basis)
-            if observation_class not in registered_classes or selected[observation_class] >= per_class_limit:
+            if (
+                observation_class not in registered_classes
+                or selected[observation_class] >= per_class_limit
+            ):
                 continue
             raw_value = str(values.get("value") or "").strip()
             unit = str(values.get("unit") or "").strip()
@@ -1488,15 +1670,21 @@ def foregs_demo(
                     "coordinate_uncertainty_m": "",
                     "geologic_unit": "",
                     "analytical_method": str(values.get("analytical_method") or ""),
-                    "digestion_or_extraction": str(values.get("digestion_or_extraction") or ""),
+                    "digestion_or_extraction": str(
+                        values.get("digestion_or_extraction") or ""
+                    ),
                     "laboratory": "",
                     "license": candidate.license_id,
                     "source_tier": "official_curated",
                     "source_id": record.source_id,
                     "source_locator": record.source_locator,
                     "sampled_at": "",
-                    "sample_depth_min_m": str(record.fields.get("_sample_depth_min_m") or ""),
-                    "sample_depth_max_m": str(record.fields.get("_sample_depth_max_m") or ""),
+                    "sample_depth_min_m": str(
+                        record.fields.get("_sample_depth_min_m") or ""
+                    ),
+                    "sample_depth_max_m": str(
+                        record.fields.get("_sample_depth_max_m") or ""
+                    ),
                     "grain_fraction": str(record.fields.get("_grain_fraction") or ""),
                 }
             )
@@ -1516,14 +1704,18 @@ def foregs_demo(
                     "possible_upstream_dl_over_2_substitution": bool(
                         values.get("possible_upstream_dl_over_2_substitution")
                     ),
-                    "scientific_note": str(record.fields.get("_censoring_boundary") or ""),
+                    "scientific_note": str(
+                        record.fields.get("_censoring_boundary") or ""
+                    ),
                 }
             )
             evidence_rows.append(entry)
             selected_source_rows.add(record.source_record_id)
             selected[observation_class] += 1
     if len(rows) != observation_limit:
-        raise DemoError(f"FOREGS produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"FOREGS produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_source_rows)
 
 
@@ -1534,36 +1726,63 @@ def afsis_demo(
     observation_limit: int,
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
     if observation_limit % len(ANALYTES) != 0:
-        raise DemoError("AfSIS observation limit must be divisible by 4 for balanced analytes")
+        raise DemoError(
+            "AfSIS observation limit must be divisible by 4 for balanced analytes"
+        )
     source_row_limit = observation_limit // len(ANALYTES)
     preferred_countries = (
-        "Tanzania", "Ethiopia", "Kenya", "Madagascar", "Uganda", "Angola",
-        "Botswana", "Nigeria", "Mali", "Guinea", "SAfrica", "Zimbambwe",
+        "Tanzania",
+        "Ethiopia",
+        "Kenya",
+        "Madagascar",
+        "Uganda",
+        "Angola",
+        "Botswana",
+        "Nigeria",
+        "Mali",
+        "Guinea",
+        "SAfrica",
+        "Zimbambwe",
     )
     if source_row_limit != len(preferred_countries):
-        raise DemoError("the checked-in AfSIS fixture requires exactly 48 observations from 12 country labels")
+        raise DemoError(
+            "the checked-in AfSIS fixture requires exactly 48 observations from 12 country labels"
+        )
     selected_records: list[RawRecord] = []
     for index, country in enumerate(preferred_countries):
         preferred_depth = "Topsoil" if index % 2 == 0 else "Subsoil"
         matches = [
-            record for record in records
+            record
+            for record in records
             if str(record.fields.get("Country") or "") == country
             and str(record.fields.get("Latitude") or "").strip()
             and str(record.fields.get("Longitude") or "").strip()
             and isinstance(record.fields.get("_target_observations"), Mapping)
             and all(
-                _reported_float(record.fields["_target_observations"][analyte]["value"]) is not None
+                _reported_float(record.fields["_target_observations"][analyte]["value"])
+                is not None
                 and float(record.fields["_target_observations"][analyte]["value"]) > 0
                 for analyte in ANALYTES
             )
         ]
         if not matches:
-            raise DemoError(f"AfSIS has no positive complete-coordinate demo row for {country}")
+            raise DemoError(
+                f"AfSIS has no positive complete-coordinate demo row for {country}"
+            )
         selected_records.append(
-            next((item for item in matches if item.fields.get("Depth") == preferred_depth), matches[0])
+            next(
+                (
+                    item
+                    for item in matches
+                    if item.fields.get("Depth") == preferred_depth
+                ),
+                matches[0],
+            )
         )
 
-    measurement = files.get(candidate.registry_entry["download"]["files"][0]["filename"])
+    measurement = files.get(
+        candidate.registry_entry["download"]["files"][0]["filename"]
+    )
     if measurement is None:
         raise DemoError("AfSIS measurement file evidence is missing")
     rows: list[dict[str, str]] = []
@@ -1603,8 +1822,12 @@ def afsis_demo(
                     "source_id": record.source_id,
                     "source_locator": record.source_locator,
                     "sampled_at": "2009/2013",
-                    "sample_depth_min_m": str(record.fields.get("_sample_depth_min_m") or ""),
-                    "sample_depth_max_m": str(record.fields.get("_sample_depth_max_m") or ""),
+                    "sample_depth_min_m": str(
+                        record.fields.get("_sample_depth_min_m") or ""
+                    ),
+                    "sample_depth_max_m": str(
+                        record.fields.get("_sample_depth_max_m") or ""
+                    ),
                     "grain_fraction": str(record.fields.get("_grain_fraction") or ""),
                 }
             )
@@ -1618,27 +1841,43 @@ def afsis_demo(
                         "alternating preferred topsoil and subsoil depth; As/Cu/Ni/Zn preserved"
                     ),
                     "reported_country": str(record.fields.get("Country") or ""),
-                    "normalized_country": str(record.fields.get("_country_normalized") or ""),
+                    "normalized_country": str(
+                        record.fields.get("_country_normalized") or ""
+                    ),
                     "site": str(record.fields.get("Site") or ""),
                     "reported_depth": str(record.fields.get("Depth") or ""),
                     "measurement_basis": str(values["measurement_basis"]),
                     "detection_limit": str(values["detection_limit"]),
                     "quantitation_limit": str(values["quantitation_limit"]),
                     "below_detection_limit": bool(values["below_detection_limit"]),
-                    "below_quantitation_limit": bool(values["below_quantitation_limit"]),
+                    "below_quantitation_limit": bool(
+                        values["below_quantitation_limit"]
+                    ),
                     "negative_numeric_result": False,
-                    "variable_metadata_locator": str(values["variable_metadata_locator"]),
-                    "threshold_metadata_locator": str(values["threshold_metadata_locator"]),
-                    "source_variable_description": str(values["source_variable_description"]),
-                    "metadata_conflicts": list(record.fields.get("_metadata_conflicts") or []),
+                    "variable_metadata_locator": str(
+                        values["variable_metadata_locator"]
+                    ),
+                    "threshold_metadata_locator": str(
+                        values["threshold_metadata_locator"]
+                    ),
+                    "source_variable_description": str(
+                        values["source_variable_description"]
+                    ),
+                    "metadata_conflicts": list(
+                        record.fields.get("_metadata_conflicts") or []
+                    ),
                     "source_crs_status": "not_reported_in_registered_files_or_related_article",
                     "grain_fraction_source_scope": "related_article_dataset_level",
-                    "scientific_note": str(record.fields.get("_quality_boundary") or ""),
+                    "scientific_note": str(
+                        record.fields.get("_quality_boundary") or ""
+                    ),
                 }
             )
             evidence_rows.append(entry)
     if len(rows) != observation_limit:
-        raise DemoError(f"AfSIS produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"AfSIS produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_records)
 
 
@@ -1661,7 +1900,8 @@ def ngsa_mercury_demo(
         for state in states:
             match = next(
                 (
-                    record for record in records
+                    record
+                    for record in records
                     if record.source_record_id not in selected_ids
                     and record.fields.get("DEPTH") == depth
                     and record.fields.get("STATE") == state
@@ -1683,7 +1923,9 @@ def ngsa_mercury_demo(
             selected.append(record)
             selected_ids.add(record.source_record_id)
     if len(selected) != observation_limit:
-        raise DemoError(f"NGSA selected {len(selected)} rows, expected {observation_limit}")
+        raise DemoError(
+            f"NGSA selected {len(selected)} rows, expected {observation_limit}"
+        )
     rows: list[dict[str, str]] = []
     evidence_rows: list[dict[str, Any]] = []
     for record in selected:
@@ -1708,7 +1950,9 @@ def ngsa_mercury_demo(
                 "latitude": "",
                 "longitude": "",
                 "original_latitude_raw": str(record.fields.get("LATITUDE_GDA94") or ""),
-                "original_longitude_raw": str(record.fields.get("LONGITUDE_GDA94") or ""),
+                "original_longitude_raw": str(
+                    record.fields.get("LONGITUDE_GDA94") or ""
+                ),
                 "source_crs": "EPSG:4283",
                 "coordinate_uncertainty_m": "5",
                 "geologic_unit": "",
@@ -1836,7 +2080,9 @@ def gsj_marine_demo(
         if all(selected_counts[analyte] >= per_analyte for analyte in analytes):
             break
     if len(rows) != observation_limit:
-        raise DemoError(f"GSJ marine produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"GSJ marine produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_source_rows)
 
 
@@ -1848,7 +2094,9 @@ def pangaea_arabian_demo(
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
     analytes = ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
     if observation_limit % len(analytes) != 0:
-        raise DemoError("PANGAEA Arabian Sea observation limit must be divisible by six")
+        raise DemoError(
+            "PANGAEA Arabian Sea observation limit must be divisible by six"
+        )
     source_row_limit = observation_limit // len(analytes)
     downloaded = files.get("PANGAEA.950139.tab")
     if downloaded is None:
@@ -1912,7 +2160,9 @@ def pangaea_arabian_demo(
             )
             evidence_rows.append(entry)
     if len(rows) != observation_limit:
-        raise DemoError(f"PANGAEA Arabian Sea produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"PANGAEA Arabian Sea produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected)
 
 
@@ -1933,12 +2183,19 @@ def v4_m6_demo(
         else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
     )
     keys = (
-        tuple(f"{group}|{analyte}" for group in ("AR", "XRF") for analyte in analytes if not (group == "XRF" and analyte == "Hg"))
+        tuple(
+            f"{group}|{analyte}"
+            for group in ("AR", "XRF")
+            for analyte in analytes
+            if not (group == "XRF" and analyte == "Hg")
+        )
         if source_id == "gemas-europe"
         else analytes
     )
     if observation_limit % len(keys) != 0:
-        raise DemoError(f"{source_id} observation limit must be divisible by {len(keys)}")
+        raise DemoError(
+            f"{source_id} observation limit must be divisible by {len(keys)}"
+        )
     per_key = observation_limit // len(keys)
     selected = Counter()
     selected_source_rows: set[str] = set()
@@ -1952,15 +2209,21 @@ def v4_m6_demo(
             continue
         if source_id == "georoc-antarctica-intraplate":
             latitude = _exact_georoc_coordinate(record, "LATITUDE MIN", "LATITUDE MAX")
-            longitude = _exact_georoc_coordinate(record, "LONGITUDE MIN", "LONGITUDE MAX")
-            sample_id = str(record.fields.get("SAMPLE NAME") or record.fields.get("UNIQUE_ID") or "").strip()
+            longitude = _exact_georoc_coordinate(
+                record, "LONGITUDE MIN", "LONGITUDE MAX"
+            )
+            sample_id = str(
+                record.fields.get("SAMPLE NAME") or record.fields.get("UNIQUE_ID") or ""
+            ).strip()
             medium = "rock"
             sample_depth_min = sample_depth_max = ""
             grain = ""
         elif source_id == "tpdc-china-mountain-soil":
             latitude = str(record.fields.get("Latitude") or "")
             longitude = str(record.fields.get("Longitude") or "")
-            sample_id = f"{record.fields.get('Sam.No','')}|{record.fields.get('Horizons','')}"
+            sample_id = (
+                f"{record.fields.get('Sam.No', '')}|{record.fields.get('Horizons', '')}"
+            )
             medium = "soil"
             sample_depth_min = sample_depth_max = ""
             grain = str(record.fields.get("_grain_fraction") or "")
@@ -1969,7 +2232,9 @@ def v4_m6_demo(
             longitude = str(record.fields.get("XCOO") or "")
             sample_id = str(record.fields.get("_physical_sample_id") or "")
             medium = "soil"
-            sample_depth_min, sample_depth_max = (("0", "0.20") if record.fields.get("TYPE_") == "Ap" else ("0", "0.10"))
+            sample_depth_min, sample_depth_max = (
+                ("0", "0.20") if record.fields.get("TYPE_") == "Ap" else ("0", "0.10")
+            )
             grain = str(record.fields.get("_grain_fraction") or "")
         if not sample_id or not latitude or not longitude:
             continue
@@ -1988,55 +2253,104 @@ def v4_m6_demo(
             if _reported_float(raw_value) is None:
                 continue
             unit = str(values.get("unit") or "")
-            record_id = stable_record_id(record.source_id, record.source_record_id, analyte, raw_value, unit)
-            rows.append({
-                "record_id": record_id, "source_record_id": record.source_record_id,
-                "sample_id": sample_id, "element_or_analyte": analyte,
-                "value": raw_value, "unit": unit, "medium": medium,
-                "measurement_basis": str(values.get("measurement_basis") or ""),
-                "value_qualifier": "", "detection_limit": str(values.get("detection_limit") or ""),
-                "detection_limit_unit": unit if values.get("detection_limit") else "",
-                "latitude": latitude if source_id == "gemas-europe" else "",
-                "longitude": longitude if source_id == "gemas-europe" else "",
-                "original_latitude_raw": "" if source_id == "gemas-europe" else latitude,
-                "original_longitude_raw": "" if source_id == "gemas-europe" else longitude,
-                "source_crs": "EPSG:4326" if source_id == "gemas-europe" else "",
-                "coordinate_uncertainty_m": "", "geologic_unit": str(record.fields.get("LOCATION") or "") if medium == "rock" else "",
-                "analytical_method": str(values.get("analytical_method") or ""),
-                "digestion_or_extraction": str(values.get("digestion_or_extraction") or ""),
-                "laboratory": "", "license": candidate.license_id, "source_tier": "official_curated",
-                "source_id": record.source_id, "source_locator": record.source_locator,
-                "sampled_at": "", "sample_depth_min_m": sample_depth_min,
-                "sample_depth_max_m": sample_depth_max, "grain_fraction": grain,
-                "lithology_raw": str(record.fields.get("ROCK NAME") or record.fields.get("Rock Group") or ""),
-                "geologic_age_raw": str(record.fields.get("AGE") or ""),
-                "tectonic_setting_raw": str(record.fields.get("TECTONIC SETTING") or ""),
-            })
+            record_id = stable_record_id(
+                record.source_id, record.source_record_id, analyte, raw_value, unit
+            )
+            rows.append(
+                {
+                    "record_id": record_id,
+                    "source_record_id": record.source_record_id,
+                    "sample_id": sample_id,
+                    "element_or_analyte": analyte,
+                    "value": raw_value,
+                    "unit": unit,
+                    "medium": medium,
+                    "measurement_basis": str(values.get("measurement_basis") or ""),
+                    "value_qualifier": "",
+                    "detection_limit": str(values.get("detection_limit") or ""),
+                    "detection_limit_unit": unit
+                    if values.get("detection_limit")
+                    else "",
+                    "latitude": latitude if source_id == "gemas-europe" else "",
+                    "longitude": longitude if source_id == "gemas-europe" else "",
+                    "original_latitude_raw": ""
+                    if source_id == "gemas-europe"
+                    else latitude,
+                    "original_longitude_raw": ""
+                    if source_id == "gemas-europe"
+                    else longitude,
+                    "source_crs": "EPSG:4326" if source_id == "gemas-europe" else "",
+                    "coordinate_uncertainty_m": "",
+                    "geologic_unit": str(record.fields.get("LOCATION") or "")
+                    if medium == "rock"
+                    else "",
+                    "analytical_method": str(values.get("analytical_method") or ""),
+                    "digestion_or_extraction": str(
+                        values.get("digestion_or_extraction") or ""
+                    ),
+                    "laboratory": "",
+                    "license": candidate.license_id,
+                    "source_tier": "official_curated",
+                    "source_id": record.source_id,
+                    "source_locator": record.source_locator,
+                    "sampled_at": "",
+                    "sample_depth_min_m": sample_depth_min,
+                    "sample_depth_max_m": sample_depth_max,
+                    "grain_fraction": grain,
+                    "lithology_raw": str(
+                        record.fields.get("ROCK NAME")
+                        or record.fields.get("Rock Group")
+                        or ""
+                    ),
+                    "geologic_age_raw": str(record.fields.get("AGE") or ""),
+                    "tectonic_setting_raw": str(
+                        record.fields.get("TECTONIC SETTING") or ""
+                    ),
+                }
+            )
             entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
-            entry.update({
-                "article_citations": [candidate.registry_entry["citation"]],
-                "article_dois": [candidate.registry_entry.get("publication_doi") or candidate.dataset_doi] if (candidate.registry_entry.get("publication_doi") or candidate.dataset_doi) else [],
-                "selection_rule": f"balanced deterministic M6 slice by {key}",
-                "reported_horizon": str(record.fields.get("Horizons") or ""),
-                "mountain": str(record.fields.get("Mountain") or ""),
-                "site": str(record.fields.get("site") or ""),
-                "sample_type": str(record.fields.get("TYPE_") or ""),
-                "country_raw": str(record.fields.get("COUNTRY") or ""),
-                "analysis_group": group,
-                "method_source_locator": str(values.get("variable_metadata_locator") or record.source_locator),
-                "below_laboratory_dl": bool(values.get("below_laboratory_dl")),
-                "upstream_half_dl_substitution": bool(values.get("upstream_half_dl_substitution")),
-            })
+            entry.update(
+                {
+                    "article_citations": [candidate.registry_entry["citation"]],
+                    "article_dois": [
+                        candidate.registry_entry.get("publication_doi")
+                        or candidate.dataset_doi
+                    ]
+                    if (
+                        candidate.registry_entry.get("publication_doi")
+                        or candidate.dataset_doi
+                    )
+                    else [],
+                    "selection_rule": f"balanced deterministic M6 slice by {key}",
+                    "reported_horizon": str(record.fields.get("Horizons") or ""),
+                    "mountain": str(record.fields.get("Mountain") or ""),
+                    "site": str(record.fields.get("site") or ""),
+                    "sample_type": str(record.fields.get("TYPE_") or ""),
+                    "country_raw": str(record.fields.get("COUNTRY") or ""),
+                    "analysis_group": group,
+                    "method_source_locator": str(
+                        values.get("variable_metadata_locator") or record.source_locator
+                    ),
+                    "below_laboratory_dl": bool(values.get("below_laboratory_dl")),
+                    "upstream_half_dl_substitution": bool(
+                        values.get("upstream_half_dl_substitution")
+                    ),
+                }
+            )
             evidence_rows.append(entry)
             selected[key] += 1
             selected_source_rows.add(record.source_record_id)
     if len(rows) != observation_limit:
-        raise DemoError(f"{source_id} produced {len(rows)} observations, expected {observation_limit}")
+        raise DemoError(
+            f"{source_id} produced {len(rows)} observations, expected {observation_limit}"
+        )
     return rows, evidence_rows, len(selected_source_rows)
 
 
 @contextmanager
-def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[DownloadedFile]]]:
+def acquired_source(
+    args: argparse.Namespace,
+) -> Iterator[tuple[Any, list[DownloadedFile]]]:
     adapter = get_adapter(args.source)
     request = {
         "sources": [args.source],
@@ -2048,7 +2362,9 @@ def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[Downlo
         if args.source != "norway-marchem":
             raise DemoError("--archive is currently supported only for norway-marchem")
         with tempfile.TemporaryDirectory(prefix="marchem-fixture-") as temporary:
-            files = adapter.files_from_archive(args.archive, Path(temporary) / "members")
+            files = adapter.files_from_archive(
+                args.archive, Path(temporary) / "members"
+            )
             yield candidate, files
     else:
         yield candidate, adapter.download(candidate, args.cache_dir, mode=args.mode)
@@ -2056,7 +2372,9 @@ def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[Downlo
 
 def _csv_text(rows: Sequence[Mapping[str, str]]) -> str:
     with tempfile.TemporaryFile("w+", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=INPUT_COLUMNS, extrasaction="ignore", lineterminator="\n")
+        writer = csv.DictWriter(
+            handle, fieldnames=INPUT_COLUMNS, extrasaction="ignore", lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
         handle.seek(0)
@@ -2064,7 +2382,11 @@ def _csv_text(rows: Sequence[Mapping[str, str]]) -> str:
 
 
 def _jsonl_text(rows: Sequence[Mapping[str, Any]]) -> str:
-    return "".join(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n" for row in rows)
+    return "".join(
+        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + "\n"
+        for row in rows
+    )
 
 
 def generate(args: argparse.Namespace) -> dict[str, Any]:
@@ -2074,9 +2396,16 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         )
     parameterized_sources = {"georoc-archaean", "usgs-conus-soil"}
     if args.source not in parameterized_sources and args.bbox is not None:
-        raise DemoError(f"bbox filtering is not implemented for source {args.source}; refusing to ignore it")
-    if args.source not in parameterized_sources and tuple(args.elements) != DEFAULT_ANALYTES:
-        raise DemoError(f"element filtering is not implemented for source {args.source}; refusing to ignore it")
+        raise DemoError(
+            f"bbox filtering is not implemented for source {args.source}; refusing to ignore it"
+        )
+    if (
+        args.source not in parameterized_sources
+        and tuple(args.elements) != DEFAULT_ANALYTES
+    ):
+        raise DemoError(
+            f"element filtering is not implemented for source {args.source}; refusing to ignore it"
+        )
     output_paths = {
         "demo_input": args.output_dir / "demo_input.csv",
         "sources": args.output_dir / "sources.jsonl",
@@ -2084,7 +2413,9 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
     }
     existing = [str(path) for path in output_paths.values() if path.exists()]
     if existing and not args.overwrite:
-        raise DemoError(f"output files already exist; use --overwrite after review: {existing}")
+        raise DemoError(
+            f"output files already exist; use --overwrite after review: {existing}"
+        )
 
     with acquired_source(args) as (candidate, downloaded):
         adapter = get_adapter(args.source)
@@ -2096,13 +2427,26 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         )
         files = {item.path.name: item for item in downloaded}
         if args.source == "georoc-archaean":
-            references = {item.path.name: _georoc_reference_map(item.path) for item in downloaded}
+            references = {
+                item.path.name: _georoc_reference_map(item.path) for item in downloaded
+            }
             rows, evidence, selected_source_rows, raw_source_rows = georoc_demo(
-                raw_records, files, references, candidate, args.observations, args.elements, args.bbox
+                raw_records,
+                files,
+                references,
+                candidate,
+                args.observations,
+                args.elements,
+                args.bbox,
             )
         elif args.source == "usgs-conus-soil":
             rows, evidence, selected_source_rows, raw_source_rows = usgs_demo(
-                raw_records, files, candidate, args.observations, args.elements, args.bbox
+                raw_records,
+                files,
+                candidate,
+                args.observations,
+                args.elements,
+                args.bbox,
             )
         elif args.source == "norway-marchem":
             rows, evidence, selected_source_rows = marchem_demo(
@@ -2162,7 +2506,11 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 raw_records, files, candidate, args.observations
             )
             raw_source_rows = len(raw_records)
-        elif args.source in {"georoc-antarctica-intraplate", "tpdc-china-mountain-soil", "gemas-europe"}:
+        elif args.source in {
+            "georoc-antarctica-intraplate",
+            "tpdc-china-mountain-soil",
+            "gemas-europe",
+        }:
             rows, evidence, selected_source_rows = v4_m6_demo(
                 raw_records, files, candidate, args.observations
             )
@@ -2198,9 +2546,13 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
     ]
     if args.source == "georoc-archaean":
-        warnings.append("GEOROC coordinates remain non-canonical until their datum is verified.")
+        warnings.append(
+            "GEOROC coordinates remain non-canonical until their datum is verified."
+        )
     elif args.source == "usgs-conus-soil":
-        warnings.append("USGS methods, WGS 84 CRS and qualifiers are decoded from Appendix 5 metadata.")
+        warnings.append(
+            "USGS methods, WGS 84 CRS and qualifiers are decoded from Appendix 5 metadata."
+        )
     elif args.source.startswith("foregs-"):
         warnings.extend(
             [
@@ -2294,7 +2646,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         warnings.extend(
             [
                 "This GEOROC member is a literature compilation, not uniform Antarctica coverage.",
-            "Only exact coordinate pairs enter the reported-coordinate fields; canonical coordinates remain withheld until the datum is verified.",
+                "Only exact coordinate pairs enter the reported-coordinate fields; canonical coordinates remain withheld until the datum is verified.",
             ]
         )
     elif args.source == "tpdc-china-mountain-soil":
@@ -2334,14 +2686,22 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 if args.source in parameterized_sources
                 else ("Cu", "Ni", "Zn")
                 if args.source == "geotraces-idp2025"
-                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn") if args.source == "gemstat-open-archive"
-                else ("As",) if args.source == "us-wqp-sacramento-river-arsenic"
-                else ("Hg",) if args.source == "australia-ngsa-mercury"
-                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn") if args.source == "japan-gsj-marine-sediment"
-                else ("As", "Cr", "Cu", "Ni", "Pb", "Zn") if args.source == "pangaea-arabian-sea-sediment"
-                else ("As", "Cr", "Cu", "Ni", "Pb", "Zn") if args.source == "georoc-antarctica-intraplate"
-                else ("Cr", "Cu", "Ni", "Pb", "Zn") if args.source == "tpdc-china-mountain-soil"
-                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn") if args.source == "gemas-europe"
+                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
+                if args.source == "gemstat-open-archive"
+                else ("As",)
+                if args.source == "us-wqp-sacramento-river-arsenic"
+                else ("Hg",)
+                if args.source == "australia-ngsa-mercury"
+                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
+                if args.source == "japan-gsj-marine-sediment"
+                else ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
+                if args.source == "pangaea-arabian-sea-sediment"
+                else ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
+                if args.source == "georoc-antarctica-intraplate"
+                else ("Cr", "Cu", "Ni", "Pb", "Zn")
+                if args.source == "tpdc-china-mountain-soil"
+                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
+                if args.source == "gemas-europe"
                 else sorted({row["element_or_analyte"] for row in rows})
                 if args.source.startswith("foregs-")
                 else ANALYTES
@@ -2379,11 +2739,19 @@ def build_parser() -> argparse.ArgumentParser:
         "--source",
         required=True,
         choices=(
-            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
-            "geotraces-idp2025", "gemstat-open-archive", "pangaea-north-africa-soil",
+            "georoc-archaean",
+            "usgs-conus-soil",
+            "norway-marchem",
+            "geotraces-idp2025",
+            "gemstat-open-archive",
+            "pangaea-north-africa-soil",
             "japan-gsj-geochemical-map",
-            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
-            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
+            "foregs-topsoil",
+            "foregs-subsoil",
+            "foregs-humus",
+            "foregs-stream-water",
+            "foregs-stream-sediment",
+            "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
             "us-wqp-sacramento-river-arsenic",
             "australia-ngsa-mercury",
