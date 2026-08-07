@@ -29,9 +29,25 @@ description: 该技能用于构建全球或区域地球化学元素分布图谱�
 
 不要跳过阶段，不要用后续可视化补造上游证据。
 
+把每个关键选择、排除、降级和拒绝的 `status`、理由、证据定位、限制与 `next_action` 写入用户要求的结构化产物；最终聊天摘要不能替代产物内证据。hash 只证明固定字节一致，规则通过只证明该规则已满足，两者都不能单独证明测量值真实或科学结论正确。
+
 ## 先路由，再加载
 
-只执行用户问题所需的最小路径。先把任务冻结为符合 [references/task-contract.schema.json](references/task-contract.schema.json) 的 `atlas-task-contract-v1`，再运行：
+只执行用户问题所需的最小路径。先把任务冻结为符合 [references/task-contract.schema.json](references/task-contract.schema.json) 的 `atlas-task-contract-v1`。处理用户文件的完整图谱任务可写为：
+
+```json
+{
+  "contract_version": "atlas-task-contract-v1",
+  "task_type": "full_atlas",
+  "request": "REQUEST.json",
+  "input": "INPUT.csv",
+  "evidence_jsonl": "RECORD_EVIDENCE.jsonl",
+  "acquisition_manifest": "ACQUISITION_MANIFEST.json",
+  "output_dir": "OUTPUT_DIR"
+}
+```
+
+再运行：
 
 ```bash
 python scripts/task_router.py --contract TASK.json --output TASK_PLAN.json
