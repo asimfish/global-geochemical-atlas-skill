@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import sqlite3
@@ -24,14 +23,6 @@ DEFAULT_BUNDLE = SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json"
 
 def _json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _load_bundle(path: Path) -> dict[str, Any]:
@@ -77,7 +68,7 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                     item["filename"],
                     item["source_url"],
                     item["bytes"],
-                    item["sha256"],
+                    item["file_identity"],
                 ),
             )
         connection.execute(
@@ -290,7 +281,7 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                 item["source_sheet"],
                 item["source_row"],
                 item["source_column"],
-                item["input_sha256"],
+                item["input_file_id"],
                 item["adapter_name"],
                 item["adapter_version"],
                 _json(item["processing_steps"]),
@@ -358,7 +349,6 @@ def build_index(bundle_path: Path, output: Path, schema_path: Path = DEFAULT_SCH
         "index_version": "d1-sqlite-index-v1",
         "output": str(output),
         "bytes": output.stat().st_size,
-        "sha256": _sha256(output),
         "counts": counts,
     }
 

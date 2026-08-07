@@ -44,11 +44,13 @@
         "india-gsi-ngcm",
         "jamstec-darwin",
         "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "pangaea-arabian-sea-sediment",
         "tpdc-china-mountain-soil"
       ],
       "remaining_work": [
         "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals beyond the verified TPDC China mountain-soil dataset.",
-        "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented national river-sediment CSV pair into separately versioned marine-sediment and surface-soil products.",
+        "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented river- and marine-sediment products into separately versioned surface-soil products.",
         "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI."
       ]
     },
@@ -112,6 +114,7 @@
       "status": "in_progress",
       "catalogued_sources": [
         "australia-ngsa",
+        "australia-ngsa-mercury",
         "australia-ozchem",
         "nz-petlab"
       ],
@@ -128,13 +131,15 @@
         "iodp-data-systems",
         "jamstec-darwin",
         "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
         "noaa-ncei-marine-geology",
         "norway-marchem",
+        "pangaea-arabian-sea-sediment",
         "pangaea-repository"
       ],
       "remaining_work": [
         "Search additional oceanographic data centres, lake-sediment archives and polar repositories.",
-        "Separate GSJ river and coastal-marine survey generations before using its national concentration database.",
+        "Keep GSJ river and marine survey generations as separate source identities and continue resolving their analytical-method metadata.",
         "Separate sample inventories from downloadable numerical measurements and resolve all contributing programs."
       ]
     }

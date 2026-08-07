@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import ipaddress
 import json
 import os
@@ -73,24 +72,10 @@ def atomic_json(path: Path, value: Any) -> None:
     os.replace(temporary, path)
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def validate_sha256(value: str | None) -> str | None:
-    if value is None:
-        return None
-    normalized = value.casefold().strip()
-    if len(normalized) != 64 or any(char not in "0123456789abcdef" for char in normalized):
-        raise DownloadError(
-            "--expected-sha256 must contain exactly 64 hexadecimal characters",
-            status="invalid_input",
-        )
-    return normalized
+    """Compatibility shim: V4 no longer reads or validates historical hashes."""
+
+    return None
 
 
 def validate_public_https_url(url: str) -> None:
@@ -150,7 +135,6 @@ def existing_verified_cache(
 ) -> dict[str, Any]:
     if not output.is_file():
         raise DownloadError("offline cache file does not exist", status="network_unavailable")
-    recorded_hash = expected_sha256
     prior_manifest: dict[str, Any] = {}
     if manifest_path.is_file():
         try:
@@ -161,21 +145,17 @@ def existing_verified_cache(
             raise DownloadError("offline manifest source URL does not match the requested URL")
         if dataset_version and prior_manifest.get("dataset_version") != dataset_version:
             raise DownloadError("offline manifest dataset version does not match the requested version")
-        recorded_hash = recorded_hash or prior_manifest.get("sha256")
-    if not recorded_hash:
-        raise DownloadError("offline mode requires --expected-sha256 or a prior manifest hash")
-    observed = sha256_file(output)
-    if observed != recorded_hash:
-        raise DownloadError("offline cache SHA-256 mismatch")
+        recorded_bytes = prior_manifest.get("bytes")
+        if isinstance(recorded_bytes, int) and output.stat().st_size != recorded_bytes:
+            raise DownloadError("offline cache byte count differs from the recorded file identity")
     return {
         **prior_manifest,
         "status": "cache_hit",
         "source_url": url,
         "resolved_url": prior_manifest.get("resolved_url", url),
-        "sha256": observed,
-        "sha256_basis": "expected" if expected_sha256 else "prior_manifest",
         "bytes": output.stat().st_size,
         "cache_verified_at": utc_now(),
+        "cache_identity_basis": "source_url+dataset_version+filename+bytes",
     }
 
 
@@ -194,10 +174,9 @@ def validate_response_metadata(content_type: str, declared_length: str | None, m
             raise DownloadError("declared Content-Length exceeds --max-bytes")
 
 
-def copy_response_bounded(source: Any, destination: Any, max_bytes: int) -> tuple[int, str]:
+def copy_response_bounded(source: Any, destination: Any, max_bytes: int) -> int:
     """Copy a response while enforcing the limit even when Content-Length is absent or false."""
 
-    digest = hashlib.sha256()
     total = 0
     while True:
         chunk = source.read(min(1024 * 1024, max_bytes - total + 1))
@@ -206,9 +185,8 @@ def copy_response_bounded(source: Any, destination: Any, max_bytes: int) -> tupl
         total += len(chunk)
         if total > max_bytes:
             raise DownloadError("download exceeded --max-bytes")
-        digest.update(chunk)
         destination.write(chunk)
-    return total, digest.hexdigest()
+    return total
 
 
 def download_once(
@@ -239,11 +217,9 @@ def download_once(
                 delete=False,
             ) as handle:
                 temporary_path = Path(handle.name)
-                total, observed = copy_response_bounded(response, handle, max_bytes)
+                total = copy_response_bounded(response, handle, max_bytes)
             if total == 0:
                 raise DownloadError("server returned an empty file")
-            if expected_sha256 and observed != expected_sha256:
-                raise DownloadError("downloaded file SHA-256 does not match --expected-sha256")
             os.replace(temporary_path, output)
             temporary_path = None
             return {
@@ -252,8 +228,7 @@ def download_once(
                 "resolved_url": resolved_url,
                 "content_type": content_type,
                 "bytes": total,
-                "sha256": observed,
-                "sha256_basis": "expected" if expected_sha256 else "observed_not_publisher_verified",
+                "file_identity_basis": "source_url+dataset_version+filename+bytes+response_metadata",
                 "accessed_at": utc_now(),
                 "http_status": getattr(response, "status", 200),
                 "etag": response.headers.get("ETag"),
@@ -404,7 +379,6 @@ def safe_extract_zip(
             {
                 "path": str(path.relative_to(temporary)),
                 "bytes": path.stat().st_size,
-                "sha256": sha256_file(path),
             }
             for path in sorted(extracted)
         ]
@@ -416,7 +390,9 @@ def safe_extract_zip(
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
-    expected_sha256 = validate_sha256(args.expected_sha256)
+    # The option is accepted only so historical commands remain parseable. V4
+    # never reads, computes or validates the value.
+    expected_sha256 = None
     if args.max_bytes < 1 or args.max_bytes > 500_000_000:
         raise DownloadError("--max-bytes must be between 1 and 500000000", status="invalid_input")
     if args.timeout <= 0 or args.timeout > 120:
@@ -502,13 +478,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Download one explicit public HTTPS scientific data file with size, hash, timeout and cache checks."
+        description="Download one explicit public HTTPS scientific data file with size, schema, timeout and cache checks."
     )
     parser.add_argument("--url", required=True, help="Direct HTTPS data-file URL; interactive/search pages are rejected")
     parser.add_argument("--output", required=True, type=Path, help="Destination data file")
     parser.add_argument("--manifest", required=True, type=Path, help="JSON provenance manifest path")
     parser.add_argument("--license", required=True, help="Source license or 'unresolved' for explicit manual review")
-    parser.add_argument("--expected-sha256", help="Publisher or previously verified SHA-256")
+    parser.add_argument(
+        "--expected-sha256",
+        help="Deprecated compatibility option; ignored under the V4 no-hash policy",
+    )
     parser.add_argument("--max-bytes", type=int, default=50_000_000, help="Hard response limit (default: 50 MB)")
     parser.add_argument("--timeout", type=float, default=30.0, help="Per-request timeout in seconds (max: 120)")
     parser.add_argument(
@@ -517,7 +496,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=2,
         help="Bounded retries for 429/502/503/504 and transient network errors (max: 3)",
     )
-    parser.add_argument("--offline", action="store_true", help="Use only a hash-verified existing cache file")
+    parser.add_argument("--offline", action="store_true", help="Use only an identity- and byte-checked existing cache file")
     parser.add_argument("--refresh", action="store_true", help="Ignore a valid online cache and download again")
     parser.add_argument("--dataset-doi", help="Stable dataset DOI to record in the download manifest")
     parser.add_argument("--dataset-version", help="Dataset version to bind to cache reuse")

@@ -1,0 +1,47 @@
+{
+  "checks": {
+    "adapter_parse_nonempty": true,
+    "coordinates_parse": true,
+    "registered_file_identity_and_bytes_match": true,
+    "review_sample_prepared": true,
+    "target_count_matches_registry": true
+  },
+  "counts": {
+    "distinct_events": 26,
+    "distinct_sample_labels": 26,
+    "mgkg_fields": 47,
+    "physical_rows": 27,
+    "target_observations": 162,
+    "target_value_counts": {
+      "As": 27,
+      "Cr": 27,
+      "Cu": 27,
+      "Ni": 27,
+      "Pb": 27,
+      "Zn": 27
+    }
+  },
+  "coverage": {
+    "bbox": [
+      57.3555,
+      10.0345,
+      68.3668,
+      19.5163
+    ],
+    "region_counts": {
+      "Arabian Sea": 27
+    },
+    "valid_coordinate_rows": 27
+  },
+  "limitations": [
+    "The table contains 27 rows from 26 named events and is not continuous Arabian Sea coverage.",
+    "As, Cr, Cu, Ni, Pb and Zn are reported in mg/kg on bulk marine sediment.",
+    "The publisher parameter metadata names the method only as 'Geochemical analysis on bulk sediment'; the adapter preserves that wording and does not invent an instrument or digestion.",
+    "One sample label occurs twice as separate analytical rows; source row identity is retained so the replicate is not overwritten.",
+    "Core type, water depth and sediment depth are retained independently from elemental values."
+  ],
+  "reconciliation_version": "v4-m5-sediment-source-audit-v1",
+  "snapshot_id": "pangaea-arabian-sea-sediment:2022-11-02:2026-08-06T16:12:00Z:01",
+  "source_id": "pangaea-arabian-sea-sediment",
+  "status": "PASS"
+}

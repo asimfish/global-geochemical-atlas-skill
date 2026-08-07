@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import math
 import os
@@ -89,15 +88,11 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
             "name": item.path.name,
             "file_id": item.file_id,
             "bytes": item.bytes,
-            "sha256": item.sha256,
             "source_url": item.source_url,
         }
         for item in downloaded
     ]
-    aggregate_sha256 = hashlib.sha256(
-        "".join(item["sha256"] for item in sorted(members, key=lambda item: item["name"])).encode()
-    ).hexdigest()
-    snapshot_id = f"{SOURCE_ID}:{candidate.version}:{aggregate_sha256[:12]}"
+    snapshot_id = f"{SOURCE_ID}:{candidate.version}:{registry['download']['observed_at']}"
     coverage = {
         "station_count": 1,
         "monitoring_location_identifier": station["MonitoringLocationIdentifier"],
@@ -135,7 +130,7 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "snapshot_id": snapshot_id,
         "observed_at": registry["download"]["observed_at"],
         "request": {"url": request_url, "station_url": next(item["source_url"] for item in members if item["file_id"] == "station")},
-        "response": {"sha256": aggregate_sha256, "bytes": sum(item["bytes"] for item in members)},
+        "response": {"bytes": sum(item["bytes"] for item in members)},
         "archive": {"members": members},
         "counts": observed_counts,
         "coverage": coverage,
@@ -146,9 +141,9 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "claim_boundary": claim_boundary,
     }
     checks = {
-        "registered_hashes_match": all(
-            item.sha256
-            == next(entry["expected_sha256"] for entry in registry["download"]["files"] if entry["file_id"] == item.file_id)
+        "registered_file_bytes_match": all(
+            item.bytes
+            == next(entry["bytes"] for entry in registry["download"]["files"] if entry["file_id"] == item.file_id)
             for item in downloaded
         ),
         "counts_match_registry": observed_counts == expected,
@@ -182,7 +177,7 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
             "observed_at": registry["download"]["observed_at"],
             "mode": registry["download"]["mode"],
         },
-        "archive": {"sha256": aggregate_sha256, "members": members},
+        "archive": {"members": members},
         "observed_data": {
             "target_analytes": registry["target_analytes"],
             "counts": observed_counts,
@@ -229,7 +224,7 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
             SOURCE_ID, record.source_record_id, "As", raw_value, str(values["unit"])
         )
         row_checks = {
-            "registered_result_hash_matches": result_file.sha256 == next(item["sha256"] for item in members if item["name"] == "results.csv"),
+            "registered_result_bytes_match": result_file.bytes == next(item["bytes"] for item in members if item["name"] == "results.csv"),
             "station_join_preserved": joined_station["MonitoringLocationIdentifier"] == fields["MonitoringLocationIdentifier"],
             "coordinates_preserved": finite(joined_station["LatitudeMeasure"]) and finite(joined_station["LongitudeMeasure"]),
             "raw_value_or_censor_limit_preserved": finite(raw_value) and values["value_qualifier"] in {"", "<"},

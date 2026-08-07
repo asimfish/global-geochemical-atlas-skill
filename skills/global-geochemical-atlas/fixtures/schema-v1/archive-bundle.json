@@ -20,6 +20,7 @@
           "source_url": "https://example.org/fixture.csv",
           "bytes": 123,
           "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          ,"file_identity": "demo-source:1.0:demo-source.csv"
         }
       ]
     }
@@ -158,6 +159,7 @@
       "source_row": 2,
       "source_column": null,
       "input_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "input_file_id": "demo-source:1.0:demo-source.csv",
       "adapter_name": "fixture_adapter",
       "adapter_version": "1.0.0",
       "processing_steps": [
@@ -272,6 +274,7 @@
         {
           "path": "archive-bundle.json",
           "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "file_identity": "synthetic-source:1.0:synthetic.csv",
           "bytes": 0
         }
       ]

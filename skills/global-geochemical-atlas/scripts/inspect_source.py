@@ -39,7 +39,6 @@ def inspect_source(source_id: str, cache_dir: Path, mode: str, sample_records: i
                 "file_id": item.file_id,
                 "filename": item.path.name,
                 "bytes": item.bytes,
-                "sha256": item.sha256,
                 "cache_status": item.cache_status,
             }
             for item in downloaded

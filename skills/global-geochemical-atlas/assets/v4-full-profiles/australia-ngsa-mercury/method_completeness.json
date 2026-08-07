@@ -1,0 +1,14 @@
+{
+  "analytical_method_counts": {
+    "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser": 2396
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2025-03-31",
+  "method_scope_counts": {
+    "dataset": 2396
+  },
+  "observation_count": 2396,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "australia-ngsa-mercury"
+}

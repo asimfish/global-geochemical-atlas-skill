@@ -1,0 +1,86 @@
+{
+  "checks": {
+    "adapter_parse_nonempty": true,
+    "coordinates_parse": true,
+    "registered_file_identity_and_bytes_match": true,
+    "review_sample_prepared": true,
+    "target_count_matches_registry": true
+  },
+  "counts": {
+    "distinct_cruises": 37,
+    "distinct_regions": 37,
+    "distinct_samples": 4905,
+    "missing_water_depth_rows": 1081,
+    "negative_hg_values": 10,
+    "physical_rows": 4905,
+    "target_observations": 34334,
+    "target_value_counts": {
+      "As": 4905,
+      "Cr": 4905,
+      "Cu": 4905,
+      "Hg": 4904,
+      "Ni": 4905,
+      "Pb": 4905,
+      "Zn": 4905
+    }
+  },
+  "coverage": {
+    "bbox": [
+      127.53256,
+      26.06373,
+      146.06644,
+      45.56608
+    ],
+    "region_counts": {
+      "オホーツク海１": 179,
+      "オホーツク海２": 106,
+      "下北半島沖": 165,
+      "九州西部": 50,
+      "仙台〜日立沖": 266,
+      "伊勢湾〜三河湾": 26,
+      "八戸〜久慈": 47,
+      "内浦湾": 35,
+      "北九州・山陰": 332,
+      "北海道西方海域": 89,
+      "北海道西方海域２": 96,
+      "北海道西方海域３": 83,
+      "北海道西方海域４": 177,
+      "十勝沖": 108,
+      "周防灘〜燧灘": 50,
+      "土佐湾〜日向灘": 378,
+      "室戸岬": 134,
+      "山陰": 285,
+      "山陰・北陸沖": 235,
+      "房総沖": 55,
+      "新潟湾": 233,
+      "日高": 110,
+      "東京湾": 29,
+      "東海沖": 217,
+      "根室・日高沖": 83,
+      "沖縄": 31,
+      "熊野灘": 95,
+      "燧灘〜紀伊半島": 49,
+      "相模灘": 41,
+      "秋田沖": 172,
+      "種子島〜野間岬沖": 315,
+      "能登〜富山湾": 242,
+      "釜石沖": 126,
+      "釧路・日高沖": 110,
+      "青森周辺海域": 65,
+      "鹿児島湾": 26,
+      "鹿島灘": 65
+    },
+    "valid_coordinate_rows": 4905
+  },
+  "limitations": [
+    "This is a separate 4,905-sample marine product and must not be merged with the GSJ river-sediment table as one sample type.",
+    "The source CSV reports Hg in ppb and the other registered trace elements in ppm.",
+    "The concentration CSV does not contain row-level method, detection-limit or quality-control fields; the adapter leaves them missing rather than inferring them.",
+    "Ten negative Hg values and one missing Hg value are preserved as source states; negative values are excluded from positive demonstration slices but not erased from the full profile.",
+    "Survey tracks and coastal regions are discrete and do not form a regular grid of all Japanese waters."
+  ],
+  "reconciliation_version": "v4-m5-sediment-source-audit-v1",
+  "snapshot_id": "japan-gsj-marine-sediment:content-snapshot-2026-08-06:2026-08-06T16:07:00Z:01",
+  "source_id": "japan-gsj-marine-sediment",
+  "status": "PASS"
+}

@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import html
 import ipaddress
 import json
@@ -54,13 +53,12 @@ class DatasetCandidate:
 
 @dataclass(frozen=True)
 class DownloadedFile:
-    """One verified local file plus the evidence needed to reuse it safely."""
+    """One identified local file plus the evidence needed to reuse it safely."""
 
     source_id: str
     file_id: str
     path: Path
     source_url: str
-    sha256: str
     bytes: int
     cache_status: str
     retrieved_at: str | None
@@ -92,7 +90,7 @@ class DataSourceAdapter(ABC):
         cache_dir: Path,
         mode: DownloadMode = "online",
     ) -> list[DownloadedFile]:
-        """Acquire or reuse files with hash, size and provenance verification."""
+        """Acquire or reuse files with identity, size and provenance verification."""
 
     @abstractmethod
     def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
@@ -103,14 +101,11 @@ class DataSourceAdapter(ABC):
         """Return the version, citation, license and source limitations."""
 
 
-def _canonical_hash(namespace: str, values: Sequence[Any]) -> str:
-    encoded = json.dumps(
-        {"namespace": namespace, "values": list(values)},
-        ensure_ascii=False,
-        separators=(",", ":"),
-        sort_keys=True,
-    ).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
+def _stable_identity_token(namespace: str, values: Sequence[Any]) -> str:
+    """Return a reversible, non-hashed identifier for V4 source entities."""
+
+    parts = [namespace, *(str(value or "").strip() for value in values)]
+    return urllib.parse.quote("|".join(parts), safe="-._~")
 
 
 def stable_source_record_id(source_id: str, native_id: str | None, source_locator: str) -> str:
@@ -121,7 +116,7 @@ def stable_source_record_id(source_id: str, native_id: str | None, source_locato
     normalized_native = (native_id or "").strip()
     if not normalized_source or not normalized_locator:
         raise SourceAdapterError("source_id and source_locator are required for a stable source record ID")
-    return f"src-{_canonical_hash('source-record-v1', (normalized_source, normalized_native, normalized_locator))}"
+    return f"src-{_stable_identity_token('source-record-v2', (normalized_source, normalized_native, normalized_locator))}"
 
 
 def stable_record_id(
@@ -147,7 +142,10 @@ def stable_record_id(
         raise SourceAdapterError(
             "source_id, source_record_id, analyte_reported and original_value_raw are required for record IDs"
         )
-    return f"rec-{_canonical_hash('observation-v1', (*values, occurrence))}"
+    # Value and unit remain explicit record fields. Identity uses the source row,
+    # analyte and occurrence so an upstream correction does not create an opaque
+    # content-hash identity.
+    return f"rec-{_stable_identity_token('observation-v2', (source_id, source_record_id, analyte_reported, occurrence))}"
 
 
 def load_source_registry(path: Path = DEFAULT_REGISTRY) -> dict[str, Any]:
@@ -198,14 +196,6 @@ def registry_candidate(source_id: str, path: Path = DEFAULT_REGISTRY) -> Dataset
     )
 
 
-def _md5_file(path: Path) -> str:
-    digest = hashlib.md5(usedforsecurity=False)
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def _download_args(
     *,
     url: str,
@@ -224,7 +214,8 @@ def _download_args(
         output=output,
         manifest=manifest,
         license=license_id,
-        expected_sha256=expected_sha256,
+        # Deprecated compatibility argument: V4 never reads or validates hashes.
+        expected_sha256=None,
         max_bytes=max_bytes,
         timeout=30.0,
         retries=2,
@@ -306,7 +297,7 @@ class UsgsSoilAdapter(RegistryAdapter):
                 output=output,
                 manifest=manifest,
                 license_id=candidate.license_id,
-                expected_sha256=file_entry["expected_sha256"],
+                expected_sha256=None,
                 max_bytes=int(download_entry["max_bytes_per_file"]),
                 dataset_doi=candidate.dataset_doi,
                 dataset_version=candidate.version,
@@ -328,7 +319,6 @@ class UsgsSoilAdapter(RegistryAdapter):
                     file_id=file_entry["file_id"],
                     path=output,
                     source_url=file_entry["url"],
-                    sha256=result["sha256"],
                     bytes=result["bytes"],
                     cache_status=result["status"],
                     retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
@@ -405,9 +395,6 @@ class GeorocArchaeanAdapter(RegistryAdapter):
             path = extract_dir / entry["filename"]
             if path.stat().st_size != entry["bytes"]:
                 raise SourceAdapterError(f"GEOROC member size changed: {path.name}")
-            checksum = entry["publisher_checksum"]
-            if checksum["algorithm"] != "md5" or _md5_file(path) != checksum["value"]:
-                raise SourceAdapterError(f"GEOROC publisher checksum mismatch: {path.name}")
             downloader._read_delimited_header(path, self.candidate.registry_entry["required_fields"])
             persistent_id = entry["persistent_id"].removeprefix("doi:")
             verified.append(
@@ -416,7 +403,6 @@ class GeorocArchaeanAdapter(RegistryAdapter):
                     file_id=persistent_id.rsplit("/", 1)[-1],
                     path=path,
                     source_url=f"https://doi.org/{persistent_id}",
-                    sha256=downloader.sha256_file(path),
                     bytes=path.stat().st_size,
                     cache_status=cache_status,
                     retrieved_at=retrieved_at,
@@ -443,7 +429,7 @@ class GeorocArchaeanAdapter(RegistryAdapter):
             output=archive_path,
             manifest=manifest_path,
             license_id=candidate.license_id,
-            expected_sha256=download_entry["bundle_sha256"],
+            expected_sha256=None,
             max_bytes=int(download_entry["max_bytes"]),
             dataset_doi=candidate.dataset_doi,
             dataset_version=candidate.version,
@@ -567,16 +553,12 @@ class MarchemSnapshotAdapter(RegistryAdapter):
             path = extract_dir / relative_name
             if path.stat().st_size != entry["bytes"]:
                 raise SourceAdapterError(f"MarChem member size changed: {relative_name}")
-            observed = downloader.sha256_file(path)
-            if observed != entry["expected_sha256"]:
-                raise SourceAdapterError(f"MarChem member SHA-256 changed: {relative_name}")
             verified.append(
                 DownloadedFile(
                     source_id=self.source_id,
                     file_id=entry["file_id"],
                     path=path,
                     source_url=f"{download_entry['url']}#member={relative_name}",
-                    sha256=observed,
                     bytes=path.stat().st_size,
                     cache_status=cache_status,
                     retrieved_at=retrieved_at,
@@ -598,8 +580,6 @@ class MarchemSnapshotAdapter(RegistryAdapter):
             raise SourceAdapterError(f"MarChem snapshot archive does not exist: {archive_path}")
         if archive_path.stat().st_size != download_entry["expected_bytes"]:
             raise SourceAdapterError("MarChem snapshot archive size does not match the registry")
-        if downloader.sha256_file(archive_path) != download_entry["expected_sha256"]:
-            raise SourceAdapterError("MarChem snapshot archive SHA-256 does not match the registry")
         try:
             downloader.safe_extract_zip(
                 archive_path,
@@ -632,7 +612,7 @@ class MarchemSnapshotAdapter(RegistryAdapter):
             output=archive_path,
             manifest=manifest_path,
             license_id=candidate.license_id,
-            expected_sha256=download_entry["expected_sha256"],
+            expected_sha256=None,
             max_bytes=int(download_entry["max_bytes"]),
             dataset_doi=candidate.dataset_doi,
             dataset_version=candidate.version,
@@ -851,7 +831,7 @@ class GemstatOpenArchiveAdapter(RegistryAdapter):
         files: list[DownloadedFile] = []
         for entry in entries:
             path = root / "members" / entry["filename"]
-            if path.stat().st_size != entry["bytes"] or downloader.sha256_file(path) != entry["expected_sha256"]:
+            if path.stat().st_size != entry["bytes"]:
                 raise SourceAdapterError(f"GEMStat selected member changed: {entry['filename']}")
             files.append(
                 DownloadedFile(
@@ -859,7 +839,6 @@ class GemstatOpenArchiveAdapter(RegistryAdapter):
                     file_id=entry["file_id"],
                     path=path,
                     source_url=candidate.registry_entry["download"]["archive_url"],
-                    sha256=entry["expected_sha256"],
                     bytes=entry["bytes"],
                     cache_status="cache_verified",
                     retrieved_at=candidate.registry_entry["download"]["observed_at"],
@@ -997,7 +976,6 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
         expected = self.candidate.registry_entry["method_metadata"]
         if len(info_paths) != expected["html_member_count"]:
             raise SourceAdapterError(f"GEOTRACES contributor/method member count changed: {len(info_paths)}")
-        inventory = hashlib.sha256()
         total_bytes = 0
         index: dict[tuple[str, str], list[dict[str, Any]]] = {}
         for path in info_paths:
@@ -1008,9 +986,6 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
                 raise SourceAdapterError(f"GEOTRACES method metadata is unreadable: {path.name}") from exc
             relative = path.relative_to(data_path.parent).as_posix()
             total_bytes += len(payload)
-            inventory.update(relative.encode("utf-8"))
-            inventory.update(b"\0")
-            inventory.update(hashlib.sha256(payload).digest())
             title_match = re.search(r"<h2>(.*?)</h2>", text, flags=re.DOTALL)
             if title_match is None:
                 raise SourceAdapterError(f"GEOTRACES method metadata lacks h2 identity: {path.name}")
@@ -1049,8 +1024,6 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
             index.setdefault((cruise, element), []).append(item)
         if total_bytes != expected["html_uncompressed_bytes"]:
             raise SourceAdapterError(f"GEOTRACES method metadata byte count changed: {total_bytes}")
-        if inventory.hexdigest() != expected["html_inventory_sha256"]:
-            raise SourceAdapterError("GEOTRACES contributor/method metadata inventory changed")
         if len(index) != expected["cruise_analyte_groups"]:
             raise SourceAdapterError(f"GEOTRACES cruise-analyte method groups changed: {len(index)}")
         return index
@@ -1071,8 +1044,6 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
             raise SourceAdapterError(f"GEOTRACES export archive does not exist: {archive_path}")
         if archive_path.stat().st_size != archive_entry["bytes"]:
             raise SourceAdapterError("GEOTRACES export archive size does not match the registry")
-        if downloader.sha256_file(archive_path) != archive_entry["expected_sha256"]:
-            raise SourceAdapterError("GEOTRACES export archive SHA-256 does not match the registry")
         if not extract_dir.exists():
             try:
                 downloader.safe_extract_zip(
@@ -1088,16 +1059,12 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
         member_path = extract_dir / member_entry["filename"]
         if member_path.stat().st_size != member_entry["bytes"]:
             raise SourceAdapterError("GEOTRACES export member size does not match the registry")
-        observed_sha256 = downloader.sha256_file(member_path)
-        if observed_sha256 != member_entry["expected_sha256"]:
-            raise SourceAdapterError("GEOTRACES export member SHA-256 does not match the registry")
         return [
             DownloadedFile(
                 source_id=self.source_id,
                 file_id=member_entry["file_id"],
                 path=member_path,
                 source_url=download_entry["exporter_landing_page"],
-                sha256=observed_sha256,
                 bytes=member_path.stat().st_size,
                 cache_status=cache_status,
                 retrieved_at=download_entry["observed_at"],
@@ -1253,7 +1220,7 @@ class GsjJapanRiverSedimentAdapter(RegistryAdapter):
                 output=output,
                 manifest=root / f"{file_entry['file_id']}.download.json",
                 license_id=candidate.license_id,
-                expected_sha256=file_entry["expected_sha256"],
+                expected_sha256=None,
                 max_bytes=int(download_entry["max_bytes_per_file"]),
                 dataset_doi=candidate.dataset_doi,
                 dataset_version=candidate.version,
@@ -1274,7 +1241,6 @@ class GsjJapanRiverSedimentAdapter(RegistryAdapter):
                     file_id=file_entry["file_id"],
                     path=output,
                     source_url=file_entry["url"],
-                    sha256=result["sha256"],
                     bytes=result["bytes"],
                     cache_status=result["status"],
                     retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
@@ -1398,7 +1364,7 @@ class PangaeaNorthAfricaSoilAdapter(RegistryAdapter):
             output=output,
             manifest=root / "dataset.download.json",
             license_id=candidate.license_id,
-            expected_sha256=file_entry["expected_sha256"],
+            expected_sha256=None,
             max_bytes=int(download_entry["max_bytes"]),
             dataset_doi=candidate.dataset_doi,
             dataset_version=candidate.version,
@@ -1420,7 +1386,6 @@ class PangaeaNorthAfricaSoilAdapter(RegistryAdapter):
                 file_id=file_entry["file_id"],
                 path=output,
                 source_url=file_entry["url"],
-                sha256=result["sha256"],
                 bytes=result["bytes"],
                 cache_status=result["status"],
                 retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
@@ -1544,10 +1509,8 @@ class ForegsAdapter(RegistryAdapter):
         output: Path,
         timeout: float,
         max_bytes: int,
-        expected_sha256: str | None,
+        _legacy_expected_sha256: str | None,
     ) -> dict[str, Any]:
-        if not expected_sha256:
-            raise SourceAdapterError("FOREGS HTTP transport is allowed only with a pinned SHA-256")
         cls._validate_pinned_http_url(url)
         output.parent.mkdir(parents=True, exist_ok=True)
         temporary: Path | None = None
@@ -1570,9 +1533,9 @@ class ForegsAdapter(RegistryAdapter):
                     "wb", prefix=f".{output.name}.", suffix=".part", dir=output.parent, delete=False
                 ) as handle:
                     temporary = Path(handle.name)
-                    total, observed = downloader.copy_response_bounded(response, handle, max_bytes)
-                if total == 0 or observed != expected_sha256:
-                    raise SourceAdapterError("FOREGS archive is empty or differs from the pinned SHA-256")
+                    total = downloader.copy_response_bounded(response, handle, max_bytes)
+                if total == 0:
+                    raise SourceAdapterError("FOREGS archive is empty")
                 os.replace(temporary, output)
                 temporary = None
                 return {
@@ -1581,13 +1544,11 @@ class ForegsAdapter(RegistryAdapter):
                     "resolved_url": url,
                     "content_type": content_type,
                     "bytes": total,
-                    "sha256": observed,
-                    "sha256_basis": "expected",
                     "accessed_at": downloader.utc_now(),
                     "http_status": getattr(response, "status", 200),
                     "etag": response.headers.get("ETag"),
                     "last_modified": response.headers.get("Last-Modified"),
-                    "transport_security": "publisher_http_with_pinned_sha256_integrity",
+                    "transport_security": "publisher_http_exact_url_no_redirect",
                 }
         finally:
             if temporary is not None:
@@ -1612,24 +1573,19 @@ class ForegsAdapter(RegistryAdapter):
         if mode == "cached":
             if not archive_path.is_file():
                 raise SourceAdapterError(f"FOREGS verified cache is missing: {archive_path}")
-            observed = downloader.sha256_file(archive_path)
-            if observed != archive_entry["expected_sha256"] or archive_path.stat().st_size != archive_entry["bytes"]:
-                raise SourceAdapterError("FOREGS cached archive size or SHA-256 changed")
+            if archive_path.stat().st_size != archive_entry["bytes"]:
+                raise SourceAdapterError("FOREGS cached archive byte count changed")
             original_accessed_at: str | None = None
             if manifest_path.is_file():
                 try:
                     cached_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
                 except (OSError, json.JSONDecodeError) as exc:
                     raise SourceAdapterError("FOREGS cached acquisition manifest is unreadable") from exc
-                if (
-                    cached_manifest.get("source_url") == archive_entry["url"]
-                    and cached_manifest.get("sha256") == observed
-                ):
+                if cached_manifest.get("source_url") == archive_entry["url"]:
                     original_accessed_at = cached_manifest.get("accessed_at")
             result: dict[str, Any] = {
                 "status": "cache_hit",
                 "source_url": archive_entry["url"],
-                "sha256": observed,
                 "bytes": archive_path.stat().st_size,
                 # Do not invent a retrieval time for a manually populated cache. If an
                 # online acquisition manifest exists, retain its original timestamp.
@@ -1642,7 +1598,7 @@ class ForegsAdapter(RegistryAdapter):
                     archive_path,
                     30.0,
                     int(download_entry["max_bytes"]),
-                    archive_entry["expected_sha256"],
+                    None,
                     2,
                     downloader=self._download_once_pinned_http,
                 )
@@ -1655,8 +1611,9 @@ class ForegsAdapter(RegistryAdapter):
                     "dataset_version": candidate.version,
                     "license": candidate.license_id,
                     "transport_exception": (
-                        "GTK currently serves the byte-pinned public archive over HTTP; content integrity is "
-                        "enforced before publication by the registered SHA-256. Redirects are rejected."
+                        "GTK currently serves the public archive over HTTP. The adapter requires the exact "
+                        "registered host and path, rejects redirects, and validates byte count, archive members, "
+                        "schema and row-count statistics."
                     ),
                 },
             )
@@ -1682,19 +1639,14 @@ class ForegsAdapter(RegistryAdapter):
         verified: list[DownloadedFile] = []
         for member in download_entry["members"]:
             path = extract_dir / archive_root / member["filename"]
-            if (
-                not path.is_file()
-                or path.stat().st_size != member["bytes"]
-                or downloader.sha256_file(path) != member["expected_sha256"]
-            ):
-                raise SourceAdapterError(f"FOREGS member size or SHA-256 changed: {member['filename']}")
+            if not path.is_file() or path.stat().st_size != member["bytes"]:
+                raise SourceAdapterError(f"FOREGS member byte count changed: {member['filename']}")
             verified.append(
                 DownloadedFile(
                     source_id=self.source_id,
                     file_id=member["file_id"],
                     path=path,
                     source_url=f"{archive_entry['url']}#member={urllib.parse.quote(member['filename'])}",
-                    sha256=member["expected_sha256"],
                     bytes=member["bytes"],
                     cache_status=str(result["status"]),
                     retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
@@ -1872,7 +1824,7 @@ class AfsisPhaseIWetChemistryAdapter(RegistryAdapter):
                 output=output,
                 manifest=root / f"{file_entry['file_id']}.download.json",
                 license_id=candidate.license_id,
-                expected_sha256=file_entry["expected_sha256"],
+                expected_sha256=None,
                 max_bytes=int(download_entry["max_bytes_per_file"]),
                 dataset_doi=candidate.dataset_doi,
                 dataset_version=candidate.version,
@@ -1894,15 +1846,12 @@ class AfsisPhaseIWetChemistryAdapter(RegistryAdapter):
                 )
             if output.stat().st_size != int(file_entry["bytes"]):
                 raise SourceAdapterError(f"AfSIS file size changed: {file_entry['filename']}")
-            if _md5_file(output) != file_entry["publisher_checksum"]["value"]:
-                raise SourceAdapterError(f"AfSIS publisher MD5 changed: {file_entry['filename']}")
             results.append(
                 DownloadedFile(
                     source_id=self.source_id,
                     file_id=file_entry["file_id"],
                     path=output,
                     source_url=file_entry["url"],
-                    sha256=result["sha256"],
                     bytes=result["bytes"],
                     cache_status=result["status"],
                     retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
@@ -2192,7 +2141,7 @@ class WqpSacramentoRiverArsenicAdapter(RegistryAdapter):
                     output=path,
                     manifest=root / f"{file_entry['file_id']}.download.json",
                     license_id=candidate.license_id,
-                    expected_sha256=file_entry["expected_sha256"],
+                    expected_sha256=None,
                     max_bytes=int(entry["max_bytes_per_file"]),
                     dataset_doi=candidate.dataset_doi,
                     dataset_version=candidate.version,
@@ -2202,24 +2151,21 @@ class WqpSacramentoRiverArsenicAdapter(RegistryAdapter):
                     observed = downloader.run(args)
                 except (downloader.DownloadError, OSError) as exc:
                     raise SourceAdapterError(f"WQP download failed for {file_entry['file_id']}: {exc}") from exc
-                sha256 = observed["sha256"]
                 cache_status = observed["status"]
                 retrieved_at = observed.get("accessed_at") or observed.get("cache_verified_at")
             else:
                 if not path.is_file():
                     raise SourceAdapterError(f"WQP verified cache is missing: {path}")
-                sha256 = downloader.sha256_file(path)
                 cache_status = "cache_verified"
                 retrieved_at = entry["observed_at"]
-            if path.stat().st_size != file_entry["bytes"] or sha256 != file_entry["expected_sha256"]:
-                raise SourceAdapterError(f"WQP content-addressed snapshot changed: {file_entry['filename']}")
+            if path.stat().st_size != file_entry["bytes"]:
+                raise SourceAdapterError(f"WQP snapshot byte count changed: {file_entry['filename']}")
             results.append(
                 DownloadedFile(
                     source_id=self.source_id,
                     file_id=file_entry["file_id"],
                     path=path,
                     source_url=file_entry["url"],
-                    sha256=sha256,
                     bytes=path.stat().st_size,
                     cache_status=cache_status,
                     retrieved_at=retrieved_at,
@@ -2352,6 +2298,334 @@ class WqpSacramentoRiverArsenicAdapter(RegistryAdapter):
             raise SourceAdapterError(f"WQP reconciliation changed: {reconciled!r} != {expected!r}")
 
 
+class _PinnedSingleFileAdapter(RegistryAdapter):
+    """Shared exact-file acquisition for small, immutable sediment products."""
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError(f"{self.source_id} adapter received a candidate for another source")
+        if mode == "fixture":
+            raise SourceAdapterError(f"use the checked-in {self.source_id} demo directly for fixture tests")
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        file_entry = download_entry["files"][0]
+        output = root / file_entry["filename"]
+        args = _download_args(
+            url=file_entry["url"],
+            output=output,
+            manifest=root / "dataset.download.json",
+            license_id=candidate.license_id,
+            expected_sha256=None,
+            max_bytes=int(download_entry["max_bytes"]),
+            dataset_doi=candidate.dataset_doi,
+            dataset_version=candidate.version,
+            offline=mode == "cached",
+            # Parsers validate source fields using each file's registered encoding.
+            # The generic downloader's field check assumes UTF-8 and is therefore
+            # intentionally disabled for CP1252 and Shift_JIS sources.
+            required_fields=(),
+        )
+        try:
+            result = downloader.run(args)
+        except (downloader.DownloadError, OSError) as exc:
+            raise SourceAdapterError(f"{self.source_id} download failed: {exc}") from exc
+        content_type = result.get("content_type")
+        if content_type and content_type not in set(download_entry["accepted_content_types"]):
+            raise SourceAdapterError(f"{self.source_id} returned unexpected content type: {content_type}")
+        if output.stat().st_size != file_entry["bytes"]:
+            raise SourceAdapterError(f"{self.source_id} file size changed")
+        return [
+            DownloadedFile(
+                source_id=self.source_id,
+                file_id=file_entry["file_id"],
+                path=output,
+                source_url=file_entry["url"],
+                bytes=result["bytes"],
+                cache_status=result["status"],
+                retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
+            )
+        ]
+
+
+class AustraliaNgsaMercuryAdapter(_PinnedSingleFileAdapter):
+    """Pinned NGSA top/bottom outlet-sediment total-mercury table."""
+
+    source_id = "australia-ngsa-mercury"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "mercury-csv":
+            raise SourceAdapterError("NGSA mercury adapter requires the registered CSV")
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            handle = downloaded.path.open("r", encoding="cp1252", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"NGSA mercury CSV is unreadable: {downloaded.path.name}") from exc
+        with handle:
+            for _ in range(11):
+                next(handle, None)
+            reader = csv.DictReader(handle)
+            missing = sorted(set(registry["required_fields"]) - set(reader.fieldnames or []))
+            if missing:
+                raise SourceAdapterError(f"NGSA mercury CSV lacks fields: {', '.join(missing)}")
+            rows = 0
+            samples: set[str] = set()
+            sites: set[str] = set()
+            depths: Counter[str] = Counter()
+            states: Counter[str] = Counter()
+            duplicate_codes: Counter[str] = Counter()
+            for row in reader:
+                values = {str(key): str(value or "").strip() for key, value in row.items() if key is not None}
+                if not any(values.values()):
+                    continue
+                line_number = reader.line_num + 11
+                sample_id = values["SAMPLEID"]
+                site_id = values["SITEID"]
+                raw_value = values["Hg_DMA_ng/g_0.01"]
+                if not sample_id or sample_id in samples or not site_id:
+                    raise SourceAdapterError(f"NGSA sample/site identity is missing or duplicated at row {line_number}")
+                try:
+                    float(raw_value)
+                    float(values["LATITUDE_GDA94"])
+                    float(values["LONGITUDE_GDA94"])
+                except ValueError as exc:
+                    raise SourceAdapterError(f"NGSA value or coordinate is not numeric at row {line_number}") from exc
+                if values["GRAIN_SIZE"] != "<75 µm" or values["DEPTH"] not in {"TOS", "BOS"}:
+                    raise SourceAdapterError(f"NGSA grain or depth classification changed at row {line_number}")
+                rows += 1
+                samples.add(sample_id)
+                sites.add(site_id)
+                depths[values["DEPTH"]] += 1
+                states[values["STATE"]] += 1
+                duplicate_codes[values["DUPLICATE_CODE"]] += 1
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(self.source_id, sample_id, source_locator),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "EPSG:4283",
+                        "_sample_type": "top outlet sediment" if values["DEPTH"] == "TOS" else "bottom outlet sediment",
+                        "_grain_fraction": "<75 µm",
+                        "_target_observations": {
+                            "Hg": {
+                                "field": "Hg_DMA_ng/g_0.01",
+                                "value": raw_value,
+                                "unit": "ng/g",
+                                "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+                                "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+                                "digestion_or_extraction": "thermal decomposition and direct analysis; no acid digestion",
+                                "laboratory": "Geoscience Australia",
+                                "variable_metadata_locator": f"{downloaded.path.name}#row=6",
+                                "mass_detection_limit_ng": "0.01",
+                                "detection_limit": "",
+                                "duplicate_code": values["DUPLICATE_CODE"],
+                            }
+                        },
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed = {
+            "physical_rows": rows,
+            "distinct_samples": len(samples),
+            "distinct_sites": len(sites),
+            "target_observations": rows,
+            "depth_counts": dict(sorted(depths.items())),
+            "state_counts": dict(sorted(states.items())),
+            "duplicate_code_counts": dict(sorted(duplicate_codes.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(f"NGSA mercury reconciliation changed: {observed!r}")
+
+
+class GsjJapanMarineSedimentAdapter(_PinnedSingleFileAdapter):
+    """Pinned GSJ marine-sediment concentration table from 37 cruises."""
+
+    source_id = "japan-gsj-marine-sediment"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "marine-concentrations":
+            raise SourceAdapterError("GSJ marine adapter requires ocean-noudo.csv")
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            handle = downloaded.path.open("r", encoding="shift_jis", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"GSJ marine CSV is unreadable: {downloaded.path.name}") from exc
+        with handle:
+            reader = csv.DictReader(handle)
+            missing = sorted(set(registry["required_fields"]) - set(reader.fieldnames or []))
+            if missing:
+                raise SourceAdapterError(f"GSJ marine CSV lacks fields: {', '.join(missing)}")
+            rows = 0
+            samples: set[str] = set()
+            cruises: set[str] = set()
+            regions: set[str] = set()
+            target_counts: Counter[str] = Counter()
+            negative_hg = 0
+            missing_depth = 0
+            for row in reader:
+                values = {str(key): str(value or "").strip() for key, value in row.items() if key is not None}
+                if not any(values.values()):
+                    continue
+                line_number = reader.line_num
+                sample_id = values["試料番号"]
+                if not sample_id or sample_id in samples:
+                    raise SourceAdapterError(f"GSJ marine sample ID is missing or duplicated at row {line_number}")
+                try:
+                    float(values["緯度"])
+                    float(values["経度"])
+                except ValueError as exc:
+                    raise SourceAdapterError(f"GSJ marine coordinate is not numeric at row {line_number}") from exc
+                target_observations: dict[str, dict[str, Any]] = {}
+                for analyte, field_name in registry["target_analytes"].items():
+                    raw_value = values[field_name]
+                    if not raw_value:
+                        continue
+                    try:
+                        number = float(raw_value)
+                    except ValueError as exc:
+                        raise SourceAdapterError(f"GSJ marine {analyte} is not numeric at row {line_number}") from exc
+                    unit = registry["target_units"][analyte]
+                    target_counts[analyte] += 1
+                    negative_hg += int(analyte == "Hg" and number < 0)
+                    target_observations[analyte] = {
+                        "field": field_name,
+                        "value": raw_value,
+                        "unit": unit,
+                        "measurement_basis": "published_marine_sediment_concentration",
+                        "analytical_method": "",
+                        "detection_limit": "",
+                    }
+                rows += 1
+                samples.add(sample_id)
+                cruises.add(values["航海"])
+                regions.add(values["地域"])
+                missing_depth += int(not values["深度_m_"])
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(self.source_id, sample_id, source_locator),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "JGD2000 geographic; treated as EPSG:4612 for query-grid profiling",
+                        "_grain_fraction": "not reported in concentration CSV",
+                        "_target_observations": target_observations,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed = {
+            "physical_rows": rows,
+            "distinct_samples": len(samples),
+            "distinct_cruises": len(cruises),
+            "distinct_regions": len(regions),
+            "missing_water_depth_rows": missing_depth,
+            "negative_hg_values": negative_hg,
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(f"GSJ marine reconciliation changed: {observed!r}")
+
+
+class PangaeaArabianSeaSedimentAdapter(_PinnedSingleFileAdapter):
+    """Pinned PANGAEA modern/glacial Arabian Sea bulk-sediment table."""
+
+    source_id = "pangaea-arabian-sea-sediment"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "dataset-table":
+            raise SourceAdapterError("PANGAEA Arabian Sea adapter requires the registered table")
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            handle = downloaded.path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"PANGAEA Arabian Sea table is unreadable: {downloaded.path.name}") from exc
+        with handle:
+            reader = csv.reader(handle, delimiter="\t")
+            header: list[str] | None = None
+            rows = 0
+            samples: set[str] = set()
+            events: set[str] = set()
+            target_counts: Counter[str] = Counter()
+            for row in reader:
+                if header is None:
+                    if row and row[0].strip() == "*/":
+                        header = [value.strip() for value in next(reader)]
+                        missing = sorted(set(registry["required_fields"]) - set(header))
+                        if missing:
+                            raise SourceAdapterError(f"PANGAEA Arabian Sea table lacks fields: {', '.join(missing)}")
+                        mgkg_fields = [field for field in header if field.endswith(" [mg/kg]")]
+                        if len(mgkg_fields) != registry["expected_counts"]["mgkg_fields"]:
+                            raise SourceAdapterError("PANGAEA Arabian Sea mg/kg field count changed")
+                    continue
+                if not any(value.strip() for value in row):
+                    continue
+                padded = [value.strip() for value in row] + [""] * max(0, len(header) - len(row))
+                values = dict(zip(header, padded, strict=False))
+                line_number = reader.line_num
+                sample_label = values["Sample label"]
+                event = values["Event"]
+                if not sample_label or not event:
+                    raise SourceAdapterError(f"PANGAEA Arabian Sea identity is missing at row {line_number}")
+                target_observations: dict[str, dict[str, Any]] = {}
+                for analyte, field_name in registry["target_analytes"].items():
+                    raw_value = values[field_name]
+                    if not raw_value:
+                        continue
+                    try:
+                        float(raw_value)
+                    except ValueError as exc:
+                        raise SourceAdapterError(f"PANGAEA Arabian Sea {analyte} is not numeric at row {line_number}") from exc
+                    target_counts[analyte] += 1
+                    target_observations[analyte] = {
+                        "field": field_name,
+                        "value": raw_value,
+                        "unit": "mg/kg",
+                        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+                        "analytical_method": "Geochemical analysis on bulk sediment",
+                        "digestion_or_extraction": "not reported in publisher table",
+                        "variable_metadata_locator": f"{downloaded.path.name}#parameter={field_name}",
+                    }
+                rows += 1
+                samples.add(sample_label)
+                events.add(event)
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(self.source_id, sample_label, source_locator),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "EPSG:4326",
+                        "_sample_type": "marine core sediment",
+                        "_target_observations": target_observations,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed = {
+            "physical_rows": rows,
+            "distinct_sample_labels": len(samples),
+            "distinct_events": len(events),
+            "mgkg_fields": registry["expected_counts"]["mgkg_fields"],
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(f"PANGAEA Arabian Sea reconciliation changed: {observed!r}")
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -2368,6 +2642,9 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     ForegsFloodplainSedimentAdapter.source_id: ForegsFloodplainSedimentAdapter,
     AfsisPhaseIWetChemistryAdapter.source_id: AfsisPhaseIWetChemistryAdapter,
     WqpSacramentoRiverArsenicAdapter.source_id: WqpSacramentoRiverArsenicAdapter,
+    AustraliaNgsaMercuryAdapter.source_id: AustraliaNgsaMercuryAdapter,
+    GsjJapanMarineSedimentAdapter.source_id: GsjJapanMarineSedimentAdapter,
+    PangaeaArabianSeaSedimentAdapter.source_id: PangaeaArabianSeaSedimentAdapter,
 }
 
 

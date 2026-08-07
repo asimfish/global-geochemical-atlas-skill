@@ -10,13 +10,13 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
 import re
 import statistics
 import tempfile
+import urllib.parse
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
@@ -480,16 +480,14 @@ def normalize_depth(row: Mapping[str, Any], flags: list[str]) -> tuple[float | N
 
 
 def stable_record_id(row: Mapping[str, Any], row_number: int) -> str:
-    payload = {
-        "source_id": blank_to_none(row.get("source_id")),
-        "sample_id": blank_to_none(row.get("sample_id")),
-        "analyte": blank_to_none(row.get("element_or_analyte")),
-        "value": blank_to_none(row.get("value")),
-        "unit": blank_to_none(row.get("unit")),
-        "row_number": row_number,
-    }
-    digest = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:16]
-    return f"gen-{digest}"
+    parts = (
+        "generated-record-v2",
+        blank_to_none(row.get("source_id")) or "",
+        blank_to_none(row.get("sample_id")) or "",
+        blank_to_none(row.get("element_or_analyte")) or "",
+        str(row_number),
+    )
+    return "gen-" + urllib.parse.quote("|".join(parts), safe="-._~")
 
 
 def score_confidence(record: Mapping[str, Any]) -> dict[str, float | str]:
@@ -763,9 +761,8 @@ def process_rows(
 
 
 def group_identifier(group_by: Sequence[str], key: Sequence[Any]) -> str:
-    payload = dict(zip(group_by, key, strict=True))
-    digest = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:12]
-    return f"grp-{digest}"
+    parts = ["group-v2", *(f"{field}={'' if value is None else value}" for field, value in zip(group_by, key, strict=True))]
+    return "grp-" + urllib.parse.quote("|".join(parts), safe="-._~")
 
 
 def detect_anomalies(
@@ -1020,7 +1017,6 @@ def run_pipeline(
     if not math.isfinite(robust_z_threshold) or robust_z_threshold <= 0:
         raise PipelineError("--robust-z-threshold must be positive")
 
-    input_bytes = input_path.read_bytes() if input_path.is_file() else b""
     rows, missing_recommended_columns = load_csv(input_path)
     records = process_rows(rows, region_bbox)
     config = {
@@ -1029,13 +1025,19 @@ def run_pipeline(
         "robust_z_threshold": robust_z_threshold,
         "region_bbox": list(region_bbox) if region_bbox else None,
     }
-    input_hash = hashlib.sha256(input_bytes).hexdigest()
-    run_id = hashlib.sha256(
-        (input_hash + json.dumps(config, sort_keys=True, separators=(",", ":"))).encode()
-    ).hexdigest()[:16]
+    input_identity = {
+        "filename": input_path.name,
+        "bytes": input_path.stat().st_size,
+        "record_count": len(rows),
+    }
+    run_id = "run-" + urllib.parse.quote(
+        f"v2|{input_path.name}|{input_identity['bytes']}|{len(rows)}|"
+        + json.dumps(config, ensure_ascii=False, sort_keys=True, separators=(",", ":")),
+        safe="-._~",
+    )
     run_metadata = {
         "run_id": run_id,
-        "input_sha256": input_hash,
+        "input_identity": input_identity,
         "input_row_count": len(rows),
         "missing_recommended_input_columns": missing_recommended_columns,
         "configuration": config,

@@ -11,78 +11,67 @@
       "bytes": 30585144,
       "cache_status": "cache_verified",
       "file_id": "arsenic-observations",
-      "filename": "Arsenic.csv",
-      "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+      "filename": "Arsenic.csv"
     },
     {
       "bytes": 34359149,
       "cache_status": "cache_verified",
       "file_id": "chromium-observations",
-      "filename": "Chromium.csv",
-      "sha256": "164294931268c7427cb7c768f23e20484db9c4130044d99c766483fb881cc62c"
+      "filename": "Chromium.csv"
     },
     {
       "bytes": 28448872,
       "cache_status": "cache_verified",
       "file_id": "copper-observations",
-      "filename": "Copper.csv",
-      "sha256": "82fb42ce1bba413a197825017727c8b2c04aa7042f92b07466f81fab3e93c451"
+      "filename": "Copper.csv"
     },
     {
       "bytes": 40765015,
       "cache_status": "cache_verified",
       "file_id": "lead-observations",
-      "filename": "Lead.csv",
-      "sha256": "6c7edbf736a32985394967ff30c175e4618c6914b7c8a77b38d40c255af7b9f0"
+      "filename": "Lead.csv"
     },
     {
       "bytes": 31175171,
       "cache_status": "cache_verified",
       "file_id": "mercury-observations",
-      "filename": "Mercury.csv",
-      "sha256": "13805529f39c9ff6c90a84b341491af9739c72c43d3ec0eba07165957058906f"
+      "filename": "Mercury.csv"
     },
     {
       "bytes": 521959,
       "cache_status": "cache_verified",
       "file_id": "methods",
-      "filename": "GEMStat_methods_metadata.csv",
-      "sha256": "fba3a0903228811def4cd7910298ccd1965b64b76fbdca90445988eec08ffbb3"
+      "filename": "GEMStat_methods_metadata.csv"
     },
     {
       "bytes": 39456553,
       "cache_status": "cache_verified",
       "file_id": "nickel-observations",
-      "filename": "Nickel.csv",
-      "sha256": "fef4cc062e06ea4e3eafd8257b6849ed1d7ece2ac6522c5f9bfdef73ea206b8f"
+      "filename": "Nickel.csv"
     },
     {
       "bytes": 146762,
       "cache_status": "cache_verified",
       "file_id": "parameters",
-      "filename": "GEMStat_parameter_metadata.csv",
-      "sha256": "46f9ddc6ed181a8a3a685fe590143d847e20960e67f20aa7dd9f4347f2c9b518"
+      "filename": "GEMStat_parameter_metadata.csv"
     },
     {
       "bytes": 16727,
       "cache_status": "cache_verified",
       "file_id": "readme",
-      "filename": "README_output_format.txt",
-      "sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d"
+      "filename": "README_output_format.txt"
     },
     {
       "bytes": 3571887,
       "cache_status": "cache_verified",
       "file_id": "stations",
-      "filename": "GEMStat_station_metadata.csv",
-      "sha256": "978d3682d4fc702e1dd9c9e4e148ca586899002b551018dbfc3e40c9f7e1695d"
+      "filename": "GEMStat_station_metadata.csv"
     },
     {
       "bytes": 26785044,
       "cache_status": "cache_verified",
       "file_id": "zinc-observations",
-      "filename": "Zinc.csv",
-      "sha256": "0d77884198cdb0c01fa9f0ad8e101e086c709bdbc36ca80dc955a1c6172a192d"
+      "filename": "Zinc.csv"
     }
   ],
   "last_successful_fetch_at": "2026-08-05T14:41:20Z",
@@ -91,7 +80,28 @@
   "online_fetch_health": "not_probed_by_reproducible_offline_run",
   "parsed_source_record_count": 3739180,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "raw_schema_fingerprint": "8cfef288888ef1201870fd1aa6f91c1c805fce23d235c30c358f74ef47d65aa3",
+  "raw_schema_field_count": 19,
+  "raw_schema_fields": [
+    "Analysis Method Code",
+    "Data Quality",
+    "Depth",
+    "GEMS Station Number",
+    "Integrated Value",
+    "License Information",
+    "Parameter Code",
+    "Remark",
+    "Sample Date",
+    "Sample Time",
+    "Unit",
+    "Value",
+    "Value Flags",
+    "_dataset_version",
+    "_element",
+    "_method_metadata",
+    "_source_file",
+    "_station_metadata",
+    "_water_fraction"
+  ],
   "retry_health": "not_measured_in_offline_profile",
   "row_count_drift_status": "matches_registered_expected_count",
   "schema_drift_detection": "checked-in profile exact comparison",

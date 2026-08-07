@@ -14,7 +14,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-eeb5466e0155",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DAs%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DPr%C3%B8veframstilling%20f%C3%B8lger%20prosedyre%20i%20LABdok_P03%3A%20Framstilling%20av%20analysel%C3%B8sninger%20etter%20partiell%20oppslutning%20i%20salpetersyre%20iht.%20NS-4770.",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -47,7 +47,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-eeb5466e0155",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DAs%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DPr%C3%B8veframstilling%20f%C3%B8lger%20prosedyre%20i%20LABdok_P03%3A%20Framstilling%20av%20analysel%C3%B8sninger%20etter%20partiell%20oppslutning%20i%20salpetersyre%20iht.%20NS-4770.",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -80,7 +80,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-ac58476fc29c",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DAs%7Cmedium%3Dwater%7Csample_type%3Dwater_stream%7Csoil_horizon%3D%7Csediment_environment%3D%7Cwater_fraction%3Ddissolved%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddissolved_surface_freshwater_mass_per_volume%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DUSGS%3APLM10%3A%20Elements%2C%20wf%2C%20cICP-MS%20%28USGS%20TMR%205-B1%29%7Cmethod_scope%3Dobservation%7Cdigestion_or_extraction%3Ddissolved%20water%3B%20USGS%20filtered-water%20method",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dissolved_surface_freshwater_mass_per_volume",
@@ -113,7 +113,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-59f49e9a8a6e",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DCu%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DMetoden%20anvendes%20p%C3%A5%20analysel%C3%B8sninger%20fremstilt%20ved%20ekstraksjon%20med%207%20M%20HNO3%20i%20autoklav%20i%20samsvar%20med%20Norsk%20Standard%20-%20NS%204770",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -146,7 +146,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-59f49e9a8a6e",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DCu%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DMetoden%20anvendes%20p%C3%A5%20analysel%C3%B8sninger%20fremstilt%20ved%20ekstraksjon%20med%207%20M%20HNO3%20i%20autoklav%20i%20samsvar%20med%20Norsk%20Standard%20-%20NS%204770",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -179,7 +179,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-59f49e9a8a6e",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DCu%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DMetoden%20anvendes%20p%C3%A5%20analysel%C3%B8sninger%20fremstilt%20ved%20ekstraksjon%20med%207%20M%20HNO3%20i%20autoklav%20i%20samsvar%20med%20Norsk%20Standard%20-%20NS%204770",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -201,6 +201,105 @@
     {
       "geometry": {
         "coordinates": [
+          61.53,
+          15.99
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DCu%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine_core%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3Dbulk%20sediment%7Cmeasurement_basis%3Dbulk_marine_sediment_geochemical_analysis%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DGeochemical%20analysis%20on%20bulk%20sediment%7Cmethod_scope%3Dparameter%7Cdigestion_or_extraction%3Dnot%20reported%20in%20publisher%20table",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 71.02,
+        "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CCu%7C",
+        "robust_z": 5.892097,
+        "sample_id": "TOM41-1-17A",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          61.5333,
+          15.9945
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DCu%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine_core%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3Dbulk%20sediment%7Cmeasurement_basis%3Dbulk_marine_sediment_geochemical_analysis%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DGeochemical%20analysis%20on%20bulk%20sediment%7Cmethod_scope%3Dparameter%7Cdigestion_or_extraction%3Dnot%20reported%20in%20publisher%20table",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 71.94,
+        "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CCu%7C",
+        "robust_z": 5.954085,
+        "sample_id": "TOM41-1-17E",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          65.0842,
+          10.0345
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DCu%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine_core%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3Dbulk%20sediment%7Cmeasurement_basis%3Dbulk_marine_sediment_geochemical_analysis%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DGeochemical%20analysis%20on%20bulk%20sediment%7Cmethod_scope%3Dparameter%7Cdigestion_or_extraction%3Dnot%20reported%20in%20publisher%20table",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 93.12,
+        "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CCu%7C",
+        "robust_z": 7.196911,
+        "sample_id": "TOM41-1-22E",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
           127.7467,
           26.3626
         ],
@@ -212,7 +311,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": "<180 µm fine stream sediment",
-        "group_id": "grp-46ae99e54658",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DCu%7Cmedium%3Dsediment%7Csample_type%3Dsediment_stream%7Csoil_horizon%3D%7Csediment_environment%3Dstream%7Cwater_fraction%3D%7Cgrain_fraction%3D%3C180%20%C2%B5m%20fine%20stream%20sediment%7Cmeasurement_basis%3Driver_sediment_%3C180um_national_geochemical_map%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3D%7Cmethod_scope%3D%7Cdigestion_or_extraction%3D",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "river_sediment_<180um_national_geochemical_map",
@@ -234,6 +333,72 @@
     {
       "geometry": {
         "coordinates": [
+          136.5527,
+          36.6977
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Hg",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DHg%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Dpublished_marine_sediment_concentration%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3D%7Cmethod_scope%3D%7Cdigestion_or_extraction%3D",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "published_marine_sediment_concentration",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 0.01,
+        "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CHg%7C",
+        "robust_z": -5.151539,
+        "sample_id": "880001",
+        "sample_type": "sediment_marine",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          144.2791,
+          -38.0882
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Hg",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "<75 µm",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DHg%7Cmedium%3Dsediment%7Csample_type%3Dsediment_outlet_top%7Csoil_horizon%3D%7Csediment_environment%3Doutlet_catchment%7Cwater_fraction%3D%7Cgrain_fraction%3D%3C75%20%C2%B5m%7Cmeasurement_basis%3Dtotal_mercury_dry_weight_%3C75um_outlet_sediment%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DUSEPA%20Method%207473%3B%20Milestone%20tri-cell%20DMA-80%20direct%20mercury%20analyser%7Cmethod_scope%3Ddataset%7Cdigestion_or_extraction%3Dthermal%20decomposition%20and%20direct%20analysis%3B%20no%20acid%20digestion",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 0.18308,
+        "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190032001%2520Fine%257C150328_00_1.CSV%2523row%253D62%7CHg%7C",
+        "robust_z": 4.088116,
+        "sample_id": "2007190032001 Fine",
+        "sample_type": "sediment_outlet_top",
+        "sediment_environment": "outlet_catchment",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
           6.25,
           65.0408
         ],
@@ -245,7 +410,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-529838b5ddc4",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DNi%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DMetoden%20anvendes%20p%C3%A5%20analysel%C3%B8sninger%20fremstilt%20ved%20ekstraksjon%20med%207%20M%20HNO3%20i%20autoklav%20i%20samsvar%20med%20Norsk%20Standard%20-%20NS%204770",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -278,7 +443,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-529838b5ddc4",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DNi%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DMetoden%20anvendes%20p%C3%A5%20analysel%C3%B8sninger%20fremstilt%20ved%20ekstraksjon%20med%207%20M%20HNO3%20i%20autoklav%20i%20samsvar%20med%20Norsk%20Standard%20-%20NS%204770",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -311,7 +476,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-cd397d77d05a",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DNi%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DPr%C3%B8veframstilling%20f%C3%B8lger%20prosedyre%20i%20LABdok_P03%3A%20Framstilling%20av%20analysel%C3%B8sninger%20etter%20partiell%20oppslutning%20i%20salpetersyre%20iht.%20NS-4770.",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -322,6 +487,105 @@
         "record_id": "rec-4aa202c7c8f607e2e6b7a94aca0e11658b629f33602e86b4312676d5001dd566",
         "robust_z": -6.878966,
         "sample_id": "R3579GR20A_00-01 cm",
+        "sample_type": "sediment_marine",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          61.53,
+          15.99
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DNi%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine_core%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3Dbulk%20sediment%7Cmeasurement_basis%3Dbulk_marine_sediment_geochemical_analysis%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DGeochemical%20analysis%20on%20bulk%20sediment%7Cmethod_scope%3Dparameter%7Cdigestion_or_extraction%3Dnot%20reported%20in%20publisher%20table",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 255.17,
+        "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CNi%7C",
+        "robust_z": 3.877662,
+        "sample_id": "TOM41-1-17A",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          61.5333,
+          15.9945
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DNi%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine_core%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3Dbulk%20sediment%7Cmeasurement_basis%3Dbulk_marine_sediment_geochemical_analysis%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DGeochemical%20analysis%20on%20bulk%20sediment%7Cmethod_scope%3Dparameter%7Cdigestion_or_extraction%3Dnot%20reported%20in%20publisher%20table",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 247.89,
+        "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CNi%7C",
+        "robust_z": 3.788384,
+        "sample_id": "TOM41-1-17E",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          136.5673,
+          37.1697
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Pb",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DPb%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Dpublished_marine_sediment_concentration%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3D%7Cmethod_scope%3D%7Cdigestion_or_extraction%3D",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "published_marine_sediment_concentration",
+        "medium": "sediment",
+        "method_version": "d2-robust-mad-v1",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 37.701,
+        "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880007%257Cocean-noudo.csv%2523row%253D8%7CPb%7C",
+        "robust_z": 3.983653,
+        "sample_id": "880007",
         "sample_type": "sediment_marine",
         "sediment_environment": "marine",
         "soil_horizon": null,
@@ -344,7 +608,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-812e4c7e4363",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DZn%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DMetoden%20anvendes%20p%C3%A5%20analysel%C3%B8sninger%20fremstilt%20ved%20ekstraksjon%20med%207%20M%20HNO3%20i%20autoklav%20i%20samsvar%20med%20Norsk%20Standard%20-%20NS%204770",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",
@@ -377,7 +641,7 @@
         "geologic_unit": null,
         "geologic_unit_raw": null,
         "grain_fraction": null,
-        "group_id": "grp-812e4c7e4363",
+        "group_id": "grp-group-v2%7Celement_or_analyte%3DZn%7Cmedium%3Dsediment%7Csample_type%3Dsediment_marine%7Csoil_horizon%3D%7Csediment_environment%3Dmarine%7Cwater_fraction%3D%7Cgrain_fraction%3D%7Cmeasurement_basis%3Ddry_weight_partial_nitric_acid%7Cgeologic_unit_raw%3D%7Cmatched_geologic_unit%3D%7Canalytical_method%3DInductively%20coupled%20plasma%20atomic%20emission%20spectroscopy%20%28ICP-OES%29%7Cmethod_scope%3Dbatch%7Cdigestion_or_extraction%3DMetoden%20anvendes%20p%C3%A5%20analysel%C3%B8sninger%20fremstilt%20ved%20ekstraksjon%20med%207%20M%20HNO3%20i%20autoklav%20i%20samsvar%20med%20Norsk%20Standard%20-%20NS%204770",
         "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
         "matched_geologic_unit": null,
         "measurement_basis": "dry_weight_partial_nitric_acid",

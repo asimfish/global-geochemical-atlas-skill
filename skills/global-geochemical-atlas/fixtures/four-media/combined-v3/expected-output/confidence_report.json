@@ -1,8 +1,8 @@
 {
   "band_counts": {
-    "high": 640,
+    "high": 736,
     "low": 8,
-    "medium": 144
+    "medium": 200
   },
   "band_thresholds": {
     "high": ">=0.80",
@@ -10,12 +10,12 @@
     "medium": ">=0.60 and <0.80"
   },
   "component_means": {
-    "completeness": 0.966942,
-    "method": 0.878788,
-    "overall": 0.916546,
-    "qc": 0.890783,
-    "source": 0.983838,
-    "spatial": 0.812121
+    "completeness": 0.961479,
+    "method": 0.858757,
+    "overall": 0.91318,
+    "qc": 0.894809,
+    "source": 0.975847,
+    "spatial": 0.832203
   },
   "confidence_version": "d2-confidence-v1",
   "gates": {
@@ -45,10 +45,14 @@
       "region_bbox": null,
       "robust_z_threshold": 3.5
     },
-    "input_row_count": 792,
-    "input_sha256": "effec52383c77e6031f976c9aab077bc40f109d4c632c9f715dc77af91c32838",
+    "input_identity": {
+      "bytes": 1029299,
+      "filename": "demo_input.csv",
+      "record_count": 944
+    },
+    "input_row_count": 944,
     "missing_recommended_input_columns": [],
-    "run_id": "093e2caaae29eea5"
+    "run_id": "run-v2%7Cdemo_input.csv%7C1029299%7C944%7C%7B%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%7D"
   },
   "weights": {
     "completeness": 0.2,

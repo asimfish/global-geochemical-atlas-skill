@@ -32,22 +32,19 @@
     "members": [
       {
         "bytes": 320402,
-        "name": "MetaData/MarChem_Inorganic_LabParameter_20260805T102709Z.csv",
-        "sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d"
+        "name": "MetaData/MarChem_Inorganic_LabParameter_20260805T102709Z.csv"
       },
       {
         "bytes": 295287,
-        "name": "MarChem_Inorganic_Data_20260805T102709Z.csv",
-        "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
+        "name": "MarChem_Inorganic_Data_20260805T102709Z.csv"
       },
       {
         "bytes": 3383,
-        "name": "MarChem_Info_20260805T102709Z",
-        "sha256": "93e4db2dd0c726751f21557caa28a8da4275da87745369d0a506e8fbd84e584f"
+        "name": "MarChem_Info_20260805T102709Z"
       }
     ]
   },
-  "claim_boundary": "This project snapshot fixes one observed official API response by request, time and content hashes. It is not a publisher DOI or proof that the upstream dynamic service will return identical content later.",
+  "claim_boundary": "This project snapshot fixes one observed official API response by request, time, file identity and statistics. It is not a publisher DOI or proof that the upstream dynamic service will return identical content later.",
   "counts": {
     "distinct_samples": 880,
     "failed_records": 0,
@@ -58,19 +55,16 @@
   },
   "evidence": {
     "candidate_evidence_path": "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json",
-    "candidate_evidence_sha256": "1f7420a2acddc620848b958eb533aefb1c24f239af91b4870118558317883b3e",
-    "content_addressed_snapshot": true,
-    "publisher_checksum_status": "missing"
+    "identity_basis": "source_id + request + observation time + member inventory + byte counts"
   },
   "limitations": [
     "The database contains natural elements and anthropogenic contaminants; target-analyte scope must be selected explicitly.",
-    "The verified public API export is dynamic and timestamped; the selected inorganic response has an observed project hash but no matching immutable DOI or publisher checksum yet.",
+    "The verified public API export is dynamic and timestamped; the selected inorganic response is fixed by request, observation time, member inventory, byte counts and scientific row statistics but has no matching immutable DOI.",
     "The As, Cu, Ni and Zn measurements are reported on a dry-weight basis after partial nitric-acid digestion and must not be represented as total content.",
     "Batch metadata mix accredited and not-accredited analyses, and the export can repeat a sample across parameter groups; both facts must survive record-level mapping."
   ],
   "observed_at": "2026-08-05T10:27:11Z",
   "request": {
-    "canonical_request_sha256": "ae8fd044ad9a43c0fba34d18fdcbf677311f77da1cdb76094c6054c447eb3445",
     "endpoint": "https://marchem-api.hi.no/export/published/dataByCriteria",
     "method": "GET",
     "parameters": [
@@ -119,16 +113,14 @@
     "bytes": 81598,
     "content_type": "application/zip",
     "http_status": null,
-    "http_status_evidence": "missing_from_original_acquisition_manifest",
-    "publisher_checksum_available": false,
-    "sha256": "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6"
+    "http_status_evidence": "missing_from_original_acquisition_manifest"
   },
-  "snapshot_id": "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e",
+  "snapshot_id": "norway-marchem:2026-08-05T10:27:11Z:3",
   "snapshot_kind": "dynamic_api_snapshot",
-  "snapshot_version": "geochemical-dynamic-snapshot-v3",
+  "snapshot_version": "geochemical-dynamic-snapshot-v4",
   "software": {
     "candidate_verifier_version": "marchem-candidate-verification-v1",
-    "snapshot_tool_version": "geochemical-dynamic-snapshot-v3"
+    "snapshot_tool_version": "geochemical-dynamic-snapshot-v4"
   },
   "source_id": "norway-marchem"
 }

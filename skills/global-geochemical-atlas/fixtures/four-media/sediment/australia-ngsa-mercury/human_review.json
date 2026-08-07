@@ -1,0 +1,1279 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS verifies byte and mapping correspondence only. Named human decisions remain null; unsigned review lowers confidence but is not a hard research-use gate.",
+  "completed_record_count": 0,
+  "dataset_version": "2025-03-31",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "21.96",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190001001%2520Fine%257C150328_00_1.CSV%2523row%253D13%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-12.6551",
+      "longitude": "142.2717",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "8/09/2008",
+      "sample_id": "2007190001001 Fine",
+      "selection_reasons": [
+        "depth=TOS",
+        "duplicate=none"
+      ],
+      "site_id": "2007190001",
+      "source_locator": "150328_00_1.CSV#row=13",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190001001%20Fine%7C150328_00_1.CSV%23row%3D13",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "11.12",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190003001%2520Fine%257C150328_00_1.CSV%2523row%253D16%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 1",
+      "latitude": "-22.7017",
+      "longitude": "114.8976",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "4/02/2008",
+      "sample_id": "2007190003001 Fine",
+      "selection_reasons": [
+        "depth=TOS",
+        "duplicate=Duplicate 1"
+      ],
+      "site_id": "2007190003",
+      "source_locator": "150328_00_1.CSV#row=16",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190003001%20Fine%7C150328_00_1.CSV%23row%3D16",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.64",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190213001%2520Fine%257C150328_00_1.CSV%2523row%253D350%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 2",
+      "latitude": "-22.7004",
+      "longitude": "114.8981",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "4/02/2008",
+      "sample_id": "2007190213001 Fine",
+      "selection_reasons": [
+        "depth=TOS",
+        "duplicate=Duplicate 2"
+      ],
+      "site_id": "2007190213",
+      "source_locator": "150328_00_1.CSV#row=350",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190213001%20Fine%7C150328_00_1.CSV%23row%3D350",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "15.89",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190001002%2520Fine%257C150328_00_1.CSV%2523row%253D14%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-12.6551",
+      "longitude": "142.2717",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "8/09/2008",
+      "sample_id": "2007190001002 Fine",
+      "selection_reasons": [
+        "depth=BOS",
+        "duplicate=none"
+      ],
+      "site_id": "2007190001",
+      "source_locator": "150328_00_1.CSV#row=14",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190001002%20Fine%7C150328_00_1.CSV%23row%3D14",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "6.36",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190003002%2520Fine%257C150328_00_1.CSV%2523row%253D17%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 1",
+      "latitude": "-22.7017",
+      "longitude": "114.8976",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "4/02/2008",
+      "sample_id": "2007190003002 Fine",
+      "selection_reasons": [
+        "depth=BOS",
+        "duplicate=Duplicate 1"
+      ],
+      "site_id": "2007190003",
+      "source_locator": "150328_00_1.CSV#row=17",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190003002%20Fine%7C150328_00_1.CSV%23row%3D17",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "6.68",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190213002%2520Fine%257C150328_00_1.CSV%2523row%253D351%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 2",
+      "latitude": "-22.7004",
+      "longitude": "114.8981",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "4/02/2008",
+      "sample_id": "2007190213002 Fine",
+      "selection_reasons": [
+        "depth=BOS",
+        "duplicate=Duplicate 2"
+      ],
+      "site_id": "2007190213",
+      "source_locator": "150328_00_1.CSV#row=351",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190213002%20Fine%7C150328_00_1.CSV%23row%3D351",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "8.98",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190055002%2520Fine%257C150328_00_1.CSV%2523row%253D96%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-14.6521",
+      "longitude": "132.018",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "20/09/2007",
+      "sample_id": "2007190055002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190055",
+      "source_locator": "150328_00_1.CSV#row=96",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190055002%20Fine%7C150328_00_1.CSV%23row%3D96",
+      "state": "NT"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "40.94",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190105001%2520Fine%257C150328_00_1.CSV%2523row%253D178%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-27.6357",
+      "longitude": "148.7402",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "11/01/2007",
+      "sample_id": "2007190105001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190105",
+      "source_locator": "150328_00_1.CSV#row=178",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190105001%20Fine%7C150328_00_1.CSV%23row%3D178",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "14.23",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190153001%2520Fine%257C150328_00_1.CSV%2523row%253D261%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-33.7314",
+      "longitude": "121.9907",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "15/12/2007",
+      "sample_id": "2007190153001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190153",
+      "source_locator": "150328_00_1.CSV#row=261",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190153001%20Fine%7C150328_00_1.CSV%23row%3D261",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.96",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190208002%2520Fine%257C150328_00_1.CSV%2523row%253D343%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 1",
+      "latitude": "-24.1356",
+      "longitude": "151.6922",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "27/10/2007",
+      "sample_id": "2007190208002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190208",
+      "source_locator": "150328_00_1.CSV#row=343",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190208002%20Fine%7C150328_00_1.CSV%23row%3D343",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "26.81",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190259002%2520Fine%257C150328_00_1.CSV%2523row%253D426%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-33.3491",
+      "longitude": "145.882",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "9/06/2007",
+      "sample_id": "2007190259002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190259",
+      "source_locator": "150328_00_1.CSV#row=426",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190259002%20Fine%7C150328_00_1.CSV%23row%3D426",
+      "state": "NSW"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "10.26",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190326001%2520Fine%257C150328_00_1.CSV%2523row%253D509%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-29.4488",
+      "longitude": "137.7461",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "24/05/2009",
+      "sample_id": "2007190326001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190326",
+      "source_locator": "150328_00_1.CSV#row=509",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190326001%20Fine%7C150328_00_1.CSV%23row%3D509",
+      "state": "SA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "3.17",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190382001%2520Fine%257C150328_00_1.CSV%2523row%253D591%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-21.949",
+      "longitude": "138.4578",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "4/08/2008",
+      "sample_id": "2007190382001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190382",
+      "source_locator": "150328_00_1.CSV#row=591",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190382001%20Fine%7C150328_00_1.CSV%23row%3D591",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "38.81",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190434002%2520Fine%257C150328_00_1.CSV%2523row%253D674%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 1",
+      "latitude": "-32.3446",
+      "longitude": "121.7056",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "12/12/2007",
+      "sample_id": "2007190434002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190434",
+      "source_locator": "150328_00_1.CSV#row=674",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190434002%20Fine%7C150328_00_1.CSV%23row%3D674",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "69.27",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190485002%2520Fine%257C150328_00_1.CSV%2523row%253D756%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-40.9527",
+      "longitude": "148.0165",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "2/08/2008",
+      "sample_id": "2007190485002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190485",
+      "source_locator": "150328_00_1.CSV#row=756",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190485002%20Fine%7C150328_00_1.CSV%23row%3D756",
+      "state": "TAS"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "15.44",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190537001%2520Fine%257C150328_00_1.CSV%2523row%253D839%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-28.6034",
+      "longitude": "150.3721",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "27/10/2008",
+      "sample_id": "2007190537001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190537",
+      "source_locator": "150328_00_1.CSV#row=839",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190537001%20Fine%7C150328_00_1.CSV%23row%3D839",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "556",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190584001%2520Fine%257C150328_00_1.CSV%2523row%253D921%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-19.9974",
+      "longitude": "146.4337",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "10/03/2007",
+      "sample_id": "2007190584001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190584",
+      "source_locator": "150328_00_1.CSV#row=921",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190584001%20Fine%7C150328_00_1.CSV%23row%3D921",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "49.01",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190659002%2520Fine%257C150328_00_1.CSV%2523row%253D1004%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 1",
+      "latitude": "-33.6497",
+      "longitude": "123.7598",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "21/01/2008",
+      "sample_id": "2007190659002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190659",
+      "source_locator": "150328_00_1.CSV#row=1004",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190659002%20Fine%7C150328_00_1.CSV%23row%3D1004",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "7.25",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190721002%2520Fine%257C150328_00_1.CSV%2523row%253D1087%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-29.8512",
+      "longitude": "146.4408",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "16/04/2008",
+      "sample_id": "2007190721002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190721",
+      "source_locator": "150328_00_1.CSV#row=1087",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190721002%20Fine%7C150328_00_1.CSV%23row%3D1087",
+      "state": "NSW"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.99",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190774001%2520Fine%257C150328_00_1.CSV%2523row%253D1169%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "Duplicate 2",
+      "latitude": "-18.5614",
+      "longitude": "140.719",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "21/09/2007",
+      "sample_id": "2007190774001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190774",
+      "source_locator": "150328_00_1.CSV#row=1169",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190774001%20Fine%7C150328_00_1.CSV%23row%3D1169",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "10.72",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190829002%2520Fine%257C150328_00_1.CSV%2523row%253D1252%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-19.9877",
+      "longitude": "120.2173",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "6/10/2008",
+      "sample_id": "2007190829002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190829",
+      "source_locator": "150328_00_1.CSV#row=1252",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190829002%20Fine%7C150328_00_1.CSV%23row%3D1252",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "12.26",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190882001%2520Fine%257C150328_00_1.CSV%2523row%253D1334%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-17.7516",
+      "longitude": "131.534",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "4/11/2008",
+      "sample_id": "2007190882001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190882",
+      "source_locator": "150328_00_1.CSV#row=1334",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190882001%20Fine%7C150328_00_1.CSV%23row%3D1334",
+      "state": "NT"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "29.93",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190932002%2520Fine%257C150328_00_1.CSV%2523row%253D1417%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-22.8607",
+      "longitude": "120.2892",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "6/04/2008",
+      "sample_id": "2007190932002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190932",
+      "source_locator": "150328_00_1.CSV#row=1417",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190932002%20Fine%7C150328_00_1.CSV%23row%3D1417",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "20.32",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007190992001%2520Fine%257C150328_00_1.CSV%2523row%253D1500%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-24.3311",
+      "longitude": "147.4445",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "15/10/2007",
+      "sample_id": "2007190992001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007190992",
+      "source_locator": "150328_00_1.CSV#row=1500",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007190992001%20Fine%7C150328_00_1.CSV%23row%3D1500",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "23.19",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191091001%2520Fine%257C150328_00_1.CSV%2523row%253D1582%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-29.175",
+      "longitude": "151.3947",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "30/08/2007",
+      "sample_id": "2007191091001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007191091",
+      "source_locator": "150328_00_1.CSV#row=1582",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191091001%20Fine%7C150328_00_1.CSV%23row%3D1582",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "25.39",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191144002%2520Fine%257C150328_00_1.CSV%2523row%253D1665%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-34.4006",
+      "longitude": "118.7261",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "17/01/2008",
+      "sample_id": "2007191144002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007191144",
+      "source_locator": "150328_00_1.CSV#row=1665",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191144002%20Fine%7C150328_00_1.CSV%23row%3D1665",
+      "state": "WA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "14.71",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191204002%2520Fine%257C150328_00_1.CSV%2523row%253D1747%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-20.8141",
+      "longitude": "146.7696",
+      "reported_depth": "BOS",
+      "review_id": "australia-ngsa-mercury-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "10/12/2007",
+      "sample_id": "2007191204002 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007191204",
+      "source_locator": "150328_00_1.CSV#row=1747",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191204002%20Fine%7C150328_00_1.CSV%23row%3D1747",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "9.33",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191255001%2520Fine%257C150328_00_1.CSV%2523row%253D1830%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-23.0399",
+      "longitude": "140.3384",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "4/05/2008",
+      "sample_id": "2007191255001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007191255",
+      "source_locator": "150328_00_1.CSV#row=1830",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191255001%20Fine%7C150328_00_1.CSV%23row%3D1830",
+      "state": "QLD"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "38.74",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191305001%2520Fine%257C150328_00_1.CSV%2523row%253D1912%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-30.4805",
+      "longitude": "133.6881",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "25/07/2008",
+      "sample_id": "2007191305001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007191305",
+      "source_locator": "150328_00_1.CSV#row=1912",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191305001%20Fine%7C150328_00_1.CSV%23row%3D1912",
+      "state": "SA"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "USEPA Method 7473; Milestone tri-cell DMA-80 direct mercury analyser",
+          "field": "Hg_DMA_ng/g_0.01",
+          "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+          "raw_value": "5.4",
+          "record_id": "rec-observation-v2%7Caustralia-ngsa-mercury%7Csrc-source-record-v2%257Caustralia-ngsa-mercury%257C2007191356001%2520Fine%257C150328_00_1.CSV%2523row%253D1995%7CHg%7C",
+          "unit": "ng/g"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "duplicate_code": "",
+      "latitude": "-15.4749",
+      "longitude": "129.7557",
+      "reported_depth": "TOS",
+      "review_id": "australia-ngsa-mercury-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_date_raw": "7/10/2008",
+      "sample_id": "2007191356001 Fine",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "site_id": "2007191356",
+      "source_locator": "150328_00_1.CSV#row=1995",
+      "source_record_id": "src-source-record-v2%7Caustralia-ngsa-mercury%7C2007191356001%20Fine%7C150328_00_1.CSV%23row%3D1995",
+      "state": "NT"
+    }
+  ],
+  "review_unit": "source_record_or_explicit_observation_mapping",
+  "source_id": "australia-ngsa-mercury",
+  "status": "prepared"
+}

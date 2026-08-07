@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
 import sys
@@ -15,7 +14,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-MANIFEST_VERSION = "geochemical-source-manifest-v1"
+MANIFEST_VERSION = "geochemical-source-manifest-v2"
 CONFIDENCE_COMPONENTS = {"source", "completeness", "method", "spatial", "qc", "overall"}
 
 
@@ -30,14 +29,6 @@ def atomic_json(path: Path, value: Any) -> None:
         handle.write("\n")
         temporary = Path(handle.name)
     os.replace(temporary, path)
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def canonical_rows(path: Path) -> list[dict[str, str]]:
@@ -71,7 +62,7 @@ def json_object(path: Path, label: str) -> dict[str, Any]:
     return value
 
 
-def confidence_binding(confidence_path: Path, input_hash: str) -> dict[str, Any]:
+def confidence_binding(confidence_path: Path, input_identity: Mapping[str, Any]) -> dict[str, Any]:
     """Validate linkage only; D1 must not recompute the D2 confidence algorithm."""
 
     report = json_object(confidence_path, "confidence report")
@@ -83,17 +74,17 @@ def confidence_binding(confidence_path: Path, input_hash: str) -> dict[str, Any]
     run_metadata = report.get("run_metadata")
     if not isinstance(run_metadata, dict):
         raise EvidenceError("confidence report has no run_metadata object")
-    if run_metadata.get("input_sha256") != input_hash:
-        raise EvidenceError("confidence report input_sha256 does not match the acquired input")
+    if run_metadata.get("input_identity") != dict(input_identity):
+        raise EvidenceError("confidence report input identity does not match the acquired input")
     component_means = report.get("component_means")
     if not isinstance(component_means, dict) or not CONFIDENCE_COMPONENTS.issubset(component_means):
         raise EvidenceError("confidence report is missing required component means")
     return {
         "filename": confidence_path.name,
-        "sha256": sha256_file(confidence_path),
+        "bytes": confidence_path.stat().st_size,
         "confidence_version": version,
         "run_id": run_metadata.get("run_id"),
-        "input_sha256": input_hash,
+        "input_identity": dict(input_identity),
         "not_a_probability": True,
         "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     }
@@ -101,7 +92,7 @@ def confidence_binding(confidence_path: Path, input_hash: str) -> dict[str, Any]
 
 def build_source_manifest(
     input_path: Path,
-    input_hash: str,
+    input_identity: Mapping[str, Any],
     rows: Sequence[Mapping[str, str]],
     confidence: Mapping[str, Any],
 ) -> tuple[dict[str, Any], bool]:
@@ -151,10 +142,7 @@ def build_source_manifest(
     manifest = {
         "manifest_version": MANIFEST_VERSION,
         "input": {
-            "filename": input_path.name,
-            "sha256": input_hash,
-            "bytes": input_path.stat().st_size,
-            "record_count": record_count,
+            **dict(input_identity),
         },
         "source_count": len(sources),
         "coverage": {
@@ -182,10 +170,14 @@ def package_evidence(
 ) -> tuple[dict[str, Any], bool]:
     if not input_path.is_file():
         raise EvidenceError(f"acquired input does not exist: {input_path}")
-    input_hash = sha256_file(input_path)
     rows = canonical_rows(database_path)
-    confidence = confidence_binding(confidence_path, input_hash)
-    manifest, synthetic_present = build_source_manifest(input_path, input_hash, rows, confidence)
+    input_identity = {
+        "filename": input_path.name,
+        "bytes": input_path.stat().st_size,
+        "record_count": len(rows),
+    }
+    confidence = confidence_binding(confidence_path, input_identity)
+    manifest, synthetic_present = build_source_manifest(input_path, input_identity, rows, confidence)
     atomic_json(output_path, manifest)
     return manifest, synthetic_present
 

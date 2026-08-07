@@ -164,8 +164,8 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
     for provenance_id, item in provenance.items():
         _require_reference(provenance_id, "dataset_id", item.get("dataset_id"), datasets, errors)
         _require_reference(provenance_id, "acquisition_run_id", item.get("acquisition_run_id"), runs, errors)
-        if not item.get("source_locator") or not item.get("input_sha256"):
-            errors.append(f"{provenance_id} lacks a record locator or input hash")
+        if not item.get("source_locator") or not item.get("input_file_id"):
+            errors.append(f"{provenance_id} lacks a record locator or input file identity")
     for observation_id, observation in observations.items():
         _require_reference(observation_id, "sample_id", observation.get("sample_id"), samples, errors)
         _require_reference(observation_id, "method_id", observation.get("method_id"), methods, errors)

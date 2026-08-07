@@ -14,7 +14,7 @@
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
   "scored_at": "2026-08-06T10:35:00Z",
-  "source_count": 50,
+  "source_count": 53,
   "sources": {
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
@@ -42,7 +42,7 @@
           "evidence": [
             "fixtures/candidate-audits/afsis-phase-i-wet-chemistry-20260806T100500Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -187,7 +187,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -275,7 +275,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -375,6 +375,104 @@
         "research_use_status=unknown"
       ]
     },
+    "australia-ngsa-mercury": {
+      "access_status": "open",
+      "attribution_note": "The publisher file states CC BY 4.0 Australia; retain dataset DOI and Geoscience Australia attribution.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/australia-ngsa-mercury/snapshot_manifest.json",
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [
+            "fixtures/four-media/sediment/australia-ngsa-mercury/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://pid.geoscience.gov.au/dataset/ga/150328",
+            "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+            "https://doi.org/10.26186/150328",
+            "https://doi.org/10.1021/acs.est.5c11189"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://pid.geoscience.gov.au/dataset/ga/150328",
+            "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+            "https://doi.org/10.26186/150328",
+            "https://doi.org/10.1021/acs.est.5c11189",
+            "doi:10.26186/150328"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2025-03-31",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "australia-ngsa-mercury",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "australia-ozchem": {
       "access_status": "unavailable",
       "attribution_note": "Current product-specific licensing and any contributed state data exceptions need confirmation.",
@@ -450,7 +548,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -627,7 +725,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -715,7 +813,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -889,7 +987,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -975,7 +1073,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1064,7 +1162,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1150,7 +1248,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1237,7 +1335,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1323,7 +1421,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1447,7 +1545,7 @@
           "evidence": [
             "fixtures/candidate-audits/foregs-floodplain-sediment-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -1541,7 +1639,7 @@
           "evidence": [
             "fixtures/candidate-audits/foregs-humus-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -1635,7 +1733,7 @@
           "evidence": [
             "fixtures/candidate-audits/foregs-stream-sediment-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -1729,7 +1827,7 @@
           "evidence": [
             "fixtures/candidate-audits/foregs-stream-water-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -1823,7 +1921,7 @@
           "evidence": [
             "fixtures/candidate-audits/foregs-subsoil-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -1917,7 +2015,7 @@
           "evidence": [
             "fixtures/candidate-audits/foregs-topsoil-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -2060,7 +2158,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -2096,7 +2194,7 @@
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [],
-          "note": "Every selected ZIP member is pinned by byte range plus compressed and decoded SHA-256.",
+          "note": "Every selected ZIP member is identified by name, byte range and decoded byte count.",
           "status": "verified",
           "weight": 15
         },
@@ -2189,7 +2287,7 @@
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [],
-          "note": "Archive members are pinned by name, size and publisher checksum.",
+          "note": "Archive members are pinned by identity and byte count.",
           "status": "verified",
           "weight": 15
         },
@@ -2333,7 +2431,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -2372,7 +2470,7 @@
             "fixtures/four-media/water/geotraces-idp2025/snapshot_manifest.json",
             "fixtures/candidate-audits/geotraces-idp2025-seawater-20260805T134155Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -2602,7 +2700,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -2860,7 +2958,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -2899,7 +2997,7 @@
             "fixtures/four-media/sediment/japan-gsj-geochemical-map/snapshot_manifest.json",
             "fixtures/candidate-audits/gsj-japan-river-sediment-20260806T034823Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -2964,6 +3062,107 @@
       },
       "source_evidence_score": 85.0,
       "source_id": "japan-gsj-geochemical-map",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "japan-gsj-marine-sediment": {
+      "access_status": "open",
+      "attribution_note": "GSJ website research products follow Japan Government Standard Terms of Use 2.0 with attribution; third-party material remains excluded.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/japan-gsj-marine-sediment/snapshot_manifest.json",
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [
+            "fixtures/four-media/sediment/japan-gsj-marine-sediment/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+            "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+            "https://doi.org/10.5571/synth.3.281",
+            "https://www.gsj.jp/license/index.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+            "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+            "https://doi.org/10.5571/synth.3.281",
+            "https://www.gsj.jp/license/index.html"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/japan-gsj-marine-sediment/snapshot_manifest.json",
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json",
+            "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+          ],
+          "note": "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "japan-gsj-marine-sediment",
       "use_mode": "normalized_analysis",
       "use_mode_limitations": [
         "30-record human review is incomplete"
@@ -3043,7 +3242,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3131,7 +3330,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3170,7 +3369,7 @@
             "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json",
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -3228,7 +3427,7 @@
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json",
             "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false"
           ],
-          "note": "A dynamic API response is frozen by exact request, observation time and SHA-256.",
+          "note": "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
           "status": "verified",
           "weight": 15
         }
@@ -3400,7 +3599,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3410,6 +3609,102 @@
       "use_mode": "discovery",
       "use_mode_limitations": [
         "research_use_status=unknown"
+      ]
+    },
+    "pangaea-arabian-sea-sediment": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA records CC BY 4.0; retain dataset and bundled-publication citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/pangaea-arabian-sea-sediment/snapshot_manifest.json",
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [
+            "fixtures/four-media/sediment/pangaea-arabian-sea-sediment/human_review.json"
+          ],
+          "note": "A 30-record review sample is prepared but no completed review is recorded.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950153"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950153",
+            "doi:10.1594/PANGAEA.950139"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2022-11-02",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-arabian-sea-sediment",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
       ]
     },
     "pangaea-north-africa-soil": {
@@ -3439,7 +3734,7 @@
             "fixtures/four-media/soil/pangaea-north-africa-soil/snapshot_manifest.json",
             "fixtures/candidate-audits/pangaea-north-africa-soil-20260806T031354Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -3668,7 +3963,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3847,7 +4142,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3969,7 +4264,7 @@
           "evidence": [
             "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -4114,7 +4409,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -4153,7 +4448,7 @@
             "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/snapshot_manifest.json",
             "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
@@ -4213,7 +4508,7 @@
             "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json",
             "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
           ],
-          "note": "A dynamic API response is frozen by exact request, observation time and SHA-256.",
+          "note": "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
           "status": "verified",
           "weight": 15
         }
@@ -4247,7 +4542,7 @@
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [],
-          "note": "Every registered file has a pinned SHA-256.",
+          "note": "Every registered file has a stable identity, official URL and byte count.",
           "status": "verified",
           "weight": 15
         },
@@ -4485,7 +4780,7 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 14,
+      "A": 17,
       "B": 1,
       "C": 1,
       "D": 34,
@@ -4494,7 +4789,7 @@
     "use_modes": {
       "benchmark_ready": 0,
       "discovery": 34,
-      "normalized_analysis": 15,
+      "normalized_analysis": 18,
       "raw_observation": 1
     }
   }

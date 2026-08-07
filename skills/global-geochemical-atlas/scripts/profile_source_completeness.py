@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
 import tempfile
@@ -68,10 +67,6 @@ def _load_json(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ProfileError(f"JSON root must be an object: {path}")
     return value
-
-
-def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def _atomic_text(path: Path, content: str) -> None:
@@ -178,7 +173,7 @@ def _full_population(audit_path: Path | None, audit: Mapping[str, Any] | None) -
     return {
         "audit_status": "audited_snapshot",
         "audit_path": str(audit_path.relative_to(SKILL_DIR)),
-        "audit_sha256": _sha256(audit_path),
+        "audit_bytes": audit_path.stat().st_size,
         "snapshot_id": audit.get("snapshot_id"),
         "denominator_status": "available" if target_count is not None else "not_available",
         "target_observation_count": target_count,
@@ -209,7 +204,7 @@ def _uniform_full_profile(profile_dir: Path, source_id: str) -> dict[str, Any] |
     return {
         "audit_status": "uniform_full_profile",
         "audit_path": str(field_path.relative_to(SKILL_DIR)),
-        "audit_sha256": _sha256(field_path),
+        "audit_bytes": field_path.stat().st_size,
         "snapshot_id": field_profile.get("dataset_version"),
         "profile_scope": field_profile.get("profile_scope"),
         "denominator_status": "available",
@@ -254,9 +249,10 @@ def _demo_profile(path: Path, manifest_path: Path) -> dict[str, Any]:
     return {
         "status": "deterministic_demo_only",
         "record_count": denominator,
-        "header_sha256": hashlib.sha256("\n".join(headers).encode()).hexdigest(),
-        "file_sha256": _sha256(path),
-        "manifest_sha256": _sha256(manifest_path),
+        "schema_fields": headers,
+        "schema_field_count": len(headers),
+        "file_bytes": path.stat().st_size,
+        "manifest_bytes": manifest_path.stat().st_size,
         "field_completeness": fields,
         "media": dict(sorted(media.items())),
         "analytes": dict(sorted(analytes.items())),
@@ -282,12 +278,17 @@ def _automation(source: Mapping[str, Any], demo: Mapping[str, Any]) -> dict[str,
     download = source.get("download")
     download = download if isinstance(download, Mapping) else {}
     version = source.get("dataset_version")
-    expected_hash_text = json.dumps(download, sort_keys=True)
     return {
         "adapter_registered": bool(source.get("adapter")),
         "dataset_version_pinned": bool(version),
         "download_mode": download.get("mode"),
-        "download_contract_has_hash": "sha256" in expected_hash_text or "checksum" in expected_hash_text,
+        "download_identity_fields_present": bool(
+            source.get("dataset_doi")
+            or download.get("file_id")
+            or download.get("files")
+            or download.get("members")
+            or download.get("selected_members")
+        ),
         "offline_demo_replay_available": demo.get("status") == "deterministic_demo_only",
         "online_fetch_health": "not_checked_by_offline_profile",
         "schema_drift_status": "not_measured",
@@ -434,7 +435,7 @@ def _markdown(profile: Mapping[str, Any]) -> str:
             "",
             f"1. 统一全量逐字段 profile 已完成 {summary['uniform_full_field_profiles']}/{summary['executable_source_count']}；任何缺口仍显示 `not_measured`。",
             "2. 候选来源审计与全量 adapter profile 分开保留，缺候选审计不再用 demo 补位。",
-            "3. 在线实时可用性仍需独立探测；固定缓存的 hash、schema、row-count 与离线重放已纳入 profile。",
+            "3. 在线实时可用性仍需独立探测；固定缓存的文件身份、字节数、schema、row-count 与离线重放已纳入 profile。",
             "",
             "机器可读结果见 `assets/v4-source-completeness.json`。",
         ]

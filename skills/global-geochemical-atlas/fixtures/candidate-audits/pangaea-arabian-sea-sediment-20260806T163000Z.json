@@ -1,0 +1,89 @@
+{
+  "acquisition": {
+    "mode": "pinned-doi-tabular-text",
+    "observed_at": "2026-08-06T16:12:00Z",
+    "request_url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+  },
+  "archive": {
+    "members": [
+      {
+        "bytes": 24152,
+        "file_id": "dataset-table",
+        "name": "PANGAEA.950139.tab",
+        "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+      }
+    ]
+  },
+  "claim_boundary": "This audit proves the pinned pangaea-arabian-sea-sediment file contract, adapter parse and registered target denominator. It does not turn discrete source observations into continuous geographic coverage or cross-method comparability.",
+  "limitations": [
+    "The table contains 27 rows from 26 named events and is not continuous Arabian Sea coverage.",
+    "As, Cr, Cu, Ni, Pb and Zn are reported in mg/kg on bulk marine sediment.",
+    "The publisher parameter metadata names the method only as 'Geochemical analysis on bulk sediment'; the adapter preserves that wording and does not invent an instrument or digestion.",
+    "One sample label occurs twice as separate analytical rows; source row identity is retained so the replicate is not overwritten.",
+    "Core type, water depth and sediment depth are retained independently from elemental values."
+  ],
+  "observed_data": {
+    "counts": {
+      "distinct_events": 26,
+      "distinct_sample_labels": 26,
+      "mgkg_fields": 47,
+      "physical_rows": 27,
+      "target_observations": 162,
+      "target_value_counts": {
+        "As": 27,
+        "Cr": 27,
+        "Cu": 27,
+        "Ni": 27,
+        "Pb": 27,
+        "Zn": 27
+      }
+    },
+    "coverage": {
+      "bbox": [
+        57.3555,
+        10.0345,
+        68.3668,
+        19.5163
+      ],
+      "region_counts": {
+        "Arabian Sea": 27
+      },
+      "valid_coordinate_rows": 27
+    },
+    "target_analytes": {
+      "As": "As [mg/kg]",
+      "Cr": "Cr [mg/kg]",
+      "Cu": "Cu [mg/kg]",
+      "Ni": "Ni [mg/kg]",
+      "Pb": "Pb [mg/kg]",
+      "Zn": "Zn [mg/kg]"
+    }
+  },
+  "observed_metadata": {
+    "dataset_doi": "10.1594/PANGAEA.950139",
+    "dataset_version": "2022-11-02",
+    "license": {
+      "name": "Creative Commons Attribution 4.0 International",
+      "spdx": "CC-BY-4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "required_fields": [
+      "Event",
+      "Latitude",
+      "Longitude",
+      "Elevation [m]",
+      "Location",
+      "Sample label",
+      "Depth sed [m]",
+      "As [mg/kg]",
+      "Cr [mg/kg]",
+      "Cu [mg/kg]",
+      "Ni [mg/kg]",
+      "Pb [mg/kg]",
+      "Zn [mg/kg]"
+    ]
+  },
+  "source_id": "pangaea-arabian-sea-sediment",
+  "status": "verified_content_addressed_official_or_doi_dataset",
+  "verification_version": "v4-m5-sediment-source-audit-v1"
+}

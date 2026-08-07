@@ -159,7 +159,7 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
             "record_id": output_record_id,
         }
         checks = {
-            "registered_member_hash_matches": observation_file.sha256 == demos.sha256_file(observation_file.path),
+            "registered_member_bytes_match": observation_file.bytes == observation_file.path.stat().st_size,
             "station_join_preserved": bool(station["GEMS Station Number"] == fields["GEMS Station Number"]),
             "coordinates_preserved": reported_float(station["Latitude"]) is not None
             and reported_float(station["Longitude"]) is not None,
@@ -193,7 +193,7 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
         "review_version": REVIEW_VERSION,
         "source_id": candidate.source_id,
         "dataset_version": candidate.version,
-        "snapshot_id": f"gemstat-open-archive:v3:{observation_file.sha256[:12]}",
+        "snapshot_id": f"gemstat-open-archive:v3:{candidate.version}",
         "status": "prepared",
         "required_record_count": 30,
         "prepared_record_count": len(records),

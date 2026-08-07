@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
 import sys
@@ -38,6 +37,9 @@ SOURCE_ORDER = (
     "foregs-stream-sediment",
     "foregs-floodplain-sediment",
     "afsis-phase-i-wet-chemistry",
+    "australia-ngsa-mercury",
+    "japan-gsj-marine-sediment",
+    "pangaea-arabian-sea-sediment",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
@@ -55,19 +57,14 @@ EXPECTED_MEDIA = {
     "foregs-stream-sediment": "sediment",
     "foregs-floodplain-sediment": "sediment",
     "afsis-phase-i-wet-chemistry": "soil",
+    "australia-ngsa-mercury": "sediment",
+    "japan-gsj-marine-sediment": "sediment",
+    "pangaea-arabian-sea-sediment": "sediment",
 }
 
 
 class CombinedDemoError(RuntimeError):
     """Raised when checked-in source fixtures cannot be combined exactly."""
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def atomic_text(path: Path, value: str) -> None:
@@ -143,12 +140,12 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
         evidence_path = fixture_dir / "sources.jsonl"
         manifest_path = fixture_dir / "run_manifest.json"
         manifest = load_json(manifest_path, f"{source_id} demo manifest")
-        expected_hashes = {item["path"]: item["sha256"] for item in manifest.get("outputs", [])}
-        if expected_hashes != {
-            "demo_input.csv": sha256_file(input_path),
-            "sources.jsonl": sha256_file(evidence_path),
+        expected_files = {item["path"]: item["bytes"] for item in manifest.get("outputs", [])}
+        if expected_files != {
+            "demo_input.csv": input_path.stat().st_size,
+            "sources.jsonl": evidence_path.stat().st_size,
         }:
-            raise CombinedDemoError(f"{source_id} fixture hashes no longer match its manifest")
+            raise CombinedDemoError(f"{source_id} fixture file inventory no longer matches its manifest")
         with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
             source_rows = [dict(row) for row in csv.DictReader(handle)]
         source_evidence = [
@@ -171,9 +168,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             {
                 "source_id": source_id,
                 "input_path": str(input_path.relative_to(source_demos.parent.parent)),
-                "input_sha256": sha256_file(input_path),
+                "input_bytes": input_path.stat().st_size,
                 "evidence_path": str(evidence_path.relative_to(source_demos.parent.parent)),
-                "evidence_sha256": sha256_file(evidence_path),
+                "evidence_bytes": evidence_path.stat().st_size,
                 "record_count": len(source_rows),
                 "source_evidence_score": evidence_report["sources"][source_id]["source_evidence_score"],
                 "evidence_tier": evidence_report["sources"][source_id]["evidence_tier"],
@@ -233,18 +230,19 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts.",
                 "AfSIS aqua-regia quasi-total topsoil and subsoil remain separate from total and differently extracted soil values.",
                 "AfSIS numeric below-DL or below-QL results retain explicit observation evidence and are not promoted to ordinary detections.",
+                "NGSA total-Hg TOS and BOS remain separate from other sediment horizons and extraction bases.",
+                "GSJ marine and GSJ river sediment remain separate products; Hg ppb is never silently mixed with ppm fields.",
+                "PANGAEA Arabian Sea bulk-core sediment retains its generic publisher method scope and DOI lineage.",
             ],
         },
         "outputs": [
             {
                 "path": output_paths["input"].name,
                 "bytes": output_paths["input"].stat().st_size,
-                "sha256": sha256_file(output_paths["input"]),
             },
             {
                 "path": output_paths["sources"].name,
                 "bytes": output_paths["sources"].stat().st_size,
-                "sha256": sha256_file(output_paths["sources"]),
             },
         ],
         "warnings": [

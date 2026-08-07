@@ -2,8 +2,8 @@
   "coverage": {
     "bbox": [
       -137.97,
-      -27.5684,
-      128.0647,
+      -42.4756,
+      153.0022,
       81.409639
     ],
     "coordinate_rate": 1.0,
@@ -24,12 +24,12 @@
       "soil",
       "water"
     ],
-    "standardization_rate": 0.989899
+    "standardization_rate": 0.991525
   },
   "input": {
+    "bytes": 1029299,
     "filename": "demo_input.csv",
-    "record_count": 792,
-    "sha256": "effec52383c77e6031f976c9aab077bc40f109d4c632c9f715dc77af91c32838",
+    "record_count": 944,
     "synthetic_demo": false
   },
   "limitations": [
@@ -39,18 +39,18 @@
     "80 anomaly background group(s) were not analyzed due to explicit failure states."
   ],
   "map_report": {
-    "candidate_record_count": 12,
+    "candidate_record_count": 20,
     "external_assets": 0,
     "interpolation": false,
     "map_version": "self-contained-svg-v1",
-    "mapped_record_count": 792
+    "mapped_record_count": 944
   },
   "metrics": {
-    "candidate_anomaly_count": 12,
+    "candidate_anomaly_count": 20,
     "censored_record_count": 57,
-    "record_count": 792,
-    "standardized_record_count": 784,
-    "valid_coordinate_count": 792
+    "record_count": 944,
+    "standardized_record_count": 936,
+    "valid_coordinate_count": 944
   },
   "next_actions": [
     "Inspect source_manifest.json and record-level source locators before scientific reuse.",

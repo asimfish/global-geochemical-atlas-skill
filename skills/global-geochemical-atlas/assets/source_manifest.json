@@ -1,6 +1,14 @@
 {
   "registry_version": "geochemical-source-registry-v1",
   "verified_at": "2026-08-06T10:05:00Z",
+  "integrity_policy": {
+    "version": "d1-no-content-hash-v1",
+    "effective_at": "2026-08-07T08:46:00Z",
+    "content_hashes_used": false,
+    "identity_fields": ["source_id", "dataset_doi_or_pid", "dataset_version", "file_id_or_name", "release_date", "accessed_at"],
+    "drift_fields": ["http_status", "bytes", "member_inventory", "schema", "row_count", "target_counts", "key_category_counts"],
+    "legacy_hash_fields": "compatibility_only_not_read_compared_or_updated"
+  },
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -2296,6 +2304,277 @@
         "All rows are linked to USGS method PLM10 (Elements, wf, cICP-MS), laboratory, result status and a reported detection/quantitation limit.",
         "The one Not Detected row is represented as a censored value at its 0.10 ug/l detection limit; no zero is invented.",
         "Ten field-replicate quality-control samples remain distinguishable from 179 routine samples and are not counted as independent routine evidence."
+      ]
+    },
+    "australia-ngsa-mercury": {
+      "adapter": "australia_ngsa_mercury",
+      "title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset",
+      "publisher": "Geoscience Australia",
+      "dataset_doi": "10.26186/150328",
+      "publication_doi": "10.1021/acs.est.5c11189",
+      "dataset_version": "2025-03-31",
+      "release_date": "2025-03-31",
+      "landing_page": "https://pid.geoscience.gov.au/dataset/ga/150328",
+      "metadata_url": "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "australia-national-outlet-sediment-survey-partial",
+      "download": {
+        "mode": "pinned-official-csv",
+        "max_bytes": 500000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "observed_at": "2026-08-06T16:07:00Z",
+        "encoding": "Windows-1252",
+        "files": [
+          {
+            "file_id": "mercury-csv",
+            "filename": "150328_00_1.CSV",
+            "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV",
+            "bytes": 208089
+          }
+        ]
+      },
+      "required_fields": [
+        "SITEID",
+        "DATE_SAMPLED",
+        "LATITUDE_GDA94",
+        "LONGITUDE_GDA94",
+        "STATE",
+        "DUPLICATE_CODE",
+        "DUPLICATE_SITEID",
+        "SAMPLEID",
+        "GRAIN_SIZE",
+        "DEPTH",
+        "Hg_DMA_ng/g_0.01"
+      ],
+      "target_analytes": {
+        "Hg": "Hg_DMA_ng/g_0.01"
+      },
+      "expected_counts": {
+        "physical_rows": 2396,
+        "distinct_samples": 2396,
+        "distinct_sites": 1247,
+        "target_observations": 2396,
+        "depth_counts": {
+          "BOS": 1182,
+          "TOS": 1214
+        },
+        "state_counts": {
+          "NSW": 298,
+          "NT": 453,
+          "QLD": 607,
+          "SA": 314,
+          "TAS": 39,
+          "VIC": 118,
+          "WA": 567
+        },
+        "duplicate_code_counts": {
+          "": 1959,
+          "Duplicate 1": 222,
+          "Duplicate 2": 215
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Schneider, L.; Taylor, J.R.; de Caritat, P. (2025). National Geochemical Survey of Australia: The Mercury Concentrations Dataset. Geoscience Australia. https://doi.org/10.26186/150328",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher CSV remains outside Git; derived fixtures retain DOI, hash and row locators.",
+      "scientific_notes": [
+        "The product reports total Hg in dry-weight ng/g for less-than-75-micrometre top and bottom outlet sediment; it is not a regular national grid.",
+        "Total mercury was measured directly on about 100 mg by Milestone tri-cell DMA-80 without acid digestion, following USEPA Method 7473.",
+        "The header reports a 0.01 ng Hg mass detection limit, not a concentration detection limit; the adapter does not incorrectly store 0.01 ng/g as a row threshold.",
+        "TOS and BOS horizons and all duplicate codes remain explicit. QA/QC duplicates are not counted as independent sites.",
+        "Coordinates use GDA94 geographic coordinates (EPSG:4283); the values are retained without an unrecorded transformation."
+      ]
+    },
+    "japan-gsj-marine-sediment": {
+      "adapter": "gsj_japan_marine_sediment",
+      "title": "Geochemical Map of Sea and Land of Japan: marine sediment concentrations",
+      "publisher": "Geological Survey of Japan, AIST",
+      "dataset_doi": null,
+      "publication_doi": "10.5571/synth.3.281",
+      "dataset_version": "content-snapshot-2026-08-06",
+      "release_date": null,
+      "landing_page": "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+      "metadata_url": "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "japan-coastal-marine-surveys-partial",
+      "download": {
+        "mode": "content-addressed-official-csv",
+        "max_bytes": 3000000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "observed_at": "2026-08-06T16:07:00Z",
+        "encoding": "Shift_JIS",
+        "files": [
+          {
+            "file_id": "marine-concentrations",
+            "filename": "ocean-noudo.csv",
+            "url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv",
+            "bytes": 1825190
+          }
+        ]
+      },
+      "required_fields": [
+        "試料番号",
+        "航海",
+        "地域",
+        "経度",
+        "緯度",
+        "深度_m_",
+        "As",
+        "Cr",
+        "Cu",
+        "Hg",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "target_analytes": {
+        "As": "As",
+        "Cr": "Cr",
+        "Cu": "Cu",
+        "Hg": "Hg",
+        "Ni": "Ni",
+        "Pb": "Pb",
+        "Zn": "Zn"
+      },
+      "target_units": {
+        "As": "ppm",
+        "Cr": "ppm",
+        "Cu": "ppm",
+        "Hg": "ppb",
+        "Ni": "ppm",
+        "Pb": "ppm",
+        "Zn": "ppm"
+      },
+      "expected_counts": {
+        "physical_rows": 4905,
+        "distinct_samples": 4905,
+        "distinct_cruises": 37,
+        "distinct_regions": 37,
+        "missing_water_depth_rows": 1081,
+        "negative_hg_values": 10,
+        "target_observations": 34334,
+        "target_value_counts": {
+          "As": 4905,
+          "Cr": 4905,
+          "Cu": 4905,
+          "Hg": 4904,
+          "Ni": 4905,
+          "Pb": 4905,
+          "Zn": 4905
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "name": "GSJ website terms aligned with Japan Government Standard Terms of Use 2.0",
+        "url": "https://www.gsj.jp/license/index.html"
+      },
+      "citation": "Imai, N. et al. (2010). Geochemical Map of Sea and Land of Japan. Synthesiology 3, 281-291. https://doi.org/10.5571/synth.3.281; official marine concentration CSV.",
+      "redistribution": "Use for attributed research analysis under GSJ website terms. The complete publisher CSV remains outside Git.",
+      "scientific_notes": [
+        "This is a separate 4,905-sample marine product and must not be merged with the GSJ river-sediment table as one sample type.",
+        "The source CSV reports Hg in ppb and the other registered trace elements in ppm.",
+        "The concentration CSV does not contain row-level method, detection-limit or quality-control fields; the adapter leaves them missing rather than inferring them.",
+        "Ten negative Hg values and one missing Hg value are preserved as source states; negative values are excluded from positive demonstration slices but not erased from the full profile.",
+        "Survey tracks and coastal regions are discrete and do not form a regular grid of all Japanese waters."
+      ]
+    },
+    "pangaea-arabian-sea-sediment": {
+      "adapter": "pangaea_arabian_sea_sediment",
+      "title": "Geochemistry of modern sediments and the glacial Arabian Sea",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.950139",
+      "parent_dataset_doi": "10.1594/PANGAEA.950153",
+      "dataset_version": "2022-11-02",
+      "release_date": "2022-11-02",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "arabian-sea-discrete-core-samples",
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 100000,
+        "accepted_content_types": [
+          "text/tab-separated-values",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-06T16:12:00Z",
+        "files": [
+          {
+            "file_id": "dataset-table",
+            "filename": "PANGAEA.950139.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile",
+            "bytes": 24152
+          }
+        ]
+      },
+      "required_fields": [
+        "Event",
+        "Latitude",
+        "Longitude",
+        "Elevation [m]",
+        "Location",
+        "Sample label",
+        "Depth sed [m]",
+        "As [mg/kg]",
+        "Cr [mg/kg]",
+        "Cu [mg/kg]",
+        "Ni [mg/kg]",
+        "Pb [mg/kg]",
+        "Zn [mg/kg]"
+      ],
+      "target_analytes": {
+        "As": "As [mg/kg]",
+        "Cr": "Cr [mg/kg]",
+        "Cu": "Cu [mg/kg]",
+        "Ni": "Ni [mg/kg]",
+        "Pb": "Pb [mg/kg]",
+        "Zn": "Zn [mg/kg]"
+      },
+      "expected_counts": {
+        "physical_rows": 27,
+        "distinct_sample_labels": 26,
+        "distinct_events": 26,
+        "mgkg_fields": 47,
+        "target_observations": 162,
+        "target_value_counts": {
+          "As": 27,
+          "Cr": 27,
+          "Cu": 27,
+          "Ni": 27,
+          "Pb": 27,
+          "Zn": 27
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Lu, W.; Wang, Y.; Oppo, D.W.; Nielsen, S.G.; Costa, K.M. (2022). Geochemistry of modern sediments and the glacial Arabian Sea. PANGAEA. https://doi.org/10.1594/PANGAEA.950139",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic rows retain DOI, hash and source locators.",
+      "scientific_notes": [
+        "The table contains 27 rows from 26 named events and is not continuous Arabian Sea coverage.",
+        "As, Cr, Cu, Ni, Pb and Zn are reported in mg/kg on bulk marine sediment.",
+        "The publisher parameter metadata names the method only as 'Geochemical analysis on bulk sediment'; the adapter preserves that wording and does not invent an instrument or digestion.",
+        "One sample label occurs twice as separate analytical rows; source row identity is retained so the replicate is not overwritten.",
+        "Core type, water depth and sediment depth are retained independently from elemental values."
       ]
     }
   }

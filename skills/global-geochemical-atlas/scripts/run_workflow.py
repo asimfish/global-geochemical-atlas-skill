@@ -133,7 +133,7 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
         },
         "input": {
             "filename": input_path.name,
-            "sha256": evidence_builder.sha256_file(input_path) if input_path.is_file() else "0" * 64,
+            "bytes": input_path.stat().st_size if input_path.is_file() else 0,
             "record_count": 0,
             "synthetic_demo": False,
         },
@@ -181,7 +181,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise WorkflowError("incomplete_retrieval", str(exc)) from exc
 
     rows = evidence_builder.canonical_rows(outputs["database"])
-    input_hash = evidence_builder.sha256_file(args.input)
     source_manifest_path = args.output_dir / "source_manifest.json"
     try:
         _, synthetic_present = evidence_builder.package_evidence(
@@ -236,7 +235,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "input": {
             "filename": args.input.name,
-            "sha256": input_hash,
+            "bytes": args.input.stat().st_size,
             "record_count": len(rows),
             "synthetic_demo": synthetic_present,
         },

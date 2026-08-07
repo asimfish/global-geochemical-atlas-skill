@@ -1,0 +1,57 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-06T10:05:00Z",
+  "cache_hit_count": 1,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2025-03-31",
+  "expected_target_observation_count": 2396,
+  "files": [
+    {
+      "bytes": 208089,
+      "cache_status": "cache_hit",
+      "file_id": "mercury-csv",
+      "filename": "150328_00_1.CSV"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-07T09:47:05Z",
+  "last_successful_parse_at": "2026-08-06T10:05:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 2396,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_field_count": 17,
+  "raw_schema_fields": [
+    "DATE_SAMPLED",
+    "DEPTH",
+    "DUPLICATE_CODE",
+    "DUPLICATE_SITEID",
+    "GRAIN_SIZE",
+    "Hg_DMA_ng/g_0.01",
+    "LATITUDE_GDA94",
+    "LONGITUDE_GDA94",
+    "SAMPLEID",
+    "SITEID",
+    "STATE",
+    "_dataset_version",
+    "_grain_fraction",
+    "_sample_type",
+    "_source_crs",
+    "_source_file",
+    "_target_observations"
+  ],
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "australia-ngsa-mercury",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 2396,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

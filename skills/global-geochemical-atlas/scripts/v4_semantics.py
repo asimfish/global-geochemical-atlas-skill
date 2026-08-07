@@ -130,6 +130,29 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "result_row_analytical_method_fields",
         "citation_scope": "observation",
     },
+    "australia-ngsa-mercury": {
+        "sediment_environment": "outlet_catchment",
+        "method_scope": "dataset",
+        "method_assignment_basis": "official_file_metadata_preamble",
+        "citation_scope": "dataset",
+    },
+    "japan-gsj-marine-sediment": {
+        "sample_type_raw": "marine sediment",
+        "sample_type": "sediment_marine",
+        "sample_type_mapping_status": "dataset_constant",
+        "sediment_environment": "marine",
+        "method_missing_reason": "not_reported_in_concentration_csv",
+        "citation_scope": "dataset",
+    },
+    "pangaea-arabian-sea-sediment": {
+        "sample_type_raw": "marine core sediment",
+        "sample_type": "sediment_marine_core",
+        "sample_type_mapping_status": "dataset_constant",
+        "sediment_environment": "marine",
+        "method_scope": "parameter",
+        "method_assignment_basis": "pangaea_parameter_method_metadata",
+        "citation_scope": "dataset",
+    },
 }
 
 SOIL_TYPE_MAP = {
@@ -215,6 +238,19 @@ def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Map
             water_body_type=canonical.removeprefix("water_"),
             water_fraction=_text(evidence.get("water_fraction")),
         )
+    elif source_id == "australia-ngsa-mercury":
+        raw = _text(evidence.get("reported_depth"))
+        mapped = {
+            "TOS": "sediment_outlet_top",
+            "BOS": "sediment_outlet_bottom",
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped NGSA outlet-sediment depth: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped,
+            sample_type_mapping_status="exact",
+        )
     return result
 
 
@@ -252,6 +288,23 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
         result["survey_area"] = _text(evidence.get("potential_source_area")) or result["survey_area"] or legacy
         result["geographic_context_raw"] = (
             _text(evidence.get("reported_location")) or result["geographic_context_raw"]
+        )
+    elif source_id == "australia-ngsa-mercury":
+        result["survey_area"] = _text(evidence.get("state")) or result["survey_area"]
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (_text(evidence.get("state")), _text(evidence.get("site_id"))) if part
+        )
+    elif source_id == "japan-gsj-marine-sediment":
+        result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
+        result["survey_area"] = _text(evidence.get("region")) or result["survey_area"]
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], result["cruise_track"]) if part
+        )
+    elif source_id == "pangaea-arabian-sea-sediment":
+        result["cruise_track"] = _text(evidence.get("event")) or result["cruise_track"]
+        result["survey_area"] = _text(evidence.get("location")) or result["survey_area"]
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], result["cruise_track"]) if part
         )
     return result
 

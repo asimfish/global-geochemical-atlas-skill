@@ -295,7 +295,7 @@
         "The source contains 1,836,306 censored values plus Pending review and Suspect rows that remain traceable and must be filtered according to use.",
         "Rows for different elements or fractions at the same station, date, time and depth are one physical sampling event, not independent evidence.",
         "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 rows and 621 parameters.",
-        "Eleven required ZIP members were locally range-verified; the complete 201 MB publisher archive MD5 is recorded but was not independently recomputed."
+        "Eleven required ZIP members were locally range-verified by DOI/version, byte ranges, member names, decoded sizes, schema and row counts; the complete 201 MB archive was not downloaded locally."
       ]
     },
     "wosis": {
@@ -557,7 +557,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -588,7 +588,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-subsoil": {
@@ -616,7 +616,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -647,7 +647,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-humus": {
@@ -675,7 +675,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -706,7 +706,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-stream-water": {
@@ -734,7 +734,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -765,7 +765,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-stream-sediment": {
@@ -793,7 +793,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -824,7 +824,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-floodplain-sediment": {
@@ -852,7 +852,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -883,7 +883,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "canada-cdogs": {
@@ -1295,7 +1295,7 @@
       ],
       "limitations": [
         "Repository inclusion is not uniform geochemical coverage or method comparability.",
-        "Each DOI dataset must pass its own licence, schema, hash, citation and duplicate checks before use."
+        "Each DOI dataset must pass its own licence, schema, file-identity, row-count, citation and duplicate checks before use."
       ]
     },
     "geotraces-idp2025": {
@@ -1571,7 +1571,7 @@
       ],
       "limitations": [
         "Repository search results are not one harmonised geochemical dataset.",
-        "Every DOI must pass separate media, method, licence, file, checksum, citation and duplicate checks."
+        "Every DOI must pass separate media, method, licence, file-identity, schema, row-count, citation and duplicate checks."
       ]
     },
     "iodp-data-systems": {
@@ -1872,7 +1872,7 @@
       ],
       "limitations": [
         "The June 2026 dataset is explicitly under development and has not completed final rock-name and batch-adjustment quality control.",
-        "A pinned version label is not sufficient for admission until file hash, licence, schema and QC flags are verified."
+        "A pinned version label is not sufficient for admission until file identity, byte count, licence, schema, row counts and QC flags are verified."
       ]
     },
     "norway-marchem": {
@@ -1935,7 +1935,7 @@
       ],
       "limitations": [
         "The database contains natural elements and anthropogenic contaminants; target-analyte scope must be selected explicitly.",
-        "The verified public API export is dynamic and timestamped; the selected inorganic response has an observed project hash but no matching immutable DOI or publisher checksum yet.",
+        "The verified public API export is dynamic and timestamped; the selected inorganic response is fixed by request, observation time, member inventory, byte counts and scientific row statistics but has no matching immutable DOI.",
         "The As, Cu, Ni and Zn measurements are reported on a dry-weight basis after partial nitric-acid digestion and must not be represented as total content.",
         "Batch metadata mix accredited and not-accredited analyses, and the export can repeat a sample across parameter groups; both facts must survive record-level mapping."
       ]
@@ -2426,6 +2426,146 @@
         "Three site labels (SN5, SN6 and SN7) have more than one published coordinate pair and must retain sample-level coordinates rather than a forced site centroid.",
         "The separate bulk-density workbook can fill 58 missing main-table rows, but six non-missing bulk-density values and five coordinates conflict with the main workbook; supplemental values must never overwrite published main-table values silently.",
         "The main workbook has no row-level detection-limit, qualifier or method fields. Dataset-level preparation, digestion, ICP-AES/ICP-MS and QC evidence comes from the linked article and must carry dataset or publication scope."
+      ]
+    },
+    "australia-ngsa-mercury": {
+      "title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset",
+      "publisher": "Geoscience Australia",
+      "source_kind": "official_national_geochemical_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["australia-outlet-sediment-catchments"],
+        "notes": "2,396 TOS/BOS records at 1,247 sites across seven states and territories; national catchment survey rather than a regular grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.26186/150328",
+        "publication_doi": "10.1021/acs.est.5c11189"
+      },
+      "landing_page": "https://pid.geoscience.gov.au/dataset/ga/150328",
+      "interfaces": [
+        {
+          "kind": "official_dataset_csv",
+          "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV",
+          "format": "cp1252_csv_with_metadata_preamble",
+          "access": "open",
+          "server_filters": []
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "The publisher file states CC BY 4.0 Australia; retain dataset DOI and Geoscience Australia attribution."
+      },
+      "version": {"status": "pinned", "value": "2025-03-31", "release_date": "2025-03-31"},
+      "adapter": {"status": "implemented", "name": "australia_ngsa_mercury"},
+      "evidence_urls": [
+        "https://pid.geoscience.gov.au/dataset/ga/150328",
+        "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+        "https://doi.org/10.26186/150328",
+        "https://doi.org/10.1021/acs.est.5c11189"
+      ],
+      "limitations": [
+        "Only Hg is present in this product; it does not supply the other target elements.",
+        "Top and bottom outlet sediment are separate horizons and cannot be pooled without an explicit comparison decision.",
+        "The reported 0.01 ng Hg limit is a mass LOD, not a concentration-row threshold.",
+        "Duplicate codes identify QA/QC structure and do not create independent spatial sites.",
+        "Catchment sampling is nationally broad but spatially discrete and uneven."
+      ]
+    },
+    "japan-gsj-marine-sediment": {
+      "title": "Geochemical Map of Sea and Land of Japan: marine sediment concentrations",
+      "publisher": "Geological Survey of Japan, AIST",
+      "source_kind": "official_national_marine_geochemical_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_coastal_partial",
+        "regions": ["japan-coastal-marine-survey-tracks"],
+        "notes": "4,905 marine sediment samples from 37 cruises and 37 named regions; separate from the implemented national river-sediment product."
+      },
+      "identifiers": {"publication_doi": "10.5571/synth.3.281"},
+      "landing_page": "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+      "interfaces": [
+        {
+          "kind": "official_marine_concentration_csv",
+          "url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv",
+          "format": "shift_jis_csv",
+          "access": "open",
+          "server_filters": []
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "url": "https://www.gsj.jp/license/index.html",
+        "notes": "GSJ website research products follow Japan Government Standard Terms of Use 2.0 with attribution; third-party material remains excluded."
+      },
+      "version": {"status": "content_addressed", "value": "content-snapshot-2026-08-06", "release_date": null},
+      "adapter": {"status": "implemented", "name": "gsj_japan_marine_sediment"},
+      "evidence_urls": [
+        "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+        "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+        "https://doi.org/10.5571/synth.3.281",
+        "https://www.gsj.jp/license/index.html"
+      ],
+      "limitations": [
+        "Marine and river sediment remain separate source products and sample types.",
+        "Hg uses ppb while the other target fields use ppm.",
+        "The concentration CSV has no row-level method, detection-limit or QC fields.",
+        "Ten negative Hg values are preserved as source results and are not ordinary positive concentrations.",
+        "Cruise sampling tracks do not constitute continuous coverage of Japanese seas."
+      ]
+    },
+    "pangaea-arabian-sea-sediment": {
+      "title": "Geochemistry of modern sediments and the glacial Arabian Sea",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "regional_discrete_samples",
+        "regions": ["arabian-sea-core-sites"],
+        "notes": "Twenty-seven rows from 26 named events between 10.03-19.52 N and 57.36-68.37 E; a method-linked long-tail dataset rather than a regional grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.950139",
+        "parent_dataset_doi": "10.1594/PANGAEA.950153"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+      "interfaces": [
+        {
+          "kind": "doi_tabular_download",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile",
+          "format": "utf8_tsv_with_pangaea_metadata",
+          "access": "open",
+          "server_filters": ["dataset_doi", "format"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "PANGAEA records CC BY 4.0; retain dataset and bundled-publication citations."
+      },
+      "version": {"status": "pinned", "value": "2022-11-02", "release_date": "2022-11-02"},
+      "adapter": {"status": "implemented", "name": "pangaea_arabian_sea_sediment"},
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+        "https://doi.org/10.1594/PANGAEA.950139",
+        "https://doi.org/10.1594/PANGAEA.950153"
+      ],
+      "limitations": [
+        "Twenty-seven source rows are not continuous Arabian Sea coverage.",
+        "The source method label is generic and does not specify an instrument or digestion.",
+        "One sample label has two source rows and must retain row identity.",
+        "Core depth and sea-floor elevation are distinct quantities and must not be interchanged.",
+        "This publication-linked dataset may overlap later aggregations and must be deduplicated by event, sample and DOI lineage."
       ]
     },
     "south-africa-cgs-geochemistry": {

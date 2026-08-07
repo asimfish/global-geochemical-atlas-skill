@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
 import tempfile
@@ -25,10 +24,6 @@ DEFAULT_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 
 class MigrationError(RuntimeError):
     """Raised when fixture migration cannot preserve one-to-one evidence."""
-
-
-def _sha256_bytes(value: bytes) -> str:
-    return hashlib.sha256(value).hexdigest()
 
 
 def _csv_bytes(rows: Sequence[Mapping[str, str]]) -> bytes:
@@ -81,7 +76,6 @@ def expected_fixture(source_id: str, fixture_dir: Path, registry: Mapping[str, A
     if not isinstance(demo_output, dict):
         raise MigrationError(f"{source_id} manifest has no demo_input.csv output")
     demo_output["bytes"] = len(content)
-    demo_output["sha256"] = _sha256_bytes(content)
     return content, manifest
 
 

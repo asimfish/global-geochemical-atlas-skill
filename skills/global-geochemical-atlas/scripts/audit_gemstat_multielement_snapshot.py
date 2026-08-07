@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import math
 import os
@@ -121,15 +120,12 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
             "file_id": item.file_id,
             "filename": item.path.name,
             "bytes": item.bytes,
-            "sha256": item.sha256,
             "range_start": registered_members[item.file_id]["range_start"],
             "range_end": registered_members[item.file_id]["range_end"],
-            "range_sha256": registered_members[item.file_id]["range_sha256"],
         }
         for item in downloaded
     ]
-    snapshot_digest = hashlib.sha256("".join(item["sha256"] for item in selected_members).encode()).hexdigest()
-    snapshot_id = f"gemstat-open-archive:v3-seven-elements:{snapshot_digest[:12]}"
+    snapshot_id = f"gemstat-open-archive:v3-seven-elements:{registry['download']['observed_at']}"
     observed = {
         "target_observations": count,
         "target_value_counts": dict(sorted(elements.items())),
@@ -168,12 +164,11 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "Dissolved, extractable, suspended and total fractions are not interchangeable.",
         "Most observations use undefined method code 0 and therefore remain in method-unknown comparison groups.",
         "Censored values and all source quality labels remain traceable; production filtering is use-case dependent.",
-        "The complete publisher ZIP MD5 is recorded, while this workflow independently verifies only selected ranges.",
+        "The workflow verifies only the selected byte ranges, member identities, decoded sizes, schemas and counts.",
     ]
     publisher_archive = {
         "filename": registry["download"]["archive_filename"],
         "bytes": registry["download"]["archive_bytes"],
-        "checksum": registry["download"]["publisher_checksum"],
         "locally_full_archive_verified": False,
     }
     snapshot = {

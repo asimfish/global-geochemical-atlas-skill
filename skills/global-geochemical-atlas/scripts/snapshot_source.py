@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Build and compare content-addressed snapshots from checked-in source evidence."""
+"""Build and compare identity-and-statistics snapshots from checked-in source evidence."""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
 from collections.abc import Mapping, Sequence
@@ -19,8 +18,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
 
-SNAPSHOT_VERSION = "geochemical-dynamic-snapshot-v3"
-DIFF_VERSION = "geochemical-snapshot-diff-v3"
+SNAPSHOT_VERSION = "geochemical-dynamic-snapshot-v4"
+DIFF_VERSION = "geochemical-snapshot-diff-v4"
 
 
 class SnapshotError(ValueError):
@@ -39,20 +38,9 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return value
 
 
-def _canonical_sha256(value: Any) -> str:
-    rendered = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(rendered.encode("utf-8")).hexdigest()
-
-
 def _require_mapping(value: Any, label: str) -> Mapping[str, Any]:
     if not isinstance(value, Mapping):
         raise SnapshotError(f"{label} must be an object")
-    return value
-
-
-def _require_sha256(value: Any, label: str) -> str:
-    if not isinstance(value, str) or len(value) != 64 or any(char not in "0123456789abcdef" for char in value):
-        raise SnapshotError(f"{label} must be a lowercase SHA-256")
     return value
 
 
@@ -67,9 +55,6 @@ def _request_contract(url: str) -> dict[str, Any]:
         "endpoint": f"{parts.scheme}://{parts.netloc}{parts.path}",
         "parameters": parameters,
     }
-    contract["canonical_request_sha256"] = _canonical_sha256(
-        {"method": contract["method"], "endpoint": contract["endpoint"], "parameters": parameters}
-    )
     return contract
 
 
@@ -94,7 +79,6 @@ def build_snapshot(
         raise SnapshotError("candidate acquisition observed_at must be UTC")
     if not isinstance(request_url, str):
         raise SnapshotError("candidate acquisition request_url is missing")
-    archive_sha256 = _require_sha256(archive.get("sha256"), "candidate archive sha256")
     members = archive.get("members")
     if not isinstance(members, list) or not members:
         raise SnapshotError("candidate archive member inventory is empty")
@@ -105,9 +89,7 @@ def build_snapshot(
         size = item.get("bytes")
         if not isinstance(name, str) or not name or not isinstance(size, int) or size < 0:
             raise SnapshotError(f"archive member {index} has invalid name or size")
-        normalized_members.append(
-            {"name": name, "bytes": size, "sha256": _require_sha256(item.get("sha256"), f"member {name} sha256")}
-        )
+        normalized_members.append({"name": name, "bytes": size})
 
     record_count = observed_data.get("data_record_count")
     distinct_samples = observed_data.get("distinct_sample_code_count")
@@ -121,7 +103,7 @@ def build_snapshot(
     )
     research_use_status = score_source_evidence.derive_research_use_status(entry)
     request = _request_contract(request_url)
-    snapshot_id = f"{source_id}:{observed_at}:{archive_sha256[:12]}"
+    snapshot_id = f"{source_id}:{observed_at}:{len(normalized_members)}"
     return {
         "snapshot_version": SNAPSHOT_VERSION,
         "snapshot_id": snapshot_id,
@@ -134,8 +116,6 @@ def build_snapshot(
             "http_status_evidence": "missing_from_original_acquisition_manifest",
             "content_type": acquisition.get("response_content_type"),
             "bytes": archive.get("bytes"),
-            "sha256": archive_sha256,
-            "publisher_checksum_available": bool(acquisition.get("publisher_checksum_available")),
         },
         "archive": {
             "filename": archive.get("filename"),
@@ -168,13 +148,11 @@ def build_snapshot(
         },
         "evidence": {
             "candidate_evidence_path": evidence_path,
-            "candidate_evidence_sha256": _canonical_sha256(candidate),
-            "publisher_checksum_status": "missing" if not acquisition.get("publisher_checksum_available") else "verified",
-            "content_addressed_snapshot": True,
+            "identity_basis": "source_id + request + observation time + member inventory + byte counts",
         },
         "limitations": list(entry.get("limitations", [])),
         "claim_boundary": (
-            "This project snapshot fixes one observed official API response by request, time and content hashes. "
+            "This project snapshot fixes one observed official API response by request, time, file identity and statistics. "
             "It is not a publisher DOI or proof that the upstream dynamic service will return identical content later."
         ),
     }
@@ -205,9 +183,8 @@ def diff_snapshots(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[
         if before_members[name] != after_members[name]
     )
     comparisons = {
-        "request_changed": before.get("request", {}).get("canonical_request_sha256")
-        != after.get("request", {}).get("canonical_request_sha256"),
-        "response_changed": before.get("response", {}).get("sha256") != after.get("response", {}).get("sha256"),
+        "request_changed": before.get("request") != after.get("request"),
+        "response_changed": before.get("response") != after.get("response"),
         "counts_changed": before.get("counts") != after.get("counts"),
         "research_use_changed": before.get("research_use") != after.get("research_use"),
         "limitations_changed": before.get("limitations") != after.get("limitations"),
@@ -241,7 +218,7 @@ def diff_snapshots(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[
         "comparisons": comparisons,
         "members": {"added": added, "removed": removed, "changed": changed_members},
         "claim_boundary": (
-            "A snapshot diff reports observed request, content, inventory and metadata changes. "
+            "A snapshot diff reports observed request, byte-count, inventory and metadata changes. "
             "It does not determine whether upstream scientific values are correct."
         ),
     }

@@ -151,10 +151,10 @@ def _review(
                 "depth": str(fields.get("Depth") or ""),
                 "latitude": str(fields.get("Latitude") or ""),
                 "longitude": str(fields.get("Longitude") or ""),
-                "source_file_sha256": measurement.sha256,
-                "metadata_file_sha256": by_filename[
+                "source_file_bytes": measurement.bytes,
+                "metadata_file_bytes": by_filename[
                     next(item.path.name for item in files if item.file_id == "variables")
-                ].sha256,
+                ].bytes,
                 "adapter_observations": adapter_observations,
                 "selection_reasons": reasons,
                 "automated_checks": {
@@ -226,12 +226,9 @@ def _audit(
                 target_counts[str(analyte)] += 1
                 threshold_counts.setdefault(str(analyte), Counter())[_threshold_category(observation)] += 1
     members = [
-        {"name": item.path.name, "bytes": item.bytes, "sha256": item.sha256}
+        {"name": item.path.name, "bytes": item.bytes}
         for item in sorted(files, key=lambda value: value.file_id)
     ]
-    aggregate_hash = source_adapters._canonical_hash(
-        "afsis-original-files-v1", [item["name"] + ":" + item["sha256"] for item in members]
-    )
     return {
         "verification_version": AUDIT_VERSION,
         "source_id": SOURCE_ID,
@@ -248,7 +245,6 @@ def _audit(
         },
         "archive": {
             "bytes": sum(item.bytes for item in files),
-            "sha256": aggregate_hash,
             "members": members,
         },
         "observed_data": {

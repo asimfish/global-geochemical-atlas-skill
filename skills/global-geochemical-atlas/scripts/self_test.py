@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
 import subprocess
 import sys
@@ -129,8 +128,10 @@ def run_suite() -> dict[str, Any]:
         require(summary["input"]["synthetic_demo"] is True, "demo must be labeled synthetic")
         require(summary["coverage"]["interpolation"] is False, "demo must not interpolate blank areas")
         manifest = json_value(first / "source_manifest.json")
-        confidence_hash = hashlib.sha256((first / "confidence_report.json").read_bytes()).hexdigest()
-        require(manifest["confidence_report"]["sha256"] == confidence_hash, "confidence evidence hash mismatch")
+        require(
+            manifest["confidence_report"]["bytes"] == (first / "confidence_report.json").stat().st_size,
+            "confidence evidence byte count mismatch",
+        )
         require(manifest["coverage"]["source_locator_rate"] == 1.0, "demo provenance coverage should be complete")
 
         html = (first / "interactive_map.html").read_text(encoding="utf-8")

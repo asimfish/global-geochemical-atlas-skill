@@ -173,54 +173,53 @@ def _registry_integrity(registry_entry: Mapping[str, Any] | None) -> dict[str, A
     if isinstance(files, list) and files:
         valid = all(
             isinstance(item, Mapping)
-            and isinstance(item.get("expected_sha256"), str)
-            and len(item["expected_sha256"]) == 64
+            and bool(item.get("file_id") or item.get("filename"))
+            and bool(item.get("url"))
+            and isinstance(item.get("bytes"), int)
+            and item["bytes"] > 0
             for item in files
         )
         return _dimension(
             "verified" if valid else "conflict",
             weight,
-            "Every registered file has a pinned SHA-256."
+            "Every registered file has a stable identity, official URL and byte count."
             if valid
-            else "One or more registered files lack a pinned SHA-256.",
+            else "One or more registered files lack a stable identity, official URL or byte count.",
         )
     selected_members = download.get("selected_members")
     if isinstance(selected_members, list) and selected_members:
         valid = all(
             isinstance(item, Mapping)
             and isinstance(item.get("bytes"), int)
-            and isinstance(item.get("expected_sha256"), str)
-            and len(item["expected_sha256"]) == 64
+            and item["bytes"] > 0
+            and bool(item.get("file_id") or item.get("filename") or item.get("name"))
             and isinstance(item.get("range_start"), int)
             and isinstance(item.get("range_end"), int)
             and item["range_end"] >= item["range_start"]
-            and isinstance(item.get("range_sha256"), str)
-            and len(item["range_sha256"]) == 64
             for item in selected_members
         )
         return _dimension(
             "verified" if valid else "conflict",
             weight,
-            "Every selected ZIP member is pinned by byte range plus compressed and decoded SHA-256."
+            "Every selected ZIP member is identified by name, byte range and decoded byte count."
             if valid
-            else "One or more selected ZIP members lack a valid range or SHA-256 contract.",
+            else "One or more selected ZIP members lacks a valid identity, range or byte-count contract.",
         )
     members = download.get("members")
     if isinstance(members, list) and members:
         valid = all(
             isinstance(item, Mapping)
             and isinstance(item.get("bytes"), int)
-            and isinstance(item.get("publisher_checksum"), Mapping)
-            and item["publisher_checksum"].get("algorithm") in {"md5", "sha256"}
-            and isinstance(item["publisher_checksum"].get("value"), str)
+            and item["bytes"] > 0
+            and bool(item.get("file_id") or item.get("filename") or item.get("name"))
             for item in members
         )
         return _dimension(
             "verified" if valid else "conflict",
             weight,
-            "Archive members are pinned by name, size and publisher checksum."
+            "Archive members are pinned by identity and byte count."
             if valid
-            else "Archive member inventory or publisher checksums are incomplete.",
+            else "Archive member identity or byte-count inventory is incomplete.",
         )
     return _dimension("conflict", weight, "The registered download has no verifiable file inventory.")
 
@@ -355,8 +354,8 @@ def score_source(
     snapshot_manifest = candidate.get("_snapshot_manifest") if isinstance(candidate, Mapping) else None
     if isinstance(snapshot_manifest, Mapping):
         candidate_archive = {
-            "sha256": snapshot_manifest.get("response", {}).get("sha256"),
             "members": snapshot_manifest.get("archive", {}).get("members"),
+            "bytes": snapshot_manifest.get("response", {}).get("bytes"),
         }
         candidate_acquisition = {
             "request_url": snapshot_manifest.get("request", {}).get("url"),
@@ -367,11 +366,13 @@ def score_source(
         candidate_acquisition = candidate.get("acquisition") if isinstance(candidate, Mapping) else None
     dynamic_snapshot = (
         isinstance(candidate_archive, Mapping)
-        and isinstance(candidate_archive.get("sha256"), str)
-        and len(candidate_archive["sha256"]) == 64
         and isinstance(candidate_acquisition, Mapping)
         and bool(candidate_acquisition.get("request_url"))
         and bool(candidate_acquisition.get("observed_at"))
+        and (
+            isinstance(candidate_archive.get("bytes"), int)
+            or isinstance(candidate_archive.get("members"), list)
+        )
     )
     if version.get("status") == "pinned" and version.get("value"):
         version_dimension = _dimension(
@@ -383,7 +384,7 @@ def score_source(
         version_dimension = _dimension(
             "verified",
             DIMENSION_WEIGHTS["version_snapshot"],
-            "A dynamic API response is frozen by exact request, observation time and SHA-256.",
+            "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
             [
                 candidate.get("_snapshot_manifest_path", ""),
                 candidate.get("_evidence_path", ""),
@@ -400,7 +401,7 @@ def score_source(
         version_dimension = _dimension(
             "missing",
             DIMENSION_WEIGHTS["version_snapshot"],
-            "No immutable version or content-addressed snapshot is currently recorded.",
+            "No concrete publisher version or observation snapshot is currently recorded.",
         )
     dimensions["version_snapshot"] = version_dimension
 
@@ -408,18 +409,17 @@ def score_source(
         members = candidate_archive.get("members", [])
         valid_members = bool(members) and all(
             isinstance(item, Mapping)
-            and isinstance(item.get("name"), str)
+            and bool(item.get("file_id") or item.get("name") or item.get("filename"))
             and isinstance(item.get("bytes"), int)
-            and isinstance(item.get("sha256"), str)
-            and len(item["sha256"]) == 64
+            and item["bytes"] > 0
             for item in members
         )
         dimensions["file_record_integrity"] = _dimension(
             "verified" if valid_members else "partial",
             DIMENSION_WEIGHTS["file_record_integrity"],
-            "The dynamic snapshot records archive hash and complete member hashes."
+            "The dynamic snapshot records a complete member identity and byte-count inventory."
             if valid_members
-            else "The dynamic snapshot hash exists but its member inventory is incomplete.",
+            else "The dynamic snapshot exists but its member identity or byte-count inventory is incomplete.",
             [candidate.get("_snapshot_manifest_path", ""), candidate.get("_evidence_path", "")],
         )
     else:

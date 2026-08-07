@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import io
 import json
 import re
@@ -31,10 +30,6 @@ VALUE_PATTERN = re.compile(r"^\s*([<>])?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][
 
 class VerificationError(RuntimeError):
     """Raised when the observed export does not match the documented contract."""
-
-
-def sha256_bytes(value: bytes) -> str:
-    return hashlib.sha256(value).hexdigest()
 
 
 def read_csv(payload: bytes) -> list[dict[str, str]]:
@@ -249,7 +244,6 @@ def verify(
                 {
                     "name": info.filename,
                     "bytes": info.file_size,
-                    "sha256": sha256_bytes(payload),
                 }
             )
 
@@ -284,12 +278,10 @@ def verify(
             "request_url": request_url,
             "observed_at": observed_at,
             "response_content_type": "application/zip",
-            "publisher_checksum_available": False,
         },
         "archive": {
             "filename": path.name,
             "bytes": len(archive_bytes),
-            "sha256": sha256_bytes(archive_bytes),
             "members": members,
             "dynamic_export_filenames": True,
         },

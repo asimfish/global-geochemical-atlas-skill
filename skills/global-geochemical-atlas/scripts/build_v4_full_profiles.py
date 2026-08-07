@@ -2,7 +2,7 @@
 """Build reproducible V4 full-population profiles and a coverage cube.
 
 Unlike the source demos, this command parses every target-bearing record in
-each verified cache.  It emits only aggregate counts and hashes; source rows
+each verified cache.  It emits only aggregate counts and structural inventories; source rows
 are never copied into the repository.  A checked-in profile therefore proves
 its own denominator without redistributing the upstream dataset.
 """
@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
@@ -113,14 +112,6 @@ class Observation:
 
 def _text(value: Any) -> str:
     return str(value or "").strip()
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _atomic_text(path: Path, content: str) -> None:
@@ -260,6 +251,30 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             _text(station.get("LongitudeMeasure")),
             _text(station.get("HorizontalCoordinateReferenceSystemDatumName")) or "NAD83",
         )
+    if source_id == "australia-ngsa-mercury":
+        return (
+            _text(fields.get("SAMPLEID")),
+            _text(fields.get("STATE")),
+            _text(fields.get("LATITUDE_GDA94")),
+            _text(fields.get("LONGITUDE_GDA94")),
+            _text(fields.get("_source_crs")) or "EPSG:4283",
+        )
+    if source_id == "japan-gsj-marine-sediment":
+        return (
+            _text(fields.get("試料番号")),
+            _text(fields.get("地域")) or _text(fields.get("航海")),
+            _text(fields.get("緯度")),
+            _text(fields.get("経度")),
+            _text(fields.get("_source_crs")),
+        )
+    if source_id == "pangaea-arabian-sea-sediment":
+        return (
+            _text(fields.get("Sample label")) or _text(fields.get("Event")),
+            _text(fields.get("Location")) or "Arabian Sea",
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
     raise FullProfileError(f"no sample/place mapping for {source_id}")
 
 
@@ -372,6 +387,16 @@ def _semantic_evidence(source_id: str, fields: Mapping[str, Any], record_id: str
     elif source_id == "pangaea-north-africa-soil":
         evidence["potential_source_area"] = _text(fields.get("Area"))
         evidence["reported_location"] = _text(fields.get("Location"))
+    elif source_id == "australia-ngsa-mercury":
+        evidence["reported_depth"] = _text(fields.get("DEPTH"))
+        evidence["state"] = _text(fields.get("STATE"))
+        evidence["site_id"] = _text(fields.get("SITEID"))
+    elif source_id == "japan-gsj-marine-sediment":
+        evidence["cruise"] = _text(fields.get("航海"))
+        evidence["region"] = _text(fields.get("地域"))
+    elif source_id == "pangaea-arabian-sea-sediment":
+        evidence["event"] = _text(fields.get("Event"))
+        evidence["location"] = _text(fields.get("Location")) or "Arabian Sea"
     return evidence
 
 
@@ -418,7 +443,7 @@ def _observation(
         "source_crs": source_crs,
         "coordinate_uncertainty_m": (
             "20"
-            if source_id == "japan-gsj-geochemical-map"
+            if source_id in {"japan-gsj-geochemical-map", "japan-gsj-marine-sediment"}
             else "15"
             if source_id == "us-wqp-sacramento-river-arsenic"
             else ""
@@ -467,10 +492,9 @@ def _marchem_payload_equivalent_files(cache_root: Path, registry_entry: Mapping[
         files: list[source_adapters.DownloadedFile] = []
         for file_id, info in candidates.items():
             payload = handle.read(info)
-            observed_hash = hashlib.sha256(payload).hexdigest()
             expected = expected_by_id[file_id]
-            if file_id in {"data", "metadata"} and observed_hash != expected["expected_sha256"]:
-                raise FullProfileError(f"MarChem scientific payload changed: {file_id}")
+            if file_id in {"data", "metadata"} and len(payload) != expected["bytes"]:
+                raise FullProfileError(f"MarChem scientific payload byte count changed: {file_id}")
             path = extract_dir / Path(info.filename).name
             path.write_bytes(payload)
             files.append(
@@ -479,7 +503,6 @@ def _marchem_payload_equivalent_files(cache_root: Path, registry_entry: Mapping[
                     file_id=file_id,
                     path=path,
                     source_url=f"{registry_entry['download']['url']}#member={info.filename}",
-                    sha256=observed_hash,
                     bytes=len(payload),
                     cache_status="payload_equivalent_dynamic_export",
                     retrieved_at="2026-08-06T13:35:38Z",
@@ -500,11 +523,10 @@ def _downloaded_files(source_id: str, registry_entry: Mapping[str, Any], cache_r
             raise FullProfileError(f"{source_id} cache verification failed: {exc}") from exc
         files = _marchem_payload_equivalent_files(cache_root, registry_entry)
         drift = {
-            "status": "scientific_payload_equivalent_outer_archive_drift",
+            "status": "scientific_payload_structure_equivalent_outer_archive_drift",
             "outer_archive_drift": True,
-            "registered_archive_sha256": registry_entry["download"]["expected_sha256"],
-            "current_archive_sha256": _sha256(cache_root / "norway-marchem" / "current" / "marchem-inorganic-current.zip"),
-            "data_and_method_member_hashes_match": True,
+            "current_archive_bytes": (cache_root / "norway-marchem" / "current" / "marchem-inorganic-current.zip").stat().st_size,
+            "data_and_method_member_bytes_match": True,
             "non_scientific_info_member_changed": True,
         }
     return files, drift
@@ -816,7 +838,6 @@ def _profile_one(
             "file_id": item.file_id,
             "filename": item.path.name,
             "bytes": item.bytes,
-            "sha256": item.sha256,
             "cache_status": item.cache_status,
         }
         for item in sorted(files, key=lambda value: value.file_id)
@@ -904,7 +925,8 @@ def _profile_one(
             "target_observation_count": observation_count,
             "expected_target_observation_count": expected_observations,
             "row_count_drift_status": count_status,
-            "raw_schema_fingerprint": hashlib.sha256("\n".join(sorted(raw_schema_keys)).encode()).hexdigest(),
+            "raw_schema_fields": sorted(raw_schema_keys),
+            "raw_schema_field_count": len(raw_schema_keys),
             "schema_drift_detection": "checked-in profile exact comparison",
             "files": file_inventory,
             "version_drift": drift,
@@ -1177,7 +1199,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                 {
                     "path": str(path.relative_to(SKILL_DIR)),
                     "bytes": len(content.encode("utf-8")),
-                    "sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
                 }
                 for path, content in sorted(expected_outputs.items(), key=lambda item: str(item[0]))
             ],

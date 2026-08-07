@@ -26,11 +26,11 @@ CREATE TABLE dataset_files (
   filename TEXT NOT NULL,
   source_url TEXT NOT NULL,
   bytes INTEGER NOT NULL CHECK (bytes >= 0),
-  sha256 TEXT NOT NULL CHECK (length(sha256) = 64),
+  file_identity TEXT NOT NULL,
   PRIMARY KEY (dataset_id, file_id)
 );
 
-CREATE INDEX idx_dataset_files_sha256 ON dataset_files(sha256);
+CREATE INDEX idx_dataset_files_identity ON dataset_files(file_identity);
 
 CREATE TABLE publications (
   publication_id TEXT PRIMARY KEY,
@@ -191,7 +191,7 @@ CREATE TABLE provenance (
   source_sheet TEXT,
   source_row INTEGER,
   source_column TEXT,
-  input_sha256 TEXT NOT NULL,
+  input_file_id TEXT NOT NULL,
   adapter_name TEXT NOT NULL,
   adapter_version TEXT NOT NULL,
   processing_steps_json TEXT NOT NULL
@@ -289,7 +289,7 @@ SELECT
   p.source_locator,
   p.source_file,
   p.source_row,
-  p.input_sha256,
+  p.input_file_id,
   d.dataset_id,
   d.dataset_version,
   d.dataset_doi,
@@ -358,7 +358,7 @@ SELECT
   p.source_sheet,
   p.source_row,
   p.source_column,
-  p.input_sha256,
+  p.input_file_id,
   p.adapter_name,
   p.adapter_version,
   p.acquisition_run_id,

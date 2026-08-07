@@ -4,10 +4,8 @@
 from __future__ import annotations
 
 import argparse
-import binascii
 import copy
 import csv
-import hashlib
 import io
 import json
 import sqlite3
@@ -74,8 +72,13 @@ def csv_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def contains_content_hash_field(value: Any) -> bool:
+    forbidden = {"sha" + "256", "md" + "5", "check" + "sum", "crc" + "32"}
+    if isinstance(value, dict):
+        return any(str(key).casefold() in forbidden or contains_content_hash_field(item) for key, item in value.items())
+    if isinstance(value, list):
+        return any(contains_content_hash_field(item) for item in value)
+    return False
 
 
 def run_command(arguments: list[str], expected_code: int = 0) -> subprocess.CompletedProcess[str]:
@@ -93,9 +96,13 @@ def check_d1(output_dir: Path) -> list[str]:
     manifest_path = output_dir / "source_manifest.json"
     confidence_path = output_dir / "confidence_report.json"
     manifest = json_value(manifest_path)
-    input_hash = sha256_file(DEMO_INPUT)
-    require(manifest.get("manifest_version") == "geochemical-source-manifest-v1", "D1 manifest version is stable", checks)
-    require(manifest.get("input", {}).get("sha256") == input_hash, "D1 manifest binds the acquired input hash", checks)
+    require(manifest.get("manifest_version") == "geochemical-source-manifest-v2", "D1 manifest version is stable", checks)
+    require(
+        manifest.get("input", {}).get("filename") == DEMO_INPUT.name
+        and manifest.get("input", {}).get("bytes") == DEMO_INPUT.stat().st_size,
+        "D1 manifest binds the acquired input identity and byte count",
+        checks,
+    )
     require(manifest.get("input", {}).get("record_count") == 19, "D1 manifest preserves the record count", checks)
     coverage = manifest.get("coverage", {})
     require(coverage.get("source_locator_rate") == 1.0, "D1 demo provenance coverage is complete", checks)
@@ -107,8 +114,27 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     binding = manifest.get("confidence_report", {})
-    require(binding.get("sha256") == sha256_file(confidence_path), "D1 packages the unchanged D2 confidence hash", checks)
+    require(binding.get("bytes") == confidence_path.stat().st_size, "D1 packages the unchanged D2 confidence report by identity and bytes", checks)
     require(binding.get("not_a_probability") is True, "D1 preserves the confidence interpretation boundary", checks)
+    forbidden_code_tokens = (
+        "import hash" + "lib",
+        "hash" + "lib.",
+        ".sha" + "256(",
+        "crc" + "32(",
+        "_md" + "5_file(",
+    )
+    active_scripts = [path for path in SCRIPT_DIR.glob("*.py") if path.name != Path(__file__).name]
+    require(
+        all(not any(token in path.read_text(encoding="utf-8") for token in forbidden_code_tokens) for path in active_scripts),
+        "D1 active scripts contain no content-hash calculation or verification path",
+        checks,
+    )
+    require(
+        not contains_content_hash_field(manifest)
+        and not contains_content_hash_field(json_value(output_dir / "run_summary.json")),
+        "D1 current delivery manifests contain no newly generated content-hash fields",
+        checks,
+    )
 
     registry = source_contracts.load_source_registry()
     require(
@@ -121,8 +147,10 @@ def check_d1(output_dir: Path) -> list[str]:
             "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
             "us-wqp-sacramento-river-arsenic",
+            "australia-ngsa-mercury", "japan-gsj-marine-sediment",
+            "pangaea-arabian-sea-sediment",
         },
-        "D1 registry freezes fifteen executable datasets across the four required media",
+        "D1 registry freezes eighteen executable datasets across the four required media",
         checks,
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
@@ -272,8 +300,10 @@ def check_d1(output_dir: Path) -> list[str]:
             "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
             "us-wqp-sacramento-river-arsenic",
+            "australia-ngsa-mercury", "japan-gsj-marine-sediment",
+            "pangaea-arabian-sea-sediment",
         },
-        "D1 V4 router selects fifteen normalized-analysis datasets across all media",
+        "D1 V4 router selects eighteen normalized-analysis datasets across all media",
         checks,
     )
     require(
@@ -305,8 +335,10 @@ def check_d1(output_dir: Path) -> list[str]:
         == {
             "norway-marchem", "japan-gsj-geochemical-map",
             "foregs-stream-sediment", "foregs-floodplain-sediment",
+            "japan-gsj-marine-sediment", "pangaea-arabian-sea-sediment",
+            "australia-ngsa-mercury",
         },
-        "D1 V3 router selects all four normalized sediment sources for a raw-observation request",
+        "D1 V4 router selects all seven normalized sediment sources for a raw-observation request",
         checks,
     )
     benchmark_route = source_router.route_sources(
@@ -336,12 +368,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 14, "B": 1, "C": 1, "D": len(catalog["sources"]) - 16, "U": 0},
+            "evidence_tiers": {"A": 17, "B": 1, "C": 1, "D": len(catalog["sources"]) - 19, "U": 0},
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 15,
+                "normalized_analysis": 18,
                 "raw_observation": 1,
-                "discovery": len(catalog["sources"]) - 16,
+                "discovery": len(catalog["sources"]) - 19,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -369,7 +401,6 @@ def check_d1(output_dir: Path) -> list[str]:
     compressor = zlib.compressobj(level=9, wbits=-15)
     compressed_fixture = compressor.compress(decoded_fixture) + compressor.flush()
     member_name = b"test.csv"
-    fixture_crc = binascii.crc32(decoded_fixture) & 0xFFFFFFFF
     range_fixture = struct.pack(
         "<IHHHHHIIIHH",
         0x04034B50,
@@ -378,7 +409,7 @@ def check_d1(output_dir: Path) -> list[str]:
         8,
         0,
         0,
-        fixture_crc,
+        0,
         len(compressed_fixture),
         len(decoded_fixture),
         len(member_name),
@@ -388,11 +419,8 @@ def check_d1(output_dir: Path) -> list[str]:
         "name": "test.csv",
         "range_start": 0,
         "range_end": len(range_fixture) - 1,
-        "range_sha256": hashlib.sha256(range_fixture).hexdigest(),
         "compressed_bytes": len(compressed_fixture),
         "uncompressed_bytes": len(decoded_fixture),
-        "crc32": f"{fixture_crc:08x}",
-        "sha256": hashlib.sha256(decoded_fixture).hexdigest(),
     }
     original_fetch = gemstat_acquisition.fetch
     original_sleep = gemstat_acquisition.time.sleep
@@ -441,8 +469,6 @@ def check_d1(output_dir: Path) -> list[str]:
     tpdc_evidence = candidate_evidence["tpdc-china-mountain-soil"]
     require(
         tpdc_evidence["archive"]["bytes"] == 1828683
-        and tpdc_evidence["archive"]["sha256"]
-        == "8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a"
         and len(tpdc_evidence["archive"]["members"]) == 3
         and tpdc_evidence["observed_data"]["physical_rows"] == 1314
         and tpdc_evidence["observed_data"]["target_observations"] == 6570
@@ -560,10 +586,8 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         marchem_verification["verification_version"] == "marchem-candidate-verification-v1"
         and marchem_verification["source_id"] == "norway-marchem"
-        and marchem_verification["archive"]["sha256"]
-        == "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6"
         and len(marchem_verification["archive"]["members"]) == 3,
-        "D1 MarChem candidate evidence pins the observed dynamic archive and member inventory",
+        "D1 MarChem candidate evidence records the observed dynamic archive and member inventory",
         checks,
     )
     require(
@@ -617,10 +641,7 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         marchem_snapshot == json_value(marchem_snapshot_path)
-        and marchem_snapshot["snapshot_id"]
-        == "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e"
-        and marchem_snapshot["request"]["canonical_request_sha256"]
-        == "ae8fd044ad9a43c0fba34d18fdcbf677311f77da1cdb76094c6054c447eb3445"
+        and marchem_snapshot["snapshot_id"] == "norway-marchem:2026-08-05T10:27:11Z:3"
         and marchem_snapshot["counts"]["raw_records"] == 1070
         and marchem_snapshot["counts"]["distinct_samples"] == 880,
         "D1 builds the checked-in MarChem snapshot deterministically from exact request and content evidence",
@@ -630,8 +651,8 @@ def check_d1(output_dir: Path) -> list[str]:
         marchem_snapshot["response"]["http_status"] is None
         and marchem_snapshot["response"]["http_status_evidence"]
         == "missing_from_original_acquisition_manifest"
-        and marchem_snapshot["evidence"]["publisher_checksum_status"] == "missing",
-        "D1 snapshot preserves missing HTTP-status and publisher-checksum evidence instead of inventing it",
+        and marchem_snapshot["evidence"]["identity_basis"].startswith("source_id + request"),
+        "D1 snapshot preserves missing HTTP status and records its non-hash identity basis",
         checks,
     )
     identical_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, copy.deepcopy(marchem_snapshot))
@@ -642,13 +663,13 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     changed_snapshot = copy.deepcopy(marchem_snapshot)
-    changed_snapshot["response"]["sha256"] = "0" * 64
+    changed_snapshot["response"]["bytes"] += 1
     changed_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, changed_snapshot)
     require(
         changed_snapshot_diff["status"] == "changed"
         and changed_snapshot_diff["requires_rescore"] is True
         and changed_snapshot_diff["comparisons"]["response_changed"] is True,
-        "D1 snapshot diff forces rescore when a dynamic response hash changes",
+        "D1 snapshot diff forces rescore when a dynamic response byte count changes",
         checks,
     )
     marchem_reconciliation = json_value(
@@ -661,8 +682,6 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         marchem_reconciliation["status"] == "PASS"
-        and marchem_reconciliation["snapshot_id"] == marchem_snapshot["snapshot_id"]
-        and marchem_reconciliation["snapshot_response_sha256"] == marchem_snapshot["response"]["sha256"]
         and marchem_reconciliation["counts"]["physical_rows"] == 1070
         and marchem_reconciliation["counts"]["distinct_samples"] == 880
         and marchem_reconciliation["counts"]["target_observations"] == 3520
@@ -884,12 +903,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         completeness_profile == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
         and completeness_profile["summary"] == {
-            "executable_source_count": 15,
-            "sources_with_full_audit": 13,
-            "sources_with_target_observation_denominator": 15,
+            "executable_source_count": 18,
+            "sources_with_full_audit": 16,
+            "sources_with_target_observation_denominator": 18,
             "sources_without_full_audit": 2,
-            "demo_record_count": 792,
-            "uniform_full_field_profiles": 15,
+            "demo_record_count": 944,
+            "uniform_full_field_profiles": 18,
         }
         and completeness_profile["sources"]["georoc-archaean"]["full_population"]["audit_status"]
         == "uniform_full_profile"
@@ -897,7 +916,7 @@ def check_d1(output_dir: Path) -> list[str]:
         == "not_measured"
         and completeness_profile["sources"]["gemstat-open-archive"]["full_population"]
         ["target_observation_count"] == 3739180,
-        "D1 V4 completeness profile separates uniform full-cache profiles, candidate audits and 792 demo rows",
+        "D1 V4 completeness profile separates uniform full-cache profiles, candidate audits and 944 demo rows",
         checks,
     )
     full_profile_root = SKILL_DIR / "assets" / "v4-full-profiles"
@@ -910,14 +929,14 @@ def check_d1(output_dir: Path) -> list[str]:
     }
     marchem_health = json_value(full_profile_root / "norway-marchem" / "automation_health.json")
     require(
-        full_manifest["source_count"] == full_manifest["registered_source_count"] == 15
-        and full_manifest["observation_count"] == 3988430
-        and full_manifest["distinct_sample_count"] == 758237
-        and full_manifest["valid_coordinate_sample_count"] == 753318
-        and full_manifest["comparable_observation_count"] == 363662
-        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 6651
-        and sum(int(row["observation_count"]) for row in cube_rows) == 3988430
-        and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 363662
+        full_manifest["source_count"] == full_manifest["registered_source_count"] == 18
+        and full_manifest["observation_count"] == 4025322
+        and full_manifest["distinct_sample_count"] == 765564
+        and full_manifest["valid_coordinate_sample_count"] == 760645
+        and full_manifest["comparable_observation_count"] == 366220
+        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 6930
+        and sum(int(row["observation_count"]) for row in cube_rows) == 4025322
+        and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 366220
         and all(
             profile["profile_scope"] == "full_population"
             and profile["observation_count"] > 0
@@ -928,18 +947,17 @@ def check_d1(output_dir: Path) -> list[str]:
             for profile in source_field_profiles.values()
         )
         and marchem_health["version_drift"]["outer_archive_drift"] is True
-        and marchem_health["version_drift"]["data_and_method_member_hashes_match"] is True
+        and marchem_health["version_drift"]["data_and_method_member_bytes_match"] is True
         and set(coverage_balance["media"]) == {"rock", "soil", "sediment", "water"}
         and coverage_balance["media"]["water"]["observation_count"] == 3783544
         and coverage_balance["media"]["water"]["independent_lineage_count"] == 4
-        and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 4
+        and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 7
         and all(
             (SKILL_DIR / item["path"]).is_file()
             and (SKILL_DIR / item["path"]).stat().st_size == item["bytes"]
-            and sha256_file(SKILL_DIR / item["path"]) == item["sha256"]
             for item in full_manifest["artifacts"]
         ),
-        "D1 V4 full profiles prove fifteen full-cache denominators and all six coverage-cube metrics",
+        "D1 V4 full profiles prove eighteen full-cache denominators and all six coverage-cube metrics",
         checks,
     )
     require(
@@ -966,11 +984,12 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"As": 5, "Cu": 6, "Ni": 6, "Zn": 6}
         and matrix["cells"]["sediment"]["selected_sources"]
         == [
-            "foregs-floodplain-sediment", "foregs-stream-sediment",
-            "japan-gsj-geochemical-map", "norway-marchem",
+            "australia-ngsa-mercury", "foregs-floodplain-sediment", "foregs-stream-sediment",
+            "japan-gsj-geochemical-map", "japan-gsj-marine-sediment", "norway-marchem",
+            "pangaea-arabian-sea-sediment",
         ]
         and matrix["cells"]["sediment"]["analyte_source_counts"]
-        == {"As": 4, "Cu": 4, "Ni": 4, "Zn": 4}
+        == {"As": 6, "Cu": 6, "Ni": 6, "Zn": 6}
         and matrix["cells"]["water"]["analyte_coverage"] == "complete_for_registered_targets"
         and matrix["cells"]["water"]["missing_analytes"] == []
         and matrix["cells"]["water"]["source_independence"]
@@ -1061,7 +1080,7 @@ def check_d1(output_dir: Path) -> list[str]:
             first_build["status"] == "PASS"
             and first_build["counts"]["observations"] == 3
             and first_build["counts"]["dataset_files"] == 1
-            and first_build["sha256"] == second_build["sha256"],
+            and first_index.read_bytes() == second_index.read_bytes(),
             "D1 builds a deterministic integrity-checked SQLite index from the archive bundle",
             checks,
         )
@@ -1161,7 +1180,7 @@ def check_d1(output_dir: Path) -> list[str]:
             json.dumps(
                 {
                     "output_filename": cached_data.name,
-                    "sha256": sha256_file(cached_data),
+                    "bytes": cached_data.stat().st_size,
                     "dataset_version": "1.0.0",
                 }
             ),
@@ -1264,13 +1283,13 @@ def check_d1(output_dir: Path) -> list[str]:
             f"D1 {source_id} fixture declares the scientific claim boundary",
             checks,
         )
-        expected_hashes = {item["path"]: item["sha256"] for item in generation_manifest["outputs"]}
+        expected_sizes = {item["path"]: item["bytes"] for item in generation_manifest["outputs"]}
         require(
-            expected_hashes == {
-                "demo_input.csv": sha256_file(demo_input),
-                "sources.jsonl": sha256_file(sources_path),
+            expected_sizes == {
+                "demo_input.csv": demo_input.stat().st_size,
+                "sources.jsonl": sources_path.stat().st_size,
             },
-            f"D1 {source_id} fixture manifest binds deterministic output hashes",
+            f"D1 {source_id} fixture manifest binds deterministic output identities and byte counts",
             checks,
         )
         require(
@@ -1387,7 +1406,7 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"<180 µm fine stream sediment"}
         and {row["coordinate_uncertainty_m"] for row in gsj_demo_rows} == {"20"}
         and all(item["original_coordinate_crs"] == "EPSG:4612 (JGD2000)" for item in gsj_evidence)
-        and all(item["sample_file_sha256"] == "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c" for item in gsj_evidence),
+        and all(item["sample_file_bytes"] == 334302 for item in gsj_evidence),
         "D1 GSJ fixture retains fine-sediment, JGD2000 and two-file evidence semantics",
         checks,
     )
@@ -1418,8 +1437,8 @@ def check_d1(output_dir: Path) -> list[str]:
 
     migration_check = migrate_v4_source_demos.migrate(SOURCE_DEMOS, check=True)
     require(
-        migration_check["status"] == "PASS" and migration_check["source_count"] == 15,
-        "D1 V4 source-demo migration is byte-stable across all fifteen sources",
+        migration_check["status"] == "PASS" and migration_check["source_count"] == 18,
+        "D1 V4 source-demo migration is byte-stable across all eighteen sources",
         checks,
     )
 
@@ -1430,9 +1449,9 @@ def check_d1(output_dir: Path) -> list[str]:
         for line in (COMBINED_DEMO / "sources.jsonl").read_text(encoding="utf-8").splitlines()
     ]
     require(
-        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 792
+        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 944
         and combined_manifest["record_counts"]["by_medium"]
-        == {"rock": 48, "sediment": 256, "soil": 288, "water": 200}
+        == {"rock": 48, "sediment": 408, "soil": 288, "water": 200}
         and combined_manifest["record_counts"]["by_source"]
         == {
             "gemstat-open-archive": 56,
@@ -1450,13 +1469,16 @@ def check_d1(output_dir: Path) -> list[str]:
             "foregs-floodplain-sediment": 48,
             "afsis-phase-i-wet-chemistry": 48,
             "us-wqp-sacramento-river-arsenic": 48,
+            "australia-ngsa-mercury": 48,
+            "japan-gsj-marine-sediment": 56,
+            "pangaea-arabian-sea-sediment": 48,
         },
-        "D1 combined fixture binds all fifteen datasets to one 792-observation four-media request",
+        "D1 combined fixture binds all eighteen datasets to one 944-observation four-media request",
         checks,
     )
     require(
         combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
-        and combined_manifest["comparison_isolation"]["partition_count"] == 111
+        and combined_manifest["comparison_isolation"]["partition_count"] == 126
         and combined_manifest["comparison_isolation"]["water_partition_count"] == 36,
         "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
         checks,
@@ -1469,7 +1491,7 @@ def check_d1(output_dir: Path) -> list[str]:
             for row in combined_rows
         )
         and all(not row["geologic_unit"] for row in combined_rows)
-        and sum(bool(row["geographic_context_raw"]) for row in combined_rows) == 192,
+        and sum(bool(row["geographic_context_raw"]) for row in combined_rows) == 344,
         "D1 V4 classifies every demo sample and removes geography from legacy geologic_unit",
         checks,
     )
@@ -1479,8 +1501,8 @@ def check_d1(output_dir: Path) -> list[str]:
             or (not row["analytical_method"] and not row["method_scope"] and row["method_missing_reason"])
             for row in combined_rows
         )
-        and sum(bool(row["method_scope"]) for row in combined_rows) == 648
-        and sum(bool(row["method_missing_reason"]) for row in combined_rows) == 144,
+        and sum(bool(row["method_scope"]) for row in combined_rows) == 744
+        and sum(bool(row["method_missing_reason"]) for row in combined_rows) == 200,
         "D1 V4 gives every present method a scope and every absent method a reason",
         checks,
     )
@@ -1489,7 +1511,7 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         len(water_rows) == 200
         and all(row["water_body_type"] and row["water_fraction"] for row in water_rows)
-        and len(sediment_rows) == 256
+        and len(sediment_rows) == 408
         and all(row["sediment_environment"] for row in sediment_rows)
         and {row["water_fraction"] for row in water_rows} == {"dissolved", "extractable", "suspended", "total"},
         "D1 V4 carries water type/fraction and sediment environment into the exchange rows",
@@ -1520,12 +1542,12 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         output_validator.validate_dir(combined_output)["status"] == "valid"
         and combined_summary["status"] == "success"
-        and combined_summary["metrics"]["record_count"] == 792
-        and combined_summary["metrics"]["standardized_record_count"] == 784
-        and combined_summary["metrics"]["valid_coordinate_count"] == 792
+        and combined_summary["metrics"]["record_count"] == 944
+        and combined_summary["metrics"]["standardized_record_count"] == 936
+        and combined_summary["metrics"]["valid_coordinate_count"] == 944
         and "UNKNOWN_SOURCE_TIER" not in combined_qc["flag_counts"]
         and combined_anomaly["group_by"] == list(standardizer.DEFAULT_GROUP_BY)
-        and len(combined_anomaly["groups"]) == 111
+        and len(combined_anomaly["groups"]) == 126
         and all(len(sources) == 1 for sources in grouped_sources.values()),
         "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
         checks,
@@ -1537,7 +1559,7 @@ def check_d1(output_dir: Path) -> list[str]:
             COMBINED_DEMO / "request.json",
             SOURCE_DEMOS,
             rebuilt_dir,
-            "2026-08-06T10:05:00Z",
+            "2026-08-06T16:30:00Z",
             False,
         )
         require(
@@ -1545,7 +1567,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 (rebuilt_dir / filename).read_bytes() == (COMBINED_DEMO / filename).read_bytes()
                 for filename in ("demo_input.csv", "sources.jsonl", "run_manifest.json")
             ),
-            "D1 combined fixture rebuilds byte-for-byte from the fifteen checked-in source demos",
+            "D1 combined fixture rebuilds byte-for-byte from the eighteen checked-in source demos",
             checks,
         )
         rebuilt_output = temporary_root / "output"
@@ -1576,7 +1598,7 @@ def check_d1(output_dir: Path) -> list[str]:
         require(standalone.read_bytes() == manifest_path.read_bytes(), "D1 standalone packaging matches D3 integration", checks)
 
         tampered_report = json_value(confidence_path)
-        tampered_report["run_metadata"]["input_sha256"] = "0" * 64
+        tampered_report["run_metadata"]["input_identity"]["bytes"] += 1
         tampered_path = Path(evidence_temp) / "tampered-confidence.json"
         tampered_path.write_text(json.dumps(tampered_report), encoding="utf-8")
         try:
@@ -1590,7 +1612,7 @@ def check_d1(output_dir: Path) -> list[str]:
             pass
         else:
             raise ContractError("D1 must reject a confidence report linked to a different input")
-        checks.append("D1 rejects a mismatched D2 confidence input hash")
+        checks.append("D1 rejects a mismatched D2 confidence input identity")
 
         unsafe_output = Path(evidence_temp) / "unsafe.csv"
         unsafe_manifest = Path(evidence_temp) / "unsafe-download.json"
@@ -1621,13 +1643,12 @@ def check_d1(output_dir: Path) -> list[str]:
         cached_file = Path(evidence_temp) / "cached.csv"
         cached_file.write_text("SiteID\tLatitude\tLongitude\nA\t1\t2\n", encoding="utf-8")
         cached_url = "https://example.org/public/cached.csv"
-        cached_hash = sha256_file(cached_file)
         cached_manifest = Path(evidence_temp) / "cached-download.json"
         cached_manifest.write_text(
             json.dumps(
                 {
                     "source_url": cached_url,
-                    "sha256": cached_hash,
+                    "bytes": cached_file.stat().st_size,
                     "dataset_version": "v1",
                 }
             ),
@@ -1637,10 +1658,10 @@ def check_d1(output_dir: Path) -> list[str]:
             cached_file,
             cached_manifest,
             cached_url,
-            cached_hash,
+            None,
             "v1",
         )
-        require(cache_result["status"] == "cache_hit", "D1 reuses only a hash-verified versioned cache", checks)
+        require(cache_result["status"] == "cache_hit", "D1 reuses only an identity-and-byte-verified versioned cache", checks)
 
         offline_manifest = Path(evidence_temp) / "offline-miss.json"
         run_command(
@@ -1665,16 +1686,13 @@ def check_d1(output_dir: Path) -> list[str]:
             checks,
         )
 
-        for expected_hash, version, expected_message in (
-            ("0" * 64, "v1", "SHA-256 mismatch"),
-            (cached_hash, "v2", "dataset version"),
-        ):
+        for version, expected_message in (("v2", "dataset version"),):
             try:
                 downloader.existing_verified_cache(
                     cached_file,
                     cached_manifest,
                     cached_url,
-                    expected_hash,
+                    None,
                     version,
                 )
             except downloader.DownloadError as exc:
@@ -1876,7 +1894,6 @@ def check_d1(output_dir: Path) -> list[str]:
                         file_id="top-0-5cm",
                         path=usgs_native,
                         source_url="https://example.org/usgs.txt",
-                        sha256=sha256_file(usgs_native),
                         bytes=usgs_native.stat().st_size,
                         cache_status="fixture",
                         retrieved_at=None,
@@ -1909,7 +1926,6 @@ def check_d1(output_dir: Path) -> list[str]:
                         file_id="OHZY0O",
                         path=georoc_native,
                         source_url="https://example.org/georoc.csv",
-                        sha256=sha256_file(georoc_native),
                         bytes=georoc_native.stat().st_size,
                         cache_status="fixture",
                         retrieved_at=None,

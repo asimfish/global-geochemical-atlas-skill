@@ -121,10 +121,10 @@
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 4,
-        "Cu": 4,
-        "Ni": 4,
-        "Zn": 4
+        "As": 6,
+        "Cu": 6,
+        "Ni": 6,
+        "Zn": 6
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -181,15 +181,19 @@
         "Zn"
       ],
       "selected_sources": [
+        "australia-ngsa-mercury",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
-        "norway-marchem"
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
         "argentina-segemar-geochemistry": "D",
         "australia-ngsa": "D",
+        "australia-ngsa-mercury": "A",
         "australia-ozchem": "D",
         "bgs-gbase": "D",
         "brazil-sgb-geochemistry": "D",
@@ -209,10 +213,12 @@
         "ireland-tellus": "D",
         "jamstec-darwin": "D",
         "japan-gsj-geochemical-map": "A",
+        "japan-gsj-marine-sediment": "A",
         "mexico-sgm-geochemical-cartography": "D",
         "noaa-ncei-marine-geology": "D",
         "norway-marchem": "A",
         "nz-petlab": "D",
+        "pangaea-arabian-sea-sediment": "A",
         "pangaea-repository": "D",
         "south-africa-cgs-geochemistry": "D",
         "sweden-sgu-geochemical-atlas": "D",
@@ -224,6 +230,7 @@
         "alaska-dggs-webgeochem": "regional_partial",
         "argentina-segemar-geochemistry": "national_partial",
         "australia-ngsa": "national_partial",
+        "australia-ngsa-mercury": "national_partial",
         "australia-ozchem": "national_partial",
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
@@ -243,10 +250,12 @@
         "ireland-tellus": "national_partial",
         "jamstec-darwin": "national_plus_selected_global",
         "japan-gsj-geochemical-map": "national_partial",
+        "japan-gsj-marine-sediment": "national_coastal_partial",
         "mexico-sgm-geochemical-cartography": "national_partial",
         "noaa-ncei-marine-geology": "global_collection",
         "norway-marchem": "national_partial",
         "nz-petlab": "national_plus_selected_global",
+        "pangaea-arabian-sea-sediment": "regional_discrete_samples",
         "pangaea-repository": "global_collection",
         "south-africa-cgs-geochemistry": "national_partial",
         "sweden-sgu-geochemical-atlas": "national_partial",
@@ -254,6 +263,9 @@
         "usgs-ngdb": "national_partial"
       },
       "source_target_analytes": {
+        "australia-ngsa-mercury": [
+          "Hg"
+        ],
         "foregs-floodplain-sediment": [
           "As",
           "Cr",
@@ -281,10 +293,27 @@
           "Pb",
           "Zn"
         ],
+        "japan-gsj-marine-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "norway-marchem": [
           "As",
           "Cu",
           "Ni",
+          "Zn"
+        ],
+        "pangaea-arabian-sea-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
           "Zn"
         ]
       },
@@ -292,6 +321,7 @@
         "alaska-dggs-webgeochem": "discovery",
         "argentina-segemar-geochemistry": "discovery",
         "australia-ngsa": "discovery",
+        "australia-ngsa-mercury": "normalized_analysis",
         "australia-ozchem": "discovery",
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
@@ -311,10 +341,12 @@
         "ireland-tellus": "discovery",
         "jamstec-darwin": "discovery",
         "japan-gsj-geochemical-map": "normalized_analysis",
+        "japan-gsj-marine-sediment": "normalized_analysis",
         "mexico-sgm-geochemical-cartography": "discovery",
         "noaa-ncei-marine-geology": "discovery",
         "norway-marchem": "normalized_analysis",
         "nz-petlab": "discovery",
+        "pangaea-arabian-sea-sediment": "normalized_analysis",
         "pangaea-repository": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
         "sweden-sgu-geochemical-atlas": "discovery",

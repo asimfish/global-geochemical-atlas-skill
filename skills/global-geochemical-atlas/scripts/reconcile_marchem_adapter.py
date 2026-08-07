@@ -145,7 +145,7 @@ def reconcile(archive: Path, snapshot_manifest: Path = DEFAULT_SNAPSHOT_MANIFEST
         "status": status,
         "source_id": adapter.source_id,
         "snapshot_id": snapshot["snapshot_id"],
-        "snapshot_response_sha256": snapshot["response"]["sha256"],
+        "snapshot_response_bytes": snapshot["response"]["bytes"],
         "adapter": adapter.candidate.adapter,
         "adapter_dataset_version": adapter.candidate.version,
         "counts": actual,

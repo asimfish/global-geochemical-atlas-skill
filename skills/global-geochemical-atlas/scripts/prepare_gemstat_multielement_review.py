@@ -136,7 +136,7 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
             "record_id": output_record_id,
         }
         checks = {
-            "registered_member_hash_matches": source_file.sha256 == demos.sha256_file(source_file.path),
+            "registered_member_bytes_match": source_file.bytes == source_file.path.stat().st_size,
             "element_mapping_preserved": source_adapters.GemstatOpenArchiveAdapter.PARAMETER_MAP[
                 fields["Parameter Code"]
             ][0] == element,
@@ -175,12 +175,11 @@ def prepare(cache_dir: Path) -> dict[str, Any]:
             }
         )
     pass_count = sum(record["automated_status"] == "PASS" for record in records)
-    snapshot_hash = next(item.sha256 for item in downloaded if item.file_id == "parameters")
     return {
         "review_version": REVIEW_VERSION,
         "source_id": candidate.source_id,
         "dataset_version": candidate.version,
-        "snapshot_id": f"gemstat-open-archive:v3-seven-elements:{snapshot_hash[:12]}",
+        "snapshot_id": f"gemstat-open-archive:v3-seven-elements:{candidate.version}",
         "status": "prepared",
         "required_record_count": 30,
         "prepared_record_count": len(records),

@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import math
 import os
@@ -22,14 +21,6 @@ AUDIT_VERSION = "gemstat-v3-arsenic-audit-v1"
 
 class AuditError(RuntimeError):
     """Raised when the selected official members no longer reconcile exactly."""
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def atomic_json(path: Path, value: Any) -> None:
@@ -145,7 +136,6 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
             "file_id": item.file_id,
             "filename": item.path.name,
             "bytes": item.bytes,
-            "sha256": item.sha256,
             "range_start": next(
                 entry["range_start"] for entry in registry["download"]["selected_members"]
                 if entry["file_id"] == item.file_id
@@ -154,14 +144,10 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
                 entry["range_end"] for entry in registry["download"]["selected_members"]
                 if entry["file_id"] == item.file_id
             ),
-            "range_sha256": next(
-                entry["range_sha256"] for entry in registry["download"]["selected_members"]
-                if entry["file_id"] == item.file_id
-            ),
         }
         for item in downloaded
     ]
-    snapshot_id = f"gemstat-open-archive:v3:{downloaded[0].sha256[:12]}"
+    snapshot_id = f"gemstat-open-archive:v3:{registry['download']['observed_at']}"
     coverage = {
         "country_count": len(countries),
         "water_types": dict(sorted(water_types.items())),
@@ -182,8 +168,8 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "The publisher page and metadata files differ by one station and one parameter; both claims are recorded.",
     ]
     claim_boundary = (
-        "This snapshot validates five byte-range-selected members from the official v3 ZIP. The publisher's full-ZIP MD5 "
-        "is recorded but the complete archive was not downloaded locally. The subset supports traceable freshwater arsenic "
+        "This snapshot validates five byte-range-selected members from the official v3 ZIP by DOI, version, member identity, ranges and sizes. "
+        "The complete archive was not downloaded locally. The subset supports traceable freshwater arsenic "
         "analysis only and does not prove global spatial completeness or cross-method comparability."
     )
     snapshot = {
@@ -199,7 +185,6 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "publisher_archive_claim": {
             "filename": registry["download"]["archive_filename"],
             "bytes": registry["download"]["archive_bytes"],
-            "checksum": registry["download"]["publisher_checksum"],
             "locally_full_archive_verified": False,
         },
         "selected_members": selected_members,
