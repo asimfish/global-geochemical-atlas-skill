@@ -1,0 +1,102 @@
+{
+  "verification_version": "v4-south-america-source-audit-v1-no-content-hash",
+  "source_id": "brazil-sgb-florianopolis-stream-sediment",
+  "status": "verified_official_numeric_dataset",
+  "claim_boundary": "This candidate binds one regional SGB stream-sediment workbook to the official RIGeo item, bitstream, workbook member, row schema, analytical methods and exact sample-ID coordinate join. It does not represent national Brazil coverage or continuous South America coverage.",
+  "acquisition": {
+    "mode": "pinned-official-rigeo-bitstream-plus-official-arcgis-record-join",
+    "observed_at": "2026-08-07T16:55:00Z",
+    "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+    "item_api": "https://rigeo.sgb.gov.br/server/api/core/items/5adc5a2e-78ca-4da4-990c-c932658481a7",
+    "bitstream_url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content",
+    "coordinate_layer": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2",
+    "coordinate_join_key": "NUM_CAMPO + NUM_LAB"
+  },
+  "archive": {
+    "repository_item_id": "5adc5a2e-78ca-4da4-990c-c932658481a7",
+    "bitstream_id": "4ac11c55-2d10-4aac-9dce-5266b442c500",
+    "name": "geoquimica_florianopolis_1985.zip",
+    "bytes": 841480,
+    "selected_member": {
+      "name": "Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx",
+      "bytes": 193591
+    },
+    "member_inventory": [
+      {"name":"Florianopolis.cpg","bytes":5},
+      {"name":"Florianopolis.dbf","bytes":15051674},
+      {"name":"Florianopolis.prj","bytes":151},
+      {"name":"Florianopolis.sbn","bytes":13916},
+      {"name":"Florianopolis.sbx","bytes":1188},
+      {"name":"Florianopolis.shp","bytes":37508},
+      {"name":"Florianopolis.shx","bytes":10788},
+      {"name":"Florianopolis_Geoquimica_Agua.xlsx","bytes":29218},
+      {"name":"Florianopolis_Geoquimica_Concentrado_de_Bateia.xlsx","bytes":9446},
+      {"name":"Florianopolis_Geoquimica_Rocha.xlsx","bytes":438881},
+      {"name":"Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx","bytes":193591},
+      {"name":"Florianopolis_Geoquimica_Solo.xlsx","bytes":15455},
+      {"name":"Florianopolis_Mineralometria.xlsx","bytes":29342},
+      {"name":"LEIA_ME_Florianópolis.pdf","bytes":107256}
+    ]
+  },
+  "observed_metadata": {
+    "dataset_pid": "https://rigeo.sgb.gov.br/handle/doc/23413",
+    "dataset_doi": null,
+    "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55",
+    "release_year": 2022,
+    "publisher": "Servico Geologico do Brasil - CPRM",
+    "citation": "SERVICO GEOLOGICO DO BRASIL - CPRM. Resultados Analiticos de Amostras Geoquimicas e Produtos Associados (planilhas de analises geoquimicas). Brasil: SGB-CPRM, 2022.",
+    "rights": {
+      "repository_item_dc_rights": "open",
+      "research_use_status": "permitted_research",
+      "license_identifier": "LicenseRef-SGB-RIGEO-open-item-metadata",
+      "license_scope": "repository item metadata only; no explicit dataset reuse license located",
+      "redistribution_status": "not_evaluated_for_project_output"
+    },
+    "medium": "stream sediment",
+    "original_coordinate_crs": "EPSG:4674 (SIRGAS 2000)",
+    "requested_coordinate_crs": "EPSG:4326",
+    "required_fields": [
+      "projeto_amostragem","projeto_publicacao","centro_custo","classe","num_campo","num_lab",
+      "data_visita","abertura","leitura","job","As_ppm","Cr_ppm","Cu_ppm","Ni_ppm",
+      "Pb_ppm","Zn_ppm","observacao"
+    ]
+  },
+  "observed_data": {
+    "counts": {
+      "workbook_rows": 1054,
+      "target_analysis_rows": 527,
+      "unique_target_samples": 520,
+      "unique_target_sample_lab_pairs": 521,
+      "target_observations": 3132,
+      "coordinate_matches": 521,
+      "target_value_counts": {"As":521,"Cr":521,"Cu":527,"Ni":521,"Pb":521,"Zn":521}
+    },
+    "methods": {
+      "Espectrografia Ótica de Emissão": 521,
+      "Absorção Atômica": 6
+    },
+    "method_scope": "record",
+    "method_assignment_basis": "source workbook leitura field",
+    "preparation_field": "abertura",
+    "qualifier_semantics": {
+      "ND": "not_detected with unknown numeric detection limit",
+      "less_than_value": "below_detection_limit with reported threshold",
+      "numeric": "source-reported numeric value"
+    }
+  },
+  "automated_audit": {
+    "status": "automated_audit_complete",
+    "reviewer_type": "codex",
+    "prepared_record_count": 30,
+    "audited_record_count": 30,
+    "completed_record_count": 30,
+    "audit_file": "../south-america/brazil-sgb-florianopolis-stream-sediment/automated_audit.json"
+  },
+  "failure_boundaries": [
+    "Fail if the RIGeo item, bitstream ID, byte count, member identity, workbook schema or reconciliation counts drift without a reviewed version update.",
+    "Fail if NUM_CAMPO + NUM_LAB cannot uniquely join an analysis sample to the official sediment layer; NUM_CAMPO alone is not unique and must not be used to force a coordinate.",
+    "Do not convert ND to zero or invent its detection limit.",
+    "Do not merge the optical-emission and atomic-absorption rows for the same sample.",
+    "Do not represent the regional Florianopolis product as national Brazil or South America coverage."
+  ]
+}

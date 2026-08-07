@@ -1,0 +1,1707 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "notes": "The sample contains ND and less-than values but no negative values. ND is retained without inventing a numeric detection limit.",
+      "outcome": "cases_found",
+      "record_count": 14,
+      "record_ids": [
+        "sgb-review-01",
+        "sgb-review-04",
+        "sgb-review-06",
+        "sgb-review-07",
+        "sgb-review-12",
+        "sgb-review-13",
+        "sgb-review-14",
+        "sgb-review-18",
+        "sgb-review-19",
+        "sgb-review-24",
+        "sgb-review-26",
+        "sgb-review-27",
+        "sgb-review-28",
+        "sgb-review-30"
+      ]
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "notes": "Sample 1046-HM-S-618 has distinct atomic-absorption and optical-emission analysis rows. They remain separate records.",
+      "outcome": "cases_found",
+      "record_count": 6,
+      "record_ids": [
+        "sgb-review-25",
+        "sgb-review-26",
+        "sgb-review-27",
+        "sgb-review-28",
+        "sgb-review-29",
+        "sgb-review-30"
+      ]
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "sgb-review-11",
+        "sgb-review-15",
+        "sgb-review-20"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "notes": "The duplicated sample has multiple explicitly reported methods; no method is guessed or selected as a replacement for the other.",
+      "outcome": "cases_found",
+      "record_count": 6,
+      "record_ids": [
+        "sgb-review-25",
+        "sgb-review-26",
+        "sgb-review-27",
+        "sgb-review-28",
+        "sgb-review-29",
+        "sgb-review-30"
+      ]
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 16,
+      "record_ids": [
+        "sgb-review-02",
+        "sgb-review-03",
+        "sgb-review-05",
+        "sgb-review-08",
+        "sgb-review-09",
+        "sgb-review-10",
+        "sgb-review-11",
+        "sgb-review-15",
+        "sgb-review-16",
+        "sgb-review-17",
+        "sgb-review-20",
+        "sgb-review-21",
+        "sgb-review-22",
+        "sgb-review-23",
+        "sgb-review-25",
+        "sgb-review-29"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_at": "2026-08-07T16:55:00Z",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T16:55:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "auditor_id": "codex-d1-evidence-audit",
+  "automated_pass_count": 30,
+  "claim_boundary": "Thirty source observations were checked against the pinned SGB workbook rows and exact NUM_CAMPO joins to the official ArcGIS sample layer. This confirms traceability and parsing semantics, not national coverage, method comparability, or measurement truth.",
+  "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 9
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-01",
+      "sample_id": "1046-HM-S-020",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997",
+      "source_row": 9
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 15.0,
+          "qualifier": "reported",
+          "raw_value": "15",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 15.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "15",
+        "source_row": 9
+      },
+      "raw_value": "15",
+      "review_id": "sgb-review-02",
+      "sample_id": "1046-HM-S-020",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997",
+      "source_row": 9
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 10.0,
+          "qualifier": "reported",
+          "raw_value": "10",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 10.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "10",
+        "source_row": 9
+      },
+      "raw_value": "10",
+      "review_id": "sgb-review-03",
+      "sample_id": "1046-HM-S-020",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997",
+      "source_row": 9
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997"
+        ],
+        "findings": [
+          "censored_or_negative_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "detection_limit": 5.0,
+      "findings": [
+        "censored_or_negative_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "detection_limit": 5.0,
+          "parsed_value": null,
+          "qualifier": "below_detection_limit",
+          "raw_value": "< 5",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "below_detection_limit",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "< 5",
+        "source_row": 9
+      },
+      "raw_value": "< 5",
+      "review_id": "sgb-review-04",
+      "sample_id": "1046-HM-S-020",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997",
+      "source_row": 9
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 50.0,
+          "qualifier": "reported",
+          "raw_value": "50",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 50.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "50",
+        "source_row": 9
+      },
+      "raw_value": "50",
+      "review_id": "sgb-review-05",
+      "sample_id": "1046-HM-S-020",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997",
+      "source_row": 9
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 9
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-06",
+      "sample_id": "1046-HM-S-020",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=9;SGB-ArcGIS-layer-2#OBJECTID=86997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-020%7CJAY017%7C9%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D9%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D86997",
+      "source_row": 9
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 175
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-07",
+      "sample_id": "1046-HM-S-1120",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932",
+      "source_row": 175
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 70.0,
+          "qualifier": "reported",
+          "raw_value": "70",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 70.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "70",
+        "source_row": 175
+      },
+      "raw_value": "70",
+      "review_id": "sgb-review-08",
+      "sample_id": "1046-HM-S-1120",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932",
+      "source_row": 175
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 20.0,
+          "qualifier": "reported",
+          "raw_value": "20",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 20.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "20",
+        "source_row": 175
+      },
+      "raw_value": "20",
+      "review_id": "sgb-review-09",
+      "sample_id": "1046-HM-S-1120",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932",
+      "source_row": 175
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "parsed_value": 50.0,
+          "qualifier": "reported",
+          "raw_value": "50",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 50.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "50",
+        "source_row": 175
+      },
+      "raw_value": "50",
+      "review_id": "sgb-review-10",
+      "sample_id": "1046-HM-S-1120",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932",
+      "source_row": 175
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value",
+        "extreme_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 300.0,
+          "qualifier": "reported",
+          "raw_value": "300",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 300.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "300",
+        "source_row": 175
+      },
+      "raw_value": "300",
+      "review_id": "sgb-review-11",
+      "sample_id": "1046-HM-S-1120",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932",
+      "source_row": 175
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 175
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-12",
+      "sample_id": "1046-HM-S-1120",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;SGB-ArcGIS-layer-2#OBJECTID=87932",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1120%7CJBG122%7C175%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D175%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87932",
+      "source_row": 175
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 189
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-13",
+      "sample_id": "1046-HM-S-1138",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939",
+      "source_row": 189
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "ND",
+        "source_row": 189
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-14",
+      "sample_id": "1046-HM-S-1138",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939",
+      "source_row": 189
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value",
+        "extreme_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 500.0,
+          "qualifier": "reported",
+          "raw_value": "500",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 500.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "500",
+        "source_row": 189
+      },
+      "raw_value": "500",
+      "review_id": "sgb-review-15",
+      "sample_id": "1046-HM-S-1138",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939",
+      "source_row": 189
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "parsed_value": 5.0,
+          "qualifier": "reported",
+          "raw_value": "5",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 5.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "5",
+        "source_row": 189
+      },
+      "raw_value": "5",
+      "review_id": "sgb-review-16",
+      "sample_id": "1046-HM-S-1138",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939",
+      "source_row": 189
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 150.0,
+          "qualifier": "reported",
+          "raw_value": "150",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 150.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "150",
+        "source_row": 189
+      },
+      "raw_value": "150",
+      "review_id": "sgb-review-17",
+      "sample_id": "1046-HM-S-1138",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939",
+      "source_row": 189
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 189
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-18",
+      "sample_id": "1046-HM-S-1138",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;SGB-ArcGIS-layer-2#OBJECTID=87939",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-1138%7CJBG129%7C189%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D189%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87939",
+      "source_row": 189
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 373
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-19",
+      "sample_id": "1046-HM-S-306",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245",
+      "source_row": 373
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value",
+        "extreme_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 500.0,
+          "qualifier": "reported",
+          "raw_value": "500",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 500.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "500",
+        "source_row": 373
+      },
+      "raw_value": "500",
+      "review_id": "sgb-review-20",
+      "sample_id": "1046-HM-S-306",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245",
+      "source_row": 373
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 30.0,
+          "qualifier": "reported",
+          "raw_value": "30",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 30.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "30",
+        "source_row": 373
+      },
+      "raw_value": "30",
+      "review_id": "sgb-review-21",
+      "sample_id": "1046-HM-S-306",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245",
+      "source_row": 373
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "parsed_value": 50.0,
+          "qualifier": "reported",
+          "raw_value": "50",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 50.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "50",
+        "source_row": 373
+      },
+      "raw_value": "50",
+      "review_id": "sgb-review-22",
+      "sample_id": "1046-HM-S-306",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245",
+      "source_row": 373
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 30.0,
+          "qualifier": "reported",
+          "raw_value": "30",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 30.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "30",
+        "source_row": 373
+      },
+      "raw_value": "30",
+      "review_id": "sgb-review-23",
+      "sample_id": "1046-HM-S-306",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245",
+      "source_row": 373
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 373
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-24",
+      "sample_id": "1046-HM-S-306",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;SGB-ArcGIS-layer-2#OBJECTID=87245",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-306%7CJAZ093%7C373%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D373%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87245",
+      "source_row": 373
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=571;SGB-ArcGIS-layer-2#OBJECTID=87496",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C571%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D571%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value",
+        "duplicate_sample_identifier",
+        "method_missing_or_multiple_candidates"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Absorção Atômica",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 21.0,
+          "qualifier": "reported",
+          "raw_value": "21",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 21.0,
+      "preparation_raw": "HNO3 a Quente",
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "21",
+        "source_row": 571
+      },
+      "raw_value": "21",
+      "review_id": "sgb-review-25",
+      "sample_id": "1046-HM-S-618",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=571;SGB-ArcGIS-layer-2#OBJECTID=87496",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C571%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D571%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496",
+      "source_row": 571
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "duplicate_sample_identifier",
+        "method_missing_or_multiple_candidates",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 573
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-26",
+      "sample_id": "1046-HM-S-618",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496",
+      "source_row": 573
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "detection_limit": 10.0,
+      "findings": [
+        "censored_or_negative_value",
+        "duplicate_sample_identifier",
+        "method_missing_or_multiple_candidates"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "detection_limit": 10.0,
+          "parsed_value": null,
+          "qualifier": "below_detection_limit",
+          "raw_value": "< 10",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "below_detection_limit",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "< 10",
+        "source_row": 573
+      },
+      "raw_value": "< 10",
+      "review_id": "sgb-review-27",
+      "sample_id": "1046-HM-S-618",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496",
+      "source_row": 573
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "duplicate_sample_identifier",
+        "method_missing_or_multiple_candidates",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "ND",
+        "source_row": 573
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-28",
+      "sample_id": "1046-HM-S-618",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496",
+      "source_row": 573
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass",
+      "findings": [
+        "ordinary_valid_value",
+        "duplicate_sample_identifier",
+        "method_missing_or_multiple_candidates"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 15.0,
+          "qualifier": "reported",
+          "raw_value": "15",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 15.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "15",
+        "source_row": 573
+      },
+      "raw_value": "15",
+      "review_id": "sgb-review-29",
+      "sample_id": "1046-HM-S-618",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496",
+      "source_row": 573
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T16:55:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates",
+          "detection_limit_not_reported"
+        ],
+        "notes": "Raw source value, qualifier, record method and composite-key coordinate evidence agree with the fixture.",
+        "reviewer_type": "codex"
+      },
+      "decision": "pass_with_disclosed_gap",
+      "findings": [
+        "censored_or_negative_value",
+        "duplicate_sample_identifier",
+        "method_missing_or_multiple_candidates",
+        "detection_limit_not_reported"
+      ],
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 573
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-review-30",
+      "sample_id": "1046-HM-S-618",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;SGB-ArcGIS-layer-2#OBJECTID=87496",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-stream-sediment%7C1046-HM-S-618%7CJBB057%7C573%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Sedimento_de_Corrente.xlsx%23row%3D573%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F2%23OBJECTID%3D87496",
+      "source_row": 573
+    }
+  ],
+  "required_record_count": 30,
+  "reviewer_type": "codex",
+  "source_id": "brazil-sgb-florianopolis-stream-sediment",
+  "status": "automated_audit_complete"
+}
