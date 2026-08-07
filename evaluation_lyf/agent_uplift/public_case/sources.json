@@ -1,9 +1,11 @@
 {
-  "case_version": "qwen-uplift-public-v2",
-  "claim_boundary": "Authority metadata is frozen from DOI/DataCite or publisher records. File hashes prove byte identity, not publisher correctness or regional representativeness.",
+  "case_version": "qwen-uplift-public-v3",
+  "resource_semantics": "minimum_truth_anchors_not_exhaustive_inputs",
+  "claim_boundary": "Authority metadata is frozen from DOI/DataCite or publisher records. These resources are minimum truth anchors, not an exhaustive source list or global coverage denominator. File hashes prove byte identity, not publisher correctness or regional representativeness.",
   "resources": [
     {
       "id": "glim",
+      "platform": "PANGAEA",
       "role": "geology",
       "url": "https://doi.pangaea.de/10.1594/PANGAEA.788537?format=textfile",
       "authority_url": "https://doi.org/10.1594/PANGAEA.788537",
@@ -14,6 +16,7 @@
     },
     {
       "id": "africa_sediment",
+      "platform": "PANGAEA",
       "role": "geochemistry",
       "source_id": "pangaea_880617",
       "url": "https://doi.pangaea.de/10.1594/PANGAEA.880617?format=textfile",
@@ -30,6 +33,7 @@
     },
     {
       "id": "africa_water",
+      "platform": "PANGAEA",
       "role": "geochemistry",
       "source_id": "pangaea_947275",
       "url": "https://doi.pangaea.de/10.1594/PANGAEA.947275?format=textfile",
@@ -46,6 +50,7 @@
     },
     {
       "id": "oceania_soil",
+      "platform": "PANGAEA",
       "role": "geochemistry",
       "source_id": "pangaea_935591",
       "url": "https://doi.pangaea.de/10.1594/PANGAEA.935591?format=textfile",
@@ -62,6 +67,7 @@
     },
     {
       "id": "antarctica_sediment",
+      "platform": "Mendeley Data",
       "role": "geochemistry",
       "source_id": "mendeley_cfnhps54h7_v1",
       "url": "https://data.mendeley.com/public-files/datasets/cfnhps54h7/files/b21a1c0e-0b6f-4d2e-b0df-f1e8bbad0465/file_downloaded",

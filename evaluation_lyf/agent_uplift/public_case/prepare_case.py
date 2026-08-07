@@ -27,13 +27,22 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     contract_path = Path(__file__).with_name("sources.json")
+    discovery_contract_path = Path(__file__).with_name("discovery_contract.json")
     contract = json.loads(contract_path.read_text(encoding="utf-8"))
-    manifest = {"case_version": contract["case_version"], "resources": []}
+    discovery_contract = json.loads(discovery_contract_path.read_text(encoding="utf-8"))
+    manifest = {
+        "case_version": contract["case_version"],
+        "resource_semantics": contract["resource_semantics"],
+        "anchor_contract_sha256": hashlib.sha256(contract_path.read_bytes()).hexdigest(),
+        "discovery_contract_sha256": hashlib.sha256(discovery_contract_path.read_bytes()).hexdigest(),
+        "discovery_contract_version": discovery_contract["schema_version"],
+        "resources": [],
+    }
     for item in contract["resources"]:
         destination = args.output_dir / item["file"]
         destination.parent.mkdir(parents=True, exist_ok=True)
         if not destination.is_file():
-            request = urllib.request.Request(item["url"], headers={"User-Agent": "geochem-qwen-uplift/1.0"})
+            request = urllib.request.Request(item["url"], headers={"User-Agent": "geochem-qwen-uplift/3.0"})
             last_error: Exception | None = None
             for attempt in range(3):
                 try:

@@ -5,7 +5,9 @@
 .earthchem.org
 .georoc.eu
 .geotraces.org
+.gemstat.org
 .githubusercontent.com
+.mendeley.com
 .naturalearthdata.com
 .noaa.gov
 .pangaea.de

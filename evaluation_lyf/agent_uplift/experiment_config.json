@@ -1,10 +1,22 @@
 {
-  "protocol_version": "qwen-uplift-docker-v2",
+  "protocol_version": "qwen-uplift-global-discovery-v3",
   "repository": "https://github.com/asimfish/global-geochemical-atlas-skill.git",
   "commit": "285ce81558a61ee6b72e428d7506bc778e5163e2",
   "model": "Qwen3.8-Max",
   "temperature": 0,
   "maximum_scorer_rounds": 3,
+  "task_request": {
+    "region": "global",
+    "elements": ["As", "Cu", "Fe", "Ni", "Pb", "Zn"],
+    "media": ["rock", "soil", "sediment", "water"],
+    "scope": "bounded_best_effort",
+    "max_records": 50000
+  },
+  "public_case": {
+    "anchor_semantics": "minimum_truth_anchors_not_exhaustive_inputs",
+    "discovery_contract": "public_case/discovery_contract.json",
+    "processing_network": "offline"
+  },
   "prompt_files": {
     "host_no_skill": "QWEN_NO_SKILL_PROMPT.md",
     "host_with_skill": "QWEN_WITH_SKILL_PROMPT.md",

@@ -17,7 +17,7 @@
 3. 有 Skill 目录原样粘贴 [`QWEN_WITH_SKILL_DOCKER_PROMPT.md`](QWEN_WITH_SKILL_DOCKER_PROMPT.md)；
 4. 回收两个目录的 `experiment_manifest.json`、`score.json` 和 submission。
 
-Prompt 会自行克隆固定 commit、构建或复用评测镜像、准备公开数据、完成任务、最多运行三轮公开 scorer，最后执行一次干净重建。用户无需预先下载仓库或 Skill。固定实验参数见 [`experiment_config.json`](experiment_config.json)。
+Prompt 会自行克隆固定 commit、构建或复用评测镜像、准备五个真实性锚点并执行有界多平台来源发现，冻结采集输入后断网完成任务，最多运行三轮公开 scorer，最后执行一次干净重建。五个资源是 B0/S0 共享的最低锚点，不是采集上限；具体发现合约见 [`public_case/discovery_contract.json`](public_case/discovery_contract.json)。用户无需预先下载仓库或 Skill。固定实验参数见 [`experiment_config.json`](experiment_config.json)。
 
 如果要保留原来的主机直跑方式，使用 [`QWEN_NO_SKILL_PROMPT.md`](QWEN_NO_SKILL_PROMPT.md) 和 [`QWEN_WITH_SKILL_PROMPT.md`](QWEN_WITH_SKILL_PROMPT.md)。主机结果与 Docker 结果属于不同 runtime profile，不能混在同一个三次中位数中。
 
@@ -47,7 +47,9 @@ Docker runner 的标准构建、mock smoke、D1/D2/D3 stage 和正式 OpenCode c
 - 无 Skill 组通过 `git archive` 只导出公开 uplift 任务，不把 `.git` 或 `skills/` 带进工作目录；
 - 有 Skill 组只额外导出一个 Skill，并映射到 `.agents/skills/global-geochemical-atlas/`；
 - `stage_benchmark/`、`reference_implementation/`、gold、历史运行和另一实验臂的产物都不可见；
-- 下载耗时与任务执行耗时分开记录；Docker 不可用时允许主机诊断回退，但必须在 manifest 中记为环境偏差，不能与 Docker 正式结果混算；
+- 只把网络传输耗时与任务执行耗时分开记录；来源规划、解析和处理仍计入执行时间；Docker 不可用时允许主机诊断回退，但必须在 manifest 中记为环境偏差，不能与 Docker 正式结果混算；
+- 新增来源及其 `discovered_manifest.json` 必须在处理前冻结；D2、D3、scorer 和 clean rebuild 使用 `--network none`；
+- 公开 scorer 对新增来源做本地 bytes/hash 和元数据一致性检查，正式评测再用不可见来源目录与在线审计验证权威性和广度；
 - scorer 最多运行三轮，每轮分数原样留存，不得修改 scorer；
 - `run.sh` 必须从保留的 `case_data/` 在新目录中重建全部产物，重建失败仍保留证据。
 
