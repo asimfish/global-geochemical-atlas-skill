@@ -27,6 +27,7 @@ import build_four_media_demo
 import build_index as index_builder
 import build_incremental_profiles
 import build_full_d1_database
+import audit_cross_source_duplicates
 import benchmark_index
 import cache_control
 import coverage_report
@@ -1220,6 +1221,41 @@ def check_d1(output_dir: Path) -> list[str]:
             and reuse_plan["reused_sources"] == ["fixture-source-v2"]
             and changed_plan["changed_sources"] == ["fixture-source-v2"],
             "D1 incremental profile planning reuses readable source identity and rebuilds only drifted sources",
+            checks,
+        )
+        duplicate_input = index_root / "duplicates.csv"
+        duplicate_fields = [
+            "record_id", "source_id", "source_locator", "source_record_id", "sample_id",
+            "element_or_analyte", "value", "unit", "medium", "latitude", "longitude",
+            "sampled_at", "sample_type", "publication_doi", "upstream_primary_source_id",
+            "analytical_method", "measurement_basis", "value_qualifier", "lithology",
+        ]
+        with duplicate_input.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=duplicate_fields, lineterminator="\n")
+            writer.writeheader()
+            base = {
+                "source_record_id": "S-1", "sample_id": "S-1", "element_or_analyte": "As",
+                "value": "5", "unit": "mg/kg", "medium": "rock", "latitude": "10",
+                "longitude": "20", "sampled_at": "2020-01-01", "sample_type": "rock_whole",
+                "publication_doi": "10.0000/upstream", "upstream_primary_source_id": "",
+                "analytical_method": "ICP-MS", "measurement_basis": "total", "value_qualifier": "reported",
+                "lithology": "basalt",
+            }
+            for source_id in ("mirror-a", "mirror-b"):
+                writer.writerow({**base, "record_id": source_id, "source_id": source_id, "source_locator": source_id})
+            possible = {
+                **base, "sample_id": "", "source_record_id": "", "publication_doi": "",
+                "latitude": "11", "longitude": "21",
+            }
+            for source_id in ("candidate-c", "candidate-d"):
+                writer.writerow({**possible, "record_id": source_id, "source_id": source_id, "source_locator": source_id})
+        duplicate_output = index_root / "duplicate-groups.jsonl"
+        duplicate_report = audit_cross_source_duplicates.audit(duplicate_input, duplicate_output)
+        require(
+            duplicate_report["exact_group_count"] == 1
+            and duplicate_report["possible_group_count"] == 1
+            and not duplicate_report["automatic_merge_performed"],
+            "D1 cross-source audit separates exact upstream duplicates from unmerged candidates",
             checks,
         )
         with sqlite3.connect(first_index) as connection:
