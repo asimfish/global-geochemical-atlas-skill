@@ -457,7 +457,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="databaseView"',
         'id="databaseDistributionCanvas"',
         'id="databaseCoverageMatrix"',
-        'id="databaseCompletenessChart"',
+        'id="databaseBoxCanvas"',
         "d3-database-visual-summary-v1",
         'id="databaseSearch"',
         'id="confidenceSummary"',

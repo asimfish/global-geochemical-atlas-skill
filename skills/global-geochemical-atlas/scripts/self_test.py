@@ -927,7 +927,7 @@ def run_suite() -> dict[str, Any]:
                     'id="databaseSearch"',
                     'id="databaseDistributionCanvas"',
                     'id="databaseCoverageMatrix"',
-                    'id="databaseCompletenessChart"',
+                    'id="databaseBoxCanvas"',
                     'id="confidenceSummary"',
                     'id="confidenceComponents"',
                     "renderDatabase",

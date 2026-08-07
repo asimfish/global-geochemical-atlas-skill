@@ -3304,7 +3304,7 @@ def check_d3(output_dir: Path) -> list[str]:
                 "polarClosure=dateLineJump",
                 'id="databaseDistributionCanvas"',
                 'id="databaseCoverageMatrix"',
-                'id="databaseCompletenessChart"',
+                'id="databaseBoxCanvas"',
                 "d3-database-visual-summary-v1",
                 'id="anomalyDensityCanvas"',
                 "drawAnomalyDensity",
@@ -3377,7 +3377,7 @@ def check_d3(output_dir: Path) -> list[str]:
                 'href="source_manifest.json"',
                 'id="databaseDistributionCanvas"',
                 'id="databaseCoverageMatrix"',
-                'id="databaseCompletenessChart"',
+                'id="databaseBoxCanvas"',
                 "不是正确概率",
             )
         ),

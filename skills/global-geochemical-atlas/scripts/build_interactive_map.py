@@ -1161,7 +1161,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="confidenceSummary"',
         'id="databaseDistributionCanvas"',
         'id="databaseCoverageMatrix"',
-        'id="databaseCompletenessChart"',
+        'id="databaseBoxCanvas"',
         "d3-database-visual-summary-v1",
         'id="projectionMode"',
         'id="globe"',

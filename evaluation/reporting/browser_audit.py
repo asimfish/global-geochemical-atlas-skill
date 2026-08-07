@@ -262,11 +262,11 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
         database_tab = activate("databaseView")
         time.sleep(0.2)
         database_distribution = canvas_state("databaseDistributionCanvas")
+        database_box = canvas_state("databaseBoxCanvas")
         database = driver.execute_script(
             """
             return {
               coverage_rows:document.querySelectorAll('#databaseCoverageMatrix tbody tr').length,
-              completeness_rows:document.querySelectorAll('#databaseCompletenessChart .completeness-row').length,
               preview_rows:document.querySelectorAll('#databaseTableBody tr').length
             };
             """
@@ -275,11 +275,15 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
             "passed": bool(
                 database_tab and database_distribution["width"] > 100
                 and database_distribution["opaque"] > 50
+                and database_box["width"] > 100 and database_box["opaque"] > 50
                 and database["coverage_rows"] > 0
-                and database["completeness_rows"] >= 5
                 and database["preview_rows"] > 0
             ),
-            "evidence": {**database, "distribution": database_distribution},
+            "evidence": {
+                **database,
+                "distribution": database_distribution,
+                "medium_boxplot": database_box,
+            },
         }
         screenshot("database")
 
