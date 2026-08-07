@@ -73,11 +73,11 @@
           "eligible_map": "false",
           "original_latitude": "95",
           "original_longitude": "10",
-          "qc_flags": "latitude_out_of_range",
+          "qc_flags": "latitude_out_of_range;possible_lat_lon_swap",
           "record_id": "P02",
           "sample_id": "S02",
-          "suggested_latitude": "",
-          "suggested_longitude": ""
+          "suggested_latitude": "10",
+          "suggested_longitude": "95"
         },
         {
           "eligible_map": "false",
