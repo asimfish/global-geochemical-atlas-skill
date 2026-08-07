@@ -2971,6 +2971,31 @@
       "license": {"spdx": "LicenseRef-Government-of-Canada-Terms", "name": "Government of Canada website terms", "url": "https://www.canada.ca/en/transparency/terms.html"},
       "citation": "Geological Survey of Canada Open File 899; CDoGS survey 21:0102.",
       "scientific_notes": ["Rows are selected only where the authoritative Survey_Key is 21:0102.", "Coordinates remain source-native NAD83 until the coordinate transformation layer runs.", "The official bundle identifier and survey narrative disagree on the water sampling year; sampled_year_raw remains unresolved."]
+    },
+    "brazil-sgb-florianopolis-stream-sediment": {
+      "adapter": "brazil_sgb_rigeo_xlsx_arcgis_join",
+      "title": "SGB Florianopolis stream-sediment geochemistry",
+      "publisher": "Servico Geologico do Brasil (SGB-CPRM)",
+      "dataset_doi": null,
+      "dataset_pid": "SGB-RIGeo:doc/23413:bitstream:4ac11c55-2d10-4aac-9dce-5266b442c500",
+      "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55",
+      "release_date": "2022",
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+      "media": ["sediment"],
+      "upstream_lineage_id": "sgb-florianopolis-geochemical-survey",
+      "download": {
+        "mode": "fixed-rigeo-bitstream-plus-record-coordinate-api",
+        "files": [
+          {"file_id": "4ac11c55-2d10-4aac-9dce-5266b442c500", "filename": "geoquimica_florianopolis_1985.zip", "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content", "bytes": 841480},
+          {"file_id": "sgb-arcgis-layer-2-sample-coordinates", "filename": "arcgis-sample-coordinates.geojson", "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2/query", "bytes": 263151}
+        ]
+      },
+      "required_fields": ["num_campo", "num_lab", "classe", "abertura", "leitura", "As_ppm", "Cr_ppm", "Cu_ppm", "Ni_ppm", "Pb_ppm", "Zn_ppm"],
+      "target_analytes": {"As": "As_ppm", "Cr": "Cr_ppm", "Cu": "Cu_ppm", "Ni": "Ni_ppm", "Pb": "Pb_ppm", "Zn": "Zn_ppm"},
+      "expected_counts": {"physical_samples": 520, "analysis_rows": 527, "target_observations": 3132},
+      "license": {"spdx": "LicenseRef-SGB-RIGEO-open-item-metadata", "name": "SGB RIGeo open item metadata", "url": "https://rigeo.sgb.gov.br/handle/doc/23413"},
+      "citation": "Servico Geologico do Brasil - CPRM (2022), Resultados Analiticos de Amostras Geoquimicas e Produtos Associados, RIGeo doc/23413.",
+      "scientific_notes": ["Regional Florianopolis stream-sediment survey, not continuous Brazilian or South American coverage.", "Coordinates join on NUM_CAMPO plus NUM_LAB because NUM_CAMPO alone is not unique.", "ND remains non-numeric unless a recoverable detection limit is present.", "Repository item metadata says open; explicit redistribution licensing was not located and is not required for research analysis."]
     }
   }
 }

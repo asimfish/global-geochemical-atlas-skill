@@ -82,7 +82,11 @@ def load_candidate_evidence(
                 entry = evidence.setdefault(source_id, {"source_id": source_id})
                 entry["_snapshot_manifest"] = snapshot
                 entry["_snapshot_manifest_path"] = str(path.relative_to(SKILL_DIR))
-        for path in sorted(snapshot_root.rglob("automated_audit.json")):
+        audit_paths = [*snapshot_root.rglob("automated_audit.json")]
+        regional_root = SKILL_DIR / "fixtures" / "south-america"
+        if regional_root.exists():
+            audit_paths.extend(regional_root.rglob("automated_audit.json"))
+        for path in sorted(audit_paths):
             audit = _read_json(path, "automated audit")
             source_id = audit.get("source_id")
             if isinstance(source_id, str) and source_id:

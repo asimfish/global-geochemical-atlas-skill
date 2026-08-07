@@ -306,6 +306,26 @@
       "evidence_urls": ["https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm", "https://www.canada.ca/en/transparency/terms.html"],
       "limitations": ["The executable water product contains uranium, not all seven earlier target elements.", "Lake water and lake sediment share one upstream survey lineage.", "Official bundle and narrative dates conflict, so the sample year remains unresolved."]
     },
+    "brazil-sgb-florianopolis-stream-sediment": {
+      "title": "SGB Florianopolis stream-sediment geochemistry",
+      "publisher": "Servico Geologico do Brasil (SGB-CPRM)",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["sediment"],
+      "coverage": {"extent_class": "regional_partial", "regions": ["florianopolis-brazil"], "notes": "One regional stream-sediment survey; not continuous Brazil or South America coverage."},
+      "identifiers": {"dataset_pid": "SGB-RIGeo:doc/23413", "bitstream_id": "4ac11c55-2d10-4aac-9dce-5266b442c500"},
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+      "interfaces": [
+        {"kind": "fixed_repository_bitstream", "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content", "format": "zip_xlsx", "access": "open", "server_filters": ["bitstream_id"]},
+        {"kind": "record_coordinate_api", "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2/query", "format": "geojson", "access": "open", "server_filters": ["NUM_CAMPO", "NUM_LAB"]}
+      ],
+      "license": {"status": "open", "id": "LicenseRef-SGB-RIGEO-open-item-metadata", "url": "https://rigeo.sgb.gov.br/handle/doc/23413", "notes": "RIGeo item metadata states open and permits research access; no explicit redistribution licence was located, so redistribution remains unevaluated."},
+      "version": {"status": "pinned", "value": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55", "release_date": "2022"},
+      "adapter": {"status": "implemented", "name": "brazil_sgb_rigeo_xlsx_arcgis_join"},
+      "evidence_urls": ["https://rigeo.sgb.gov.br/handle/doc/23413", "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2"],
+      "limitations": ["Coordinates require NUM_CAMPO plus NUM_LAB because NUM_CAMPO alone is not unique.", "ND is retained without inventing a numeric detection limit.", "Optical-emission and atomic-absorption analyses remain separate method partitions."]
+    },
     "usgs-ngdb": {
       "title": "U.S. Geological Survey National Geochemical Database",
       "publisher": "U.S. Geological Survey",

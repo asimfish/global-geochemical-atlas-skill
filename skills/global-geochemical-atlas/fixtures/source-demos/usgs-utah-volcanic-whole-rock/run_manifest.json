@@ -1,5 +1,6 @@
 {
   "content_hashes_used": false,
+  "content_hashing_used": false,
   "data_mode": "fixture",
   "demo_generation_version": "d1-usgs-utah-rock-fixture-v1",
   "exchange_schema": "d1-v4-exchange-v1",
@@ -20,7 +21,7 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 70691,
+      "bytes": 60850,
       "path": "demo_input.csv"
     },
     {
@@ -120,6 +121,7 @@
       "source_url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__25%2F54%2F67%2F255467a4b87c59c73d90553dbb20ea04b6a40228"
     }
   ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
   "warnings": [
     "The release is a regional volcanic-rock compilation, not nationwide or globally representative rock coverage.",
     "It includes newly published analyses and records also available through NGD-Rock; DOI and original sample identifiers must participate in cross-platform duplicate detection.",

@@ -197,6 +197,15 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "official_cdogs_package_column_method_table",
         "citation_scope": "dataset",
     },
+    "brazil-sgb-florianopolis-stream-sediment": {
+        "sample_type_raw": "sedimento de corrente",
+        "sample_type": "sediment_stream",
+        "sample_type_mapping_status": "mapped",
+        "sediment_environment": "stream",
+        "method_scope": "record",
+        "method_assignment_basis": "source_workbook_leitura_field",
+        "citation_scope": "dataset",
+    },
 }
 
 SOIL_TYPE_MAP = {
@@ -316,6 +325,9 @@ def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Map
         raw = _text(evidence.get("sample_type_raw"))
         if raw != _text(contract.get("sample_type_raw")):
             raise SemanticError(f"unexpected CDoGS sample type: {raw}")
+    elif source_id == "brazil-sgb-florianopolis-stream-sediment":
+        raw = _text(evidence.get("sample_type_raw"))
+        result["sample_type_raw"] = raw
     return result
 
 
@@ -388,6 +400,11 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
         result["survey_area"] = "CDoGS survey 21:0102"
         result["geographic_context_raw"] = " / ".join(
             part for part in (result["survey_area"], _text(evidence.get("site_id"))) if part
+        )
+    elif source_id == "brazil-sgb-florianopolis-stream-sediment":
+        result["survey_area"] = "Florianopolis, Brazil"
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], _text(evidence.get("project")), _text(evidence.get("sample_id"))) if part
         )
     return result
 

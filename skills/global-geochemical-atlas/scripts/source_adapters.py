@@ -205,6 +205,8 @@ def source_lineage_id(source_id: str) -> str:
         return "georoc-compilation"
     if source_id.startswith("foregs-"):
         return "foregs-geochemical-atlas-europe-2005"
+    if source_id.startswith("cdogs-210102-"):
+        return "cdogs-survey-210102"
     return source_id
 
 
@@ -3537,6 +3539,28 @@ class Cdogs210102LakeWaterAdapter(Cdogs210102Adapter):
     source_id = "cdogs-210102-lake-water"
 
 
+class BrazilSgbFlorianopolisStreamSedimentAdapter(RegistryAdapter):
+    """Registered wrapper around the independently audited SGB adapter."""
+
+    source_id = "brazil-sgb-florianopolis-stream-sediment"
+
+    def _delegate(self) -> DataSourceAdapter:
+        import brazil_sgb_florianopolis as brazil_sgb
+
+        return brazil_sgb.BrazilSgbFlorianopolisStreamSedimentAdapter()
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        return self._delegate().download(candidate, cache_dir, mode)
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        return self._delegate().parse(files)
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -3562,6 +3586,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     UsgsUtahVolcanicRockAdapter.source_id: UsgsUtahVolcanicRockAdapter,
     Cdogs210102LakeSedimentAdapter.source_id: Cdogs210102LakeSedimentAdapter,
     Cdogs210102LakeWaterAdapter.source_id: Cdogs210102LakeWaterAdapter,
+    BrazilSgbFlorianopolisStreamSedimentAdapter.source_id: BrazilSgbFlorianopolisStreamSedimentAdapter,
 }
 
 

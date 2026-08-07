@@ -307,6 +307,14 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             _text(fields.get("_longitude")),
             _text(fields.get("_source_crs")),
         )
+    if source_id == "brazil-sgb-florianopolis-stream-sediment":
+        return (
+            "|".join((_text(fields.get("sample_id")), _text(fields.get("num_lab")))),
+            "Florianopolis, Brazil",
+            _text(fields.get("latitude")),
+            _text(fields.get("longitude")),
+            _text(fields.get("source_crs")) or "EPSG:4326",
+        )
     raise FullProfileError(f"no sample/place mapping for {source_id}")
 
 
@@ -328,6 +336,9 @@ def _method(source_id: str, fields: Mapping[str, Any], field_name: str, values: 
             locator = _text(item.get("_metadata_source_locator"))
     elif source_id == "pangaea-north-africa-soil":
         method = _text(fields.get("_analytical_method"))
+    elif source_id == "brazil-sgb-florianopolis-stream-sediment":
+        method = _text(fields.get("analytical_method_raw"))
+        locator = _text(fields.get("source_locator"))
     return method, locator
 
 
@@ -343,7 +354,7 @@ def _target_values(
         for analyte, values in nested.items():
             if not isinstance(values, Mapping):
                 continue
-            raw = _text(values.get("value"))
+            raw = _text(values.get("reported_value")) or _text(values.get("raw_value")) or _text(values.get("value"))
             if raw:
                 yield (
                     _text(values.get("analyte")) or _text(analyte),
@@ -449,6 +460,10 @@ def _semantic_evidence(source_id: str, fields: Mapping[str, Any], record_id: str
         evidence["sample_type"] = _text(fields.get("sample_type"))
         evidence["sample_type_raw"] = _text(fields.get("sample_type_raw"))
         evidence["site_id"] = _text(fields.get("site_id"))
+    elif source_id == "brazil-sgb-florianopolis-stream-sediment":
+        evidence["sample_type_raw"] = _text(fields.get("sample_type_raw"))
+        evidence["project"] = _text(fields.get("projeto_amostragem"))
+        evidence["sample_id"] = _text(fields.get("sample_id"))
     return evidence
 
 
@@ -492,6 +507,7 @@ def _observation(
         "measurement_basis": _text(values.get("measurement_basis")),
         "detection_limit": _text(values.get("detection_limit")),
         "detection_limit_unit": _text(values.get("detection_limit_unit")),
+        "sampled_at": _text(raw.fields.get("sampled_at")),
         "latitude": latitude,
         "longitude": longitude,
         "source_crs": source_crs,
@@ -509,6 +525,8 @@ def _observation(
         "preparation": _text(values.get("preparation")),
         "analytical_technique": _text(values.get("analytical_technique")) or method,
         "laboratory": _text(values.get("laboratory")) or _text(raw.fields.get("_laboratory_raw")),
+        "digestion_or_extraction": _text(values.get("digestion_or_extraction")) or _text(raw.fields.get("digestion_or_extraction_raw")),
+        "coordinate_status": _text(raw.fields.get("coordinate_status")),
         "license": _text((registry_entry.get("license") or {}).get("spdx")),
         "grain_fraction": _text(raw.fields.get("_grain_fraction")),
         "material_raw": _text(raw.fields.get("MATERIAL")) or _text(raw.fields.get("_rock_type_raw")),

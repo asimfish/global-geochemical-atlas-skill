@@ -76,6 +76,15 @@ def expected_fixture(source_id: str, fixture_dir: Path, registry: Mapping[str, A
     if not isinstance(demo_output, dict):
         raise MigrationError(f"{source_id} manifest has no demo_input.csv output")
     demo_output["bytes"] = len(content)
+    # Once a fixture manifest is rewritten under V4, retain only the readable
+    # artifact identity.  Historical digest fields are neither recomputed nor
+    # carried forward with a now-changed byte count.
+    for output in outputs.values():
+        if isinstance(output, dict):
+            output.pop("sha256", None)
+            output.pop("md5", None)
+            output.pop("checksum", None)
+    manifest["content_hashing_used"] = False
     return content, manifest
 
 

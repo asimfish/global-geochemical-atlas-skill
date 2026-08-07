@@ -1,4 +1,5 @@
 {
+  "content_hashing_used": false,
   "data_mode": "fixture",
   "demo_generation_version": "d1-demo-slice-v1",
   "exchange_schema": "d1-v4-exchange-v1",
@@ -17,14 +18,12 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 49172,
-      "path": "demo_input.csv",
-      "sha256": "270215361238ada148ba8180b3b3c2fb83b9b57d1c325bd50ecd4f318691c738"
+      "bytes": 49561,
+      "path": "demo_input.csv"
     },
     {
       "bytes": 74254,
-      "path": "sources.jsonl",
-      "sha256": "da77e2ec474f6a22b9465ed059eee07812dbf7723c7a83de8041ce7fc45b3284"
+      "path": "sources.jsonl"
     }
   ],
   "record_counts": {
