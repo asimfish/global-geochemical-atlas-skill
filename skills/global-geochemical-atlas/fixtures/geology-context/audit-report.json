@@ -1,0 +1,351 @@
+{
+  "audit_version": "d1-geology-context-audit-v1",
+  "generated_at": "2026-08-07T12:44:32Z",
+  "sample_count": 30,
+  "point_status_counts": {
+    "ambiguous": 16,
+    "matched": 10,
+    "unmatched": 4
+  },
+  "tile_status_counts": {
+    "matched": 22,
+    "unmatched": 8
+  },
+  "tile_matches_consistent_with_point_candidates": 22,
+  "tile_match_count": 22,
+  "failed_lookup_count": 0,
+  "status": "PASS",
+  "interpretation": "Point mode preserves overlapping source-scale candidates. Tile mode reproduces Macrostrat's carto visualization priority locally and must retain the carto_blended uncertainty label.",
+  "checks": [
+    {
+      "sample_id": "geo-audit-01",
+      "audit_type": "multiscale_overlap",
+      "region": "North America - Wisconsin",
+      "point_status": "ambiguous",
+      "point_candidate_count": 4,
+      "tile_status": "matched",
+      "tile_source_id": "7",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-02",
+      "audit_type": "boundary_probe",
+      "region": "North America - Wisconsin",
+      "point_status": "ambiguous",
+      "point_candidate_count": 4,
+      "tile_status": "matched",
+      "tile_source_id": "7",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-03",
+      "audit_type": "multiscale_overlap",
+      "region": "North America - Grand Canyon",
+      "point_status": "ambiguous",
+      "point_candidate_count": 4,
+      "tile_status": "matched",
+      "tile_source_id": "7",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-04",
+      "audit_type": "boundary_probe",
+      "region": "North America - Grand Canyon",
+      "point_status": "ambiguous",
+      "point_candidate_count": 4,
+      "tile_status": "matched",
+      "tile_source_id": "7",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-05",
+      "audit_type": "coastal",
+      "region": "North America - San Francisco",
+      "point_status": "ambiguous",
+      "point_candidate_count": 4,
+      "tile_status": "matched",
+      "tile_source_id": "7",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-06",
+      "audit_type": "continental",
+      "region": "North America - Mexico City",
+      "point_status": "ambiguous",
+      "point_candidate_count": 2,
+      "tile_status": "matched",
+      "tile_source_id": "7",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-07",
+      "audit_type": "continental",
+      "region": "South America - Quito",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-08",
+      "audit_type": "continental",
+      "region": "South America - Sao Paulo",
+      "point_status": "ambiguous",
+      "point_candidate_count": 2,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-09",
+      "audit_type": "continental",
+      "region": "South America - Patagonia",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-10",
+      "audit_type": "continental",
+      "region": "Europe - London",
+      "point_status": "ambiguous",
+      "point_candidate_count": 3,
+      "tile_status": "matched",
+      "tile_source_id": "147",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-11",
+      "audit_type": "coastal",
+      "region": "Europe - Oslo",
+      "point_status": "ambiguous",
+      "point_candidate_count": 2,
+      "tile_status": "matched",
+      "tile_source_id": "147",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-12",
+      "audit_type": "mountain",
+      "region": "Europe - Alps",
+      "point_status": "ambiguous",
+      "point_candidate_count": 3,
+      "tile_status": "matched",
+      "tile_source_id": "147",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-13",
+      "audit_type": "volcanic",
+      "region": "Europe - Iceland",
+      "point_status": "ambiguous",
+      "point_candidate_count": 4,
+      "tile_status": "matched",
+      "tile_source_id": "2",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-14",
+      "audit_type": "continental",
+      "region": "Africa - Cairo",
+      "point_status": "ambiguous",
+      "point_candidate_count": 2,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-15",
+      "audit_type": "coastal",
+      "region": "Africa - Cape Town",
+      "point_status": "ambiguous",
+      "point_candidate_count": 2,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-16",
+      "audit_type": "continental",
+      "region": "Africa - Nairobi",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-17",
+      "audit_type": "continental",
+      "region": "Africa - Sahara",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-18",
+      "audit_type": "continental",
+      "region": "Asia - Beijing",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-19",
+      "audit_type": "coastal",
+      "region": "Asia - Tokyo",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-20",
+      "audit_type": "mountain",
+      "region": "Asia - Kathmandu",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-21",
+      "audit_type": "continental",
+      "region": "Asia - Delhi",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-22",
+      "audit_type": "volcanic",
+      "region": "Asia - Jakarta",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-23",
+      "audit_type": "continental",
+      "region": "Australia - Perth",
+      "point_status": "ambiguous",
+      "point_candidate_count": 3,
+      "tile_status": "matched",
+      "tile_source_id": "11",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-24",
+      "audit_type": "coastal",
+      "region": "Australia - Sydney",
+      "point_status": "ambiguous",
+      "point_candidate_count": 3,
+      "tile_status": "matched",
+      "tile_source_id": "11",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-25",
+      "audit_type": "continental",
+      "region": "New Zealand - Christchurch",
+      "point_status": "ambiguous",
+      "point_candidate_count": 3,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-26",
+      "audit_type": "polar",
+      "region": "Antarctica - McMurdo",
+      "point_status": "unmatched",
+      "point_candidate_count": 0,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-27",
+      "audit_type": "ocean",
+      "region": "Pacific Ocean",
+      "point_status": "unmatched",
+      "point_candidate_count": 0,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-28",
+      "audit_type": "ocean",
+      "region": "South Atlantic",
+      "point_status": "unmatched",
+      "point_candidate_count": 0,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-29",
+      "audit_type": "coastal_boundary",
+      "region": "Gulf of Guinea",
+      "point_status": "unmatched",
+      "point_candidate_count": 0,
+      "tile_status": "unmatched",
+      "tile_source_id": null,
+      "tile_source_present_in_point_candidates": null,
+      "source_geology_preserved": true
+    },
+    {
+      "sample_id": "geo-audit-30",
+      "audit_type": "island_boundary",
+      "region": "Fiji",
+      "point_status": "matched",
+      "point_candidate_count": 1,
+      "tile_status": "matched",
+      "tile_source_id": "154",
+      "tile_source_present_in_point_candidates": true,
+      "source_geology_preserved": true
+    }
+  ]
+}
