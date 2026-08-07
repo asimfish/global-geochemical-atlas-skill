@@ -94,10 +94,11 @@ anomaly_report.json
 | 全球分布、跨洲总览 | `global` | 必须为 `global` | `global_globe`：二维世界地图 + 三维地球仪，嵌入全部可上图记录 |
 | 国家、城市、流域、矿区 | `regional` | 非 `global` 预设或 `custom` | `regional_focus`：只嵌入严格范围内记录，锁定区域入口且不显示地球仪 |
 
-区域预设支持 `usa`、`usa48`、`china`、`shanghai`、`europe`、`australia`。其中 `usa`、`usa48`、
-`china`、`australia` 使用固定 Natural Earth Admin‑0 国家多边形与 bbox 联合判定，避免国家 bbox
-误纳邻国样点；`shanghai`、`europe` 仍是 bbox。其他范围使用
-`default_region=custom`，并填写 WGS84 `custom_region.label` 与 `bounds={w,s,e,n}`。区域模式下：
+区域参数接受 `usa48`、`shanghai`、`europe` 三个研究预设，以及随 Skill 冻结的 Natural Earth
+Admin‑0 国家名称、常用中英文别名或 ISO-3。国家范围使用固定多边形与最小圆周 bbox 联合判定，
+避免普通 bbox 误纳邻国样点，并正确支持 Fiji 等跨日期变更线国家；研究预设仍按其冻结边界执行。
+非国家研究范围使用 `default_region=custom`，并填写 WGS84 `custom_region.label` 与
+`bounds={w,s,e,n}`；`w>e` 表示跨日期变更线。区域模式下：
 
 - `interactive_map.html` 的样点、异常候选、来源卡片和元素组合只来自配置范围内记录；
 - `samples.geojson` 只含配置范围内 feature，并声明 `spatial_scope.output_clipped=true`、`clip_method` 与可选 `country_code`；
@@ -136,7 +137,7 @@ python scripts/render_visualization.py \
   --output-dir VISUALIZATION_OUTPUT
 ```
 
-任意国家、城市、流域、矿区或研究框使用自定义 WGS84 bbox：
+冻结注册表中的国家直接传名称/别名/ISO-3；城市、流域、矿区或其他研究框使用自定义 WGS84 bbox：
 
 ```bash
 python scripts/create_visualization_profile.py \
@@ -177,6 +178,13 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
   [visualization-report.schema.json](visualization-report.schema.json)；
 - `iteration_backlog.csv`：从完整 canonical 数据库派生的 D1/D2 修复、复核与科学限制清单，行结构见
   [iteration-backlog.schema.json](iteration-backlog.schema.json)。
+
+profile 触发的结构化研究产物：
+
+- `story=comparison` 时生成 `element_comparison.json`，只配对同一来源、稳定物理样品和完整可比层，报告输入数、排除原因、log10 配对、tie-corrected Spearman、四象限和非因果边界，结构见 [element-comparison.schema.json](element-comparison.schema.json)；
+- `filters.element` 非空时生成 `concentration_grid.geojson`，按固定 1°/2°/5° WGS84 观测格网和显式可比层报告样品数、删失比例、可定量中位数与 IQR，不做空间插值，结构见 [concentration-grid.schema.json](concentration-grid.schema.json)。
+
+两项均由 `visualization_report.json.outputs` 与 `output_sha256` 绑定；不满足触发条件时不得残留上一次 `--force` 运行的旧文件。
 
 输出目录同时保留页面引用的标准数据库、来源、置信度和异常文件。HTML 不依赖 CDN、远程字体、
 在线瓦片或浏览器扩展；HTML 或 GeoJSON 单文件超过 100 MB 的运行时安全上限时失败关闭。该上限约束生成产物，不替代官网对提交包及仓库内文件的更严格限制。

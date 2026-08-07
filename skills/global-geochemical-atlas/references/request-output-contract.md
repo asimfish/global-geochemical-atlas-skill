@@ -8,6 +8,8 @@
 | `region` | object/string | 是 | 无 | `global`、命名区域或 WGS84 bbox |
 | `media` | string[] | 是 | 无 | rock/soil/sediment/water/mineral/concentrate |
 | `measurement_basis` | string[]/null | 否 | null | 非空数组；total/dissolved/extractable 等 |
+| `geology_units` | string[]/null | 否 | null | 只保留 exact normalized 地质单元标签 |
+| `geology_match` | string | 否 | reported_or_matched | reported_or_matched/reported/matched；matched 缺地质匹配数据时失败关闭 |
 | `time_range` | [string,string]/null | 否 | null | 采样时间而非发布日期；两项以四位年份开头且 start ≤ end |
 | `sources` | `auto`/string[] | 否 | auto | 只选择公开科学来源 |
 | `output_formats` | string[] | 否 | csv,json,geojson,html_map | 结构化产物 |
@@ -55,6 +57,10 @@
 ## 证据链
 
 `standardize_geochemistry.py` 可在四个最低分析字段上输出 QC；完整 `run_workflow.py` 为保证任务要求的来源追溯，额外要求非空 `source_id`、`source_locator` 和 `license`。缺失时不得用 `unknown` 冒充已验证来源，应返回 `conflicting_evidence` 并提示补充 sidecar 或来源字段；`source_tier` 缺失可以保留为 `unknown`，但必须降低来源分量。
+
+完整请求执行共享单一 monotonic deadline：自动评审单任务上限 900 秒，默认内部预算 840 秒；该门禁严于最新规则中的 12 小时 Skill 整体运行上限。`request_evidence/execution.json.timing` 记录单任务上限、内部预算、工作流预留、实际耗时与 deadline 策略；逐源 timeout 和工作流 timeout 都只能缩短剩余预算，不能叠加突破单任务时限。
+
+独立 D3 产物在核心十五文件之外按 profile 条件生成：元素组合任务生成 `element_comparison.json`，单元素任务生成 `concentration_grid.geojson`。二者均由 `visualization_report.json` 路径和 SHA-256 绑定，分别遵循 [element-comparison.schema.json](element-comparison.schema.json) 与 [concentration-grid.schema.json](concentration-grid.schema.json)。
 
 每条关键记录至少保留：
 

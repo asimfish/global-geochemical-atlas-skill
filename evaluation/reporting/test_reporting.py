@@ -128,7 +128,8 @@ class ReportingTests(unittest.TestCase):
             for name in ("d1_raw.csv", "geochemistry.csv"):
                 with (root / name).open("w", encoding="utf-8", newline="") as handle:
                     writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
-                    writer.writeheader(); writer.writerows(rows)
+                    writer.writeheader()
+                    writer.writerows(rows)
             samples = {
                 "type": "FeatureCollection", "features": [
                     {"type": "Feature", "geometry": {"type": "Point", "coordinates": [115.85, -31.93]}, "properties": {"record_id": row["record_id"]}}

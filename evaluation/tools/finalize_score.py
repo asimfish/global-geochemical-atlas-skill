@@ -9,6 +9,7 @@ import json
 import math
 import os
 import tempfile
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,9 @@ from typing import Any
 SCORER_VERSION = "6.0.0"
 ROOT = Path(__file__).resolve().parents[1]
 ALIGNMENT_PATH = ROOT / "contracts" / "benchmark-execution-contract.json"
+sys.path.insert(0, str(ROOT))
+
+from review_integrity import ReviewIntegrityError, validate_binding, validate_llm_review_envelope  # noqa: E402
 
 
 class FinalizeError(ValueError):
@@ -160,6 +164,8 @@ def _review_metrics(
     *,
     expected_task_id: str | None = None,
     frozen_criteria: dict[str, dict[str, Any]] | None = None,
+    allowed_evidence_paths: list[str] | None = None,
+    objective_reference: str | None = None,
 ) -> list[dict[str, Any]]:
     metrics = []
     if expected_task_id is not None and report.get("task_id") != expected_task_id:
@@ -196,9 +202,25 @@ def _review_metrics(
         if not isinstance(evidence, list) or not evidence:
             raise FinalizeError(f"{prefix} criterion {criterion_id} must cite evidence")
         for index, item in enumerate(evidence):
-            if not isinstance(item, str):
+            field = f"{prefix}.{criterion_id}.evidence[{index}]"
+            if not isinstance(item, str) or not item:
                 raise FinalizeError(f"{prefix} criterion {criterion_id} evidence must be strings")
-            _safe_relative(item, f"{prefix}.{criterion_id}.evidence[{index}]")
+            path_part, separator, pointer = item.partition("#")
+            _safe_relative(path_part, field)
+            if separator and not pointer.startswith("/"):
+                raise FinalizeError(f"{field} JSON Pointer must start with /")
+            allowed = list(allowed_evidence_paths or [])
+            if objective_reference:
+                allowed.append(objective_reference)
+            if allowed and not any(
+                item == base
+                or item.startswith(f"{base}/")
+                or ("#" not in base and item.startswith(f"{base}#/"))
+                for base in allowed
+            ):
+                raise FinalizeError(
+                    f"{prefix} criterion {criterion_id} cites evidence outside the frozen scope"
+                )
         reason = criterion.get("reason")
         if not isinstance(reason, str) or not reason.strip():
             raise FinalizeError(f"{prefix} criterion {criterion_id} reason must be non-empty")
@@ -231,6 +253,7 @@ def finalize(
     candidate_status: str,
     objective_evidence: str,
     llm_path: Path | None = None,
+    review_binding_path: Path | None = None,
     llm_evidence: str = "llm_grader_report.json",
     static_path: Path | None = None,
     static_evidence: str = "static_review.json",
@@ -245,6 +268,18 @@ def finalize(
     if objective.get("task_id") != rubric.get("task_id"):
         raise FinalizeError("objective report task_id does not match the frozen rubric")
     frozen_criteria = _frozen_criteria(rubric)
+    rubric_evidence_paths = rubric.get("evidence_paths")
+    if not isinstance(rubric_evidence_paths, list) or not rubric_evidence_paths or not all(
+        isinstance(item, str) and item for item in rubric_evidence_paths
+    ):
+        raise FinalizeError("rubric evidence_paths must be a non-empty string array")
+    for index, item in enumerate(rubric_evidence_paths):
+        path_part, separator, pointer = item.partition("#")
+        _safe_relative(path_part, f"rubric.evidence_paths[{index}]")
+        if separator and not pointer.startswith("/"):
+            raise FinalizeError(
+                f"rubric.evidence_paths[{index}] JSON Pointer must start with /"
+            )
     redline_events = objective.get("redline_events")
     if not isinstance(redline_events, list):
         raise FinalizeError("objective redline_events must be an array")
@@ -258,7 +293,11 @@ def finalize(
     metrics = _objective_metrics(objective, _safe_relative(objective_evidence, "objective_evidence"), dimension_ids)
     review_pending = False
     if llm_path:
+        if review_binding_path is None:
+            raise FinalizeError("LLM evidence requires a controller-owned review binding")
         llm_report = _load(llm_path)
+        expected_binding = validate_binding(_load(review_binding_path))
+        validate_llm_review_envelope(llm_report, expected_binding)
         if llm_report.get("grader_uncertainty") not in {"low", "medium", "high"}:
             raise FinalizeError("llm grader_uncertainty is invalid")
         if not isinstance(llm_report.get("human_review_required"), bool):
@@ -278,11 +317,19 @@ def finalize(
                 dimension_ids,
                 expected_task_id=str(rubric.get("task_id")),
                 frozen_criteria=frozen_criteria,
+                allowed_evidence_paths=rubric_evidence_paths,
+                objective_reference=_safe_relative(
+                    objective_evidence, "objective_evidence"
+                ),
             )
         )
         review_pending = llm_report["human_review_required"]
+    if review_binding_path is not None and llm_path is None:
+        raise FinalizeError("review binding was supplied without LLM evidence")
     if static_path:
-        metrics.extend(_review_metrics(_load(static_path), _safe_relative(static_evidence, "static_evidence"), "static", dimension_ids))
+        raise FinalizeError(
+            "static review scoring is disabled until a frozen static rubric and evidence scope exist"
+        )
 
     hard_gate = bool(objective.get("hard_gate_passed")) and candidate_status in {"success", "partial_success"}
     if not hard_gate:
@@ -396,6 +443,7 @@ def main() -> int:
     parser.add_argument("--candidate-status", required=True, choices=("success", "partial_success", "failed", "timed_out", "resource_exceeded", "cancelled"))
     parser.add_argument("--objective-evidence", default="objective_report.json")
     parser.add_argument("--llm-report", type=Path)
+    parser.add_argument("--review-binding", type=Path)
     parser.add_argument("--llm-evidence", default="llm_grader_report.json")
     parser.add_argument("--static-review", type=Path)
     parser.add_argument("--static-evidence", default="static_review.json")
@@ -409,12 +457,13 @@ def main() -> int:
             candidate_status=args.candidate_status,
             objective_evidence=args.objective_evidence,
             llm_path=args.llm_report.resolve() if args.llm_report else None,
+            review_binding_path=args.review_binding.resolve() if args.review_binding else None,
             llm_evidence=args.llm_evidence,
             static_path=args.static_review.resolve() if args.static_review else None,
             static_evidence=args.static_evidence,
         )
         _atomic_json(args.output, score)
-    except (OSError, json.JSONDecodeError, KeyError, TypeError, FinalizeError) as exc:
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, FinalizeError, ReviewIntegrityError) as exc:
         print(f"scorer error: {exc}")
         return 75
     print(json.dumps({"status": "scored", "run_id": score["run_id"], "score_status": score["score_status"], "total_score": score["total_score"]}, ensure_ascii=False))

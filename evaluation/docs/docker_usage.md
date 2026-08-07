@@ -17,7 +17,7 @@ Docker 实现集中在 [`evaluation/docker/`](../docker/)：`Dockerfile` 冻结�
 | L0 结构/安全初筛 | `preflight.py`：单 Skill、frontmatter、体积、密钥、引用与主题检查 |
 | L1 静态审查 | preflight 生成冻结证据；原创性和独立模型审查明确保留为人工/外部 reviewer 项 |
 | L2 运行与产物 | Docker 2 CPU、4 GB、无 GPU、900 秒、只读根文件系统、PID 限制、E1 十产物清单 |
-| L3 质量评分 | 复用 Q01–Q24 checker、`finalize_score.py`、独立 LLM/static-review 报告接口 |
+| L3 质量评分 | 复用 Q01–Q24 checker、`finalize_score.py` 和逐运行哈希绑定的独立 LLM 报告；static-review 当前禁用 |
 | B0/S0 uplift | 相同题面、镜像、模型、repeat、网络和资源；唯一差异是 S0 的只读 Skill 挂载 |
 | 重复策略 | 主模型 B0/S0 各三次并取中位数；可选补充模型各一次，单独归档、不混入主聚合 |
 | 数据下载不计时 | campaign 输入在运行前已打包；容器计时只覆盖 Agent 执行，元数据单列 `download_seconds` |
@@ -114,7 +114,7 @@ python3 evaluation/docker/campaign.py stage \
 
 未知 profile、不可运行 profile、条目/注册表哈希变化，或 model、temperature、thinking 与冻结策略不一致时，宿主 runner 和容器入口都会以环境无效失败关闭。不要原地改写已用于正式实验的 profile；新增版本化 ID，并保留旧条目以便复核历史证据。
 
-密钥只通过宿主环境继承，命令、计划和 JSON 均不写密钥值；runner 会在归档前清除日志中的密钥字节。若候选把密钥写入 submission，runner 会等长覆盖该值并以 E1 `74` 失败关闭：
+真实密钥只由宿主注入每次运行独占的短生命周期 provider relay；候选容器只得到随机本地 relay token，不能读取真实密钥。relay 只向冻结的 HTTPS origin 转发 `/chat/completions` 或 `/responses`，替换 Authorization 后再过滤响应头，并在候选结束后销毁。命令、计划和 JSON 均不写真实密钥值；runner 仍会在归档前递归清除真实密钥或 relay token 字节。若交卷包含这些字节，runner 会等长覆盖并以 E1 `74` 失败关闭：
 
 ```bash
 export EVAL_API_KEY='从密钥管理器注入，不写入仓库'
@@ -140,14 +140,16 @@ python3 evaluation/docker/campaign.py run \
 
 网关 hostname 会自动加入本次 allowlist；科学数据域名来自 `allowlist.txt`，新增域名用重复的 `--allow-host` 显式声明。禁止使用 `--network host`。
 
-若独立 grader 已为每次运行生成报告，可接入：
+独立 grader 必须在候选运行完成后读取每个 `review_binding.json`，生成逐运行报告；报告须精确绑定 run、任务包、提交产物、objective report、rubric、Skill 快照和评分协议。旧报告或其他 repeat 的报告会失败关闭。全部报告准备好后执行第二阶段：
 
 ```bash
-  --llm-report-dir /frozen/reviews \
-  --static-review /frozen/static_review.json
+python3 evaluation/docker/campaign.py finalize-reviews \
+  --campaign-dir /runs/qwen-main-v1 \
+  --llm-report-dir /frozen/bound-reviews
 ```
 
-每次 LLM 报告可命名为 `<run_id>.json`，或放在 `main/Q01/S0/repeat-1.json`（补充模型使用 `supplemental/`）。缺失报告时不补造分数，相关维度保持 `not_scored`/`partial`。
+第二阶段先验证并暂存全部报告和新分数，全部通过后才原子替换逐文件证据并重建聚合。每次 LLM 报告可命名为 `<run_id>.json`，或放在 `main/Q01/S0/repeat-1.json`（补充模型使用 `supplemental/`）。候选执行成功或部分成功的 run 必须逐一提供报告；已经失败、超时或资源超限的 run 保留原有 `ineligible` 分数，不要求也不接受 LLM 补分。缺失报告时不补造分数，相关维度保持 `not_scored`/`partial`。`run --llm-report-dir` 明确拒绝，避免在绑定尚未生成时误用预制报告。
+当前没有冻结 static-review rubric 和证据范围，因此 `--static-review` 明确拒绝，不能用共享静态报告补齐任意维度。
 
 ## 7. 证据目录
 
@@ -167,12 +169,13 @@ campaign/
 │   ├── candidate.stderr
 │   ├── runner_metadata.json
 │   ├── objective_report.json
+│   ├── review_binding.json     # controller 生成的逐运行证据绑定
 │   ├── score.json
 │   └── run_record.json
 └── supplemental/...
 ```
 
-记录包含 task/Skill/产物哈希、镜像 ID、资源限制、原始退出码、E1 退出码、运行时长、网络模式、provider endpoint、profile/registry 哈希、temperature 和 thinking。`pair_fingerprint_inputs` 明文保存参与哈希的非密钥字段，B0/S0 的配对可独立复算。grader 证据在 submission 外，避免污染候选交卷。
+记录包含 task/冻结 Skill/产物哈希、镜像 ID、资源限制、原始退出码、E1 退出码、运行时长、网络模式、provider endpoint、profile/registry 哈希、temperature 和 thinking。campaign 开始时创建拒绝符号链接且哈希复核的只读 Skill 快照；`pair_fingerprint_inputs` 明文保存参与哈希的非密钥字段，B0/S0 的配对可独立复算。grader 证据在 submission 外，避免污染候选交卷。
 
 ## 8. 失败关闭
 

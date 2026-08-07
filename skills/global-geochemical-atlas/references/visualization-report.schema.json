@@ -105,6 +105,10 @@
       },
       "additionalProperties": false
     },
+    "element_comparison": {
+      "$ref": "urn:global-geochemical-atlas:element-comparison:v1"
+    },
+    "concentration_grid_summary": {"type": "object"},
     "limitations": {"type": "array", "items": {"type": "string"}},
     "next_actions": {"type": "array", "items": {"type": "string"}}
   },

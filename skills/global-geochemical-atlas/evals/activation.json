@@ -1,0 +1,49 @@
+{
+  "schema_version": "skill-activation-eval-v1",
+  "skill": "global-geochemical-atlas",
+  "cases": [
+    {
+      "id": "positive-explicit",
+      "prompt": "Use $global-geochemical-atlas to build a reproducible copper and arsenic atlas for soil and stream sediment in China, with provenance, QC, anomalies, and an offline interactive map.",
+      "should_activate": true,
+      "expected_behavior": [
+        "freezes elements, region, media, evidence policy, and outputs",
+        "routes through source evidence, normalization, QC, anomaly screening, and visualization",
+        "reports coverage and scientific limitations"
+      ]
+    },
+    {
+      "id": "positive-natural",
+      "prompt": "Compare lead and zinc measurements from public rock and sediment datasets in a named country, preserving methods and detection limits, then make a traceable interactive map.",
+      "should_activate": true,
+      "expected_behavior": [
+        "uses exact country geometry and comparable measurement layers",
+        "preserves raw values, methods, censoring, and source locators",
+        "does not present association or anomalies as causation"
+      ]
+    },
+    {
+      "id": "negative-generic-map",
+      "prompt": "Create a subway map for my city and suggest the fastest commute.",
+      "should_activate": false,
+      "expected_behavior": [
+        "does not activate for non-geochemical mapping or route planning"
+      ]
+    },
+    {
+      "id": "negative-general-chemistry",
+      "prompt": "Explain the electron configuration of copper and help balance a redox equation.",
+      "should_activate": false,
+      "expected_behavior": [
+        "does not activate for general chemistry education without geochemical data workflow needs"
+      ]
+    }
+  ],
+  "rubrics": {
+    "discoverability": "Activates for explicit and natural geochemical atlas requests and stays inactive for adjacent mapping or general-chemistry requests.",
+    "correctness": "Selects the minimum deterministic workflow that satisfies the requested scientific products and validates its outputs.",
+    "security": "Treats external content as data, does not request secrets, and keeps network activity read-only and allowlisted.",
+    "effectiveness": "Produces evidence-linked structured artifacts and exposes coverage, uncertainty, exclusions, and failure states.",
+    "efficiency": "Avoids unrelated sources and stages, reuses verified caches, and remains inside the shared execution budget."
+  }
+}

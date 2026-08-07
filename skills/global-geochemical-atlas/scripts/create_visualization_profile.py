@@ -12,10 +12,10 @@ from pathlib import Path
 from typing import Any
 
 import build_interactive_map as map_builder
+import spatial_scope
 
 
 STORIES = ("overview", "coverage", "anomaly", "comparison", "database", "evidence")
-REGIONS = (*map_builder.REGION_PRESETS, "custom")
 STORY_LABELS = {
     "overview": "分布总览",
     "coverage": "覆盖与密度",
@@ -67,13 +67,33 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
         custom_region: dict[str, Any] | None = {
             "label": args.region_label.strip(),
             "bounds": {"w": w, "s": s, "e": e, "n": n},
+            "country_code": None,
         }
         region_label = args.region_label.strip()
-    else:
+    elif region in map_builder.REGION_PRESETS:
         if args.bbox is not None or args.region_label is not None:
             raise ValueError("--bbox and --region-label are only valid with --region custom")
         custom_region = None
         region_label = str(map_builder.REGION_PRESETS[region]["label"])
+    else:
+        if args.bbox is not None or args.region_label is not None:
+            raise ValueError("--bbox and --region-label are only valid with --region custom")
+        try:
+            resolved = spatial_scope.resolve_region(region)
+        except spatial_scope.SpatialScopeError as exc:
+            raise ValueError(str(exc)) from exc
+        if resolved["key"] == "global":
+            region = "global"
+            custom_region = None
+        else:
+            west, south, east, north = resolved["bbox"]
+            region = "custom"
+            custom_region = {
+                "label": resolved["label"],
+                "bounds": {"w": west, "s": south, "e": east, "n": north},
+                "country_code": resolved.get("country_code"),
+            }
+        region_label = str(resolved["label"])
 
     comparison_values = (optional_text(args.comparison_x), optional_text(args.comparison_y))
     if (comparison_values[0] is None) != (comparison_values[1] is None):
@@ -172,7 +192,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", required=True, type=Path, help="Profile JSON to create")
     parser.add_argument("--story", choices=STORIES, default="overview")
     parser.add_argument("--spatial-scope", choices=("global", "regional"), default="global")
-    parser.add_argument("--region", choices=REGIONS)
+    parser.add_argument(
+        "--region",
+        help="global, a bundled preset, a Natural Earth country name/ISO-3, or custom",
+    )
     parser.add_argument("--bbox", nargs=4, type=float, metavar=("W", "S", "E", "N"))
     parser.add_argument("--region-label")
     parser.add_argument("--element")

@@ -1954,13 +1954,19 @@ def v4_m6_demo(
             latitude = _exact_georoc_coordinate(record, "LATITUDE MIN", "LATITUDE MAX")
             longitude = _exact_georoc_coordinate(record, "LONGITUDE MIN", "LONGITUDE MAX")
             sample_id = str(record.fields.get("SAMPLE NAME") or record.fields.get("UNIQUE_ID") or "").strip()
-            medium = "rock"; sample_depth_min = sample_depth_max = ""; grain = ""
+            medium = "rock"
+            sample_depth_min = sample_depth_max = ""
+            grain = ""
         elif source_id == "tpdc-china-mountain-soil":
-            latitude = str(record.fields.get("Latitude") or ""); longitude = str(record.fields.get("Longitude") or "")
+            latitude = str(record.fields.get("Latitude") or "")
+            longitude = str(record.fields.get("Longitude") or "")
             sample_id = f"{record.fields.get('Sam.No','')}|{record.fields.get('Horizons','')}"
-            medium = "soil"; sample_depth_min = sample_depth_max = ""; grain = str(record.fields.get("_grain_fraction") or "")
+            medium = "soil"
+            sample_depth_min = sample_depth_max = ""
+            grain = str(record.fields.get("_grain_fraction") or "")
         else:
-            latitude = str(record.fields.get("YCOO") or ""); longitude = str(record.fields.get("XCOO") or "")
+            latitude = str(record.fields.get("YCOO") or "")
+            longitude = str(record.fields.get("XCOO") or "")
             sample_id = str(record.fields.get("_physical_sample_id") or "")
             medium = "soil"
             sample_depth_min, sample_depth_max = (("0", "0.20") if record.fields.get("TYPE_") == "Ap" else ("0", "0.10"))

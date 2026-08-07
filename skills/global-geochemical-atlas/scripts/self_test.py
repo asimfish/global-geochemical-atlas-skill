@@ -161,6 +161,9 @@ def run_suite() -> dict[str, Any]:
         "anomaly-regions.schema.json",
         "spatial-anomaly-report.schema.json",
         "request-execution.schema.json",
+        "task-contract.schema.json",
+        "element-comparison.schema.json",
+        "concentration-grid.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")

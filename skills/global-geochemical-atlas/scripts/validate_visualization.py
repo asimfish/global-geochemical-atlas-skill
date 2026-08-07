@@ -120,6 +120,92 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "profile": "visualization_profile.json",
             "iteration_backlog": "iteration_backlog.csv",
         }
+        if isinstance(profile, dict) and profile.get("story") == "comparison":
+            expected_outputs["element_comparison"] = "element_comparison.json"
+            comparison_path = output_dir / "element_comparison.json"
+            if not comparison_path.is_file() or comparison_path.stat().st_size == 0:
+                errors.append("comparison visualization is missing element_comparison.json")
+            else:
+                try:
+                    comparison = workflow_validator.strict_json(comparison_path)
+                except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+                    errors.append(f"element_comparison.json is invalid JSON: {exc}")
+                else:
+                    if comparison.get("comparison_version") != "d3-element-comparison-v1":
+                        errors.append("element_comparison.json has an unsupported version")
+                    expected_elements = {
+                        "x": profile.get("comparison", {}).get("x"),
+                        "y": profile.get("comparison", {}).get("y"),
+                    }
+                    if comparison.get("elements") != expected_elements:
+                        errors.append("element_comparison.json elements differ from the profile")
+                    pairs = comparison.get("paired_records")
+                    coverage = comparison.get("coverage")
+                    statistics = comparison.get("statistics")
+                    if not isinstance(pairs, list) or not isinstance(coverage, dict):
+                        errors.append("element_comparison.json lacks pair and coverage arrays")
+                    elif coverage.get("paired_sample_layer_count") != len(pairs):
+                        errors.append("element_comparison.json pair count is inconsistent")
+                    elif comparison.get("status") != (
+                        "success" if len(pairs) >= 8 else "insufficient_pairs"
+                    ):
+                        errors.append("element_comparison.json status violates the eight-pair gate")
+                    if (
+                        isinstance(pairs, list)
+                        and len(pairs) < 8
+                        and isinstance(statistics, dict)
+                        and statistics.get("spearman_rho") is not None
+                    ):
+                        errors.append("element_comparison.json reports Spearman below eight pairs")
+                    if comparison.get("input_sha256") != workflow_validator.sha256_file(
+                        paths["geochemistry.csv"]
+                    ):
+                        errors.append("element_comparison.json input hash differs from geochemistry.csv")
+                    if report.get("element_comparison") != comparison:
+                        errors.append("visualization_report.json comparison differs from its artifact")
+        if isinstance(profile, dict) and profile.get("filters", {}).get("element"):
+            expected_outputs["concentration_grid"] = "concentration_grid.geojson"
+            grid_path = output_dir / "concentration_grid.geojson"
+            if not grid_path.is_file() or grid_path.stat().st_size == 0:
+                errors.append("element-filtered visualization is missing concentration_grid.geojson")
+            else:
+                try:
+                    grid = workflow_validator.strict_json(grid_path)
+                except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+                    errors.append(f"concentration_grid.geojson is invalid JSON: {exc}")
+                else:
+                    if (
+                        grid.get("type") != "FeatureCollection"
+                        or grid.get("grid_version") != "d3-observed-concentration-grid-v1"
+                        or grid.get("element") != profile.get("filters", {}).get("element")
+                        or grid.get("interpolation") is not False
+                        or grid.get("feature_count") != len(grid.get("features", []))
+                    ):
+                        errors.append("concentration_grid.geojson violates its observed-cell contract")
+                    if grid.get("input_sha256") != workflow_validator.sha256_file(
+                        paths["geochemistry.csv"]
+                    ):
+                        errors.append("concentration_grid.geojson input hash differs from geochemistry.csv")
+                    for feature in grid.get("features", []):
+                        properties = feature.get("properties", {}) if isinstance(feature, dict) else {}
+                        count_fields = (
+                            properties.get("quantified_count"),
+                            properties.get("censored_count"),
+                            properties.get("unquantified_count"),
+                        )
+                        if (
+                            not all(isinstance(value, int) and value >= 0 for value in count_fields)
+                            or sum(count_fields) != properties.get("record_count")
+                        ):
+                            errors.append("concentration grid feature counts do not reconcile")
+                    summary = report.get("concentration_grid_summary", {})
+                    if (
+                        summary.get("grid_version") != grid.get("grid_version")
+                        or summary.get("element") != grid.get("element")
+                        or summary.get("feature_count") != grid.get("feature_count")
+                        or summary.get("interpolation") is not False
+                    ):
+                        errors.append("visualization_report.json concentration summary differs from its artifact")
         if report.get("outputs") != expected_outputs:
             errors.append("visualization_report.json outputs do not match the D3 contract")
         for name, expected_hash in report.get("inputs", {}).items():
@@ -134,7 +220,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors.append("visualization_report.json output_sha256 must be an object")
         else:
             for name in expected_outputs.values():
-                if output_hashes.get(name) != workflow_validator.sha256_file(paths[name]):
+                if output_hashes.get(name) != workflow_validator.sha256_file(output_dir / name):
                     errors.append(f"visualization_report.json output hash differs for {name}")
         map_report = report.get("map_report")
         if not isinstance(map_report, dict):

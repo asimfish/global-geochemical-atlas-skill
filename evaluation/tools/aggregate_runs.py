@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import math
+import re
 import statistics
 import sys
 from collections import defaultdict
@@ -16,6 +17,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ALIGNMENT_PATH = ROOT / "contracts" / "benchmark-execution-contract.json"
+SHA256 = re.compile(r"^[0-9a-f]{64}$")
+OFFICIAL_TASKS = {f"Q{number:02d}" for number in range(1, 25)}
 
 
 class AggregateError(ValueError):
@@ -51,7 +54,12 @@ def _summary(values: list[float]) -> dict[str, Any]:
 
 
 def _validate_record(record: dict[str, Any], alignment: dict[str, Any], dimensions: dict[str, float]) -> dict[str, Any]:
-    required = {"run_id", "task_id", "split", "variant", "repeat", "pair_fingerprint", "status", "exit_code", "score"}
+    required = {
+        "run_id", "task_id", "split", "variant", "repeat", "pair_fingerprint",
+        "status", "exit_code", "score", "provider", "skill_version",
+        "frozen_skill_sha256", "benchmark_version", "protocol_mode",
+        "benchmark_scope", "formal_result_eligible", "sandbox_image", "model",
+    }
     missing = sorted(required - set(record))
     if missing:
         raise AggregateError(f"run record missing fields: {missing}")
@@ -59,6 +67,25 @@ def _validate_record(record: dict[str, Any], alignment: dict[str, Any], dimensio
         raise AggregateError(f"{record['run_id']}: variant/repeat must be B0|S0 and 1..3")
     if record["split"] not in {"public", "shadow", "final_holdout"}:
         raise AggregateError(f"{record['run_id']}: invalid split")
+    if record["benchmark_version"] != alignment["benchmark_version"]:
+        raise AggregateError(f"{record['run_id']}: benchmark version drift")
+    if not isinstance(record["pair_fingerprint"], str) or not SHA256.fullmatch(record["pair_fingerprint"]):
+        raise AggregateError(f"{record['run_id']}: pair_fingerprint must be lowercase SHA-256")
+    skill_sha256 = record["frozen_skill_sha256"]
+    if not isinstance(skill_sha256, str) or not SHA256.fullmatch(skill_sha256):
+        raise AggregateError(f"{record['run_id']}: frozen_skill_sha256 must be lowercase SHA-256")
+    if record["variant"] == "S0" and record["skill_version"] != skill_sha256:
+        raise AggregateError(f"{record['run_id']}: S0 skill_version does not match the frozen Skill")
+    if record["variant"] == "B0" and record["skill_version"] is not None:
+        raise AggregateError(f"{record['run_id']}: B0 must not expose a mounted skill_version")
+    if record["protocol_mode"] not in {"development", "formal"}:
+        raise AggregateError(f"{record['run_id']}: invalid protocol_mode")
+    if not isinstance(record["benchmark_scope"], str) or not record["benchmark_scope"]:
+        raise AggregateError(f"{record['run_id']}: benchmark_scope must be non-empty")
+    if not isinstance(record["formal_result_eligible"], bool):
+        raise AggregateError(f"{record['run_id']}: formal_result_eligible must be boolean")
+    if not isinstance(record["provider"], dict):
+        raise AggregateError(f"{record['run_id']}: provider must be an audit object")
     exit_meanings = {int(key): value for key, value in alignment["exit_codes"].items()}
     if record["exit_code"] not in exit_meanings:
         raise AggregateError(f"{record['run_id']}: exit code is outside E1")
@@ -115,6 +142,9 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
     run_ids = [record["run_id"] for record in normalized]
     if len(run_ids) != len(set(run_ids)):
         raise AggregateError("run_id values must be unique")
+    skill_hashes = {record["frozen_skill_sha256"] for record in normalized}
+    if len(skill_hashes) != 1:
+        raise AggregateError("campaign contains more than one frozen Skill identity")
     grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for record in normalized:
         grouped[(record["task_id"], record["split"])].append(record)
@@ -206,12 +236,46 @@ def aggregate(records: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict
             }
         dimension_metrics[split] = split_dimensions
     complete_scores = sum(record["score"].get("score_status") == "complete" for record in normalized)
+    task_ids = {record["task_id"] for record in normalized}
+    expected_splits = {
+        f"Q{number:02d}": (
+            "public" if number <= 8 else "shadow" if number <= 16 else "final_holdout"
+        )
+        for number in range(1, 25)
+    }
+    readiness_checks = {
+        "all_scores_complete": complete_scores == len(normalized),
+        "all_runs_successful": all(record["status"] == "success" for record in normalized),
+        "full_24_task_campaign": task_ids == OFFICIAL_TASKS and len(normalized) == 144,
+        "official_split_assignment": all(
+            expected_splits.get(record["task_id"]) == record["split"] for record in normalized
+        ),
+        "formal_protocol": all(record["protocol_mode"] == "formal" for record in normalized),
+        "official_frozen_benchmark": all(
+            record["benchmark_scope"] == "official_frozen" for record in normalized
+        ),
+        "formal_result_eligibility": all(record["formal_result_eligible"] for record in normalized),
+        "official_provider_identity": all(
+            record["provider"].get("official_claim") is True
+            and record["provider"].get("verification_status") == "official_frozen"
+            for record in normalized
+        ),
+        "single_skill_identity": len(skill_hashes) == 1,
+        "single_model_identity": len({record["model"] for record in normalized}) == 1,
+        "single_sandbox_identity": len({record["sandbox_image"] for record in normalized}) == 1,
+        "no_redline_events": all(not record.get("redline_events") for record in normalized),
+    }
     return rows, {
         "schema_version": "e2.e1-campaign-aggregate.v1",
         "e1_contract_sha256": alignment["e1_contract_sha256"],
         "records": len(normalized),
         "complete_score_records": complete_scores,
-        "official_ready": complete_scores == len(normalized),
+        "all_scores_complete": readiness_checks["all_scores_complete"],
+        "official_ready": all(readiness_checks.values()),
+        "readiness_checks": readiness_checks,
+        "official_ready_reasons": [
+            check for check, passed in readiness_checks.items() if not passed
+        ],
         "tasks": task_results,
         "split_metrics": split_metrics,
         "dimension_metrics": dimension_metrics,

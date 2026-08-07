@@ -49,6 +49,10 @@
                 "n": {"type": "number", "minimum": -90, "maximum": 90}
               },
               "additionalProperties": false
+            },
+            "country_code": {
+              "type": ["string", "null"],
+              "pattern": "^[A-Z]{3}$"
             }
           },
           "additionalProperties": false

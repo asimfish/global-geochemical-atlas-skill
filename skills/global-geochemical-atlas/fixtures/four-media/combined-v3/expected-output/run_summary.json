@@ -27,9 +27,9 @@
         "sha256": "f55e30230eb432ce0802585db727a140d9fad209bde8786449571594248727b0"
       },
       "confidence_report": {
-        "bytes": 3982,
+        "bytes": 4123,
         "filename": "confidence_report.json",
-        "sha256": "d635f4d4ce2b36415073be92d97578329fe77b10d1b8077321abddbe4a77d6d4"
+        "sha256": "282fc8813036a1b064056b6aef18784290c3788e18967a205a15c2219f469f7f"
       },
       "database": {
         "bytes": 2003010,
@@ -37,9 +37,9 @@
         "sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db"
       },
       "interactive_map": {
-        "bytes": 1202470,
+        "bytes": 1203017,
         "filename": "interactive_map.html",
-        "sha256": "97d9fcf4d34b66c6e210e577b2f5d7d78d553f8493cc7ca9bdd4d88706496978"
+        "sha256": "e8561f238ace762dc1a103a345e553e681b6e1a3ed8c2ef68e4dbb55a2e50db3"
       },
       "iteration_backlog": {
         "bytes": 739091,
@@ -64,7 +64,7 @@
       "source_manifest": {
         "bytes": 39820,
         "filename": "source_manifest.json",
-        "sha256": "8289dd1682e0bb7e4543ddc2fa259dddecda9fef7be03d8547b24bfe35d6ea19"
+        "sha256": "84fa5c6dbd12ed39a400a98784315221ac5e9ab275c96850b30f34555e3606c9"
       },
       "spatial_anomaly_report": {
         "bytes": 11722,
@@ -126,7 +126,7 @@
     "artifact_bindings": {
       "anomalies_sha256": "f7717d49b0f7cd8af8bf612d6a45eef4727bebe58f8b44286f6a02b8524c0da7",
       "database_sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db",
-      "interactive_map_sha256": "97d9fcf4d34b66c6e210e577b2f5d7d78d553f8493cc7ca9bdd4d88706496978",
+      "interactive_map_sha256": "e8561f238ace762dc1a103a345e553e681b6e1a3ed8c2ef68e4dbb55a2e50db3",
       "samples_geojson_sha256": "3364437bffa5db21b4174701ce5c1810fdb7812121983c420ec5680507d89d89"
     },
     "basemap": {
@@ -248,7 +248,7 @@
     "display_sample_count": 226,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1202470,
+    "html_bytes": 1203017,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 808,
@@ -429,7 +429,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-dual-scope-atlas-v4",
-    "template_sha256": "abe911bb4e280e15b3da8cf2cf8a4f56fd8584f1c60b07992db90bce8ffeec3b",
+    "template_sha256": "ccc127fbc7623cd6b7deb41781370050b81af57d7c25850015614c7e2e5d53ec",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "task-first-progressive-disclosure-v2",

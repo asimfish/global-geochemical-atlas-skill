@@ -1,3 +1,29 @@
+x-candidate: &candidate
+  image: ${EVAL_IMAGE:-global-geochemical-eval:local}
+  depends_on: [proxy, provider-relay]
+  environment:
+    EVAL_API_KEY: ${EVAL_RELAY_TOKEN:?set a per-run relay token}
+    EVAL_PROVIDER_BASE_URL: http://provider-relay:8090
+    EVAL_PROVIDER_UPSTREAM_BASE_URL: ${EVAL_PROVIDER_BASE_URL:?set EVAL_PROVIDER_BASE_URL}
+    EVAL_PROVIDER_MODEL_ID: ${EVAL_PROVIDER_MODEL_ID:?set EVAL_PROVIDER_MODEL_ID}
+    EVAL_MODEL_VARIANT: ${EVAL_MODEL_VARIANT:-}
+    EVAL_TEMPERATURE: ${EVAL_TEMPERATURE:-0}
+    EVAL_THINKING_MODE: ${EVAL_THINKING_MODE:-not_configured}
+    EVAL_PROVIDER_PROFILE_ID: ${EVAL_PROVIDER_PROFILE_ID:?set EVAL_PROVIDER_PROFILE_ID}
+    EVAL_PROVIDER_PROFILE_SHA256: ${EVAL_PROVIDER_PROFILE_SHA256:?set EVAL_PROVIDER_PROFILE_SHA256}
+    EVAL_PROVIDER_REGISTRY_SHA256: ${EVAL_PROVIDER_REGISTRY_SHA256:?set EVAL_PROVIDER_REGISTRY_SHA256}
+    HTTPS_PROXY: http://proxy:8080
+    HTTP_PROXY: http://proxy:8080
+    NO_PROXY: localhost,127.0.0.1,provider-relay
+  networks: [candidate_internal]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  read_only: true
+  tmpfs: [/tmp]
+  pids_limit: 256
+  cpus: 2
+  mem_limit: 4g
+
 services:
   proxy:
     image: ${EVAL_IMAGE:-global-geochemical-eval:local}
@@ -9,25 +35,47 @@ services:
     security_opt: [no-new-privileges:true]
     read_only: true
     tmpfs: [/tmp]
+    pids_limit: 64
+    cpus: 1
+    mem_limit: 512m
 
-  candidate:
+  provider-relay:
     image: ${EVAL_IMAGE:-global-geochemical-eval:local}
-    profiles: [manual]
-    depends_on: [proxy]
+    command: ["python", "/opt/evaluation/container/provider_relay.py"]
     environment:
-      EVAL_API_KEY: ${EVAL_API_KEY:?set EVAL_API_KEY}
-      EVAL_PROVIDER_BASE_URL: ${EVAL_PROVIDER_BASE_URL:?set EVAL_PROVIDER_BASE_URL}
-      EVAL_PROVIDER_MODEL_ID: ${EVAL_PROVIDER_MODEL_ID:?set EVAL_PROVIDER_MODEL_ID}
-      HTTPS_PROXY: http://proxy:8080
-      HTTP_PROXY: http://proxy:8080
-    networks: [candidate_internal]
+      EVAL_RELAY_TOKEN: ${EVAL_RELAY_TOKEN:?set a per-run relay token}
+      EVAL_UPSTREAM_API_KEY: ${EVAL_API_KEY:?set EVAL_API_KEY}
+      EVAL_UPSTREAM_BASE_URL: ${EVAL_PROVIDER_BASE_URL:?set EVAL_PROVIDER_BASE_URL}
+      EVAL_UPSTREAM_MODEL_ID: ${EVAL_PROVIDER_MODEL_ID:?set EVAL_PROVIDER_MODEL_ID}
+      EVAL_UPSTREAM_TEMPERATURE: ${EVAL_TEMPERATURE:-0}
+      EVAL_UPSTREAM_THINKING_MODE: ${EVAL_THINKING_MODE:-not_configured}
+      EVAL_RELAY_MAX_SECONDS: ${EVAL_RELAY_MAX_SECONDS:-900}
+      EVAL_RELAY_MAX_REQUESTS: ${EVAL_RELAY_MAX_REQUESTS:-512}
+    networks: [candidate_internal, egress]
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     read_only: true
     tmpfs: [/tmp]
-    pids_limit: 256
-    cpus: 2
-    mem_limit: 4g
+    pids_limit: 64
+    cpus: 1
+    mem_limit: 512m
+
+  candidate-b0:
+    <<: *candidate
+    profiles: [manual-b0]
+    volumes:
+      - ${EVAL_TASK_DIR:?set EVAL_TASK_DIR}:/task:ro
+      - ${EVAL_WORKSPACE_DIR:?set EVAL_WORKSPACE_DIR}:/workspace:rw
+      - ${EVAL_SUBMISSION_DIR:?set EVAL_SUBMISSION_DIR}:/submission:rw
+
+  candidate-s0:
+    <<: *candidate
+    profiles: [manual-s0]
+    volumes:
+      - ${EVAL_TASK_DIR:?set EVAL_TASK_DIR}:/task:ro
+      - ${EVAL_WORKSPACE_DIR:?set EVAL_WORKSPACE_DIR}:/workspace:rw
+      - ${EVAL_SUBMISSION_DIR:?set EVAL_SUBMISSION_DIR}:/submission:rw
+      - ${EVAL_SKILL_DIR:?set frozen EVAL_SKILL_DIR}:/workspace/.opencode/skills/global-geochemical-atlas:ro
 
 networks:
   candidate_internal:

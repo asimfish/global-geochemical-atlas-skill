@@ -8,7 +8,6 @@ import csv
 import hashlib
 import json
 import math
-import statistics
 from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable
@@ -170,7 +169,6 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     root = args.submission_dir
     d1 = read_csv(root / "d1_raw.csv")
     d2 = read_csv(root / "geochemistry.csv")
-    qc = load_json(root / "qc_report.json", {})
     confidence = load_json(root / "confidence_report.json", {})
     source_manifest = load_json(root / "source_manifest.json", {})
     discovery = load_json(root / "discovery_report.json", {})

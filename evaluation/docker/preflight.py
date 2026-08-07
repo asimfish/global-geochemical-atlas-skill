@@ -17,7 +17,7 @@ NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 MARKDOWN_LINK = re.compile(r"\[[^]]*]\(([^)]+)\)")
 INLINE_PATH = re.compile(r"`((?:references|scripts|assets)/[^`]+)`")
 SECRET_PATTERNS = (
-    ("openai_style_key", re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")),
+    ("openai_style_key", re.compile(r"\bsk-[A-Za-z0-9._-]{16,}\b")),
     ("aws_access_key", re.compile(r"\bAKIA[A-Z0-9]{16}\b")),
     ("private_key", re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
 )
@@ -30,6 +30,24 @@ SKIP_PARTS = {"__pycache__", ".git", ".pytest_cache", ".ruff_cache", ".venv", "n
 SKIP_SUFFIXES = {".pyc", ".pyo", ".log", ".tmp"}
 TOTAL_LIMIT = 200 * 1024 * 1024
 FILE_LIMIT = 100 * 1024 * 1024
+ACTIVATION_RUBRICS = {"discoverability", "correctness", "security", "effectiveness", "efficiency"}
+SKILL_CARD_SECTIONS = (
+    "## Purpose",
+    "## Inputs and outputs",
+    "## Effective capabilities",
+    "## Trust boundaries and controls",
+    "## Known limitations",
+    "## Verification",
+)
+SKILL_CARD_CAPABILITIES = (
+    "| Reads |",
+    "| Writes |",
+    "| Executes |",
+    "| Network |",
+    "| Credentials |",
+    "| External effects |",
+    "| Approval gates |",
+)
 
 
 class FrontmatterError(ValueError):
@@ -81,6 +99,20 @@ def package_files(repo: Path) -> list[Path]:
     return sorted(set(files))
 
 
+def repository_files(repo: Path) -> list[Path]:
+    files: list[Path] = []
+    for path in repo.rglob("*"):
+        relative = path.relative_to(repo)
+        if (
+            path.is_file()
+            and not path.is_symlink()
+            and not any(part in SKIP_PARTS for part in relative.parts)
+            and path.suffix.casefold() not in SKIP_SUFFIXES
+        ):
+            files.append(path)
+    return sorted(files)
+
+
 def direct_local_references(skill_dir: Path, body: str) -> tuple[set[str], list[str]]:
     raw = set(MARKDOWN_LINK.findall(body)) | set(INLINE_PATH.findall(body))
     paths: set[str] = set()
@@ -99,6 +131,107 @@ def direct_local_references(skill_dir: Path, body: str) -> tuple[set[str], list[
             errors.append(f"referenced file does not exist: {target}")
         paths.add(relative.as_posix())
     return paths, errors
+
+
+def validate_agent_metadata(skill_dir: Path, skill_name: str) -> list[str]:
+    path = skill_dir / "agents" / "openai.yaml"
+    if not path.is_file():
+        return ["agents/openai.yaml is missing"]
+    text = path.read_text(encoding="utf-8")
+    fields = {
+        key: value
+        for key, value in re.findall(
+            r'^  (display_name|short_description|default_prompt): "([^"]+)"\s*$',
+            text,
+            flags=re.MULTILINE,
+        )
+    }
+    errors = [f"interface.{key} is missing or not a quoted string" for key in (
+        "display_name", "short_description", "default_prompt"
+    ) if key not in fields]
+    short_description = fields.get("short_description", "")
+    if short_description and not 25 <= len(short_description) <= 64:
+        errors.append("interface.short_description must contain 25..64 characters")
+    default_prompt = fields.get("default_prompt", "")
+    if default_prompt and f"${skill_name}" not in default_prompt:
+        errors.append(f"interface.default_prompt must mention ${skill_name}")
+    if not re.search(r"^  allow_implicit_invocation: (?:true|false)\s*$", text, re.MULTILINE):
+        errors.append("policy.allow_implicit_invocation must be an explicit boolean")
+    return errors
+
+
+def validate_skill_card(skill_dir: Path) -> list[str]:
+    path = skill_dir / "skill-card.md"
+    if not path.is_file():
+        return ["skill-card.md is missing"]
+    text = path.read_text(encoding="utf-8")
+    errors = [f"missing section: {heading}" for heading in SKILL_CARD_SECTIONS if heading not in text]
+    errors.extend(
+        f"missing capability declaration: {capability}"
+        for capability in SKILL_CARD_CAPABILITIES
+        if capability not in text
+    )
+    return errors
+
+
+def validate_activation_eval(skill_dir: Path, skill_name: str) -> list[str]:
+    path = skill_dir / "evals" / "activation.json"
+    if not path.is_file():
+        return ["evals/activation.json is missing"]
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [f"activation eval is not valid JSON: {exc}"]
+    if not isinstance(document, dict):
+        return ["activation eval root must be an object"]
+    errors: list[str] = []
+    if document.get("skill") != skill_name:
+        errors.append("activation eval skill does not match the Skill directory")
+    cases = document.get("cases")
+    if not isinstance(cases, list):
+        errors.append("activation eval cases must be an array")
+        cases = []
+    identifiers: set[str] = set()
+    positive = 0
+    negative = 0
+    for index, case in enumerate(cases):
+        if not isinstance(case, dict):
+            errors.append(f"activation case {index} must be an object")
+            continue
+        identifier = case.get("id")
+        if not isinstance(identifier, str) or not identifier:
+            errors.append(f"activation case {index} has no stable id")
+        elif identifier in identifiers:
+            errors.append(f"activation case id is duplicated: {identifier}")
+        else:
+            identifiers.add(identifier)
+        if not isinstance(case.get("prompt"), str) or not case["prompt"].strip():
+            errors.append(f"activation case {index} has no prompt")
+        should_activate = case.get("should_activate")
+        if should_activate is True:
+            positive += 1
+        elif should_activate is False:
+            negative += 1
+        else:
+            errors.append(f"activation case {index} should_activate must be boolean")
+        behavior = case.get("expected_behavior")
+        if not isinstance(behavior, list) or not behavior or not all(
+            isinstance(item, str) and item.strip() for item in behavior
+        ):
+            errors.append(f"activation case {index} needs non-empty expected_behavior strings")
+    if positive < 2 or negative < 2:
+        errors.append("activation eval requires at least two positive and two adjacent negative cases")
+    rubrics = document.get("rubrics")
+    if not isinstance(rubrics, dict):
+        errors.append("activation eval rubrics must be an object")
+    else:
+        missing = sorted(ACTIVATION_RUBRICS - set(rubrics))
+        if missing:
+            errors.append(f"activation eval rubrics are missing: {', '.join(missing)}")
+        for key in ACTIVATION_RUBRICS & set(rubrics):
+            if not isinstance(rubrics[key], str) or not rubrics[key].strip():
+                errors.append(f"activation rubric is empty: {key}")
+    return errors
 
 
 def check(checks: list[dict[str, Any]], check_id: str, status: str, evidence: str, detail: Any) -> None:
@@ -140,7 +273,7 @@ def evaluate(repo: Path, topic: str) -> dict[str, Any]:
 
     secret_hits = []
     injection_hits = []
-    for path in files:
+    for path in repository_files(repo):
         if path.suffix.casefold() not in {".md", ".py", ".json", ".jsonl", ".txt", ".yaml", ".yml", ".toml"}:
             continue
         try:
@@ -150,10 +283,11 @@ def evaluate(repo: Path, topic: str) -> dict[str, Any]:
         for label, pattern in SECRET_PATTERNS:
             for match in pattern.finditer(text):
                 secret_hits.append({"file": path.relative_to(repo).as_posix(), "kind": label, "offset": match.start()})
-        for pattern in INJECTION_PATTERNS:
-            for match in pattern.finditer(text):
-                injection_hits.append({"file": path.relative_to(repo).as_posix(), "offset": match.start()})
-    check(checks, "l0.secrets", "pass" if not secret_hits else "fail", "submission text files", secret_hits)
+        if path in files:
+            for pattern in INJECTION_PATTERNS:
+                for match in pattern.finditer(text):
+                    injection_hits.append({"file": path.relative_to(repo).as_posix(), "offset": match.start()})
+    check(checks, "l0.secrets", "pass" if not secret_hits else "fail", "repository text files", secret_hits)
     check(checks, "l0.scoring_injection", "pass" if not injection_hits else "review", "submission text files", injection_hits)
 
     line_count = len(skill_file.read_text(encoding="utf-8").splitlines())
@@ -169,6 +303,30 @@ def evaluate(repo: Path, topic: str) -> dict[str, Any]:
             if path.is_file() and path.relative_to(skill_dir).as_posix() not in references
         ]
     check(checks, "l1.direct_reachability", "pass" if not unlinked else "review", str(skill_file.relative_to(repo)), sorted(unlinked))
+    agent_errors = validate_agent_metadata(skill_dir, name)
+    check(
+        checks,
+        "l1.agent_metadata",
+        "pass" if not agent_errors else "fail",
+        str((skill_dir / "agents" / "openai.yaml").relative_to(repo)),
+        agent_errors,
+    )
+    card_errors = validate_skill_card(skill_dir)
+    check(
+        checks,
+        "l1.skill_card",
+        "pass" if not card_errors else "fail",
+        str((skill_dir / "skill-card.md").relative_to(repo)),
+        card_errors,
+    )
+    activation_errors = validate_activation_eval(skill_dir, name)
+    check(
+        checks,
+        "l1.activation_eval",
+        "pass" if not activation_errors else "fail",
+        str((skill_dir / "evals" / "activation.json").relative_to(repo)),
+        activation_errors,
+    )
     lower = body.casefold()
     check(checks, "l1.structured_contract", "pass" if ("schema" in lower and ("json" in lower or "csv" in lower)) else "review", str(skill_file.relative_to(repo)), "Schema plus JSON/CSV expected")
     check(checks, "l1.examples", "pass" if "```" in body else "review", str(skill_file.relative_to(repo)), "at least one fenced example expected")
