@@ -146,7 +146,7 @@
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1045753,
+    "html_bytes": 1046925,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -418,7 +418,7 @@
       "story": "overview",
       "subtitle": "从标准化记录进入分布、覆盖、元素组合和候选异常证据；空白表示当前数据覆盖缺口。",
       "theme": "evidence-dark",
-      "title": "全球地球化学元素图谱"
+      "title": "全球地球化学元素分布图谱"
     },
     "visualization_profile_warnings": []
   },
