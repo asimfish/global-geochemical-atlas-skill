@@ -44,6 +44,7 @@
   "not_a_probability": true,
   "run_metadata": {
     "configuration": {
+      "batch_qc_gate_applied": false,
       "group_by": [
         "element_or_analyte",
         "medium",
@@ -63,14 +64,18 @@
       ],
       "minimum_group_size": 8,
       "minimum_quantified_fraction": 0.7,
+      "minimum_spatial_candidates": 2,
+      "minimum_spatial_samples": 5,
       "region_bbox": null,
       "robust_z_threshold": 3.5,
-      "schema_map": {}
+      "schema_map": {},
+      "spatial_fdr_alpha": 0.1,
+      "spatial_grid_degrees": 2.0
     },
     "input_row_count": 796,
     "input_sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
     "missing_recommended_input_columns": [],
-    "run_id": "3e077dc27d6ce88e",
+    "run_id": "deadbcc72c8f4cd9",
     "schema_map_sha256": null
   },
   "source_scoring": {

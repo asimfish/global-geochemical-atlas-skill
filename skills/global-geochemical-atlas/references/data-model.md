@@ -51,7 +51,7 @@ dataset_source ── publication
 - 岩性、地质单元和地质年代；
 - 土层、粒级、筛分尺寸；
 - 水样过滤状态、现场/实验室测定条件；
-- 标准物质、空白、校准、精密度、准确度和重复测定关系。
+- 分析批次 ID、标准物质、空白、校准、精密度、准确度和重复测定关系。
 
 ## 原始值与可逆解析
 
@@ -80,6 +80,7 @@ not_reported | not_applicable | not_available | redacted | parse_failed
 | 介质/岩性 | 保存来源原词和词汇映射候选 | 决定最终科学分类和合并规则 |
 | 坐标 | 原值、CRS、可复现转换和不确定度 | 空间 QC、异常和适用性判断 |
 | 方法 | 原文、代码、方法引用和实验室 | 方法可比性、质量门和置信度分量 |
+| 分析批次 | 保留来源批次 ID、CRM/空白/重复样原始测定与 policy 证据 | 重算批次通过状态；失败记录保留但排除出异常背景 |
 | 来源质量 | 发布者、版本、许可、完整性和证据链 | 记录级 QC 与 operational confidence |
 
 现有 `geochemistry-record.schema.json` 继续作为 D2 标准化测定结果。D1 的 `observation_id` 在交换长表中映射到 D2 `record_id`，不另造一个含义不同的随机 ID。

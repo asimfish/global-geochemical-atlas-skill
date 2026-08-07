@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:batch-qc-policy:v1",
+  "title": "Laboratory batch QC acceptance policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "crm_recovery_percent",
+    "blank_maximum",
+    "duplicate_rpd_maximum_percent",
+    "batch_rule"
+  ],
+  "oneOf": [
+    {"required": ["schema_version"], "not": {"required": ["version"]}},
+    {"required": ["version"], "not": {"required": ["schema_version"]}}
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "crm_recovery_percent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum", "maximum", "inclusive"],
+      "properties": {
+        "minimum": {"type": "number", "minimum": 0},
+        "maximum": {"type": "number", "minimum": 0},
+        "inclusive": {"type": "boolean"}
+      }
+    },
+    "blank_maximum": {"type": "number", "minimum": 0},
+    "duplicate_rpd_maximum_percent": {"type": "number", "minimum": 0},
+    "batch_rule": {"const": "all_checks_must_pass"},
+    "unit": {"type": "string", "minLength": 1}
+  }
+}

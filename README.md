@@ -29,7 +29,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-两个命令应分别返回 `"status": "success"` 和 `"status": "valid"`。随后打开 `/tmp/geochemical-production-demo/interactive_map.html`；无需网络、密钥、GPU 或 Python 第三方包。
+两个命令应分别返回 `"status": "partial_success"` 和 `"status": "valid"`。前者是刻意的科学状态：hash 固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十五项产物契约全部有效。随后打开 `/tmp/geochemical-production-demo/interactive_map.html`；无需网络、密钥、GPU 或 Python 第三方包。
 
 这条回归使用 996 条 hash 固定的 USGS 真实土壤测定和固定版本 GLiM 岩性图。在生产阈值 `n≥20` 下，预期 996/996 完成地质匹配、12 个可比背景组完成分析、识别 6 个 high/low 候选异常，输出校验 0 错误/0 警告。它证明工程和科学规则可执行，不代表美国土壤的统计分布；完整证据见[生产演示说明](skills/global-geochemical-atlas/references/production-demo.md)。
 
@@ -38,12 +38,12 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 | 赛题交付物 | 运行产物 | 核心保证 |
 |---|---|---|
 | **可交互元素分布地图** | `interactive_map.html`、`samples.geojson` | 按元素、介质、区域、方法与置信度筛选；查看样点、热力和异常候选 |
-| **标准化地球化学数据库** | `geochemistry.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法与 QC 字段 |
+| **标准化地球化学数据库** | `geochemistry.csv`、`batch_acceptance.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法、分析批次与 QC 字段 |
 | **数据来源与置信度说明** | `source_manifest.json`、`record_evidence.jsonl`、`confidence_report.json` | URL/DOI、许可、版本、哈希、源记录定位和五分量置信度可追溯 |
-| **异常区域识别结果** | `anomalies.geojson`、`anomaly_report.json` | 在声明的可比背景组内报告富集/亏损方向、样本量、median/MAD 和失败边界 |
+| **异常区域识别结果** | `anomalies.geojson`、`anomaly_report.json`、`anomaly_regions.geojson`、`spatial_anomaly_report.json` | 记录级 robust-MAD 候选 + 精确超几何富集/BH-FDR 空间筛查；完整报告失败边界 |
 | **可复用 Skill 文档** | [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) | 明确请求契约、工具路由、科学规则、接口和失败状态 |
 
-完整运行固定生成 11 个产物；逐文件 schema 与状态定义见[输入输出契约](skills/global-geochemical-atlas/references/request-output-contract.md)。
+完整运行固定生成 15 个产物；逐文件 schema 与状态定义见[输入输出契约](skills/global-geochemical-atlas/references/request-output-contract.md)。
 
 ## 使用自己的数据
 
@@ -69,7 +69,7 @@ flowchart LR
 ```
 
 - **D1** 保存许可、版本、下载请求、文件哈希和记录级定位；来源目录中的候选不等于本次请求可用。
-- **D2** 保守处理单位、删失值、坐标、方法和可选地质匹配；在足够样本的可比组内用稳健 MAD z-score 筛查高/低异常。
+- **D2** 保守处理单位、删失值、坐标、方法、实验室批次和可选地质匹配；先用稳健 MAD z-score 筛记录级高/低值，再用精确超几何检验 + BH-FDR 筛空间聚集。
 - **D3** 只消费公共产物，通过版本化 profile 生成全球、国家或 WGS84 bbox 研究视图；不重算 D2 科学结果。
 
 ## 科学护栏
@@ -77,8 +77,9 @@ flowchart LR
 - 原值、原单位、qualifier、来源坐标表达和转换记录始终保留；不能证明的转换会失败关闭。
 - 固体质量比可统一为 `mg/kg`，水体质量/体积可统一为 `ug/L`；没有密度时不跨量纲换算。
 - `<LOD`、`<LOQ`、`BDL`、`ND` 不替换为 0 或 LOD/2。
+- CRM、空白、重复样按显式 policy 重新计算；失败批次保留在数据库，但不进入异常背景。
 - 不静默交换经纬度，不把未知 CRS 冒充 WGS84；空间匹配记录数据源、版本、方法和边界距离。
-- 异常只表示相对已声明背景组的筛查候选，不等于污染、矿床或成因结论。
+- 异常点和 FDR 网格都只表示筛查候选；网格不是地质/行政/污染边界，不等于污染、矿床或成因结论。
 - demo 与真实来源切片只用于工程复现，不支持全球或区域代表性科学结论。
 
 ## 复现上图
@@ -108,7 +109,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 | 如果你想…… | 从这里开始 |
 |---|---|
 | 让 Agent 执行完整任务 | [Skill 入口](skills/global-geochemical-atlas/SKILL.md) |
-| 对接输入或消费 11 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
+| 对接输入或消费 15 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
 | 理解数据库字段与专业平台 crosswalk | [数据模型](skills/global-geochemical-atlas/references/data-model.md) |
 | 审查单位、删失值、置信度和异常规则 | [科学规则](skills/global-geochemical-atlas/references/scientific-rules.md) |
 | 复现真实数据生产阈值闭环 | [生产演示](skills/global-geochemical-atlas/references/production-demo.md) |

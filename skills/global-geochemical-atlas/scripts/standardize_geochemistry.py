@@ -23,10 +23,13 @@ from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+import evaluate_batch_qc as batch_qc
+
 INTERFACE_VERSION = "d2-interface-v2"
 PIPELINE_VERSION = "d2-pipeline-v2"
 CONFIDENCE_VERSION = "d2-confidence-v3"
 ANOMALY_VERSION = "d2-robust-mad-v2"
+SPATIAL_ANOMALY_VERSION = "d2-spatial-hypergeometric-fdr-v1"
 ATOMIC_WEIGHT_VERSION = "d2-atomic-weights-v1"
 GEOLOGY_JOIN_VERSION = "d2-glim-05deg-cell-join-v1"
 GLIM_SOURCE = "https://doi.org/10.1594/PANGAEA.788537"
@@ -83,6 +86,9 @@ SCHEMA_COLUMNS = (
     "sample_id",
     "sample_identity_group",
     "replicate_group_id",
+    "analysis_batch_id",
+    "batch_qc_status",
+    "batch_qc_disposition",
     "igsn",
     "element_or_analyte",
     "analyte_reported",
@@ -196,7 +202,8 @@ SCHEMA_COLUMNS = (
 )
 
 INPUT_FIELDS = {
-    "record_id", "source_record_id", "sample_id", "sample_identity_group", "replicate_group_id", "igsn",
+    "record_id", "source_record_id", "sample_id", "sample_identity_group", "replicate_group_id",
+    "analysis_batch_id", "igsn",
     "element_or_analyte", "analyte_reported", "species_or_oxide", "value", "unit", "value_qualifier",
     "source_qualifier_raw",
     "missing_reason", "medium", "material", "measurement_basis", "original_latitude_raw",
@@ -255,6 +262,9 @@ FLAG_SEVERITY = {
     "MISSING_LICENSE": "warning",
     "UNKNOWN_SOURCE_TIER": "warning",
     "MISSING_SAMPLE_ID": "warning",
+    "MISSING_ANALYSIS_BATCH_ID": "warning",
+    "BATCH_QC_NOT_EVALUATED": "warning",
+    "BATCH_QC_FAILED": "error",
     "INVALID_FILE_SHA256": "warning",
     "INVALID_GEOLOGIC_MATCH_CONFIDENCE": "warning",
     "GEOLOGY_MATCH_NO_COVERAGE": "warning",
@@ -985,6 +995,9 @@ def normalize_row(
         "sample_id": sample_id,
         "sample_identity_group": blank_to_none(row.get("sample_identity_group")),
         "replicate_group_id": blank_to_none(row.get("replicate_group_id")),
+        "analysis_batch_id": blank_to_none(row.get("analysis_batch_id")),
+        "batch_qc_status": "not_supplied",
+        "batch_qc_disposition": None,
         "igsn": blank_to_none(row.get("igsn")),
         "element_or_analyte": analyte,
         "analyte_reported": analyte_reported,
@@ -1139,6 +1152,58 @@ def process_rows(
     records = [normalize_row(row, index, region_bbox) for index, row in enumerate(rows, start=2)]
     mark_duplicate_candidates(records)
     return records
+
+
+def apply_batch_acceptance(
+    records: Sequence[dict[str, Any]], acceptance_rows: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    """Attach a fail-closed batch decision to every analytical record.
+
+    The laboratory controls are evaluated separately by ``evaluate_batch_qc``.
+    Records from failed, incomplete, unknown, or undeclared batches are retained
+    in the canonical database but cannot enter anomaly background groups.
+    """
+
+    decisions: dict[str, Mapping[str, Any]] = {}
+    for item in acceptance_rows:
+        batch_id = str(item.get("batch_id") or "").strip()
+        if not batch_id or batch_id in decisions:
+            raise PipelineError("batch acceptance contains a missing or duplicate batch_id")
+        decisions[batch_id] = item
+    status_counts: Counter[str] = Counter()
+    for record in records:
+        batch_id = record.get("analysis_batch_id")
+        if batch_id in (None, ""):
+            record["batch_qc_status"] = "incomplete"
+            record["batch_qc_disposition"] = "exclude_batch_and_investigate"
+            add_flag(record["qc_flags"], "MISSING_ANALYSIS_BATCH_ID")
+            add_flag(record["qc_flags"], "BATCH_QC_NOT_EVALUATED")
+        else:
+            decision = decisions.get(str(batch_id))
+            if decision is None:
+                record["batch_qc_status"] = "incomplete"
+                record["batch_qc_disposition"] = "exclude_batch_and_investigate"
+                add_flag(record["qc_flags"], "BATCH_QC_NOT_EVALUATED")
+            elif bool(decision.get("batch_pass")):
+                record["batch_qc_status"] = "pass"
+                record["batch_qc_disposition"] = "accept_for_scientific_analysis"
+            else:
+                record["batch_qc_status"] = "fail"
+                record["batch_qc_disposition"] = "exclude_batch_and_investigate"
+                add_flag(record["qc_flags"], "BATCH_QC_FAILED")
+        status_counts[str(record["batch_qc_status"])] += 1
+        record["operational_confidence"] = score_confidence(record)
+    return {
+        "gate_applied": True,
+        "decision_count": len(decisions),
+        "record_status_counts": dict(sorted(status_counts.items())),
+        "accepted_batch_ids": sorted(
+            batch_id for batch_id, item in decisions.items() if bool(item.get("batch_pass"))
+        ),
+        "excluded_batch_ids": sorted(
+            batch_id for batch_id, item in decisions.items() if not bool(item.get("batch_pass"))
+        ),
+    }
 
 
 def sha256_file(path: Path) -> str:
@@ -1333,6 +1398,7 @@ def group_identifier(group_by: Sequence[str], key: Sequence[Any]) -> str:
 def detect_anomalies(
     records: Sequence[Mapping[str, Any]], group_by: Sequence[str] = DEFAULT_GROUP_BY,
     min_group_size: int = 8, robust_z_threshold: float = 3.5, min_quantified_fraction: float = 0.70,
+    batch_qc_gate_applied: bool = False,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     grouped: dict[tuple[Any, ...], list[Mapping[str, Any]]] = defaultdict(list)
     for record in records:
@@ -1346,7 +1412,12 @@ def detect_anomalies(
         exclusions: Counter[str] = Counter()
         for record in group_records:
             value = record.get("normalized_value")
-            if "DUPLICATE_CANDIDATE" in record.get("qc_flags", []):
+            batch_status = record.get("batch_qc_status")
+            if batch_qc_gate_applied and batch_status == "fail":
+                exclusions["batch_qc_failed"] += 1
+            elif batch_qc_gate_applied and batch_status != "pass":
+                exclusions["batch_qc_incomplete"] += 1
+            elif "DUPLICATE_CANDIDATE" in record.get("qc_flags", []):
                 exclusions["duplicate_candidate"] += 1
             elif record.get("value_qualifier") in CENSORED_QUALIFIERS:
                 exclusions["censored"] += 1
@@ -1358,7 +1429,10 @@ def detect_anomalies(
                 usable.append(record)
 
         group_id = group_identifier(group_by, key)
-        independent_total = len(group_records) - exclusions["duplicate_candidate"]
+        independent_total = len(group_records) - sum(
+            exclusions[reason]
+            for reason in ("duplicate_candidate", "batch_qc_failed", "batch_qc_incomplete")
+        )
         quantified_fraction = len(usable) / independent_total if independent_total else 0.0
         censored_fraction = exclusions["censored"] / independent_total if independent_total else 0.0
         report: dict[str, Any] = {
@@ -1376,11 +1450,15 @@ def detect_anomalies(
             "log10_mad": None,
             "candidate_count": 0,
         }
+        if independent_total < min_group_size:
+            group_reports.append(report)
+            continue
         if quantified_fraction < min_quantified_fraction:
             report["status"] = "insufficient_quantified_fraction"
             group_reports.append(report)
             continue
         if len(usable) < min_group_size:
+            report["status"] = "insufficient_usable_group_size"
             group_reports.append(report)
             continue
 
@@ -1455,6 +1533,13 @@ def detect_anomalies(
         "group_by": list(group_by),
         "minimum_group_size": min_group_size,
         "minimum_quantified_fraction": min_quantified_fraction,
+        "gate_evaluation_order": [
+            "independent_record_count",
+            "quantified_fraction",
+            "usable_record_count",
+            "nonzero_dispersion",
+        ],
+        "batch_qc_gate_applied": batch_qc_gate_applied,
         "robust_z_threshold": robust_z_threshold,
         "scientific_status": "screening_baseline_only",
         "caveat": (
@@ -1465,6 +1550,324 @@ def detect_anomalies(
         "groups": group_reports,
     }
     return geojson, anomaly_report
+
+
+def log_combination(total: int, selected: int) -> float:
+    if selected < 0 or selected > total:
+        return float("-inf")
+    return (
+        math.lgamma(total + 1)
+        - math.lgamma(selected + 1)
+        - math.lgamma(total - selected + 1)
+    )
+
+
+def hypergeometric_survival(
+    successes: int, population: int, population_successes: int, draws: int
+) -> float:
+    """Return the one-sided exact P[X >= successes] without SciPy.
+
+    Conditioning on the observed group-wide candidate count avoids estimating a
+    zero null probability when every candidate happens to fall in one cell.
+    """
+
+    if not 0 <= population_successes <= population or not 0 <= draws <= population:
+        raise PipelineError("invalid hypergeometric test counts")
+    minimum = max(0, draws - (population - population_successes))
+    maximum = min(draws, population_successes)
+    if successes <= minimum:
+        return 1.0
+    if successes > maximum:
+        return 0.0
+    denominator = log_combination(population, draws)
+
+    def log_probability(value: int) -> float:
+        return (
+            log_combination(population_successes, value)
+            + log_combination(population - population_successes, draws - value)
+            - denominator
+        )
+
+    def log_sum(start: int, stop: int) -> float:
+        value_range = range(start, stop)
+        anchor = max(log_probability(value) for value in value_range)
+        return anchor + math.log(
+            math.fsum(
+                math.exp(log_probability(value) - anchor)
+                for value in value_range
+            )
+        )
+
+    lower_term_count = successes - minimum
+    upper_term_count = maximum - successes + 1
+    if lower_term_count < upper_term_count:
+        # P[X >= x] = 1 - P[X < x].  ``-expm1`` retains precision when
+        # the shorter lower-tail sum is close to one.
+        log_lower_probability = min(0.0, log_sum(minimum, successes))
+        probability = -math.expm1(log_lower_probability)
+    else:
+        probability = math.exp(log_sum(successes, maximum + 1))
+    return min(1.0, max(0.0, probability))
+
+
+def benjamini_hochberg(values: Sequence[float]) -> list[float]:
+    if not values:
+        return []
+    order = sorted(range(len(values)), key=lambda index: (values[index], index))
+    adjusted = [1.0] * len(values)
+    running = 1.0
+    count = len(values)
+    for rank_index in range(count - 1, -1, -1):
+        original_index = order[rank_index]
+        rank = rank_index + 1
+        running = min(running, values[original_index] * count / rank)
+        adjusted[original_index] = min(1.0, running)
+    return adjusted
+
+
+def spatial_cell(
+    longitude: float, latitude: float, grid_degrees: float
+) -> tuple[int, int, float, float, float, float]:
+    longitude_cells = int(round(360.0 / grid_degrees))
+    latitude_cells = int(round(180.0 / grid_degrees))
+    longitude_index = min(longitude_cells - 1, max(0, int(math.floor((longitude + 180) / grid_degrees))))
+    latitude_index = min(latitude_cells - 1, max(0, int(math.floor((latitude + 90) / grid_degrees))))
+    west = -180.0 + longitude_index * grid_degrees
+    south = -90.0 + latitude_index * grid_degrees
+    return longitude_index, latitude_index, west, south, west + grid_degrees, south + grid_degrees
+
+
+def detect_spatial_anomaly_regions(
+    records: Sequence[Mapping[str, Any]],
+    point_anomalies: Mapping[str, Any],
+    anomaly_report: Mapping[str, Any],
+    group_by: Sequence[str],
+    *,
+    grid_degrees: float = 2.0,
+    minimum_spatial_samples: int = 5,
+    minimum_spatial_candidates: int = 2,
+    fdr_alpha: float = 0.10,
+    batch_qc_gate_applied: bool = False,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Screen fixed cells for over-represented high/low record-level candidates.
+
+    The one-sided exact hypergeometric test conditions on the group-wide
+    candidate count, then applies Benjamini-Hochberg correction over every
+    eligible cell/direction hypothesis. The resulting polygons are screening
+    cells, never inferred geologic, pollution, or mineralization boundaries.
+    """
+
+    longitude_cells = 360.0 / grid_degrees if grid_degrees > 0 else math.inf
+    latitude_cells = 180.0 / grid_degrees if grid_degrees > 0 else math.inf
+    if (
+        not math.isfinite(grid_degrees)
+        or not 0 < grid_degrees <= 30
+        or not math.isclose(longitude_cells, round(longitude_cells), abs_tol=1e-9)
+        or not math.isclose(latitude_cells, round(latitude_cells), abs_tol=1e-9)
+    ):
+        raise PipelineError("--spatial-grid-degrees must divide both 180 and 360 and be in (0, 30]")
+    if minimum_spatial_samples < 3:
+        raise PipelineError("--min-spatial-samples must be at least 3")
+    if minimum_spatial_candidates < 1:
+        raise PipelineError("--min-spatial-candidates must be at least 1")
+    if not 0 < fdr_alpha <= 0.25:
+        raise PipelineError("--spatial-fdr-alpha must be in (0, 0.25]")
+
+    analyzed_groups = {
+        str(item.get("group_id"))
+        for item in anomaly_report.get("groups", [])
+        if isinstance(item, Mapping) and item.get("status") == "analyzed"
+    }
+    candidate_direction = {
+        str(feature.get("properties", {}).get("record_id")): str(
+            feature.get("properties", {}).get("direction")
+        )
+        for feature in point_anomalies.get("features", [])
+        if isinstance(feature, Mapping)
+        and isinstance(feature.get("properties"), Mapping)
+        and feature.get("properties", {}).get("direction") in {"high", "low"}
+    }
+    grouped: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
+    group_payloads: dict[str, dict[str, Any]] = {}
+    for record in records:
+        key = tuple(record.get(field) for field in group_by)
+        group_id = group_identifier(group_by, key)
+        if group_id not in analyzed_groups:
+            continue
+        if batch_qc_gate_applied and record.get("batch_qc_status") != "pass":
+            continue
+        if "DUPLICATE_CANDIDATE" in record.get("qc_flags", []):
+            continue
+        value = record.get("normalized_value")
+        if (
+            record.get("value_qualifier") in CENSORED_QUALIFIERS
+            or not isinstance(value, (int, float))
+            or value <= 0
+            or not isinstance(record.get("longitude"), (int, float))
+            or not isinstance(record.get("latitude"), (int, float))
+        ):
+            continue
+        grouped[group_id].append(record)
+        group_payloads[group_id] = dict(zip(group_by, key, strict=True))
+
+    hypotheses: list[dict[str, Any]] = []
+    group_summaries: list[dict[str, Any]] = []
+    for group_id in sorted(grouped):
+        group_records = grouped[group_id]
+        cells: dict[tuple[int, int], dict[str, Any]] = {}
+        for record in group_records:
+            cell = spatial_cell(float(record["longitude"]), float(record["latitude"]), grid_degrees)
+            key = (cell[0], cell[1])
+            bucket = cells.setdefault(key, {
+                "bounds": cell[2:], "records": [], "candidate_ids": {"high": [], "low": []}
+            })
+            bucket["records"].append(record)
+            direction = candidate_direction.get(str(record.get("record_id")))
+            if direction in {"high", "low"}:
+                bucket["candidate_ids"][direction].append(str(record["record_id"]))
+        direction_counts = Counter(candidate_direction.get(str(item.get("record_id"))) for item in group_records)
+        eligible_cell_count = 0
+        for direction in ("high", "low"):
+            total_candidates = int(direction_counts.get(direction, 0))
+            if total_candidates == 0:
+                continue
+            for cell_key in sorted(cells):
+                cell = cells[cell_key]
+                cell_total = len(cell["records"])
+                outside_total = len(group_records) - cell_total
+                if cell_total < minimum_spatial_samples or outside_total < minimum_spatial_samples:
+                    continue
+                eligible_cell_count += 1
+                cell_candidates = len(cell["candidate_ids"][direction])
+                outside_candidates = total_candidates - cell_candidates
+                outside_rate = outside_candidates / outside_total
+                p_value = hypergeometric_survival(
+                    cell_candidates,
+                    len(group_records),
+                    total_candidates,
+                    cell_total,
+                )
+                hypotheses.append({
+                    "group_id": group_id,
+                    "group": group_payloads[group_id],
+                    "direction": direction,
+                    "cell_key": cell_key,
+                    "bounds": cell["bounds"],
+                    "sample_count": cell_total,
+                    "candidate_count": cell_candidates,
+                    "candidate_record_ids": sorted(cell["candidate_ids"][direction]),
+                    "outside_sample_count": outside_total,
+                    "outside_candidate_count": outside_candidates,
+                    "outside_candidate_rate": outside_rate,
+                    "p_value": p_value,
+                })
+        group_summaries.append({
+            "group_id": group_id,
+            "mapped_usable_record_count": len(group_records),
+            "mapped_cell_count": len(cells),
+            "high_candidate_count": int(direction_counts.get("high", 0)),
+            "low_candidate_count": int(direction_counts.get("low", 0)),
+            "eligible_hypothesis_count": eligible_cell_count,
+        })
+
+    adjusted = benjamini_hochberg([float(item["p_value"]) for item in hypotheses])
+    features: list[dict[str, Any]] = []
+    reported_tests: list[dict[str, Any]] = []
+    for item, q_value in zip(hypotheses, adjusted, strict=True):
+        item["fdr_q_value"] = q_value
+        if item["candidate_count"]:
+            reported_tests.append({
+                key: item[key]
+                for key in (
+                    "group_id", "direction", "cell_key", "sample_count", "candidate_count",
+                    "outside_sample_count", "outside_candidate_count", "outside_candidate_rate",
+                    "p_value", "fdr_q_value",
+                )
+            })
+        observed_rate = item["candidate_count"] / item["sample_count"]
+        if (
+            item["candidate_count"] < minimum_spatial_candidates
+            or q_value > fdr_alpha
+            or observed_rate <= item["outside_candidate_rate"]
+        ):
+            continue
+        west, south, east, north = item["bounds"]
+        region_payload = {
+            "group_id": item["group_id"],
+            "direction": item["direction"],
+            "cell": [west, south, east, north],
+        }
+        region_id = "region-" + hashlib.sha256(
+            json.dumps(region_payload, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()[:16]
+        outside_rate = item["outside_candidate_rate"]
+        features.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[
+                    [west, south], [east, south], [east, north], [west, north], [west, south]
+                ]],
+            },
+            "properties": {
+                "region_id": region_id,
+                "status": "candidate_anomaly_region",
+                "scientific_status": "screening_candidate_only",
+                "direction": item["direction"],
+                "group_id": item["group_id"],
+                "group": item["group"],
+                "grid_degrees": grid_degrees,
+                "sample_count": item["sample_count"],
+                "candidate_count": item["candidate_count"],
+                "candidate_record_ids": item["candidate_record_ids"],
+                "observed_candidate_rate": round(observed_rate, 12),
+                "outside_candidate_rate": round(outside_rate, 12),
+                "enrichment_ratio": (
+                    round(observed_rate / outside_rate, 12) if outside_rate > 0 else None
+                ),
+                "p_value": round(float(item["p_value"]), 12),
+                "fdr_q_value": round(float(q_value), 12),
+                "method_version": SPATIAL_ANOMALY_VERSION,
+                "boundary_model": "fixed_wgs84_grid_cell_not_geologic_boundary",
+                "interpretation_limit": (
+                    "Candidate co-location cell after FDR control; not an interpolated concentration surface, "
+                    "site boundary, pollution claim, mineralization claim, or causal attribution."
+                ),
+            },
+        })
+
+    geojson = {
+        "type": "FeatureCollection",
+        "name": "geochemical_candidate_anomaly_regions",
+        "interface_version": INTERFACE_VERSION,
+        "method_version": SPATIAL_ANOMALY_VERSION,
+        "features": features,
+    }
+    report = {
+        "interface_version": INTERFACE_VERSION,
+        "method_version": SPATIAL_ANOMALY_VERSION,
+        "status": "screened" if hypotheses else "insufficient_spatial_background",
+        "scientific_status": "screening_candidate_regions_only",
+        "point_candidate_method_version": ANOMALY_VERSION,
+        "grid_degrees": grid_degrees,
+        "minimum_spatial_samples": minimum_spatial_samples,
+        "minimum_spatial_candidates": minimum_spatial_candidates,
+        "multiple_testing_method": "Benjamini-Hochberg FDR",
+        "fdr_alpha": fdr_alpha,
+        "null_model": (
+            "one-sided exact hypergeometric enrichment conditional on the candidate count "
+            "within the same D2 comparable background group"
+        ),
+        "hypothesis_count": len(hypotheses),
+        "candidate_region_count": len(features),
+        "groups": group_summaries,
+        "nonzero_candidate_cell_tests": reported_tests,
+        "caveat": (
+            "Fixed cells with over-represented record-level candidates are screening regions only. "
+            "Grid edges are not geological or administrative boundaries and blank areas are not absence."
+        ),
+    }
+    return geojson, report
 
 
 def build_qc_report(records: Sequence[Mapping[str, Any]], run_metadata: Mapping[str, Any]) -> dict[str, Any]:
@@ -1677,11 +2080,16 @@ def run_pipeline(
     schema_map_path: Path | None = None, min_quantified_fraction: float = 0.70,
     analysis_profile: str = "demo", geology_grid_path: Path | None = None,
     geology_grid_sha256: str | None = None,
+    batch_qc_input_path: Path | None = None, batch_qc_policy_path: Path | None = None,
+    spatial_grid_degrees: float = 2.0, min_spatial_samples: int | None = None,
+    min_spatial_candidates: int = 2, spatial_fdr_alpha: float = 0.10,
 ) -> dict[str, Path]:
     if analysis_profile not in {"demo", "production"}:
         raise PipelineError("--analysis-profile must be demo or production")
     if min_group_size is None:
         min_group_size = 20 if analysis_profile == "production" else 8
+    if min_spatial_samples is None:
+        min_spatial_samples = 20 if analysis_profile == "production" else 5
     unknown_group_fields = sorted(set(group_by) - GROUPABLE_FIELDS)
     if unknown_group_fields:
         raise PipelineError(f"unknown --group-by fields: {', '.join(unknown_group_fields)}")
@@ -1693,6 +2101,8 @@ def run_pipeline(
         raise PipelineError("--robust-z-threshold must be positive")
     if not math.isfinite(min_quantified_fraction) or not 0 <= min_quantified_fraction <= 1:
         raise PipelineError("--min-quantified-fraction must be between 0 and 1")
+    if (batch_qc_input_path is None) != (batch_qc_policy_path is None):
+        raise PipelineError("--batch-qc-input and --batch-qc-policy must be supplied together")
 
     if (geology_grid_path is None) != (geology_grid_sha256 is None):
         raise PipelineError("--geology-grid and --geology-grid-sha256 must be supplied together")
@@ -1704,6 +2114,32 @@ def run_pipeline(
     schema_map, schema_map_hash = load_schema_map(schema_map_path)
     rows, missing_recommended_columns = load_csv(input_path, schema_map)
     records = process_rows(rows, region_bbox)
+    batch_acceptance_rows: list[dict[str, Any]] = []
+    batch_report: dict[str, Any] = {
+        "schema_version": batch_qc.REPORT_VERSION,
+        "status": "not_supplied",
+        "batch_count": 0,
+        "passed_batch_count": 0,
+        "failed_or_incomplete_batch_count": 0,
+        "scientific_boundary": (
+            "No batch policy was supplied; batch acceptance was not used as an anomaly-background gate."
+        ),
+    }
+    batch_gate_summary: dict[str, Any] = {
+        "gate_applied": False,
+        "decision_count": 0,
+        "record_status_counts": {"not_supplied": len(records)},
+        "accepted_batch_ids": [],
+        "excluded_batch_ids": [],
+    }
+    if batch_qc_input_path is not None and batch_qc_policy_path is not None:
+        try:
+            batch_acceptance_rows, batch_report = batch_qc.evaluate(
+                batch_qc_input_path, batch_qc_policy_path
+            )
+        except batch_qc.BatchQCError as exc:
+            raise PipelineError(f"batch QC evaluation failed: {exc}") from exc
+        batch_gate_summary = apply_batch_acceptance(records, batch_acceptance_rows)
     geology_summary = None
     if geology_grid_path is not None and normalized_grid_sha256 is not None:
         if not geology_grid_path.is_file():
@@ -1722,12 +2158,20 @@ def run_pipeline(
         "minimum_quantified_fraction": min_quantified_fraction,
         "region_bbox": list(region_bbox) if region_bbox else None,
         "schema_map": dict(sorted(schema_map.items())),
+        "batch_qc_gate_applied": batch_gate_summary["gate_applied"],
+        "spatial_grid_degrees": spatial_grid_degrees,
+        "minimum_spatial_samples": min_spatial_samples,
+        "minimum_spatial_candidates": min_spatial_candidates,
+        "spatial_fdr_alpha": spatial_fdr_alpha,
     }
     if analysis_profile == "production":
         config["analysis_profile"] = analysis_profile
     if normalized_grid_sha256 is not None:
         config["geology_grid_sha256"] = normalized_grid_sha256
         config["geology_join_version"] = GEOLOGY_JOIN_VERSION
+    if batch_qc_input_path is not None and batch_qc_policy_path is not None:
+        config["batch_qc_input_sha256"] = sha256_file(batch_qc_input_path)
+        config["batch_qc_policy_sha256"] = sha256_file(batch_qc_policy_path)
     input_hash = hashlib.sha256(input_bytes).hexdigest()
     run_id = hashlib.sha256(
         (input_hash + json.dumps(config, sort_keys=True, separators=(",", ":"))).encode()
@@ -1741,10 +2185,35 @@ def run_pipeline(
         "configuration": config,
     }
     geojson, anomaly_report = detect_anomalies(
-        records, group_by, min_group_size, robust_z_threshold, min_quantified_fraction
+        records,
+        group_by,
+        min_group_size,
+        robust_z_threshold,
+        min_quantified_fraction,
+        batch_qc_gate_applied=batch_gate_summary["gate_applied"],
     )
     anomaly_report["run_metadata"] = run_metadata
+    anomaly_regions, spatial_anomaly_report = detect_spatial_anomaly_regions(
+        records,
+        geojson,
+        anomaly_report,
+        group_by,
+        grid_degrees=spatial_grid_degrees,
+        minimum_spatial_samples=min_spatial_samples,
+        minimum_spatial_candidates=min_spatial_candidates,
+        fdr_alpha=spatial_fdr_alpha,
+        batch_qc_gate_applied=batch_gate_summary["gate_applied"],
+    )
+    spatial_anomaly_report["run_metadata"] = run_metadata
     qc_report = build_qc_report(records, run_metadata)
+    qc_report["batch_qc"] = {
+        **batch_gate_summary,
+        "report_status": batch_report["status"],
+        "passed_batch_count": int(batch_report.get("passed_batch_count", 0)),
+        "failed_or_incomplete_batch_count": int(
+            batch_report.get("failed_or_incomplete_batch_count", 0)
+        ),
+    }
     if geology_summary is not None:
         qc_report["geology_matching"] = geology_summary
     confidence_report = build_confidence_report(records, run_metadata)
@@ -1755,12 +2224,20 @@ def run_pipeline(
         "confidence_report": output_dir / "confidence_report.json",
         "anomalies": output_dir / "anomalies.geojson",
         "anomaly_report": output_dir / "anomaly_report.json",
+        "batch_acceptance": output_dir / "batch_acceptance.csv",
+        "batch_qc_report": output_dir / "batch_qc_report.json",
+        "anomaly_regions": output_dir / "anomaly_regions.geojson",
+        "spatial_anomaly_report": output_dir / "spatial_anomaly_report.json",
     }
     write_csv(outputs["database"], records)
     atomic_write_text(outputs["qc_report"], json_text(qc_report))
     atomic_write_text(outputs["confidence_report"], json_text(confidence_report))
     atomic_write_text(outputs["anomalies"], json_text(geojson))
     atomic_write_text(outputs["anomaly_report"], json_text(anomaly_report))
+    batch_qc.write_csv(outputs["batch_acceptance"], batch_acceptance_rows)
+    batch_qc.write_report(outputs["batch_qc_report"], batch_report)
+    atomic_write_text(outputs["anomaly_regions"], json_text(anomaly_regions))
+    atomic_write_text(outputs["spatial_anomaly_report"], json_text(spatial_anomaly_report))
     return outputs
 
 
@@ -1769,10 +2246,18 @@ def build_parser() -> argparse.ArgumentParser:
         description="Standardize geochemical CSV records, run QC, score operational confidence, and screen anomalies."
     )
     parser.add_argument("--input", required=True, type=Path, help="Input CSV from the D1 acquisition/provenance stage")
-    parser.add_argument("--output-dir", required=True, type=Path, help="Directory for five deterministic D2 outputs")
+    parser.add_argument("--output-dir", required=True, type=Path, help="Directory for nine deterministic D2 outputs")
     parser.add_argument(
         "--schema-map", type=Path,
         help="Optional JSON object mapping canonical D2 input fields to source CSV column names",
+    )
+    parser.add_argument(
+        "--batch-qc-input", type=Path,
+        help="Optional normalized CRM/blank/duplicate CSV; requires --batch-qc-policy",
+    )
+    parser.add_argument(
+        "--batch-qc-policy", type=Path,
+        help="Explicit laboratory acceptance policy; requires --batch-qc-input",
     )
     parser.add_argument(
         "--geology-grid", type=Path,
@@ -1800,6 +2285,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--robust-z-threshold", type=float, default=3.5, help="Absolute modified z threshold")
     parser.add_argument(
+        "--spatial-grid-degrees", type=float, default=2.0,
+        help="Fixed WGS84 screening-cell size; must divide 180 and 360 (default: 2)",
+    )
+    parser.add_argument(
+        "--min-spatial-samples", type=int,
+        help="Minimum mapped usable records inside and outside a tested cell (demo=5, production=20)",
+    )
+    parser.add_argument(
+        "--min-spatial-candidates", type=int, default=2,
+        help="Minimum record-level candidates before a significant cell is reported (default: 2)",
+    )
+    parser.add_argument(
+        "--spatial-fdr-alpha", type=float, default=0.10,
+        help="Benjamini-Hochberg FDR threshold for candidate regions (default: 0.10)",
+    )
+    parser.add_argument(
         "--region-bbox", type=parse_bbox, metavar="W,S,E,N",
         help="Optional requested region; dateline-crossing west > east is supported",
     )
@@ -1825,6 +2326,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             analysis_profile=args.analysis_profile,
             geology_grid_path=args.geology_grid,
             geology_grid_sha256=args.geology_grid_sha256,
+            batch_qc_input_path=args.batch_qc_input,
+            batch_qc_policy_path=args.batch_qc_policy,
+            spatial_grid_degrees=args.spatial_grid_degrees,
+            min_spatial_samples=args.min_spatial_samples,
+            min_spatial_candidates=args.min_spatial_candidates,
+            spatial_fdr_alpha=args.spatial_fdr_alpha,
         )
     except (PipelineError, OSError) as exc:
         parser.error(str(exc))

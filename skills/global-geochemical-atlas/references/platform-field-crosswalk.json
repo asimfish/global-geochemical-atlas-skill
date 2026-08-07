@@ -7,9 +7,9 @@
   },
   "reviewed_at": "2026-08-05",
   "scope": {
-    "canonical_field_count": 115,
+    "canonical_field_count": 118,
     "crosswalked_field_count": 36,
-    "non_core_field_count": 79,
+    "non_core_field_count": 82,
     "statement": "The crosswalk covers priority sample, observation, method, spatial and provenance semantics. D1 V4 raw, scope, citation, geology and rights fields are explicitly classified as local extensions or deferred crosswalks until additional professional schemas are reviewed. This supports import/export design and gap analysis, but does not certify conformance to EarthChem, USGS AGDB2, ODM2, IGSN or DataCite."
   },
   "mapping_type_definitions": {
@@ -557,7 +557,7 @@
     },
     {
       "classification": "deferred_crosswalk",
-      "fields": ["sample_identity_group", "replicate_group_id", "coordinate_uncertainty_m", "grain_fraction", "geologic_unit", "geologic_unit_id", "geologic_context_source", "geologic_context_version", "geologic_match_method", "distance_to_geologic_boundary_m", "geologic_match_confidence", "sample_type_raw", "sample_type", "geographic_context_raw", "survey_area", "map_sheet", "cruise_track", "lithology_raw", "soil_horizon_raw", "soil_horizon", "sediment_environment", "water_body_type", "water_fraction", "filtered_state", "geologic_unit_raw", "geologic_age_raw", "tectonic_setting_raw", "matched_geologic_unit", "geology_map_source", "geology_map_version", "match_method", "match_scale", "boundary_distance_m", "match_uncertainty", "method_scope", "preparation", "analytical_technique", "instrument", "quantitation_limit", "quantitation_limit_unit", "reference_materials", "method_publication_id", "publication_id", "publication_doi", "upstream_primary_source_id"],
+      "fields": ["sample_identity_group", "replicate_group_id", "analysis_batch_id", "batch_qc_status", "batch_qc_disposition", "coordinate_uncertainty_m", "grain_fraction", "geologic_unit", "geologic_unit_id", "geologic_context_source", "geologic_context_version", "geologic_match_method", "distance_to_geologic_boundary_m", "geologic_match_confidence", "sample_type_raw", "sample_type", "geographic_context_raw", "survey_area", "map_sheet", "cruise_track", "lithology_raw", "soil_horizon_raw", "soil_horizon", "sediment_environment", "water_body_type", "water_fraction", "filtered_state", "geologic_unit_raw", "geologic_age_raw", "tectonic_setting_raw", "matched_geologic_unit", "geology_map_source", "geology_map_version", "match_method", "match_scale", "boundary_distance_m", "match_uncertainty", "method_scope", "preparation", "analytical_technique", "instrument", "quantitation_limit", "quantitation_limit_unit", "reference_materials", "method_publication_id", "publication_id", "publication_doi", "upstream_primary_source_id"],
       "rationale": "Important duplicate-resolution, sample-type, water/sediment context, method-scope, citation and spatial-geology enrichment fields, but the reviewed sources do not establish sufficiently portable one-to-one mappings. Future versions should add GeoSciML/CGI, method and rights vocabularies plus platform-specific extensions before claiming alignment."
     }
   ]

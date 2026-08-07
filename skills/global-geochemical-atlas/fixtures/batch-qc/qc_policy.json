@@ -1,0 +1,12 @@
+{
+  "schema_version": "synthetic-batch-qc-policy-v1",
+  "crm_recovery_percent": {
+    "minimum": 80,
+    "maximum": 120,
+    "inclusive": true
+  },
+  "blank_maximum": 5,
+  "duplicate_rpd_maximum_percent": 20,
+  "batch_rule": "all_checks_must_pass",
+  "unit": "mg/kg"
+}

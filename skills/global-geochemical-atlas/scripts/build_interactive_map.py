@@ -555,7 +555,6 @@ def visualization_profile_warnings(
     if requested_medium and requested_medium not in available["medium"]:
         warnings.append(f"请求的组合介质在当前数据中未观测到：{requested_medium}")
     region = selected_region(profile)
-    bounds = region["bounds"]
     region_records = [
         record
         for record in records
@@ -1048,6 +1047,8 @@ def build_map(
     confidence_report_path: Path | None = None,
     source_manifest_path: Path | None = None,
     anomaly_report_path: Path | None = None,
+    anomaly_regions_path: Path | None = None,
+    spatial_anomaly_report_path: Path | None = None,
     iteration_backlog_path: Path | None = None,
     basemap_path: Path = DEFAULT_BASEMAP,
     visualization_profile_path: Path | None = None,
@@ -1065,6 +1066,11 @@ def build_map(
         database, max_points, scope_region, countries_by_code
     )
     anomalies = load_anomalies(anomalies_path)
+    anomaly_regions = (
+        load_anomalies(anomaly_regions_path)
+        if anomaly_regions_path is not None
+        else {"type": "FeatureCollection", "features": []}
+    )
     basemap = load_basemap(basemap_path)
     anomaly_ids = {
         str(feature.get("properties", {}).get("record_id"))
@@ -1106,6 +1112,7 @@ def build_map(
             "clickable_sample_density_heatmap": True,
             "element_pair_comparison": True,
             "enrichment_and_depletion_candidates": True,
+            "statistically_screened_anomaly_regions": anomaly_regions_path is not None,
         },
         "deliverables": {
             "standardized_database_first_class_ui": True,
@@ -1141,7 +1148,10 @@ def build_map(
             "heatmap_encodes": "physical_sample_density",
             "heatmap_interpolates_concentration": False,
             "anomaly_basis": "D2 robust z within declared comparable background groups",
-            "anomaly_region_semantics": "visual aggregation of D2 candidate points only",
+            "anomaly_region_semantics": (
+                "D2 fixed-cell candidate over-representation with BH-FDR is supplied separately; "
+                "D3 zoom bubbles remain count-only visual aggregation"
+            ),
             "anomaly_contrast": "candidate_vs_comparable_group_median_and_robust_thresholds",
             "element_pair_analysis": "log10_scatter_median_quadrant_shares_spearman_and_coverage_matrix",
         },
@@ -1164,6 +1174,10 @@ def build_map(
         "confidence_report": load_json_object(confidence_report_path, "confidence report"),
         "source_manifest": load_json_object(source_manifest_path, "source manifest"),
         "anomaly_report": load_json_object(anomaly_report_path, "anomaly report"),
+        "spatial_anomaly_regions": anomaly_regions,
+        "spatial_anomaly_report": load_json_object(
+            spatial_anomaly_report_path, "spatial anomaly report"
+        ),
         "iteration_backlog": backlog_builder.load(iteration_backlog_path) if iteration_backlog_path else backlog_builder.load(Path("")),
     }
     html = (
@@ -1204,6 +1218,7 @@ def build_map(
         "candidate_record_count": sum(
             str(record["record_id"]) in anomaly_ids for record in records
         ),
+        "candidate_anomaly_region_count": len(anomaly_regions.get("features", [])),
         "default_view": (
             "all_data_sample_deduplicated"
             if all_data_overview
@@ -1224,6 +1239,7 @@ def build_map(
             "sample_density_heatmap",
             "element_pair_comparison",
             "candidate_anomaly_region_aggregation",
+            "fdr_screened_candidate_anomaly_regions",
         ],
         "capability_matrix": capability_matrix,
         "region_presets": [*REGION_PRESETS, "custom_bbox"],
@@ -1273,6 +1289,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--source-manifest", type=Path, help="Optional D1 source_manifest.json")
     parser.add_argument("--anomaly-report", type=Path, help="Optional D2 anomaly_report.json")
+    parser.add_argument(
+        "--anomaly-regions", type=Path,
+        help="Optional D2 FDR-screened anomaly_regions.geojson",
+    )
+    parser.add_argument(
+        "--spatial-anomaly-report", type=Path,
+        help="Optional D2 spatial_anomaly_report.json",
+    )
     parser.add_argument("--iteration-backlog", type=Path, help="Optional D1/D2 iteration_backlog.csv")
     parser.add_argument(
         "--basemap", type=Path, default=DEFAULT_BASEMAP, help="Pinned offline basemap asset"
@@ -1308,6 +1332,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             confidence_report_path=args.confidence_report,
             source_manifest_path=args.source_manifest,
             anomaly_report_path=args.anomaly_report,
+            anomaly_regions_path=args.anomaly_regions,
+            spatial_anomaly_report_path=args.spatial_anomaly_report,
             iteration_backlog_path=args.iteration_backlog,
             basemap_path=args.basemap,
             visualization_profile_path=args.profile,

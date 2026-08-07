@@ -1,6 +1,13 @@
 {
+  "batch_qc_gate_applied": false,
   "candidate_count": 16,
   "caveat": "Candidates are relative to the declared background group and do not establish pollution, mineralization, provenance, or cause.",
+  "gate_evaluation_order": [
+    "independent_record_count",
+    "quantified_fraction",
+    "usable_record_count",
+    "nonzero_dispersion"
+  ],
   "group_by": [
     "element_or_analyte",
     "medium",
@@ -715,7 +722,7 @@
       "records_excluded": 2,
       "records_total": 8,
       "records_used": 6,
-      "status": "insufficient_group_size"
+      "status": "insufficient_usable_group_size"
     },
     {
       "candidate_count": 0,
@@ -781,7 +788,7 @@
       "records_excluded": 2,
       "records_total": 2,
       "records_used": 0,
-      "status": "insufficient_quantified_fraction"
+      "status": "insufficient_group_size"
     },
     {
       "candidate_count": 0,
@@ -845,7 +852,7 @@
       "records_excluded": 1,
       "records_total": 3,
       "records_used": 2,
-      "status": "insufficient_quantified_fraction"
+      "status": "insufficient_group_size"
     },
     {
       "candidate_count": 0,
@@ -942,7 +949,7 @@
       "records_excluded": 2,
       "records_total": 8,
       "records_used": 6,
-      "status": "insufficient_group_size"
+      "status": "insufficient_usable_group_size"
     },
     {
       "candidate_count": 0,
@@ -2943,6 +2950,7 @@
   "robust_z_threshold": 3.5,
   "run_metadata": {
     "configuration": {
+      "batch_qc_gate_applied": false,
       "group_by": [
         "element_or_analyte",
         "medium",
@@ -2962,14 +2970,18 @@
       ],
       "minimum_group_size": 8,
       "minimum_quantified_fraction": 0.7,
+      "minimum_spatial_candidates": 2,
+      "minimum_spatial_samples": 5,
       "region_bbox": null,
       "robust_z_threshold": 3.5,
-      "schema_map": {}
+      "schema_map": {},
+      "spatial_fdr_alpha": 0.1,
+      "spatial_grid_degrees": 2.0
     },
     "input_row_count": 796,
     "input_sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
     "missing_recommended_input_columns": [],
-    "run_id": "3e077dc27d6ce88e",
+    "run_id": "deadbcc72c8f4cd9",
     "schema_map_sha256": null
   },
   "scientific_status": "screening_baseline_only"

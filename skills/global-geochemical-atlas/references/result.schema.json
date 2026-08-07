@@ -74,14 +74,22 @@
         "standardized_record_count",
         "valid_coordinate_count",
         "censored_record_count",
-        "candidate_anomaly_count"
+        "candidate_anomaly_count",
+        "batch_qc_failed_or_incomplete_count",
+        "candidate_anomaly_region_count",
+        "iteration_action_required_count",
+        "iteration_review_required_count"
       ],
       "properties": {
         "record_count": {"type": "integer", "minimum": 0},
         "standardized_record_count": {"type": "integer", "minimum": 0},
         "valid_coordinate_count": {"type": "integer", "minimum": 0},
         "censored_record_count": {"type": "integer", "minimum": 0},
-        "candidate_anomaly_count": {"type": "integer", "minimum": 0}
+        "candidate_anomaly_count": {"type": "integer", "minimum": 0},
+        "batch_qc_failed_or_incomplete_count": {"type": "integer", "minimum": 0},
+        "candidate_anomaly_region_count": {"type": "integer", "minimum": 0},
+        "iteration_action_required_count": {"type": "integer", "minimum": 0},
+        "iteration_review_required_count": {"type": "integer", "minimum": 0}
       }
     },
     "coverage": {
@@ -110,6 +118,7 @@
         "display_sample_count": {"type": "integer", "minimum": 0},
         "unmappable_record_count": {"type": "integer", "minimum": 0},
         "candidate_record_count": {"type": "integer", "minimum": 0},
+        "candidate_anomaly_region_count": {"type": "integer", "minimum": 0},
         "default_view": {"enum": ["all_data_sample_deduplicated", "profile_driven_task_view", "regional_scope_task_view"]},
         "embedded_payload_schema": {"const": "d3-compact-payload-v1"},
         "anomaly_region_render_mode": {"const": "zoom-adaptive-anomaly-bubbles-v1"},
@@ -142,7 +151,9 @@
               "type": "object",
               "required": ["w", "s", "e", "n"]
             },
-            "output_clipped": {"type": "boolean"}
+            "output_clipped": {"type": "boolean"},
+            "clip_method": {"type": "string", "enum": ["bbox", "country_polygon_and_bbox"]},
+            "country_code": {"type": ["string", "null"]}
           },
           "additionalProperties": false
         },
@@ -153,7 +164,8 @@
               "distribution_points",
               "sample_density_heatmap",
               "element_pair_comparison",
-              "candidate_anomaly_region_aggregation"
+              "candidate_anomaly_region_aggregation",
+              "fdr_screened_candidate_anomaly_regions"
             ]
           },
           "uniqueItems": true
@@ -167,7 +179,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "object",
-            "required": ["label", "bounds", "record_count", "sample_count", "elements", "media", "administrative_clip"],
+            "required": ["label", "bounds", "record_count", "sample_count", "elements", "media", "administrative_clip", "clip_method"],
             "properties": {
               "label": {"type": "string"},
               "bounds": {"type": "object"},
@@ -175,7 +187,8 @@
               "sample_count": {"type": "integer", "minimum": 0},
               "elements": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
               "media": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-              "administrative_clip": {"const": false}
+              "administrative_clip": {"type": "boolean"},
+              "clip_method": {"type": "string", "enum": ["bbox", "country_polygon_and_bbox"]}
             },
             "additionalProperties": false
           }

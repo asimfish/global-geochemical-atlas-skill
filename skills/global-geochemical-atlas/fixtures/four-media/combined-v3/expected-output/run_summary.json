@@ -34,7 +34,8 @@
   "limitations": [
     "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
     "Map density uses observed points only; no interpolation is performed across unsampled areas.",
-    "51 anomaly background group(s) were not analyzed due to explicit failure states."
+    "51 anomaly background group(s) were not analyzed due to explicit failure states.",
+    "Partial-success reasons: one_or_more_anomaly_background_groups_not_analyzed, one_or_more_records_not_map_eligible, spatial_candidate_region_background_insufficient."
   ],
   "map_report": {
     "anomaly_region_render_mode": "zoom-adaptive-anomaly-bubbles-v1",
@@ -46,6 +47,7 @@
       "scale": "1:110m",
       "title": "Natural Earth 1:110m Land"
     },
+    "candidate_anomaly_region_count": 0,
     "candidate_record_count": 16,
     "capability_matrix": {
       "deliverables": {
@@ -87,12 +89,13 @@
         "clickable_sample_density_heatmap": true,
         "element_pair_comparison": true,
         "enrichment_and_depletion_candidates": true,
-        "global_or_regional_distribution_map": true
+        "global_or_regional_distribution_map": true,
+        "statistically_screened_anomaly_regions": true
       },
       "scientific_semantics": {
         "anomaly_basis": "D2 robust z within declared comparable background groups",
         "anomaly_contrast": "candidate_vs_comparable_group_median_and_robust_thresholds",
-        "anomaly_region_semantics": "visual aggregation of D2 candidate points only",
+        "anomaly_region_semantics": "D2 fixed-cell candidate over-representation with BH-FDR is supplied separately; D3 zoom bubbles remain count-only visual aggregation",
         "element_pair_analysis": "log10_scatter_median_quadrant_shares_spearman_and_coverage_matrix",
         "heatmap_encodes": "physical_sample_density",
         "heatmap_interpolates_concentration": false,
@@ -146,7 +149,7 @@
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1045671,
+    "html_bytes": 1058009,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -385,7 +388,8 @@
       "distribution_points",
       "sample_density_heatmap",
       "element_pair_comparison",
-      "candidate_anomaly_region_aggregation"
+      "candidate_anomaly_region_aggregation",
+      "fdr_screened_candidate_anomaly_regions"
     ],
     "visualization_profile": {
       "comparison": {
@@ -423,7 +427,9 @@
     "visualization_profile_warnings": []
   },
   "metrics": {
+    "batch_qc_failed_or_incomplete_count": 0,
     "candidate_anomaly_count": 16,
+    "candidate_anomaly_region_count": 0,
     "censored_record_count": 23,
     "iteration_action_required_count": 240,
     "iteration_review_required_count": 796,
@@ -438,7 +444,10 @@
   ],
   "outputs": {
     "anomalies": "anomalies.geojson",
+    "anomaly_regions": "anomaly_regions.geojson",
     "anomaly_report": "anomaly_report.json",
+    "batch_acceptance": "batch_acceptance.csv",
+    "batch_qc_report": "batch_qc_report.json",
     "confidence_report": "confidence_report.json",
     "database": "geochemistry.csv",
     "interactive_map": "interactive_map.html",
@@ -446,7 +455,8 @@
     "qc_report": "qc_report.json",
     "record_evidence": "record_evidence.jsonl",
     "samples": "samples.geojson",
-    "source_manifest": "source_manifest.json"
+    "source_manifest": "source_manifest.json",
+    "spatial_anomaly_report": "spatial_anomaly_report.json"
   },
   "quality_status": "issues_detected",
   "request_summary": {
@@ -473,5 +483,5 @@
     "robust_z_threshold": 3.5
   },
   "schema_version": "global-geochemical-atlas-result-v1",
-  "status": "success"
+  "status": "partial_success"
 }
