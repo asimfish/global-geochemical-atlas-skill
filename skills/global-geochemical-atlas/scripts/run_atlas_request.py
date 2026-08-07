@@ -18,8 +18,11 @@ from pathlib import Path
 from typing import Any
 
 import coverage_report
+import execution_budget
 import source_adapters
 import source_router
+import spatial_scope
+import standardize_geochemistry as standardizer
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -31,6 +34,7 @@ FOUR_MEDIA_FIXTURE = SKILL_DIR / "fixtures" / "four-media" / "combined-v3"
 DEFAULT_GEOLOGY_GRID = SKILL_DIR / "assets" / "geology" / "pangaea-788537.zip"
 DEFAULT_GEOLOGY_SHA256 = "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e"
 PARAMETERIZED_SOURCES = {"georoc-archaean", "usgs-conus-soil"}
+DEFAULT_WORKFLOW_RESERVE_SECONDS = 180.0
 
 
 class RequestRunError(RuntimeError):
@@ -116,13 +120,75 @@ def _inside_bbox(row: Mapping[str, str], bbox: Sequence[float]) -> bool:
         longitude = float(row.get("longitude") or "")
     except ValueError:
         return False
-    west, south, east, north = bbox
-    longitude_inside = west <= longitude <= east if west <= east else longitude >= west or longitude <= east
-    return longitude_inside and south <= latitude <= north
+    return spatial_scope.coordinate_in_bbox(longitude, latitude, bbox)
 
 
 def _basis_matches(requested: Sequence[str], actual: str) -> bool:
     return any(source_router.basis_matches(item, actual) for item in requested)
+
+
+def _normalized_geology(value: Any) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip()).casefold()
+
+
+def _geology_labels(
+    row: Mapping[str, str],
+    match_policy: str,
+    geology_grid: standardizer.GlimGrid | None,
+) -> set[str]:
+    labels: set[str] = set()
+    if match_policy in {"reported", "reported_or_matched"}:
+        labels.update(
+            _normalized_geology(row.get(field))
+            for field in ("geologic_unit", "geologic_unit_raw")
+            if str(row.get(field) or "").strip()
+        )
+    if match_policy in {"matched", "reported_or_matched"}:
+        existing = _normalized_geology(row.get("matched_geologic_unit"))
+        if existing:
+            labels.add(existing)
+        if geology_grid is not None and _canonical_coordinate_declared(row):
+            medium = str(row.get("medium") or "").casefold()
+            sediment_context = " ".join(
+                str(row.get(field) or "") for field in ("material", "sediment_environment")
+            ).casefold()
+            if medium != "water" and not (medium == "sediment" and "marine" in sediment_context):
+                try:
+                    latitude = float(row.get("latitude") or "")
+                    longitude = float(row.get("longitude") or "")
+                except ValueError:
+                    pass
+                else:
+                    if -90 <= latitude <= 90 and -180 <= longitude <= 180:
+                        match = geology_grid.lookup(latitude, longitude)
+                        if match is not None:
+                            labels.add(_normalized_geology(f"GLiM:{match[0]}:{match[1]}"))
+    return labels
+
+
+def _load_request_geology_grid(
+    request: Mapping[str, Any],
+    grid_path: Path,
+    expected_sha256: str,
+    no_geology: bool,
+) -> standardizer.GlimGrid | None:
+    if not request.get("geology_units") or request.get("geology_match") == "reported":
+        return None
+    if no_geology:
+        if request.get("geology_match") == "matched":
+            raise RequestRunError(
+                "unsupported_scope",
+                "geology_match=matched requires the frozen geology grid; remove --no-geology",
+            )
+        return None
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_sha256.casefold()):
+        raise RequestRunError("invalid_input", "geology grid SHA-256 must contain 64 hexadecimal characters")
+    if not grid_path.is_file() or sha256_file(grid_path) != expected_sha256.casefold():
+        raise RequestRunError("conflicting_evidence", "geology grid is missing or its SHA-256 does not match")
+    try:
+        return standardizer.GlimGrid(grid_path)
+    except standardizer.PipelineError as exc:
+        raise RequestRunError("conflicting_evidence", str(exc)) from exc
 
 
 def filter_bundle(
@@ -131,6 +197,7 @@ def filter_bundle(
     request: Mapping[str, Any],
     output_input: Path,
     output_evidence: Path | None,
+    geology_grid: standardizer.GlimGrid | None = None,
 ) -> tuple[int, int, list[str]]:
     try:
         with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
@@ -157,12 +224,18 @@ def filter_bundle(
             raise RequestRunError("conflicting_evidence", f"record evidence is unreadable: {evidence_path}") from exc
 
     region = request["region"]
-    if isinstance(region, str) and region != "global":
+    try:
+        resolved_region = spatial_scope.resolve_region(region)
+    except spatial_scope.SpatialScopeError as exc:
         raise RequestRunError(
             "needs_human_review",
-            "named-region execution needs a frozen polygon; use a WGS84 bbox or global scope",
-        )
+            str(exc),
+        ) from exc
     requested_basis = request.get("measurement_basis")
+    requested_geology = {
+        _normalized_geology(item) for item in (request.get("geology_units") or [])
+    }
+    geology_match = str(request.get("geology_match", "reported_or_matched"))
     requested_time = request.get("time_range")
     requested_sources = request.get("sources")
     start_year = _year(requested_time[0]) if requested_time else None
@@ -180,11 +253,24 @@ def filter_bundle(
             reason = "source"
         elif requested_basis and not _basis_matches(requested_basis, str(row.get("measurement_basis") or "")):
             reason = "measurement_basis"
-        elif isinstance(region, dict) and not _canonical_coordinate_declared(row):
+        elif resolved_region["key"] != "global" and not _canonical_coordinate_declared(row):
             reason = "bbox_unverified_crs"
-        elif isinstance(region, dict) and not _inside_bbox(row, region["bbox"]):
-            reason = "bbox"
-        elif requested_time:
+        elif resolved_region["key"] != "global":
+            try:
+                latitude = float(row.get("latitude") or "")
+                longitude = float(row.get("longitude") or "")
+            except ValueError:
+                reason = "region"
+            else:
+                try:
+                    inside_region = spatial_scope.coordinate_in_region(
+                        longitude, latitude, resolved_region
+                    )
+                except spatial_scope.SpatialScopeError as exc:
+                    raise RequestRunError("conflicting_evidence", str(exc)) from exc
+                if not inside_region:
+                    reason = "region"
+        if reason is None and requested_time:
             sample_bounds = _year_bounds(row.get("sampled_at"))
             if (
                 sample_bounds is None
@@ -194,6 +280,10 @@ def filter_bundle(
                 or sample_bounds[0] > end_year
             ):
                 reason = "time_range"
+        if reason is None and requested_geology and not requested_geology.intersection(
+            _geology_labels(row, geology_match, geology_grid)
+        ):
+            reason = "geology_units"
         if reason is not None:
             exclusion_counts[reason] = exclusion_counts.get(reason, 0) + 1
             continue
@@ -268,7 +358,7 @@ def acquire_online_source(
     output_dir: Path,
     acquisition_mode: str,
     generated_at: str,
-    timeout_seconds: int = 300,
+    timeout_seconds: float = 300.0,
 ) -> None:
     analytes = [item for item in request["elements"]]
     if source_id == "usgs-conus-soil":
@@ -304,7 +394,7 @@ def acquire_online_source(
     except subprocess.TimeoutExpired as exc:
         raise RequestRunError(
             "incomplete_retrieval",
-            f"source acquisition timed out after {timeout_seconds}s for {source_id}",
+            f"source acquisition timed out after {timeout_seconds:.3f}s for {source_id}",
         ) from exc
     if result.returncode:
         raise RequestRunError(
@@ -347,6 +437,87 @@ def source_budgets(
         source_id: minimums[source_id] + quotient + (1 if index < remainder else 0)
         for index, source_id in enumerate(ordered)
     }
+
+
+def plan_auto_sources(
+    route_entries: Sequence[Mapping[str, Any]],
+    maximum_records: int,
+    analyte_count: int,
+) -> tuple[list[str], list[str]]:
+    """Choose the broadest evidence-ranked executable subset within a record ceiling."""
+
+    entries = [dict(entry) for entry in route_entries]
+    source_ids = [str(entry["source_id"]) for entry in entries]
+    minimums = {
+        source_id: minimum_source_records(source_id, analyte_count)
+        for source_id in source_ids
+    }
+    if sum(minimums.values()) <= maximum_records:
+        return source_ids, []
+    selected: list[str] = []
+    uncovered_media = {
+        str(medium)
+        for entry in entries
+        for medium in entry.get("matching_media", [])
+    }
+    remaining = list(entries)
+    capacity = maximum_records
+    while remaining:
+        affordable = [
+            entry for entry in remaining if minimums[str(entry["source_id"])] <= capacity
+        ]
+        if not affordable:
+            break
+        affordable.sort(
+            key=lambda entry: (
+                -len(uncovered_media.intersection(entry.get("matching_media", []))),
+                -float(entry.get("source_evidence_score", 0.0)),
+                minimums[str(entry["source_id"])],
+                str(entry["source_id"]),
+            )
+        )
+        chosen = affordable[0]
+        source_id = str(chosen["source_id"])
+        selected.append(source_id)
+        capacity -= minimums[source_id]
+        uncovered_media.difference_update(str(item) for item in chosen.get("matching_media", []))
+        remaining = [entry for entry in remaining if entry["source_id"] != source_id]
+    if not selected:
+        minimum = min(minimums.values()) if minimums else 1
+        raise RequestRunError(
+            "unsupported_scope",
+            f"max_records={maximum_records} cannot fund the smallest routed source minimum ({minimum})",
+        )
+    skipped = [source_id for source_id in source_ids if source_id not in set(selected)]
+    return selected, skipped
+
+
+def request_visualization_profile(
+    request: Mapping[str, Any], resolved_region: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Translate the frozen public request into the D3 profile used by the full workflow."""
+
+    profile = read_json(
+        SKILL_DIR / "assets" / "visualization-profile.template.json",
+        "default visualization profile",
+    )
+    if resolved_region["key"] != "global":
+        west, south, east, north = resolved_region["bbox"]
+        profile["spatial_scope"] = "regional"
+        profile["default_region"] = "custom"
+        profile["custom_region"] = {
+            "label": str(resolved_region["label"]),
+            "bounds": {"w": west, "s": south, "e": east, "n": north},
+            "country_code": resolved_region.get("country_code"),
+        }
+        profile["title"] = f"{resolved_region['label']}地球化学分布与证据"
+    if len(request["elements"]) == 1:
+        profile["filters"]["element"] = request["elements"][0]
+    if len(request["media"]) == 1:
+        profile["filters"]["medium"] = request["media"][0]
+    if len(request.get("geology_units") or []) == 1:
+        profile["filters"]["geology"] = request["geology_units"][0]
+    return profile
 
 
 def merge_acquired_sources(
@@ -516,19 +687,39 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise RequestRunError(
             "invalid_input", "--batch-qc-input and --batch-qc-policy must be supplied together"
         )
-    if not 1 <= args.source_timeout_seconds <= 900:
+    if not 1 <= args.source_timeout_seconds <= execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:
         raise RequestRunError(
-            "invalid_input", "--source-timeout-seconds must be between 1 and 900"
+            "invalid_input",
+            f"--source-timeout-seconds must be between 1 and {execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:g}",
+        )
+    try:
+        deadline = execution_budget.ExecutionBudget(args.total_timeout_seconds)
+    except execution_budget.ExecutionBudgetError as exc:
+        raise RequestRunError("invalid_input", str(exc)) from exc
+    if not 5 <= args.workflow_reserve_seconds < deadline.total_seconds:
+        raise RequestRunError(
+            "invalid_input",
+            "--workflow-reserve-seconds must be at least 5 and below the total timeout",
         )
     catalog = source_router.load_catalog()
     registry = source_adapters.load_source_registry()
     request = source_router.validate_request(read_json(args.request, "request"), catalog)
+    try:
+        resolved_region = spatial_scope.resolve_region(request["region"])
+    except spatial_scope.SpatialScopeError as exc:
+        raise RequestRunError("needs_human_review", str(exc)) from exc
     route = source_router.route_sources(request, catalog, registry)
     matrix = coverage_report.build_matrix(catalog, request, registry)
     source_outcomes: list[dict[str, Any]] = []
     acquisition_warnings: list[str] = []
     source_child_manifests: list[tuple[str, Path]] = []
     retained_acquisition_manifests: list[dict[str, Any]] = []
+    geology_filter_grid = _load_request_geology_grid(
+        request,
+        args.geology_grid,
+        args.geology_grid_sha256,
+        args.no_geology,
+    )
 
     generated_at = args.generated_at or datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     with tempfile.TemporaryDirectory(prefix="geochemical-request-") as temporary:
@@ -547,7 +738,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 raise RequestRunError("network_unavailable", "online acquisition cannot run with request offline=true")
             selected_ids = [item["source_id"] for item in route["selected_sources"]]
             if args.online_source == "auto":
-                requested_ids = selected_ids
+                requested_ids, skipped_ids = plan_auto_sources(
+                    route["selected_sources"],
+                    int(request["max_records"]),
+                    len(request["elements"]),
+                )
+                if skipped_ids:
+                    acquisition_warnings.append(
+                        "record budget omitted routed sources: " + ", ".join(skipped_ids)
+                    )
             else:
                 requested_ids = [args.online_source]
             unknown = sorted(set(requested_ids) - set(selected_ids))
@@ -560,11 +759,25 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 requested_ids, int(request["max_records"]), len(request["elements"])
             )
             successful: list[dict[str, Any]] = []
-            for source_id in requested_ids:
+            for source_index, source_id in enumerate(requested_ids):
                 acquired = work / "acquired" / source_id
                 source_request = dict(request)
                 source_request["max_records"] = budgets[source_id]
                 try:
+                    remaining_source_count = len(requested_ids) - source_index
+                    acquisition_window = deadline.child_timeout(
+                        f"source acquisition {source_id}",
+                        reserve_seconds=args.workflow_reserve_seconds,
+                        minimum_seconds=1.0,
+                    )
+                    source_timeout = min(
+                        float(args.source_timeout_seconds),
+                        acquisition_window / remaining_source_count,
+                    )
+                    if source_timeout < float(args.source_timeout_seconds):
+                        acquisition_warnings.append(
+                            f"global deadline capped {source_id} acquisition at {source_timeout:.3f}s"
+                        )
                     acquire_online_source(
                         source_id,
                         source_request,
@@ -572,7 +785,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         acquired,
                         args.acquisition_mode,
                         generated_at,
-                        timeout_seconds=args.source_timeout_seconds,
+                        timeout_seconds=source_timeout,
                     )
                     verify_manifest_outputs(
                         acquired / "run_manifest.json",
@@ -608,7 +821,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         "directory": acquired,
                         "record_count": record_count,
                     })
-                except (OSError, ValueError, RequestRunError) as exc:
+                except (
+                    OSError,
+                    ValueError,
+                    RequestRunError,
+                    execution_budget.ExecutionBudgetError,
+                ) as exc:
                     source_outcomes.append({
                         "source_id": source_id,
                         "status": "failed",
@@ -661,7 +879,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         filtered_input = work / "request_input.csv"
         filtered_evidence = work / "request_evidence.jsonl" if source_evidence is not None else None
         original_count, selected_count, warnings = filter_bundle(
-            source_input, source_evidence, request, filtered_input, filtered_evidence
+            source_input,
+            source_evidence,
+            request,
+            filtered_input,
+            filtered_evidence,
+            geology_grid=geology_filter_grid,
         )
         warnings = acquisition_warnings + warnings
         filtered_acquisition: Path | None = None
@@ -692,7 +915,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         if filtered_acquisition is not None:
             command.extend(["--acquisition-manifest", str(filtered_acquisition)])
         if isinstance(request["region"], dict):
-            command.extend(["--region-bbox", ",".join(str(item) for item in request["region"]["bbox"])])
+            command.append(
+                "--region-bbox=" + ",".join(str(item) for item in resolved_region["bbox"])
+            )
+        elif resolved_region["key"] != "global":
+            command.append(
+                "--region-bbox=" + ",".join(str(item) for item in resolved_region["bbox"])
+            )
+        visualization_profile = work / "visualization-profile.json"
+        write_json(visualization_profile, request_visualization_profile(request, resolved_region))
+        command.extend(["--visualization-profile", str(visualization_profile)])
         if not args.no_geology:
             command.extend(
                 [
@@ -716,7 +948,26 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         )
         if args.min_spatial_samples is not None:
             command.extend(["--min-spatial-samples", str(args.min_spatial_samples)])
-        result = subprocess.run(command, capture_output=True, text=True, check=False, timeout=900)
+        try:
+            workflow_timeout = deadline.child_timeout(
+                "D2/D3 workflow",
+                reserve_seconds=5.0,
+                minimum_seconds=1.0,
+            )
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=workflow_timeout,
+            )
+        except execution_budget.ExecutionBudgetError as exc:
+            raise RequestRunError("incomplete_retrieval", str(exc)) from exc
+        except subprocess.TimeoutExpired as exc:
+            raise RequestRunError(
+                "incomplete_retrieval",
+                f"D2/D3 workflow exhausted the global execution deadline after {workflow_timeout:.3f}s",
+            ) from exc
         if result.returncode:
             raise RequestRunError(
                 "incomplete_retrieval",
@@ -789,11 +1040,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         or execution_coverage_status != "covered"
         or bool(warnings)
     )
+    if deadline.remaining_seconds <= 0:
+        raise RequestRunError(
+            "incomplete_retrieval",
+            "global execution budget was exhausted during final evidence packaging",
+        )
     execution = {
-        "execution_version": "geochemical-request-execution-v2",
+        "execution_version": "geochemical-request-execution-v3",
         "status": "partial_success" if execution_partial else "success",
         "mode": mode,
         "analysis_profile": args.analysis_profile,
+        "timing": {
+            "official_task_limit_seconds": execution_budget.OFFICIAL_TASK_LIMIT_SECONDS,
+            "internal_budget_seconds": deadline.total_seconds,
+            "workflow_reserve_seconds": float(args.workflow_reserve_seconds),
+            "elapsed_seconds": round(deadline.elapsed_seconds, 3),
+            "completed_within_internal_budget": deadline.remaining_seconds > 0,
+            "deadline_policy": "single_monotonic_deadline_v1",
+        },
         "geology_grid": None if args.no_geology else {
             "filename": args.geology_grid.name,
             "sha256": args.geology_grid_sha256,
@@ -843,8 +1107,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--cache-dir", type=Path, default=Path(".cache/data"))
     parser.add_argument("--acquisition-mode", choices=("online", "cached"), default="online")
     parser.add_argument(
-        "--source-timeout-seconds", type=int, default=300,
-        help="Per-source acquisition subprocess timeout (default: 300)",
+        "--source-timeout-seconds", type=float, default=300.0,
+        help="Per-source timeout cap inside the shared global budget (default: 300)",
+    )
+    parser.add_argument(
+        "--total-timeout-seconds",
+        type=float,
+        default=execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS,
+        help="Monotonic end-to-end script budget, capped at 840 seconds",
+    )
+    parser.add_argument(
+        "--workflow-reserve-seconds",
+        type=float,
+        default=DEFAULT_WORKFLOW_RESERVE_SECONDS,
+        help="Capacity protected from online acquisition for D2/D3 and validation (default: 180)",
     )
     parser.add_argument(
         "--require-all-sources", action="store_true",

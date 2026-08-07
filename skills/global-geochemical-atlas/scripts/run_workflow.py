@@ -269,6 +269,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             anomaly_regions_path=outputs["anomaly_regions"],
             spatial_anomaly_report_path=outputs["spatial_anomaly_report"],
             iteration_backlog_path=backlog_path,
+            visualization_profile_path=args.visualization_profile,
         )
     except (map_builder.MapBuildError, OSError) as exc:
         raise WorkflowError("incomplete_retrieval", f"map generation failed: {exc}") from exc
@@ -429,6 +430,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--region-bbox", type=standardizer.parse_bbox, metavar="W,S,E,N",
         help="Optional WGS84 requested region, used for coordinate QC (dateline crossing supported)",
+    )
+    parser.add_argument(
+        "--visualization-profile",
+        type=Path,
+        help="Optional validated D3 profile used to scope and configure the generated map",
     )
     parser.add_argument("--max-records", type=int, default=50_000, help="Fail closed above this input count")
     parser.add_argument(
