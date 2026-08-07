@@ -1,0 +1,46 @@
+{
+  "audit_record_count": 30,
+  "cache_statuses": {
+    "pkg-0136c": "cache"
+  },
+  "dataset_version": "cdogs-svy210102-page-2025-05-18",
+  "fixture_observation_count": 30,
+  "generated_at": "2026-08-07T12:56:23Z",
+  "observation_count": 655,
+  "run_version": "d1-cdogs-210102-adapter-v1",
+  "source_files": {
+    "pkg-0136c": {
+      "byte_count_matches_reference": true,
+      "filename": "svy210102_pkg_0136c.xlsx",
+      "method_observation_counts": {
+        "U_FT": 655
+      },
+      "observation_rows": 655,
+      "observed_bytes": 563410,
+      "official_url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx",
+      "reference_bytes": 563410,
+      "required_columns": [
+        "Lab_Sample_Identifier",
+        "Lab_Key",
+        "Bundle_Key",
+        "Survey_Key",
+        "Site_Key",
+        "Field_Key",
+        "Control_Reference_ID",
+        "Latitude_NAD83",
+        "Longitude_NAD83",
+        "Sample_Type_Name_en",
+        "Preparation_Method_Name_en",
+        "QAQC_Block_ID",
+        "QAQC_Sample_Identifier",
+        "Order_Of_Analysis",
+        "U_FT"
+      ],
+      "survey_rows": 655
+    }
+  },
+  "source_id": "cdogs-210102-lake-water",
+  "survey_key": "21:0102",
+  "survey_url": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+  "upstream_lineage_id": "cdogs-survey-210102"
+}
