@@ -14,8 +14,8 @@
 
 - 来源：GEOROC Compilation: Archaean Cratons，DOI `10.25625/1KRR1P`，版本 12.0；
 - 许可：CC BY-SA 4.0；
-- 内容：按源文件顺序选择 whole-rock、reported point coordinates 记录，并平衡抽取 As、Cu、Ni、Zn 各 12 条；
-- 边界：数值是 GEOROC 预编译选择值，不代表全部重复测量；公开元数据未充分声明统一 datum，因此 reported coordinates 只写入原始字段，canonical 坐标与 CRS 留空，不进入地图。
+- 内容：按源文件顺序选择 whole-rock、精确点坐标记录，并平衡抽取 As、Cu、Ni、Zn 各 12 条；
+- 边界：数值是 GEOROC 预编译选择值，不代表全部重复测量。
 
 ## USGS demo
 
@@ -23,8 +23,8 @@
 
 - 来源：USGS Data Series 801，DOI `10.3133/ds801`；
 - 权利状态：USGS 制作的数据属于美国公有领域，仍保留建议引用；
-- 内容：0–5 cm、A horizon、C horizon 各选择 9 个源样品，每个样品保留 As、Cu、Ni、Zn，并在每层确定性纳入一条删失记录；`material` 显式编码土层，避免异常背景混合；
-- 边界：三个土层保持可区分；D1 按 USGS Appendix 5 映射 WGS 84、分析方法、消解方式和原始 qualifier，D2 负责 canonical qualifier、单位标准化、QC 和置信度。
+- 内容：0–5 cm、A horizon、C horizon 各选择 4 个源样品，每个样品保留 As、Cu、Ni、Zn；
+- 边界：三个土层保持可区分，legacy qualifier 和科学标准化由 D2 处理。
 
 ## PANGAEA 北非土壤 demo
 
@@ -64,6 +64,7 @@
 - 许可：CC BY 4.0，并遵守 Fair Data Use 的数据集和原贡献者引用要求；
 - 内容：从 QC 1/2、坐标和深度有效的 dissolved 观测中平衡选择 Cu、Ni、Zn 各 16 条，共 48 条；
 - 单位边界：原始 `nmol/kg` 保持不变；没有明确元素原子量和海水密度时不换算为 `ug/L`；
+- 方法边界：39,327 条目标观测均连接到航次×元素 contributor metadata；只有唯一 BODC 方法记录时才赋值，多候选记录只保留候选集，不猜成行级方法；
 - 覆盖边界：样点来自海洋航次，不是规则全球网格；官方离散海水变量表没有 As，必须用其他水体来源补齐。
 
 ## GEMStat demo
@@ -72,9 +73,18 @@
 
 - 来源：UNEP GEMS/Water Global Freshwater Quality Archive v3，版本 DOI `10.5281/zenodo.18459694`；
 - 许可：CC BY 4.0，保留 archive 引用；
-- 内容：只从 Good/Fair、方法代码明确、非负且非极端的记录中选择 dissolved、suspended、total As 各 16 条；在来源具备时平衡 `mg/l`/`µg/l`、湖泊/河流和 `<` 删失值；
-- 质量边界：原始 492,999 条观测中的方法代码 0、Pending review、Suspect、重复和异常哨兵仍保留在全量适配器与审计报告中，但不进入演示；
-- 覆盖边界：As 子集只涉及 33 个贡献国家，不是规则全球淡水网格，也不能与 GEOTRACES 海水背景直接混算。
+- 内容：只从 Good/Fair、方法代码明确、非负且非极端的记录中为 As、Cr、Cu、Hg、Ni、Pb、Zn 各选择 8 条，共 56 条；dissolved、extractable、suspended、total 分相和 `<` 删失值保持独立；
+- 质量边界：全量 3,739,180 条七元素观测中只有 279,225 条方法代码明确；Pending review、Suspect、重复、异常哨兵和 1,836,306 条删失观测仍保留在全量适配器与审计报告中；
+- 覆盖边界：七元素子集涉及 35 个贡献国家、17,248 个站点和 689,291 个物理采样事件，不是规则全球淡水网格，也不能与 GEOTRACES 海水背景直接混算。Cr-VI 不计作元素 Cr。
+
+## USGS/WQP Sacramento River dissolved As demo
+
+目录：`us-wqp-sacramento-river-arsenic/`。
+
+- 来源：Water Quality Portal 固定的 USGS/NWIS 结果与站点查询响应，站点 `USGS-11447650`；
+- 内容：189 条 2010–2023 dissolved As 记录中确定性选择 48 条，覆盖 Not Detected、field replicate、Preliminary 和 Accepted routine 状态；
+- 方法与 QC：逐行保留 `USGS:PLM10`、实验室、检出限类型和值、结果状态与活动类型；Not Detected 以 `<0.10 ug/l` 保留，不填零；
+- 覆盖边界：这是一个方法丰富的独立淡水时间序列，不是美国或全球河流水质覆盖。WQP 是交付入口，USGS/NWIS 是上游证据，不重复计作两条血缘。
 
 ## FOREGS 六介质 demo
 
@@ -97,7 +107,6 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --cache-dir .cache/data \
   --output-dir /tmp/georoc-demo \
   --mode cached \
-  --elements As,Cu,Ni,Zn \
   --observations 48 \
   --generated-at 2026-08-05T06:25:00Z
 
@@ -106,8 +115,7 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
   --cache-dir .cache/data \
   --output-dir /tmp/usgs-demo \
   --mode cached \
-  --elements As,Cu,Ni,Zn \
-  --observations 108 \
+  --observations 48 \
   --generated-at 2026-08-05T06:25:00Z
 
 python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
@@ -171,6 +179,6 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将以上十四个来源合并到同一个 `sources=auto` 请求：796 条观测包括 rock 48、soil 348、sediment 256、water 144。`run_manifest.json` 绑定十四个输入 fixture 的 hash、来源证据等级、离线验证状态，以及标准化前后均为 93 个 D2 比较分区（水体 18 个）；`expected-output/` 是可字节级重建的十五文件工作流结果，新增批次门禁和 FDR 空间候选区域证据，其中 `iteration_backlog.csv` 单列证据缺口、复核项和删失科学限制。
+`fixtures/four-media/combined-v3/` 将二十一个可执行来源合并到同一个 `sources=auto` 请求：1,144 条观测包括 rock 96、soil 440、sediment 408、water 200。`run_manifest.json` 绑定二十一个输入 fixture 的 hash、来源证据等级、路由结果和 156 个 D2 比较分区；`expected-output/` 是可字节级重建的十五文件工作流结果。
 
-这只是接口联合测试。93 个背景组按元素、介质、material、样品类型、土壤层位、沉积环境、水分相、粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取方法隔离；当前没有一个组跨越不兼容来源。GEOROC 和 AfSIS 未证实 CRS 的 reported coordinates 不进入 canonical 地图。16 个工程异常候选只验证筛查流程，不构成区域异常、污染或矿化结论。
+这只是接口联合测试。156 个背景组按元素、介质、样品类型、分相、measurement basis、地质单元、方法和消解/提取方法隔离；只有两个同属 GEOROC compilation 血缘且字段契约相同的专题数据集共享四个组，不跨越独立来源血缘。输出中的 27 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。8 条水体中 suspended `µg/g` 记录及其他歧义比值单位明确失败关闭，不作 `µg/L` 标准化。

@@ -1,0 +1,130 @@
+{
+  "acquisition": {
+    "mode": "content-addressed-official-csv",
+    "observed_at": "2026-08-06T16:07:00Z",
+    "request_url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+  },
+  "archive": {
+    "members": [
+      {
+        "bytes": 1825190,
+        "file_id": "marine-concentrations",
+        "name": "ocean-noudo.csv",
+        "sha256": "e81046209e381a727de856eec14ee4a67ace37751c66d1d74467c3d8214bad49",
+        "source_url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+      }
+    ]
+  },
+  "claim_boundary": "This audit proves the pinned japan-gsj-marine-sediment file contract, adapter parse and registered target denominator. It does not turn discrete source observations into continuous geographic coverage or cross-method comparability.",
+  "limitations": [
+    "This is a separate 4,905-sample marine product and must not be merged with the GSJ river-sediment table as one sample type.",
+    "The source CSV reports Hg in ppb and the other registered trace elements in ppm.",
+    "The concentration CSV does not contain row-level method, detection-limit or quality-control fields; the adapter leaves them missing rather than inferring them.",
+    "Ten negative Hg values and one missing Hg value are preserved as source states; negative values are excluded from positive demonstration slices but not erased from the full profile.",
+    "Survey tracks and coastal regions are discrete and do not form a regular grid of all Japanese waters."
+  ],
+  "observed_data": {
+    "counts": {
+      "distinct_cruises": 37,
+      "distinct_regions": 37,
+      "distinct_samples": 4905,
+      "missing_water_depth_rows": 1081,
+      "negative_hg_values": 10,
+      "physical_rows": 4905,
+      "target_observations": 34334,
+      "target_value_counts": {
+        "As": 4905,
+        "Cr": 4905,
+        "Cu": 4905,
+        "Hg": 4904,
+        "Ni": 4905,
+        "Pb": 4905,
+        "Zn": 4905
+      }
+    },
+    "coverage": {
+      "bbox": [
+        127.53256,
+        26.06373,
+        146.06644,
+        45.56608
+      ],
+      "region_counts": {
+        "オホーツク海１": 179,
+        "オホーツク海２": 106,
+        "下北半島沖": 165,
+        "九州西部": 50,
+        "仙台〜日立沖": 266,
+        "伊勢湾〜三河湾": 26,
+        "八戸〜久慈": 47,
+        "内浦湾": 35,
+        "北九州・山陰": 332,
+        "北海道西方海域": 89,
+        "北海道西方海域２": 96,
+        "北海道西方海域３": 83,
+        "北海道西方海域４": 177,
+        "十勝沖": 108,
+        "周防灘〜燧灘": 50,
+        "土佐湾〜日向灘": 378,
+        "室戸岬": 134,
+        "山陰": 285,
+        "山陰・北陸沖": 235,
+        "房総沖": 55,
+        "新潟湾": 233,
+        "日高": 110,
+        "東京湾": 29,
+        "東海沖": 217,
+        "根室・日高沖": 83,
+        "沖縄": 31,
+        "熊野灘": 95,
+        "燧灘〜紀伊半島": 49,
+        "相模灘": 41,
+        "秋田沖": 172,
+        "種子島〜野間岬沖": 315,
+        "能登〜富山湾": 242,
+        "釜石沖": 126,
+        "釧路・日高沖": 110,
+        "青森周辺海域": 65,
+        "鹿児島湾": 26,
+        "鹿島灘": 65
+      },
+      "valid_coordinate_rows": 4905
+    },
+    "target_analytes": {
+      "As": "As",
+      "Cr": "Cr",
+      "Cu": "Cu",
+      "Hg": "Hg",
+      "Ni": "Ni",
+      "Pb": "Pb",
+      "Zn": "Zn"
+    }
+  },
+  "observed_metadata": {
+    "dataset_doi": null,
+    "dataset_version": "content-snapshot-2026-08-06",
+    "license": {
+      "name": "GSJ website terms aligned with Japan Government Standard Terms of Use 2.0",
+      "spdx": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+      "url": "https://www.gsj.jp/license/index.html"
+    },
+    "required_fields": [
+      "試料番号",
+      "航海",
+      "地域",
+      "経度",
+      "緯度",
+      "深度_m_",
+      "As",
+      "Cr",
+      "Cu",
+      "Hg",
+      "Ni",
+      "Pb",
+      "Zn"
+    ]
+  },
+  "source_id": "japan-gsj-marine-sediment",
+  "status": "verified_content_addressed_official_or_doi_dataset",
+  "verification_version": "v4-m5-sediment-source-audit-v2-content-addressed"
+}

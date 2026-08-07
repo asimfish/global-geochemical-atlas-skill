@@ -16,14 +16,14 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 64164,
+      "bytes": 66228,
       "path": "demo_input.csv",
-      "sha256": "b0d71aa2c62f169040dae93047e2dfcc2f1778529003973172d8cc6ad112053f"
+      "sha256": "ed5fd3487d97eec672ca5c3e25e32e8b3b24f173de9768db24666f430c753dd4"
     },
     {
-      "bytes": 84339,
+      "bytes": 142243,
       "path": "sources.jsonl",
-      "sha256": "9c17eb16f44005aba88da55daaf0108986a6075e408d0bf74ae205e6102de163"
+      "sha256": "4b8b52938ffd41ad276d4870beb6fcccbe3fe00ad6cb9b2fd082cea0fc1ba0ee"
     }
   ],
   "record_counts": {

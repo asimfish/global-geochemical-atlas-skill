@@ -1,0 +1,98 @@
+{
+  "acquisition": {
+    "mode": "pinned-official-csv",
+    "observed_at": "2026-08-06T16:07:00Z",
+    "request_url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+  },
+  "archive": {
+    "members": [
+      {
+        "bytes": 208089,
+        "file_id": "mercury-csv",
+        "name": "150328_00_1.CSV",
+        "sha256": "3089b02331e8aff7e78ec8b972fa6ff9acfe85c9b49ae67462605cef3fbb247c",
+        "source_url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+      }
+    ]
+  },
+  "claim_boundary": "This audit proves the pinned australia-ngsa-mercury file contract, adapter parse and registered target denominator. It does not turn discrete source observations into continuous geographic coverage or cross-method comparability.",
+  "limitations": [
+    "The product reports total Hg in dry-weight ng/g for less-than-75-micrometre top and bottom outlet sediment; it is not a regular national grid.",
+    "Total mercury was measured directly on about 100 mg by Milestone tri-cell DMA-80 without acid digestion, following USEPA Method 7473.",
+    "The header reports a 0.01 ng Hg mass detection limit, not a concentration detection limit; the adapter does not incorrectly store 0.01 ng/g as a row threshold.",
+    "TOS and BOS horizons and all duplicate codes remain explicit. QA/QC duplicates are not counted as independent sites.",
+    "Coordinates use GDA94 geographic coordinates (EPSG:4283); the values are retained without an unrecorded transformation."
+  ],
+  "observed_data": {
+    "counts": {
+      "depth_counts": {
+        "BOS": 1182,
+        "TOS": 1214
+      },
+      "distinct_samples": 2396,
+      "distinct_sites": 1247,
+      "duplicate_code_counts": {
+        "": 1959,
+        "Duplicate 1": 222,
+        "Duplicate 2": 215
+      },
+      "physical_rows": 2396,
+      "state_counts": {
+        "NSW": 298,
+        "NT": 453,
+        "QLD": 607,
+        "SA": 314,
+        "TAS": 39,
+        "VIC": 118,
+        "WA": 567
+      },
+      "target_observations": 2396
+    },
+    "coverage": {
+      "bbox": [
+        113.8092,
+        -43.3302,
+        153.3335,
+        -11.0346
+      ],
+      "region_counts": {
+        "NSW": 298,
+        "NT": 453,
+        "QLD": 607,
+        "SA": 314,
+        "TAS": 39,
+        "VIC": 118,
+        "WA": 567
+      },
+      "valid_coordinate_rows": 2396
+    },
+    "target_analytes": {
+      "Hg": "Hg_DMA_ng/g_0.01"
+    }
+  },
+  "observed_metadata": {
+    "dataset_doi": "10.26186/150328",
+    "dataset_version": "2025-03-31",
+    "license": {
+      "name": "Creative Commons Attribution 4.0 International",
+      "spdx": "CC-BY-4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "required_fields": [
+      "SITEID",
+      "DATE_SAMPLED",
+      "LATITUDE_GDA94",
+      "LONGITUDE_GDA94",
+      "STATE",
+      "DUPLICATE_CODE",
+      "DUPLICATE_SITEID",
+      "SAMPLEID",
+      "GRAIN_SIZE",
+      "DEPTH",
+      "Hg_DMA_ng/g_0.01"
+    ]
+  },
+  "source_id": "australia-ngsa-mercury",
+  "status": "verified_content_addressed_official_or_doi_dataset",
+  "verification_version": "v4-m5-sediment-source-audit-v2-content-addressed"
+}

@@ -1,11 +1,11 @@
 {
   "adapter_registered": true,
   "as_of": "2026-08-06T10:05:00Z",
-  "cache_hit_count": 5,
+  "cache_hit_count": 11,
   "cached_parse_status": "pass",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "v3",
-  "expected_target_observation_count": null,
+  "expected_target_observation_count": 3739180,
   "files": [
     {
       "bytes": 30585144,
@@ -15,11 +15,46 @@
       "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
     },
     {
+      "bytes": 34359149,
+      "cache_status": "cache_verified",
+      "file_id": "chromium-observations",
+      "filename": "Chromium.csv",
+      "sha256": "164294931268c7427cb7c768f23e20484db9c4130044d99c766483fb881cc62c"
+    },
+    {
+      "bytes": 28448872,
+      "cache_status": "cache_verified",
+      "file_id": "copper-observations",
+      "filename": "Copper.csv",
+      "sha256": "82fb42ce1bba413a197825017727c8b2c04aa7042f92b07466f81fab3e93c451"
+    },
+    {
+      "bytes": 40765015,
+      "cache_status": "cache_verified",
+      "file_id": "lead-observations",
+      "filename": "Lead.csv",
+      "sha256": "6c7edbf736a32985394967ff30c175e4618c6914b7c8a77b38d40c255af7b9f0"
+    },
+    {
+      "bytes": 31175171,
+      "cache_status": "cache_verified",
+      "file_id": "mercury-observations",
+      "filename": "Mercury.csv",
+      "sha256": "13805529f39c9ff6c90a84b341491af9739c72c43d3ec0eba07165957058906f"
+    },
+    {
       "bytes": 521959,
       "cache_status": "cache_verified",
       "file_id": "methods",
       "filename": "GEMStat_methods_metadata.csv",
       "sha256": "fba3a0903228811def4cd7910298ccd1965b64b76fbdca90445988eec08ffbb3"
+    },
+    {
+      "bytes": 39456553,
+      "cache_status": "cache_verified",
+      "file_id": "nickel-observations",
+      "filename": "Nickel.csv",
+      "sha256": "fef4cc062e06ea4e3eafd8257b6849ed1d7ece2ac6522c5f9bfdef73ea206b8f"
     },
     {
       "bytes": 146762,
@@ -41,17 +76,45 @@
       "file_id": "stations",
       "filename": "GEMStat_station_metadata.csv",
       "sha256": "978d3682d4fc702e1dd9c9e4e148ca586899002b551018dbfc3e40c9f7e1695d"
+    },
+    {
+      "bytes": 26785044,
+      "cache_status": "cache_verified",
+      "file_id": "zinc-observations",
+      "filename": "Zinc.csv",
+      "sha256": "0d77884198cdb0c01fa9f0ad8e101e086c709bdbc36ca80dc955a1c6172a192d"
     }
   ],
   "last_successful_fetch_at": "2026-08-05T14:41:20Z",
   "last_successful_parse_at": "2026-08-06T10:05:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",
-  "parsed_source_record_count": 492999,
+  "parsed_source_record_count": 3739180,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "raw_schema_fingerprint": "6ba7f7308b5eccfba3ed34ed6f2eb41ab964a703733dfab4b95c87876dd889b0",
+  "raw_schema_field_count": 19,
+  "raw_schema_fields": [
+    "Analysis Method Code",
+    "Data Quality",
+    "Depth",
+    "GEMS Station Number",
+    "Integrated Value",
+    "License Information",
+    "Parameter Code",
+    "Remark",
+    "Sample Date",
+    "Sample Time",
+    "Unit",
+    "Value",
+    "Value Flags",
+    "_dataset_version",
+    "_element",
+    "_method_metadata",
+    "_source_file",
+    "_station_metadata",
+    "_water_fraction"
+  ],
   "retry_health": "not_measured_in_offline_profile",
-  "row_count_drift_status": "baseline_recorded_no_registered_count",
+  "row_count_drift_status": "matches_registered_expected_count",
   "schema_drift_detection": "checked-in profile exact comparison",
   "source_id": "gemstat-open-archive",
   "supported_modes": [
@@ -59,7 +122,7 @@
     "cached",
     "offline_fixture"
   ],
-  "target_observation_count": 492999,
+  "target_observation_count": 3739180,
   "version_drift": {
     "outer_archive_drift": false,
     "status": "matches_registered_snapshot"

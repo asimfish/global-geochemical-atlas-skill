@@ -1,0 +1,290 @@
+{
+  "acquisition": {
+    "mode": "pinned-zip-member-byte-ranges",
+    "observed_at": "2026-08-05T14:41:20Z",
+    "record_doi": "10.5281/zenodo.18459694"
+  },
+  "archive": {
+    "bytes": 201278791,
+    "checksum": {
+      "algorithm": "md5",
+      "value": "00f3ea19ce529753977eb3aeb08fbc47"
+    },
+    "filename": "GFQA_v3.zip",
+    "locally_full_archive_verified": false
+  },
+  "claim_boundary": "This snapshot verifies seven element CSVs and four metadata/readme members selected by exact ZIP byte ranges. It describes voluntary freshwater observations rather than continuous global coverage. Operational fractions, units, methods and water-body types remain separate; Cr-VI is retained upstream but excluded from elemental Cr.",
+  "limitations": [
+    "Coverage is spatially and temporally uneven and does not form a global grid.",
+    "Rows sharing station, date, time and depth are one physical sampling event across elements and fractions.",
+    "Dissolved, extractable, suspended and total fractions are not interchangeable.",
+    "Most observations use undefined method code 0 and therefore remain in method-unknown comparison groups.",
+    "Censored values and all source quality labels remain traceable; production filtering is use-case dependent.",
+    "The complete publisher ZIP MD5 is recorded, while this workflow independently verifies only selected ranges."
+  ],
+  "observed_data": {
+    "counts": {
+      "country_count": 35,
+      "data_quality_counts": {
+        "Fair": 3541736,
+        "Good": 30917,
+        "Pending review": 30378,
+        "Suspect": 23766,
+        "Unknown": 112383
+      },
+      "defined_method_observations": 279225,
+      "distinct_physical_samples": 689291,
+      "excluded_parameter_counts": {
+        "Cr-VI": 15855
+      },
+      "method_combinations_used": 192,
+      "parameter_counts": {
+        "As-Dis": 188961,
+        "As-Sus": 5439,
+        "As-Tot": 298599,
+        "Cr-Dis": 213249,
+        "Cr-Ext": 6449,
+        "Cr-Tot": 318063,
+        "Cu-Dis": 218039,
+        "Cu-Ext": 6760,
+        "Cu-Sus": 162,
+        "Cu-Tot": 235568,
+        "Hg-Dis": 222301,
+        "Hg-Ext": 24,
+        "Hg-Sus": 38,
+        "Hg-Tot": 295108,
+        "Ni-Dis": 291236,
+        "Ni-Ext": 6702,
+        "Ni-Sus": 144,
+        "Ni-Tot": 340465,
+        "Pb-Dis": 295427,
+        "Pb-Ext": 6745,
+        "Pb-Sus": 164,
+        "Pb-Tot": 352333,
+        "Zn-Dis": 184715,
+        "Zn-Ext": 6727,
+        "Zn-Sus": 159,
+        "Zn-Tot": 245603
+      },
+      "station_count": 17248,
+      "target_observations": 3739180,
+      "target_value_counts": {
+        "As": 492999,
+        "Cr": 537761,
+        "Cu": 460529,
+        "Hg": 517471,
+        "Ni": 638547,
+        "Pb": 654669,
+        "Zn": 437204
+      },
+      "undefined_method_observations": {
+        "As": 449714,
+        "Cr": 491113,
+        "Cu": 414269,
+        "Hg": 515242,
+        "Ni": 591196,
+        "Pb": 607566,
+        "Zn": 390855
+      },
+      "unit_counts": {
+        "mg/l": 2974113,
+        "ng/l": 1386,
+        "µg/g": 629,
+        "µg/l": 763052
+      },
+      "unmatched_method_rows": 0,
+      "unmatched_station_rows": 0,
+      "value_flag_counts": {
+        "": 1902804,
+        "<": 1836306,
+        ">": 70
+      },
+      "water_type_counts": {
+        "Groundwater station": 192410,
+        "Lake station": 340952,
+        "Reservoir station": 85544,
+        "River station": 3103732,
+        "Wetland station": 16542
+      }
+    },
+    "coverage": {
+      "bbox": [
+        -139.78,
+        -34.415567,
+        94.636585,
+        81.9356
+      ],
+      "country_count": 35,
+      "distinct_physical_samples": 689291,
+      "sample_date_range": [
+        "1968-05-09",
+        "2023-12-29"
+      ],
+      "sample_depth_range_m": [
+        0.0,
+        999.0
+      ],
+      "station_count": 17248,
+      "water_types": {
+        "Groundwater station": 192410,
+        "Lake station": 340952,
+        "Reservoir station": 85544,
+        "River station": 3103732,
+        "Wetland station": 16542
+      }
+    },
+    "target_analytes": {
+      "As": [
+        "As-Dis",
+        "As-Sus",
+        "As-Tot"
+      ],
+      "Cr": [
+        "Cr-Dis",
+        "Cr-Ext",
+        "Cr-Tot"
+      ],
+      "Cu": [
+        "Cu-Dis",
+        "Cu-Ext",
+        "Cu-Sus",
+        "Cu-Tot"
+      ],
+      "Hg": [
+        "Hg-Dis",
+        "Hg-Ext",
+        "Hg-Sus",
+        "Hg-Tot"
+      ],
+      "Ni": [
+        "Ni-Dis",
+        "Ni-Ext",
+        "Ni-Sus",
+        "Ni-Tot"
+      ],
+      "Pb": [
+        "Pb-Dis",
+        "Pb-Ext",
+        "Pb-Sus",
+        "Pb-Tot"
+      ],
+      "Zn": [
+        "Zn-Dis",
+        "Zn-Ext",
+        "Zn-Sus",
+        "Zn-Tot"
+      ]
+    }
+  },
+  "observed_metadata": {
+    "method_rows": 2228,
+    "parameter_rows": 621,
+    "station_exact_duplicates": 35,
+    "station_rows": 22981,
+    "station_unique_ids": 22946
+  },
+  "selected_members": [
+    {
+      "bytes": 30585144,
+      "file_id": "arsenic-observations",
+      "filename": "Arsenic.csv",
+      "range_end": 5138990,
+      "range_sha256": "64d67a154816b58c06569c38d74c5d1c1cf3fe4a265a7127f6248a0a06b2386f",
+      "range_start": 3033466,
+      "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+    },
+    {
+      "bytes": 34359149,
+      "file_id": "chromium-observations",
+      "filename": "Chromium.csv",
+      "range_end": 23395931,
+      "range_sha256": "362df9fd528b7eab5cff03aadceffa330b83eed0d94b71b6e129b89adea4cc97",
+      "range_start": 21099972,
+      "sha256": "164294931268c7427cb7c768f23e20484db9c4130044d99c766483fb881cc62c"
+    },
+    {
+      "bytes": 28448872,
+      "file_id": "copper-observations",
+      "filename": "Copper.csv",
+      "range_end": 26169314,
+      "range_sha256": "cfb499687474fcb4575fd1eaecb33f40be7e4f528ca86430623661d9d6a709cd",
+      "range_start": 24122334,
+      "sha256": "82fb42ce1bba413a197825017727c8b2c04aa7042f92b07466f81fab3e93c451"
+    },
+    {
+      "bytes": 31175171,
+      "file_id": "mercury-observations",
+      "filename": "Mercury.csv",
+      "range_end": 56488526,
+      "range_sha256": "76c512c12cdcfdd3bf3d0edec0c4f83d5ba88f7176c9b96e313fb1a2039371bc",
+      "range_start": 54591798,
+      "sha256": "13805529f39c9ff6c90a84b341491af9739c72c43d3ec0eba07165957058906f"
+    },
+    {
+      "bytes": 39456553,
+      "file_id": "nickel-observations",
+      "filename": "Nickel.csv",
+      "range_end": 59767178,
+      "range_sha256": "e26717aeed36f3ba7781a670170954ad40e877ea1f2f9cbbf784041938f746a0",
+      "range_start": 57019516,
+      "sha256": "fef4cc062e06ea4e3eafd8257b6849ed1d7ece2ac6522c5f9bfdef73ea206b8f"
+    },
+    {
+      "bytes": 40765015,
+      "file_id": "lead-observations",
+      "filename": "Lead.csv",
+      "range_end": 50275481,
+      "range_sha256": "f2d7044ecc01d887429fb989f9b4d3e2f311d2100cf95157af4976b90dd9c683",
+      "range_start": 47619799,
+      "sha256": "6c7edbf736a32985394967ff30c175e4618c6914b7c8a77b38d40c255af7b9f0"
+    },
+    {
+      "bytes": 26785044,
+      "file_id": "zinc-observations",
+      "filename": "Zinc.csv",
+      "range_end": 201270727,
+      "range_sha256": "12e36f17cab48a074abd284dde218df739f4fec27b6db22dc5301b3b8e72b786",
+      "range_start": 199286587,
+      "sha256": "0d77884198cdb0c01fa9f0ad8e101e086c709bdbc36ca80dc955a1c6172a192d"
+    },
+    {
+      "bytes": 521959,
+      "file_id": "methods",
+      "filename": "GEMStat_methods_metadata.csv",
+      "range_end": 37236391,
+      "range_sha256": "b57e5a891c86df10467bf0a4292411646e465c42829b6a6812b752bd23b52eea",
+      "range_start": 37150286,
+      "sha256": "fba3a0903228811def4cd7910298ccd1965b64b76fbdca90445988eec08ffbb3"
+    },
+    {
+      "bytes": 146762,
+      "file_id": "parameters",
+      "filename": "GEMStat_parameter_metadata.csv",
+      "range_end": 37279436,
+      "range_sha256": "b65ea5a45a0439b53a95694986e30df2ea7f0b4dca0c78c01302f6d3cfb85df5",
+      "range_start": 37236392,
+      "sha256": "46f9ddc6ed181a8a3a685fe590143d847e20960e67f20aa7dd9f4347f2c9b518"
+    },
+    {
+      "bytes": 3571887,
+      "file_id": "stations",
+      "filename": "GEMStat_station_metadata.csv",
+      "range_end": 37914330,
+      "range_sha256": "aed790aa81b1801bfe16da00e1b1a4455d938829d885d374a3bd0b5612a33520",
+      "range_start": 37279437,
+      "sha256": "978d3682d4fc702e1dd9c9e4e148ca586899002b551018dbfc3e40c9f7e1695d"
+    },
+    {
+      "bytes": 16727,
+      "file_id": "readme",
+      "filename": "README_output_format.txt",
+      "range_end": 171536953,
+      "range_sha256": "4849149f512a9ef8a5c0c32a64821c59a3f1132e73412efe7568aeb00525609f",
+      "range_start": 171533195,
+      "sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d"
+    }
+  ],
+  "source_id": "gemstat-open-archive",
+  "status": "verified_selective_official_archive_members",
+  "verification_version": "gemstat-v3-seven-element-audit-v1"
+}

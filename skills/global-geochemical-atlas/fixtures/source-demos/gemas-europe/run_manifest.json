@@ -1,0 +1,65 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T10:20:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Hg",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 52
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 82420,
+      "path": "demo_input.csv",
+      "sha256": "711b19462c6da2d49bc8452f893fdc3e53e5428c5cf41cfa6e31e775aa753e1f"
+    },
+    {
+      "bytes": 89540,
+      "path": "sources.jsonl",
+      "sha256": "63e8c9237e86708828453026064f39db5e8c8a4f062a57174e4ef7cd866f187e"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 52,
+    "raw_source_rows": 8262,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+    "license": "CC-BY-4.0",
+    "source_id": "gemas-europe",
+    "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)"
+  },
+  "source_files": [
+    {
+      "bytes": 4307359,
+      "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+      "retrieved_at": "2026-08-07T15:43:08Z",
+      "sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4",
+      "source_url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "GEMAS is a low-density European soil survey, not continuous coverage.",
+    "Aqua-regia and XRF measurements remain in separate comparison partitions."
+  ]
+}

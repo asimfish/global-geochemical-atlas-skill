@@ -163,6 +163,8 @@ def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> byte
     filename = value[30 : 30 + name_length].decode("utf-8")
     payload_start = 30 + name_length + extra_length
     payload = value[payload_start : payload_start + compressed]
+    observed_crc32 = f"{crc:08x}"
+    expected_crc32 = str(specification.get("crc32") or observed_crc32)
     if (
         signature != 0x04034B50
         or flags != 0
@@ -170,7 +172,7 @@ def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> byte
         or filename != specification["name"]
         or compressed != specification["compressed_bytes"]
         or uncompressed != specification["uncompressed_bytes"]
-        or f"{crc:08x}" != specification["crc32"]
+        or observed_crc32 != expected_crc32
         or len(payload) != compressed
     ):
         raise AcquisitionError(f"local ZIP header changed: {specification['name']}")
@@ -180,7 +182,7 @@ def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> byte
         raise AcquisitionError(f"compressed member is corrupt: {specification['name']}") from exc
     if (
         len(decoded) != uncompressed
-        or f"{binascii.crc32(decoded) & 0xFFFFFFFF:08x}" != specification["crc32"]
+        or f"{binascii.crc32(decoded) & 0xFFFFFFFF:08x}" != expected_crc32
         or sha256_bytes(decoded) != specification["sha256"]
     ):
         raise AcquisitionError(f"decoded member changed: {specification['name']}")

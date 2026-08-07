@@ -1,0 +1,52 @@
+{
+  "archive": {
+    "members": [
+      {
+        "bytes": 24152,
+        "file_id": "dataset-table",
+        "name": "PANGAEA.950139.tab",
+        "sha256": "d5c2b65e6a839bd3e45eaaa5593da37af7ebae83cec1725b678817c30405c990",
+        "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+      }
+    ]
+  },
+  "claim_boundary": "This audit proves the pinned pangaea-arabian-sea-sediment file contract, adapter parse and registered target denominator. It does not turn discrete source observations into continuous geographic coverage or cross-method comparability.",
+  "counts": {
+    "distinct_events": 26,
+    "distinct_sample_labels": 26,
+    "mgkg_fields": 47,
+    "physical_rows": 27,
+    "target_observations": 162,
+    "target_value_counts": {
+      "As": 27,
+      "Cr": 27,
+      "Cu": 27,
+      "Ni": 27,
+      "Pb": 27,
+      "Zn": 27
+    }
+  },
+  "coverage": {
+    "bbox": [
+      57.3555,
+      10.0345,
+      68.3668,
+      19.5163
+    ],
+    "region_counts": {
+      "Arabian Sea": 27
+    },
+    "valid_coordinate_rows": 27
+  },
+  "observed_at": "2026-08-06T16:12:00Z",
+  "request": {
+    "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+  },
+  "response": {
+    "bytes": 24152,
+    "sha256": "d5c2b65e6a839bd3e45eaaa5593da37af7ebae83cec1725b678817c30405c990"
+  },
+  "snapshot_id": "pangaea-arabian-sea-sediment:2022-11-02:2026-08-06T16:12:00Z:01",
+  "snapshot_version": "geochemical-source-snapshot-v3-content-addressed",
+  "source_id": "pangaea-arabian-sea-sediment"
+}

@@ -1,0 +1,4349 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS verifies byte and mapping correspondence only. Named human decisions remain null; unsigned review lowers confidence but is not a hard research-use gate.",
+  "completed_record_count": 0,
+  "dataset_version": "content-snapshot-2026-08-06",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.5",
+          "record_id": "rec-3063692800136f6071ce6c17e90198663ab98bba8f8d50b4bf56e08260a77ee9",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.26067",
+            "longitude": "141.46783",
+            "region": "下北半島沖",
+            "sample_id": "820044",
+            "water_depth_m": "57"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "51.216",
+          "record_id": "rec-b360c385d33d808671b2d441fbe2ef5252b2e083475870a9f1e8ab68965cba39",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.26067",
+            "longitude": "141.46783",
+            "region": "下北半島沖",
+            "sample_id": "820044",
+            "water_depth_m": "57"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "7.352",
+          "record_id": "rec-40177185be92f7d8cd34c2f9a99189d8cdd6542aabe033cd16c963209736eb66",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.26067",
+            "longitude": "141.46783",
+            "region": "下北半島沖",
+            "sample_id": "820044",
+            "water_depth_m": "57"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-2.912",
+          "record_id": "rec-3acf3c5482b3b65ccdaba92232731c2bc528dc5d4cb70b7c21322cdabb4cf0c5",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.26067",
+            "longitude": "141.46783",
+            "region": "下北半島沖",
+            "sample_id": "820044",
+            "water_depth_m": "57"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.473",
+          "record_id": "rec-fd02b3d2f53c6729afe6cb50f5251b32a2318bc1ad522f948af95eba71cf4ffe",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.26067",
+            "longitude": "141.46783",
+            "region": "下北半島沖",
+            "sample_id": "820044",
+            "water_depth_m": "57"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.811",
+          "record_id": "rec-7a6c33d36e27220d6588aba54747ba705d3c764b93e81aae44500d66fb353691",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.26067",
+            "longitude": "141.46783",
+            "region": "下北半島沖",
+            "sample_id": "820044",
+            "water_depth_m": "57"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "85.908",
+          "record_id": "rec-8adfe0ed0fc09ef96c1f85cbd993f5a031a510a64abe98be3327b963c8567ad4",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.26067",
+            "longitude": "141.46783",
+            "region": "下北半島沖",
+            "sample_id": "820044",
+            "water_depth_m": "57"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "820044",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1640",
+      "source_record_id": "src-11692f69fe47bc69d65f0e613aa5d6ed76eb4fb7c4f9eeba4097347595079199"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5",
+          "record_id": "rec-9ed0195e395eeb332f48e5c6ce18efe2ceee0847435602ed226ac168959d0039",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.6",
+            "longitude": "141.37267",
+            "region": "下北半島沖",
+            "sample_id": "820084",
+            "water_depth_m": "308"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "19.029",
+          "record_id": "rec-c8ce884edddd393bbb38f350bf3176cbbd3992f15638ba3c2e308598ee78141c",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.6",
+            "longitude": "141.37267",
+            "region": "下北半島沖",
+            "sample_id": "820084",
+            "water_depth_m": "308"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.507",
+          "record_id": "rec-dc54e6f6e03e13e3afa7407c14516343609414601e71213900800fe563d0ea8c",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.6",
+            "longitude": "141.37267",
+            "region": "下北半島沖",
+            "sample_id": "820084",
+            "water_depth_m": "308"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-1.977",
+          "record_id": "rec-8ea38712794fa225eea800e9b64f0954c58f481fbd0a43a61952758515ade0be",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.6",
+            "longitude": "141.37267",
+            "region": "下北半島沖",
+            "sample_id": "820084",
+            "water_depth_m": "308"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.03",
+          "record_id": "rec-a25a42d2b8895d73e4a3dcc5c1e41baef52a568f1e4a39bd413351c4baf3fbcb",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.6",
+            "longitude": "141.37267",
+            "region": "下北半島沖",
+            "sample_id": "820084",
+            "water_depth_m": "308"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.655",
+          "record_id": "rec-944a95be3bbb5dd3521d078cc04caa2ae8a5a4aab1e690c87e19df9207fb4c29",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.6",
+            "longitude": "141.37267",
+            "region": "下北半島沖",
+            "sample_id": "820084",
+            "water_depth_m": "308"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "95.027",
+          "record_id": "rec-050bb2bd45cc2e957fecbe52444819651da6ca6010a2bdf22c3041eb57011213",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.6",
+            "longitude": "141.37267",
+            "region": "下北半島沖",
+            "sample_id": "820084",
+            "water_depth_m": "308"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "820084",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1673",
+      "source_record_id": "src-c8e193d2eaeeef30299a18e724cf24beddb98be73ccc72f0ce26cd4d53e5055b"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.6",
+          "record_id": "rec-df69d1418bd7e8555bd762850e74eb26ebb076f7908de0310209db2fc5645baa",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.56667",
+            "longitude": "141.75",
+            "region": "釜石沖",
+            "sample_id": "810123",
+            "water_depth_m": "167"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "34.05",
+          "record_id": "rec-61de2eac154020a198a0b618c250e334f55a578d0f74d586cb3ccd448215c6e2",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.56667",
+            "longitude": "141.75",
+            "region": "釜石沖",
+            "sample_id": "810123",
+            "water_depth_m": "167"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.468",
+          "record_id": "rec-d03b30544e69f76893584a9caa11a6b2edf6289d0bcfa0f69aceed727b97bc0d",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.56667",
+            "longitude": "141.75",
+            "region": "釜石沖",
+            "sample_id": "810123",
+            "water_depth_m": "167"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-30.639",
+          "record_id": "rec-6b4d4484f81bc22a829e2aa8de83e016dceabd14d8db926b371d9938503c442d",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.56667",
+            "longitude": "141.75",
+            "region": "釜石沖",
+            "sample_id": "810123",
+            "water_depth_m": "167"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.805",
+          "record_id": "rec-9de9b64742e6085d0bab0bf79d5229967204c2c3ce2d7bec9dc30197ae3a221f",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.56667",
+            "longitude": "141.75",
+            "region": "釜石沖",
+            "sample_id": "810123",
+            "water_depth_m": "167"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.595",
+          "record_id": "rec-611273f12673f41c66711d1b99eeea9b99e46f21812b378a1a158cd208842e3c",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.56667",
+            "longitude": "141.75",
+            "region": "釜石沖",
+            "sample_id": "810123",
+            "water_depth_m": "167"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "68.481",
+          "record_id": "rec-4692ea4f31c607fd2bfade26fe9607395d181066b0a101c77f0de268d2ec5f9b",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.56667",
+            "longitude": "141.75",
+            "region": "釜石沖",
+            "sample_id": "810123",
+            "water_depth_m": "167"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "810123",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1875",
+      "source_record_id": "src-54f5f50ccd11fef084ff1a2a62d842468b6ce494068622571c5362afc65775c0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "18",
+          "record_id": "rec-4cc509d77a1364e9076ca9493b477d49dd6c3e8909883f6f1e937979e3b09bae",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.067",
+            "longitude": "141.16583",
+            "region": "仙台〜日立沖",
+            "sample_id": "813077",
+            "water_depth_m": "36"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.938",
+          "record_id": "rec-8bbd9b418f6697316c3813e508b778216c3278a0fcefe5133e2c2b1e14d84584",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.067",
+            "longitude": "141.16583",
+            "region": "仙台〜日立沖",
+            "sample_id": "813077",
+            "water_depth_m": "36"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.67",
+          "record_id": "rec-01da9359dff4955306b446f5b5779b77e2732ed497442a2db6c8e1bb1713b482",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.067",
+            "longitude": "141.16583",
+            "region": "仙台〜日立沖",
+            "sample_id": "813077",
+            "water_depth_m": "36"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.401",
+          "record_id": "rec-f9a0372273c764786a0f485cac83df90e83c34ecd88b50c0aeb8b1d4574d5c1c",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.067",
+            "longitude": "141.16583",
+            "region": "仙台〜日立沖",
+            "sample_id": "813077",
+            "water_depth_m": "36"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.076",
+          "record_id": "rec-0f14dc61a3e78238014f4800589b701f1091772f8273a0d0aeb99bb6e49b129c",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.067",
+            "longitude": "141.16583",
+            "region": "仙台〜日立沖",
+            "sample_id": "813077",
+            "water_depth_m": "36"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.899",
+          "record_id": "rec-d242a1cff8b039f4f8554a178174bafcd62603e4f09ccced1c88ea30e79fa9fb",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.067",
+            "longitude": "141.16583",
+            "region": "仙台〜日立沖",
+            "sample_id": "813077",
+            "water_depth_m": "36"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "34.167",
+          "record_id": "rec-ceb7b394cb3d21376f85084c22cc7e47451f3aee8736f8d4080dda97361a6914",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.067",
+            "longitude": "141.16583",
+            "region": "仙台〜日立沖",
+            "sample_id": "813077",
+            "water_depth_m": "36"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "813077",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2098",
+      "source_record_id": "src-ba83dcf8737d173452b8c4ed3be2b9845054c1afcf1d6b22f1040618da800920"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.7",
+          "record_id": "rec-5dc38661eee148c6f485037ca23d47e0598fe6b1e27baf4b94f110fb81108f9e",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.03083",
+            "longitude": "141.08",
+            "region": "仙台〜日立沖",
+            "sample_id": "813079",
+            "water_depth_m": "31"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.145",
+          "record_id": "rec-c892453be78ef5fbe719102fd13700d98d8544329d47c05aa69eb6cf81ae0e3f",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.03083",
+            "longitude": "141.08",
+            "region": "仙台〜日立沖",
+            "sample_id": "813079",
+            "water_depth_m": "31"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "3.638",
+          "record_id": "rec-ead5f7bd792f94402e998e4c1733b7bc235996dae8ebd99d60668119107365a2",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.03083",
+            "longitude": "141.08",
+            "region": "仙台〜日立沖",
+            "sample_id": "813079",
+            "water_depth_m": "31"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.508",
+          "record_id": "rec-b642c86d52e1d0ce071d64a5f1f215453bcaef4679d828f17fc8ad440535485d",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.03083",
+            "longitude": "141.08",
+            "region": "仙台〜日立沖",
+            "sample_id": "813079",
+            "water_depth_m": "31"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.812",
+          "record_id": "rec-8d7eeb7ea2b612f8e3dd1139721b8e454d66544b1eb093c6f87b5858bb4efdc7",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.03083",
+            "longitude": "141.08",
+            "region": "仙台〜日立沖",
+            "sample_id": "813079",
+            "water_depth_m": "31"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.292",
+          "record_id": "rec-e030698dd7a5483beb67680980ebe152f75b377dd6471e340636a7c513a47016",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.03083",
+            "longitude": "141.08",
+            "region": "仙台〜日立沖",
+            "sample_id": "813079",
+            "water_depth_m": "31"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "26.021",
+          "record_id": "rec-652aeae38bb3b185b5f65cb51037d93460755898ad5fc8880796a0d8d742f41e",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.03083",
+            "longitude": "141.08",
+            "region": "仙台〜日立沖",
+            "sample_id": "813079",
+            "water_depth_m": "31"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "813079",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2099",
+      "source_record_id": "src-499ab84ac53a30f84d935d373510c221f3235c19a5bb85350208b460914b477d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.6",
+          "record_id": "rec-03520abc8935664665c24120304d8c7bc639011cba396d642a1f1db922d9cef5",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.032",
+            "longitude": "141.25233",
+            "region": "仙台〜日立沖",
+            "sample_id": "813080",
+            "water_depth_m": "42"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.668",
+          "record_id": "rec-e6794344ab179abaa932d65409694de1e7d97a4a3fc44fd4589b39f1550b2b59",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.032",
+            "longitude": "141.25233",
+            "region": "仙台〜日立沖",
+            "sample_id": "813080",
+            "water_depth_m": "42"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.454",
+          "record_id": "rec-82bbe73f16ec40cddc3c167bb80e84dbe5497ce663873a3526a28cf79b7639a7",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.032",
+            "longitude": "141.25233",
+            "region": "仙台〜日立沖",
+            "sample_id": "813080",
+            "water_depth_m": "42"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-4.286",
+          "record_id": "rec-2e4f54a349f2a64c1f2b4d1f680ff545d38d5a7a10f87de174709fd172ca0a9b",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.032",
+            "longitude": "141.25233",
+            "region": "仙台〜日立沖",
+            "sample_id": "813080",
+            "water_depth_m": "42"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.229",
+          "record_id": "rec-fb0ec7e89055126b94f9e444219152649a5d7363091ea3cd9b38c61a50f300c3",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.032",
+            "longitude": "141.25233",
+            "region": "仙台〜日立沖",
+            "sample_id": "813080",
+            "water_depth_m": "42"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.15",
+          "record_id": "rec-3e9765b39f0db9e48a1ace7760e4f6da1bf0f6983462320b5cda2aa1730d8a31",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.032",
+            "longitude": "141.25233",
+            "region": "仙台〜日立沖",
+            "sample_id": "813080",
+            "water_depth_m": "42"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "53.138",
+          "record_id": "rec-6be6ff0ddf77a5291906a2dddb5eb71ae627d5276f4249b8b5f6b78be777c43b",
+          "source_metadata": {
+            "cruise": "GH81-3",
+            "latitude": "38.032",
+            "longitude": "141.25233",
+            "region": "仙台〜日立沖",
+            "sample_id": "813080",
+            "water_depth_m": "42"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "813080",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2100",
+      "source_record_id": "src-e2f31c472a16f555f79dc1fd7bf38695873ba81e29015fce594c1bf64ca55de1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.4",
+          "record_id": "rec-eece37ab8b07278ff0d0128da08549003449123d272253297091179def432bbd",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.00133",
+            "longitude": "132.31667",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832396",
+            "water_depth_m": "92"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.85",
+          "record_id": "rec-9aa1202f34620575bd15e793f0d8d4ff77c5d6aa6f2fb376663c9b35209811e5",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.00133",
+            "longitude": "132.31667",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832396",
+            "water_depth_m": "92"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.551",
+          "record_id": "rec-3d4400d0ae229d7903e92c8792c8e9f0b73521d71da3d0169ec12d6c6bbf7108",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.00133",
+            "longitude": "132.31667",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832396",
+            "water_depth_m": "92"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.482",
+          "record_id": "rec-43b705c0396b045750efac157c34669f4ce0a0f2a9b4b7ab887f223376977df7",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.00133",
+            "longitude": "132.31667",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832396",
+            "water_depth_m": "92"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.433",
+          "record_id": "rec-6e226e0032c274f095d79b3757f0ece5845eff6a6be2975cce758ffb8168e3ff",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.00133",
+            "longitude": "132.31667",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832396",
+            "water_depth_m": "92"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.334",
+          "record_id": "rec-19de16d17ad8b43344bf54e0334e72820dd8a4bbe9a46ff10f614409b925bc59",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.00133",
+            "longitude": "132.31667",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832396",
+            "water_depth_m": "92"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "39.716",
+          "record_id": "rec-b030edbe5a3a8db97d51b971b99832a3ba702c5b9c7cfa70550f03753883cba3",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.00133",
+            "longitude": "132.31667",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832396",
+            "water_depth_m": "92"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832396",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3185",
+      "source_record_id": "src-2b0f2c994a37c4d8cd9b59dac4f3847e41d5af15d7154d7d6f6f6db7291e35a0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.5",
+          "record_id": "rec-8a4ae1d979d5e6dc0b7046d7829436897caba1c778d6a633cccbf438954b95f8",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.005",
+            "longitude": "132.275",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832401",
+            "water_depth_m": "89"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "21.198",
+          "record_id": "rec-f823286781d20d46d16e22156d4e72d9a1c267ec4a59270434f458e06e481cdf",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.005",
+            "longitude": "132.275",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832401",
+            "water_depth_m": "89"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.188",
+          "record_id": "rec-d14fdd2ec5f4ac2bf9575230bf3dc677fa4afbbb8af44171b7380f1238d0cdc3",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.005",
+            "longitude": "132.275",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832401",
+            "water_depth_m": "89"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.531",
+          "record_id": "rec-9d0ba329007bd7d642de8ed2e7c1de33dcd13090cdf65624fe3e644e964d33f0",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.005",
+            "longitude": "132.275",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832401",
+            "water_depth_m": "89"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.095",
+          "record_id": "rec-5c7df965fb4a5294559bdbd01f1419f73431bd03fc995828451127785d655d70",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.005",
+            "longitude": "132.275",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832401",
+            "water_depth_m": "89"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.539",
+          "record_id": "rec-7c8d6f44c274dde23e5b73b9b689283c5e66369a83d85392b173df67a5595227",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.005",
+            "longitude": "132.275",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832401",
+            "water_depth_m": "89"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "46.694",
+          "record_id": "rec-87a74f86006667193aef1a48e7a6c30bbc6f35708aa1e01282b0fb41a13ed70b",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.005",
+            "longitude": "132.275",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832401",
+            "water_depth_m": "89"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832401",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3190",
+      "source_record_id": "src-a4e364eda60c872f4668525e979812b9ef67dcc843d79490a463c1c087997359"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.1",
+          "record_id": "rec-6a86c7811841f4eb571dca8e035792a84f8dae178f1f0fe9e0073fd39f0c9d0d",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "33.90917",
+            "longitude": "130.59433",
+            "region": "北九州・山陰",
+            "sample_id": "852103",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.681",
+          "record_id": "rec-5e997070f47b6c48258d93112309789985faef56186a63d624ea77ecfdbc0180",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "33.90917",
+            "longitude": "130.59433",
+            "region": "北九州・山陰",
+            "sample_id": "852103",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.543",
+          "record_id": "rec-9d77a0b2413267b3abcedc0859534ddf3dc3f1ebe1be130fe8626fcf083e6459",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "33.90917",
+            "longitude": "130.59433",
+            "region": "北九州・山陰",
+            "sample_id": "852103",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-4.911",
+          "record_id": "rec-e4ed8718e1b378d7f4e6db2a799afa2e9852e414b0831e09481b4ac2f083d7d0",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "33.90917",
+            "longitude": "130.59433",
+            "region": "北九州・山陰",
+            "sample_id": "852103",
+            "water_depth_m": ""
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.163",
+          "record_id": "rec-8ff96694428e0299fb995232522aaf1c1916c4ebc456333bb136813332e9d348",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "33.90917",
+            "longitude": "130.59433",
+            "region": "北九州・山陰",
+            "sample_id": "852103",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.303",
+          "record_id": "rec-bf3a6dfebf73b6a80d94c88c460e4458b2a4025d317acbea5e927813088eefd0",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "33.90917",
+            "longitude": "130.59433",
+            "region": "北九州・山陰",
+            "sample_id": "852103",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.735",
+          "record_id": "rec-fa39aeeb409635ec1a4678e66cb3ce5f3ca7983fce04c92ee40e6c34866cebd3",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "33.90917",
+            "longitude": "130.59433",
+            "region": "北九州・山陰",
+            "sample_id": "852103",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "852103",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3760",
+      "source_record_id": "src-4b08fc43b02103854964e7792a76045ffa5add27fe608403d750814291d92c44"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.6",
+          "record_id": "rec-cebf389bf2d1d891c1117fc7ac083830d83f4d24e587f2842bc1d8e309e37f68",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "34.803",
+            "longitude": "131.2695",
+            "region": "北九州・山陰",
+            "sample_id": "852217",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "49.577",
+          "record_id": "rec-40113ea1f4b2a7bdc420800f6fc454098418c8378620f3c734e9ee2c9bf66d07",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "34.803",
+            "longitude": "131.2695",
+            "region": "北九州・山陰",
+            "sample_id": "852217",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "3.949",
+          "record_id": "rec-0fd28691fdc9f269dff1f46fac85ab7423f814bc71dbaee8816675e7f0a5722b",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "34.803",
+            "longitude": "131.2695",
+            "region": "北九州・山陰",
+            "sample_id": "852217",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-3.393",
+          "record_id": "rec-f8873b6fdb98627dc28cc5e7ebf71db7228b172e305a04048cb73acc0f6040ff",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "34.803",
+            "longitude": "131.2695",
+            "region": "北九州・山陰",
+            "sample_id": "852217",
+            "water_depth_m": ""
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.745",
+          "record_id": "rec-a4ace4601b6a2b2580f0653a3fc7f899f07cf45f64373e157262b0a5aa0cd5e2",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "34.803",
+            "longitude": "131.2695",
+            "region": "北九州・山陰",
+            "sample_id": "852217",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.834",
+          "record_id": "rec-53a85c4bf5dde163a85ee6fe7d23638bef53e14693dfb4872254ee4b0cb4fcec",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "34.803",
+            "longitude": "131.2695",
+            "region": "北九州・山陰",
+            "sample_id": "852217",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "25.434",
+          "record_id": "rec-cb1d3120b294f2f729f59c852970635967acef888b28b98d98934e7ab2252d5c",
+          "source_metadata": {
+            "cruise": "GH85-2",
+            "latitude": "34.803",
+            "longitude": "131.2695",
+            "region": "北九州・山陰",
+            "sample_id": "852217",
+            "water_depth_m": ""
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "852217",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3874",
+      "source_record_id": "src-24ce137ad6d015467886629a2ec0027fc5e786b2f6803b57266beddbe33e3da0"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.3",
+          "record_id": "rec-5e894b12a1b45c2d1f918fbbe430c1c88417c0e3553e211195ca39d5fd157c87",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.46667",
+            "longitude": "141.655",
+            "region": "仙台〜日立沖",
+            "sample_id": "812161",
+            "water_depth_m": "265"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "50.809",
+          "record_id": "rec-255f541ef872d56d7c50ff86c14bde2818f3da99bbb1216368173c0edf889294",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.46667",
+            "longitude": "141.655",
+            "region": "仙台〜日立沖",
+            "sample_id": "812161",
+            "water_depth_m": "265"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.993",
+          "record_id": "rec-23c9158ec3a8da69a1f6c9838368f76ff17ccce381d4f6fc34b0aa4ae448c3c2",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.46667",
+            "longitude": "141.655",
+            "region": "仙台〜日立沖",
+            "sample_id": "812161",
+            "water_depth_m": "265"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.183",
+          "record_id": "rec-3528d67c244b5412158fac9b3920120a748c7377e8a7ec81eff2640741bd982a",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.46667",
+            "longitude": "141.655",
+            "region": "仙台〜日立沖",
+            "sample_id": "812161",
+            "water_depth_m": "265"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.583",
+          "record_id": "rec-46a06bc65d3f994e5ab52359541a34642892166cc0e82f09368772171a58af30",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.46667",
+            "longitude": "141.655",
+            "region": "仙台〜日立沖",
+            "sample_id": "812161",
+            "water_depth_m": "265"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "73.223",
+          "record_id": "rec-5f86db170605a99c7339a342f20db33df52d27ddf9f4281977f3d245e8424348",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.46667",
+            "longitude": "141.655",
+            "region": "仙台〜日立沖",
+            "sample_id": "812161",
+            "water_depth_m": "265"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "812161",
+      "selection_reasons": [
+        "missing_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2006",
+      "source_record_id": "src-d56e158106e4abd805c45f4ad4a4540c266cf3133d805a2815cd14596ed4b586"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.3",
+          "record_id": "rec-ee5dd1731de1c21be53547474a9308ce4de432438355a6eba6de33819e0c433d",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "36.6977",
+            "longitude": "136.5527",
+            "region": "能登〜富山湾",
+            "sample_id": "880001",
+            "water_depth_m": "45"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.469",
+          "record_id": "rec-6284af9afbd56e0deabcecb54c6878b9c376b0403570582722c67b2b730d464b",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "36.6977",
+            "longitude": "136.5527",
+            "region": "能登〜富山湾",
+            "sample_id": "880001",
+            "water_depth_m": "45"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.293",
+          "record_id": "rec-bb59296fba5c8faeb376936252ff92d636bd2ce84b70944c9cc39d70daeb3d8b",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "36.6977",
+            "longitude": "136.5527",
+            "region": "能登〜富山湾",
+            "sample_id": "880001",
+            "water_depth_m": "45"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10",
+          "record_id": "rec-2267ccc05903fb8438fbc5f46cc8834cb3ad369b356825a79058cd9ea9b6a06e",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "36.6977",
+            "longitude": "136.5527",
+            "region": "能登〜富山湾",
+            "sample_id": "880001",
+            "water_depth_m": "45"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.194",
+          "record_id": "rec-7cf01878c1ad3320b093bab9d21881950f13006ddead868739e01b0c7f2c9c10",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "36.6977",
+            "longitude": "136.5527",
+            "region": "能登〜富山湾",
+            "sample_id": "880001",
+            "water_depth_m": "45"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.707",
+          "record_id": "rec-4ffffdcbf1ed1a4608eee55cadffea20a595b728b018b1027e509ee288c425b1",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "36.6977",
+            "longitude": "136.5527",
+            "region": "能登〜富山湾",
+            "sample_id": "880001",
+            "water_depth_m": "45"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "64.418",
+          "record_id": "rec-ba42a8c1a32d032a7e6608b11a8733880b670f439026e306581d323d8ed3d850",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "36.6977",
+            "longitude": "136.5527",
+            "region": "能登〜富山湾",
+            "sample_id": "880001",
+            "water_depth_m": "45"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "880001",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2",
+      "source_record_id": "src-758550ec220aa1ef22f64e0c593424c88f8ed1b2a3925631bae4a2c46aa251ef"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.2",
+          "record_id": "rec-9b0078914671b9aebb7171fa3611d80c40baf082d31756733ebd39fdb8f19d60",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "37.2895",
+            "longitude": "137.3552",
+            "region": "能登〜富山湾",
+            "sample_id": "880178",
+            "water_depth_m": "474"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "61.563",
+          "record_id": "rec-59089a6ce635f1a26bff89daa48ec775dfd88e1f25f6bba73adfca70d3c0bea6",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "37.2895",
+            "longitude": "137.3552",
+            "region": "能登〜富山湾",
+            "sample_id": "880178",
+            "water_depth_m": "474"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "19.502",
+          "record_id": "rec-ed756e6b2008688ddbb13cb0744d5878f6cb3c57a54c7d9a16bb33f59e4fae8d",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "37.2895",
+            "longitude": "137.3552",
+            "region": "能登〜富山湾",
+            "sample_id": "880178",
+            "water_depth_m": "474"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "60",
+          "record_id": "rec-3308731b8452d6ea564f48900042e9b325a2420e704a2628778e7f7834f69cf9",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "37.2895",
+            "longitude": "137.3552",
+            "region": "能登〜富山湾",
+            "sample_id": "880178",
+            "water_depth_m": "474"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "23.316",
+          "record_id": "rec-9e8e0a43c68d996335e2e0fa105fa21abc0c40d01d72a2b3a55a79da90e3bc37",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "37.2895",
+            "longitude": "137.3552",
+            "region": "能登〜富山湾",
+            "sample_id": "880178",
+            "water_depth_m": "474"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.206",
+          "record_id": "rec-0a822e7d040ede6cc68e871cbde439f0cdb63ca38d0ff8fb08dfd7a6bcf1ed1e",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "37.2895",
+            "longitude": "137.3552",
+            "region": "能登〜富山湾",
+            "sample_id": "880178",
+            "water_depth_m": "474"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "83.079",
+          "record_id": "rec-20b88f05834cb9b88282378fd18ea14e8c9145c4b5c75bdd416cc5acd9d67588",
+          "source_metadata": {
+            "cruise": "GH88",
+            "latitude": "37.2895",
+            "longitude": "137.3552",
+            "region": "能登〜富山湾",
+            "sample_id": "880178",
+            "water_depth_m": "474"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "880178",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=171",
+      "source_record_id": "src-2248badf11dfccf26666eb34ff102ae292a2c25d7ec2ebd027838efe9cf07809"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.9",
+          "record_id": "rec-a8be790958af48291e4fb185c26146e5d68ee67fbef6d583cb55897b456313ca",
+          "source_metadata": {
+            "cruise": "GH90",
+            "latitude": "38.0952",
+            "longitude": "138.7108",
+            "region": "新潟湾",
+            "sample_id": "900097",
+            "water_depth_m": "231"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "32.324",
+          "record_id": "rec-f2897f242d4d10c1f8914415e590d2a0ce69db764543dc2406b38e6830758a6b",
+          "source_metadata": {
+            "cruise": "GH90",
+            "latitude": "38.0952",
+            "longitude": "138.7108",
+            "region": "新潟湾",
+            "sample_id": "900097",
+            "water_depth_m": "231"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.568",
+          "record_id": "rec-4d0e677e46c5bd325cfe8cd13e9bc958a3f6331a544c4d24a8ebe4bae6b78ab7",
+          "source_metadata": {
+            "cruise": "GH90",
+            "latitude": "38.0952",
+            "longitude": "138.7108",
+            "region": "新潟湾",
+            "sample_id": "900097",
+            "water_depth_m": "231"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "60",
+          "record_id": "rec-7587eb9afef8d918e665b631473d64516f2d5d725099f6eedb619a4d27d2179a",
+          "source_metadata": {
+            "cruise": "GH90",
+            "latitude": "38.0952",
+            "longitude": "138.7108",
+            "region": "新潟湾",
+            "sample_id": "900097",
+            "water_depth_m": "231"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.618",
+          "record_id": "rec-4016d3aa9243552dc3a179ad8bb795b8c786217394ff472016148b20868707f9",
+          "source_metadata": {
+            "cruise": "GH90",
+            "latitude": "38.0952",
+            "longitude": "138.7108",
+            "region": "新潟湾",
+            "sample_id": "900097",
+            "water_depth_m": "231"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "25.367",
+          "record_id": "rec-fd83287bc18e1277bd14e4ed7301f51d0c7fa87d260f28b65dea340449702bc1",
+          "source_metadata": {
+            "cruise": "GH90",
+            "latitude": "38.0952",
+            "longitude": "138.7108",
+            "region": "新潟湾",
+            "sample_id": "900097",
+            "water_depth_m": "231"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "36.303",
+          "record_id": "rec-0a25916ba86f0496275eb5f39d1ed9c9ec20c13393fc16d1358d14adfbc48fa6",
+          "source_metadata": {
+            "cruise": "GH90",
+            "latitude": "38.0952",
+            "longitude": "138.7108",
+            "region": "新潟湾",
+            "sample_id": "900097",
+            "water_depth_m": "231"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "900097",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=340",
+      "source_record_id": "src-a15e0dfcc4946ac14bc8c934a610c4ff1b41fa061a87ba18881cf6952a388d6a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.1",
+          "record_id": "rec-392f452424479f6f7cd30db1e3874d304ecfd0ba6ba365916b27f37b75f5084f",
+          "source_metadata": {
+            "cruise": "GH91",
+            "latitude": "38.9073",
+            "longitude": "139.5065",
+            "region": "秋田沖",
+            "sample_id": "910270",
+            "water_depth_m": "370"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "66.027",
+          "record_id": "rec-80634d5ed60f0c60d456366f3d89ea44571747516ace5ebbd77d57f1e988b2b1",
+          "source_metadata": {
+            "cruise": "GH91",
+            "latitude": "38.9073",
+            "longitude": "139.5065",
+            "region": "秋田沖",
+            "sample_id": "910270",
+            "water_depth_m": "370"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.856",
+          "record_id": "rec-0fef728b1ff32ce2393461aae351649142230ba96c339ab1112ae51efb0acbff",
+          "source_metadata": {
+            "cruise": "GH91",
+            "latitude": "38.9073",
+            "longitude": "139.5065",
+            "region": "秋田沖",
+            "sample_id": "910270",
+            "water_depth_m": "370"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "30",
+          "record_id": "rec-d4007fe14cbfac025e9ef8e0d6a305860d24b90e70c7c0a15d4e0040fdcc2286",
+          "source_metadata": {
+            "cruise": "GH91",
+            "latitude": "38.9073",
+            "longitude": "139.5065",
+            "region": "秋田沖",
+            "sample_id": "910270",
+            "water_depth_m": "370"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "29.311",
+          "record_id": "rec-4addca805cd8a53a9549ca6020bb1cfdb9d7ce0d82ea8e55b50cb0f57ef8878c",
+          "source_metadata": {
+            "cruise": "GH91",
+            "latitude": "38.9073",
+            "longitude": "139.5065",
+            "region": "秋田沖",
+            "sample_id": "910270",
+            "water_depth_m": "370"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "42.292",
+          "record_id": "rec-6eb6b15803764684aea74ebd888785dfaffb6c326395d8091beff0524218b907",
+          "source_metadata": {
+            "cruise": "GH91",
+            "latitude": "38.9073",
+            "longitude": "139.5065",
+            "region": "秋田沖",
+            "sample_id": "910270",
+            "water_depth_m": "370"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "92.084",
+          "record_id": "rec-33022657dcb9c5f62d5053af3b5544a2d76379cf580ebc63bfb9afcf180e3065",
+          "source_metadata": {
+            "cruise": "GH91",
+            "latitude": "38.9073",
+            "longitude": "139.5065",
+            "region": "秋田沖",
+            "sample_id": "910270",
+            "water_depth_m": "370"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "910270",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=509",
+      "source_record_id": "src-4589cf76e19b7db83fa809db6f3c59a51369d3468798eec7c1206c2b3e472ba7"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.3",
+          "record_id": "rec-f292cd08b4291cfa3cde65f69bdaed0c7d0102dc44fb494e1645945972ff05bc",
+          "source_metadata": {
+            "cruise": "GH94",
+            "latitude": "41.6",
+            "longitude": "139.3282",
+            "region": "北海道西方海域",
+            "sample_id": "940039",
+            "water_depth_m": "1526"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "184.632",
+          "record_id": "rec-3de0d8c7cb6384e6a88de659ac81f3b5c945ab57522de36f67f8ae86a1d7cb63",
+          "source_metadata": {
+            "cruise": "GH94",
+            "latitude": "41.6",
+            "longitude": "139.3282",
+            "region": "北海道西方海域",
+            "sample_id": "940039",
+            "water_depth_m": "1526"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "51.992",
+          "record_id": "rec-8b3bea724dd75eb6dfba6124adf6b3bd4df3ac1d9e45d3e37d31ba8b1030d6b9",
+          "source_metadata": {
+            "cruise": "GH94",
+            "latitude": "41.6",
+            "longitude": "139.3282",
+            "region": "北海道西方海域",
+            "sample_id": "940039",
+            "water_depth_m": "1526"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "40",
+          "record_id": "rec-7738a2f37a381b329e89a5d9c2d7bb7e431df5c5a597f61032ba957cf1ba51e4",
+          "source_metadata": {
+            "cruise": "GH94",
+            "latitude": "41.6",
+            "longitude": "139.3282",
+            "region": "北海道西方海域",
+            "sample_id": "940039",
+            "water_depth_m": "1526"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "77.792",
+          "record_id": "rec-29034d405226e67d45001e8ea806c65b7a1424c747a52ae68ca100daff7d2806",
+          "source_metadata": {
+            "cruise": "GH94",
+            "latitude": "41.6",
+            "longitude": "139.3282",
+            "region": "北海道西方海域",
+            "sample_id": "940039",
+            "water_depth_m": "1526"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "19.461",
+          "record_id": "rec-8d594f06a360052c86e3c1f04bb89171a99de72e8c117f80c5eba25967044547",
+          "source_metadata": {
+            "cruise": "GH94",
+            "latitude": "41.6",
+            "longitude": "139.3282",
+            "region": "北海道西方海域",
+            "sample_id": "940039",
+            "water_depth_m": "1526"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "81.019",
+          "record_id": "rec-d7bcca4515d71a7a777acd5924dadff608f9c12763acc6c221449334062b0416",
+          "source_metadata": {
+            "cruise": "GH94",
+            "latitude": "41.6",
+            "longitude": "139.3282",
+            "region": "北海道西方海域",
+            "sample_id": "940039",
+            "water_depth_m": "1526"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "940039",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=678",
+      "source_record_id": "src-a55e9e39ce15f101d6b7d1601168027eb8c4108cc06474c647de6c02992ec41d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.4",
+          "record_id": "rec-69cca27650ab4eb223d0c5f3e671142f87b71079ac75509de184c740cb331bd5",
+          "source_metadata": {
+            "cruise": "GH96",
+            "latitude": "43.79983",
+            "longitude": "139.75267",
+            "region": "北海道西方海域３",
+            "sample_id": "960262",
+            "water_depth_m": "1804"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "45.762",
+          "record_id": "rec-000e1837fe726b84ea447910d85aecefeeb3650b417bd27a183b68d2e0534f5e",
+          "source_metadata": {
+            "cruise": "GH96",
+            "latitude": "43.79983",
+            "longitude": "139.75267",
+            "region": "北海道西方海域３",
+            "sample_id": "960262",
+            "water_depth_m": "1804"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.382",
+          "record_id": "rec-ce2563d0491e2f657a6025322bf479fef62d0b4d1ddd8c03aae3da675d71fd7e",
+          "source_metadata": {
+            "cruise": "GH96",
+            "latitude": "43.79983",
+            "longitude": "139.75267",
+            "region": "北海道西方海域３",
+            "sample_id": "960262",
+            "water_depth_m": "1804"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "30",
+          "record_id": "rec-f97610baf79c680faf0cb318d1f64a9a27dce8fc1f6b78f75f1cc89cb56c06aa",
+          "source_metadata": {
+            "cruise": "GH96",
+            "latitude": "43.79983",
+            "longitude": "139.75267",
+            "region": "北海道西方海域３",
+            "sample_id": "960262",
+            "water_depth_m": "1804"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.986",
+          "record_id": "rec-c040a14cbd9ebafa4894ec7cfa7fd76f6e1a8bb0e10beea8bf0626e41f45cd1d",
+          "source_metadata": {
+            "cruise": "GH96",
+            "latitude": "43.79983",
+            "longitude": "139.75267",
+            "region": "北海道西方海域３",
+            "sample_id": "960262",
+            "water_depth_m": "1804"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "49.519",
+          "record_id": "rec-5172a7ce5667e9c588508467d6a9044e2aa9e224f01790ed7c2e247f87657853",
+          "source_metadata": {
+            "cruise": "GH96",
+            "latitude": "43.79983",
+            "longitude": "139.75267",
+            "region": "北海道西方海域３",
+            "sample_id": "960262",
+            "water_depth_m": "1804"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "97.4",
+          "record_id": "rec-90cde0de7d9b23b176f274622ac80db9e83aeec10648028425e295aa7796c291",
+          "source_metadata": {
+            "cruise": "GH96",
+            "latitude": "43.79983",
+            "longitude": "139.75267",
+            "region": "北海道西方海域３",
+            "sample_id": "960262",
+            "water_depth_m": "1804"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "960262",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=848",
+      "source_record_id": "src-9d8bd06e9a9617733b6e147abcdde0be1657134d70f59d75f33abc1ffc7cb680"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.9",
+          "record_id": "rec-c0557c2bb7a254cc8a2cb3c9986ccf816e7bff1218cb17d5ff26a7b0ae60ec87",
+          "source_metadata": {
+            "cruise": "GH98",
+            "latitude": "44.82366",
+            "longitude": "141.64464",
+            "region": "北海道西方海域４",
+            "sample_id": "980447",
+            "water_depth_m": "53"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "69.838",
+          "record_id": "rec-21992bf37186e42749cecf81c64ac4c4e3b7ef69ac4ad239edeb6a02c4555aac",
+          "source_metadata": {
+            "cruise": "GH98",
+            "latitude": "44.82366",
+            "longitude": "141.64464",
+            "region": "北海道西方海域４",
+            "sample_id": "980447",
+            "water_depth_m": "53"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.423",
+          "record_id": "rec-5642d491f4bd06a8b8d2fb1d6944e1f581f0b2e9c0eba57a98eba05fb89e94d8",
+          "source_metadata": {
+            "cruise": "GH98",
+            "latitude": "44.82366",
+            "longitude": "141.64464",
+            "region": "北海道西方海域４",
+            "sample_id": "980447",
+            "water_depth_m": "53"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "80",
+          "record_id": "rec-d975e81b82a9bb16544bb12d21c825bdf32cdd7a23ae4d0ebfc935d260042b70",
+          "source_metadata": {
+            "cruise": "GH98",
+            "latitude": "44.82366",
+            "longitude": "141.64464",
+            "region": "北海道西方海域４",
+            "sample_id": "980447",
+            "water_depth_m": "53"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "35.613",
+          "record_id": "rec-9cf7b75ac6a161c76939fc2c026794a0eb7d44051803544de34acde95c93e6f5",
+          "source_metadata": {
+            "cruise": "GH98",
+            "latitude": "44.82366",
+            "longitude": "141.64464",
+            "region": "北海道西方海域４",
+            "sample_id": "980447",
+            "water_depth_m": "53"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "21.977",
+          "record_id": "rec-563cbf0333661f2aa2ae46a3b4eb9d62609a1673816d9ada93992a8560362467",
+          "source_metadata": {
+            "cruise": "GH98",
+            "latitude": "44.82366",
+            "longitude": "141.64464",
+            "region": "北海道西方海域４",
+            "sample_id": "980447",
+            "water_depth_m": "53"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "73.341",
+          "record_id": "rec-7f6bdb987b11c491f4cd4d1b959bb19510944e52fbecadc4d58f11bd433ddfb7",
+          "source_metadata": {
+            "cruise": "GH98",
+            "latitude": "44.82366",
+            "longitude": "141.64464",
+            "region": "北海道西方海域４",
+            "sample_id": "980447",
+            "water_depth_m": "53"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "980447",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1017",
+      "source_record_id": "src-4bb9d23d288bd56f43af1e9d9726f18c8c87433820cbdbe371969c87bc66df0f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.9",
+          "record_id": "rec-ceec19ec3c2ab2d9d3c35dbf9da13cc2bd02fd29440c684c7d77cf3bda860dae",
+          "source_metadata": {
+            "cruise": "GH00",
+            "latitude": "45.30097",
+            "longitude": "143.36758",
+            "region": "オホーツク海１",
+            "sample_id": "1000094",
+            "water_depth_m": "147"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "59.788",
+          "record_id": "rec-ad8df6bfa417965e41a426b07f37fb2bda7ffd9bf5c0ffe954aaa3df63ab8f95",
+          "source_metadata": {
+            "cruise": "GH00",
+            "latitude": "45.30097",
+            "longitude": "143.36758",
+            "region": "オホーツク海１",
+            "sample_id": "1000094",
+            "water_depth_m": "147"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.119",
+          "record_id": "rec-75850f3111ae0af9d16ecdd888af5f3ef1ed6e5329d4d5e452a30f9c4c91076f",
+          "source_metadata": {
+            "cruise": "GH00",
+            "latitude": "45.30097",
+            "longitude": "143.36758",
+            "region": "オホーツク海１",
+            "sample_id": "1000094",
+            "water_depth_m": "147"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10",
+          "record_id": "rec-71bd66f4cc67592f8898854376c5031f13ade7bfd2745326164f4cd71c52e1f1",
+          "source_metadata": {
+            "cruise": "GH00",
+            "latitude": "45.30097",
+            "longitude": "143.36758",
+            "region": "オホーツク海１",
+            "sample_id": "1000094",
+            "water_depth_m": "147"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "26.445",
+          "record_id": "rec-f15eb3f9187cdc57ff0ea93234282af695e7a40480c50b5fb2865a4e45805fb8",
+          "source_metadata": {
+            "cruise": "GH00",
+            "latitude": "45.30097",
+            "longitude": "143.36758",
+            "region": "オホーツク海１",
+            "sample_id": "1000094",
+            "water_depth_m": "147"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.484",
+          "record_id": "rec-30f5b1f067fa1f657815144d428ac11370ab97b952e8b4f602a0ace236435ec7",
+          "source_metadata": {
+            "cruise": "GH00",
+            "latitude": "45.30097",
+            "longitude": "143.36758",
+            "region": "オホーツク海１",
+            "sample_id": "1000094",
+            "water_depth_m": "147"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "72.118",
+          "record_id": "rec-2b4797946c3af506510c653e579e81487c64d7ab83ec9de3c8eb5e903746c013",
+          "source_metadata": {
+            "cruise": "GH00",
+            "latitude": "45.30097",
+            "longitude": "143.36758",
+            "region": "オホーツク海１",
+            "sample_id": "1000094",
+            "water_depth_m": "147"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1000094",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1186",
+      "source_record_id": "src-ae186ea2b0045af2acce5bb0f81c06639fddf5c94b6d418ec0f26df72f60d0d6"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10",
+          "record_id": "rec-9cd15d49573acd2ef9b22705ed2575f047495baea10df2a4aeef3f63cf5e06f9",
+          "source_metadata": {
+            "cruise": "GH01",
+            "latitude": "44.034",
+            "longitude": "144.43451",
+            "region": "オホーツク海２",
+            "sample_id": "1010266",
+            "water_depth_m": "64"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "46.971",
+          "record_id": "rec-76642bffbab320d018eaf9e36b1d53e6ccdb00aa48469bf617d208926d7570d6",
+          "source_metadata": {
+            "cruise": "GH01",
+            "latitude": "44.034",
+            "longitude": "144.43451",
+            "region": "オホーツク海２",
+            "sample_id": "1010266",
+            "water_depth_m": "64"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.253",
+          "record_id": "rec-d4ab150dc062204277a8f1a51cdfd37dae39fbaa92174095a60faa534da14408",
+          "source_metadata": {
+            "cruise": "GH01",
+            "latitude": "44.034",
+            "longitude": "144.43451",
+            "region": "オホーツク海２",
+            "sample_id": "1010266",
+            "water_depth_m": "64"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "60",
+          "record_id": "rec-ae3e3786c4ea537a7a4d685a193d674efc96d54638f649aab01c70ed31fa6110",
+          "source_metadata": {
+            "cruise": "GH01",
+            "latitude": "44.034",
+            "longitude": "144.43451",
+            "region": "オホーツク海２",
+            "sample_id": "1010266",
+            "water_depth_m": "64"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.399",
+          "record_id": "rec-6bf36474169616d89b08ece0f06220ca79c8c2b6c0f4f9c0b8e53b32e2b4554c",
+          "source_metadata": {
+            "cruise": "GH01",
+            "latitude": "44.034",
+            "longitude": "144.43451",
+            "region": "オホーツク海２",
+            "sample_id": "1010266",
+            "water_depth_m": "64"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.983",
+          "record_id": "rec-3af3220580269e927a7b701ce0884ce207b091a2a1af7a8ce013e370eb1d6cc9",
+          "source_metadata": {
+            "cruise": "GH01",
+            "latitude": "44.034",
+            "longitude": "144.43451",
+            "region": "オホーツク海２",
+            "sample_id": "1010266",
+            "water_depth_m": "64"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "56.175",
+          "record_id": "rec-0ba1bea53b5ae0495156d4d75f11ccfb5d30433a6219b065f6e288aa2b2e16e5",
+          "source_metadata": {
+            "cruise": "GH01",
+            "latitude": "44.034",
+            "longitude": "144.43451",
+            "region": "オホーツク海２",
+            "sample_id": "1010266",
+            "water_depth_m": "64"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1010266",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1355",
+      "source_record_id": "src-1046db7221256b6986105952c53ba11713ce902a8adbfb8e71ea39eda3508d88"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "7.3",
+          "record_id": "rec-7ab5062583ae838161392d2a93567d8e03f4790705a0fa4c73ea19a4670d1a4b",
+          "source_metadata": {
+            "cruise": "GH03",
+            "latitude": "42.86672",
+            "longitude": "144.73059",
+            "region": "釧路・日高沖",
+            "sample_id": "1030078",
+            "water_depth_m": "76"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "32.036",
+          "record_id": "rec-620a2543be62f18ed3e486ff159051562ab327d0abc146af05a1fc8bcbb6bf56",
+          "source_metadata": {
+            "cruise": "GH03",
+            "latitude": "42.86672",
+            "longitude": "144.73059",
+            "region": "釧路・日高沖",
+            "sample_id": "1030078",
+            "water_depth_m": "76"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.244",
+          "record_id": "rec-a86d4a3438c06e7d3ace897ba432139219a46eb0095c1147446620ad28a99017",
+          "source_metadata": {
+            "cruise": "GH03",
+            "latitude": "42.86672",
+            "longitude": "144.73059",
+            "region": "釧路・日高沖",
+            "sample_id": "1030078",
+            "water_depth_m": "76"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "26.344",
+          "record_id": "rec-452f84b56b6f893acddbce62b198bf62efd5560513e8eea11ad9a038fcdbadd9",
+          "source_metadata": {
+            "cruise": "GH03",
+            "latitude": "42.86672",
+            "longitude": "144.73059",
+            "region": "釧路・日高沖",
+            "sample_id": "1030078",
+            "water_depth_m": "76"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "11.907",
+          "record_id": "rec-d04142275b3a8daf2c89f2c3d33534f2ccd2fc56d056baf15265d2e76e6bc769",
+          "source_metadata": {
+            "cruise": "GH03",
+            "latitude": "42.86672",
+            "longitude": "144.73059",
+            "region": "釧路・日高沖",
+            "sample_id": "1030078",
+            "water_depth_m": "76"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "11.348",
+          "record_id": "rec-24efba42e8da5a6d6718fe0002a7287266686e5412293437a21d1662d56ef37d",
+          "source_metadata": {
+            "cruise": "GH03",
+            "latitude": "42.86672",
+            "longitude": "144.73059",
+            "region": "釧路・日高沖",
+            "sample_id": "1030078",
+            "water_depth_m": "76"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.499",
+          "record_id": "rec-b34d457c42f4105ca7cf871ee988e821e249ad2133cc77553b1e40707e9b7d94",
+          "source_metadata": {
+            "cruise": "GH03",
+            "latitude": "42.86672",
+            "longitude": "144.73059",
+            "region": "釧路・日高沖",
+            "sample_id": "1030078",
+            "water_depth_m": "76"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1030078",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1524",
+      "source_record_id": "src-62f0de85ec7d7d20974493f701c25b462e1f4397df972d5633b1874b768cba30"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "7.9",
+          "record_id": "rec-9ccc73d86eb9f72df016e2bd15764f3cb025414a28ae2be877307be8c102d05a",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.751",
+            "longitude": "141.28467",
+            "region": "下北半島沖",
+            "sample_id": "820109",
+            "water_depth_m": "241"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "31.253",
+          "record_id": "rec-8665d7ad6d8f5f91e2955714c28c04ef7f400c69c6e450806ab2868831ceb128",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.751",
+            "longitude": "141.28467",
+            "region": "下北半島沖",
+            "sample_id": "820109",
+            "water_depth_m": "241"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.969",
+          "record_id": "rec-210ba6ac5962ffae22704f686442c9088e8a326f559d210bf417c435912255bb",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.751",
+            "longitude": "141.28467",
+            "region": "下北半島沖",
+            "sample_id": "820109",
+            "water_depth_m": "241"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "99.203",
+          "record_id": "rec-9690a68d18a4c70d20c1d7f7dd0a248b0ce50af82ed010c06e3b58eb96301e02",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.751",
+            "longitude": "141.28467",
+            "region": "下北半島沖",
+            "sample_id": "820109",
+            "water_depth_m": "241"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.558",
+          "record_id": "rec-111bf8a4770023275db5c55d230e355ee36001ee3398d696a4c92545934fac97",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.751",
+            "longitude": "141.28467",
+            "region": "下北半島沖",
+            "sample_id": "820109",
+            "water_depth_m": "241"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.864",
+          "record_id": "rec-8e7c1751823e54f1410402fffbd9a5ee20a40c8231ea61441bd524687af94d8a",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.751",
+            "longitude": "141.28467",
+            "region": "下北半島沖",
+            "sample_id": "820109",
+            "water_depth_m": "241"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.63",
+          "record_id": "rec-840607f7806d9e26b314983bccd136cb5c5e7352ae385f3402e59fa52ec41612",
+          "source_metadata": {
+            "cruise": "GH82-3",
+            "latitude": "41.751",
+            "longitude": "141.28467",
+            "region": "下北半島沖",
+            "sample_id": "820109",
+            "water_depth_m": "241"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "820109",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1693",
+      "source_record_id": "src-842d9efb57372d641f3a9c287eb6729ae43265dfbce7b02e894d58595d75f5c9"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4",
+          "record_id": "rec-94e16849b3e095c91d8da10e93defe05721d5ba74fd5cea956066c2bf13b381b",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.63",
+            "longitude": "142.255",
+            "region": "釜石沖",
+            "sample_id": "810109",
+            "water_depth_m": "683"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "49.679",
+          "record_id": "rec-28fa80e1b5e3a3aaf7af553c7d86a4a3b3e8b8b8cd0555d293cd869d7bf88982",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.63",
+            "longitude": "142.255",
+            "region": "釜石沖",
+            "sample_id": "810109",
+            "water_depth_m": "683"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.31",
+          "record_id": "rec-83766b3392d99929f8db2de778e772fa628727311bcd3ed467521cb841b10008",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.63",
+            "longitude": "142.255",
+            "region": "釜石沖",
+            "sample_id": "810109",
+            "water_depth_m": "683"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "51.178",
+          "record_id": "rec-53baf4a12beaea60161edd30c016d149662724f9f0f1b248f410e147acefa46a",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.63",
+            "longitude": "142.255",
+            "region": "釜石沖",
+            "sample_id": "810109",
+            "water_depth_m": "683"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.924",
+          "record_id": "rec-46053dd34e3d0bfe28d7a7bccb088014bb79a5d0373c8eb3a7cb3614850416c5",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.63",
+            "longitude": "142.255",
+            "region": "釜石沖",
+            "sample_id": "810109",
+            "water_depth_m": "683"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.553",
+          "record_id": "rec-c4751a8de144b7c65b3f70a8de7be020258bb2c9dc614d508e9ded93ee2a332f",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.63",
+            "longitude": "142.255",
+            "region": "釜石沖",
+            "sample_id": "810109",
+            "water_depth_m": "683"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "88.236",
+          "record_id": "rec-ee50a90db6b589f57fa56044dffc01333e968f512bcc86b730e1a1fc6ed8f985",
+          "source_metadata": {
+            "cruise": "GH81-1",
+            "latitude": "38.63",
+            "longitude": "142.255",
+            "region": "釜石沖",
+            "sample_id": "810109",
+            "water_depth_m": "683"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "810109",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1862",
+      "source_record_id": "src-f4b0e23095d13bd3a980616f4bf72523a6f8ba0a1840d45963919299afb90010"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.4",
+          "record_id": "rec-1f5bb8adad4081d9764aa0e21e874516fbad80228635033b0f4d2fc9e9ee6b00",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.2",
+            "longitude": "141.335",
+            "region": "仙台〜日立沖",
+            "sample_id": "812199",
+            "water_depth_m": "139"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "41.599",
+          "record_id": "rec-98997eca6b9013a27a2214dc606771e505fb4b093df4baa5210efbdcb6e2ebcc",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.2",
+            "longitude": "141.335",
+            "region": "仙台〜日立沖",
+            "sample_id": "812199",
+            "water_depth_m": "139"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.728",
+          "record_id": "rec-392d7b056d153cb6d75c234b7deccedabf5df6e468c1ef82520a402122d43c45",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.2",
+            "longitude": "141.335",
+            "region": "仙台〜日立沖",
+            "sample_id": "812199",
+            "water_depth_m": "139"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "45.632",
+          "record_id": "rec-cdd59acc19fcfe646e36a0ae3c857e1741c4ba1a8962ad025bb266ee38938249",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.2",
+            "longitude": "141.335",
+            "region": "仙台〜日立沖",
+            "sample_id": "812199",
+            "water_depth_m": "139"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "35.246",
+          "record_id": "rec-be81a058f23d579c545caf75528b404ed0116c43df47bb0eddbbc97b19a9031d",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.2",
+            "longitude": "141.335",
+            "region": "仙台〜日立沖",
+            "sample_id": "812199",
+            "water_depth_m": "139"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.654",
+          "record_id": "rec-3f66b60fd034b011e9976e8171884580ba0474583c3b6d636335ea656598d69a",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.2",
+            "longitude": "141.335",
+            "region": "仙台〜日立沖",
+            "sample_id": "812199",
+            "water_depth_m": "139"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "83.076",
+          "record_id": "rec-fd2b8b1f3b908336da6eeeb7901aa0faf3e888aac6349c3994b1d199c244127e",
+          "source_metadata": {
+            "cruise": "GH81-2",
+            "latitude": "37.2",
+            "longitude": "141.335",
+            "region": "仙台〜日立沖",
+            "sample_id": "812199",
+            "water_depth_m": "139"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "812199",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2031",
+      "source_record_id": "src-691ecc02d3f6fc0016677160d47cd655b4bdec00ef8c0f128fb23f2345e3252a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.1",
+          "record_id": "rec-7b884371ab70e024df75847a7c8d5e88dfbf4232c2b6178d65f34df73325e3f8",
+          "source_metadata": {
+            "cruise": "GH80-2",
+            "latitude": "35.17167",
+            "longitude": "140.743",
+            "region": "房総沖",
+            "sample_id": "800037",
+            "water_depth_m": "190"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "41.891",
+          "record_id": "rec-edb8da1f70bc514376c9a461b1188452032a96e4272e7547374c122ca96cb7ea",
+          "source_metadata": {
+            "cruise": "GH80-2",
+            "latitude": "35.17167",
+            "longitude": "140.743",
+            "region": "房総沖",
+            "sample_id": "800037",
+            "water_depth_m": "190"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.809",
+          "record_id": "rec-22227b235e19230b8dd403393d54dc7283c679d818db69b8595ee80193d78c28",
+          "source_metadata": {
+            "cruise": "GH80-2",
+            "latitude": "35.17167",
+            "longitude": "140.743",
+            "region": "房総沖",
+            "sample_id": "800037",
+            "water_depth_m": "190"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "78.155",
+          "record_id": "rec-1e6b8a56a3733710b97071af86addfdfbdce91524a624c91eb94b2209d9db984",
+          "source_metadata": {
+            "cruise": "GH80-2",
+            "latitude": "35.17167",
+            "longitude": "140.743",
+            "region": "房総沖",
+            "sample_id": "800037",
+            "water_depth_m": "190"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "18.242",
+          "record_id": "rec-0120378f8b97e6e198335426d4d5cb2b67995feff228ba9183138a182b97873b",
+          "source_metadata": {
+            "cruise": "GH80-2",
+            "latitude": "35.17167",
+            "longitude": "140.743",
+            "region": "房総沖",
+            "sample_id": "800037",
+            "water_depth_m": "190"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.349",
+          "record_id": "rec-b275fb9f5cd570ec1a142cec94214423de7307fd45b5836a56fa1155deec5eda",
+          "source_metadata": {
+            "cruise": "GH80-2",
+            "latitude": "35.17167",
+            "longitude": "140.743",
+            "region": "房総沖",
+            "sample_id": "800037",
+            "water_depth_m": "190"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "98.759",
+          "record_id": "rec-9561041085519f5074b7411110a9051933fe83ef0a34c13e13e636d2e326bc85",
+          "source_metadata": {
+            "cruise": "GH80-2",
+            "latitude": "35.17167",
+            "longitude": "140.743",
+            "region": "房総沖",
+            "sample_id": "800037",
+            "water_depth_m": "190"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "800037",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2200",
+      "source_record_id": "src-6442a39908d461de068182f6d901ba5afc457e2442090fe29f2f3b1ff0407169"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.5",
+          "record_id": "rec-e94067febd5dff905624129035b19f3872252798323952233e17567a21861316",
+          "source_metadata": {
+            "cruise": "GH97",
+            "latitude": "34.36453",
+            "longitude": "137.77655",
+            "region": "東海沖",
+            "sample_id": "970187",
+            "water_depth_m": "1000"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "73.203",
+          "record_id": "rec-a9c38371eddd9b74ee5c314a82f63ba8eadeecc1a2563d6b8b0ddf7aa741dfa1",
+          "source_metadata": {
+            "cruise": "GH97",
+            "latitude": "34.36453",
+            "longitude": "137.77655",
+            "region": "東海沖",
+            "sample_id": "970187",
+            "water_depth_m": "1000"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "32.871",
+          "record_id": "rec-24754a2d0b6ab03745e31c254f6b28cec7ad7e012980357991006cb9da99f09c",
+          "source_metadata": {
+            "cruise": "GH97",
+            "latitude": "34.36453",
+            "longitude": "137.77655",
+            "region": "東海沖",
+            "sample_id": "970187",
+            "water_depth_m": "1000"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "200.024",
+          "record_id": "rec-8d06b7c9a29fc5128fed879bc4225627495ac9f9678f36ad7ac928555280f9da",
+          "source_metadata": {
+            "cruise": "GH97",
+            "latitude": "34.36453",
+            "longitude": "137.77655",
+            "region": "東海沖",
+            "sample_id": "970187",
+            "water_depth_m": "1000"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "38.14",
+          "record_id": "rec-f0c4288ebf823c2cbe10b787731e29c11fdcc5bb2304970e0e69f48cd3a51e19",
+          "source_metadata": {
+            "cruise": "GH97",
+            "latitude": "34.36453",
+            "longitude": "137.77655",
+            "region": "東海沖",
+            "sample_id": "970187",
+            "water_depth_m": "1000"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "22.404",
+          "record_id": "rec-3ae98c4f757aee602bb8e7890f6121c74a0af67d4954d91694cc975c7816b81d",
+          "source_metadata": {
+            "cruise": "GH97",
+            "latitude": "34.36453",
+            "longitude": "137.77655",
+            "region": "東海沖",
+            "sample_id": "970187",
+            "water_depth_m": "1000"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "82.684",
+          "record_id": "rec-c41bc48e540ed07be5d8edd4d72921701147bc65002fd618c9908f71e1f5da4a",
+          "source_metadata": {
+            "cruise": "GH97",
+            "latitude": "34.36453",
+            "longitude": "137.77655",
+            "region": "東海沖",
+            "sample_id": "970187",
+            "water_depth_m": "1000"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "970187",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2369",
+      "source_record_id": "src-02a2a5dca1cf23f7ed7c8964962bb23f9ee63598d0491946591834e0d9008c7b"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.5",
+          "record_id": "rec-4d6deb634d4be7fa37efe7c1da7dca2dd80b71b8f316cf3f435e8b2d8ff29cfa",
+          "source_metadata": {
+            "cruise": "GC04-3",
+            "latitude": "35.55432",
+            "longitude": "139.88538",
+            "region": "東京湾",
+            "sample_id": "1042008",
+            "water_depth_m": "18"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "118.766",
+          "record_id": "rec-547bf07133be21e589aa0433239e44325cceb3e36308b46dfb68df2913522177",
+          "source_metadata": {
+            "cruise": "GC04-3",
+            "latitude": "35.55432",
+            "longitude": "139.88538",
+            "region": "東京湾",
+            "sample_id": "1042008",
+            "water_depth_m": "18"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "96.377",
+          "record_id": "rec-404ebd01d6f118f69a3f9330617d7658540f32a6fb7ead1cc526cd98d4ccf900",
+          "source_metadata": {
+            "cruise": "GC04-3",
+            "latitude": "35.55432",
+            "longitude": "139.88538",
+            "region": "東京湾",
+            "sample_id": "1042008",
+            "water_depth_m": "18"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "630.993",
+          "record_id": "rec-5bbf54d733ea36be112447f766d2fcad4c76a54fb5ada8c88df7b5c4019af293",
+          "source_metadata": {
+            "cruise": "GC04-3",
+            "latitude": "35.55432",
+            "longitude": "139.88538",
+            "region": "東京湾",
+            "sample_id": "1042008",
+            "water_depth_m": "18"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "47.58",
+          "record_id": "rec-3457828f316868efbce69c5e09954799af58fcb91bf397028c9c651f15bd9695",
+          "source_metadata": {
+            "cruise": "GC04-3",
+            "latitude": "35.55432",
+            "longitude": "139.88538",
+            "region": "東京湾",
+            "sample_id": "1042008",
+            "water_depth_m": "18"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "66.742",
+          "record_id": "rec-b11c605d1b7d8d287ad7c24ee0e7ab6680a68e55bc966c991c5bb408ab73399e",
+          "source_metadata": {
+            "cruise": "GC04-3",
+            "latitude": "35.55432",
+            "longitude": "139.88538",
+            "region": "東京湾",
+            "sample_id": "1042008",
+            "water_depth_m": "18"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "424.881",
+          "record_id": "rec-2922789319cd899515916753ba688663813a13fd568415ef3462aed627a02f2a",
+          "source_metadata": {
+            "cruise": "GC04-3",
+            "latitude": "35.55432",
+            "longitude": "139.88538",
+            "region": "東京湾",
+            "sample_id": "1042008",
+            "water_depth_m": "18"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1042008",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2539",
+      "source_record_id": "src-1228f25b5ad26b49f60e6ea9f15a4b30faf35d8cee95c9149f8663c4484c42eb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.5",
+          "record_id": "rec-98bf1725295220a2a9627f4dd32df51ce6c4d526807021b8a4a0f2125cb44b80",
+          "source_metadata": {
+            "cruise": "GH82-1",
+            "latitude": "32.92167",
+            "longitude": "134.41333",
+            "region": "室戸岬",
+            "sample_id": "821030",
+            "water_depth_m": "945"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "58.998",
+          "record_id": "rec-bb56c48cb4945000bca943e28edaa5626d5870306505e5f3bd5647ab3d1cc819",
+          "source_metadata": {
+            "cruise": "GH82-1",
+            "latitude": "32.92167",
+            "longitude": "134.41333",
+            "region": "室戸岬",
+            "sample_id": "821030",
+            "water_depth_m": "945"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.606",
+          "record_id": "rec-757bc38b1d90d51caca6c8ca84f2ccb547bf782e69746755ab32663e3c554bb3",
+          "source_metadata": {
+            "cruise": "GH82-1",
+            "latitude": "32.92167",
+            "longitude": "134.41333",
+            "region": "室戸岬",
+            "sample_id": "821030",
+            "water_depth_m": "945"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "109.234",
+          "record_id": "rec-a1de96cfdfd7d0f6254797416833c17a5b929c95c58b3745ec2059ab604757fe",
+          "source_metadata": {
+            "cruise": "GH82-1",
+            "latitude": "32.92167",
+            "longitude": "134.41333",
+            "region": "室戸岬",
+            "sample_id": "821030",
+            "water_depth_m": "945"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "23.211",
+          "record_id": "rec-662dbdd1086a3de78a5e8ea24cb837799427b53be06fa7aa6115ad7f7cb9333a",
+          "source_metadata": {
+            "cruise": "GH82-1",
+            "latitude": "32.92167",
+            "longitude": "134.41333",
+            "region": "室戸岬",
+            "sample_id": "821030",
+            "water_depth_m": "945"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.582",
+          "record_id": "rec-ad08d6336cc4dfd4abe90bdd32204d05a815b19ded6ce3001c969d63059fe869",
+          "source_metadata": {
+            "cruise": "GH82-1",
+            "latitude": "32.92167",
+            "longitude": "134.41333",
+            "region": "室戸岬",
+            "sample_id": "821030",
+            "water_depth_m": "945"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.886",
+          "record_id": "rec-ea12c3c2b9aa0b6c7de7d270c55907edfad86aba1fc8acbdec950caec28a6aed",
+          "source_metadata": {
+            "cruise": "GH82-1",
+            "latitude": "32.92167",
+            "longitude": "134.41333",
+            "region": "室戸岬",
+            "sample_id": "821030",
+            "water_depth_m": "945"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "821030",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2708",
+      "source_record_id": "src-1e7fcdd2032ea4eb8d40f64ee751678983c0b392c2183b3afaca275e2b057afe"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.9",
+          "record_id": "rec-41ff13794f9137a0e9091f348dbaef57d5fab823a4bdccf5c5b174b611edc90e",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.1925",
+            "longitude": "133.49533",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832063",
+            "water_depth_m": "133"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "59.948",
+          "record_id": "rec-c1805e09f11922f37d8bbb1dcaeaa302a36ff08980f0266a055259e9eff42d61",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.1925",
+            "longitude": "133.49533",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832063",
+            "water_depth_m": "133"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "11.124",
+          "record_id": "rec-1156f2b8857ea948a5430c03c77ce05eaa9f70bd6bfd591adb55e351c4fe90a1",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.1925",
+            "longitude": "133.49533",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832063",
+            "water_depth_m": "133"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "95.275",
+          "record_id": "rec-f16d2d05cea4cac7ad9d06a503411b4914d41b16ecfc321441d9a178b9836dbe",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.1925",
+            "longitude": "133.49533",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832063",
+            "water_depth_m": "133"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "27.485",
+          "record_id": "rec-af0a16e33560284db6bbcacdf064e09f6b2be6f3efcebc39270540195c29aa5b",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.1925",
+            "longitude": "133.49533",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832063",
+            "water_depth_m": "133"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.475",
+          "record_id": "rec-85723163b909b2f7159623e463401b0f931d9c12de2d2a7e3193a89e76a1e974",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.1925",
+            "longitude": "133.49533",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832063",
+            "water_depth_m": "133"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.194",
+          "record_id": "rec-791661be9e27f3d3c8f3df3dd09710b21294f2e430db68e68bff37ed8dc16d4f",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "33.1925",
+            "longitude": "133.49533",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832063",
+            "water_depth_m": "133"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832063",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2877",
+      "source_record_id": "src-b496b2b79c6ce4f60f1e384646e0d074cb98c0324da100a1b1cfb2233deaf5f5"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.2",
+          "record_id": "rec-01ed39e5ce773c024347f1aadee96865bd670fa5ae446c1a250bbbedf245d9ea",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "32.5905",
+            "longitude": "131.98633",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832244",
+            "water_depth_m": "274"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.842",
+          "record_id": "rec-18eda11e182d52b58ab5d4c416393782cac437a3f82e14a0a5a216cb65373d49",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "32.5905",
+            "longitude": "131.98633",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832244",
+            "water_depth_m": "274"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.461",
+          "record_id": "rec-7bff3569f4c69194d19aafe2318f99b17394237250df55857f9580d960f268cd",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "32.5905",
+            "longitude": "131.98633",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832244",
+            "water_depth_m": "274"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "52.213",
+          "record_id": "rec-3bf554a9afbb248f980d08d1e45f3c6999d3dc6cd7f0ae1a140d90ed5cefe7b3",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "32.5905",
+            "longitude": "131.98633",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832244",
+            "water_depth_m": "274"
+          },
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.007",
+          "record_id": "rec-a87a73952110a2a1023c8136a89f9b88776fd55b0eadb21085f4e33eb710e9b9",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "32.5905",
+            "longitude": "131.98633",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832244",
+            "water_depth_m": "274"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.463",
+          "record_id": "rec-17868249dfb5e07fe65542c860d7add862e0219d43066874e6e88d17bef20045",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "32.5905",
+            "longitude": "131.98633",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832244",
+            "water_depth_m": "274"
+          },
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "69.801",
+          "record_id": "rec-c3bdc59b87ca61fb2340e043af1e4cf2386fe9dc425333bb929d5da510ddc2c9",
+          "source_metadata": {
+            "cruise": "GH83-2",
+            "latitude": "32.5905",
+            "longitude": "131.98633",
+            "region": "土佐湾〜日向灘",
+            "sample_id": "832244",
+            "water_depth_m": "274"
+          },
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "japan-gsj-marine-sediment-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832244",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3046",
+      "source_record_id": "src-ba07bd5b2ed01f0066a45245c17d9384d0c45a52ae3ace978b3bedfb640c3db7"
+    }
+  ],
+  "required_record_count": 30,
+  "review_version": "geochemical-human-review-v1",
+  "selection_strategy": "Thirty stratified source records or explicit analyte mappings spanning source order and documented edge cases.",
+  "snapshot_id": "japan-gsj-marine-sediment:content-snapshot-2026-08-06:2026-08-06T16:07:00Z:01",
+  "source_id": "japan-gsj-marine-sediment",
+  "status": "prepared"
+}

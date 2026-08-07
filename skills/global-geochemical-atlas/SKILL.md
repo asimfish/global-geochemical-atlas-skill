@@ -71,7 +71,7 @@ python scripts/validate_outputs.py --output-dir /tmp/geochemical-atlas
 
 该 fixture 是 hash 固定的 USGS 真实切片，默认使用仓库内固定 GLiM 岩性图；它验证生产 `n≥20` 异常流程，不是代表性抽样。固定指标和许可见 [references/production-demo.md](references/production-demo.md)。
 
-需要证明岩石、土壤、沉积物、水体可以走通同一接口时，另跑十四来源、796 条真实来源最小观测的四介质演示：
+需要证明岩石、土壤、沉积物、水体可以走通同一接口时，另跑 21 来源、1,144 条真实来源最小观测的四介质演示：
 
 ```bash
 python scripts/build_four_media_demo.py \

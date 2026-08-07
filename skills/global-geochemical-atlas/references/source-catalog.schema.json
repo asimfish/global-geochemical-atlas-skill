@@ -106,13 +106,19 @@
           "properties": {
             "concept_doi": {"type": "string", "minLength": 1},
             "cstr": {"type": "string", "minLength": 1},
+            "arcgis_item_id": {"type": "string", "minLength": 1},
+            "catalog_uuid": {"type": "string", "minLength": 1},
             "dataset_doi": {"type": "string", "minLength": 1},
+            "dataverse_file_id": {"type": "string", "minLength": 1},
+            "file_doi": {"type": "string", "minLength": 1},
             "file_id": {"type": "string", "minLength": 1},
             "metadata_uuid": {"type": "string", "minLength": 1},
+            "monitoring_location_identifier": {"type": "string", "minLength": 1},
             "parent_atlas": {"type": "string", "minLength": 1},
             "parent_dataset_doi": {"type": "string", "minLength": 1},
             "project_doi": {"type": "string", "minLength": 1},
-            "publication_doi": {"type": "string", "minLength": 1}
+            "publication_doi": {"type": "string", "minLength": 1},
+            "resource_id": {"type": "string", "minLength": 1}
           }
         },
         "landing_page": {"type": "string", "format": "uri", "pattern": "^https://"},

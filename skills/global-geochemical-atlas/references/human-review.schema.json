@@ -31,6 +31,10 @@
     "completed_record_count": {"type": "integer", "minimum": 0},
     "all_records_reviewed": {"type": "boolean"},
     "selection_strategy": {"type": "string", "minLength": 1},
+    "element_quotas": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
     "records": {
       "type": "array",
       "items": {

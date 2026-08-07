@@ -43,6 +43,8 @@
           "source_evidence_tiers",
           "source_use_modes",
           "source_independence",
+          "independent_lineage_count",
+          "lineage_ids",
           "method_metadata_coverage",
           "spatial_density_coverage",
           "temporal_coverage",
@@ -79,6 +81,8 @@
             }
           },
           "source_independence": {"type": "string"},
+          "independent_lineage_count": {"type": "integer", "minimum": 0},
+          "lineage_ids": {"$ref": "#/$defs/uniqueStrings"},
           "method_metadata_coverage": {"type": "string"},
           "spatial_density_coverage": {"type": "string"},
           "temporal_coverage": {"type": "string"},

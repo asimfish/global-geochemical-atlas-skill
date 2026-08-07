@@ -51,6 +51,7 @@
         "independent_lineage_count",
         "source_ids",
         "reported_coordinate_sample_count",
+        "lineage_ids",
         "valid_coordinate_sample_count",
         "comparable_observation_count",
         "covered_spatial_cells",
@@ -66,6 +67,11 @@
           "uniqueItems": true
         },
         "reported_coordinate_sample_count": {"type": "integer", "minimum": 0},
+        "lineage_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
         "valid_coordinate_sample_count": {"type": "integer", "minimum": 0},
         "comparable_observation_count": {"type": "integer", "minimum": 0},
         "covered_spatial_cells": {"type": "integer", "minimum": 0},

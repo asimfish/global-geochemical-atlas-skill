@@ -1,0 +1,43 @@
+{
+  "checks": {
+    "adapter_parse_nonempty": true,
+    "registered_file_identity_and_bytes_match": true,
+    "registered_schema_present": true,
+    "review_sample_prepared": true,
+    "target_count_matches_registry": true
+  },
+  "claim_boundary": "This evidence binds georoc-antarctica-intraplate to its DOI/PID, version, file identity, byte count, schema and registered row statistics. It does not claim continuous spatial coverage or cross-method comparability.",
+  "counts": {
+    "age_rows": 396,
+    "citation_ids": 18,
+    "complete_coordinate_rows": 424,
+    "distinct_sample_names": 407,
+    "exact_point_rows": 423,
+    "exact_point_target_observations": 1181,
+    "references_with_doi": 15,
+    "rock_types": {
+      "MET": 175,
+      "PER": 9,
+      "PLU": 161,
+      "VOL": 79
+    },
+    "rows_with_any_target": 313,
+    "rows_without_targets": 111,
+    "source_rows": 424,
+    "target_observations": 1183,
+    "target_observations_by_analyte": {
+      "As": 15,
+      "Cr": 241,
+      "Cu": 187,
+      "Hg": 0,
+      "Ni": 267,
+      "Pb": 276,
+      "Zn": 197
+    },
+    "unique_ids": 424
+  },
+  "reconciliation_version": "v4-m6-source-audit-v2-content-addressed",
+  "snapshot_id": "georoc-antarctica-intraplate:12.0:2026-08-07T10:20:00Z:01",
+  "source_id": "georoc-antarctica-intraplate",
+  "status": "PASS"
+}

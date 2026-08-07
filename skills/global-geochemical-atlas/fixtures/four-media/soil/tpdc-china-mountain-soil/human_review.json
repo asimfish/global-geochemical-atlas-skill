@@ -1,0 +1,1096 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS verifies identity, bytes and mapping correspondence only. Named human decisions remain null; unsigned review lowers confidence but is not a hard research-use gate.",
+  "completed_record_count": 0,
+  "dataset_version": "tpdc-file-2025-07-23",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "18.9559163",
+          "record_id": "rec-77c70b59d86804e2eab6c0d716549d36ce19d4180dab8cfe05eecb6ea09c1384",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-f179d95c3463f98ce1788d31a8e9038f13f89e24087b585958bbc3c5fb7e790e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "18.81300768",
+          "record_id": "rec-d83cdccfe235aed15ba2d102ff3b72a77c38c0e31cd2255a884f0daf6554451c",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-f179d95c3463f98ce1788d31a8e9038f13f89e24087b585958bbc3c5fb7e790e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "8.17407267",
+          "record_id": "rec-d72babaf44ca23b252478ba063fb84b5823588c464a4c4755ef4eece08a2fed5",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-f179d95c3463f98ce1788d31a8e9038f13f89e24087b585958bbc3c5fb7e790e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "36.67421791",
+          "record_id": "rec-36736e14b642087c519e872c9b9a9b9d186dea1e6a67efcba8cf7a7294e15a06",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-f179d95c3463f98ce1788d31a8e9038f13f89e24087b585958bbc3c5fb7e790e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "39.75180754",
+          "record_id": "rec-c7b244814442bf687611e763908e1be652b9f5664bc160bc6c2d54b6a18c4114",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=2",
+      "source_record_id": "src-f179d95c3463f98ce1788d31a8e9038f13f89e24087b585958bbc3c5fb7e790e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "55.84411553",
+          "record_id": "rec-d87a0bb0e89a00d12c9d07d3ab5d32f21c5d0c6fce7b4119eff4b2a6406e145c",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-550ac228a983287472c4fa2de5be2d546ab60be5566b8b2f0c43355375eae0fb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "22.43118242",
+          "record_id": "rec-8e5080e33a36ad2fb3b44bfdd976ada182046ce9f68a898b27225b328da91ccd",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-550ac228a983287472c4fa2de5be2d546ab60be5566b8b2f0c43355375eae0fb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "17.43750602",
+          "record_id": "rec-0b5f36dfbb6f16b7f1ce82475ba72e15105180a30eb7b35cb0f08e676b68e911",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-550ac228a983287472c4fa2de5be2d546ab60be5566b8b2f0c43355375eae0fb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "49.30315406",
+          "record_id": "rec-3292f0b44e013f75bb3e6da5f0de770f14c23a9a53021cc2a1ee68da220979c8",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-550ac228a983287472c4fa2de5be2d546ab60be5566b8b2f0c43355375eae0fb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "34.17537681",
+          "record_id": "rec-7ec7feed205c305274bf4c5e663c404a34f0bed53c2789df065917203fdf21f1",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=3",
+      "source_record_id": "src-550ac228a983287472c4fa2de5be2d546ab60be5566b8b2f0c43355375eae0fb"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "99.99969226",
+          "record_id": "rec-3c8b9bcdb740b5a399b42ca66da5b79e6f1ce910021fcaa8e9c873bb1db4927b",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-147724cd391f011bd714ff6d69f90e69593486b70bcc3ecdd656262535988966"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "32.77009594",
+          "record_id": "rec-3d3241c4ce9cbd2b8cf3abda6faa56f92bb5a86f6d946112e2d83ccfc492cab2",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-147724cd391f011bd714ff6d69f90e69593486b70bcc3ecdd656262535988966"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "41.85384863",
+          "record_id": "rec-5ed83d47ccc5f7bf15c30946057fe37167ca76694b511e0253b35eae0af28082",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-147724cd391f011bd714ff6d69f90e69593486b70bcc3ecdd656262535988966"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "24.34543002",
+          "record_id": "rec-f848f43dc51613960280b4c146d6c7c0de6ae9d84acc6825509e40200a3ab95c",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-147724cd391f011bd714ff6d69f90e69593486b70bcc3ecdd656262535988966"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "66.90938787",
+          "record_id": "rec-329f9c8c0487a02a7db03a23c965d0d830d0e886cf6706e3282218c9941938ee",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-1|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=4",
+      "source_record_id": "src-147724cd391f011bd714ff6d69f90e69593486b70bcc3ecdd656262535988966"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "28.53868701",
+          "record_id": "rec-cebccc13c3776f8051a1d469ad06c1a250a501e2956dbbf0f2d1a6cf974d62fd",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-af6a2f529f3805cfdc6f097d22c02198075f11d1b512843897b993e1b14a5ff1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "13.90534475",
+          "record_id": "rec-acbf299386fe7046f14b65c89131154e30b756e12bee3f39964d89c8ba657e7a",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-af6a2f529f3805cfdc6f097d22c02198075f11d1b512843897b993e1b14a5ff1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "9.901539015",
+          "record_id": "rec-1250900cc135675df6a4d88a684502f704d821c9418ae25ff3189e706c8970c2",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-af6a2f529f3805cfdc6f097d22c02198075f11d1b512843897b993e1b14a5ff1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "33.18995003",
+          "record_id": "rec-8fb627e35a221020f1992c1f79a7198d155d4f4cd53e66ba9e4c41b06ba9a221",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-af6a2f529f3805cfdc6f097d22c02198075f11d1b512843897b993e1b14a5ff1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "27.77236509",
+          "record_id": "rec-9a100671e98890e091432da95e2c637c6c2a8dc33be7dcfd155afd45c8f474d3",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|O",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=5",
+      "source_record_id": "src-af6a2f529f3805cfdc6f097d22c02198075f11d1b512843897b993e1b14a5ff1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "42.55520625",
+          "record_id": "rec-69f9226c07cea1e6f3a2b23ee010c2094e8f6ddf663dde33262703d77a561422",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-e00fb6eb783bc9b904aa29b152deb654f8755fa3d477507e8dfce2982b60878f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "21.44693577",
+          "record_id": "rec-97ebee9ab72cd8f686cd14fcfd6cbac7c723225cad62c4d1750e00782b655769",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-e00fb6eb783bc9b904aa29b152deb654f8755fa3d477507e8dfce2982b60878f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "16.03194862",
+          "record_id": "rec-1f2fa9d27622675cff42c2d8977195f5b6de3aeb06f9d8c4ef355b96ec1a800b",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-e00fb6eb783bc9b904aa29b152deb654f8755fa3d477507e8dfce2982b60878f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "56.98719354",
+          "record_id": "rec-ccd5fce790e58fd6c3940a6dd72db148688820ab33e70a3a11558724412e8a49",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-e00fb6eb783bc9b904aa29b152deb654f8755fa3d477507e8dfce2982b60878f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "29.10616827",
+          "record_id": "rec-7486c11d72e3eae0df9b2042aff4f87844f49efe32c3e351c04c5ec40b0a1344",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|A",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=6",
+      "source_record_id": "src-e00fb6eb783bc9b904aa29b152deb654f8755fa3d477507e8dfce2982b60878f"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "76.99310803",
+          "record_id": "rec-9e363a38035babb423dc165def95359e11ef20e3f061aac3494e47a3b865032b",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-2975ea61f0f8bef8af504472f61b7a4c059c3a08de17e60340e8debccb4cd12d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "16.28655465",
+          "record_id": "rec-fdb0c256096bb08f8a7da1dfc0422a9468e04bdafaeda207028e5d5ab6cdbe37",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-2975ea61f0f8bef8af504472f61b7a4c059c3a08de17e60340e8debccb4cd12d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "21.16935796",
+          "record_id": "rec-589cdc79a9b9a3454edfe1cb7af8ab51f66808975c7ee0cedc81248843169284",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-2975ea61f0f8bef8af504472f61b7a4c059c3a08de17e60340e8debccb4cd12d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-MS (Agilent 7700x)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "22.60047706",
+          "record_id": "rec-9078145365781ae5ca6dd1c9113fefcb625d27a3a5cc6dea7c8e2d469c1137ef",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-2975ea61f0f8bef8af504472f61b7a4c059c3a08de17e60340e8debccb4cd12d"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES (PerkinElmer Optima 2000)",
+          "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+          "raw_value": "47.87316815",
+          "record_id": "rec-73fd8adb81e0e706e1384960378584e671c9d7a636216db9313078f141cd9ee7",
+          "source_file_bytes": 577715,
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "review_id": "tpdc-china-mountain-soil-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AL1-2|C",
+      "selection_reasons": [
+        "source_order_prefix",
+        "target_observation_mapping"
+      ],
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_locator": "Soil dataset.xlsx#sheet1-row=7",
+      "source_record_id": "src-2975ea61f0f8bef8af504472f61b7a4c059c3a08de17e60340e8debccb4cd12d"
+    }
+  ],
+  "required_record_count": 30,
+  "review_version": "geochemical-human-review-v1",
+  "selection_strategy": "First thirty deterministic target observations from the checked-in source demo, preserving byte and mapping evidence.",
+  "snapshot_id": "tpdc-china-mountain-soil:tpdc-file-2025-07-23:2026-08-07T10:20:00Z:01",
+  "source_id": "tpdc-china-mountain-soil",
+  "status": "prepared"
+}

@@ -3,30 +3,31 @@
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "v3",
   "media": {
-    "water": 492999
+    "water": 3739180
   },
   "profile_version": "d1-v4-full-population-profile-v1",
   "sample_types": {
-    "water_groundwater": 30671,
-    "water_lake": 43253,
-    "water_reservoir": 13886,
-    "water_river": 402080,
-    "water_wetland": 3109
+    "water_groundwater": 192410,
+    "water_lake": 340952,
+    "water_reservoir": 85544,
+    "water_river": 3103732,
+    "water_wetland": 16542
   },
   "sediment_environments": {
-    "not_applicable": 492999
+    "not_applicable": 3739180
   },
   "source_id": "gemstat-open-archive",
   "water_body_types": {
-    "groundwater": 30671,
-    "lake": 43253,
-    "reservoir": 13886,
-    "river": 402080,
-    "wetland": 3109
+    "groundwater": 192410,
+    "lake": 340952,
+    "reservoir": 85544,
+    "river": 3103732,
+    "wetland": 16542
   },
   "water_fractions": {
-    "dissolved": 188961,
-    "suspended": 5439,
-    "total": 298599
+    "dissolved": 1613928,
+    "extractable": 33407,
+    "suspended": 6106,
+    "total": 2085739
   }
 }

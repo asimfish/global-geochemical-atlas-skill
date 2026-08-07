@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "citation_scope_counts": {
+    "dataset": 2396
+  },
+  "citation_text_count": 2396,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_doi": "10.26186/150328",
+  "dataset_doi_present": true,
+  "dataset_version": "2025-03-31",
+  "observation_denominator": 2396,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "publication_doi_observation_count": 0,
+  "source_id": "australia-ngsa-mercury",
+  "upstream_primary_source_observation_count": 0
+}

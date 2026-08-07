@@ -1,8 +1,8 @@
 {
   "band_counts": {
     "high": 0,
-    "low": 96,
-    "medium": 700
+    "low": 344,
+    "medium": 800
   },
   "band_thresholds": {
     "high": ">=0.80",
@@ -18,19 +18,20 @@
     "spatial": "Canonical coordinate availability plus declared CRS and coordinate uncertainty; original-only coordinates score zero."
   },
   "component_means": {
-    "completeness": 0.960981,
-    "method": 0.879397,
-    "overall": 0.764308,
-    "qc": 0.879623,
-    "source": 0.983166,
-    "spatial": 0.715578
+    "completeness": 0.941793,
+    "method": 0.847902,
+    "overall": 0.728176,
+    "qc": 0.824755,
+    "source": 0.977448,
+    "spatial": 0.573427
   },
   "confidence_version": "d2-confidence-v3",
   "gate_counts": {
-    "incomplete_method_context_medium_cap": 144,
-    "missing_canonical_coordinate_low_cap": 96,
-    "missing_coordinate_uncertainty_medium_cap": 652,
-    "missing_geologic_context_medium_cap": 492
+    "error_qc_low_cap": 104,
+    "incomplete_method_context_medium_cap": 248,
+    "missing_canonical_coordinate_low_cap": 336,
+    "missing_coordinate_uncertainty_medium_cap": 760,
+    "missing_geologic_context_medium_cap": 592
   },
   "gates": {
     "error_qc_low_cap": "Any error-level QC flag caps overall at 0.59 (low).",
@@ -72,10 +73,10 @@
       "spatial_fdr_alpha": 0.1,
       "spatial_grid_degrees": 2.0
     },
-    "input_row_count": 796,
-    "input_sha256": "b01771910ead702e6275a7f3c997a03346c48e413a68ef4289446269e0100337",
+    "input_row_count": 1144,
+    "input_sha256": "29d77ba24c231f36f32f80d681b67c415cf0bc0d5e0c286b8667f287fbd9e9a0",
     "missing_recommended_input_columns": [],
-    "run_id": "1f53e6970d34ebba",
+    "run_id": "e19d155bf634af68",
     "schema_map_sha256": null
   },
   "source_scoring": {

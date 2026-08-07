@@ -72,6 +72,9 @@ def validate_contract(contract: dict[str, Any]) -> list[dict[str, Any]]:
     if not isinstance(sources, list) or not sources:
         errors.append(mismatch("sources", "non-empty array", type(sources).__name__))
         return errors
+    required_source_count = contract.get("required_source_count")
+    if required_source_count is not None and len(sources) != required_source_count:
+        errors.append(mismatch("required_source_count", required_source_count, len(sources)))
     ids = [item.get("source_id") for item in sources if isinstance(item, dict)]
     if len(ids) != len(set(ids)):
         errors.append(mismatch("sources[].source_id", "unique", ids))
@@ -137,7 +140,7 @@ def audit_demo(source: dict[str, Any], demos_root: Path) -> dict[str, Any]:
             if not re.fullmatch(r"[0-9a-f]{64}", record_hash):
                 errors.append(mismatch(f"{row_kind}[{row_index}].{hash_field}", "lowercase SHA-256", record_hash))
             locator = display(row.get("source_locator"))
-            if not locator or "#row=" not in locator:
+            if not locator or not re.search(r"#(?:[^#]*row|record)=", locator):
                 errors.append(mismatch(f"{row_kind}[{row_index}].source_locator", "row-addressable locator", locator))
 
     expected_spot = {key: display(value) for key, value in source["spot_record"].items()}
