@@ -33,6 +33,10 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 
 这条回归使用 996 条 hash 固定的 USGS 真实土壤测定和固定版本 GLiM 岩性图。在生产阈值 `n≥20` 下，预期 996/996 完成地质匹配、12 个可比背景组完成分析、识别 6 个 high/low 候选异常，输出校验 0 错误/0 警告。它证明工程和科学规则可执行，不代表美国土壤的统计分布；完整证据见[生产演示说明](skills/global-geochemical-atlas/references/production-demo.md)。
 
+## 三分钟比赛 Demo
+
+可直接打开 [HTML 幻灯片](demo/presentation.html)，并按[逐页讲稿](demo/speaker-script.md)完成 180 秒演示。录制前运行 `bash demo/prepare_demo.sh /tmp/global-geochemical-atlas-live`；完整的快捷键、现场地图动作、失败降级和录制检查见 [Demo 使用说明](demo/README.md)。演示材料位于正式 Skill 目录之外，不会进入只包含参赛 Skill 的提交归档。
+
 ## 你会得到什么
 
 | 赛题交付物 | 运行产物 | 核心保证 |
