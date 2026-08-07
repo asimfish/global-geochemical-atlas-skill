@@ -1,6 +1,6 @@
 # 公开地球化学数据源路由
 
-核对日期：2026-08-06。端点和使用条件可能变化；每次运行重新记录访问日期和实际响应。
+核对日期：2026-08-08。端点和使用条件可能变化；每次运行重新记录访问日期和实际响应。
 
 ## 优先级
 
@@ -109,7 +109,7 @@
 - 元数据边界：注册文件和相关论文没有明确 CRS；变量表把 `As.75` 描述成“Arsenic-78”，且变量表与相关论文的采样年份分别为 2009–2013 和 2009–2012。适配器保留冲突，不猜测修复；
 - 命名边界：`SAfrica` 和 `Zimbambwe` 等发布方标签原样保留，规范名只写独立字段；18 个国家标签不代表均匀非洲覆盖。
 
-### `tpdc-china-mountain-soil`（已冻结文件契约，待 V4 适配）
+### `tpdc-china-mountain-soil`
 
 - 数据集：中国山地不同气候区土壤剖面多元素综合数据集；DOI `10.11888/Terre.tpdc.302620`；TPDC metadata UUID `2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1`；
 - 使用条件：TPDC 元数据返回 licence code `1`、`sharePolicy=A`、`shareType=online`；前端许可表把 code `1` 映射为 CC BY 4.0，使用时保留数据作者、数据 DOI 和 TPDC 署名；
@@ -119,7 +119,15 @@
 - 背景字段：逐行有母岩类别、母岩组、土纲、土类、海拔、经纬度、气候和植被信息，适合验证 V4 样品类型、地质背景与环境上下文 schema；
 - 方法：风干并过 2 mm 筛，HNO3-HF-HClO4 消解；Zn 用 ICP-AES，Cr/Cu/Ni/Pb 用 ICP-MS；论文报告空白、重复、GBW-07405、95%–105% 回收率和相应 RSD。工作簿没有逐行方法或检出限，因此这些事实只能以 publication scope 连接；
 - 质量边界：元数据和文件未声明坐标 CRS；SN5、SN6、SN7 各有多个发布坐标对；单独 bulk-density 表能补 58 个主表缺失行，但同时有六个非空 BD 冲突和五个坐标冲突，必须保留双来源值和冲突标记，不能覆盖主表；
-- 当前状态：文件契约和字段审计已完成，canonical adapter 尚未接入。按 V4 计划先完成 sample/method/geology schema，再制作 30 条复核和端到端 fixture。
+- 当前状态：canonical adapter 已注册并通过组件测试；40 条 per-source demo 与全量 6,570 条中国区域 fixture 切片（`fixtures/china/combined-v1`）均由该适配器生成。datum 未声明的 GPS 坐标保持 reported-only（canonical 留空，失败关闭），上图需 `--coordinate-mode reported` 并自动注入警示条；datum 证据审查记录在 `coordinate-policy-registry.json`。
+
+### `zenodo-yangtze-yellow-river-sediment`（中国区域 fixture 来源）
+
+- 数据集：Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments（Data Set S2）；DOI `10.5281/zenodo.7098563`；CC BY 4.0；
+- 内容：93 个 HCl-/AC-残余粒级分离河流沉积物样品 × As/Cr/Cu/Ni/Pb/Zn = 558 条观测；`Data Set S2.xlsx` 76,596 bytes，SHA-256 `413f54f6…`（Zenodo 官方 `md5:f71702e1…`）；
+- 单位证据：工作簿无单位行，构建器强制比对内嵌 BHVO-2/AGV-2/W-2/GSP-2 QC 块与认证 µg/g 值（容差 20%）后才接受 `ug/g`；
+- 质量边界：不发布采样坐标，记录只入标准化数据库、不进任何地图层；HCl/AC 残余与粒级保持独立比较组；
+- 登记范围：本来源只注册在中国区域 fixture（构建器 `scripts/build_china_demo.py`），不进入通用 source catalog 路由；完整登记、哈希与重建命令见 `references/china-fixture.md`。
 
 ## D1 适配器和稳定 ID
 
