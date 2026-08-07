@@ -49,10 +49,10 @@
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["filename", "sha256", "record_count", "synthetic_demo"],
+      "required": ["filename", "bytes", "record_count", "synthetic_demo"],
       "properties": {
         "filename": {"type": "string"},
-        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 1},
         "record_count": {"type": "integer", "minimum": 0},
         "synthetic_demo": {"type": "boolean"}
       }

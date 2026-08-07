@@ -1,0 +1,77 @@
+{
+  "archive": {
+    "members": [
+      {
+        "bytes": 367799,
+        "file_id": "UYO5XO",
+        "name": "2026-06-RZZ9VM_ANTARCTICA.csv",
+        "source_url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+      }
+    ]
+  },
+  "claim_boundary": "This evidence binds georoc-antarctica-intraplate to its DOI/PID, version, file identity, byte count, schema and registered row statistics. It does not claim continuous spatial coverage or cross-method comparability.",
+  "counts": {
+    "age_rows": 396,
+    "citation_ids": 18,
+    "complete_coordinate_rows": 424,
+    "distinct_sample_names": 407,
+    "exact_point_rows": 423,
+    "exact_point_target_observations": 1181,
+    "references_with_doi": 15,
+    "rock_types": {
+      "MET": 175,
+      "PER": 9,
+      "PLU": 161,
+      "VOL": 79
+    },
+    "rows_with_any_target": 313,
+    "rows_without_targets": 111,
+    "source_rows": 424,
+    "target_observations": 1183,
+    "target_observations_by_analyte": {
+      "As": 15,
+      "Cr": 241,
+      "Cu": 187,
+      "Hg": 0,
+      "Ni": 267,
+      "Pb": 276,
+      "Zn": 197
+    },
+    "unique_ids": 424
+  },
+  "observed_at": "2026-08-07T10:20:00Z",
+  "request": {
+    "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+  },
+  "response": {
+    "bytes": 367799
+  },
+  "schema": {
+    "required_field_count": 20,
+    "required_fields": [
+      "CITATIONS",
+      "TECTONIC SETTING",
+      "LOCATION",
+      "LATITUDE MIN",
+      "LATITUDE MAX",
+      "LONGITUDE MIN",
+      "LONGITUDE MAX",
+      "SAMPLE NAME",
+      "ROCK NAME",
+      "AGE",
+      "ROCK TYPE",
+      "MATERIAL",
+      "AS(PPM)",
+      "CR(PPM)",
+      "CU(PPM)",
+      "HG(PPM)",
+      "NI(PPM)",
+      "PB(PPM)",
+      "ZN(PPM)",
+      "UNIQUE_ID"
+    ]
+  },
+  "snapshot_id": "georoc-antarctica-intraplate:12.0:2026-08-07T10:20:00Z:01",
+  "snapshot_version": "geochemical-source-snapshot-v2-no-content-hash",
+  "source_id": "georoc-antarctica-intraplate"
+}

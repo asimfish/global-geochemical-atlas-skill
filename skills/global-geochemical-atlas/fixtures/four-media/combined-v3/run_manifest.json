@@ -1,5 +1,5 @@
 {
-  "claim_boundary": "The combined package binds 18 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
+  "claim_boundary": "The combined package binds 21 already verified mini-slices to one request and evidence chain. It does not increase their geographic representativeness or create independent replication.",
   "combined_demo_version": "d1-four-media-combined-v1",
   "comparison_isolation": {
     "explicit_boundaries": [
@@ -17,7 +17,10 @@
       "AfSIS numeric below-DL or below-QL results retain explicit observation evidence and are not promoted to ordinary detections.",
       "NGSA total-Hg TOS and BOS remain separate from other sediment horizons and extraction bases.",
       "GSJ marine and GSJ river sediment remain separate products; Hg ppb is never silently mixed with ppm fields.",
-      "PANGAEA Arabian Sea bulk-core sediment retains its generic publisher method scope and DOI lineage."
+      "PANGAEA Arabian Sea bulk-core sediment retains its generic publisher method scope and DOI lineage.",
+      "GEOROC Antarctica coordinate ranges are not converted to invented points and its missing row-level method remains explicit.",
+      "TPDC O/A/C soil horizons and article-scoped ICP-MS/ICP-AES assignments remain separate.",
+      "GEMAS aqua-regia and XRF analysis groups remain separate measurement bases and comparison partitions."
     ],
     "group_fields": [
       "element_or_analyte",
@@ -28,51 +31,52 @@
       "water_fraction",
       "grain_fraction",
       "measurement_basis",
+      "tectonic_setting_raw",
       "geologic_unit_raw",
       "matched_geologic_unit",
       "analytical_method",
       "method_scope",
       "digestion_or_extraction"
     ],
-    "partition_count": 126,
+    "partition_count": 160,
     "water_partition_count": 36,
     "water_partitions": {
-      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_mg_per_l\", \"\", \"\", \"Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma\", \"observation\", \"GEMStat dissolved operational fraction\"]": 1,
-      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_mg_per_l\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
-      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_l\", \"\", \"\", \"Extractable elements in acid preserved samples are analyzed by ICP-MS.\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
-      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_ug_per_l\", \"\", \"\", \"Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer\", \"observation\", \"GEMStat total operational fraction\"]": 3,
-      "[\"As\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"\", \"dissolved_surface_freshwater_mass_per_volume\", \"\", \"\", \"USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)\", \"observation\", \"dissolved water; USGS filtered-water method\"]": 48,
-      "[\"As\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
-      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 3,
-      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
-      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
-      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"Total metals by inductively coupled argon plasma emission spectrometry with external nebulizer.\", \"observation\", \"GEMStat total operational fraction\"]": 1,
-      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"Dissolved metals by inductively coupled argon plasma/mass spectrometer with pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
-      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"Extractable elements in acid preserved samples are analyzed by ICP-MS.\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
-      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
-      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
-      "[\"Cu\", \"water\", \"water_seawater\", \"\", \"\", \"dissolved\", \"\", \"dissolved_seawater_molar_per_mass\", \"\", \"\", \"BODC originator and methods record 326861\", \"cruise_analyte\", \"dissolved_fraction; linked BODC cruise-analyte method record\"]": 16,
-      "[\"Cu\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
-      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"Cold-Vapor Atomic Absorption Spectrometric Method with H2SO4, KMnO4 and K2S2O8 Digestion\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
-      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"Mercury by flameless atomic absorption on autoanalyzer\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
-      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_l\", \"\", \"\", \"Total mercury in water is analyzed by atomic fluorescence.\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
-      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_ug_per_l\", \"\", \"\", \"Determination of mercury concentration using flameless atomic absorption on an autoanalyser.\", \"observation\", \"GEMStat total operational fraction\"]": 2,
-      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
-      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
-      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
-      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
-      "[\"Ni\", \"water\", \"water_seawater\", \"\", \"\", \"dissolved\", \"\", \"dissolved_seawater_molar_per_mass\", \"\", \"\", \"BODC originator and methods record 571336\", \"cruise_analyte\", \"dissolved_fraction; linked BODC cruise-analyte method record\"]": 16,
-      "[\"Ni\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
-      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
-      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
-      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
-      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
-      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
-      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
-      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
-      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
-      "[\"Zn\", \"water\", \"water_seawater\", \"\", \"\", \"dissolved\", \"\", \"dissolved_seawater_molar_per_mass\", \"\", \"\", \"BODC originator and methods record 571336\", \"cruise_analyte\", \"dissolved_fraction; linked BODC cruise-analyte method record\"]": 16,
-      "[\"Zn\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12
+      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma\", \"observation\", \"GEMStat dissolved operational fraction\"]": 1,
+      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
+      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable elements in acid preserved samples are analyzed by ICP-MS.\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
+      "[\"As\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer\", \"observation\", \"GEMStat total operational fraction\"]": 3,
+      "[\"As\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"\", \"dissolved_surface_freshwater_mass_per_volume\", \"\", \"\", \"\", \"USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)\", \"observation\", \"dissolved water; USGS filtered-water method\"]": 48,
+      "[\"As\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
+      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 3,
+      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
+      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
+      "[\"Cr\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Total metals by inductively coupled argon plasma emission spectrometry with external nebulizer.\", \"observation\", \"GEMStat total operational fraction\"]": 1,
+      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Dissolved metals by inductively coupled argon plasma/mass spectrometer with pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
+      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable elements in acid preserved samples are analyzed by ICP-MS.\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
+      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
+      "[\"Cu\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
+      "[\"Cu\", \"water\", \"water_seawater\", \"\", \"\", \"dissolved\", \"\", \"dissolved_seawater_molar_per_mass\", \"\", \"\", \"\", \"BODC originator and methods record 326861\", \"cruise_analyte\", \"dissolved_fraction; linked BODC cruise-analyte method record\"]": 16,
+      "[\"Cu\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
+      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Cold-Vapor Atomic Absorption Spectrometric Method with H2SO4, KMnO4 and K2S2O8 Digestion\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
+      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Mercury by flameless atomic absorption on autoanalyzer\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
+      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Total mercury in water is analyzed by atomic fluorescence.\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
+      "[\"Hg\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Determination of mercury concentration using flameless atomic absorption on an autoanalyser.\", \"observation\", \"GEMStat total operational fraction\"]": 2,
+      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
+      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
+      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
+      "[\"Ni\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
+      "[\"Ni\", \"water\", \"water_seawater\", \"\", \"\", \"dissolved\", \"\", \"dissolved_seawater_molar_per_mass\", \"\", \"\", \"\", \"BODC originator and methods record 571336\", \"cruise_analyte\", \"dissolved_fraction; linked BODC cruise-analyte method record\"]": 16,
+      "[\"Ni\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12,
+      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
+      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
+      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
+      "[\"Pb\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
+      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"dissolved\", \"\", \"freshwater_dissolved_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Dissolved metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization\", \"observation\", \"GEMStat dissolved operational fraction\"]": 2,
+      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"extractable\", \"\", \"freshwater_extractable_operational_fraction_ug_per_l\", \"\", \"\", \"\", \"Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)\", \"observation\", \"GEMStat extractable operational fraction\"]": 2,
+      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"suspended\", \"\", \"freshwater_suspended_operational_fraction_ug_per_g\", \"\", \"\", \"\", \"Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020\", \"observation\", \"GEMStat suspended operational fraction\"]": 2,
+      "[\"Zn\", \"water\", \"water_river\", \"\", \"\", \"total\", \"\", \"freshwater_total_operational_fraction_mg_per_l\", \"\", \"\", \"\", \"Inductively Coupled Plasma (ICP) Method (Total Metals after Rigorous Digestion)\", \"observation\", \"GEMStat total operational fraction\"]": 2,
+      "[\"Zn\", \"water\", \"water_seawater\", \"\", \"\", \"dissolved\", \"\", \"dissolved_seawater_molar_per_mass\", \"\", \"\", \"\", \"BODC originator and methods record 571336\", \"cruise_analyte\", \"dissolved_fraction; linked BODC cruise-analyte method record\"]": 16,
+      "[\"Zn\", \"water\", \"water_stream\", \"\", \"\", \"dissolved\", \"<0.45 micrometre filtered fraction\", \"dissolved_<0.45um_stream_water\", \"\", \"\", \"\", \"ICP-QMS for published trace metals\", \"file\", \"filtered below 0.45 micrometres and acidified to 1% v/v HNO3\"]": 12
     }
   },
   "data_mode": "fixture",
@@ -86,6 +90,17 @@
       "record_count": 48,
       "source_evidence_score": 85.0,
       "source_id": "georoc-archaean",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_bytes": 66962,
+      "evidence_path": "fixtures/source-demos/georoc-antarctica-intraplate/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 51758,
+      "input_path": "fixtures/source-demos/georoc-antarctica-intraplate/demo_input.csv",
+      "record_count": 48,
+      "source_evidence_score": 85.0,
+      "source_id": "georoc-antarctica-intraplate",
       "use_mode": "normalized_analysis"
     },
     {
@@ -274,34 +289,56 @@
       "source_evidence_score": 85.0,
       "source_id": "pangaea-arabian-sea-sediment",
       "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_bytes": 58880,
+      "evidence_path": "fixtures/source-demos/tpdc-china-mountain-soil/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 49376,
+      "input_path": "fixtures/source-demos/tpdc-china-mountain-soil/demo_input.csv",
+      "record_count": 40,
+      "source_evidence_score": 85.0,
+      "source_id": "tpdc-china-mountain-soil",
+      "use_mode": "normalized_analysis"
+    },
+    {
+      "evidence_bytes": 98116,
+      "evidence_path": "fixtures/source-demos/gemas-europe/sources.jsonl",
+      "evidence_tier": "A",
+      "input_bytes": 83463,
+      "input_path": "fixtures/source-demos/gemas-europe/demo_input.csv",
+      "record_count": 52,
+      "source_evidence_score": 85.0,
+      "source_id": "gemas-europe",
+      "use_mode": "normalized_analysis"
     }
   ],
   "generated_at": "2026-08-06T16:30:00Z",
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 1029299,
+      "bytes": 1209831,
       "path": "demo_input.csv"
     },
     {
-      "bytes": 1642920,
+      "bytes": 1866878,
       "path": "sources.jsonl"
     }
   ],
   "record_counts": {
     "by_analyte": {
-      "As": 220,
-      "Cr": 24,
-      "Cu": 204,
-      "Hg": 64,
-      "Ni": 204,
-      "Pb": 24,
-      "Zn": 204
+      "As": 236,
+      "Cr": 48,
+      "Cu": 228,
+      "Hg": 68,
+      "Ni": 228,
+      "Pb": 48,
+      "Zn": 228
     },
     "by_medium": {
-      "rock": 48,
+      "rock": 96,
       "sediment": 408,
-      "soil": 288,
+      "soil": 380,
       "water": 200
     },
     "by_source": {
@@ -313,7 +350,9 @@
       "foregs-stream-water": 48,
       "foregs-subsoil": 48,
       "foregs-topsoil": 48,
+      "gemas-europe": 52,
       "gemstat-open-archive": 56,
+      "georoc-antarctica-intraplate": 48,
       "georoc-archaean": 48,
       "geotraces-idp2025": 48,
       "japan-gsj-geochemical-map": 48,
@@ -321,10 +360,11 @@
       "norway-marchem": 112,
       "pangaea-arabian-sea-sediment": 48,
       "pangaea-north-africa-soil": 48,
+      "tpdc-china-mountain-soil": 40,
       "us-wqp-sacramento-river-arsenic": 48,
       "usgs-conus-soil": 48
     },
-    "total": 944
+    "total": 1084
   },
   "request": {
     "elements": [
@@ -376,6 +416,7 @@
         ],
         "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
         "selected_sources": [
+          "georoc-antarctica-intraplate",
           "georoc-archaean"
         ],
         "status": "partial"
@@ -429,12 +470,10 @@
           "brazil-sgb-geochemistry",
           "earthchem-library",
           "foregs-europe",
-          "gemas-europe",
           "ireland-tellus",
           "pangaea-repository",
           "soils4africa",
           "south-africa-cgs-geochemistry",
-          "tpdc-china-mountain-soil",
           "usgs-ngdb",
           "wosis"
         ],
@@ -444,7 +483,9 @@
           "foregs-humus",
           "foregs-subsoil",
           "foregs-topsoil",
+          "gemas-europe",
           "pangaea-north-africa-soil",
+          "tpdc-china-mountain-soil",
           "usgs-conus-soil"
         ],
         "status": "partial"
@@ -484,7 +525,9 @@
       "foregs-stream-water",
       "foregs-subsoil",
       "foregs-topsoil",
+      "gemas-europe",
       "gemstat-open-archive",
+      "georoc-antarctica-intraplate",
       "georoc-archaean",
       "geotraces-idp2025",
       "japan-gsj-geochemical-map",
@@ -492,12 +535,13 @@
       "norway-marchem",
       "pangaea-arabian-sea-sediment",
       "pangaea-north-africa-soil",
+      "tpdc-china-mountain-soil",
       "us-wqp-sacramento-river-arsenic",
       "usgs-conus-soil"
     ],
     "status": "partial"
   },
-  "scientific_scope": "18 verified source demos combined to exercise one four-media workflow",
+  "scientific_scope": "21 verified source demos combined to exercise one four-media workflow",
   "warnings": [
     "This combined fixture proves interface compatibility, not representative global coverage.",
     "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",

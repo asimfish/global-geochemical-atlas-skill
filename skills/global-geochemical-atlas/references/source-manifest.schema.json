@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:geochemistry-source-manifest:d1-v1",
+  "$id": "urn:ai4s:geochemistry-source-manifest:d1-v2",
   "title": "D1 geochemical source and evidence manifest",
   "type": "object",
   "additionalProperties": false,
@@ -15,14 +15,13 @@
     "claim_boundary"
   ],
   "properties": {
-    "manifest_version": {"const": "geochemical-source-manifest-v1"},
+    "manifest_version": {"const": "geochemical-source-manifest-v2"},
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["filename", "sha256", "bytes", "record_count"],
+      "required": ["filename", "bytes", "record_count"],
       "properties": {
         "filename": {"type": "string", "minLength": 1},
-        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "bytes": {"type": "integer", "minimum": 1},
         "record_count": {"type": "integer", "minimum": 1}
       }
@@ -83,19 +82,28 @@
       "additionalProperties": false,
       "required": [
         "filename",
-        "sha256",
+        "bytes",
         "confidence_version",
         "run_id",
-        "input_sha256",
+        "input_identity",
         "not_a_probability",
         "contract"
       ],
       "properties": {
         "filename": {"const": "confidence_report.json"},
-        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 1},
         "confidence_version": {"type": "string", "minLength": 1},
         "run_id": {"type": ["string", "null"]},
-        "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "input_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["filename", "bytes", "record_count"],
+          "properties": {
+            "filename": {"type": "string", "minLength": 1},
+            "bytes": {"type": "integer", "minimum": 1},
+            "record_count": {"type": "integer", "minimum": 1}
+          }
+        },
         "not_a_probability": {"const": true},
         "contract": {"type": "string", "minLength": 1}
       }

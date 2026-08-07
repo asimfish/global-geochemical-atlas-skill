@@ -1,5 +1,7 @@
 # D1 候选来源逐源复核报告
 
+> 历史审计快照：本文主体记录 2026-08-06 时的 14 来源阶段，不是当前覆盖总结。当前状态以 `v4-source-completeness.md`、`v4-full-population-profile.md` 和 V4 计划为准。文中的历史 MD5/SHA-256 值只为档案兼容保留；V4 不读取、比对、更新或使用它们准入、评分、缓存和验收。
+
 复核标准：`geochemical-source-evidence-v3`
 
 更新时间：2026-08-06 18:35（Asia/Shanghai）

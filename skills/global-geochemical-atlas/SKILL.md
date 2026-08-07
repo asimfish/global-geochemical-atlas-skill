@@ -47,7 +47,7 @@ offline: boolean
 
 只访问公开科学来源。搜索结果摘要只用于发现数据集，不作为测量证据。
 
-需要离线展示真实四介质接口时，使用已经 hash 固定的十五来源、792 条观测最小切片：
+需要离线展示真实四介质接口时，使用已按版本、文件身份、字节数、schema 和行数固定的二十一来源、1,084 条观测最小切片：
 
 ```bash
 python scripts/build_four_media_demo.py \
@@ -77,7 +77,7 @@ python scripts/build_v4_full_profiles.py --check
 - 下载 URL、查询参数、访问日期和版本日期；
 - 本次科研使用条件、署名要求和必要申请；
 - 服务端过滤与本地过滤；
-- 响应类型、字节数、记录数和 SHA-256；
+- 响应状态与类型、字节数、成员清单、schema、记录数和关键分类统计；
 - 原字段到 canonical 字段的映射；
 - 失败状态和未覆盖范围。
 
@@ -92,9 +92,9 @@ python scripts/download_data.py \
   --max-bytes 50000000
 ```
 
-优先提供 `--expected-sha256`。使用 `--offline` 时只接受哈希匹配的缓存。不要抓取需要交互同意或禁止自动访问的门户页面。
+V4 不计算或校验 MD5、SHA-256 等内容哈希。使用 `--offline` 时，只复用 DOI/PID、版本、文件 ID/文件名、字节数、schema、行数和关键统计均符合登记契约的缓存。不要抓取需要交互同意或禁止自动访问的门户页面。
 
-动态官方 API 没有不可变发布版本时，按 [references/dynamic-snapshot-policy.md](references/dynamic-snapshot-policy.md) 固定精确请求、UTC 时间、响应 hash、成员清单和数量：
+动态官方 API 没有不可变发布版本时，按 [references/dynamic-snapshot-policy.md](references/dynamic-snapshot-policy.md) 固定精确请求、UTC 时间、响应状态、字节数、成员清单、schema 和数量：
 
 ```bash
 python scripts/snapshot_source.py create \
@@ -194,7 +194,7 @@ python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 
 每个关键结论绑定 `source_id + source_locator`。把事实、脚本计算、模型推断、假设和未验证项分开。输出字段定义见 [references/result.schema.json](references/result.schema.json)，记录字段定义见 [references/geochemistry-record.schema.json](references/geochemistry-record.schema.json)。
 
-来源打包必须符合 [references/source-manifest.schema.json](references/source-manifest.schema.json)，置信度报告必须符合 [references/confidence-report.schema.json](references/confidence-report.schema.json)。保留二者的输入哈希与报告哈希绑定，不要在证据链阶段重新计算置信度。
+来源打包必须符合 [references/source-manifest.schema.json](references/source-manifest.schema.json)，置信度报告必须符合 [references/confidence-report.schema.json](references/confidence-report.schema.json)。用输入文件身份、字节数和记录数关联二者；不计算内容哈希，也不在证据链阶段重新计算置信度。
 
 来源筛选不能只看旧的 `approved`。先生成 `source_evidence_scores.json`，分别报告 `access_status`、`research_use_status`、八项证据维度、`evidence_tier` 和 `use_mode`。缺少软证据会降分但不删除来源；只有访问、科研使用、损坏/截断和来源无法识别等操作边界限制当前动作。完整规则见 [references/source-acceptance-standard.md](references/source-acceptance-standard.md)。
 

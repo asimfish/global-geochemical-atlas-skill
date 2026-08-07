@@ -197,6 +197,16 @@ def registry_candidate(source_id: str, path: Path = DEFAULT_REGISTRY) -> Dataset
     )
 
 
+def source_lineage_id(source_id: str) -> str:
+    """Return the upstream project lineage used for coverage independence."""
+
+    if source_id.startswith("georoc-"):
+        return "georoc-compilation"
+    if source_id.startswith("foregs-"):
+        return "foregs-geochemical-atlas-europe-2005"
+    return source_id
+
+
 def _download_args(
     *,
     url: str,

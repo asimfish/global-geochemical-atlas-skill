@@ -23,6 +23,7 @@ import standardize_geochemistry as standardizer
 COMBINED_VERSION = "d1-four-media-combined-v1"
 SOURCE_ORDER = (
     "georoc-archaean",
+    "georoc-antarctica-intraplate",
     "usgs-conus-soil",
     "norway-marchem",
     "geotraces-idp2025",
@@ -40,9 +41,12 @@ SOURCE_ORDER = (
     "australia-ngsa-mercury",
     "japan-gsj-marine-sediment",
     "pangaea-arabian-sea-sediment",
+    "tpdc-china-mountain-soil",
+    "gemas-europe",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
+    "georoc-antarctica-intraplate": "rock",
     "usgs-conus-soil": "soil",
     "norway-marchem": "sediment",
     "geotraces-idp2025": "water",
@@ -60,6 +64,8 @@ EXPECTED_MEDIA = {
     "australia-ngsa-mercury": "sediment",
     "japan-gsj-marine-sediment": "sediment",
     "pangaea-arabian-sea-sediment": "sediment",
+    "tpdc-china-mountain-soil": "soil",
+    "gemas-europe": "soil",
 }
 
 
@@ -233,6 +239,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "NGSA total-Hg TOS and BOS remain separate from other sediment horizons and extraction bases.",
                 "GSJ marine and GSJ river sediment remain separate products; Hg ppb is never silently mixed with ppm fields.",
                 "PANGAEA Arabian Sea bulk-core sediment retains its generic publisher method scope and DOI lineage.",
+                "GEOROC Antarctica coordinate ranges are not converted to invented points and its missing row-level method remains explicit.",
+                "TPDC O/A/C soil horizons and article-scoped ICP-MS/ICP-AES assignments remain separate.",
+                "GEMAS aqua-regia and XRF analysis groups remain separate measurement bases and comparison partitions.",
             ],
         },
         "outputs": [

@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "adapter_parse_nonempty": true,
+    "registered_file_identity_and_bytes_match": true,
+    "registered_schema_present": true,
+    "review_sample_prepared": true,
+    "target_count_matches_registry": true
+  },
+  "claim_boundary": "This evidence binds gemas-europe to its DOI/PID, version, file identity, byte count, schema and registered row statistics. It does not claim continuous spatial coverage or cross-method comparability.",
+  "counts": {
+    "analysis_group_observations": {
+      "AR": 28917,
+      "XRF": 24786
+    },
+    "analysis_records": 8262,
+    "country_labels": 33,
+    "physical_samples": 4131,
+    "target_observations": 53703,
+    "target_value_counts": {
+      "As": 8262,
+      "Cr": 8262,
+      "Cu": 8262,
+      "Hg": 4131,
+      "Ni": 8262,
+      "Pb": 8262,
+      "Zn": 8262
+    }
+  },
+  "reconciliation_version": "v4-m6-source-audit-v1-no-content-hash",
+  "snapshot_id": "gemas-europe:GSI-ArcGIS-Enterprise-republication-2024:2026-08-07T10:20:00Z:01",
+  "source_id": "gemas-europe",
+  "status": "PASS"
+}

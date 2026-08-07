@@ -176,7 +176,7 @@
       "filename": "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv"
     }
   ],
-  "last_successful_fetch_at": "2026-08-06T13:34:27Z",
+  "last_successful_fetch_at": null,
   "last_successful_parse_at": "2026-08-06T10:05:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",

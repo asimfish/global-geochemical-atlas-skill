@@ -2706,6 +2706,15 @@
         }]
       },
       "required_fields": ["ID", "COUNTRY", "TYPE_", "TYPE2", "XCOO", "YCOO", "AS_", "CR", "CU", "HG", "NI", "PB", "ZN", "AS_XRF", "CR_XRF", "CU_XRF", "NI_XRF", "PB_XRF", "ZN_XRF"],
+      "target_analytes": {
+        "As": ["AS_", "AS_XRF"],
+        "Cr": ["CR", "CR_XRF"],
+        "Cu": ["CU", "CU_XRF"],
+        "Hg": ["HG"],
+        "Ni": ["NI", "NI_XRF"],
+        "Pb": ["PB", "PB_XRF"],
+        "Zn": ["ZN", "ZN_XRF"]
+      },
       "analysis_groups": {
         "AR": {
           "target_analytes": {"As": "AS_", "Cr": "CR", "Cu": "CU", "Hg": "HG", "Ni": "NI", "Pb": "PB", "Zn": "ZN"},

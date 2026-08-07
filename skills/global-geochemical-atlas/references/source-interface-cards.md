@@ -1,5 +1,7 @@
 # D1 数据源接口卡片
 
+> V4 无哈希规则覆盖本文中早期接口卡的 checksum/hash 表述：当前使用 DOI/PID、版本、文件 ID/名称、发布/访问时间、字节数、schema、行数和关键统计；不计算或校验内容哈希。
+
 核对日期：2026-08-06。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
 
 ## V1 兼容状态说明

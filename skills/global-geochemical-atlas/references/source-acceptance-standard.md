@@ -1,8 +1,8 @@
 # D1 数据源使用边界与证据标准
 
-版本：`geochemical-source-evidence-v3`
+版本：`geochemical-source-evidence-v4-no-content-hash`
 
-核对日期：2026-08-05
+核对日期：2026-08-07
 
 ## 目的
 
@@ -37,8 +37,8 @@
 | 维度 | 权重 | 满分证据 |
 |---|---:|---|
 | `identity_publisher` | 10 | 标题、发布者、官方落地页和稳定标识明确 |
-| `version_snapshot` | 15 | 不可变 DOI/版本，或精确请求、时间和 hash 组成的动态快照 |
-| `file_record_integrity` | 15 | 文件成员、hash、分页和记录数量可以对账 |
+| `version_snapshot` | 15 | 不可变 DOI/PID/版本，或精确请求、获取时间、文件身份和发布元数据组成的动态快照 |
+| `file_record_integrity` | 15 | 文件 ID/名称、字节数、成员、schema、分页、记录数和关键统计可以对账 |
 | `provenance` | 15 | 可以回到数据集、文件、原始记录、样品和引用 |
 | `schema_semantics` | 15 | 样品、介质、元素、值、单位、坐标和测量基准可解释 |
 | `method_qc_metadata` | 10 | 消解/提取、仪器、实验室、检出限、不确定度和 QC 可用 |
@@ -56,6 +56,8 @@
 | `not_applicable` | 从分母移除 | 该维度确实不适用，并说明理由 |
 
 人工复核使用渐进分：未开始 0 分，1–9 条 2 分，10–29 条 5 分，30 条分层复核通过或不足 30 条时全量通过为 10 分。发现未解决的系统性映射错误时记为 `conflict`。
+
+V4 不计算、校验或评分 MD5、SHA-256 等内容哈希。哈希不得影响准入、缓存命中、漂移检测、回归测试或交付验收。
 
 ## 证据等级
 

@@ -50,6 +50,7 @@
         "distinct_sample_count",
         "independent_lineage_count",
         "source_ids",
+        "lineage_ids",
         "valid_coordinate_sample_count",
         "comparable_observation_count",
         "covered_spatial_cells",
@@ -60,6 +61,11 @@
         "distinct_sample_count": {"type": "integer", "minimum": 0},
         "independent_lineage_count": {"type": "integer", "minimum": 0},
         "source_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "lineage_ids": {
           "type": "array",
           "items": {"type": "string", "minLength": 1},
           "uniqueItems": true

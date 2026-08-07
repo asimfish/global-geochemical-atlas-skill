@@ -26,7 +26,7 @@
       "filename": "AfSIS_Phase_I_wet_chemistry_variables_v2.xlsx"
     }
   ],
-  "last_successful_fetch_at": "2026-08-06T10:02:30Z",
+  "last_successful_fetch_at": null,
   "last_successful_parse_at": "2026-08-06T10:05:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",

@@ -1,0 +1,22 @@
+{
+  "access_status_counts": {
+    "public_download": 53703
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "attribution_required_counts": {
+    "true": 53703
+  },
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+  "license_id": "CC-BY-4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "redistribution_is_not_a_research_use_gate": true,
+  "redistribution_status_counts": {
+    "not_evaluated_for_project_output": 53703
+  },
+  "research_use_status_counts": {
+    "permitted_research": 53703
+  },
+  "source_id": "gemas-europe"
+}

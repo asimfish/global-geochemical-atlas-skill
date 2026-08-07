@@ -1,31 +1,31 @@
 {
   "claim_boundary": "Source fields are preserved from the input. A locator is not independently verified unless a download manifest or source-specific audit says so. Declared licenses still require source-specific review.",
   "confidence_report": {
-    "bytes": 1980,
+    "bytes": 2045,
     "confidence_version": "d2-confidence-v1",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
     "input_identity": {
-      "bytes": 1029299,
+      "bytes": 1209831,
       "filename": "demo_input.csv",
-      "record_count": 944
+      "record_count": 1084
     },
     "not_a_probability": true,
-    "run_id": "run-v2%7Cdemo_input.csv%7C1029299%7C944%7C%7B%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%7D"
+    "run_id": "run-v2%7Cdemo_input.csv%7C1209831%7C1084%7C%7B%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22tectonic_setting_raw%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%7D"
   },
   "coverage": {
     "declared_license_rate": 1.0,
-    "records_with_declared_license": 944,
-    "records_with_source_locator": 944,
+    "records_with_declared_license": 1084,
+    "records_with_source_locator": 1084,
     "source_locator_rate": 1.0
   },
   "input": {
-    "bytes": 1029299,
+    "bytes": 1209831,
     "filename": "demo_input.csv",
-    "record_count": 944
+    "record_count": 1084
   },
   "manifest_version": "geochemical-source-manifest-v2",
-  "source_count": 18,
+  "source_count": 21,
   "sources": [
     {
       "all_records_license_declared": true,
@@ -216,6 +216,28 @@
       "all_records_located": true,
       "evidence_type": "source_declared_in_input",
       "example_locators": [
+        "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+        "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+        "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+        "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=4"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 52,
+      "locator_count": 4,
+      "record_count": 52,
+      "source_id": "gemas-europe",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
         "Arsenic.csv#row=26008",
         "Arsenic.csv#row=26052",
         "Arsenic.csv#row=26290",
@@ -230,6 +252,29 @@
       "locator_count": 56,
       "record_count": 56,
       "source_id": "gemstat-open-archive",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "2026-06-RZZ9VM_ANTARCTICA.csv#row=135",
+        "2026-06-RZZ9VM_ANTARCTICA.csv#row=136",
+        "2026-06-RZZ9VM_ANTARCTICA.csv#row=137",
+        "2026-06-RZZ9VM_ANTARCTICA.csv#row=2",
+        "2026-06-RZZ9VM_ANTARCTICA.csv#row=22"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-SA-4.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 27,
+      "record_count": 48,
+      "source_id": "georoc-antarctica-intraplate",
       "source_tiers": [
         "official_curated"
       ]
@@ -391,6 +436,29 @@
       "locator_count": 12,
       "record_count": 48,
       "source_id": "pangaea-north-africa-soil",
+      "source_tiers": [
+        "official_curated"
+      ]
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "evidence_type": "source_declared_in_input",
+      "example_locators": [
+        "Soil dataset.xlsx#sheet1-row=2",
+        "Soil dataset.xlsx#sheet1-row=3",
+        "Soil dataset.xlsx#sheet1-row=4",
+        "Soil dataset.xlsx#sheet1-row=5",
+        "Soil dataset.xlsx#sheet1-row=6"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "located_record_count": 40,
+      "locator_count": 8,
+      "record_count": 40,
+      "source_id": "tpdc-china-mountain-soil",
       "source_tiers": [
         "official_curated"
       ]

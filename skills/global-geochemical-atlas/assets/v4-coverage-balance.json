@@ -5,21 +5,33 @@
   "media": {
     "rock": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": 395,
-      "distinct_sample_count": 25659,
+      "covered_spatial_cells": 413,
+      "distinct_sample_count": 25972,
       "independent_lineage_count": 1,
-      "observation_count": 65988,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
+      "observation_count": 67171,
       "source_ids": [
+        "georoc-antarctica-intraplate",
         "georoc-archaean"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 20866
+      "valid_coordinate_sample_count": 21178
     },
     "sediment": {
       "comparable_observation_count": 25236,
       "covered_spatial_cells": 1313,
       "distinct_sample_count": 12831,
-      "independent_lineage_count": 7,
+      "independent_lineage_count": 6,
+      "lineage_ids": [
+        "australia-ngsa-mercury",
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
       "observation_count": 82282,
       "source_ids": [
         "australia-ngsa-mercury",
@@ -34,27 +46,43 @@
       "valid_coordinate_sample_count": 12831
     },
     "soil": {
-      "comparable_observation_count": 34468,
-      "covered_spatial_cells": 1472,
-      "distinct_sample_count": 18469,
+      "comparable_observation_count": 94741,
+      "covered_spatial_cells": 1851,
+      "distinct_sample_count": 23914,
       "independent_lineage_count": 6,
-      "observation_count": 93508,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
+      "observation_count": 153781,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 18343
+      "valid_coordinate_sample_count": 23788
     },
     "water": {
       "comparable_observation_count": 306516,
       "covered_spatial_cells": 2440,
       "distinct_sample_count": 708605,
       "independent_lineage_count": 4,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
+      ],
       "observation_count": 3783544,
       "source_ids": [
         "foregs-stream-water",
@@ -69,66 +97,123 @@
   "medium_elements": {
     "rock|As": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": 96,
-      "distinct_sample_count": 4488,
+      "covered_spatial_cells": 97,
+      "distinct_sample_count": 4503,
       "element": "As",
       "independent_lineage_count": 1,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
       "medium": "rock",
-      "observation_count": 4765,
+      "observation_count": 4780,
       "source_ids": [
+        "georoc-antarctica-intraplate",
         "georoc-archaean"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 4206
+      "valid_coordinate_sample_count": 4221
+    },
+    "rock|Cr": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 14,
+      "distinct_sample_count": 241,
+      "element": "Cr",
+      "independent_lineage_count": 1,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
+      "medium": "rock",
+      "observation_count": 241,
+      "source_ids": [
+        "georoc-antarctica-intraplate"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 240
     },
     "rock|Cu": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": 315,
-      "distinct_sample_count": 17443,
+      "covered_spatial_cells": 329,
+      "distinct_sample_count": 17630,
       "element": "Cu",
       "independent_lineage_count": 1,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
       "medium": "rock",
-      "observation_count": 17890,
+      "observation_count": 18077,
       "source_ids": [
+        "georoc-antarctica-intraplate",
         "georoc-archaean"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 14218
+      "valid_coordinate_sample_count": 14405
     },
     "rock|Ni": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": 388,
-      "distinct_sample_count": 25138,
+      "covered_spatial_cells": 404,
+      "distinct_sample_count": 25405,
       "element": "Ni",
       "independent_lineage_count": 1,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
       "medium": "rock",
-      "observation_count": 25688,
+      "observation_count": 25955,
       "source_ids": [
+        "georoc-antarctica-intraplate",
         "georoc-archaean"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 20480
+      "valid_coordinate_sample_count": 20746
+    },
+    "rock|Pb": {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 17,
+      "distinct_sample_count": 276,
+      "element": "Pb",
+      "independent_lineage_count": 1,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
+      "medium": "rock",
+      "observation_count": 276,
+      "source_ids": [
+        "georoc-antarctica-intraplate"
+      ],
+      "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+      "valid_coordinate_sample_count": 276
     },
     "rock|Zn": {
       "comparable_observation_count": 0,
-      "covered_spatial_cells": 316,
-      "distinct_sample_count": 17215,
+      "covered_spatial_cells": 328,
+      "distinct_sample_count": 17412,
       "element": "Zn",
       "independent_lineage_count": 1,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
       "medium": "rock",
-      "observation_count": 17645,
+      "observation_count": 17842,
       "source_ids": [
+        "georoc-antarctica-intraplate",
         "georoc-archaean"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 14037
+      "valid_coordinate_sample_count": 14234
     },
     "sediment|As": {
       "comparable_observation_count": 4100,
       "covered_spatial_cells": 768,
       "distinct_sample_count": 10435,
       "element": "As",
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 5,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
       "medium": "sediment",
       "observation_count": 12029,
       "source_ids": [
@@ -147,7 +232,13 @@
       "covered_spatial_cells": 693,
       "distinct_sample_count": 9555,
       "element": "Cr",
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 4,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "pangaea-arabian-sea-sediment"
+      ],
       "medium": "sediment",
       "observation_count": 11149,
       "source_ids": [
@@ -165,7 +256,14 @@
       "covered_spatial_cells": 768,
       "distinct_sample_count": 10435,
       "element": "Cu",
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 5,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
       "medium": "sediment",
       "observation_count": 12029,
       "source_ids": [
@@ -184,7 +282,13 @@
       "covered_spatial_cells": 662,
       "distinct_sample_count": 10323,
       "element": "Hg",
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 4,
+      "lineage_ids": [
+        "australia-ngsa-mercury",
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment"
+      ],
       "medium": "sediment",
       "observation_count": 11868,
       "source_ids": [
@@ -202,7 +306,14 @@
       "covered_spatial_cells": 768,
       "distinct_sample_count": 10435,
       "element": "Ni",
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 5,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
       "medium": "sediment",
       "observation_count": 12029,
       "source_ids": [
@@ -221,7 +332,13 @@
       "covered_spatial_cells": 693,
       "distinct_sample_count": 9555,
       "element": "Pb",
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 4,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "pangaea-arabian-sea-sediment"
+      ],
       "medium": "sediment",
       "observation_count": 11149,
       "source_ids": [
@@ -239,7 +356,14 @@
       "covered_spatial_cells": 768,
       "distinct_sample_count": 10435,
       "element": "Zn",
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 5,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
       "medium": "sediment",
       "observation_count": 12029,
       "source_ids": [
@@ -254,130 +378,191 @@
       "valid_coordinate_sample_count": 10435
     },
     "soil|As": {
-      "comparable_observation_count": 5163,
-      "covered_spatial_cells": 1469,
-      "distinct_sample_count": 18062,
+      "comparable_observation_count": 13425,
+      "covered_spatial_cells": 1809,
+      "distinct_sample_count": 22193,
       "element": "As",
       "independent_lineage_count": 5,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "usgs-conus-soil"
+      ],
       "medium": "soil",
-      "observation_count": 19860,
+      "observation_count": 28122,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 17936
+      "valid_coordinate_sample_count": 22067
     },
     "soil|Cr": {
-      "comparable_observation_count": 5173,
-      "covered_spatial_cells": 586,
-      "distinct_sample_count": 3692,
+      "comparable_observation_count": 14749,
+      "covered_spatial_cells": 967,
+      "distinct_sample_count": 9137,
       "element": "Cr",
-      "independent_lineage_count": 4,
+      "independent_lineage_count": 5,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil"
+      ],
       "medium": "soil",
-      "observation_count": 5299,
+      "observation_count": 14875,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-subsoil",
         "foregs-topsoil",
-        "pangaea-north-africa-soil"
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 3566
+      "valid_coordinate_sample_count": 9011
     },
     "soil|Cu": {
-      "comparable_observation_count": 5530,
-      "covered_spatial_cells": 1471,
-      "distinct_sample_count": 18429,
+      "comparable_observation_count": 15106,
+      "covered_spatial_cells": 1851,
+      "distinct_sample_count": 23874,
       "element": "Cu",
       "independent_lineage_count": 6,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
       "medium": "soil",
-      "observation_count": 20227,
+      "observation_count": 29803,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 18303
+      "valid_coordinate_sample_count": 23748
     },
     "soil|Hg": {
-      "comparable_observation_count": 1986,
-      "covered_spatial_cells": 497,
-      "distinct_sample_count": 1977,
+      "comparable_observation_count": 6117,
+      "covered_spatial_cells": 840,
+      "distinct_sample_count": 6108,
       "element": "Hg",
-      "independent_lineage_count": 3,
+      "independent_lineage_count": 2,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe"
+      ],
       "medium": "soil",
-      "observation_count": 1986,
+      "observation_count": 6117,
       "source_ids": [
         "foregs-humus",
         "foregs-subsoil",
-        "foregs-topsoil"
+        "foregs-topsoil",
+        "gemas-europe"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 1977
+      "valid_coordinate_sample_count": 6108
     },
     "soil|Ni": {
-      "comparable_observation_count": 5538,
-      "covered_spatial_cells": 1472,
-      "distinct_sample_count": 18430,
+      "comparable_observation_count": 15114,
+      "covered_spatial_cells": 1851,
+      "distinct_sample_count": 23875,
       "element": "Ni",
       "independent_lineage_count": 6,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
       "medium": "soil",
-      "observation_count": 20235,
+      "observation_count": 29811,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 18304
+      "valid_coordinate_sample_count": 23749
     },
     "soil|Pb": {
-      "comparable_observation_count": 5538,
-      "covered_spatial_cells": 588,
-      "distinct_sample_count": 4050,
+      "comparable_observation_count": 15114,
+      "covered_spatial_cells": 967,
+      "distinct_sample_count": 9495,
       "element": "Pb",
       "independent_lineage_count": 5,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil"
+      ],
       "medium": "soil",
-      "observation_count": 5664,
+      "observation_count": 15240,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
-        "pangaea-north-africa-soil"
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 3924
+      "valid_coordinate_sample_count": 9369
     },
     "soil|Zn": {
-      "comparable_observation_count": 5540,
-      "covered_spatial_cells": 1472,
-      "distinct_sample_count": 18439,
+      "comparable_observation_count": 15116,
+      "covered_spatial_cells": 1851,
+      "distinct_sample_count": 23884,
       "element": "Zn",
       "independent_lineage_count": 6,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
       "medium": "soil",
-      "observation_count": 20237,
+      "observation_count": 29813,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 18313
+      "valid_coordinate_sample_count": 23758
     },
     "water|As": {
       "comparable_observation_count": 44282,
@@ -385,6 +570,11 @@
       "distinct_sample_count": 458213,
       "element": "As",
       "independent_lineage_count": 3,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "us-wqp-sacramento-river-arsenic"
+      ],
       "medium": "water",
       "observation_count": 493996,
       "source_ids": [
@@ -401,6 +591,10 @@
       "distinct_sample_count": 494384,
       "element": "Cr",
       "independent_lineage_count": 2,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive"
+      ],
       "medium": "water",
       "observation_count": 538569,
       "source_ids": [
@@ -416,6 +610,11 @@
       "distinct_sample_count": 425125,
       "element": "Cu",
       "independent_lineage_count": 3,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025"
+      ],
       "medium": "water",
       "observation_count": 467612,
       "source_ids": [
@@ -432,6 +631,9 @@
       "distinct_sample_count": 486882,
       "element": "Hg",
       "independent_lineage_count": 1,
+      "lineage_ids": [
+        "gemstat-open-archive"
+      ],
       "medium": "water",
       "observation_count": 517471,
       "source_ids": [
@@ -446,6 +648,11 @@
       "distinct_sample_count": 610877,
       "element": "Ni",
       "independent_lineage_count": 3,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025"
+      ],
       "medium": "water",
       "observation_count": 656390,
       "source_ids": [
@@ -462,6 +669,10 @@
       "distinct_sample_count": 611042,
       "element": "Pb",
       "independent_lineage_count": 2,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive"
+      ],
       "medium": "water",
       "observation_count": 655477,
       "source_ids": [
@@ -477,6 +688,11 @@
       "distinct_sample_count": 410190,
       "element": "Zn",
       "independent_lineage_count": 3,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025"
+      ],
       "medium": "water",
       "observation_count": 454029,
       "source_ids": [

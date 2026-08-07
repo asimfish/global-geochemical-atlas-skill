@@ -12,6 +12,7 @@
         "earthchem-library",
         "earthchem-portal",
         "gemstat-open-archive",
+        "georoc-antarctica-intraplate",
         "georoc-archaean",
         "georoc-database",
         "glorich",
@@ -127,6 +128,7 @@
       "status": "in_progress",
       "catalogued_sources": [
         "emodnet-chemistry",
+        "georoc-antarctica-intraplate",
         "geotraces-idp2025",
         "iodp-data-systems",
         "jamstec-darwin",

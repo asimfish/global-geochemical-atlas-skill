@@ -1,0 +1,97 @@
+{
+  "acquisition": {
+    "mode": "official-post-bundle-extracted-members",
+    "observed_at": "2026-08-07T10:20:00Z",
+    "request_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+  },
+  "archive": {
+    "bytes": 1828683,
+    "members": [
+      {
+        "bytes": 577715,
+        "file_id": "soil-dataset",
+        "name": "Soil dataset.xlsx",
+        "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      },
+      {
+        "bytes": 33386,
+        "file_id": "bulk-density-supplement",
+        "name": "Soil bulk density.xlsx",
+        "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      },
+      {
+        "bytes": 1246886,
+        "file_id": "dataset-description",
+        "name": "Description of the dataset.docx",
+        "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      }
+    ]
+  },
+  "claim_boundary": "This evidence binds tpdc-china-mountain-soil to its DOI/PID, version, file identity, byte count, schema and registered row statistics. It does not claim continuous spatial coverage or cross-method comparability.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "prepared_unsigned"
+  },
+  "observed_data": {
+    "counts": {
+      "distinct_mountains": 30,
+      "distinct_profiles": 485,
+      "distinct_sites": 166,
+      "horizon_counts": {
+        "A": 481,
+        "C": 452,
+        "O": 381
+      },
+      "physical_rows": 1314,
+      "target_observations": 6570,
+      "target_value_counts": {
+        "Cr": 1314,
+        "Cu": 1314,
+        "Ni": 1314,
+        "Pb": 1314,
+        "Zn": 1314
+      }
+    },
+    "target_analytes": {
+      "Cr": "Cr",
+      "Cu": "Cu",
+      "Ni": "Ni",
+      "Pb": "Pb",
+      "Zn": "Zn"
+    }
+  },
+  "observed_metadata": {
+    "dataset_doi": "10.11888/Terre.tpdc.302620",
+    "dataset_pid": "18406.11.Terre.tpdc.302620",
+    "dataset_version": "tpdc-file-2025-07-23",
+    "license": {
+      "name": "Creative Commons Attribution 4.0 International",
+      "spdx": "CC-BY-4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "release_date": "2025-07-23",
+    "required_fields": [
+      "Climaticzones",
+      "Mountain",
+      "site",
+      "Sam.No",
+      "Horizons",
+      "Latitude",
+      "Longitude",
+      "Rock Class",
+      "Rock Group",
+      "Soil Order",
+      "Great Soil Group",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ]
+  },
+  "source_id": "tpdc-china-mountain-soil",
+  "status": "verified_official_or_doi_dataset",
+  "verification_version": "v4-m6-source-audit-v1-no-content-hash"
+}

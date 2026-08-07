@@ -934,10 +934,10 @@ def _profile_one(
             "cached_parse_status": "pass",
             "offline_replay_status": "pass",
             "supported_modes": ["online", "cached", "offline_fixture"],
-            "last_successful_fetch_at": max(
-                (_text(item.retrieved_at) for item in files if _text(item.retrieved_at)),
-                default=None,
-            ),
+            # Cache validation timestamps change on every offline replay and are
+            # not acquisition evidence. Keep the publisher/source observation
+            # time from the registry so checked-in profiles remain reproducible.
+            "last_successful_fetch_at": _text((registry_entry.get("download") or {}).get("observed_at")) or None,
             "last_successful_parse_at": registry_verified_at,
             "online_fetch_health": (
                 "drift_detected_payload_equivalent"
@@ -1077,6 +1077,7 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
                 "observation_count": 0,
                 "distinct_sample_count": 0,
                 "lineages": set(),
+                "source_ids": set(),
                 "valid_coordinate_sample_count": 0,
                 "comparable_observation_count": 0,
                 "cells": set(),
@@ -1084,7 +1085,9 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
         )
         target["observation_count"] += metrics["observation_count"]
         target["distinct_sample_count"] += metrics["distinct_sample_count"]
-        target["lineages"].add(source_id)
+        lineage_id = source_adapters.source_lineage_id(source_id)
+        target["lineages"].add(lineage_id)
+        target["source_ids"].add(source_id)
         target["valid_coordinate_sample_count"] += metrics["valid_coordinate_sample_count"]
         target["comparable_observation_count"] += metrics["comparable_observation_count"]
         target["cells"].update(profile["spatial_coverage"]["spatial_cell_ids"])
@@ -1095,6 +1098,7 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
                     "observation_count": 0,
                     "distinct_sample_count": 0,
                     "lineages": set(),
+                    "source_ids": set(),
                     "valid_coordinate_sample_count": 0,
                     "comparable_observation_count": 0,
                     "cells": set(),
@@ -1102,7 +1106,8 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
             )
             cell["observation_count"] += values["observation_count"]
             cell["distinct_sample_count"] += values["distinct_sample_count"]
-            cell["lineages"].add(source_id)
+            cell["lineages"].add(lineage_id)
+            cell["source_ids"].add(source_id)
             cell["valid_coordinate_sample_count"] += values["valid_coordinate_sample_count"]
             cell["comparable_observation_count"] += values["comparable_observation_count"]
             cell["cells"].update(values["spatial_cell_ids"])
@@ -1112,7 +1117,8 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
             "observation_count": value["observation_count"],
             "distinct_sample_count": value["distinct_sample_count"],
             "independent_lineage_count": len(value["lineages"]),
-            "source_ids": sorted(value["lineages"]),
+            "source_ids": sorted(value["source_ids"]),
+            "lineage_ids": sorted(value["lineages"]),
             "valid_coordinate_sample_count": value["valid_coordinate_sample_count"],
             "comparable_observation_count": value["comparable_observation_count"],
             "covered_spatial_cells": len(value["cells"]),

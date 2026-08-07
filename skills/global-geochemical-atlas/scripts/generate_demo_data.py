@@ -1914,6 +1914,9 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 else ("Hg",) if args.source == "australia-ngsa-mercury"
                 else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn") if args.source == "japan-gsj-marine-sediment"
                 else ("As", "Cr", "Cu", "Ni", "Pb", "Zn") if args.source == "pangaea-arabian-sea-sediment"
+                else ("As", "Cr", "Cu", "Ni", "Pb", "Zn") if args.source == "georoc-antarctica-intraplate"
+                else ("Cr", "Cu", "Ni", "Pb", "Zn") if args.source == "tpdc-china-mountain-soil"
+                else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn") if args.source == "gemas-europe"
                 else sorted({row["element_or_analyte"] for row in rows})
                 if args.source.startswith("foregs-")
                 else ANALYTES
@@ -2048,6 +2051,30 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 ]
                 if args.source == "pangaea-arabian-sea-sediment"
                 else []
+            ),
+            *(
+                [
+                    "This GEOROC member is a literature compilation and is not uniform Antarctica coverage.",
+                    "Only exact coordinate pairs enter the point fixture; coordinate ranges remain areas.",
+                    "The selected row-level analytical method is absent from the precompiled member and is not inferred.",
+                ]
+                if args.source == "georoc-antarctica-intraplate" else []
+            ),
+            *(
+                [
+                    "TPDC samples cover 30 mountain ecosystems rather than a uniform China soil grid.",
+                    "O, A and C horizons remain separate; the undeclared coordinate CRS remains blank.",
+                    "Dataset-level ICP-MS/ICP-AES assignments come from the linked article, not row-level workbook fields.",
+                ]
+                if args.source == "tpdc-china-mountain-soil" else []
+            ),
+            *(
+                [
+                    "GEMAS is a low-density European soil survey, not continuous coverage.",
+                    "Aqua-regia and XRF measurements remain in separate comparison partitions.",
+                    "XRF half-DL substitutions are flagged and never presented as recovered exact detections.",
+                ]
+                if args.source == "gemas-europe" else []
             ),
         ],
         "failures": [],

@@ -17,7 +17,7 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 生成：
 
 - `geochemistry.csv`：标准化地球化学数据库；
-- `source_manifest.json`：记录级来源、许可、输入哈希及置信度报告哈希绑定；
+- `source_manifest.json`：记录级来源、许可、输入文件身份、字节数、记录数及置信度报告关联；
 - `qc_report.json` 与 `confidence_report.json`：QC 和运行级置信度；
 - `anomalies.geojson` 与 `anomaly_report.json`：候选异常及背景组统计；
 - `samples.geojson`：地图样点图层；
@@ -32,7 +32,7 @@ python skills/global-geochemical-atlas/scripts/self_test.py
 
 ## 真实来源四介质离线复现
 
-仓库还提供五条已验证真实来源的最小切片：GEOROC 岩石、USGS 土壤、MarChem 沉积物、GEOTRACES 海水和 GEMStat 淡水。它们可合成一个 304 条观测的四介质输入，并生成统一地图包：
+仓库提供 21 个已接入真实来源的最小切片，覆盖岩石、土壤、沉积物和水体。它们可合成一个 1,084 条观测的四介质输入，并生成统一地图包：
 
 ```bash
 python skills/global-geochemical-atlas/scripts/build_four_media_demo.py \
@@ -78,7 +78,7 @@ skills/
     └── scripts/
 ```
 
-没有 `requirements.txt`：运行脚本只使用 Python 标准库。完整数据不进入仓库；可使用受控下载脚本获取公开文件，并保存 URL、时间、许可和 SHA-256。
+没有 `requirements.txt`：运行脚本只使用 Python 标准库。完整数据不进入仓库；可使用受控下载脚本获取公开文件，并保存 DOI/PID、版本、文件 ID/名称、发布与访问时间、字节数、schema、行数、关键统计和许可。V4 不计算或校验 MD5、SHA-256 等内容哈希。
 
 ## 三人协作
 

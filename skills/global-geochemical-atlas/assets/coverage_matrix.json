@@ -4,22 +4,25 @@
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 1,
-        "Cu": 1,
-        "Ni": 1,
-        "Zn": 1
+        "As": 2,
+        "Cu": 2,
+        "Ni": 2,
+        "Zn": 2
       },
-      "analytes_with_multiple_sources": [],
-      "analytes_with_single_source": [
+      "analytes_with_multiple_sources": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
+      "analytes_with_single_source": [],
       "audited_analytes": [
         "As",
+        "Cr",
         "Cu",
+        "Hg",
         "Ni",
+        "Pb",
         "Zn"
       ],
       "candidate_sources": [
@@ -39,6 +42,10 @@
         "petdb",
         "usgs-ngdb"
       ],
+      "independent_lineage_count": 1,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
@@ -49,6 +56,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "georoc-antarctica-intraplate",
         "georoc-archaean"
       ],
       "source_evidence_tiers": {
@@ -58,6 +66,7 @@
         "earthchem-library": "D",
         "earthchem-portal": "D",
         "finland-gtk-geochemistry": "D",
+        "georoc-antarctica-intraplate": "A",
         "georoc-archaean": "A",
         "georoc-database": "D",
         "iodp-data-systems": "D",
@@ -69,7 +78,7 @@
         "petdb": "D",
         "usgs-ngdb": "D"
       },
-      "source_independence": "single_source_dependency",
+      "source_independence": "multiple_datasets_single_upstream_lineage",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
         "australia-ozchem": "national_partial",
@@ -77,6 +86,7 @@
         "earthchem-library": "global_collection",
         "earthchem-portal": "global_partial",
         "finland-gtk-geochemistry": "national_partial",
+        "georoc-antarctica-intraplate": "continental_partial",
         "georoc-archaean": "global_partial",
         "georoc-database": "global_partial",
         "iodp-data-systems": "global_partial",
@@ -89,6 +99,15 @@
         "usgs-ngdb": "national_partial"
       },
       "source_target_analytes": {
+        "georoc-antarctica-intraplate": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "georoc-archaean": [
           "As",
           "Cu",
@@ -103,6 +122,7 @@
         "earthchem-library": "discovery",
         "earthchem-portal": "discovery",
         "finland-gtk-geochemistry": "discovery",
+        "georoc-antarctica-intraplate": "normalized_analysis",
         "georoc-archaean": "normalized_analysis",
         "georoc-database": "discovery",
         "iodp-data-systems": "discovery",
@@ -171,6 +191,15 @@
         "us-water-quality-portal",
         "usgs-ngdb"
       ],
+      "independent_lineage_count": 6,
+      "lineage_ids": [
+        "australia-ngsa-mercury",
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
@@ -225,7 +254,7 @@
         "us-water-quality-portal": "D",
         "usgs-ngdb": "D"
       },
-      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
         "argentina-segemar-geochemistry": "national_partial",
@@ -360,10 +389,10 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 5,
-        "Cu": 6,
-        "Ni": 6,
-        "Zn": 6
+        "As": 6,
+        "Cu": 8,
+        "Ni": 8,
+        "Zn": 8
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -387,14 +416,21 @@
         "brazil-sgb-geochemistry",
         "earthchem-library",
         "foregs-europe",
-        "gemas-europe",
         "ireland-tellus",
         "pangaea-repository",
         "soils4africa",
         "south-africa-cgs-geochemistry",
-        "tpdc-china-mountain-soil",
         "usgs-ngdb",
         "wosis"
+      ],
+      "independent_lineage_count": 6,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
       ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
@@ -410,7 +446,9 @@
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "source_evidence_tiers": {
@@ -423,18 +461,18 @@
         "foregs-humus": "A",
         "foregs-subsoil": "A",
         "foregs-topsoil": "A",
-        "gemas-europe": "D",
+        "gemas-europe": "A",
         "ireland-tellus": "D",
         "pangaea-north-africa-soil": "A",
         "pangaea-repository": "D",
         "soils4africa": "D",
         "south-africa-cgs-geochemistry": "D",
-        "tpdc-china-mountain-soil": "C",
+        "tpdc-china-mountain-soil": "A",
         "usgs-conus-soil": "A",
         "usgs-ngdb": "D",
         "wosis": "D"
       },
-      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "afsis-phase-i-wet-chemistry": "continental_partial",
         "alaska-dggs-webgeochem": "regional_partial",
@@ -490,8 +528,24 @@
           "Pb",
           "Zn"
         ],
+        "gemas-europe": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "pangaea-north-africa-soil": [
           "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "tpdc-china-mountain-soil": [
           "Cr",
           "Cu",
           "Ni",
@@ -515,13 +569,13 @@
         "foregs-humus": "normalized_analysis",
         "foregs-subsoil": "normalized_analysis",
         "foregs-topsoil": "normalized_analysis",
-        "gemas-europe": "discovery",
+        "gemas-europe": "normalized_analysis",
         "ireland-tellus": "discovery",
         "pangaea-north-africa-soil": "normalized_analysis",
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
-        "tpdc-china-mountain-soil": "raw_observation",
+        "tpdc-china-mountain-soil": "normalized_analysis",
         "usgs-conus-soil": "normalized_analysis",
         "usgs-ngdb": "discovery",
         "wosis": "discovery"
@@ -569,6 +623,13 @@
         "pangaea-repository",
         "us-water-quality-portal"
       ],
+      "independent_lineage_count": 4,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
+      ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
@@ -603,7 +664,7 @@
         "us-water-quality-portal": "D",
         "us-wqp-sacramento-river-arsenic": "B"
       },
-      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",

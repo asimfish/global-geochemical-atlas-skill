@@ -26,7 +26,7 @@
       "filename": "MarChem_Inorganic_LabParameter_20260806T133536Z.csv"
     }
   ],
-  "last_successful_fetch_at": "2026-08-06T13:35:38Z",
+  "last_successful_fetch_at": null,
   "last_successful_parse_at": "2026-08-06T10:05:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "drift_detected_payload_equivalent",

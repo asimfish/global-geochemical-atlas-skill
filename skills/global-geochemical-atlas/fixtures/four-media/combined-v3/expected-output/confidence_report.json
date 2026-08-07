@@ -1,8 +1,8 @@
 {
   "band_counts": {
-    "high": 736,
+    "high": 828,
     "low": 8,
-    "medium": 200
+    "medium": 248
   },
   "band_thresholds": {
     "high": ">=0.80",
@@ -10,12 +10,12 @@
     "medium": ">=0.60 and <0.80"
   },
   "component_means": {
-    "completeness": 0.961479,
-    "method": 0.858757,
-    "overall": 0.91318,
-    "qc": 0.894809,
-    "source": 0.975847,
-    "spatial": 0.832203
+    "completeness": 0.958403,
+    "method": 0.847478,
+    "overall": 0.908841,
+    "qc": 0.888026,
+    "source": 0.978967,
+    "spatial": 0.820664
   },
   "confidence_version": "d2-confidence-v1",
   "gates": {
@@ -35,6 +35,7 @@
         "water_fraction",
         "grain_fraction",
         "measurement_basis",
+        "tectonic_setting_raw",
         "geologic_unit_raw",
         "matched_geologic_unit",
         "analytical_method",
@@ -46,13 +47,13 @@
       "robust_z_threshold": 3.5
     },
     "input_identity": {
-      "bytes": 1029299,
+      "bytes": 1209831,
       "filename": "demo_input.csv",
-      "record_count": 944
+      "record_count": 1084
     },
-    "input_row_count": 944,
+    "input_row_count": 1084,
     "missing_recommended_input_columns": [],
-    "run_id": "run-v2%7Cdemo_input.csv%7C1029299%7C944%7C%7B%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%7D"
+    "run_id": "run-v2%7Cdemo_input.csv%7C1209831%7C1084%7C%7B%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22tectonic_setting_raw%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%7D"
   },
   "weights": {
     "completeness": 0.2,

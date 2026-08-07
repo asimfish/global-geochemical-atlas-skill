@@ -14,7 +14,7 @@
       "filename": "150328_00_1.CSV"
     }
   ],
-  "last_successful_fetch_at": "2026-08-07T09:47:05Z",
+  "last_successful_fetch_at": "2026-08-06T16:07:00Z",
   "last_successful_parse_at": "2026-08-06T10:05:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",

@@ -1,0 +1,15 @@
+{
+  "analytical_method_counts": {
+    "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS": 28917,
+    "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS": 24786
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+  "method_scope_counts": {
+    "dataset_analysis_group": 53703
+  },
+  "observation_count": 53703,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "gemas-europe"
+}

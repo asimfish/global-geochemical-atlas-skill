@@ -77,12 +77,15 @@ def build_matrix(
         analytes_with_multiple_sources = sorted(
             analyte for analyte, count in analyte_source_counts.items() if count > 1
         )
+        lineage_ids = sorted({source_adapters.source_lineage_id(source_id) for source_id in selected})
         if len(selected) == 1:
             independence = "single_source_dependency"
+        elif len(lineage_ids) == 1:
+            independence = "multiple_datasets_single_upstream_lineage"
         elif len(selected) > 1 and analytes_with_single_source:
             independence = "multiple_sources_but_single_source_per_analyte"
         elif len(selected) > 1:
-            independence = "multiple_sources_lineage_not_yet_deduplicated"
+            independence = "multiple_independent_lineages"
         else:
             independence = "no_current_analysis_source"
         missing_analytes = sorted(set(requested_analytes) - set(audited_analytes))
@@ -114,6 +117,8 @@ def build_matrix(
                 source_id: routed_sources[source_id]["use_mode"] for source_id in source_scopes
             },
             "source_independence": independence,
+            "independent_lineage_count": len(lineage_ids),
+            "lineage_ids": lineage_ids,
             "method_metadata_coverage": "not_yet_audited",
             "spatial_density_coverage": "not_yet_audited",
             "temporal_coverage": "not_yet_audited",
@@ -189,11 +194,11 @@ def render_markdown(matrix: Mapping[str, Any]) -> str:
             "",
             "## 当前判断",
             "",
-            "- 岩石只有 GEOROC 太古宙专题来源，因此仍是 `partial`；",
-            "- 土壤已有 USGS、PANGAEA、AfSIS 与 FOREGS topsoil/subsoil/humus；AfSIS 补充非洲 18 个国家标签和 51 个 LDSF 站点，但不是均匀大陆网格；温和硝酸浸出、王水准全量和总量不可混用，整体仍为 `partial`；",
-            "- 沉积物已有 MarChem、GSJ 与 FOREGS stream/floodplain sediment；海洋/河流/泛滥平原、粒级和消解基础不同，仍为 `partial`；",
-            "- 水体已有 GEOTRACES 海水、GEMStat 淡水和 FOREGS 欧洲溪流水；目标分析物有多个来源，但海水/淡水、单位和时间尺度不可直接混为同一背景；",
-            "- FOREGS 六类来源已经分别实现适配器并固定文件 hash；这增加了欧洲低密度基线覆盖，不代表欧洲每个位置有实测值；",
+            "- 岩石有 GEOROC 太古宙和南极洲两个数据集，但同属 GEOROC compilation 上游血缘，因此独立血缘仍为 1，整体仍是 `partial`；",
+            "- 土壤已有 USGS、PANGAEA、AfSIS、FOREGS、TPDC 和 GEMAS 六条上游血缘；消解/浸取范围、土层和空间密度不同，仍为 `partial`；",
+            "- 沉积物有七个数据集、六条上游血缘；海洋/河流/泛滥平原、粒级和消解基础不同，仍为 `partial`；",
+            "- 水体有 GEOTRACES 海水、GEMStat 淡水、FOREGS 欧洲溪流水和 WQP 萨克拉门托河四条血缘；海水/淡水、分相、单位和时间尺度不可直接混为同一背景；",
+            "- FOREGS 六类来源已分别实现适配器，但属于同一上游项目血缘；这增加了欧洲低密度基线覆盖，不代表欧洲每个位置有实测值；",
             "- AfSIS V2.0 已固定三个 original 文件并全量对账 2,002 个样品；126 个缺坐标样品和逐元素低于 DL/QL 的数值保持显式，不能用 48 条完整坐标 demo 代替全量质量结论；",
             "- 岩石、土壤和沉积物样板的 As、Cu、Ni、Zn 目标字段已登记；来源数增加不代表方法一致或空间充分，方法、时间和密度仍需逐源审计；",
             "- 聚合平台不计作独立证据，必须追溯并去重其上游数据集。",

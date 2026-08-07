@@ -2,8 +2,8 @@
   "coverage": {
     "bbox": [
       -137.97,
-      -42.4756,
-      153.0022,
+      -73.2733,
+      166.3111,
       81.409639
     ],
     "coordinate_rate": 1.0,
@@ -24,33 +24,33 @@
       "soil",
       "water"
     ],
-    "standardization_rate": 0.991525
+    "standardization_rate": 0.99262
   },
   "input": {
-    "bytes": 1029299,
+    "bytes": 1209831,
     "filename": "demo_input.csv",
-    "record_count": 944,
+    "record_count": 1084,
     "synthetic_demo": false
   },
   "limitations": [
     "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
     "Map density uses observed points only; no interpolation is performed across unsampled areas.",
     "Some records have error-level QC flags and are capped at low operational confidence.",
-    "80 anomaly background group(s) were not analyzed due to explicit failure states."
+    "109 anomaly background group(s) were not analyzed due to explicit failure states."
   ],
   "map_report": {
-    "candidate_record_count": 20,
+    "candidate_record_count": 22,
     "external_assets": 0,
     "interpolation": false,
     "map_version": "self-contained-svg-v1",
-    "mapped_record_count": 944
+    "mapped_record_count": 1084
   },
   "metrics": {
-    "candidate_anomaly_count": 20,
+    "candidate_anomaly_count": 22,
     "censored_record_count": 57,
-    "record_count": 944,
-    "standardized_record_count": 936,
-    "valid_coordinate_count": 944
+    "record_count": 1084,
+    "standardized_record_count": 1076,
+    "valid_coordinate_count": 1084
   },
   "next_actions": [
     "Inspect source_manifest.json and record-level source locators before scientific reuse.",
@@ -78,6 +78,7 @@
       "water_fraction",
       "grain_fraction",
       "measurement_basis",
+      "tectonic_setting_raw",
       "geologic_unit_raw",
       "matched_geologic_unit",
       "analytical_method",
