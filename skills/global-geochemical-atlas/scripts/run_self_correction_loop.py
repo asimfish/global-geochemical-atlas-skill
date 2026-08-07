@@ -296,7 +296,9 @@ def decide_next(
     if not has_autonomous:
         return "stop", "no_autonomous_repair"
     previous = rounds[-2] if len(rounds) >= 2 else None
-    if previous is not None and actionable_signature(previous) == actionable_signature(last):
+    if previous is not None and actionable_signature(previous) == actionable_signature(
+        last
+    ):
         return "stop", "no_progress"
     if len(rounds) >= max_rounds:
         return "stop", "round_budget_exhausted"
@@ -307,8 +309,15 @@ def decide_next(
 
 def final_status(stop_reason: str, last: dict[str, Any] | None) -> str:
     if stop_reason == "converged" and last is not None:
-        return "success" if last.get("execution_status") == "success" else "partial_success"
-    if stop_reason in ("round_budget_exhausted", "time_budget_exhausted") and last is not None:
+        return (
+            "success"
+            if last.get("execution_status") == "success"
+            else "partial_success"
+        )
+    if (
+        stop_reason in ("round_budget_exhausted", "time_budget_exhausted")
+        and last is not None
+    ):
         if last.get("validation_status") == "valid":
             return "partial_success"
         return "needs_human_review"
@@ -337,7 +346,9 @@ def next_step_text(stop_reason: str, plan: dict[str, Any]) -> str:
         "invalid_input": "输入缺少最低必需列；按 D2 契约修正输入文件后重跑。",
         "in_progress": "循环在本轮后中断；在同一输出目录重新调用控制器续跑。",
     }
-    return mapping.get(stop_reason, "查看 loop_report.json 与最后一轮 run_summary.json。")
+    return mapping.get(
+        stop_reason, "查看 loop_report.json 与最后一轮 run_summary.json。"
+    )
 
 
 def build_run_command(args: argparse.Namespace, round_dir: Path) -> list[str]:
@@ -393,14 +404,20 @@ def run_pre_gates(args: argparse.Namespace, round_index: int) -> dict[str, Any] 
         viable, detail = gate_routing(args.request)
         if not viable:
             return make_gate_round(
-                round_index, args, "routing_viability", detail,
+                round_index,
+                args,
+                "routing_viability",
+                detail,
                 GATE_STOP_REASONS["routing_viability"],
             )
     elif args.mode == "input":
         viable, detail = gate_input_header(args.input)
         if not viable:
             return make_gate_round(
-                round_index, args, "input_header", detail,
+                round_index,
+                args,
+                "input_header",
+                detail,
                 GATE_STOP_REASONS["input_header"],
             )
     return None
@@ -431,7 +448,10 @@ def gate_routing(request: Path) -> tuple[bool, str]:
     selected = len(route.get("selected_sources") or [])
     review = len(route.get("review_sources") or [])
     if selected == 0 and review == 0:
-        return False, "router selected 0 sources and 0 review candidates for this request"
+        return (
+            False,
+            "router selected 0 sources and 0 review candidates for this request",
+        )
     return True, f"router found {selected} selected and {review} review-tier sources"
 
 
@@ -496,7 +516,11 @@ def execute_round(
                 }
             )
         gate_events.append(
-            {"gate": "run_exit", "status": "pass", "detail": f"exit 0, status {execution_status}"}
+            {
+                "gate": "run_exit",
+                "status": "pass",
+                "detail": f"exit 0, status {execution_status}",
+            }
         )
     elif exit_code is None:
         execution_status = "round_timeout"
@@ -667,9 +691,9 @@ def public_round(record: dict[str, Any]) -> dict[str, Any]:
 def rehydrate_round(record: dict[str, Any], mode: str) -> dict[str, Any]:
     """Rebuild controller-internal fields for rounds loaded from a report."""
     hydrated = dict(record)
-    hydrated["run_failure_retryable"] = record.get("exit_code") != 0 and run_failure_retryable(
-        record.get("execution_status"), mode
-    )
+    hydrated["run_failure_retryable"] = record.get(
+        "exit_code"
+    ) != 0 and run_failure_retryable(record.get("execution_status"), mode)
     hydrated["gate_stop_reason"] = None
     if is_gate_round(record):
         for event in record.get("gate_events", []):
@@ -791,7 +815,9 @@ def run_loop(args: argparse.Namespace) -> dict[str, Any]:
         record = execute_round(args, len(rounds) + 1, loop_root)
         rounds.append(record)
         compute_delta(rounds)
-        write_json(loop_root / REPORT_FILENAME, assemble_report(args, rounds, "in_progress"))
+        write_json(
+            loop_root / REPORT_FILENAME, assemble_report(args, rounds, "in_progress")
+        )
 
     report = assemble_report(args, rounds, stop_reason)
     write_json(loop_root / REPORT_FILENAME, report)
@@ -821,11 +847,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--evidence-jsonl", type=Path)
     parser.add_argument("--acquisition-manifest", type=Path)
     parser.add_argument("--cache-dir", type=Path, default=Path(".cache/data"))
-    parser.add_argument("--acquisition-mode", choices=("online", "cached"), default="online")
+    parser.add_argument(
+        "--acquisition-mode", choices=("online", "cached"), default="online"
+    )
     parser.add_argument(
         "--analysis-profile", choices=("demo", "production"), default="production"
     )
-    parser.add_argument("--generated-at", help="ISO-8601 acquisition timestamp passthrough")
+    parser.add_argument(
+        "--generated-at", help="ISO-8601 acquisition timestamp passthrough"
+    )
     parser.add_argument("--batch-qc-input", type=Path)
     parser.add_argument("--batch-qc-policy", type=Path)
     parser.add_argument("--no-geology", action="store_true")
@@ -853,7 +883,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="Hard per-round subprocess timeout (default 900; the run's internal budget stays 840)",
     )
     parser.add_argument(
-        "--self-test", action="store_true", help="Run embedded decision-logic tests and exit"
+        "--self-test",
+        action="store_true",
+        help="Run embedded decision-logic tests and exit",
     )
     return parser
 
@@ -868,18 +900,36 @@ def _self_test() -> int:
         checks += 1
 
     # 1. Source-error classification is conservative.
-    check(source_failure_retryable("HTTP Error 503: connection timed out"), "transient retryable")
-    check(not source_failure_retryable("research use conditions unclear"), "license manual")
+    check(
+        source_failure_retryable("HTTP Error 503: connection timed out"),
+        "transient retryable",
+    )
+    check(
+        not source_failure_retryable("research use conditions unclear"),
+        "license manual",
+    )
     check(not source_failure_retryable("mystery failure"), "unknown defaults to manual")
     check(
         not source_failure_retryable("network schema drift detected"),
         "non-retryable marker wins over retryable marker",
     )
     # 2. Run-level classification.
-    check(run_failure_retryable("network_unavailable", "demo"), "network retryable in any mode")
-    check(run_failure_retryable("incomplete_retrieval", "online"), "incomplete retryable online")
-    check(not run_failure_retryable("incomplete_retrieval", "input"), "incomplete manual offline")
-    check(not run_failure_retryable("needs_human_review", "online"), "human review never retried")
+    check(
+        run_failure_retryable("network_unavailable", "demo"),
+        "network retryable in any mode",
+    )
+    check(
+        run_failure_retryable("incomplete_retrieval", "online"),
+        "incomplete retryable online",
+    )
+    check(
+        not run_failure_retryable("incomplete_retrieval", "input"),
+        "incomplete manual offline",
+    )
+    check(
+        not run_failure_retryable("needs_human_review", "online"),
+        "human review never retried",
+    )
 
     def stub_round(
         *,
@@ -909,17 +959,25 @@ def _self_test() -> int:
         }
 
     # 3. Convergence: clean round stops as converged.
-    check(decide_next([stub_round()], 3, 0.0, None) == ("stop", "converged"), "clean converges")
+    check(
+        decide_next([stub_round()], 3, 0.0, None) == ("stop", "converged"),
+        "clean converges",
+    )
     # 4. Retryable source failure continues; identical repeat stops as no_progress.
-    failing = stub_round(failed=[{"source_id": "s1", "error": "timeout", "retryable": True}])
+    failing = stub_round(
+        failed=[{"source_id": "s1", "error": "timeout", "retryable": True}]
+    )
     check(decide_next([failing], 3, 0.0, None)[0] == "continue", "retryable continues")
     check(
         decide_next([failing, failing], 3, 0.0, None) == ("stop", "no_progress"),
         "identical signature stops",
     )
-    improving = stub_round(failed=[{"source_id": "s2", "error": "timeout", "retryable": True}])
+    improving = stub_round(
+        failed=[{"source_id": "s2", "error": "timeout", "retryable": True}]
+    )
     check(
-        decide_next([failing, improving], 2, 0.0, None) == ("stop", "round_budget_exhausted"),
+        decide_next([failing, improving], 2, 0.0, None)
+        == ("stop", "round_budget_exhausted"),
         "round budget enforced",
     )
     # 5. Manual-only issues stop immediately with a grouped plan.
@@ -937,7 +995,10 @@ def _self_test() -> int:
         "manual issues stop the loop",
     )
     plan = build_repair_plan(manual_only)
-    check(plan["autonomous"] == [] and plan["manual"][0]["count"] == 5, "manual plan built")
+    check(
+        plan["autonomous"] == [] and plan["manual"][0]["count"] == 5,
+        "manual plan built",
+    )
     # 6. Non-retryable source failure joins the manual plan.
     hard_fail = stub_round(
         failed=[{"source_id": "s9", "error": "license unclear", "retryable": False}]
@@ -974,20 +1035,29 @@ def _self_test() -> int:
         "invalid contract stops",
     )
     check(
-        decide_next([stub_round(exit_code=2, execution_status="invalid_input")], 3, 0.0, None)
+        decide_next(
+            [stub_round(exit_code=2, execution_status="invalid_input")], 3, 0.0, None
+        )
         == ("stop", "run_failed"),
         "hard failure stops",
     )
     check(
         decide_next(
-            [stub_round(exit_code=2, execution_status="needs_human_review")], 3, 0.0, None
+            [stub_round(exit_code=2, execution_status="needs_human_review")],
+            3,
+            0.0,
+            None,
         )
         == ("stop", "needs_human_review"),
         "human review stops",
     )
     check(
         decide_next(
-            [stub_round(exit_code=2, execution_status="network_unavailable", retry_run=True)],
+            [
+                stub_round(
+                    exit_code=2, execution_status="network_unavailable", retry_run=True
+                )
+            ],
             3,
             0.0,
             None,
@@ -1001,13 +1071,18 @@ def _self_test() -> int:
         "time budget enforced",
     )
     # 10. Final status mapping.
-    check(final_status("converged", {"execution_status": "success"}) == "success", "success maps")
     check(
-        final_status("converged", {"execution_status": "partial_success"}) == "partial_success",
+        final_status("converged", {"execution_status": "success"}) == "success",
+        "success maps",
+    )
+    check(
+        final_status("converged", {"execution_status": "partial_success"})
+        == "partial_success",
         "partial maps",
     )
     check(
-        final_status("no_autonomous_repair", {}) == "needs_human_review", "manual maps to review"
+        final_status("no_autonomous_repair", {}) == "needs_human_review",
+        "manual maps to review",
     )
     check(final_status("run_failed", {}) == "failed", "run_failed maps to failed")
     # 11. Backlog harvesting, gate-round rehydration and frozen-request enforcement.
@@ -1023,8 +1098,13 @@ def _self_test() -> int:
             encoding="utf-8",
         )
         harvested = read_backlog(backlog)
-        check(harvested["status_counts"]["action_required"] == 2, "backlog action count")
-        check(harvested["status_counts"]["scientific_limit"] == 1, "scientific limit separate")
+        check(
+            harvested["status_counts"]["action_required"] == 2, "backlog action count"
+        )
+        check(
+            harvested["status_counts"]["scientific_limit"] == 1,
+            "scientific limit separate",
+        )
         check(harvested["auto_recheck"] == 1, "auto_recheck counted")
         check(harvested["manual_groups"][0]["count"] == 2, "manual grouping")
         gate_public = {
@@ -1066,7 +1146,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _self_test()
     try:
         if not args.request or not args.output_dir:
-            raise LoopUsageError("--request and --output-dir are required unless --self-test")
+            raise LoopUsageError(
+                "--request and --output-dir are required unless --self-test"
+            )
         if not args.request.is_file():
             raise LoopUsageError(f"request file not found: {args.request}")
         if args.input is not None:
