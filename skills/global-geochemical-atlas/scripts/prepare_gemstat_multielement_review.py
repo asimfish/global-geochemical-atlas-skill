@@ -10,11 +10,10 @@ import os
 import sys
 import tempfile
 from collections import defaultdict
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-import generate_demo_data as demos
 import source_adapters
 
 REVIEW_VERSION = "geochemical-human-review-v1"

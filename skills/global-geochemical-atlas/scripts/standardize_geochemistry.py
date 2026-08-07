@@ -971,6 +971,9 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
     if geology_required and not geologic_context_present:
         overall = min(overall, 0.79)
         gates_applied.append("missing_geologic_context_medium_cap")
+    if str(record.get("source_id") or "").casefold().startswith("synthetic"):
+        overall = min(overall, 0.59)
+        gates_applied.append("synthetic_fixture_low_cap")
     band = "high" if overall >= 0.80 else "medium" if overall >= 0.60 else "low"
     return {
         "version": CONFIDENCE_VERSION,
@@ -2096,6 +2099,7 @@ def build_confidence_report(
             "missing_coordinate_uncertainty_medium_cap": "Canonical coordinates without declared uncertainty cap overall at 0.79 (medium).",
             "incomplete_method_context_medium_cap": "Missing basis, method family, analytical method or digestion/extraction caps overall at 0.79 (medium).",
             "missing_geologic_context_medium_cap": "Rock, soil and non-marine sediment without source or matched geology cap overall at 0.79 (medium).",
+            "synthetic_fixture_low_cap": "Synthetic validation records are capped at 0.59 (low) and cannot imply real-world scientific confidence.",
         },
         "gate_counts": dict(sorted(gates.items())),
         "component_means": means,

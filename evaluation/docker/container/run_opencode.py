@@ -69,6 +69,7 @@ def build_config(
 def main() -> int:
     try:
         base_url = required("EVAL_PROVIDER_BASE_URL")
+        upstream_base_url = required("EVAL_PROVIDER_UPSTREAM_BASE_URL")
         model_id = required("EVAL_PROVIDER_MODEL_ID")
         profile_id = required("EVAL_PROVIDER_PROFILE_ID")
         if not os.environ.get("EVAL_API_KEY"):
@@ -81,7 +82,7 @@ def main() -> int:
             profile_sha256=required("EVAL_PROVIDER_PROFILE_SHA256"),
         )
         profile.validate_runtime(
-            base_url=base_url,
+            base_url=upstream_base_url,
             model=model_id,
             temperature=temperature,
             thinking_mode=thinking_mode,

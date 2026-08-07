@@ -33,7 +33,7 @@ scorer，避免候选迎合断言。五个资源是 B0/S0 共享的最低锚点�
 ```text
 evaluation/docker/
 ├── Dockerfile                         # 固定 OpenCode 与科学 Python 环境
-├── compose.yaml                       # 手工调试候选容器与白名单代理
+├── compose.yaml                       # 手工调试隔离的 candidate-b0 / candidate-s0 与白名单代理
 ├── campaign.py                        # 构建、B0/S0 campaign、stage 统一入口
 ├── preflight.py                       # L0/L1 确定性预检
 ├── allowlist.txt                      # 允许访问的科学数据域名

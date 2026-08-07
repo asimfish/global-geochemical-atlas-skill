@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:request:v3",
+  "$id": "urn:global-geochemical-atlas:request:v4",
   "title": "Global geochemical atlas evidence-aware request",
   "type": "object",
   "additionalProperties": false,
@@ -49,6 +49,19 @@
       "minItems": 1,
       "items": {"type": "string", "minLength": 1},
       "uniqueItems": true
+    },
+    "geology_units": {
+      "type": ["array", "null"],
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {"type": "string", "minLength": 1, "maxLength": 160},
+      "uniqueItems": true,
+      "description": "Exact normalized geological-unit labels to retain after source/geology matching."
+    },
+    "geology_match": {
+      "type": "string",
+      "enum": ["reported_or_matched", "reported", "matched"],
+      "default": "reported_or_matched"
     },
     "time_range": {
       "type": ["array", "null"],

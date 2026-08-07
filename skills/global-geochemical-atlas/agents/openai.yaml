@@ -1,0 +1,6 @@
+interface:
+  display_name: "Global Geochemical Atlas"
+  short_description: "Build traceable global geochemical atlases"
+  default_prompt: "Use $global-geochemical-atlas to build a traceable geochemical atlas for the requested elements, region, and sample media."
+policy:
+  allow_implicit_invocation: true

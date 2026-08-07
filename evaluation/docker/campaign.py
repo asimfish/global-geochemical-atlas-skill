@@ -12,15 +12,33 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 from dataclasses import dataclass
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Sequence
 from urllib.parse import urlsplit
 
-from common import atomic_json, hash_tree, sha256_file, utc_now
-from provider_profiles import ProviderProfile, load_provider_profile
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from common import (  # noqa: E402
+    IGNORED_TREE_PARTS,
+    IGNORED_TREE_SUFFIXES,
+    atomic_json,
+    hash_records,
+    hash_tree,
+    sha256_file,
+    utc_now,
+)
+from provider_profiles import ProviderProfile, load_provider_profile  # noqa: E402
+from review_integrity import (  # noqa: E402
+    BINDING_SCHEMA,
+    ReviewIntegrityError,
+    validate_binding,
+    validate_llm_review_envelope,
+)
 
 
 EVALUATION_ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +48,7 @@ ALIGNMENT_PATH = EVALUATION_ROOT / "contracts" / "benchmark-execution-contract.j
 PUBLIC_INTERFACE = EVALUATION_ROOT / "ai_visible_public" / "public_interface.md"
 PUBLIC_CONTRACT_VALIDATOR = EVALUATION_ROOT / "ai_visible_public" / "validate_submission_contract.py"
 SKILL_DIR = REPO_ROOT / "skills" / "global-geochemical-atlas"
+GRADER_PROTOCOL = EVALUATION_ROOT / "docs" / "llm_grader_protocol.md"
 SAFE_NAME = re.compile(r"[^a-z0-9_.-]+")
 E1_STATUS = {
     0: "success",
@@ -61,12 +80,24 @@ class NetworkHandle:
     proxy: str | None = None
 
 
+@dataclass(frozen=True)
+class ProviderRelayHandle:
+    container: str
+    token: str
+    base_url: str = "http://eval-provider-relay:8090"
+
+
 def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def run_checked(command: list[str], *, capture: bool = True) -> subprocess.CompletedProcess[str]:
-    completed = subprocess.run(command, check=False, capture_output=capture, text=True)
+def run_checked(
+    command: list[str],
+    *,
+    capture: bool = True,
+    environment: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    completed = subprocess.run(command, check=False, capture_output=capture, text=True, env=environment)
     if completed.returncode != 0:
         message = completed.stderr.strip() or completed.stdout.strip() or f"exit {completed.returncode}"
         raise CampaignError(f"command failed: {' '.join(command[:4])}: {message}")
@@ -86,6 +117,39 @@ def docker_available() -> dict[str, Any]:
 
 def image_identity(image: str) -> str:
     return run_checked(["docker", "image", "inspect", image, "--format", "{{.Id}}"]).stdout.strip()
+
+
+def freeze_skill_snapshot(source: Path, destination: Path) -> str:
+    """Copy one immutable Skill tree and prove that its evaluation hash is unchanged."""
+
+    if not source.is_dir():
+        raise CampaignError(f"Skill directory does not exist: {source}")
+    if destination.exists():
+        raise CampaignError(f"Skill snapshot destination already exists: {destination}")
+    symlinks = sorted(
+        path.relative_to(source).as_posix()
+        for path in source.rglob("*")
+        if path.is_symlink()
+    )
+    if symlinks:
+        raise CampaignError(f"Skill snapshot refuses symlinks: {symlinks}")
+
+    source_sha256 = hash_tree(source)
+
+    def ignore(_directory: str, names: list[str]) -> set[str]:
+        return {
+            name
+            for name in names
+            if name in IGNORED_TREE_PARTS
+            or Path(name).suffix.casefold() in IGNORED_TREE_SUFFIXES
+        }
+
+    shutil.copytree(source, destination, ignore=ignore)
+    snapshot_sha256 = hash_tree(destination)
+    if snapshot_sha256 != source_sha256:
+        shutil.rmtree(destination)
+        raise CampaignError("frozen Skill snapshot hash does not match its source")
+    return snapshot_sha256
 
 
 def docker_build_proxy_options(environment: dict[str, str]) -> tuple[list[str], str, list[str]]:
@@ -235,6 +299,82 @@ def cleanup_network(handle: NetworkHandle) -> None:
             subprocess.run(["docker", "network", "rm", network], check=False, capture_output=True)
 
 
+def start_provider_relay(
+    *,
+    image: str,
+    network: NetworkHandle,
+    run_id: str,
+    upstream_base_url: str,
+    upstream_api_key: str,
+    model: str,
+    temperature: float,
+    thinking_mode: str,
+    timeout_seconds: int,
+) -> ProviderRelayHandle:
+    if network.mode != "whitelist" or not network.internal or not network.egress:
+        raise CampaignError("OpenCode evaluation requires the isolated whitelist network")
+    container = f"gga-provider-{safe_slug(run_id)}-{uuid.uuid4().hex[:6]}"
+    token = uuid.uuid4().hex + uuid.uuid4().hex
+    command = [
+        "docker", "run", "--detach", "--name", container,
+        "--network", network.internal, "--network-alias", "eval-provider-relay",
+        "--cpus", "1", "--memory", "512m", "--memory-swap", "512m", "--pids-limit", "64",
+        "--read-only", "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
+        "--tmpfs", "/tmp:rw,nosuid,nodev,size=16m",
+        "--env", "EVAL_RELAY_TOKEN",
+        "--env", "EVAL_UPSTREAM_BASE_URL",
+        "--env", "EVAL_UPSTREAM_API_KEY",
+        "--env", "EVAL_UPSTREAM_MODEL_ID",
+        "--env", "EVAL_UPSTREAM_TEMPERATURE",
+        "--env", "EVAL_UPSTREAM_THINKING_MODE",
+        "--env", "EVAL_RELAY_MAX_SECONDS",
+        image, "python", "/opt/evaluation/container/provider_relay.py",
+    ]
+    child_environment = os.environ.copy()
+    child_environment["EVAL_RELAY_TOKEN"] = token
+    child_environment["EVAL_UPSTREAM_BASE_URL"] = upstream_base_url
+    child_environment["EVAL_UPSTREAM_API_KEY"] = upstream_api_key
+    child_environment["EVAL_UPSTREAM_MODEL_ID"] = model
+    child_environment["EVAL_UPSTREAM_TEMPERATURE"] = str(temperature)
+    child_environment["EVAL_UPSTREAM_THINKING_MODE"] = thinking_mode
+    child_environment["EVAL_RELAY_MAX_SECONDS"] = str(min(timeout_seconds, 900))
+    try:
+        run_checked(command, environment=child_environment)
+        run_checked(["docker", "network", "connect", network.egress, container])
+        time.sleep(0.25)
+        running = run_checked(
+            ["docker", "inspect", container, "--format", "{{.State.Running}}"]
+        ).stdout.strip()
+        if running != "true":
+            raise CampaignError("provider relay failed to start")
+        return ProviderRelayHandle(container=container, token=token)
+    except Exception:
+        subprocess.run(["docker", "rm", "--force", container], check=False, capture_output=True)
+        raise
+
+
+def cleanup_provider_relay(handle: ProviderRelayHandle | None) -> bool:
+    """Revoke the relay capability and verify that its credential-bearing container is gone."""
+
+    if handle is None:
+        return True
+    removed = subprocess.run(
+        ["docker", "rm", "--force", handle.container],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    inspected = subprocess.run(
+        ["docker", "container", "inspect", handle.container],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    message = f"{removed.stdout}\n{removed.stderr}".casefold()
+    removal_acceptable = removed.returncode == 0 or "no such" in message
+    return removal_acceptable and inspected.returncode != 0
+
+
 def prepare_task_bundle(question: str, destination: Path) -> tuple[Path, str, str]:
     source, split = task_source(question)
     public_task = EVALUATION_ROOT / "ai_visible_public" / "tasks" / question
@@ -278,6 +418,7 @@ def pair_fingerprint_inputs(
     provider_profile: ProviderProfile,
     provider_base_url: str,
     thinking_mode: str,
+    skill_sha256: str,
 ) -> dict[str, Any]:
     return {
         "image_id": image_id,
@@ -293,6 +434,7 @@ def pair_fingerprint_inputs(
         "repeat": repeat,
         "resources": profile.__dict__,
         "task_hash": task_hash,
+        "skill_sha256": skill_sha256,
     }
 
 
@@ -309,6 +451,7 @@ def pair_fingerprint(
     provider_profile: ProviderProfile,
     provider_base_url: str,
     thinking_mode: str,
+    skill_sha256: str,
 ) -> str:
     payload = pair_fingerprint_inputs(
         task_hash=task_hash,
@@ -322,6 +465,7 @@ def pair_fingerprint(
         provider_profile=provider_profile,
         provider_base_url=provider_base_url,
         thinking_mode=thinking_mode,
+        skill_sha256=skill_sha256,
     )
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
@@ -342,7 +486,6 @@ def audit_q24_map(image: str, run_dir: Path, submission: Path) -> dict[str, Any]
     """Run the Q24 browser gate outside the candidate container and bind its bytes."""
 
     controller = run_dir / "controller"
-    screenshots = controller / "q24_screenshots"
     controller.mkdir(parents=True, exist_ok=True)
     output = controller / "q24_browser_audit.json"
     stdout = controller / "q24_browser_audit.stdout"
@@ -435,6 +578,7 @@ def execute_container(
     host_environment: dict[str, str],
     stdout_path: Path,
     stderr_path: Path,
+    skill_dir: Path,
 ) -> tuple[int, bool, float]:
     uid_gid = f"{os.getuid()}:{os.getgid()}"
     docker_command = [
@@ -482,7 +626,7 @@ def execute_container(
             "HTTPS_PROXY": "http://eval-proxy:8080",
             "http_proxy": "http://eval-proxy:8080",
             "https_proxy": "http://eval-proxy:8080",
-            "NO_PROXY": "localhost,127.0.0.1",
+            "NO_PROXY": "localhost,127.0.0.1,eval-provider-relay",
         }.items():
             docker_command.extend(["--env", f"{key}={value}"])
     for name_ in environment_names:
@@ -491,7 +635,7 @@ def execute_container(
         docker_command.extend(["--env", f"{key}={value}"])
     if condition == "S0":
         docker_command.extend(
-            ["--volume", f"{SKILL_DIR.resolve()}:/workspace/.opencode/skills/global-geochemical-atlas:ro"]
+            ["--volume", f"{skill_dir.resolve()}:/workspace/.opencode/skills/global-geochemical-atlas:ro"]
         )
     docker_command.append(image)
     docker_command.extend(command)
@@ -562,7 +706,7 @@ def ineligible_score(run_id: str, status: str, rubric: Path, reason_path: str) -
     }
 
 
-def validate_review(path: Path, label: str) -> None:
+def validate_review(path: Path, label: str, expected_binding: dict[str, Any]) -> None:
     if not path.is_file():
         raise CampaignError(f"{label} does not exist: {path}")
     try:
@@ -571,6 +715,10 @@ def validate_review(path: Path, label: str) -> None:
         raise CampaignError(f"{label} is not valid JSON: {path}") from exc
     if not isinstance(value, dict):
         raise CampaignError(f"{label} must contain a JSON object: {path}")
+    try:
+        validate_llm_review_envelope(value, expected_binding)
+    except ReviewIntegrityError as exc:
+        raise CampaignError(f"{label} failed integrity validation: {exc}") from exc
 
 
 def locate_llm_report(
@@ -605,6 +753,8 @@ def grade_run(
     *,
     llm_report: Path | None,
     static_review: Path | None,
+    review_context: dict[str, Any],
+    artifacts: list[dict[str, Any]],
 ) -> tuple[dict[str, Any], str | None, str | None, bool]:
     objective = run_dir / "objective_report.json"
     rubric = source / "rubric.json"
@@ -626,6 +776,19 @@ def grade_run(
         score = ineligible_score(run_id, "failed", rubric, "runner_metadata.json")
         atomic_json(score_path, score)
         return score, None, None, True
+    review_binding = {
+        "schema_version": BINDING_SCHEMA,
+        **review_context,
+        "rubric_task_id": str(load_json(rubric)["task_id"]),
+        "submission_artifacts_sha256": hash_records(
+            (str(item["path"]), str(item["sha256"])) for item in artifacts
+        ),
+        "objective_report_sha256": sha256_file(objective),
+        "rubric_sha256": sha256_file(rubric),
+        "grader_protocol_sha256": sha256_file(GRADER_PROTOCOL),
+    }
+    review_binding_path = run_dir / "review_binding.json"
+    atomic_json(review_binding_path, review_binding)
     finalize_command = [
         sys.executable,
         str(EVALUATION_ROOT / "tools" / "finalize_score.py"),
@@ -642,16 +805,21 @@ def grade_run(
     ]
     llm_name = None
     if llm_report is not None:
-        validate_review(llm_report, "LLM grader report")
+        validate_review(llm_report, "LLM grader report", review_binding)
         llm_name = "llm_grader_report.json"
         shutil.copy2(llm_report, run_dir / llm_name)
-        finalize_command.extend(["--llm-report", str(run_dir / llm_name), "--llm-evidence", llm_name])
+        finalize_command.extend(
+            [
+                "--llm-report", str(run_dir / llm_name),
+                "--review-binding", str(review_binding_path),
+                "--llm-evidence", llm_name,
+            ]
+        )
     static_name = None
     if static_review is not None:
-        validate_review(static_review, "static review")
-        static_name = "static_review.json"
-        shutil.copy2(static_review, run_dir / static_name)
-        finalize_command.extend(["--static-review", str(run_dir / static_name), "--static-evidence", static_name])
+        raise CampaignError(
+            "static review scoring is disabled until a frozen static rubric and evidence scope exist"
+        )
     finalize_command.extend(["--output", str(score_path)])
     finalize = subprocess.run(
         finalize_command,
@@ -691,6 +859,9 @@ def run_one(
     required_paths: list[str],
     llm_report_dir: Path | None,
     static_review: Path | None,
+    skill_dir: Path,
+    skill_sha256: str,
+    protocol_mode: str,
 ) -> dict[str, Any]:
     run_id = f"{safe_slug(campaign_id)}-{question.casefold()}-{condition.casefold()}-r{repeat}"
     run_dir = campaign_root / group / question / condition / f"repeat-{repeat}"
@@ -716,6 +887,7 @@ def run_one(
         provider_profile=provider_profile,
         provider_base_url=provider_base_url,
         thinking_mode=thinking_mode,
+        skill_sha256=skill_sha256,
     )
     fingerprint = hashlib.sha256(
         json.dumps(fingerprint_inputs, sort_keys=True, separators=(",", ":")).encode()
@@ -723,14 +895,30 @@ def run_one(
     environment_names = []
     environment_values: dict[str, str] = {}
     host_environment: dict[str, str] = {}
+    provider_relay: ProviderRelayHandle | None = None
+    redaction_values: list[str] = []
     if "/run_opencode.py" in " ".join(agent_command):
         if not os.environ.get(api_key_env):
             raise CampaignError(f"host environment variable is empty: {api_key_env}")
+        upstream_api_key = os.environ[api_key_env]
+        provider_relay = start_provider_relay(
+            image=image,
+            network=network,
+            run_id=run_id,
+            upstream_base_url=provider_base_url,
+            upstream_api_key=upstream_api_key,
+            model=model,
+            temperature=temperature,
+            thinking_mode=thinking_mode,
+            timeout_seconds=int(profile.timeout_seconds),
+        )
+        redaction_values.extend([upstream_api_key, provider_relay.token])
         environment_names.append("EVAL_API_KEY")
-        host_environment["EVAL_API_KEY"] = os.environ[api_key_env]
+        host_environment["EVAL_API_KEY"] = provider_relay.token
         environment_values.update(
             {
-                "EVAL_PROVIDER_BASE_URL": provider_base_url,
+                "EVAL_PROVIDER_BASE_URL": provider_relay.base_url,
+                "EVAL_PROVIDER_UPSTREAM_BASE_URL": provider_base_url,
                 "EVAL_PROVIDER_MODEL_ID": model,
                 "EVAL_MODEL_VARIANT": model_variant,
                 "EVAL_TEMPERATURE": str(temperature),
@@ -742,26 +930,32 @@ def run_one(
         )
     container_name = f"gga-{safe_slug(run_id)}-{uuid.uuid4().hex[:6]}"
     started_at = utc_now()
-    raw_exit, timed_out, duration = execute_container(
-        name=container_name,
-        image=image,
-        command=agent_command,
-        task_dir=task_dir,
-        workspace=workspace,
-        submission=submission,
-        condition=condition,
-        network=network,
-        profile=profile,
-        environment_names=environment_names,
-        environment_values=environment_values,
-        host_environment=host_environment,
-        stdout_path=stdout_path,
-        stderr_path=stderr_path,
-    )
+    provider_relay_revoked = True
+    try:
+        raw_exit, timed_out, duration = execute_container(
+            name=container_name,
+            image=image,
+            command=agent_command,
+            task_dir=task_dir,
+            workspace=workspace,
+            submission=submission,
+            condition=condition,
+            network=network,
+            profile=profile,
+            environment_names=environment_names,
+            environment_values=environment_values,
+            host_environment=host_environment,
+            stdout_path=stdout_path,
+            stderr_path=stderr_path,
+            skill_dir=skill_dir,
+        )
+    finally:
+        provider_relay_revoked = cleanup_provider_relay(provider_relay)
     log_secret_redacted = any(
-        [redact_file(path, host_environment.values()) for path in (stdout_path, stderr_path)]
+        [redact_file(path, redaction_values) for path in (stdout_path, stderr_path)]
     )
-    secret_redaction_files = redact_tree(submission, host_environment.values())
+    secret_redaction_files = redact_tree(submission, redaction_values)
+    workspace_secret_redaction_files = redact_tree(workspace, redaction_values)
     artifacts, missing = artifact_inventory(submission, required_paths)
     q24_browser = (
         audit_q24_map(image, run_dir, submission)
@@ -771,6 +965,10 @@ def run_one(
     exit_code, status = candidate_status(raw_exit, timed_out, missing)
     if secret_redaction_files:
         exit_code, status = 74, "failed"
+    if workspace_secret_redaction_files:
+        exit_code, status = 74, "failed"
+    if not provider_relay_revoked:
+        exit_code, status = 73, "failed"
     exit_code, status = apply_q24_browser_gate(
         question, q24_browser, exit_code, status
     )
@@ -793,7 +991,9 @@ def run_one(
         "network_mode": network.mode,
         "resources": profile.__dict__,
         "skill_mounted": condition == "S0",
-        "skill_sha256": hash_tree(SKILL_DIR) if condition == "S0" else None,
+        "skill_sha256": skill_sha256 if condition == "S0" else None,
+        "frozen_skill_sha256": skill_sha256,
+        "protocol_mode": protocol_mode,
         "started_at": started_at,
         "ended_at": utc_now(),
         "execution_seconds": duration,
@@ -812,12 +1012,18 @@ def run_one(
             if isinstance(q24_browser, dict) else None
         ),
         "secret_redaction_files": secret_redaction_files,
+        "workspace_secret_redaction_files": workspace_secret_redaction_files,
         "log_secret_redacted": log_secret_redacted,
+        "provider_relay_revoked": provider_relay_revoked,
         "stdout": stdout_path.name,
         "stderr": stderr_path.name,
         "provider_base_url": provider_base_url or None,
         "provider_host": urlsplit(provider_base_url).hostname if provider_base_url else None,
-        "secret_policy": "API keys are inherited by name or injected in process environment and are never serialized.",
+        "secret_policy": (
+            "The provider key exists only in the short-lived runner-owned relay environment; "
+            "the candidate receives a per-run relay token through process environment, the relay "
+            "enforces model parameters plus request/time limits, and cleanup verifies revocation."
+        ),
     }
     atomic_json(run_dir / "runner_metadata.json", metadata)
     score_path = run_dir / "score.json"
@@ -830,6 +1036,16 @@ def run_one(
         score_path,
         llm_report=llm_source,
         static_review=static_review,
+        review_context={
+            "run_id": run_id,
+            "question_id": question,
+            "condition": condition,
+            "repeat": repeat,
+            "pair_fingerprint": fingerprint,
+            "task_bundle_sha256": task_hash,
+            "frozen_skill_sha256": skill_sha256,
+        },
+        artifacts=artifacts,
     )
     effective_exit_code = 75 if scorer_failed else exit_code
     effective_status = "failed" if scorer_failed else status
@@ -843,6 +1059,14 @@ def run_one(
     if secret_redaction_files:
         redline_events.append(
             {"id": "secret_material_in_submission", "consequence": "acceptance_fail"}
+        )
+    if workspace_secret_redaction_files:
+        redline_events.append(
+            {"id": "secret_material_in_workspace", "consequence": "acceptance_fail"}
+        )
+    if not provider_relay_revoked:
+        redline_events.append(
+            {"id": "provider_relay_revocation_unverified", "consequence": "acceptance_fail"}
         )
     if question == "Q24" and (
         not isinstance(q24_browser, dict) or q24_browser.get("status") != "pass"
@@ -866,6 +1090,10 @@ def run_one(
             "thinking": thinking_mode,
         },
         "skill_version": metadata["skill_sha256"],
+        "frozen_skill_sha256": skill_sha256,
+        "protocol_mode": protocol_mode,
+        "benchmark_scope": "repo_local_regression",
+        "formal_result_eligible": False,
         "benchmark_version": load_json(ALIGNMENT_PATH)["benchmark_version"],
         "started_at": metadata["started_at"],
         "ended_at": metadata["ended_at"],
@@ -881,6 +1109,10 @@ def run_one(
         "llm_grader_raw": None,
         "llm_grader_report": (
             str((run_dir / llm_name).relative_to(campaign_root)) if llm_name is not None else None
+        ),
+        "review_binding": (
+            str((run_dir / "review_binding.json").relative_to(campaign_root))
+            if (run_dir / "review_binding.json").is_file() else None
         ),
         "static_review": (
             str((run_dir / static_name).relative_to(campaign_root)) if static_name is not None else None
@@ -1094,14 +1326,21 @@ def run_campaign(args: argparse.Namespace) -> int:
             "formal paired uplift requires exactly --repeats 3; use --development-run only for diagnostics"
         )
     if args.static_review:
-        validate_review(args.static_review, "static review")
-    if args.llm_report_dir and not args.llm_report_dir.is_dir():
-        raise CampaignError(f"--llm-report-dir is not a directory: {args.llm_report_dir}")
+        raise CampaignError(
+            "--static-review is disabled until a frozen static rubric and evidence scope exist"
+        )
+    if args.llm_report_dir:
+        raise CampaignError(
+            "inline --llm-report-dir is disabled because review bindings exist only after execution; "
+            "run the campaign first, then use finalize-reviews"
+        )
     docker_available()
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
         raise CampaignError("--output-dir must be new or empty")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     image_id = image_identity(args.image)
+    source_skill_sha256 = hash_tree(SKILL_DIR)
+    frozen_skill_dir = args.output_dir / "controller" / "frozen-skill"
     provider_host = urlsplit(args.provider_base_url).hostname if args.provider_base_url else None
     if args.agent == "opencode":
         if not provider_host or urlsplit(args.provider_base_url).scheme != "https":
@@ -1144,6 +1383,12 @@ def run_campaign(args: argparse.Namespace) -> int:
         "network": args.network,
         "allowlist": rules,
         "resources": profile.__dict__,
+        "skill_snapshot": {
+            "source": str(SKILL_DIR.relative_to(REPO_ROOT)),
+            "path": str(frozen_skill_dir.relative_to(args.output_dir)),
+            "sha256": source_skill_sha256,
+            "created": False,
+        },
         "official_claim_boundary": (
             "The local tasks reproduce the public execution contract but are not the organizer's hidden set. "
             "The exact official anti-cheat rules and final uplift synthesis are not public."
@@ -1153,6 +1398,10 @@ def run_campaign(args: argparse.Namespace) -> int:
     if args.dry_run:
         print(json.dumps(plan, ensure_ascii=False, indent=2, sort_keys=True))
         return 0
+    frozen_skill_sha256 = freeze_skill_snapshot(SKILL_DIR, frozen_skill_dir)
+    plan["skill_snapshot"]["sha256"] = frozen_skill_sha256
+    plan["skill_snapshot"]["created"] = True
+    atomic_json(args.output_dir / "campaign_plan.json", plan)
     network = start_network(args.image, campaign_id, rules, args.network)
     records: list[dict[str, Any]] = []
     supplemental_records: list[dict[str, Any]] = []
@@ -1180,8 +1429,11 @@ def run_campaign(args: argparse.Namespace) -> int:
                         network=network,
                         profile=profile,
                         required_paths=required_paths,
-                        llm_report_dir=args.llm_report_dir,
+                        llm_report_dir=None,
                         static_review=args.static_review,
+                        skill_dir=frozen_skill_dir,
+                        skill_sha256=frozen_skill_sha256,
+                        protocol_mode=plan["protocol_mode"],
                     )
                     records.append(record)
         if args.supplemental_model:
@@ -1210,8 +1462,11 @@ def run_campaign(args: argparse.Namespace) -> int:
                         network=network,
                         profile=profile,
                         required_paths=required_paths,
-                        llm_report_dir=args.llm_report_dir,
+                        llm_report_dir=None,
                         static_review=args.static_review,
+                        skill_dir=frozen_skill_dir,
+                        skill_sha256=frozen_skill_sha256,
+                        protocol_mode=plan["protocol_mode"],
                     )
                     supplemental_records.append(record)
     finally:
@@ -1260,6 +1515,312 @@ def run_campaign(args: argparse.Namespace) -> int:
     print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
     all_records = records + supplemental_records
     return 0 if all(item["status"] == "success" for item in all_records) and aggregate_status != "fail" else 2
+
+
+def _campaign_path(root: Path, relative: Any, label: str) -> Path:
+    if not isinstance(relative, str) or not relative:
+        raise CampaignError(f"{label} must be a non-empty relative path")
+    candidate_relative = Path(relative)
+    if candidate_relative.is_absolute() or ".." in candidate_relative.parts:
+        raise CampaignError(f"{label} escapes the campaign directory")
+    candidate = (root / candidate_relative).resolve()
+    root_resolved = root.resolve()
+    if root_resolved not in candidate.parents:
+        raise CampaignError(f"{label} escapes the campaign directory")
+    return candidate
+
+
+def _write_jsonl(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
+            for record in records:
+                handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _validate_bound_run_evidence(
+    *,
+    campaign_root: Path,
+    run_dir: Path,
+    source: Path,
+    record: Mapping[str, Any],
+    metadata: Mapping[str, Any],
+    binding: Mapping[str, Any],
+    required_paths: list[str],
+) -> None:
+    """Re-hash every controller-owned input before accepting a delayed review."""
+
+    task_dir = run_dir / "task"
+    submission = run_dir / "submission"
+    objective = run_dir / "objective_report.json"
+    rubric = source / "rubric.json"
+    frozen_skill = campaign_root / "controller" / "frozen-skill"
+    required_files = {
+        "task bundle": task_dir,
+        "submission": submission,
+        "objective report": objective,
+        "rubric": rubric,
+        "grader protocol": GRADER_PROTOCOL,
+        "frozen Skill": frozen_skill,
+    }
+    missing = [label for label, path in required_files.items() if not path.exists()]
+    if missing:
+        raise CampaignError(f"bound run evidence is missing: {missing}")
+    file_symlinks = [label for label, path in required_files.items() if path.is_symlink()]
+    if file_symlinks:
+        raise CampaignError(f"bound run evidence refuses symlinked files: {file_symlinks}")
+    nested_symlinks = sorted(
+        f"{label}/{path.relative_to(root).as_posix()}"
+        for label, root in (("task bundle", task_dir), ("frozen Skill", frozen_skill))
+        for path in root.rglob("*")
+        if path.is_symlink()
+    )
+    if nested_symlinks:
+        raise CampaignError(f"bound run evidence refuses symlinks: {nested_symlinks}")
+
+    artifacts, missing_artifacts = artifact_inventory(submission, required_paths)
+    if missing_artifacts:
+        raise CampaignError(f"bound submission artifacts are missing: {missing_artifacts}")
+    current = {
+        "task_bundle_sha256": hash_tree(task_dir),
+        "submission_artifacts_sha256": hash_records(
+            (str(item["path"]), str(item["sha256"])) for item in artifacts
+        ),
+        "objective_report_sha256": sha256_file(objective),
+        "rubric_sha256": sha256_file(rubric),
+        "frozen_skill_sha256": hash_tree(frozen_skill),
+        "grader_protocol_sha256": sha256_file(GRADER_PROTOCOL),
+    }
+    drift = sorted(key for key, value in current.items() if binding.get(key) != value)
+    if drift:
+        raise CampaignError(f"bound run evidence drift for {record.get('run_id')}: {drift}")
+
+    fingerprint_inputs = metadata.get("pair_fingerprint_inputs")
+    if not isinstance(fingerprint_inputs, dict):
+        raise CampaignError("runner metadata is missing pair_fingerprint_inputs")
+    fingerprint = hashlib.sha256(
+        json.dumps(fingerprint_inputs, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    identity = {
+        "run_id": record.get("run_id"),
+        "question_id": record.get("task_id"),
+        "condition": record.get("variant"),
+        "repeat": record.get("repeat"),
+        "pair_fingerprint": fingerprint,
+        "task_bundle_sha256": current["task_bundle_sha256"],
+        "frozen_skill_sha256": current["frozen_skill_sha256"],
+    }
+    if any(binding.get(key) != value for key, value in identity.items()):
+        raise CampaignError(f"review binding identity drift for {record.get('run_id')}")
+    metadata_identity = {
+        "run_id": metadata.get("run_id"),
+        "task": metadata.get("task"),
+        "condition": metadata.get("condition"),
+        "repeat": metadata.get("repeat"),
+        "pair_fingerprint": metadata.get("pair_fingerprint"),
+        "task_bundle_sha256": metadata.get("task_bundle_sha256"),
+        "frozen_skill_sha256": metadata.get("frozen_skill_sha256"),
+    }
+    expected_metadata = {
+        "run_id": identity["run_id"],
+        "task": identity["question_id"],
+        "condition": identity["condition"],
+        "repeat": identity["repeat"],
+        "pair_fingerprint": fingerprint,
+        "task_bundle_sha256": current["task_bundle_sha256"],
+        "frozen_skill_sha256": current["frozen_skill_sha256"],
+    }
+    if metadata_identity != expected_metadata:
+        raise CampaignError(f"runner metadata identity drift for {record.get('run_id')}")
+
+
+def finalize_campaign_reviews(args: argparse.Namespace) -> int:
+    """Validate per-run review envelopes, stage all scores, then commit them atomically per file."""
+
+    campaign_root = args.campaign_dir.resolve()
+    if not campaign_root.is_dir():
+        raise CampaignError(f"campaign directory does not exist: {campaign_root}")
+    if not args.llm_report_dir.is_dir():
+        raise CampaignError(f"LLM report directory does not exist: {args.llm_report_dir}")
+    report_root = args.llm_report_dir.resolve()
+    controller = campaign_root / "controller"
+    controller.mkdir(exist_ok=True)
+    required_paths = [
+        item["path"]
+        for item in load_json(ALIGNMENT_PATH)["submission"]["required_artifacts"]
+    ]
+    record_sets: list[tuple[str, Path, list[dict[str, Any]]]] = []
+    for group, filename in (("main", "runs.jsonl"), ("supplemental", "supplemental_runs.jsonl")):
+        path = campaign_root / filename
+        if not path.is_file():
+            if group == "main":
+                raise CampaignError(f"campaign record file does not exist: {path}")
+            continue
+        if path.is_symlink():
+            raise CampaignError(f"campaign record file must not be a symlink: {path}")
+        records = [
+            json.loads(line)
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        if not records:
+            raise CampaignError(f"campaign record file is empty: {path}")
+        record_sets.append((group, path, records))
+
+    all_records = [record for _, _, records in record_sets for record in records]
+    run_ids = [record.get("run_id") for record in all_records]
+    score_paths = [record.get("score_path") for record in all_records]
+    if len(run_ids) != len(set(run_ids)) or len(score_paths) != len(set(score_paths)):
+        raise CampaignError("campaign review targets must have unique run_id and score_path values")
+    resolved_score_paths = [
+        _campaign_path(campaign_root, value, "score_path") for value in score_paths
+    ]
+    if len(resolved_score_paths) != len(set(resolved_score_paths)):
+        raise CampaignError("campaign review score_path values resolve to duplicate targets")
+
+    staged: list[dict[str, Any]] = []
+    with tempfile.TemporaryDirectory(prefix="review-stage-", dir=controller) as temporary:
+        staging = Path(temporary)
+        for group, _, records in record_sets:
+            for record in records:
+                run_id = str(record.get("run_id") or "")
+                question = str(record.get("task_id") or "")
+                condition = str(record.get("variant") or "")
+                repeat = record.get("repeat")
+                if not run_id or condition not in {"B0", "S0"} or repeat not in {1, 2, 3}:
+                    raise CampaignError("campaign run identity is incomplete")
+                score_path = _campaign_path(campaign_root, record.get("score_path"), "score_path")
+                run_dir = score_path.parent
+                metadata_path = run_dir / "runner_metadata.json"
+                if metadata_path.is_symlink():
+                    raise CampaignError(f"runner metadata must not be a symlink for {run_id}")
+                metadata = load_json(metadata_path)
+                candidate_status = metadata.get("candidate_status", metadata.get("status"))
+                candidate_exit_code = metadata.get("candidate_exit_code", metadata.get("exit_code"))
+                if candidate_status not in {"success", "partial_success"}:
+                    if (
+                        record.get("status") != candidate_status
+                        or record.get("exit_code") != candidate_exit_code
+                    ):
+                        raise CampaignError(f"failed run identity drift for {run_id}")
+                    continue
+                binding_path = run_dir / "review_binding.json"
+                if not binding_path.is_file():
+                    raise CampaignError(f"review binding is missing for {run_id}")
+                if binding_path.is_symlink():
+                    raise CampaignError(f"review binding must not be a symlink for {run_id}")
+                binding = validate_binding(load_json(binding_path))
+                report_source = locate_llm_report(
+                    args.llm_report_dir, run_id, group, question, condition, int(repeat)
+                )
+                if report_source is None:
+                    raise CampaignError(f"LLM grader report is missing for {run_id}")
+                report_resolved = report_source.resolve()
+                if report_source.is_symlink() or report_root not in report_resolved.parents:
+                    raise CampaignError(f"LLM grader report escapes its report directory for {run_id}")
+                validate_review(report_source, "LLM grader report", binding)
+                source, _ = task_source(question)
+                _validate_bound_run_evidence(
+                    campaign_root=campaign_root,
+                    run_dir=run_dir,
+                    source=source,
+                    record=record,
+                    metadata=metadata,
+                    binding=binding,
+                    required_paths=required_paths,
+                )
+                staging_id = f"{safe_slug(run_id)}-{hashlib.sha256(run_id.encode()).hexdigest()[:12]}"
+                staged_score = staging / f"{staging_id}.score.json"
+                staged_report = staging / f"{staging_id}.review.json"
+                shutil.copy2(report_source, staged_report)
+                completed = subprocess.run(
+                    [
+                        sys.executable,
+                        str(EVALUATION_ROOT / "tools" / "finalize_score.py"),
+                        "--objective-report", str(run_dir / "objective_report.json"),
+                        "--rubric", str(source / "rubric.json"),
+                        "--run-id", run_id,
+                        "--candidate-status", str(candidate_status),
+                        "--objective-evidence", "objective_report.json",
+                        "--llm-report", str(staged_report),
+                        "--review-binding", str(binding_path),
+                        "--llm-evidence", "llm_grader_report.json",
+                        "--output", str(staged_score),
+                    ],
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                )
+                if completed.returncode != 0 or not staged_score.is_file():
+                    raise CampaignError(
+                        f"review scoring failed for {run_id}: "
+                        f"{(completed.stderr or completed.stdout).strip()}"
+                    )
+                staged.append(
+                    {
+                        "record": record,
+                        "run_dir": run_dir,
+                        "metadata_path": metadata_path,
+                        "metadata": metadata,
+                        "candidate_status": candidate_status,
+                        "candidate_exit_code": candidate_exit_code,
+                        "score_path": score_path,
+                        "staged_score": staged_score,
+                        "staged_report": staged_report,
+                    }
+                )
+
+        for item in staged:
+            run_dir = item["run_dir"]
+            score = load_json(item["staged_score"])
+            os.replace(item["staged_score"], item["score_path"])
+            os.replace(item["staged_report"], run_dir / "llm_grader_report.json")
+            metadata = item["metadata"]
+            metadata["scorer_failed"] = False
+            metadata["status"] = item["candidate_status"]
+            metadata["exit_code"] = item["candidate_exit_code"]
+            atomic_json(item["metadata_path"], metadata)
+            record = item["record"]
+            record["score"] = score
+            record["status"] = item["candidate_status"]
+            record["exit_code"] = item["candidate_exit_code"]
+            record["llm_grader_report"] = str(
+                (run_dir / "llm_grader_report.json").relative_to(campaign_root)
+            )
+            atomic_json(run_dir / "run_record.json", record)
+
+    for _, path, records in record_sets:
+        _write_jsonl(path, records)
+    main_records = campaign_root / "runs.jsonl"
+    summary_csv = campaign_root / "summary.csv"
+    summary_json = campaign_root / "summary.json"
+    if summary_csv.exists() or summary_json.exists():
+        aggregate = subprocess.run(
+            [
+                sys.executable,
+                str(EVALUATION_ROOT / "tools" / "aggregate_runs.py"),
+                str(main_records),
+                "--csv-output", str(summary_csv),
+                "--json-output", str(summary_json),
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if aggregate.returncode != 0:
+            raise CampaignError(
+                "review scores were committed but campaign aggregation failed: "
+                f"{(aggregate.stderr or aggregate.stdout).strip()}"
+            )
+    print(json.dumps({"status": "PASS", "reviewed_runs": len(staged)}, sort_keys=True))
+    return 0
 
 
 def parser() -> argparse.ArgumentParser:
@@ -1335,12 +1896,26 @@ def parser() -> argparse.ArgumentParser:
     campaign.add_argument("--network", choices=("offline", "whitelist"), default="whitelist")
     campaign.add_argument("--allowlist", type=Path, default=DOCKER_ROOT / "allowlist.txt")
     campaign.add_argument("--allow-host", action="append", default=[])
-    campaign.add_argument("--llm-report-dir", type=Path, help="optional independent per-run grader reports")
-    campaign.add_argument("--static-review", type=Path, help="optional frozen static review JSON")
+    campaign.add_argument(
+        "--llm-report-dir", type=Path,
+        help="disabled inline; run first, then use finalize-reviews with bound reports",
+    )
+    campaign.add_argument(
+        "--static-review", type=Path,
+        help="disabled until a frozen static rubric and evidence scope exist",
+    )
     campaign.add_argument("--timeout-seconds", type=int, default=900)
     campaign.add_argument("--output-dir", type=Path, required=True)
     campaign.add_argument("--dry-run", action="store_true")
     campaign.set_defaults(func=run_campaign)
+
+    reviews = sub.add_parser(
+        "finalize-reviews",
+        help="validate bound independent LLM reviews and update an existing campaign",
+    )
+    reviews.add_argument("--campaign-dir", type=Path, required=True)
+    reviews.add_argument("--llm-report-dir", type=Path, required=True)
+    reviews.set_defaults(func=finalize_campaign_reviews)
     return root
 
 

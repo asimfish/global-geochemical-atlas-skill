@@ -571,12 +571,21 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         template_path = Path(__file__).resolve().parent.parent / "assets" / "interactive-atlas-v3.html"
         if not isinstance(map_report, dict):
             errors.append("run_summary map_report is missing")
-        elif (
-            map_report.get("template_contract_version") != "d3-dual-scope-atlas-v4"
-            or map_report.get("template_variant") != "global_globe"
-            or map_report.get("template_sha256") != sha256_file(template_path)
-        ):
-            errors.append("run_summary map template identity is invalid")
+        else:
+            spatial_scope = map_report.get("spatial_scope")
+            scope_mode = spatial_scope.get("mode") if isinstance(spatial_scope, dict) else None
+            expected_variant = None
+            if scope_mode == "global":
+                expected_variant = "global_globe"
+            elif scope_mode == "regional":
+                expected_variant = "regional_focus"
+            if (
+                map_report.get("template_contract_version") != "d3-dual-scope-atlas-v4"
+                or expected_variant is None
+                or map_report.get("template_variant") != expected_variant
+                or map_report.get("template_sha256") != sha256_file(template_path)
+            ):
+                errors.append("run_summary map template identity is invalid")
         transaction = summary.get("artifact_transaction")
         if (
             not isinstance(transaction, dict)

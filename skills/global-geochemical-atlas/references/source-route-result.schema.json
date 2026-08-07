@@ -15,7 +15,7 @@
     "claim_boundary"
   ],
   "properties": {
-    "route_version": {"const": "geochemical-source-route-v3"},
+    "route_version": {"const": "geochemical-source-route-v4"},
     "status": {"type": "string", "enum": ["ready", "partial", "needs_human_review", "unsupported_scope"]},
     "request": {"type": "object"},
     "selected_sources": {"type": "array", "items": {"$ref": "#/$defs/routeSource"}},
@@ -76,10 +76,11 @@
         "request_compatibility": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["analytes", "region", "measurement_basis", "time_range", "max_records"],
+          "required": ["analytes", "region", "geology", "measurement_basis", "time_range", "max_records"],
           "properties": {
             "analytes": {"$ref": "#/$defs/compatibilityDimension"},
             "region": {"$ref": "#/$defs/compatibilityDimension"},
+            "geology": {"$ref": "#/$defs/compatibilityDimension"},
             "measurement_basis": {"$ref": "#/$defs/compatibilityDimension"},
             "time_range": {"$ref": "#/$defs/compatibilityDimension"},
             "max_records": {"$ref": "#/$defs/compatibilityDimension"}
