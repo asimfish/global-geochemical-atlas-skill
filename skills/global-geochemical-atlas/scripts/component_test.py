@@ -76,8 +76,12 @@ REGIONAL_VISUALIZATION_PROFILE = (
 REGIONAL_COMPARISON_PROFILE = (
     SKILL_DIR / "assets" / "visualization-profile.comparison-regional.template.json"
 )
-VISUALIZATION_PROFILE_SCHEMA = SKILL_DIR / "references" / "visualization-profile.schema.json"
-VISUALIZATION_REPORT_SCHEMA = SKILL_DIR / "references" / "visualization-report.schema.json"
+VISUALIZATION_PROFILE_SCHEMA = (
+    SKILL_DIR / "references" / "visualization-profile.schema.json"
+)
+VISUALIZATION_REPORT_SCHEMA = (
+    SKILL_DIR / "references" / "visualization-report.schema.json"
+)
 PRODUCTION_REQUEST = SKILL_DIR / "fixtures" / "production-usgs" / "request.json"
 
 
@@ -104,8 +108,12 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def run_command(arguments: list[str], expected_code: int = 0) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(arguments, capture_output=True, text=True, check=False, timeout=60)
+def run_command(
+    arguments: list[str], expected_code: int = 0
+) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(
+        arguments, capture_output=True, text=True, check=False, timeout=60
+    )
     if result.returncode != expected_code:
         raise ContractError(
             f"unexpected exit {result.returncode}, expected {expected_code}: {' '.join(arguments)}\n"
@@ -120,12 +128,32 @@ def check_d1(output_dir: Path) -> list[str]:
     confidence_path = output_dir / "confidence_report.json"
     manifest = json_value(manifest_path)
     input_hash = sha256_file(DEMO_INPUT)
-    require(manifest.get("manifest_version") == "geochemical-source-manifest-v2", "D1 manifest version is stable", checks)
-    require(manifest.get("input", {}).get("sha256") == input_hash, "D1 manifest binds the acquired input hash", checks)
-    require(manifest.get("input", {}).get("record_count") == 19, "D1 manifest preserves the record count", checks)
+    require(
+        manifest.get("manifest_version") == "geochemical-source-manifest-v2",
+        "D1 manifest version is stable",
+        checks,
+    )
+    require(
+        manifest.get("input", {}).get("sha256") == input_hash,
+        "D1 manifest binds the acquired input hash",
+        checks,
+    )
+    require(
+        manifest.get("input", {}).get("record_count") == 19,
+        "D1 manifest preserves the record count",
+        checks,
+    )
     coverage = manifest.get("coverage", {})
-    require(coverage.get("source_locator_rate") == 1.0, "D1 demo provenance coverage is complete", checks)
-    require(coverage.get("declared_license_rate") == 1.0, "D1 demo license declarations are complete", checks)
+    require(
+        coverage.get("source_locator_rate") == 1.0,
+        "D1 demo provenance coverage is complete",
+        checks,
+    )
+    require(
+        coverage.get("declared_license_rate") == 1.0,
+        "D1 demo license declarations are complete",
+        checks,
+    )
     require(
         coverage.get("verified_evidence_rate") == 0.0,
         "D1 does not overstate verification when no acquisition manifest is supplied",
@@ -143,23 +171,42 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     binding = manifest.get("confidence_report", {})
-    require(binding.get("sha256") == sha256_file(confidence_path), "D1 packages the unchanged D2 confidence hash", checks)
-    require(binding.get("not_a_probability") is True, "D1 preserves the confidence interpretation boundary", checks)
+    require(
+        binding.get("sha256") == sha256_file(confidence_path),
+        "D1 packages the unchanged D2 confidence hash",
+        checks,
+    )
+    require(
+        binding.get("not_a_probability") is True,
+        "D1 preserves the confidence interpretation boundary",
+        checks,
+    )
 
     registry = source_contracts.load_source_registry()
     require(
         set(registry["sources"])
         == {
-            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
-            "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
+            "georoc-archaean",
+            "usgs-conus-soil",
+            "norway-marchem",
+            "geotraces-idp2025",
+            "gemstat-open-archive",
+            "japan-gsj-geochemical-map",
             "pangaea-north-africa-soil",
-            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
-            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
+            "foregs-topsoil",
+            "foregs-subsoil",
+            "foregs-humus",
+            "foregs-stream-water",
+            "foregs-stream-sediment",
+            "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
             "us-wqp-sacramento-river-arsenic",
-            "australia-ngsa-mercury", "japan-gsj-marine-sediment",
+            "australia-ngsa-mercury",
+            "japan-gsj-marine-sediment",
             "pangaea-arabian-sea-sediment",
-            "georoc-antarctica-intraplate", "tpdc-china-mountain-soil", "gemas-europe",
+            "georoc-antarctica-intraplate",
+            "tpdc-china-mountain-soil",
+            "gemas-europe",
         },
         "D1 registry freezes twenty-one executable datasets across the four required media",
         checks,
@@ -173,7 +220,8 @@ def check_d1(output_dir: Path) -> list[str]:
     gemstat = source_contracts.registry_candidate("gemstat-open-archive")
     require(
         gemstat.version == "v3"
-        and set(gemstat.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
+        and set(gemstat.registry_entry["target_analytes"])
+        == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
         and gemstat.registry_entry["expected_counts"]["target_observations"] == 3739180
         and len(gemstat.registry_entry["download"]["selected_members"]) == 11,
         "D1 GEMStat candidate pins the official v3 seven-element and metadata member subset",
@@ -197,7 +245,8 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         pangaea.version == "2022-10-25"
         and pangaea.license_id == "CC-BY-4.0"
-        and set(pangaea.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
+        and set(pangaea.registry_entry["target_analytes"])
+        == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
         and pangaea.registry_entry["expected_counts"]["physical_rows"] == 43
         and pangaea.registry_entry["expected_counts"]["target_observations"] == 258,
         "D1 PANGAEA candidate pins the concrete DOI table, six targets and exact row counts",
@@ -206,7 +255,8 @@ def check_d1(output_dir: Path) -> list[str]:
     gsj = source_contracts.registry_candidate("japan-gsj-geochemical-map")
     require(
         gsj.version == "sample-2024-02-20_concentration-2007-01-10"
-        and set(gsj.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
+        and set(gsj.registry_entry["target_analytes"])
+        == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
         and gsj.registry_entry["target_units"]["Hg"] == "ppb"
         and gsj.registry_entry["expected_counts"]["ordinal_joined_rows"] == 3024
         and gsj.registry_entry["expected_counts"]["duplicate_sample_id"] == "78013",
@@ -244,29 +294,35 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         afsis.version == "2.0"
         and afsis.license_id == "CC-BY-4.0"
-        and set(afsis.registry_entry["target_analytes"]) == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
+        and set(afsis.registry_entry["target_analytes"])
+        == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
         and afsis.registry_entry["expected_counts"]["physical_rows"] == 2002
         and afsis.registry_entry["expected_counts"]["complete_coordinate_pairs"] == 1876
-        and afsis.registry_entry["expected_counts"]["positive_below_dl_counts"]["Pb"] == 1969,
+        and afsis.registry_entry["expected_counts"]["positive_below_dl_counts"]["Pb"]
+        == 1969,
         "D1 AfSIS candidate pins version 2.0, six analytes and its coordinate and detection-limit boundaries",
         checks,
     )
-    with tempfile.TemporaryDirectory(prefix="afsis-xlsx-contract-") as temporary_directory:
+    with tempfile.TemporaryDirectory(
+        prefix="afsis-xlsx-contract-"
+    ) as temporary_directory:
         workbook = Path(temporary_directory) / "synthetic.xlsx"
         with zipfile.ZipFile(workbook, "w") as archive:
             archive.writestr(
                 "xl/sharedStrings.xml",
                 '<?xml version="1.0"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-                '<si><t>variable name</t></si><si><t>As.75</t></si></sst>',
+                "<si><t>variable name</t></si><si><t>As.75</t></si></sst>",
             )
             archive.writestr(
                 "xl/worksheets/sheet1.xml",
                 '<?xml version="1.0"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
                 '<sheetData><row r="1"><c r="B1" t="s"><v>0</v></c></row>'
                 '<row r="2"><c r="B2" t="s"><v>1</v></c><c r="D2"><v>2.5</v></c></row>'
-                '</sheetData></worksheet>',
+                "</sheetData></worksheet>",
             )
-        parsed_xlsx = source_contracts.AfsisPhaseIWetChemistryAdapter._xlsx_rows(workbook)
+        parsed_xlsx = source_contracts.AfsisPhaseIWetChemistryAdapter._xlsx_rows(
+            workbook
+        )
     require(
         parsed_xlsx == [(1, ["", "variable name"]), (2, ["", "As.75", "", "2.5"])],
         "D1 AfSIS workbook reader preserves sparse columns without extracting untrusted members",
@@ -397,7 +453,9 @@ def check_d1(output_dir: Path) -> list[str]:
             {
                 **source_router.validate_request(
                     {
-                        "elements": ["Cu"], "region": "China", "media": ["soil"],
+                        "elements": ["Cu"],
+                        "region": "China",
+                        "media": ["soil"],
                         "geology_units": ["Unit A"],
                     },
                     catalog,
@@ -414,7 +472,8 @@ def check_d1(output_dir: Path) -> list[str]:
             {
                 **source_router.validate_request(
                     {
-                        "elements": ["Cu"], "region": {"bbox": [170, -20, -170, 20]},
+                        "elements": ["Cu"],
+                        "region": {"bbox": [170, -20, -170, 20]},
                         "media": ["soil"],
                     },
                     catalog,
@@ -428,7 +487,8 @@ def check_d1(output_dir: Path) -> list[str]:
             china_count == 1
             and [row["record_id"] for row in csv_rows(china_output)] == ["beijing"]
             and dateline_count == 2
-            and {row["record_id"] for row in csv_rows(dateline_output)} == {"east", "west"},
+            and {row["record_id"] for row in csv_rows(dateline_output)}
+            == {"east", "west"},
             "D1 request execution applies strict country polygons, geology labels, and wrapped bbox filters",
             checks,
         )
@@ -526,9 +586,7 @@ def check_d1(output_dir: Path) -> list[str]:
         catalog_schema["$defs"]["source"]["properties"]["identifiers"]["properties"]
     )
     observed_identifier_fields = {
-        field
-        for entry in catalog["sources"].values()
-        for field in entry["identifiers"]
+        field for entry in catalog["sources"].values() for field in entry["identifiers"]
     }
     require(
         observed_identifier_fields <= allowed_identifier_fields,
@@ -536,7 +594,9 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     interface_schema_fields = set(
-        catalog_schema["$defs"]["source"]["properties"]["interfaces"]["items"]["properties"]
+        catalog_schema["$defs"]["source"]["properties"]["interfaces"]["items"][
+            "properties"
+        ]
     )
     observed_interface_fields = {
         field
@@ -546,12 +606,19 @@ def check_d1(output_dir: Path) -> list[str]:
     }
     require(
         observed_interface_fields <= interface_schema_fields
-        and all(interface.get("method") in {None, "GET", "POST"} for entry in catalog["sources"].values() for interface in entry["interfaces"]),
+        and all(
+            interface.get("method") in {None, "GET", "POST"}
+            for entry in catalog["sources"].values()
+            for interface in entry["interfaces"]
+        ),
         "D1 catalog interface fields and HTTP methods remain aligned with the published Schema",
         checks,
     )
     require(
-        set(catalog["sources"][source_id]["status"] for source_id in ("georoc-archaean", "usgs-conus-soil"))
+        set(
+            catalog["sources"][source_id]["status"]
+            for source_id in ("georoc-archaean", "usgs-conus-soil")
+        )
         == {"approved"}
         and {
             source_id
@@ -564,7 +631,9 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         {"rock", "soil", "sediment", "water"}
-        <= {medium for entry in catalog["sources"].values() for medium in entry["media"]},
+        <= {
+            medium for entry in catalog["sources"].values() for medium in entry["media"]
+        },
         "D1 catalog has initial discovery coverage for all four required media",
         checks,
     )
@@ -581,16 +650,26 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         {entry["source_id"] for entry in route["selected_sources"]}
         == {
-            "georoc-archaean", "usgs-conus-soil", "norway-marchem",
-            "geotraces-idp2025", "gemstat-open-archive", "japan-gsj-geochemical-map",
+            "georoc-archaean",
+            "usgs-conus-soil",
+            "norway-marchem",
+            "geotraces-idp2025",
+            "gemstat-open-archive",
+            "japan-gsj-geochemical-map",
             "pangaea-north-africa-soil",
-            "foregs-topsoil", "foregs-subsoil", "foregs-humus",
-            "foregs-stream-water", "foregs-stream-sediment", "foregs-floodplain-sediment",
+            "foregs-topsoil",
+            "foregs-subsoil",
+            "foregs-humus",
+            "foregs-stream-water",
+            "foregs-stream-sediment",
+            "foregs-floodplain-sediment",
             "afsis-phase-i-wet-chemistry",
             "us-wqp-sacramento-river-arsenic",
             "japan-gsj-marine-sediment",
             "pangaea-arabian-sea-sediment",
-            "georoc-antarctica-intraplate", "tpdc-china-mountain-soil", "gemas-europe",
+            "georoc-antarctica-intraplate",
+            "tpdc-china-mountain-soil",
+            "gemas-europe",
         },
         "D1 V4 router selects the twenty compatible normalized-analysis datasets across all media",
         checks,
@@ -605,7 +684,8 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         "usgs-ngdb" in {entry["source_id"] for entry in route["review_sources"]}
-        and "gemstat-open-archive" not in {entry["source_id"] for entry in route["review_sources"]},
+        and "gemstat-open-archive"
+        not in {entry["source_id"] for entry in route["review_sources"]},
         "D1 router exposes relevant candidates and their review blockers",
         checks,
     )
@@ -614,13 +694,19 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         {entry["source_id"] for entry in arsenic_water_route["selected_sources"]}
-        == {"foregs-stream-water", "gemstat-open-archive", "us-wqp-sacramento-river-arsenic"}
+        == {
+            "foregs-stream-water",
+            "gemstat-open-archive",
+            "us-wqp-sacramento-river-arsenic",
+        }
         and "geotraces-idp2025"
         in {entry["source_id"] for entry in arsenic_water_route["review_sources"]}
         and next(
-            entry for entry in arsenic_water_route["review_sources"]
+            entry
+            for entry in arsenic_water_route["review_sources"]
             if entry["source_id"] == "geotraces-idp2025"
-        )["request_compatibility"]["analytes"]["status"] == "incompatible",
+        )["request_compatibility"]["analytes"]["status"]
+        == "incompatible",
         "D1 router applies registered analyte availability before source selection",
         checks,
     )
@@ -664,8 +750,10 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         {entry["source_id"] for entry in raw_sediment_route["selected_sources"]}
         == {
-            "norway-marchem", "japan-gsj-geochemical-map",
-            "foregs-stream-sediment", "foregs-floodplain-sediment",
+            "norway-marchem",
+            "japan-gsj-geochemical-map",
+            "foregs-stream-sediment",
+            "foregs-floodplain-sediment",
             "japan-gsj-marine-sediment",
             "pangaea-arabian-sea-sediment",
         },
@@ -690,7 +778,9 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     candidate_evidence = score_source_evidence.load_candidate_evidence()
-    evidence = score_source_evidence.score_catalog(catalog, registry, candidate_evidence)
+    evidence = score_source_evidence.score_catalog(
+        catalog, registry, candidate_evidence
+    )
     require(
         evidence == json_value(SKILL_DIR / "assets" / "source_evidence_scores.json"),
         "D1 checked-in V3 evidence report is reproducible from catalog, registry and candidate evidence",
@@ -699,7 +789,13 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["summary"]
         == {
-            "evidence_tiers": {"A": 20, "B": 1, "C": 0, "D": len(catalog["sources"]) - 21, "U": 0},
+            "evidence_tiers": {
+                "A": 20,
+                "B": 1,
+                "C": 0,
+                "D": len(catalog["sources"]) - 21,
+                "U": 0,
+            },
             "use_modes": {
                 "benchmark_ready": 0,
                 "normalized_analysis": 21,
@@ -714,7 +810,9 @@ def check_d1(output_dir: Path) -> list[str]:
         evidence["sources"]["georoc-archaean"]["source_evidence_score"] == 85
         and evidence["sources"]["georoc-archaean"]["evidence_tier"] == "A"
         and evidence["sources"]["georoc-archaean"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["georoc-archaean"]["source_evidence_dimensions"]["human_review"]["status"]
+        and evidence["sources"]["georoc-archaean"]["source_evidence_dimensions"][
+            "human_review"
+        ]["status"]
         == "missing",
         "D1 scores GEOROC highly without falsely marking the pending human review complete",
         checks,
@@ -722,8 +820,11 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["sources"]["gemstat-open-archive"]["source_evidence_score"] == 85
         and evidence["sources"]["gemstat-open-archive"]["evidence_tier"] == "A"
-        and evidence["sources"]["gemstat-open-archive"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["gemstat-open-archive"]["source_evidence_dimensions"]["human_review"]["status"]
+        and evidence["sources"]["gemstat-open-archive"]["use_mode"]
+        == "normalized_analysis"
+        and evidence["sources"]["gemstat-open-archive"]["source_evidence_dimensions"][
+            "human_review"
+        ]["status"]
         == "missing",
         "D1 credits the range-verified GEMStat adapter without treating unsigned review as a hard rejection",
         checks,
@@ -733,20 +834,24 @@ def check_d1(output_dir: Path) -> list[str]:
     compressed_fixture = compressor.compress(decoded_fixture) + compressor.flush()
     member_name = b"test.csv"
     fixture_crc = binascii.crc32(decoded_fixture) & 0xFFFFFFFF
-    range_fixture = struct.pack(
-        "<IHHHHHIIIHH",
-        0x04034B50,
-        0,
-        0,
-        8,
-        0,
-        0,
-        fixture_crc,
-        len(compressed_fixture),
-        len(decoded_fixture),
-        len(member_name),
-        0,
-    ) + member_name + compressed_fixture
+    range_fixture = (
+        struct.pack(
+            "<IHHHHHIIIHH",
+            0x04034B50,
+            0,
+            0,
+            8,
+            0,
+            0,
+            fixture_crc,
+            len(compressed_fixture),
+            len(decoded_fixture),
+            len(member_name),
+            0,
+        )
+        + member_name
+        + compressed_fixture
+    )
     range_specification = {
         "name": "test.csv",
         "range_start": 0,
@@ -778,7 +883,9 @@ def check_d1(output_dir: Path) -> list[str]:
         evidence["sources"]["norway-marchem"]["source_evidence_score"] == 85
         and evidence["sources"]["norway-marchem"]["evidence_tier"] == "A"
         and evidence["sources"]["norway-marchem"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["norway-marchem"]["source_evidence_dimensions"]["version_snapshot"]["status"]
+        and evidence["sources"]["norway-marchem"]["source_evidence_dimensions"][
+            "version_snapshot"
+        ]["status"]
         == "verified",
         "D1 credits the frozen MarChem adapter while retaining its pending human-review limitation",
         checks,
@@ -786,17 +893,24 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         evidence["sources"]["geotraces-idp2025"]["source_evidence_score"] == 85
         and evidence["sources"]["geotraces-idp2025"]["evidence_tier"] == "A"
-        and evidence["sources"]["geotraces-idp2025"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["geotraces-idp2025"]["source_evidence_dimensions"]["human_review"]["status"]
+        and evidence["sources"]["geotraces-idp2025"]["use_mode"]
+        == "normalized_analysis"
+        and evidence["sources"]["geotraces-idp2025"]["source_evidence_dimensions"][
+            "human_review"
+        ]["status"]
         == "missing",
         "D1 credits the pinned GEOTRACES adapter without pretending the prepared review is signed",
         checks,
     )
     require(
-        evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_score"] == 85
+        evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_score"]
+        == 85
         and evidence["sources"]["afsis-phase-i-wet-chemistry"]["evidence_tier"] == "A"
-        and evidence["sources"]["afsis-phase-i-wet-chemistry"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["afsis-phase-i-wet-chemistry"]["source_evidence_dimensions"]["human_review"]["status"]
+        and evidence["sources"]["afsis-phase-i-wet-chemistry"]["use_mode"]
+        == "normalized_analysis"
+        and evidence["sources"]["afsis-phase-i-wet-chemistry"][
+            "source_evidence_dimensions"
+        ]["human_review"]["status"]
         == "missing",
         "D1 credits the pinned AfSIS files and adapter while retaining pending human review",
         checks,
@@ -809,20 +923,25 @@ def check_d1(output_dir: Path) -> list[str]:
         and len(tpdc_evidence["archive"]["members"]) == 3
         and tpdc_evidence["observed_data"]["counts"]["physical_rows"] == 1314
         and tpdc_evidence["observed_data"]["counts"]["target_observations"] == 6570
-        and set(tpdc_evidence["observed_data"]["target_analytes"]) == {"Cr", "Cu", "Ni", "Pb", "Zn"}
-        and tpdc_evidence["observed_metadata"]["dataset_doi"] == "10.11888/Terre.tpdc.302620",
+        and set(tpdc_evidence["observed_data"]["target_analytes"])
+        == {"Cr", "Cu", "Ni", "Pb", "Zn"}
+        and tpdc_evidence["observed_metadata"]["dataset_doi"]
+        == "10.11888/Terre.tpdc.302620",
         "D1 TPDC candidate pins the content-addressed official bundle contract and five targets",
         checks,
     )
     require(
         evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_score"] == 85
         and evidence["sources"]["tpdc-china-mountain-soil"]["evidence_tier"] == "A"
-        and evidence["sources"]["tpdc-china-mountain-soil"]["use_mode"] == "normalized_analysis"
-        and evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_dimensions"]
-        ["file_record_integrity"]["status"]
+        and evidence["sources"]["tpdc-china-mountain-soil"]["use_mode"]
+        == "normalized_analysis"
+        and evidence["sources"]["tpdc-china-mountain-soil"][
+            "source_evidence_dimensions"
+        ]["file_record_integrity"]["status"]
         == "verified"
-        and evidence["sources"]["tpdc-china-mountain-soil"]["source_evidence_dimensions"]
-        ["adapter_reproducibility"]["status"]
+        and evidence["sources"]["tpdc-china-mountain-soil"][
+            "source_evidence_dimensions"
+        ]["adapter_reproducibility"]["status"]
         == "verified",
         "D1 exposes TPDC as a content-addressed normalized-analysis source",
         checks,
@@ -831,31 +950,39 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         audit["status"] == "PASS"
         and audit["summary"]["evidence_tiers"] == evidence["summary"]["evidence_tiers"]
-        and audit["sources"]["gemstat-open-archive"]["operational_status"] == "available"
+        and audit["sources"]["gemstat-open-archive"]["operational_status"]
+        == "available"
         and audit["sources"]["gemstat-open-archive"]["evidence_tier"] == "A",
         "D1 audit separates operational research-use restrictions from progressive evidence tier",
         checks,
     )
     tampered_catalog = copy.deepcopy(catalog)
     tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "unresolved"
-    tampered_audit = source_audit.audit_catalog(tampered_catalog, registry, candidate_evidence)
+    tampered_audit = source_audit.audit_catalog(
+        tampered_catalog, registry, candidate_evidence
+    )
     require(
         tampered_audit["status"] == "PASS"
-        and tampered_audit["sources"]["georoc-archaean"]["research_use_status"] == "unknown"
-        and tampered_audit["sources"]["georoc-archaean"]["operational_status"] == "restricted"
+        and tampered_audit["sources"]["georoc-archaean"]["research_use_status"]
+        == "unknown"
+        and tampered_audit["sources"]["georoc-archaean"]["operational_status"]
+        == "restricted"
         and tampered_audit["sources"]["georoc-archaean"]["source_evidence_score"] == 85,
         "D1 separates unresolved research-use conditions from unchanged scientific evidence completeness",
         checks,
     )
     tampered_catalog["sources"]["georoc-archaean"]["license"]["status"] = "open"
-    tampered_catalog["sources"]["georoc-archaean"]["version"]["value"] = "unreviewed-new-version"
+    tampered_catalog["sources"]["georoc-archaean"]["version"]["value"] = (
+        "unreviewed-new-version"
+    )
     tampered_route = source_router.route_sources(
         {"elements": ["As"], "region": "global", "media": ["rock"]},
         tampered_catalog,
         registry,
     )
     require(
-        "georoc-archaean" not in {entry["source_id"] for entry in tampered_route["selected_sources"]}
+        "georoc-archaean"
+        not in {entry["source_id"] for entry in tampered_route["selected_sources"]}
         and "conflict=adapter_reproducibility"
         in next(
             entry["reason"]
@@ -879,7 +1006,8 @@ def check_d1(output_dir: Path) -> list[str]:
             and record["evidence_url"].startswith("https://")
             for record in discovery_records
         )
-        and max(record["round"] for record in discovery_records) == catalog["discovery_state"]["round"],
+        and max(record["round"] for record in discovery_records)
+        == catalog["discovery_state"]["round"],
         "D1 discovery log accounts for every catalog source through the current official-evidence round",
         checks,
     )
@@ -915,7 +1043,8 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     marchem_data = marchem_verification["observed_data"]
     require(
-        marchem_verification["verification_version"] == "marchem-candidate-verification-v1"
+        marchem_verification["verification_version"]
+        == "marchem-candidate-verification-v1"
         and marchem_verification["source_id"] == "norway-marchem"
         and marchem_verification["archive"]["sha256"]
         == "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6"
@@ -938,22 +1067,32 @@ def check_d1(output_dir: Path) -> list[str]:
         all(
             profile["record_count"] == 1070
             and profile["present_count"] == 880
-            and profile["present_count"] + profile["missing_count"] == profile["record_count"]
+            and profile["present_count"] + profile["missing_count"]
+            == profile["record_count"]
             and profile["invalid_count"] == 0
             and profile["reported_unit"] == "mg/kg"
             and profile["weight_basis"] == "dry"
             for profile in marchem_data["target_analytes"].values()
         )
-        and marchem_verification["observed_metadata"]["partial_digestion_disclosed"] is True
-        and marchem_verification["observed_metadata"]["not_total_content_disclosed"] is True
-        and marchem_verification["observed_metadata"]["accreditation_rows"]["not_accredited"] > 0,
+        and marchem_verification["observed_metadata"]["partial_digestion_disclosed"]
+        is True
+        and marchem_verification["observed_metadata"]["not_total_content_disclosed"]
+        is True
+        and marchem_verification["observed_metadata"]["accreditation_rows"][
+            "not_accredited"
+        ]
+        > 0,
         "D1 MarChem evidence preserves target units, censoring context, partial digestion and accreditation limits",
         checks,
     )
     require(
         len(marchem_verification["prepared_human_review_sample"]) == 30
         and marchem_verification["human_review"]
-        == {"required_record_count": 30, "prepared_record_count": 30, "status": "pending"}
+        == {
+            "required_record_count": 30,
+            "prepared_record_count": 30,
+            "status": "pending",
+        }
         and verify_marchem_candidate.parse_value("<2.0") == ("censored_lt", 2.0),
         "D1 prepares but does not falsely mark the required MarChem human review as complete",
         checks,
@@ -991,7 +1130,9 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 snapshot preserves missing HTTP-status and publisher-checksum evidence instead of inventing it",
         checks,
     )
-    identical_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, copy.deepcopy(marchem_snapshot))
+    identical_snapshot_diff = snapshot_source.diff_snapshots(
+        marchem_snapshot, copy.deepcopy(marchem_snapshot)
+    )
     require(
         identical_snapshot_diff["status"] == "identical"
         and identical_snapshot_diff["requires_rescore"] is False,
@@ -1000,7 +1141,9 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     changed_snapshot = copy.deepcopy(marchem_snapshot)
     changed_snapshot["response"]["sha256"] = "0" * 64
-    changed_snapshot_diff = snapshot_source.diff_snapshots(marchem_snapshot, changed_snapshot)
+    changed_snapshot_diff = snapshot_source.diff_snapshots(
+        marchem_snapshot, changed_snapshot
+    )
     require(
         changed_snapshot_diff["status"] == "changed"
         and changed_snapshot_diff["requires_rescore"] is True
@@ -1019,7 +1162,8 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         marchem_reconciliation["status"] == "PASS"
         and marchem_reconciliation["snapshot_id"] == marchem_snapshot["snapshot_id"]
-        and marchem_reconciliation["snapshot_response_sha256"] == marchem_snapshot["response"]["sha256"]
+        and marchem_reconciliation["snapshot_response_sha256"]
+        == marchem_snapshot["response"]["sha256"]
         and marchem_reconciliation["counts"]["physical_rows"] == 1070
         and marchem_reconciliation["counts"]["distinct_samples"] == 880
         and marchem_reconciliation["counts"]["target_observations"] == 3520
@@ -1031,9 +1175,12 @@ def check_d1(output_dir: Path) -> list[str]:
         marchem_reconciliation["counts"]["target_censored_counts"]
         == {"As": 20, "Cu": 18, "Ni": 2, "Zn": 5}
         and marchem_reconciliation["measurement_semantics"]["units"] == ["mg/kg"]
-        and marchem_reconciliation["measurement_semantics"]["weight_bases"] == ["Dry weight"]
-        and marchem_reconciliation["checks"]["partial_digestion_boundary_preserved"] is True
-        and marchem_reconciliation["checks"]["accreditation_variation_preserved"] is True,
+        and marchem_reconciliation["measurement_semantics"]["weight_bases"]
+        == ["Dry weight"]
+        and marchem_reconciliation["checks"]["partial_digestion_boundary_preserved"]
+        is True
+        and marchem_reconciliation["checks"]["accreditation_variation_preserved"]
+        is True,
         "D1 MarChem reconciliation preserves censoring, dry weight, partial digestion and accreditation",
         checks,
     )
@@ -1051,7 +1198,10 @@ def check_d1(output_dir: Path) -> list[str]:
         and marchem_human_review["prepared_record_count"] == 30
         and marchem_human_review["automated_pass_count"] == 30
         and marchem_human_review["completed_record_count"] == 0
-        and all(record["automated_status"] == "PASS" for record in marchem_human_review["records"]),
+        and all(
+            record["automated_status"] == "PASS"
+            for record in marchem_human_review["records"]
+        ),
         "D1 prepares 30 passing MarChem comparisons without claiming human completion",
         checks,
     )
@@ -1061,9 +1211,15 @@ def check_d1(output_dir: Path) -> list[str]:
             == {"decision": None, "reviewer": None, "reviewed_at": None, "notes": None}
             for record in marchem_human_review["records"]
         )
-        and any(not record["adapter_observations"] for record in marchem_human_review["records"])
         and any(
-            any(str(value).startswith("<") for value in record["published_target_raw_values"].values())
+            not record["adapter_observations"]
+            for record in marchem_human_review["records"]
+        )
+        and any(
+            any(
+                str(value).startswith("<")
+                for value in record["published_target_raw_values"].values()
+            )
             for record in marchem_human_review["records"]
         ),
         "D1 review sheet awaits a named reviewer and includes missing and censored edge cases",
@@ -1071,16 +1227,36 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     prepared_reference_reviews = {
         "georoc-archaean": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "rock" / "georoc-archaean" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "rock"
+            / "georoc-archaean"
+            / "human_review.json"
         ),
         "usgs-conus-soil": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "soil" / "usgs-conus-soil" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "soil"
+            / "usgs-conus-soil"
+            / "human_review.json"
         ),
         "geotraces-idp2025": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "water" / "geotraces-idp2025" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "water"
+            / "geotraces-idp2025"
+            / "human_review.json"
         ),
         "gemstat-open-archive": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "water" / "gemstat-open-archive" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "water"
+            / "gemstat-open-archive"
+            / "human_review.json"
         ),
         "pangaea-north-africa-soil": json_value(
             SKILL_DIR
@@ -1099,28 +1275,65 @@ def check_d1(output_dir: Path) -> list[str]:
             / "human_review.json"
         ),
         "foregs-topsoil": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-topsoil" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "soil"
+            / "foregs-topsoil"
+            / "human_review.json"
         ),
         "foregs-subsoil": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-subsoil" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "soil"
+            / "foregs-subsoil"
+            / "human_review.json"
         ),
         "foregs-humus": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "soil" / "foregs-humus" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "soil"
+            / "foregs-humus"
+            / "human_review.json"
         ),
         "foregs-stream-water": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "water" / "foregs-stream-water" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "water"
+            / "foregs-stream-water"
+            / "human_review.json"
         ),
         "foregs-stream-sediment": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "sediment" / "foregs-stream-sediment" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "sediment"
+            / "foregs-stream-sediment"
+            / "human_review.json"
         ),
         "foregs-floodplain-sediment": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "sediment" / "foregs-floodplain-sediment" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "sediment"
+            / "foregs-floodplain-sediment"
+            / "human_review.json"
         ),
         "afsis-phase-i-wet-chemistry": json_value(
-            SKILL_DIR / "fixtures" / "four-media" / "soil" / "afsis-phase-i-wet-chemistry" / "human_review.json"
+            SKILL_DIR
+            / "fixtures"
+            / "four-media"
+            / "soil"
+            / "afsis-phase-i-wet-chemistry"
+            / "human_review.json"
         ),
     }
-    human_review_schema = json_value(SKILL_DIR / "references" / "human-review.schema.json")
+    human_review_schema = json_value(
+        SKILL_DIR / "references" / "human-review.schema.json"
+    )
     allowed_review_fields = set(human_review_schema["properties"])
     required_review_fields = set(human_review_schema["required"])
     allowed_review_record_fields = set(
@@ -1129,12 +1342,17 @@ def check_d1(output_dir: Path) -> list[str]:
     required_review_record_fields = set(
         human_review_schema["properties"]["records"]["items"]["required"]
     )
-    all_prepared_reviews = {**prepared_reference_reviews, "norway-marchem": marchem_human_review}
+    all_prepared_reviews = {
+        **prepared_reference_reviews,
+        "norway-marchem": marchem_human_review,
+    }
     require(
         all(
             required_review_fields <= set(review) <= allowed_review_fields
             and all(
-                required_review_record_fields <= set(record) <= allowed_review_record_fields
+                required_review_record_fields
+                <= set(record)
+                <= allowed_review_record_fields
                 for record in review["records"]
             )
             for review in all_prepared_reviews.values()
@@ -1148,14 +1366,21 @@ def check_d1(output_dir: Path) -> list[str]:
             and review["prepared_record_count"] == 30
             and review["automated_pass_count"] == 30
             and review["completed_record_count"] == 0
-            and all(record["automated_status"] == "PASS" for record in review["records"])
+            and all(
+                record["automated_status"] == "PASS" for record in review["records"]
+            )
             for review in prepared_reference_reviews.values()
         ),
         "D1 prepares 30 passing reference comparisons without auto-signing them",
         checks,
     )
     review_validation = human_review_validator.validate(
-        SKILL_DIR / "fixtures" / "four-media" / "soil" / "usgs-conus-soil" / "human_review.json"
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "soil"
+        / "usgs-conus-soil"
+        / "human_review.json"
     )
     require(
         review_validation["status"] == "pending"
@@ -1184,7 +1409,11 @@ def check_d1(output_dir: Path) -> list[str]:
             for record in prepared_reference_reviews["georoc-archaean"]["records"]
         )
         > 0
-        and {item["quality_flag"] for record in prepared_reference_reviews["geotraces-idp2025"]["records"] for item in record["adapter_observations"]}
+        and {
+            item["quality_flag"]
+            for record in prepared_reference_reviews["geotraces-idp2025"]["records"]
+            for item in record["adapter_observations"]
+        }
         == {"1", "2", "3", "4", "5", "6"}
         and {
             item["water_fraction"]
@@ -1200,23 +1429,33 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"Fair", "Good", "Pending review", "Suspect"}
         and {
             item["analyte"]
-            for record in prepared_reference_reviews["pangaea-north-africa-soil"]["records"]
+            for record in prepared_reference_reviews["pangaea-north-africa-soil"][
+                "records"
+            ]
             for item in record["adapter_observations"]
         }
         == {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
         and all(
-            record["automated_checks"]["publisher_location_preserved_without_country_inference"]
-            for record in prepared_reference_reviews["pangaea-north-africa-soil"]["records"]
+            record["automated_checks"][
+                "publisher_location_preserved_without_country_inference"
+            ]
+            for record in prepared_reference_reviews["pangaea-north-africa-soil"][
+                "records"
+            ]
         )
         and [
             (record["reported_sample_id"], record["sample_id_occurrence"])
-            for record in prepared_reference_reviews["japan-gsj-geochemical-map"]["records"]
+            for record in prepared_reference_reviews["japan-gsj-geochemical-map"][
+                "records"
+            ]
             if record["reported_sample_id"] == "78013"
         ]
         == [("78013", 1), ("78013", 2)]
         and {
             item["unit"]
-            for record in prepared_reference_reviews["japan-gsj-geochemical-map"]["records"]
+            for record in prepared_reference_reviews["japan-gsj-geochemical-map"][
+                "records"
+            ]
             for item in record["adapter_observations"]
         }
         == {"ppm", "ppb"},
@@ -1225,19 +1464,44 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     afsis_review = prepared_reference_reviews["afsis-phase-i-wet-chemistry"]
     afsis_reasons = {
-        reason for record in afsis_review["records"] for reason in record["selection_reasons"]
+        reason
+        for record in afsis_review["records"]
+        for reason in record["selection_reasons"]
     }
     require(
-        {reason.removeprefix("country=") for reason in afsis_reasons if reason.startswith("country=")}
-        == {
-            "Angola", "Botswana", "Burkina Faso", "Cameroon", "Ethiopia", "Ghana", "Guinea",
-            "Kenya", "Madagascar", "Mali", "Mozambique", "Niger", "Nigeria", "SAfrica",
-            "Tanzania", "Uganda", "Zambia", "Zimbambwe",
+        {
+            reason.removeprefix("country=")
+            for reason in afsis_reasons
+            if reason.startswith("country=")
         }
-        and {"depth=Topsoil", "depth=Subsoil", "coordinates=missing_both"} <= afsis_reasons
-        and {"As=negative_numeric", "Cu=negative_numeric", "Pb=negative_numeric"} <= afsis_reasons
+        == {
+            "Angola",
+            "Botswana",
+            "Burkina Faso",
+            "Cameroon",
+            "Ethiopia",
+            "Ghana",
+            "Guinea",
+            "Kenya",
+            "Madagascar",
+            "Mali",
+            "Mozambique",
+            "Niger",
+            "Nigeria",
+            "SAfrica",
+            "Tanzania",
+            "Uganda",
+            "Zambia",
+            "Zimbambwe",
+        }
+        and {"depth=Topsoil", "depth=Subsoil", "coordinates=missing_both"}
+        <= afsis_reasons
+        and {"As=negative_numeric", "Cu=negative_numeric", "Pb=negative_numeric"}
+        <= afsis_reasons
         and all(
-            record["automated_checks"]["negative_and_below_limit_values_flagged_without_imputation"]
+            record["automated_checks"][
+                "negative_and_below_limit_values_flagged_without_imputation"
+            ]
             for record in afsis_review["records"]
         ),
         "D1 AfSIS review spans all country labels, depths, missing coordinates and negative instrument results",
@@ -1246,15 +1510,22 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         all(
             evidence["sources"][source_id]["source_evidence_score"] == 85.0
-            and evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["status"] == "missing"
+            and evidence["sources"][source_id]["source_evidence_dimensions"][
+                "human_review"
+            ]["status"]
+            == "missing"
             and "30-record review sample is prepared"
-            in evidence["sources"][source_id]["source_evidence_dimensions"]["human_review"]["note"]
+            in evidence["sources"][source_id]["source_evidence_dimensions"][
+                "human_review"
+            ]["note"]
             for source_id in prepared_reference_reviews
         ),
         "D1 records all prepared reviews without granting unsigned evidence points",
         checks,
     )
-    coverage_request = json_value(SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json")
+    coverage_request = json_value(
+        SOURCE_DEMOS.parent / "source-routing" / "global-all-media-request.json"
+    )
     matrix = coverage_report.build_matrix(catalog, coverage_request, registry)
     require(
         matrix == json_value(SKILL_DIR / "assets" / "coverage_matrix.json"),
@@ -1267,8 +1538,10 @@ def check_d1(output_dir: Path) -> list[str]:
         SOURCE_DEMOS,
     )
     require(
-        completeness_profile == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
-        and completeness_profile["summary"] == {
+        completeness_profile
+        == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
+        and completeness_profile["summary"]
+        == {
             "executable_source_count": 21,
             "sources_with_full_audit": 19,
             "sources_with_target_observation_denominator": 21,
@@ -1276,12 +1549,18 @@ def check_d1(output_dir: Path) -> list[str]:
             "demo_record_count": 1144,
             "uniform_full_field_profiles": 21,
         }
-        and completeness_profile["sources"]["georoc-archaean"]["full_population"]["audit_status"]
+        and completeness_profile["sources"]["georoc-archaean"]["full_population"][
+            "audit_status"
+        ]
         == "uniform_full_profile"
-        and completeness_profile["sources"]["georoc-archaean"]["candidate_audit"]["audit_status"]
+        and completeness_profile["sources"]["georoc-archaean"]["candidate_audit"][
+            "audit_status"
+        ]
         == "not_measured"
-        and completeness_profile["sources"]["gemstat-open-archive"]["full_population"]
-        ["target_observation_count"] == 3739180,
+        and completeness_profile["sources"]["gemstat-open-archive"]["full_population"][
+            "target_observation_count"
+        ]
+        == 3739180,
         "D1 V4 completeness profile separates uniform full-cache profiles, candidate audits and 1,144 demo rows",
         checks,
     )
@@ -1293,7 +1572,9 @@ def check_d1(output_dir: Path) -> list[str]:
         source_id: json_value(full_profile_root / source_id / "field_completeness.json")
         for source_id in registry["sources"]
     }
-    marchem_health = json_value(full_profile_root / "norway-marchem" / "automation_health.json")
+    marchem_health = json_value(
+        full_profile_root / "norway-marchem" / "automation_health.json"
+    )
     require(
         full_manifest["source_count"] == full_manifest["registered_source_count"] == 21
         and full_manifest["observation_count"] == 4086778
@@ -1308,21 +1589,26 @@ def check_d1(output_dir: Path) -> list[str]:
             profile["profile_scope"] == "full_population"
             and profile["observation_count"] > 0
             and all(
-                item["non_empty"] + item["missing"] == item["denominator"] == profile["observation_count"]
+                item["non_empty"] + item["missing"]
+                == item["denominator"]
+                == profile["observation_count"]
                 for item in profile["fields"].values()
             )
             for profile in source_field_profiles.values()
         )
         and marchem_health["version_drift"]["outer_archive_drift"] is True
-        and marchem_health["version_drift"]["data_and_method_member_hashes_match"] is True
+        and marchem_health["version_drift"]["data_and_method_member_hashes_match"]
+        is True
         and set(coverage_balance["media"]) == {"rock", "soil", "sediment", "water"}
         and coverage_balance["media"]["water"]["observation_count"] == 3783544
         and coverage_balance["media"]["water"]["independent_lineage_count"] == 4
         and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 6
-        and coverage_balance["media"]["rock"]["reported_coordinate_sample_count"] == 21178
+        and coverage_balance["media"]["rock"]["reported_coordinate_sample_count"]
+        == 21178
         and coverage_balance["media"]["rock"]["valid_coordinate_sample_count"] == 0
         and coverage_balance["media"]["soil"]["valid_coordinate_sample_count"] == 20598
-        and coverage_balance["media"]["sediment"]["valid_coordinate_sample_count"] == 2507
+        and coverage_balance["media"]["sediment"]["valid_coordinate_sample_count"]
+        == 2507
         and all(
             int(metrics[field]) >= 0
             for metrics in [
@@ -1330,14 +1616,25 @@ def check_d1(output_dir: Path) -> list[str]:
                 *coverage_balance["medium_elements"].values(),
             ]
             for field in (
-                "observation_count", "distinct_sample_count", "independent_lineage_count",
-                "reported_coordinate_sample_count", "valid_coordinate_sample_count",
-                "comparable_observation_count", "reported_covered_spatial_cells", "covered_spatial_cells",
+                "observation_count",
+                "distinct_sample_count",
+                "independent_lineage_count",
+                "reported_coordinate_sample_count",
+                "valid_coordinate_sample_count",
+                "comparable_observation_count",
+                "reported_covered_spatial_cells",
+                "covered_spatial_cells",
             )
         )
         and all(
-            coverage_balance["medium_elements"][f"rock|{element}"]["valid_coordinate_sample_count"] == 0
-            and coverage_balance["medium_elements"][f"rock|{element}"]["covered_spatial_cells"] == 0
+            coverage_balance["medium_elements"][f"rock|{element}"][
+                "valid_coordinate_sample_count"
+            ]
+            == 0
+            and coverage_balance["medium_elements"][f"rock|{element}"][
+                "covered_spatial_cells"
+            ]
+            == 0
             for element in ("As", "Cu", "Ni", "Zn")
         )
         and all(
@@ -1346,10 +1643,14 @@ def check_d1(output_dir: Path) -> list[str]:
             for row in cube_rows
             if row["source_id"]
             in {
-                "georoc-archaean", "georoc-antarctica-intraplate",
-                "afsis-phase-i-wet-chemistry", "japan-gsj-geochemical-map",
-                "japan-gsj-marine-sediment", "australia-ngsa-mercury",
-                "tpdc-china-mountain-soil", "us-wqp-sacramento-river-arsenic",
+                "georoc-archaean",
+                "georoc-antarctica-intraplate",
+                "afsis-phase-i-wet-chemistry",
+                "japan-gsj-geochemical-map",
+                "japan-gsj-marine-sediment",
+                "australia-ngsa-mercury",
+                "tpdc-china-mountain-soil",
+                "us-wqp-sacramento-river-arsenic",
             }
         )
         and all(
@@ -1366,12 +1667,18 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        completeness_profile["sources"]["afsis-phase-i-wet-chemistry"]["demo_fixture"]
-        ["field_completeness"]["sample_type"]["rate"] == 1.0
-        and completeness_profile["sources"]["gemstat-open-archive"]["demo_fixture"]
-        ["field_completeness"]["water_fraction"]["rate"] == 1.0
-        and completeness_profile["sources"]["georoc-archaean"]["demo_fixture"]
-        ["field_completeness"]["method_scope"]["rate"] == 0.0,
+        completeness_profile["sources"]["afsis-phase-i-wet-chemistry"]["demo_fixture"][
+            "field_completeness"
+        ]["sample_type"]["rate"]
+        == 1.0
+        and completeness_profile["sources"]["gemstat-open-archive"]["demo_fixture"][
+            "field_completeness"
+        ]["water_fraction"]["rate"]
+        == 1.0
+        and completeness_profile["sources"]["georoc-archaean"]["demo_fixture"][
+            "field_completeness"
+        ]["method_scope"]["rate"]
+        == 0.0,
         "D1 V4 demo profile reports populated semantics and preserves explicit missing method scope",
         checks,
     )
@@ -1379,26 +1686,35 @@ def check_d1(output_dir: Path) -> list[str]:
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"]
         == "multiple_datasets_single_upstream_lineage"
-        and matrix["cells"]["rock"]["analyte_coverage"] == "complete_for_registered_targets"
+        and matrix["cells"]["rock"]["analyte_coverage"]
+        == "complete_for_registered_targets"
         and matrix["cells"]["soil"]["selected_sources"]
         == [
             "afsis-phase-i-wet-chemistry",
-            "foregs-humus", "foregs-subsoil", "foregs-topsoil",
-            "gemas-europe", "pangaea-north-africa-soil",
-            "tpdc-china-mountain-soil", "usgs-conus-soil",
+            "foregs-humus",
+            "foregs-subsoil",
+            "foregs-topsoil",
+            "gemas-europe",
+            "pangaea-north-africa-soil",
+            "tpdc-china-mountain-soil",
+            "usgs-conus-soil",
         ]
         and matrix["cells"]["soil"]["analyte_source_counts"]
         == {"As": 6, "Cr": 6, "Cu": 8, "Hg": 4, "Ni": 8, "Pb": 7, "Zn": 8}
         and matrix["cells"]["sediment"]["selected_sources"]
         == [
-            "australia-ngsa-mercury", "foregs-floodplain-sediment",
-            "foregs-stream-sediment", "japan-gsj-geochemical-map",
-            "japan-gsj-marine-sediment", "norway-marchem",
+            "australia-ngsa-mercury",
+            "foregs-floodplain-sediment",
+            "foregs-stream-sediment",
+            "japan-gsj-geochemical-map",
+            "japan-gsj-marine-sediment",
+            "norway-marchem",
             "pangaea-arabian-sea-sediment",
         ]
         and matrix["cells"]["sediment"]["analyte_source_counts"]
         == {"As": 6, "Cr": 5, "Cu": 6, "Hg": 5, "Ni": 6, "Pb": 5, "Zn": 6}
-        and matrix["cells"]["water"]["analyte_coverage"] == "complete_for_registered_targets"
+        and matrix["cells"]["water"]["analyte_coverage"]
+        == "complete_for_registered_targets"
         and matrix["cells"]["water"]["missing_analytes"] == []
         and matrix["cells"]["water"]["source_independence"]
         == "multiple_sources_but_single_source_per_analyte"
@@ -1407,7 +1723,9 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 coverage matrix keeps rock, soil, sediment and water source independence explicit",
         checks,
     )
-    archive_bundle = json_value(SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json")
+    archive_bundle = json_value(
+        SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json"
+    )
     archive_validation = acquisition_validator.validate_bundle(archive_bundle)
     require(
         archive_validation["status"] == "PASS"
@@ -1417,7 +1735,9 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     censored_observation = next(
-        item for item in archive_bundle["observations"] if item["observation_id"] == "observation-as-lt"
+        item
+        for item in archive_bundle["observations"]
+        if item["observation_id"] == "observation-as-lt"
     )
     require(
         censored_observation["value_raw"] == "<5"
@@ -1437,10 +1757,15 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     schema_invalid_bundle = copy.deepcopy(archive_bundle)
     del schema_invalid_bundle["datasets"][0]["title"]
-    schema_invalid_validation = acquisition_validator.validate_bundle(schema_invalid_bundle)
+    schema_invalid_validation = acquisition_validator.validate_bundle(
+        schema_invalid_bundle
+    )
     require(
         schema_invalid_validation["status"] == "FAIL"
-        and any("missing required field: title" in error for error in schema_invalid_validation["errors"]),
+        and any(
+            "missing required field: title" in error
+            for error in schema_invalid_validation["errors"]
+        ),
         "D1 archive validation enforces entity JSON Schemas before indexing",
         checks,
     )
@@ -1504,7 +1829,11 @@ def check_d1(output_dir: Path) -> list[str]:
         try:
             index_builder.build_index(archive_path, first_index)
         except ValueError as exc:
-            require("refusing to overwrite" in str(exc), "D1 index creation refuses implicit overwrite", checks)
+            require(
+                "refusing to overwrite" in str(exc),
+                "D1 index creation refuses implicit overwrite",
+                checks,
+            )
         else:
             raise ContractError("D1 index builder must refuse implicit overwrite")
 
@@ -1525,7 +1854,8 @@ def check_d1(output_dir: Path) -> list[str]:
             checks,
         )
         require(
-            query_source.query_index(first_index, bbox=[0, 0, 1, 1])["record_count"] == 0,
+            query_source.query_index(first_index, bbox=[0, 0, 1, 1])["record_count"]
+            == 0,
             "D1 RTree query excludes observations outside the requested bbox",
             checks,
         )
@@ -1547,7 +1877,8 @@ def check_d1(output_dir: Path) -> list[str]:
         require(
             v4_build["status"] == "PASS"
             and v4_query["record_count"] == 1
-            and v4_query["records"][0]["geographic_context_raw"] == "Synthetic survey block",
+            and v4_query["records"][0]["geographic_context_raw"]
+            == "Synthetic survey block",
             "D1 V4 SQLite query filters sample type, horizon, source geology and method scope",
             checks,
         )
@@ -1559,7 +1890,12 @@ def check_d1(output_dir: Path) -> list[str]:
             ).fetchone()
             view_counts = {
                 view: connection.execute(f"SELECT COUNT(*) FROM {view}").fetchone()[0]
-                for view in ("observation_search", "sample_summary", "source_coverage", "provenance_trace")
+                for view in (
+                    "observation_search",
+                    "sample_summary",
+                    "source_coverage",
+                    "provenance_trace",
+                )
             }
         require(
             trace == ("fixture.csv", 2, "1.0.0", "run-fixture-v1"),
@@ -1567,7 +1903,8 @@ def check_d1(output_dir: Path) -> list[str]:
             checks,
         )
         require(
-            view_counts == {
+            view_counts
+            == {
                 "observation_search": 3,
                 "sample_summary": 2,
                 "source_coverage": 3,
@@ -1578,13 +1915,24 @@ def check_d1(output_dir: Path) -> list[str]:
         )
 
         request_one = {"media": ["soil"], "elements": ["As", "Cu"], "region": "global"}
-        request_reordered = {"region": "global", "elements": ["As", "Cu"], "media": ["soil"]}
+        request_reordered = {
+            "region": "global",
+            "elements": ["As", "Cu"],
+            "media": ["soil"],
+        }
         request_changed = {"region": "global", "elements": ["Zn"], "media": ["soil"]}
-        key_one = cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_one)
+        key_one = cache_control.stable_request_cache_key(
+            "fixture-source", "1.0.0", request_one
+        )
         require(
             key_one
-            == cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_reordered)
-            and key_one != cache_control.stable_request_cache_key("fixture-source", "1.0.0", request_changed),
+            == cache_control.stable_request_cache_key(
+                "fixture-source", "1.0.0", request_reordered
+            )
+            and key_one
+            != cache_control.stable_request_cache_key(
+                "fixture-source", "1.0.0", request_changed
+            ),
             "D1 derived-cache key is stable under JSON key order and changes with request parameters",
             checks,
         )
@@ -1616,9 +1964,15 @@ def check_d1(output_dir: Path) -> list[str]:
         try:
             cache_control.delete_cache(cache_root, "fixture-source", "1.0.0", "wrong")
         except ValueError as exc:
-            require("confirmation must exactly equal" in str(exc), "D1 cache deletion requires an exact source@version confirmation", checks)
+            require(
+                "confirmation must exactly equal" in str(exc),
+                "D1 cache deletion requires an exact source@version confirmation",
+                checks,
+            )
         else:
-            raise ContractError("D1 cache deletion must reject an incorrect confirmation")
+            raise ContractError(
+                "D1 cache deletion must reject an incorrect confirmation"
+            )
         deleted = cache_control.delete_cache(
             cache_root, "fixture-source", "1.0.0", "fixture-source@1.0.0"
         )
@@ -1640,7 +1994,8 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         vocabulary_registry["registry_version"] == "geochemical-vocabulary-registry-v1"
         and vocabulary_registry["vocabularies"]["earthchem-unit"]["version"] is None
-        and vocabulary_registry["vocabularies"]["d1-missing-reason-v1"]["status"] == "internal_frozen",
+        and vocabulary_registry["vocabularies"]["d1-missing-reason-v1"]["status"]
+        == "internal_frozen",
         "D1 vocabulary registry distinguishes external references from frozen internal terms",
         checks,
     )
@@ -1697,12 +2052,42 @@ def check_d1(output_dir: Path) -> list[str]:
     expected_demo_analyte_counts = {
         "geotraces-idp2025": {"Cu": 16, "Ni": 16, "Zn": 16},
         "foregs-humus": {"Cu": 16, "Ni": 16, "Zn": 16},
-        "gemstat-open-archive": {"As": 8, "Cr": 8, "Cu": 8, "Hg": 8, "Ni": 8, "Pb": 8, "Zn": 8},
+        "gemstat-open-archive": {
+            "As": 8,
+            "Cr": 8,
+            "Cu": 8,
+            "Hg": 8,
+            "Ni": 8,
+            "Pb": 8,
+            "Zn": 8,
+        },
         "us-wqp-sacramento-river-arsenic": {"As": 48},
         "australia-ngsa-mercury": {"Hg": 48},
-        "japan-gsj-marine-sediment": {"As": 8, "Cr": 8, "Cu": 8, "Hg": 8, "Ni": 8, "Pb": 8, "Zn": 8},
-        "pangaea-arabian-sea-sediment": {"As": 8, "Cr": 8, "Cu": 8, "Ni": 8, "Pb": 8, "Zn": 8},
-        "georoc-antarctica-intraplate": {"As": 8, "Cr": 8, "Cu": 8, "Ni": 8, "Pb": 8, "Zn": 8},
+        "japan-gsj-marine-sediment": {
+            "As": 8,
+            "Cr": 8,
+            "Cu": 8,
+            "Hg": 8,
+            "Ni": 8,
+            "Pb": 8,
+            "Zn": 8,
+        },
+        "pangaea-arabian-sea-sediment": {
+            "As": 8,
+            "Cr": 8,
+            "Cu": 8,
+            "Ni": 8,
+            "Pb": 8,
+            "Zn": 8,
+        },
+        "georoc-antarctica-intraplate": {
+            "As": 8,
+            "Cr": 8,
+            "Cu": 8,
+            "Ni": 8,
+            "Pb": 8,
+            "Zn": 8,
+        },
         "tpdc-china-mountain-soil": {"Cr": 8, "Cu": 8, "Ni": 8, "Pb": 8, "Zn": 8},
         "gemas-europe": {"As": 8, "Cr": 8, "Cu": 8, "Hg": 4, "Ni": 8, "Pb": 8, "Zn": 8},
         "norway-marchem": {"As": 28, "Cu": 28, "Ni": 28, "Zn": 28},
@@ -1722,9 +2107,13 @@ def check_d1(output_dir: Path) -> list[str]:
         sources_path = demo_dir / "sources.jsonl"
         generation_manifest = json_value(demo_dir / "run_manifest.json")
         demo_rows = csv_rows(demo_input)
-        evidence_rows = [json.loads(line) for line in sources_path.read_text(encoding="utf-8").splitlines()]
+        evidence_rows = [
+            json.loads(line)
+            for line in sources_path.read_text(encoding="utf-8").splitlines()
+        ]
         require(
-            len(demo_rows) == expected_demo_count and len(evidence_rows) == expected_demo_count,
+            len(demo_rows) == expected_demo_count
+            and len(evidence_rows) == expected_demo_count,
             f"D1 {source_id} fixture has one evidence record per observation",
             checks,
         )
@@ -1734,9 +2123,12 @@ def check_d1(output_dir: Path) -> list[str]:
             f"D1 {source_id} fixture declares the scientific claim boundary",
             checks,
         )
-        expected_hashes = {item["path"]: item["sha256"] for item in generation_manifest["outputs"]}
+        expected_hashes = {
+            item["path"]: item["sha256"] for item in generation_manifest["outputs"]
+        }
         require(
-            expected_hashes == {
+            expected_hashes
+            == {
                 "demo_input.csv": sha256_file(demo_input),
                 "sources.jsonl": sha256_file(sources_path),
             },
@@ -1744,7 +2136,8 @@ def check_d1(output_dir: Path) -> list[str]:
             checks,
         )
         require(
-            {row["record_id"] for row in demo_rows} == {row["record_id"] for row in evidence_rows}
+            {row["record_id"] for row in demo_rows}
+            == {row["record_id"] for row in evidence_rows}
             and {row["source_id"] for row in demo_rows} == {source_id},
             f"D1 {source_id} fixture preserves record-level evidence linkage",
             checks,
@@ -1759,7 +2152,8 @@ def check_d1(output_dir: Path) -> list[str]:
             checks,
         )
         require(
-            generation_manifest.get("demo_generation_version") == expected_demo_versions[source_id]
+            generation_manifest.get("demo_generation_version")
+            == expected_demo_versions[source_id]
             and {item.get("generation_version") for item in evidence_rows}
             == {expected_demo_versions[source_id]},
             f"D1 {source_id} fixture pins its evidence-complete generator contract",
@@ -1796,9 +2190,7 @@ def check_d1(output_dir: Path) -> list[str]:
             for line in merged_evidence.read_text(encoding="utf-8").splitlines()
         ]
         require(
-            request_runner.source_budgets(
-                ["georoc-archaean", "usgs-conus-soil"], 5
-            )
+            request_runner.source_budgets(["georoc-archaean", "usgs-conus-soil"], 5)
             == {"georoc-archaean": 2, "usgs-conus-soil": 3}
             and merged_count == 156
             and len(merged_rows) == len(merged_evidence_rows) == 156,
@@ -1822,7 +2214,9 @@ def check_d1(output_dir: Path) -> list[str]:
         )
     georoc_evidence = [
         json.loads(line)
-        for line in (SOURCE_DEMOS / "georoc-archaean" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+        for line in (SOURCE_DEMOS / "georoc-archaean" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
     ]
     georoc_demo_rows = csv_rows(SOURCE_DEMOS / "georoc-archaean" / "demo_input.csv")
     require(
@@ -1850,15 +2244,27 @@ def check_d1(output_dir: Path) -> list[str]:
             == "withheld_pending_datum_verification"
             for item in georoc_evidence
         )
-        and all(row["lithology_raw"] and row["geologic_age_raw"] and row["tectonic_setting_raw"] for row in georoc_demo_rows)
-        and all(not row["geologic_unit_raw"] and not row["matched_geologic_unit"] for row in georoc_demo_rows),
+        and all(
+            row["lithology_raw"]
+            and row["geologic_age_raw"]
+            and row["tectonic_setting_raw"]
+            for row in georoc_demo_rows
+        )
+        and all(
+            not row["geologic_unit_raw"] and not row["matched_geologic_unit"]
+            for row in georoc_demo_rows
+        ),
         "D1 GEOROC fixture preserves source geology and reported coordinates without inventing units or WGS84",
         checks,
     )
-    gemstat_demo_rows = csv_rows(SOURCE_DEMOS / "gemstat-open-archive" / "demo_input.csv")
+    gemstat_demo_rows = csv_rows(
+        SOURCE_DEMOS / "gemstat-open-archive" / "demo_input.csv"
+    )
     gemstat_evidence = [
         json.loads(line)
-        for line in (SOURCE_DEMOS / "gemstat-open-archive" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+        for line in (SOURCE_DEMOS / "gemstat-open-archive" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
     ]
     require(
         Counter(row["water_fraction"] for row in gemstat_demo_rows)
@@ -1872,14 +2278,17 @@ def check_d1(output_dir: Path) -> list[str]:
         )
         and {row["unit"] for row in gemstat_demo_rows} == {"mg/l", "µg/l", "µg/g"}
         and {row["value_qualifier"] for row in gemstat_demo_rows} == {"", "<"}
-        and {item["source_data_quality"] for item in gemstat_evidence} <= {"Good", "Fair"}
+        and {item["source_data_quality"] for item in gemstat_evidence}
+        <= {"Good", "Fair"}
         and all(item["analysis_method_code"] != "0" for item in gemstat_evidence),
         "D1 GEMStat demo balances fractions while excluding undefined-method and low-quality records",
         checks,
     )
     usgs_evidence = [
         json.loads(line)
-        for line in (SOURCE_DEMOS / "usgs-conus-soil" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+        for line in (SOURCE_DEMOS / "usgs-conus-soil" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
     ]
     require(
         {item.get("soil_layer") for item in usgs_evidence}
@@ -1889,7 +2298,12 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     usgs_rows = csv_rows(SOURCE_DEMOS / "usgs-conus-soil" / "demo_input.csv")
     require(
-        all(row["analytical_method"] and row["method_family"] and row["digestion_or_extraction"] for row in usgs_rows),
+        all(
+            row["analytical_method"]
+            and row["method_family"]
+            and row["digestion_or_extraction"]
+            for row in usgs_rows
+        ),
         "D1 USGS fixture decodes analyte-specific method and digestion metadata",
         checks,
     )
@@ -1909,11 +2323,14 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     marchem_evidence = [
         json.loads(line)
-        for line in (SOURCE_DEMOS / "norway-marchem" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+        for line in (SOURCE_DEMOS / "norway-marchem" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
     ]
     require(
         {item.get("digestion_scope") for item in marchem_evidence} == {"partial"}
-        and {item.get("wet_or_dry_weight") for item in marchem_evidence} == {"Dry weight"}
+        and {item.get("wet_or_dry_weight") for item in marchem_evidence}
+        == {"Dry weight"}
         and {item.get("accreditation_status") for item in marchem_evidence}
         == {"accredited", "not_accredited"}
         and all(item.get("metadata_source_locator") for item in marchem_evidence),
@@ -1922,16 +2339,21 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     geotraces_evidence = [
         json.loads(line)
-        for line in (SOURCE_DEMOS / "geotraces-idp2025" / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+        for line in (SOURCE_DEMOS / "geotraces-idp2025" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
     ]
     require(
-        {item.get("seadatanet_quality_flag") for item in geotraces_evidence} <= {"1", "2"}
+        {item.get("seadatanet_quality_flag") for item in geotraces_evidence}
+        <= {"1", "2"}
         and {item.get("water_fraction") for item in geotraces_evidence} == {"dissolved"}
         and all(item.get("sample_depth_m") for item in geotraces_evidence),
         "D1 GEOTRACES fixture retains dissolved fraction, depth and accepted source QC",
         checks,
     )
-    pangaea_demo_rows = csv_rows(SOURCE_DEMOS / "pangaea-north-africa-soil" / "demo_input.csv")
+    pangaea_demo_rows = csv_rows(
+        SOURCE_DEMOS / "pangaea-north-africa-soil" / "demo_input.csv"
+    )
     pangaea_evidence = [
         json.loads(line)
         for line in (SOURCE_DEMOS / "pangaea-north-africa-soil" / "sources.jsonl")
@@ -1950,13 +2372,17 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"platform_policy_declared"}
         and {row["coordinate_policy_id"] for row in pangaea_demo_rows}
         == {"pangaea-geocode-wgs84-v1"}
-        and {row["coordinate_latitude_field"] for row in pangaea_demo_rows} == {"Latitude"}
-        and {row["coordinate_longitude_field"] for row in pangaea_demo_rows} == {"Longitude"}
+        and {row["coordinate_latitude_field"] for row in pangaea_demo_rows}
+        == {"Latitude"}
+        and {row["coordinate_longitude_field"] for row in pangaea_demo_rows}
+        == {"Longitude"}
         and all(item["reported_location"] for item in pangaea_evidence),
         "D1 PANGAEA fixture retains fine-fraction, digestion, location and platform-policy coordinate evidence",
         checks,
     )
-    gsj_demo_rows = csv_rows(SOURCE_DEMOS / "japan-gsj-geochemical-map" / "demo_input.csv")
+    gsj_demo_rows = csv_rows(
+        SOURCE_DEMOS / "japan-gsj-geochemical-map" / "demo_input.csv"
+    )
     gsj_evidence = [
         json.loads(line)
         for line in (SOURCE_DEMOS / "japan-gsj-geochemical-map" / "sources.jsonl")
@@ -1969,12 +2395,21 @@ def check_d1(output_dir: Path) -> list[str]:
         and {row["grain_fraction"] for row in gsj_demo_rows}
         == {"<180 µm fine stream sediment"}
         and {row["coordinate_uncertainty_m"] for row in gsj_demo_rows} == {"20"}
-        and all(item["original_coordinate_crs"] == "EPSG:4612 (JGD2000)" for item in gsj_evidence)
-        and all(item["sample_file_sha256"] == "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c" for item in gsj_evidence),
+        and all(
+            item["original_coordinate_crs"] == "EPSG:4612 (JGD2000)"
+            for item in gsj_evidence
+        )
+        and all(
+            item["sample_file_sha256"]
+            == "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c"
+            for item in gsj_evidence
+        ),
         "D1 GSJ fixture retains fine-sediment, JGD2000 and two-file evidence semantics",
         checks,
     )
-    afsis_demo_rows = csv_rows(SOURCE_DEMOS / "afsis-phase-i-wet-chemistry" / "demo_input.csv")
+    afsis_demo_rows = csv_rows(
+        SOURCE_DEMOS / "afsis-phase-i-wet-chemistry" / "demo_input.csv"
+    )
     afsis_evidence = [
         json.loads(line)
         for line in (SOURCE_DEMOS / "afsis-phase-i-wet-chemistry" / "sources.jsonl")
@@ -1986,12 +2421,15 @@ def check_d1(output_dir: Path) -> list[str]:
         and {row["measurement_basis"] for row in afsis_demo_rows}
         == {"aqua_regia_quasi_total_air_dry_soil"}
         and {row["unit"] for row in afsis_demo_rows} == {"mg kg^-1"}
-        and {row["grain_fraction"] for row in afsis_demo_rows}
-        == {"<2 mm"}
+        and {row["grain_fraction"] for row in afsis_demo_rows} == {"<2 mm"}
         and {row["source_crs"] for row in afsis_demo_rows} == {""}
         and {item["reported_country"] for item in afsis_evidence}
         >= {"SAfrica", "Zimbambwe"}
-        and {item["normalized_country"] for item in afsis_evidence if item["reported_country"] == "SAfrica"}
+        and {
+            item["normalized_country"]
+            for item in afsis_evidence
+            if item["reported_country"] == "SAfrica"
+        }
         == {"South Africa"}
         and all(item["negative_numeric_result"] is False for item in afsis_evidence)
         and any(item["below_detection_limit"] for item in afsis_evidence),
@@ -2010,10 +2448,15 @@ def check_d1(output_dir: Path) -> list[str]:
     combined_rows = csv_rows(COMBINED_DEMO / "demo_input.csv")
     combined_evidence = [
         json.loads(line)
-        for line in (COMBINED_DEMO / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+        for line in (COMBINED_DEMO / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
     ]
     require(
-        combined_manifest["record_counts"]["total"] == len(combined_rows) == len(combined_evidence) == 1144
+        combined_manifest["record_counts"]["total"]
+        == len(combined_rows)
+        == len(combined_evidence)
+        == 1144
         and combined_manifest["record_counts"]["by_medium"]
         == {"rock": 96, "sediment": 408, "soil": 440, "water": 200}
         and combined_manifest["record_counts"]["by_source"]
@@ -2046,15 +2489,18 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         combined_manifest["route"]["status"] == "offline_fixtures_verified"
         and combined_manifest["route"]["source_router_status"] == "needs_human_review"
-        and combined_manifest["route"]["selection_context"] == "checked_in_fixtures_hash_verified"
+        and combined_manifest["route"]["selection_context"]
+        == "checked_in_fixtures_hash_verified"
         and set(combined_manifest["route"]["selected_sources"])
         == set(combined_manifest["record_counts"]["by_source"]),
         "D1 combined fixture promotes offline routes only after local manifest and SHA-256 verification",
         checks,
     )
     require(
-        combined_manifest["comparison_isolation"]["group_fields"] == list(standardizer.DEFAULT_GROUP_BY)
-        and combined_manifest["comparison_isolation"]["raw_input_partition_count"] == 156
+        combined_manifest["comparison_isolation"]["group_fields"]
+        == list(standardizer.DEFAULT_GROUP_BY)
+        and combined_manifest["comparison_isolation"]["raw_input_partition_count"]
+        == 156
         and combined_manifest["comparison_isolation"]["partition_count"] == 156
         and combined_manifest["comparison_isolation"]["water_partition_count"] == 36,
         "D1 combined fixture freezes the exact D2 comparison partitions and water boundaries",
@@ -2074,8 +2520,16 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     require(
         all(
-            (row["analytical_method"] and row["method_scope"] and not row["method_missing_reason"])
-            or (not row["analytical_method"] and not row["method_scope"] and row["method_missing_reason"])
+            (
+                row["analytical_method"]
+                and row["method_scope"]
+                and not row["method_missing_reason"]
+            )
+            or (
+                not row["analytical_method"]
+                and not row["method_scope"]
+                and row["method_missing_reason"]
+            )
             for row in combined_rows
         )
         and sum(bool(row["method_scope"]) for row in combined_rows) == 896
@@ -2104,7 +2558,8 @@ def check_d1(output_dir: Path) -> list[str]:
             and row["license_url"]
             for row in combined_rows
         )
-        and {row["citation_scope"] for row in combined_rows} == {"dataset", "observation"},
+        and {row["citation_scope"] for row in combined_rows}
+        == {"dataset", "observation"},
         "D1 V4 keeps citation scope, access, research use and license evidence distinct",
         checks,
     )
@@ -2114,11 +2569,15 @@ def check_d1(output_dir: Path) -> list[str]:
     combined_anomaly = json_value(combined_output / "anomaly_report.json")
     combined_database = csv_rows(combined_output / "geochemistry.csv")
     combined_pangaea = [
-        row for row in combined_database if row["source_id"] == "pangaea-north-africa-soil"
+        row
+        for row in combined_database
+        if row["source_id"] == "pangaea-north-africa-soil"
     ]
     grouped_sources: dict[tuple[str, ...], set[str]] = {}
     for row in combined_database:
-        key = tuple(str(row.get(field) or "") for field in standardizer.DEFAULT_GROUP_BY)
+        key = tuple(
+            str(row.get(field) or "") for field in standardizer.DEFAULT_GROUP_BY
+        )
         grouped_sources.setdefault(key, set()).add(row["source_id"])
     require(
         output_validator.validate_dir(combined_output)["status"] == "valid"
@@ -2164,7 +2623,8 @@ def check_d1(output_dir: Path) -> list[str]:
         )
         require(
             all(
-                (rebuilt_dir / filename).read_bytes() == (COMBINED_DEMO / filename).read_bytes()
+                (rebuilt_dir / filename).read_bytes()
+                == (COMBINED_DEMO / filename).read_bytes()
                 for filename in ("demo_input.csv", "sources.jsonl", "run_manifest.json")
             ),
             "D1 combined fixture rebuilds byte-for-byte from the twenty-one checked-in source demos",
@@ -2187,7 +2647,8 @@ def check_d1(output_dir: Path) -> list[str]:
         )
         require(
             all(
-                (rebuilt_output / filename).read_bytes() == (combined_output / filename).read_bytes()
+                (rebuilt_output / filename).read_bytes()
+                == (combined_output / filename).read_bytes()
                 for filename in output_validator.REQUIRED_FILES.values()
             ),
             "D1 combined stable output package rebuilds byte-for-byte",
@@ -2224,7 +2685,11 @@ def check_d1(output_dir: Path) -> list[str]:
         evidence_builder.package_evidence(
             DEMO_INPUT, output_dir / "geochemistry.csv", confidence_path, standalone
         )
-        require(standalone.read_bytes() == manifest_path.read_bytes(), "D1 standalone packaging matches D3 integration", checks)
+        require(
+            standalone.read_bytes() == manifest_path.read_bytes(),
+            "D1 standalone packaging matches D3 integration",
+            checks,
+        )
 
         verified_output = Path(evidence_temp) / "verified-source-workflow"
         usgs_demo = SOURCE_DEMOS / "usgs-conus-soil"
@@ -2245,25 +2710,33 @@ def check_d1(output_dir: Path) -> list[str]:
         verified_manifest = json_value(verified_output / "source_manifest.json")
         require(
             verified_manifest["coverage"]["verified_evidence_rate"] == 1.0
-            and verified_manifest["record_evidence"]["evidence_level"] == "verified_record_evidence",
+            and verified_manifest["record_evidence"]["evidence_level"]
+            == "verified_record_evidence",
             "D1 final manifest consumes and hash-binds the acquisition evidence sidecar",
             checks,
         )
         verified_summary = json_value(verified_output / "run_summary.json")
         require(
             verified_summary["input"]["not_for_scientific_interpretation"] is True
-            and "not for scientific interpretation" in verified_summary["limitations"][0],
+            and "not for scientific interpretation"
+            in verified_summary["limitations"][0],
             "D3 propagates the fixture claim boundary into the final result",
             checks,
         )
 
         tampered_evidence_rows = [
-            json.loads(line) for line in (usgs_demo / "sources.jsonl").read_text(encoding="utf-8").splitlines()
+            json.loads(line)
+            for line in (usgs_demo / "sources.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
         ]
         tampered_evidence_rows[0]["record_id"] = "rec-not-in-canonical-database"
         tampered_evidence = Path(evidence_temp) / "tampered-record-ids.jsonl"
         tampered_evidence.write_text(
-            "".join(json.dumps(item, sort_keys=True, separators=(",", ":")) + "\n" for item in tampered_evidence_rows),
+            "".join(
+                json.dumps(item, sort_keys=True, separators=(",", ":")) + "\n"
+                for item in tampered_evidence_rows
+            ),
             encoding="utf-8",
         )
         try:
@@ -2278,13 +2751,19 @@ def check_d1(output_dir: Path) -> list[str]:
         except evidence_builder.EvidenceError:
             pass
         else:
-            raise ContractError("D1 must reject sidecar record IDs that differ from the canonical database")
-        checks.append("D1 rejects record-evidence additions, removals and record-ID substitutions")
+            raise ContractError(
+                "D1 must reject sidecar record IDs that differ from the canonical database"
+            )
+        checks.append(
+            "D1 rejects record-evidence additions, removals and record-ID substitutions"
+        )
 
         tampered_acquisition = json_value(usgs_demo / "run_manifest.json")
         tampered_acquisition["source_files"][0]["sha256"] = "0" * 64
         tampered_acquisition_path = Path(evidence_temp) / "tampered-acquisition.json"
-        tampered_acquisition_path.write_text(json.dumps(tampered_acquisition), encoding="utf-8")
+        tampered_acquisition_path.write_text(
+            json.dumps(tampered_acquisition), encoding="utf-8"
+        )
         try:
             evidence_builder.package_evidence(
                 usgs_demo / "demo_input.csv",
@@ -2297,8 +2776,12 @@ def check_d1(output_dir: Path) -> list[str]:
         except evidence_builder.EvidenceError:
             pass
         else:
-            raise ContractError("D1 must reject source-file hashes not present in the acquisition manifest")
-        checks.append("D1 cross-checks every record source-file hash against acquired files")
+            raise ContractError(
+                "D1 must reject source-file hashes not present in the acquisition manifest"
+            )
+        checks.append(
+            "D1 cross-checks every record source-file hash against acquired files"
+        )
 
         tampered_report = json_value(confidence_path)
         tampered_report["run_metadata"]["input_sha256"] = "0" * 64
@@ -2314,7 +2797,9 @@ def check_d1(output_dir: Path) -> list[str]:
         except evidence_builder.EvidenceError:
             pass
         else:
-            raise ContractError("D1 must reject a confidence report linked to a different input")
+            raise ContractError(
+                "D1 must reject a confidence report linked to a different input"
+            )
         checks.append("D1 rejects a mismatched D2 confidence input hash")
 
         unsafe_output = Path(evidence_temp) / "unsafe.csv"
@@ -2336,7 +2821,11 @@ def check_d1(output_dir: Path) -> list[str]:
             ],
             expected_code=2,
         )
-        require(not unsafe_output.exists(), "D1 downloader fails closed on unsafe URLs", checks)
+        require(
+            not unsafe_output.exists(),
+            "D1 downloader fails closed on unsafe URLs",
+            checks,
+        )
         require(
             json_value(unsafe_manifest).get("status") == "invalid_input",
             "D1 downloader returns a structured invalid_input status",
@@ -2344,7 +2833,9 @@ def check_d1(output_dir: Path) -> list[str]:
         )
 
         cached_file = Path(evidence_temp) / "cached.csv"
-        cached_file.write_text("SiteID\tLatitude\tLongitude\nA\t1\t2\n", encoding="utf-8")
+        cached_file.write_text(
+            "SiteID\tLatitude\tLongitude\nA\t1\t2\n", encoding="utf-8"
+        )
         cached_url = "https://example.org/public/cached.csv"
         cached_hash = sha256_file(cached_file)
         cached_manifest = Path(evidence_temp) / "cached-download.json"
@@ -2365,7 +2856,11 @@ def check_d1(output_dir: Path) -> list[str]:
             cached_hash,
             "v1",
         )
-        require(cache_result["status"] == "cache_hit", "D1 reuses only a hash-verified versioned cache", checks)
+        require(
+            cache_result["status"] == "cache_hit",
+            "D1 reuses only a hash-verified versioned cache",
+            checks,
+        )
 
         offline_manifest = Path(evidence_temp) / "offline-miss.json"
         run_command(
@@ -2416,7 +2911,9 @@ def check_d1(output_dir: Path) -> list[str]:
             ("text/plain", "1001", "Content-Length"),
         ):
             try:
-                downloader.validate_response_metadata(content_type, declared_length, max_bytes=1000)
+                downloader.validate_response_metadata(
+                    content_type, declared_length, max_bytes=1000
+                )
             except downloader.DownloadError as exc:
                 require(
                     expected_message in str(exc),
@@ -2424,10 +2921,14 @@ def check_d1(output_dir: Path) -> list[str]:
                     checks,
                 )
             else:
-                raise ContractError(f"D1 must reject {expected_message} response metadata")
+                raise ContractError(
+                    f"D1 must reject {expected_message} response metadata"
+                )
 
         try:
-            downloader.copy_response_bounded(io.BytesIO(b"x" * 1001), io.BytesIO(), max_bytes=1000)
+            downloader.copy_response_bounded(
+                io.BytesIO(b"x" * 1001), io.BytesIO(), max_bytes=1000
+            )
         except downloader.DownloadError as exc:
             require(
                 "download exceeded" in str(exc),
@@ -2457,7 +2958,9 @@ def check_d1(output_dir: Path) -> list[str]:
             sleeper=delays.append,
         )
         require(
-            retry_result.get("attempts") == 3 and attempts == [1, 2, 3] and delays == [1, 2],
+            retry_result.get("attempts") == 3
+            and attempts == [1, 2, 3]
+            and delays == [1, 2],
             "D1 retries transient timeouts only within the configured bound",
             checks,
         )
@@ -2488,8 +2991,12 @@ def check_d1(output_dir: Path) -> list[str]:
         else:
             raise ContractError("D1 must stop on HTTP 403")
         require(
-            downloader.is_retryable_error(urllib.error.HTTPError(cached_url, 502, "Bad Gateway", None, None))
-            and not downloader.is_retryable_error(urllib.error.HTTPError(cached_url, 500, "Error", None, None)),
+            downloader.is_retryable_error(
+                urllib.error.HTTPError(cached_url, 502, "Bad Gateway", None, None)
+            )
+            and not downloader.is_retryable_error(
+                urllib.error.HTTPError(cached_url, 500, "Error", None, None)
+            ),
             "D1 HTTP retry policy is limited to the declared transient statuses",
             checks,
         )
@@ -2536,7 +3043,9 @@ def check_d1(output_dir: Path) -> list[str]:
         missing_field_file = Path(evidence_temp) / "missing-fields.csv"
         missing_field_file.write_text("SiteID,Value\nA,1\n", encoding="utf-8")
         try:
-            downloader._read_delimited_header(missing_field_file, ["Latitude", "Longitude"])
+            downloader._read_delimited_header(
+                missing_field_file, ["Latitude", "Longitude"]
+            )
         except downloader.DownloadError as exc:
             require(
                 "required delimited fields not found" in str(exc),
@@ -2582,7 +3091,11 @@ def check_d1(output_dir: Path) -> list[str]:
             pass
         else:
             raise ContractError("D1 must reject ZIP path traversal")
-        require(not (Path(evidence_temp) / "escape.csv").exists(), "D1 rejects ZIP path traversal", checks)
+        require(
+            not (Path(evidence_temp) / "escape.csv").exists(),
+            "D1 rejects ZIP path traversal",
+            checks,
+        )
 
         usgs_native = Path(evidence_temp) / "Appendix_2b_Top5_18Sept2013.txt"
         usgs_native.write_text(
@@ -2674,15 +3187,24 @@ def check_d2(output_dir: Path) -> list[str]:
     require(len(rows) == 19, "D2 canonical database preserves all demo records", checks)
     require(
         {
-            "source_record_id", "analyte_reported", "species_or_oxide", "source_qualifier_raw",
-            "censored", "missing_reason", "method_family", "file_sha256",
-        }
-        .issubset(rows[0]),
+            "source_record_id",
+            "analyte_reported",
+            "species_or_oxide",
+            "source_qualifier_raw",
+            "censored",
+            "missing_reason",
+            "method_family",
+            "file_sha256",
+        }.issubset(rows[0]),
         "D2 v2 database exposes provenance, censoring and method-family fields",
         checks,
     )
     indexed = {row["record_id"]: row for row in rows}
-    require(float(indexed["rock-fe-001"]["normalized_value"]) == 25_000, "D2 solid unit conversion is stable", checks)
+    require(
+        float(indexed["rock-fe-001"]["normalized_value"]) == 25_000,
+        "D2 solid unit conversion is stable",
+        checks,
+    )
     molar_flags: list[str] = []
     require(
         standardizer.conversion_for("water", "nmol/kg", molar_flags) == (1.0, "nmol/kg")
@@ -2692,16 +3214,22 @@ def check_d2(output_dir: Path) -> list[str]:
     )
     molar_volume = standardizer.normalize_row(
         {
-            "record_id": "molar-ni", "sample_id": "molar-ni",
-            "element_or_analyte": "Ni", "value": "20.814", "unit": "nmol/L",
+            "record_id": "molar-ni",
+            "sample_id": "molar-ni",
+            "element_or_analyte": "Ni",
+            "value": "20.814",
+            "unit": "nmol/L",
             "medium": "water",
         },
         2,
     )
     unknown_molar = standardizer.normalize_row(
         {
-            "record_id": "molar-unknown", "sample_id": "molar-unknown",
-            "element_or_analyte": "Xx", "value": "20.814", "unit": "nmol/L",
+            "record_id": "molar-unknown",
+            "sample_id": "molar-unknown",
+            "element_or_analyte": "Xx",
+            "value": "20.814",
+            "unit": "nmol/L",
             "medium": "water",
         },
         3,
@@ -2716,19 +3244,35 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 converts evidence-supported nmol/L with frozen atomic weights and fails closed otherwise",
         checks,
     )
-    require(indexed["soil-as-013"]["normalized_value"] == "", "D2 censored values are not imputed", checks)
-    require(indexed["soil-as-013"]["censored"] == "true", "D2 serializes censoring state explicitly", checks)
+    require(
+        indexed["soil-as-013"]["normalized_value"] == "",
+        "D2 censored values are not imputed",
+        checks,
+    )
+    require(
+        indexed["soil-as-013"]["censored"] == "true",
+        "D2 serializes censoring state explicitly",
+        checks,
+    )
     lod = standardizer.normalize_row(
         {
-            "element_or_analyte": "As", "value": "<LOD", "unit": "mg/kg", "medium": "soil",
-            "detection_limit": "0.2", "detection_limit_unit": "mg/kg",
+            "element_or_analyte": "As",
+            "value": "<LOD",
+            "unit": "mg/kg",
+            "medium": "soil",
+            "detection_limit": "0.2",
+            "detection_limit_unit": "mg/kg",
         },
         2,
     )
     loq = standardizer.normalize_row(
         {
-            "element_or_analyte": "As", "value": "<LOQ", "unit": "mg/kg", "medium": "soil",
-            "quantitation_limit": "0.4", "quantitation_limit_unit": "mg/kg",
+            "element_or_analyte": "As",
+            "value": "<LOQ",
+            "unit": "mg/kg",
+            "medium": "soil",
+            "quantitation_limit": "0.4",
+            "quantitation_limit_unit": "mg/kg",
         },
         3,
     )
@@ -2742,14 +3286,19 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 preserves literal LOD and LOQ censoring without zero imputation",
         checks,
     )
-    require(indexed["soil-as-001"]["method_family"] == "icp_ms", "D2 normalizes analytical method families", checks)
+    require(
+        indexed["soil-as-001"]["method_family"] == "icp_ms",
+        "D2 normalizes analytical method families",
+        checks,
+    )
     require(
         "AMBIGUOUS_AQUEOUS_RATIO_UNIT" in indexed["water-as-ambiguous"]["qc_flags"],
         "D2 ambiguous aqueous units fail closed",
         checks,
     )
     require(
-        indexed["swap-coord-001"]["latitude"] == "" and indexed["swap-coord-001"]["longitude"] == "",
+        indexed["swap-coord-001"]["latitude"] == ""
+        and indexed["swap-coord-001"]["longitude"] == "",
         "D2 does not silently swap coordinates",
         checks,
     )
@@ -2758,19 +3307,36 @@ def check_d2(output_dir: Path) -> list[str]:
     fallback_duplicates = standardizer.process_rows(
         [
             {
-                "record_id": "fallback-a", "source_record_id": "row-a", "sample_id": "",
-                "element_or_analyte": "As", "value": "10", "unit": "mg/kg", "medium": "soil",
-                "latitude": "35", "longitude": "103", "source_crs": "EPSG:4326",
+                "record_id": "fallback-a",
+                "source_record_id": "row-a",
+                "sample_id": "",
+                "element_or_analyte": "As",
+                "value": "10",
+                "unit": "mg/kg",
+                "medium": "soil",
+                "latitude": "35",
+                "longitude": "103",
+                "source_crs": "EPSG:4326",
             },
             {
-                "record_id": "fallback-b", "source_record_id": "row-b", "sample_id": "",
-                "element_or_analyte": "As", "value": "10", "unit": "mg/kg", "medium": "soil",
-                "latitude": "35", "longitude": "103", "source_crs": "EPSG:4326",
+                "record_id": "fallback-b",
+                "source_record_id": "row-b",
+                "sample_id": "",
+                "element_or_analyte": "As",
+                "value": "10",
+                "unit": "mg/kg",
+                "medium": "soil",
+                "latitude": "35",
+                "longitude": "103",
+                "source_crs": "EPSG:4326",
             },
         ]
     )
     require(
-        all("DUPLICATE_CANDIDATE" in record["qc_flags"] for record in fallback_duplicates),
+        all(
+            "DUPLICATE_CANDIDATE" in record["qc_flags"]
+            for record in fallback_duplicates
+        ),
         "D2 source-row IDs do not mask duplicates when sample IDs are absent",
         checks,
     )
@@ -2814,8 +3380,12 @@ def check_d2(output_dir: Path) -> list[str]:
     gated_records = []
     for index, (batch_id, value) in enumerate(
         [
-            ("LAB-A", "10"), ("LAB-A", "11"), ("LAB-A", "12"),
-            ("LAB-B", "100"), ("LAB-B", "110"), ("LAB-B", "120"),
+            ("LAB-A", "10"),
+            ("LAB-A", "11"),
+            ("LAB-A", "12"),
+            ("LAB-B", "100"),
+            ("LAB-B", "110"),
+            ("LAB-B", "120"),
         ]
     ):
         gated_records.append(
@@ -2870,8 +3440,12 @@ def check_d2(output_dir: Path) -> list[str]:
                 index + 2,
             )
         )
-    spatial_key = tuple(spatial_records[0].get(field) for field in standardizer.DEFAULT_GROUP_BY)
-    spatial_group_id = standardizer.group_identifier(standardizer.DEFAULT_GROUP_BY, spatial_key)
+    spatial_key = tuple(
+        spatial_records[0].get(field) for field in standardizer.DEFAULT_GROUP_BY
+    )
+    spatial_group_id = standardizer.group_identifier(
+        standardizer.DEFAULT_GROUP_BY, spatial_key
+    )
     synthetic_points = {
         "type": "FeatureCollection",
         "features": [
@@ -2906,16 +3480,28 @@ def check_d2(output_dir: Path) -> list[str]:
     )
     try:
         standardizer.run_pipeline(
-            DEMO_INPUT, output_dir / "invalid-production", analysis_profile="production", min_group_size=8
+            DEMO_INPUT,
+            output_dir / "invalid-production",
+            analysis_profile="production",
+            min_group_size=8,
         )
     except standardizer.PipelineError:
-        checks.append("D2 production profile enforces at least twenty usable records per group")
+        checks.append(
+            "D2 production profile enforces at least twenty usable records per group"
+        )
     else:
-        raise ContractError("D2 production profile accepted --min-group-size below twenty")
+        raise ContractError(
+            "D2 production profile accepted --min-group-size below twenty"
+        )
     confidence = json_value(output_dir / "confidence_report.json")
-    require(confidence.get("confidence_version") == "d2-confidence-v3", "D2 confidence version is explicit", checks)
     require(
-        set(confidence.get("weights", {})) == {"source", "completeness", "method", "spatial", "qc"},
+        confidence.get("confidence_version") == "d2-confidence-v3",
+        "D2 confidence version is explicit",
+        checks,
+    )
+    require(
+        set(confidence.get("weights", {}))
+        == {"source", "completeness", "method", "spatial", "qc"},
         "D2 confidence component contract is complete",
         checks,
     )
@@ -2926,7 +3512,11 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 confidence report explains every component and the D1 verification boundary",
         checks,
     )
-    require(abs(sum(confidence["weights"].values()) - 1.0) < 1e-12, "D2 confidence weights sum to one", checks)
+    require(
+        abs(sum(confidence["weights"].values()) - 1.0) < 1e-12,
+        "D2 confidence weights sum to one",
+        checks,
+    )
     require(
         "missing_coordinate_uncertainty_medium_cap" in confidence["gates"]
         and confidence["gate_counts"].get("error_qc_low_cap", 0) > 0,
@@ -2969,29 +3559,39 @@ def check_d2(output_dir: Path) -> list[str]:
         [
             sys.executable,
             str(REQUEST_RUNNER),
-            "--request", str(PRODUCTION_REQUEST),
-            "--output-dir", str(production_dir),
-            "--demo", "production-usgs",
-            "--analysis-profile", "production",
-            "--generated-at", "2026-08-07T00:00:00Z",
+            "--request",
+            str(PRODUCTION_REQUEST),
+            "--output-dir",
+            str(production_dir),
+            "--demo",
+            "production-usgs",
+            "--analysis-profile",
+            "production",
+            "--generated-at",
+            "2026-08-07T00:00:00Z",
         ]
     )
     production_summary = json_value(production_dir / "run_summary.json")
     production_anomaly = json_value(production_dir / "anomaly_report.json")
     production_confidence = json_value(production_dir / "confidence_report.json")
-    production_execution = json_value(production_dir / "request_evidence" / "execution.json")
+    production_execution = json_value(
+        production_dir / "request_evidence" / "execution.json"
+    )
     production_source_manifest = json_value(production_dir / "source_manifest.json")
     production_rows = csv_rows(production_dir / "geochemistry.csv")
     require(
         production_summary["metrics"]["record_count"] == 996
         and production_summary["metrics"]["valid_coordinate_count"] == 996
-        and all(row["matched_geologic_unit"].startswith("GLiM:") for row in production_rows),
+        and all(
+            row["matched_geologic_unit"].startswith("GLiM:") for row in production_rows
+        ),
         "D2 production demo performs pinned GLiM matching for every real USGS record",
         checks,
     )
     require(
         production_anomaly["minimum_group_size"] == 20
-        and sum(group["status"] == "analyzed" for group in production_anomaly["groups"]) == 12
+        and sum(group["status"] == "analyzed" for group in production_anomaly["groups"])
+        == 12
         and production_anomaly["candidate_count"] == 6,
         "D2 production demo analyzes real comparable groups without lowering the twenty-record gate",
         checks,
@@ -3004,7 +3604,9 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 production demo keeps missing coordinate uncertainty visible through confidence gates",
         checks,
     )
-    execution_schema = json_value(SKILL_DIR / "references" / "request-execution.schema.json")
+    execution_schema = json_value(
+        SKILL_DIR / "references" / "request-execution.schema.json"
+    )
     acquisition_entries = production_execution["acquisition_manifests"]
     require(
         set(production_execution) == set(execution_schema["properties"])
@@ -3034,7 +3636,9 @@ def check_d2(output_dir: Path) -> list[str]:
             == item["sha256"]
             for item in acquisition_entries
         )
-        and production_source_manifest["record_evidence"]["acquisition_manifest"]["sha256"]
+        and production_source_manifest["record_evidence"]["acquisition_manifest"][
+            "sha256"
+        ]
         == acquisition_entries[0]["sha256"],
         "D1 request evidence retains every manifest byte needed to audit the post-run hash chain",
         checks,
@@ -3048,9 +3652,12 @@ def check_d2(output_dir: Path) -> list[str]:
             [
                 sys.executable,
                 str(REQUEST_RUNNER),
-                "--request", str(mismatched_path),
-                "--output-dir", str(Path(mismatch_temp) / "mismatched-source-output"),
-                "--demo", "production-usgs",
+                "--request",
+                str(mismatched_path),
+                "--output-dir",
+                str(Path(mismatch_temp) / "mismatched-source-output"),
+                "--demo",
+                "production-usgs",
             ],
             expected_code=2,
         )
@@ -3068,7 +3675,9 @@ def check_d2(output_dir: Path) -> list[str]:
     with tempfile.TemporaryDirectory() as tamper_temp:
         tampered_input = Path(tamper_temp) / "demo_input.csv"
         production_fixture = SKILL_DIR / "fixtures" / "production-usgs"
-        tampered_input.write_bytes((production_fixture / "demo_input.csv").read_bytes() + b"\n")
+        tampered_input.write_bytes(
+            (production_fixture / "demo_input.csv").read_bytes() + b"\n"
+        )
         try:
             request_runner.verify_manifest_outputs(
                 production_fixture / "run_manifest.json",
@@ -3076,7 +3685,8 @@ def check_d2(output_dir: Path) -> list[str]:
             )
         except request_runner.RequestRunError as exc:
             require(
-                exc.status == "conflicting_evidence" and "hash/size mismatch" in str(exc),
+                exc.status == "conflicting_evidence"
+                and "hash/size mismatch" in str(exc),
                 "Request runner rejects a fixture whose bytes no longer match its parent manifest",
                 checks,
             )
@@ -3100,13 +3710,21 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 anomaly outputs expose one validated method version",
         checks,
     )
-    require(anomaly_report.get("scientific_status") == "screening_baseline_only", "D2 anomaly boundary is explicit", checks)
+    require(
+        anomaly_report.get("scientific_status") == "screening_baseline_only",
+        "D2 anomaly boundary is explicit",
+        checks,
+    )
     require(
         anomaly_report.get("minimum_quantified_fraction") == 0.70,
         "D2 anomaly screening declares the quantified-fraction gate",
         checks,
     )
-    require(anomaly_report.get("candidate_count") == 1, "D2 demo anomaly result is stable", checks)
+    require(
+        anomaly_report.get("candidate_count") == 1,
+        "D2 demo anomaly result is stable",
+        checks,
+    )
     require(
         anomalies["features"][0]["properties"].get("status") == "candidate_anomaly",
         "D2 does not turn a screening candidate into a causal conclusion",
@@ -3118,25 +3736,29 @@ def check_d2(output_dir: Path) -> list[str]:
         "D1-to-D2 schema-map fields match the executable interface",
         checks,
     )
-    crosswalk_schema = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.schema.json")
+    crosswalk_schema = json_value(
+        SKILL_DIR / "references" / "platform-field-crosswalk.schema.json"
+    )
     require(
-        crosswalk_schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema",
+        crosswalk_schema.get("$schema")
+        == "https://json-schema.org/draft/2020-12/schema",
         "D2 professional-platform crosswalk has a versioned JSON Schema",
         checks,
     )
-    record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+    record_schema = json_value(
+        SKILL_DIR / "references" / "geochemistry-record.schema.json"
+    )
     crosswalk = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.json")
     require(
         crosswalk.get("status") == "semantic_alignment_not_conformance_claim"
-        and crosswalk.get("canonical_schema", {}).get("schema_id") == record_schema.get("$id"),
+        and crosswalk.get("canonical_schema", {}).get("schema_id")
+        == record_schema.get("$id"),
         "D2 crosswalk declares semantic alignment without a false conformance claim",
         checks,
     )
     mapped_fields = [item["canonical_field"] for item in crosswalk["field_mappings"]]
     non_core_fields = [
-        field
-        for group in crosswalk["non_core_fields"]
-        for field in group["fields"]
+        field for group in crosswalk["non_core_fields"] for field in group["fields"]
     ]
     canonical_fields = set(record_schema["properties"])
     require(
@@ -3164,13 +3786,20 @@ def check_d2(output_dir: Path) -> list[str]:
     require(
         len(evidence_ids) == len(set(evidence_ids))
         and len(platform_ids) == len(set(platform_ids))
-        and set(platform_ids) == {"earthchem_ecl", "usgs_agdb2", "odm2", "igsn_datacite"},
+        and set(platform_ids)
+        == {"earthchem_ecl", "usgs_agdb2", "odm2", "igsn_datacite"},
         "D2 crosswalk platform and evidence registries are unique and explicit",
         checks,
     )
     evidence_set = set(evidence_ids)
     platform_set = set(platform_ids)
-    valid_mapping_types = {"exact", "renamed", "transformed", "composite", "no_direct_equivalent"}
+    valid_mapping_types = {
+        "exact",
+        "renamed",
+        "transformed",
+        "composite",
+        "no_direct_equivalent",
+    }
     mapping_rows = [
         mapping
         for field_mapping in crosswalk["field_mappings"]
@@ -3182,17 +3811,31 @@ def check_d2(output_dir: Path) -> list[str]:
             and mapping["mapping_type"] in valid_mapping_types
             and set(mapping["evidence_ids"]) <= evidence_set
             and (
-                (mapping["mapping_type"] == "no_direct_equivalent" and not mapping["external_path"])
-                or (mapping["mapping_type"] != "no_direct_equivalent" and bool(mapping["external_path"]))
+                (
+                    mapping["mapping_type"] == "no_direct_equivalent"
+                    and not mapping["external_path"]
+                )
+                or (
+                    mapping["mapping_type"] != "no_direct_equivalent"
+                    and bool(mapping["external_path"])
+                )
             )
             for mapping in mapping_rows
         )
         and all(
-            len({mapping["platform_id"] for mapping in field_mapping["platform_mappings"]})
+            len(
+                {
+                    mapping["platform_id"]
+                    for mapping in field_mapping["platform_mappings"]
+                }
+            )
             == len(field_mapping["platform_mappings"])
             for field_mapping in crosswalk["field_mappings"]
         )
-        and all(set(platform["evidence_ids"]) <= evidence_set for platform in crosswalk["platforms"]),
+        and all(
+            set(platform["evidence_ids"]) <= evidence_set
+            for platform in crosswalk["platforms"]
+        ),
         "D2 crosswalk mappings reference valid platforms, evidence and absence semantics",
         checks,
     )
@@ -3247,21 +3890,43 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 deterministic TaskContract selects the minimum stable entry point and exact acceptance outputs",
         checks,
     )
-    skill_dirs = [path for path in (REPO_ROOT / "skills").iterdir() if path.is_dir() and not path.name.startswith(".")]
-    require(len(skill_dirs) == 1 and skill_dirs[0] == SKILL_DIR, "D3 keeps exactly one production Skill", checks)
+    skill_dirs = [
+        path
+        for path in (REPO_ROOT / "skills").iterdir()
+        if path.is_dir() and not path.name.startswith(".")
+    ]
+    require(
+        len(skill_dirs) == 1 and skill_dirs[0] == SKILL_DIR,
+        "D3 keeps exactly one production Skill",
+        checks,
+    )
     required_outputs = set(output_validator.REQUIRED_FILES.values())
     actual_outputs = {path.name for path in output_dir.iterdir() if path.is_file()}
-    require(actual_outputs == required_outputs, "D3 publishes the stable output set", checks)
+    require(
+        actual_outputs == required_outputs, "D3 publishes the stable output set", checks
+    )
     validation = output_validator.validate_dir(output_dir)
-    require(validation.get("status") == "valid", "D3 integrated outputs pass the public validator", checks)
+    require(
+        validation.get("status") == "valid",
+        "D3 integrated outputs pass the public validator",
+        checks,
+    )
     html = (output_dir / "interactive_map.html").read_text(encoding="utf-8")
-    require("<script src=" not in html.casefold(), "D3 map is self-contained without external scripts", checks)
+    require(
+        "<script src=" not in html.casefold(),
+        "D3 map is self-contained without external scripts",
+        checks,
+    )
     require(
         all(
             marker in html
             for marker in (
-                'id="element"', 'id="medium"', 'id="sampleType"', 'id="methodScope"',
-                'id="confidence"', 'id="anomalyOnly"',
+                'id="element"',
+                'id="medium"',
+                'id="sampleType"',
+                'id="methodScope"',
+                'id="confidence"',
+                'id="anomalyOnly"',
             )
         ),
         "D3 map exposes element, medium, sample type, method scope, confidence and anomaly filters",
@@ -3422,8 +4087,7 @@ def check_d3(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        "选择单个元素后显示可比浓度色带" in html
-        and "灰色：其他方法或测量基准" in html,
+        "选择单个元素后显示可比浓度色带" in html and "灰色：其他方法或测量基准" in html,
         "D3 defaults to a scientifically valid all-data sample overview",
         checks,
     )
@@ -3435,14 +4099,23 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 embeds pinned offline land and country boundaries with visible provenance",
         checks,
     )
-    require("候选异常不代表污染" in html, "D3 map communicates the scientific interpretation boundary", checks)
+    require(
+        "候选异常不代表污染" in html,
+        "D3 map communicates the scientific interpretation boundary",
+        checks,
+    )
     summary = json_value(output_dir / "run_summary.json")
     require(
         summary.get("status") == "partial_success",
         "D3 run summary exposes incomplete map/background coverage instead of overstating success",
         checks,
     )
-    require(set(summary.get("outputs", {}).values()) == required_outputs - {"run_summary.json"}, "D3 summary names every reusable artifact", checks)
+    require(
+        set(summary.get("outputs", {}).values())
+        == required_outputs - {"run_summary.json"},
+        "D3 summary names every reusable artifact",
+        checks,
+    )
     map_report = summary.get("map_report", {})
     require(
         map_report.get("map_version") == "d3-interactive-atlas-v3"
@@ -3472,21 +4145,23 @@ def check_d3(output_dir: Path) -> list[str]:
         and map_report.get("external_assets") == 0
         and map_report.get("interpolation") is False
         and all(
-            map_report.get("capability_matrix", {}).get("filter_dimensions", {}).values()
+            map_report.get("capability_matrix", {})
+            .get("filter_dimensions", {})
+            .values()
         )
         and all(map_report.get("capability_matrix", {}).get("outputs", {}).values())
-        and all(map_report.get("capability_matrix", {}).get("deliverables", {}).values())
+        and all(
+            map_report.get("capability_matrix", {}).get("deliverables", {}).values()
+        )
         and map_report.get("ui_hierarchy_version")
         == "task-first-progressive-disclosure-v2"
-        and map_report.get("template_contract_version")
-        == "d3-dual-scope-atlas-v4"
+        and map_report.get("template_contract_version") == "d3-dual-scope-atlas-v4"
         and map_report.get("template_variant") == "global_globe"
         and map_report.get("database_visual_summary_schema")
         == "d3-database-visual-summary-v1"
         and map_report.get("template_sha256")
         == sha256_file(SKILL_DIR / "assets" / "interactive-atlas-v3.html")
-        and map_report.get("terminology_contract")
-        == "competition-geochemistry-v1"
+        and map_report.get("terminology_contract") == "competition-geochemistry-v1"
         and map_report.get("visual_question_contract", {}).get("schema_version")
         == "d3-visual-question-contract-v1"
         and set(map_report.get("visual_question_contract", {}).get("views", {}))
@@ -3599,7 +4274,11 @@ def check_d3(output_dir: Path) -> list[str]:
         and profile.get("spatial_scope") == "global"
         and profile_schema.get("properties", {}).get("schema_version", {}).get("const")
         == "d3-visualization-profile-v2"
-        and set(profile_schema.get("properties", {}).get("spatial_scope", {}).get("enum", []))
+        and set(
+            profile_schema.get("properties", {})
+            .get("spatial_scope", {})
+            .get("enum", [])
+        )
         == {"global", "regional"}
         and set(profile_schema.get("properties", {}).get("story", {}).get("enum", []))
         == {"overview", "coverage", "anomaly", "comparison", "database", "evidence"}
@@ -3637,8 +4316,16 @@ def check_d3(output_dir: Path) -> list[str]:
                 "filtered-coverage",
                 "coverage",
                 [
-                    "--story", "coverage", "--element", "Cu", "--medium", "soil",
-                    "--sample-type", "soil_topsoil", "--method-scope", "observation",
+                    "--story",
+                    "coverage",
+                    "--element",
+                    "Cu",
+                    "--medium",
+                    "soil",
+                    "--sample-type",
+                    "soil_topsoil",
+                    "--method-scope",
+                    "observation",
                 ],
             ),
             (
@@ -3712,15 +4399,32 @@ def check_d3(output_dir: Path) -> list[str]:
             (
                 "named-country-overview",
                 "overview",
-                ["--story", "overview", "--spatial-scope", "regional", "--region", "Japan"],
+                [
+                    "--story",
+                    "overview",
+                    "--spatial-scope",
+                    "regional",
+                    "--region",
+                    "Japan",
+                ],
             ),
             (
                 "antimeridian-coverage",
                 "coverage",
                 [
-                    "--story", "coverage", "--spatial-scope", "regional",
-                    "--region", "custom", "--bbox", "170", "-20", "-170", "20",
-                    "--region-label", "日期变更线研究框",
+                    "--story",
+                    "coverage",
+                    "--spatial-scope",
+                    "regional",
+                    "--region",
+                    "custom",
+                    "--bbox",
+                    "170",
+                    "-20",
+                    "-170",
+                    "20",
+                    "--region-label",
+                    "日期变更线研究框",
                 ],
             ),
         )
@@ -3754,7 +4458,8 @@ def check_d3(output_dir: Path) -> list[str]:
             require(
                 generated_profile.get("story") == expected_story
                 and generated_report.get("profile") == generated_profile
-                and visualization_validator.validate_dir(bundle).get("status") == "valid",
+                and visualization_validator.validate_dir(bundle).get("status")
+                == "valid",
                 f"D3 question profile reproduces the {case_name} task without HTML edits",
                 checks,
             )
@@ -3811,22 +4516,28 @@ def check_d3(output_dir: Path) -> list[str]:
             [
                 sys.executable,
                 str(VISUALIZATION_RENDERER),
-                "--input-dir", str(output_dir),
-                "--profile", str(question_root / "global-overview.json"),
-                "--output-dir", str(stale_bundle),
+                "--input-dir",
+                str(output_dir),
+                "--profile",
+                str(question_root / "global-overview.json"),
+                "--output-dir",
+                str(stale_bundle),
                 "--force",
             ]
         )
         require(
             not (stale_bundle / "element_comparison.json").exists()
             and not (stale_bundle / "concentration_grid.geojson").exists()
-            and visualization_validator.validate_dir(stale_bundle).get("status") == "valid",
+            and visualization_validator.validate_dir(stale_bundle).get("status")
+            == "valid",
             "D3 force rerender removes structured artifacts not triggered by the new profile",
             checks,
         )
         require(
-            generated_profiles[1].get("filters", {}).get("sample_type") == "soil_topsoil"
-            and generated_profiles[1].get("filters", {}).get("method_scope") == "observation"
+            generated_profiles[1].get("filters", {}).get("sample_type")
+            == "soil_topsoil"
+            and generated_profiles[1].get("filters", {}).get("method_scope")
+            == "observation"
             and custom_profile.get("default_region") == "custom"
             and custom_profile.get("custom_region", {}).get("label") == "智利研究框"
             and custom_profile.get("custom_region", {}).get("bounds")
@@ -3838,7 +4549,14 @@ def check_d3(output_dir: Path) -> list[str]:
             and custom_comparison_profile.get("comparison")
             == {"x": "As", "y": "Pb", "medium": "soil"}
             and {profile_value.get("story") for profile_value in generated_profiles}
-            == {"overview", "coverage", "anomaly", "comparison", "database", "evidence"},
+            == {
+                "overview",
+                "coverage",
+                "anomaly",
+                "comparison",
+                "database",
+                "evidence",
+            },
             "D3 question matrix covers six stories and reproducible arbitrary regional comparison profiles",
             checks,
         )
@@ -3916,15 +4634,20 @@ def check_d3(output_dir: Path) -> list[str]:
         )
         scoped_geojson = json_value(visualization_output / "samples.geojson")
         scoped_features = scoped_geojson.get("features", [])
-        scoped_report = visualization_report.get("map_report", {}).get("spatial_scope", {})
+        scoped_report = visualization_report.get("map_report", {}).get(
+            "spatial_scope", {}
+        )
         require(
             visualization_report.get("status") == "success"
             and visualization_report.get("interface_version")
             == "d3-visualization-interface-v1"
             and visualization_report.get("profile", {}).get("story") == "anomaly"
-            and visualization_report.get("profile", {}).get("filters", {}).get("element")
+            and visualization_report.get("profile", {})
+            .get("filters", {})
+            .get("element")
             == "As"
-            and visualization_report.get("profile", {}).get("spatial_scope") == "regional"
+            and visualization_report.get("profile", {}).get("spatial_scope")
+            == "regional"
             and visualization_report.get("map_report", {}).get("default_view")
             == "regional_scope_task_view"
             and scoped_report.get("region_key") == "china"
@@ -3971,10 +4694,15 @@ def check_d3(output_dir: Path) -> list[str]:
             city_report.get("map_report", {}).get("spatial_scope", {}).get("region_key")
             == "shanghai"
             and city_report.get("map_report", {}).get("mapped_record_count") == 0
-            and city_report.get("map_report", {}).get("scope_excluded_mappable_record_count")
+            and city_report.get("map_report", {}).get(
+                "scope_excluded_mappable_record_count"
+            )
             == city_report.get("map_report", {}).get("source_mappable_record_count")
             and city_geojson.get("features") == []
-            and any("覆盖缺口" in warning for warning in city_report.get("profile_warnings", [])),
+            and any(
+                "覆盖缺口" in warning
+                for warning in city_report.get("profile_warnings", [])
+            ),
             "D3 city template keeps an empty regional result instead of falling back to a world map",
             checks,
         )
@@ -4067,7 +4795,11 @@ def check_d3(output_dir: Path) -> list[str]:
     return checks
 
 
-CHECKERS: dict[str, Callable[[Path], list[str]]] = {"d1": check_d1, "d2": check_d2, "d3": check_d3}
+CHECKERS: dict[str, Callable[[Path], list[str]]] = {
+    "d1": check_d1,
+    "d2": check_d2,
+    "d3": check_d3,
+}
 
 
 def run_suite(component: str) -> dict[str, Any]:
@@ -4075,12 +4807,23 @@ def run_suite(component: str) -> dict[str, Any]:
     with tempfile.TemporaryDirectory() as output_temp:
         output_dir = Path(output_temp)
         run_command(
-            [sys.executable, str(WORKFLOW), "--input", str(DEMO_INPUT), "--output-dir", str(output_dir)]
+            [
+                sys.executable,
+                str(WORKFLOW),
+                "--input",
+                str(DEMO_INPUT),
+                "--output-dir",
+                str(output_dir),
+            ]
         )
         components: dict[str, Any] = {}
         for name in selected:
             checks = CHECKERS[name](output_dir)
-            components[name.upper()] = {"status": "PASS", "checks": len(checks), "details": checks}
+            components[name.upper()] = {
+                "status": "PASS",
+                "checks": len(checks),
+                "details": checks,
+            }
     return {
         "status": "PASS",
         "selected": component,
@@ -4100,7 +4843,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         report = run_suite(args.component)
     except (ContractError, OSError, ValueError, subprocess.SubprocessError) as exc:
-        print(json.dumps({"status": "FAIL", "component": args.component, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                {"status": "FAIL", "component": args.component, "error": str(exc)},
+                ensure_ascii=False,
+            ),
+            file=sys.stderr,
+        )
         return 1
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0

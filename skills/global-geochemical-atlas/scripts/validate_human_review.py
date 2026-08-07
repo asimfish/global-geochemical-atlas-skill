@@ -28,9 +28,17 @@ def validate(path: Path) -> dict[str, Any]:
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        return {"status": "invalid", "path": str(path), "errors": [f"unreadable JSON: {exc}"]}
+        return {
+            "status": "invalid",
+            "path": str(path),
+            "errors": [f"unreadable JSON: {exc}"],
+        }
     if not isinstance(document, dict):
-        return {"status": "invalid", "path": str(path), "errors": ["root must be an object"]}
+        return {
+            "status": "invalid",
+            "path": str(path),
+            "errors": ["root must be an object"],
+        }
 
     errors: list[str] = []
     records = document.get("records")
@@ -62,8 +70,10 @@ def validate(path: Path) -> dict[str, Any]:
             identifiers.add(review_id)
         checks = record.get("automated_checks")
         check_values = list(checks.values()) if isinstance(checks, dict) else []
-        machine_pass = record.get("automated_status") == "PASS" and bool(check_values) and all(
-            item is True for item in check_values
+        machine_pass = (
+            record.get("automated_status") == "PASS"
+            and bool(check_values)
+            and all(item is True for item in check_values)
         )
         automated_pass += int(machine_pass)
         reviewer = record.get("reviewer")
@@ -83,12 +93,29 @@ def validate(path: Path) -> dict[str, Any]:
         errors.append("automated_pass_count does not match record checks")
     if document.get("completed_record_count") != completed:
         errors.append("completed_record_count does not match signed reviewer blocks")
-    complete = len(records) >= required and completed == len(records) and automated_pass == len(records)
+    complete = (
+        len(records) >= required
+        and completed == len(records)
+        and automated_pass == len(records)
+    )
     passed = complete and human_pass == len(records)
-    expected_status = "passed" if passed else "failed" if complete and human_fail else "in_progress" if completed else "prepared"
+    expected_status = (
+        "passed"
+        if passed
+        else "failed"
+        if complete and human_fail
+        else "in_progress"
+        if completed
+        else "prepared"
+    )
     if document.get("status") != expected_status:
-        errors.append(f"status must be {expected_status!r} for the current record decisions")
-    if "all_records_reviewed" in document and document.get("all_records_reviewed") is not complete:
+        errors.append(
+            f"status must be {expected_status!r} for the current record decisions"
+        )
+    if (
+        "all_records_reviewed" in document
+        and document.get("all_records_reviewed") is not complete
+    ):
         errors.append("all_records_reviewed does not match review completion")
 
     return {
