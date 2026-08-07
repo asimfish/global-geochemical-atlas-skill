@@ -2864,7 +2864,11 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
             key = f"{sample}|{horizon}"
             if key in samples:
                 raise SourceAdapterError(f"TPDC sample+horizon duplicated at row {row_number}")
-            samples.add(key); profiles.add(sample); sites.add(values["site"]); mountains.add(values["Mountain"]); horizons[horizon] += 1
+            samples.add(key)
+            profiles.add(sample)
+            sites.add(values["site"])
+            mountains.add(values["Mountain"])
+            horizons[horizon] += 1
             observations: dict[str, dict[str, Any]] = {}
             for analyte, field in self.candidate.registry_entry["target_analytes"].items():
                 raw_value = values[field].strip()
@@ -2983,7 +2987,10 @@ class GemasEuropeAdapter(RegistryAdapter):
             raise SourceAdapterError("GEMAS requires its registered GSI resource")
         downloaded = files[0]
         expected = self.candidate.registry_entry["expected_counts"]
-        samples: set[str] = set(); countries: set[str] = set(); counts = Counter(); group_counts = Counter()
+        samples: set[str] = set()
+        countries: set[str] = set()
+        counts = Counter()
+        group_counts = Counter()
         with zipfile.ZipFile(downloaded.path) as archive:
             for member in self.candidate.registry_entry["download"]["files"][0]["member_contracts"]:
                 field_names, rows = self._dbf_rows(archive.read(member["filename"]))
@@ -2996,7 +3003,8 @@ class GemasEuropeAdapter(RegistryAdapter):
                     country = values.get("COUNTRY", "")
                     try:
                         sample_number = int(float(values.get("ID", "")))
-                        longitude = float(values.get("XCOO", "")); latitude = float(values.get("YCOO", ""))
+                        longitude = float(values.get("XCOO", ""))
+                        latitude = float(values.get("YCOO", ""))
                     except ValueError as exc:
                         raise SourceAdapterError(f"GEMAS sample identity/coordinate changed at record {record_number}") from exc
                     if not country or not (-180 <= longitude <= 180 and -90 <= latitude <= 90):
@@ -3004,7 +3012,8 @@ class GemasEuropeAdapter(RegistryAdapter):
                     sample_key = f"GEMAS:{sample_type}:{sample_number}"
                     if sample_key in samples:
                         raise SourceAdapterError(f"GEMAS sample duplicated: {sample_key}")
-                    samples.add(sample_key); countries.add(country)
+                    samples.add(sample_key)
+                    countries.add(country)
                     for analysis_group in ("AR", "XRF"):
                         observations: dict[str, dict[str, Any]] = {}
                         fields = self.candidate.registry_entry["analysis_groups"][analysis_group]
@@ -3012,8 +3021,10 @@ class GemasEuropeAdapter(RegistryAdapter):
                             raw_value = values.get(field, "")
                             if not raw_value:
                                 raise SourceAdapterError(f"GEMAS {field} missing for {sample_key}")
-                            numeric = float(raw_value); dl = float(fields["detection_limits"][analyte])
-                            counts[analyte] += 1; group_counts[analysis_group] += 1
+                            numeric = float(raw_value)
+                            dl = float(fields["detection_limits"][analyte])
+                            counts[analyte] += 1
+                            group_counts[analysis_group] += 1
                             observations[analyte] = {
                                 "field": field, "value": raw_value, "unit": "mg/kg",
                                 "measurement_basis": fields["measurement_basis"],
