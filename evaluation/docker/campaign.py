@@ -61,12 +61,24 @@ class NetworkHandle:
     proxy: str | None = None
 
 
+@dataclass(frozen=True)
+class ProviderRelayHandle:
+    container: str
+    token: str
+    base_url: str = "http://eval-provider-relay:8090"
+
+
 def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def run_checked(command: list[str], *, capture: bool = True) -> subprocess.CompletedProcess[str]:
-    completed = subprocess.run(command, check=False, capture_output=capture, text=True)
+def run_checked(
+    command: list[str],
+    *,
+    capture: bool = True,
+    environment: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    completed = subprocess.run(command, check=False, capture_output=capture, text=True, env=environment)
     if completed.returncode != 0:
         message = completed.stderr.strip() or completed.stdout.strip() or f"exit {completed.returncode}"
         raise CampaignError(f"command failed: {' '.join(command[:4])}: {message}")
@@ -233,6 +245,51 @@ def cleanup_network(handle: NetworkHandle) -> None:
     for network in (handle.internal, handle.egress):
         if network:
             subprocess.run(["docker", "network", "rm", network], check=False, capture_output=True)
+
+
+def start_provider_relay(
+    *,
+    image: str,
+    network: NetworkHandle,
+    run_id: str,
+    upstream_base_url: str,
+    upstream_api_key: str,
+) -> ProviderRelayHandle:
+    if network.mode != "whitelist" or not network.internal or not network.egress:
+        raise CampaignError("OpenCode evaluation requires the isolated whitelist network")
+    container = f"gga-provider-{safe_slug(run_id)}-{uuid.uuid4().hex[:6]}"
+    token = uuid.uuid4().hex + uuid.uuid4().hex
+    command = [
+        "docker", "run", "--detach", "--name", container,
+        "--network", network.internal, "--network-alias", "eval-provider-relay",
+        "--cpus", "1", "--memory", "512m", "--memory-swap", "512m", "--pids-limit", "64",
+        "--read-only", "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
+        "--tmpfs", "/tmp:rw,nosuid,nodev,size=16m",
+        "--env", f"EVAL_RELAY_TOKEN={token}",
+        "--env", f"EVAL_UPSTREAM_BASE_URL={upstream_base_url}",
+        "--env", "EVAL_UPSTREAM_API_KEY",
+        image, "python", "/opt/evaluation/container/provider_relay.py",
+    ]
+    child_environment = os.environ.copy()
+    child_environment["EVAL_UPSTREAM_API_KEY"] = upstream_api_key
+    try:
+        run_checked(command, environment=child_environment)
+        run_checked(["docker", "network", "connect", network.egress, container])
+        time.sleep(0.25)
+        running = run_checked(
+            ["docker", "inspect", container, "--format", "{{.State.Running}}"]
+        ).stdout.strip()
+        if running != "true":
+            raise CampaignError("provider relay failed to start")
+        return ProviderRelayHandle(container=container, token=token)
+    except Exception:
+        subprocess.run(["docker", "rm", "--force", container], check=False, capture_output=True)
+        raise
+
+
+def cleanup_provider_relay(handle: ProviderRelayHandle | None) -> None:
+    if handle is not None:
+        subprocess.run(["docker", "rm", "--force", handle.container], check=False, capture_output=True)
 
 
 def prepare_task_bundle(question: str, destination: Path) -> tuple[Path, str, str]:
@@ -482,7 +539,7 @@ def execute_container(
             "HTTPS_PROXY": "http://eval-proxy:8080",
             "http_proxy": "http://eval-proxy:8080",
             "https_proxy": "http://eval-proxy:8080",
-            "NO_PROXY": "localhost,127.0.0.1",
+            "NO_PROXY": "localhost,127.0.0.1,eval-provider-relay",
         }.items():
             docker_command.extend(["--env", f"{key}={value}"])
     for name_ in environment_names:
@@ -723,14 +780,25 @@ def run_one(
     environment_names = []
     environment_values: dict[str, str] = {}
     host_environment: dict[str, str] = {}
+    provider_relay: ProviderRelayHandle | None = None
+    redaction_values: list[str] = []
     if "/run_opencode.py" in " ".join(agent_command):
         if not os.environ.get(api_key_env):
             raise CampaignError(f"host environment variable is empty: {api_key_env}")
-        environment_names.append("EVAL_API_KEY")
-        host_environment["EVAL_API_KEY"] = os.environ[api_key_env]
+        upstream_api_key = os.environ[api_key_env]
+        provider_relay = start_provider_relay(
+            image=image,
+            network=network,
+            run_id=run_id,
+            upstream_base_url=provider_base_url,
+            upstream_api_key=upstream_api_key,
+        )
+        redaction_values.extend([upstream_api_key, provider_relay.token])
         environment_values.update(
             {
-                "EVAL_PROVIDER_BASE_URL": provider_base_url,
+                "EVAL_API_KEY": provider_relay.token,
+                "EVAL_PROVIDER_BASE_URL": provider_relay.base_url,
+                "EVAL_PROVIDER_UPSTREAM_BASE_URL": provider_base_url,
                 "EVAL_PROVIDER_MODEL_ID": model,
                 "EVAL_MODEL_VARIANT": model_variant,
                 "EVAL_TEMPERATURE": str(temperature),
@@ -742,26 +810,29 @@ def run_one(
         )
     container_name = f"gga-{safe_slug(run_id)}-{uuid.uuid4().hex[:6]}"
     started_at = utc_now()
-    raw_exit, timed_out, duration = execute_container(
-        name=container_name,
-        image=image,
-        command=agent_command,
-        task_dir=task_dir,
-        workspace=workspace,
-        submission=submission,
-        condition=condition,
-        network=network,
-        profile=profile,
-        environment_names=environment_names,
-        environment_values=environment_values,
-        host_environment=host_environment,
-        stdout_path=stdout_path,
-        stderr_path=stderr_path,
-    )
+    try:
+        raw_exit, timed_out, duration = execute_container(
+            name=container_name,
+            image=image,
+            command=agent_command,
+            task_dir=task_dir,
+            workspace=workspace,
+            submission=submission,
+            condition=condition,
+            network=network,
+            profile=profile,
+            environment_names=environment_names,
+            environment_values=environment_values,
+            host_environment=host_environment,
+            stdout_path=stdout_path,
+            stderr_path=stderr_path,
+        )
+    finally:
+        cleanup_provider_relay(provider_relay)
     log_secret_redacted = any(
-        [redact_file(path, host_environment.values()) for path in (stdout_path, stderr_path)]
+        [redact_file(path, redaction_values) for path in (stdout_path, stderr_path)]
     )
-    secret_redaction_files = redact_tree(submission, host_environment.values())
+    secret_redaction_files = redact_tree(submission, redaction_values)
     artifacts, missing = artifact_inventory(submission, required_paths)
     q24_browser = (
         audit_q24_map(image, run_dir, submission)
@@ -817,7 +888,10 @@ def run_one(
         "stderr": stderr_path.name,
         "provider_base_url": provider_base_url or None,
         "provider_host": urlsplit(provider_base_url).hostname if provider_base_url else None,
-        "secret_policy": "API keys are inherited by name or injected in process environment and are never serialized.",
+        "secret_policy": (
+            "The provider key exists only in the short-lived runner-owned relay environment; "
+            "the candidate receives a per-run relay token and neither value is serialized."
+        ),
     }
     atomic_json(run_dir / "runner_metadata.json", metadata)
     score_path = run_dir / "score.json"

@@ -114,7 +114,7 @@ python3 evaluation/docker/campaign.py stage \
 
 未知 profile、不可运行 profile、条目/注册表哈希变化，或 model、temperature、thinking 与冻结策略不一致时，宿主 runner 和容器入口都会以环境无效失败关闭。不要原地改写已用于正式实验的 profile；新增版本化 ID，并保留旧条目以便复核历史证据。
 
-密钥只通过宿主环境继承，命令、计划和 JSON 均不写密钥值；runner 会在归档前清除日志中的密钥字节。若候选把密钥写入 submission，runner 会等长覆盖该值并以 E1 `74` 失败关闭：
+真实密钥只由宿主注入每次运行独占的短生命周期 provider relay；候选容器只得到随机本地 relay token，不能读取真实密钥。relay 只向冻结的 HTTPS origin 转发 `/chat/completions` 或 `/responses`，替换 Authorization 后再过滤响应头，并在候选结束后销毁。命令、计划和 JSON 均不写真实密钥值；runner 仍会在归档前递归清除真实密钥或 relay token 字节。若交卷包含这些字节，runner 会等长覆盖并以 E1 `74` 失败关闭：
 
 ```bash
 export EVAL_API_KEY='从密钥管理器注入，不写入仓库'

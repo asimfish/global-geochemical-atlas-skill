@@ -9,17 +9,38 @@ services:
     security_opt: [no-new-privileges:true]
     read_only: true
     tmpfs: [/tmp]
+    pids_limit: 64
+    cpus: 1
+    mem_limit: 512m
+
+  provider-relay:
+    image: ${EVAL_IMAGE:-global-geochemical-eval:local}
+    command: ["python", "/opt/evaluation/container/provider_relay.py"]
+    environment:
+      EVAL_RELAY_TOKEN: ${EVAL_RELAY_TOKEN:?set a per-run relay token}
+      EVAL_UPSTREAM_API_KEY: ${EVAL_API_KEY:?set EVAL_API_KEY}
+      EVAL_UPSTREAM_BASE_URL: ${EVAL_PROVIDER_BASE_URL:?set EVAL_PROVIDER_BASE_URL}
+    networks: [candidate_internal, egress]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    pids_limit: 64
+    cpus: 1
+    mem_limit: 512m
 
   candidate:
     image: ${EVAL_IMAGE:-global-geochemical-eval:local}
     profiles: [manual]
-    depends_on: [proxy]
+    depends_on: [proxy, provider-relay]
     environment:
-      EVAL_API_KEY: ${EVAL_API_KEY:?set EVAL_API_KEY}
-      EVAL_PROVIDER_BASE_URL: ${EVAL_PROVIDER_BASE_URL:?set EVAL_PROVIDER_BASE_URL}
+      EVAL_API_KEY: ${EVAL_RELAY_TOKEN:?set a per-run relay token}
+      EVAL_PROVIDER_BASE_URL: http://provider-relay:8090
+      EVAL_PROVIDER_UPSTREAM_BASE_URL: ${EVAL_PROVIDER_BASE_URL:?set EVAL_PROVIDER_BASE_URL}
       EVAL_PROVIDER_MODEL_ID: ${EVAL_PROVIDER_MODEL_ID:?set EVAL_PROVIDER_MODEL_ID}
       HTTPS_PROXY: http://proxy:8080
       HTTP_PROXY: http://proxy:8080
+      NO_PROXY: localhost,127.0.0.1,provider-relay
     networks: [candidate_internal]
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]

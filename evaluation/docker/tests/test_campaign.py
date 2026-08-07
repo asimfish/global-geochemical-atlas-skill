@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -14,6 +15,7 @@ DOCKER_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(DOCKER_ROOT))
 
 from campaign import (  # noqa: E402
+    NetworkHandle,
     RuntimeProfile,
     apply_q24_browser_gate,
     candidate_status,
@@ -27,6 +29,7 @@ from campaign import (  # noqa: E402
     redact_file,
     redact_tree,
     run_campaign,
+    start_provider_relay,
 )
 from provider_profiles import ProviderProfileError, load_provider_profile  # noqa: E402
 
@@ -150,6 +153,31 @@ class CampaignTests(unittest.TestCase):
     def test_credentialed_build_proxy_fails_closed(self) -> None:
         with self.assertRaisesRegex(Exception, "contains credentials"):
             docker_build_proxy_options({"HTTPS_PROXY": "http://user:password@proxy.example:8080"})
+
+    def test_provider_key_is_not_serialized_in_the_relay_docker_command(self) -> None:
+        completed = subprocess.CompletedProcess([], 0, stdout="true\n", stderr="")
+        with (
+            patch("campaign.run_checked", return_value=completed) as run_checked,
+            patch("campaign.time.sleep"),
+        ):
+            relay = start_provider_relay(
+                image="evaluation:test",
+                network=NetworkHandle(
+                    mode="whitelist", internal="internal", egress="egress", proxy="proxy"
+                ),
+                run_id="test-run",
+                upstream_base_url="https://gateway.example/v1",
+                upstream_api_key="provider-secret-value",
+            )
+        first_call = run_checked.call_args_list[0]
+        docker_command = first_call.args[0]
+        self.assertNotIn("provider-secret-value", " ".join(docker_command))
+        self.assertIn("EVAL_UPSTREAM_API_KEY", docker_command)
+        self.assertEqual(
+            first_call.kwargs["environment"]["EVAL_UPSTREAM_API_KEY"],
+            "provider-secret-value",
+        )
+        self.assertEqual(len(relay.token), 64)
 
     def test_pair_fingerprint_is_shared_by_b0_and_s0_inputs(self) -> None:
         profile = RuntimeProfile()
