@@ -11,7 +11,7 @@
 - commit: 8b66e14269a4347ca3cda93b0fbf86db48bb40c1
 - model: Qwen3.8-Max
 - temperature=0
-- 资源：2 CPU、4 GB 内存、256 PIDs、单次任务 12h
+- 资源：2 CPU、4 GB 内存、256 PIDs、单次任务 12小时
 - 公开 scorer 最多三轮；下载数据的时间单独记录，不计入任务执行耗时
 
 先确认当前目录没有用户文件；若非空，不要删除任何现有内容，而是在当前目录中新建唯一的 `qwen_with_skill_docker_uplift/` 并进入。随后执行等价于以下步骤的操作，记录每个命令、退出码和耗时：
