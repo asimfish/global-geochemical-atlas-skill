@@ -4546,6 +4546,30 @@ def check_d3(output_dir: Path) -> list[str]:
                     f"D3 {case_name} emits a non-interpolated observed-cell concentration grid",
                     checks,
                 )
+                if grid_features:
+                    grid_path = bundle / "concentration_grid.geojson"
+                    original_grid = grid_path.read_text(encoding="utf-8")
+                    tampered_grid = copy.deepcopy(concentration_grid)
+                    tampered_grid["features"][0]["properties"]["quantified_count"] = (
+                        True
+                    )
+                    try:
+                        grid_path.write_text(
+                            json.dumps(tampered_grid, ensure_ascii=False),
+                            encoding="utf-8",
+                        )
+                        tampered_validation = visualization_validator.validate_dir(
+                            bundle
+                        )
+                    finally:
+                        grid_path.write_text(original_grid, encoding="utf-8")
+                    require(
+                        tampered_validation["status"] == "invalid"
+                        and "concentration grid feature counts do not reconcile"
+                        in tampered_validation["errors"],
+                        "D3 rejects boolean values in concentration-grid count fields",
+                        checks,
+                    )
             generated_profiles.append(generated_profile)
         custom_profile = generated_profiles[2]
         custom_comparison_profile = generated_profiles[4]

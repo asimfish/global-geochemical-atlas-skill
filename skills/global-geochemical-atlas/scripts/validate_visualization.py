@@ -7,7 +7,7 @@ import argparse
 import json
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import build_interactive_map as map_builder
 import render_visualization as renderer
@@ -241,10 +241,15 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                             properties.get("censored_count"),
                             properties.get("unquantified_count"),
                         )
-                        if not all(
-                            isinstance(value, int) and value >= 0
+                        valid_counts = all(
+                            isinstance(value, int)
+                            and not isinstance(value, bool)
+                            and value >= 0
                             for value in count_fields
-                        ) or sum(count_fields) != properties.get("record_count"):
+                        )
+                        if not valid_counts or sum(
+                            cast(int, value) for value in count_fields
+                        ) != properties.get("record_count"):
                             errors.append(
                                 "concentration grid feature counts do not reconcile"
                             )
