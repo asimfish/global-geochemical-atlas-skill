@@ -11,6 +11,7 @@ import json
 import os
 import re
 import socket
+import struct
 import tempfile
 import urllib.error
 import urllib.parse
@@ -2626,6 +2627,377 @@ class PangaeaArabianSeaSedimentAdapter(_PinnedSingleFileAdapter):
             raise SourceAdapterError(f"PANGAEA Arabian Sea reconciliation changed: {observed!r}")
 
 
+class GeorocAntarcticaIntraplateAdapter(RegistryAdapter):
+    """Pinned GEOROC Antarctica member from the Intraplate Volcanics compilation."""
+
+    source_id = "georoc-antarctica-intraplate"
+
+    def _root(self, cache_dir: Path) -> Path:
+        standard = self._cache_root(cache_dir)
+        legacy = cache_dir / "georoc-antarctica" / self.candidate.version
+        return standard if standard.exists() or not legacy.exists() else legacy
+
+    def download(
+        self, candidate: DatasetCandidate, cache_dir: Path, mode: DownloadMode = "online"
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("GEOROC Antarctica adapter received another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in GEOROC Antarctica demo for fixture tests")
+        entry = candidate.registry_entry["download"]
+        file_entry = entry["files"][0]
+        root = self._root(cache_dir)
+        output = root / file_entry["filename"]
+        args = _download_args(
+            url=file_entry["url"], output=output, manifest=root / "member.download.json",
+            license_id=candidate.license_id, expected_sha256=None,
+            max_bytes=int(entry["max_bytes"]), dataset_doi=candidate.dataset_doi,
+            dataset_version=candidate.version, offline=mode == "cached",
+            required_fields=candidate.registry_entry["required_fields"],
+        )
+        try:
+            result = downloader.run(args)
+        except (downloader.DownloadError, OSError) as exc:
+            raise SourceAdapterError(f"GEOROC Antarctica download failed: {exc}") from exc
+        if output.stat().st_size != int(file_entry["bytes"]):
+            raise SourceAdapterError("GEOROC Antarctica member byte count changed")
+        return [DownloadedFile(
+            source_id=self.source_id, file_id=file_entry["file_id"], path=output,
+            source_url=file_entry["url"], bytes=output.stat().st_size,
+            cache_status=result["status"],
+            retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
+        )]
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "UYO5XO":
+            raise SourceAdapterError("GEOROC Antarctica requires its registered Dataverse member")
+        downloaded = files[0]
+        counts = Counter()
+        samples: set[str] = set()
+        names: set[str] = set()
+        for line_number, values in GeorocArchaeanAdapter._rows(downloaded.path):
+            native_id = str(values.get("UNIQUE_ID") or "").strip()
+            if not native_id or native_id in samples:
+                raise SourceAdapterError(f"GEOROC Antarctica UNIQUE_ID missing or duplicated at row {line_number}")
+            samples.add(native_id)
+            if values.get("SAMPLE NAME"):
+                names.add(values["SAMPLE NAME"])
+            observations: dict[str, dict[str, Any]] = {}
+            for analyte, field in self.candidate.registry_entry["target_analytes"].items():
+                raw_value = str(values.get(field) or "").strip()
+                if not raw_value:
+                    continue
+                try:
+                    float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(f"GEOROC Antarctica {field} is not numeric at row {line_number}") from exc
+                counts[analyte] += 1
+                observations[analyte] = {
+                    "field": field, "value": raw_value, "unit": "ppm",
+                    "measurement_basis": "GEOROC_precompiled_selected_value",
+                }
+            source_locator = f"{downloaded.path.name}#row={line_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
+                source_locator=source_locator,
+                fields={**values, "_target_observations": observations,
+                        "_source_file": downloaded.path.name, "_dataset_version": self.candidate.version},
+            )
+        expected = self.candidate.registry_entry["expected_counts"]
+        observed = {
+            "source_rows": len(samples), "unique_ids": len(samples),
+            "distinct_sample_names": len(names), "target_observations": sum(counts.values()),
+            "target_observations_by_analyte": {key: counts[key] for key in ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")},
+        }
+        for key, value in observed.items():
+            if value != expected[key]:
+                raise SourceAdapterError(f"GEOROC Antarctica reconciliation changed for {key}: {value!r}")
+
+
+class TpdcChinaMountainSoilAdapter(RegistryAdapter):
+    """TPDC China mountain-soil workbook with article-scoped analytical methods."""
+
+    source_id = "tpdc-china-mountain-soil"
+    _xlsx_namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+
+    @staticmethod
+    def _column_index(reference: str) -> int:
+        return AfsisPhaseIWetChemistryAdapter._column_index(reference)
+
+    @classmethod
+    def _xlsx_rows(cls, path: Path) -> list[tuple[int, list[str]]]:
+        try:
+            with zipfile.ZipFile(path) as archive:
+                members = archive.infolist()
+                if len(members) > 100 or sum(item.file_size for item in members) > 10_000_000:
+                    raise SourceAdapterError("TPDC workbook exceeds safe structural limits")
+                if "xl/worksheets/sheet1.xml" not in archive.namelist():
+                    raise SourceAdapterError("TPDC workbook lacks sheet1.xml")
+                namespace = f"{{{cls._xlsx_namespace}}}"
+                shared_strings: list[str] = []
+                if "xl/sharedStrings.xml" in archive.namelist():
+                    root = ET.fromstring(archive.read("xl/sharedStrings.xml"))
+                    shared_strings = [
+                        "".join(node.text or "" for node in item.iter(f"{namespace}t"))
+                        for item in root.findall(f"{namespace}si")
+                    ]
+                sheet = ET.fromstring(archive.read("xl/worksheets/sheet1.xml"))
+        except (OSError, zipfile.BadZipFile, ET.ParseError, KeyError) as exc:
+            raise SourceAdapterError(f"TPDC workbook is unreadable: {path.name}") from exc
+        rows: list[tuple[int, list[str]]] = []
+        for row in sheet.findall(f".//{namespace}sheetData/{namespace}row"):
+            indexed: dict[int, str] = {}
+            for cell in row.findall(f"{namespace}c"):
+                index = cls._column_index(str(cell.get("r") or ""))
+                value_node = cell.find(f"{namespace}v")
+                value = "" if value_node is None else str(value_node.text or "")
+                if cell.get("t") == "s" and value:
+                    try:
+                        value = shared_strings[int(value)]
+                    except (ValueError, IndexError) as exc:
+                        raise SourceAdapterError("TPDC workbook shared-string index changed") from exc
+                elif cell.get("t") == "inlineStr":
+                    value = "".join(node.text or "" for node in cell.iter(f"{namespace}t"))
+                indexed[index] = value.strip()
+            width = max(indexed, default=-1) + 1
+            rows.append((int(row.get("r") or len(rows) + 1), [indexed.get(i, "") for i in range(width)]))
+        return rows
+
+    def download(
+        self, candidate: DatasetCandidate, cache_dir: Path, mode: DownloadMode = "online"
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("TPDC adapter received another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in TPDC demo for fixture tests")
+        standard = self._cache_root(cache_dir)
+        fallback = SKILL_DIR.parents[1] / ".cache" / "tpdc-profile" / "source"
+        root = standard if standard.exists() else fallback
+        results: list[DownloadedFile] = []
+        missing = []
+        for entry in candidate.registry_entry["download"]["files"]:
+            path = root / entry["filename"]
+            if not path.exists():
+                missing.append(entry["filename"])
+                continue
+            if path.stat().st_size != int(entry["bytes"]):
+                raise SourceAdapterError(f"TPDC cached file byte count changed: {path.name}")
+            results.append(DownloadedFile(
+                source_id=self.source_id, file_id=entry["file_id"], path=path,
+                source_url=entry["url"], bytes=path.stat().st_size,
+                cache_status="verified_cache", retrieved_at=None,
+            ))
+        if missing:
+            raise SourceAdapterError(
+                "TPDC POST bundle is not cached; retrieve the registered file ID and extract these members: "
+                + ", ".join(missing)
+            )
+        return results
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        if "soil-dataset" not in by_id:
+            raise SourceAdapterError("TPDC main soil workbook is missing")
+        downloaded = by_id["soil-dataset"]
+        rows = self._xlsx_rows(downloaded.path)
+        headers = rows[0][1] if rows else []
+        required = set(self.candidate.registry_entry["required_fields"])
+        if not required.issubset(headers):
+            raise SourceAdapterError(f"TPDC workbook schema changed; missing={sorted(required - set(headers))}")
+        samples: set[str] = set()
+        profiles: set[str] = set()
+        sites: set[str] = set()
+        mountains: set[str] = set()
+        horizons = Counter()
+        counts = Counter()
+        for row_number, row in rows[1:]:
+            padded = row + [""] * max(0, len(headers) - len(row))
+            values = dict(zip(headers, padded, strict=False))
+            sample = values["Sam.No"].strip()
+            horizon = values["Horizons"].strip()
+            if not sample or horizon not in {"O", "A", "C"}:
+                raise SourceAdapterError(f"TPDC sample identity/horizon changed at row {row_number}")
+            key = f"{sample}|{horizon}"
+            if key in samples:
+                raise SourceAdapterError(f"TPDC sample+horizon duplicated at row {row_number}")
+            samples.add(key); profiles.add(sample); sites.add(values["site"]); mountains.add(values["Mountain"]); horizons[horizon] += 1
+            observations: dict[str, dict[str, Any]] = {}
+            for analyte, field in self.candidate.registry_entry["target_analytes"].items():
+                raw_value = values[field].strip()
+                try:
+                    float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(f"TPDC {field} is not numeric at row {row_number}") from exc
+                counts[analyte] += 1
+                method = "ICP-AES (PerkinElmer Optima 2000)" if analyte == "Zn" else "ICP-MS (Agilent 7700x)"
+                observations[analyte] = {
+                    "field": field, "value": raw_value, "unit": "mg/kg",
+                    "measurement_basis": "acid_digested_air_dry_soil_<2mm",
+                    "analytical_method": method,
+                    "digestion_or_extraction": "article-reported acid digestion",
+                    "variable_metadata_locator": "doi:10.5194/essd-17-4779-2025",
+                }
+            source_locator = f"{downloaded.path.name}#sheet1-row={row_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(self.source_id, key, source_locator),
+                source_locator=source_locator,
+                fields={**values, "_target_observations": observations, "_source_file": downloaded.path.name,
+                        "_source_crs": "", "_medium": "soil", "_sample_type": horizon,
+                        "_grain_fraction": "<2 mm", "_dataset_version": self.candidate.version},
+            )
+        expected = self.candidate.registry_entry["expected_counts"]
+        observed = {"physical_rows": len(samples), "distinct_profiles": len(profiles),
+                    "distinct_sites": len(sites), "distinct_mountains": len(mountains),
+                    "horizon_counts": dict(sorted(horizons.items())),
+                    "target_observations": sum(counts.values()),
+                    "target_value_counts": dict(sorted(counts.items()))}
+        if observed != expected:
+            raise SourceAdapterError(f"TPDC reconciliation changed: {observed!r} != {expected!r}")
+
+
+class GemasEuropeAdapter(RegistryAdapter):
+    """GSI's official GEMAS Ap/Gr DBF republication with method-separated analyses."""
+
+    source_id = "gemas-europe"
+
+    @staticmethod
+    def _dbf_rows(payload: bytes) -> tuple[list[str], list[tuple[int, dict[str, str]]]]:
+        if len(payload) < 33:
+            raise SourceAdapterError("GEMAS DBF is truncated")
+        record_count = struct.unpack("<I", payload[4:8])[0]
+        header_length = struct.unpack("<H", payload[8:10])[0]
+        record_length = struct.unpack("<H", payload[10:12])[0]
+        descriptors = payload[32:header_length - 1]
+        fields: list[tuple[str, int]] = []
+        for offset in range(0, len(descriptors), 32):
+            item = descriptors[offset:offset + 32]
+            if len(item) < 32 or item[0] == 0x0D:
+                break
+            name = item[:11].split(b"\0", 1)[0].decode("ascii").strip()
+            fields.append((name, item[16]))
+        rows: list[tuple[int, dict[str, str]]] = []
+        for index in range(record_count):
+            start = header_length + index * record_length
+            record = payload[start:start + record_length]
+            if len(record) != record_length:
+                raise SourceAdapterError("GEMAS DBF record area is truncated")
+            if record[:1] == b"*":
+                continue
+            cursor = 1
+            values: dict[str, str] = {}
+            for name, width in fields:
+                values[name] = record[cursor:cursor + width].decode("utf-8", errors="replace").strip()
+                cursor += width
+            rows.append((index + 1, values))
+        return [name for name, _ in fields], rows
+
+    def _root(self, cache_dir: Path) -> Path:
+        standard = self._cache_root(cache_dir)
+        fallback = cache_dir / "gemas-v4" / "gsi-arcgis-2024"
+        return standard if standard.exists() or not fallback.exists() else fallback
+
+    def download(
+        self, candidate: DatasetCandidate, cache_dir: Path, mode: DownloadMode = "online"
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("GEMAS adapter received another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in GEMAS demo for fixture tests")
+        entry = candidate.registry_entry["download"]
+        file_entry = entry["files"][0]
+        root = self._root(cache_dir)
+        output = root / file_entry["filename"]
+        args = _download_args(
+            url=file_entry["url"], output=output, manifest=root / "gemas.download.json",
+            license_id=candidate.license_id, expected_sha256=None,
+            max_bytes=int(entry["max_bytes"]), dataset_doi=candidate.dataset_doi,
+            dataset_version=candidate.version, offline=mode == "cached",
+        )
+        try:
+            result = downloader.run(args)
+        except (downloader.DownloadError, OSError) as exc:
+            raise SourceAdapterError(f"GEMAS download failed: {exc}") from exc
+        if output.stat().st_size != int(file_entry["bytes"]):
+            raise SourceAdapterError("GEMAS ZIP byte count changed")
+        try:
+            with zipfile.ZipFile(output) as archive:
+                names = set(archive.namelist())
+                missing = set(entry["required_members"]) - names
+                if missing:
+                    raise SourceAdapterError(f"GEMAS ZIP member inventory changed: {sorted(missing)}")
+        except zipfile.BadZipFile as exc:
+            raise SourceAdapterError("GEMAS ZIP is unreadable") from exc
+        return [DownloadedFile(source_id=self.source_id, file_id=file_entry["file_id"], path=output,
+                               source_url=file_entry["url"], bytes=output.stat().st_size,
+                               cache_status=result["status"],
+                               retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"))]
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "1725dd24-1b2f-46d5-bf24-ad2db5ee176e":
+            raise SourceAdapterError("GEMAS requires its registered GSI resource")
+        downloaded = files[0]
+        expected = self.candidate.registry_entry["expected_counts"]
+        samples: set[str] = set(); countries: set[str] = set(); counts = Counter(); group_counts = Counter()
+        with zipfile.ZipFile(downloaded.path) as archive:
+            for member in self.candidate.registry_entry["download"]["files"][0]["member_contracts"]:
+                field_names, rows = self._dbf_rows(archive.read(member["filename"]))
+                if len(field_names) != int(member["field_count"]) or len(rows) != int(member["record_count"]):
+                    raise SourceAdapterError(f"GEMAS DBF structure changed: {member['filename']}")
+                for record_number, values in rows:
+                    sample_type = values.get("TYPE_", "")
+                    if sample_type != member["sample_type"]:
+                        continue
+                    country = values.get("COUNTRY", "")
+                    try:
+                        sample_number = int(float(values.get("ID", "")))
+                        longitude = float(values.get("XCOO", "")); latitude = float(values.get("YCOO", ""))
+                    except ValueError as exc:
+                        raise SourceAdapterError(f"GEMAS sample identity/coordinate changed at record {record_number}") from exc
+                    if not country or not (-180 <= longitude <= 180 and -90 <= latitude <= 90):
+                        raise SourceAdapterError(f"GEMAS invalid production row at record {record_number}")
+                    sample_key = f"GEMAS:{sample_type}:{sample_number}"
+                    if sample_key in samples:
+                        raise SourceAdapterError(f"GEMAS sample duplicated: {sample_key}")
+                    samples.add(sample_key); countries.add(country)
+                    for analysis_group in ("AR", "XRF"):
+                        observations: dict[str, dict[str, Any]] = {}
+                        fields = self.candidate.registry_entry["analysis_groups"][analysis_group]
+                        for analyte, field in fields["target_analytes"].items():
+                            raw_value = values.get(field, "")
+                            if not raw_value:
+                                raise SourceAdapterError(f"GEMAS {field} missing for {sample_key}")
+                            numeric = float(raw_value); dl = float(fields["detection_limits"][analyte])
+                            counts[analyte] += 1; group_counts[analysis_group] += 1
+                            observations[analyte] = {
+                                "field": field, "value": raw_value, "unit": "mg/kg",
+                                "measurement_basis": fields["measurement_basis"],
+                                "analytical_method": fields["analytical_method"],
+                                "digestion_or_extraction": fields["digestion_or_extraction"],
+                                "detection_limit": str(fields["detection_limits"][analyte]),
+                                "below_laboratory_dl": numeric < dl,
+                                "upstream_half_dl_substitution": analysis_group == "XRF" and numeric == dl / 2,
+                            }
+                        source_locator = f"{downloaded.path.name}!{member['filename']}#record={record_number}"
+                        native_id = f"{sample_key}:{analysis_group}"
+                        yield RawRecord(
+                            source_id=self.source_id,
+                            source_record_id=stable_source_record_id(self.source_id, native_id, source_locator),
+                            source_locator=source_locator,
+                            fields={**values, "_physical_sample_id": sample_key, "_analysis_group": analysis_group,
+                                    "_target_observations": observations, "_source_file": downloaded.path.name,
+                                    "_source_crs": "EPSG:4326", "_sample_type": sample_type,
+                                    "_grain_fraction": fields["grain_fraction"], "_dataset_version": self.candidate.version},
+                        )
+        observed = {"physical_samples": len(samples), "analysis_records": len(samples) * 2,
+                    "country_labels": len(countries), "target_observations": sum(counts.values()),
+                    "analysis_group_observations": dict(sorted(group_counts.items())),
+                    "target_value_counts": dict(sorted(counts.items()))}
+        if observed != expected:
+            raise SourceAdapterError(f"GEMAS reconciliation changed: {observed!r} != {expected!r}")
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -2645,6 +3017,9 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     AustraliaNgsaMercuryAdapter.source_id: AustraliaNgsaMercuryAdapter,
     GsjJapanMarineSedimentAdapter.source_id: GsjJapanMarineSedimentAdapter,
     PangaeaArabianSeaSedimentAdapter.source_id: PangaeaArabianSeaSedimentAdapter,
+    GeorocAntarcticaIntraplateAdapter.source_id: GeorocAntarcticaIntraplateAdapter,
+    TpdcChinaMountainSoilAdapter.source_id: TpdcChinaMountainSoilAdapter,
+    GemasEuropeAdapter.source_id: GemasEuropeAdapter,
 }
 
 
