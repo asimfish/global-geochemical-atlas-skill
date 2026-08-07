@@ -97,4 +97,4 @@ python skills/global-geochemical-atlas/scripts/run_workflow.py \
 3. 新数据有来源、许可与哈希；新科学规则有适用边界与失败状态。
 4. 没有第二个 Skill 目录，没有密钥、缓存、生成输出或大文件。
 5. PR 模板中的交付物、接口影响和复现命令填写完整。
-6. `ruff check .`、`ruff format --check .` 和仓库 CI 通过；已执行的测试与无法执行的外部检查均如实记录。
+6. `ruff check .`、`ruff format --check .`、`mypy --config-file mypy-critical.ini` 和仓库 CI 通过；已执行的测试与无法执行的外部检查均如实记录。类型门当前明确覆盖评测关键与公共契约边界，其他历史适配器在完成类型化后再加入，不得把“关键边界通过”误写成“全仓严格类型化”。

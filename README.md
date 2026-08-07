@@ -131,6 +131,11 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 | [`evaluation/docker/`](evaluation/docker/) | 上述评测共用的镜像、隔离、OpenCode 与 campaign runner |
 
 ```bash
+# 全仓格式、lint 与评测关键/公共契约类型门
+ruff check .
+ruff format --check .
+mypy --config-file mypy-critical.ini
+
 # D1/D2/D3 公共接口与契约
 python skills/global-geochemical-atlas/scripts/component_test.py --component all
 

@@ -31,6 +31,7 @@
 ```bash
 ruff check .
 ruff format --check .
+mypy --config-file mypy-critical.ini
 uv run pytest -x --tb=short
 python skills/global-geochemical-atlas/scripts/component_test.py --component all
 python skills/global-geochemical-atlas/scripts/self_test.py
