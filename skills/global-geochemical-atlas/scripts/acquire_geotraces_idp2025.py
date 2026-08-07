@@ -88,7 +88,9 @@ def read_response(response: Any, max_bytes: int) -> bytes:
 
 
 def fetch_export_url(client: urllib.request.OpenerDirector, timeout: float) -> str:
-    request = urllib.request.Request(EXTRACTOR_URL, headers={"User-Agent": "global-geochemical-atlas-skill/1"})
+    request = urllib.request.Request(
+        EXTRACTOR_URL, headers={"User-Agent": "global-geochemical-atlas-skill/1"}
+    )
     with client.open(request, timeout=timeout) as response:
         html = read_response(response, 2_000_000).decode("utf-8")
     match = re.search(r'<meta\s+name="csrf-token"\s+content="([^"]+)"', html)
@@ -131,11 +133,19 @@ def fetch_export_url(client: urllib.request.OpenerDirector, timeout: float) -> s
     try:
         value = json.loads(payload.decode("utf-8"))
     except (UnicodeError, json.JSONDecodeError) as exc:
-        raise AcquisitionError("official download endpoint did not return JSON") from exc
+        raise AcquisitionError(
+            "official download endpoint did not return JSON"
+        ) from exc
     output_url = value.get("output_file_url") if isinstance(value, dict) else None
     parsed = urllib.parse.urlparse(str(output_url or ""))
-    if parsed.scheme != "https" or parsed.hostname != "geotraces.webodv.awi.de" or not parsed.path.startswith("/downloads/"):
-        raise AcquisitionError("official download endpoint returned an unsafe output URL")
+    if (
+        parsed.scheme != "https"
+        or parsed.hostname != "geotraces.webodv.awi.de"
+        or not parsed.path.startswith("/downloads/")
+    ):
+        raise AcquisitionError(
+            "official download endpoint returned an unsafe output URL"
+        )
     return str(output_url)
 
 
@@ -151,14 +161,22 @@ def download_archive(
     if output.exists() and not overwrite:
         raise AcquisitionError(f"output exists; use --overwrite after review: {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
-    request = urllib.request.Request(url, headers={"User-Agent": "global-geochemical-atlas-skill/1"})
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "global-geochemical-atlas-skill/1"}
+    )
     temporary: Path | None = None
     try:
         with client.open(request, timeout=timeout) as response:
-            content_type = str(response.headers.get("Content-Type") or "").split(";", 1)[0].strip()
+            content_type = (
+                str(response.headers.get("Content-Type") or "").split(";", 1)[0].strip()
+            )
             if content_type not in {"application/zip", "application/octet-stream"}:
-                raise AcquisitionError(f"unexpected archive content type: {content_type or 'missing'}")
-            with tempfile.NamedTemporaryFile("wb", dir=output.parent, delete=False) as handle:
+                raise AcquisitionError(
+                    f"unexpected archive content type: {content_type or 'missing'}"
+                )
+            with tempfile.NamedTemporaryFile(
+                "wb", dir=output.parent, delete=False
+            ) as handle:
                 temporary = Path(handle.name)
                 total = 0
                 while True:
@@ -188,9 +206,13 @@ def validate_archive(path: Path) -> list[dict[str, Any]]:
     with archive:
         members = archive.infolist()
         if not members or len(members) > MAX_MEMBERS:
-            raise AcquisitionError("archive member count is empty or exceeds the safety limit")
+            raise AcquisitionError(
+                "archive member count is empty or exceeds the safety limit"
+            )
         if any(info.is_dir() or info.file_size < 0 for info in members):
-            raise AcquisitionError("archive contains an unsupported directory or invalid member")
+            raise AcquisitionError(
+                "archive contains an unsupported directory or invalid member"
+            )
         names = [info.filename for info in members]
         if len(names) != len(set(names)):
             raise AcquisitionError("archive contains duplicate member names")
@@ -203,15 +225,30 @@ def validate_archive(path: Path) -> list[dict[str, Any]]:
             raise AcquisitionError("archive contains an unsafe member path")
         if sum(info.file_size for info in members) > MAX_UNCOMPRESSED_BYTES:
             raise AcquisitionError("archive exceeds the uncompressed-size safety limit")
-        data_members = [info for info in members if "/" not in info.filename and info.filename.endswith(".txt")]
+        data_members = [
+            info
+            for info in members
+            if "/" not in info.filename and info.filename.endswith(".txt")
+        ]
         if len(data_members) != 1:
-            raise AcquisitionError("archive must contain exactly one top-level ODV text member")
+            raise AcquisitionError(
+                "archive must contain exactly one top-level ODV text member"
+            )
         with archive.open(data_members[0]) as handle:
             header_probe = handle.read(128_000).decode("utf-8")
-        header = next((line.split("\t") for line in header_probe.splitlines() if line.startswith("Cruise\t")), None)
+        header = next(
+            (
+                line.split("\t")
+                for line in header_probe.splitlines()
+                if line.startswith("Cruise\t")
+            ),
+            None,
+        )
         missing = sorted(set(REQUIRED_COLUMNS) - set(header or []))
         if missing:
-            raise AcquisitionError(f"ODV member lacks required columns: {', '.join(missing)}")
+            raise AcquisitionError(
+                f"ODV member lacks required columns: {', '.join(missing)}"
+            )
         return [
             {
                 "name": info.filename,
@@ -224,7 +261,9 @@ def validate_archive(path: Path) -> list[dict[str, Any]]:
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -249,10 +288,15 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if not args.accept_fair_use:
-        print("acquire_geotraces_idp2025: --accept-fair-use is required", file=sys.stderr)
+        print(
+            "acquire_geotraces_idp2025: --accept-fair-use is required", file=sys.stderr
+        )
         return 2
     if not (1 <= args.timeout <= 300) or not (100_000 <= args.max_bytes <= 50_000_000):
-        print("acquire_geotraces_idp2025: timeout or max-bytes is outside the safety range", file=sys.stderr)
+        print(
+            "acquire_geotraces_idp2025: timeout or max-bytes is outside the safety range",
+            file=sys.stderr,
+        )
         return 2
     try:
         client = opener()
@@ -290,7 +334,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
         }
         atomic_json(args.manifest, manifest)
-        print(json.dumps({"status": "PASS", "sha256": manifest["response"]["sha256"]}, sort_keys=True))
+        print(
+            json.dumps(
+                {"status": "PASS", "sha256": manifest["response"]["sha256"]},
+                sort_keys=True,
+            )
+        )
         return 0
     except (AcquisitionError, OSError, urllib.error.URLError) as exc:
         print(f"acquire_geotraces_idp2025: {exc}", file=sys.stderr)

@@ -22,7 +22,9 @@ class AuditError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -45,16 +47,23 @@ def audit(cache_dir: Path) -> dict[str, Any]:
         if not isinstance(targets, Mapping):
             raise AuditError(f"target metadata missing: {record.source_locator}")
         for element, values in targets.items():
-            if not isinstance(values, Mapping) or not str(values.get("value") or "").strip():
+            if (
+                not isinstance(values, Mapping)
+                or not str(values.get("value") or "").strip()
+            ):
                 continue
             observations += 1
             status = str(values.get("method_metadata_status") or "missing")
             statuses[status] += 1
             by_element.setdefault(str(element), Counter())[status] += 1
-            cruise_analyte_groups.add((str(record.fields.get("Cruise") or ""), str(element)))
+            cruise_analyte_groups.add(
+                (str(record.fields.get("Cruise") or ""), str(element))
+            )
             candidates = values.get("method_metadata_candidates")
             if not isinstance(candidates, list) or not candidates:
-                raise AuditError(f"method candidates missing: {record.source_locator} {element}")
+                raise AuditError(
+                    f"method candidates missing: {record.source_locator} {element}"
+                )
             for item in candidates:
                 if not isinstance(item, Mapping):
                     raise AuditError("invalid method candidate")
@@ -62,18 +71,28 @@ def audit(cache_dir: Path) -> dict[str, Any]:
                 for url in item.get("method_urls", []):
                     method_urls.add(str(url))
                 for person in item.get("originators", []):
-                    originators.add((str(person.get("name") or ""), str(person.get("orcid_url") or "")))
+                    originators.add(
+                        (
+                            str(person.get("name") or ""),
+                            str(person.get("orcid_url") or ""),
+                        )
+                    )
     expected = candidate.registry_entry["method_metadata"]
     checks = {
-        "target_observations_match": observations == candidate.registry_entry["expected_counts"]["target_observations"],
+        "target_observations_match": observations
+        == candidate.registry_entry["expected_counts"]["target_observations"],
         "all_observations_linked": statuses.get("missing", 0) == 0,
         "single_method_observations_match": statuses["single_linked_record"]
         == expected["observations_with_single_method_record"],
-        "multiple_method_observations_match": statuses["multiple_linked_records_unresolved"]
+        "multiple_method_observations_match": statuses[
+            "multiple_linked_records_unresolved"
+        ]
         == expected["observations_with_multiple_method_records"],
-        "cruise_analyte_groups_match": len(cruise_analyte_groups) == expected["cruise_analyte_groups"],
+        "cruise_analyte_groups_match": len(cruise_analyte_groups)
+        == expected["cruise_analyte_groups"],
         "info_members_match": len(info_locators) == expected["html_member_count"],
-        "method_records_match": len(method_urls) == expected["unique_bodc_method_record_count"],
+        "method_records_match": len(method_urls)
+        == expected["unique_bodc_method_record_count"],
         "originators_match": len(originators) == expected["originator_count"],
     }
     if not all(checks.values()):
@@ -86,7 +105,8 @@ def audit(cache_dir: Path) -> dict[str, Any]:
         "observation_denominator": observations,
         "method_metadata_status_counts": dict(sorted(statuses.items())),
         "by_element": {
-            element: dict(sorted(counts.items())) for element, counts in sorted(by_element.items())
+            element: dict(sorted(counts.items()))
+            for element, counts in sorted(by_element.items())
         },
         "cruise_analyte_group_count": len(cruise_analyte_groups),
         "exported_info_member_count": len(info_locators),
@@ -118,7 +138,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         report = audit(args.cache_dir)
         atomic_json(args.output, report)
-        print(json.dumps({"status": "PASS", "observations": report["observation_denominator"]}, sort_keys=True))
+        print(
+            json.dumps(
+                {"status": "PASS", "observations": report["observation_denominator"]},
+                sort_keys=True,
+            )
+        )
         return 0
     except (AuditError, OSError, ValueError, source_adapters.SourceAdapterError) as exc:
         print(f"audit_geotraces_method_metadata: {exc}", file=sys.stderr)

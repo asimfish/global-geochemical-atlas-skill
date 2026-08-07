@@ -24,7 +24,13 @@ CATALOG_VERSION = "geochemical-source-catalog-v1"
 ROUTE_VERSION = "geochemical-source-route-v4"
 VALID_MEDIA = {"rock", "soil", "sediment", "water", "mineral", "concentrate"}
 VALID_OUTPUT_FORMATS = {"csv", "json", "geojson", "html_map"}
-VALID_SOURCE_STATUS = {"approved", "conditional", "metadata_only", "needs_human_review", "rejected"}
+VALID_SOURCE_STATUS = {
+    "approved",
+    "conditional",
+    "metadata_only",
+    "needs_human_review",
+    "rejected",
+}
 ALLOWED_REQUEST_KEYS = {
     "elements",
     "region",
@@ -69,9 +75,15 @@ def load_catalog(path: Path = DEFAULT_CATALOG) -> dict[str, Any]:
         raise SourceRoutingError("unsupported source catalog version")
     sources = catalog.get("sources")
     if not isinstance(sources, dict) or not sources:
-        raise SourceRoutingError("source catalog must contain a non-empty sources object")
+        raise SourceRoutingError(
+            "source catalog must contain a non-empty sources object"
+        )
     for source_id, entry in sources.items():
-        if not isinstance(source_id, str) or not source_id or not isinstance(entry, dict):
+        if (
+            not isinstance(source_id, str)
+            or not source_id
+            or not isinstance(entry, dict)
+        ):
             raise SourceRoutingError("source catalog contains an invalid source entry")
         required = {
             "title",
@@ -90,27 +102,43 @@ def load_catalog(path: Path = DEFAULT_CATALOG) -> dict[str, Any]:
         }
         missing = sorted(required - set(entry))
         if missing:
-            raise SourceRoutingError(f"catalog source {source_id} lacks keys: {', '.join(missing)}")
+            raise SourceRoutingError(
+                f"catalog source {source_id} lacks keys: {', '.join(missing)}"
+            )
         status = entry.get("status")
         if status not in VALID_SOURCE_STATUS:
-            raise SourceRoutingError(f"catalog source {source_id} has invalid status: {status}")
+            raise SourceRoutingError(
+                f"catalog source {source_id} has invalid status: {status}"
+            )
         media = entry.get("media")
-        if not isinstance(media, list) or not media or not set(media).issubset(VALID_MEDIA):
+        if (
+            not isinstance(media, list)
+            or not media
+            or not set(media).issubset(VALID_MEDIA)
+        ):
             raise SourceRoutingError(f"catalog source {source_id} has invalid media")
         if not isinstance(entry.get("production_eligible"), bool):
-            raise SourceRoutingError(f"catalog source {source_id} has invalid legacy production_eligible flag")
+            raise SourceRoutingError(
+                f"catalog source {source_id} has invalid legacy production_eligible flag"
+            )
     discovery = catalog.get("discovery_state")
-    if not isinstance(discovery, dict) or not isinstance(discovery.get("saturated"), bool):
+    if not isinstance(discovery, dict) or not isinstance(
+        discovery.get("saturated"), bool
+    ):
         raise SourceRoutingError("source catalog has invalid discovery_state")
     return catalog
 
 
-def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> dict[str, Any]:
+def validate_request(
+    request: Mapping[str, Any], catalog: Mapping[str, Any]
+) -> dict[str, Any]:
     """Validate the shared v1 request fields needed for source routing."""
 
     unknown_keys = sorted(set(request) - ALLOWED_REQUEST_KEYS)
     if unknown_keys:
-        raise SourceRoutingError(f"request has unsupported keys: {', '.join(unknown_keys)}")
+        raise SourceRoutingError(
+            f"request has unsupported keys: {', '.join(unknown_keys)}"
+        )
     elements = request.get("elements")
     if (
         not isinstance(elements, list)
@@ -128,13 +156,23 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
     ):
         raise SourceRoutingError("request media must be a non-empty unique array")
     if not set(media).issubset(VALID_MEDIA):
-        raise SourceRoutingError(f"request contains unsupported media: {sorted(set(media) - VALID_MEDIA)}")
+        raise SourceRoutingError(
+            f"request contains unsupported media: {sorted(set(media) - VALID_MEDIA)}"
+        )
     region = request.get("region")
     if not isinstance(region, (str, dict)) or not region:
-        raise SourceRoutingError("request region must be a non-empty name, 'global', or bbox object")
+        raise SourceRoutingError(
+            "request region must be a non-empty name, 'global', or bbox object"
+        )
     if isinstance(region, dict):
-        if set(region) != {"bbox"} or not isinstance(region["bbox"], list) or len(region["bbox"]) != 4:
-            raise SourceRoutingError("request region object must contain exactly bbox=[west,south,east,north]")
+        if (
+            set(region) != {"bbox"}
+            or not isinstance(region["bbox"], list)
+            or len(region["bbox"]) != 4
+        ):
+            raise SourceRoutingError(
+                "request region object must contain exactly bbox=[west,south,east,north]"
+            )
         try:
             spatial_scope.resolve_region(region)
         except spatial_scope.SpatialScopeError as exc:
@@ -147,10 +185,14 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
             or not all(isinstance(item, str) for item in sources)
             or len(sources) != len(set(sources))
         ):
-            raise SourceRoutingError("request sources must be 'auto' or a non-empty string array")
+            raise SourceRoutingError(
+                "request sources must be 'auto' or a non-empty string array"
+            )
         unknown_sources = sorted(set(sources) - set(catalog["sources"]))
         if unknown_sources:
-            raise SourceRoutingError(f"request names unknown sources: {', '.join(unknown_sources)}")
+            raise SourceRoutingError(
+                f"request names unknown sources: {', '.join(unknown_sources)}"
+            )
     measurement_basis = request.get("measurement_basis")
     if measurement_basis is not None and (
         not isinstance(measurement_basis, list)
@@ -158,19 +200,28 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
         or not all(isinstance(item, str) and item for item in measurement_basis)
         or len(measurement_basis) != len(set(measurement_basis))
     ):
-        raise SourceRoutingError("measurement_basis must be null or a unique string array")
+        raise SourceRoutingError(
+            "measurement_basis must be null or a unique string array"
+        )
     geology_units = request.get("geology_units")
     if geology_units is not None and (
         not isinstance(geology_units, list)
         or not geology_units
         or len(geology_units) > 50
-        or not all(isinstance(item, str) and 0 < len(item.strip()) <= 160 for item in geology_units)
+        or not all(
+            isinstance(item, str) and 0 < len(item.strip()) <= 160
+            for item in geology_units
+        )
         or len(geology_units) != len(set(geology_units))
     ):
-        raise SourceRoutingError("geology_units must be null or a unique array of 1-50 non-empty labels")
+        raise SourceRoutingError(
+            "geology_units must be null or a unique array of 1-50 non-empty labels"
+        )
     geology_match = request.get("geology_match", "reported_or_matched")
     if geology_match not in {"reported_or_matched", "reported", "matched"}:
-        raise SourceRoutingError("geology_match must be reported_or_matched, reported, or matched")
+        raise SourceRoutingError(
+            "geology_match must be reported_or_matched, reported, or matched"
+        )
     time_range = request.get("time_range")
     if time_range is not None and (
         not isinstance(time_range, list)
@@ -180,20 +231,30 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
         raise SourceRoutingError("time_range must be null or a two-string array")
     if time_range is not None and _year(time_range[0]) > _year(time_range[1]):
         raise SourceRoutingError("time_range start must not be after end")
-    output_formats = request.get("output_formats", ["csv", "json", "geojson", "html_map"])
+    output_formats = request.get(
+        "output_formats", ["csv", "json", "geojson", "html_map"]
+    )
     if (
         not isinstance(output_formats, list)
         or not all(isinstance(item, str) for item in output_formats)
         or len(output_formats) != len(set(output_formats))
         or not set(output_formats).issubset(VALID_OUTPUT_FORMATS)
     ):
-        raise SourceRoutingError("output_formats must be a unique array of supported formats")
+        raise SourceRoutingError(
+            "output_formats must be a unique array of supported formats"
+        )
     if request.get("target_crs", "EPSG:4326") != "EPSG:4326":
         raise SourceRoutingError("target_crs supports only EPSG:4326")
     if request.get("license_policy", "open_only") != "open_only":
-        raise SourceRoutingError("legacy license_policy supports only open_only; use research_use_policy in V3")
+        raise SourceRoutingError(
+            "legacy license_policy supports only open_only; use research_use_policy in V3"
+        )
     research_use_policy = request.get("research_use_policy", "permitted_research")
-    if research_use_policy not in {"permitted_research", "open_research_only", "include_permission_required"}:
+    if research_use_policy not in {
+        "permitted_research",
+        "open_research_only",
+        "include_permission_required",
+    }:
         raise SourceRoutingError("invalid research_use_policy")
     minimum_evidence_tier = request.get("minimum_evidence_tier", "D")
     if minimum_evidence_tier not in score_source_evidence.TIER_RANK:
@@ -204,7 +265,11 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
             "minimum_use_mode must be discovery, raw_observation, normalized_analysis or benchmark_ready"
         )
     max_records = request.get("max_records", 50000)
-    if isinstance(max_records, bool) or not isinstance(max_records, int) or not 1 <= max_records <= 200000:
+    if (
+        isinstance(max_records, bool)
+        or not isinstance(max_records, int)
+        or not 1 <= max_records <= 200000
+    ):
         raise SourceRoutingError("max_records must be an integer from 1 to 200000")
     if not isinstance(request.get("offline", False), bool):
         raise SourceRoutingError("offline must be a boolean")
@@ -286,7 +351,10 @@ def _source_bbox(source_id: str) -> list[float] | None:
     if (
         not isinstance(bbox, list)
         or len(bbox) != 4
-        or not all(isinstance(item, (int, float)) and not isinstance(item, bool) for item in bbox)
+        or not all(
+            isinstance(item, (int, float)) and not isinstance(item, bool)
+            for item in bbox
+        )
     ):
         return None
     return [float(item) for item in bbox]
@@ -302,10 +370,18 @@ def basis_matches(requested: str, declared: str) -> bool:
     generic = {
         "total": ("total", "near_total", "quasi_total"),
         "dissolved": ("dissolved", "filtered"),
-        "extractable": ("extract", "extraction", "extractable", "leachable", "digestion"),
+        "extractable": (
+            "extract",
+            "extraction",
+            "extractable",
+            "leachable",
+            "digestion",
+        ),
     }
     padded_available = f"_{available}_"
-    return any(f"_{token}_" in padded_available for token in generic.get(wanted, (wanted,)))
+    return any(
+        f"_{token}_" in padded_available for token in generic.get(wanted, (wanted,))
+    )
 
 
 def request_compatibility(
@@ -317,9 +393,17 @@ def request_compatibility(
     """Compare every retrieval-changing request field with frozen source evidence."""
 
     registered = registry_entry if isinstance(registry_entry, Mapping) else {}
-    target_analytes = sorted(str(item) for item in registered.get("target_analytes", {}))
+    target_analytes = sorted(
+        str(item) for item in registered.get("target_analytes", {})
+    )
     matched_analytes = sorted(set(request["elements"]).intersection(target_analytes))
-    analyte_status = "compatible" if matched_analytes else "incompatible" if target_analytes else "unverified"
+    analyte_status = (
+        "compatible"
+        if matched_analytes
+        else "incompatible"
+        if target_analytes
+        else "unverified"
+    )
 
     region = request["region"]
     source_bbox = _source_bbox(source_id)
@@ -336,7 +420,9 @@ def request_compatibility(
     if region != "global" and resolved_region is not None:
         if source_bbox is None:
             region_status = "unverified"
-            region_note = "canonical source bbox unavailable; WGS84 filtering cannot be verified"
+            region_note = (
+                "canonical source bbox unavailable; WGS84 filtering cannot be verified"
+            )
         elif spatial_scope.bbox_intersects(resolved_region["bbox"], source_bbox):
             region_status = "compatible"
             region_note = (
@@ -377,13 +463,21 @@ def request_compatibility(
             for declared in declared_basis
             if any(basis_matches(requested, declared) for requested in requested_basis)
         )
-        basis_status = "compatible" if matched_basis else "incompatible" if declared_basis else "unverified"
+        basis_status = (
+            "compatible"
+            if matched_basis
+            else "incompatible"
+            if declared_basis
+            else "unverified"
+        )
 
     requested_time = request.get("time_range")
     declared_bounds = [
         value
         for value in _walk_values(registered, "date_bounds")
-        if isinstance(value, list) and len(value) == 2 and all(isinstance(item, str) for item in value)
+        if isinstance(value, list)
+        and len(value) == 2
+        and all(isinstance(item, str) for item in value)
     ]
     if requested_time is None:
         time_status = "not_applicable"
@@ -395,7 +489,13 @@ def request_compatibility(
             for bounds in declared_bounds
             if requested_start <= _year(bounds[1]) and _year(bounds[0]) <= requested_end
         ]
-        time_status = "compatible" if matched_bounds else "incompatible" if declared_bounds else "unverified"
+        time_status = (
+            "compatible"
+            if matched_bounds
+            else "incompatible"
+            if declared_bounds
+            else "unverified"
+        )
 
     return {
         "analytes": {
@@ -440,7 +540,11 @@ def _research_policy_allows(policy: str, status: str) -> bool:
         return status != "unknown"
     if policy == "open_research_only":
         return status == "open_research"
-    return status in {"open_research", "attribution_required", "noncommercial_research_only"}
+    return status in {
+        "open_research",
+        "attribution_required",
+        "noncommercial_research_only",
+    }
 
 
 def route_sources(
@@ -451,7 +555,11 @@ def route_sources(
     """Return usable routes, lower-use candidates and conservative coverage states."""
 
     resolved_catalog = dict(catalog) if catalog is not None else load_catalog()
-    resolved_registry = dict(registry) if registry is not None else source_adapters.load_source_registry()
+    resolved_registry = (
+        dict(registry)
+        if registry is not None
+        else source_adapters.load_source_registry()
+    )
     normalized = validate_request(request, resolved_catalog)
     evidence_report = score_source_evidence.score_catalog(
         resolved_catalog,
@@ -460,7 +568,11 @@ def route_sources(
     )
     requested_media = set(normalized["media"])
     explicit_sources = normalized["sources"]
-    allowed_ids = set(resolved_catalog["sources"]) if explicit_sources == "auto" else set(explicit_sources)
+    allowed_ids = (
+        set(resolved_catalog["sources"])
+        if explicit_sources == "auto"
+        else set(explicit_sources)
+    )
 
     selected: list[dict[str, Any]] = []
     review: list[dict[str, Any]] = []
@@ -496,7 +608,13 @@ def route_sources(
         )
         offline_ok = not normalized["offline"]
         compatibility_ok = not compatibility_blockers
-        if evidence_ok and use_mode_ok and research_ok and offline_ok and compatibility_ok:
+        if (
+            evidence_ok
+            and use_mode_ok
+            and research_ok
+            and offline_ok
+            and compatibility_ok
+        ):
             selected.append(
                 _route_entry(
                     source_id,
@@ -517,9 +635,13 @@ def route_sources(
                     f"evidence_tier={evidence['evidence_tier']} below {normalized['minimum_evidence_tier']}"
                 )
             if not use_mode_ok:
-                blockers.append(f"use_mode={evidence['use_mode']} below {normalized['minimum_use_mode']}")
+                blockers.append(
+                    f"use_mode={evidence['use_mode']} below {normalized['minimum_use_mode']}"
+                )
             if not research_ok:
-                blockers.append(f"research_use_status={evidence['research_use_status']}")
+                blockers.append(
+                    f"research_use_status={evidence['research_use_status']}"
+                )
             if not offline_ok:
                 blockers.append("offline_cache_not_verified")
             blockers.extend(compatibility_blockers)
@@ -538,8 +660,12 @@ def route_sources(
     coverage: dict[str, Any] = {}
     saturated = bool(resolved_catalog["discovery_state"]["saturated"])
     for medium in normalized["media"]:
-        selected_ids = sorted(item["source_id"] for item in selected if medium in item["matching_media"])
-        candidate_ids = sorted(item["source_id"] for item in review if medium in item["matching_media"])
+        selected_ids = sorted(
+            item["source_id"] for item in selected if medium in item["matching_media"]
+        )
+        candidate_ids = sorted(
+            item["source_id"] for item in review if medium in item["matching_media"]
+        )
         if selected_ids:
             coverage_status = "partial"
             note = "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope."
@@ -560,7 +686,11 @@ def route_sources(
         }
 
     if selected:
-        status = "partial" if any(item["status"] != "covered" for item in coverage.values()) else "ready"
+        status = (
+            "partial"
+            if any(item["status"] != "covered" for item in coverage.values())
+            else "ready"
+        )
     elif review:
         status = "needs_human_review"
     else:
@@ -572,7 +702,9 @@ def route_sources(
         "max_records is an acquisition/output ceiling enforced by the downstream runner, not evidence that the selected records are representative.",
     ]
     if not saturated:
-        limitations.append("Source discovery is still in progress; absence from this route is not proof that no source exists.")
+        limitations.append(
+            "Source discovery is still in progress; absence from this route is not proof that no source exists."
+        )
     if normalized["offline"]:
         limitations.append(
             "Offline routing cannot inspect an external cache, so it does not select any source until the caller separately verifies a versioned cache and SHA-256."
@@ -591,8 +723,18 @@ def route_sources(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--request", type=Path, required=True, help="Request JSON conforming to request.schema.json")
-    parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG, help="Discovered source catalog JSON")
+    parser.add_argument(
+        "--request",
+        type=Path,
+        required=True,
+        help="Request JSON conforming to request.schema.json",
+    )
+    parser.add_argument(
+        "--catalog",
+        type=Path,
+        default=DEFAULT_CATALOG,
+        help="Discovered source catalog JSON",
+    )
     parser.add_argument(
         "--output",
         type=Path,
@@ -607,7 +749,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         catalog = load_catalog(args.catalog)
         request = _read_json(args.request, "request")
         result = route_sources(request, catalog)
-        rendered = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        rendered = (
+            json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        )
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(rendered, encoding="utf-8")
@@ -627,7 +771,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(rendered, end="")
         return 0
     except (OSError, SourceRoutingError) as exc:
-        print(json.dumps({"status": "invalid_input", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                {"status": "invalid_input", "error": str(exc)}, ensure_ascii=False
+            ),
+            file=sys.stderr,
+        )
         return 2
 
 

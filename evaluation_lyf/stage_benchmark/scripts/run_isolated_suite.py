@@ -76,10 +76,14 @@ def complete_row(**overrides: str) -> dict[str, str]:
 
 
 def close_enough(actual: Any, expected: float) -> bool:
-    return isinstance(actual, (int, float)) and math.isclose(actual, expected, rel_tol=1e-10, abs_tol=1e-12)
+    return isinstance(actual, (int, float)) and math.isclose(
+        actual, expected, rel_tol=1e-10, abs_tol=1e-12
+    )
 
 
-def anomaly_records(d2: Any, values: Sequence[str], *, method: str = "ICP-MS", prefix: str = "a") -> list[dict[str, Any]]:
+def anomaly_records(
+    d2: Any, values: Sequence[str], *, method: str = "ICP-MS", prefix: str = "a"
+) -> list[dict[str, Any]]:
     return [
         d2.normalize_row(
             complete_row(
@@ -97,7 +101,9 @@ def anomaly_records(d2: Any, values: Sequence[str], *, method: str = "ICP-MS", p
 
 
 def anomaly_ids(geojson: dict[str, Any]) -> set[str]:
-    return {feature["properties"]["record_id"] for feature in geojson.get("features", [])}
+    return {
+        feature["properties"]["record_id"] for feature in geojson.get("features", [])
+    }
 
 
 def run_suite(stress_records: int) -> dict[str, Any]:
@@ -139,7 +145,10 @@ def run_suite(stress_records: int) -> dict[str, Any]:
             and record["normalized_unit"] == "mg/kg",
             category="unit_normalization",
             expected={"value": case["expected"], "unit": "mg/kg"},
-            actual={"value": record["normalized_value"], "unit": record["normalized_unit"]},
+            actual={
+                "value": record["normalized_value"],
+                "unit": record["normalized_unit"],
+            },
         )
 
     for case in matrix["water_unit_cases"]:
@@ -158,7 +167,10 @@ def run_suite(stress_records: int) -> dict[str, Any]:
             and record["normalized_unit"] == "ug/L",
             category="unit_normalization",
             expected={"value": case["expected"], "unit": "ug/L"},
-            actual={"value": record["normalized_value"], "unit": record["normalized_unit"]},
+            actual={
+                "value": record["normalized_value"],
+                "unit": record["normalized_unit"],
+            },
         )
 
     for index, case in enumerate(matrix["ambiguous_or_unsupported_cases"]):
@@ -170,15 +182,21 @@ def run_suite(stress_records: int) -> dict[str, Any]:
             record["normalized_value"] is None and case["flag"] in record["qc_flags"],
             category="unit_normalization",
             expected={"normalized_value": None, "flag": case["flag"]},
-            actual={"normalized_value": record["normalized_value"], "flags": record["qc_flags"]},
+            actual={
+                "normalized_value": record["normalized_value"],
+                "flags": record["qc_flags"],
+            },
         )
 
     alias_cases = {"arsenic": "As", "AS": "As", "砷": "As", "lead": "Pb", "铅": "Pb"}
     for reported, expected in alias_cases.items():
-        record = d2.normalize_row(complete_row(element_or_analyte=reported, analyte_reported=reported), 2)
+        record = d2.normalize_row(
+            complete_row(element_or_analyte=reported, analyte_reported=reported), 2
+        )
         checks.add(
             f"analyte_alias_{reported}",
-            record["element_or_analyte"] == expected and "UNRECOGNIZED_ANALYTE" not in record["qc_flags"],
+            record["element_or_analyte"] == expected
+            and "UNRECOGNIZED_ANALYTE" not in record["qc_flags"],
             category="analyte",
             expected=expected,
             actual=record["element_or_analyte"],
@@ -203,10 +221,16 @@ def run_suite(stress_records: int) -> dict[str, Any]:
             and "d2-atomic-weights-v1" in str(record["conversion_formula"]),
             category="oxide_conversion",
             expected="positive elemental value with versioned formula",
-            actual={"value": record["normalized_value"], "formula": record["conversion_formula"]},
+            actual={
+                "value": record["normalized_value"],
+                "formula": record["conversion_formula"],
+            },
         )
     unsupported = d2.normalize_row(
-        complete_row(element_or_analyte="Fe", species_or_oxide="Fe2O3T", value="1", unit="wt%"), 2
+        complete_row(
+            element_or_analyte="Fe", species_or_oxide="Fe2O3T", value="1", unit="wt%"
+        ),
+        2,
     )
     checks.add(
         "unsupported_total_iron_fails_closed",
@@ -217,11 +241,15 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         actual=unsupported["qc_flags"],
     )
     mismatch = d2.normalize_row(
-        complete_row(element_or_analyte="Cu", species_or_oxide="NiO", value="1", unit="wt%"), 2
+        complete_row(
+            element_or_analyte="Cu", species_or_oxide="NiO", value="1", unit="wt%"
+        ),
+        2,
     )
     checks.add(
         "oxide_element_mismatch_fails_closed",
-        mismatch["normalized_value"] is None and "OXIDE_ELEMENT_MISMATCH" in mismatch["qc_flags"],
+        mismatch["normalized_value"] is None
+        and "OXIDE_ELEMENT_MISMATCH" in mismatch["qc_flags"],
         category="oxide_conversion",
         expected="OXIDE_ELEMENT_MISMATCH",
         actual=mismatch["qc_flags"],
@@ -251,7 +279,10 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         )
     for raw, qualifier in (("ND", "nd"), ("BDL", "bdl")):
         record = d2.normalize_row(
-            complete_row(value=raw, detection_limit="0.01", detection_limit_unit="mg/kg"), 2
+            complete_row(
+                value=raw, detection_limit="0.01", detection_limit_unit="mg/kg"
+            ),
+            2,
         )
         checks.add(
             f"nondetect_{qualifier}_preserves_limit",
@@ -260,7 +291,10 @@ def run_suite(stress_records: int) -> dict[str, Any]:
             and close_enough(record["normalized_censoring_limit"], 0.01),
             category="censoring",
             expected={"qualifier": qualifier, "limit": 0.01},
-            actual={"qualifier": record["value_qualifier"], "limit": record["normalized_censoring_limit"]},
+            actual={
+                "qualifier": record["value_qualifier"],
+                "limit": record["normalized_censoring_limit"],
+            },
         )
     trace = d2.normalize_row(complete_row(value="trace"), 2)
     checks.add(
@@ -277,7 +311,10 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         missing["missing_reason"] == "not_analyzed" and missing["censored"] is False,
         category="censoring",
         expected={"missing_reason": "not_analyzed", "censored": False},
-        actual={"missing_reason": missing["missing_reason"], "censored": missing["censored"]},
+        actual={
+            "missing_reason": missing["missing_reason"],
+            "censored": missing["censored"],
+        },
     )
 
     valid_boundary = d2.normalize_row(complete_row(latitude="90", longitude="180"), 2)
@@ -285,7 +322,10 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         "coordinate_boundary_is_valid",
         valid_boundary["latitude"] == 90 and valid_boundary["longitude"] == 180,
         category="coordinates",
-        actual={"latitude": valid_boundary["latitude"], "longitude": valid_boundary["longitude"]},
+        actual={
+            "latitude": valid_boundary["latitude"],
+            "longitude": valid_boundary["longitude"],
+        },
     )
     swapped = d2.normalize_row(complete_row(latitude="120", longitude="30"), 2)
     checks.add(
@@ -315,14 +355,18 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         category="coordinates",
         actual=zero_island["qc_flags"],
     )
-    outside = d2.normalize_row(complete_row(latitude="35", longitude="103"), 2, (100, 30, 102, 40))
+    outside = d2.normalize_row(
+        complete_row(latitude="35", longitude="103"), 2, (100, 30, 102, 40)
+    )
     checks.add(
         "outside_requested_region_is_flagged",
         "OUTSIDE_REQUEST_REGION" in outside["qc_flags"],
         category="coordinates",
         actual=outside["qc_flags"],
     )
-    inside_dateline = d2.normalize_row(complete_row(latitude="0", longitude="175"), 2, (170, -10, -170, 10))
+    inside_dateline = d2.normalize_row(
+        complete_row(latitude="0", longitude="175"), 2, (170, -10, -170, 10)
+    )
     checks.add(
         "dateline_crossing_bbox_is_supported",
         "OUTSIDE_REQUEST_REGION" not in inside_dateline["qc_flags"],
@@ -375,7 +419,8 @@ def run_suite(stress_records: int) -> dict[str, Any]:
     )
     checks.add(
         "confidence_degrades_with_missing_evidence",
-        strong["operational_confidence"]["overall"] > weak["operational_confidence"]["overall"],
+        strong["operational_confidence"]["overall"]
+        > weak["operational_confidence"]["overall"],
         category="confidence",
         expected="strong > weak",
         actual={
@@ -443,19 +488,30 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         actual=sorted(anomaly_ids(high_geojson)),
     )
     low_values = ["0.01", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12"]
-    low_geojson, _ = d2.detect_anomalies(anomaly_records(d2, low_values, prefix="low"), min_group_size=8)
-    low_directions = {feature["properties"]["direction"] for feature in low_geojson["features"]}
+    low_geojson, _ = d2.detect_anomalies(
+        anomaly_records(d2, low_values, prefix="low"), min_group_size=8
+    )
+    low_directions = {
+        feature["properties"]["direction"] for feature in low_geojson["features"]
+    }
     checks.add(
         "robust_screen_finds_low_candidate",
         anomaly_ids(low_geojson) == {"low-0"} and low_directions == {"low"},
         category="anomaly",
         expected={"ids": ["low-0"], "directions": ["low"]},
-        actual={"ids": sorted(anomaly_ids(low_geojson)), "directions": sorted(low_directions)},
+        actual={
+            "ids": sorted(anomaly_ids(low_geojson)),
+            "directions": sorted(low_directions),
+        },
     )
 
-    nineteen = anomaly_records(d2, [str(8 + index / 10) for index in range(19)], prefix="n19")
+    nineteen = anomaly_records(
+        d2, [str(8 + index / 10) for index in range(19)], prefix="n19"
+    )
     _, report_19 = d2.detect_anomalies(nineteen)
-    twenty = anomaly_records(d2, [str(8 + index / 10) for index in range(20)], prefix="n20")
+    twenty = anomaly_records(
+        d2, [str(8 + index / 10) for index in range(20)], prefix="n20"
+    )
     _, report_20 = d2.detect_anomalies(twenty)
     checks.add(
         "production_group_size_boundary_is_19_fail_20_analyze",
@@ -463,7 +519,10 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         and report_20["groups"][0]["status"] == "analyzed",
         category="anomaly",
         expected={"n19": "insufficient_group_size", "n20": "analyzed"},
-        actual={"n19": report_19["groups"][0]["status"], "n20": report_20["groups"][0]["status"]},
+        actual={
+            "n19": report_19["groups"][0]["status"],
+            "n20": report_20["groups"][0]["status"],
+        },
     )
 
     exact_70 = anomaly_records(
@@ -471,13 +530,17 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         ["8", "9", "10", "11", "12", "13", "14", "<1", "ND", "trace"],
         prefix="q70",
     )
-    _, report_70 = d2.detect_anomalies(exact_70, min_group_size=3, min_quantified_fraction=0.70)
+    _, report_70 = d2.detect_anomalies(
+        exact_70, min_group_size=3, min_quantified_fraction=0.70
+    )
     below_70 = anomaly_records(
         d2,
         ["8", "9", "10", "11", "12", "13", "<1", "<1", "ND", "trace"],
         prefix="q69",
     )
-    _, report_below = d2.detect_anomalies(below_70, min_group_size=3, min_quantified_fraction=0.70)
+    _, report_below = d2.detect_anomalies(
+        below_70, min_group_size=3, min_quantified_fraction=0.70
+    )
     checks.add(
         "quantified_fraction_boundary_is_inclusive",
         report_70["groups"][0]["status"] == "analyzed"
@@ -499,21 +562,32 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         actual=flat_report["groups"][0]["status"],
     )
 
-    method_a = anomaly_records(d2, ["8", "9", "10", "11", "12", "500"], method="ICP-MS", prefix="ma")
-    method_b = anomaly_records(d2, ["8", "9", "10", "11", "12", "13"], method="XRF", prefix="mb")
+    method_a = anomaly_records(
+        d2, ["8", "9", "10", "11", "12", "500"], method="ICP-MS", prefix="ma"
+    )
+    method_b = anomaly_records(
+        d2, ["8", "9", "10", "11", "12", "13"], method="XRF", prefix="mb"
+    )
     _, method_report = d2.detect_anomalies(method_a + method_b, min_group_size=5)
     checks.add(
         "method_families_form_separate_background_groups",
         len(method_report["groups"]) == 2
-        and {group["group"]["method_family"] for group in method_report["groups"]} == {"icp_ms", "xrf"},
+        and {group["group"]["method_family"] for group in method_report["groups"]}
+        == {"icp_ms", "xrf"},
         category="anomaly",
         expected=["icp_ms", "xrf"],
-        actual=sorted(group["group"]["method_family"] for group in method_report["groups"]),
+        actual=sorted(
+            group["group"]["method_family"] for group in method_report["groups"]
+        ),
     )
 
-    reversed_geojson, _ = d2.detect_anomalies(list(reversed(high_records)), min_group_size=8)
+    reversed_geojson, _ = d2.detect_anomalies(
+        list(reversed(high_records)), min_group_size=8
+    )
     scaled_values = [str(float(value) * 100) for value in high_values]
-    scaled_geojson, _ = d2.detect_anomalies(anomaly_records(d2, scaled_values, prefix="high"), min_group_size=8)
+    scaled_geojson, _ = d2.detect_anomalies(
+        anomaly_records(d2, scaled_values, prefix="high"), min_group_size=8
+    )
     checks.add(
         "anomaly_identity_is_invariant_to_input_order",
         anomaly_ids(reversed_geojson) == anomaly_ids(high_geojson),
@@ -532,18 +606,25 @@ def run_suite(stress_records: int) -> dict[str, Any]:
     equivalent_wt = d2.normalize_row(complete_row(value="0.001", unit="wt%"), 3)
     checks.add(
         "equivalent_units_produce_equal_canonical_values",
-        close_enough(equivalent_ppm["normalized_value"], equivalent_wt["normalized_value"]),
+        close_enough(
+            equivalent_ppm["normalized_value"], equivalent_wt["normalized_value"]
+        ),
         category="metamorphic",
         expected=equivalent_ppm["normalized_value"],
         actual=equivalent_wt["normalized_value"],
     )
 
     help_result = subprocess.run(
-        [sys.executable, str(D2_SCRIPT), "--help"], capture_output=True, text=True, check=False
+        [sys.executable, str(D2_SCRIPT), "--help"],
+        capture_output=True,
+        text=True,
+        check=False,
     )
     checks.add(
         "cli_help_is_available",
-        help_result.returncode == 0 and "--schema-map" in help_result.stdout and "--min-group-size" in help_result.stdout,
+        help_result.returncode == 0
+        and "--schema-map" in help_result.stdout
+        and "--min-group-size" in help_result.stdout,
         category="cli",
         expected=0,
         actual=help_result.returncode,
@@ -567,10 +648,14 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         )
         checks.add(
             "invalid_cli_input_exits_2_without_traceback",
-            bad_result.returncode == 2 and "traceback" not in bad_result.stderr.casefold(),
+            bad_result.returncode == 2
+            and "traceback" not in bad_result.stderr.casefold(),
             category="cli",
             expected=2,
-            actual={"returncode": bad_result.returncode, "stderr": bad_result.stderr[-300:]},
+            actual={
+                "returncode": bad_result.returncode,
+                "stderr": bad_result.stderr[-300:],
+            },
         )
         parameter_result = subprocess.run(
             [
@@ -589,7 +674,8 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         )
         checks.add(
             "invalid_scientific_parameter_exits_2",
-            parameter_result.returncode == 2 and "at least 3" in parameter_result.stderr,
+            parameter_result.returncode == 2
+            and "at least 3" in parameter_result.stderr,
             category="cli",
             expected=2,
             actual=parameter_result.returncode,
@@ -600,7 +686,9 @@ def run_suite(stress_records: int) -> dict[str, Any]:
         first_outputs = d2.run_pipeline(D2_FIXTURE, first_dir, min_group_size=8)
         second_outputs = d2.run_pipeline(D2_FIXTURE, second_dir, min_group_size=8)
         first_bytes = {path.name: path.read_bytes() for path in first_outputs.values()}
-        second_bytes = {path.name: path.read_bytes() for path in second_outputs.values()}
+        second_bytes = {
+            path.name: path.read_bytes() for path in second_outputs.values()
+        }
         checks.add(
             "all_nine_outputs_are_emitted",
             set(first_bytes) == EXPECTED_OUTPUTS,
@@ -613,7 +701,11 @@ def run_suite(stress_records: int) -> dict[str, Any]:
             first_bytes == second_bytes,
             category="determinism",
             expected="all output bytes equal",
-            actual=[name for name in first_bytes if first_bytes[name] != second_bytes.get(name)],
+            actual=[
+                name
+                for name in first_bytes
+                if first_bytes[name] != second_bytes.get(name)
+            ],
         )
         manifest = load_json(first_dir / "run_manifest.json")
         bad_hashes = [
@@ -627,7 +719,9 @@ def run_suite(stress_records: int) -> dict[str, Any]:
             category="evidence_chain",
             actual=bad_hashes,
         )
-        with (first_dir / "geochemistry.csv").open(encoding="utf-8", newline="") as handle:
+        with (first_dir / "geochemistry.csv").open(
+            encoding="utf-8", newline=""
+        ) as handle:
             serialized_rows = list(csv.DictReader(handle))
         nested_parse_errors = []
         for index, row in enumerate(serialized_rows):
@@ -730,7 +824,9 @@ def run_suite(stress_records: int) -> dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the independent D2 scientific and engineering validation suite.")
+    parser = argparse.ArgumentParser(
+        description="Run the independent D2 scientific and engineering validation suite."
+    )
     parser.add_argument("--report", type=Path, help="Optional path for the JSON report")
     parser.add_argument(
         "--stress-records",

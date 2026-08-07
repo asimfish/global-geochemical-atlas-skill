@@ -52,7 +52,8 @@ def rate(rows: list[dict[str, str]], fields: Iterable[str]) -> float:
     if not rows or not fields:
         return 0.0
     return round(
-        sum(all(nonblank(row, field) for field in fields) for row in rows) / len(rows), 6
+        sum(all(nonblank(row, field) for field in fields) for row in rows) / len(rows),
+        6,
     )
 
 
@@ -61,7 +62,8 @@ def any_field_rate(rows: list[dict[str, str]], fields: Iterable[str]) -> float:
     if not rows or not fields:
         return 0.0
     return round(
-        sum(any(nonblank(row, field) for field in fields) for row in rows) / len(rows), 6
+        sum(any(nonblank(row, field) for field in fields) for row in rows) / len(rows),
+        6,
     )
 
 
@@ -73,14 +75,21 @@ def json_cell(value: str, expected: type) -> Any:
     return parsed if isinstance(parsed, expected) else expected()
 
 
-def coordinate(row: dict[str, str], original: bool = False) -> tuple[float, float] | None:
+def coordinate(
+    row: dict[str, str], original: bool = False
+) -> tuple[float, float] | None:
     lat_field = "original_latitude_raw" if original else "latitude"
     lon_field = "original_longitude_raw" if original else "longitude"
     try:
         lat, lon = float(row[lat_field]), float(row[lon_field])
     except (KeyError, TypeError, ValueError):
         return None
-    if math.isfinite(lat) and math.isfinite(lon) and -90 <= lat <= 90 and -180 <= lon <= 180:
+    if (
+        math.isfinite(lat)
+        and math.isfinite(lon)
+        and -90 <= lat <= 90
+        and -180 <= lon <= 180
+    ):
         return round(lat, 8), round(lon, 8)
     return None
 
@@ -115,7 +124,9 @@ def geojson_metrics(path: Path) -> dict[str, Any]:
     }
 
 
-def artifact(path: Path, *, valid: bool, usable: bool, detail: Any = None) -> dict[str, Any]:
+def artifact(
+    path: Path, *, valid: bool, usable: bool, detail: Any = None
+) -> dict[str, Any]:
     return {
         "present": path.is_file() and path.stat().st_size > 0,
         "valid": bool(valid),
@@ -127,7 +138,9 @@ def artifact(path: Path, *, valid: bool, usable: bool, detail: Any = None) -> di
     }
 
 
-def browser_screenshots_verified(audit: dict[str, Any], audit_path: Path | None) -> bool:
+def browser_screenshots_verified(
+    audit: dict[str, Any], audit_path: Path | None
+) -> bool:
     if audit_path is None or not audit_path.is_file():
         return False
     directory = audit.get("screenshot_directory")
@@ -181,18 +194,28 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     sample_metrics = geojson_metrics(root / "samples.geojson")
 
     d1_media = Counter((row.get("medium") or "unknown").strip() for row in d1)
-    d1_elements = Counter((row.get("element_or_analyte") or "unknown").strip() for row in d1)
-    source_ids = {(row.get("source_id") or "").strip() for row in d1 if nonblank(row, "source_id")}
+    d1_elements = Counter(
+        (row.get("element_or_analyte") or "unknown").strip() for row in d1
+    )
+    source_ids = {
+        (row.get("source_id") or "").strip() for row in d1 if nonblank(row, "source_id")
+    }
     samples = {
         ((row.get("source_id") or "").strip(), (row.get("sample_id") or "").strip())
-        for row in d1 if nonblank(row, "sample_id")
+        for row in d1
+        if nonblank(row, "sample_id")
     }
     reported_locations = {value for row in d1 if (value := reported_coordinate(row))}
-    discovery_candidates = discovery.get("candidates") if isinstance(discovery, dict) else []
-    discovery_candidates = discovery_candidates if isinstance(discovery_candidates, list) else []
+    discovery_candidates = (
+        discovery.get("candidates") if isinstance(discovery, dict) else []
+    )
+    discovery_candidates = (
+        discovery_candidates if isinstance(discovery_candidates, list) else []
+    )
     discovery_status = Counter(
         str(item.get("status") or "unknown").casefold()
-        for item in discovery_candidates if isinstance(item, dict)
+        for item in discovery_candidates
+        if isinstance(item, dict)
     )
     discovery_platforms = {
         str(item.get("platform") or "").strip()
@@ -208,62 +231,105 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     for row in d2:
         flags = {str(value) for value in json_cell(row.get("qc_flags", ""), list)}
         flag_counts.update(flags)
-        inferred_units += any("INFER" in flag.upper() and "UNIT" in flag.upper() for flag in flags)
+        inferred_units += any(
+            "INFER" in flag.upper() and "UNIT" in flag.upper() for flag in flags
+        )
         explicit_failures += any(
-            token in flag.upper() for flag in flags
+            token in flag.upper()
+            for flag in flags
             for token in ("UNSUPPORTED_UNIT", "AMBIGUOUS_AQUEOUS", "UNSUPPORTED_MOLAR")
         )
-        censored += (row.get("censored") or "").strip().casefold() in {"true", "1", "yes"}
+        censored += (row.get("censored") or "").strip().casefold() in {
+            "true",
+            "1",
+            "yes",
+        }
         operational = json_cell(row.get("operational_confidence", ""), dict)
         confidence_bands[str(operational.get("band") or "unknown")] += 1
 
     canonical_locations = {value for row in d2 if (value := coordinate(row))}
-    normalized = sum(nonblank(row, "normalized_value") and nonblank(row, "normalized_unit") for row in d2)
+    normalized = sum(
+        nonblank(row, "normalized_value") and nonblank(row, "normalized_unit")
+        for row in d2
+    )
     conversion_trace = sum(
         nonblank(row, "conversion_factor") and nonblank(row, "conversion_formula")
-        for row in d2 if nonblank(row, "normalized_value")
+        for row in d2
+        if nonblank(row, "normalized_value")
     )
     geology = sum(
-        any(nonblank(row, field) for field in ("matched_geologic_unit", "geologic_unit", "geologic_unit_raw"))
+        any(
+            nonblank(row, field)
+            for field in ("matched_geologic_unit", "geologic_unit", "geologic_unit_raw")
+        )
         for row in d2
     )
     provenance = rate(d2, ("source_id", "source_locator", "file_sha256"))
-    directions = Counter(
-        anomaly_direction(item.get("properties", {}).get("direction"))
-        for item in anomaly.get("features", []) if isinstance(item, dict)
-    ) if isinstance(anomaly, dict) else Counter()
+    directions = (
+        Counter(
+            anomaly_direction(item.get("properties", {}).get("direction"))
+            for item in anomaly.get("features", [])
+            if isinstance(item, dict)
+        )
+        if isinstance(anomaly, dict)
+        else Counter()
+    )
 
-    screenshot_evidence_bound = browser_screenshots_verified(browser, args.browser_audit)
+    screenshot_evidence_bound = browser_screenshots_verified(
+        browser, args.browser_audit
+    )
     browser_bound = (
         browser.get("schema_version") == "geochemical-browser-audit-v1"
         and browser.get("generated_by") == "external_evaluation_controller"
-        and browser.get("html", {}).get("sha256") == sha256_file(root / "interactive_map.html")
+        and browser.get("html", {}).get("sha256")
+        == sha256_file(root / "interactive_map.html")
         and browser.get("html", {}).get("bytes")
-        == ((root / "interactive_map.html").stat().st_size if (root / "interactive_map.html").is_file() else 0)
+        == (
+            (root / "interactive_map.html").stat().st_size
+            if (root / "interactive_map.html").is_file()
+            else 0
+        )
         and screenshot_evidence_bound
     )
     browser_pass = browser_bound and browser.get("status") == "pass"
     score = score_data.get("score") if isinstance(score_data, dict) else None
     red_lines: list[dict[str, Any]] = []
     if inferred_units:
-        red_lines.append({"code": "UNIT_INFERENCE", "count": inferred_units, "severity": "error"})
+        red_lines.append(
+            {"code": "UNIT_INFERENCE", "count": inferred_units, "severity": "error"}
+        )
     missing_media = sorted(FOUR_MEDIA - set(d1_media))
     if missing_media:
-        red_lines.append({"code": "FOUR_MEDIA_INCOMPLETE", "missing": missing_media, "severity": "error"})
+        red_lines.append(
+            {
+                "code": "FOUR_MEDIA_INCOMPLETE",
+                "missing": missing_media,
+                "severity": "error",
+            }
+        )
     if not browser_pass:
         red_lines.append({"code": "D3_NOT_BROWSER_VERIFIED", "severity": "error"})
     if canonical_locations and len(canonical_locations) < 100:
-        red_lines.append({"code": "SPARSE_UNIQUE_MAP_LOCATIONS", "count": len(canonical_locations), "severity": "warning"})
+        red_lines.append(
+            {
+                "code": "SPARSE_UNIQUE_MAP_LOCATIONS",
+                "count": len(canonical_locations),
+                "severity": "warning",
+            }
+        )
 
     database_valid = bool(d2) and len({row.get("record_id") for row in d2}) == len(d2)
     source_valid = (
         (root / "source_manifest.json").is_file()
-        and isinstance(source_manifest, dict) and isinstance(source_manifest.get("sources"), list)
-        and isinstance(confidence, dict) and bool(confidence)
+        and isinstance(source_manifest, dict)
+        and isinstance(source_manifest.get("sources"), list)
+        and isinstance(confidence, dict)
+        and bool(confidence)
         and provenance == 1.0
     )
     anomaly_valid = (
-        isinstance(anomaly, dict) and anomaly.get("type") == "FeatureCollection"
+        isinstance(anomaly, dict)
+        and anomaly.get("type") == "FeatureCollection"
         and isinstance(anomaly.get("features"), list)
         and isinstance(anomaly_report, dict)
     )
@@ -303,9 +369,13 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             "discovery_status_counts": dict(sorted(discovery_status.items())),
             "searched_platform_count": len(discovery_platforms),
             "searched_platforms": sorted(discovery_platforms),
-            "discovery_stop_reason": discovery.get("stop_reason") if isinstance(discovery, dict) else None,
+            "discovery_stop_reason": discovery.get("stop_reason")
+            if isinstance(discovery, dict)
+            else None,
             "remaining_candidate_count": len(discovery.get("remaining_candidates", []))
-            if isinstance(discovery, dict) and isinstance(discovery.get("remaining_candidates"), list) else 0,
+            if isinstance(discovery, dict)
+            and isinstance(discovery.get("remaining_candidates"), list)
+            else 0,
             "media_counts": dict(sorted(d1_media.items())),
             "missing_required_media": missing_media,
             "element_count": len(d1_elements),
@@ -313,7 +383,13 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
                 d1, ("analytical_method", "analytical_technique", "method_family")
             ),
             "geology_completeness": any_field_rate(
-                d1, ("geologic_unit_raw", "geologic_unit", "matched_geologic_unit", "lithology_raw")
+                d1,
+                (
+                    "geologic_unit_raw",
+                    "geologic_unit",
+                    "matched_geologic_unit",
+                    "lithology_raw",
+                ),
             ),
             "coordinate_evidence_completeness": any_field_rate(
                 d1, ("source_crs", "coordinate_evidence_scope", "coordinate_policy_id")
@@ -326,11 +402,15 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
                 root / "coverage_report.json",
                 valid=isinstance(coverage_report, dict) and bool(coverage_report),
                 usable=isinstance(coverage_report, dict)
-                and any(key in coverage_report for key in ("coverage_gaps", "by_region", "by_source")),
+                and any(
+                    key in coverage_report
+                    for key in ("coverage_gaps", "by_region", "by_source")
+                ),
                 detail={
                     "declared_gap_count": len(coverage_report.get("coverage_gaps", []))
                     if isinstance(coverage_report, dict)
-                    and isinstance(coverage_report.get("coverage_gaps"), list) else None,
+                    and isinstance(coverage_report.get("coverage_gaps"), list)
+                    else None,
                 },
             ),
         },
@@ -341,11 +421,15 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             "normalized_records": normalized,
             "normalization_rate": round(normalized / len(d2), 6) if d2 else 0.0,
             "conversion_trace_records": conversion_trace,
-            "conversion_trace_rate": round(conversion_trace / normalized, 6) if normalized else 0.0,
+            "conversion_trace_rate": round(conversion_trace / normalized, 6)
+            if normalized
+            else 0.0,
             "explicit_unit_failure_records": explicit_failures,
             "inferred_unit_records": inferred_units,
             "censored_records": censored,
-            "canonical_coordinate_records": sum(coordinate(row) is not None for row in d2),
+            "canonical_coordinate_records": sum(
+                coordinate(row) is not None for row in d2
+            ),
             "unique_canonical_locations": len(canonical_locations),
             "geology_context_records": geology,
             "geology_context_rate": round(geology / len(d2), 6) if d2 else 0.0,
@@ -373,33 +457,53 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         },
         "deliverables": {
             "interactive_map": artifact(
-                root / "interactive_map.html", valid=browser_bound and browser.get("loaded") is True,
-                usable=browser_pass, detail={"browser_status": browser.get("status", "not_run")},
+                root / "interactive_map.html",
+                valid=browser_bound and browser.get("loaded") is True,
+                usable=browser_pass,
+                detail={"browser_status": browser.get("status", "not_run")},
             ),
             "standardized_database": artifact(
-                root / "geochemistry.csv", valid=database_valid,
+                root / "geochemistry.csv",
+                valid=database_valid,
                 usable=database_valid and normalized > 0,
-                detail={"records": len(d2), "unique_locations": len(canonical_locations)},
+                detail={
+                    "records": len(d2),
+                    "unique_locations": len(canonical_locations),
+                },
             ),
             "sources_and_confidence": artifact(
-                root / "source_manifest.json", valid=source_valid,
-                usable=source_valid and bool(confidence), detail={"provenance_rate": provenance},
+                root / "source_manifest.json",
+                valid=source_valid,
+                usable=source_valid and bool(confidence),
+                detail={"provenance_rate": provenance},
             ),
             "anomaly_results": artifact(
-                root / "anomalies.geojson", valid=anomaly_valid,
-                usable=anomaly_valid and "screen" in json.dumps(anomaly_report).casefold(),
+                root / "anomalies.geojson",
+                valid=anomaly_valid,
+                usable=anomaly_valid
+                and "screen" in json.dumps(anomaly_report).casefold(),
                 detail={"directions": dict(directions)},
             ),
             "reusable_skill_document": artifact(
-                skill_path or Path("SKILL.md"), valid=skill_present and "name:" in skill_path.read_text(encoding="utf-8")[:1000] if skill_present else False,
-                usable=skill_present and skill_path.stat().st_size > 3000 if skill_present else False,
+                skill_path or Path("SKILL.md"),
+                valid=skill_present
+                and "name:" in skill_path.read_text(encoding="utf-8")[:1000]
+                if skill_present
+                else False,
+                usable=skill_present and skill_path.stat().st_size > 3000
+                if skill_present
+                else False,
             ),
         },
         "score": {
             "observed": score,
-            "maximum": score_data.get("maximum", 100) if isinstance(score_data, dict) else 100,
+            "maximum": score_data.get("maximum", 100)
+            if isinstance(score_data, dict)
+            else 100,
             "ceiling_saturated": (
-                args.condition == "B0" and isinstance(score, (int, float)) and score >= 90
+                args.condition == "B0"
+                and isinstance(score, (int, float))
+                and score >= 90
             ),
             "source": str(args.score) if args.score else None,
         },
@@ -411,47 +515,65 @@ def render(report: dict[str, Any]) -> str:
     exp, d1, d2, d3 = report["experiment"], report["d1"], report["d2"], report["d3"]
     descriptive = report["score"].get("descriptive_partial_mean")
     lines = [
-        "# 全球地球化学图谱统一评测报告", "",
+        "# 全球地球化学图谱统一评测报告",
+        "",
         f"- 运行：`{exp['runtime']}` / `{exp['condition']}` / `{exp['run_id']}`",
         f"- 独立 Agent 会话：`{str(exp['independent_agent_session']).lower()}`",
         f"- 正式观测分：`{report['score']['observed']}`；描述性 partial 均值：`{descriptive}`；天花板饱和：`{str(report['score']['ceiling_saturated']).lower()}`",
         f"- 正式 uplift 单次资格：`{str(report['fairness']['eligible_run_component']).lower()}`",
     ]
     if report["fairness"].get("ineligibility_reasons"):
-        lines.append(f"- 不合格原因：{'；'.join(report['fairness']['ineligibility_reasons'])}")
+        lines.append(
+            f"- 不合格原因：{'；'.join(report['fairness']['ineligibility_reasons'])}"
+        )
     benchmark = report.get("benchmark")
     if isinstance(benchmark, dict):
-        lines.extend([
-            "", "## Q01–Q24 基准概览", "",
-            f"- 范围：`{benchmark['scope']}`；报告 `{benchmark['task_report_count']}/{benchmark['question_count']}`；完整六维分 `{benchmark['complete_score_count']}/{benchmark['question_count']}`。",
-            f"- 产品题：`{benchmark['product_question']}`；最终运行产物门禁：`{str(benchmark['product_gate_usable']).lower()}`。",
-            f"- 结论边界：{benchmark['claim_boundary']}",
-            "", "| 阶段 | 题数 | machine | LLM | 描述性 partial 均值 | 失败检查 |",
-            "|---|---:|---:|---:|---:|---:|",
-        ])
+        lines.extend(
+            [
+                "",
+                "## Q01–Q24 基准概览",
+                "",
+                f"- 范围：`{benchmark['scope']}`；报告 `{benchmark['task_report_count']}/{benchmark['question_count']}`；完整六维分 `{benchmark['complete_score_count']}/{benchmark['question_count']}`。",
+                f"- 产品题：`{benchmark['product_question']}`；最终运行产物门禁：`{str(benchmark['product_gate_usable']).lower()}`。",
+                f"- 结论边界：{benchmark['claim_boundary']}",
+                "",
+                "| 阶段 | 题数 | machine | LLM | 描述性 partial 均值 | 失败检查 |",
+                "|---|---:|---:|---:|---:|---:|",
+            ]
+        )
         for stage, item in benchmark["stage_summaries"].items():
             lines.append(
                 f"| {stage} | {item['question_count']} | {item['machine_awarded']}/{item['machine_possible']} "
                 f"| {item['llm_awarded']}/{item['llm_possible']} | {item['descriptive_partial_mean']} | {item['failed_check_count']} |"
             )
-    lines.extend([
-        "", "## D1 采集与覆盖", "",
-        "| 测定记录 | 唯一样品 | 唯一坐标 | 来源 | 元素 | 四介质缺口 |",
-        "|---:|---:|---:|---:|---:|---|",
-        f"| {d1['measurement_records']} | {d1['unique_samples']} | {d1['unique_reported_locations']} | {d1['source_count']} | {d1['element_count']} | {', '.join(d1['missing_required_media']) or '无'} |",
-        f"- 来源发现：候选 `{d1['discovery_candidate_count']}`，平台 `{d1['searched_platform_count']}`，状态 `{d1['discovery_status_counts']}`，停止原因 `{d1['discovery_stop_reason']}`。",
-        f"- 字段完整率：方法 `{d1['method_completeness']:.1%}`，地质背景 `{d1['geology_completeness']:.1%}`，坐标证据 `{d1['coordinate_evidence_completeness']:.1%}`，记录级来源 `{d1['record_provenance_completeness']:.1%}`。",
-        "", "## D2 标准化与科学处理", "",
-        "| 输入/输出 | 标准化 | 单位推断 | 显式失败 | canonical 坐标 | 唯一位置 | 地质覆盖 | 异常 high/low |",
-        "|---|---:|---:|---:|---:|---:|---:|---|",
-        f"| {d2['input_records']}/{d2['output_records']} | {d2['normalized_records']} | {d2['inferred_unit_records']} | {d2['explicit_unit_failure_records']} | {d2['canonical_coordinate_records']} | {d2['unique_canonical_locations']} | {d2['geology_context_records']} | {d2['anomaly_directions']} |",
-        "", "## D3 浏览器实测", "",
-        f"- 浏览器验收：`{d3['browser_audit'].get('status', 'not_run')}`（哈希绑定：`{str(d3['browser_audit_bound']).lower()}`）",
-        f"- 上图测定 feature：`{d3['map_measurement_features']}`；唯一地图位置：`{d3['map_unique_locations']}`",
-        "", "## 五项产物", "",
-        "| 产物 | present | valid | usable |",
-        "|---|---:|---:|---:|",
-    ])
+    lines.extend(
+        [
+            "",
+            "## D1 采集与覆盖",
+            "",
+            "| 测定记录 | 唯一样品 | 唯一坐标 | 来源 | 元素 | 四介质缺口 |",
+            "|---:|---:|---:|---:|---:|---|",
+            f"| {d1['measurement_records']} | {d1['unique_samples']} | {d1['unique_reported_locations']} | {d1['source_count']} | {d1['element_count']} | {', '.join(d1['missing_required_media']) or '无'} |",
+            f"- 来源发现：候选 `{d1['discovery_candidate_count']}`，平台 `{d1['searched_platform_count']}`，状态 `{d1['discovery_status_counts']}`，停止原因 `{d1['discovery_stop_reason']}`。",
+            f"- 字段完整率：方法 `{d1['method_completeness']:.1%}`，地质背景 `{d1['geology_completeness']:.1%}`，坐标证据 `{d1['coordinate_evidence_completeness']:.1%}`，记录级来源 `{d1['record_provenance_completeness']:.1%}`。",
+            "",
+            "## D2 标准化与科学处理",
+            "",
+            "| 输入/输出 | 标准化 | 单位推断 | 显式失败 | canonical 坐标 | 唯一位置 | 地质覆盖 | 异常 high/low |",
+            "|---|---:|---:|---:|---:|---:|---:|---|",
+            f"| {d2['input_records']}/{d2['output_records']} | {d2['normalized_records']} | {d2['inferred_unit_records']} | {d2['explicit_unit_failure_records']} | {d2['canonical_coordinate_records']} | {d2['unique_canonical_locations']} | {d2['geology_context_records']} | {d2['anomaly_directions']} |",
+            "",
+            "## D3 浏览器实测",
+            "",
+            f"- 浏览器验收：`{d3['browser_audit'].get('status', 'not_run')}`（哈希绑定：`{str(d3['browser_audit_bound']).lower()}`）",
+            f"- 上图测定 feature：`{d3['map_measurement_features']}`；唯一地图位置：`{d3['map_unique_locations']}`",
+            "",
+            "## 五项产物",
+            "",
+            "| 产物 | present | valid | usable |",
+            "|---|---:|---:|---:|",
+        ]
+    )
     labels = {
         "interactive_map": "可交互元素分布地图",
         "standardized_database": "标准化地球化学数据库",
@@ -461,13 +583,19 @@ def render(report: dict[str, Any]) -> str:
     }
     for key, label in labels.items():
         item = report["deliverables"][key]
-        lines.append(f"| {label} | {item['present']} | {item['valid']} | {item['usable']} |")
+        lines.append(
+            f"| {label} | {item['present']} | {item['valid']} | {item['usable']} |"
+        )
     if isinstance(benchmark, dict):
-        lines.extend([
-            "", "## Q01–Q24 逐题结果", "",
-            "| 题号 | 阶段 | machine | LLM | score_status | 描述性 partial | 失败检查 |",
-            "|---|---|---:|---:|---|---:|---:|",
-        ])
+        lines.extend(
+            [
+                "",
+                "## Q01–Q24 逐题结果",
+                "",
+                "| 题号 | 阶段 | machine | LLM | score_status | 描述性 partial | 失败检查 |",
+                "|---|---|---:|---:|---|---:|---:|",
+            ]
+        )
         for item in benchmark["task_results"]:
             lines.append(
                 f"| {item['question_id']} | {item['stage']} | {item['machine_awarded']}/{item['machine_possible']} "
@@ -476,25 +604,39 @@ def render(report: dict[str, Any]) -> str:
             )
     lines.extend(["", "## 科学红线", ""])
     if report["scientific_red_lines"]:
-        lines.extend(f"- `{item['code']}`：{item}" for item in report["scientific_red_lines"])
+        lines.extend(
+            f"- `{item['code']}`：{item}" for item in report["scientific_red_lines"]
+        )
     else:
         lines.append("- 未触发机器可见红线；这不替代领域专家复核。")
-    lines.extend([
-        "", "> 本报告把测定记录、物理样品和唯一地图位置分开统计；记录多不等于全球覆盖完整。", "",
-    ])
+    lines.extend(
+        [
+            "",
+            "> 本报告把测定记录、物理样品和唯一地图位置分开统计；记录多不等于全球覆盖完整。",
+            "",
+        ]
+    )
     return "\n".join(lines)
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate unified machine and Markdown evaluation reports.")
+    parser = argparse.ArgumentParser(
+        description="Generate unified machine and Markdown evaluation reports."
+    )
     parser.add_argument("--submission-dir", type=Path, required=True)
-    parser.add_argument("--runtime", choices=("q01-q24", "host-uplift", "docker-uplift"), required=True)
+    parser.add_argument(
+        "--runtime", choices=("q01-q24", "host-uplift", "docker-uplift"), required=True
+    )
     parser.add_argument("--condition", choices=("B0", "S0"), required=True)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--independent-session", action="store_true")
     parser.add_argument("--blind-bundle", action="store_true")
     parser.add_argument("--score", type=Path)
-    parser.add_argument("--results-dir", type=Path, help="Q01-Q24 directory containing Qxx score/objective/LLM reports")
+    parser.add_argument(
+        "--results-dir",
+        type=Path,
+        help="Q01-Q24 directory containing Qxx score/objective/LLM reports",
+    )
     parser.add_argument("--browser-audit", type=Path)
     parser.add_argument("--experiment-manifest", type=Path)
     parser.add_argument("--skill-document", type=Path)
@@ -515,7 +657,12 @@ def main() -> int:
         encoding="utf-8",
     )
     args.output_md.write_text(render(report), encoding="utf-8")
-    print(json.dumps({"status": "generated", "red_lines": len(report["scientific_red_lines"])}, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "generated", "red_lines": len(report["scientific_red_lines"])},
+            sort_keys=True,
+        )
+    )
     return 0
 
 

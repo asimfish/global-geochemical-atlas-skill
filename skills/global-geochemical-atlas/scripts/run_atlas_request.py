@@ -32,7 +32,9 @@ GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 PRODUCTION_FIXTURE = SKILL_DIR / "fixtures" / "production-usgs"
 FOUR_MEDIA_FIXTURE = SKILL_DIR / "fixtures" / "four-media" / "combined-v3"
 DEFAULT_GEOLOGY_GRID = SKILL_DIR / "assets" / "geology" / "pangaea-788537.zip"
-DEFAULT_GEOLOGY_SHA256 = "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e"
+DEFAULT_GEOLOGY_SHA256 = (
+    "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e"
+)
 PARAMETERIZED_SOURCES = {"georoc-archaean", "usgs-conus-soil"}
 DEFAULT_WORKFLOW_RESERVE_SECONDS = 180.0
 
@@ -49,9 +51,13 @@ def read_json(path: Path, label: str) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as exc:
-        raise RequestRunError("invalid_input", f"{label} does not exist: {path}") from exc
+        raise RequestRunError(
+            "invalid_input", f"{label} does not exist: {path}"
+        ) from exc
     except (UnicodeError, json.JSONDecodeError) as exc:
-        raise RequestRunError("invalid_input", f"{label} is not valid UTF-8 JSON: {path}") from exc
+        raise RequestRunError(
+            "invalid_input", f"{label} is not valid UTF-8 JSON: {path}"
+        ) from exc
     if not isinstance(value, dict):
         raise RequestRunError("invalid_input", f"{label} must be a JSON object")
     return value
@@ -67,7 +73,10 @@ def sha256_file(path: Path) -> str:
 
 def write_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
 
 def verify_manifest_outputs(manifest_path: Path, paths: Sequence[Path]) -> None:
@@ -76,7 +85,9 @@ def verify_manifest_outputs(manifest_path: Path, paths: Sequence[Path]) -> None:
     manifest = read_json(manifest_path, "source acquisition manifest")
     outputs = manifest.get("outputs")
     if not isinstance(outputs, list):
-        raise RequestRunError("conflicting_evidence", "source manifest has no outputs hash inventory")
+        raise RequestRunError(
+            "conflicting_evidence", "source manifest has no outputs hash inventory"
+        )
     inventory: dict[str, Mapping[str, Any]] = {}
     for item in outputs:
         if isinstance(item, Mapping) and isinstance(item.get("path"), str):
@@ -85,11 +96,15 @@ def verify_manifest_outputs(manifest_path: Path, paths: Sequence[Path]) -> None:
         evidence = inventory.get(path.name)
         if evidence is None:
             raise RequestRunError(
-                "conflicting_evidence", f"source manifest does not bind supplied file: {path.name}"
+                "conflicting_evidence",
+                f"source manifest does not bind supplied file: {path.name}",
             )
         actual_hash = sha256_file(path)
         actual_bytes = path.stat().st_size
-        if evidence.get("sha256") != actual_hash or evidence.get("bytes") != actual_bytes:
+        if (
+            evidence.get("sha256") != actual_hash
+            or evidence.get("bytes") != actual_bytes
+        ):
             raise RequestRunError(
                 "conflicting_evidence",
                 f"source manifest hash/size mismatch for {path.name}",
@@ -102,14 +117,18 @@ def _year(value: Any) -> int | None:
 
 
 def _year_bounds(value: Any) -> tuple[int, int] | None:
-    years = [int(item) for item in re.findall(r"(?<!\d)(\d{4})(?!\d)", str(value or ""))]
+    years = [
+        int(item) for item in re.findall(r"(?<!\d)(\d{4})(?!\d)", str(value or ""))
+    ]
     return (min(years), max(years)) if years else None
 
 
 def _canonical_coordinate_declared(row: Mapping[str, str]) -> bool:
     source_crs = re.sub(r"\s+", "", str(row.get("source_crs") or "")).casefold()
     transform = str(row.get("coordinate_transform_method") or "").strip()
-    return source_crs in {"epsg:4326", "wgs84", "wgs1984", "4326", "ogc:crs84"} or bool(transform)
+    return source_crs in {"epsg:4326", "wgs84", "wgs1984", "4326", "ogc:crs84"} or bool(
+        transform
+    )
 
 
 def _inside_bbox(row: Mapping[str, str], bbox: Sequence[float]) -> bool:
@@ -150,9 +169,12 @@ def _geology_labels(
         if geology_grid is not None and _canonical_coordinate_declared(row):
             medium = str(row.get("medium") or "").casefold()
             sediment_context = " ".join(
-                str(row.get(field) or "") for field in ("material", "sediment_environment")
+                str(row.get(field) or "")
+                for field in ("material", "sediment_environment")
             ).casefold()
-            if medium != "water" and not (medium == "sediment" and "marine" in sediment_context):
+            if medium != "water" and not (
+                medium == "sediment" and "marine" in sediment_context
+            ):
                 try:
                     latitude = float(row.get("latitude") or "")
                     longitude = float(row.get("longitude") or "")
@@ -162,7 +184,9 @@ def _geology_labels(
                     if -90 <= latitude <= 90 and -180 <= longitude <= 180:
                         match = geology_grid.lookup(latitude, longitude)
                         if match is not None:
-                            labels.add(_normalized_geology(f"GLiM:{match[0]}:{match[1]}"))
+                            labels.add(
+                                _normalized_geology(f"GLiM:{match[0]}:{match[1]}")
+                            )
     return labels
 
 
@@ -182,9 +206,15 @@ def _load_request_geology_grid(
             )
         return None
     if not re.fullmatch(r"[0-9a-f]{64}", expected_sha256.casefold()):
-        raise RequestRunError("invalid_input", "geology grid SHA-256 must contain 64 hexadecimal characters")
+        raise RequestRunError(
+            "invalid_input",
+            "geology grid SHA-256 must contain 64 hexadecimal characters",
+        )
     if not grid_path.is_file() or sha256_file(grid_path) != expected_sha256.casefold():
-        raise RequestRunError("conflicting_evidence", "geology grid is missing or its SHA-256 does not match")
+        raise RequestRunError(
+            "conflicting_evidence",
+            "geology grid is missing or its SHA-256 does not match",
+        )
     try:
         return standardizer.GlimGrid(grid_path)
     except standardizer.PipelineError as exc:
@@ -205,9 +235,13 @@ def filter_bundle(
             fields = list(reader.fieldnames or [])
             rows = [dict(row) for row in reader]
     except (OSError, UnicodeError) as exc:
-        raise RequestRunError("invalid_input", f"input CSV is unreadable: {input_path}") from exc
+        raise RequestRunError(
+            "invalid_input", f"input CSV is unreadable: {input_path}"
+        ) from exc
     if not fields or not rows:
-        raise RequestRunError("invalid_input", "input CSV must contain a header and at least one record")
+        raise RequestRunError(
+            "invalid_input", "input CSV must contain a header and at least one record"
+        )
 
     evidence_by_id: dict[str, str] = {}
     if evidence_path is not None:
@@ -216,12 +250,20 @@ def filter_bundle(
                 if not line.strip():
                     continue
                 item = json.loads(line)
-                record_id = str(item.get("record_id") or "") if isinstance(item, dict) else ""
+                record_id = (
+                    str(item.get("record_id") or "") if isinstance(item, dict) else ""
+                )
                 if not record_id or record_id in evidence_by_id:
-                    raise RequestRunError("conflicting_evidence", "record evidence has missing or duplicate record_id")
+                    raise RequestRunError(
+                        "conflicting_evidence",
+                        "record evidence has missing or duplicate record_id",
+                    )
                 evidence_by_id[record_id] = line
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-            raise RequestRunError("conflicting_evidence", f"record evidence is unreadable: {evidence_path}") from exc
+            raise RequestRunError(
+                "conflicting_evidence",
+                f"record evidence is unreadable: {evidence_path}",
+            ) from exc
 
     region = request["region"]
     try:
@@ -249,11 +291,18 @@ def filter_bundle(
             reason = "element"
         elif row.get("medium") not in request["media"]:
             reason = "medium"
-        elif isinstance(requested_sources, list) and row.get("source_id") not in requested_sources:
+        elif (
+            isinstance(requested_sources, list)
+            and row.get("source_id") not in requested_sources
+        ):
             reason = "source"
-        elif requested_basis and not _basis_matches(requested_basis, str(row.get("measurement_basis") or "")):
+        elif requested_basis and not _basis_matches(
+            requested_basis, str(row.get("measurement_basis") or "")
+        ):
             reason = "measurement_basis"
-        elif resolved_region["key"] != "global" and not _canonical_coordinate_declared(row):
+        elif resolved_region["key"] != "global" and not _canonical_coordinate_declared(
+            row
+        ):
             reason = "bbox_unverified_crs"
         elif resolved_region["key"] != "global":
             try:
@@ -280,8 +329,12 @@ def filter_bundle(
                 or sample_bounds[0] > end_year
             ):
                 reason = "time_range"
-        if reason is None and requested_geology and not requested_geology.intersection(
-            _geology_labels(row, geology_match, geology_grid)
+        if (
+            reason is None
+            and requested_geology
+            and not requested_geology.intersection(
+                _geology_labels(row, geology_match, geology_grid)
+            )
         ):
             reason = "geology_units"
         if reason is not None:
@@ -316,7 +369,9 @@ def filter_bundle(
                 "conflicting_evidence",
                 f"record evidence does not cover filtered input IDs: {missing[:5]}",
             )
-        output_evidence.write_text("".join(evidence_by_id[item] + "\n" for item in ids), encoding="utf-8")
+        output_evidence.write_text(
+            "".join(evidence_by_id[item] + "\n" for item in ids), encoding="utf-8"
+        )
     return len(rows), len(selected), warnings
 
 
@@ -331,11 +386,15 @@ def filtered_manifest(
     source = read_json(source_manifest_path, "source acquisition manifest")
     source_files = source.get("source_files")
     if not isinstance(source_files, list) or not source_files:
-        raise RequestRunError("conflicting_evidence", "source manifest has no source_files evidence")
+        raise RequestRunError(
+            "conflicting_evidence", "source manifest has no source_files evidence"
+        )
     return {
         "request_run_manifest_version": "geochemical-request-run-v1",
         "data_mode": source.get("data_mode", "fixture"),
-        "not_for_scientific_interpretation": bool(source.get("not_for_scientific_interpretation", False)),
+        "not_for_scientific_interpretation": bool(
+            source.get("not_for_scientific_interpretation", False)
+        ),
         "request": dict(request),
         "filter_counts": {"input": original_count, "selected": selected_count},
         "parent_manifest": {
@@ -344,8 +403,16 @@ def filtered_manifest(
         },
         "source_files": source_files,
         "outputs": [
-            {"path": input_path.name, "bytes": input_path.stat().st_size, "sha256": sha256_file(input_path)},
-            {"path": evidence_path.name, "bytes": evidence_path.stat().st_size, "sha256": sha256_file(evidence_path)},
+            {
+                "path": input_path.name,
+                "bytes": input_path.stat().st_size,
+                "sha256": sha256_file(input_path),
+            },
+            {
+                "path": evidence_path.name,
+                "bytes": evidence_path.stat().st_size,
+                "sha256": sha256_file(evidence_path),
+            },
         ],
         "failures": [],
     }
@@ -361,7 +428,8 @@ def request_dimension_coverage(
             rows = list(csv.DictReader(handle))
     except (OSError, UnicodeError) as exc:
         raise RequestRunError(
-            "incomplete_retrieval", f"cannot audit filtered request dimensions: {filtered_input}"
+            "incomplete_retrieval",
+            f"cannot audit filtered request dimensions: {filtered_input}",
         ) from exc
     dimensions: dict[str, Any] = {}
     warnings: list[str] = []
@@ -409,7 +477,9 @@ def request_failure_summary(
         },
         "input": {
             "filename": input_path.name if input_path is not None else str(args.demo),
-            "sha256": sha256_file(input_path) if input_path is not None and input_path.is_file() else "0" * 64,
+            "sha256": sha256_file(input_path)
+            if input_path is not None and input_path.is_file()
+            else "0" * 64,
             "record_count": 0,
             "synthetic_demo": False,
             "data_mode": "not_evaluated",
@@ -467,20 +537,32 @@ def acquire_online_source(
     command = [
         sys.executable,
         str(GENERATOR),
-        "--source", source_id,
-        "--cache-dir", str(cache_dir),
-        "--output-dir", str(output_dir),
-        "--mode", acquisition_mode,
-        "--observations", str(observations),
-        "--generated-at", generated_at,
+        "--source",
+        source_id,
+        "--cache-dir",
+        str(cache_dir),
+        "--output-dir",
+        str(output_dir),
+        "--mode",
+        acquisition_mode,
+        "--observations",
+        str(observations),
+        "--generated-at",
+        generated_at,
     ]
     if source_id in PARAMETERIZED_SOURCES:
         command.extend(["--elements", ",".join(analytes)])
     if source_id == "usgs-conus-soil" and isinstance(request["region"], dict):
-        command.extend(["--bbox", ",".join(str(item) for item in request["region"]["bbox"])])
+        command.extend(
+            ["--bbox", ",".join(str(item) for item in request["region"]["bbox"])]
+        )
     try:
         result = subprocess.run(
-            command, capture_output=True, text=True, check=False, timeout=timeout_seconds
+            command,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=timeout_seconds,
         )
     except subprocess.TimeoutExpired as exc:
         raise RequestRunError(
@@ -509,9 +591,13 @@ def source_budgets(
 ) -> dict[str, int]:
     ordered = list(source_ids)
     if not ordered:
-        raise RequestRunError("unsupported_scope", "source route selected no executable source")
+        raise RequestRunError(
+            "unsupported_scope", "source route selected no executable source"
+        )
     if analyte_count < 1:
-        raise RequestRunError("invalid_input", "source budget requires at least one analyte")
+        raise RequestRunError(
+            "invalid_input", "source budget requires at least one analyte"
+        )
     minimums = {
         source_id: minimum_source_records(source_id, analyte_count)
         for source_id in ordered
@@ -547,15 +633,15 @@ def plan_auto_sources(
         return source_ids, []
     selected: list[str] = []
     uncovered_media = {
-        str(medium)
-        for entry in entries
-        for medium in entry.get("matching_media", [])
+        str(medium) for entry in entries for medium in entry.get("matching_media", [])
     }
     remaining = list(entries)
     capacity = maximum_records
     while remaining:
         affordable = [
-            entry for entry in remaining if minimums[str(entry["source_id"])] <= capacity
+            entry
+            for entry in remaining
+            if minimums[str(entry["source_id"])] <= capacity
         ]
         if not affordable:
             break
@@ -571,7 +657,9 @@ def plan_auto_sources(
         source_id = str(chosen["source_id"])
         selected.append(source_id)
         capacity -= minimums[source_id]
-        uncovered_media.difference_update(str(item) for item in chosen.get("matching_media", []))
+        uncovered_media.difference_update(
+            str(item) for item in chosen.get("matching_media", [])
+        )
         remaining = [entry for entry in remaining if entry["source_id"] != source_id]
     if not selected:
         minimum = min(minimums.values()) if minimums else 1
@@ -641,33 +729,43 @@ def merge_acquired_sources(
         not_for_science = not_for_science or bool(
             manifest.get("not_for_scientific_interpretation", False)
         )
-        source_manifests.append({
-            "source_id": source_id,
-            "filename": manifest_path.name,
-            "sha256": sha256_file(manifest_path),
-            "record_count": int(acquisition["record_count"]),
-        })
+        source_manifests.append(
+            {
+                "source_id": source_id,
+                "filename": manifest_path.name,
+                "sha256": sha256_file(manifest_path),
+                "record_count": int(acquisition["record_count"]),
+            }
+        )
         manifest_files = manifest.get("source_files")
         if not isinstance(manifest_files, list) or not manifest_files:
             raise RequestRunError(
-                "conflicting_evidence", f"{source_id} source manifest has no source_files"
+                "conflicting_evidence",
+                f"{source_id} source manifest has no source_files",
             )
         filename_map: dict[str, str] = {}
         for item in manifest_files:
-            if not isinstance(item, Mapping) or not isinstance(item.get("filename"), str):
+            if not isinstance(item, Mapping) or not isinstance(
+                item.get("filename"), str
+            ):
                 raise RequestRunError(
-                    "conflicting_evidence", f"{source_id} source manifest has invalid source_files"
+                    "conflicting_evidence",
+                    f"{source_id} source manifest has invalid source_files",
                 )
             original = str(item["filename"])
             namespaced = f"{source_id}--{original}"
             filename_map[original] = namespaced
-            source_files.append({**dict(item), "filename": namespaced, "source_id": source_id})
+            source_files.append(
+                {**dict(item), "filename": namespaced, "source_id": source_id}
+            )
 
         with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
             source_headers = list(reader.fieldnames or [])
             if not source_headers:
-                raise RequestRunError("conflicting_evidence", f"{source_id} CSV has no header")
+                raise RequestRunError(
+                    "conflicting_evidence", f"{source_id} CSV has no header"
+                )
             for field in source_headers:
                 if field not in headers:
                     headers.append(field)
@@ -675,12 +773,14 @@ def merge_acquired_sources(
                 row = dict(raw)
                 if row.get("source_id") != source_id:
                     raise RequestRunError(
-                        "conflicting_evidence", f"{source_id} CSV contains another source_id"
+                        "conflicting_evidence",
+                        f"{source_id} CSV contains another source_id",
                     )
                 record_id = str(row.get("record_id") or "")
                 if not record_id or record_id in record_ids:
                     raise RequestRunError(
-                        "conflicting_evidence", "multi-source CSV has missing or duplicate record_id"
+                        "conflicting_evidence",
+                        "multi-source CSV has missing or duplicate record_id",
                     )
                 record_ids.add(record_id)
                 source_file = str(row.get("source_file") or "")
@@ -706,16 +806,19 @@ def merge_acquired_sources(
                 item = json.loads(line)
             except json.JSONDecodeError as exc:
                 raise RequestRunError(
-                    "conflicting_evidence", f"{source_id} evidence line {line_number} is invalid"
+                    "conflicting_evidence",
+                    f"{source_id} evidence line {line_number} is invalid",
                 ) from exc
             if not isinstance(item, dict) or item.get("source_id") != source_id:
                 raise RequestRunError(
-                    "conflicting_evidence", f"{source_id} evidence contains another source_id"
+                    "conflicting_evidence",
+                    f"{source_id} evidence contains another source_id",
                 )
             record_id = str(item.get("record_id") or "")
             if not record_id or record_id in evidence_ids:
                 raise RequestRunError(
-                    "conflicting_evidence", "multi-source evidence has missing or duplicate record_id"
+                    "conflicting_evidence",
+                    "multi-source evidence has missing or duplicate record_id",
                 )
             evidence_ids.add(record_id)
             source_file = str(item.get("source_file") or "")
@@ -729,7 +832,8 @@ def merge_acquired_sources(
             evidence_rows.append(item)
     if record_ids != evidence_ids:
         raise RequestRunError(
-            "conflicting_evidence", "merged multi-source CSV and evidence record IDs differ"
+            "conflicting_evidence",
+            "merged multi-source CSV and evidence record IDs differ",
         )
 
     output_input.parent.mkdir(parents=True, exist_ok=True)
@@ -740,7 +844,8 @@ def merge_acquired_sources(
             writer.writerow({field: row.get(field, "") for field in headers})
     output_evidence.write_text(
         "".join(
-            json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+            json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            + "\n"
             for item in evidence_rows
         ),
         encoding="utf-8",
@@ -773,12 +878,19 @@ def merge_acquired_sources(
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
-        raise RequestRunError("invalid_input", "output directory must be absent or empty")
+        raise RequestRunError(
+            "invalid_input", "output directory must be absent or empty"
+        )
     if (args.batch_qc_input is None) != (args.batch_qc_policy is None):
         raise RequestRunError(
-            "invalid_input", "--batch-qc-input and --batch-qc-policy must be supplied together"
+            "invalid_input",
+            "--batch-qc-input and --batch-qc-policy must be supplied together",
         )
-    if not 1 <= args.source_timeout_seconds <= execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:
+    if (
+        not 1
+        <= args.source_timeout_seconds
+        <= execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS
+    ):
         raise RequestRunError(
             "invalid_input",
             f"--source-timeout-seconds must be between 1 and {execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:g}",
@@ -794,7 +906,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         )
     catalog = source_router.load_catalog()
     registry = source_adapters.load_source_registry()
-    request = source_router.validate_request(read_json(args.request, "request"), catalog)
+    request = source_router.validate_request(
+        read_json(args.request, "request"), catalog
+    )
     try:
         resolved_region = spatial_scope.resolve_region(request["region"])
     except spatial_scope.SpatialScopeError as exc:
@@ -812,7 +926,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         args.no_geology,
     )
 
-    generated_at = args.generated_at or datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    generated_at = args.generated_at or datetime.now(timezone.utc).replace(
+        microsecond=0
+    ).isoformat().replace("+00:00", "Z")
     with tempfile.TemporaryDirectory(prefix="geochemical-request-") as temporary:
         work = Path(temporary)
         source_input: Path
@@ -826,7 +942,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             mode = "provided_input"
         elif args.online_source is not None:
             if request["offline"]:
-                raise RequestRunError("network_unavailable", "online acquisition cannot run with request offline=true")
+                raise RequestRunError(
+                    "network_unavailable",
+                    "online acquisition cannot run with request offline=true",
+                )
             selected_ids = [item["source_id"] for item in route["selected_sources"]]
             if args.online_source == "auto":
                 requested_ids, skipped_ids = plan_auto_sources(
@@ -836,7 +955,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 )
                 if skipped_ids:
                     acquisition_warnings.append(
-                        "record budget omitted routed sources: " + ", ".join(skipped_ids)
+                        "record budget omitted routed sources: "
+                        + ", ".join(skipped_ids)
                     )
             else:
                 requested_ids = [args.online_source]
@@ -888,7 +1008,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         record_count = sum(1 for _ in csv.DictReader(handle))
                     if record_count == 0:
                         raise RequestRunError(
-                            "incomplete_retrieval", f"source acquisition returned zero rows for {source_id}"
+                            "incomplete_retrieval",
+                            f"source acquisition returned zero rows for {source_id}",
                         )
                     if record_count > budgets[source_id]:
                         raise RequestRunError(
@@ -907,27 +1028,35 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     source_child_manifests.append(
                         (source_id, acquired / "run_manifest.json")
                     )
-                    successful.append({
-                        "source_id": source_id,
-                        "directory": acquired,
-                        "record_count": record_count,
-                    })
+                    successful.append(
+                        {
+                            "source_id": source_id,
+                            "directory": acquired,
+                            "record_count": record_count,
+                        }
+                    )
                 except (
                     OSError,
                     ValueError,
                     RequestRunError,
                     execution_budget.ExecutionBudgetError,
                 ) as exc:
-                    source_outcomes.append({
-                        "source_id": source_id,
-                        "status": "failed",
-                        "allocated_max_records": budgets[source_id],
-                        "record_count": 0,
-                        "manifest_sha256": None,
-                        "error": str(exc),
-                    })
+                    source_outcomes.append(
+                        {
+                            "source_id": source_id,
+                            "status": "failed",
+                            "allocated_max_records": budgets[source_id],
+                            "record_count": 0,
+                            "manifest_sha256": None,
+                            "error": str(exc),
+                        }
+                    )
                     acquisition_warnings.append(f"source {source_id} failed: {exc}")
-            failed_ids = [item["source_id"] for item in source_outcomes if item["status"] == "failed"]
+            failed_ids = [
+                item["source_id"]
+                for item in source_outcomes
+                if item["status"] == "failed"
+            ]
             if failed_ids and args.require_all_sources:
                 raise RequestRunError(
                     "incomplete_retrieval",
@@ -955,7 +1084,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 else f"online_source:{args.online_source}"
             )
         else:
-            fixture = PRODUCTION_FIXTURE if args.demo == "production-usgs" else FOUR_MEDIA_FIXTURE
+            fixture = (
+                PRODUCTION_FIXTURE
+                if args.demo == "production-usgs"
+                else FOUR_MEDIA_FIXTURE
+            )
             source_input = fixture / "demo_input.csv"
             source_evidence = fixture / "sources.jsonl"
             source_manifest = fixture / "run_manifest.json"
@@ -968,7 +1101,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             verify_manifest_outputs(source_manifest, bound_paths)
 
         filtered_input = work / "request_input.csv"
-        filtered_evidence = work / "request_evidence.jsonl" if source_evidence is not None else None
+        filtered_evidence = (
+            work / "request_evidence.jsonl" if source_evidence is not None else None
+        )
         original_count, selected_count, warnings = filter_bundle(
             source_input,
             source_evidence,
@@ -1000,10 +1135,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         command = [
             sys.executable,
             str(WORKFLOW),
-            "--input", str(filtered_input),
-            "--output-dir", str(args.output_dir),
-            "--analysis-profile", args.analysis_profile,
-            "--max-records", str(request["max_records"]),
+            "--input",
+            str(filtered_input),
+            "--output-dir",
+            str(args.output_dir),
+            "--analysis-profile",
+            args.analysis_profile,
+            "--max-records",
+            str(request["max_records"]),
         ]
         if filtered_evidence is not None:
             command.extend(["--evidence-jsonl", str(filtered_evidence)])
@@ -1011,34 +1150,46 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             command.extend(["--acquisition-manifest", str(filtered_acquisition)])
         if isinstance(request["region"], dict):
             command.append(
-                "--region-bbox=" + ",".join(str(item) for item in resolved_region["bbox"])
+                "--region-bbox="
+                + ",".join(str(item) for item in resolved_region["bbox"])
             )
         elif resolved_region["key"] != "global":
             command.append(
-                "--region-bbox=" + ",".join(str(item) for item in resolved_region["bbox"])
+                "--region-bbox="
+                + ",".join(str(item) for item in resolved_region["bbox"])
             )
         visualization_profile = work / "visualization-profile.json"
-        write_json(visualization_profile, request_visualization_profile(request, resolved_region))
+        write_json(
+            visualization_profile,
+            request_visualization_profile(request, resolved_region),
+        )
         command.extend(["--visualization-profile", str(visualization_profile)])
         if not args.no_geology:
             command.extend(
                 [
-                    "--geology-grid", str(args.geology_grid),
-                    "--geology-grid-sha256", args.geology_grid_sha256,
+                    "--geology-grid",
+                    str(args.geology_grid),
+                    "--geology-grid-sha256",
+                    args.geology_grid_sha256,
                 ]
             )
         if args.batch_qc_input is not None:
             command.extend(
                 [
-                    "--batch-qc-input", str(args.batch_qc_input),
-                    "--batch-qc-policy", str(args.batch_qc_policy),
+                    "--batch-qc-input",
+                    str(args.batch_qc_input),
+                    "--batch-qc-policy",
+                    str(args.batch_qc_policy),
                 ]
             )
         command.extend(
             [
-                "--spatial-grid-degrees", str(args.spatial_grid_degrees),
-                "--min-spatial-candidates", str(args.min_spatial_candidates),
-                "--spatial-fdr-alpha", str(args.spatial_fdr_alpha),
+                "--spatial-grid-degrees",
+                str(args.spatial_grid_degrees),
+                "--min-spatial-candidates",
+                str(args.min_spatial_candidates),
+                "--spatial-fdr-alpha",
+                str(args.spatial_fdr_alpha),
             ]
         )
         if args.min_spatial_samples is not None:
@@ -1120,7 +1271,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     write_json(request_evidence / "request.json", request)
     write_json(request_evidence / "source_route.json", route)
     write_json(request_evidence / "coverage.json", matrix)
-    (request_evidence / "coverage.md").write_text(coverage_report.render_markdown(matrix), encoding="utf-8")
+    (request_evidence / "coverage.md").write_text(
+        coverage_report.render_markdown(matrix), encoding="utf-8"
+    )
     workflow_summary_path = args.output_dir / "run_summary.json"
     workflow_summary = read_json(workflow_summary_path, "workflow run summary")
     execution_coverage_status = (
@@ -1154,11 +1307,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "completed_within_internal_budget": deadline.remaining_seconds > 0,
             "deadline_policy": "single_monotonic_deadline_v1",
         },
-        "geology_grid": None if args.no_geology else {
+        "geology_grid": None
+        if args.no_geology
+        else {
             "filename": args.geology_grid.name,
             "sha256": args.geology_grid_sha256,
         },
-        "record_counts": {"before_request_filters": original_count, "after_request_filters": selected_count},
+        "record_counts": {
+            "before_request_filters": original_count,
+            "after_request_filters": selected_count,
+        },
         "source_outcomes": source_outcomes,
         "acquisition_manifests": retained_acquisition_manifests,
         "route_status": route["status"],
@@ -1198,13 +1356,19 @@ def build_parser() -> argparse.ArgumentParser:
         "--online-source",
         help="One routed source ID, or 'auto' to acquire and merge every compatible routed source",
     )
-    parser.add_argument("--demo", choices=("production-usgs", "four-media"), default="production-usgs")
+    parser.add_argument(
+        "--demo", choices=("production-usgs", "four-media"), default="production-usgs"
+    )
     parser.add_argument("--evidence-jsonl", type=Path)
     parser.add_argument("--acquisition-manifest", type=Path)
     parser.add_argument("--cache-dir", type=Path, default=Path(".cache/data"))
-    parser.add_argument("--acquisition-mode", choices=("online", "cached"), default="online")
     parser.add_argument(
-        "--source-timeout-seconds", type=float, default=300.0,
+        "--acquisition-mode", choices=("online", "cached"), default="online"
+    )
+    parser.add_argument(
+        "--source-timeout-seconds",
+        type=float,
+        default=300.0,
         help="Per-source timeout cap inside the shared global budget (default: 300)",
     )
     parser.add_argument(
@@ -1220,11 +1384,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="Capacity protected from online acquisition for D2/D3 and validation (default: 180)",
     )
     parser.add_argument(
-        "--require-all-sources", action="store_true",
+        "--require-all-sources",
+        action="store_true",
         help="Fail the request instead of returning partial_success when any routed source fails",
     )
-    parser.add_argument("--generated-at", help="ISO-8601 acquisition timestamp; defaults to current UTC")
-    parser.add_argument("--analysis-profile", choices=("demo", "production"), default="production")
+    parser.add_argument(
+        "--generated-at", help="ISO-8601 acquisition timestamp; defaults to current UTC"
+    )
+    parser.add_argument(
+        "--analysis-profile", choices=("demo", "production"), default="production"
+    )
     parser.add_argument("--geology-grid", type=Path, default=DEFAULT_GEOLOGY_GRID)
     parser.add_argument("--geology-grid-sha256", default=DEFAULT_GEOLOGY_SHA256)
     parser.add_argument("--no-geology", action="store_true")
@@ -1247,7 +1416,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         output_owned = False
     try:
         result = run(args)
-    except (OSError, ValueError, source_router.SourceRoutingError, RequestRunError) as exc:
+    except (
+        OSError,
+        ValueError,
+        source_router.SourceRoutingError,
+        RequestRunError,
+    ) as exc:
         status = exc.status if isinstance(exc, RequestRunError) else "invalid_input"
         if output_owned:
             try:
@@ -1258,7 +1432,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
             except OSError:
                 pass
-        print(json.dumps({"status": status, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": status, "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 2
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     return 0

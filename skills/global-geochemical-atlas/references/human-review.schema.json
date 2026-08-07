@@ -18,7 +18,11 @@
   "properties": {
     "review_version": {
       "type": "string",
-      "enum": ["geochemical-human-review-v1", "foregs-human-review-v1"]
+      "enum": [
+        "afsis-phase-i-human-review-v1",
+        "geochemical-human-review-v1",
+        "foregs-human-review-v1"
+      ]
     },
     "source_id": {"type": "string", "minLength": 1},
     "dataset_version": {"type": "string", "minLength": 1},

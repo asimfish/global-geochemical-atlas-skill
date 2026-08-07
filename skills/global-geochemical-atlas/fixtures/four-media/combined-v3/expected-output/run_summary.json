@@ -37,9 +37,9 @@
         "sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db"
       },
       "interactive_map": {
-        "bytes": 1221125,
+        "bytes": 1221110,
         "filename": "interactive_map.html",
-        "sha256": "807ab8c4be1289a8f9e656c2b41b30e270f4bb1e9c5ad5c79b5904f20d52f6a3"
+        "sha256": "108987b4032578c748cc52eebf3a2518d07304083f4651c4ea100250b9b459da"
       },
       "iteration_backlog": {
         "bytes": 739091,
@@ -126,7 +126,7 @@
     "artifact_bindings": {
       "anomalies_sha256": "f7717d49b0f7cd8af8bf612d6a45eef4727bebe58f8b44286f6a02b8524c0da7",
       "database_sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db",
-      "interactive_map_sha256": "807ab8c4be1289a8f9e656c2b41b30e270f4bb1e9c5ad5c79b5904f20d52f6a3",
+      "interactive_map_sha256": "108987b4032578c748cc52eebf3a2518d07304083f4651c4ea100250b9b459da",
       "samples_geojson_sha256": "3364437bffa5db21b4174701ce5c1810fdb7812121983c420ec5680507d89d89"
     },
     "basemap": {
@@ -164,7 +164,7 @@
         "formal_comparison_requires_profile_rerender": true,
         "four_primary_map_controls": true,
         "four_top_level_kpis": true,
-        "hierarchy_version": "task-first-progressive-disclosure-v2",
+        "hierarchy_version": "atlas-progressive-disclosure-v2",
         "keyboard_map_navigation": true,
         "localized_measurement_basis": true,
         "professional_navigation_labels": true,
@@ -248,7 +248,7 @@
     "display_sample_count": 226,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1221125,
+    "html_bytes": 1221110,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 808,
@@ -429,10 +429,10 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-dual-scope-atlas-v4",
-    "template_sha256": "8b69005c45eba991465c67aaaea5a6f6d2c3d56bc06110b3a2d07691184392dc",
+    "template_sha256": "bc71bb3c057e865bbe8fbf83591d305e46c0a659d6d129e0ff161775a9f7af52",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
-    "ui_hierarchy_version": "task-first-progressive-disclosure-v2",
+    "ui_hierarchy_version": "atlas-progressive-disclosure-v2",
     "unmappable_record_count": 336,
     "visual_question_contract": {
       "schema_version": "d3-visual-question-contract-v1",

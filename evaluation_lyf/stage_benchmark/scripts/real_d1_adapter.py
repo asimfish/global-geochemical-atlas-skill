@@ -15,7 +15,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from lab_common import CONTRACT_ROOT, LAB_ROOT, atomic_write_json, load_json, prepare_empty_output_dir, sha256_file
+from lab_common import (
+    CONTRACT_ROOT,
+    LAB_ROOT,
+    atomic_write_json,
+    load_json,
+    prepare_empty_output_dir,
+    sha256_file,
+)
 
 SOURCE_CONTRACT = CONTRACT_ROOT / "real-sources.json"
 DEFAULT_FIXTURE_DIR = LAB_ROOT / "real-data" / "fixtures" / "raw"
@@ -158,7 +165,9 @@ def resource_by_id(contract: Mapping[str, Any], resource_id: str) -> dict[str, A
 def verified_path(fixture_dir: Path, resource: Mapping[str, Any]) -> Path:
     path = fixture_dir / str(resource["local_file"])
     if not path.is_file():
-        raise AdapterError(f"frozen fixture is missing; run fetch_real_fixtures.py first: {path}")
+        raise AdapterError(
+            f"frozen fixture is missing; run fetch_real_fixtures.py first: {path}"
+        )
     actual = sha256_file(path)
     if actual != resource["sha256"]:
         raise AdapterError(f"frozen fixture hash mismatch for {path.name}: {actual}")
@@ -226,7 +235,9 @@ def wqp_measurement(row: Mapping[str, str]) -> tuple[str, str, str, str, str]:
     value = (row.get("ResultMeasureValue") or "").strip()
     detection_condition = (row.get("ResultDetectionConditionText") or "").strip()
     measure_qualifier = (row.get("MeasureQualifierCode") or "").strip()
-    raw_qualifier = " | ".join(item for item in (detection_condition, measure_qualifier) if item)
+    raw_qualifier = " | ".join(
+        item for item in (detection_condition, measure_qualifier) if item
+    )
     limit = (row.get("DetectionQuantitationLimitMeasure/MeasureValue") or "").strip()
     if detection_condition.casefold() == "not detected":
         return "", "nd", raw_qualifier, limit, ""
@@ -239,7 +250,9 @@ def wqp_measurement(row: Mapping[str, str]) -> tuple[str, str, str, str, str]:
     return value, "", raw_qualifier, limit, ""
 
 
-def common_provenance(dataset: Mapping[str, Any], resource: Mapping[str, Any]) -> dict[str, str]:
+def common_provenance(
+    dataset: Mapping[str, Any], resource: Mapping[str, Any]
+) -> dict[str, str]:
     return {
         "source_id": str(dataset["id"]),
         "dataset_title": str(dataset["title"]),
@@ -252,14 +265,18 @@ def common_provenance(dataset: Mapping[str, Any], resource: Mapping[str, Any]) -
     }
 
 
-def read_ds801(fixture_dir: Path, contract: Mapping[str, Any], max_samples: int) -> Iterable[dict[str, str]]:
+def read_ds801(
+    fixture_dir: Path, contract: Mapping[str, Any], max_samples: int
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "usgs_ds801")
     resource = resource_by_id(contract, "usgs_ds801_top5")
     path = verified_path(fixture_dir, resource)
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         lines = handle.readlines()
     try:
-        header_index = next(index for index, line in enumerate(lines) if line.startswith("Top5_LabID\t"))
+        header_index = next(
+            index for index, line in enumerate(lines) if line.startswith("Top5_LabID\t")
+        )
     except StopIteration as exc:
         raise AdapterError("DS801 Top5 header was not found") from exc
     reader = csv.reader(lines[header_index:], delimiter="\t")
@@ -271,7 +288,9 @@ def read_ds801(fixture_dir: Path, contract: Mapping[str, Any], max_samples: int)
         if not any(value.strip() for value in values):
             continue
         if len(values) != len(headers):
-            raise AdapterError(f"DS801 row {offset} has {len(values)} fields; expected {len(headers)}")
+            raise AdapterError(
+                f"DS801 row {offset} has {len(values)} fields; expected {len(headers)}"
+            )
         if max_samples and sampled >= max_samples:
             break
         sampled += 1
@@ -282,10 +301,14 @@ def read_ds801(fixture_dir: Path, contract: Mapping[str, Any], max_samples: int)
         site_id = raw["SiteID"].strip()
         # DS801 uses the literal N.S. for sites where no sample was available;
         # it occurs more than once and therefore cannot serve as an identifier.
-        sample_key = lab_id if lab_id.casefold() != "n.s." else f"site-{site_id}-no-sample"
+        sample_key = (
+            lab_id if lab_id.casefold() != "n.s." else f"site-{site_id}-no-sample"
+        )
         for element, method in DS801_METHODS.items():
             source_column = f"Top5_{element}"
-            value, qualifier, raw_qualifier, missing_reason = ds801_measurement(raw[source_column])
+            value, qualifier, raw_qualifier, missing_reason = ds801_measurement(
+                raw[source_column]
+            )
             row = {
                 "record_id": f"usgs-ds801-top5:{sample_key}:{element}",
                 "source_record_id": f"DS801:Top5:{sample_key}:{element}",
@@ -323,7 +346,9 @@ def read_ds801(fixture_dir: Path, contract: Mapping[str, Any], max_samples: int)
             yield row
 
 
-def read_rass(fixture_dir: Path, contract: Mapping[str, Any], max_samples: int) -> Iterable[dict[str, str]]:
+def read_rass(
+    fixture_dir: Path, contract: Mapping[str, Any], max_samples: int
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "usgs_rass_circle")
     resource = resource_by_id(contract, "usgs_rass_circle_sediment")
     path = verified_path(fixture_dir, resource)
@@ -331,14 +356,19 @@ def read_rass(fixture_dir: Path, contract: Mapping[str, Any], max_samples: int) 
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         for logical_row, raw in enumerate(reader, start=2):
-            if not (raw.get("DESCRIPT1") or "").startswith("SD(") or (raw.get("DESCRIPT2") or "").strip():
+            if (
+                not (raw.get("DESCRIPT1") or "").startswith("SD(")
+                or (raw.get("DESCRIPT2") or "").strip()
+            ):
                 continue
             if max_samples and selected >= max_samples:
                 break
             selected += 1
             tag = (raw.get("TAGNUMBER") or "").strip()
             if not tag:
-                raise AdapterError(f"RASS logical CSV row {logical_row} has no TAGNUMBER")
+                raise AdapterError(
+                    f"RASS logical CSV row {logical_row} has no TAGNUMBER"
+                )
             for element in RASS_ELEMENTS:
                 source_value_column = f"S_{element.upper()}_PPM"
                 source_qualifier_column = f"S_{element.upper()}_Q"
@@ -395,11 +425,13 @@ def read_taylor_rock(
     selected = 0
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
-        missing_columns = set(column for column, _unit in TAYLOR_ROCK_ELEMENTS.values()) - set(
-            reader.fieldnames or []
-        )
+        missing_columns = set(
+            column for column, _unit in TAYLOR_ROCK_ELEMENTS.values()
+        ) - set(reader.fieldnames or [])
         if missing_columns:
-            raise AdapterError(f"Taylor Mountains rock columns are missing: {sorted(missing_columns)}")
+            raise AdapterError(
+                f"Taylor Mountains rock columns are missing: {sorted(missing_columns)}"
+            )
         for logical_row, raw in enumerate(reader, start=2):
             if max_samples and selected >= max_samples:
                 break
@@ -460,7 +492,9 @@ def read_taylor_rock(
                     "geologic_context_version": (
                         "OFR 2007-1196 v1.1 (2010-05-21)" if geologic_unit else ""
                     ),
-                    "geologic_match_method": "source_table_reported" if geologic_unit else "",
+                    "geologic_match_method": "source_table_reported"
+                    if geologic_unit
+                    else "",
                     "distance_to_geologic_boundary_m": "",
                     "geologic_match_confidence": "unknown" if geologic_unit else "",
                     "analytical_method": (
@@ -481,7 +515,11 @@ def read_taylor_rock(
 
 def horizontal_uncertainty_m(station: Mapping[str, str]) -> str:
     raw = (station.get("HorizontalAccuracyMeasure/MeasureValue") or "").strip()
-    unit = (station.get("HorizontalAccuracyMeasure/MeasureUnitCode") or "").strip().casefold()
+    unit = (
+        (station.get("HorizontalAccuracyMeasure/MeasureUnitCode") or "")
+        .strip()
+        .casefold()
+    )
     try:
         value = float(raw)
     except ValueError:
@@ -495,7 +533,9 @@ def horizontal_uncertainty_m(station: Mapping[str, str]) -> str:
     return ""
 
 
-def read_wqp(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[str, str]]:
+def read_wqp(
+    fixture_dir: Path, contract: Mapping[str, Any]
+) -> Iterable[dict[str, str]]:
     dataset = dataset_by_id(contract, "wqp_usgs_01594440_arsenic")
     result_resource = resource_by_id(contract, "wqp_usgs_01594440_arsenic")
     station_resource = resource_by_id(contract, "wqp_usgs_01594440_station")
@@ -509,12 +549,22 @@ def read_wqp(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[st
             location_id = (raw.get("MonitoringLocationIdentifier") or "").strip()
             station = stations.get(location_id)
             if station is None:
-                raise AdapterError(f"WQP result row {logical_row} has no station metadata: {location_id}")
+                raise AdapterError(
+                    f"WQP result row {logical_row} has no station metadata: {location_id}"
+                )
             result_id = (raw.get("ResultIdentifier") or "").strip()
             if not result_id:
-                raise AdapterError(f"WQP result row {logical_row} has no ResultIdentifier")
-            value, qualifier, raw_qualifier, detection_limit, missing_reason = wqp_measurement(raw)
-            fraction = (raw.get("ResultSampleFractionText") or "unspecified").strip().casefold()
+                raise AdapterError(
+                    f"WQP result row {logical_row} has no ResultIdentifier"
+                )
+            value, qualifier, raw_qualifier, detection_limit, missing_reason = (
+                wqp_measurement(raw)
+            )
+            fraction = (
+                (raw.get("ResultSampleFractionText") or "unspecified")
+                .strip()
+                .casefold()
+            )
             method = (raw.get("ResultAnalyticalMethod/MethodName") or "").strip()
             yield {
                 "record_id": f"wqp:{result_id}",
@@ -526,12 +576,15 @@ def read_wqp(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[st
                 "element_or_analyte": "As",
                 "analyte_reported": (raw.get("CharacteristicName") or "").strip(),
                 "value": value,
-                "unit": (raw.get("ResultMeasure/MeasureUnitCode") or "ug/l").strip() or "ug/l",
+                "unit": (raw.get("ResultMeasure/MeasureUnitCode") or "ug/l").strip()
+                or "ug/l",
                 "value_qualifier": qualifier,
                 "source_qualifier_raw": raw_qualifier,
                 "missing_reason": missing_reason,
                 "medium": "water",
-                "material": (raw.get("ActivityMediaSubdivisionName") or "water").strip(),
+                "material": (
+                    raw.get("ActivityMediaSubdivisionName") or "water"
+                ).strip(),
                 "measurement_basis": f"aqueous_{fraction.replace(' ', '_')}",
                 "latitude": (station.get("LatitudeMeasure") or "").strip(),
                 "longitude": (station.get("LongitudeMeasure") or "").strip(),
@@ -561,7 +614,9 @@ def read_wqp(fixture_dir: Path, contract: Mapping[str, Any]) -> Iterable[dict[st
 def atomic_write_csv(path: Path, rows: Iterable[Mapping[str, Any]]) -> int:
     path.parent.mkdir(parents=True, exist_ok=True)
     count = 0
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=path.parent, delete=False
+    ) as handle:
         temporary = Path(handle.name)
         writer = csv.DictWriter(handle, fieldnames=OUTPUT_FIELDS, extrasaction="raise")
         writer.writeheader()
@@ -572,15 +627,21 @@ def atomic_write_csv(path: Path, rows: Iterable[Mapping[str, Any]]) -> int:
     return count
 
 
-def adapt_sources(fixture_dir: Path, output_dir: Path, max_source_samples: int) -> dict[str, Path]:
+def adapt_sources(
+    fixture_dir: Path, output_dir: Path, max_source_samples: int
+) -> dict[str, Path]:
     prepare_empty_output_dir(output_dir)
     contract = load_json(SOURCE_CONTRACT)
     raw_manifest_path = fixture_dir / "source_manifest.json"
     if not raw_manifest_path.is_file():
-        raise AdapterError("source_manifest.json is missing; verify fixtures before adapting")
+        raise AdapterError(
+            "source_manifest.json is missing; verify fixtures before adapting"
+        )
     raw_manifest = load_json(raw_manifest_path)
     if raw_manifest.get("source_contract_sha256") != sha256_file(SOURCE_CONTRACT):
-        raise AdapterError("fixture manifest does not bind the current real source contract")
+        raise AdapterError(
+            "fixture manifest does not bind the current real source contract"
+        )
 
     rows = [
         *read_ds801(fixture_dir, contract, max_source_samples),
@@ -636,7 +697,9 @@ def adapt_sources(fixture_dir: Path, output_dir: Path, max_source_samples: int) 
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Adapt frozen real USGS/WQP data into the D2 canonical input CSV.")
+    parser = argparse.ArgumentParser(
+        description="Adapt frozen real USGS/WQP data into the D2 canonical input CSV."
+    )
     parser.add_argument("--fixture-dir", type=Path, default=DEFAULT_FIXTURE_DIR)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument(
@@ -654,10 +717,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.max_source_samples < 0:
         parser.error("--max-source-samples must be nonnegative")
     try:
-        outputs = adapt_sources(args.fixture_dir, args.output_dir, args.max_source_samples)
+        outputs = adapt_sources(
+            args.fixture_dir, args.output_dir, args.max_source_samples
+        )
     except (AdapterError, OSError, ValueError, csv.Error, json.JSONDecodeError) as exc:
         parser.error(str(exc))
-    print(json.dumps({name: str(path) for name, path in outputs.items()}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {name: str(path) for name, path in outputs.items()},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

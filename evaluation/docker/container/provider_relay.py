@@ -57,7 +57,9 @@ def parse_upstream(value: str) -> SplitResult:
         or parsed.query
         or parsed.fragment
     ):
-        raise ValueError("EVAL_UPSTREAM_BASE_URL must be an absolute credential-free HTTPS URL")
+        raise ValueError(
+            "EVAL_UPSTREAM_BASE_URL must be an absolute credential-free HTTPS URL"
+        )
     return parsed
 
 
@@ -108,16 +110,22 @@ def validate_payload(
         or not math.isfinite(float(temperature))
         or float(temperature) != expected_temperature
     ):
-        raise ValueError("provider request temperature does not match the frozen temperature")
+        raise ValueError(
+            "provider request temperature does not match the frozen temperature"
+        )
     if thinking_mode == "not_configured":
-        overrides = sorted(THINKING_OVERRIDE_KEYS & {str(key).casefold() for key in payload})
+        overrides = sorted(
+            THINKING_OVERRIDE_KEYS & {str(key).casefold() for key in payload}
+        )
         if overrides:
             raise ValueError(
                 "provider request contains a thinking override forbidden by the frozen profile: "
                 + ", ".join(overrides)
             )
     else:
-        raise ValueError(f"relay does not implement frozen thinking mode: {thinking_mode}")
+        raise ValueError(
+            f"relay does not implement frozen thinking mode: {thinking_mode}"
+        )
     return payload
 
 
@@ -168,7 +176,10 @@ class RelayHandler(BaseHTTPRequestHandler):
             raise ValueError("invalid Content-Length") from exc
         if value < 0 or value > MAX_REQUEST_BYTES:
             raise ValueError(f"request body exceeds {MAX_REQUEST_BYTES} bytes")
-        if sum(len(key) + len(value) for key, value in self.headers.items()) > MAX_HEADER_BYTES:
+        if (
+            sum(len(key) + len(value) for key, value in self.headers.items())
+            > MAX_HEADER_BYTES
+        ):
             raise ValueError("request headers are too large")
         return value
 
@@ -205,7 +216,7 @@ class RelayHandler(BaseHTTPRequestHandler):
             connection.close()
 
     def _error(self, status: int, message: str) -> None:
-        body = f'{status} {message}\n'.encode("utf-8", errors="replace")
+        body = f"{status} {message}\n".encode("utf-8", errors="replace")
         self.send_response(status)
         self.send_header("Content-Type", "text/plain; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
@@ -257,12 +268,18 @@ def main() -> int:
         port = int(os.environ.get("EVAL_RELAY_PORT", "8090"))
         if not 1 <= port <= 65535:
             raise ValueError("EVAL_RELAY_PORT is outside 1..65535")
-        max_requests = int(os.environ.get("EVAL_RELAY_MAX_REQUESTS", str(DEFAULT_MAX_REQUESTS)))
-        max_seconds = int(os.environ.get("EVAL_RELAY_MAX_SECONDS", str(DEFAULT_MAX_SECONDS)))
+        max_requests = int(
+            os.environ.get("EVAL_RELAY_MAX_REQUESTS", str(DEFAULT_MAX_REQUESTS))
+        )
+        max_seconds = int(
+            os.environ.get("EVAL_RELAY_MAX_SECONDS", str(DEFAULT_MAX_SECONDS))
+        )
         if not 1 <= max_requests <= 10_000:
             raise ValueError("EVAL_RELAY_MAX_REQUESTS is outside 1..10000")
         if not 1 <= max_seconds <= DEFAULT_MAX_SECONDS:
-            raise ValueError(f"EVAL_RELAY_MAX_SECONDS is outside 1..{DEFAULT_MAX_SECONDS}")
+            raise ValueError(
+                f"EVAL_RELAY_MAX_SECONDS is outside 1..{DEFAULT_MAX_SECONDS}"
+            )
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
         return 73

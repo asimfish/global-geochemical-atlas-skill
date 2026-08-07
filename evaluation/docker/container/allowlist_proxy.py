@@ -40,7 +40,9 @@ def host_allowed(host: str, rules: tuple[str, ...]) -> bool:
     return False
 
 
-def public_addresses(host: str, port: int) -> list[tuple[int, int, int, str, tuple[object, ...]]]:
+def public_addresses(
+    host: str, port: int
+) -> list[tuple[int, int, int, str, tuple[object, ...]]]:
     addresses = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
     safe = []
     for address in addresses:
@@ -123,16 +125,24 @@ class ProxyHandler(socketserver.StreamRequestHandler):
             self.wfile.flush()
             self.relay(self.connection, outbound)
 
-    def handle_http(self, method: str, target: str, version: str, headers: list[bytes]) -> None:
+    def handle_http(
+        self, method: str, target: str, version: str, headers: list[bytes]
+    ) -> None:
         parsed = urlsplit(target)
         if parsed.scheme != "http" or not parsed.hostname:
-            raise ValueError("plain HTTP proxy requests require an absolute http:// URL")
+            raise ValueError(
+                "plain HTTP proxy requests require an absolute http:// URL"
+            )
         port = parsed.port or 80
         self.checked_target(parsed.hostname, port)
         path = parsed.path or "/"
         if parsed.query:
             path += f"?{parsed.query}"
-        filtered = [line for line in headers if not line.lower().startswith((b"proxy-connection:", b"connection:"))]
+        filtered = [
+            line
+            for line in headers
+            if not line.lower().startswith((b"proxy-connection:", b"connection:"))
+        ]
         with connect_public(parsed.hostname, port) as outbound:
             outbound.sendall(f"{method} {path} {version}\r\n".encode("iso-8859-1"))
             for line in filtered:

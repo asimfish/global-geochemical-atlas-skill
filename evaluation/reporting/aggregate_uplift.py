@@ -50,7 +50,9 @@ def diagnostic_comparison(arms: dict[str, list[dict[str, Any]]]) -> dict[str, An
         partial = [
             float(report.get("score", {}).get("descriptive_partial_mean"))
             for report in reports
-            if isinstance(report.get("score", {}).get("descriptive_partial_mean"), (int, float))
+            if isinstance(
+                report.get("score", {}).get("descriptive_partial_mean"), (int, float)
+            )
         ]
         arm_summary[condition] = {
             "run_count": len(reports),
@@ -67,17 +69,25 @@ def diagnostic_comparison(arms: dict[str, list[dict[str, Any]]]) -> dict[str, An
                 value = item.get("descriptive_total_score")
                 question = item.get("question_id")
                 if question and isinstance(value, (int, float)):
-                    task_values[condition].setdefault(str(question), []).append(float(value))
+                    task_values[condition].setdefault(str(question), []).append(
+                        float(value)
+                    )
             for stage, item in (benchmark.get("stage_summaries") or {}).items():
                 value = item.get("descriptive_partial_mean")
                 if isinstance(value, (int, float)):
                     stages[condition].setdefault(str(stage), []).append(float(value))
-        names = sorted({name for report in reports for name in report.get("deliverables", {})})
+        names = sorted(
+            {name for report in reports for name in report.get("deliverables", {})}
+        )
         deliverables[condition] = {
             name: (
-                sum(report.get("deliverables", {}).get(name, {}).get("usable") is True for report in reports)
+                sum(
+                    report.get("deliverables", {}).get(name, {}).get("usable") is True
+                    for report in reports
+                )
                 / len(reports)
-                if reports else 0.0
+                if reports
+                else 0.0
             )
             for name in names
         }
@@ -85,10 +95,17 @@ def diagnostic_comparison(arms: dict[str, list[dict[str, Any]]]) -> dict[str, An
     per_task = []
     wins = ties = losses = 0
     for question in sorted(set(task_values["B0"]) | set(task_values["S0"])):
-        b_values, s_values = task_values["B0"].get(question, []), task_values["S0"].get(question, [])
+        b_values, s_values = (
+            task_values["B0"].get(question, []),
+            task_values["S0"].get(question, []),
+        )
         b_median = statistics.median(b_values) if b_values else None
         s_median = statistics.median(s_values) if s_values else None
-        delta = s_median - b_median if b_median is not None and s_median is not None else None
+        delta = (
+            s_median - b_median
+            if b_median is not None and s_median is not None
+            else None
+        )
         if delta is not None:
             if delta > 1e-9:
                 wins += 1
@@ -96,13 +113,21 @@ def diagnostic_comparison(arms: dict[str, list[dict[str, Any]]]) -> dict[str, An
                 losses += 1
             else:
                 ties += 1
-        per_task.append({"question_id": question, "b0_median": b_median, "s0_median": s_median, "delta_s0_minus_b0": delta})
+        per_task.append(
+            {
+                "question_id": question,
+                "b0_median": b_median,
+                "s0_median": s_median,
+                "delta_s0_minus_b0": delta,
+            }
+        )
     stage_delta = {}
     for stage in sorted(set(stages["B0"]) | set(stages["S0"])):
         b_values, s_values = stages["B0"].get(stage, []), stages["S0"].get(stage, [])
         stage_delta[stage] = (
             statistics.median(s_values) - statistics.median(b_values)
-            if b_values and s_values else None
+            if b_values and s_values
+            else None
         )
     return {
         "claim_boundary": "Diagnostic partial totals compare observed artifacts only; they are not a formal competition score or Skill uplift claim.",
@@ -129,7 +154,10 @@ def aggregate(reports: list[dict[str, Any]]) -> dict[str, Any]:
             errors.append(f"{condition} requires exactly 3 reports, got {len(values)}")
         if len(set(run_ids)) != len(run_ids) or any(not value for value in run_ids):
             errors.append(f"{condition} run IDs are missing or not independent")
-        if any(not item.get("fairness", {}).get("eligible_run_component") for item in values):
+        if any(
+            not item.get("fairness", {}).get("eligible_run_component")
+            for item in values
+        ):
             errors.append(f"{condition} contains an ineligible run component")
     fingerprints = {fingerprint(item) for item in reports}
     if None in fingerprints or len(fingerprints) != 1:
@@ -140,16 +168,21 @@ def aggregate(reports: list[dict[str, Any]]) -> dict[str, Any]:
     if not errors:
         for condition, values in arms.items():
             raw = [item["score"].get("observed") for item in values]
-            if any(isinstance(value, bool) or not isinstance(value, (int, float)) for value in raw):
+            if any(
+                isinstance(value, bool) or not isinstance(value, (int, float))
+                for value in raw
+            ):
                 errors.append(f"{condition} has a missing or nonnumeric score")
                 continue
             scores[condition] = summarize([float(value) for value in raw])
-            codes = sorted({
-                str(item.get("code"))
-                for report in values
-                for item in report.get("scientific_red_lines", [])
-                if isinstance(item, dict) and item.get("code")
-            })
+            codes = sorted(
+                {
+                    str(item.get("code"))
+                    for report in values
+                    for item in report.get("scientific_red_lines", [])
+                    if isinstance(item, dict) and item.get("code")
+                }
+            )
             counts_per_run: list[Counter[str]] = []
             for report in values:
                 counter: Counter[str] = Counter()
@@ -161,30 +194,42 @@ def aggregate(reports: list[dict[str, Any]]) -> dict[str, Any]:
                 code: statistics.median(counter[code] for counter in counts_per_run)
                 for code in codes
             }
-            deliverable_names = sorted({
-                name for report in values for name in report.get("deliverables", {})
-            })
+            deliverable_names = sorted(
+                {name for report in values for name in report.get("deliverables", {})}
+            )
             deliverable_usability[condition] = {
                 name: sum(
                     report.get("deliverables", {}).get(name, {}).get("usable") is True
                     for report in values
-                ) / len(values)
+                )
+                / len(values)
                 for name in deliverable_names
             }
     eligible = not errors
-    uplift = scores.get("S0", {}).get("median", 0) - scores.get("B0", {}).get("median", 0) if eligible else None
+    uplift = (
+        scores.get("S0", {}).get("median", 0) - scores.get("B0", {}).get("median", 0)
+        if eligible
+        else None
+    )
     ceiling = bool(eligible and scores["B0"]["median"] >= 90)
-    both_full = bool(eligible and scores["B0"]["median"] == 100 and scores["S0"]["median"] == 100)
+    both_full = bool(
+        eligible and scores["B0"]["median"] == 100 and scores["S0"]["median"] == 100
+    )
     return {
         "schema_version": "global-geochemical-uplift-aggregate-v1",
         "status": "eligible" if eligible else "not_eligible",
         "errors": errors,
-        "pair_fingerprint": next(iter(fingerprints)) if len(fingerprints) == 1 else None,
+        "pair_fingerprint": next(iter(fingerprints))
+        if len(fingerprints) == 1
+        else None,
         "arms": scores,
         "scientific_red_line_median_counts": red_lines,
         "scientific_red_line_change_s0_minus_b0": {
-            code: red_lines.get("S0", {}).get(code, 0) - red_lines.get("B0", {}).get(code, 0)
-            for code in sorted(set(red_lines.get("B0", {})) | set(red_lines.get("S0", {})))
+            code: red_lines.get("S0", {}).get(code, 0)
+            - red_lines.get("B0", {}).get(code, 0)
+            for code in sorted(
+                set(red_lines.get("B0", {})) | set(red_lines.get("S0", {}))
+            )
         },
         "deliverable_usable_run_rates": deliverable_usability,
         "median_uplift_s0_minus_b0": uplift,
@@ -214,7 +259,12 @@ def main() -> int:
         json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(json.dumps({"status": result["status"], "uplift": result["median_uplift_s0_minus_b0"]}, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": result["status"], "uplift": result["median_uplift_s0_minus_b0"]},
+            sort_keys=True,
+        )
+    )
     return 0 if result["status"] == "eligible" or args.diagnostic else 1
 
 

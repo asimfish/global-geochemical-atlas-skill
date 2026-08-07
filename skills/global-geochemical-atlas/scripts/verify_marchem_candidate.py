@@ -26,7 +26,9 @@ TARGET_COLUMNS = {
     "Ni": "Ni_ICPOES_mg/kg",
     "Zn": "Zn_ICPOES_mg/kg",
 }
-VALUE_PATTERN = re.compile(r"^\s*([<>])?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)\s*$")
+VALUE_PATTERN = re.compile(
+    r"^\s*([<>])?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)\s*$"
+)
 
 
 class VerificationError(RuntimeError):
@@ -111,22 +113,25 @@ def metadata_profile(rows: Sequence[dict[str, str]]) -> dict[str, Any]:
         if row.get("LLQ"):
             limits_by_element[element].add(row["LLQ"])
     comments = "\n".join(row.get("Comment", "") for row in target_rows).lower()
-    preparation = "\n".join(row.get("Sample_preparation_method", "") for row in target_rows).lower()
+    preparation = "\n".join(
+        row.get("Sample_preparation_method", "") for row in target_rows
+    ).lower()
     return {
         "metadata_record_count": len(rows),
         "target_metadata_record_count": len(target_rows),
-        "target_batches": {key: sorted(value) for key, value in sorted(batches_by_element.items())},
+        "target_batches": {
+            key: sorted(value) for key, value in sorted(batches_by_element.items())
+        },
         "target_llq_values_mg_per_kg": {
-            key: sorted(value, key=float) for key, value in sorted(limits_by_element.items())
+            key: sorted(value, key=float)
+            for key, value in sorted(limits_by_element.items())
         },
         "accreditation_rows": {
             status: accreditation.get(status, 0)
             for status in ("accredited", "not_accredited", "unclear")
         },
         "partial_digestion_disclosed": (
-            "partial" in comments
-            or "partiell" in comments
-            or "partiell" in preparation
+            "partial" in comments or "partiell" in comments or "partiell" in preparation
         ),
         "not_total_content_disclosed": (
             "not total" in comments
@@ -139,7 +144,9 @@ def metadata_profile(rows: Sequence[dict[str, str]]) -> dict[str, Any]:
 
 def row_reasons(row: dict[str, str]) -> set[str]:
     reasons: set[str] = set()
-    statuses = [parse_value(row.get(column, ""))[0] for column in TARGET_COLUMNS.values()]
+    statuses = [
+        parse_value(row.get(column, ""))[0] for column in TARGET_COLUMNS.values()
+    ]
     if "missing" in statuses:
         reasons.add("target_missing")
     if any(status.startswith("censored_") for status in statuses):
@@ -149,7 +156,9 @@ def row_reasons(row: dict[str, str]) -> set[str]:
     return reasons
 
 
-def audit_sample(rows: Sequence[dict[str, str]], size: int = 30) -> list[dict[str, Any]]:
+def audit_sample(
+    rows: Sequence[dict[str, str]], size: int = 30
+) -> list[dict[str, Any]]:
     if not rows:
         return []
     selected: dict[int, set[str]] = defaultdict(set)
@@ -209,7 +218,8 @@ def audit_sample(rows: Sequence[dict[str, str]], size: int = 30) -> list[dict[st
                 "longitude": row.get("Longitude"),
                 "latitude": row.get("Latitude"),
                 "target_raw_values": {
-                    element: row.get(column, "") for element, column in TARGET_COLUMNS.items()
+                    element: row.get(column, "")
+                    for element, column in TARGET_COLUMNS.items()
                 },
                 "selection_reasons": sorted(selected[index]),
             }
@@ -266,8 +276,12 @@ def verify(
         for row in data_rows
         if row.get("Longitude") and row.get("Latitude")
     ]
-    years = sorted({row.get("Cruise_year", "") for row in data_rows if row.get("Cruise_year")})
-    batches = sorted({row.get("Batch_code", "") for row in data_rows if row.get("Batch_code")})
+    years = sorted(
+        {row.get("Cruise_year", "") for row in data_rows if row.get("Cruise_year")}
+    )
+    batches = sorted(
+        {row.get("Batch_code", "") for row in data_rows if row.get("Batch_code")}
+    )
     samples = [row.get("Sample_code", "") for row in data_rows]
     sample_counts = Counter(samples)
     target_rows_by_sample: Counter[str] = Counter()
@@ -296,10 +310,14 @@ def verify(
         "observed_data": {
             "data_record_count": len(data_rows),
             "distinct_sample_code_count": len(sample_counts),
-            "duplicate_sample_code_count": sum(1 for count in sample_counts.values() if count > 1),
+            "duplicate_sample_code_count": sum(
+                1 for count in sample_counts.values() if count > 1
+            ),
             "target_bearing_row_count": target_bearing_row_count,
             "sample_codes_with_target_count": len(target_rows_by_sample),
-            "sample_codes_without_target_count": len(set(samples) - set(target_rows_by_sample)),
+            "sample_codes_without_target_count": len(
+                set(samples) - set(target_rows_by_sample)
+            ),
             "sample_codes_with_multiple_target_rows_count": sum(
                 1 for count in target_rows_by_sample.values() if count > 1
             ),
@@ -333,16 +351,29 @@ def verify(
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("archive", type=Path, help="MarChem inorganic ZIP export")
-    parser.add_argument("--request-url", help="Exact public export URL used for this response")
-    parser.add_argument("--observed-at", help="UTC timestamp reported by the export information member")
+    parser.add_argument(
+        "--request-url", help="Exact public export URL used for this response"
+    )
+    parser.add_argument(
+        "--observed-at", help="UTC timestamp reported by the export information member"
+    )
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON")
     args = parser.parse_args(argv)
     try:
-        result = verify(args.archive, request_url=args.request_url, observed_at=args.observed_at)
+        result = verify(
+            args.archive, request_url=args.request_url, observed_at=args.observed_at
+        )
     except (OSError, ValueError, zipfile.BadZipFile, VerificationError) as exc:
         print(f"ERROR: {exc}", file=__import__("sys").stderr)
         return 2
-    print(json.dumps(result, ensure_ascii=False, indent=2 if args.pretty else None, sort_keys=True))
+    print(
+        json.dumps(
+            result,
+            ensure_ascii=False,
+            indent=2 if args.pretty else None,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

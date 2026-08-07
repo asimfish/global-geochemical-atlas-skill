@@ -25,7 +25,9 @@ class AuditError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -39,7 +41,9 @@ def _float(value: Any) -> float:
         raise AuditError(f"expected numeric GSJ value, received {value!r}") from exc
 
 
-def _review_records(records: Sequence[source_adapters.RawRecord], candidate: Any) -> list[dict[str, Any]]:
+def _review_records(
+    records: Sequence[source_adapters.RawRecord], candidate: Any
+) -> list[dict[str, Any]]:
     selected: list[int] = []
     reasons: dict[int, set[str]] = {}
 
@@ -49,12 +53,20 @@ def _review_records(records: Sequence[source_adapters.RawRecord], candidate: Any
             reasons[index] = set()
         reasons[index].add(reason)
 
-    duplicate_indices = [i for i, record in enumerate(records) if record.fields["試料番号"] == "78013"]
+    duplicate_indices = [
+        i for i, record in enumerate(records) if record.fields["試料番号"] == "78013"
+    ]
     for index in duplicate_indices:
         add(index, "duplicate_sample_78013_ordinal_join")
     for field in ("緯度(JGD2000)", "経度(JGD2000)"):
-        add(min(range(len(records)), key=lambda i: _float(records[i].fields[field])), f"minimum_{field}")
-        add(max(range(len(records)), key=lambda i: _float(records[i].fields[field])), f"maximum_{field}")
+        add(
+            min(range(len(records)), key=lambda i: _float(records[i].fields[field])),
+            f"minimum_{field}",
+        )
+        add(
+            max(range(len(records)), key=lambda i: _float(records[i].fields[field])),
+            f"maximum_{field}",
+        )
     for ordinal in range(30):
         index = round(ordinal * (len(records) - 1) / 29)
         add(index, "national_source_order_stratum")
@@ -91,7 +103,9 @@ def _review_records(records: Sequence[source_adapters.RawRecord], candidate: Any
                 "source_record_id": record.source_record_id,
                 "source_locator": record.source_locator,
                 "sample_source_locator": record.fields["_sample_source_locator"],
-                "concentration_source_locator": record.fields["_concentration_source_locator"],
+                "concentration_source_locator": record.fields[
+                    "_concentration_source_locator"
+                ],
                 "reported_sample_id": record.fields["試料番号"],
                 "sample_id_occurrence": record.fields["_sample_id_occurrence"],
                 "map_sheet": record.fields["地図名"],
@@ -107,7 +121,10 @@ def _review_records(records: Sequence[source_adapters.RawRecord], candidate: Any
                     "jgd2000_coordinates_preserved": True,
                     "seven_target_values_preserved_without_imputation": True,
                     "hg_ppb_and_other_ppm_units_preserved": True,
-                    "stable_observation_ids_unique": len({item["record_id"] for item in observations}) == 7,
+                    "stable_observation_ids_unique": len(
+                        {item["record_id"] for item in observations}
+                    )
+                    == 7,
                 },
                 "automated_status": "PASS",
                 "reviewer": {
@@ -137,7 +154,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     target_fields: Mapping[str, str] = candidate.registry_entry["target_analytes"]
     target_units: Mapping[str, str] = candidate.registry_entry["target_units"]
     target_counts = {
-        analyte: sum(bool(str(record.fields[target_fields[analyte]]).strip()) for record in records)
+        analyte: sum(
+            bool(str(record.fields[target_fields[analyte]]).strip())
+            for record in records
+        )
         for analyte in TARGETS
     }
     bbox = [
@@ -202,8 +222,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "source_id": SOURCE_ID,
         "snapshot_id": snapshot_id,
         "observed_at": args.observed_at,
-        "request": {"url": candidate.landing_page, "file_urls": [item.source_url for item in files]},
-        "response": {"bytes": sum(item.bytes for item in files), "sha256": combined_hash},
+        "request": {
+            "url": candidate.landing_page,
+            "file_urls": [item.source_url for item in files],
+        },
+        "response": {
+            "bytes": sum(item.bytes for item in files),
+            "sha256": combined_hash,
+        },
         "archive": {"sha256": combined_hash, "members": members},
         "counts": observed_data,
         "claim_boundary": audit["claim_boundary"],
@@ -214,13 +240,20 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "snapshot_id": snapshot_id,
         "status": "PASS",
         "checks": {
-            "sample_file_hash_match": by_id["samples"].sha256 == candidate.registry_entry["download"]["files"][0]["expected_sha256"],
-            "concentration_file_hash_match": by_id["concentrations"].sha256 == candidate.registry_entry["download"]["files"][1]["expected_sha256"],
+            "sample_file_hash_match": by_id["samples"].sha256
+            == candidate.registry_entry["download"]["files"][0]["expected_sha256"],
+            "concentration_file_hash_match": by_id["concentrations"].sha256
+            == candidate.registry_entry["download"]["files"][1]["expected_sha256"],
             "valid_row_counts_match": len(records) == 3024,
             "ordinal_join_count_match": len(records) == 3024,
             "duplicate_78013_preserved": duplicate_ids == {"78013": 2},
-            "target_counts_match": target_counts == {analyte: 3024 for analyte in TARGETS},
-            "target_units_match": target_units == {**{analyte: "ppm" for analyte in TARGETS if analyte != "Hg"}, "Hg": "ppb"},
+            "target_counts_match": target_counts
+            == {analyte: 3024 for analyte in TARGETS},
+            "target_units_match": target_units
+            == {
+                **{analyte: "ppm" for analyte in TARGETS if analyte != "Hg"},
+                "Hg": "ppb",
+            },
             "review_sample_prepared": len(review_records) == 30,
         },
         "counts": observed_data,
@@ -250,7 +283,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     atomic_json(args.snapshot_output, snapshot)
     atomic_json(args.reconciliation_output, reconciliation)
     atomic_json(args.review_output, review)
-    return {"status": "PASS", "joined_rows": len(records), "prepared_review_records": len(review_records)}
+    return {
+        "status": "PASS",
+        "joined_rows": len(records),
+        "prepared_review_records": len(review_records),
+    }
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -263,11 +300,22 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--audit-output",
         type=Path,
-        default=skill_dir / "fixtures" / "candidate-audits" / "gsj-japan-river-sediment-20260806T034823Z.json",
+        default=skill_dir
+        / "fixtures"
+        / "candidate-audits"
+        / "gsj-japan-river-sediment-20260806T034823Z.json",
     )
-    parser.add_argument("--snapshot-output", type=Path, default=fixture_dir / "snapshot_manifest.json")
-    parser.add_argument("--reconciliation-output", type=Path, default=fixture_dir / "adapter_reconciliation.json")
-    parser.add_argument("--review-output", type=Path, default=fixture_dir / "human_review.json")
+    parser.add_argument(
+        "--snapshot-output", type=Path, default=fixture_dir / "snapshot_manifest.json"
+    )
+    parser.add_argument(
+        "--reconciliation-output",
+        type=Path,
+        default=fixture_dir / "adapter_reconciliation.json",
+    )
+    parser.add_argument(
+        "--review-output", type=Path, default=fixture_dir / "human_review.json"
+    )
     return parser
 
 

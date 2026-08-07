@@ -50,8 +50,14 @@ def _load_bundle(path: Path) -> dict[str, Any]:
 
 
 def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None:
-    connection.execute("INSERT INTO archive_metadata VALUES (?, ?)", ("archive_model", "d1-archive-model-v1"))
-    connection.execute("INSERT INTO archive_metadata VALUES (?, ?)", ("bundle_version", bundle["bundle_version"]))
+    connection.execute(
+        "INSERT INTO archive_metadata VALUES (?, ?)",
+        ("archive_model", "d1-archive-model-v1"),
+    )
+    connection.execute(
+        "INSERT INTO archive_metadata VALUES (?, ?)",
+        ("bundle_version", bundle["bundle_version"]),
+    )
     for dataset in bundle["datasets"]:
         connection.execute(
             "INSERT INTO datasets VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -82,7 +88,13 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
             )
         connection.execute(
             "INSERT INTO archive_fts(entity_type, entity_id, searchable_text) VALUES (?, ?, ?)",
-            ("dataset", dataset["dataset_id"], " ".join((dataset["title"], dataset["publisher"], dataset["source_id"]))),
+            (
+                "dataset",
+                dataset["dataset_id"],
+                " ".join(
+                    (dataset["title"], dataset["publisher"], dataset["source_id"])
+                ),
+            ),
         )
     for publication in bundle["publications"]:
         connection.execute(
@@ -106,7 +118,16 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
             (
                 "publication",
                 publication["publication_id"],
-                " ".join(filter(None, (publication["citation"], publication["title"], publication["doi"]))),
+                " ".join(
+                    filter(
+                        None,
+                        (
+                            publication["citation"],
+                            publication["title"],
+                            publication["doi"],
+                        ),
+                    )
+                ),
             ),
         )
     for event in bundle["sampling_events"]:
@@ -238,7 +259,10 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
             ),
         )
         for publication_id in method["publication_ids"]:
-            connection.execute("INSERT INTO method_publications VALUES (?, ?)", (method["method_id"], publication_id))
+            connection.execute(
+                "INSERT INTO method_publications VALUES (?, ?)",
+                (method["method_id"], publication_id),
+            )
         connection.execute(
             "INSERT INTO archive_fts(entity_type, entity_id, searchable_text) VALUES (?, ?, ?)",
             (
@@ -319,7 +343,9 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
         )
 
 
-def build_index(bundle_path: Path, output: Path, schema_path: Path = DEFAULT_SCHEMA) -> dict[str, Any]:
+def build_index(
+    bundle_path: Path, output: Path, schema_path: Path = DEFAULT_SCHEMA
+) -> dict[str, Any]:
     if output.exists():
         raise ValueError(f"refusing to overwrite existing index: {output}")
     bundle = _load_bundle(bundle_path)
@@ -342,10 +368,20 @@ def build_index(bundle_path: Path, output: Path, schema_path: Path = DEFAULT_SCH
             integrity = connection.execute("PRAGMA integrity_check").fetchone()[0]
             foreign_keys = connection.execute("PRAGMA foreign_key_check").fetchall()
             if integrity != "ok" or foreign_keys:
-                raise ValueError(f"SQLite integrity failure: integrity={integrity}, foreign_keys={foreign_keys}")
+                raise ValueError(
+                    f"SQLite integrity failure: integrity={integrity}, foreign_keys={foreign_keys}"
+                )
             counts = {
                 table: connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
-                for table in ("datasets", "dataset_files", "sampling_events", "samples", "analytical_methods", "observations", "provenance")
+                for table in (
+                    "datasets",
+                    "dataset_files",
+                    "sampling_events",
+                    "samples",
+                    "analytical_methods",
+                    "observations",
+                    "provenance",
+                )
             }
         finally:
             connection.close()
@@ -376,7 +412,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         report = build_index(args.bundle, args.output, args.schema)
     except (OSError, sqlite3.Error, ValueError) as exc:
-        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 2
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0

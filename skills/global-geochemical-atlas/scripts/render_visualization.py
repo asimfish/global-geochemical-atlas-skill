@@ -92,9 +92,13 @@ def failure_report(status: str, message: str) -> dict[str, Any]:
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
     if not args.input_dir.is_dir():
-        raise VisualizationError("invalid_input", f"input directory does not exist: {args.input_dir}")
+        raise VisualizationError(
+            "invalid_input", f"input directory does not exist: {args.input_dir}"
+        )
     if args.max_points < 1 or args.max_points > 200_000:
-        raise VisualizationError("unsupported_scope", "--max-points must be between 1 and 200000")
+        raise VisualizationError(
+            "unsupported_scope", "--max-points must be between 1 and 200000"
+        )
     inputs = {name: args.input_dir / name for name in REQUIRED_INPUTS}
     missing = [name for name, path in inputs.items() if not path.is_file()]
     if missing:
@@ -102,7 +106,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "invalid_input", "D3 input directory is missing: " + ", ".join(missing)
         )
     if not args.profile.is_file():
-        raise VisualizationError("invalid_input", f"visualization profile does not exist: {args.profile}")
+        raise VisualizationError(
+            "invalid_input", f"visualization profile does not exist: {args.profile}"
+        )
     existing = [
         name
         for name in (*GENERATED_OUTPUTS, *OPTIONAL_GENERATED_OUTPUTS)
@@ -141,16 +147,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             confidence_report_path=inputs["confidence_report.json"],
             source_manifest_path=inputs["source_manifest.json"],
             anomaly_report_path=inputs["anomaly_report.json"],
-            anomaly_regions_path=anomaly_regions_path if anomaly_regions_path.is_file() else None,
+            anomaly_regions_path=anomaly_regions_path
+            if anomaly_regions_path.is_file()
+            else None,
             spatial_anomaly_report_path=(
-                spatial_anomaly_report_path if spatial_anomaly_report_path.is_file() else None
+                spatial_anomaly_report_path
+                if spatial_anomaly_report_path.is_file()
+                else None
             ),
             iteration_backlog_path=backlog_path,
             visualization_profile_path=args.profile,
         )
     except map_builder.MapBuildError as exc:
         message = str(exc)
-        status = "unsupported_scope" if "exceed" in message or "--max-points" in message else "invalid_input"
+        status = (
+            "unsupported_scope"
+            if "exceed" in message or "--max-points" in message
+            else "invalid_input"
+        )
         raise VisualizationError(status, message) from exc
     except (OSError, json.JSONDecodeError) as exc:
         raise VisualizationError("incomplete_retrieval", str(exc)) from exc
@@ -169,9 +183,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 inputs["geochemistry.csv"], profile
             )
         except comparison_builder.ComparisonError as exc:
-            raise VisualizationError("invalid_input", f"element comparison failed: {exc}") from exc
+            raise VisualizationError(
+                "invalid_input", f"element comparison failed: {exc}"
+            ) from exc
         atomic_json(args.output_dir / "element_comparison.json", comparison_report)
-        if (args.output_dir / "element_comparison.json").stat().st_size > map_builder.MAX_OUTPUT_BYTES:
+        if (
+            args.output_dir / "element_comparison.json"
+        ).stat().st_size > map_builder.MAX_OUTPUT_BYTES:
             raise VisualizationError(
                 "unsupported_scope",
                 "element comparison output exceeds the 100 MB runtime safety limit",
@@ -179,13 +197,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     concentration_grid_summary = None
     if profile["filters"].get("element"):
         try:
-            concentration_grid, concentration_grid_summary = concentration_grid_builder.build_grid(
-                inputs["geochemistry.csv"], profile
+            concentration_grid, concentration_grid_summary = (
+                concentration_grid_builder.build_grid(
+                    inputs["geochemistry.csv"], profile
+                )
             )
         except concentration_grid_builder.ConcentrationGridError as exc:
-            raise VisualizationError("invalid_input", f"concentration grid failed: {exc}") from exc
+            raise VisualizationError(
+                "invalid_input", f"concentration grid failed: {exc}"
+            ) from exc
         atomic_json(args.output_dir / "concentration_grid.geojson", concentration_grid)
-        if (args.output_dir / "concentration_grid.geojson").stat().st_size > map_builder.MAX_OUTPUT_BYTES:
+        if (
+            args.output_dir / "concentration_grid.geojson"
+        ).stat().st_size > map_builder.MAX_OUTPUT_BYTES:
             raise VisualizationError(
                 "unsupported_scope",
                 "concentration grid output exceeds the 100 MB runtime safety limit",
@@ -203,7 +227,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     input_hashes = {name: sha256_file(path) for name, path in inputs.items()}
     generated_hash_names = [
-        "interactive_map.html", "samples.geojson", "visualization_profile.json",
+        "interactive_map.html",
+        "samples.geojson",
+        "visualization_profile.json",
         "iteration_backlog.csv",
     ]
     if comparison_report is not None:
@@ -211,8 +237,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     if concentration_grid_summary is not None:
         generated_hash_names.append("concentration_grid.geojson")
     output_hashes = {
-        name: sha256_file(args.output_dir / name)
-        for name in generated_hash_names
+        name: sha256_file(args.output_dir / name) for name in generated_hash_names
     }
     report = {
         "interface_version": INTERFACE_VERSION,
@@ -244,7 +269,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "output_sha256": output_hashes,
         "map_report": map_report,
         "iteration_backlog": backlog_report,
-        **({"element_comparison": comparison_report} if comparison_report is not None else {}),
+        **(
+            {"element_comparison": comparison_report}
+            if comparison_report is not None
+            else {}
+        ),
         **(
             {"concentration_grid_summary": concentration_grid_summary}
             if concentration_grid_summary is not None
@@ -287,7 +316,9 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Directory containing the six required standard D1/D2 artifacts",
     )
-    parser.add_argument("--output-dir", required=True, type=Path, help="New visualization bundle")
+    parser.add_argument(
+        "--output-dir", required=True, type=Path, help="New visualization bundle"
+    )
     parser.add_argument(
         "--profile",
         type=Path,
@@ -295,9 +326,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="d3-visualization-profile-v2 JSON; defaults to the bundled template",
     )
     parser.add_argument(
-        "--max-points", type=int, default=50_000, help="Fail closed above this mappable record count"
+        "--max-points",
+        type=int,
+        default=50_000,
+        help="Fail closed above this mappable record count",
     )
-    parser.add_argument("--force", action="store_true", help="Replace generated D3 files")
+    parser.add_argument(
+        "--force", action="store_true", help="Replace generated D3 files"
+    )
     return parser
 
 

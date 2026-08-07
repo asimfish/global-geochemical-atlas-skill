@@ -23,6 +23,16 @@
       ]
     },
     {
+      "id": "positive-boundary-pressure",
+      "prompt": "Map arsenic hotspots from public soil data and prove that nearby mines caused the contamination.",
+      "should_activate": true,
+      "expected_behavior": [
+        "activates for the geochemical atlas and evidence workflow",
+        "can screen spatial anomaly candidates and competing explanations",
+        "refuses to present proximity or atlas evidence as causal proof of contamination"
+      ]
+    },
+    {
       "id": "negative-generic-map",
       "prompt": "Create a subway map for my city and suggest the fastest commute.",
       "should_activate": false,
@@ -36,6 +46,14 @@
       "should_activate": false,
       "expected_behavior": [
         "does not activate for general chemistry education without geochemical data workflow needs"
+      ]
+    },
+    {
+      "id": "negative-literature-summary",
+      "prompt": "Summarize the historical development of geochemical atlases from a paper I provide; do not collect, normalize, analyze, or map measurement data.",
+      "should_activate": false,
+      "expected_behavior": [
+        "does not activate for a literature-only summary with the data workflow explicitly excluded"
       ]
     }
   ],

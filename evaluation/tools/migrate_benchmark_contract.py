@@ -40,7 +40,9 @@ CANDIDATE_CONTRACT_BLOCK = f"""{CANDIDATE_MARKER_START}
 
 def _atomic_text(path: Path, value: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", dir=path.parent
+    )
     temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
@@ -53,7 +55,9 @@ def _atomic_text(path: Path, value: str) -> None:
 
 
 def _atomic_json(path: Path, value: Any) -> None:
-    _atomic_text(path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    _atomic_text(
+        path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    )
 
 
 def _load_json(path: Path) -> Any:
@@ -89,12 +93,19 @@ def _encode_evidence(path: Path) -> dict[str, Any]:
             rows = list(reader)
             return {"format": "csv", "columns": reader.fieldnames or [], "rows": rows}
     if suffix == ".jsonl":
-        rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        rows = [
+            json.loads(line)
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
         return {"format": "jsonl", "rows": rows}
     try:
         return {"format": "text", "value": path.read_text(encoding="utf-8")}
     except UnicodeDecodeError:
-        return {"format": "base64", "value": base64.b64encode(path.read_bytes()).decode("ascii")}
+        return {
+            "format": "base64",
+            "value": base64.b64encode(path.read_bytes()).decode("ascii"),
+        }
 
 
 def _primary_dimension(task_id: str, check: dict[str, Any]) -> str:
@@ -103,9 +114,22 @@ def _primary_dimension(task_id: str, check: dict[str, Any]) -> str:
     path = str(check.get("path", "")).lower()
     if check_type in {"file_exists", "file_min_bytes", "file_sha256"}:
         return "engineering_quality"
-    if any(token in check_id + " " + path for token in ("source", "provenance", "doi", "license", "integrity", "hash")):
+    if any(
+        token in check_id + " " + path
+        for token in ("source", "provenance", "doi", "license", "integrity", "hash")
+    ):
         return "scientific_credibility"
-    if any(token in check_id for token in ("schema", "column", "field", "identity", "manifest", "traceability")):
+    if any(
+        token in check_id
+        for token in (
+            "schema",
+            "column",
+            "field",
+            "identity",
+            "manifest",
+            "traceability",
+        )
+    ):
         return "platform_reusability"
     category = task_id.split("-")[1] if "-" in task_id else ""
     if category in {"DATA", "PROV", "LICENSE"}:
@@ -118,12 +142,47 @@ def _primary_dimension(task_id: str, check: dict[str, Any]) -> str:
 
 
 def _rubric_dimension(criterion: dict[str, Any]) -> str:
-    text = " ".join(str(criterion.get(key, "")) for key in ("id", "full_credit")).lower()
-    if any(token in text for token in ("source", "provenance", "license", "integrity", "evidence", "traceability", "引用", "来源", "许可")):
+    text = " ".join(
+        str(criterion.get(key, "")) for key in ("id", "full_credit")
+    ).lower()
+    if any(
+        token in text
+        for token in (
+            "source",
+            "provenance",
+            "license",
+            "integrity",
+            "evidence",
+            "traceability",
+            "引用",
+            "来源",
+            "许可",
+        )
+    ):
         return "scientific_credibility"
-    if any(token in text for token in ("reproduc", "audit", "stable", "failure_behavior", "可复现", "审计")):
+    if any(
+        token in text
+        for token in (
+            "reproduc",
+            "audit",
+            "stable",
+            "failure_behavior",
+            "可复现",
+            "审计",
+        )
+    ):
         return "engineering_quality"
-    if any(token in text for token in ("schema", "mapping", "identity_model", "interface", "结构", "复用")):
+    if any(
+        token in text
+        for token in (
+            "schema",
+            "mapping",
+            "identity_model",
+            "interface",
+            "结构",
+            "复用",
+        )
+    ):
         return "platform_reusability"
     return "domain_understanding"
 
@@ -148,10 +207,14 @@ def _copy_template(template: Path, destination: Path) -> None:
             shutil.copyfile(source, destination / source.name)
 
 
-def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dict[str, Any]:
+def _align_task(
+    task_dir: Path, contract: dict[str, Any], template: Path
+) -> dict[str, Any]:
     metadata_path = task_dir / "task.json"
     metadata = _load_json(metadata_path)
-    legacy_outputs = list(metadata.get("legacy_logical_outputs") or metadata.get("required_outputs", []))
+    legacy_outputs = list(
+        metadata.get("legacy_logical_outputs") or metadata.get("required_outputs", [])
+    )
     required = [item["path"] for item in contract["submission"]["required_artifacts"]]
     candidate_visible_contract = build_candidate_visible_contract(
         task_dir,
@@ -168,7 +231,9 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
             "e1_contract_sha256": contract["e1_contract_sha256"],
             "required_outputs": required,
             "legacy_logical_outputs": legacy_outputs,
-            "benchmark_evidence_container": contract["submission"]["benchmark_evidence"]["container"],
+            "benchmark_evidence_container": contract["submission"][
+                "benchmark_evidence"
+            ]["container"],
             "candidate_visible_contract": candidate_visible_contract,
         }
     )
@@ -178,7 +243,9 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
     for relative in legacy_outputs:
         source = task_dir / "gold" / relative
         if not source.is_file():
-            raise FileNotFoundError(f"{task_dir.name}: missing legacy gold evidence {relative}")
+            raise FileNotFoundError(
+                f"{task_dir.name}: missing legacy gold evidence {relative}"
+            )
         evidence[relative] = _encode_evidence(source)
 
     artifact_root = task_dir / "gold" / "artifacts"
@@ -214,7 +281,10 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
     if "llm_points" in rubric:
         rubric["evidence_points"] = rubric.pop("llm_points")
     legacy_set = set(legacy_outputs)
-    rubric["evidence_paths"] = [_rewrite_evidence_path(item, legacy_set) for item in rubric.get("evidence_paths", [])]
+    rubric["evidence_paths"] = [
+        _rewrite_evidence_path(item, legacy_set)
+        for item in rubric.get("evidence_paths", [])
+    ]
     for criterion in rubric.get("criteria", []):
         criterion["dimension_id"] = _rubric_dimension(criterion)
     rubric["scoring_contract"] = "e1-six-dimension-v1"
@@ -241,7 +311,11 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
         CANDIDATE_CONTRACT_BLOCK,
     )
     _atomic_text(task_markdown, content)
-    return {"question_id": metadata["question_id"], "task_id": metadata["task_id"], "legacy_outputs": legacy_outputs}
+    return {
+        "question_id": metadata["question_id"],
+        "task_id": metadata["task_id"],
+        "legacy_outputs": legacy_outputs,
+    }
 
 
 def _update_inventory(path: Path) -> None:
@@ -253,13 +327,19 @@ def _update_inventory(path: Path) -> None:
         return
     for row in rows:
         row["required_output_count"] = "10"
-        row["evidence_points"] = row.pop("objective_points", row.get("evidence_points", ""))
-        row["llm_evidence_points"] = row.pop("llm_points", row.get("llm_evidence_points", ""))
+        row["evidence_points"] = row.pop(
+            "objective_points", row.get("evidence_points", "")
+        )
+        row["llm_evidence_points"] = row.pop(
+            "llm_points", row.get("llm_evidence_points", "")
+        )
         row["status"] = "ALIGNED_E1"
         row["gold_version"] = VERSION
         row["scoring_contract"] = "e1-six-dimension-v1"
     fieldnames = list(rows[0])
-    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", dir=path.parent
+    )
     temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8", newline="") as handle:
@@ -284,13 +364,25 @@ def main() -> int:
     template = root / "contracts" / "submission-artifact-template" / "artifacts"
     if not template.is_dir():
         raise SystemExit(f"missing E1 artifact template: {template}")
-    tasks = [_align_task(task_dir, contract, template) for task_dir in _task_dirs(root, private_root)]
+    tasks = [
+        _align_task(task_dir, contract, template)
+        for task_dir in _task_dirs(root, private_root)
+    ]
     _atomic_text(root / "VERSION", VERSION + "\n")
     _update_inventory(root / "task_inventory.csv")
     selected_private = private_root or (root / "evaluator_private")
     if selected_private.is_dir():
         _update_inventory(selected_private / "task_inventory_private.csv")
-    print(json.dumps({"status": "PASS", "benchmark_version": VERSION, "tasks_aligned": len(tasks)}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {
+                "status": "PASS",
+                "benchmark_version": VERSION,
+                "tasks_aligned": len(tasks),
+            },
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 

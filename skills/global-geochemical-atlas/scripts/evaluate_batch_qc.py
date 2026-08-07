@@ -34,7 +34,14 @@ OUTPUT_COLUMNS = (
     "batch_pass",
     "disposition",
 )
-REQUIRED_INPUT_COLUMNS = {"batch_id", "qc_type", "qc_id", "value", "certified_value", "pair_id"}
+REQUIRED_INPUT_COLUMNS = {
+    "batch_id",
+    "qc_type",
+    "qc_id",
+    "value",
+    "certified_value",
+    "pair_id",
+}
 VALID_QC_TYPES = {"CRM", "BLANK", "DUPLICATE"}
 
 
@@ -71,20 +78,31 @@ def read_policy(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise BatchQCError("QC policy must be a JSON object")
     allowed = {
-        "schema_version", "version", "crm_recovery_percent", "blank_maximum",
-        "duplicate_rpd_maximum_percent", "batch_rule", "unit",
+        "schema_version",
+        "version",
+        "crm_recovery_percent",
+        "blank_maximum",
+        "duplicate_rpd_maximum_percent",
+        "batch_rule",
+        "unit",
     }
     unknown = sorted(set(value) - allowed)
     if unknown:
         raise BatchQCError(f"QC policy has unsupported keys: {', '.join(unknown)}")
     version_fields = [key for key in ("schema_version", "version") if key in value]
     if len(version_fields) != 1:
-        raise BatchQCError("QC policy requires exactly one of schema_version or version")
+        raise BatchQCError(
+            "QC policy requires exactly one of schema_version or version"
+        )
     version = value[version_fields[0]]
     if not isinstance(version, str) or not version.strip():
         raise BatchQCError("QC policy version must be a non-empty string")
     recovery = value.get("crm_recovery_percent")
-    if not isinstance(recovery, dict) or set(recovery) != {"minimum", "maximum", "inclusive"}:
+    if not isinstance(recovery, dict) or set(recovery) != {
+        "minimum",
+        "maximum",
+        "inclusive",
+    }:
         raise BatchQCError(
             "crm_recovery_percent must contain exactly minimum, maximum and inclusive"
         )
@@ -135,12 +153,18 @@ def read_rows(path: Path, policy_unit: str | None) -> list[dict[str, Any]]:
             qc_type = str(raw.get("qc_type") or "").strip().upper()
             qc_id = str(raw.get("qc_id") or "").strip()
             if not batch_id or not qc_id:
-                raise BatchQCError(f"batch QC CSV:{line_number} lacks batch_id or qc_id")
+                raise BatchQCError(
+                    f"batch QC CSV:{line_number} lacks batch_id or qc_id"
+                )
             if qc_type not in VALID_QC_TYPES:
-                raise BatchQCError(f"batch QC CSV:{line_number} has unsupported qc_type {qc_type!r}")
+                raise BatchQCError(
+                    f"batch QC CSV:{line_number} has unsupported qc_type {qc_type!r}"
+                )
             identity = (batch_id, qc_id)
             if identity in seen_ids:
-                raise BatchQCError(f"batch QC CSV:{line_number} repeats qc_id within batch")
+                raise BatchQCError(
+                    f"batch QC CSV:{line_number} repeats qc_id within batch"
+                )
             seen_ids.add(identity)
             unit = str(raw.get("unit") or "").strip() or None
             if policy_unit is not None and unit != policy_unit:
@@ -151,7 +175,9 @@ def read_rows(path: Path, policy_unit: str | None) -> list[dict[str, Any]]:
                 "batch_id": batch_id,
                 "qc_type": qc_type,
                 "qc_id": qc_id,
-                "value": finite_number(raw.get("value"), f"batch QC CSV:{line_number} value"),
+                "value": finite_number(
+                    raw.get("value"), f"batch QC CSV:{line_number} value"
+                ),
                 "certified_value": None,
                 "pair_id": str(raw.get("pair_id") or "").strip() or None,
                 "unit": unit,
@@ -160,14 +186,18 @@ def read_rows(path: Path, policy_unit: str | None) -> list[dict[str, Any]]:
             certified = str(raw.get("certified_value") or "").strip()
             if qc_type == "CRM":
                 row["certified_value"] = finite_number(
-                    certified, f"batch QC CSV:{line_number} certified_value", positive=True
+                    certified,
+                    f"batch QC CSV:{line_number} certified_value",
+                    positive=True,
                 )
             elif certified:
                 raise BatchQCError(
                     f"batch QC CSV:{line_number} certified_value is only valid for CRM rows"
                 )
             if qc_type == "DUPLICATE" and row["pair_id"] is None:
-                raise BatchQCError(f"batch QC CSV:{line_number} duplicate row lacks pair_id")
+                raise BatchQCError(
+                    f"batch QC CSV:{line_number} duplicate row lacks pair_id"
+                )
             if qc_type != "DUPLICATE" and row["pair_id"] is not None:
                 raise BatchQCError(
                     f"batch QC CSV:{line_number} pair_id is only valid for DUPLICATE rows"
@@ -193,7 +223,9 @@ def worst_recovery(values: Sequence[float]) -> float | None:
     return max(values, key=lambda item: (abs(item - 100.0), item)) if values else None
 
 
-def evaluate(input_path: Path, policy_path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def evaluate(
+    input_path: Path, policy_path: Path
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     policy = read_policy(policy_path)
     rows = read_rows(input_path, policy["unit"])
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -210,18 +242,20 @@ def evaluate(input_path: Path, policy_path: Path) -> tuple[list[dict[str, Any]],
             if row["qc_type"] != "CRM":
                 continue
             recovery = row["value"] / row["certified_value"] * 100.0
-            crm_checks.append({
-                "qc_id": row["qc_id"],
-                "observed_value": row["value"],
-                "certified_value": row["certified_value"],
-                "recovery_percent": recovery,
-                "pass": within(
-                    recovery,
-                    recovery_policy["minimum"],
-                    recovery_policy["maximum"],
-                    recovery_policy["inclusive"],
-                ),
-            })
+            crm_checks.append(
+                {
+                    "qc_id": row["qc_id"],
+                    "observed_value": row["value"],
+                    "certified_value": row["certified_value"],
+                    "recovery_percent": recovery,
+                    "pass": within(
+                        recovery,
+                        recovery_policy["minimum"],
+                        recovery_policy["maximum"],
+                        recovery_policy["inclusive"],
+                    ),
+                }
+            )
         blank_checks = [
             {
                 "qc_id": row["qc_id"],
@@ -243,13 +277,15 @@ def evaluate(input_path: Path, policy_path: Path) -> tuple[list[dict[str, Any]],
                 malformed_pairs.append(pair_id)
                 continue
             pair_rpd = rpd(pair[0]["value"], pair[1]["value"])
-            duplicate_checks.append({
-                "pair_id": pair_id,
-                "qc_ids": [pair[0]["qc_id"], pair[1]["qc_id"]],
-                "values": [pair[0]["value"], pair[1]["value"]],
-                "rpd_percent": pair_rpd,
-                "pass": pair_rpd <= policy["duplicate_rpd_maximum_percent"],
-            })
+            duplicate_checks.append(
+                {
+                    "pair_id": pair_id,
+                    "qc_ids": [pair[0]["qc_id"], pair[1]["qc_id"]],
+                    "values": [pair[0]["value"], pair[1]["value"]],
+                    "rpd_percent": pair_rpd,
+                    "pass": pair_rpd <= policy["duplicate_rpd_maximum_percent"],
+                }
+            )
 
         incomplete = []
         if not crm_checks:
@@ -277,7 +313,9 @@ def evaluate(input_path: Path, policy_path: Path) -> tuple[list[dict[str, Any]],
             "crm_pass": crm_pass,
             "blank_value": max(blank_values) if blank_values else None,
             "blank_pass": blank_pass,
-            "duplicate_rpd_percent": max(duplicate_values) if duplicate_values else None,
+            "duplicate_rpd_percent": max(duplicate_values)
+            if duplicate_values
+            else None,
             "duplicate_pass": duplicate_pass,
             "batch_pass": batch_pass,
             "disposition": (
@@ -287,17 +325,23 @@ def evaluate(input_path: Path, policy_path: Path) -> tuple[list[dict[str, Any]],
             ),
         }
         acceptance.append(row)
-        details.append({
-            "batch_id": batch_id,
-            "status": "pass" if batch_pass else "incomplete" if incomplete else "fail",
-            "incomplete_reasons": incomplete,
-            "malformed_duplicate_pair_ids": malformed_pairs,
-            "crm_checks": crm_checks,
-            "blank_checks": blank_checks,
-            "duplicate_checks": duplicate_checks,
-            "batch_pass": batch_pass,
-            "disposition": row["disposition"],
-        })
+        details.append(
+            {
+                "batch_id": batch_id,
+                "status": "pass"
+                if batch_pass
+                else "incomplete"
+                if incomplete
+                else "fail",
+                "incomplete_reasons": incomplete,
+                "malformed_duplicate_pair_ids": malformed_pairs,
+                "crm_checks": crm_checks,
+                "blank_checks": blank_checks,
+                "duplicate_checks": duplicate_checks,
+                "batch_pass": batch_pass,
+                "disposition": row["disposition"],
+            }
+        )
 
     passed = sum(bool(item["batch_pass"]) for item in acceptance)
     report = {
@@ -341,7 +385,11 @@ def write_csv(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
         writer.writeheader()
         for item in rows:
             row = dict(item)
-            for field in ("crm_recovery_percent", "blank_value", "duplicate_rpd_percent"):
+            for field in (
+                "crm_recovery_percent",
+                "blank_value",
+                "duplicate_rpd_percent",
+            ):
                 row[field] = display_number(row[field])
             for field in ("crm_pass", "blank_pass", "duplicate_pass", "batch_pass"):
                 row[field] = "true" if row[field] else "false"
@@ -353,7 +401,9 @@ def write_csv(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
 def write_report(path: Path, report: Mapping[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         handle.write(payload)
         temporary = Path(handle.name)
     os.replace(temporary, path)
@@ -363,7 +413,9 @@ def logical_csv(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     return {
         "format": "csv",
         "columns": list(OUTPUT_COLUMNS),
-        "rows": [{column: row.get(column) for column in OUTPUT_COLUMNS} for row in rows],
+        "rows": [
+            {column: row.get(column) for column in OUTPUT_COLUMNS} for row in rows
+        ],
     }
 
 
@@ -371,8 +423,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Evaluate CRM recovery, blank maximum and duplicate RPD with a supplied batch policy."
     )
-    parser.add_argument("--input", required=True, type=Path, help="Normalized laboratory QC CSV")
-    parser.add_argument("--policy", required=True, type=Path, help="Explicit JSON acceptance policy")
+    parser.add_argument(
+        "--input", required=True, type=Path, help="Normalized laboratory QC CSV"
+    )
+    parser.add_argument(
+        "--policy", required=True, type=Path, help="Explicit JSON acceptance policy"
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -399,12 +455,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.stdout_contract:
         print(json.dumps(logical_csv(rows), ensure_ascii=False, sort_keys=True))
     else:
-        print(json.dumps({
-            "status": report["status"],
-            "batch_count": report["batch_count"],
-            "passed_batch_count": report["passed_batch_count"],
-            "output_dir": str(args.output_dir) if args.output_dir is not None else None,
-        }, ensure_ascii=False, sort_keys=True))
+        print(
+            json.dumps(
+                {
+                    "status": report["status"],
+                    "batch_count": report["batch_count"],
+                    "passed_batch_count": report["passed_batch_count"],
+                    "output_dir": str(args.output_dir)
+                    if args.output_dir is not None
+                    else None,
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+            )
+        )
     return 0
 
 

@@ -36,8 +36,18 @@ def stage(command: list[str]) -> dict[str, Any]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run all four D2 validation layers.")
-    parser.add_argument("--output-dir", type=Path, required=True, help="New or empty combined output directory")
-    parser.add_argument("--stress-records", type=int, default=10_000, help="Isolated-suite resource smoke size")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="New or empty combined output directory",
+    )
+    parser.add_argument(
+        "--stress-records",
+        type=int,
+        default=10_000,
+        help="Isolated-suite resource smoke size",
+    )
     parser.add_argument(
         "--real-max-source-samples",
         type=int,
@@ -94,7 +104,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     real_report_path = real_dir / "real_data_report.json"
     real_report = load_json(real_report_path) if real_report_path.is_file() else None
     global_report_path = global_dir / "global_data_report.json"
-    global_report = load_json(global_report_path) if global_report_path.is_file() else None
+    global_report = (
+        load_json(global_report_path) if global_report_path.is_file() else None
+    )
     reports = [
         report
         for report in (isolated_report, e2e_report, real_report, global_report)
@@ -139,16 +151,22 @@ def main(argv: Sequence[str] | None = None) -> int:
             "global_showcase_manifest": "global/d3/showcase_manifest.json",
         },
         "blocking_failed": sum(
-            report.get("counts", {}).get("blocking", {}).get("failed", 0) for report in reports
+            report.get("counts", {}).get("blocking", {}).get("failed", 0)
+            for report in reports
         ),
         "review_failed": sum(
-            report.get("counts", {}).get("review", {}).get("failed", 0) for report in reports
+            report.get("counts", {}).get("review", {}).get("failed", 0)
+            for report in reports
         ),
     }
     atomic_write_json(args.output_dir / "summary.json", summary)
     print(
         json.dumps(
-            {"status": status, "summary": str(args.output_dir / "summary.json"), **summary["reports"]},
+            {
+                "status": status,
+                "summary": str(args.output_dir / "summary.json"),
+                **summary["reports"],
+            },
             ensure_ascii=False,
             sort_keys=True,
         )

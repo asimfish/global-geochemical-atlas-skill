@@ -62,7 +62,9 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
         raise ValueError("--spatial-scope regional requires a non-global --region")
     if region == "custom":
         if args.bbox is None or optional_text(args.region_label) is None:
-            raise ValueError("--region custom requires --bbox W S E N and --region-label")
+            raise ValueError(
+                "--region custom requires --bbox W S E N and --region-label"
+            )
         w, s, e, n = args.bbox
         custom_region: dict[str, Any] | None = {
             "label": args.region_label.strip(),
@@ -72,12 +74,16 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
         region_label = args.region_label.strip()
     elif region in map_builder.REGION_PRESETS:
         if args.bbox is not None or args.region_label is not None:
-            raise ValueError("--bbox and --region-label are only valid with --region custom")
+            raise ValueError(
+                "--bbox and --region-label are only valid with --region custom"
+            )
         custom_region = None
         region_label = str(map_builder.REGION_PRESETS[region]["label"])
     else:
         if args.bbox is not None or args.region_label is not None:
-            raise ValueError("--bbox and --region-label are only valid with --region custom")
+            raise ValueError(
+                "--bbox and --region-label are only valid with --region custom"
+            )
         try:
             resolved = spatial_scope.resolve_region(region)
         except spatial_scope.SpatialScopeError as exc:
@@ -95,12 +101,18 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
             }
         region_label = str(resolved["label"])
 
-    comparison_values = (optional_text(args.comparison_x), optional_text(args.comparison_y))
+    comparison_values = (
+        optional_text(args.comparison_x),
+        optional_text(args.comparison_y),
+    )
     if (comparison_values[0] is None) != (comparison_values[1] is None):
         raise ValueError("--comparison-x and --comparison-y must be supplied together")
     if args.story == "comparison" and None in comparison_values:
         raise ValueError("story=comparison requires --comparison-x and --comparison-y")
-    if comparison_values[0] is not None and comparison_values[0] == comparison_values[1]:
+    if (
+        comparison_values[0] is not None
+        and comparison_values[0] == comparison_values[1]
+    ):
         raise ValueError("comparison elements must be different")
 
     filters = {
@@ -132,7 +144,10 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
     if comparison_values[0] is not None:
         filter_summary.append(f"组合={comparison_values[0]}×{comparison_values[1]}")
     scope_summary = "全球" if args.spatial_scope == "global" else region_label
-    title = optional_text(args.title) or f"{scope_summary}地球化学{STORY_LABELS[args.story]}"
+    title = (
+        optional_text(args.title)
+        or f"{scope_summary}地球化学{STORY_LABELS[args.story]}"
+    )
     subtitle = optional_text(args.subtitle) or (
         f"{scope_summary}范围的标准化地球化学观测"
         + ("；筛选：" + "，".join(filter_summary) if filter_summary else "")
@@ -189,9 +204,13 @@ def build_parser() -> argparse.ArgumentParser:
             "The calling Agent must translate the user question into explicit parameters."
         )
     )
-    parser.add_argument("--output", required=True, type=Path, help="Profile JSON to create")
+    parser.add_argument(
+        "--output", required=True, type=Path, help="Profile JSON to create"
+    )
     parser.add_argument("--story", choices=STORIES, default="overview")
-    parser.add_argument("--spatial-scope", choices=("global", "regional"), default="global")
+    parser.add_argument(
+        "--spatial-scope", choices=("global", "regional"), default="global"
+    )
     parser.add_argument(
         "--region",
         help="global, a bundled preset, a Natural Earth country name/ISO-3, or custom",
@@ -217,7 +236,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--hide-anomaly-regions", action="store_true")
     parser.add_argument("--title")
     parser.add_argument("--subtitle")
-    parser.add_argument("--force", action="store_true", help="Replace an existing profile")
+    parser.add_argument(
+        "--force", action="store_true", help="Replace an existing profile"
+    )
     return parser
 
 
@@ -225,7 +246,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.output.exists() and not args.force:
-        parser.error(f"output already exists; choose a new path or pass --force: {args.output}")
+        parser.error(
+            f"output already exists; choose a new path or pass --force: {args.output}"
+        )
     try:
         profile = validate_profile(build_profile(args), args.output.parent)
     except (ValueError, map_builder.MapBuildError) as exc:

@@ -28,7 +28,9 @@ class ReviewPreparationError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -42,7 +44,9 @@ def _unsigned_reviewer() -> dict[str, None]:
 def _source_row(record: source_adapters.RawRecord) -> int:
     _, _, row_text = record.source_locator.partition("#row=")
     if not row_text.isdigit():
-        raise ReviewPreparationError(f"source locator has no row number: {record.source_locator}")
+        raise ReviewPreparationError(
+            f"source locator has no row number: {record.source_locator}"
+        )
     return int(row_text)
 
 
@@ -56,10 +60,15 @@ def _georoc_eligible(record: source_adapters.RawRecord) -> bool:
         return False
     if not str(record.fields.get("SAMPLE NAME") or "").strip():
         return False
-    return any(demos._reported_float(record.fields.get(f"{analyte.upper()}(PPM)")) is not None for analyte in ANALYTES)
+    return any(
+        demos._reported_float(record.fields.get(f"{analyte.upper()}(PPM)")) is not None
+        for analyte in ANALYTES
+    )
 
 
-def _georoc_selection(records: Sequence[source_adapters.RawRecord]) -> list[tuple[source_adapters.RawRecord, list[str]]]:
+def _georoc_selection(
+    records: Sequence[source_adapters.RawRecord],
+) -> list[tuple[source_adapters.RawRecord, list[str]]]:
     eligible = [record for record in records if _georoc_eligible(record)]
     by_file: dict[str, list[source_adapters.RawRecord]] = defaultdict(list)
     for record in eligible:
@@ -77,31 +86,47 @@ def _georoc_selection(records: Sequence[source_adapters.RawRecord]) -> list[tupl
     partial = [
         record
         for record in eligible
-        if sum(demos._reported_float(record.fields.get(f"{item.upper()}(PPM)")) is not None for item in ANALYTES)
+        if sum(
+            demos._reported_float(record.fields.get(f"{item.upper()}(PPM)")) is not None
+            for item in ANALYTES
+        )
         < len(ANALYTES)
     ]
     for record in partial:
         add(record, "target_missing_edge_case")
-    multi_citation = [record for record in eligible if len(re.findall(r"\[([^\]]+)\]", str(record.fields.get("CITATIONS") or ""))) > 1]
+    multi_citation = [
+        record
+        for record in eligible
+        if len(re.findall(r"\[([^\]]+)\]", str(record.fields.get("CITATIONS") or "")))
+        > 1
+    ]
     for record in multi_citation:
         add(record, "multiple_original_citations")
     spatial_orders = {
         "latitude_min_boundary": sorted(
             eligible,
-            key=lambda item: float(demos._exact_georoc_coordinate(item, "LATITUDE MIN", "LATITUDE MAX")),
+            key=lambda item: float(
+                demos._exact_georoc_coordinate(item, "LATITUDE MIN", "LATITUDE MAX")
+            ),
         ),
         "latitude_max_boundary": sorted(
             eligible,
-            key=lambda item: float(demos._exact_georoc_coordinate(item, "LATITUDE MIN", "LATITUDE MAX")),
+            key=lambda item: float(
+                demos._exact_georoc_coordinate(item, "LATITUDE MIN", "LATITUDE MAX")
+            ),
             reverse=True,
         ),
         "longitude_min_boundary": sorted(
             eligible,
-            key=lambda item: float(demos._exact_georoc_coordinate(item, "LONGITUDE MIN", "LONGITUDE MAX")),
+            key=lambda item: float(
+                demos._exact_georoc_coordinate(item, "LONGITUDE MIN", "LONGITUDE MAX")
+            ),
         ),
         "longitude_max_boundary": sorted(
             eligible,
-            key=lambda item: float(demos._exact_georoc_coordinate(item, "LONGITUDE MIN", "LONGITUDE MAX")),
+            key=lambda item: float(
+                demos._exact_georoc_coordinate(item, "LONGITUDE MIN", "LONGITUDE MAX")
+            ),
             reverse=True,
         ),
     }
@@ -115,7 +140,9 @@ def _georoc_selection(records: Sequence[source_adapters.RawRecord]) -> list[tupl
             if len(selected) == 30:
                 break
     if len(selected) != 30:
-        raise ReviewPreparationError(f"GEOROC selection produced {len(selected)} rows, expected 30")
+        raise ReviewPreparationError(
+            f"GEOROC selection produced {len(selected)} rows, expected 30"
+        )
     return [(record, sorted(reasons)) for record, reasons in selected.values()]
 
 
@@ -124,17 +151,32 @@ def _georoc_review(
     files: Mapping[str, source_adapters.DownloadedFile],
     candidate: source_adapters.DatasetCandidate,
 ) -> list[dict[str, Any]]:
-    references = {filename: demos._georoc_reference_map(item.path) for filename, item in files.items()}
+    references = {
+        filename: demos._georoc_reference_map(item.path)
+        for filename, item in files.items()
+    }
     output: list[dict[str, Any]] = []
     for position, (record, reasons) in enumerate(_georoc_selection(records), start=1):
         filename = str(record.fields.get("_source_file") or "")
         downloaded = files[filename]
-        latitude = demos._exact_georoc_coordinate(record, "LATITUDE MIN", "LATITUDE MAX")
-        longitude = demos._exact_georoc_coordinate(record, "LONGITUDE MIN", "LONGITUDE MAX")
+        latitude = demos._exact_georoc_coordinate(
+            record, "LATITUDE MIN", "LATITUDE MAX"
+        )
+        longitude = demos._exact_georoc_coordinate(
+            record, "LONGITUDE MIN", "LONGITUDE MAX"
+        )
         sample_id = str(record.fields.get("SAMPLE NAME") or "").strip()
-        raw_values = {item: str(record.fields.get(f"{item.upper()}(PPM)") or "").strip() for item in ANALYTES}
-        citation_ids = re.findall(r"\[([^\]]+)\]", str(record.fields.get("CITATIONS") or ""))
-        citations = [references[filename].get(item, f"[{item}] unresolved") for item in citation_ids]
+        raw_values = {
+            item: str(record.fields.get(f"{item.upper()}(PPM)") or "").strip()
+            for item in ANALYTES
+        }
+        citation_ids = re.findall(
+            r"\[([^\]]+)\]", str(record.fields.get("CITATIONS") or "")
+        )
+        citations = [
+            references[filename].get(item, f"[{item}] unresolved")
+            for item in citation_ids
+        ]
         observations = []
         for analyte, raw_value in raw_values.items():
             if demos._reported_float(raw_value) is None:
@@ -148,7 +190,9 @@ def _georoc_review(
                     "sample_id": sample_id,
                     "latitude": latitude,
                     "longitude": longitude,
-                    "material": demos._strip_citation_suffix(record.fields.get("MATERIAL")),
+                    "material": demos._strip_citation_suffix(
+                        record.fields.get("MATERIAL")
+                    ),
                     "rock_name": str(record.fields.get("ROCK NAME") or "").strip(),
                     "location": str(record.fields.get("LOCATION") or "").strip(),
                     "record_id": source_adapters.stable_record_id(
@@ -161,14 +205,25 @@ def _georoc_review(
                 }
             )
         checks = {
-            "registered_member_hash_matches": downloaded.sha256 == demos.sha256_file(downloaded.path),
+            "registered_member_hash_matches": downloaded.sha256
+            == demos.sha256_file(downloaded.path),
             "sample_id_preserved": bool(sample_id),
             "exact_point_coordinates_preserved": bool(latitude and longitude),
-            "whole_rock_material_preserved": demos._strip_citation_suffix(record.fields.get("MATERIAL")).upper() == "WR",
+            "whole_rock_material_preserved": demos._strip_citation_suffix(
+                record.fields.get("MATERIAL")
+            ).upper()
+            == "WR",
             "target_values_preserved_without_imputation": len(observations)
-            == sum(demos._reported_float(value) is not None for value in raw_values.values()),
-            "citation_ids_resolved": bool(citation_ids) and all("unresolved" not in value for value in citations),
-            "stable_observation_ids_unique": len({item["record_id"] for item in observations}) == len(observations),
+            == sum(
+                demos._reported_float(value) is not None
+                for value in raw_values.values()
+            ),
+            "citation_ids_resolved": bool(citation_ids)
+            and all("unresolved" not in value for value in citations),
+            "stable_observation_ids_unique": len(
+                {item["record_id"] for item in observations}
+            )
+            == len(observations),
         }
         output.append(
             {
@@ -198,7 +253,9 @@ def _even_positions(length: int, count: int) -> list[int]:
     return positions
 
 
-def _usgs_selection(records: Sequence[source_adapters.RawRecord]) -> list[tuple[source_adapters.RawRecord, list[str]]]:
+def _usgs_selection(
+    records: Sequence[source_adapters.RawRecord],
+) -> list[tuple[source_adapters.RawRecord, list[str]]]:
     layers = ("top-0-5cm", "a-horizon", "c-horizon")
     by_layer: dict[str, list[source_adapters.RawRecord]] = defaultdict(list)
     for record in records:
@@ -209,18 +266,27 @@ def _usgs_selection(records: Sequence[source_adapters.RawRecord]) -> list[tuple[
         units = record.fields.get("_units")
         if not isinstance(units, Mapping):
             continue
-        if not all(str(record.fields.get(f"{prefix}{item}") or "").strip() for item in ANALYTES):
+        if not all(
+            str(record.fields.get(f"{prefix}{item}") or "").strip() for item in ANALYTES
+        ):
             continue
-        if not all(str(units.get(f"{prefix}{item}") or "").strip() for item in ANALYTES):
+        if not all(
+            str(units.get(f"{prefix}{item}") or "").strip() for item in ANALYTES
+        ):
             continue
-        if demos._reported_float(record.fields.get("Latitude")) is None or demos._reported_float(record.fields.get("Longitude")) is None:
+        if (
+            demos._reported_float(record.fields.get("Latitude")) is None
+            or demos._reported_float(record.fields.get("Longitude")) is None
+        ):
             continue
         by_layer[layer].append(record)
     selected: list[tuple[source_adapters.RawRecord, list[str]]] = []
     for layer in layers:
         rows = by_layer[layer]
         for position in _even_positions(len(rows), 10):
-            selected.append((rows[position], [f"soil_layer={layer}", "spatially_even_source_order"]))
+            selected.append(
+                (rows[position], [f"soil_layer={layer}", "spatially_even_source_order"])
+            )
     return selected
 
 
@@ -236,8 +302,13 @@ def _usgs_review(
         units = record.fields["_units"]
         filename = str(record.fields.get("_source_file") or "")
         downloaded = files[filename]
-        sample_id = str(record.fields.get(f"{prefix}LabID") or record.fields.get("SiteID") or "").strip()
-        raw_values = {item: str(record.fields.get(f"{prefix}{item}") or "").strip() for item in ANALYTES}
+        sample_id = str(
+            record.fields.get(f"{prefix}LabID") or record.fields.get("SiteID") or ""
+        ).strip()
+        raw_values = {
+            item: str(record.fields.get(f"{prefix}{item}") or "").strip()
+            for item in ANALYTES
+        }
         depth_min, depth_max = demos._depth_m(record)
         observations = []
         for analyte, raw_value in raw_values.items():
@@ -264,16 +335,23 @@ def _usgs_review(
                 }
             )
         checks = {
-            "registered_file_hash_matches": downloaded.sha256 == demos.sha256_file(downloaded.path),
+            "registered_file_hash_matches": downloaded.sha256
+            == demos.sha256_file(downloaded.path),
             "sample_id_preserved": bool(sample_id),
             "coordinates_preserved": all(
-                demos._reported_float(record.fields.get(field)) is not None for field in ("Latitude", "Longitude")
+                demos._reported_float(record.fields.get(field)) is not None
+                for field in ("Latitude", "Longitude")
             ),
             "soil_layer_preserved": layer in {"top-0-5cm", "a-horizon", "c-horizon"},
-            "four_target_values_preserved": len(observations) == 4 and all(raw_values.values()),
+            "four_target_values_preserved": len(observations) == 4
+            and all(raw_values.values()),
             "source_units_preserved": all(item["unit"] for item in observations),
-            "depth_semantics_preserved": layer == "top-0-5cm" or bool(depth_min and depth_max),
-            "stable_observation_ids_unique": len({item["record_id"] for item in observations}) == 4,
+            "depth_semantics_preserved": layer == "top-0-5cm"
+            or bool(depth_min and depth_max),
+            "stable_observation_ids_unique": len(
+                {item["record_id"] for item in observations}
+            )
+            == 4,
         }
         output.append(
             {
@@ -292,10 +370,14 @@ def _usgs_review(
     return output
 
 
-def _geotraces_target_observations(record: source_adapters.RawRecord) -> Mapping[str, Mapping[str, str]]:
+def _geotraces_target_observations(
+    record: source_adapters.RawRecord,
+) -> Mapping[str, Mapping[str, str]]:
     observations = record.fields.get("_target_observations")
     if not isinstance(observations, Mapping):
-        raise ReviewPreparationError(f"GEOTRACES target mapping is missing: {record.source_locator}")
+        raise ReviewPreparationError(
+            f"GEOTRACES target mapping is missing: {record.source_locator}"
+        )
     return {
         str(analyte): values
         for analyte, values in observations.items()
@@ -321,7 +403,9 @@ def _geotraces_selection(
                 (
                     record
                     for record in eligible
-                    if _geotraces_target_observations(record).get(analyte, {}).get("quality_flag")
+                    if _geotraces_target_observations(record)
+                    .get(analyte, {})
+                    .get("quality_flag")
                     == quality_flag
                 ),
                 None,
@@ -333,7 +417,11 @@ def _geotraces_selection(
         for record in eligible
         if all(
             demos._reported_float(record.fields.get(field)) is not None
-            for field in ("Longitude [degrees_east]", "Latitude [degrees_north]", "DEPTH [m]")
+            for field in (
+                "Longitude [degrees_east]",
+                "Latitude [degrees_north]",
+                "DEPTH [m]",
+            )
         )
     ]
     boundary_orders = {
@@ -345,10 +433,16 @@ def _geotraces_selection(
         "depth_max_boundary": ("DEPTH [m]", True),
     }
     for reason, (field, reverse) in boundary_orders.items():
-        ordered = sorted(numeric_records, key=lambda item: float(item.fields[field]), reverse=reverse)
+        ordered = sorted(
+            numeric_records, key=lambda item: float(item.fields[field]), reverse=reverse
+        )
         if ordered:
             add(ordered[0], reason)
-    multi_analyte = [record for record in eligible if len(_geotraces_target_observations(record)) >= 2]
+    multi_analyte = [
+        record
+        for record in eligible
+        if len(_geotraces_target_observations(record)) >= 2
+    ]
     if multi_analyte:
         add(multi_analyte[0], "multiple_target_analytes_on_sample")
     for position in _even_positions(len(eligible), 30):
@@ -356,7 +450,9 @@ def _geotraces_selection(
         if len(selected) == 30:
             break
     if len(selected) != 30:
-        raise ReviewPreparationError(f"GEOTRACES selection produced {len(selected)} rows, expected 30")
+        raise ReviewPreparationError(
+            f"GEOTRACES selection produced {len(selected)} rows, expected 30"
+        )
     return [(record, sorted(reasons)) for record, reasons in selected.values()]
 
 
@@ -368,7 +464,9 @@ def _geotraces_review(
     downloaded = next(iter(files.values()))
     known_qc = set(candidate.registry_entry["quality_schema"]["flag_meanings"])
     output: list[dict[str, Any]] = []
-    for position, (record, reasons) in enumerate(_geotraces_selection(records), start=1):
+    for position, (record, reasons) in enumerate(
+        _geotraces_selection(records), start=1
+    ):
         targets = _geotraces_target_observations(record)
         cruise = str(record.fields.get("Cruise") or "").strip()
         station = str(record.fields.get("Station") or "").strip()
@@ -389,10 +487,18 @@ def _geotraces_review(
                     "cruise": cruise,
                     "station": station,
                     "sample_depth_m": depth,
-                    "sampled_at": str(record.fields.get("yyyy-mm-ddThh:mm:ss.sss") or ""),
-                    "latitude": str(record.fields.get("Latitude [degrees_north]") or ""),
-                    "longitude": str(record.fields.get("Longitude [degrees_east]") or ""),
-                    "sampling_devices": str(record.fields.get("Sampling Devices") or ""),
+                    "sampled_at": str(
+                        record.fields.get("yyyy-mm-ddThh:mm:ss.sss") or ""
+                    ),
+                    "latitude": str(
+                        record.fields.get("Latitude [degrees_north]") or ""
+                    ),
+                    "longitude": str(
+                        record.fields.get("Longitude [degrees_east]") or ""
+                    ),
+                    "sampling_devices": str(
+                        record.fields.get("Sampling Devices") or ""
+                    ),
                     "standard_deviation": str(values.get("standard_deviation") or ""),
                     "quality_schema": str(values.get("quality_schema") or ""),
                     "quality_flag": str(values.get("quality_flag") or ""),
@@ -406,23 +512,28 @@ def _geotraces_review(
                 }
             )
         checks = {
-            "registered_member_hash_matches": downloaded.sha256 == demos.sha256_file(downloaded.path),
+            "registered_member_hash_matches": downloaded.sha256
+            == demos.sha256_file(downloaded.path),
             "sample_identity_preserved": bool(cruise and station and depth),
             "coordinates_preserved": all(
                 demos._reported_float(record.fields.get(field)) is not None
                 for field in ("Latitude [degrees_north]", "Longitude [degrees_east]")
             ),
             "sample_depth_preserved": demos._reported_float(depth) is not None,
-            "target_values_preserved_without_imputation": len(observations) == len(targets),
+            "target_values_preserved_without_imputation": len(observations)
+            == len(targets),
             "dissolved_fraction_and_unit_preserved": all(
                 item["water_fraction"] == "dissolved" and item["unit"] == "nmol/kg"
                 for item in observations
             ),
             "seadatanet_quality_flags_preserved": all(
-                item["quality_schema"] == "SEADATANET" and item["quality_flag"] in known_qc
+                item["quality_schema"] == "SEADATANET"
+                and item["quality_flag"] in known_qc
                 for item in observations
             ),
-            "stable_observation_ids_unique": len({item["record_id"] for item in observations})
+            "stable_observation_ids_unique": len(
+                {item["record_id"] for item in observations}
+            )
             == len(observations),
         }
         output.append(
@@ -433,7 +544,8 @@ def _geotraces_review(
                 "sample_id": sample_id,
                 "selection_reasons": reasons,
                 "published_target_raw_values": {
-                    analyte: str(values.get("value") or "") for analyte, values in targets.items()
+                    analyte: str(values.get("value") or "")
+                    for analyte, values in targets.items()
                 },
                 "adapter_observations": observations,
                 "automated_checks": checks,
@@ -502,8 +614,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.output:
             atomic_json(args.output, review)
         print(json.dumps(review, ensure_ascii=False, sort_keys=True))
-        return 0 if review["automated_pass_count"] == review["prepared_record_count"] == 30 else 1
-    except (OSError, ValueError, ReviewPreparationError, source_adapters.SourceAdapterError) as exc:
+        return (
+            0
+            if review["automated_pass_count"] == review["prepared_record_count"] == 30
+            else 1
+        )
+    except (
+        OSError,
+        ValueError,
+        ReviewPreparationError,
+        source_adapters.SourceAdapterError,
+    ) as exc:
         print(f"prepare_reference_human_review: {exc}", file=sys.stderr)
         return 2
 

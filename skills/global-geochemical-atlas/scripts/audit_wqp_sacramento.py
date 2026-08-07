@@ -26,7 +26,9 @@ class AuditError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -40,7 +42,9 @@ def finite(value: Any) -> bool:
         return False
 
 
-def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+def audit(
+    cache_dir: Path,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     adapter = source_adapters.get_adapter(SOURCE_ID)
     candidate = adapter.discover({"sources": [SOURCE_ID]})[0]
     downloaded = adapter.download(candidate, cache_dir, mode="cached")
@@ -71,8 +75,12 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "target_observations": len(records),
         "numeric_results": numeric,
         "not_detected_results": not_detected,
-        "unique_activity_ids": len({str(record.fields["ActivityIdentifier"]) for record in records}),
-        "unique_result_ids": len({str(record.fields["ResultIdentifier"]) for record in records}),
+        "unique_activity_ids": len(
+            {str(record.fields["ActivityIdentifier"]) for record in records}
+        ),
+        "unique_result_ids": len(
+            {str(record.fields["ResultIdentifier"]) for record in records}
+        ),
         "accepted_results": statuses["Accepted"],
         "preliminary_results": statuses["Preliminary"],
         "routine_samples": activity_types["Sample-Routine"],
@@ -92,7 +100,9 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         }
         for item in downloaded
     ]
-    snapshot_id = f"{SOURCE_ID}:{candidate.version}:{registry['download']['observed_at']}"
+    snapshot_id = (
+        f"{SOURCE_ID}:{candidate.version}:{registry['download']['observed_at']}"
+    )
     coverage = {
         "station_count": 1,
         "monitoring_location_identifier": station["MonitoringLocationIdentifier"],
@@ -123,13 +133,20 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "The Not Detected result remains left-censored at its reported limit rather than being converted to zero.",
         "WQP is the delivery route; the upstream USGS/NWIS record is the evidence source and is not double-counted.",
     ]
-    request_url = next(item["source_url"] for item in members if item["file_id"] == "results")
+    request_url = next(
+        item["source_url"] for item in members if item["file_id"] == "results"
+    )
     snapshot = {
         "snapshot_version": "geochemical-source-snapshot-v1",
         "source_id": SOURCE_ID,
         "snapshot_id": snapshot_id,
         "observed_at": registry["download"]["observed_at"],
-        "request": {"url": request_url, "station_url": next(item["source_url"] for item in members if item["file_id"] == "station")},
+        "request": {
+            "url": request_url,
+            "station_url": next(
+                item["source_url"] for item in members if item["file_id"] == "station"
+            ),
+        },
         "response": {"bytes": sum(item["bytes"] for item in members)},
         "archive": {"members": members},
         "counts": observed_counts,
@@ -137,25 +154,42 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "result_status_counts": dict(sorted(statuses.items())),
         "activity_type_counts": dict(sorted(activity_types.items())),
         "detection_limit_type_counts": dict(sorted(limits.items())),
-        "evidence": {"dataset_version": candidate.version, "license": candidate.license_id},
+        "evidence": {
+            "dataset_version": candidate.version,
+            "license": candidate.license_id,
+        },
         "claim_boundary": claim_boundary,
     }
     checks = {
         "registered_file_bytes_match": all(
             item.bytes
-            == next(entry["bytes"] for entry in registry["download"]["files"] if entry["file_id"] == item.file_id)
+            == next(
+                entry["bytes"]
+                for entry in registry["download"]["files"]
+                if entry["file_id"] == item.file_id
+            )
             for item in downloaded
         ),
         "counts_match_registry": observed_counts == expected,
-        "station_join_complete": all(record.fields["_station_metadata"]["MonitoringLocationIdentifier"] == "USGS-11447650" for record in records),
+        "station_join_complete": all(
+            record.fields["_station_metadata"]["MonitoringLocationIdentifier"]
+            == "USGS-11447650"
+            for record in records
+        ),
         "all_rows_are_dissolved_arsenic_water": all(
             record.fields["CharacteristicName"] == "Arsenic"
             and record.fields["ResultSampleFractionText"] == "Dissolved"
             and record.fields["ActivityMediaName"] == "Water"
             for record in records
         ),
-        "method_metadata_complete": all(record.fields["_target_observations"]["As"]["analytical_method"] for record in records),
-        "limit_metadata_complete": all(record.fields["_target_observations"]["As"]["detection_limit"] for record in records),
+        "method_metadata_complete": all(
+            record.fields["_target_observations"]["As"]["analytical_method"]
+            for record in records
+        ),
+        "limit_metadata_complete": all(
+            record.fields["_target_observations"]["As"]["detection_limit"]
+            for record in records
+        ),
     }
     if not all(checks.values()):
         raise AuditError(f"WQP audit checks failed: {checks}")
@@ -204,10 +238,31 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
                 selected.append(record)
                 selected_ids.add(record.source_record_id)
 
-    add([record for record in records if record.fields["ResultDetectionConditionText"] == "Not Detected"])
-    add([record for record in records if record.fields["ActivityTypeCode"] == "Quality Control Sample-Field Replicate"])
-    preliminary = [record for record in records if record.fields["ResultStatusIdentifier"] == "Preliminary"]
-    accepted = [record for record in records if record.fields["ResultStatusIdentifier"] == "Accepted"]
+    add(
+        [
+            record
+            for record in records
+            if record.fields["ResultDetectionConditionText"] == "Not Detected"
+        ]
+    )
+    add(
+        [
+            record
+            for record in records
+            if record.fields["ActivityTypeCode"]
+            == "Quality Control Sample-Field Replicate"
+        ]
+    )
+    preliminary = [
+        record
+        for record in records
+        if record.fields["ResultStatusIdentifier"] == "Preliminary"
+    ]
+    accepted = [
+        record
+        for record in records
+        if record.fields["ResultStatusIdentifier"] == "Accepted"
+    ]
     add([preliminary[round(i * (len(preliminary) - 1) / 9)] for i in range(10)])
     add([accepted[round(i * (len(accepted) - 1) / 9)] for i in range(10)])
     add(records)
@@ -224,14 +279,23 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
             SOURCE_ID, record.source_record_id, "As", raw_value, str(values["unit"])
         )
         row_checks = {
-            "registered_result_bytes_match": result_file.bytes == next(item["bytes"] for item in members if item["name"] == "results.csv"),
-            "station_join_preserved": joined_station["MonitoringLocationIdentifier"] == fields["MonitoringLocationIdentifier"],
-            "coordinates_preserved": finite(joined_station["LatitudeMeasure"]) and finite(joined_station["LongitudeMeasure"]),
-            "raw_value_or_censor_limit_preserved": finite(raw_value) and values["value_qualifier"] in {"", "<"},
-            "unit_and_fraction_preserved": values["unit"] == "ug/l" and fields["ResultSampleFractionText"] == "Dissolved",
-            "method_preserved": str(values["analytical_method"]).startswith("USGS:PLM10:"),
-            "result_status_preserved": values["source_result_status"] in {"Accepted", "Preliminary"},
-            "activity_type_preserved": values["activity_type"] in {"Sample-Routine", "Quality Control Sample-Field Replicate"},
+            "registered_result_bytes_match": result_file.bytes
+            == next(item["bytes"] for item in members if item["name"] == "results.csv"),
+            "station_join_preserved": joined_station["MonitoringLocationIdentifier"]
+            == fields["MonitoringLocationIdentifier"],
+            "coordinates_preserved": finite(joined_station["LatitudeMeasure"])
+            and finite(joined_station["LongitudeMeasure"]),
+            "raw_value_or_censor_limit_preserved": finite(raw_value)
+            and values["value_qualifier"] in {"", "<"},
+            "unit_and_fraction_preserved": values["unit"] == "ug/l"
+            and fields["ResultSampleFractionText"] == "Dissolved",
+            "method_preserved": str(values["analytical_method"]).startswith(
+                "USGS:PLM10:"
+            ),
+            "result_status_preserved": values["source_result_status"]
+            in {"Accepted", "Preliminary"},
+            "activity_type_preserved": values["activity_type"]
+            in {"Sample-Routine", "Quality Control Sample-Field Replicate"},
             "stable_observation_id_present": output_record_id.startswith("rec-"),
         }
         review_records.append(
@@ -245,7 +309,9 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
                     f"activity_type={fields['ActivityTypeCode']}",
                     f"qualifier={values['value_qualifier'] or 'reported'}",
                 ],
-                "published_target_raw_values": {"As": fields["ResultMeasureValue"] or None},
+                "published_target_raw_values": {
+                    "As": fields["ResultMeasureValue"] or None
+                },
                 "adapter_observations": [
                     {
                         "analyte": "As",
@@ -267,10 +333,17 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
                 ],
                 "automated_checks": row_checks,
                 "automated_status": "PASS" if all(row_checks.values()) else "FAIL",
-                "reviewer": {"decision": None, "reviewer": None, "reviewed_at": None, "notes": None},
+                "reviewer": {
+                    "decision": None,
+                    "reviewer": None,
+                    "reviewed_at": None,
+                    "notes": None,
+                },
             }
         )
-    automated_pass_count = sum(item["automated_status"] == "PASS" for item in review_records)
+    automated_pass_count = sum(
+        item["automated_status"] == "PASS" for item in review_records
+    )
     review = {
         "review_version": "geochemical-human-review-v1",
         "source_id": SOURCE_ID,
@@ -286,7 +359,9 @@ def audit(cache_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, An
         "claim_boundary": "Automated PASS verifies preservation only. Unsigned human review adds confidence and is not a research-use permission gate.",
     }
     if automated_pass_count != 30:
-        raise AuditError(f"only {automated_pass_count}/30 WQP review rows passed automated checks")
+        raise AuditError(
+            f"only {automated_pass_count}/30 WQP review rows passed automated checks"
+        )
     return snapshot, reconciliation, candidate_audit, review
 
 
@@ -308,7 +383,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         atomic_json(args.reconciliation_output, reconciliation)
         atomic_json(args.candidate_audit_output, candidate_audit)
         atomic_json(args.review_output, review)
-        print(json.dumps({"status": "PASS", "snapshot_id": snapshot["snapshot_id"], "review_rows": 30}, sort_keys=True))
+        print(
+            json.dumps(
+                {
+                    "status": "PASS",
+                    "snapshot_id": snapshot["snapshot_id"],
+                    "review_rows": 30,
+                },
+                sort_keys=True,
+            )
+        )
         return 0
     except (AuditError, OSError, ValueError, source_adapters.SourceAdapterError) as exc:
         print(f"audit_wqp_sacramento: {exc}", file=sys.stderr)

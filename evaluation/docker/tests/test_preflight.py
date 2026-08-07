@@ -59,14 +59,41 @@ class PreflightTests(unittest.TestCase):
                 {
                     "skill": "global-geochemical-atlas",
                     "cases": [
-                        {"id": "p1", "prompt": "atlas one", "should_activate": True, "expected_behavior": ["route"]},
-                        {"id": "p2", "prompt": "atlas two", "should_activate": True, "expected_behavior": ["route"]},
-                        {"id": "n1", "prompt": "subway map", "should_activate": False, "expected_behavior": ["skip"]},
-                        {"id": "n2", "prompt": "redox", "should_activate": False, "expected_behavior": ["skip"]},
+                        {
+                            "id": "p1",
+                            "prompt": "atlas one",
+                            "should_activate": True,
+                            "expected_behavior": ["route"],
+                        },
+                        {
+                            "id": "p2",
+                            "prompt": "atlas two",
+                            "should_activate": True,
+                            "expected_behavior": ["route"],
+                        },
+                        {
+                            "id": "n1",
+                            "prompt": "subway map",
+                            "should_activate": False,
+                            "expected_behavior": ["skip"],
+                        },
+                        {
+                            "id": "n2",
+                            "prompt": "redox",
+                            "should_activate": False,
+                            "expected_behavior": ["skip"],
+                        },
                     ],
-                    "rubrics": {key: "required" for key in (
-                        "discoverability", "correctness", "security", "effectiveness", "efficiency"
-                    )},
+                    "rubrics": {
+                        key: "required"
+                        for key in (
+                            "discoverability",
+                            "correctness",
+                            "security",
+                            "effectiveness",
+                            "efficiency",
+                        )
+                    },
                 }
             ),
             encoding="utf-8",
@@ -97,8 +124,12 @@ class PreflightTests(unittest.TestCase):
         path.write_text("sk-sp-" + "segment.with.dots-and-dashes" * 2, encoding="utf-8")
         report = evaluate(root, "global-geochemical-atlas")
         self.assertIn("l0.secrets", report["failures"])
-        secret_check = next(item for item in report["checks"] if item["id"] == "l0.secrets")
-        self.assertEqual(secret_check["detail"][0]["file"], "evaluation/accidental-secret.md")
+        secret_check = next(
+            item for item in report["checks"] if item["id"] == "l0.secrets"
+        )
+        self.assertEqual(
+            secret_check["detail"][0]["file"], "evaluation/accidental-secret.md"
+        )
 
     def test_malformed_governance_artifact_is_blocking(self) -> None:
         root = self.make_repo()

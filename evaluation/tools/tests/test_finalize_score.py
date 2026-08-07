@@ -38,7 +38,9 @@ class ReviewEvidenceScopeTests(unittest.TestCase):
             {"scientific_credibility"},
             expected_task_id="GGA-TEST-001",
             frozen_criteria=frozen,
-            allowed_evidence_paths=["artifacts/run_manifest.json#/benchmark_evidence/source"],
+            allowed_evidence_paths=[
+                "artifacts/run_manifest.json#/benchmark_evidence/source"
+            ],
             objective_reference="objective_report.json",
         )
 

@@ -24,7 +24,9 @@ class AuditError(RuntimeError):
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as handle:
         json.dump(value, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
         temporary = Path(handle.name)
@@ -35,10 +37,14 @@ def _float(value: Any) -> float:
     try:
         return float(str(value).strip())
     except ValueError as exc:
-        raise AuditError(f"expected a finite numeric source value, received {value!r}") from exc
+        raise AuditError(
+            f"expected a finite numeric source value, received {value!r}"
+        ) from exc
 
 
-def _review_records(records: Sequence[source_adapters.RawRecord], candidate: Any) -> list[dict[str, Any]]:
+def _review_records(
+    records: Sequence[source_adapters.RawRecord], candidate: Any
+) -> list[dict[str, Any]]:
     selected_indices: list[int] = []
     reasons: dict[int, set[str]] = {}
 
@@ -56,8 +62,14 @@ def _review_records(records: Sequence[source_adapters.RawRecord], candidate: Any
         add(index, "first_sample_per_potential_source_area")
 
     for field in ("Latitude", "Longitude"):
-        add(min(range(len(records)), key=lambda i: _float(records[i].fields[field])), f"minimum_{field.casefold()}")
-        add(max(range(len(records)), key=lambda i: _float(records[i].fields[field])), f"maximum_{field.casefold()}")
+        add(
+            min(range(len(records)), key=lambda i: _float(records[i].fields[field])),
+            f"minimum_{field.casefold()}",
+        )
+        add(
+            max(range(len(records)), key=lambda i: _float(records[i].fields[field])),
+            f"maximum_{field.casefold()}",
+        )
 
     for index in range(len(records)):
         if len(selected_indices) >= 30:
@@ -106,7 +118,10 @@ def _review_records(records: Sequence[source_adapters.RawRecord], candidate: Any
                     "six_target_values_preserved_without_imputation": True,
                     "units_preserved": True,
                     "method_and_digestion_attached": True,
-                    "stable_observation_ids_unique": len({item["record_id"] for item in observations}) == 6,
+                    "stable_observation_ids_unique": len(
+                        {item["record_id"] for item in observations}
+                    )
+                    == 6,
                 },
                 "automated_status": "PASS",
                 "reviewer": {
@@ -135,7 +150,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     sample_ids = {str(record.fields["Sample ID"]) for record in records}
     target_fields: Mapping[str, str] = candidate.registry_entry["target_analytes"]
     target_counts = {
-        analyte: sum(bool(str(record.fields[target_fields[analyte]]).strip()) for record in records)
+        analyte: sum(
+            bool(str(record.fields[target_fields[analyte]]).strip())
+            for record in records
+        )
         for analyte in TARGETS
     }
     bbox = [
@@ -159,7 +177,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "sha256": downloaded.sha256,
             "bytes": downloaded.bytes,
             "members": [
-                {"name": downloaded.path.name, "bytes": downloaded.bytes, "sha256": downloaded.sha256}
+                {
+                    "name": downloaded.path.name,
+                    "bytes": downloaded.bytes,
+                    "sha256": downloaded.sha256,
+                }
             ],
         },
         "observed_data": {
@@ -210,11 +232,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "snapshot_id": snapshot_id,
         "status": "PASS",
         "checks": {
-            "file_sha256_match": downloaded.sha256 == candidate.registry_entry["download"]["files"][0]["expected_sha256"],
-            "file_bytes_match": downloaded.bytes == candidate.registry_entry["download"]["files"][0]["bytes"],
+            "file_sha256_match": downloaded.sha256
+            == candidate.registry_entry["download"]["files"][0]["expected_sha256"],
+            "file_bytes_match": downloaded.bytes
+            == candidate.registry_entry["download"]["files"][0]["bytes"],
             "physical_rows_match": len(records) == 43,
             "distinct_samples_match": len(sample_ids) == 43,
-            "target_counts_match": target_counts == {analyte: 43 for analyte in TARGETS},
+            "target_counts_match": target_counts
+            == {analyte: 43 for analyte in TARGETS},
             "bbox_match": bbox == [-13.26, 15.67, 32.5, 33.83],
             "review_sample_prepared": len(review_records) == 30,
         },
@@ -245,7 +270,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     atomic_json(args.snapshot_output, snapshot)
     atomic_json(args.reconciliation_output, reconciliation)
     atomic_json(args.review_output, review)
-    return {"status": "PASS", "source_rows": len(records), "prepared_review_records": len(review_records)}
+    return {
+        "status": "PASS",
+        "source_rows": len(records),
+        "prepared_review_records": len(review_records),
+    }
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -258,11 +287,22 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--audit-output",
         type=Path,
-        default=skill_dir / "fixtures" / "candidate-audits" / "pangaea-north-africa-soil-20260806T031354Z.json",
+        default=skill_dir
+        / "fixtures"
+        / "candidate-audits"
+        / "pangaea-north-africa-soil-20260806T031354Z.json",
     )
-    parser.add_argument("--snapshot-output", type=Path, default=fixture_dir / "snapshot_manifest.json")
-    parser.add_argument("--reconciliation-output", type=Path, default=fixture_dir / "adapter_reconciliation.json")
-    parser.add_argument("--review-output", type=Path, default=fixture_dir / "human_review.json")
+    parser.add_argument(
+        "--snapshot-output", type=Path, default=fixture_dir / "snapshot_manifest.json"
+    )
+    parser.add_argument(
+        "--reconciliation-output",
+        type=Path,
+        default=fixture_dir / "adapter_reconciliation.json",
+    )
+    parser.add_argument(
+        "--review-output", type=Path, default=fixture_dir / "human_review.json"
+    )
     return parser
 
 

@@ -20,7 +20,7 @@ python scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-预期 996 条 USGS 真实测定、996 条有效 WGS84 坐标、996 条固定 GLiM 岩性匹配、12 个达到 `n≥20` 的可比背景组和 6 个 high/low 候选异常；输出验证 0 错误、0 警告。详细边界、hash、许可和复现指标见 [production-demo.md](production-demo.md)。
+预期 996 条 USGS 真实测定、996 条有效 WGS84 坐标、996 条固定 GLiM 岩性匹配、12 个达到 `n≥20` 的可比背景组和 6 个 high/low 候选异常；输出验证 0 错误、0 警告。详细边界、hash、许可和复现指标由 Skill 直接路由到 `production-demo.md`。
 
 ## 合成边界演示
 

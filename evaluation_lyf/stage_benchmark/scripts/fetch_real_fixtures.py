@@ -22,7 +22,13 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from lab_common import CONTRACT_ROOT, LAB_ROOT, atomic_write_json, load_json, sha256_file
+from lab_common import (
+    CONTRACT_ROOT,
+    LAB_ROOT,
+    atomic_write_json,
+    load_json,
+    sha256_file,
+)
 
 SOURCE_CONTRACT = CONTRACT_ROOT / "real-sources.json"
 DEFAULT_FIXTURE_DIR = LAB_ROOT / "real-data" / "fixtures" / "raw"
@@ -62,22 +68,30 @@ def ds801_record_count(path: Path) -> int:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         lines = handle.readlines()
     try:
-        header_index = next(index for index, line in enumerate(lines) if line.startswith("Top5_LabID\t"))
+        header_index = next(
+            index for index, line in enumerate(lines) if line.startswith("Top5_LabID\t")
+        )
     except StopIteration as exc:
         raise FixtureError(f"DS801 table header not found: {path}") from exc
     # One unit row follows the header. Empty lines after that are ignored.
     return sum(1 for line in lines[header_index + 2 :] if line.strip())
 
 
-def validate_resource(path: Path, resource: Mapping[str, Any], max_bytes: int) -> dict[str, Any]:
+def validate_resource(
+    path: Path, resource: Mapping[str, Any], max_bytes: int
+) -> dict[str, Any]:
     if not path.is_file():
         raise FixtureError(f"fixture is missing: {path}")
     actual_bytes = path.stat().st_size
     expected_bytes = int(resource["bytes"])
     if actual_bytes > max_bytes:
-        raise FixtureError(f"fixture exceeds --max-bytes-per-file ({actual_bytes} > {max_bytes}): {path.name}")
+        raise FixtureError(
+            f"fixture exceeds --max-bytes-per-file ({actual_bytes} > {max_bytes}): {path.name}"
+        )
     if actual_bytes != expected_bytes:
-        raise FixtureError(f"byte-size drift for {path.name}: expected {expected_bytes}, got {actual_bytes}")
+        raise FixtureError(
+            f"byte-size drift for {path.name}: expected {expected_bytes}, got {actual_bytes}"
+        )
     actual_sha256 = sha256_file(path)
     expected_sha256 = str(resource["sha256"]).lower()
     if actual_sha256 != expected_sha256:
@@ -97,7 +111,9 @@ def validate_resource(path: Path, resource: Mapping[str, Any], max_bytes: int) -
     elif data_format == "tsv_with_preamble":
         record_count = ds801_record_count(path)
     minimum_records = resource.get("minimum_records")
-    if minimum_records is not None and (record_count is None or record_count < int(minimum_records)):
+    if minimum_records is not None and (
+        record_count is None or record_count < int(minimum_records)
+    ):
         raise FixtureError(
             f"too few records in {path.name}: expected at least {minimum_records}, got {record_count}"
         )
@@ -126,17 +142,23 @@ def download_to_temporary(
     for attempt in range(retries + 1):
         temporary_path: Path | None = None
         try:
-            request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
+            request = urllib.request.Request(
+                url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"}
+            )
             with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
                 final_url = response.geturl()
                 if urllib.parse.urlsplit(final_url).scheme != "https":
-                    raise FixtureError(f"source redirected away from HTTPS: {final_url}")
+                    raise FixtureError(
+                        f"source redirected away from HTTPS: {final_url}"
+                    )
                 content_length = response.headers.get("Content-Length")
                 if content_length is not None and int(content_length) > max_bytes:
                     raise FixtureError(
                         f"declared response exceeds --max-bytes-per-file ({content_length} > {max_bytes})"
                     )
-                with tempfile.NamedTemporaryFile("wb", dir=fixture_dir, delete=False) as handle:
+                with tempfile.NamedTemporaryFile(
+                    "wb", dir=fixture_dir, delete=False
+                ) as handle:
                     temporary_path = Path(handle.name)
                     received = 0
                     while True:
@@ -158,7 +180,9 @@ def download_to_temporary(
                 temporary_path.unlink()
             if attempt < retries:
                 time.sleep(min(2.0, 0.25 * (2**attempt)))
-    raise FixtureError(f"download failed after {retries + 1} attempts: {url}: {last_error}")
+    raise FixtureError(
+        f"download failed after {retries + 1} attempts: {url}: {last_error}"
+    )
 
 
 def materialize_fixtures(
@@ -187,7 +211,9 @@ def materialize_fixtures(
         destination = resource_path(fixture_dir, resource)
         should_download = not destination.is_file() or refresh
         if offline and should_download:
-            raise FixtureError(f"offline mode cannot supply missing or refreshed fixture: {destination.name}")
+            raise FixtureError(
+                f"offline mode cannot supply missing or refreshed fixture: {destination.name}"
+            )
         if should_download:
             downloaded_any = True
             temporary = download_to_temporary(
@@ -227,10 +253,20 @@ def materialize_fixtures(
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Fetch or offline-verify the pinned real geochemistry fixtures.")
+    parser = argparse.ArgumentParser(
+        description="Fetch or offline-verify the pinned real geochemistry fixtures."
+    )
     parser.add_argument("--fixture-dir", type=Path, default=DEFAULT_FIXTURE_DIR)
-    parser.add_argument("--offline", action="store_true", help="Open no network connections; require pinned files")
-    parser.add_argument("--refresh", action="store_true", help="Redownload every file and reject any byte drift")
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="Open no network connections; require pinned files",
+    )
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Redownload every file and reject any byte drift",
+    )
     parser.add_argument("--timeout-seconds", type=float, default=30.0)
     parser.add_argument("--max-bytes-per-file", type=int, default=5 * 1024 * 1024)
     parser.add_argument("--retries", type=int, default=2)
@@ -242,8 +278,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.offline and args.refresh:
         parser.error("--offline and --refresh are mutually exclusive")
-    if args.timeout_seconds <= 0 or args.max_bytes_per_file <= 0 or not 0 <= args.retries <= 5:
-        parser.error("timeout/max-bytes must be positive and retries must be between 0 and 5")
+    if (
+        args.timeout_seconds <= 0
+        or args.max_bytes_per_file <= 0
+        or not 0 <= args.retries <= 5
+    ):
+        parser.error(
+            "timeout/max-bytes must be positive and retries must be between 0 and 5"
+        )
     try:
         result = materialize_fixtures(
             args.fixture_dir,

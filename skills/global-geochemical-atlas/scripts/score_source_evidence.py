@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import source_adapters
+import validate_human_review
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -40,7 +41,12 @@ STATUS_FACTORS = {
     "conflict": 0.0,
 }
 TIER_RANK = {"U": 0, "D": 1, "C": 2, "B": 3, "A": 4}
-USE_MODE_RANK = {"discovery": 0, "raw_observation": 1, "normalized_analysis": 2, "benchmark_ready": 3}
+USE_MODE_RANK = {
+    "discovery": 0,
+    "raw_observation": 1,
+    "normalized_analysis": 2,
+    "benchmark_ready": 3,
+}
 
 
 class EvidenceScoringError(ValueError):
@@ -116,7 +122,9 @@ def _dimension(
 
 
 def _https_urls(values: Sequence[Any]) -> bool:
-    return bool(values) and all(isinstance(value, str) and value.startswith("https://") for value in values)
+    return bool(values) and all(
+        isinstance(value, str) and value.startswith("https://") for value in values
+    )
 
 
 def derive_access_status(entry: Mapping[str, Any]) -> str:
@@ -134,7 +142,15 @@ def derive_access_status(entry: Mapping[str, Any]) -> str:
         return "restricted"
     if "account" in combined or "login" in combined:
         return "account_required"
-    if any(token in combined for token in ("acceptance", "registration", "moratorium", "form_or_station_limit")):
+    if any(
+        token in combined
+        for token in (
+            "acceptance",
+            "registration",
+            "moratorium",
+            "form_or_station_limit",
+        )
+    ):
         return "application_required"
     return "unavailable"
 
@@ -147,9 +163,17 @@ def derive_research_use_status(entry: Mapping[str, Any]) -> str:
     license_id = str(license_entry.get("id") or "")
     if license_id == "LicenseRef-USGS-Public-Domain":
         return "open_research"
-    if status in {"open", "open_reuse_terms", "dataset_specific_open_government", "citation_and_copyright_terms"}:
+    if status in {
+        "open",
+        "open_reuse_terms",
+        "dataset_specific_open_government",
+        "citation_and_copyright_terms",
+    }:
         return "attribution_required"
-    if status == "restricted" and "noncommercial" in str(license_entry.get("notes", "")).casefold():
+    if (
+        status == "restricted"
+        and "noncommercial" in str(license_entry.get("notes", "")).casefold()
+    ):
         return "noncommercial_research_only"
     if status in {
         "mixed_record_or_batch",
@@ -165,10 +189,16 @@ def derive_research_use_status(entry: Mapping[str, Any]) -> str:
 def _registry_integrity(registry_entry: Mapping[str, Any] | None) -> dict[str, Any]:
     weight = DIMENSION_WEIGHTS["file_record_integrity"]
     if registry_entry is None:
-        return _dimension("missing", weight, "No frozen file or archive inventory is registered.")
+        return _dimension(
+            "missing", weight, "No frozen file or archive inventory is registered."
+        )
     download = registry_entry.get("download")
     if not isinstance(download, Mapping):
-        return _dimension("conflict", weight, "A production registry entry exists without a download contract.")
+        return _dimension(
+            "conflict",
+            weight,
+            "A production registry entry exists without a download contract.",
+        )
     files = download.get("files")
     if isinstance(files, list) and files:
         valid = all(
@@ -222,29 +252,57 @@ def _registry_integrity(registry_entry: Mapping[str, Any] | None) -> dict[str, A
             if valid
             else "Archive member inventory or publisher checksums are incomplete.",
         )
-    return _dimension("conflict", weight, "The registered download has no verifiable file inventory.")
+    return _dimension(
+        "conflict", weight, "The registered download has no verifiable file inventory."
+    )
 
 
-def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, Any]:
+def _human_review_dimension(
+    source_id: str, candidate: Mapping[str, Any] | None
+) -> dict[str, Any]:
     weight = DIMENSION_WEIGHTS["human_review"]
     review = candidate.get("human_review") if isinstance(candidate, Mapping) else None
-    evidence = [candidate.get("_human_review_path", "")] if isinstance(candidate, Mapping) else []
+    evidence = (
+        [candidate.get("_human_review_path", "")]
+        if isinstance(candidate, Mapping)
+        else []
+    )
     if not isinstance(review, Mapping):
-        return _dimension("missing", weight, "No checked-in human review record is available.")
-    completed = review.get("completed_record_count", 0)
-    if review.get("status") in {"complete", "passed"} and not completed:
-        completed = review.get("reviewed_record_count", review.get("required_record_count", 0))
-    if not isinstance(completed, int) or completed < 0:
-        return _dimension("conflict", weight, "Human review count is invalid.")
-    if review.get("status") == "conflict":
         return _dimension(
-            "conflict", weight, "Human review found an unresolved systematic mapping error.", evidence
+            "missing", weight, "No checked-in human review record is available."
         )
-    if completed >= 30 or (
-        review.get("all_records_reviewed") is True and review.get("status") in {"complete", "passed"}
-    ):
+    validation = validate_human_review.validate_document(
+        dict(review), path=evidence[0] or "<candidate-human-review>"
+    )
+    if validation.get("source_id") != source_id:
         return _dimension(
-            "verified", weight, f"{completed} stratified records were reviewed and passed.", evidence
+            "conflict",
+            weight,
+            "Human review source_id does not match the source being scored.",
+            evidence,
+        )
+    if validation["status"] == "invalid":
+        summary = "; ".join(validation["errors"][:3])
+        return _dimension(
+            "conflict",
+            weight,
+            f"Human review failed integrity validation: {summary}",
+            evidence,
+        )
+    if validation["human_fail_count"]:
+        return _dimension(
+            "conflict",
+            weight,
+            f"Human review contains {validation['human_fail_count']} failed record decisions.",
+            evidence,
+        )
+    completed = validation["completed_record_count"]
+    if validation["benchmark_ready_review"]:
+        return _dimension(
+            "verified",
+            weight,
+            f"{completed} stratified records were reviewed and passed.",
+            evidence,
         )
     if completed >= 10:
         return _dimension(
@@ -262,7 +320,7 @@ def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, An
             evidence,
             awarded_points=2,
         )
-    prepared = review.get("prepared_record_count", 0)
+    prepared = validation["prepared_record_count"]
     return _dimension(
         "missing",
         weight,
@@ -318,13 +376,14 @@ def _derive_use_mode(
         if dimensions["human_review"]["status"] != "verified":
             reasons.append("30-record human review is incomplete")
         return "normalized_analysis", reasons
-    if (
-        dimensions["file_record_integrity"]["status"] == "verified"
-        and dimensions["schema_semantics"]["status"] in {"verified", "partial"}
-    ):
+    if dimensions["file_record_integrity"]["status"] == "verified" and dimensions[
+        "schema_semantics"
+    ]["status"] in {"verified", "partial"}:
         reasons.append("a production adapter is not yet verified")
         return "raw_observation", reasons
-    reasons.append("record integrity or schema semantics are not sufficiently evidenced")
+    reasons.append(
+        "record integrity or schema semantics are not sufficiently evidenced"
+    )
     return "discovery", reasons
 
 
@@ -337,9 +396,9 @@ def score_source(
     """Return independently visible research-use, evidence and use-mode states."""
 
     evidence_urls = entry.get("evidence_urls", [])
-    identity_ok = bool(entry.get("title") and entry.get("publisher") and entry.get("landing_page")) and _https_urls(
-        evidence_urls
-    )
+    identity_ok = bool(
+        entry.get("title") and entry.get("publisher") and entry.get("landing_page")
+    ) and _https_urls(evidence_urls)
     dimensions: dict[str, dict[str, Any]] = {
         "identity_publisher": _dimension(
             "verified" if identity_ok else "conflict",
@@ -352,7 +411,9 @@ def score_source(
     }
 
     version = entry.get("version", {})
-    snapshot_manifest = candidate.get("_snapshot_manifest") if isinstance(candidate, Mapping) else None
+    snapshot_manifest = (
+        candidate.get("_snapshot_manifest") if isinstance(candidate, Mapping) else None
+    )
     if isinstance(snapshot_manifest, Mapping):
         candidate_archive = {
             "sha256": snapshot_manifest.get("response", {}).get("sha256"),
@@ -363,8 +424,12 @@ def score_source(
             "observed_at": snapshot_manifest.get("observed_at"),
         }
     else:
-        candidate_archive = candidate.get("archive") if isinstance(candidate, Mapping) else None
-        candidate_acquisition = candidate.get("acquisition") if isinstance(candidate, Mapping) else None
+        candidate_archive = (
+            candidate.get("archive") if isinstance(candidate, Mapping) else None
+        )
+        candidate_acquisition = (
+            candidate.get("acquisition") if isinstance(candidate, Mapping) else None
+        )
     dynamic_snapshot = (
         isinstance(candidate_archive, Mapping)
         and isinstance(candidate_archive.get("sha256"), str)
@@ -390,7 +455,11 @@ def score_source(
                 candidate_acquisition.get("request_url", ""),
             ],
         )
-    elif version.get("status") in {"snapshot_available", "annual_repository_versions", "dataset_specific"}:
+    elif version.get("status") in {
+        "snapshot_available",
+        "annual_repository_versions",
+        "dataset_specific",
+    }:
         version_dimension = _dimension(
             "partial",
             DIMENSION_WEIGHTS["version_snapshot"],
@@ -420,7 +489,10 @@ def score_source(
             "The dynamic snapshot records archive hash and complete member hashes."
             if valid_members
             else "The dynamic snapshot hash exists but its member inventory is incomplete.",
-            [candidate.get("_snapshot_manifest_path", ""), candidate.get("_evidence_path", "")],
+            [
+                candidate.get("_snapshot_manifest_path", ""),
+                candidate.get("_evidence_path", ""),
+            ],
         )
     else:
         dimensions["file_record_integrity"] = _registry_integrity(registry_entry)
@@ -437,7 +509,9 @@ def score_source(
         provenance_note = "Dataset-level provenance is known, but record-level locators have not been verified."
     else:
         provenance_status = "missing"
-        provenance_note = "Dataset and record provenance are not sufficiently identified."
+        provenance_note = (
+            "Dataset and record provenance are not sufficiently identified."
+        )
     provenance_evidence = [entry.get("landing_page", ""), *evidence_urls]
     if identifiers.get("dataset_doi"):
         provenance_evidence.append(f"doi:{identifiers['dataset_doi']}")
@@ -448,9 +522,19 @@ def score_source(
         provenance_evidence,
     )
 
-    required_fields = registry_entry.get("required_fields") if isinstance(registry_entry, Mapping) else None
-    observed_data = candidate.get("observed_data") if isinstance(candidate, Mapping) else None
-    target_analytes = observed_data.get("target_analytes") if isinstance(observed_data, Mapping) else None
+    required_fields = (
+        registry_entry.get("required_fields")
+        if isinstance(registry_entry, Mapping)
+        else None
+    )
+    observed_data = (
+        candidate.get("observed_data") if isinstance(candidate, Mapping) else None
+    )
+    target_analytes = (
+        observed_data.get("target_analytes")
+        if isinstance(observed_data, Mapping)
+        else None
+    )
     if isinstance(required_fields, list) and required_fields:
         schema_status: EvidenceStatus = "verified"
         schema_note = "The production registry freezes required source fields and a parsed output contract."
@@ -467,7 +551,9 @@ def score_source(
         [candidate.get("_evidence_path", "")] if isinstance(candidate, Mapping) else [],
     )
 
-    observed_metadata = candidate.get("observed_metadata") if isinstance(candidate, Mapping) else None
+    observed_metadata = (
+        candidate.get("observed_metadata") if isinstance(candidate, Mapping) else None
+    )
     if isinstance(observed_metadata, Mapping) and (
         observed_metadata.get("partial_digestion_disclosed")
         or observed_metadata.get("target_llq_values_mg_per_kg")
@@ -499,7 +585,9 @@ def score_source(
             adapter_note = "A reproducible candidate verifier exists, but no canonical production adapter is implemented."
         else:
             adapter_status = "missing"
-            adapter_note = "No callable adapter and frozen parsing contract are registered."
+            adapter_note = (
+                "No callable adapter and frozen parsing contract are registered."
+            )
     else:
         try:
             adapter = source_adapters.get_adapter(source_id)
@@ -508,9 +596,15 @@ def score_source(
             adapter_note = "The production registry entry has no callable adapter."
         else:
             registry_version = str(registry_entry.get("dataset_version"))
-            if adapter.candidate.version == registry_version == str(version.get("value")):
+            if (
+                adapter.candidate.version
+                == registry_version
+                == str(version.get("value"))
+            ):
                 adapter_status = "verified"
-                adapter_note = "Adapter, registry and catalog resolve the same frozen version."
+                adapter_note = (
+                    "Adapter, registry and catalog resolve the same frozen version."
+                )
             else:
                 adapter_status = "conflict"
                 adapter_note = "Adapter, registry and catalog versions do not align."
@@ -520,20 +614,30 @@ def score_source(
         adapter_note,
         [candidate.get("_evidence_path", "")] if isinstance(candidate, Mapping) else [],
     )
-    dimensions["human_review"] = _human_review_dimension(candidate)
+    dimensions["human_review"] = _human_review_dimension(source_id, candidate)
 
     denominator = sum(
-        item["weight"] for item in dimensions.values() if item["status"] != "not_applicable"
+        item["weight"]
+        for item in dimensions.values()
+        if item["status"] != "not_applicable"
     )
     awarded = sum(item["awarded_points"] for item in dimensions.values())
-    scoreable = denominator > 0 and dimensions["identity_publisher"]["status"] != "conflict"
+    scoreable = (
+        denominator > 0 and dimensions["identity_publisher"]["status"] != "conflict"
+    )
     score = round((awarded / denominator) * 100, 2) if scoreable else 0.0
     tier = _score_tier(score, scoreable)
     access_status = derive_access_status(entry)
     research_use_status = derive_research_use_status(entry)
-    use_mode, use_mode_limitations = _derive_use_mode(access_status, research_use_status, dimensions, tier)
-    conflicts = [name for name, item in dimensions.items() if item["status"] == "conflict"]
-    missing_dimensions = [name for name, item in dimensions.items() if item["status"] == "missing"]
+    use_mode, use_mode_limitations = _derive_use_mode(
+        access_status, research_use_status, dimensions, tier
+    )
+    conflicts = [
+        name for name, item in dimensions.items() if item["status"] == "conflict"
+    ]
+    missing_dimensions = [
+        name for name, item in dimensions.items() if item["status"] == "missing"
+    ]
     return {
         "source_id": source_id,
         "access_status": access_status,
@@ -576,10 +680,17 @@ def score_catalog(
         "source_count": len(sources),
         "dimension_weights": DIMENSION_WEIGHTS,
         "summary": {
-            "evidence_tiers": {tier: tier_counts.get(tier, 0) for tier in ("A", "B", "C", "D", "U")},
+            "evidence_tiers": {
+                tier: tier_counts.get(tier, 0) for tier in ("A", "B", "C", "D", "U")
+            },
             "use_modes": {
                 mode: mode_counts.get(mode, 0)
-                for mode in ("benchmark_ready", "normalized_analysis", "raw_observation", "discovery")
+                for mode in (
+                    "benchmark_ready",
+                    "normalized_analysis",
+                    "raw_observation",
+                    "discovery",
+                )
             },
         },
         "sources": sources,
@@ -604,7 +715,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
-    parser.add_argument("--candidate-audits", type=Path, default=DEFAULT_CANDIDATE_AUDITS)
+    parser.add_argument(
+        "--candidate-audits", type=Path, default=DEFAULT_CANDIDATE_AUDITS
+    )
     parser.add_argument("--output", type=Path)
     return parser
 
@@ -613,14 +726,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         report = run(args.catalog, args.registry, args.candidate_audits)
-        rendered = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        rendered = (
+            json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        )
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(rendered, encoding="utf-8")
         print(rendered, end="")
         return 0
     except (OSError, EvidenceScoringError, source_adapters.SourceAdapterError) as exc:
-        print(json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps({"status": "FAIL", "error": str(exc)}, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 2
 
 
