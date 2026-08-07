@@ -1,7 +1,0 @@
-raw_row_id,source_record_id,sample_id,analyte,value,unit,method,lab,replicate_group_id,latitude,longitude
-D01,SR001,A1,Cu,50,mg/kg,ICP-MS,LAB-X,,10,20
-D02,SR001,A1,Cu,50,mg/kg,ICP-MS,LAB-X,,10,20
-D03,SR002,A1,Cu,51,mg/kg,ICP-MS,LAB-X,RG-A1,10,20
-D04,SR003,A1,Cu,48,mg/kg,XRF,LAB-Y,,10,20
-D05,SR004,B1,Cu,30,mg/kg,ICP-MS,LAB-X,,11,21
-D06,SR005,B2,Cu,30,mg/kg,ICP-MS,LAB-X,,11,21

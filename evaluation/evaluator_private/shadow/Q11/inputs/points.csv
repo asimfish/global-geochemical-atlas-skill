@@ -1,6 +1,0 @@
-point_id,longitude,latitude,coordinate_precision_m
-G01,5,5,100
-G02,9.999,5,100
-G03,15,5,2000
-G04,25,5,100
-G05,10,5,100

@@ -1,7 +1,0 @@
-record_id,element,value,unit,medium,basis,phase
-M01,Pb,25,mg/kg,soil,dry,total
-M02,Pb,30,mg/kg,soil,wet,total
-M03,Pb,0.02,mg/L,water,aqueous,dissolved
-M04,Pb,100,ug/g,soil,dry,total
-M05,Pb,20,ug/L,water,aqueous,filtered_dissolved
-M06,Pb,25000,ug/kg,soil,dry,total

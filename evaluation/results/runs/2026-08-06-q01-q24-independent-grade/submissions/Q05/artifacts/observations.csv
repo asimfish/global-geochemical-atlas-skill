@@ -1,3 +1,0 @@
-record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
-V01,V01,Cu,25,mg/kg,,,,valid_data.csv,
-V02,V02,Zn,80,mg/kg,,,,valid_data.csv,

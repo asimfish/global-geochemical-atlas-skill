@@ -1,3 +1,0 @@
-record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
-AM01,AM01,,10,,,-17,179.8,q20-fixture,
-AM02,AM02,,20,,,-18,-179.7,q20-fixture,

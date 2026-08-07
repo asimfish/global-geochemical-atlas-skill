@@ -1,1 +1,0 @@
-{"version":"q24-policy-1","minimum_anomaly_n":20,"minimum_quantified_fraction":0.70,"anomaly_requires_valid_coordinates":true,"robust_z_threshold":3.5,"map_allows_censored_with_null_numeric_value":true,"partial_success_exit_code":2}

@@ -1,6 +1,0 @@
-record_id,latitude,longitude,element,value,unit,medium,source_id,confidence_score,qc_flags,eligible_map
-MAP1,10,100,Ni,50,mg/kg,rock,SRC1,90,,true
-MAP2,40,-120,Pb,20,mg/kg,soil,SRC2,75,,true
-MAP3,0,200,Cu,30,mg/kg,soil,SRC2,30,longitude_out_of_range,false
-MAP4,10,,Zn,40,mg/kg,soil,SRC2,30,missing_longitude,false
-MAP5,0,0,As,5,mg/kg,soil,SRC3,40,possible_zero_zero_placeholder,false

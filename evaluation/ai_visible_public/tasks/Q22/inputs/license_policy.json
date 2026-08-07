@@ -1,9 +1,0 @@
-{
-  "version": "q22-license-1",
-  "classes": {
-    "CC-BY-4.0": {"redistribution_allowed": true, "allowed_payload": "raw_and_derived", "required_actions": ["attribution"], "confidence_penalty": 0},
-    "CC-BY-SA-4.0": {"redistribution_allowed": true, "allowed_payload": "raw_and_derived", "required_actions": ["attribution", "share_alike"], "confidence_penalty": 0},
-    "restricted_nonredistributable": {"redistribution_allowed": false, "allowed_payload": "metadata_and_pointer_only", "required_actions": ["do_not_redistribute_raw", "retain_access_controls"], "confidence_penalty": 10},
-    "unknown": {"redistribution_allowed": false, "allowed_payload": "metadata_only", "required_actions": ["license_review_required"], "confidence_penalty": 20}
-  }
-}

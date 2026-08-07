@@ -1,9 +1,0 @@
-{
-  "task_id": "GGA-CONF-001",
-  "policy_version": "q12-confidence-1",
-  "records": [
-    {"record_id": "K01", "components": {"provenance": 25, "coordinates": 20, "analysis": 20, "sample": 15, "record_qc": 20}, "confidence_score": 100, "confidence_label": "high", "confidence_is_probability": false},
-    {"record_id": "K02", "components": {"provenance": 15, "coordinates": 12, "analysis": 12, "sample": 10, "record_qc": 10}, "confidence_score": 59, "confidence_label": "low", "confidence_is_probability": false},
-    {"record_id": "K03", "components": {"provenance": 5, "coordinates": 0, "analysis": 0, "sample": 5, "record_qc": 0}, "confidence_score": 10, "confidence_label": "low", "confidence_is_probability": false}
-  ]
-}

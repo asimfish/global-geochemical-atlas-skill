@@ -1,7 +1,0 @@
-{
-  "task_id": "GGA-DATA-001",
-  "record_fields": ["source_id", "source_record_id", "dataset_title", "dataset_version", "dataset_doi", "source_url", "accessed_at", "license", "sha256", "citation"],
-  "download_sha256_required": true,
-  "allowed_example_doi": "10.25625/2JETOA",
-  "on_missing_provenance": "exclude_from_scientific_primary_dataset"
-}
