@@ -33,6 +33,8 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 
 这条回归使用 996 条 hash 固定的 USGS 真实土壤测定和固定版本 GLiM 岩性图。在生产阈值 `n≥20` 下，预期 996/996 完成地质匹配、12 个可比背景组完成分析、识别 6 个 high/low 候选异常，输出校验 0 错误/0 警告。它证明工程和科学规则可执行，不代表美国土壤的统计分布；完整证据见[生产演示说明](skills/global-geochemical-atlas/references/production-demo.md)。
 
+本地重复基准采用 3 次预热和 10 次独立测量，每次都创建新输出目录并验证全部 15 项产物；记录结果与适用边界见[工作流性能基准](skills/global-geochemical-atlas/BENCHMARK.md)。它不是官方模型得分或 2 CPU 容器成绩。
+
 ## 你会得到什么
 
 | 赛题交付物 | 运行产物 | 核心保证 |
@@ -117,6 +119,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 | 定制全球、区域或元素组合地图 | [D3 可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md) |
 | 修改 D1/D2/D3 或提交 PR | [贡献指南](CONTRIBUTING.md) |
 | 查看开发期 Q01–Q24 benchmark | [评测说明](evaluation/README.md) |
+| 复现离线工作流性能基线 | [性能基准](skills/global-geochemical-atlas/BENCHMARK.md) |
 | 选择正确的测试 Prompt | [测试 Prompt 总入口](TESTING_PROMPTS.md) |
 
 ## 开发验证
@@ -141,6 +144,11 @@ python skills/global-geochemical-atlas/scripts/component_test.py --component all
 
 # 端到端离线回归
 python skills/global-geochemical-atlas/scripts/self_test.py
+
+# 重复执行并验证完整离线工作流性能
+python skills/global-geochemical-atlas/scripts/benchmark_workflow.py \
+  --warmups 3 --runs 10 \
+  --output /tmp/gga-workflow-benchmark.json
 
 # evaluation 工具单元测试
 python -m unittest discover -s evaluation/tools/tests -v

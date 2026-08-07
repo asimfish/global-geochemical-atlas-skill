@@ -71,6 +71,8 @@ of causal, pollution, resource, or global-completeness claims.
   `evaluation/docker/preflight.py` from the repository root.
 - Scientific and end-to-end checks: `scripts/component_test.py --component all` and
   `scripts/self_test.py`.
+- Repeatable offline workflow timing and its claim boundary: `BENCHMARK.md` and
+  `scripts/benchmark_workflow.py`.
 
 ## Static scanner verification
 
