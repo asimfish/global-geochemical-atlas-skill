@@ -56,15 +56,19 @@ def public_projection(bundle: dict[str, Any]) -> list[dict[str, Any]]:
 def build(
     config: dict[str, Any], b0: dict[str, Any], s0: dict[str, Any], *,
     condition: str, runtime: str, run_id: str, provider_base_url: str,
+    expected_commit: str | None = None,
 ) -> dict[str, Any]:
     if condition not in {"B0", "S0"} or runtime not in {"host-uplift", "docker-uplift"}:
         raise ManifestError("unsupported condition or runtime")
+    frozen_commit = expected_commit or config.get("commit")
+    if not isinstance(frozen_commit, str) or len(frozen_commit) != 40:
+        raise ManifestError("expected commit must be a full 40-character Git object ID")
     for expected, bundle in (("B0", b0), ("S0", s0)):
         if (
             bundle.get("schema_version") != "qwen-uplift-candidate-bundle-v1"
             or bundle.get("mode") != "formal"
             or bundle.get("condition") != expected
-            or bundle.get("source_commit") != config.get("commit")
+            or bundle.get("source_commit") != frozen_commit
         ):
             raise ManifestError(f"{expected} bundle is not the frozen formal bundle")
     b0_public, s0_public = public_projection(b0), public_projection(s0)
@@ -89,7 +93,7 @@ def build(
     common = {
         "protocol_version": config.get("protocol_version"),
         "repository": config.get("repository"),
-        "commit": config.get("commit"),
+        "commit": frozen_commit,
         "display_model": config.get("model"),
         "api_model": api_model,
         "temperature": temperature,
@@ -138,6 +142,10 @@ def main() -> int:
     parser.add_argument("--runtime", choices=("host-uplift", "docker-uplift"), required=True)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--provider-base-url", required=True)
+    parser.add_argument(
+        "--expected-commit",
+        help="Controller-frozen release commit; required when the checked-out config necessarily predates its own release pin.",
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
@@ -145,6 +153,7 @@ def main() -> int:
             load(args.config), load(args.b0_bundle_manifest), load(args.s0_bundle_manifest),
             condition=args.condition, runtime=args.runtime, run_id=args.run_id,
             provider_base_url=args.provider_base_url,
+            expected_commit=args.expected_commit,
         )
     except (ManifestError, ProviderProfileError) as exc:
         parser.exit(1, f"experiment manifest error: {exc}\n")

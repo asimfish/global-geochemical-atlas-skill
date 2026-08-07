@@ -11,11 +11,12 @@ python3 evaluation_lyf/agent_uplift/export_candidate_bundle.py \
 ```
 
 固定：repository=`https://github.com/asimfish/global-geochemical-atlas-skill.git`，
-commit=`3497fa284fd181cc3880bc3d84d7bbc9dff35e37`，model=`Qwen3.8-Max`，temperature=0，
+commit=`1b20c276e8515bcf632cb45efe9f500c587ed3bf`，model=`Qwen3.8-Max`，temperature=0，
 `runtime_mode=docker`，`skill_used=false`。把 bundle 只读挂载为候选初始目录；不得挂载完整仓库。原样提供
 `AGENT_PROMPT.md`。候选不可见 `.git`、Skill、score_submission.py、checker、rubric、gold、历史或另一臂。
 
-候选退出后控制器用 `evaluation/reporting/build_experiment_manifest.py` 生成候选不可写的实验 manifest，再运行
+候选退出后控制器用 `evaluation/reporting/build_experiment_manifest.py --expected-commit <上述固定 commit>` 生成
+候选不可写的实验 manifest，再运行
 来源真实性门禁、真实 Chromium、带 `--browser-audit` 的 scorer 和统一报告。每臂三个新会话，同 pair
 fingerprint；用 `aggregate_uplift.py` 聚合。公开 scorer 最多三轮仅限 development bundle。
 只处理四个固定地球化学锚点属于未完成 D1；保存发现 manifest、clean_rebuild、截图和全部 SHA-256，并核对

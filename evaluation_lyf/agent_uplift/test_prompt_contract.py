@@ -46,6 +46,7 @@ class PromptContractTests(unittest.TestCase):
                 self.assertIn("browser", prompt.casefold())
                 self.assertIn("aggregate_uplift.py", prompt)
                 self.assertIn("build_experiment_manifest.py", prompt)
+                self.assertIn("--expected-commit", prompt)
                 self.assertIn("只处理四个固定地球化学锚点属于未完成 D1", prompt)
         for name, prompt in self.candidate_prompts.items():
             with self.subTest(candidate_prompt=name):

@@ -16,6 +16,7 @@ python3 evaluation/reporting/build_experiment_manifest.py \
   --condition S0 \
   --runtime docker-uplift \
   --run-id S0-01 \
+  --expected-commit <experiment_config.json 中冻结的完整 commit> \
   --provider-base-url https://<网关主机>/v1 \
   --output RUN/experiment_manifest.json
 ```

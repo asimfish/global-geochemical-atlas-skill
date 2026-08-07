@@ -44,11 +44,20 @@ class ReportingTests(unittest.TestCase):
         )
         self.assertEqual(b0_manifest["pair_fingerprint"], s0_manifest["pair_fingerprint"])
         self.assertNotEqual(b0_manifest["run_fingerprint"], s0_manifest["run_fingerprint"])
+        release_commit = "9" * 40
+        b0["source_commit"] = s0["source_commit"] = release_commit
+        release_manifest = build_experiment_manifest.build(
+            config, b0, s0, condition="B0", runtime="host-uplift", run_id="b0-release",
+            provider_base_url="https://gateway.example.test/v1",
+            expected_commit=release_commit,
+        )
+        self.assertEqual(release_commit, release_manifest["common_experiment"]["commit"])
         s0["files"][0] = {"path": "TASK.md", "bytes": 11, "sha256": "0" * 64}
         with self.assertRaisesRegex(build_experiment_manifest.ManifestError, "public task bytes differ"):
             build_experiment_manifest.build(
                 config, b0, s0, condition="S0", runtime="host-uplift", run_id="s0-2",
                 provider_base_url="https://gateway.example.test/v1",
+                expected_commit=release_commit,
             )
 
     def test_report_distinguishes_measurements_samples_and_locations(self) -> None:
