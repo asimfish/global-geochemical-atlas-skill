@@ -1,0 +1,1554 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 13,
+      "record_ids": [
+        "sgb-soil-review-01",
+        "sgb-soil-review-06",
+        "sgb-soil-review-07",
+        "sgb-soil-review-12",
+        "sgb-soil-review-13",
+        "sgb-soil-review-18",
+        "sgb-soil-review-19",
+        "sgb-soil-review-21",
+        "sgb-soil-review-22",
+        "sgb-soil-review-24",
+        "sgb-soil-review-25",
+        "sgb-soil-review-28",
+        "sgb-soil-review-30"
+      ]
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 2,
+      "record_ids": [
+        "sgb-soil-review-09",
+        "sgb-soil-review-14"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 17,
+      "record_ids": [
+        "sgb-soil-review-02",
+        "sgb-soil-review-03",
+        "sgb-soil-review-04",
+        "sgb-soil-review-05",
+        "sgb-soil-review-08",
+        "sgb-soil-review-09",
+        "sgb-soil-review-10",
+        "sgb-soil-review-11",
+        "sgb-soil-review-14",
+        "sgb-soil-review-15",
+        "sgb-soil-review-16",
+        "sgb-soil-review-17",
+        "sgb-soil-review-20",
+        "sgb-soil-review-23",
+        "sgb-soil-review-26",
+        "sgb-soil-review-27",
+        "sgb-soil-review-29"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_at": "2026-08-07T17:35:00Z",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T17:35:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "auditor_id": "codex-d1-evidence-audit",
+  "claim_boundary": "Thirty source observations from five official soil rows were checked for raw-value correspondence, qualifier semantics, record method, sample identity and exact sample+lab coordinate traceability. The audit does not claim national coverage, known soil horizons, complete preparation metadata or cross-method comparability.",
+  "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 2
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-01",
+      "sample_id": "1046-JC-L-001",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954",
+      "source_row": 2
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 20.0,
+          "qualifier": "reported",
+          "raw_value": "20",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 20.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "20",
+        "source_row": 2
+      },
+      "raw_value": "20",
+      "review_id": "sgb-soil-review-02",
+      "sample_id": "1046-JC-L-001",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954",
+      "source_row": 2
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 15.0,
+          "qualifier": "reported",
+          "raw_value": "15",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 15.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "15",
+        "source_row": 2
+      },
+      "raw_value": "15",
+      "review_id": "sgb-soil-review-03",
+      "sample_id": "1046-JC-L-001",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954",
+      "source_row": 2
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "parsed_value": 7.0,
+          "qualifier": "reported",
+          "raw_value": "7",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 7.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "7",
+        "source_row": 2
+      },
+      "raw_value": "7",
+      "review_id": "sgb-soil-review-04",
+      "sample_id": "1046-JC-L-001",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954",
+      "source_row": 2
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 30.0,
+          "qualifier": "reported",
+          "raw_value": "30",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 30.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "30",
+        "source_row": 2
+      },
+      "raw_value": "30",
+      "review_id": "sgb-soil-review-05",
+      "sample_id": "1046-JC-L-001",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954",
+      "source_row": 2
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 2
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-06",
+      "sample_id": "1046-JC-L-001",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-001%7CJBC211%7C2%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D2%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87954",
+      "source_row": 2
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 8
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-07",
+      "sample_id": "1046-JC-L-007",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966",
+      "source_row": 8
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 15.0,
+          "qualifier": "reported",
+          "raw_value": "15",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 15.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "15",
+        "source_row": 8
+      },
+      "raw_value": "15",
+      "review_id": "sgb-soil-review-08",
+      "sample_id": "1046-JC-L-007",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966",
+      "source_row": 8
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 200.0,
+          "qualifier": "reported",
+          "raw_value": "200",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 200.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "200",
+        "source_row": 8
+      },
+      "raw_value": "200",
+      "review_id": "sgb-soil-review-09",
+      "sample_id": "1046-JC-L-007",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966",
+      "source_row": 8
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "parsed_value": 10.0,
+          "qualifier": "reported",
+          "raw_value": "10",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 10.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "10",
+        "source_row": 8
+      },
+      "raw_value": "10",
+      "review_id": "sgb-soil-review-10",
+      "sample_id": "1046-JC-L-007",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966",
+      "source_row": 8
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 70.0,
+          "qualifier": "reported",
+          "raw_value": "70",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 70.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "70",
+        "source_row": 8
+      },
+      "raw_value": "70",
+      "review_id": "sgb-soil-review-11",
+      "sample_id": "1046-JC-L-007",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966",
+      "source_row": 8
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 8
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-12",
+      "sample_id": "1046-JC-L-007",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-007%7CJBC339%7C8%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D8%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87966",
+      "source_row": 8
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 23
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-13",
+      "sample_id": "1046-JC-L-022",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987",
+      "source_row": 23
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 70.0,
+          "qualifier": "reported",
+          "raw_value": "70",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 70.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "70",
+        "source_row": 23
+      },
+      "raw_value": "70",
+      "review_id": "sgb-soil-review-14",
+      "sample_id": "1046-JC-L-022",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987",
+      "source_row": 23
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 15.0,
+          "qualifier": "reported",
+          "raw_value": "15",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 15.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "15",
+        "source_row": 23
+      },
+      "raw_value": "15",
+      "review_id": "sgb-soil-review-15",
+      "sample_id": "1046-JC-L-022",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987",
+      "source_row": 23
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "parsed_value": 5.0,
+          "qualifier": "reported",
+          "raw_value": "5",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 5.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "5",
+        "source_row": 23
+      },
+      "raw_value": "5",
+      "review_id": "sgb-soil-review-16",
+      "sample_id": "1046-JC-L-022",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987",
+      "source_row": 23
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 20.0,
+          "qualifier": "reported",
+          "raw_value": "20",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 20.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "20",
+        "source_row": 23
+      },
+      "raw_value": "20",
+      "review_id": "sgb-soil-review-17",
+      "sample_id": "1046-JC-L-022",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987",
+      "source_row": 23
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 23
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-18",
+      "sample_id": "1046-JC-L-022",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-022%7CJBC354%7C23%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D23%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87987",
+      "source_row": 23
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 29
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-19",
+      "sample_id": "1046-JC-L-028",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993",
+      "source_row": 29
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 10.0,
+          "qualifier": "reported",
+          "raw_value": "10",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 10.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "10",
+        "source_row": 29
+      },
+      "raw_value": "10",
+      "review_id": "sgb-soil-review-20",
+      "sample_id": "1046-JC-L-028",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993",
+      "source_row": 29
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "detection_limit": 5.0,
+          "parsed_value": null,
+          "qualifier": "below_detection_limit",
+          "raw_value": "< 5",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "below_detection_limit",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "< 5",
+        "source_row": 29
+      },
+      "raw_value": "< 5",
+      "review_id": "sgb-soil-review-21",
+      "sample_id": "1046-JC-L-028",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993",
+      "source_row": 29
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "detection_limit": 5.0,
+          "parsed_value": null,
+          "qualifier": "below_detection_limit",
+          "raw_value": "< 5",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "below_detection_limit",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "< 5",
+        "source_row": 29
+      },
+      "raw_value": "< 5",
+      "review_id": "sgb-soil-review-22",
+      "sample_id": "1046-JC-L-028",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993",
+      "source_row": 29
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 15.0,
+          "qualifier": "reported",
+          "raw_value": "15",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 15.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "15",
+        "source_row": 29
+      },
+      "raw_value": "15",
+      "review_id": "sgb-soil-review-23",
+      "sample_id": "1046-JC-L-028",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993",
+      "source_row": 29
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 29
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-24",
+      "sample_id": "1046-JC-L-028",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-028%7CJBC360%7C29%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D29%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87993",
+      "source_row": 29
+    },
+    {
+      "analyte": "As",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "As_ppm",
+        "raw_value": "ND",
+        "source_row": 33
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-25",
+      "sample_id": "1046-JC-L-032",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997",
+      "source_row": 33
+    },
+    {
+      "analyte": "Cr",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "parsed_value": 10.0,
+          "qualifier": "reported",
+          "raw_value": "10",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 10.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cr_ppm",
+        "raw_value": "10",
+        "source_row": 33
+      },
+      "raw_value": "10",
+      "review_id": "sgb-soil-review-26",
+      "sample_id": "1046-JC-L-032",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997",
+      "source_row": 33
+    },
+    {
+      "analyte": "Cu",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "parsed_value": 30.0,
+          "qualifier": "reported",
+          "raw_value": "30",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 30.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Cu_ppm",
+        "raw_value": "30",
+        "source_row": 33
+      },
+      "raw_value": "30",
+      "review_id": "sgb-soil-review-27",
+      "sample_id": "1046-JC-L-032",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997",
+      "source_row": 33
+    },
+    {
+      "analyte": "Ni",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "detection_limit": 5.0,
+          "parsed_value": null,
+          "qualifier": "below_detection_limit",
+          "raw_value": "< 5",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "below_detection_limit",
+      "raw_field_evidence": {
+        "field": "Ni_ppm",
+        "raw_value": "< 5",
+        "source_row": 33
+      },
+      "raw_value": "< 5",
+      "review_id": "sgb-soil-review-28",
+      "sample_id": "1046-JC-L-032",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997",
+      "source_row": 33
+    },
+    {
+      "analyte": "Pb",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "parsed_value": 50.0,
+          "qualifier": "reported",
+          "raw_value": "50",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": 50.0,
+      "qualifier": "reported",
+      "raw_field_evidence": {
+        "field": "Pb_ppm",
+        "raw_value": "50",
+        "source_row": 33
+      },
+      "raw_value": "50",
+      "review_id": "sgb-soil-review-29",
+      "sample_id": "1046-JC-L-032",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997",
+      "source_row": 33
+    },
+    {
+      "analyte": "Zn",
+      "codex_audit": {
+        "audited_at": "2026-08-07T17:35:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+          "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997"
+        ],
+        "findings": [
+          "censored_or_negative_value",
+          "detection_limit_not_reported",
+          "digestion_not_reported"
+        ],
+        "notes": "The raw value, qualifier, record method and exact sample+lab coordinate join agree with the official fixture; missing digestion and ND limits remain explicit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "method_raw": "Espectrografia Ótica de Emissão",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "parsed_value": null,
+          "qualifier": "not_detected",
+          "raw_value": "ND",
+          "unit": "ppm"
+        }
+      ],
+      "parsed_value": null,
+      "qualifier": "not_detected",
+      "raw_field_evidence": {
+        "field": "Zn_ppm",
+        "raw_value": "ND",
+        "source_row": 33
+      },
+      "raw_value": "ND",
+      "review_id": "sgb-soil-review-30",
+      "sample_id": "1046-JC-L-032",
+      "source_locator": "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+      "source_record_id": "src-source-record-v2%7Cbrazil-sgb-florianopolis-soil%7C1046-JC-L-032%7CJBC364%7C33%7Cgeoquimica_florianopolis_1985.zip%2FFlorianopolis_Geoquimica_Solo.xlsx%23row%3D33%3Bhttps%3A%2F%2Fgeoportal.sgb.gov.br%2Fserver%2Frest%2Fservices%2Fgeoquimica%2Fgeoquimica_integrada%2FFeatureServer%2F5%23OBJECTID%3D87997",
+      "source_row": 33
+    }
+  ],
+  "required_record_count": 30,
+  "reviewer_type": "codex",
+  "source_id": "brazil-sgb-florianopolis-soil",
+  "status": "automated_audit_complete"
+}

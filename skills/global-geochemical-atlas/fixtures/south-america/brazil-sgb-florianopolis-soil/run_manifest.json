@@ -1,0 +1,66 @@
+{
+  "data_mode": "official-source-native-fixture",
+  "generated_at": "2026-08-07T17:35:00Z",
+  "source": {
+    "source_id": "brazil-sgb-florianopolis-soil",
+    "title": "SGB Florianopolis soil geochemistry",
+    "dataset_pid": "https://rigeo.sgb.gov.br/handle/doc/23413",
+    "dataset_doi": null,
+    "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+    "publisher": "Servico Geologico do Brasil - CPRM",
+    "release_year": 2022
+  },
+  "source_files": [
+    {
+      "file_id": "4ac11c55-2d10-4aac-9dce-5266b442c500",
+      "filename": "geoquimica_florianopolis_1985.zip",
+      "bytes": 841480,
+      "source_url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content",
+      "selected_member": "Florianopolis_Geoquimica_Solo.xlsx",
+      "selected_member_bytes": 15455
+    },
+    {
+      "file_id": "sgb-arcgis-layer-5-soil-coordinates",
+      "source_url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5/query",
+      "join_key": "NUM_CAMPO + NUM_LAB",
+      "requested_output_crs": "EPSG:4326"
+    }
+  ],
+  "fixture": {
+    "filename": "source_native_fixture.csv",
+    "bytes": 1828,
+    "source_analysis_rows": 5,
+    "unique_samples": 5,
+    "target_observations": 30,
+    "audited_observations": 30,
+    "selection": "Five complete source rows retain ordinary values, ND, all three less-than cases and the regional Cu and Cr maxima."
+  },
+  "full_profile": {
+    "workbook_rows": 32,
+    "target_analysis_rows": 32,
+    "unique_sample_ids": 32,
+    "unique_sample_lab_pairs": 32,
+    "target_observations": 192,
+    "coordinate_matches": 32,
+    "coordinate_failures": 0,
+    "target_observations_by_analyte": {"As":32,"Cr":32,"Cu":32,"Ni":32,"Pb":32,"Zn":32},
+    "qualifiers": {"below_detection_limit":3,"not_detected":64,"reported":125},
+    "methods": {"Espectrografia Ótica de Emissão":32},
+    "soil_horizon_raw": {"Nao Identificado":32},
+    "soil_type_raw": {"Nao Especificado":32}
+  },
+  "rights": {
+    "access_status": "public_download",
+    "repository_item_dc_rights": "open",
+    "research_use_status": "permitted_research",
+    "license_scope": "repository item metadata only; no explicit dataset reuse license located",
+    "redistribution_status": "not_evaluated_for_project_output"
+  },
+  "warnings": [
+    "This 32-sample regional product must not be presented as national Brazil or continuous South America coverage.",
+    "The official layer reports horizon as Nao Identificado and soil type as Nao Especificado; D1 leaves canonical horizon empty.",
+    "The source does not report digestion/preparation for these optical-emission rows.",
+    "As and Zn are ND for all 32 samples and ND has no recoverable numeric detection limit.",
+    "Mercury is not present in this child workbook."
+  ]
+}

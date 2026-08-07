@@ -1,0 +1,86 @@
+{
+  "verification_version": "v4-south-america-soil-source-audit-v1-no-content-hash",
+  "source_id": "brazil-sgb-florianopolis-soil",
+  "status": "verified_official_numeric_dataset",
+  "claim_boundary": "This candidate binds one regional SGB soil workbook to the official RIGeo item, bitstream, worksheet schema, record methods and exact sample+lab coordinate joins. It does not represent national Brazil coverage, a known soil horizon or continuous South America coverage.",
+  "acquisition": {
+    "mode": "pinned-official-rigeo-bitstream-plus-official-arcgis-record-join",
+    "observed_at": "2026-08-07T17:35:00Z",
+    "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+    "item_api": "https://rigeo.sgb.gov.br/server/api/core/items/5adc5a2e-78ca-4da4-990c-c932658481a7",
+    "bitstream_url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content",
+    "coordinate_layer": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5",
+    "coordinate_join_key": "NUM_CAMPO + NUM_LAB"
+  },
+  "archive": {
+    "repository_item_id": "5adc5a2e-78ca-4da4-990c-c932658481a7",
+    "bitstream_id": "4ac11c55-2d10-4aac-9dce-5266b442c500",
+    "name": "geoquimica_florianopolis_1985.zip",
+    "bytes": 841480,
+    "selected_member": {"name":"Florianopolis_Geoquimica_Solo.xlsx","bytes":15455},
+    "member_count": 14,
+    "member_inventory_contract": "The standalone adapter pins all 14 member names and byte counts and fails on additions, removals or byte-count drift."
+  },
+  "observed_metadata": {
+    "dataset_pid": "https://rigeo.sgb.gov.br/handle/doc/23413",
+    "dataset_doi": null,
+    "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+    "release_year": 2022,
+    "publisher": "Servico Geologico do Brasil - CPRM",
+    "citation": "SERVICO GEOLOGICO DO BRASIL - CPRM. Resultados Analiticos de Amostras Geoquimicas e Produtos Associados (planilhas de analises geoquimicas). Brasil: SGB-CPRM, 2022.",
+    "rights": {
+      "repository_item_dc_rights": "open",
+      "research_use_status": "permitted_research",
+      "license_identifier": "LicenseRef-SGB-RIGEO-open-item-metadata",
+      "license_scope": "repository item metadata only; no explicit dataset reuse license located",
+      "redistribution_status": "not_evaluated_for_project_output"
+    },
+    "medium": "soil",
+    "original_coordinate_crs": "EPSG:4674 (SIRGAS 2000)",
+    "requested_coordinate_crs": "EPSG:4326",
+    "soil_horizon_raw": "Nao Identificado",
+    "soil_type_raw": "Nao Especificado",
+    "required_fields": [
+      "projeto_amostragem","projeto_publicacao","centro_custo","classe","num_campo","num_lab",
+      "data_visita","abertura","leitura","job","As_ppm","Cr_ppm","Cu_ppm","Ni_ppm",
+      "Pb_ppm","Zn_ppm","observacao"
+    ]
+  },
+  "observed_data": {
+    "counts": {
+      "workbook_rows": 32,
+      "target_analysis_rows": 32,
+      "unique_target_samples": 32,
+      "unique_target_sample_lab_pairs": 32,
+      "target_observations": 192,
+      "coordinate_matches": 32,
+      "target_value_counts": {"As":32,"Cr":32,"Cu":32,"Ni":32,"Pb":32,"Zn":32},
+      "qualifier_counts": {"below_detection_limit":3,"not_detected":64,"reported":125}
+    },
+    "methods": {"Espectrografia Ótica de Emissão":32},
+    "method_scope": "record",
+    "method_assignment_basis": "source workbook leitura field",
+    "preparation_status": "not_reported",
+    "qualifier_semantics": {
+      "ND": "not_detected with unknown numeric detection limit",
+      "less_than_value": "below_detection_limit with reported threshold",
+      "numeric": "source-reported numeric value"
+    }
+  },
+  "automated_audit": {
+    "status": "automated_audit_complete",
+    "reviewer_type": "codex",
+    "prepared_record_count": 30,
+    "audited_record_count": 30,
+    "completed_record_count": 30,
+    "audit_file": "../south-america/brazil-sgb-florianopolis-soil/automated_audit.json"
+  },
+  "failure_boundaries": [
+    "Fail if the RIGeo item, bitstream ID, byte count, 14-member inventory, workbook schema or reconciliation counts drift without a reviewed version update.",
+    "Fail if NUM_CAMPO + NUM_LAB does not uniquely join every target row to the official SGB soil layer; do not force a coordinate.",
+    "Do not convert ND to zero or invent a numeric detection limit.",
+    "Do not infer a canonical soil horizon from Nao Identificado or a soil class from Nao Especificado.",
+    "Do not infer digestion/preparation from the method name.",
+    "Do not represent the 32-sample regional product as national Brazil or South America coverage."
+  ]
+}
