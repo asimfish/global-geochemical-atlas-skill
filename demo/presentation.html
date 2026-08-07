@@ -4,1021 +4,721 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <title>Global Geochemical Atlas Skill · 3 分钟 Demo</title>
+  <title>Global Geochemical Atlas Skill · Champion Demo</title>
   <style>
     :root {
-      --ink: #f4fbfa;
-      --muted: #9eb8b8;
-      --panel: rgba(8, 45, 54, .78);
-      --panel-strong: #0a333d;
-      --line: rgba(134, 223, 211, .24);
-      --mint: #52e2c4;
-      --mint-soft: #a9f5e7;
-      --cyan: #66c9ff;
-      --gold: #ffcd67;
-      --coral: #ff7c72;
-      --navy: #041b23;
-      --deep: #02141a;
-      --shadow: 0 24px 80px rgba(0, 0, 0, .34);
+      --bg: #03141b;
+      --panel: #0b2630;
+      --mint: #69f5e6;
+      --red: #ff5c78;
+      --gold: #f6c344;
+      --ink: #f3f8fa;
+      --muted: #95afb7;
+      --grid: #1a3b44;
+      --slide-ratio: 1.7777778;
+      --ease: cubic-bezier(.2, .8, .2, 1);
     }
 
     * { box-sizing: border-box; }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-      background: var(--deep);
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      background: #010a0e;
       color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 86% 12%, rgba(82, 226, 196, .13), transparent 28%),
-        radial-gradient(circle at 12% 92%, rgba(102, 201, 255, .09), transparent 30%),
-        linear-gradient(135deg, var(--deep), var(--navy));
-    }
-
     button, a { font: inherit; }
+    button { color: inherit; }
 
-    .deck {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
+    .stage {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(100vw, calc(100vh * var(--slide-ratio)));
+      height: min(100vh, calc(100vw / var(--slide-ratio)));
+      transform: translate(-50%, -50%);
+      overflow: hidden;
+      background: var(--bg);
+      box-shadow: 0 0 100px rgba(0, 0, 0, .72);
       isolation: isolate;
     }
 
     .slide {
       position: absolute;
       inset: 0;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: clamp(14px, 1.8vh, 24px);
-      padding: clamp(28px, 4.2vw, 76px) clamp(34px, 5vw, 92px) clamp(28px, 4vh, 58px);
+      padding: 3.4% 4%;
       opacity: 0;
       visibility: hidden;
-      transform: translateX(34px) scale(.992);
-      transition: opacity .34s ease, transform .42s cubic-bezier(.2,.8,.2,1), visibility .34s;
+      transform: translate3d(2.5%, 0, 0) scale(.995);
+      transition: opacity .42s ease, transform .58s var(--ease), visibility .42s;
+      overflow: hidden;
     }
+    .slide.active { opacity: 1; visibility: visible; transform: none; z-index: 2; }
+    .slide.leaving { transform: translate3d(-2.5%, 0, 0) scale(.995); }
 
-    .slide.active {
-      opacity: 1;
-      visibility: visible;
-      transform: none;
-      z-index: 2;
-    }
-
-    .slide.exit-left { transform: translateX(-34px) scale(.992); }
-
-    .slide::after {
-      content: "";
+    .bg-field {
       position: absolute;
       inset: 0;
-      pointer-events: none;
-      z-index: -1;
+      z-index: -5;
+      background:
+        radial-gradient(circle at 52% 44%, rgba(11, 38, 48, .95), transparent 48%),
+        linear-gradient(135deg, #03141b, #061d25 55%, #03141b);
+    }
+    .grid-field {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      opacity: .38;
       background-image:
-        linear-gradient(rgba(121, 213, 202, .035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(121, 213, 202, .035) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: linear-gradient(to bottom, black, transparent 92%);
+        linear-gradient(rgba(105, 245, 230, .09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(105, 245, 230, .09) 1px, transparent 1px);
+      background-size: 9.375% 16.666%;
+      mask-image: radial-gradient(circle at 58% 45%, black, transparent 85%);
+    }
+    .noise {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .14;
+      background-image: radial-gradient(rgba(255,255,255,.18) .45px, transparent .6px);
+      background-size: 4px 4px;
+      mix-blend-mode: soft-light;
     }
 
     .eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font: 700 clamp(11px, 1.25vw, 22px)/1.2 "DejaVu Sans Mono", ui-monospace, monospace;
+      letter-spacing: .16em;
       color: var(--mint);
-      font-size: clamp(12px, 1vw, 17px);
-      font-weight: 760;
-      letter-spacing: .18em;
       text-transform: uppercase;
     }
-
-    .eyebrow::before {
-      content: "";
-      width: 30px;
-      height: 3px;
-      border-radius: 99px;
-      background: var(--mint);
-      box-shadow: 0 0 20px rgba(82, 226, 196, .75);
-    }
-
-    h1, h2, h3, p { margin: 0; }
-
-    h1 {
-      max-width: 1100px;
-      font-size: clamp(48px, 6.1vw, 105px);
-      line-height: .98;
-      letter-spacing: -.055em;
-      font-weight: 840;
-    }
-
-    h2 {
-      font-size: clamp(34px, 4.2vw, 72px);
+    .title {
+      margin: 1.2% 0 0;
+      font-size: clamp(30px, 4.4vw, 80px);
       line-height: 1.08;
       letter-spacing: -.04em;
-      font-weight: 820;
+      font-weight: 850;
     }
-
-    h3 {
-      font-size: clamp(18px, 1.55vw, 28px);
-      line-height: 1.24;
+    .display {
+      font: 850 clamp(46px, 7.1vw, 130px)/.9 "DejaVu Sans Mono", ui-monospace, monospace;
+      letter-spacing: -.06em;
     }
+    .mono { font-family: "DejaVu Sans Mono", ui-monospace, monospace; }
+    .mint { color: var(--mint); }
+    .red { color: var(--red); }
+    .gold { color: var(--gold); }
+    .muted { color: var(--muted); }
 
-    .lead {
-      max-width: 980px;
-      color: #d2e5e3;
-      font-size: clamp(19px, 1.75vw, 32px);
-      line-height: 1.5;
-    }
-
-    .gradient-text {
-      color: transparent;
-      background: linear-gradient(96deg, var(--mint-soft), var(--cyan));
-      background-clip: text;
-      -webkit-background-clip: text;
-    }
-
-    .topline {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding-right: 92px;
-    }
-
-    .topline > :first-child {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    .slide-time {
-      flex: none;
-      position: absolute;
-      top: clamp(28px, 4.2vw, 76px);
-      right: clamp(34px, 5vw, 92px);
-      padding: 8px 13px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(5, 29, 36, .72);
-      font: 700 clamp(11px, .9vw, 15px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #759394;
-      font-size: clamp(11px, .85vw, 15px);
-      letter-spacing: .04em;
-    }
-
-    .footer strong { color: #b9d2d0; }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: clamp(34px, 5vw, 90px);
-      align-items: center;
-    }
-
-    .hero-copy { display: grid; gap: clamp(20px, 3vh, 38px); }
-
-    .hero-mark {
-      position: relative;
-      aspect-ratio: 1;
-      width: min(31vw, 460px);
-      justify-self: end;
-      display: grid;
-      place-items: center;
-    }
-
-    .orbit, .orbit::before, .orbit::after {
-      position: absolute;
-      inset: 10%;
-      border: 1px solid rgba(82, 226, 196, .24);
-      border-radius: 50%;
-    }
-
-    .orbit::before, .orbit::after { content: ""; inset: 14%; }
-    .orbit::after { inset: 29%; border-color: rgba(102, 201, 255, .3); }
-
-    .globe {
-      position: relative;
-      width: 55%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 2px solid var(--mint);
-      box-shadow: 0 0 80px rgba(82, 226, 196, .23), inset 0 0 45px rgba(82, 226, 196, .11);
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 35% 35%, rgba(82, 226, 196, .3), transparent 18%),
-        repeating-linear-gradient(0deg, transparent 0 17%, rgba(82, 226, 196, .25) 18%, transparent 19%),
-        repeating-linear-gradient(90deg, transparent 0 17%, rgba(102, 201, 255, .22) 18%, transparent 19%);
-    }
-
-    .globe::before,
-    .globe::after {
-      content: "";
-      position: absolute;
-      border-radius: 48% 52% 60% 40%;
-      background: rgba(169, 245, 231, .74);
-      filter: drop-shadow(0 0 8px rgba(82, 226, 196, .6));
-    }
-
-    .globe::before { width: 34%; height: 25%; left: 18%; top: 22%; transform: rotate(-18deg); }
-    .globe::after { width: 28%; height: 34%; right: 16%; bottom: 18%; transform: rotate(24deg); }
-
-    .dot {
-      position: absolute;
-      width: 13px;
-      height: 13px;
-      border: 3px solid #031920;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 0 3px rgba(255, 205, 103, .3), 0 0 18px var(--gold);
-    }
-
-    .dot.d1 { top: 21%; right: 24%; }
-    .dot.d2 { left: 22%; bottom: 27%; background: var(--coral); box-shadow: 0 0 0 3px rgba(255,124,114,.3),0 0 18px var(--coral); }
-    .dot.d3 { right: 16%; bottom: 37%; background: var(--cyan); box-shadow: 0 0 0 3px rgba(102,201,255,.3),0 0 18px var(--cyan); }
-
-    .metric-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      max-width: 760px;
-    }
-
-    .metric {
-      padding: 16px 18px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: linear-gradient(160deg, rgba(12, 58, 67, .78), rgba(5, 33, 40, .74));
-      box-shadow: inset 0 1px rgba(255,255,255,.04);
-    }
-
-    .metric b {
-      display: block;
-      color: var(--mint-soft);
-      font-size: clamp(22px, 2vw, 36px);
-      line-height: 1.05;
-    }
-
-    .metric span { color: var(--muted); font-size: clamp(11px, .9vw, 15px); }
-
-    .problem-grid {
-      display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: clamp(24px, 3vw, 52px);
-      align-items: stretch;
-    }
-
-    .media-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .media-card, .risk-card, .flow-card, .science-card, .deliverable {
-      border: 1px solid var(--line);
-      background: linear-gradient(150deg, rgba(12, 55, 64, .84), rgba(4, 29, 36, .84));
-      box-shadow: var(--shadow);
-    }
-
-    .media-card {
-      min-height: 150px;
-      padding: clamp(16px, 1.6vw, 26px);
-      border-radius: 20px;
-      display: grid;
-      align-content: space-between;
-      gap: 10px;
-    }
-
-    .media-card .symbol {
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: rgba(82, 226, 196, .12);
-      color: var(--mint);
-      font-size: 24px;
-    }
-
-    .media-card p, .risk-card p, .science-card p {
-      color: var(--muted);
-      font-size: clamp(13px, 1.05vw, 18px);
-      line-height: 1.45;
-    }
-
-    .risk-stack { display: grid; gap: 14px; align-content: center; }
-
-    .risk-card {
-      padding: clamp(20px, 2vw, 32px);
-      border-radius: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .risk-card::before {
-      content: "";
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 5px;
-      background: var(--coral);
-    }
-
-    .risk-card.gold::before { background: var(--gold); }
-
-    .risk-card strong { display: block; margin-bottom: 8px; font-size: clamp(18px, 1.5vw, 27px); }
-    .risk-card .formula { color: var(--coral); font-family: ui-monospace, monospace; }
-
-    .flow {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr auto 1fr;
-      align-items: stretch;
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .flow-card {
-      border-radius: 22px;
-      padding: clamp(18px, 2vw, 30px);
-      display: grid;
-      align-content: start;
-      gap: 14px;
-      min-height: 250px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .flow-card::after {
-      content: attr(data-stage);
-      position: absolute;
-      right: -5px;
-      bottom: -28px;
-      color: rgba(169,245,231,.055);
-      font-size: 118px;
-      font-weight: 900;
-      letter-spacing: -.08em;
-    }
-
-    .flow-card .step {
-      color: var(--mint);
-      font: 800 clamp(12px, 1vw, 16px)/1 ui-monospace, monospace;
-      letter-spacing: .14em;
-    }
-
-    .flow-card ul { margin: 0; padding-left: 20px; color: #bfd4d2; line-height: 1.7; font-size: clamp(13px, 1.1vw, 19px); }
-    .flow-arrow { display: grid; place-items: center; color: var(--mint); font-size: 32px; }
-
-    .contract-strip {
-      display: grid;
-      grid-template-columns: .8fr 1.7fr 1.1fr;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .contract-pill {
-      padding: 13px 17px;
-      border-radius: 14px;
-      border: 1px solid rgba(102, 201, 255, .2);
-      background: rgba(102, 201, 255, .065);
-      color: #c7e8f6;
-      font-size: clamp(12px, .95vw, 16px);
-    }
-
-    .terminal-layout {
-      display: grid;
-      grid-template-columns: 1.24fr .76fr;
-      gap: clamp(24px, 3vw, 48px);
-      align-items: center;
-    }
-
-    .terminal {
-      border: 1px solid rgba(169, 245, 231, .25);
-      border-radius: 22px;
-      overflow: hidden;
-      background: #021116;
-      box-shadow: 0 28px 90px rgba(0,0,0,.48);
-    }
-
-    .terminal-bar {
-      display: flex;
-      gap: 8px;
-      padding: 13px 16px;
-      border-bottom: 1px solid rgba(169,245,231,.12);
-      background: #092832;
-    }
-
-    .terminal-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--coral); }
-    .terminal-bar i:nth-child(2) { background: var(--gold); }
-    .terminal-bar i:nth-child(3) { background: var(--mint); }
-
-    pre {
-      margin: 0;
-      padding: clamp(20px, 2vw, 32px);
-      overflow: hidden;
-      color: #d5e9e7;
-      font: 600 clamp(12px, 1.05vw, 18px)/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: pre-wrap;
-    }
-
-    .cmd { color: var(--cyan); }
-    .ok { color: var(--mint); }
-    .partial { color: var(--gold); }
-
-    .result-stack { display: grid; gap: 14px; }
-    .result-card {
-      padding: clamp(17px, 1.6vw, 26px);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: var(--panel);
-    }
-
-    .result-card b { display: block; color: var(--mint-soft); font-size: clamp(28px, 2.5vw, 45px); }
-    .result-card span { color: var(--muted); font-size: clamp(12px, 1vw, 17px); }
-
-    .product-frame {
-      position: relative;
-      min-height: 0;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      overflow: hidden;
-      background: #e9f1ef;
-      box-shadow: 0 30px 90px rgba(0,0,0,.42);
-    }
-
-    .product-frame img {
-      width: 100%;
-      height: 100%;
-      min-height: 0;
-      object-fit: cover;
-      object-position: top center;
-      display: block;
-    }
-
-    .product-callout {
-      position: absolute;
-      right: 24px;
-      bottom: 22px;
-      width: min(420px, 32%);
-      padding: 18px 20px;
-      border: 1px solid rgba(169,245,231,.34);
-      border-radius: 16px;
-      background: rgba(3, 24, 30, .92);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 16px 50px rgba(0,0,0,.35);
-    }
-
-    .product-callout b { color: var(--mint); }
-    .product-callout p { margin-top: 6px; color: #c1d6d4; line-height: 1.45; font-size: clamp(11px, .88vw, 15px); }
-
-    .live-button, .ghost-button {
+    .chip {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 9px;
-      padding: 11px 15px;
-      margin-top: 12px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 780;
-      font-size: clamp(11px, .9vw, 15px);
-      transition: transform .2s, background .2s;
-    }
-
-    .live-button { color: #042028; background: var(--mint); }
-    .ghost-button { color: var(--mint-soft); border: 1px solid rgba(82,226,196,.35); background: rgba(82,226,196,.08); }
-    .live-button:hover, .ghost-button:hover { transform: translateY(-2px); }
-
-    .science-layout {
-      display: grid;
-      grid-template-columns: .95fr 1.05fr;
-      gap: clamp(28px, 4vw, 70px);
-      align-items: center;
-    }
-
-    .confidence-wheel {
-      position: relative;
-      width: min(34vw, 470px);
-      aspect-ratio: 1;
-      margin: auto;
-      display: grid;
-      place-items: center;
-    }
-
-    .confidence-wheel::before {
-      content: "";
-      width: 57%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: conic-gradient(var(--mint) 0 30%, var(--cyan) 30% 50%, var(--gold) 50% 70%, #8f9eff 70% 85%, var(--coral) 85% 100%);
-      box-shadow: 0 0 70px rgba(82,226,196,.15);
-    }
-
-    .confidence-wheel::after {
-      content: "可用性\A 不是概率";
-      white-space: pre;
-      position: absolute;
-      width: 37%;
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      border-radius: 50%;
-      background: #062630;
+      gap: .7em;
+      min-height: 2.3em;
+      padding: .48em .9em;
+      border: 1px solid rgba(105, 245, 230, .45);
+      border-radius: 999px;
+      background: rgba(3, 20, 27, .86);
       color: var(--ink);
-      font-weight: 800;
-      line-height: 1.25;
-      font-size: clamp(16px, 1.45vw, 25px);
+      font-size: clamp(11px, 1.15vw, 20px);
+      font-weight: 730;
+      backdrop-filter: blur(6px);
     }
-
-    .wheel-label { position: absolute; font-size: clamp(12px, 1vw, 17px); color: #c6dcda; }
-    .wheel-label b { display: block; color: var(--mint-soft); }
-    .wl1 { top: 3%; left: 42%; }
-    .wl2 { top: 27%; right: 0; }
-    .wl3 { bottom: 12%; right: 7%; }
-    .wl4 { bottom: 8%; left: 8%; }
-    .wl5 { top: 27%; left: 0; }
-
-    .science-stack { display: grid; gap: 13px; }
-    .science-card { padding: 18px 20px; border-radius: 17px; box-shadow: none; }
-    .science-card strong { font-size: clamp(16px, 1.3vw, 22px); }
-    .science-card strong em { color: var(--gold); font-style: normal; }
-
-    .equation {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 12px;
-      align-items: center;
-      padding: 20px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,205,103,.25);
-      background: rgba(255,205,103,.065);
-      text-align: center;
-      font-size: clamp(20px, 1.8vw, 32px);
-      font-weight: 800;
-    }
-
-    .equation .not { color: var(--coral); font-size: 34px; }
-    .equation small { display: block; color: var(--muted); font-weight: 500; font-size: clamp(11px, .85vw, 14px); }
-
-    .closing-grid {
-      display: grid;
-      grid-template-columns: 1.12fr .88fr;
-      gap: clamp(28px, 4vw, 70px);
-      align-items: center;
-    }
-
-    .deliverables { display: grid; gap: 11px; }
-    .deliverable {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 15px 18px;
-      border-radius: 15px;
-      box-shadow: none;
-      font-size: clamp(14px, 1.25vw, 21px);
-      font-weight: 690;
-    }
-
-    .check {
-      flex: none;
-      width: 29px;
-      height: 29px;
-      display: grid;
-      place-items: center;
-      border-radius: 9px;
-      color: #042028;
+    .chip::before {
+      content: "";
+      width: .55em;
+      height: .55em;
+      border-radius: 50%;
       background: var(--mint);
-      font-weight: 900;
+      box-shadow: 0 0 14px var(--mint);
     }
+    .chip.gold-chip { border-color: rgba(246, 195, 68, .55); }
+    .chip.gold-chip::before { background: var(--gold); box-shadow: 0 0 14px var(--gold); }
+    .chip.red-chip { border-color: rgba(255, 92, 120, .62); }
+    .chip.red-chip::before { background: var(--red); box-shadow: 0 0 14px var(--red); }
 
-    .proof-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
-    .proof {
-      padding: 19px;
-      border-radius: 17px;
-      border: 1px solid var(--line);
-      background: rgba(7, 43, 52, .72);
+    .footer-line {
+      position: absolute;
+      left: 4%;
+      right: 18%;
+      bottom: 3.2%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2em;
+      color: var(--muted);
+      font: 600 clamp(9px, .9vw, 16px)/1.2 "DejaVu Sans Mono", ui-monospace, monospace;
+      z-index: 8;
     }
-    .proof b { color: var(--mint-soft); font-size: clamp(24px, 2.2vw, 40px); }
-    .proof p { color: var(--muted); font-size: clamp(11px, .9vw, 15px); line-height: 1.4; }
-
-    .closing-quote {
-      margin-top: 24px;
-      padding-left: 20px;
-      border-left: 4px solid var(--mint);
-      color: #d8ebe8;
-      font-size: clamp(19px, 1.8vw, 31px);
-      line-height: 1.4;
-      font-weight: 720;
-    }
-
-    .notes {
-      display: none;
-      position: fixed;
-      z-index: 20;
-      right: 22px;
-      top: 22px;
-      bottom: 82px;
-      width: min(520px, 38vw);
-      padding: 22px;
-      overflow: auto;
-      border: 1px solid rgba(255,205,103,.36);
-      border-radius: 18px;
-      background: rgba(1, 16, 21, .96);
-      color: #e8f3f2;
-      box-shadow: 0 25px 90px rgba(0,0,0,.6);
-      font-size: clamp(15px, 1.05vw, 19px);
-      line-height: 1.7;
-    }
-
-    body.notes-on .slide.active .notes { display: block; }
-    .notes strong { display: block; color: var(--gold); margin-bottom: 8px; }
-
-    .progress {
-      position: fixed;
-      z-index: 30;
+    .footer-line::before {
+      content: "";
+      position: absolute;
       left: 0;
+      right: 0;
+      top: -1em;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(105,245,230,.6), transparent 78%);
+    }
+
+    /* Slide 1 */
+    .cover { padding: 3.8% 4.3%; }
+    .cover-image {
+      position: absolute;
+      inset: 0;
+      z-index: -8;
+      background: url("assets/global-overview-1920x1080.png") center/100% 100% no-repeat;
+      transform: scale(1.01);
+    }
+    .cover-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: -6;
+      background:
+        linear-gradient(90deg, rgba(3,20,27,.99) 0%, rgba(3,20,27,.92) 43%, rgba(3,20,27,.32) 72%, rgba(3,20,27,.04) 100%),
+        linear-gradient(0deg, rgba(3,20,27,.94), transparent 38%);
+    }
+    .cover-copy { width: 55%; padding-top: 1.5%; }
+    .cover .title { margin-top: 6.5%; font-size: clamp(42px, 5vw, 92px); }
+    .cover-lead {
+      margin-top: 7%;
+      font-size: clamp(22px, 3.25vw, 58px);
+      line-height: 1.28;
+      font-weight: 760;
+    }
+    .cover-sub {
+      margin-top: 4%;
+      max-width: 17em;
+      color: var(--muted);
+      font-size: clamp(15px, 1.55vw, 28px);
+      line-height: 1.55;
+    }
+    .cover-chips { position: absolute; left: 4.3%; bottom: 10.8%; display: flex; gap: 1em; }
+    .scan {
+      position: absolute;
+      z-index: 3;
+      top: 6%;
+      bottom: 6%;
+      left: 72%;
+      width: 1px;
+      background: var(--mint);
+      box-shadow: 0 0 10px var(--mint), 0 0 32px rgba(105,245,230,.72);
+      animation: scan 4.8s ease-in-out infinite alternate;
+    }
+    .scan::before {
+      content: "";
+      position: absolute;
+      top: 0;
       bottom: 0;
+      right: -5vw;
+      width: 10vw;
+      background: linear-gradient(90deg, transparent, rgba(105,245,230,.11), transparent);
+    }
+    .scan::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1.2vw;
+      aspect-ratio: 1;
+      border: 1px solid var(--mint);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 .8vw rgba(105,245,230,.08), 0 0 28px var(--mint);
+    }
+    @keyframes scan { from { left: 62%; } to { left: 91%; } }
+
+    /* Slide 2 */
+    .request-token {
+      position: absolute;
+      left: 4%; right: 4%; top: 20%;
+      height: 8.4%;
+      display: flex; align-items: center;
+      padding: 0 2.2%;
+      border: 1px solid rgba(105,245,230,.6);
+      border-radius: .8vw;
+      background: rgba(3,20,27,.9);
+      font-size: clamp(12px, 1.35vw, 24px);
+      white-space: nowrap;
+      box-shadow: inset 0 0 30px rgba(105,245,230,.04);
+    }
+    .request-token::before { content: ""; width: .7em; height: .7em; margin-right: 1em; border-radius: 50%; background: var(--mint); box-shadow: 0 0 16px var(--mint); }
+    .request-token span:last-child { margin-left: auto; color: var(--muted); font-family: inherit; }
+    .engine-flow {
+      position: absolute;
+      left: 7%; right: 7%; top: 34%;
+      height: 28%;
+      display: grid;
+      grid-template-columns: 1fr .7fr 1fr .7fr 1fr .8fr .9fr;
+      align-items: center;
+    }
+    .engine-line { height: 2px; background: linear-gradient(90deg, var(--mint), var(--gold)); box-shadow: 0 0 14px rgba(105,245,230,.5); position: relative; }
+    .engine-line::after { content: ""; position: absolute; right: -1px; top: 50%; border: .45em solid transparent; border-left-color: var(--mint); transform: translate(70%, -50%); }
+    .engine-node {
+      position: relative;
       width: 100%;
-      height: 5px;
-      background: rgba(255,255,255,.06);
+      aspect-ratio: 1.55;
+      border-radius: 50%;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      border: 1.5px solid var(--node, var(--mint));
+      background: radial-gradient(circle, rgba(11,38,48,.96), rgba(3,20,27,.92));
+      box-shadow: 0 0 28px color-mix(in srgb, var(--node, var(--mint)) 18%, transparent);
     }
-
-    .progress > span {
-      display: block;
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, var(--mint), var(--cyan));
-      box-shadow: 0 0 16px rgba(82,226,196,.7);
-      transition: width .3s ease;
+    .engine-node b { color: var(--node, var(--mint)); font: 800 clamp(12px, 1.45vw, 26px)/1 "DejaVu Sans Mono", monospace; }
+    .engine-node strong { margin-top: .55em; font-size: clamp(14px, 1.7vw, 30px); }
+    .engine-node small { margin-top: .7em; color: var(--muted); font-size: clamp(9px, .95vw, 17px); }
+    .output-hub { --node: var(--mint); aspect-ratio: 1; }
+    .output-arc {
+      position: absolute;
+      left: 4%; right: 4%; bottom: 12%;
+      height: 22%;
+      border-top: 1px solid rgba(105,245,230,.22);
+      border-radius: 50% 50% 0 0;
     }
+    .output-pill {
+      position: absolute;
+      width: 17%;
+      display: flex; align-items: center; gap: .75em;
+      color: var(--ink);
+      font-size: clamp(10px, 1.2vw, 21px);
+      font-weight: 760;
+    }
+    .output-pill i { display: grid; place-items: center; width: 2.3em; aspect-ratio: 1; border: 1px solid var(--c, var(--mint)); border-radius: 50%; color: var(--c, var(--mint)); font-style: normal; box-shadow: 0 0 18px color-mix(in srgb, var(--c, var(--mint)) 22%, transparent); }
+    .op1 { left: 2%; top: 36%; } .op2 { left: 22%; top: 14%; } .op3 { left: 42%; top: 2%; }
+    .op4 { left: 63%; top: 14%; --c: var(--red); } .op5 { left: 82%; top: 36%; }
+    .boundary-line { position: absolute; left: 7%; right: 7%; bottom: 8.5%; text-align: center; color: var(--ink); font-size: clamp(15px, 1.7vw, 30px); font-weight: 730; }
 
+    /* Live map slides */
+    .map-slide { padding: 0; background: var(--bg); }
+    .map-shell {
+      position: absolute;
+      inset: 0;
+      background: var(--fallback) center/100% 100% no-repeat;
+      overflow: hidden;
+    }
+    .map-shell iframe { width: 100%; height: 100%; border: 0; pointer-events: none; background: var(--bg); }
+    .map-shell.interactive iframe { pointer-events: auto; }
+    .map-shade {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(3,20,27,.98) 0%, rgba(3,20,27,.46) 20%, transparent 37%), linear-gradient(0deg, rgba(3,20,27,.82), transparent 30%);
+    }
+    .map-title { position: absolute; z-index: 6; left: 3.6%; top: 3.2%; }
+    .map-title .title { margin-top: .45em; }
+    .map-actions { position: absolute; z-index: 10; right: 3.5%; top: 4%; display: flex; gap: .75em; }
+    .map-toggle, .open-map {
+      border: 1px solid rgba(105,245,230,.58);
+      background: rgba(3,20,27,.9);
+      padding: .72em 1em;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--ink);
+      font: 750 clamp(10px, 1vw, 18px)/1 "DejaVu Sans Mono", monospace;
+      transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .map-toggle:hover, .open-map:hover { border-color: var(--mint); box-shadow: 0 0 20px rgba(105,245,230,.25); transform: translateY(-1px); }
+    .map-shell.interactive + .map-shade { opacity: .42; }
+    .metric-rail {
+      position: absolute;
+      z-index: 6;
+      left: 3.2%;
+      bottom: 10.2%;
+      width: 37%;
+      padding: 2.1% 2.4%;
+      border: 1px solid rgba(105,245,230,.58);
+      border-radius: 1vw;
+      background: linear-gradient(135deg, rgba(3,20,27,.97), rgba(11,38,48,.84));
+      box-shadow: 0 18px 60px rgba(0,0,0,.35), inset 0 0 35px rgba(105,245,230,.035);
+      backdrop-filter: blur(8px);
+    }
+    .metric-label { color: var(--muted); font: 760 clamp(9px, 1vw, 18px)/1.2 "DejaVu Sans Mono", monospace; letter-spacing: .12em; }
+    .metric-rail .display { margin-top: .22em; color: var(--metric, var(--mint)); text-shadow: 0 0 24px color-mix(in srgb, var(--metric, var(--mint)) 40%, transparent); }
+    .metric-sub { margin-top: .6em; display: flex; flex-wrap: wrap; gap: .55em 1.2em; font-size: clamp(10px, 1.15vw, 21px); }
+    .metric-sub b { font-family: "DejaVu Sans Mono", monospace; color: var(--ink); }
+    .science-callout {
+      position: absolute;
+      z-index: 6;
+      right: 3.5%;
+      bottom: 10.2%;
+      width: 50%;
+      padding: 1.4% 1.8%;
+      border: 1px solid var(--callout, var(--gold));
+      border-radius: .8vw;
+      background: rgba(3,20,27,.92);
+      font-size: clamp(11px, 1.25vw, 22px);
+      line-height: 1.5;
+      box-shadow: 0 0 24px color-mix(in srgb, var(--callout, var(--gold)) 14%, transparent);
+    }
+    .science-callout b { display: block; color: var(--ink); }
+    .map-tabs { position: absolute; z-index: 6; right: 3.5%; top: 18%; display: flex; gap: 1.4em; font: 760 clamp(9px, 1vw, 18px)/1 "DejaVu Sans Mono", monospace; }
+    .map-tabs span { color: var(--muted); } .map-tabs .active-tab { color: var(--mint); }
+    .candidate-legend { position: absolute; z-index: 6; right: 3.5%; top: 37%; padding: 1em 1.2em; border: 1px solid var(--grid); border-radius: .7vw; background: rgba(3,20,27,.9); font-size: clamp(10px, 1.05vw, 19px); }
+    .candidate-legend div { display: flex; align-items: center; gap: .75em; margin: .45em 0; }
+    .candidate-legend i { width: .8em; aspect-ratio: 1; border-radius: 50%; background: var(--c); box-shadow: 0 0 12px var(--c); }
+
+    /* Slide 5 */
+    .equations { position: absolute; left: 4%; right: 4%; top: 19%; height: 22%; }
+    .equation { display: flex; align-items: baseline; gap: .65em; font-size: clamp(20px, 3.1vw, 56px); font-weight: 780; white-space: nowrap; }
+    .equation + .equation { margin-top: 2.5%; margin-left: 11%; }
+    .equation .value { font-family: "DejaVu Sans Mono", monospace; color: var(--mint); font-weight: 850; }
+    .equation:nth-child(2) .value { color: var(--gold); }
+    .neq { color: var(--red); font-size: 1.35em; text-shadow: 0 0 22px rgba(255,92,120,.5); }
+    .forbidden { color: var(--red); }
+    .confidence-rail { position: absolute; left: 4%; right: 4%; top: 46%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.2%; }
+    .component { min-width: 0; }
+    .component-head { display: flex; justify-content: space-between; align-items: baseline; font-size: clamp(10px, 1.1vw, 20px); }
+    .component-head b { font-family: "DejaVu Sans Mono", monospace; color: var(--c, var(--mint)); }
+    .bar { height: .48vw; min-height: 4px; margin-top: .8em; border-radius: 99px; background: var(--grid); overflow: hidden; }
+    .bar i { display: block; height: 100%; width: var(--v); border-radius: inherit; background: var(--c, var(--mint)); box-shadow: 0 0 16px var(--c, var(--mint)); }
+    .component small { display: block; margin-top: .9em; color: var(--muted); font: 650 clamp(8px, .8vw, 14px)/1 "DejaVu Sans Mono", monospace; }
+    .guardrails { position: absolute; left: 4%; right: 4%; top: 65%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4%; }
+    .guardrail { border-top: 3px solid var(--c); padding-top: 1.2em; }
+    .guardrail h3 { margin: 0; font: 800 clamp(13px, 1.55vw, 28px)/1.2 "DejaVu Sans Mono", monospace; }
+    .guardrail p { margin: .7em 0 0; color: var(--muted); font-size: clamp(10px, 1.08vw, 19px); line-height: 1.55; }
+
+    /* Slide 6 */
+    .orbit-stage { position: absolute; inset: 17% 7% 11%; }
+    .orbit-ring { position: absolute; left: 50%; top: 51%; width: 84%; height: 76%; transform: translate(-50%, -50%); border: 1px solid rgba(105,245,230,.2); border-radius: 50%; }
+    .orbit-ring::before { content: ""; position: absolute; inset: 14%; border: 1px solid rgba(105,245,230,.11); border-radius: 50%; }
+    .core {
+      position: absolute; left: 50%; top: 48%; width: 18%; aspect-ratio: 1;
+      transform: translate(-50%, -50%); border: 2px solid var(--mint); border-radius: 50%;
+      display: grid; place-content: center; text-align: center;
+      background: radial-gradient(circle, rgba(11,38,48,.98), rgba(3,20,27,.98));
+      box-shadow: 0 0 54px rgba(105,245,230,.28), inset 0 0 28px rgba(105,245,230,.08);
+    }
+    .core::before { content: "◎"; color: var(--mint); font-size: clamp(28px, 4.2vw, 76px); line-height: .8; }
+    .core b { margin-top: .4em; font: 850 clamp(18px, 2.8vw, 50px)/1 "DejaVu Sans Mono", monospace; }
+    .core small { margin-top: .6em; color: var(--muted); font: 700 clamp(8px, .85vw, 15px)/1 monospace; }
+    .orbit-node { position: absolute; display: flex; align-items: center; gap: .9em; width: 25%; font-size: clamp(11px, 1.25vw, 22px); font-weight: 780; }
+    .orbit-node i { flex: none; display: grid; place-items: center; width: 3.3em; aspect-ratio: 1; border: 1.5px solid var(--c, var(--mint)); border-radius: 50%; color: var(--c, var(--mint)); font: 800 1.2em/1 "DejaVu Sans Mono", monospace; background: rgba(3,20,27,.95); box-shadow: 0 0 18px color-mix(in srgb, var(--c, var(--mint)) 22%, transparent); }
+    .n1 { left: 3%; top: 15%; } .n2 { right: 1%; top: 9%; } .n3 { right: -1%; top: 56%; --c: var(--gold); }
+    .n4 { left: 55%; bottom: 8%; --c: var(--red); } .n5 { left: 5%; bottom: 8%; }
+    .proof-strip { position: absolute; left: 10%; right: 10%; bottom: 12%; text-align: center; color: var(--muted); font: 650 clamp(9px, 1vw, 18px)/1.3 "DejaVu Sans Mono", monospace; }
+    .closing { position: absolute; left: 0; right: 0; bottom: 5.2%; text-align: center; font: 850 clamp(20px, 2.8vw, 52px)/1 "DejaVu Sans Mono", monospace; letter-spacing: .02em; }
+
+    /* Controls */
     .controls {
       position: fixed;
-      z-index: 40;
-      right: 18px;
-      bottom: 18px;
+      z-index: 100;
+      right: max(14px, env(safe-area-inset-right));
+      bottom: max(14px, env(safe-area-inset-bottom));
       display: flex;
+      gap: 7px;
       align-items: center;
-      gap: 8px;
-    }
-
-    .control-button, .counter, .timer {
-      height: 42px;
-      border: 1px solid rgba(169,245,231,.22);
-      background: rgba(3, 27, 34, .88);
-      color: #d7e9e7;
-      border-radius: 12px;
+      padding: 7px;
+      border: 1px solid rgba(105,245,230,.24);
+      border-radius: 999px;
+      background: rgba(1,10,14,.78);
       backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+      box-shadow: 0 12px 34px rgba(0,0,0,.3);
     }
-
-    .control-button { width: 42px; cursor: pointer; }
-    .control-button:hover { border-color: var(--mint); color: var(--mint); }
-    .counter, .timer { display: grid; place-items: center; padding: 0 12px; font: 700 13px/1 ui-monospace, monospace; }
-    .timer.running { color: var(--mint); }
-    .timer.over { color: var(--coral); border-color: rgba(255,124,114,.5); }
-
-    .shortcut-hint {
+    .controls button, .controls a {
+      min-width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      font: 750 12px/1 "DejaVu Sans Mono", monospace;
+    }
+    .controls button:hover, .controls a:hover { color: var(--ink); background: rgba(105,245,230,.12); }
+    .timer { color: var(--mint) !important; min-width: 62px !important; }
+    .slide-count { color: var(--ink); padding: 0 5px; font: 750 12px/1 "DejaVu Sans Mono", monospace; }
+    .progress { position: fixed; z-index: 101; left: 0; bottom: 0; height: 3px; width: 0; background: linear-gradient(90deg, var(--mint), var(--gold), var(--red)); box-shadow: 0 0 16px var(--mint); transition: width .35s var(--ease); }
+    .notes-panel {
       position: fixed;
+      z-index: 90;
       left: 18px;
       bottom: 18px;
-      z-index: 35;
-      color: #718f90;
-      font-size: 11px;
-      letter-spacing: .04em;
+      width: min(620px, calc(100vw - 36px));
+      max-height: 38vh;
+      overflow: auto;
+      padding: 18px 20px;
+      border: 1px solid rgba(105,245,230,.3);
+      border-radius: 14px;
+      background: rgba(1,10,14,.94);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      color: #d8e7e9;
+      font-size: 15px;
+      line-height: 1.65;
+      transform: translateY(120%);
+      opacity: 0;
+      transition: transform .3s var(--ease), opacity .3s;
     }
+    .notes-panel.open { transform: none; opacity: 1; }
+    .notes-panel strong { color: var(--mint); }
+    .notes-template { display: none; }
 
-    @media (max-width: 850px) {
-      .hero-grid, .problem-grid, .terminal-layout, .science-layout, .closing-grid { grid-template-columns: 1fr; }
-      .hero-mark { display: none; }
-      .flow { grid-template-columns: 1fr; }
-      .flow-arrow { transform: rotate(90deg); height: 18px; }
-      .flow-card { min-height: auto; }
-      .contract-strip { grid-template-columns: 1fr; }
-      .product-callout { width: calc(100% - 28px); right: 14px; bottom: 14px; }
-      .confidence-wheel { display: none; }
-      .notes { width: calc(100vw - 44px); }
-      .slide { overflow: auto; }
+    .active .reveal { opacity: 0; transform: translateY(20px); animation: reveal .7s var(--ease) forwards; animation-delay: var(--d, 0s); }
+    @keyframes reveal { to { opacity: 1; transform: none; } }
+
+    html.static .reveal { opacity: 1 !important; transform: none !important; animation: none !important; }
+
+    @media (max-aspect-ratio: 4/3) {
+      .controls { transform: scale(.9); transform-origin: right bottom; }
+      .map-actions { top: 3%; }
     }
-
-    @media print {
-      html, body { overflow: visible; background: white; }
-      .deck { height: auto; }
-      .slide {
-        position: relative;
-        width: 13.333in;
-        height: 7.5in;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        page-break-after: always;
-      }
-      .controls, .progress, .shortcut-hint, .notes { display: none !important; }
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; animation: none !important; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1 !important; transform: none !important; animation: none !important; }
     }
   </style>
 </head>
 <body>
-  <main class="deck" aria-label="Global Geochemical Atlas Skill 三分钟演示">
-    <section class="slide active" data-time="0:00–0:15" aria-label="第 1 页，开场">
-      <div class="topline">
-        <div class="eyebrow">AI4S · Evidence-first atlas</div>
-        <div class="slide-time">00:15</div>
+  <main class="stage" id="stage" aria-live="polite">
+    <div class="noise"></div>
+
+    <section class="slide cover active" data-title="颜色没有证据，地图就没有意义">
+      <div class="cover-image"></div>
+      <div class="cover-scrim"></div>
+      <div class="grid-field"></div>
+      <div class="scan"></div>
+      <div class="cover-copy">
+        <div class="eyebrow reveal" style="--d:.12s">AI4S 2026 · GLOBAL GEOCHEMICAL ATLAS SKILL</div>
+        <h1 class="title reveal" style="--d:.28s">颜色没有证据<br>地图就没有意义</h1>
+        <div class="cover-lead reveal" style="--d:.46s">把公开测定变成<br><span class="mint">可追溯研究界面</span></div>
+        <p class="cover-sub reveal" style="--d:.62s">不是给散点上色，而是把每个结论绑定到证据。</p>
       </div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <h1>让每一种地图颜色<br><span class="gradient-text">都有证据。</span></h1>
-          <p class="lead">Global Geochemical Atlas Skill<br>把公开测定转成可追溯数据库、候选异常与交互地图。</p>
-          <div class="metric-row" aria-label="核心指标">
-            <div class="metric"><b>1</b><span>个研究请求</span></div>
-            <div class="metric"><b>15</b><span>项稳定产物</span></div>
-            <div class="metric"><b>record-level</b><span>记录级证据链</span></div>
-          </div>
-        </div>
-        <div class="hero-mark" aria-hidden="true">
-          <div class="orbit"></div>
-          <div class="globe"></div>
-          <i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i>
-        </div>
+      <div class="cover-chips reveal" style="--d:.8s">
+        <span class="chip">真实运行</span>
+        <span class="chip">离线自包含</span>
+        <span class="chip gold-chip">五类交付</span>
       </div>
-      <div class="footer"><span>全球地球化学元素分布图谱 Skill</span><strong>01 / 07</strong></div>
-      <aside class="notes"><strong>讲稿 · 15 秒</strong>地球化学地图最危险的，不是没有颜色，而是颜色没有证据。我们做了一个 Agent Skill，把公开测定转成可追溯数据库、候选异常和交互地图。</aside>
+      <div class="footer-line"><span>D3 expanded global run</span><span>screenshot no-crop · live HTML inside</span></div>
+      <template class="notes-template">先看右侧，这不是效果图，而是我们的 D3 expanded global run。地球化学地图最危险的地方，是颜色很有冲击力，证据却不可核查。我们的目标不是给散点上色，而是把公开测定变成可追溯研究界面：真实运行、离线自包含，并直接面向比赛要求的五类交付。</template>
     </section>
 
-    <section class="slide" data-time="0:15–0:37" aria-label="第 2 页，真实问题">
-      <div class="topline">
-        <div><div class="eyebrow">The real problem</div><h2>拼表很容易。<span class="gradient-text">证明可比</span>很难。</h2></div>
-        <div class="slide-time">00:22</div>
+    <section class="slide" data-title="一个请求，启动证据引擎">
+      <div class="bg-field"></div><div class="grid-field"></div>
+      <div class="eyebrow reveal" style="--d:.08s">01 · EXECUTABLE EVIDENCE CHAIN</div>
+      <h2 class="title reveal" style="--d:.18s">一个请求，启动证据引擎</h2>
+      <div class="request-token mono reveal" style="--d:.3s"><span>{elements:[As,Cu], region:global, media:[rock,soil,sediment,water]}</span><span>一个稳定输入</span></div>
+      <div class="engine-flow">
+        <div class="engine-node reveal" style="--d:.45s"><b>D1 · SOURCE</b><strong>公开来源</strong><small>版本许可 · locator + hash</small></div>
+        <div class="engine-line reveal" style="--d:.52s"></div>
+        <div class="engine-node reveal" style="--d:.62s;--node:var(--gold)"><b>D2 · SCIENCE</b><strong>单位 + QC</strong><small>basis · geology · robust MAD</small></div>
+        <div class="engine-line reveal" style="--d:.7s"></div>
+        <div class="engine-node reveal" style="--d:.8s;--node:var(--red)"><b>D3 · PRODUCT</b><strong>profile-driven</strong><small>map · evidence · iteration</small></div>
+        <div class="engine-line reveal" style="--d:.88s"></div>
+        <div class="engine-node output-hub reveal" style="--d:.98s"><b>1 → 5</b><strong>FIVE OUTPUTS</strong></div>
       </div>
-      <div class="problem-grid">
-        <div class="media-grid">
-          <article class="media-card"><div class="symbol">◆</div><div><h3>岩石</h3><p>全岩 / 矿物、主量 / 微量、氧化物表达</p></div></article>
-          <article class="media-card"><div class="symbol">●</div><div><h3>土壤</h3><p>层位、粒级、干湿基准、消解方法</p></div></article>
-          <article class="media-card"><div class="symbol">≈</div><div><h3>沉积物</h3><p>河流 / 海洋环境、筛分与部分提取</p></div></article>
-          <article class="media-card"><div class="symbol">◉</div><div><h3>水体</h3><p>溶解 / 总量、质量体积单位、采样时间</p></div></article>
-        </div>
-        <div class="risk-stack">
-          <article class="risk-card"><strong>语义不一致 → 错误热点</strong><p>单位相同，不代表 measurement basis、方法和介质可比。</p></article>
-          <article class="risk-card gold"><strong>来源断裂 → 无法复核</strong><p>没有 DOI、版本、许可、文件 hash 与记录定位，地图只是<span class="formula">“相信我”</span>。</p></article>
-          <article class="risk-card"><strong>覆盖空白 → 伪装成“没有”</strong><p>未采样区域不能被地图底色解释为元素缺失。</p></article>
-        </div>
+      <div class="output-arc reveal" style="--d:1.08s">
+        <div class="output-pill op1"><i>MAP</i><span>交互地图</span></div>
+        <div class="output-pill op2"><i>DB</i><span>标准数据库</span></div>
+        <div class="output-pill op3"><i>QC</i><span>来源与置信度</span></div>
+        <div class="output-pill op4"><i>Δ</i><span>异常结果</span></div>
+        <div class="output-pill op5"><i>SK</i><span>可复用 Skill</span></div>
       </div>
-      <div class="footer"><span>真正的对象是“样品 × 元素 × 方法 × 来源”</span><strong>02 / 07</strong></div>
-      <aside class="notes"><strong>讲稿 · 22 秒</strong>同一个元素，在岩石、土壤、沉积物和水体里，单位、测量基准、消解方法、坐标精度和许可都可能不同。直接拼表，会制造看似精确、实际不可比的热点。真正的问题不是“画点”，而是先证明每个点能不能比较、来自哪里、有什么限制。</aside>
+      <div class="boundary-line reveal" style="--d:1.24s">高自由度交给 Agent，科学红线交给可测试代码。</div>
+      <template class="notes-template">用户只需要给出元素、区域和样品介质。D1 负责公开来源、版本许可、记录定位符和哈希；D2 用确定性脚本完成单位与基准统一、质量控制、地质背景和稳健 MAD 候选识别；D3 再按 profile 生成地图、证据视图和迭代入口。最终同时得到交互地图、标准数据库、来源与置信度、异常结果和可复用 Skill。高自由度交给 Agent，科学红线交给可测试代码。</template>
     </section>
 
-    <section class="slide" data-time="0:37–1:05" aria-label="第 3 页，端到端工作流">
-      <div class="topline">
-        <div><div class="eyebrow">One skill · staged workflow</div><h2>一条状态机，守住整条科学链路。</h2></div>
-        <div class="slide-time">00:28</div>
+    <section class="slide map-slide" data-title="全球视图已经跑起来">
+      <div class="map-shell" style="--fallback:url('assets/global-overview-1920x1080.png')">
+        <iframe src="live/global-overview.html" title="全球地球化学交互地图" loading="eager"></iframe>
       </div>
-      <div>
-        <div class="flow">
-          <article class="flow-card" data-stage="1">
-            <span class="step">D1 · SOURCE</span><h3>发现、准入与冻结</h3>
-            <ul><li>按元素 / 区域 / 介质路由</li><li>DOI · 版本 · 许可 · URL</li><li>下载参数 · SHA-256 · locator</li></ul>
-          </article>
-          <div class="flow-arrow">→</div>
-          <article class="flow-card" data-stage="2">
-            <span class="step">D2 · SCIENCE</span><h3>标准化、QC 与异常</h3>
-            <ul><li>单位 / basis / 删失值 / 坐标</li><li>方法 · 批次 QC · 地质匹配</li><li>可比背景组 robust-MAD + FDR</li></ul>
-          </article>
-          <div class="flow-arrow">→</div>
-          <article class="flow-card" data-stage="3">
-            <span class="step">D3 · PRODUCT</span><h3>研究配置与交互地图</h3>
-            <ul><li>只消费公共产物，不重算 D2</li><li>元素 / 区域 / 地质 / 介质筛选</li><li>来源、置信度与失败边界下钻</li></ul>
-          </article>
-        </div>
-        <div class="contract-strip">
-          <div class="contract-pill"><b>输入</b> · request.schema.json</div>
-          <div class="contract-pill"><b>15 产物</b> · CSV / JSONL / GeoJSON / HTML</div>
-          <div class="contract-pill"><b>失败状态</b> · 可机器检查</div>
-        </div>
+      <div class="map-shade"></div>
+      <div class="map-title">
+        <div class="eyebrow reveal" style="--d:.08s">02 · REAL RUN / GLOBAL</div>
+        <h2 class="title reveal" style="--d:.18s">全球视图已经跑起来</h2>
       </div>
-      <div class="footer"><span>高自由度交给 Agent，科学红线交给确定性脚本</span><strong>03 / 07</strong></div>
-      <aside class="notes"><strong>讲稿 · 28 秒</strong>用户只需声明元素、区域和介质。D1 路由公开科学来源，冻结 DOI、版本、许可、下载参数、文件哈希和记录级定位。D2 确定性处理单位、删失值、坐标、方法、批次 QC、地质匹配和可比背景组异常。D3 只消费公共产物生成研究地图，不重新计算科学结论。十五个产物都由 schema 校验，失败会显式返回，不会用猜测填满结果。</aside>
+      <div class="map-actions reveal" style="--d:.25s">
+        <button class="map-toggle" type="button">启用地图交互</button>
+        <a class="open-map" href="live/global-overview.html" target="_blank" rel="noopener">新窗口打开 ↗</a>
+      </div>
+      <div class="map-tabs reveal" style="--d:.35s"><span class="active-tab">MAP</span><span>DATABASE</span><span>SOURCES</span><span>ANOMALIES</span></div>
+      <div class="metric-rail reveal" style="--d:.48s">
+        <div class="metric-label">MAPPED MEASUREMENTS</div>
+        <div class="display">44,510</div>
+        <div class="metric-sub"><span><b>11,548</b> 物理样点</span><span><b>4</b> 种介质</span><span><b class="red">535</b> high / low 记录候选</span><span><b>15</b> 声明来源</span></div>
+      </div>
+      <div class="science-callout reveal" style="--d:.66s">
+        <b>热区只表示采样密度，不插值浓度。</b>
+        <span class="muted">空白表示覆盖缺口，不代表元素不存在。</span>
+      </div>
+      <div class="footer-line"><span>44,536 canonical records · 26 unmappable remain in database / QC</span><span>LIVE HTML + screenshot fallback</span></div>
+      <template class="notes-template">现在进入真实全球运行。当前 expanded run 有四万四千五百一十条测定成功上图，对应一万一千五百四十八个物理样点、四种介质和五百三十五个 high 或 low 记录候选，界面同时暴露地图、数据库、来源置信度和异常页签。现场网络和浏览器允许时，我会切换到原始 HTML 旋转、缩放和点选；否则这张完整无裁切截图就是稳定后备。这里的热区只表示采样密度，不是浓度插值；总计四万四千五百三十六条 canonical records，二十六条不可上图记录仍留在数据库和 QC 中。十五个来源是声明来源，不等同于独立核验。</template>
     </section>
 
-    <section class="slide" data-time="1:05–1:35" aria-label="第 4 页，现场闭环">
-      <div class="topline">
-        <div><div class="eyebrow">Live · deterministic run</div><h2>一个请求，跑通生产阈值闭环。</h2></div>
-        <div class="slide-time">00:30</div>
+    <section class="slide map-slide" data-title="从全球，推入中国">
+      <div class="map-shell" style="--fallback:url('assets/china-anomaly-1920x1080.png')">
+        <iframe src="live/china-anomaly.html" title="中国候选异常交互地图" loading="eager"></iframe>
       </div>
-      <div class="terminal-layout">
-        <div class="terminal" aria-label="演示命令">
-          <div class="terminal-bar"><i></i><i></i><i></i></div>
-          <pre><span class="cmd">$ bash demo/prepare_demo.sh \
-  /tmp/global-geochemical-atlas-live</span>
-
-request execution   <span class="partial">partial_success</span>
-records             <span class="ok">996 / 996</span>
-standardized        <span class="ok">996 / 996</span>
-valid coordinates   <span class="ok">996 / 996</span>
-GLiM matched         <span class="ok">996 / 996</span>
-background groups   <span class="ok">12 analyzed</span>
-record candidates   <span class="ok">6 high / low</span>
-
-output contract     <span class="ok">valid</span>
-errors / warnings   <span class="ok">0 / 0</span></pre>
-        </div>
-        <div class="result-stack">
-          <div class="result-card"><b>996</b><span>hash 固定的 USGS 真实土壤测定</span></div>
-          <div class="result-card"><b>100%</b><span>标准化、坐标与粗尺度地质匹配</span></div>
-          <div class="result-card"><b>15 / 15</b><span>输出产物契约通过</span></div>
-          <div class="result-card"><b>0</b><span>密钥 · GPU · 第三方运行时依赖</span></div>
-        </div>
+      <div class="map-shade"></div>
+      <div class="map-title">
+        <div class="eyebrow gold reveal" style="--d:.08s">03 · PROFILE-DRIVEN DRILLDOWN</div>
+        <h2 class="title reveal" style="--d:.18s">从全球，推入中国</h2>
       </div>
-      <div class="footer"><span>真实来源固定切片 · 不代表区域统计分布</span><strong>04 / 07</strong></div>
-      <aside class="notes"><strong>讲稿 · 30 秒</strong>这是生产阈值的离线真实切片。一个请求调用 Skill，996 条 USGS 土壤测定全部完成标准化、坐标检查和固定版本 GLiM 岩性匹配。系统在十二个可比背景组中识别六个 high 或 low 候选；十五项输出契约验证为零错误、零警告。整个过程不需要密钥、GPU或第三方 Python 包。</aside>
+      <div class="map-actions reveal" style="--d:.25s">
+        <button class="map-toggle" type="button">启用地图交互</button>
+        <a class="open-map" href="live/china-anomaly.html" target="_blank" rel="noopener">新窗口打开 ↗</a>
+      </div>
+      <div class="candidate-legend reveal" style="--d:.38s"><div><i style="--c:var(--red)"></i>high · 富集候选</div><div><i style="--c:var(--mint)"></i>low · 亏损候选</div></div>
+      <div class="metric-rail reveal" style="--d:.48s;--metric:var(--gold);border-color:rgba(246,195,68,.68)">
+        <div class="metric-label">CHINA MEASUREMENTS</div>
+        <div class="display">7,114</div>
+        <div class="metric-sub"><span><b>1,464</b> 物理样点</span><span><b class="red">136</b> 记录候选</span><span><b>6</b> 元素</span><span><b>2</b> 介质</span></div>
+      </div>
+      <div class="science-callout reveal" style="--d:.66s;--callout:var(--red)">
+        <b>Natural Earth 国家多边形 + WGS84 bbox 联合严格裁剪</b>
+        <span class="red">候选不是污染、矿化或成因结论。</span>
+      </div>
+      <div class="footer-line"><span>排除范围框内邻国记录 · 不重写 D2 统计结论</span><span>LIVE HTML + screenshot fallback</span></div>
+      <template class="notes-template">同一个 D3 接口继续下钻中国：七千一百一十四条测定、一千四百六十四个物理样点、一百三十六个记录候选，覆盖六个元素和两种介质。范围不是简单矩形框，而是 Natural Earth 国家多边形与 WGS84 bbox 联合严格裁剪，框内邻国记录会被排除。现场可继续打开中国交互 HTML；截图同样完整保留严格裁剪说明。红色 high 和青色 low 只是筛查方向，不能直接解释为污染、矿化或成因。</template>
     </section>
 
-    <section class="slide" data-time="1:35–2:15" aria-label="第 5 页，交互产品">
-      <div class="topline">
-        <div><div class="eyebrow">Product · evidence in context</div><h2>看见分布，也能下钻到一条记录。</h2></div>
-        <div class="slide-time">00:40</div>
+    <section class="slide" data-title="可信，不是永远给答案">
+      <div class="bg-field"></div><div class="grid-field"></div>
+      <div class="eyebrow reveal" style="--d:.08s">04 · SCIENTIFIC RESTRAINT</div>
+      <h2 class="title reveal" style="--d:.18s">可信，不是永远给答案</h2>
+      <div class="equations">
+        <div class="equation reveal" style="--d:.34s"><span class="value">0.874</span><span>工作流置信度</span><span class="neq">≠</span><span class="forbidden">87.4% 正确概率</span></div>
+        <div class="equation reveal" style="--d:.48s"><span class="value">535</span><span>个记录候选</span><span class="neq">≠</span><span class="forbidden">535 个成因结论</span></div>
       </div>
-      <div class="product-frame">
-        <img src="../skills/global-geochemical-atlas/assets/readme-atlas-overview.png" alt="全球地球化学元素图谱真实工作流截图">
-        <div class="product-callout">
-          <b>地图不是证据的终点，而是入口。</b>
-          <p>元素 · 介质 · 区域 · 地质 · 方法 · 置信度筛选；点击样点查看原值、标准值、QC、source locator 与 hash。</p>
-          <a class="live-button" href="../skills/global-geochemical-atlas/assets/interactive-atlas-v3.html" target="_blank" rel="noopener">↗ 打开真实交互地图</a>
-        </div>
+      <div class="confidence-rail">
+        <div class="component reveal" style="--d:.62s"><div class="component-head"><span>来源</span><b>0.897</b></div><div class="bar"><i style="--v:89.7%"></i></div><small>SOURCE</small></div>
+        <div class="component reveal" style="--d:.68s"><div class="component-head"><span>完整性</span><b>0.956</b></div><div class="bar"><i style="--v:95.6%"></i></div><small>COMPLETENESS</small></div>
+        <div class="component reveal" style="--d:.74s;--c:var(--gold)"><div class="component-head"><span>方法</span><b>0.813</b></div><div class="bar"><i style="--v:81.3%"></i></div><small>METHOD</small></div>
+        <div class="component reveal" style="--d:.8s;--c:var(--gold)"><div class="component-head"><span>空间</span><b>0.800</b></div><div class="bar"><i style="--v:80%"></i></div><small>SPATIAL</small></div>
+        <div class="component reveal" style="--d:.86s"><div class="component-head"><span>QC</span><b>0.876</b></div><div class="bar"><i style="--v:87.6%"></i></div><small>QUALITY CONTROL</small></div>
       </div>
-      <div class="footer"><span>密度只表示物理采样密度 · 不做浓度插值</span><strong>05 / 07</strong></div>
-      <aside class="notes"><strong>讲稿 + 地图动作 · 40 秒</strong>现在进入地图。先按元素和介质筛选，再开启候选异常。注意，密度层只表达采样密度，不插值浓度。点击一个点，可以同时看到原值、标准值、换算轨迹、分析方法、QC、来源定位和五分量置信度。这里的六个点只表示相对当前背景的候选高低值，不代表污染、矿床或成因。</aside>
+      <div class="guardrails">
+        <article class="guardrail reveal" style="--d:1s;--c:var(--mint)"><h3>248 条删失观测</h3><p>绝不插补为 0。</p></article>
+        <article class="guardrail reveal" style="--d:1.08s;--c:var(--gold)"><h3>26 条不可上图记录</h3><p>仍保留在数据库 / QC。</p></article>
+        <article class="guardrail reveal" style="--d:1.16s;--c:var(--red)"><h3>100% locator 覆盖</h3><p>independent verified count = 0，不升级证据等级。</p></article>
+      </div>
+      <div class="footer-line"><span>D3 renders D1 / D2 evidence; it does not recompute scientific conclusions</span><span>confidence ≠ probability</span></div>
+      <template class="notes-template">可信不等于永远给答案。零点八七四是工作流可用性的置信度，不是百分之八十七点四的正确概率；五百三十五个记录候选，也不是五百三十五个成因结论。五个分量分别是来源零点八九七、完整性零点九五六、方法零点八一三、空间零点八零零、质量控制零点八七六。系统同时把失败边界做成可见结果：二百四十八条删失观测绝不补成零，二十六条不可上图记录仍可审计；expanded slice 的 locator 覆盖率是百分之百，但 independent verified count 仍然是零，所以证据等级不升级。D3 只呈现 D1 和 D2 的证据，不重新计算科学结论。</template>
     </section>
 
-    <section class="slide" data-time="2:15–2:40" aria-label="第 6 页，科学可信性">
-      <div class="topline">
-        <div><div class="eyebrow">Scientific guardrails</div><h2>可信，不是“永远给答案”。</h2></div>
-        <div class="slide-time">00:25</div>
+    <section class="slide" data-title="一个请求，五类交付，全链可核查">
+      <div class="bg-field"></div><div class="grid-field"></div>
+      <div class="eyebrow reveal" style="--d:.08s">GLOBAL GEOCHEMICAL ATLAS SKILL</div>
+      <h2 class="title reveal" style="--d:.18s">一个请求，五类交付，全链可核查</h2>
+      <div class="orbit-stage">
+        <div class="orbit-ring reveal" style="--d:.3s"></div>
+        <div class="core reveal" style="--d:.4s"><b>1 → 5</b><small>ONE REQUEST</small></div>
+        <div class="orbit-node n1 reveal" style="--d:.56s"><i>MAP</i><span>可交互元素<br>分布地图</span></div>
+        <div class="orbit-node n2 reveal" style="--d:.64s"><i>DB</i><span>标准化地球化学<br>数据库</span></div>
+        <div class="orbit-node n3 reveal" style="--d:.72s"><i>QC</i><span>数据来源与<br>置信度说明</span></div>
+        <div class="orbit-node n4 reveal" style="--d:.8s"><i>Δ</i><span>异常区域<br>识别结果</span></div>
+        <div class="orbit-node n5 reveal" style="--d:.88s"><i>SK</i><span>可复用<br>Skill 文档</span></div>
       </div>
-      <div class="science-layout">
-        <div class="confidence-wheel" aria-label="五分量置信度">
-          <div class="wheel-label wl1"><b>30%</b>来源</div>
-          <div class="wheel-label wl2"><b>20%</b>完整性</div>
-          <div class="wheel-label wl3"><b>20%</b>方法</div>
-          <div class="wheel-label wl4"><b>15%</b>空间</div>
-          <div class="wheel-label wl5"><b>15%</b>QC</div>
-        </div>
-        <div class="science-stack">
-          <article class="science-card"><strong>删失值 <em>≠ 0</em></strong><p>&lt;LOD、ND、BDL 保留 qualifier 和检出限。</p></article>
-          <article class="science-card"><strong>单位相同 <em>≠ 可比</em></strong><p>介质、basis、方法和消解语义共同定义背景组。</p></article>
-          <article class="science-card"><strong>缺坐标不确定度 → <em>medium cap</em></strong><p>本次 996 条记录诚实封顶 0.79，不把完整字段写成高置信。</p></article>
-          <div class="equation"><div>6 个记录候选<small>robust-MAD high / low</small></div><div class="not">≠</div><div>0 个区域候选<small>空间背景不足，失败关闭</small></div></div>
-        </div>
-      </div>
-      <div class="footer"><span>候选异常 ≠ 污染、矿化、来源或成因结论</span><strong>06 / 07</strong></div>
-      <aside class="notes"><strong>讲稿 · 25 秒</strong>这套 Skill 的差异，是会诚实地拒绝过度结论。删失值绝不填零；没有密度不跨量纲换算；置信度是来源、完整性、方法、空间和 QC 的可用性评分，不是真实概率。这次切片没有坐标不确定度，所以 996 条记录都被封顶在 medium。空间背景不足时，系统输出零个异常区域，而不是把六个点涂成一片热点。</aside>
-    </section>
-
-    <section class="slide" data-time="2:40–3:00" aria-label="第 7 页，结尾">
-      <div class="topline">
-        <div><div class="eyebrow">Reusable by design</div><h2>一个 Skill，交付五类可复用结果。</h2></div>
-        <div class="slide-time">00:20</div>
-      </div>
-      <div class="closing-grid">
-        <div>
-          <div class="deliverables">
-            <div class="deliverable"><span class="check">✓</span>可交互元素分布地图</div>
-            <div class="deliverable"><span class="check">✓</span>标准化地球化学数据库</div>
-            <div class="deliverable"><span class="check">✓</span>数据来源与置信度说明</div>
-            <div class="deliverable"><span class="check">✓</span>候选异常记录与区域结果</div>
-            <div class="deliverable"><span class="check">✓</span>OpenCode / Codex 可复用 Skill 文档</div>
-          </div>
-        </div>
-        <div>
-          <h3>两条固定证据路径</h3>
-          <div class="proof-cards">
-            <div class="proof"><b>996</b><p>USGS 真实观测<br>生产 n≥20 闭环</p></div>
-            <div class="proof"><b>14 × 4</b><p>公开来源 × 四介质<br>统一接口广度</p></div>
-          </div>
-          <p class="closing-quote">不假装已经覆盖全球，<br>让每一次扩展都可验证。</p>
-          <a class="ghost-button" href="../skills/global-geochemical-atlas/SKILL.md" target="_blank" rel="noopener">查看完整 Skill 文档 →</a>
-        </div>
-      </div>
-      <div class="footer"><span>Global Geochemical Atlas Skill</span><strong>07 / 07</strong></div>
-      <aside class="notes"><strong>讲稿 · 20 秒</strong>最终，一个请求交付比赛要求的五类结果。生产切片证明 n≥20 的闭环，十四来源、四介质证明接口广度。它不假装已覆盖全球，却让每次扩展都可验证、可复现、可审计。这就是 Global Geochemical Atlas Skill。</aside>
+      <div class="proof-strip reveal" style="--d:1.02s">15 declared sources · 44,536 canonical records · global + China live views</div>
+      <div class="closing reveal" style="--d:1.16s">Open → Inspect → Trace → Reproduce</div>
+      <template class="notes-template">最后请记住一句话：一个请求，五类交付，全链可核查。交互元素分布地图、标准化地球化学数据库、数据来源与置信度说明、异常区域识别结果和可复用 Skill 文档，都由同一个稳定接口交付。当前运行证明是十五个声明来源、四万四千五百三十六条 canonical records，以及全球和中国两个真实视图。打开、检查、追溯、复现，这就是 Global Geochemical Atlas Skill。</template>
     </section>
   </main>
 
-  <div class="shortcut-hint" aria-hidden="true">← → 翻页 · N 讲稿 · T 计时 · F 全屏</div>
-  <div class="controls" aria-label="演示控制">
-    <div class="timer" id="timer" title="T 启动/暂停，R 归零">03:00</div>
-    <button class="control-button" id="prev" type="button" title="上一页" aria-label="上一页">←</button>
-    <div class="counter" id="counter">1 / 7</div>
-    <button class="control-button" id="next" type="button" title="下一页" aria-label="下一页">→</button>
-    <button class="control-button" id="notes" type="button" title="显示讲稿" aria-label="显示讲稿">N</button>
-    <button class="control-button" id="full" type="button" title="全屏" aria-label="全屏">⛶</button>
+  <aside class="notes-panel" id="notes"><strong>讲稿</strong><div id="notesText"></div></aside>
+  <div class="controls" role="toolbar" aria-label="演示控制">
+    <button type="button" id="prev" title="上一页">←</button>
+    <span class="slide-count" id="slideCount">1 / 6</span>
+    <button type="button" id="next" title="下一页">→</button>
+    <button type="button" id="notesBtn" title="讲稿 N">N</button>
+    <button type="button" class="timer" id="timer" title="计时 T">03:00</button>
+    <button type="button" id="fullscreen" title="全屏 F">F</button>
+    <a href="Global-Geochemical-Atlas-Demo.pptx" download title="下载可编辑 PPTX">PPTX</a>
   </div>
-  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+  <div class="progress" id="progress"></div>
 
   <script>
     (() => {
+      if (new URLSearchParams(location.search).has('static')) document.documentElement.classList.add('static');
       const slides = [...document.querySelectorAll('.slide')];
-      const counter = document.getElementById('counter');
+      const count = document.getElementById('slideCount');
       const progress = document.getElementById('progress');
+      const notes = document.getElementById('notes');
+      const notesText = document.getElementById('notesText');
       const timer = document.getElementById('timer');
-      let index = 0;
-      let timerId = null;
-      let remaining = 180;
-      let touchStartX = null;
+      let index = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+      let seconds = 180;
+      let ticking = false;
+      let interval = null;
 
-      function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
-
-      function show(nextIndex, updateHash = true) {
-        const oldIndex = index;
-        index = clamp(nextIndex, 0, slides.length - 1);
+      function render(nextIndex, direction = 1) {
+        nextIndex = Math.max(0, Math.min(slides.length - 1, nextIndex));
         slides.forEach((slide, i) => {
-          slide.classList.toggle('active', i === index);
-          slide.classList.toggle('exit-left', i < index);
-          slide.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+          slide.classList.toggle('active', i === nextIndex);
+          slide.classList.toggle('leaving', i === index && i !== nextIndex && direction > 0);
+          if (i !== nextIndex) {
+            const shell = slide.querySelector('.map-shell');
+            if (shell) shell.classList.remove('interactive');
+            const toggle = slide.querySelector('.map-toggle');
+            if (toggle) toggle.textContent = '启用地图交互';
+          }
         });
-        counter.textContent = `${index + 1} / ${slides.length}`;
+        index = nextIndex;
+        location.hash = String(index + 1);
+        count.textContent = `${index + 1} / ${slides.length}`;
         progress.style.width = `${((index + 1) / slides.length) * 100}%`;
-        document.title = `${index + 1}/${slides.length} · Global Geochemical Atlas Skill`;
-        if (updateHash && oldIndex !== index) history.replaceState(null, '', `#${index + 1}`);
+        document.title = `${index + 1}/${slides.length} · ${slides[index].dataset.title}`;
+        notesText.textContent = slides[index].querySelector('.notes-template')?.textContent.trim() || '';
       }
 
-      function formatTime(seconds) {
-        const sign = seconds < 0 ? '+' : '';
-        const absolute = Math.abs(seconds);
-        return `${sign}${String(Math.floor(absolute / 60)).padStart(2, '0')}:${String(absolute % 60).padStart(2, '0')}`;
-      }
-
+      function go(delta) { render(index + delta, delta); }
       function paintTimer() {
-        timer.textContent = formatTime(remaining);
-        timer.classList.toggle('running', Boolean(timerId));
-        timer.classList.toggle('over', remaining < 0);
+        const mm = String(Math.floor(Math.abs(seconds) / 60)).padStart(2, '0');
+        const ss = String(Math.abs(seconds) % 60).padStart(2, '0');
+        timer.textContent = `${seconds < 0 ? '+' : ''}${mm}:${ss}`;
+        timer.style.color = seconds <= 20 ? 'var(--red)' : 'var(--mint)';
       }
-
       function toggleTimer() {
-        if (timerId) {
-          clearInterval(timerId);
-          timerId = null;
-        } else {
-          timerId = setInterval(() => { remaining -= 1; paintTimer(); }, 1000);
-        }
-        paintTimer();
+        ticking = !ticking;
+        clearInterval(interval);
+        if (ticking) interval = setInterval(() => { seconds -= 1; paintTimer(); }, 1000);
       }
-
-      function resetTimer() {
-        if (timerId) clearInterval(timerId);
-        timerId = null;
-        remaining = 180;
-        paintTimer();
-      }
-
-      function toggleNotes() { document.body.classList.toggle('notes-on'); }
+      function resetTimer() { ticking = false; clearInterval(interval); seconds = 180; paintTimer(); }
       function toggleFullscreen() {
         if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
         else document.exitFullscreen?.();
       }
 
-      document.getElementById('prev').addEventListener('click', () => show(index - 1));
-      document.getElementById('next').addEventListener('click', () => show(index + 1));
-      document.getElementById('notes').addEventListener('click', toggleNotes);
-      document.getElementById('full').addEventListener('click', toggleFullscreen);
+      document.getElementById('prev').addEventListener('click', () => go(-1));
+      document.getElementById('next').addEventListener('click', () => go(1));
+      document.getElementById('notesBtn').addEventListener('click', () => notes.classList.toggle('open'));
+      document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
       timer.addEventListener('click', toggleTimer);
 
-      document.addEventListener('keydown', event => {
-        if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); show(index + 1); }
-        else if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); show(index - 1); }
-        else if (event.key === 'Home') show(0);
-        else if (event.key === 'End') show(slides.length - 1);
-        else if (event.key.toLowerCase() === 'n') toggleNotes();
+      document.querySelectorAll('.map-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+          const shell = button.closest('.slide').querySelector('.map-shell');
+          const on = shell.classList.toggle('interactive');
+          button.textContent = on ? '退出地图交互' : '启用地图交互';
+        });
+      });
+
+      addEventListener('hashchange', () => {
+        const value = (parseInt(location.hash.slice(1), 10) || 1) - 1;
+        if (value !== index) render(value, value > index ? 1 : -1);
+      });
+      addEventListener('keydown', event => {
+        if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement || event.target instanceof HTMLTextAreaElement) return;
+        if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); go(1); }
+        else if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); go(-1); }
+        else if (event.key === 'Home') render(0, -1);
+        else if (event.key === 'End') render(slides.length - 1, 1);
+        else if (event.key.toLowerCase() === 'n') notes.classList.toggle('open');
         else if (event.key.toLowerCase() === 't') toggleTimer();
         else if (event.key.toLowerCase() === 'r') resetTimer();
         else if (event.key.toLowerCase() === 'f') toggleFullscreen();
+        else if (event.key === 'Escape') {
+          document.querySelectorAll('.map-shell.interactive').forEach(shell => shell.classList.remove('interactive'));
+          document.querySelectorAll('.map-toggle').forEach(button => button.textContent = '启用地图交互');
+        }
       });
 
-      document.addEventListener('touchstart', event => { touchStartX = event.changedTouches[0].clientX; }, { passive: true });
-      document.addEventListener('touchend', event => {
-        if (touchStartX === null) return;
-        const delta = event.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(delta) > 55) show(index + (delta < 0 ? 1 : -1));
-        touchStartX = null;
-      }, { passive: true });
-
-      const requested = Number.parseInt(location.hash.slice(1), 10);
-      show(Number.isFinite(requested) ? requested - 1 : 0, false);
+      render(index);
       paintTimer();
     })();
   </script>

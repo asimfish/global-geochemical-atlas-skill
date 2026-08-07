@@ -35,7 +35,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 
 ## 三分钟比赛 Demo
 
-可直接打开 [HTML 幻灯片](demo/presentation.html)，并按[逐页讲稿](demo/speaker-script.md)完成 180 秒演示。录制前运行 `bash demo/prepare_demo.sh /tmp/global-geochemical-atlas-live`；完整的快捷键、现场地图动作、失败降级和录制检查见 [Demo 使用说明](demo/README.md)。演示材料位于正式 Skill 目录之外，不会进入只包含参赛 Skill 的提交归档。
+可直接打开 [HTML 幻灯片](demo/presentation.html)：6 页深色科技风叙事内嵌全球与中国两个真实交互地图，并以完整运行截图自动兜底；也可使用[可编辑 PPTX](demo/Global-Geochemical-Atlas-Demo.pptx)。按[逐页讲稿](demo/speaker-script.md)可在 180 秒内完成演示；完整的快捷键、数据口径、失败降级和录制检查见 [Demo 使用说明](demo/README.md)。`prepare_demo.sh` 的 996 条 USGS 生产阈值切片是可选技术复现，与 PPT 使用的 expanded run 不合并统计。演示材料位于正式 Skill 目录之外，不会进入只包含参赛 Skill 的提交归档。
 
 ## 你会得到什么
 
