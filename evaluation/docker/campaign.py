@@ -125,6 +125,34 @@ def parse_conditions(value: str) -> list[str]:
     return conditions
 
 
+def validate_provider_profile(
+    provider_profile: str,
+    provider_base_url: str,
+    model: str,
+    temperature: float,
+) -> None:
+    if provider_profile != "qwen-anthropic":
+        return
+    parsed_provider = urlsplit(provider_base_url)
+    if (
+        parsed_provider.scheme != "https"
+        or parsed_provider.hostname != QWEN_ANTHROPIC_HOST
+        or parsed_provider.username is not None
+        or parsed_provider.password is not None
+        or parsed_provider.port is not None
+        or parsed_provider.path.rstrip("/") != "/apps/anthropic"
+        or parsed_provider.query
+        or parsed_provider.fragment
+    ):
+        raise CampaignError(
+            "qwen-anthropic requires the approved HTTPS /apps/anthropic SDK base URL"
+        )
+    if temperature != 0.6:
+        raise CampaignError("qwen-anthropic requires --temperature 0.6")
+    if model != "qwen3.8-max":
+        raise CampaignError("qwen-anthropic primary --model must be qwen3.8-max")
+
+
 def read_allowlist(path: Path, extra: Sequence[str]) -> tuple[str, ...]:
     rules = []
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -880,7 +908,6 @@ def run_stage(args: argparse.Namespace) -> int:
 
 
 def run_campaign(args: argparse.Namespace) -> int:
-    docker_available()
     alignment = load_json(ALIGNMENT_PATH)
     required_paths = [item["path"] for item in alignment["submission"]["required_artifacts"]]
     tasks = parse_tasks(args.tasks)
@@ -889,31 +916,19 @@ def run_campaign(args: argparse.Namespace) -> int:
         raise CampaignError("--repeats must be between 1 and 3")
     if not 0.0 <= args.temperature <= 2.0:
         raise CampaignError("--temperature must be between 0 and 2")
-    if args.provider_profile == "qwen-anthropic":
-        parsed_provider = urlsplit(args.provider_base_url)
-        if (
-            parsed_provider.scheme != "https"
-            or parsed_provider.hostname != QWEN_ANTHROPIC_HOST
-            or parsed_provider.username is not None
-            or parsed_provider.password is not None
-            or parsed_provider.port is not None
-            or parsed_provider.path.rstrip("/") != "/apps/anthropic"
-            or parsed_provider.query
-            or parsed_provider.fragment
-        ):
-            raise CampaignError(
-                "qwen-anthropic requires the approved HTTPS /apps/anthropic SDK base URL"
-            )
-        if args.temperature != 0.6:
-            raise CampaignError("qwen-anthropic requires --temperature 0.6")
-        if args.model != "qwen3.8-max":
-            raise CampaignError("qwen-anthropic primary --model must be qwen3.8-max")
+    validate_provider_profile(
+        args.provider_profile,
+        args.provider_base_url,
+        args.model,
+        args.temperature,
+    )
     if args.static_review:
         validate_review(args.static_review, "static review")
     if args.llm_report_dir and not args.llm_report_dir.is_dir():
         raise CampaignError(f"--llm-report-dir is not a directory: {args.llm_report_dir}")
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
         raise CampaignError("--output-dir must be new or empty")
+    docker_available()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     image_id = image_identity(args.image)
     provider_host = urlsplit(args.provider_base_url).hostname if args.provider_base_url else None
