@@ -1,7 +1,7 @@
 {
   "protocol_version": "qwen-uplift-blind-browser-v4",
   "repository": "https://github.com/asimfish/global-geochemical-atlas-skill.git",
-  "commit": "1b20c276e8515bcf632cb45efe9f500c587ed3bf",
+  "commit": "7538b156bb719f45b478b7e4997e04a49084ebe7",
   "model": "Qwen3.8-Max",
   "api_model": "qwen3.8-max",
   "provider_profile": "local-qwen38-openai-v1",

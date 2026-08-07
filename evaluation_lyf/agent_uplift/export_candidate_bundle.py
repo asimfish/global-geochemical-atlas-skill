@@ -42,13 +42,40 @@ def regular_copy(source: Path, destination: Path) -> None:
     shutil.copyfile(source, destination)
 
 
-def copy_skill(source: Path, destination: Path) -> None:
-    for path in sorted(source.rglob("*")):
-        if path.is_symlink():
-            raise BundleError(f"Skill contains a symlink: {path}")
-        if path.is_file():
-            relative = path.relative_to(source)
-            regular_copy(path, destination / relative)
+def git_blob(repo_root: Path, relative: Path) -> bytes:
+    completed = subprocess.run(
+        ["git", "-c", f"safe.directory={repo_root}", "show", f"HEAD:{relative.as_posix()}"],
+        cwd=repo_root, check=False, capture_output=True,
+    )
+    if completed.returncode != 0:
+        raise BundleError(f"file is not a blob in the frozen commit: {relative}")
+    return completed.stdout
+
+
+def tracked_copy(repo_root: Path, relative: Path, destination: Path) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(git_blob(repo_root, relative))
+
+
+def copy_tracked_skill(repo_root: Path, source_relative: Path, destination: Path) -> None:
+    completed = subprocess.run(
+        [
+            "git", "-c", f"safe.directory={repo_root}", "ls-tree", "-r", "-z", "HEAD", "--",
+            source_relative.as_posix(),
+        ],
+        cwd=repo_root, check=True, capture_output=True,
+    )
+    entries = [entry for entry in completed.stdout.split(b"\0") if entry]
+    if not entries:
+        raise BundleError(f"Skill has no tracked files at frozen commit: {source_relative}")
+    for entry in entries:
+        metadata, raw_path = entry.split(b"\t", 1)
+        mode, object_type, _object_id = metadata.decode("ascii").split()
+        relative = Path(raw_path.decode("utf-8"))
+        if object_type != "blob" or mode not in {"100644", "100755"}:
+            raise BundleError(f"unsupported tracked Skill entry: {relative} ({mode} {object_type})")
+        inside = relative.relative_to(source_relative)
+        tracked_copy(repo_root, relative, destination / inside)
 
 
 def manifest_entries(root: Path) -> list[dict[str, object]]:
@@ -115,11 +142,22 @@ def export(repo_root: Path, output: Path, condition: str, mode: str, prompt: Pat
     staging = Path(tempfile.mkdtemp(prefix=f".{output.name}.staging-", dir=output.parent))
     try:
         for relative in (*PUBLIC_FILES, *(DEVELOPMENT_FILES if mode == "development" else ())):
-            regular_copy(source / relative, staging / relative)
-        regular_copy(prompt, staging / "AGENT_PROMPT.md")
+            if mode == "formal":
+                tracked_copy(repo_root, Path("evaluation_lyf/agent_uplift") / relative, staging / relative)
+            else:
+                regular_copy(source / relative, staging / relative)
+        if mode == "formal":
+            try:
+                prompt_relative = prompt.resolve().relative_to(repo_root)
+            except ValueError as exc:
+                raise BundleError("formal prompt must be a tracked file inside the repository") from exc
+            tracked_copy(repo_root, prompt_relative, staging / "AGENT_PROMPT.md")
+        else:
+            regular_copy(prompt, staging / "AGENT_PROMPT.md")
         if condition == "S0":
-            copy_skill(
-                repo_root / "skills/global-geochemical-atlas",
+            copy_tracked_skill(
+                repo_root,
+                Path("skills/global-geochemical-atlas"),
                 staging / ".agents/skills/global-geochemical-atlas",
             )
         (staging / "submission").mkdir()
