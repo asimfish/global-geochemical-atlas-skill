@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import sqlite3
@@ -24,14 +23,6 @@ DEFAULT_BUNDLE = SKILL_DIR / "fixtures" / "schema-v1" / "archive-bundle.json"
 
 def _json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _load_bundle(path: Path) -> dict[str, Any]:
@@ -77,7 +68,7 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                     item["filename"],
                     item["source_url"],
                     item["bytes"],
-                    item["sha256"],
+                    item["file_identity"],
                 ),
             )
         connection.execute(
@@ -142,10 +133,10 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
             "medium_raw, material_raw, sample_type_raw, sample_type, sample_type_mapping_status, "
             "geographic_context_raw, survey_area, map_sheet, cruise_track, lithology_raw, lithology, "
             "geologic_unit_raw, geologic_age_raw, tectonic_setting_raw, matched_geologic_unit, "
-            "geology_map_source, geology_map_version, match_method, match_scale, boundary_distance_m, "
-            "match_uncertainty, soil_horizon_raw, soil_horizon, sediment_environment, grain_fraction_raw, "
+            "geology_map_source, geology_map_source_id, geology_map_version, match_method, match_scale, boundary_distance_m, "
+            "match_uncertainty, match_status, match_candidates_json, soil_horizon_raw, soil_horizon, sediment_environment, grain_fraction_raw, "
             "water_body_type, water_fraction, filtered_state_raw, description_raw) "
-            "VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 sample["sample_id"],
                 sample["native_sample_id"],
@@ -167,11 +158,14 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                 sample.get("tectonic_setting_raw"),
                 sample.get("matched_geologic_unit"),
                 sample.get("geology_map_source"),
+                sample.get("geology_map_source_id"),
                 sample.get("geology_map_version"),
                 sample.get("match_method"),
                 sample.get("match_scale"),
                 sample.get("boundary_distance_m"),
                 sample.get("match_uncertainty"),
+                sample.get("match_status") or "legacy_not_available",
+                json.dumps(sample.get("match_candidates", []), ensure_ascii=False, sort_keys=True),
                 sample["soil_horizon_raw"],
                 sample.get("soil_horizon"),
                 sample.get("sediment_environment"),
@@ -290,7 +284,7 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                 item["source_sheet"],
                 item["source_row"],
                 item["source_column"],
-                item["input_sha256"],
+                item["input_file_id"],
                 item["adapter_name"],
                 item["adapter_version"],
                 _json(item["processing_steps"]),
@@ -358,7 +352,6 @@ def build_index(bundle_path: Path, output: Path, schema_path: Path = DEFAULT_SCH
         "index_version": "d1-sqlite-index-v1",
         "output": str(output),
         "bytes": output.stat().st_size,
-        "sha256": _sha256(output),
         "counts": counts,
     }
 

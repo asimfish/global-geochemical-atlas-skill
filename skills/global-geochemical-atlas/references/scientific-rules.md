@@ -103,7 +103,7 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 
 `source_crs` 可来自文件、数据集元数据或版本化平台政策，输出分别标记
 `file_declared`、`dataset_metadata_declared`、`platform_policy_declared`。平台政策不是按数值形态猜 CRS：
-必须同时命中政策 ID、平台 DOI 规则和原始经纬度字段白名单，政策 URL、版本与页面 SHA-256 写入记录。
+必须同时命中政策 ID、平台 DOI 规则和原始经纬度字段白名单，政策 URL、版本与访问时间写入记录。
 
 当前 `pangaea-geocode-wgs84-v1` 仅适用于带 `10.1594/PANGAEA.<id>` DOI 的 PANGAEA
 `LATITUDE`/`LONGITUDE` geocode；依据固定版本的 PANGAEA Geocode 官方说明。字段被重命名、派生、投影，
@@ -162,7 +162,7 @@ Mendeley 或普通用户 CSV。
 
 `overall = 0.30*source + 0.20*completeness + 0.20*method + 0.15*spatial + 0.15*qc`。
 
-来源分量的 v3 起始值为：官方策展 1.00、政府机构 0.95、同行评审 0.90、机构仓储 0.80、作者补充材料 0.75、聚合站 0.55、未知 0.30；缺少 source ID、精确定位、许可，或有源文件却无 SHA-256 会继续扣分。来源 tier 必须由 D1 根据来源与版本信息显式填写，不按域名自动猜测。
+来源分量的 v3 起始值为：官方策展 1.00、政府机构 0.95、同行评审 0.90、机构仓储 0.80、作者补充材料 0.75、聚合站 0.55、未知 0.30；缺少 source ID、精确定位、许可或可读文件身份会继续扣分。来源 tier 必须由 D1 根据来源与版本信息显式填写，不按域名自动猜测。
 
 v3 使用可审计门控：任一 `error` 级 flag 或缺少 canonical WGS84 坐标时，`overall` 上限为 0.59；坐标存在但缺少不确定性、方法上下文不完整，或岩石/土壤/非海洋沉积物缺少来源直报或空间匹配地质背景时，上限为 0.79。每条记录写入 `gates_applied`，报告汇总 `gate_counts`。这些 gate 防止字段看似完整但科学使用条件不足的记录得到 high。上述参数是版本化的工作流启发式，应通过 E2 的 holdout/失败案例校准，不能解释为统计概率。
 
@@ -208,24 +208,24 @@ v3 使用可审计门控：任一 `error` 级 flag 或缺少 canonical WGS84 坐
 ### D1、D3、E1、E2 协作接口
 
 - D1 → D2：UTF-8 CSV，一行一个样品 × 分析物测定；非 canonical 列名必须用符合
-  `schema-map.schema.json` 的显式映射，来源 qualifier、检出限、CRS、源行定位和文件 SHA-256 不得猜测。
+  `schema-map.schema.json` 的显式映射，来源 qualifier、检出限、CRS、源行定位和文件身份不得猜测。
 - D2 → D3：固定生成上述九个分析产物；D3 可忽略可选内容，但不得把 null 浓度绘制为零、把统计区域与显示聚合混为一谈、把候选异常写成因果结论，或重新计算 `operational_confidence`。
 - D2 → E1：`standardize_geochemistry.py` 成功时退出码为 0，并在 stdout 输出产物角色到路径的 JSON；无效输入或配置通过 argparse 以退出码 2 失败，写产物时采用原子替换。
 - D2 → E2：`anomaly_report.json` 必须记录分组、最小样本量、最小可量化比例、modified z 阈值与
   `analyzed`、`insufficient_group_size`、`insufficient_quantified_fraction`、`insufficient_usable_group_size`、`zero_dispersion` 失败状态；空间报告另记录精确检验、假设总数和 BH-FDR。
-- 相同输入字节、schema map、批次文件、policy 和参数应产生字节一致的九个 D2 产物；运行元数据记录输入与映射 SHA-256。
+- 相同输入字节、schema map、批次文件、policy 和参数应产生字节一致的 D2 产物；运行元数据记录输入文件名、字节数、schema、行数和参数身份。
 
 ### 可选 GLiM 空间匹配
 
-提供 `--geology-grid` 与对应 `--geology-grid-sha256` 时，D2 读取 PANGAEA.788537 的官方 GLiM 0.5° Arc/ASCII ZIP，按 WGS84 点位执行确定性 cell join。结果写入 `matched_geologic_unit`、`geology_map_source/version`、`match_method/scale`、`boundary_distance_m`、`match_uncertainty` 和 `geology_missing_reason`；输入的 `geologic_unit` 与 `geologic_unit_raw` 不被覆盖。网格 hash 和 join 版本进入所有运行元数据，汇总进入 `qc_report.json.geology_matching`。
+提供 `--geology-grid` 时，D2 读取 PANGAEA.788537 的官方 GLiM 0.5° Arc/ASCII ZIP，按 WGS84 点位执行确定性 cell join。结果写入 `matched_geologic_unit`、`geology_map_source/version`、`match_method/scale`、`boundary_distance_m`、`match_uncertainty` 和 `geology_missing_reason`；输入的 `geologic_unit` 与 `geologic_unit_raw` 不被覆盖。网格 DOI/版本、文件名、字节数、成员清单和 join 版本进入运行元数据，汇总进入 `qc_report.json.geology_matching`。
 
-GLiM 只表示 0.5° 主导表层岩性筛查背景，不是场地级地层或构造单元。水体和明确的海洋沉积物不赋陆地岩性；无 canonical WGS84 坐标、NODATA 和靠近 cell 边界的记录保留显式处置状态。没有同时提供网格与 SHA-256 时失败关闭，不从模型常识补地质单元。
+GLiM 只表示 0.5° 主导表层岩性筛查背景，不是场地级地层或构造单元。水体和明确的海洋沉积物不赋陆地岩性；无 canonical WGS84 坐标、NODATA 和靠近 cell 边界的记录保留显式处置状态。没有可读网格身份或网格结构校验失败时关闭匹配，不从模型常识补地质单元。
 
 ## 8. 科学依据与边界
 
 - [PANGAEA Geocode 官方说明](https://wiki.pangaea.de/w/handler?title=Geocode&oldid=17007) 声明平台
   `LATITUDE`/`LONGITUDE` geocode 为 WGS84 十进制度；`pangaea-geocode-wgs84-v1` 固定该页面版本、访问日和
-  SHA-256，并只对 PANGAEA DOI 与精确字段白名单生效。
+  访问时间，并只对 PANGAEA DOI 与精确字段白名单生效。
 - [CIAAW 标准/简表原子量](https://www.ciaaw.org/abridged-atomic-weights.htm) 是
   `d2-ciaaw-abridged-2024-v1` 的权威依据；实现冻结常规元素值，在线页面更新不会静默改变已发布结果。
 - [USGS QA/QC primer](https://pubs.usgs.gov/publication/ofr20111187) 强调从采样设计、实验分析到最终解释均需 QA/QC：DOI `10.3133/ofr20111187`。

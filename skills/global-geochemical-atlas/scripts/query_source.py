@@ -48,14 +48,20 @@ def query_index(
     analytes: Sequence[str] | None = None,
     media: Sequence[str] | None = None,
     sample_types: Sequence[str] | None = None,
+    lithologies: Sequence[str] | None = None,
     soil_horizons: Sequence[str] | None = None,
     sediment_environments: Sequence[str] | None = None,
     water_body_types: Sequence[str] | None = None,
     water_fractions: Sequence[str] | None = None,
     geologic_units: Sequence[str] | None = None,
+    geology_statuses: Sequence[str] | None = None,
+    geology_map_sources: Sequence[str] | None = None,
     source_ids: Sequence[str] | None = None,
     methods: Sequence[str] | None = None,
+    analytical_techniques: Sequence[str] | None = None,
     method_scopes: Sequence[str] | None = None,
+    measurement_bases: Sequence[str] | None = None,
+    value_qualifiers: Sequence[str] | None = None,
     license_ids: Sequence[str] | None = None,
     bbox: Sequence[float] | None = None,
     sampled_after: str | None = None,
@@ -96,6 +102,14 @@ def query_index(
         _append_in_filter(clauses, parameters, "analyte_reported", analytes)
         _append_in_filter(clauses, parameters, "medium_raw", media)
         _append_in_filter(clauses, parameters, "sample_type", sample_types)
+        if lithologies:
+            normalized_lithologies = [value.strip() for value in lithologies]
+            if any(not value for value in normalized_lithologies):
+                raise QueryError("lithology filters must not be empty")
+            placeholders = ",".join("?" for _ in normalized_lithologies)
+            clauses.append(f"(os.lithology IN ({placeholders}) OR os.lithology_raw IN ({placeholders}))")
+            parameters.extend(normalized_lithologies)
+            parameters.extend(normalized_lithologies)
         _append_in_filter(clauses, parameters, "soil_horizon", soil_horizons)
         _append_in_filter(clauses, parameters, "sediment_environment", sediment_environments)
         _append_in_filter(clauses, parameters, "water_body_type", water_body_types)
@@ -110,9 +124,23 @@ def query_index(
             )
             parameters.extend(normalized_geology)
             parameters.extend(normalized_geology)
+        _append_in_filter(clauses, parameters, "match_status", geology_statuses)
+        if geology_map_sources:
+            normalized_sources = [value.strip() for value in geology_map_sources]
+            if any(not value for value in normalized_sources):
+                raise QueryError("geology map source filters must not be empty")
+            placeholders = ",".join("?" for _ in normalized_sources)
+            clauses.append(
+                f"(os.geology_map_source IN ({placeholders}) OR os.geology_map_source_id IN ({placeholders}))"
+            )
+            parameters.extend(normalized_sources)
+            parameters.extend(normalized_sources)
         _append_in_filter(clauses, parameters, "source_id", source_ids)
-        _append_in_filter(clauses, parameters, "technique_raw", methods)
+        technique_filters = list(methods or []) + list(analytical_techniques or [])
+        _append_in_filter(clauses, parameters, "technique_raw", technique_filters)
         _append_in_filter(clauses, parameters, "method_scope", method_scopes)
+        _append_in_filter(clauses, parameters, "measurement_basis_raw", measurement_bases)
+        _append_in_filter(clauses, parameters, "value_qualifier", value_qualifiers)
         _append_in_filter(clauses, parameters, "license_id", license_ids)
 
         warnings: list[str] = []
@@ -180,14 +208,20 @@ def query_index(
         "analytes": list(analytes or []),
         "media": list(media or []),
         "sample_types": list(sample_types or []),
+        "lithologies": list(lithologies or []),
         "soil_horizons": list(soil_horizons or []),
         "sediment_environments": list(sediment_environments or []),
         "water_body_types": list(water_body_types or []),
         "water_fractions": list(water_fractions or []),
         "geologic_units": list(geologic_units or []),
+        "geology_statuses": list(geology_statuses or []),
+        "geology_map_sources": list(geology_map_sources or []),
         "source_ids": list(source_ids or []),
         "methods": list(methods or []),
+        "analytical_techniques": list(analytical_techniques or []),
         "method_scopes": list(method_scopes or []),
+        "measurement_bases": list(measurement_bases or []),
+        "value_qualifiers": list(value_qualifiers or []),
         "license_ids": list(license_ids or []),
         "bbox": list(bbox) if bbox is not None else None,
         "sampled_after": sampled_after,
@@ -213,14 +247,25 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--analyte", action="append", dest="analytes")
     parser.add_argument("--medium", action="append", dest="media")
     parser.add_argument("--sample-type", action="append", dest="sample_types")
+    parser.add_argument("--lithology", action="append", dest="lithologies")
     parser.add_argument("--soil-horizon", action="append", dest="soil_horizons")
     parser.add_argument("--sediment-environment", action="append", dest="sediment_environments")
     parser.add_argument("--water-body-type", action="append", dest="water_body_types")
     parser.add_argument("--water-fraction", action="append", dest="water_fractions")
     parser.add_argument("--geologic-unit", action="append", dest="geologic_units")
+    parser.add_argument("--geology-status", action="append", dest="geology_statuses")
+    parser.add_argument("--geology-map-source", action="append", dest="geology_map_sources")
     parser.add_argument("--source-id", action="append", dest="source_ids")
     parser.add_argument("--method", action="append", dest="methods", help="Exact source-native technique")
+    parser.add_argument(
+        "--analytical-technique",
+        action="append",
+        dest="analytical_techniques",
+        help="Exact source-native analytical technique; --method remains a compatibility alias",
+    )
     parser.add_argument("--method-scope", action="append", dest="method_scopes")
+    parser.add_argument("--measurement-basis", action="append", dest="measurement_bases")
+    parser.add_argument("--value-qualifier", action="append", dest="value_qualifiers")
     parser.add_argument("--license-id", action="append", dest="license_ids")
     parser.add_argument("--bbox", nargs=4, type=float, metavar=("WEST", "SOUTH", "EAST", "NORTH"))
     parser.add_argument("--sampled-after", help="Inclusive source-native ISO date lower bound")
@@ -239,14 +284,20 @@ def main(argv: Sequence[str] | None = None) -> int:
             analytes=args.analytes,
             media=args.media,
             sample_types=args.sample_types,
+            lithologies=args.lithologies,
             soil_horizons=args.soil_horizons,
             sediment_environments=args.sediment_environments,
             water_body_types=args.water_body_types,
             water_fractions=args.water_fractions,
             geologic_units=args.geologic_units,
+            geology_statuses=args.geology_statuses,
+            geology_map_sources=args.geology_map_sources,
             source_ids=args.source_ids,
             methods=args.methods,
+            analytical_techniques=args.analytical_techniques,
             method_scopes=args.method_scopes,
+            measurement_bases=args.measurement_bases,
+            value_qualifiers=args.value_qualifiers,
             license_ids=args.license_ids,
             bbox=args.bbox,
             sampled_after=args.sampled_after,

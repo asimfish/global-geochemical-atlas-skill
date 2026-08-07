@@ -1,23 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:ai4s:geochemistry-source-manifest:d1-v2",
-  "title": "D1 v2 geochemical source and evidence manifest",
+  "title": "D1 geochemical source and evidence manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "manifest_version", "input", "source_count", "coverage", "sources", "record_evidence",
-    "confidence_report", "data_mode", "not_for_scientific_interpretation",
-    "synthetic_data_present", "claim_boundary"
+    "manifest_version",
+    "input",
+    "source_count",
+    "coverage",
+    "sources",
+    "confidence_report",
+    "synthetic_data_present",
+    "claim_boundary"
   ],
   "properties": {
     "manifest_version": {"const": "geochemical-source-manifest-v2"},
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["filename", "sha256", "bytes", "record_count"],
+      "required": ["filename", "bytes", "record_count"],
       "properties": {
         "filename": {"type": "string", "minLength": 1},
-        "sha256": {"$ref": "#/$defs/sha256"},
         "bytes": {"type": "integer", "minimum": 1},
         "record_count": {"type": "integer", "minimum": 1}
       }
@@ -27,58 +31,49 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "records_with_source_locator", "records_with_declared_license", "source_locator_rate",
-        "declared_license_rate", "records_with_verified_evidence", "verified_evidence_rate"
+        "records_with_source_locator",
+        "records_with_declared_license",
+        "source_locator_rate",
+        "declared_license_rate"
       ],
       "properties": {
         "records_with_source_locator": {"type": "integer", "minimum": 0},
         "records_with_declared_license": {"type": "integer", "minimum": 0},
-        "records_with_verified_evidence": {"type": "integer", "minimum": 0},
-        "source_locator_rate": {"$ref": "#/$defs/rate"},
-        "declared_license_rate": {"$ref": "#/$defs/rate"},
-        "verified_evidence_rate": {"$ref": "#/$defs/rate"}
+        "source_locator_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "declared_license_rate": {"type": "number", "minimum": 0, "maximum": 1}
       }
     },
     "sources": {
       "type": "array",
       "minItems": 1,
-      "items": {"$ref": "#/$defs/source"}
-    },
-    "record_evidence": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "filename", "sha256", "schema_version", "record_count", "exact_record_id_match",
-        "evidence_level", "acquisition_manifest"
-      ],
-      "properties": {
-        "filename": {"const": "record_evidence.jsonl"},
-        "sha256": {"$ref": "#/$defs/sha256"},
-        "schema_version": {"const": "geochemical-record-evidence-v1"},
-        "record_count": {"type": "integer", "minimum": 1},
-        "exact_record_id_match": {"const": true},
-        "evidence_level": {
-          "enum": ["source_declared_in_input", "validated_record_evidence", "verified_record_evidence"]
-        },
-        "acquisition_manifest": {
-          "oneOf": [
-            {"type": "null"},
-            {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "filename", "sha256", "data_mode", "generation_version",
-                "not_for_scientific_interpretation"
-              ],
-              "properties": {
-                "filename": {"type": "string", "minLength": 1},
-                "sha256": {"$ref": "#/$defs/sha256"},
-                "data_mode": {"enum": ["fixture", "online", "cached"]},
-                "generation_version": {"type": ["string", "null"]},
-                "not_for_scientific_interpretation": {"type": "boolean"}
-              }
-            }
-          ]
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "record_count",
+          "source_tiers",
+          "licenses",
+          "located_record_count",
+          "locator_count",
+          "example_locators",
+          "all_records_located",
+          "all_records_license_declared",
+          "evidence_type",
+          "license_review"
+        ],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "record_count": {"type": "integer", "minimum": 1},
+          "source_tiers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "licenses": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "located_record_count": {"type": "integer", "minimum": 0},
+          "locator_count": {"type": "integer", "minimum": 0},
+          "example_locators": {"type": "array", "maxItems": 5, "items": {"type": "string"}},
+          "all_records_located": {"type": "boolean"},
+          "all_records_license_declared": {"type": "boolean"},
+          "evidence_type": {"type": "string", "enum": ["synthetic_demo", "source_declared_in_input"]},
+          "license_review": {"type": "string", "enum": ["demo_cc0", "verify_source_terms", "unresolved"]}
         }
       }
     },
@@ -86,75 +81,34 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "filename", "sha256", "confidence_version", "run_id", "input_sha256",
-        "not_a_probability", "contract"
+        "filename",
+        "bytes",
+        "confidence_version",
+        "run_id",
+        "input_identity",
+        "not_a_probability",
+        "contract"
       ],
       "properties": {
         "filename": {"const": "confidence_report.json"},
-        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1},
         "confidence_version": {"type": "string", "minLength": 1},
         "run_id": {"type": ["string", "null"]},
-        "input_sha256": {"$ref": "#/$defs/sha256"},
+        "input_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["filename", "bytes", "record_count"],
+          "properties": {
+            "filename": {"type": "string", "minLength": 1},
+            "bytes": {"type": "integer", "minimum": 1},
+            "record_count": {"type": "integer", "minimum": 1}
+          }
+        },
         "not_a_probability": {"const": true},
         "contract": {"type": "string", "minLength": 1}
       }
     },
-    "data_mode": {"enum": ["fixture", "online", "cached", "input", "synthetic_fixture"]},
-    "not_for_scientific_interpretation": {"type": "boolean"},
     "synthetic_data_present": {"type": "boolean"},
     "claim_boundary": {"type": "string", "minLength": 1}
-  },
-  "$defs": {
-    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "rate": {"type": "number", "minimum": 0, "maximum": 1},
-    "stringList": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-    "source": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "source_id", "record_count", "source_tiers", "licenses", "located_record_count",
-        "locator_count", "example_locators", "all_records_located",
-        "all_records_license_declared", "verified_record_count", "dataset_titles", "dataset_dois",
-        "dataset_versions", "source_files", "article_citations", "article_dois",
-        "evidence_type", "license_review"
-      ],
-      "properties": {
-        "source_id": {"type": "string", "minLength": 1},
-        "record_count": {"type": "integer", "minimum": 1},
-        "source_tiers": {"$ref": "#/$defs/stringList"},
-        "licenses": {"$ref": "#/$defs/stringList"},
-        "located_record_count": {"type": "integer", "minimum": 0},
-        "locator_count": {"type": "integer", "minimum": 0},
-        "example_locators": {"type": "array", "maxItems": 5, "items": {"type": "string"}},
-        "all_records_located": {"type": "boolean"},
-        "all_records_license_declared": {"type": "boolean"},
-        "verified_record_count": {"type": "integer", "minimum": 0},
-        "dataset_titles": {"$ref": "#/$defs/stringList"},
-        "dataset_dois": {"$ref": "#/$defs/stringList"},
-        "dataset_versions": {"$ref": "#/$defs/stringList"},
-        "source_files": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["filename", "sha256", "url"],
-            "properties": {
-              "filename": {"type": "string", "minLength": 1},
-              "sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
-              "url": {"type": ["string", "null"]}
-            }
-          }
-        },
-        "article_citations": {"$ref": "#/$defs/stringList"},
-        "article_dois": {"$ref": "#/$defs/stringList"},
-        "evidence_type": {
-          "enum": [
-            "synthetic_demo", "source_declared_in_input", "validated_record_evidence",
-            "verified_record_evidence"
-          ]
-        },
-        "license_review": {"enum": ["demo_cc0", "verify_source_terms", "unresolved"]}
-      }
-    }
   }
 }

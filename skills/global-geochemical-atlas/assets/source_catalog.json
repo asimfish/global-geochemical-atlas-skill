@@ -1,7 +1,7 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-06T10:35:00Z",
-  "claim_boundary": "This catalog records discovered sources and interface facts. V3 automatic selection is determined separately by access status, research-use status, evidence tier, use mode, and execution context; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
+  "reviewed_at": "2026-08-07T12:00:00Z",
+  "claim_boundary": "This catalog records discovered sources and interface facts. V4 routing uses evidence tier, research-use status, use mode and structured Codex audits; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
     "round": 6,
     "status": "in_progress",
@@ -83,6 +83,38 @@
       ],
       "limitations": [
         "Precompiled selected values are not an unfiltered set of every replicate determination."
+      ]
+    },
+    "georoc-antarctica-intraplate": {
+      "title": "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member",
+      "publisher": "DIGIS Team, Goettingen University",
+      "source_kind": "disciplinary_repository",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["rock"],
+      "coverage": {
+        "extent_class": "continental_partial",
+        "regions": ["antarctica-intraplate-volcanics"],
+        "notes": "424 literature-linked whole-rock rows; a discrete compilation, not uniform Antarctica coverage."
+      },
+      "identifiers": {"dataset_doi": "10.25625/RZZ9VM", "file_doi": "10.25625/RZZ9VM/UYO5XO", "dataverse_file_id": 173608},
+      "landing_page": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
+      "interfaces": [{
+        "kind": "versioned_dataverse_member",
+        "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original",
+        "format": "cp1252_csv",
+        "access": "open",
+        "server_filters": ["dataset_doi", "dataset_version", "file_doi"]
+      }],
+      "license": {"status": "open", "id": "CC-BY-SA-4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/", "notes": "Retain GEOROC and original-publication citations."},
+      "version": {"status": "pinned", "value": "12.0", "release_date": "2026-06-11"},
+      "adapter": {"status": "implemented", "name": "georoc_dataverse_member"},
+      "evidence_urls": ["https://georoc.eu/georoc/precompiled/", "https://doi.org/10.25625/RZZ9VM", "https://doi.org/10.25625/RZZ9VM/UYO5XO"],
+      "limitations": [
+        "The compilation follows published sampling and is spatially uneven.",
+        "One coordinate range is not an exact point and is not converted to a midpoint.",
+        "The winning row-level analytical method is absent from the precompiled member.",
+        "This member shares the GEOROC compilation lineage and is not an independent rock-source family."
       ]
     },
     "usgs-conus-soil": {
@@ -187,6 +219,133 @@
         "Aggregated records must retain every original publication reference."
       ]
     },
+    "usgs-utah-volcanic-whole-rock": {
+      "title": "Whole-rock geochemical data for volcanic rocks sampled in northwestern Utah and adjacent states",
+      "publisher": "U.S. Geological Survey",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["rock"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["northwestern-utah", "adjacent-idaho", "adjacent-nevada"],
+        "notes": "A regional volcanic-rock release with 246 sampled rows; it is an independent non-GEOROC lineage but not representative of United States or global rock coverage."
+      },
+      "identifiers": {
+        "dataset_doi": "10.5066/P1NZXUZF",
+        "sciencebase_item_id": "672d2e6dd34ea9e45088e967"
+      },
+      "landing_page": "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+      "interfaces": [
+        {
+          "kind": "fixed_sciencebase_child_files",
+          "url": "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+          "format": "csv_relational_tables",
+          "access": "open",
+          "server_filters": ["sciencebase_child_item_id", "file_id"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "LicenseRef-USGS-Public-Domain",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "notes": "The data release identifies CC0 1.0; retain the USGS dataset citation and record-level source locators."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "2026-02-09",
+        "release_date": "2026-02-16"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "usgs_sciencebase_child_csvs"
+      },
+      "evidence_urls": [
+        "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+        "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+        "https://doi.org/10.5066/P1NZXUZF"
+      ],
+      "limitations": [
+        "Negative target values are publisher encodings for less-than limits and remain qualified observations.",
+        "Some UGS-ALS measurements retain two explicit method candidates rather than an invented winning method.",
+        "The release overlaps NGD-Rock; upstream DOI, sample, analyte and method identities participate in duplicate lineage audits.",
+        "No target Hg observation is present in the four production child data files."
+      ]
+    },
+    "cdogs-210102-lake-sediment": {
+      "title": "CDoGS survey 21:0102 lake-sediment geochemistry",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["sediment"],
+      "coverage": {"extent_class": "regional_partial", "regions": ["southeastern-ontario"], "notes": "Discrete lake-sediment samples from one official reconnaissance survey; not Canadian or global continuous coverage."},
+      "identifiers": {"dataset_pid": "CDoGS:survey:21:0102:lake-sediment", "survey_key": "21:0102"},
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "interfaces": [{"kind": "fixed_official_package_files", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx", "format": "xlsx", "access": "open", "server_filters": ["Survey_Key"]}],
+      "license": {"status": "open", "id": "LicenseRef-Government-of-Canada-Terms", "url": "https://www.canada.ca/en/transparency/terms.html", "notes": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations."},
+      "version": {"status": "pinned", "value": "cdogs-svy210102-page-2025-05-18", "release_date": "1984"},
+      "adapter": {"status": "implemented", "name": "cdogs_210102_xlsx"},
+      "evidence_urls": ["https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm", "https://www.canada.ca/en/transparency/terms.html"],
+      "limitations": ["Lake water and lake sediment share one upstream survey lineage.", "Coordinates are published as NAD83 and remain identified as such.", "Different package columns retain their own analytical method and detection-limit contracts."]
+    },
+    "cdogs-210102-lake-water": {
+      "title": "CDoGS survey 21:0102 lake-water uranium",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["water"],
+      "coverage": {"extent_class": "regional_partial", "regions": ["southeastern-ontario"], "notes": "Discrete lake-water samples from one official reconnaissance survey; uranium only."},
+      "identifiers": {"dataset_pid": "CDoGS:survey:21:0102:lake-water", "survey_key": "21:0102"},
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "interfaces": [{"kind": "fixed_official_package_file", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx", "format": "xlsx", "access": "open", "server_filters": ["Survey_Key"]}],
+      "license": {"status": "open", "id": "LicenseRef-Government-of-Canada-Terms", "url": "https://www.canada.ca/en/transparency/terms.html", "notes": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations."},
+      "version": {"status": "pinned", "value": "cdogs-svy210102-page-2025-05-18", "release_date": "1984"},
+      "adapter": {"status": "implemented", "name": "cdogs_210102_xlsx"},
+      "evidence_urls": ["https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm", "https://www.canada.ca/en/transparency/terms.html"],
+      "limitations": ["The executable water product contains uranium, not all seven earlier target elements.", "Lake water and lake sediment share one upstream survey lineage.", "Official bundle and narrative dates conflict, so the sample year remains unresolved."]
+    },
+    "brazil-sgb-florianopolis-soil": {
+      "title": "SGB Florianopolis soil geochemistry",
+      "publisher": "Servico Geologico do Brasil (SGB-CPRM)",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["soil"],
+      "coverage": {"extent_class": "regional_partial", "regions": ["florianopolis-brazil"], "notes": "One 32-sample regional soil survey; not continuous Brazil or South America coverage."},
+      "identifiers": {"dataset_pid": "SGB-RIGeo:doc/23413:soil", "bitstream_id": "4ac11c55-2d10-4aac-9dce-5266b442c500"},
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+      "interfaces": [
+        {"kind": "fixed_repository_bitstream", "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content", "format": "zip_xlsx", "access": "open", "server_filters": ["bitstream_id", "workbook_member"]},
+        {"kind": "record_coordinate_api", "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5/query", "format": "geojson", "access": "open", "server_filters": ["NUM_CAMPO", "NUM_LAB"]}
+      ],
+      "license": {"status": "open", "id": "LicenseRef-SGB-RIGEO-open-item-metadata", "url": "https://rigeo.sgb.gov.br/handle/doc/23413", "notes": "RIGeo item metadata states open and permits research access; redistribution remains unevaluated."},
+      "version": {"status": "pinned", "value": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil", "release_date": "2022"},
+      "adapter": {"status": "implemented", "name": "brazil_sgb_rigeo_soil_xlsx_arcgis_join"},
+      "evidence_urls": ["https://rigeo.sgb.gov.br/handle/doc/23413", "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5"],
+      "limitations": ["All source rows have an unidentified soil horizon and unspecified soil type.", "As and Zn are ND and are not converted to numeric concentrations.", "Digestion is not reported and is not inferred from the optical-emission technique."]
+    },
+    "brazil-sgb-florianopolis-stream-sediment": {
+      "title": "SGB Florianopolis stream-sediment geochemistry",
+      "publisher": "Servico Geologico do Brasil (SGB-CPRM)",
+      "source_kind": "official_national_dataset",
+      "status": "approved",
+      "production_eligible": true,
+      "media": ["sediment"],
+      "coverage": {"extent_class": "regional_partial", "regions": ["florianopolis-brazil"], "notes": "One regional stream-sediment survey; not continuous Brazil or South America coverage."},
+      "identifiers": {"dataset_pid": "SGB-RIGeo:doc/23413", "bitstream_id": "4ac11c55-2d10-4aac-9dce-5266b442c500"},
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+      "interfaces": [
+        {"kind": "fixed_repository_bitstream", "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content", "format": "zip_xlsx", "access": "open", "server_filters": ["bitstream_id"]},
+        {"kind": "record_coordinate_api", "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2/query", "format": "geojson", "access": "open", "server_filters": ["NUM_CAMPO", "NUM_LAB"]}
+      ],
+      "license": {"status": "open", "id": "LicenseRef-SGB-RIGEO-open-item-metadata", "url": "https://rigeo.sgb.gov.br/handle/doc/23413", "notes": "RIGeo item metadata states open and permits research access; no explicit redistribution licence was located, so redistribution remains unevaluated."},
+      "version": {"status": "pinned", "value": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55", "release_date": "2022"},
+      "adapter": {"status": "implemented", "name": "brazil_sgb_rigeo_xlsx_arcgis_join"},
+      "evidence_urls": ["https://rigeo.sgb.gov.br/handle/doc/23413", "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2"],
+      "limitations": ["Coordinates require NUM_CAMPO plus NUM_LAB because NUM_CAMPO alone is not unique.", "ND is retained without inventing a numeric detection limit.", "Optical-emission and atomic-absorption analyses remain separate method partitions."]
+    },
     "usgs-ngdb": {
       "title": "U.S. Geological Survey National Geochemical Database",
       "publisher": "U.S. Geological Survey",
@@ -235,7 +394,7 @@
       ]
     },
     "gemstat-open-archive": {
-      "title": "UNEP GEMS/Water Global Freshwater Quality Archive v3",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive v3 seven-element subset",
       "publisher": "UNEP GEMS/Water Programme, GEMS/Water Data Centre and German Federal Institute of Hydrology",
       "source_kind": "official_international_database",
       "status": "needs_human_review",
@@ -244,7 +403,7 @@
       "coverage": {
         "extent_class": "global_partial",
         "regions": ["global"],
-        "notes": "The v3 archive describes 42 contributing countries. The audited arsenic subset contains 492,999 observations at 15,621 stations in 33 countries across river, lake, groundwater, reservoir and wetland station types; spatial and temporal coverage is uneven."
+        "notes": "The audited As/Cr/Cu/Hg/Ni/Pb/Zn subset contains 3,739,180 target observations representing 689,291 station-date-time-depth sampling events at 17,248 stations in 35 countries. River, lake, groundwater, reservoir and wetland coverage is spatially and temporally uneven."
       },
       "identifiers": {
         "dataset_doi": "10.5281/zenodo.18459694",
@@ -280,7 +439,7 @@
       },
       "adapter": {
         "status": "implemented",
-        "name": "gemstat_v3_arsenic_range"
+        "name": "gemstat_v3_seven_element_ranges"
       },
       "evidence_urls": [
         "https://zenodo.org/records/18459694",
@@ -289,13 +448,13 @@
         "https://gemstat.org/data-gemstat/data-submission/"
       ],
       "limitations": [
-        "The audited arsenic subset covers 33 voluntarily contributing countries and is not a uniform global freshwater grid.",
-        "Dissolved, suspended and total arsenic fractions must remain separate.",
-        "Most arsenic observations use undefined analysis method code 0, so method-comparable subsets are substantially smaller.",
-        "The source contains censoring, 5,655 extra exact duplicate observations, and Pending review/Suspect values that must remain traceable and filtered according to use.",
-        "Three -999.999 sentinels and 78 values at or above 1000 mg/l are Pending review and cannot support anomaly claims.",
+        "The seven-element subset covers 35 voluntarily contributing countries and is not a uniform global freshwater grid.",
+        "Dissolved, extractable, suspended and total operational fractions must remain separate; Cr-VI is excluded from elemental chromium.",
+        "Only 279,225 of 3,739,180 target observations have a defined analysis method, so method-comparable subsets are substantially smaller.",
+        "The source contains 1,836,306 censored values plus Pending review and Suspect rows that remain traceable and must be filtered according to use.",
+        "Rows for different elements or fractions at the same station, date, time and depth are one physical sampling event, not independent evidence.",
         "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 rows and 621 parameters.",
-        "Only five required ZIP members were locally range-verified; the complete 201 MB publisher archive MD5 is recorded but was not independently recomputed."
+        "Eleven required ZIP members were locally range-verified by DOI/version, byte ranges, member names, decoded sizes, schema and row counts; the complete 201 MB archive was not downloaded locally."
       ]
     },
     "wosis": {
@@ -368,11 +527,11 @@
         "notes": "Federated discovery across participating solid-earth geochemistry databases."
       },
       "identifiers": {},
-      "landing_page": "https://earthchem.org/data-access/overview",
+      "landing_page": "https://earthchem.org/portal",
       "interfaces": [
         {
           "kind": "federated_search",
-          "url": "https://search.earthchem.org/",
+          "url": "https://earthchem.org/portal",
           "format": "portal_and_documented_services",
           "access": "open",
           "server_filters": ["location", "material", "parameter", "database"]
@@ -394,7 +553,7 @@
         "name": null
       },
       "evidence_urls": [
-        "https://earthchem.org/data-access/overview",
+        "https://earthchem.org/portal",
         "https://earthchem.org/ecl/templates",
         "https://earthchem.org/ecl/vocabularies"
       ],
@@ -405,9 +564,9 @@
     },
     "gemas-europe": {
       "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)",
-      "publisher": "EuroGeoSurveys Geochemistry Expert Group",
+      "publisher": "Geological Survey Ireland distribution of the EuroGeoSurveys GEMAS project",
       "source_kind": "official_regional_program",
-      "status": "metadata_only",
+      "status": "needs_human_review",
       "production_eligible": false,
       "media": ["soil"],
       "coverage": {
@@ -415,37 +574,42 @@
         "regions": ["europe"],
         "notes": "Harmonised agricultural and grazing land soil survey for Europe."
       },
-      "identifiers": {},
-      "landing_page": "https://gemas.eurogeosurveys.org/",
+      "identifiers": {"catalog_uuid": "0c6c5bbc-20a7-4011-8585-7befb511a4b4", "resource_id": "1725dd24-1b2f-46d5-bf24-ad2db5ee176e", "arcgis_item_id": "0ce25b11e8f3412da84ff65a35fb62c7"},
+      "landing_page": "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
       "interfaces": [
         {
-          "kind": "wms_and_product_links",
-          "url": "https://gemas.eurogeosurveys.org/Links_GEMAS.htm",
-          "format": "wms_or_dataset_specific",
-          "access": "metadata_open_data_terms_to_verify",
-          "server_filters": ["map_layer"]
+          "kind": "official_bulk_download",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+          "format": "zip_shapefile_dbf",
+          "access": "open",
+          "server_filters": ["resource_id"]
         }
       ],
       "license": {
-        "status": "unresolved",
-        "id": null,
-        "url": null,
-        "notes": "Numeric data redistribution and dataset-level license require verification."
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "GSI catalogue terms are CC BY 4.0; retain GSI distribution and upstream GEMAS attribution."
       },
       "version": {
-        "status": "unresolved",
-        "value": null,
-        "release_date": null
+        "status": "pinned",
+        "value": "GSI-ArcGIS-Enterprise-republication-2024",
+        "release_date": "2024-04-02"
       },
       "adapter": {
-        "status": "not_implemented",
-        "name": null
+        "status": "implemented",
+        "name": "gemas_gsi_dbf"
       },
       "evidence_urls": [
-        "https://gemas.eurogeosurveys.org/Links_GEMAS.htm"
+        "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
+        "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer",
+        "https://gemas.eurogeosurveys.org/"
       ],
       "limitations": [
-        "Current discovery evidence identifies map services and project links but not a verified open bulk numeric release."
+        "The 4,131 valid samples are a low-density European survey, not continuous coverage.",
+        "Modified aqua-regia and XRF results are separate measurement bases.",
+        "XRF half-detection-limit substitutions cannot recover original censor qualifiers.",
+        "GSI distribution is not an independent field-sampling lineage from GEMAS."
       ]
     },
     "petdb": {
@@ -557,7 +721,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -588,7 +752,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-subsoil": {
@@ -616,7 +780,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -647,7 +811,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-humus": {
@@ -675,7 +839,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -706,7 +870,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-stream-water": {
@@ -734,7 +898,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -765,7 +929,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-stream-sediment": {
@@ -793,7 +957,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -824,7 +988,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "foregs-floodplain-sediment": {
@@ -852,7 +1016,7 @@
           "kind": "bulk_download",
           "url": "https://weppi.gtk.fi/publ/foregsatlas/ForegsData.php",
           "format": "zip_csv_xlsx",
-          "access": "free_download_citation_terms; archive HTTP transport accepted only with exact SHA-256",
+          "access": "free_download_citation_terms; archive HTTP transport restricted to exact official URL with redirects rejected",
           "server_filters": [
             "country_code",
             "sample_medium"
@@ -883,7 +1047,7 @@
         "About one sample per 4,700 square kilometres; continental baseline does not imply local coverage.",
         "Measurement bases and methods remain explicit and are not silently pooled.",
         "Published numeric CSVs do not preserve row-level less-than qualifiers; half-DL values are treated as possible upstream substitutions.",
-        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and requires the exact registered SHA-256."
+        "The publisher archive endpoint currently uses legacy HTTP; the adapter rejects redirects and validates byte count, member inventory, schema and row counts."
       ]
     },
     "canada-cdogs": {
@@ -1005,6 +1169,51 @@
       "limitations": [
         "Discovery located official legacy documentation but not a verified current bulk numeric endpoint.",
         "Contributed state-survey records may overlap upstream releases."
+      ]
+    },
+    "us-wqp-sacramento-river-arsenic": {
+      "title": "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal",
+      "publisher": "U.S. Geological Survey California Water Science Center via the Water Quality Portal",
+      "source_kind": "official_primary_via_official_aggregator",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["water"],
+      "coverage": {
+        "extent_class": "single_station_time_series",
+        "regions": ["california-sacramento-river-freeport"],
+        "notes": "One USGS stream station with 189 dissolved-As observations from 2010-2023; method-rich independent freshwater validation, not national coverage."
+      },
+      "identifiers": {
+        "monitoring_location_identifier": "USGS-11447650"
+      },
+      "landing_page": "https://www.waterqualitydata.us/",
+      "interfaces": [
+        {
+          "kind": "content_addressed_query_pair",
+          "url": "https://www.waterqualitydata.us/webservices_documentation/",
+          "format": "csv",
+          "access": "open",
+          "server_filters": ["site", "provider", "sample_media", "characteristic", "date"]
+        }
+      ],
+      "license": {
+        "status": "public_domain_with_acknowledgement",
+        "id": "LicenseRef-USGS-Public-Domain",
+        "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
+        "notes": "The pinned records are USGS/NWIS data. Retain USGS, WQP, station, query, access time and result identifiers."
+      },
+      "version": {"status": "content_addressed", "value": "content-snapshot-2026-08-06", "release_date": null},
+      "adapter": {"status": "implemented", "name": "wqp_pinned_usgs_station_results"},
+      "evidence_urls": [
+        "https://www.waterqualitydata.us/webservices_documentation/",
+        "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+      ],
+      "limitations": [
+        "The exact query repeated As, Cu, Ni and Zn parameters, but the response contained only dissolved arsenic; unreturned elements are not claimed.",
+        "This is one station and cannot fill the geographic coverage gap of a national or global river network.",
+        "Fifty-seven results are preliminary and ten are field-replicate QC samples; both statuses remain explicit.",
+        "The one Not Detected result is left-censored at its reported limit and is not converted to zero.",
+        "Portal aggregation is not independent evidence from the upstream USGS/NWIS provider."
       ]
     },
     "us-water-quality-portal": {
@@ -1239,18 +1448,18 @@
       "license": {
         "status": "dataset_specific",
         "id": null,
-        "url": "https://earthchem.org/ecl/policies",
+        "url": "https://www.earthchem.org/page_category/submit-data/",
         "notes": "Depositors choose among CC0, CC BY, CC BY-SA and non-commercial Creative Commons licences; filter at dataset level."
       },
       "version": {"status": "dynamic", "value": null, "release_date": null},
       "adapter": {"status": "discovery_only", "name": null},
       "evidence_urls": [
         "https://ecl.earthchem.org/home.php",
-        "https://earthchem.org/ecl/policies"
+        "https://www.earthchem.org/page_category/submit-data/"
       ],
       "limitations": [
         "Repository inclusion is not uniform geochemical coverage or method comparability.",
-        "Each DOI dataset must pass its own licence, schema, hash, citation and duplicate checks before use."
+        "Each DOI dataset must pass its own licence, schema, file-identity, row-count, citation and duplicate checks before use."
       ]
     },
     "geotraces-idp2025": {
@@ -1526,7 +1735,7 @@
       ],
       "limitations": [
         "Repository search results are not one harmonised geochemical dataset.",
-        "Every DOI must pass separate media, method, licence, file, checksum, citation and duplicate checks."
+        "Every DOI must pass separate media, method, licence, file-identity, schema, row-count, citation and duplicate checks."
       ]
     },
     "iodp-data-systems": {
@@ -1827,7 +2036,7 @@
       ],
       "limitations": [
         "The June 2026 dataset is explicitly under development and has not completed final rock-name and batch-adjustment quality control.",
-        "A pinned version label is not sufficient for admission until file hash, licence, schema and QC flags are verified."
+        "A pinned version label is not sufficient for admission until file identity, byte count, licence, schema, row counts and QC flags are verified."
       ]
     },
     "norway-marchem": {
@@ -1890,7 +2099,7 @@
       ],
       "limitations": [
         "The database contains natural elements and anthropogenic contaminants; target-analyte scope must be selected explicitly.",
-        "The verified public API export is dynamic and timestamped; the selected inorganic response has an observed project hash but no matching immutable DOI or publisher checksum yet.",
+        "The verified public API export is dynamic and timestamped; the selected inorganic response is fixed by request, observation time, member inventory, byte counts and scientific row statistics but has no matching immutable DOI.",
         "The As, Cu, Ni and Zn measurements are reported on a dry-weight basis after partial nitric-acid digestion and must not be represented as total content.",
         "Batch metadata mix accredited and not-accredited analyses, and the export can repeat a sample across parameter groups; both facts must survive record-level mapping."
       ]
@@ -2364,8 +2573,8 @@
         "release_date": "2025-07-23"
       },
       "adapter": {
-        "status": "not_implemented",
-        "name": null
+        "status": "implemented",
+        "name": "tpdc_china_mountain_soil"
       },
       "evidence_urls": [
         "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
@@ -2381,6 +2590,146 @@
         "Three site labels (SN5, SN6 and SN7) have more than one published coordinate pair and must retain sample-level coordinates rather than a forced site centroid.",
         "The separate bulk-density workbook can fill 58 missing main-table rows, but six non-missing bulk-density values and five coordinates conflict with the main workbook; supplemental values must never overwrite published main-table values silently.",
         "The main workbook has no row-level detection-limit, qualifier or method fields. Dataset-level preparation, digestion, ICP-AES/ICP-MS and QC evidence comes from the linked article and must carry dataset or publication scope."
+      ]
+    },
+    "australia-ngsa-mercury": {
+      "title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset",
+      "publisher": "Geoscience Australia",
+      "source_kind": "official_national_geochemical_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_partial",
+        "regions": ["australia-outlet-sediment-catchments"],
+        "notes": "2,396 TOS/BOS records at 1,247 sites across seven states and territories; national catchment survey rather than a regular grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.26186/150328",
+        "publication_doi": "10.1021/acs.est.5c11189"
+      },
+      "landing_page": "https://pid.geoscience.gov.au/dataset/ga/150328",
+      "interfaces": [
+        {
+          "kind": "official_dataset_csv",
+          "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV",
+          "format": "cp1252_csv_with_metadata_preamble",
+          "access": "open",
+          "server_filters": []
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "The publisher file states CC BY 4.0 Australia; retain dataset DOI and Geoscience Australia attribution."
+      },
+      "version": {"status": "pinned", "value": "2025-03-31", "release_date": "2025-03-31"},
+      "adapter": {"status": "implemented", "name": "australia_ngsa_mercury"},
+      "evidence_urls": [
+        "https://pid.geoscience.gov.au/dataset/ga/150328",
+        "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+        "https://doi.org/10.26186/150328",
+        "https://doi.org/10.1021/acs.est.5c11189"
+      ],
+      "limitations": [
+        "Only Hg is present in this product; it does not supply the other target elements.",
+        "Top and bottom outlet sediment are separate horizons and cannot be pooled without an explicit comparison decision.",
+        "The reported 0.01 ng Hg limit is a mass LOD, not a concentration-row threshold.",
+        "Duplicate codes identify QA/QC structure and do not create independent spatial sites.",
+        "Catchment sampling is nationally broad but spatially discrete and uneven."
+      ]
+    },
+    "japan-gsj-marine-sediment": {
+      "title": "Geochemical Map of Sea and Land of Japan: marine sediment concentrations",
+      "publisher": "Geological Survey of Japan, AIST",
+      "source_kind": "official_national_marine_geochemical_database",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "national_coastal_partial",
+        "regions": ["japan-coastal-marine-survey-tracks"],
+        "notes": "4,905 marine sediment samples from 37 cruises and 37 named regions; separate from the implemented national river-sediment product."
+      },
+      "identifiers": {"publication_doi": "10.5571/synth.3.281"},
+      "landing_page": "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+      "interfaces": [
+        {
+          "kind": "official_marine_concentration_csv",
+          "url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv",
+          "format": "shift_jis_csv",
+          "access": "open",
+          "server_filters": []
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "url": "https://www.gsj.jp/license/index.html",
+        "notes": "GSJ website research products follow Japan Government Standard Terms of Use 2.0 with attribution; third-party material remains excluded."
+      },
+      "version": {"status": "content_addressed", "value": "content-snapshot-2026-08-06", "release_date": null},
+      "adapter": {"status": "implemented", "name": "gsj_japan_marine_sediment"},
+      "evidence_urls": [
+        "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+        "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+        "https://doi.org/10.5571/synth.3.281",
+        "https://www.gsj.jp/license/index.html"
+      ],
+      "limitations": [
+        "Marine and river sediment remain separate source products and sample types.",
+        "Hg uses ppb while the other target fields use ppm.",
+        "The concentration CSV has no row-level method, detection-limit or QC fields.",
+        "Ten negative Hg values are preserved as source results and are not ordinary positive concentrations.",
+        "Cruise sampling tracks do not constitute continuous coverage of Japanese seas."
+      ]
+    },
+    "pangaea-arabian-sea-sediment": {
+      "title": "Geochemistry of modern sediments and the glacial Arabian Sea",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "regional_discrete_samples",
+        "regions": ["arabian-sea-core-sites"],
+        "notes": "Twenty-seven rows from 26 named events between 10.03-19.52 N and 57.36-68.37 E; a method-linked long-tail dataset rather than a regional grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.950139",
+        "parent_dataset_doi": "10.1594/PANGAEA.950153"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+      "interfaces": [
+        {
+          "kind": "doi_tabular_download",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile",
+          "format": "utf8_tsv_with_pangaea_metadata",
+          "access": "open",
+          "server_filters": ["dataset_doi", "format"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "PANGAEA records CC BY 4.0; retain dataset and bundled-publication citations."
+      },
+      "version": {"status": "pinned", "value": "2022-11-02", "release_date": "2022-11-02"},
+      "adapter": {"status": "implemented", "name": "pangaea_arabian_sea_sediment"},
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+        "https://doi.org/10.1594/PANGAEA.950139",
+        "https://doi.org/10.1594/PANGAEA.950153"
+      ],
+      "limitations": [
+        "Twenty-seven source rows are not continuous Arabian Sea coverage.",
+        "The source method label is generic and does not specify an instrument or digestion.",
+        "One sample label has two source rows and must retain row identity.",
+        "Core depth and sea-floor elevation are distinct quantities and must not be interchanged.",
+        "This publication-linked dataset may overlap later aggregations and must be deduplicated by event, sample and DOI lineage."
       ]
     },
     "south-africa-cgs-geochemistry": {

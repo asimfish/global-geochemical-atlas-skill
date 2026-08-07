@@ -1,25 +1,28 @@
 {
-  "as_of": "2026-08-06T10:35:00Z",
+  "as_of": "2026-08-07T12:00:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 1,
-        "Cu": 1,
-        "Ni": 1,
-        "Zn": 1
+        "As": 3,
+        "Cu": 3,
+        "Ni": 3,
+        "Zn": 3
       },
-      "analytes_with_multiple_sources": [],
-      "analytes_with_single_source": [
+      "analytes_with_multiple_sources": [
         "As",
         "Cu",
         "Ni",
         "Zn"
       ],
+      "analytes_with_single_source": [],
       "audited_analytes": [
         "As",
+        "Cr",
         "Cu",
+        "Hg",
         "Ni",
+        "Pb",
         "Zn"
       ],
       "candidate_sources": [
@@ -39,6 +42,11 @@
         "petdb",
         "usgs-ngdb"
       ],
+      "independent_lineage_count": 2,
+      "lineage_ids": [
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
+      ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
@@ -49,7 +57,9 @@
         "Zn"
       ],
       "selected_sources": [
-        "georoc-archaean"
+        "georoc-antarctica-intraplate",
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
@@ -58,6 +68,7 @@
         "earthchem-library": "D",
         "earthchem-portal": "D",
         "finland-gtk-geochemistry": "D",
+        "georoc-antarctica-intraplate": "A",
         "georoc-archaean": "A",
         "georoc-database": "D",
         "iodp-data-systems": "D",
@@ -67,9 +78,10 @@
         "nz-petlab": "D",
         "pangaea-repository": "D",
         "petdb": "D",
-        "usgs-ngdb": "D"
+        "usgs-ngdb": "D",
+        "usgs-utah-volcanic-whole-rock": "A"
       },
-      "source_independence": "single_source_dependency",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
         "australia-ozchem": "national_partial",
@@ -77,6 +89,7 @@
         "earthchem-library": "global_collection",
         "earthchem-portal": "global_partial",
         "finland-gtk-geochemistry": "national_partial",
+        "georoc-antarctica-intraplate": "continental_partial",
         "georoc-archaean": "global_partial",
         "georoc-database": "global_partial",
         "iodp-data-systems": "global_partial",
@@ -86,13 +99,32 @@
         "nz-petlab": "national_plus_selected_global",
         "pangaea-repository": "global_collection",
         "petdb": "global_partial",
-        "usgs-ngdb": "national_partial"
+        "usgs-ngdb": "national_partial",
+        "usgs-utah-volcanic-whole-rock": "regional_partial"
       },
       "source_target_analytes": {
+        "georoc-antarctica-intraplate": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "georoc-archaean": [
           "As",
           "Cu",
           "Ni",
+          "Zn"
+        ],
+        "usgs-utah-volcanic-whole-rock": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
           "Zn"
         ]
       },
@@ -103,7 +135,8 @@
         "earthchem-library": "discovery",
         "earthchem-portal": "discovery",
         "finland-gtk-geochemistry": "discovery",
-        "georoc-archaean": "normalized_analysis",
+        "georoc-antarctica-intraplate": "benchmark_ready",
+        "georoc-archaean": "benchmark_ready",
         "georoc-database": "discovery",
         "iodp-data-systems": "discovery",
         "jamstec-darwin": "discovery",
@@ -112,7 +145,8 @@
         "nz-petlab": "discovery",
         "pangaea-repository": "discovery",
         "petdb": "discovery",
-        "usgs-ngdb": "discovery"
+        "usgs-ngdb": "discovery",
+        "usgs-utah-volcanic-whole-rock": "benchmark_ready"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",
@@ -121,10 +155,10 @@
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 4,
-        "Cu": 4,
-        "Ni": 4,
-        "Zn": 4
+        "As": 8,
+        "Cu": 8,
+        "Ni": 8,
+        "Zn": 8
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -146,6 +180,7 @@
         "alaska-dggs-webgeochem",
         "argentina-segemar-geochemistry",
         "australia-ngsa",
+        "australia-ngsa-mercury",
         "australia-ozchem",
         "bgs-gbase",
         "brazil-sgb-geochemistry",
@@ -171,6 +206,16 @@
         "us-water-quality-portal",
         "usgs-ngdb"
       ],
+      "independent_lineage_count": 7,
+      "lineage_ids": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
       "note": "At least one source meets the requested evidence and use mode, but geographic, temporal and method completeness remain bounded by its declared scope.",
@@ -181,20 +226,27 @@
         "Zn"
       ],
       "selected_sources": [
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
-        "norway-marchem"
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
         "argentina-segemar-geochemistry": "D",
         "australia-ngsa": "D",
+        "australia-ngsa-mercury": "A",
         "australia-ozchem": "D",
         "bgs-gbase": "D",
+        "brazil-sgb-florianopolis-stream-sediment": "A",
         "brazil-sgb-geochemistry": "D",
         "canada-bc-rgs": "D",
         "canada-cdogs": "D",
+        "cdogs-210102-lake-sediment": "A",
         "chile-sernageomin-geochemistry": "D",
         "earthchem-library": "D",
         "earthchem-portal": "D",
@@ -209,26 +261,31 @@
         "ireland-tellus": "D",
         "jamstec-darwin": "D",
         "japan-gsj-geochemical-map": "A",
+        "japan-gsj-marine-sediment": "A",
         "mexico-sgm-geochemical-cartography": "D",
         "noaa-ncei-marine-geology": "D",
         "norway-marchem": "A",
         "nz-petlab": "D",
+        "pangaea-arabian-sea-sediment": "A",
         "pangaea-repository": "D",
         "south-africa-cgs-geochemistry": "D",
         "sweden-sgu-geochemical-atlas": "D",
         "us-water-quality-portal": "D",
         "usgs-ngdb": "D"
       },
-      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
         "argentina-segemar-geochemistry": "national_partial",
         "australia-ngsa": "national_partial",
+        "australia-ngsa-mercury": "national_partial",
         "australia-ozchem": "national_partial",
         "bgs-gbase": "national_partial",
+        "brazil-sgb-florianopolis-stream-sediment": "regional_partial",
         "brazil-sgb-geochemistry": "national_partial",
         "canada-bc-rgs": "regional_partial",
         "canada-cdogs": "national_partial",
+        "cdogs-210102-lake-sediment": "regional_partial",
         "chile-sernageomin-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
         "earthchem-portal": "global_partial",
@@ -243,10 +300,12 @@
         "ireland-tellus": "national_partial",
         "jamstec-darwin": "national_plus_selected_global",
         "japan-gsj-geochemical-map": "national_partial",
+        "japan-gsj-marine-sediment": "national_coastal_partial",
         "mexico-sgm-geochemical-cartography": "national_partial",
         "noaa-ncei-marine-geology": "global_collection",
         "norway-marchem": "national_partial",
         "nz-petlab": "national_plus_selected_global",
+        "pangaea-arabian-sea-sediment": "regional_discrete_samples",
         "pangaea-repository": "global_collection",
         "south-africa-cgs-geochemistry": "national_partial",
         "sweden-sgu-geochemical-atlas": "national_partial",
@@ -254,6 +313,23 @@
         "usgs-ngdb": "national_partial"
       },
       "source_target_analytes": {
+        "brazil-sgb-florianopolis-stream-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "cdogs-210102-lake-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "foregs-floodplain-sediment": [
           "As",
           "Cr",
@@ -281,10 +357,27 @@
           "Pb",
           "Zn"
         ],
+        "japan-gsj-marine-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "norway-marchem": [
           "As",
           "Cu",
           "Ni",
+          "Zn"
+        ],
+        "pangaea-arabian-sea-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
           "Zn"
         ]
       },
@@ -292,11 +385,14 @@
         "alaska-dggs-webgeochem": "discovery",
         "argentina-segemar-geochemistry": "discovery",
         "australia-ngsa": "discovery",
+        "australia-ngsa-mercury": "benchmark_ready",
         "australia-ozchem": "discovery",
         "bgs-gbase": "discovery",
+        "brazil-sgb-florianopolis-stream-sediment": "benchmark_ready",
         "brazil-sgb-geochemistry": "discovery",
         "canada-bc-rgs": "discovery",
         "canada-cdogs": "discovery",
+        "cdogs-210102-lake-sediment": "benchmark_ready",
         "chile-sernageomin-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "earthchem-portal": "discovery",
@@ -304,17 +400,19 @@
         "emodnet-chemistry": "discovery",
         "finland-gtk-geochemistry": "discovery",
         "foregs-europe": "discovery",
-        "foregs-floodplain-sediment": "normalized_analysis",
-        "foregs-stream-sediment": "normalized_analysis",
+        "foregs-floodplain-sediment": "benchmark_ready",
+        "foregs-stream-sediment": "benchmark_ready",
         "india-gsi-ngcm": "discovery",
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
         "jamstec-darwin": "discovery",
-        "japan-gsj-geochemical-map": "normalized_analysis",
+        "japan-gsj-geochemical-map": "benchmark_ready",
+        "japan-gsj-marine-sediment": "benchmark_ready",
         "mexico-sgm-geochemical-cartography": "discovery",
         "noaa-ncei-marine-geology": "discovery",
-        "norway-marchem": "normalized_analysis",
+        "norway-marchem": "benchmark_ready",
         "nz-petlab": "discovery",
+        "pangaea-arabian-sea-sediment": "benchmark_ready",
         "pangaea-repository": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
         "sweden-sgu-geochemical-atlas": "discovery",
@@ -328,10 +426,10 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 5,
-        "Cu": 6,
-        "Ni": 6,
-        "Zn": 6
+        "As": 7,
+        "Cu": 9,
+        "Ni": 9,
+        "Zn": 9
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -355,14 +453,22 @@
         "brazil-sgb-geochemistry",
         "earthchem-library",
         "foregs-europe",
-        "gemas-europe",
         "ireland-tellus",
         "pangaea-repository",
         "soils4africa",
         "south-africa-cgs-geochemistry",
-        "tpdc-china-mountain-soil",
         "usgs-ngdb",
         "wosis"
+      ],
+      "independent_lineage_count": 7,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
       ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
@@ -375,38 +481,43 @@
       ],
       "selected_sources": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "source_evidence_tiers": {
         "afsis-phase-i-wet-chemistry": "A",
         "alaska-dggs-webgeochem": "D",
         "bgs-gbase": "D",
+        "brazil-sgb-florianopolis-soil": "A",
         "brazil-sgb-geochemistry": "D",
         "earthchem-library": "D",
         "foregs-europe": "D",
         "foregs-humus": "A",
         "foregs-subsoil": "A",
         "foregs-topsoil": "A",
-        "gemas-europe": "D",
+        "gemas-europe": "A",
         "ireland-tellus": "D",
         "pangaea-north-africa-soil": "A",
         "pangaea-repository": "D",
         "soils4africa": "D",
         "south-africa-cgs-geochemistry": "D",
-        "tpdc-china-mountain-soil": "C",
+        "tpdc-china-mountain-soil": "A",
         "usgs-conus-soil": "A",
         "usgs-ngdb": "D",
         "wosis": "D"
       },
-      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "afsis-phase-i-wet-chemistry": "continental_partial",
         "alaska-dggs-webgeochem": "regional_partial",
         "bgs-gbase": "national_partial",
+        "brazil-sgb-florianopolis-soil": "regional_partial",
         "brazil-sgb-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
         "foregs-europe": "regional_partial",
@@ -426,6 +537,14 @@
       },
       "source_target_analytes": {
         "afsis-phase-i-wet-chemistry": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "brazil-sgb-florianopolis-soil": [
           "As",
           "Cr",
           "Cu",
@@ -458,8 +577,24 @@
           "Pb",
           "Zn"
         ],
+        "gemas-europe": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "pangaea-north-africa-soil": [
           "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "tpdc-china-mountain-soil": [
           "Cr",
           "Cu",
           "Ni",
@@ -474,23 +609,24 @@
         ]
       },
       "source_use_modes": {
-        "afsis-phase-i-wet-chemistry": "normalized_analysis",
+        "afsis-phase-i-wet-chemistry": "benchmark_ready",
         "alaska-dggs-webgeochem": "discovery",
         "bgs-gbase": "discovery",
+        "brazil-sgb-florianopolis-soil": "benchmark_ready",
         "brazil-sgb-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "foregs-europe": "discovery",
-        "foregs-humus": "normalized_analysis",
-        "foregs-subsoil": "normalized_analysis",
-        "foregs-topsoil": "normalized_analysis",
-        "gemas-europe": "discovery",
+        "foregs-humus": "benchmark_ready",
+        "foregs-subsoil": "benchmark_ready",
+        "foregs-topsoil": "benchmark_ready",
+        "gemas-europe": "benchmark_ready",
         "ireland-tellus": "discovery",
-        "pangaea-north-africa-soil": "normalized_analysis",
+        "pangaea-north-africa-soil": "benchmark_ready",
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
         "south-africa-cgs-geochemistry": "discovery",
-        "tpdc-china-mountain-soil": "raw_observation",
-        "usgs-conus-soil": "normalized_analysis",
+        "tpdc-china-mountain-soil": "benchmark_ready",
+        "usgs-conus-soil": "benchmark_ready",
         "usgs-ngdb": "discovery",
         "wosis": "discovery"
       },
@@ -501,10 +637,10 @@
     "water": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 2,
-        "Cu": 2,
-        "Ni": 2,
-        "Zn": 2
+        "As": 3,
+        "Cu": 3,
+        "Ni": 3,
+        "Zn": 3
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -517,6 +653,7 @@
         "As",
         "Cr",
         "Cu",
+        "Hg",
         "Ni",
         "Pb",
         "Zn"
@@ -526,6 +663,7 @@
         "brazil-sgb-geochemistry",
         "canada-bc-rgs",
         "canada-cdogs",
+        "cdogs-210102-lake-water",
         "earthchem-library",
         "eea-waterbase",
         "emodnet-chemistry",
@@ -535,6 +673,13 @@
         "ireland-tellus",
         "pangaea-repository",
         "us-water-quality-portal"
+      ],
+      "independent_lineage_count": 4,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
       ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
@@ -548,13 +693,15 @@
       "selected_sources": [
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
       ],
       "source_evidence_tiers": {
         "bgs-gbase": "D",
         "brazil-sgb-geochemistry": "D",
         "canada-bc-rgs": "D",
         "canada-cdogs": "D",
+        "cdogs-210102-lake-water": "A",
         "earthchem-library": "D",
         "eea-waterbase": "D",
         "emodnet-chemistry": "D",
@@ -566,14 +713,16 @@
         "iodp-data-systems": "D",
         "ireland-tellus": "D",
         "pangaea-repository": "D",
-        "us-water-quality-portal": "D"
+        "us-water-quality-portal": "D",
+        "us-wqp-sacramento-river-arsenic": "A"
       },
-      "source_independence": "multiple_sources_lineage_not_yet_deduplicated",
+      "source_independence": "multiple_independent_lineages",
       "source_scopes": {
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
         "canada-bc-rgs": "regional_partial",
         "canada-cdogs": "national_partial",
+        "cdogs-210102-lake-water": "regional_partial",
         "earthchem-library": "global_collection",
         "eea-waterbase": "regional_partial",
         "emodnet-chemistry": "regional_partial",
@@ -585,7 +734,8 @@
         "iodp-data-systems": "global_partial",
         "ireland-tellus": "national_partial",
         "pangaea-repository": "global_collection",
-        "us-water-quality-portal": "national_partial"
+        "us-water-quality-portal": "national_partial",
+        "us-wqp-sacramento-river-arsenic": "single_station_time_series"
       },
       "source_target_analytes": {
         "foregs-stream-water": [
@@ -597,12 +747,21 @@
           "Zn"
         ],
         "gemstat-open-archive": [
-          "As"
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
         ],
         "geotraces-idp2025": [
           "Cu",
           "Ni",
           "Zn"
+        ],
+        "us-wqp-sacramento-river-arsenic": [
+          "As"
         ]
       },
       "source_use_modes": {
@@ -610,18 +769,20 @@
         "brazil-sgb-geochemistry": "discovery",
         "canada-bc-rgs": "discovery",
         "canada-cdogs": "discovery",
+        "cdogs-210102-lake-water": "benchmark_ready",
         "earthchem-library": "discovery",
         "eea-waterbase": "discovery",
         "emodnet-chemistry": "discovery",
         "foregs-europe": "discovery",
-        "foregs-stream-water": "normalized_analysis",
-        "gemstat-open-archive": "normalized_analysis",
-        "geotraces-idp2025": "normalized_analysis",
+        "foregs-stream-water": "benchmark_ready",
+        "gemstat-open-archive": "benchmark_ready",
+        "geotraces-idp2025": "benchmark_ready",
         "glorich": "discovery",
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
         "pangaea-repository": "discovery",
-        "us-water-quality-portal": "discovery"
+        "us-water-quality-portal": "discovery",
+        "us-wqp-sacramento-river-arsenic": "benchmark_ready"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",

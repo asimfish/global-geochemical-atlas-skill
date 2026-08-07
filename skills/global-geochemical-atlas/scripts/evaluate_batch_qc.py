@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
@@ -40,14 +39,6 @@ VALID_QC_TYPES = {"CRM", "BLANK", "DUPLICATE"}
 
 class BatchQCError(ValueError):
     """Raised when a batch QC input or policy is unsafe or ambiguous."""
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def finite_number(value: Any, label: str, *, positive: bool = False) -> float:
@@ -196,6 +187,8 @@ def worst_recovery(values: Sequence[float]) -> float | None:
 def evaluate(input_path: Path, policy_path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     policy = read_policy(policy_path)
     rows = read_rows(input_path, policy["unit"])
+    with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
+        input_columns = list(csv.DictReader(handle).fieldnames or [])
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         grouped[row["batch_id"]].append(row)
@@ -303,8 +296,18 @@ def evaluate(input_path: Path, policy_path: Path) -> tuple[list[dict[str, Any]],
     report = {
         "schema_version": REPORT_VERSION,
         "status": "evaluated",
-        "input_sha256": sha256_file(input_path),
-        "policy_sha256": sha256_file(policy_path),
+        "input_identity": {
+            "filename": input_path.name,
+            "bytes": input_path.stat().st_size,
+            "row_count": len(rows),
+            "columns": input_columns,
+        },
+        "policy_identity": {
+            "filename": policy_path.name,
+            "bytes": policy_path.stat().st_size,
+            "schema_version": policy["schema_version"],
+            "rule_count": 4,
+        },
         "policy": policy,
         "formulae": {
             "crm_recovery_percent": "observed / certified * 100",

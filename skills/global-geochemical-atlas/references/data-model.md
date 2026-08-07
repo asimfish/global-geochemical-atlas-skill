@@ -25,20 +25,20 @@ dataset_source ── publication
 | `sampling_event` | `sampling_event_id` | `dataset_id` | 采样地点、时间、深度和采集方法 |
 | `sample` | `sample_id` | `sampling_event_id`, `parent_sample_id` | 物理样品、介质、材料和父子样关系 |
 | `analytical_method` | `method_id` | `publication_ids` | 前处理、消解、技术、仪器、实验室和校准 |
-| `provenance` | `provenance_id` | `dataset_id`, `acquisition_run_id` | 原文件/API、行列、hash、适配器和处理步骤 |
+| `provenance` | `provenance_id` | `dataset_id`, `acquisition_run_id` | 原文件/API、文件 ID、行列、适配器和处理步骤 |
 | `observation` | `observation_id` | `sample_id`, `method_id`, `provenance_id` | 一个样品的一个分析物测定 |
-| `acquisition_run` | `acquisition_run_id` | `dataset_ids` | 一次 D1 请求、版本、数量、缓存和输出 hash |
+| `acquisition_run` | `acquisition_run_id` | `dataset_ids` | 一次 D1 请求、版本、数量、缓存和输出清单 |
 
-来源提供永久标识时优先使用；样品支持 IGSN。缺少永久标识时，使用已文档化的 canonical 字段生成稳定 SHA-256 ID。ID 不能包含本地路径、机器名或本次下载时间。
+来源提供永久标识时优先使用；样品支持 IGSN。缺少永久标识时，使用 `source_id + 原生样品 ID + 来源定位 + 重复序号` 的可读、可转义组合生成稳定 ID。ID 不能包含本地路径、机器名或本次下载时间。
 
 ## 字段优先级
 
 ### P0：必须有，或必须阻止生产
 
-- 数据集：`source_id`、`dataset_id`、版本、发布者、许可、落地页、文件/响应 hash；
+- 数据集：`source_id`、`dataset_id`、DOI/PID、版本、发布者、许可、落地页、文件 ID/名称和字节数；
 - 样品与采样：稳定样品 ID、介质原词、位置原值与 CRS；实验样品位置可不适用但必须说明；
 - 测定：分析物原词、原始值、原始单位、限定符、样品外键；
-- 证据：来源记录 ID、原文件/API 定位、适配器版本和输入 hash。
+- 证据：来源记录 ID、原文件/API 定位、输入文件 ID、适配器版本和处理步骤。
 
 ### P1：强烈建议并进入完整性统计
 

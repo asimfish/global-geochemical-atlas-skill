@@ -22,11 +22,10 @@
       "pattern": "^(?!.*[/\\\\])(?!\\.{1,2}$).+$"
     },
     "source_row": {"type": ["integer", "string", "null"]},
-    "source_file_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
     "source_file_url": {
       "type": ["string", "null"],
       "pattern": "^https?://",
-      "description": "HTTPS is preferred. The evidence builder accepts the legacy FOREGS HTTP publisher only when source_file_sha256 is pinned."
+      "description": "HTTPS is preferred. The legacy FOREGS HTTP publisher is accepted only for its explicitly registered source URL."
     },
     "evidence_version": {"type": ["string", "null"]},
     "evidence_status": {"type": ["string", "null"]}

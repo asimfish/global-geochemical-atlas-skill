@@ -18,7 +18,7 @@
       "distance_to_geologic_boundary_m", "geologic_match_confidence", "analytical_method", "method_family",
       "digestion_or_extraction", "laboratory", "reference_material", "detection_limit", "detection_limit_unit",
       "source_id", "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row",
-      "source_locator", "file_sha256", "license", "source_tier"
+      "source_locator", "license", "source_tier"
     ]
   },
   "additionalProperties": {"type": "string", "minLength": 1}

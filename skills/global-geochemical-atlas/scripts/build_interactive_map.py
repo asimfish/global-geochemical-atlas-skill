@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
@@ -13,14 +12,6 @@ import tempfile
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 import build_iteration_backlog as backlog_builder
 
@@ -647,6 +638,8 @@ def load_basemap(path: Path) -> dict[str, Any]:
     if point_count > 100_000:
         raise MapBuildError("offline basemap exceeds the point safety limit")
     return {
+        "asset_filename": path.name,
+        "asset_bytes": path.stat().st_size,
         "asset_version": value["asset_version"],
         "title": value.get("title", "Natural Earth land"),
         "natural_earth_version": value.get("natural_earth_version"),
@@ -656,7 +649,6 @@ def load_basemap(path: Path) -> dict[str, Any]:
         ),
         "source_page": value.get("source_page"),
         "license": value["license"],
-        "archive_sha256": value.get("archive_sha256"),
         "point_count": point_count,
         "rings": rings,
     }
@@ -717,6 +709,8 @@ def load_country_boundaries(path: Path) -> dict[str, Any]:
     if not required.issubset(seen):
         raise MapBuildError("offline country boundary omits a supported strict country")
     return {
+        "asset_filename": path.name,
+        "asset_bytes": path.stat().st_size,
         "asset_version": value["asset_version"],
         "title": value.get("title"),
         "natural_earth_version": value.get("natural_earth_version"),
@@ -725,7 +719,10 @@ def load_country_boundaries(path: Path) -> dict[str, Any]:
         "source_page": value.get("source_page"),
         "source_geojson_url": value.get("source_geojson_url"),
         "source_commit": value.get("source_commit"),
-        "source_sha256": value.get("source_sha256"),
+        "source_filename": value.get("source_filename") or Path(
+            str(value.get("source_geojson_url") or "source.geojson")
+        ).name,
+        "source_feature_count": value.get("source_feature_count") or len(normalized),
         "license": value["license"],
         "boundary_semantics": value.get("boundary_semantics"),
         "country_count": len(normalized),
@@ -1259,25 +1256,49 @@ def build_map(
         "html_bytes": html_bytes,
         "samples_geojson_bytes": geojson_bytes,
         "artifact_bindings": {
-            "database_sha256": sha256_file(database),
-            "anomalies_sha256": sha256_file(anomalies_path),
-            "interactive_map_sha256": sha256_file(output_html),
-            "samples_geojson_sha256": sha256_file(output_geojson),
+            "database": {
+                "filename": database.name,
+                "bytes": database.stat().st_size,
+                "record_count": total_records,
+            },
+            "anomalies": {
+                "filename": anomalies_path.name,
+                "bytes": anomalies_path.stat().st_size,
+                "feature_count": len(anomalies.get("features", [])),
+                "schema_version": anomalies.get("schema_version"),
+            },
+            "interactive_map": {
+                "filename": output_html.name,
+                "bytes": html_bytes,
+                "map_version": MAP_VERSION,
+            },
+            "samples_geojson": {
+                "filename": output_geojson.name,
+                "bytes": geojson_bytes,
+                "feature_count": len(geojson.get("features", [])),
+                "schema_version": geojson.get("schema_version"),
+            },
         },
         "basemap": {
             "asset_version": basemap["asset_version"],
+            "filename": basemap["asset_filename"],
+            "bytes": basemap["asset_bytes"],
             "title": basemap["title"],
             "scale": basemap["scale"],
             "license": basemap["license"],
-            "archive_sha256": basemap["archive_sha256"],
+            "point_count": basemap["point_count"],
             "embedded": True,
         },
         "country_boundaries": {
             "asset_version": boundaries["asset_version"],
+            "filename": boundaries["asset_filename"],
+            "bytes": boundaries["asset_bytes"],
             "title": boundaries["title"],
             "scale": boundaries["scale"],
             "license": boundaries["license"],
-            "source_sha256": boundaries["source_sha256"],
+            "source_commit": boundaries["source_commit"],
+            "source_filename": boundaries["source_filename"],
+            "source_feature_count": boundaries["source_feature_count"],
             "country_count": boundaries["country_count"],
             "point_count": boundaries["point_count"],
             "embedded": True,

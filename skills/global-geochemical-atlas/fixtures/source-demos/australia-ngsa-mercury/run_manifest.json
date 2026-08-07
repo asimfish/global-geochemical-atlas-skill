@@ -1,0 +1,56 @@
+{
+  "content_hashing_used": false,
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-06T16:30:00Z",
+  "generation_request": {
+    "analytes": [
+      "Hg"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 71372,
+      "path": "demo_input.csv"
+    },
+    {
+      "bytes": 79070,
+      "path": "sources.jsonl"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 2396,
+    "selected_source_rows": 48
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.26186/150328",
+    "dataset_version": "2025-03-31",
+    "license": "CC-BY-4.0",
+    "source_id": "australia-ngsa-mercury",
+    "title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset"
+  },
+  "source_files": [
+    {
+      "bytes": 208089,
+      "filename": "150328_00_1.CSV",
+      "retrieved_at": "2026-08-07T09:46:07Z",
+      "source_url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "NGSA provides total Hg only; it does not supply the other target elements.",
+    "TOS and BOS remain separate sample types, and QA/QC duplicates are not independent sites.",
+    "The reported 0.01 ng Hg mass LOD is not treated as a concentration detection limit."
+  ]
+}

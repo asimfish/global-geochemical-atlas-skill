@@ -20,7 +20,7 @@ python scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-预期 996 条 USGS 真实测定、996 条有效 WGS84 坐标、996 条固定 GLiM 岩性匹配、12 个达到 `n≥20` 的可比背景组和 6 个 high/low 候选异常；输出验证 0 错误、0 警告。详细边界、hash、许可和复现指标见 [production-demo.md](production-demo.md)。
+预期 996 条 USGS 真实测定、996 条有效 WGS84 坐标、996 条固定 GLiM 岩性匹配、12 个达到 `n≥20` 的可比背景组和 6 个 high/low 候选异常；输出验证 0 错误、0 警告。详细边界、版本、许可和复现指标见 [production-demo.md](production-demo.md)。
 
 ## 合成边界演示
 
@@ -129,3 +129,5 @@ python scripts/run_workflow.py \
 ```
 
 预期为 796 条真实来源最小观测、四介质、十四来源、796/796 标准化、700/796 有效 canonical 坐标、23 条已确认删失值、93 个隔离背景组及完整十五文件输出（含批次状态、统计空间报告与 `iteration_backlog.csv`）。GEOROC 与 AfSIS 的 96 条 reported coordinates 因 datum/CRS 未证实而不冒充 WGS84；FOREGS 中可能的 `DL/2` 数值和 AfSIS 中低于来源 DL/QL 的已发布数值只带证据边界。演示时先展示覆盖空白和来源范围，再展示地图；16 个工程异常候选只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。
+
+这是普通使用和回归测试的推荐入口。D1 另具备 26 来源、4,096,615 条观测的全量重放能力，但只有显式发布、覆盖审计或验收模式才下载并构建全量数据库。

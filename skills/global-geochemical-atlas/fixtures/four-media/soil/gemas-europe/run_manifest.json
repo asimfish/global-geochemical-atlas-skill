@@ -1,0 +1,61 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T10:20:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Hg",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 52
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 83463,
+      "path": "demo_input.csv"
+    },
+    {
+      "bytes": 98116,
+      "path": "sources.jsonl"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 52,
+    "raw_source_rows": 8262,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+    "license": "CC-BY-4.0",
+    "source_id": "gemas-europe",
+    "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)"
+  },
+  "source_files": [
+    {
+      "bytes": 4307359,
+      "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+      "retrieved_at": "2026-08-07T10:30:42Z",
+      "source_url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "GEMAS is a low-density European soil survey, not continuous coverage.",
+    "Aqua-regia and XRF measurements remain in separate comparison partitions.",
+    "XRF half-DL substitutions are flagged and never presented as recovered exact detections."
+  ]
+}

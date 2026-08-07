@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import re
 import shutil
@@ -29,8 +28,11 @@ GENERATOR = SCRIPT_DIR / "generate_demo_data.py"
 PRODUCTION_FIXTURE = SKILL_DIR / "fixtures" / "production-usgs"
 FOUR_MEDIA_FIXTURE = SKILL_DIR / "fixtures" / "four-media" / "combined-v3"
 DEFAULT_GEOLOGY_GRID = SKILL_DIR / "assets" / "geology" / "pangaea-788537.zip"
-DEFAULT_GEOLOGY_SHA256 = "43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e"
 PARAMETERIZED_SOURCES = {"georoc-archaean", "usgs-conus-soil"}
+SOURCE_FILE_IDENTITY_FIELDS = (
+    "file_id", "source_url", "bytes", "retrieved_at", "release_date",
+    "dataset_version", "schema", "row_count", "member_list",
+)
 
 
 class RequestRunError(RuntimeError):
@@ -53,12 +55,49 @@ def read_json(path: Path, label: str) -> dict[str, Any]:
     return value
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def file_identity(path: Path) -> dict[str, Any]:
+    identity: dict[str, Any] = {"filename": path.name, "bytes": path.stat().st_size}
+    if path.suffix == ".csv":
+        with path.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.reader(handle)
+            identity["columns"] = next(reader, [])
+            identity["row_count"] = sum(1 for _ in reader)
+    elif path.suffix == ".jsonl":
+        with path.open("r", encoding="utf-8") as handle:
+            identity["row_count"] = sum(bool(line.strip()) for line in handle)
+    elif path.suffix == ".json":
+        value = read_json(path, path.name)
+        identity["top_level_keys"] = sorted(value)
+        for key in ("schema_version", "manifest_version", "run_version"):
+            if key in value:
+                identity[key] = value[key]
+    elif path.suffix == ".zip":
+        import zipfile
+
+        try:
+            with zipfile.ZipFile(path) as archive:
+                identity["members"] = [
+                    {"name": item.filename, "bytes": item.file_size}
+                    for item in sorted(archive.infolist(), key=lambda value: value.filename)
+                ]
+        except zipfile.BadZipFile as exc:
+            raise RequestRunError("invalid_input", f"invalid ZIP archive: {path}") from exc
+    return identity
+
+
+def output_identity(path: Path) -> dict[str, Any]:
+    identity = file_identity(path)
+    identity["path"] = identity.pop("filename")
+    return identity
+
+
+def source_file_identity(item: Mapping[str, Any]) -> dict[str, Any]:
+    if not isinstance(item.get("filename"), str):
+        raise RequestRunError("conflicting_evidence", "source file identity lacks filename")
+    return {
+        "filename": item["filename"],
+        **{key: item[key] for key in SOURCE_FILE_IDENTITY_FIELDS if key in item},
+    }
 
 
 def write_json(path: Path, value: Any) -> None:
@@ -67,28 +106,41 @@ def write_json(path: Path, value: Any) -> None:
 
 
 def verify_manifest_outputs(manifest_path: Path, paths: Sequence[Path]) -> None:
-    """Verify that a parent acquisition manifest actually binds every supplied file."""
+    """Verify parent bindings by readable file identity and structural statistics."""
 
     manifest = read_json(manifest_path, "source acquisition manifest")
     outputs = manifest.get("outputs")
     if not isinstance(outputs, list):
-        raise RequestRunError("conflicting_evidence", "source manifest has no outputs hash inventory")
+        raise RequestRunError("conflicting_evidence", "source manifest has no outputs inventory")
     inventory: dict[str, Mapping[str, Any]] = {}
     for item in outputs:
-        if isinstance(item, Mapping) and isinstance(item.get("path"), str):
-            inventory[Path(item["path"]).name] = item
+        if isinstance(item, Mapping):
+            name = item.get("path") or item.get("filename")
+            if isinstance(name, str):
+                inventory[Path(name).name] = item
     for path in paths:
         evidence = inventory.get(path.name)
         if evidence is None:
             raise RequestRunError(
                 "conflicting_evidence", f"source manifest does not bind supplied file: {path.name}"
             )
-        actual_hash = sha256_file(path)
-        actual_bytes = path.stat().st_size
-        if evidence.get("sha256") != actual_hash or evidence.get("bytes") != actual_bytes:
+        actual = file_identity(path)
+        if evidence.get("bytes") != actual["bytes"]:
             raise RequestRunError(
                 "conflicting_evidence",
-                f"source manifest hash/size mismatch for {path.name}",
+                f"source manifest byte-count mismatch for {path.name}",
+            )
+        expected_rows = evidence.get("row_count", evidence.get("record_count"))
+        if isinstance(expected_rows, int) and expected_rows != actual.get("row_count"):
+            raise RequestRunError(
+                "conflicting_evidence",
+                f"source manifest row-count mismatch for {path.name}",
+            )
+        expected_columns = evidence.get("columns")
+        if isinstance(expected_columns, list) and expected_columns != actual.get("columns"):
+            raise RequestRunError(
+                "conflicting_evidence",
+                f"source manifest schema mismatch for {path.name}",
             )
 
 
@@ -239,23 +291,27 @@ def filtered_manifest(
     selected_count: int,
 ) -> dict[str, Any]:
     source = read_json(source_manifest_path, "source acquisition manifest")
+    source_metadata = source.get("source")
     source_files = source.get("source_files")
     if not isinstance(source_files, list) or not source_files:
         raise RequestRunError("conflicting_evidence", "source manifest has no source_files evidence")
+    if any(not isinstance(item, Mapping) for item in source_files):
+        raise RequestRunError("conflicting_evidence", "source manifest has invalid source_files evidence")
     return {
         "request_run_manifest_version": "geochemical-request-run-v1",
         "data_mode": source.get("data_mode", "fixture"),
         "not_for_scientific_interpretation": bool(source.get("not_for_scientific_interpretation", False)),
         "request": dict(request),
         "filter_counts": {"input": original_count, "selected": selected_count},
-        "parent_manifest": {
-            "filename": source_manifest_path.name,
-            "sha256": sha256_file(source_manifest_path),
-        },
-        "source_files": source_files,
+        "parent_manifest": file_identity(source_manifest_path),
+        "source": dict(source_metadata) if isinstance(source_metadata, Mapping) else None,
+        "source_files": [
+            source_file_identity(item)
+            for item in source_files
+        ],
         "outputs": [
-            {"path": input_path.name, "bytes": input_path.stat().st_size, "sha256": sha256_file(input_path)},
-            {"path": evidence_path.name, "bytes": evidence_path.stat().st_size, "sha256": sha256_file(evidence_path)},
+            output_identity(input_path),
+            output_identity(evidence_path),
         ],
         "failures": [],
     }
@@ -358,7 +414,7 @@ def merge_acquired_sources(
     generated_at: str,
     acquisition_mode: str,
 ) -> tuple[int, dict[str, Any]]:
-    """Merge verified source bundles without losing per-source manifests or hashes."""
+    """Merge verified source bundles while retaining readable manifest identities."""
 
     headers: list[str] = []
     merged_rows: list[dict[str, str]] = []
@@ -381,9 +437,8 @@ def merge_acquired_sources(
         )
         source_manifests.append({
             "source_id": source_id,
-            "filename": manifest_path.name,
-            "sha256": sha256_file(manifest_path),
             "record_count": int(acquisition["record_count"]),
+            **file_identity(manifest_path),
         })
         manifest_files = manifest.get("source_files")
         if not isinstance(manifest_files, list) or not manifest_files:
@@ -399,7 +454,9 @@ def merge_acquired_sources(
             original = str(item["filename"])
             namespaced = f"{source_id}--{original}"
             filename_map[original] = namespaced
-            source_files.append({**dict(item), "filename": namespaced, "source_id": source_id})
+            source_file = source_file_identity(item)
+            source_file["filename"] = namespaced
+            source_files.append({**source_file, "source_id": source_id})
 
         with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
@@ -492,16 +549,8 @@ def merge_acquired_sources(
         "source_manifests": source_manifests,
         "source_files": source_files,
         "outputs": [
-            {
-                "path": output_input.name,
-                "bytes": output_input.stat().st_size,
-                "sha256": sha256_file(output_input),
-            },
-            {
-                "path": output_evidence.name,
-                "bytes": output_evidence.stat().st_size,
-                "sha256": sha256_file(output_evidence),
-            },
+            output_identity(output_input),
+            output_identity(output_evidence),
         ],
         "failures": [],
     }
@@ -596,7 +645,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         "status": "success",
                         "allocated_max_records": budgets[source_id],
                         "record_count": record_count,
-                        "manifest_sha256": sha256_file(acquired / "run_manifest.json"),
+                        "manifest_identity": file_identity(acquired / "run_manifest.json"),
                         "error": None,
                     }
                     source_outcomes.append(outcome)
@@ -614,7 +663,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         "status": "failed",
                         "allocated_max_records": budgets[source_id],
                         "record_count": 0,
-                        "manifest_sha256": None,
+                        "manifest_identity": None,
                         "error": str(exc),
                     })
                     acquisition_warnings.append(f"source {source_id} failed: {exc}")
@@ -694,12 +743,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         if isinstance(request["region"], dict):
             command.extend(["--region-bbox", ",".join(str(item) for item in request["region"]["bbox"])])
         if not args.no_geology:
-            command.extend(
-                [
-                    "--geology-grid", str(args.geology_grid),
-                    "--geology-grid-sha256", args.geology_grid_sha256,
-                ]
-            )
+            command.extend(["--geology-grid", str(args.geology_grid)])
         if args.batch_qc_input is not None:
             command.extend(
                 [
@@ -766,7 +810,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         "path": destination.relative_to(
                             args.output_dir / "request_evidence"
                         ).as_posix(),
-                        "sha256": sha256_file(destination),
+                        "identity": file_identity(destination),
                     }
                 )
 
@@ -794,17 +838,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "status": "partial_success" if execution_partial else "success",
         "mode": mode,
         "analysis_profile": args.analysis_profile,
-        "geology_grid": None if args.no_geology else {
-            "filename": args.geology_grid.name,
-            "sha256": args.geology_grid_sha256,
-        },
+        "geology_grid": None if args.no_geology else file_identity(args.geology_grid),
         "record_counts": {"before_request_filters": original_count, "after_request_filters": selected_count},
         "source_outcomes": source_outcomes,
         "acquisition_manifests": retained_acquisition_manifests,
         "route_status": route["status"],
         "coverage_status": matrix["overall_status"],
         "route_resolution": (
-            "offline_fixture_hash_verified"
+            "offline_fixture_manifest_verified"
             if mode.startswith("fixture:")
             else "routed_multi_source_evidence_verified"
             if mode == "online_sources:auto"
@@ -853,7 +894,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--generated-at", help="ISO-8601 acquisition timestamp; defaults to current UTC")
     parser.add_argument("--analysis-profile", choices=("demo", "production"), default="production")
     parser.add_argument("--geology-grid", type=Path, default=DEFAULT_GEOLOGY_GRID)
-    parser.add_argument("--geology-grid-sha256", default=DEFAULT_GEOLOGY_SHA256)
     parser.add_argument("--no-geology", action="store_true")
     parser.add_argument("--batch-qc-input", type=Path)
     parser.add_argument("--batch-qc-policy", type=Path)

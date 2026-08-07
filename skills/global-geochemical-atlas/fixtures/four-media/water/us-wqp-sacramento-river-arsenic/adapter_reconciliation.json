@@ -1,0 +1,58 @@
+{
+  "checks": {
+    "all_rows_are_dissolved_arsenic_water": true,
+    "counts_match_registry": true,
+    "limit_metadata_complete": true,
+    "method_metadata_complete": true,
+    "registered_hashes_match": true,
+    "station_join_complete": true
+  },
+  "counts": {
+    "accepted_results": 132,
+    "analytical_method_ids": {
+      "USGS:PLM10": 189
+    },
+    "field_replicates": 10,
+    "not_detected_results": 1,
+    "numeric_results": 188,
+    "physical_rows": 189,
+    "preliminary_results": 57,
+    "routine_samples": 179,
+    "target_observations": 189,
+    "unique_activity_ids": 189,
+    "unique_result_ids": 189
+  },
+  "coverage": {
+    "bbox": [
+      -121.5016167,
+      38.45566389,
+      -121.5016167,
+      38.45566389
+    ],
+    "monitoring_location_identifier": "USGS-11447650",
+    "monitoring_location_name": "SACRAMENTO R A FREEPORT CA",
+    "monitoring_location_type": "Stream",
+    "reported_horizontal_accuracy": {
+      "collection_method": "Interpolated from MAP.",
+      "unit": "seconds",
+      "value": ".5"
+    },
+    "sample_date_range": [
+      "2010-01-14",
+      "2023-10-18"
+    ],
+    "source_crs": "NAD83",
+    "station_count": 1
+  },
+  "limitations": [
+    "A single station is not a spatial freshwater atlas.",
+    "The exact repeated-parameter query returned arsenic only; Cu, Ni and Zn are not claimed.",
+    "Preliminary results and field-replicate QC samples remain labeled and are not silently promoted to accepted routine evidence.",
+    "The Not Detected result remains left-censored at its reported limit rather than being converted to zero.",
+    "WQP is the delivery route; the upstream USGS/NWIS record is the evidence source and is not double-counted."
+  ],
+  "reconciliation_version": "wqp-sacramento-dissolved-as-audit-v1",
+  "snapshot_id": "us-wqp-sacramento-river-arsenic:content-snapshot-2026-08-06:e4c8487141ad",
+  "source_id": "us-wqp-sacramento-river-arsenic",
+  "status": "PASS"
+}

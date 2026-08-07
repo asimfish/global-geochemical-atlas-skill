@@ -15,8 +15,28 @@
   "properties": {
     "schema_version": {"const": "geochemical-batch-qc-report-v1"},
     "status": {"type": "string", "enum": ["not_supplied", "evaluated"]},
-    "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "input_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "bytes", "row_count", "columns"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "row_count": {"type": "integer", "minimum": 1},
+        "columns": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "policy_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "bytes", "schema_version", "rule_count"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "schema_version": {"type": "string", "minLength": 1},
+        "rule_count": {"type": "integer", "minimum": 1}
+      }
+    },
     "policy": {
       "type": "object",
       "additionalProperties": false,
@@ -128,7 +148,7 @@
     {
       "if": {"properties": {"status": {"const": "evaluated"}}},
       "then": {
-        "required": ["input_sha256", "policy_sha256", "policy", "formulae", "batch_rule", "batch_results"]
+        "required": ["input_identity", "policy_identity", "policy", "formulae", "batch_rule", "batch_results"]
       }
     },
     {

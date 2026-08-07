@@ -10,13 +10,13 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
 import re
 import statistics
 import tempfile
+import urllib.parse
 import zipfile
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
@@ -54,6 +54,7 @@ DEFAULT_GROUP_BY = (
     "water_fraction",
     "grain_fraction",
     "measurement_basis",
+    "tectonic_setting_raw",
     "geologic_unit_raw",
     "matched_geologic_unit",
     "analytical_method",
@@ -72,6 +73,7 @@ GROUPABLE_FIELDS = {
     "water_fraction",
     "grain_fraction",
     "measurement_basis",
+    "tectonic_setting_raw",
     "geologic_unit",
     "geologic_unit_raw",
     "matched_geologic_unit",
@@ -122,7 +124,6 @@ SCHEMA_COLUMNS = (
     "coordinate_policy_id",
     "coordinate_policy_version",
     "coordinate_policy_url",
-    "coordinate_policy_sha256",
     "coordinate_latitude_field",
     "coordinate_longitude_field",
     "coordinate_uncertainty_m",
@@ -198,7 +199,6 @@ SCHEMA_COLUMNS = (
     "source_file",
     "source_row",
     "source_locator",
-    "file_sha256",
     "license",
     "access_status",
     "research_use_status",
@@ -227,7 +227,7 @@ INPUT_FIELDS = {
     "distance_to_geologic_boundary_m", "geologic_match_confidence", "analytical_method", "method_family",
     "digestion_or_extraction", "laboratory", "reference_material", "detection_limit", "detection_limit_unit",
     "source_id", "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row",
-    "source_locator", "file_sha256", "license", "source_tier",
+    "source_locator", "license", "source_tier",
 }
 RECOMMENDED_INPUT_COLUMNS = {
     "record_id", "source_record_id", "sample_id", "measurement_basis", "source_id", "source_locator",
@@ -282,7 +282,6 @@ FLAG_SEVERITY = {
     "MISSING_ANALYSIS_BATCH_ID": "warning",
     "BATCH_QC_NOT_EVALUATED": "warning",
     "BATCH_QC_FAILED": "error",
-    "INVALID_FILE_SHA256": "warning",
     "INVALID_GEOLOGIC_MATCH_CONFIDENCE": "warning",
     "GEOLOGY_MATCH_NO_COVERAGE": "warning",
     "GEOLOGY_BOUNDARY_UNCERTAIN": "warning",
@@ -401,6 +400,7 @@ SOURCE_TIER_SCORES = {
 }
 SOURCE_TIER_ALIASES = {
     "official": "official_curated", "official curated": "official_curated", "official_curated": "official_curated",
+    "official_usgs_data_release": "official_curated",
     "government": "government", "gov": "government", "government agency": "government",
     "peer reviewed": "peer_reviewed", "peer-reviewed": "peer_reviewed", "peer_reviewed": "peer_reviewed",
     "journal": "peer_reviewed", "institutional repository": "institutional_repository",
@@ -440,8 +440,13 @@ METHOD_FAMILY_PATTERNS = (
     ("idms", ("idms", "isotope dilution")),
     ("ion_chromatography", ("ion chromatography",)),
 )
-WGS84_CRS_ALIASES = {"epsg:4326", "4326", "wgs84", "wgs 84", "ogc:crs84", "crs84"}
-SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+# NAD83 geographic coordinates are map-ready at this workflow's declared 15 m
+# uncertainty floor. The original datum is retained in source_crs; no claim of
+# sub-metre WGS84 equivalence is made.
+WGS84_CRS_ALIASES = {
+    "epsg:4326", "4326", "wgs84", "wgs 84", "ogc:crs84", "crs84",
+    "epsg:4269", "4269", "nad83", "nad 83",
+}
 NUMBER_RE = re.compile(r"^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$")
 PREFIXED_NUMBER_RE = re.compile(r"^(<=|>=|<|>|≤|≥|~)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)$")
 
@@ -754,7 +759,6 @@ def coordinate_evidence(
         "coordinate_policy_id": None,
         "coordinate_policy_version": None,
         "coordinate_policy_url": None,
-        "coordinate_policy_sha256": None,
         "coordinate_latitude_field": blank_to_none(row.get("coordinate_latitude_field")),
         "coordinate_longitude_field": blank_to_none(row.get("coordinate_longitude_field")),
     }
@@ -778,7 +782,6 @@ def coordinate_evidence(
         and longitude_field.casefold()
         in {str(value).casefold() for value in policy.get("longitude_fields", [])}
         and policy.get("target_crs") == "EPSG:4326"
-        and re.fullmatch(r"[0-9a-f]{64}", str(policy.get("authority_page_sha256") or ""))
     )
     if not valid:
         add_flag(flags, "INVALID_COORDINATE_POLICY")
@@ -788,7 +791,6 @@ def coordinate_evidence(
             "coordinate_policy_id": str(policy["policy_id"]),
             "coordinate_policy_version": str(policy["version"]),
             "coordinate_policy_url": str(policy["authority_url"]),
-            "coordinate_policy_sha256": str(policy["authority_page_sha256"]),
         }
     )
     add_flag(flags, "PLATFORM_CRS_POLICY_APPLIED")
@@ -875,17 +877,15 @@ def normalize_depth(row: Mapping[str, Any], flags: list[str]) -> tuple[float | N
 
 
 def stable_record_id(row: Mapping[str, Any], row_number: int) -> str:
-    payload = {
-        "source_id": blank_to_none(row.get("source_id")),
-        "source_record_id": blank_to_none(row.get("source_record_id")),
-        "sample_id": blank_to_none(row.get("sample_id")),
-        "analyte": blank_to_none(row.get("element_or_analyte")),
-        "value": blank_to_none(row.get("value")),
-        "unit": blank_to_none(row.get("unit")),
-        "row_number": row_number,
-    }
-    digest = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:16]
-    return f"gen-{digest}"
+    parts = (
+        "generated-record-v2",
+        blank_to_none(row.get("source_id")) or "",
+        blank_to_none(row.get("source_record_id")) or "",
+        blank_to_none(row.get("sample_id")) or "",
+        blank_to_none(row.get("element_or_analyte")) or "",
+        str(row_number),
+    )
+    return "gen-" + urllib.parse.quote("|".join(parts), safe="-._~")
 
 
 def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
@@ -898,10 +898,6 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
         source -= 0.25
     if record["license"] is None:
         source -= 0.10
-    if record["source_file"] is not None and (
-        record["file_sha256"] is None or "INVALID_FILE_SHA256" in flags
-    ):
-        source -= 0.05
     source = max(0.0, min(1.0, source))
 
     completeness_fields = (
@@ -1107,11 +1103,6 @@ def normalize_row(
         if geologic_match_confidence not in {"high", "medium", "low", "unknown"}:
             geologic_match_confidence = "unknown"
             add_flag(flags, "INVALID_GEOLOGIC_MATCH_CONFIDENCE")
-    file_sha256 = blank_to_none(row.get("file_sha256"))
-    if file_sha256 is not None and not SHA256_RE.fullmatch(file_sha256):
-        add_flag(flags, "INVALID_FILE_SHA256")
-    elif file_sha256 is not None:
-        file_sha256 = file_sha256.lower()
     original_unit = blank_to_none(row.get("unit"))
     source_qualifier_raw = extract_source_qualifier_raw(row)
     record: dict[str, Any] = {
@@ -1224,7 +1215,6 @@ def normalize_row(
         "source_file": blank_to_none(row.get("source_file")),
         "source_row": blank_to_none(row.get("source_row")),
         "source_locator": source_locator,
-        "file_sha256": file_sha256,
         "license": license_value,
         "access_status": blank_to_none(row.get("access_status")),
         "research_use_status": blank_to_none(row.get("research_use_status")),
@@ -1332,14 +1322,6 @@ def apply_batch_acceptance(
     }
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 class GlimGrid:
     """Read the official GLiM 0.5 degree Arc/ASCII screening grid."""
 
@@ -1428,7 +1410,7 @@ class GlimGrid:
 
 
 def apply_spatial_geology(
-    records: Sequence[dict[str, Any]], grid: GlimGrid, grid_path: Path, expected_sha256: str
+    records: Sequence[dict[str, Any]], grid: GlimGrid, grid_path: Path
 ) -> dict[str, Any]:
     statuses: Counter[str] = Counter()
     for record in records:
@@ -1493,7 +1475,7 @@ def apply_spatial_geology(
         "grid_supplied": True,
         "grid": {
             "filename": grid_path.name,
-            "sha256": expected_sha256,
+            "bytes": grid_path.stat().st_size,
             "source": GLIM_SOURCE,
             "version": GLIM_VERSION,
             "license": GLIM_LICENSE,
@@ -1516,9 +1498,8 @@ def apply_spatial_geology(
 
 
 def group_identifier(group_by: Sequence[str], key: Sequence[Any]) -> str:
-    payload = dict(zip(group_by, key, strict=True))
-    digest = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:12]
-    return f"grp-{digest}"
+    parts = ["group-v2", *(f"{field}={'' if value is None else value}" for field, value in zip(group_by, key, strict=True))]
+    return "grp-" + urllib.parse.quote("|".join(parts), safe="-._~")
 
 
 def detect_anomalies(
@@ -1923,9 +1904,11 @@ def detect_spatial_anomaly_regions(
             "direction": item["direction"],
             "cell": [west, south, east, north],
         }
-        region_id = "region-" + hashlib.sha256(
-            json.dumps(region_payload, sort_keys=True, separators=(",", ":")).encode()
-        ).hexdigest()[:16]
+        region_id = "region-" + urllib.parse.quote(
+            f"{region_payload['group_id']}|{region_payload['direction']}|"
+            + ",".join(str(value) for value in region_payload["cell"]),
+            safe="-._~",
+        )
         outside_rate = item["outside_candidate_rate"]
         features.append({
             "type": "Feature",
@@ -2069,7 +2052,7 @@ def build_confidence_report(
         "run_metadata": dict(run_metadata),
         "weights": {"source": 0.30, "completeness": 0.20, "method": 0.20, "spatial": 0.15, "qc": 0.15},
         "component_definitions": {
-            "source": "Registry tier score minus explicit penalties for missing source ID, locator, license, or invalid file hash.",
+            "source": "Registry tier score minus explicit penalties for missing source ID, locator, or license.",
             "completeness": "Fraction of required scientific, method, spatial, dataset, file and license fields present.",
             "method": "Fraction present among measurement basis, analytical method, method family and digestion/extraction.",
             "spatial": "Canonical coordinate availability plus declared CRS and coordinate uncertainty; original-only coordinates score zero.",
@@ -2082,11 +2065,10 @@ def build_confidence_report(
                 "missing_source_id": 0.15,
                 "missing_source_locator": 0.25,
                 "missing_license": 0.10,
-                "source_file_without_valid_sha256": 0.05,
             },
             "evidence_boundary": (
-                "D2 scores declared fields and hash syntax. D1 separately validates record-ID equality and, when an "
-                "acquisition manifest is supplied, binds the input and record-evidence hashes."
+                "D2 scores declared scientific and provenance fields. D1 separately validates exact record-ID "
+                "equality and readable file, row, source, and dataset identities."
             ),
         },
         "band_thresholds": {"high": ">=0.80", "medium": ">=0.60 and <0.80", "low": "<0.60"},
@@ -2116,7 +2098,7 @@ def parse_bbox(value: str) -> tuple[float, float, float, float]:
     return west, south, east, north
 
 
-def load_schema_map(path: Path | None) -> tuple[dict[str, str], str | None]:
+def load_schema_map(path: Path | None) -> tuple[dict[str, str], dict[str, Any] | None]:
     if path is None:
         return {}, None
     if not path.is_file():
@@ -2135,7 +2117,11 @@ def load_schema_map(path: Path | None) -> tuple[dict[str, str], str | None]:
         if not isinstance(source_column, str) or not source_column.strip():
             raise PipelineError(f"schema map source column for {canonical} must be a non-empty string")
         mapping[canonical] = source_column.strip()
-    return mapping, hashlib.sha256(raw).hexdigest()
+    return mapping, {
+        "filename": path.name,
+        "bytes": path.stat().st_size,
+        "mapping_count": len(mapping),
+    }
 
 
 def load_csv(path: Path, schema_map: Mapping[str, str] | None = None) -> tuple[list[dict[str, str]], list[str]]:
@@ -2205,7 +2191,6 @@ def run_pipeline(
     robust_z_threshold: float = 3.5, region_bbox: tuple[float, float, float, float] | None = None,
     schema_map_path: Path | None = None, min_quantified_fraction: float = 0.70,
     analysis_profile: str = "demo", geology_grid_path: Path | None = None,
-    geology_grid_sha256: str | None = None,
     batch_qc_input_path: Path | None = None, batch_qc_policy_path: Path | None = None,
     spatial_grid_degrees: float = 2.0, min_spatial_samples: int | None = None,
     min_spatial_candidates: int = 2, spatial_fdr_alpha: float = 0.10,
@@ -2230,14 +2215,7 @@ def run_pipeline(
     if (batch_qc_input_path is None) != (batch_qc_policy_path is None):
         raise PipelineError("--batch-qc-input and --batch-qc-policy must be supplied together")
 
-    if (geology_grid_path is None) != (geology_grid_sha256 is None):
-        raise PipelineError("--geology-grid and --geology-grid-sha256 must be supplied together")
-    normalized_grid_sha256 = geology_grid_sha256.casefold() if geology_grid_sha256 is not None else None
-    if normalized_grid_sha256 is not None and not SHA256_RE.fullmatch(normalized_grid_sha256):
-        raise PipelineError("--geology-grid-sha256 must contain exactly 64 hexadecimal characters")
-
-    input_bytes = input_path.read_bytes() if input_path.is_file() else b""
-    schema_map, schema_map_hash = load_schema_map(schema_map_path)
+    schema_map, schema_map_identity = load_schema_map(schema_map_path)
     rows, missing_recommended_columns = load_csv(input_path, schema_map)
     records = process_rows(rows, region_bbox)
     batch_acceptance_rows: list[dict[str, Any]] = []
@@ -2267,16 +2245,11 @@ def run_pipeline(
             raise PipelineError(f"batch QC evaluation failed: {exc}") from exc
         batch_gate_summary = apply_batch_acceptance(records, batch_acceptance_rows)
     geology_summary = None
-    if geology_grid_path is not None and normalized_grid_sha256 is not None:
+    if geology_grid_path is not None:
         if not geology_grid_path.is_file():
             raise PipelineError(f"geology grid does not exist: {geology_grid_path}")
-        observed_grid_sha256 = sha256_file(geology_grid_path)
-        if observed_grid_sha256 != normalized_grid_sha256:
-            raise PipelineError("geology grid SHA-256 does not match --geology-grid-sha256")
         geology_grid = GlimGrid(geology_grid_path)
-        geology_summary = apply_spatial_geology(
-            records, geology_grid, geology_grid_path, normalized_grid_sha256
-        )
+        geology_summary = apply_spatial_geology(records, geology_grid, geology_grid_path)
     config = {
         "group_by": list(group_by),
         "minimum_group_size": min_group_size,
@@ -2290,23 +2263,38 @@ def run_pipeline(
         "minimum_spatial_candidates": min_spatial_candidates,
         "spatial_fdr_alpha": spatial_fdr_alpha,
     }
+    input_identity = {
+        "filename": input_path.name,
+        "bytes": input_path.stat().st_size,
+        "record_count": len(rows),
+    }
     if analysis_profile == "production":
         config["analysis_profile"] = analysis_profile
-    if normalized_grid_sha256 is not None:
-        config["geology_grid_sha256"] = normalized_grid_sha256
+    if geology_grid_path is not None:
+        config["geology_grid_identity"] = {
+            "filename": geology_grid_path.name,
+            "bytes": geology_grid_path.stat().st_size,
+        }
         config["geology_join_version"] = GEOLOGY_JOIN_VERSION
     if batch_qc_input_path is not None and batch_qc_policy_path is not None:
-        config["batch_qc_input_sha256"] = sha256_file(batch_qc_input_path)
-        config["batch_qc_policy_sha256"] = sha256_file(batch_qc_policy_path)
-    input_hash = hashlib.sha256(input_bytes).hexdigest()
-    run_id = hashlib.sha256(
-        (input_hash + json.dumps(config, sort_keys=True, separators=(",", ":"))).encode()
-    ).hexdigest()[:16]
+        config["batch_qc_input_identity"] = {
+            "filename": batch_qc_input_path.name,
+            "bytes": batch_qc_input_path.stat().st_size,
+        }
+        config["batch_qc_policy_identity"] = {
+            "filename": batch_qc_policy_path.name,
+            "bytes": batch_qc_policy_path.stat().st_size,
+        }
+    run_id = "run-" + urllib.parse.quote(
+        f"v2|{input_path.name}|{input_identity['bytes']}|{len(rows)}|"
+        + json.dumps(config, ensure_ascii=False, sort_keys=True, separators=(",", ":")),
+        safe="-._~",
+    )
     run_metadata = {
         "run_id": run_id,
-        "input_sha256": input_hash,
+        "input_identity": input_identity,
         "input_row_count": len(rows),
-        "schema_map_sha256": schema_map_hash,
+        "schema_map_identity": schema_map_identity,
         "missing_recommended_input_columns": missing_recommended_columns,
         "configuration": config,
     }
@@ -2390,10 +2378,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optional official PANGAEA.788537 GLiM 0.5 degree ZIP for screening point-in-cell matching",
     )
     parser.add_argument(
-        "--geology-grid-sha256",
-        help="Required SHA-256 pin when --geology-grid is supplied",
-    )
-    parser.add_argument(
         "--analysis-profile", choices=("demo", "production"), default="demo",
         help="Production enforces at least 20 usable records per anomaly background group",
     )
@@ -2451,7 +2435,6 @@ def main(argv: Sequence[str] | None = None) -> int:
             min_quantified_fraction=args.min_quantified_fraction,
             analysis_profile=args.analysis_profile,
             geology_grid_path=args.geology_grid,
-            geology_grid_sha256=args.geology_grid_sha256,
             batch_qc_input_path=args.batch_qc_input,
             batch_qc_policy_path=args.batch_qc_policy,
             spatial_grid_degrees=args.spatial_grid_degrees,

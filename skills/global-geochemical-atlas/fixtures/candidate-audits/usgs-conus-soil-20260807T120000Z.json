@@ -1,0 +1,64 @@
+{
+  "acquisition": {
+    "mode": "official-versioned-static-files",
+    "observed_at": "2026-08-07T12:00:00Z",
+    "request_url": "https://pubs.usgs.gov/ds/801/downloads/"
+  },
+  "archive": {
+    "bytes": 5433398,
+    "members": [
+      {
+        "bytes": 1450062,
+        "file_id": "top-0-5cm",
+        "name": "Appendix_2b_Top5_18Sept2013.txt",
+        "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt"
+      },
+      {
+        "bytes": 1987189,
+        "file_id": "a-horizon",
+        "name": "Appendix_3b_Ahorizon_18Sept2013.txt",
+        "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt"
+      },
+      {
+        "bytes": 1996147,
+        "file_id": "c-horizon",
+        "name": "Appendix_4b_Chorizon_18Sept2013.txt",
+        "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+      }
+    ]
+  },
+  "automated_audit": {
+    "audited_record_count": 30,
+    "required_record_count": 30,
+    "reviewer_type": "codex",
+    "status": "automated_audit_complete"
+  },
+  "claim_boundary": "The audit binds the three CONUS soil layers to USGS Data Series 801, stable file identities, byte counts, the 236-field parsed schema and full adapter statistics. It does not imply global soil coverage or row-level analytical-method completeness.",
+  "observed_data": {
+    "counts": {
+      "complete_coordinate_target_observations": 58284,
+      "distinct_samples": 14380,
+      "physical_rows": 14571,
+      "target_observations": 58284
+    },
+    "target_analytes": {
+      "As": ["Top5_As", "A_As", "C_As"],
+      "Cu": ["Top5_Cu", "A_Cu", "C_Cu"],
+      "Ni": ["Top5_Ni", "A_Ni", "C_Ni"],
+      "Zn": ["Top5_Zn", "A_Zn", "C_Zn"]
+    }
+  },
+  "observed_metadata": {
+    "citation_scope": "dataset",
+    "coordinate_reference_system": "EPSG:4326",
+    "dataset_doi": "10.3133/ds801",
+    "dataset_version": "Data Series 801, 2013 release",
+    "method_missing_reason": "The registered analysis tables do not carry a uniquely assignable row-level analytical-method identifier.",
+    "method_scope": "missing",
+    "release_date": "2013",
+    "research_use_status": "permitted_research_public_domain"
+  },
+  "source_id": "usgs-conus-soil",
+  "status": "verified_official_or_doi_dataset",
+  "verification_version": "d1-v4-candidate-audit-v1"
+}

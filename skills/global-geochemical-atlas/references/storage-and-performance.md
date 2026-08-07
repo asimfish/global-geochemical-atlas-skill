@@ -1,10 +1,10 @@
 # D1 存储、缓存与性能契约
 
-更新：2026-08-05（Asia/Shanghai）
+更新：2026-08-07（Asia/Shanghai）
 
-契约版本：`d1-storage-contract-v1`
+契约版本：`d1-storage-contract-v2-no-content-hash`
 
-本文件规定 D1 如何保存来源原件、结构化归档、派生索引和一次获取结果。速度不能绕过来源准入、版本、hash、字段、完整性或证据链检查。
+本文件规定 D1 如何保存来源原件、结构化归档、派生索引和一次获取结果。速度不能绕过来源准入、版本、文件身份、字节数、schema、数量、完整性或证据链检查。V4 不计算或校验内容哈希。
 
 ## 1. 四层存储
 
@@ -15,7 +15,7 @@
 | 派生查询索引 | `outputs/acquisition/<run_id>/index.sqlite` | 从归档包重建的 SQLite 索引 | 否 |
 | D1 交换交付 | `outputs/acquisition/<run_id>/` | `raw_observations.csv`、`sources.jsonl`、`run_manifest.json`、`coverage.json` | 通常否；仅小型 fixture 可提交 |
 
-SQLite 不是科学事实的唯一副本。删除索引后，必须能用同一归档 schema、代码版本和输入 hash 重新生成。
+SQLite 不是科学事实的唯一副本。删除索引后，必须能用同一归档 schema、代码版本、输入文件身份和记录数重新生成。
 
 ## 2. 一次 acquisition 的最低输出
 
@@ -24,21 +24,21 @@ outputs/acquisition/<run_id>/
   archive-bundle.json       # 分层、可验证的 D1 原值归档
   raw_observations.csv      # 一行一个测定，兼容 D2
   sources.jsonl             # 一条观测对应一条来源证明
-  run_manifest.json         # 请求、版本、schema、数量、耗时、hash 和状态
+  run_manifest.json         # 请求、版本、文件身份、schema、数量、耗时和状态
   coverage.json             # covered / partial / uncovered / unknown
   index.sqlite              # 可选派生物，不作为唯一交付
 ```
 
-`run_manifest.json` 必须对账 `source_records = observations + rejected_records + failed_records` 适用的来源级数量，并记录所有输出的路径、字节数和 SHA-256。失败或降级运行仍需写明状态和原因，不能只留下一个看似正常的 CSV。
+`run_manifest.json` 必须对账 `source_records = observations + rejected_records + failed_records` 适用的来源级数量，并记录所有输出的路径、文件身份、字节数、schema 和行数。失败或降级运行仍需写明状态和原因，不能只留下一个看似正常的 CSV。
 
-## 3. 两类缓存 key
+## 3. 两类缓存身份
 
 来源原件缓存和查询结果缓存不能混为一谈：
 
-- 来源原件如果是不可变整库文件，以 `source_id + dataset_version + URL + 文件 hash` 验证；地区、元素等查询条件不改变该原件。
-- API 响应、筛选结果和其他派生缓存，以 `source_id + dataset_version + canonical request JSON` 生成 SHA-256 key。请求中的地区、介质、分析物、时间、来源和许可条件变化时 key 必须变化。
+- 来源原件如果是不可变整库文件，以 `source_id + DOI/PID + dataset_version + file_id/filename + bytes` 验证；地区、元素等查询条件不改变该原件。
+- API 响应、筛选结果和其他派生缓存，使用规范化请求的可读序列化文本作为请求身份，并记录 `source_id + dataset_version`。地区、介质、分析物、时间、来源或科研使用条件变化时，必须生成新缓存条目。
 
-`cache_control.py` 实现 `d1-request-cache-key-v1`。JSON 对象键顺序不影响 key，但数组顺序按请求原义保留。缓存命中仍需重新核对版本和内容 hash；仅目录或文件名相同不能视为命中。
+`cache_control.py` 实现 V4 无哈希缓存身份。JSON 对象键顺序不影响规范化请求文本，但数组顺序按请求原义保留。缓存命中仍需重新核对 URL、DOI/PID、版本、文件身份、字节数、schema、行数和关键统计；仅目录或文件名相同不能视为命中。
 
 查看一个明确来源版本：
 
@@ -116,8 +116,8 @@ python3 scripts/benchmark_index.py --records 100000
 ## 6. 失败关闭与复现
 
 - 没有网络且无验证缓存：返回 `network_unavailable`，不伪造空数据为“无覆盖”。
-- URL、版本、hash 或请求 key 不一致：拒绝复用。
+- URL、DOI/PID、版本、文件身份、字节数、schema、行数、关键统计或规范化请求不一致：拒绝复用。
 - SQLite 外键或完整性检查失败：不发布索引。
-- 相同归档包和 schema 必须产生相同记录集合；fixture 测试同时检查 SQLite 文件 hash。
+- 相同归档包和 schema 必须产生相同记录集合；fixture 测试检查 SQLite 完整性、表行数和关键查询结果。
 - 完整来源文件、缓存和索引受 `.gitignore` 约束，不进入仓库。
 - 查询结果始终保留 `value_raw`、限定符、方法和证据，不在索引层执行单位换算、异常判断或地质推测。

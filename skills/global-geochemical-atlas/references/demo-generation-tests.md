@@ -1,5 +1,7 @@
 # D1–D3 demo 生成、证据链与可视化测试记录
 
+> 历史回归记录：本文保留 V3/早期 V4 的旧 fixture 数量和当时记录的哈希值，仅用于审计历史。当前 V4 不计算、读取、更新或校验任何 MD5/SHA 内容哈希；现行状态以 `v4-source-completeness.md`、`v4-full-population-profile.md` 和 `component_test.py` 为准。
+
 核验日期：2026-08-05。fixture 仅用于流水线演示，均声明 `not_for_scientific_interpretation: true`。
 
 ## 已提交 fixture

@@ -1,0 +1,65 @@
+{
+  "content_hashing_used": false,
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-06T14:50:00Z",
+  "generation_request": {
+    "analytes": [
+      "As"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 65135,
+      "path": "demo_input.csv"
+    },
+    {
+      "bytes": 105729,
+      "path": "sources.jsonl"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 189,
+    "selected_source_rows": 48
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "content-snapshot-2026-08-06",
+    "license": "LicenseRef-USGS-Public-Domain",
+    "source_id": "us-wqp-sacramento-river-arsenic",
+    "title": "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal"
+  },
+  "source_files": [
+    {
+      "bytes": 123432,
+      "filename": "results.csv",
+      "retrieved_at": "2026-08-06T14:50:00Z",
+      "sha256": "916f17a851b0597c55b4dfd78ace1ad65c13d2c30935b05b2e74b18910d28fcd",
+      "source_url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+    },
+    {
+      "bytes": 1241,
+      "filename": "station.csv",
+      "retrieved_at": "2026-08-06T14:50:00Z",
+      "sha256": "74e51e3081133eedf1598127cd942c35353d397b9129fba711f1540e61af5c17",
+      "source_url": "https://www.waterqualitydata.us/data/Station/search?siteid=USGS-11447650&providers=NWIS&mimeType=csv&zip=no"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "This is one USGS river station, not national or global freshwater coverage.",
+    "The retained response contains dissolved arsenic only; unreturned elements from the exact repeated-parameter query are not claimed.",
+    "Preliminary results and field-replicate QC samples remain explicitly labeled and must not be treated as accepted independent routine observations.",
+    "The Not Detected result remains left-censored at its reported 0.10 ug/l limit; no zero is invented."
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "archive": {
+    "members": [
+      {
+        "bytes": 208089,
+        "file_id": "mercury-csv",
+        "name": "150328_00_1.CSV",
+        "source_url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+      }
+    ]
+  },
+  "claim_boundary": "This audit proves the pinned australia-ngsa-mercury file contract, adapter parse and registered target denominator. It does not turn discrete source observations into continuous geographic coverage or cross-method comparability.",
+  "counts": {
+    "depth_counts": {
+      "BOS": 1182,
+      "TOS": 1214
+    },
+    "distinct_samples": 2396,
+    "distinct_sites": 1247,
+    "duplicate_code_counts": {
+      "": 1959,
+      "Duplicate 1": 222,
+      "Duplicate 2": 215
+    },
+    "physical_rows": 2396,
+    "state_counts": {
+      "NSW": 298,
+      "NT": 453,
+      "QLD": 607,
+      "SA": 314,
+      "TAS": 39,
+      "VIC": 118,
+      "WA": 567
+    },
+    "target_observations": 2396
+  },
+  "coverage": {
+    "bbox": [
+      113.8092,
+      -43.3302,
+      153.3335,
+      -11.0346
+    ],
+    "region_counts": {
+      "NSW": 298,
+      "NT": 453,
+      "QLD": 607,
+      "SA": 314,
+      "TAS": 39,
+      "VIC": 118,
+      "WA": 567
+    },
+    "valid_coordinate_rows": 2396
+  },
+  "observed_at": "2026-08-06T16:07:00Z",
+  "request": {
+    "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+  },
+  "response": {
+    "bytes": 208089
+  },
+  "snapshot_id": "australia-ngsa-mercury:2025-03-31:2026-08-06T16:07:00Z:01",
+  "snapshot_version": "geochemical-source-snapshot-v1",
+  "source_id": "australia-ngsa-mercury"
+}

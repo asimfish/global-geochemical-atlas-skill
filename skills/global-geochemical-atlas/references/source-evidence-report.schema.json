@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:geochemical-source-evidence:v3",
+  "$id": "urn:ai4s:geochemical-source-evidence:v4",
   "title": "D1 progressive source evidence report",
   "type": "object",
   "additionalProperties": false,
@@ -16,7 +16,7 @@
     "claim_boundary"
   ],
   "properties": {
-    "evidence_version": {"const": "geochemical-source-evidence-v3"},
+    "evidence_version": {"const": "geochemical-source-evidence-v4"},
     "catalog_version": {"const": "geochemical-source-catalog-v1"},
     "registry_version": {"const": "geochemical-source-registry-v1"},
     "scored_at": {"type": "string", "format": "date-time"},
@@ -32,7 +32,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "properties": {
         "identity_publisher": {"const": 10},
@@ -42,7 +42,7 @@
         "schema_semantics": {"const": 15},
         "method_qc_metadata": {"const": 10},
         "adapter_reproducibility": {"const": 10},
-        "human_review": {"const": 10}
+        "automated_audit": {"const": 10}
       }
     },
     "summary": {"$ref": "#/$defs/summary"},
@@ -98,7 +98,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "properties": {
         "identity_publisher": {"$ref": "#/$defs/dimension"},
@@ -108,7 +108,7 @@
         "schema_semantics": {"$ref": "#/$defs/dimension"},
         "method_qc_metadata": {"$ref": "#/$defs/dimension"},
         "adapter_reproducibility": {"$ref": "#/$defs/dimension"},
-        "human_review": {"$ref": "#/$defs/dimension"}
+        "automated_audit": {"$ref": "#/$defs/dimension"}
       }
     },
     "sourceEvidence": {

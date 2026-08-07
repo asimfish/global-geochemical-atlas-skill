@@ -1,0 +1,822 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS verifies identity, bytes and mapping correspondence only. Named human decisions remain null; unsigned review lowers confidence but is not a hard research-use gate.",
+  "completed_record_count": 0,
+  "dataset_version": "12.0",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "analyte": "Cu",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "6.12",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265342%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D2%7CCu%7C",
+      "review_id": "georoc-antarctica-intraplate-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST181 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265342%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D2",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "1.02",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265342%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D2%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST181 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265342%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D2",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "12.5",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265342%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D2%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST181 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265342%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D2",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Zn",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "44.6",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265342%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D2%7CZn%7C",
+      "review_id": "georoc-antarctica-intraplate-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST181 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265342%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D2",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cu",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "27.8",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265343%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D3%7CCu%7C",
+      "review_id": "georoc-antarctica-intraplate-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_STS242 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=3",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265343%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D3",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "0",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265343%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D3%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_STS242 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=3",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265343%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D3",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "11.2",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265343%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D3%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_STS242 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=3",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265343%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D3",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Zn",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "82.9",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265343%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D3%7CZn%7C",
+      "review_id": "georoc-antarctica-intraplate-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_STS242 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=3",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265343%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D3",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cu",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "38.9",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265344%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D4%7CCu%7C",
+      "review_id": "georoc-antarctica-intraplate-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST241 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=4",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265344%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D4",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "66.6",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265344%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D4%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST241 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=4",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265344%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D4",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "8.51",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265344%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D4%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST241 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=4",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265344%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D4",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Zn",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "88",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265344%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D4%7CZn%7C",
+      "review_id": "georoc-antarctica-intraplate-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST241 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=4",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265344%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D4",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cu",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "23.2",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265345%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D5%7CCu%7C",
+      "review_id": "georoc-antarctica-intraplate-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST254 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=5",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265345%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D5",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "8.61",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265345%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D5%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST254 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=5",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265345%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D5",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "21.6",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265345%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D5%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST254 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=5",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265345%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D5",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Zn",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "16.5",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265345%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D5%7CZn%7C",
+      "review_id": "georoc-antarctica-intraplate-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST254 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=5",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265345%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D5",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cu",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "12.4",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265346%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D6%7CCu%7C",
+      "review_id": "georoc-antarctica-intraplate-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST264 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=6",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265346%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D6",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "2.54",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265346%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D6%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST264 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=6",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265346%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D6",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "10.8",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265346%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D6%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST264 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=6",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265346%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D6",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Zn",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "42.9",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1265346%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D6%7CZn%7C",
+      "review_id": "georoc-antarctica-intraplate-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_ST264 [21659]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=6",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1265346%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D6",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "93.96",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1350285%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D22%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_BHD1-1 [22154]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=22",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1350285%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D22",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "4.96",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1350285%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D22%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_BHD1-1 [22154]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=22",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1350285%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D22",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "90.67",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1350286%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D23%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_BHD1-2A [22154]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=23",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1350286%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D23",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "4.44",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1350286%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D23%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_BHD1-2A [22154]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=23",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1350286%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D23",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Ni",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "94.56",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1350287%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D24%7CNi%7C",
+      "review_id": "georoc-antarctica-intraplate-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_BHD1-3 [22154]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=24",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1350287%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D24",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Pb",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "5.05",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1350287%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D24%7CPb%7C",
+      "review_id": "georoc-antarctica-intraplate-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_BHD1-3 [22154]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=24",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1350287%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D24",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cr",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "125",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1562896%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D34%7CCr%7C",
+      "review_id": "georoc-antarctica-intraplate-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_57492-1              [23103]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=34",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1562896%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D34",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cr",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "262",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1562897%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D35%7CCr%7C",
+      "review_id": "georoc-antarctica-intraplate-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_57492-9              [23103]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=35",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1562897%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D35",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cr",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "263",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1562898%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D36%7CCr%7C",
+      "review_id": "georoc-antarctica-intraplate-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_57493-5              [23103]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=36",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1562898%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D36",
+      "unit": "ppm"
+    },
+    {
+      "analyte": "Cr",
+      "analytical_method": "",
+      "automated_checks": {
+        "coordinate_pair_preserved_or_explicitly_absent": true,
+        "method_scope_not_inferred_beyond_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "target_value_and_unit_preserved": true
+      },
+      "automated_status": "PASS",
+      "measurement_basis": "GEOROC_precompiled_selected_value",
+      "raw_value": "224",
+      "record_id": "rec-observation-v2%7Cgeoroc-antarctica-intraplate%7Csrc-source-record-v2%257Cgeoroc-antarctica-intraplate%257C1562899%257C2026-06-RZZ9VM_ANTARCTICA.csv%2523row%253D37%7CCr%7C",
+      "review_id": "georoc-antarctica-intraplate-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "s_57494-3              [23103]",
+      "source_file_bytes": 367799,
+      "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=37",
+      "source_record_id": "src-source-record-v2%7Cgeoroc-antarctica-intraplate%7C1562899%7C2026-06-RZZ9VM_ANTARCTICA.csv%23row%3D37",
+      "unit": "ppm"
+    }
+  ],
+  "source_id": "georoc-antarctica-intraplate",
+  "status": "prepared_unsigned"
+}

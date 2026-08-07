@@ -1,0 +1,18 @@
+SortOrder,Tblname,AttributeLabel,AttributeDescription
+1,UTVolcRocks_USGS-Alabs_Data,LAB_ID,Unique sample identification number assigned by the laboratory.
+8,UTVolcRocks_USGS-Alabs_Data,DATUM,Reference datum for the latitude and longitude coordinates of the sample site.
+9,UTVolcRocks_USGS-Alabs_Data,LATITUDE,Latitude of the sample site in decimal degrees.
+10,UTVolcRocks_USGS-Alabs_Data,LONGITUDE,Longitude of the sample site in decimal degrees.
+11,UTVolcRocks_USGS-Alabs_Data,LocationConfidenceMeters,"Accuracy, in meters, of sample location."
+13,UTVolcRocks_USGS-Alabs_Data,SAMPLE_SRC,Physical setting or environment from which the sample was collected.
+14,UTVolcRocks_USGS-Alabs_Data,XNDRYCLASS,"Secondary classification or subclass of rock sample: igneous, sedimentary, or metamorphic."
+15,UTVolcRocks_USGS-Alabs_Data,SPEC_NAME,"A specific name for the sample media collected, as provided by the sample submitter."
+17,UTVolcRocks_USGS-Alabs_Data,GEOL_AGE,Age or range of ages from the Geological Time Scale for the collected sample.
+39,UTVolcRocks_USGS-Alabs_Data,CRPPM_XRF,"Concentration of chromium (Cr) in parts-per-million, determined by X-ray fluorescence spectrometry. Minus sign (-) indicates value is less than reported number."
+40,UTVolcRocks_USGS-Alabs_Data,CUPPM_XRF,"Concentration of copper (Cu) in parts-per-million, determined by X-ray fluorescence spectrometry. Minus sign (-) indicates value is less than reported number."
+43,UTVolcRocks_USGS-Alabs_Data,NIPPM_XRF,"Concentration of nickel (Ni) in parts-per-million, determined by X-ray fluorescence spectrometry. Minus sign (-) indicates value is less than reported number."
+47,UTVolcRocks_USGS-Alabs_Data,ZNPPM_XRF,"Concentration of zinc (Zn) in parts-per-million, determined by X-ray fluorescence spectrometry."
+53,UTVolcRocks_USGS-Alabs_Data,ASPPM_NA,"Concentration of arsenic (As) in parts-per-million, determined by instrumental neutron activation analysis. Minus sign (-) indicates value is less than reported number."
+58,UTVolcRocks_USGS-Alabs_Data,CRPPM_NA,"Concentration of chromium (Cr) in parts-per-million, determined by instrumental neutron activation analysis. Minus sign (-) indicates value is less than reported number."
+66,UTVolcRocks_USGS-Alabs_Data,NIPPM_NA,"Concentration of nickel (Ni) in parts-per-million, determined by instrumental neutron activation analysis. Minus sign (-) indicates value is less than reported number."
+79,UTVolcRocks_USGS-Alabs_Data,ZNPPM_NA,"Concentration of zinc (Zn) in parts-per-million, determined by instrumental neutron activation analysis."

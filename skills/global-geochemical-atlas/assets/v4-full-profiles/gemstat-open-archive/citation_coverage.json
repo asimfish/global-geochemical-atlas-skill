@@ -1,14 +1,14 @@
 {
   "as_of": "2026-08-06T10:05:00Z",
   "citation_scope_counts": {
-    "dataset": 492999
+    "dataset": 3739180
   },
-  "citation_text_count": 492999,
+  "citation_text_count": 3739180,
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_doi": "10.5281/zenodo.18459694",
   "dataset_doi_present": true,
   "dataset_version": "v3",
-  "observation_denominator": 492999,
+  "observation_denominator": 3739180,
   "profile_version": "d1-v4-full-population-profile-v1",
   "publication_doi_observation_count": 0,
   "source_id": "gemstat-open-archive",

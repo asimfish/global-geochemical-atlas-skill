@@ -1,665 +1,4409 @@
 {
   "artifacts": [
     {
-      "bytes": 18825,
+      "bytes": 30287,
+      "coverage_balance_version": "d1-v4-medium-balance-v1",
       "path": "assets/v4-coverage-balance.json",
-      "sha256": "55c7cb1ac028b320d346ecf9471b69ad98bae83f660cad9ec705e35c1f0843de"
+      "top_level_keys": [
+        "claim_boundary",
+        "coverage_balance_version",
+        "denominator_definition",
+        "media",
+        "medium_elements"
+      ]
     },
     {
-      "bytes": 1330366,
+      "bytes": 3062105,
+      "columns": [
+        "cube_version",
+        "source_id",
+        "medium",
+        "element",
+        "sample_type",
+        "method_scope",
+        "region",
+        "measurement_basis",
+        "observation_count",
+        "distinct_sample_count",
+        "independent_lineage_count",
+        "reported_coordinate_sample_count",
+        "valid_coordinate_sample_count",
+        "comparable_observation_count",
+        "covered_spatial_cells",
+        "spatial_grid"
+      ],
       "path": "assets/v4-coverage-cube.csv",
-      "sha256": "8d73263e3e10a9138983642b0fa092c6962953aa66e32dfd2adc93f5245a3c73"
+      "row_count": 13052
     },
     {
-      "bytes": 2162,
+      "bytes": 2724,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/automation_health.json",
-      "sha256": "71ed02f04a025e2917a8693b49844977eced64f98cd2b0cd2255a9c0615c9467"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 790,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/citation_coverage.json",
-      "sha256": "ecfb5c541d45d69606dd4ed78361ec87f1330cdb080f9bdcd04f103c14b65bfc"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4943,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/field_completeness.json",
-      "sha256": "4fe216bdf6f693b2cad37b592d8ba60c8916ffff4db5eedfdef4fbed95f43ab1"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 734,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/geology_coverage.json",
-      "sha256": "106e9af2613644a4bd325e35fac0a64bb4fdaaf9b2b370138725f54c2c57414d"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 745,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/method_completeness.json",
-      "sha256": "758d4ee3830c10a188b1bcc2d50eec71f364f3339869f2dd0cf22825f2792edd"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 791,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/sample_type_coverage.json",
-      "sha256": "dfb9966c85a46eea696d49c4b1bc6f7ea3de77a4c67f62c1000620a5aa19e9c2"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 2636,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/spatial_coverage.json",
-      "sha256": "7798f33ab9586ad2328ee6bc31c92c6fd9c6f1af8a56fbd65066f704f59a989c"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 929,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/usage_rights_coverage.json",
-      "sha256": "b0c43003cccc3887f4692c427a38643b1340f29fb5a972b215779ff8ad29bcdd"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2343,
+      "bytes": 1849,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 785,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4869,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 735,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 705,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 812,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 19024,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 927,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 3373,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 815,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4850,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 779,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 711,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 815,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 1611,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 995,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-soil/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 3396,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 824,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4927,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 786,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 750,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 813,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 1661,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 1005,
+      "path": "assets/v4-full-profiles/brazil-sgb-florianopolis-stream-sediment/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 3038,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 798,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4894,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 760,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 806,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 783,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 32380,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 984,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-sediment/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 2889,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 792,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4822,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 756,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 685,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 764,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 32305,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 977,
+      "path": "assets/v4-full-profiles/cdogs-210102-lake-water/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 3123,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/automation_health.json",
-      "sha256": "aa70dae9e1d07f8d758fc5f1c1200ed5329bb7fed09ad3fabc530efc4f007fce"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 811,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/citation_coverage.json",
-      "sha256": "05d08aa3dc2bda221d4fbe1d88fe9438b6ae1947d6990e630582e611e2860824"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4919,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/field_completeness.json",
-      "sha256": "230127678271053d52c5910fef4ad96963e8760272bf9a4af092cd60294dfdc9"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 773,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/geology_coverage.json",
-      "sha256": "dfa745fecaa243e0f876bc003a2ad3cae6f57360d1d3645e75459684cb57a5bf"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 797,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/method_completeness.json",
-      "sha256": "de84cf11ea326a89a6d20e14abe248edcab11ac128248af2f42ccf30277a7844"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 808,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/sample_type_coverage.json",
-      "sha256": "a97a5bbb54e745bf970de98840caa5d6716615586e34a61f632eb950d1dbdc39"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 16811,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/spatial_coverage.json",
-      "sha256": "743357d4e471af96edd8fe396363ab9a4952f7fdacfd8b6c40923ebb84cda6fe"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 1007,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/usage_rights_coverage.json",
-      "sha256": "9aeffb276cdcc64ae10447651dbdd935cbd60bfdefad42a8d82cad94a955a341"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2113,
+      "bytes": 2342,
       "path": "assets/v4-full-profiles/foregs-humus/automation_health.json",
-      "sha256": "a7223647458f022600e15ffa28d3a285928d2876535f0aa809b63006911672b9"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 797,
       "path": "assets/v4-full-profiles/foregs-humus/citation_coverage.json",
-      "sha256": "f0527d007dfa5b6567e505fe82b5c44218095d465d7f66a8ba0a3cdb69b62f56"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4893,
       "path": "assets/v4-full-profiles/foregs-humus/field_completeness.json",
-      "sha256": "fbe3970c5999b59a91929383f769e4d3198163375a879751259f37d43b98792e"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 759,
       "path": "assets/v4-full-profiles/foregs-humus/geology_coverage.json",
-      "sha256": "890612f8c4842bf05350a11f241e6b7baa3096884d3f5eea620016c9ad6350e4"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/foregs-humus/method_completeness.json",
-      "sha256": "35249643995dfcb560c70835e0c55089a06c5a482ade156298f46a076c5905ec"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 785,
       "path": "assets/v4-full-profiles/foregs-humus/sample_type_coverage.json",
-      "sha256": "bf0b132a74e4b0618a7f9d02505689ee08f456a9d3973ede1728afe9ed266ad6"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 10660,
       "path": "assets/v4-full-profiles/foregs-humus/spatial_coverage.json",
-      "sha256": "ad313aee761ca6895cac6c8571397fc0b5f54ecbccb0ef2f8d5133ce91c46c36"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 993,
       "path": "assets/v4-full-profiles/foregs-humus/usage_rights_coverage.json",
-      "sha256": "77df5f8f0bf8369049a7a911d3489211da292b268cfb4f6bdcec2611a95c3bf7"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2345,
+      "bytes": 3138,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/automation_health.json",
-      "sha256": "1940e60719266be1d2443c8256c45b419a73e5d1d152618a040f4eb282312fbc"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 810,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/citation_coverage.json",
-      "sha256": "b01b6248d90087d2220eb10f00ab98db18a3b2d05d067086f832c579d99c1732"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4986,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/field_completeness.json",
-      "sha256": "9e4de4dd2ecaaff4e31cc24a0d2523f89587da259e8fc6307156c7f251034d09"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 770,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/geology_coverage.json",
-      "sha256": "90d8977f99e0a015674817c3ea992b50359a4571c5e2791faf7b4399abd2d3bf"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 795,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/method_completeness.json",
-      "sha256": "b0d710171af087c71b2b531b0d0259358d16e46493cc937d44c1b88ca42c6bbe"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 801,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/sample_type_coverage.json",
-      "sha256": "41d4ac5939e703fcfd9e93afce07a5a37726ff71fa6da7c8275d8d312e9af269"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 18215,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/spatial_coverage.json",
-      "sha256": "f0d6261b4c95347644796eebca9142ac3b681add45baf9d7965da7b5791f80fc"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 1007,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/usage_rights_coverage.json",
-      "sha256": "60ac4dac961a25c624ee7ccfc1fcb4c87f1e39e5435dcaeeed7ba6472c17ec9b"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 1649,
+      "bytes": 2588,
       "path": "assets/v4-full-profiles/foregs-stream-water/automation_health.json",
-      "sha256": "b3190651e1339e715a767756ce160e6f286c055ad1a6afdbfb55e8a00e048fcd"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 804,
       "path": "assets/v4-full-profiles/foregs-stream-water/citation_coverage.json",
-      "sha256": "33fd5a11abfc217544f61eba2c54e1f746a00fcf9e0fa8f9d98863adc282cbd9"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4900,
       "path": "assets/v4-full-profiles/foregs-stream-water/field_completeness.json",
-      "sha256": "d5b598b5b70e14a347a33a864a2ae6f98c68b479749d6e15d8bc8d315b1f8604"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 766,
       "path": "assets/v4-full-profiles/foregs-stream-water/geology_coverage.json",
-      "sha256": "b9a2fcc1b724ad02679ba0dfbe8e7631a0a9066af7a7149aa1cc7f56a07a8d88"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 699,
       "path": "assets/v4-full-profiles/foregs-stream-water/method_completeness.json",
-      "sha256": "b709605949ad640ff983f8ad0563d1b3fbebd476646220f0566314bc09a6d9c1"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 782,
       "path": "assets/v4-full-profiles/foregs-stream-water/sample_type_coverage.json",
-      "sha256": "af81a8ae70ed1770b11555119ef91f2c376591f82897a4bad89e5e29af8a4d55"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 17516,
       "path": "assets/v4-full-profiles/foregs-stream-water/spatial_coverage.json",
-      "sha256": "61a894a217884036e00973dfd3e337b4f5f43a2aa1c5a1c1a144a93c4a34cbff"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 1000,
       "path": "assets/v4-full-profiles/foregs-stream-water/usage_rights_coverage.json",
-      "sha256": "df64bfeb7a4a80c5634b2534bf55edc7d3885e4c008c1f707f3f4517404673a2"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2574,
+      "bytes": 3442,
       "path": "assets/v4-full-profiles/foregs-subsoil/automation_health.json",
-      "sha256": "0a2a0f7aff5e4f2a2d0576f05b8615b2848872f168df23b993a9b495923937de"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 802,
       "path": "assets/v4-full-profiles/foregs-subsoil/citation_coverage.json",
-      "sha256": "acce6acda22251e84e235257603bfbf0e48f49d14518fe3d4a8d9ded913da9a2"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4964,
       "path": "assets/v4-full-profiles/foregs-subsoil/field_completeness.json",
-      "sha256": "8df07f6c8c51b5d87d1d0a8645f1d014c8abf978ce73a7b797888abad19c0f41"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 762,
       "path": "assets/v4-full-profiles/foregs-subsoil/geology_coverage.json",
-      "sha256": "b0848db0d5285d9f2baeb58466f404e25a774127c11e5fb1bc5e940f4e039457"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 803,
       "path": "assets/v4-full-profiles/foregs-subsoil/method_completeness.json",
-      "sha256": "e650872cf602d6c85deb46bf4bbc9cc07a19acc205ef725a36b21c50078890e1"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 794,
       "path": "assets/v4-full-profiles/foregs-subsoil/sample_type_coverage.json",
-      "sha256": "ef10e1add13553ff42e2d63decc0a8e842e26bb030173ad1d2595cfcd89b90b9"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 17365,
       "path": "assets/v4-full-profiles/foregs-subsoil/spatial_coverage.json",
-      "sha256": "87e57d8a323de090c2b08b58b2f7aef6859c09074c2e731b78a86bc0c52aa9d8"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 999,
       "path": "assets/v4-full-profiles/foregs-subsoil/usage_rights_coverage.json",
-      "sha256": "ed678fb2e1e5c03b754ce7d1d0dcde51af48325b9ed5a894feb0cf00757df278"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2575,
+      "bytes": 3412,
       "path": "assets/v4-full-profiles/foregs-topsoil/automation_health.json",
-      "sha256": "6ef98b0320349b586f2431f854b0fc2a9055fe2d082b57d07ff52e3b0d5df90f"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 802,
       "path": "assets/v4-full-profiles/foregs-topsoil/citation_coverage.json",
-      "sha256": "73addc0f6a5801f76ee78164c9449203158454df19da5cc5fe48623dd8ccaf4c"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4964,
       "path": "assets/v4-full-profiles/foregs-topsoil/field_completeness.json",
-      "sha256": "72d1b96704cf74d3f939f9f87144fc496d0b107cad7de2c261a3378d275a8f4f"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 762,
       "path": "assets/v4-full-profiles/foregs-topsoil/geology_coverage.json",
-      "sha256": "5cfc79a25344460b4e3e370896201fb71ca7284cac4a22517f2455079d4ebfec"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 803,
       "path": "assets/v4-full-profiles/foregs-topsoil/method_completeness.json",
-      "sha256": "be91cb95cfe7beddc76b8aaaf3a860d903163f66d7c213ef0b80da4af4eed862"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 794,
       "path": "assets/v4-full-profiles/foregs-topsoil/sample_type_coverage.json",
-      "sha256": "f237219d712e1b6f4a607200a0d0326ec75b33a1cea8bbf29e5f902ffde5e7bd"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 17878,
       "path": "assets/v4-full-profiles/foregs-topsoil/spatial_coverage.json",
-      "sha256": "5cdc495ceb5ec4773ac68678ab6be6c711306f75fb016daa70ce34b787e43685"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 999,
       "path": "assets/v4-full-profiles/foregs-topsoil/usage_rights_coverage.json",
-      "sha256": "ad95d460b9e7e340c5b633975ff206849ac6e2c0706edb09a54a2007a1edb0fa"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2584,
+      "bytes": 3481,
+      "path": "assets/v4-full-profiles/gemas-europe/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 796,
+      "path": "assets/v4-full-profiles/gemas-europe/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4958,
+      "path": "assets/v4-full-profiles/gemas-europe/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 756,
+      "path": "assets/v4-full-profiles/gemas-europe/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 812,
+      "path": "assets/v4-full-profiles/gemas-europe/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 834,
+      "path": "assets/v4-full-profiles/gemas-europe/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 28563,
+      "path": "assets/v4-full-profiles/gemas-europe/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 951,
+      "path": "assets/v4-full-profiles/gemas-europe/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 3412,
       "path": "assets/v4-full-profiles/gemstat-open-archive/automation_health.json",
-      "sha256": "e10b3df2ebe139d1da594a06bd6545b91c222617687567de173d2b2a487cf2b8"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 792,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 5096,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 728,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 5015,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 1035,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 39232,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 929,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 4434,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 789,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/citation_coverage.json",
-      "sha256": "c7ca6e30c0a958984cfed14a530a8036a9a40099e9330ad9d70f91afd18bcd4b"
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
-      "bytes": 5024,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/field_completeness.json",
-      "sha256": "9b133beed5288cfa770801310352a852cf48f22449bd8c63e6ad82f06d75a640"
+      "bytes": 4874,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
-      "bytes": 727,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/geology_coverage.json",
-      "sha256": "fa768f1fdde381ed7f60cc8cfffe7d6c3d4c409952794c8c2801735da383556b"
+      "bytes": 744,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
-      "bytes": 2625,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/method_completeness.json",
-      "sha256": "29f0342ea9ca14d8fbc4e26515c4d302580ab5ff22bf8bb679afcae3eebc0c45"
+      "bytes": 644,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
-      "bytes": 997,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/sample_type_coverage.json",
-      "sha256": "c96050155fc8d41d8ffa9a429dba17df28cc1ec9a31e6c278961565ea1e2fc40"
+      "bytes": 766,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
-      "bytes": 36496,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/spatial_coverage.json",
-      "sha256": "4ade109ea8576e72ee76191dcdd46f8cd31b414e966f6d03e1e27e1fa568b7ec"
+      "bytes": 2907,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
-      "bytes": 925,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/usage_rights_coverage.json",
-      "sha256": "6adae6a4cb8923ae6cc092c12a48d7f8dbd9f4fbaf8d62f950ca879172497828"
+      "bytes": 933,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 8158,
+      "bytes": 8663,
       "path": "assets/v4-full-profiles/georoc-archaean/automation_health.json",
-      "sha256": "a6b6191038674867d6ff3e6c2458c8bcf663f599ee199f0d8133ed1c0288597e"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 779,
       "path": "assets/v4-full-profiles/georoc-archaean/citation_coverage.json",
-      "sha256": "2045c4ad0ff77d50f7c983f7a7d30840bc612190a16ae26e6b3c74d0052b8a2d"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4942,
       "path": "assets/v4-full-profiles/georoc-archaean/field_completeness.json",
-      "sha256": "00047d45905cf6e4c3a605d714fed23474b888165fbb136cd7ba13aca5f0a7cd"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 735,
       "path": "assets/v4-full-profiles/georoc-archaean/geology_coverage.json",
-      "sha256": "23ca437f08c2b8775a06b04d99b1997e4835261d64f5d56afba7d9791417cf98"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 634,
       "path": "assets/v4-full-profiles/georoc-archaean/method_completeness.json",
-      "sha256": "7952079ab0fa6dd0a39b11a949f71fd2b9531bccdd3d43ed83e59338a0c48d68"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 758,
       "path": "assets/v4-full-profiles/georoc-archaean/sample_type_coverage.json",
-      "sha256": "032de2b29c715303aa25a4fa702b993c854a049356f49c14066a6361a16f8cb9"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 100710,
       "path": "assets/v4-full-profiles/georoc-archaean/spatial_coverage.json",
-      "sha256": "5ffc387a820b0a32c773df49262dc17e0e64c8ac73aaa23ecd2b17873b8da9ba"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 924,
       "path": "assets/v4-full-profiles/georoc-archaean/usage_rights_coverage.json",
-      "sha256": "85417bd38c1ed5030b12f533d8cdc6b29ccac4f51a787095fb71ebb212c492e4"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 1680,
+      "bytes": 2120,
       "path": "assets/v4-full-profiles/geotraces-idp2025/automation_health.json",
-      "sha256": "561c1a1d79d332363497a3e0e291c510c17f101612c19b44d824a543f98c66ec"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 809,
       "path": "assets/v4-full-profiles/geotraces-idp2025/citation_coverage.json",
-      "sha256": "cc0353b4e0df0ad6caa0fb0323ac6008d82ef1d5a7cce56fed55426824b6de52"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
-      "bytes": 4930,
+      "bytes": 4957,
       "path": "assets/v4-full-profiles/geotraces-idp2025/field_completeness.json",
-      "sha256": "1078144f919ecba84e7977469272d80b25f2653a1783d0bd2444ce28223531fd"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/geotraces-idp2025/geology_coverage.json",
-      "sha256": "8d62736bd975faa432bcee88483e6451a48aa3fe159abac0018db5262f11d42c"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
-      "bytes": 639,
+      "bytes": 2883,
       "path": "assets/v4-full-profiles/geotraces-idp2025/method_completeness.json",
-      "sha256": "711071cb24295dbad2a2b23edd0060dd01d55bd79728858768a2a487e8ac1a60"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 752,
       "path": "assets/v4-full-profiles/geotraces-idp2025/sample_type_coverage.json",
-      "sha256": "d216c231f3268317fd323a7c787e49ca100f9c1055268ddeb3acb81d655db91d"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 39629,
       "path": "assets/v4-full-profiles/geotraces-idp2025/spatial_coverage.json",
-      "sha256": "3b02ff35e0ac8b8977d2624cf7ac83094a1fe2e929daea4910ef12d082774ea4"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 967,
       "path": "assets/v4-full-profiles/geotraces-idp2025/usage_rights_coverage.json",
-      "sha256": "02f8827483d6de5d39f446764b9c2661f7cee1246555c7687b3ae9a2d344eaa0"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 1878,
+      "bytes": 2717,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/automation_health.json",
-      "sha256": "b164c047dd182f8172cbfb587467e178f18eb4227d05e80dfc2a18d98093c883"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 811,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/citation_coverage.json",
-      "sha256": "419739e15256931dfeed3c6d5f2cf24e4275931bdd42e6a0caa096ca2740a09c"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4973,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/field_completeness.json",
-      "sha256": "4c70a91fbeaf3899e57035106ea8391f4daa6275e61b5466691ea37586c523c1"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 771,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/geology_coverage.json",
-      "sha256": "ce0eca10450141e339e1e3f49c6ad427c8a41d2747b199d76263a6fa3225ce53"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 682,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/method_completeness.json",
-      "sha256": "ea76899fbde0de37b56cf85e98e809292debd1c5b8cd67b4eae14c3456925488"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 802,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/sample_type_coverage.json",
-      "sha256": "ef2ba99ba370e5667aa79029fcb88a5cbfa85b7f02f3b568cf438e2e430696a2"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 5160,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/spatial_coverage.json",
-      "sha256": "4be4413c3df586f7806fb504bbb7cbb3960564839a91845eab26cd1d6d1910fb"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 994,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/usage_rights_coverage.json",
-      "sha256": "fb49e0e7639ef79c1cd620904f1ce6c863318795a3d42c200ba1d1156d90db01"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2544,
+      "bytes": 2289,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 796,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4958,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 756,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 667,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 787,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 6043,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 979,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 3303,
       "path": "assets/v4-full-profiles/norway-marchem/automation_health.json",
-      "sha256": "953a0bbac2688623e7956e379f8cb9677bdd25b3c4fc9dcf6777f4cd469487c5"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 803,
       "path": "assets/v4-full-profiles/norway-marchem/citation_coverage.json",
-      "sha256": "b8f1a84b55c4d408a9fb66fecaf6eb7d473e2605b8deddc47c7bc8d752157a31"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4899,
       "path": "assets/v4-full-profiles/norway-marchem/field_completeness.json",
-      "sha256": "ebfea66d942cd1978fd437e2ebedb92da561cd77e51b99148cbf77d33dc2982f"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 765,
       "path": "assets/v4-full-profiles/norway-marchem/geology_coverage.json",
-      "sha256": "bbd22214086c8900af771b48cf9b91b746b1f782ffa83eac437a5e6b7d4cb0c6"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 730,
       "path": "assets/v4-full-profiles/norway-marchem/method_completeness.json",
-      "sha256": "60811859c70192cc5f27fc036494f5524915848f13f20515237a3182e0f98696"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 792,
       "path": "assets/v4-full-profiles/norway-marchem/sample_type_coverage.json",
-      "sha256": "26394c7ac39152430316e66110641630c2506e2ff4e9ef5da5d6e209e6466458"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 3971,
       "path": "assets/v4-full-profiles/norway-marchem/spatial_coverage.json",
-      "sha256": "99ab33fe0acf9e7c4b3876e1eea196a11d2e3847cbbb832d7646a356e06554cb"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 957,
       "path": "assets/v4-full-profiles/norway-marchem/usage_rights_coverage.json",
-      "sha256": "099bcd122d0e6a314a5582eca8235fd95520ff07ea23410b154c2af6cdb59f25"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 1617,
+      "bytes": 2732,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 795,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4806,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 740,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 679,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 768,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 1812,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 929,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 2550,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/automation_health.json",
-      "sha256": "d62ac1d72ded161fda53bc054762c818ebe7932677b075d86271103bb2ef82fd"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 792,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/citation_coverage.json",
-      "sha256": "332b7323877a518241221aeeed227caa82fa101810f6466cfe7d275b71742df4"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4803,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/field_completeness.json",
-      "sha256": "c0161d9308ec80ef2beb991f9a54c2d0964620ee267309d8b427b2bba508d999"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 737,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/geology_coverage.json",
-      "sha256": "a1fce3f0881b734ee78a24c5b4963ce6375f601e16c7cbed7ad56426c4d7a2ea"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 685,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/method_completeness.json",
-      "sha256": "4dc3048ac1eec27f2567d21a34a924092d27cbd7684a1033b68497194a7fca8e"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 761,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/sample_type_coverage.json",
-      "sha256": "5b9db5fc6db9216aa52745ab352ec91a582c69b330c23cac37d0b48a865d4d71"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 2759,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/spatial_coverage.json",
-      "sha256": "7888c587ed0f22af4890d4ccb02562f10f0a7c7f6ff6566e28498fc7628604b7"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 926,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/usage_rights_coverage.json",
-      "sha256": "0a586ee429fd2711060d57e4bb00f71ac51d697f799c10cb3f202f26e9068d67"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2142,
+      "bytes": 2578,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 808,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4881,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 750,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 722,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 839,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 3290,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 939,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 4603,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 800,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4826,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 760,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 713,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 772,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 1579,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 1007,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 5380,
       "path": "assets/v4-full-profiles/usgs-conus-soil/automation_health.json",
-      "sha256": "c25e716f63d9990c9dd8d84af1786223bf6541ad34c11ca294ad80b608c943ea"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
     },
     {
       "bytes": 798,
       "path": "assets/v4-full-profiles/usgs-conus-soil/citation_coverage.json",
-      "sha256": "29208fd3fc62bd44b740601f1ad10705367df12f37b7c1c94798d8d7fed0b8ca"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
     },
     {
       "bytes": 4950,
       "path": "assets/v4-full-profiles/usgs-conus-soil/field_completeness.json",
-      "sha256": "55f5296db142dba19f0510445274ee88f2af29c5a938b6ee356eefbce22e2612"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 748,
       "path": "assets/v4-full-profiles/usgs-conus-soil/geology_coverage.json",
-      "sha256": "29b7ba4f545956ec64d0a198ec3790b5d7af1472acbbebf5331c52cb55637a8e"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
     },
     {
       "bytes": 659,
       "path": "assets/v4-full-profiles/usgs-conus-soil/method_completeness.json",
-      "sha256": "313590054dd739305648835c36f00f6a72fabb1cbcfde8a8d06fbb2ee5763460"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
     },
     {
       "bytes": 838,
       "path": "assets/v4-full-profiles/usgs-conus-soil/sample_type_coverage.json",
-      "sha256": "0ca834da5270e5e8a5934bcc4263b35dc14ec123b4b91b2cbb3392d5a42db577"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
     },
     {
       "bytes": 30526,
       "path": "assets/v4-full-profiles/usgs-conus-soil/spatial_coverage.json",
-      "sha256": "e3d7956a3051d49898a6da6c01914b630b54cadf88766a4789404f07185fa977"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
     },
     {
       "bytes": 1001,
       "path": "assets/v4-full-profiles/usgs-conus-soil/usage_rights_coverage.json",
-      "sha256": "1a45b790f5e659e8d13ebec0e0a1e32a2c16251c9000ce19a6331ffc239503e7"
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
     },
     {
-      "bytes": 2935,
-      "path": "references/v4-full-population-profile.md",
-      "sha256": "11bb89db9e074d4679db7d793d4aa90dd83447ff40ccfec39b005cfecf0f8cd4"
+      "bytes": 6703,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/automation_health.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "adapter_registered",
+        "as_of",
+        "cache_hit_count",
+        "cached_parse_status",
+        "claim_boundary",
+        "dataset_version",
+        "expected_target_observation_count",
+        "files",
+        "last_successful_fetch_at",
+        "last_successful_parse_at",
+        "offline_replay_status",
+        "online_fetch_health",
+        "parsed_source_record_count",
+        "profile_version",
+        "raw_schema_field_count",
+        "raw_schema_fields",
+        "retry_health",
+        "row_count_drift_status",
+        "schema_drift_detection",
+        "source_id",
+        "supported_modes",
+        "target_observation_count",
+        "version_drift"
+      ]
+    },
+    {
+      "bytes": 793,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/citation_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "citation_scope_counts",
+        "citation_text_count",
+        "claim_boundary",
+        "dataset_doi",
+        "dataset_doi_present",
+        "dataset_version",
+        "observation_denominator",
+        "profile_version",
+        "publication_doi_observation_count",
+        "source_id",
+        "upstream_primary_source_observation_count"
+      ]
+    },
+    {
+      "bytes": 4903,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/field_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "denominator_definition",
+        "fields",
+        "observation_count",
+        "profile_scope",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 748,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/geology_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "geographic_context_is_not_counted_as_geologic_unit",
+        "geologic_age_raw",
+        "geologic_unit_raw",
+        "lithology_raw",
+        "matched_geologic_unit",
+        "observation_denominator",
+        "profile_version",
+        "source_id",
+        "tectonic_setting_raw"
+      ]
+    },
+    {
+      "bytes": 892,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/method_completeness.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "analytical_method_counts",
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "method_scope_counts",
+        "observation_count",
+        "profile_version",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 773,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/sample_type_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "claim_boundary",
+        "dataset_version",
+        "media",
+        "profile_version",
+        "sample_types",
+        "sediment_environments",
+        "source_id",
+        "water_body_types",
+        "water_fractions"
+      ]
+    },
+    {
+      "bytes": 2979,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/spatial_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "as_of",
+        "bbox",
+        "claim_boundary",
+        "coordinate_canonicalization_status",
+        "coordinate_count_definition",
+        "coordinate_uncertainty_m_observation_counts",
+        "covered_spatial_cells",
+        "dataset_version",
+        "distinct_sample_count",
+        "profile_version",
+        "region_count",
+        "region_observation_counts",
+        "reported_coordinate_sample_count",
+        "reported_covered_spatial_cells",
+        "reported_spatial_cell_ids",
+        "reported_spatial_grid",
+        "source_crs_observation_counts",
+        "source_id",
+        "spatial_cell_ids",
+        "spatial_grid",
+        "valid_coordinate_sample_count"
+      ]
+    },
+    {
+      "bytes": 938,
+      "path": "assets/v4-full-profiles/usgs-utah-volcanic-whole-rock/usage_rights_coverage.json",
+      "profile_version": "d1-v4-full-population-profile-v1",
+      "top_level_keys": [
+        "access_status_counts",
+        "as_of",
+        "attribution_required_counts",
+        "claim_boundary",
+        "dataset_version",
+        "license_id",
+        "license_url",
+        "profile_version",
+        "redistribution_is_not_a_research_use_gate",
+        "redistribution_status_counts",
+        "research_use_status_counts",
+        "source_id"
+      ]
+    },
+    {
+      "bytes": 4054,
+      "path": "references/v4-full-population-profile.md"
     }
   ],
   "as_of": "2026-08-06T10:05:00Z",
-  "comparable_observation_count": 94023,
-  "coverage_cube_rows": 5773,
+  "comparable_observation_count": 423405,
+  "coverage_cube_rows": 13052,
   "coverage_cube_version": "d1-v4-coverage-cube-v1",
-  "covered_spatial_cells_source_sum": 5954,
+  "covered_spatial_cells_source_sum": 7603,
   "denominator_definition": "all non-empty registered target observations parsed from verified full caches",
-  "distinct_sample_count": 554429,
+  "distinct_sample_count": 773445,
   "media": {
     "rock": {
-      "comparable_observation_count": 0,
-      "covered_spatial_cells": 0,
-      "distinct_sample_count": 25659,
-      "independent_lineage_count": 1,
-      "observation_count": 65988,
-      "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 20866,
-      "reported_covered_spatial_cells": 395,
+      "comparable_observation_count": 1271,
+      "covered_spatial_cells": 25,
+      "distinct_sample_count": 26203,
+      "independent_lineage_count": 2,
+      "lineage_ids": [
+        "georoc-compilation",
+        "usgs-utah-volcanic-whole-rock"
+      ],
+      "observation_count": 68618,
+      "reported_comparable_observation_count": 1271,
+      "reported_coordinate_sample_count": 21409,
+      "reported_covered_spatial_cells": 420,
       "source_ids": [
-        "georoc-archaean"
+        "georoc-antarctica-intraplate",
+        "georoc-archaean",
+        "usgs-utah-volcanic-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 0
+      "valid_coordinate_sample_count": 543
     },
     "sediment": {
-      "comparable_observation_count": 22678,
-      "covered_spatial_cells": 641,
-      "distinct_sample_count": 5504,
-      "independent_lineage_count": 4,
-      "observation_count": 45390,
-      "reported_comparable_observation_count": 22678,
-      "reported_coordinate_sample_count": 5504,
-      "reported_covered_spatial_cells": 720,
+      "comparable_observation_count": 31458,
+      "covered_spatial_cells": 1238,
+      "distinct_sample_count": 14036,
+      "independent_lineage_count": 8,
+      "lineage_ids": [
+        "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-survey-210102",
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
+      "observation_count": 89825,
+      "reported_comparable_observation_count": 31458,
+      "reported_coordinate_sample_count": 14036,
+      "reported_covered_spatial_cells": 1317,
       "source_ids": [
+        "australia-ngsa-mercury",
+        "brazil-sgb-florianopolis-stream-sediment",
+        "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
-        "norway-marchem"
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 2481
+      "valid_coordinate_sample_count": 11013
     },
     "soil": {
-      "comparable_observation_count": 23212,
-      "covered_spatial_cells": 1419,
-      "distinct_sample_count": 18469,
-      "independent_lineage_count": 6,
-      "observation_count": 93508,
-      "reported_comparable_observation_count": 34468,
-      "reported_coordinate_sample_count": 18343,
-      "reported_covered_spatial_cells": 1472,
+      "comparable_observation_count": 83613,
+      "covered_spatial_cells": 1799,
+      "distinct_sample_count": 23946,
+      "independent_lineage_count": 7,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
+      "observation_count": 153973,
+      "reported_comparable_observation_count": 94869,
+      "reported_coordinate_sample_count": 23820,
+      "reported_covered_spatial_cells": 1852,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
+        "brazil-sgb-florianopolis-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 16467
+      "valid_coordinate_sample_count": 21944
     },
     "water": {
-      "comparable_observation_count": 48133,
-      "covered_spatial_cells": 2370,
-      "distinct_sample_count": 504797,
-      "independent_lineage_count": 3,
-      "observation_count": 537174,
-      "reported_comparable_observation_count": 48133,
-      "reported_coordinate_sample_count": 504797,
-      "reported_covered_spatial_cells": 2370,
+      "comparable_observation_count": 307063,
+      "covered_spatial_cells": 2442,
+      "distinct_sample_count": 709260,
+      "independent_lineage_count": 5,
+      "lineage_ids": [
+        "cdogs-survey-210102",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
+      ],
+      "observation_count": 3784199,
+      "reported_comparable_observation_count": 307063,
+      "reported_coordinate_sample_count": 709260,
+      "reported_covered_spatial_cells": 2442,
       "source_ids": [
+        "cdogs-210102-lake-water",
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 504797
+      "valid_coordinate_sample_count": 709260
     }
   },
-  "observation_count": 742060,
+  "observation_count": 4096615,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "registered_source_count": 14,
-  "reported_coordinate_sample_count": 549510,
-  "source_count": 14,
+  "registered_source_count": 26,
+  "reported_coordinate_sample_count": 768525,
+  "source_count": 26,
   "sources": [
     {
       "comparable_observation_count": 0,
@@ -671,6 +4415,61 @@
       "reported_coordinate_sample_count": 1876,
       "source_id": "afsis-phase-i-wet-chemistry",
       "valid_coordinate_sample_count": 0
+    },
+    {
+      "comparable_observation_count": 2396,
+      "covered_spatial_cells": 545,
+      "distinct_sample_count": 2396,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 2396,
+      "reported_coordinate_sample_count": 2396,
+      "source_id": "australia-ngsa-mercury",
+      "valid_coordinate_sample_count": 2396
+    },
+    {
+      "comparable_observation_count": 128,
+      "covered_spatial_cells": 1,
+      "distinct_sample_count": 32,
+      "medium": "soil",
+      "method_rate": 1.0,
+      "observation_count": 192,
+      "reported_coordinate_sample_count": 32,
+      "source_id": "brazil-sgb-florianopolis-soil",
+      "valid_coordinate_sample_count": 32
+    },
+    {
+      "comparable_observation_count": 2032,
+      "covered_spatial_cells": 2,
+      "distinct_sample_count": 521,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 3132,
+      "reported_coordinate_sample_count": 521,
+      "source_id": "brazil-sgb-florianopolis-stream-sediment",
+      "valid_coordinate_sample_count": 521
+    },
+    {
+      "comparable_observation_count": 4190,
+      "covered_spatial_cells": 2,
+      "distinct_sample_count": 684,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 4411,
+      "reported_coordinate_sample_count": 684,
+      "source_id": "cdogs-210102-lake-sediment",
+      "valid_coordinate_sample_count": 684
+    },
+    {
+      "comparable_observation_count": 547,
+      "covered_spatial_cells": 2,
+      "distinct_sample_count": 655,
+      "medium": "water",
+      "method_rate": 1.0,
+      "observation_count": 655,
+      "reported_coordinate_sample_count": 655,
+      "source_id": "cdogs-210102-lake-water",
+      "valid_coordinate_sample_count": 655
     },
     {
       "comparable_observation_count": 8976,
@@ -739,15 +4538,37 @@
       "valid_coordinate_sample_count": 862
     },
     {
-      "comparable_observation_count": 43285,
-      "covered_spatial_cells": 1071,
-      "distinct_sample_count": 485672,
+      "comparable_observation_count": 53703,
+      "covered_spatial_cells": 829,
+      "distinct_sample_count": 4131,
+      "medium": "soil",
+      "method_rate": 1.0,
+      "observation_count": 53703,
+      "reported_coordinate_sample_count": 4131,
+      "source_id": "gemas-europe",
+      "valid_coordinate_sample_count": 4131
+    },
+    {
+      "comparable_observation_count": 279225,
+      "covered_spatial_cells": 1153,
+      "distinct_sample_count": 689291,
       "medium": "water",
-      "method_rate": 0.087799,
-      "observation_count": 492999,
-      "reported_coordinate_sample_count": 485672,
+      "method_rate": 0.074675,
+      "observation_count": 3739180,
+      "reported_coordinate_sample_count": 689291,
       "source_id": "gemstat-open-archive",
-      "valid_coordinate_sample_count": 485672
+      "valid_coordinate_sample_count": 689291
+    },
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 18,
+      "distinct_sample_count": 313,
+      "medium": "rock",
+      "method_rate": 0.0,
+      "observation_count": 1183,
+      "reported_coordinate_sample_count": 312,
+      "source_id": "georoc-antarctica-intraplate",
+      "valid_coordinate_sample_count": 312
     },
     {
       "comparable_observation_count": 0,
@@ -761,11 +4582,11 @@
       "valid_coordinate_sample_count": 0
     },
     {
-      "comparable_observation_count": 0,
+      "comparable_observation_count": 22254,
       "covered_spatial_cells": 1166,
       "distinct_sample_count": 18317,
       "medium": "water",
-      "method_rate": 0.0,
+      "method_rate": 0.565871,
       "observation_count": 39327,
       "reported_coordinate_sample_count": 18317,
       "source_id": "geotraces-idp2025",
@@ -783,6 +4604,17 @@
       "valid_coordinate_sample_count": 0
     },
     {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 108,
+      "distinct_sample_count": 4905,
+      "medium": "sediment",
+      "method_rate": 0.0,
+      "observation_count": 34334,
+      "reported_coordinate_sample_count": 4905,
+      "source_id": "japan-gsj-marine-sediment",
+      "valid_coordinate_sample_count": 4905
+    },
+    {
       "comparable_observation_count": 3520,
       "covered_spatial_cells": 76,
       "distinct_sample_count": 880,
@@ -792,6 +4624,17 @@
       "reported_coordinate_sample_count": 880,
       "source_id": "norway-marchem",
       "valid_coordinate_sample_count": 880
+    },
+    {
+      "comparable_observation_count": 162,
+      "covered_spatial_cells": 10,
+      "distinct_sample_count": 26,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 162,
+      "reported_coordinate_sample_count": 26,
+      "source_id": "pangaea-arabian-sea-sediment",
+      "valid_coordinate_sample_count": 26
     },
     {
       "comparable_observation_count": 258,
@@ -805,6 +4648,28 @@
       "valid_coordinate_sample_count": 43
     },
     {
+      "comparable_observation_count": 6570,
+      "covered_spatial_cells": 42,
+      "distinct_sample_count": 1314,
+      "medium": "soil",
+      "method_rate": 1.0,
+      "observation_count": 6570,
+      "reported_coordinate_sample_count": 1314,
+      "source_id": "tpdc-china-mountain-soil",
+      "valid_coordinate_sample_count": 1314
+    },
+    {
+      "comparable_observation_count": 189,
+      "covered_spatial_cells": 1,
+      "distinct_sample_count": 189,
+      "medium": "water",
+      "method_rate": 1.0,
+      "observation_count": 189,
+      "reported_coordinate_sample_count": 189,
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "valid_coordinate_sample_count": 189
+    },
+    {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 884,
       "distinct_sample_count": 14380,
@@ -814,7 +4679,18 @@
       "reported_coordinate_sample_count": 14380,
       "source_id": "usgs-conus-soil",
       "valid_coordinate_sample_count": 14380
+    },
+    {
+      "comparable_observation_count": 1271,
+      "covered_spatial_cells": 7,
+      "distinct_sample_count": 231,
+      "medium": "rock",
+      "method_rate": 0.878369,
+      "observation_count": 1447,
+      "reported_coordinate_sample_count": 231,
+      "source_id": "usgs-utah-volcanic-whole-rock",
+      "valid_coordinate_sample_count": 231
     }
   ],
-  "valid_coordinate_sample_count": 523745
+  "valid_coordinate_sample_count": 742760
 }

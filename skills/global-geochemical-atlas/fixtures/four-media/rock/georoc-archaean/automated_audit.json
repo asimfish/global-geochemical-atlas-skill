@@ -1,0 +1,1738 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "georoc-archaean-review-06",
+        "georoc-archaean-review-11",
+        "georoc-archaean-review-19"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "georoc-archaean-review-01",
+        "georoc-archaean-review-02",
+        "georoc-archaean-review-03",
+        "georoc-archaean-review-04",
+        "georoc-archaean-review-05",
+        "georoc-archaean-review-06",
+        "georoc-archaean-review-07",
+        "georoc-archaean-review-08",
+        "georoc-archaean-review-09",
+        "georoc-archaean-review-10",
+        "georoc-archaean-review-11",
+        "georoc-archaean-review-12",
+        "georoc-archaean-review-13",
+        "georoc-archaean-review-14",
+        "georoc-archaean-review-15",
+        "georoc-archaean-review-16",
+        "georoc-archaean-review-17",
+        "georoc-archaean-review-18",
+        "georoc-archaean-review-19",
+        "georoc-archaean-review-20",
+        "georoc-archaean-review-21",
+        "georoc-archaean-review-22",
+        "georoc-archaean-review-23",
+        "georoc-archaean-review-24",
+        "georoc-archaean-review-25",
+        "georoc-archaean-review-26",
+        "georoc-archaean-review-27",
+        "georoc-archaean-review-28",
+        "georoc-archaean-review-29",
+        "georoc-archaean-review-30"
+      ]
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "georoc-archaean-review-01",
+        "georoc-archaean-review-02",
+        "georoc-archaean-review-03",
+        "georoc-archaean-review-04",
+        "georoc-archaean-review-05",
+        "georoc-archaean-review-06",
+        "georoc-archaean-review-07",
+        "georoc-archaean-review-08",
+        "georoc-archaean-review-09",
+        "georoc-archaean-review-10",
+        "georoc-archaean-review-11",
+        "georoc-archaean-review-12",
+        "georoc-archaean-review-13",
+        "georoc-archaean-review-14",
+        "georoc-archaean-review-15",
+        "georoc-archaean-review-16",
+        "georoc-archaean-review-17",
+        "georoc-archaean-review-18",
+        "georoc-archaean-review-19",
+        "georoc-archaean-review-20",
+        "georoc-archaean-review-21",
+        "georoc-archaean-review-22",
+        "georoc-archaean-review-23",
+        "georoc-archaean-review-24",
+        "georoc-archaean-review-25",
+        "georoc-archaean-review-26",
+        "georoc-archaean-review-27",
+        "georoc-archaean-review-28",
+        "georoc-archaean-review-29",
+        "georoc-archaean-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "12.0",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=2",
+          "src-fbda42ab497287085e4c2a9ce348c10c4c5f5e0b1dc6e45ce28b3d237bed4e06"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "70",
+          "record_id": "rec-5cc05e1b8ff7c70ff33e2747d971849f635d70a24d16d29efbfc6f9c19d3d090",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "70",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-01",
+      "sample_id": "s_85147 [6004]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "multiple_original_citations",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=2",
+      "source_record_id": "src-fbda42ab497287085e4c2a9ce348c10c4c5f5e0b1dc6e45ce28b3d237bed4e06"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_AMAZONIAN_CRATON.csv#row=2",
+          "src-891910d8b78b413d2aabfcefd347ba2ebc63c479210d499caa5a6b90bcc9c3c7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "1.4",
+          "record_id": "rec-17716f9a5eeac851196830b79fb4102025c1ffdea1de4b691fa6a31c59ecc68a",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "13",
+          "record_id": "rec-3c2442f4cfd0e2a9c037d677126d6cd9f5f78d60758a8b2f5ab52f65e6f626dd",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "1100",
+          "record_id": "rec-b6608d669d2f5349b6c9da3b37e25643bf33d446cae1d503ea8df586d5b39d12",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "72",
+          "record_id": "rec-bd44ff4c354e12da7f4b2370bf2c755827e4e3b2347414d65ba6973473722ad8",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.4",
+        "Cu": "13",
+        "Ni": "1100",
+        "Zn": "72"
+      },
+      "review_id": "georoc-archaean-review-02",
+      "sample_id": "s_SELVA01 [20057]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member"
+      ],
+      "source_locator": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv#row=2",
+      "source_record_id": "src-891910d8b78b413d2aabfcefd347ba2ebc63c479210d499caa5a6b90bcc9c3c7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_BALTIC_SHIELD_ARCHEAN.csv#row=4",
+          "src-22d39107b0becb68ab32d85b463456bf0410ebf9b90ebd9730c0ca2c808abf47"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "10",
+          "record_id": "rec-d3c6b45e6ac0ec7620477c270c862edda3d8da2e3837d7e12cf77142d71f505d",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "10",
+        "Ni": "",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-03",
+      "sample_id": "s_FZ-44L [17805]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_BALTIC_SHIELD_ARCHEAN.csv#row=4",
+      "source_record_id": "src-22d39107b0becb68ab32d85b463456bf0410ebf9b90ebd9730c0ca2c808abf47"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_BASTAR_CRATON.csv#row=5",
+          "src-639685c877770f5989abcef9b5f6e9e6fc6d30eb277bd843b76ae93e1922b51a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "230",
+          "record_id": "rec-46a8049bd2c6f898f0038586784eab6207d1527f1fe23b63414be2406511c778",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "230",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-04",
+      "sample_id": "s_97/161 [8676] / s_161 [14227]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "multiple_original_citations",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_BASTAR_CRATON.csv#row=5",
+      "source_record_id": "src-639685c877770f5989abcef9b5f6e9e6fc6d30eb277bd843b76ae93e1922b51a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_BUNDELKHAND_CRATON.csv#row=2",
+          "src-655ed68a0cfc481a2de50b0e155a9a710d1b1ab013aa2257797742e606b60041"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "59",
+          "record_id": "rec-f215f98e193f00a3754c329e6460a07beddbb299972e40024fe1a1d767c5bc90",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "536",
+          "record_id": "rec-9ce9b99af6b642801317ca1d2d0cff84531d83619d083ca9dc1d460c386988eb",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "75",
+          "record_id": "rec-e786867ce20f677bbff2040fefb3ae636b4b14d7d24b2f7429ccf2b2a3fde96d",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "59",
+        "Ni": "536",
+        "Zn": "75"
+      },
+      "review_id": "georoc-archaean-review-05",
+      "sample_id": "s_BGS-8 [22018]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_BUNDELKHAND_CRATON.csv#row=2",
+      "source_record_id": "src-655ed68a0cfc481a2de50b0e155a9a710d1b1ab013aa2257797742e606b60041"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_CHURCHILL_PROVINCE_ARCHEAN.csv#row=47",
+          "src-33810206dfbf0b3cff365802cb88eebda078e1e1e469fa3dc707f14acef1b65a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "36",
+          "record_id": "rec-8ee32f3e6c0e19134d1a238b52cacf2d65293cab5a2bd74de7480b6499e16614",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "0.5",
+          "record_id": "rec-b81f44f69f6e722227d1989d96bc81f54bd2b999ec92bfab771945f1f70fa0e7",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "2060",
+          "record_id": "rec-93094d98e337ddac8266681fe80eb25e8a3a1d72e7894e7a416f7cf5342c13ab",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "44",
+          "record_id": "rec-3e27e265e086cac9392412e45342327ac9998ef4348e361afd7cea397d20f5ed",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "36",
+        "Cu": "0.5",
+        "Ni": "2060",
+        "Zn": "44"
+      },
+      "review_id": "georoc-archaean-review-06",
+      "sample_id": "s_204989 [22155]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member"
+      ],
+      "source_locator": "2026-06-1KRR1P_CHURCHILL_PROVINCE_ARCHEAN.csv#row=47",
+      "source_record_id": "src-33810206dfbf0b3cff365802cb88eebda078e1e1e469fa3dc707f14acef1b65a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_CONGO_CRATON.csv#row=76",
+          "src-0f657fd0077a91ff1eb0983158a6bf2d9e453a95900ea6231526b908236968ec"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "27",
+          "record_id": "rec-a8477e202b5748af71311f35b847922407dba5c27d874e858d4e7a03293799e4",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "27",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-07",
+      "sample_id": "s_BKD-3 [23946]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_CONGO_CRATON.csv#row=76",
+      "source_record_id": "src-0f657fd0077a91ff1eb0983158a6bf2d9e453a95900ea6231526b908236968ec"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_DHARWAR_CRATON_ARCHEAN.csv#row=8",
+          "src-c00ea8fbda4ebbd36f3afae418d77e8f61355ba3818584b00f515d1bb87736a8"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "0",
+          "record_id": "rec-616d86435f3c83a9511cf38fda18e0c985b5ab98f16fda5414d48fc38b2f4c08",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "0",
+          "record_id": "rec-6fbfed89a67e61cd5007df38c5f96933af45a942f1c6c99ae8c976872be0950d",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "0",
+          "record_id": "rec-87b36e1c35a672f390c7cfac84332896cac26f3da107da839e2ec1aef62217cf",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "0",
+          "record_id": "rec-c7bc5c189c59122ee8d5f572e980976fde34e3a07516e1ffdbb0d8b96a2e9dd1",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0",
+        "Cu": "0",
+        "Ni": "0",
+        "Zn": "0"
+      },
+      "review_id": "georoc-archaean-review-08",
+      "sample_id": "s_1911-10 [20582]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member"
+      ],
+      "source_locator": "2026-06-1KRR1P_DHARWAR_CRATON_ARCHEAN.csv#row=8",
+      "source_record_id": "src-c00ea8fbda4ebbd36f3afae418d77e8f61355ba3818584b00f515d1bb87736a8"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_EAST_EUROPEAN_CRATON.csv#row=2",
+          "src-649de656cb91a6d3345e719c6b43cdc685c7eee0c1cd2acef82aa5a6e6b0d24a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "294",
+          "record_id": "rec-890493caeb16992ee26d6b59e8b0737f4ccc0c25b0f96f1607c7926684cb7c45",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "294",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-09",
+      "sample_id": "s_20 [5470]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_EAST_EUROPEAN_CRATON.csv#row=2",
+      "source_record_id": "src-649de656cb91a6d3345e719c6b43cdc685c7eee0c1cd2acef82aa5a6e6b0d24a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_GAWLER_CRATON.csv#row=10",
+          "src-33b122f805c8e896aa7c9d49b02e8cacc3d20b5d37cef3dc0aebd97cbfe9dc2a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "2.2",
+          "record_id": "rec-3deffa4232d06b30d3f9b1acfcea41d6d166ea0479e25d00d0fe1593ee0c30f8",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "4",
+          "record_id": "rec-e8a0b800c9756d484ea6c3071b273928779993d8c13a313bfe1c36decc439558",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "0",
+          "record_id": "rec-43d2552f44e053093cb4bec237df1a46cfd29721d576c3867336a7cb610b5354",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "31",
+          "record_id": "rec-bd42fb6777b3fe58374bb608516d34fdcd1e3e1d39f08ac528fdb4dab3e19117",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.2",
+        "Cu": "4",
+        "Ni": "0",
+        "Zn": "31"
+      },
+      "review_id": "georoc-archaean-review-10",
+      "sample_id": "s_MB158 [22777]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "longitude_max_boundary"
+      ],
+      "source_locator": "2026-06-1KRR1P_GAWLER_CRATON.csv#row=10",
+      "source_record_id": "src-33b122f805c8e896aa7c9d49b02e8cacc3d20b5d37cef3dc0aebd97cbfe9dc2a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_KAAPVAAL_CRATON_ARCHEAN.csv#row=2",
+          "src-276f9a8b42480ce3968e21dc746952346a6b0c9e3e4271afa11e264d096df209"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "1415",
+          "record_id": "rec-b3cac210816d68515a1ed7ae264fdaad1a988fb47aa394d8d6eca5703f0c7735",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "1415",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-11",
+      "sample_id": "s_SCH1.1 [20457]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_KAAPVAAL_CRATON_ARCHEAN.csv#row=2",
+      "source_record_id": "src-276f9a8b42480ce3968e21dc746952346a6b0c9e3e4271afa11e264d096df209"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_LIMPOPO_BELT.csv#row=2",
+          "src-0abb00ee3cb3c623fc10a53a2843488e5034f1439de88c374d5aec51a8649194"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "0.7",
+          "record_id": "rec-3b0d038a1157a744e3520cd6c2ac8d3583777f2b29b9bb79583cb293461a7f22",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "0",
+          "record_id": "rec-bff41b92780263d9556d4ceb2aff13e16fa811a545c9e72d0f82b3a2f09720df",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "32",
+          "record_id": "rec-5948909d9d45f14bd9449ae47ff5972cc471ec48dc28b1d8107e7aa1bc884c9b",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "0.7",
+        "Ni": "0",
+        "Zn": "32"
+      },
+      "review_id": "georoc-archaean-review-12",
+      "sample_id": "s_RB8 [21633]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_LIMPOPO_BELT.csv#row=2",
+      "source_record_id": "src-0abb00ee3cb3c623fc10a53a2843488e5034f1439de88c374d5aec51a8649194"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_NORTH_ATLANTIC_CRATON_ARCHEAN.csv#row=4",
+          "src-bfa4c2d9e3c055d9d15116bbce37c1da1df2513bc208644572c457ce8c1c746f"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "729",
+          "record_id": "rec-d2d80c3966aeb6ecbcb2e55d9d858bd4bee2e29a0d750ccc034e75979781a78a",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "729",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-13",
+      "sample_id": "s_GR9703 [20190]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_NORTH_ATLANTIC_CRATON_ARCHEAN.csv#row=4",
+      "source_record_id": "src-bfa4c2d9e3c055d9d15116bbce37c1da1df2513bc208644572c457ce8c1c746f"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_NORTH_CHINA_CRATON.csv#row=2",
+          "src-45728f8156667d245c3a478df5ef60ff9a50594fb5f8c4e6bdf634280a1fb1c5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "142",
+          "record_id": "rec-bb2e55e5ec032bbc9a781e9e8801bd805b19e3187bf543575eb2e5271570be52",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "142",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-14",
+      "sample_id": "s_11JD02-2 [17466]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_NORTH_CHINA_CRATON.csv#row=2",
+      "source_record_id": "src-45728f8156667d245c3a478df5ef60ff9a50594fb5f8c4e6bdf634280a1fb1c5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_RAE_CRATON.csv#row=2",
+          "src-a51a05ed6b5e465c56d8e4824de88fa5ea3af1ab290b9d074e18feca2542d7c1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "91.2",
+          "record_id": "rec-bc42a0e486309e1aa65ad952406ef258dd6eb5ebbcc11501844900256703a850",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "85.6999999999999",
+          "record_id": "rec-5a7402dd93c19a19d79c398da5736432fe5bbc3dfb6b4ed164e2656598fc3c50",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "155.7",
+          "record_id": "rec-ea1a29561d3993841198e35d075b7f82b0367f84c3c1b8ea4249de76091f3781",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "91.2",
+        "Ni": "85.6999999999999",
+        "Zn": "155.7"
+      },
+      "review_id": "georoc-archaean-review-15",
+      "sample_id": "s_177375 [13654]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_RAE_CRATON.csv#row=2",
+      "source_record_id": "src-a51a05ed6b5e465c56d8e4824de88fa5ea3af1ab290b9d074e18feca2542d7c1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_SAO_FRANCISCO_CRATON_ARCHEAN.csv#row=2",
+          "src-10e08b94166309d5e1dd611a395cb99caad5cdcd9f3d887eaca4a31a350ceda4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "1.422",
+          "record_id": "rec-863d56d7b6711bcc43dfe58b48957ac8a798feec6d8275b26dc6496458ff7922",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "0.8255",
+          "record_id": "rec-6d43aaa7572635c857c85d99d8d4e072184f1fbb0739cc47dc1c078b478fe918",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "56.007",
+          "record_id": "rec-41f780c4ae5409b24520e8adf1d7192a2defcd5d04ca7960b24438d4a6bd977e",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "1.422",
+        "Ni": "0.8255",
+        "Zn": "56.007"
+      },
+      "review_id": "georoc-archaean-review-16",
+      "sample_id": "s_TZD1231D [20769]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_SAO_FRANCISCO_CRATON_ARCHEAN.csv#row=2",
+      "source_record_id": "src-10e08b94166309d5e1dd611a395cb99caad5cdcd9f3d887eaca4a31a350ceda4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_SARMATIAN_CRATON.csv#row=2",
+          "src-0a3e65315b4d47616ebdff48ba45aab6e50a470e0058e28d5e559a5ba29a7c99"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "116",
+          "record_id": "rec-0edea32d4a171170159f0828efc564f388904c582229a5e4a722d0ad76736e27",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "116",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-17",
+      "sample_id": "s_18 [5470]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_SARMATIAN_CRATON.csv#row=2",
+      "source_record_id": "src-0a3e65315b4d47616ebdff48ba45aab6e50a470e0058e28d5e559a5ba29a7c99"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_SIBERIAN_CRATON_ARCHEAN.csv#row=41",
+          "src-2eb61ca5bf74c995161364db7b9c4f5e80ba7d4d2a1e7d8f434b83124269d1bf"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "30",
+          "record_id": "rec-64933b1376a5964b510863b316fc1dff887d34b876bcd46735ff78e1e2dca776",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "30",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-18",
+      "sample_id": "s_18-95 [23874]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_SIBERIAN_CRATON_ARCHEAN.csv#row=41",
+      "source_record_id": "src-2eb61ca5bf74c995161364db7b9c4f5e80ba7d4d2a1e7d8f434b83124269d1bf"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_SINGHBHUM_CRATON_ARCHEAN.csv#row=2",
+          "src-7d7251abb2ae387413b8232323ca17dc995d9227c004e8a8947ef5e7b1e127ae"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "1714.2",
+          "record_id": "rec-36c492b8653818f3ab0f106e60f1615fe45bae948bd813521e9b1b83d4713cf3",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "68.329",
+          "record_id": "rec-e895ed610311953e1e5f80f986aebb9ecbfe0b30173ea21ad19ea824c4155377",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "1714.2",
+        "Zn": "68.329"
+      },
+      "review_id": "georoc-archaean-review-19",
+      "sample_id": "s_S1C1 [21131]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_SINGHBHUM_CRATON_ARCHEAN.csv#row=2",
+      "source_record_id": "src-7d7251abb2ae387413b8232323ca17dc995d9227c004e8a8947ef5e7b1e127ae"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_SLAVE_PROVINCE_ARCHEAN.csv#row=2",
+          "src-aacffb0552a8ede9e552365b51c790b7806f655e5967cb730ce15cd29b9688e7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "85",
+          "record_id": "rec-e3ff0ddf6540451c7bc1e513e9cab9409b9b845d1161e3745a3dcb674019e1ba",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "2",
+          "record_id": "rec-c9e7df5b93e6875b3ff80968052424affa909ad50c4889476b390f40737cecc5",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "85",
+          "record_id": "rec-06662a26af2fbae04da86edcd5a24e44757bc047179097aaa5c13c2fb92c6260",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "85",
+        "Ni": "2",
+        "Zn": "85"
+      },
+      "review_id": "georoc-archaean-review-20",
+      "sample_id": "s_TC3-A [21822]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_SLAVE_PROVINCE_ARCHEAN.csv#row=2",
+      "source_record_id": "src-aacffb0552a8ede9e552365b51c790b7806f655e5967cb730ce15cd29b9688e7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv#row=3",
+          "src-4aedf619c61801266f03726a3ebfbf971ebea242163c19aec7ace5819b881c76"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "51.2",
+          "record_id": "rec-026eaa277719fbd730684e0dd822a19e018fe2499a7b51f0e63f28d8a0d7620a",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "855",
+          "record_id": "rec-ccc3d8af78c343427c58f9ea75a2cdc750111a5339776606fea563831c91297c",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "104",
+          "record_id": "rec-633ce7b5e0d51b3f70f53b0d470705f58b2add673bfdfecf78d4016f1407ed1e",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "51.2",
+        "Ni": "855",
+        "Zn": "104"
+      },
+      "review_id": "georoc-archaean-review-21",
+      "sample_id": "s_422/94 [20130]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv#row=3",
+      "source_record_id": "src-4aedf619c61801266f03726a3ebfbf971ebea242163c19aec7ace5819b881c76"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_TANZANIA_CRATON_ARCHEAN.csv#row=2",
+          "src-2f8101b6cfde67959fe60ad790f9a333eec09ac3752a1bb5a522337beec42cad"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "340",
+          "record_id": "rec-dd9ceb374a280db74c14bc81b237f9d220a492b00196ac63775dcac094f9a669",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "60",
+          "record_id": "rec-55f8616eeaa669fecee1e40e4c283ca14d8122da601f8ec21f13e9e3b9eaf24c",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "340",
+        "Zn": "60"
+      },
+      "review_id": "georoc-archaean-review-22",
+      "sample_id": "s_BZ 37 [20615]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_TANZANIA_CRATON_ARCHEAN.csv#row=2",
+      "source_record_id": "src-2f8101b6cfde67959fe60ad790f9a333eec09ac3752a1bb5a522337beec42cad"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv#row=2",
+          "src-0a422f35fced67991cb165f2cdb77ab19c7055c18ab6924d534858e46633222a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "189",
+          "record_id": "rec-58983207b0803268914d07b38394f5f7fa044aebbdf4417526081cd1831c5ca9",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "189",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-23",
+      "sample_id": "s_MA 7 [21885]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv#row=2",
+      "source_record_id": "src-0a422f35fced67991cb165f2cdb77ab19c7055c18ab6924d534858e46633222a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_WEST_AUSTRALIAN_CRATON.csv#row=2",
+          "src-0a68520c0cae29bdc8148e02d07dd7632ce9de83d179d5fb91f3de9644dd1362"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "30",
+          "record_id": "rec-9f9eca8437eb812c0ce65a8a1471ecef587019155613c4b6d1a8ae8fb4c0add4",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "840",
+          "record_id": "rec-677705a63c5f96e085b3aaf89a053ba108507753ff87cc7105e0b50c5fe1f7cf",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "70",
+          "record_id": "rec-ac5460fb91a7469683bb60f1208fe424061860aceeef4a4582f6fce82a972fcc",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "30",
+        "Ni": "840",
+        "Zn": "70"
+      },
+      "review_id": "georoc-archaean-review-24",
+      "sample_id": "s_KM-8 [16962]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_WEST_AUSTRALIAN_CRATON.csv#row=2",
+      "source_record_id": "src-0a68520c0cae29bdc8148e02d07dd7632ce9de83d179d5fb91f3de9644dd1362"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_WYOMING_PROVINCE.csv#row=4",
+          "src-581681bbcb3cf98363953f78cc365031b5969427708dbbde346684a1fbb5bc75"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "0",
+          "record_id": "rec-d85b31b78b0dacea4a9147d14c1b02292b2d050f96c0959dec025e4808adf7cf",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "raw_value": "53",
+          "record_id": "rec-460f5d3a0509c6f47b51e5e59d38fab0c887363e49bde01e4713021a635678a5",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "1170",
+          "record_id": "rec-d390903ea7ce8af181767af0e147a1bc5c687a1e143d0e973441f129070bd51e",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "88",
+          "record_id": "rec-5cf0665ded63cb2f0bf06432fa0a749d8e21bebebeb2321070b520b0b9f5adfa",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0",
+        "Cu": "53",
+        "Ni": "1170",
+        "Zn": "88"
+      },
+      "review_id": "georoc-archaean-review-25",
+      "sample_id": "s_MV88-1 [22620]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member"
+      ],
+      "source_locator": "2026-06-1KRR1P_WYOMING_PROVINCE.csv#row=4",
+      "source_record_id": "src-581681bbcb3cf98363953f78cc365031b5969427708dbbde346684a1fbb5bc75"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_YANGTZE_BLOCK.csv#row=2",
+          "src-ba60115e7cd95b773d9deba291e4b347e71121936e71f04e006e36bb0346e29a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "6.3",
+          "record_id": "rec-a7e1f638dd1175707566a4a644558d99394d1ab11d460c646fff9993d13d1880",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "raw_value": "2.28",
+          "record_id": "rec-7863ad3da38f15d09b970ff057253eec390227d9e9f859cbe0bad3b68c30a4a2",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "raw_value": "64.7",
+          "record_id": "rec-163e6c3b47b2cac2c55c17bf69cf17196866af3f4f55f3600cbfdbc3543ccc79",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "6.3",
+        "Ni": "2.28",
+        "Zn": "64.7"
+      },
+      "review_id": "georoc-archaean-review-26",
+      "sample_id": "s_ZX-8-1 [22200]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_YANGTZE_BLOCK.csv#row=2",
+      "source_record_id": "src-ba60115e7cd95b773d9deba291e4b347e71121936e71f04e006e36bb0346e29a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_ZIMBABWE_CRATON_ARCHEAN.csv#row=4",
+          "src-c231d74a79ac0758ccf73aebec9a15a167797a71347ffb5f28f1d660eb41dcc5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "17.25",
+          "record_id": "rec-bc5ca7f72bea6f6a58dfda1873963e5b1047b111f5da7556b05344c35e7b3324",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "17.25",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-27",
+      "sample_id": "s_B-H 1 [20180]",
+      "selection_reasons": [
+        "first_eligible_for_archive_member",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_ZIMBABWE_CRATON_ARCHEAN.csv#row=4",
+      "source_record_id": "src-c231d74a79ac0758ccf73aebec9a15a167797a71347ffb5f28f1d660eb41dcc5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=3",
+          "src-e257f28366bc8e972615d0d3ee0e710eace38e4cf2a18d926c36b806a039250b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "25",
+          "record_id": "rec-7227c1d2f6b3cc3f4b3d0798142b9aa99e56cd99367c58d3917b7104354fd2c9",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "25",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-28",
+      "sample_id": "s_86221/9 [6004]",
+      "selection_reasons": [
+        "multiple_original_citations",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=3",
+      "source_record_id": "src-e257f28366bc8e972615d0d3ee0e710eace38e4cf2a18d926c36b806a039250b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=4",
+          "src-03c495f7a5c1a539309653b28c87aa4bc428c558ab37baf1e04905cc3db8b730"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "16",
+          "record_id": "rec-61b28a43b30ac28b862b15ab8f0eb0c50fc5c14b91f83b8a8c162469cce2b5d4",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "16",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-29",
+      "sample_id": "s_86231/1 [6004]",
+      "selection_reasons": [
+        "multiple_original_citations",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=4",
+      "source_record_id": "src-03c495f7a5c1a539309653b28c87aa4bc428c558ab37baf1e04905cc3db8b730"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=5",
+          "src-5d6e9489ebf6d85f4a51b0916a61a01a9560320248515dc891e7cbed16a49635"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "789",
+          "record_id": "rec-89bc40f1faa239ad70b5c4e1bb8ac8c53721bab2ac94c0ae2ea923cc7ebcaf96",
+          "unit": "ppm"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "",
+        "Cu": "",
+        "Ni": "789",
+        "Zn": ""
+      },
+      "review_id": "georoc-archaean-review-30",
+      "sample_id": "s_8550 [7221]",
+      "selection_reasons": [
+        "multiple_original_citations",
+        "target_missing_edge_case"
+      ],
+      "source_locator": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=5",
+      "source_record_id": "src-5d6e9489ebf6d85f4a51b0916a61a01a9560320248515dc891e7cbed16a49635"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "georoc-archaean",
+  "status": "automated_audit_complete"
+}

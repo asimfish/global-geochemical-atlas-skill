@@ -127,7 +127,7 @@ def summary_outputs() -> dict[str, str]:
     }
 
 
-def artifact_transaction(output_dir: Path, input_sha256: str) -> dict[str, Any]:
+def artifact_transaction(output_dir: Path) -> dict[str, Any]:
     """Build the final commit marker after every non-summary artifact exists."""
 
     artifacts: dict[str, dict[str, Any]] = {}
@@ -138,14 +138,13 @@ def artifact_transaction(output_dir: Path, input_sha256: str) -> dict[str, Any]:
         artifacts[logical_name] = {
             "filename": filename,
             "bytes": path.stat().st_size,
-            "sha256": evidence_builder.sha256_file(path),
         }
     return {
         "transaction_version": TRANSACTION_VERSION,
         "state": "committed",
         "commit_marker": "run_summary.json",
-        "input_sha256": input_sha256,
         "artifacts": artifacts,
+        "identity_policy": "filename-and-byte-count; no content hashes",
         "mutation_rule": (
             "Any change to D1, D2, confidence, evidence, backlog, anomaly or D3 artifacts "
             "requires regenerating every dependent artifact and writing a new commit marker."
@@ -173,7 +172,7 @@ def failure_summary(status: str, message: str, input_path: Path, args: argparse.
         },
         "input": {
             "filename": input_path.name,
-            "sha256": evidence_builder.sha256_file(input_path) if input_path.is_file() else "0" * 64,
+            "bytes": input_path.stat().st_size if input_path.is_file() else 0,
             "record_count": 0,
             "synthetic_demo": False,
             "data_mode": "not_evaluated",
@@ -223,7 +222,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             region_bbox=args.region_bbox,
             analysis_profile=args.analysis_profile,
             geology_grid_path=args.geology_grid,
-            geology_grid_sha256=args.geology_grid_sha256,
             batch_qc_input_path=args.batch_qc_input,
             batch_qc_policy_path=args.batch_qc_policy,
             spatial_grid_degrees=args.spatial_grid_degrees,
@@ -237,7 +235,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise WorkflowError("incomplete_retrieval", str(exc)) from exc
 
     rows = evidence_builder.canonical_rows(outputs["database"])
-    input_hash = evidence_builder.sha256_file(args.input)
     source_manifest_path = args.output_dir / "source_manifest.json"
     try:
         source_manifest, synthetic_present = evidence_builder.package_evidence(
@@ -352,7 +349,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "input": {
             "filename": args.input.name,
-            "sha256": input_hash,
+            "bytes": args.input.stat().st_size,
             "record_count": len(rows),
             "synthetic_demo": synthetic_present,
             "data_mode": source_manifest.get("data_mode", "input"),
@@ -370,7 +367,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "Add source-specific field mappings rather than guessing legacy qualifier semantics.",
         ],
         "map_report": map_report,
-        "artifact_transaction": artifact_transaction(args.output_dir, input_hash),
+        "artifact_transaction": artifact_transaction(args.output_dir),
     }
     if partial_reasons:
         summary["limitations"].append(
@@ -397,12 +394,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--evidence-jsonl",
         type=Path,
-        help="Optional D1 record evidence sidecar; copied and hash-bound as record_evidence.jsonl",
+        help="Optional D1 record evidence sidecar; copied and linked by record ID and byte count",
     )
     parser.add_argument(
         "--acquisition-manifest",
         type=Path,
-        help="Optional D1 run manifest that binds the input CSV and --evidence-jsonl hashes",
+        help="Optional D1 run manifest that binds the input CSV and --evidence-jsonl metadata",
     )
     parser.add_argument(
         "--batch-qc-input",
@@ -417,10 +414,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--geology-grid", type=Path,
         help="Optional official PANGAEA.788537 GLiM 0.5 degree ZIP for D2 screening spatial matching",
-    )
-    parser.add_argument(
-        "--geology-grid-sha256",
-        help="Required SHA-256 pin when --geology-grid is supplied",
     )
     parser.add_argument(
         "--analysis-profile", choices=("demo", "production"), default="demo",

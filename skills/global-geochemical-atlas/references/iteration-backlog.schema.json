@@ -8,7 +8,7 @@
     "issue_code", "field", "observed_value", "detail", "recommended_action", "auto_recheck"
   ],
   "properties": {
-    "item_id": {"type": "string", "pattern": "^ITER-[0-9a-f]{16}$"},
+    "item_id": {"type": "string", "pattern": "^ITER\\|[^\\r\\n]+$", "maxLength": 4096},
     "record_id": {"type": "string", "minLength": 1},
     "source_id": {"type": "string", "minLength": 1},
     "stage_owner": {"enum": ["D1", "D2"]},

@@ -1,8 +1,128 @@
 {
-  "batch_count": 0,
-  "failed_or_incomplete_batch_count": 0,
-  "passed_batch_count": 0,
+  "batch_count": 2,
+  "batch_results": [
+    {
+      "batch_id": "LAB-A",
+      "batch_pass": true,
+      "blank_checks": [
+        {
+          "pass": true,
+          "qc_id": "BLK-A",
+          "value": 2.0
+        }
+      ],
+      "crm_checks": [
+        {
+          "certified_value": 100.0,
+          "observed_value": 105.0,
+          "pass": true,
+          "qc_id": "CRM-A",
+          "recovery_percent": 105.0
+        }
+      ],
+      "disposition": "accept_for_scientific_analysis",
+      "duplicate_checks": [
+        {
+          "pair_id": "PAIR-A",
+          "pass": true,
+          "qc_ids": [
+            "DUP-A1",
+            "DUP-A2"
+          ],
+          "rpd_percent": 9.523809523809524,
+          "values": [
+            50.0,
+            55.0
+          ]
+        }
+      ],
+      "incomplete_reasons": [],
+      "malformed_duplicate_pair_ids": [],
+      "status": "pass"
+    },
+    {
+      "batch_id": "LAB-B",
+      "batch_pass": false,
+      "blank_checks": [
+        {
+          "pass": false,
+          "qc_id": "BLK-B",
+          "value": 8.0
+        }
+      ],
+      "crm_checks": [
+        {
+          "certified_value": 100.0,
+          "observed_value": 135.0,
+          "pass": false,
+          "qc_id": "CRM-B",
+          "recovery_percent": 135.0
+        }
+      ],
+      "disposition": "exclude_batch_and_investigate",
+      "duplicate_checks": [
+        {
+          "pair_id": "PAIR-B",
+          "pass": false,
+          "qc_ids": [
+            "DUP-B1",
+            "DUP-B2"
+          ],
+          "rpd_percent": 40.0,
+          "values": [
+            40.0,
+            60.0
+          ]
+        }
+      ],
+      "incomplete_reasons": [],
+      "malformed_duplicate_pair_ids": [],
+      "status": "fail"
+    }
+  ],
+  "batch_rule": "all CRM, blank and duplicate checks must pass",
+  "failed_or_incomplete_batch_count": 1,
+  "formulae": {
+    "blank_summary": "maximum blank value",
+    "crm_recovery_percent": "observed / certified * 100",
+    "crm_summary": "worst absolute deviation from 100 percent",
+    "duplicate_rpd_percent": "abs(x1-x2) / ((x1+x2)/2) * 100",
+    "duplicate_summary": "maximum complete-pair RPD"
+  },
+  "input_identity": {
+    "bytes": 336,
+    "columns": [
+      "batch_id",
+      "qc_type",
+      "qc_id",
+      "value",
+      "certified_value",
+      "pair_id",
+      "unit"
+    ],
+    "filename": "batch_qc.csv",
+    "row_count": 8
+  },
+  "passed_batch_count": 1,
+  "policy": {
+    "batch_rule": "all_checks_must_pass",
+    "blank_maximum": 5.0,
+    "crm_recovery_percent": {
+      "inclusive": true,
+      "maximum": 120.0,
+      "minimum": 80.0
+    },
+    "duplicate_rpd_maximum_percent": 20.0,
+    "schema_version": "synthetic-batch-qc-policy-v1",
+    "unit": "mg/kg"
+  },
+  "policy_identity": {
+    "bytes": 269,
+    "filename": "qc_policy.json",
+    "rule_count": 4,
+    "schema_version": "synthetic-batch-qc-policy-v1"
+  },
   "schema_version": "geochemical-batch-qc-report-v1",
-  "scientific_boundary": "No batch policy was supplied; batch acceptance was not used as an anomaly-background gate.",
-  "status": "not_supplied"
+  "scientific_boundary": "Batch acceptance gates analytical comparability only; it does not prove measurement truth or establish an anomaly cause. Failed and incomplete batches remain traceable.",
+  "status": "evaluated"
 }

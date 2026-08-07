@@ -10,23 +10,17 @@
     "input_contract": {"type": "string"},
     "inputs": {
       "type": "object",
-      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      "additionalProperties": {"$ref": "#/$defs/fileIdentity"}
     },
     "profile_input": {
-      "type": "object",
-      "required": ["filename", "sha256"],
-      "properties": {
-        "filename": {"type": "string"},
-        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
-      },
-      "additionalProperties": false
+      "$ref": "#/$defs/fileIdentity"
     },
     "profile": {"$ref": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v2"},
     "profile_warnings": {"type": "array", "items": {"type": "string"}},
     "outputs": {"type": "object", "additionalProperties": {"type": "string"}},
-    "output_sha256": {
+    "output_artifacts": {
       "type": "object",
-      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      "additionalProperties": {"$ref": "#/$defs/fileIdentity"}
     },
     "map_report": {
       "type": "object",
@@ -112,7 +106,7 @@
           "profile_input",
           "profile",
           "profile_warnings",
-          "output_sha256",
+          "output_artifacts",
           "map_report",
           "iteration_backlog"
         ]
@@ -120,6 +114,21 @@
     }
   ],
   "$defs": {
+    "fileIdentity": {
+      "type": "object",
+      "required": ["filename", "bytes"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "columns": {"type": "array", "items": {"type": "string"}},
+        "row_count": {"type": "integer", "minimum": 0},
+        "top_level_keys": {"type": "array", "items": {"type": "string"}},
+        "schema_version": {"type": "string"},
+        "interface_version": {"type": "string"},
+        "map_version": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
     "visualQuestion": {
       "type": "object",
       "required": ["question", "comparison_baseline", "encoding", "boundary"],

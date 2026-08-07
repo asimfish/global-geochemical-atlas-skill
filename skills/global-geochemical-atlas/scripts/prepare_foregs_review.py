@@ -124,7 +124,7 @@ def build(source_id: str, cache_dir: Path, prepared_at: str) -> dict[str, Any]:
                 "sample_id": str(fields.get(sample_field) or "") if sample_field else "",
                 "latitude": str(fields.get(latitude_field) or "") if latitude_field else "",
                 "longitude": str(fields.get(longitude_field) or "") if longitude_field else "",
-                "source_file_sha256": file_evidence.sha256,
+                "source_file_bytes": file_evidence.bytes,
                 "published_target_raw_values": {
                     str(item["analyte"]): str(item["raw_value"]) for item in adapter_observations
                 },

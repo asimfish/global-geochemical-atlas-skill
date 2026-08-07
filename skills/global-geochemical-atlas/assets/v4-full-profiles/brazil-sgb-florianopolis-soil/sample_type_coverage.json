@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+  "media": {
+    "soil": 192
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "soil_unspecified_horizon": 192
+  },
+  "sediment_environments": {
+    "not_applicable": 192
+  },
+  "source_id": "brazil-sgb-florianopolis-soil",
+  "water_body_types": {
+    "not_applicable": 192
+  },
+  "water_fractions": {
+    "not_applicable": 192
+  }
+}

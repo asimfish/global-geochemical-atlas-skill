@@ -37,11 +37,10 @@
     "archive": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["filename", "bytes", "sha256", "members", "dynamic_export_filenames"],
+      "required": ["filename", "bytes", "members", "dynamic_export_filenames"],
       "properties": {
         "filename": {"type": "string", "minLength": 1},
         "bytes": {"type": "integer", "minimum": 1},
-        "sha256": {"$ref": "#/$defs/sha256"},
         "members": {
           "type": "array",
           "minItems": 3,
@@ -143,15 +142,13 @@
     "claim_boundary": {"type": "string", "minLength": 1}
   },
   "$defs": {
-    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "member": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "bytes", "sha256"],
+      "required": ["name", "bytes"],
       "properties": {
         "name": {"type": "string", "minLength": 1},
-        "bytes": {"type": "integer", "minimum": 1},
-        "sha256": {"$ref": "#/$defs/sha256"}
+        "bytes": {"type": "integer", "minimum": 1}
       }
     },
     "uniqueStrings": {

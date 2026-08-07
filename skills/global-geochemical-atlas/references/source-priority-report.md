@@ -1,20 +1,20 @@
 # D1 候选来源接入顺序
 
-核对日期：2026-08-06。排序只安排接入和复核先后，不删减全介质、全信源普查范围。
+核对日期：2026-08-07。排序只安排接入和复核先后，不删减全介质、全信源普查范围。21 个可执行来源的 30 条结构化 Codex 审计和全量 profile 均已完成。
 
 | 顺序 | 来源 | 主要覆盖收益 | 接入成本 | 当前主要风险 | 下一道动作 |
 |---:|---|---|---|---|---|
-| 已接入 | `geotraces-idp2025` | 已补全球海洋航次 Cu/Ni/Zn normalized-analysis 样板；固定版本、DOI、QC、动态快照和全量关系已核实 | 已完成工程接入 | 航次覆盖不连续；无 As；30 条人工复核和贡献者/方法完整率尚未签署 | 与 GEMStat 淡水 As 保持背景隔离；继续补独立海水来源和人工签署 |
-| 已接入 | `gemstat-open-archive` | 已补淡水 As normalized-analysis 路由；v3 DOI、CC BY 4.0、五个精确 ZIP range、492,999 条观测和站点/方法连接已核实 | 已完成工程接入 | 33 国不均匀覆盖；大量方法代码 0；删失、重复和 Pending review 值需分层处理；人工复核未签署 | 扩大方法明确的可比子集，补独立淡水来源并完成具名复核 |
-| 已接入 | `norway-marchem` | 已补海洋沉积物 normalized-analysis 样板；公开 API、许可、目标元素、方法、动态快照和全量关系均已核实 | 已完成工程接入 | 只覆盖挪威海域；30 条人工复核尚未签署 | 完成 30 条逐条复核后升为 `benchmark_ready`；另补独立沉积物来源 |
-| 已接入 | `pangaea-north-africa-soil` | 具体 DOI 的北非可风蚀细粒土壤，补非洲区域和完整行级方法/引用血缘 | 已完成工程接入 | 只有 43 个离散样点；与 bulk-soil 调查不可直接混用；人工复核未签署 | 完成具名复核；继续用逐 DOI 方式补论文长尾而不把 PANGAEA 仓库当独立来源 |
-| 已接入 | `japan-gsj-geochemical-map` | 3,024 行全国河流沉积物，补亚洲和独立沉积物区域 | 已完成工程接入 | CSV 缺逐行方法、检出限和 QC；海洋/土壤产品尚未接入；人工复核未签署 | 完成具名复核；固定详细方法资料，再把海洋沉积物和表层土壤作为独立产品接入 |
-| 已接入 | FOREGS 六个介质来源 | 16,364 个 CSV 行、48,504 条七目标元素映射，补欧洲 topsoil/subsoil/humus/stream water/stream sediment/floodplain sediment | 已完成工程接入 | 低密度；父项目共享血缘；行级 `<DL` 限定符不可恢复；官方旧站为 hash 固定 HTTP | 完成六份具名复核；继续补与 FOREGS 独立的国家/区域来源 |
-| 已接入 | `afsis-phase-i-wet-chemistry` | 2,002 个非洲多国 topsoil/subsoil 样品、18 个国家标签、51 个站点和六目标元素，补非洲土壤与方法/阈值证据 | 已完成工程接入 | 非均匀 LDSF 站点；126 个缺坐标样品；负数及大量低于 DL/QL 的发布数值；人工复核未签署 | 完成具名复核和 V4 全量 profile；继续补非洲水体、岩石及独立土壤来源 |
-| 已冻结 | `tpdc-china-mountain-soil` | 1,314 个中国山地 O/A/C 层样品，Cr/Cu/Ni/Pb/Zn 共 6,570 条；母岩、土类、气候和坐标字段完整 | 文件契约和字段审计已完成，适配器待 V4 schema | 非全国均匀覆盖；无 As/Hg；CRS 未声明；bulk-density 补表存在值和坐标冲突 | 先完成 V4 sample/method/geology schema，再实现 adapter、冲突保留和 30 条复核 |
-| 1 | `canada-bc-rgs` / `argentina-segemar-geochemistry` / `alaska-dggs-webgeochem` | 同时补北美省/州级与南美覆盖；均已有数值下载或公开目录，且保留方法/出版物线索 | 中高 | 多原始调查、历史方法、重复发布和逐文件许可 | BC 固定 2020 版文件；Argentina 选一个开放图幅；Alaska 选一个具 DOI 的 DGGS 数据包，各自做字段/方法/hash 对账 |
+| 已接入 | `geotraces-idp2025` | 全球海洋航次 Cu/Ni/Zn；版本、DOI、QC、快照和全量关系已核实 | 自动审计完成 | 航次覆盖不连续；无 As；贡献者/方法仍不完整 | 与 GEMStat 淡水保持背景隔离；补独立海水来源 |
+| 已接入 | `gemstat-open-archive` | 全球淡水多元素与站点/方法连接 | 自动审计完成 | 覆盖不均；大量方法代码 0；删失、重复和 Pending review 值需分层处理 | 扩大方法明确的可比子集；补独立淡水来源 |
+| 已接入 | `norway-marchem` | 挪威海洋沉积物、多元素和批次方法 | 自动审计完成 | 只覆盖挪威海域 | 另补独立沉积物来源 |
+| 已接入 | `pangaea-north-africa-soil` | 具体 DOI 的北非可风蚀细粒土壤和行级方法/引用 | 自动审计完成 | 只有 43 个离散样点；与 bulk soil 不可直接混用 | 继续逐 DOI 补论文长尾 |
+| 已接入 | `japan-gsj-geochemical-map` | 日本 3,024 个河流沉积物样点 | 自动审计完成 | CSV 缺逐行方法、检出限和 QC | 固定详细方法资料，继续接入其他 GSJ 独立产品 |
+| 已接入 | FOREGS 六个介质来源 | 欧洲六类介质和七目标元素 | 六份自动审计完成 | 低密度；父项目共享血缘；原始 `<DL` 限定符不可恢复 | 继续补与 FOREGS 独立的国家/区域来源 |
+| 已接入 | `afsis-phase-i-wet-chemistry` | 非洲 2,002 个土壤样品和六目标元素 | 自动审计完成 | 126 个缺坐标；原始 CRS 未声明；负数和大量低于 DL/QL 值 | 保持 CRS 为 unknown；继续补独立非洲来源 |
+| 已接入 | `tpdc-china-mountain-soil` | 中国 30 个山地生态系统、1,314 个 O/A/C 层样品 | 自动审计和全量 profile 完成 | 非全国均匀覆盖；无 As/Hg；原始 CRS 未声明；补表有冲突 | 保持 CRS 为 unknown；补表不得覆盖主表原值 |
+| 1 | `canada-bc-rgs` / `argentina-segemar-geochemistry` / `alaska-dggs-webgeochem` | 同时补北美省/州级与南美覆盖；均已有数值下载或公开目录，且保留方法/出版物线索 | 中高 | 多原始调查、历史方法、重复发布和逐文件许可 | 固定具体版本与文件身份，分别做字段、方法、字节数、schema、行数和关键统计对账 |
 | 2 | `ireland-tellus` | 同时补土壤、沉积物和水，适合验证跨介质 schema | 中 | 官网临时下线、多个区域/国家 release、许可通知需重新固定 | 官网恢复后固定具体 ZIP、release note、方法表、许可和 checksum |
-| 3 | `sweden-sgu-geochemical-atlas` / `finland-gtk-geochemistry` | 增加北欧沉积物和岩石的官方可查询数值 | 中 | 产品/图层许可和版本不同，介质及提取方法必须分开 | 瑞典先固定 till CSV 许可与 hash；芬兰先选一个岩石和一个沉积物产品复核 |
+| 3 | `sweden-sgu-geochemical-atlas` / `finland-gtk-geochemistry` | 增加北欧沉积物和岩石的官方可查询数值 | 中 | 产品/图层许可和版本不同，介质及提取方法必须分开 | 瑞典先固定 till CSV 的许可、版本、文件身份和行数；芬兰先选一个岩石和一个沉积物产品复核 |
 | 4 | `canada-cdogs` | 大量沉积物和水体调查，且有官方原始/标准化文件 | 中高 | 逐调查版本、联邦/省许可、复测与重发布关系 | 先选一个开放、字段完整的沉积物+水调查做端到端复核 |
 | 5 | `emodnet-chemistry` | 扩展欧洲海洋水/沉积物候选，并为水体分析物提供独立交叉来源 | 中高 | 聚合、贡献者引用和上游重复 | 固定一个不受限协调产品，并先完成 record-level provider 血缘解析 |
 | 6 | `usgs-ngdb` / `norway-ngu-lito` | 扩展岩石、沉积物和土壤的国家数据 | 高 | 历史异质；LITO 2026 版尚未完成最终 QC | USGS 先选不可变发布；LITO 等最终 QC 或明确保留 preliminary 标志后再适配 |

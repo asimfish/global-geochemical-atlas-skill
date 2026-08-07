@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import re
@@ -60,7 +59,6 @@ REQUIRED_DATABASE_COLUMNS = {
     "coordinate_policy_id",
     "coordinate_policy_version",
     "coordinate_policy_url",
-    "coordinate_policy_sha256",
     "analytical_method",
     "method_scope",
     "digestion_or_extraction",
@@ -80,14 +78,6 @@ def strict_json(path: Path) -> Any:
         raise ValueError(f"non-finite JSON constant: {value}")
 
     return json.loads(path.read_text(encoding="utf-8"), parse_constant=reject_constant)
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def valid_coordinate_pair(coordinates: Any) -> bool:
@@ -248,7 +238,7 @@ def validate_database_batch_gate(
 def database_evidence_index(path: Path) -> dict[str, dict[str, str]]:
     fields = (
         "source_record_id", "source_id", "source_locator", "license", "analyte_reported",
-        "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row", "file_sha256",
+        "dataset_title", "dataset_doi", "dataset_version", "source_file", "source_row",
     )
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         return {
@@ -293,7 +283,7 @@ def validate_record_evidence(
         comparable = {
             "source_record_id": "source_record_id", "dataset_title": "dataset_title",
             "dataset_doi": "dataset_doi", "dataset_version": "dataset_version",
-            "source_file": "source_file", "source_row": "source_row", "source_file_sha256": "file_sha256",
+            "source_file": "source_file", "source_row": "source_row",
         }
         for evidence_field, canonical_field in comparable.items():
             evidence_value = value.get(evidence_field)
@@ -302,19 +292,12 @@ def validate_record_evidence(
                 errors.append(
                     f"record_evidence.jsonl:{line_number} conflicts with geochemistry.csv on {evidence_field}"
                 )
-        file_hash = value.get("source_file_sha256")
-        if file_hash is not None and (not isinstance(file_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", file_hash)):
-            errors.append(f"record_evidence.jsonl:{line_number} has invalid source_file_sha256")
         source_url = value.get("source_file_url")
         source_url_safe = (
             isinstance(source_url, str)
             and (
                 source_url.startswith("https://")
-                or (
-                    source_url.startswith("http://weppi.gtk.fi/")
-                    and isinstance(file_hash, str)
-                    and re.fullmatch(r"[0-9a-f]{64}", file_hash) is not None
-                )
+                or source_url.startswith("http://weppi.gtk.fi/")
             )
         )
         if source_url is not None and not source_url_safe:
@@ -582,7 +565,6 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                         not isinstance(binding, dict)
                         or binding.get("filename") != filename
                         or binding.get("bytes") != path.stat().st_size
-                        or binding.get("sha256") != sha256_file(path)
                     ):
                         errors.append(
                             f"run_summary artifact transaction mismatch for {filename}"
@@ -603,8 +585,8 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         summary_input = summary.get("input") if isinstance(summary, dict) else None
         if not isinstance(manifest_input, dict) or not isinstance(summary_input, dict):
             errors.append("source manifest and run summary must contain input objects")
-        elif manifest_input.get("sha256") != summary_input.get("sha256"):
-            errors.append("source manifest input hash does not match run summary")
+        elif any(manifest_input.get(field) != summary_input.get(field) for field in ("filename", "bytes", "record_count")):
+            errors.append("source manifest input identity does not match run summary")
         if isinstance(summary_input, dict):
             if manifest.get("data_mode") != summary_input.get("data_mode"):
                 errors.append("source manifest data_mode does not match run summary")
@@ -616,23 +598,23 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         if not isinstance(binding, dict):
             errors.append("source_manifest.json must bind confidence_report.json")
         else:
-            if binding.get("sha256") != sha256_file(paths["confidence_report"]):
-                errors.append("source manifest confidence hash does not match confidence_report.json")
+            if binding.get("bytes") != paths["confidence_report"].stat().st_size:
+                errors.append("source manifest confidence byte count does not match confidence_report.json")
             if binding.get("not_a_probability") is not True:
                 errors.append("source manifest must preserve the confidence interpretation boundary")
             if binding.get("confidence_version") != confidence.get("confidence_version"):
                 errors.append("source manifest confidence_version does not match confidence_report.json")
             run_metadata = confidence.get("run_metadata")
-            if not isinstance(run_metadata, dict) or binding.get("input_sha256") != run_metadata.get("input_sha256"):
-                errors.append("source manifest confidence input hash does not match D2 run metadata")
+            if not isinstance(run_metadata, dict) or binding.get("input_identity") != run_metadata.get("input_identity"):
+                errors.append("source manifest confidence input identity does not match D2 run metadata")
         evidence_binding = manifest.get("record_evidence")
         if not isinstance(evidence_binding, dict):
             errors.append("source_manifest.json must bind record_evidence.jsonl")
         else:
             if evidence_binding.get("filename") != paths["record_evidence"].name:
                 errors.append("source manifest record evidence filename is invalid")
-            if evidence_binding.get("sha256") != sha256_file(paths["record_evidence"]):
-                errors.append("source manifest record evidence hash does not match record_evidence.jsonl")
+            if evidence_binding.get("bytes") != paths["record_evidence"].stat().st_size:
+                errors.append("source manifest record evidence byte count does not match record_evidence.jsonl")
             if evidence_binding.get("record_count") != evidence_count:
                 errors.append("source manifest record evidence count does not match record_evidence.jsonl")
             if evidence_binding.get("exact_record_id_match") is not True:

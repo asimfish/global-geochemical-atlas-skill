@@ -4,7 +4,7 @@
   "title": "D1 record provenance archive entity",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "provenance_id", "source_id", "dataset_id", "acquisition_run_id", "source_record_id", "source_locator", "source_file", "source_sheet", "source_row", "source_column", "input_sha256", "adapter_name", "adapter_version", "processing_steps"],
+  "required": ["schema_version", "provenance_id", "source_id", "dataset_id", "acquisition_run_id", "source_record_id", "source_locator", "source_file", "source_sheet", "source_row", "source_column", "input_file_id", "adapter_name", "adapter_version", "processing_steps"],
   "properties": {
     "schema_version": {"const": "d1-provenance-v1"},
     "provenance_id": {"type": "string", "minLength": 1},
@@ -17,7 +17,7 @@
     "source_sheet": {"type": ["string", "null"]},
     "source_row": {"type": ["integer", "null"], "minimum": 1},
     "source_column": {"type": ["string", "null"]},
-    "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "input_file_id": {"type": "string", "minLength": 1},
     "adapter_name": {"type": "string", "minLength": 1},
     "adapter_version": {"type": "string", "minLength": 1},
     "processing_steps": {

@@ -5,10 +5,8 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
-import re
 import sys
 import tempfile
 from collections import defaultdict
@@ -20,7 +18,6 @@ MANIFEST_VERSION = "geochemical-source-manifest-v2"
 RECORD_EVIDENCE_VERSION = "geochemical-record-evidence-v1"
 RECORD_EVIDENCE_FILENAME = "record_evidence.jsonl"
 CONFIDENCE_COMPONENTS = {"source", "completeness", "method", "spatial", "qc", "overall"}
-SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 MAX_EVIDENCE_BYTES = 100_000_000
 REQUIRED_EVIDENCE_FIELDS = {
     "record_id",
@@ -50,15 +47,6 @@ def atomic_bytes(path: Path, content: bytes) -> None:
         handle.write(content)
         temporary = Path(handle.name)
     os.replace(temporary, path)
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
 
 def canonical_rows(path: Path) -> list[dict[str, str]]:
     if not path.is_file():
@@ -91,18 +79,14 @@ def json_object(path: Path, label: str) -> dict[str, Any]:
     return value
 
 
-def source_url_is_evidence_safe(value: Any, file_hash: Any) -> bool:
-    """Accept HTTPS, or a hash-pinned HTTP locator used by a legacy publisher."""
+def source_url_is_evidence_safe(value: Any) -> bool:
+    """Accept HTTPS and the explicitly registered legacy FOREGS publisher."""
 
     if not isinstance(value, str):
         return False
     if value.startswith("https://"):
         return True
-    return (
-        value.startswith("http://weppi.gtk.fi/")
-        and isinstance(file_hash, str)
-        and SHA256_RE.fullmatch(file_hash) is not None
-    )
+    return value.startswith("http://weppi.gtk.fi/")
 
 
 def _declared_evidence(rows: Sequence[Mapping[str, str]]) -> tuple[list[dict[str, Any]], bytes]:
@@ -119,7 +103,6 @@ def _declared_evidence(rows: Sequence[Mapping[str, str]]) -> tuple[list[dict[str
             "dataset_version": row.get("dataset_version") or None,
             "source_file": row.get("source_file") or None,
             "source_row": row.get("source_row") or None,
-            "source_file_sha256": row.get("file_sha256") or None,
             "evidence_status": "source_declared_in_input",
             "evidence_version": RECORD_EVIDENCE_VERSION,
         }
@@ -157,9 +140,6 @@ def load_record_evidence(path: Path) -> tuple[list[dict[str, Any]], bytes]:
             raise EvidenceError(
                 f"record evidence line {line_number} lacks required fields: {', '.join(missing)}"
             )
-        file_hash = value.get("source_file_sha256")
-        if file_hash is not None and (not isinstance(file_hash, str) or not SHA256_RE.fullmatch(file_hash)):
-            raise EvidenceError(f"record evidence line {line_number} has invalid source_file_sha256")
         source_file = value.get("source_file")
         if source_file is not None and (
             not isinstance(source_file, str)
@@ -168,11 +148,8 @@ def load_record_evidence(path: Path) -> tuple[list[dict[str, Any]], bytes]:
         ):
             raise EvidenceError(f"record evidence line {line_number} has unsafe source_file")
         source_url = value.get("source_file_url")
-        if source_url is not None and not source_url_is_evidence_safe(source_url, file_hash):
-            raise EvidenceError(
-                f"record evidence line {line_number} has an unsafe source_file_url; "
-                "the allowlisted legacy HTTP publisher requires a pinned SHA-256"
-            )
+        if source_url is not None and not source_url_is_evidence_safe(source_url):
+            raise EvidenceError(f"record evidence line {line_number} has an unsafe source_file_url")
         for list_field in ("article_citations", "article_dois"):
             items = value.get(list_field)
             if items is not None and (
@@ -220,7 +197,6 @@ def validate_record_linkage(
         "dataset_version": "dataset_version",
         "source_file": "source_file",
         "source_row": "source_row",
-        "source_file_sha256": "file_sha256",
     }
     required_comparable = {"source_id", "source_locator", "license", "analyte_reported"}
     for record_id, item in evidence_by_id.items():
@@ -262,40 +238,60 @@ def acquisition_binding(
     output_entries = [item for item in outputs if isinstance(item, dict) and isinstance(item.get("path"), str)]
     if len(output_entries) != len(outputs) or len({item["path"] for item in output_entries}) != len(output_entries):
         raise EvidenceError("acquisition manifest has invalid or duplicate output paths")
-    hashes = {item["path"]: item.get("sha256") for item in output_entries}
-    if hashes.get(input_path.name) != sha256_file(input_path):
-        raise EvidenceError("acquisition manifest does not bind the input CSV hash")
-    if evidence_path is None or hashes.get(evidence_path.name) != sha256_file(evidence_path):
-        raise EvidenceError("acquisition manifest does not bind the record evidence hash")
+    output_by_name = {item["path"]: item for item in output_entries}
+    input_entry = output_by_name.get(input_path.name)
+    if not isinstance(input_entry, dict) or input_entry.get("bytes") != input_path.stat().st_size:
+        raise EvidenceError("acquisition manifest does not bind the input CSV identity")
+    if evidence_path is not None:
+        evidence_entry = output_by_name.get(evidence_path.name)
+        if not isinstance(evidence_entry, dict) or evidence_entry.get("bytes") != evidence_path.stat().st_size:
+            raise EvidenceError("acquisition manifest does not bind the record evidence identity")
     source_files = manifest.get("source_files")
-    if not isinstance(source_files, list) or not source_files:
-        raise EvidenceError("acquisition manifest must contain source_files")
-    acquired_files: dict[str, tuple[str, str]] = {}
+    if not isinstance(source_files, list):
+        raise EvidenceError("acquisition manifest must contain a source_files array")
+    fixture_inputs = manifest.get("fixture_inputs")
+    fixture_source_ids = {
+        str(item.get("source_id") or "")
+        for item in fixture_inputs or []
+        if isinstance(item, dict)
+    }
+    manifest_source = manifest.get("source")
+    manifest_source_id = (
+        str(manifest_source.get("source_id") or "")
+        if isinstance(manifest_source, Mapping)
+        else ""
+    )
+    acquired_files: dict[tuple[str, str], str] = {}
     for entry in source_files:
         if not isinstance(entry, dict):
             raise EvidenceError("acquisition manifest contains an invalid source file")
+        source_id = str(entry.get("source_id") or manifest_source_id)
         filename = entry.get("filename")
-        file_hash = entry.get("sha256")
         source_url = entry.get("source_url")
+        file_key = (source_id, str(filename or ""))
         if (
+            not source_id
+            or
             not isinstance(filename, str)
             or Path(filename).name != filename
-            or filename in acquired_files
-            or not isinstance(file_hash, str)
-            or not SHA256_RE.fullmatch(file_hash)
-            or not source_url_is_evidence_safe(source_url, file_hash)
+            or file_key in acquired_files
+            or not source_url_is_evidence_safe(source_url)
         ):
             raise EvidenceError("acquisition manifest contains unsafe or incomplete source-file evidence")
-        acquired_files[filename] = (file_hash, source_url)
+        acquired_files[file_key] = source_url
     for item in evidence_rows:
+        source_id = str(item.get("source_id") or "")
         filename = item.get("source_file")
-        file_hash = item.get("source_file_sha256")
         source_url = item.get("source_file_url")
-        if not isinstance(filename, str) or not isinstance(file_hash, str):
-            raise EvidenceError("verified record evidence requires source_file and source_file_sha256")
-        acquired = acquired_files.get(filename)
-        if acquired is None or acquired[0] != file_hash or (source_url is not None and acquired[1] != source_url):
-            raise EvidenceError(f"record evidence is not bound to acquired source file: {filename}")
+        if filename in (None, ""):
+            if source_id not in fixture_source_ids or not str(item.get("source_locator") or ""):
+                raise EvidenceError("verified record evidence requires a file or fixture-bound source locator")
+            continue
+        if not isinstance(filename, str):
+            raise EvidenceError("verified record evidence has an invalid source_file")
+        acquired = acquired_files.get((source_id, filename))
+        if acquired is None or (source_url is not None and acquired != source_url):
+            raise EvidenceError(f"record evidence is not bound to acquired source file: {source_id}:{filename}")
     failures = manifest.get("failures")
     if not isinstance(failures, list) or failures:
         raise EvidenceError("acquisition manifest must declare an empty failures array")
@@ -305,7 +301,7 @@ def acquisition_binding(
     return (
         {
             "filename": path.name,
-            "sha256": sha256_file(path),
+            "bytes": path.stat().st_size,
             "data_mode": manifest["data_mode"],
             "generation_version": manifest.get("demo_generation_version"),
             "not_for_scientific_interpretation": not_for_science,
@@ -315,7 +311,7 @@ def acquisition_binding(
     )
 
 
-def confidence_binding(confidence_path: Path, input_hash: str) -> dict[str, Any]:
+def confidence_binding(confidence_path: Path, input_identity: Mapping[str, Any]) -> dict[str, Any]:
     """Validate linkage only; D1 must not recompute the D2 confidence algorithm."""
 
     report = json_object(confidence_path, "confidence report")
@@ -327,17 +323,17 @@ def confidence_binding(confidence_path: Path, input_hash: str) -> dict[str, Any]
     run_metadata = report.get("run_metadata")
     if not isinstance(run_metadata, dict):
         raise EvidenceError("confidence report has no run_metadata object")
-    if run_metadata.get("input_sha256") != input_hash:
-        raise EvidenceError("confidence report input_sha256 does not match the acquired input")
+    if run_metadata.get("input_identity") != dict(input_identity):
+        raise EvidenceError("confidence report input identity does not match the acquired input")
     component_means = report.get("component_means")
     if not isinstance(component_means, dict) or not CONFIDENCE_COMPONENTS.issubset(component_means):
         raise EvidenceError("confidence report is missing required component means")
     return {
         "filename": confidence_path.name,
-        "sha256": sha256_file(confidence_path),
+        "bytes": confidence_path.stat().st_size,
         "confidence_version": version,
         "run_id": run_metadata.get("run_id"),
-        "input_sha256": input_hash,
+        "input_identity": dict(input_identity),
         "not_a_probability": True,
         "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     }
@@ -345,11 +341,11 @@ def confidence_binding(confidence_path: Path, input_hash: str) -> dict[str, Any]
 
 def build_source_manifest(
     input_path: Path,
-    input_hash: str,
+    input_identity: Mapping[str, Any],
     rows: Sequence[Mapping[str, str]],
     confidence: Mapping[str, Any],
     evidence_rows: Sequence[Mapping[str, Any]],
-    evidence_hash: str,
+    evidence_bytes: int,
     evidence_level: str,
     acquisition: Mapping[str, Any] | None,
     data_mode: str,
@@ -381,7 +377,6 @@ def build_source_manifest(
             {
                 (
                     str(item.get("source_file") or ""),
-                    str(item.get("source_file_sha256") or ""),
                     str(item.get("source_file_url") or ""),
                 )
                 for item in source_evidence
@@ -434,8 +429,8 @@ def build_source_manifest(
                 "dataset_dois": dataset_dois,
                 "dataset_versions": dataset_versions,
                 "source_files": [
-                    {"filename": filename, "sha256": file_hash or None, "url": url or None}
-                    for filename, file_hash, url in source_files
+                    {"filename": filename, "url": url or None}
+                    for filename, url in source_files
                 ],
                 "article_citations": article_citations,
                 "article_dois": article_dois,
@@ -448,10 +443,7 @@ def build_source_manifest(
     manifest = {
         "manifest_version": MANIFEST_VERSION,
         "input": {
-            "filename": input_path.name,
-            "sha256": input_hash,
-            "bytes": input_path.stat().st_size,
-            "record_count": record_count,
+            **dict(input_identity),
         },
         "source_count": len(sources),
         "coverage": {
@@ -465,7 +457,7 @@ def build_source_manifest(
         "sources": sources,
         "record_evidence": {
             "filename": RECORD_EVIDENCE_FILENAME,
-            "sha256": evidence_hash,
+            "bytes": evidence_bytes,
             "schema_version": RECORD_EVIDENCE_VERSION,
             "record_count": len(evidence_rows),
             "exact_record_id_match": True,
@@ -477,7 +469,7 @@ def build_source_manifest(
         "not_for_scientific_interpretation": not_for_scientific_interpretation,
         "synthetic_data_present": synthetic_present,
         "claim_boundary": (
-            "Record evidence is hash-bound and record-ID matched when evidence_level is verified_record_evidence. "
+            "Record evidence is matched by exact record ID and readable source/file/row identity. "
             "A verified chain proves provenance linkage, not measurement truth or method comparability. "
             "Declared licenses still require source-specific review."
         ),
@@ -495,9 +487,13 @@ def package_evidence(
 ) -> tuple[dict[str, Any], bool]:
     if not input_path.is_file():
         raise EvidenceError(f"acquired input does not exist: {input_path}")
-    input_hash = sha256_file(input_path)
     rows = canonical_rows(database_path)
-    confidence = confidence_binding(confidence_path, input_hash)
+    input_identity = {
+        "filename": input_path.name,
+        "bytes": input_path.stat().st_size,
+        "record_count": len(rows),
+    }
+    confidence = confidence_binding(confidence_path, input_identity)
     if evidence_path is None:
         evidence_rows, evidence_content = _declared_evidence(rows)
         evidence_level = "source_declared_in_input"
@@ -517,14 +513,13 @@ def package_evidence(
         data_mode = "synthetic_fixture"
         not_for_science = True
     evidence_output = output_path.with_name(RECORD_EVIDENCE_FILENAME)
-    evidence_hash = hashlib.sha256(evidence_content).hexdigest()
     manifest, synthetic_present = build_source_manifest(
         input_path,
-        input_hash,
+        input_identity,
         rows,
         confidence,
         evidence_rows,
-        evidence_hash,
+        len(evidence_content),
         evidence_level,
         acquisition,
         data_mode,
@@ -547,7 +542,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--acquisition-manifest",
         type=Path,
-        help="Optional D1 run manifest that hash-binds the input and evidence sidecar",
+        help="Optional D1 run manifest that binds input and evidence through readable identities",
     )
     return parser
 

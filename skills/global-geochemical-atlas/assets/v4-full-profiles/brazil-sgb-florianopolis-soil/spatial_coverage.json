@@ -1,0 +1,38 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "bbox": [
+    -48.707720677,
+    -27.59178565899998,
+    -48.70485246800001,
+    -27.587969969000028
+  ],
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_status": "source_crs_declared_epsg4326",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
+  "coordinate_uncertainty_m_observation_counts": {
+    "not_reported": 192
+  },
+  "covered_spatial_cells": 1,
+  "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+  "distinct_sample_count": 32,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "region_count": 1,
+  "region_observation_counts": {
+    "Florianopolis, Brazil": 192
+  },
+  "reported_coordinate_sample_count": 32,
+  "reported_covered_spatial_cells": 1,
+  "reported_spatial_cell_ids": [
+    "-28:-049"
+  ],
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
+  "source_crs_observation_counts": {
+    "EPSG:4326": 192
+  },
+  "source_id": "brazil-sgb-florianopolis-soil",
+  "spatial_cell_ids": [
+    "-28:-049"
+  ],
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
+  "valid_coordinate_sample_count": 32
+}

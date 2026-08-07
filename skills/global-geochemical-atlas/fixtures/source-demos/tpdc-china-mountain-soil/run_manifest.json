@@ -1,0 +1,72 @@
+{
+  "content_hashing_used": false,
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T10:20:00Z",
+  "generation_request": {
+    "analytes": [
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 40
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 57078,
+      "path": "demo_input.csv"
+    },
+    {
+      "bytes": 58880,
+      "path": "sources.jsonl"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 40,
+    "raw_source_rows": 1314,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.11888/Terre.tpdc.302620",
+    "dataset_version": "tpdc-file-2025-07-23",
+    "license": "CC-BY-4.0",
+    "source_id": "tpdc-china-mountain-soil",
+    "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains"
+  },
+  "source_files": [
+    {
+      "bytes": 577715,
+      "filename": "Soil dataset.xlsx",
+      "retrieved_at": null,
+      "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+    },
+    {
+      "bytes": 33386,
+      "filename": "Soil bulk density.xlsx",
+      "retrieved_at": null,
+      "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+    },
+    {
+      "bytes": 1246886,
+      "filename": "Description of the dataset.docx",
+      "retrieved_at": null,
+      "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "TPDC samples cover 30 mountain ecosystems rather than a uniform China soil grid.",
+    "O, A and C horizons remain separate; the undeclared coordinate CRS remains blank.",
+    "Dataset-level ICP-MS/ICP-AES assignments come from the linked article, not row-level workbook fields."
+  ]
+}

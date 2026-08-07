@@ -5,8 +5,8 @@
 每个目录包含：
 
 - `demo_input.csv`：D1 交给 D2 的长表输入，保留原值、原单位、来源和许可；
-- `sources.jsonl`：逐观测证据链，链接源文件、源行、文件 hash、数据集 DOI/版本和原始引用；
-- `run_manifest.json`：固定生成参数、输入文件 hash、记录数、输出 hash 和科学限制。
+- `sources.jsonl`：逐观测证据链，链接源文件、源行、文件身份、数据集 DOI/版本和原始引用；
+- `run_manifest.json`：固定生成参数、输入文件身份、记录数、关键统计和科学限制。
 
 ## GEOROC demo
 
@@ -167,10 +167,12 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 
 `afsis-phase-i-wet-chemistry/` 从官方 Dataverse 的三个 original 文件生成 48 条正值观测：12 个国家标签各选一个有完整坐标的样品，并为 As/Cu/Ni/Zn 各保留一条测定。原始国家标签 `SAfrica`、`Zimbambwe` 不被覆盖，规范名只写入独立证据字段；上下层、王水准全量基础、ICP-MS/ICP-OES、实验室、DL 和 QL 均逐观测绑定。
 
-全量来源有 2,002 个样品，其中 126 个缺少经纬度；As/Cu/Pb 有负数仪器结果，Pb 有 1,969 条正值低于来源 DL。注册文件和相关论文没有声明坐标 CRS，因此 demo 保留经纬度但 `source_crs` 为空；变量表的 `As.75`/“Arsenic-78”以及采样年份也有文字冲突并保留在 evidence。demo 为了通过地图流水线只选正值与完整坐标，不得据此宣称全量无缺失或所有数值均为可靠检出。完整边界见 candidate audit 和 30 条待签署复核单。
+全量来源有 2,002 个样品，其中 126 个缺少经纬度；As/Cu/Pb 有负数仪器结果，Pb 有 1,969 条正值低于来源 DL。注册文件和相关论文没有声明坐标 CRS，因此 demo 保留经纬度但 `source_crs` 为空；变量表的 `As.75`/“Arsenic-78”以及采样年份也有文字冲突并保留在 evidence。demo 为了通过地图流水线只选正值与完整坐标，不得据此宣称全量无缺失或所有数值均为可靠检出。完整边界见 candidate audit 和 30 条 Codex 结构化自动审计。
 
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将以上十四个来源合并到同一个 `sources=auto` 请求：796 条观测包括 rock 48、soil 348、sediment 256、water 144。`run_manifest.json` 绑定十四个输入 fixture 的 hash、来源证据等级、离线验证状态，以及标准化前后均为 93 个 D2 比较分区（水体 18 个）；`expected-output/` 是可字节级重建的十五文件工作流结果，新增批次门禁和 FDR 空间候选区域证据，其中 `iteration_backlog.csv` 单列证据缺口、复核项和删失科学限制。
+`fixtures/four-media/combined-v3/` 将 26 个可执行数据集合并到同一个 `sources=auto` 请求：1,271 条观测包括 rock 144、soil 410、sediment 487、water 230。`run_manifest.json` 绑定 26 个输入 fixture 的可读身份、来源证据等级和离线验证状态，并冻结 193 个 D2 比较分区（水体 37 个）；`expected-output/` 是可确定性重建的十五文件工作流结果，包含批次门禁和 FDR 空间候选区域证据，其中 `iteration_backlog.csv` 单列证据缺口、复核项和删失科学限制。
 
-这只是接口联合测试。93 个背景组按元素、介质、material、样品类型、土壤层位、沉积环境、水分相、粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取方法隔离；当前没有一个组跨越不兼容来源。GEOROC 和 AfSIS 未证实 CRS 的 reported coordinates 不进入 canonical 地图。16 个工程异常候选只验证筛查流程，不构成区域异常、污染或矿化结论。
+这些 fixture 是正常使用和普通测试的默认入口。完整 26 来源下载、4,096,615 条观测的 full profile 或全量 SQLite 仅用于显式发布/验收模式，不是来源准入或日常运行前置条件。
+
+这只是接口联合测试。193 个背景组按元素、介质、material、样品类型、土壤层位、沉积环境、水分相、粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取方法隔离；当前没有一个组跨越不兼容来源。未证实 CRS 的 reported coordinates 不进入 canonical 地图。候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。

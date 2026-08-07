@@ -26,10 +26,19 @@
     "meaning": {"type": "string", "minLength": 1},
     "run_metadata": {
       "type": "object",
-      "required": ["run_id", "input_sha256", "input_row_count", "configuration"],
+      "required": ["run_id", "input_identity", "input_row_count", "configuration"],
       "properties": {
         "run_id": {"type": "string", "minLength": 1},
-        "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "input_identity": {
+          "type": "object",
+          "required": ["filename", "bytes", "record_count"],
+          "properties": {
+            "filename": {"type": "string", "minLength": 1},
+            "bytes": {"type": "integer", "minimum": 1},
+            "record_count": {"type": "integer", "minimum": 1}
+          },
+          "additionalProperties": false
+        },
         "input_row_count": {"type": "integer", "minimum": 1},
         "configuration": {"type": "object"}
       },

@@ -1,0 +1,2458 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS verifies byte and mapping correspondence only. Named human decisions remain null; unsigned review lowers confidence but is not a hard research-use gate.",
+  "completed_record_count": 0,
+  "dataset_version": "2022-11-02",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.04",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "76.49",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "71.02",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "255.17",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "7.95",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "96.17",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-17A-MC",
+      "latitude": "15.9900",
+      "location": "Arabian Sea",
+      "longitude": "61.5300",
+      "review_id": "pangaea-arabian-sea-sediment-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-17A",
+      "sediment_depth_m": "0.025",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=102",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-17A%7CPANGAEA.950139.tab%23row%3D102",
+      "water_depth_m": "-3985"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.02",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "73.09",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "71.94",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "247.89",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "7.52",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "97.24",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-17E-MC",
+      "latitude": "15.9945",
+      "location": "Arabian Sea",
+      "longitude": "61.5333",
+      "review_id": "pangaea-arabian-sea-sediment-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-17E",
+      "sediment_depth_m": "0.025",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=103",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-17E%7CPANGAEA.950139.tab%23row%3D103",
+      "water_depth_m": "-3985"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.46",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "109.53",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "93.12",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "130.67",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "11.68",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "82.19",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-22E-MC",
+      "latitude": "10.0345",
+      "location": "Arabian Sea",
+      "longitude": "65.0842",
+      "review_id": "pangaea-arabian-sea-sediment-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-22E",
+      "sediment_depth_m": "0.023",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=104",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-22E%7CPANGAEA.950139.tab%23row%3D104",
+      "water_depth_m": "-4426"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.05",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-29G%257CPANGAEA.950139.tab%2523row%253D105%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "48.32",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-29G%257CPANGAEA.950139.tab%2523row%253D105%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "18.19",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-29G%257CPANGAEA.950139.tab%2523row%253D105%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "62.55",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-29G%257CPANGAEA.950139.tab%2523row%253D105%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "6.70",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-29G%257CPANGAEA.950139.tab%2523row%253D105%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "45.26",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-29G%257CPANGAEA.950139.tab%2523row%253D105%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-29G-MC",
+      "latitude": "17.2012",
+      "location": "Arabian Sea",
+      "longitude": "59.9518",
+      "review_id": "pangaea-arabian-sea-sediment-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-29G",
+      "sediment_depth_m": "0.033",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=105",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-29G%7CPANGAEA.950139.tab%23row%3D105",
+      "water_depth_m": "-2431"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.50",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32C%257CPANGAEA.950139.tab%2523row%253D106%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "228.31",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32C%257CPANGAEA.950139.tab%2523row%253D106%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "18.14",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32C%257CPANGAEA.950139.tab%2523row%253D106%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "72.87",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32C%257CPANGAEA.950139.tab%2523row%253D106%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.92",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32C%257CPANGAEA.950139.tab%2523row%253D106%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "32.32",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32C%257CPANGAEA.950139.tab%2523row%253D106%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-32C",
+      "latitude": "19.5013",
+      "location": "Arabian Sea",
+      "longitude": "58.4677",
+      "review_id": "pangaea-arabian-sea-sediment-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-32C",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=106",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-32C%7CPANGAEA.950139.tab%23row%3D106",
+      "water_depth_m": "-611"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.16",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D107%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "229.59",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D107%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "19.38",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D107%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "72.30",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D107%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.72",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D107%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "32.96",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D107%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-32G",
+      "latitude": "19.5013",
+      "location": "Arabian Sea",
+      "longitude": "58.4677",
+      "review_id": "pangaea-arabian-sea-sediment-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-32G",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=107",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-32G%7CPANGAEA.950139.tab%23row%3D107",
+      "water_depth_m": "-611"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.23",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D108%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "201.18",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D108%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "18.95",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D108%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "59.97",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D108%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.99",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D108%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "30.76",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-32G%257CPANGAEA.950139.tab%2523row%253D108%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-32G",
+      "latitude": "19.5013",
+      "location": "Arabian Sea",
+      "longitude": "58.4677",
+      "review_id": "pangaea-arabian-sea-sediment-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-32G",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=108",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-32G%7CPANGAEA.950139.tab%23row%3D108",
+      "water_depth_m": "-611"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.75",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26D%257CPANGAEA.950139.tab%2523row%253D109%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "142.63",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26D%257CPANGAEA.950139.tab%2523row%253D109%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "22.53",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26D%257CPANGAEA.950139.tab%2523row%253D109%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "56.73",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26D%257CPANGAEA.950139.tab%2523row%253D109%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "7.81",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26D%257CPANGAEA.950139.tab%2523row%253D109%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "31.22",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26D%257CPANGAEA.950139.tab%2523row%253D109%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM47-26D",
+      "latitude": "19.2123",
+      "location": "Arabian Sea",
+      "longitude": "58.2720",
+      "review_id": "pangaea-arabian-sea-sediment-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM47-1-26D",
+      "sediment_depth_m": "0.030",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=109",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM47-1-26D%7CPANGAEA.950139.tab%23row%3D109",
+      "water_depth_m": "-513"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.74",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26F%257CPANGAEA.950139.tab%2523row%253D110%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "242.27",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26F%257CPANGAEA.950139.tab%2523row%253D110%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "18.57",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26F%257CPANGAEA.950139.tab%2523row%253D110%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "60.52",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26F%257CPANGAEA.950139.tab%2523row%253D110%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "4.83",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26F%257CPANGAEA.950139.tab%2523row%253D110%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "35.34",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-26F%257CPANGAEA.950139.tab%2523row%253D110%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM47-26F",
+      "latitude": "19.2123",
+      "location": "Arabian Sea",
+      "longitude": "58.2720",
+      "review_id": "pangaea-arabian-sea-sediment-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM47-1-26F",
+      "sediment_depth_m": "0.015",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=110",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM47-1-26F%7CPANGAEA.950139.tab%23row%3D110",
+      "water_depth_m": "-513"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "0.87",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-30H%257CPANGAEA.950139.tab%2523row%253D111%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "165.73",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-30H%257CPANGAEA.950139.tab%2523row%253D111%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "4.86",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-30H%257CPANGAEA.950139.tab%2523row%253D111%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "29.42",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-30H%257CPANGAEA.950139.tab%2523row%253D111%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.73",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-30H%257CPANGAEA.950139.tab%2523row%253D111%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "9.54",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-30H%257CPANGAEA.950139.tab%2523row%253D111%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM47-30H",
+      "latitude": "19.2150",
+      "location": "Arabian Sea",
+      "longitude": "58.0155",
+      "review_id": "pangaea-arabian-sea-sediment-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM47-1-30H",
+      "sediment_depth_m": "0.055",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=111",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM47-1-30H%7CPANGAEA.950139.tab%23row%3D111",
+      "water_depth_m": "-71"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.04",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-34D%257CPANGAEA.950139.tab%2523row%253D112%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "198.37",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-34D%257CPANGAEA.950139.tab%2523row%253D112%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "37.92",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-34D%257CPANGAEA.950139.tab%2523row%253D112%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "140.13",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-34D%257CPANGAEA.950139.tab%2523row%253D112%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "6.14",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-34D%257CPANGAEA.950139.tab%2523row%253D112%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "59.92",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM47-1-34D%257CPANGAEA.950139.tab%2523row%253D112%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM47-34D",
+      "latitude": "19.5163",
+      "location": "Arabian Sea",
+      "longitude": "58.4883",
+      "review_id": "pangaea-arabian-sea-sediment-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM47-1-34D",
+      "sediment_depth_m": "0.055",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=112",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM47-1-34D%7CPANGAEA.950139.tab%23row%3D112",
+      "water_depth_m": "-719"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.83",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-04MC-A-0-1cm%257CPANGAEA.950139.tab%2523row%253D113%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "84.62",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-04MC-A-0-1cm%257CPANGAEA.950139.tab%2523row%253D113%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "27.87",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-04MC-A-0-1cm%257CPANGAEA.950139.tab%2523row%253D113%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "54.36",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-04MC-A-0-1cm%257CPANGAEA.950139.tab%2523row%253D113%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "5.89",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-04MC-A-0-1cm%257CPANGAEA.950139.tab%2523row%253D113%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "58.17",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-04MC-A-0-1cm%257CPANGAEA.950139.tab%2523row%253D113%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN041-04-MC",
+      "latitude": "17.6923",
+      "location": "Arabian Sea",
+      "longitude": "57.8350",
+      "review_id": "pangaea-arabian-sea-sediment-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN041-04MC-A-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=113",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN041-04MC-A-0-1cm%7CPANGAEA.950139.tab%23row%3D113",
+      "water_depth_m": "-1435"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.45",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-14PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D114%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "158.41",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-14PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D114%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "51.38",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-14PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D114%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "146.46",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-14PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D114%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "8.30",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-14PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D114%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "111.44",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-14PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D114%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN041-14-PC",
+      "latitude": "17.2162",
+      "location": "Arabian Sea",
+      "longitude": "59.6078",
+      "review_id": "pangaea-arabian-sea-sediment-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN041-14PC-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=114",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN041-14PC-0-1cm%7CPANGAEA.950139.tab%23row%3D114",
+      "water_depth_m": "-3476"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.80",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-23MC-H-0-1cm%257CPANGAEA.950139.tab%2523row%253D115%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "70.98",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-23MC-H-0-1cm%257CPANGAEA.950139.tab%2523row%253D115%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "70.48",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-23MC-H-0-1cm%257CPANGAEA.950139.tab%2523row%253D115%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "91.94",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-23MC-H-0-1cm%257CPANGAEA.950139.tab%2523row%253D115%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "8.58",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-23MC-H-0-1cm%257CPANGAEA.950139.tab%2523row%253D115%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "85.24",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-23MC-H-0-1cm%257CPANGAEA.950139.tab%2523row%253D115%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN041-23-MC",
+      "latitude": "15.6837",
+      "location": "Arabian Sea",
+      "longitude": "68.3668",
+      "review_id": "pangaea-arabian-sea-sediment-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN041-23MC-H-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=115",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN041-23MC-H-0-1cm%7CPANGAEA.950139.tab%23row%3D115",
+      "water_depth_m": "-3779"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.78",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-26MC-B-0-1cm%257CPANGAEA.950139.tab%2523row%253D116%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "43.17",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-26MC-B-0-1cm%257CPANGAEA.950139.tab%2523row%253D116%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "62.74",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-26MC-B-0-1cm%257CPANGAEA.950139.tab%2523row%253D116%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "99.96",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-26MC-B-0-1cm%257CPANGAEA.950139.tab%2523row%253D116%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "5.73",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-26MC-B-0-1cm%257CPANGAEA.950139.tab%2523row%253D116%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "70.84",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-26MC-B-0-1cm%257CPANGAEA.950139.tab%2523row%253D116%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN041-26-MC",
+      "latitude": "14.5335",
+      "location": "Arabian Sea",
+      "longitude": "64.6000",
+      "review_id": "pangaea-arabian-sea-sediment-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN041-26MC-B-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=116",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN041-26MC-B-0-1cm%7CPANGAEA.950139.tab%23row%3D116",
+      "water_depth_m": "-3930"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.14",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-2PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D117%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "66.09",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-2PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D117%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "26.96",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-2PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D117%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "52.34",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-2PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D117%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "4.09",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-2PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D117%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "85.48",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-2PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D117%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN041-2-PC",
+      "latitude": "17.6973",
+      "location": "Arabian Sea",
+      "longitude": "57.8293",
+      "review_id": "pangaea-arabian-sea-sediment-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN041-2PC-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=117",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN041-2PC-0-1cm%7CPANGAEA.950139.tab%23row%3D117",
+      "water_depth_m": "-1428"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.07",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-6GGC-4-4.5cm%257CPANGAEA.950139.tab%2523row%253D118%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "92.28",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-6GGC-4-4.5cm%257CPANGAEA.950139.tab%2523row%253D118%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "48.30",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-6GGC-4-4.5cm%257CPANGAEA.950139.tab%2523row%253D118%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "89.51",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-6GGC-4-4.5cm%257CPANGAEA.950139.tab%2523row%253D118%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "6.39",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-6GGC-4-4.5cm%257CPANGAEA.950139.tab%2523row%253D118%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "118.51",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-6GGC-4-4.5cm%257CPANGAEA.950139.tab%2523row%253D118%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-6-GGC",
+      "latitude": "17.3817",
+      "location": "Arabian Sea",
+      "longitude": "58.7950",
+      "review_id": "pangaea-arabian-sea-sediment-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-6GGC-4-4.5cm",
+      "sediment_depth_m": "0.043",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=118",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-6GGC-4-4.5cm%7CPANGAEA.950139.tab%23row%3D118",
+      "water_depth_m": "-3652"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.05",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-9MC-H%25201-2%2520cm%257CPANGAEA.950139.tab%2523row%253D119%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "70.06",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-9MC-H%25201-2%2520cm%257CPANGAEA.950139.tab%2523row%253D119%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "29.06",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-9MC-H%25201-2%2520cm%257CPANGAEA.950139.tab%2523row%253D119%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "52.99",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-9MC-H%25201-2%2520cm%257CPANGAEA.950139.tab%2523row%253D119%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.89",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-9MC-H%25201-2%2520cm%257CPANGAEA.950139.tab%2523row%253D119%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "57.31",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-9MC-H%25201-2%2520cm%257CPANGAEA.950139.tab%2523row%253D119%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-9H-MC",
+      "latitude": "17.6963",
+      "location": "Arabian Sea",
+      "longitude": "57.8635",
+      "review_id": "pangaea-arabian-sea-sediment-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-9MC-H 1-2 cm",
+      "sediment_depth_m": "0.015",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=119",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-9MC-H%201-2%20cm%7CPANGAEA.950139.tab%23row%3D119",
+      "water_depth_m": "-1468"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "0.81",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC15H-0-0.5cm%257CPANGAEA.950139.tab%2523row%253D120%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "71.97",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC15H-0-0.5cm%257CPANGAEA.950139.tab%2523row%253D120%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "18.28",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC15H-0-0.5cm%257CPANGAEA.950139.tab%2523row%253D120%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "34.31",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC15H-0-0.5cm%257CPANGAEA.950139.tab%2523row%253D120%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.42",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC15H-0-0.5cm%257CPANGAEA.950139.tab%2523row%253D120%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "48.88",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC15H-0-0.5cm%257CPANGAEA.950139.tab%2523row%253D120%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-15H-MC",
+      "latitude": "17.7000",
+      "location": "Arabian Sea",
+      "longitude": "57.5000",
+      "review_id": "pangaea-arabian-sea-sediment-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-MC15H-0-0.5cm",
+      "sediment_depth_m": "0.003",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=120",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-MC15H-0-0.5cm%7CPANGAEA.950139.tab%23row%3D120",
+      "water_depth_m": "-587"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.30",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC1F-0-1cm%257CPANGAEA.950139.tab%2523row%253D121%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "54.51",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC1F-0-1cm%257CPANGAEA.950139.tab%2523row%253D121%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "82.35",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC1F-0-1cm%257CPANGAEA.950139.tab%2523row%253D121%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "261.97",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC1F-0-1cm%257CPANGAEA.950139.tab%2523row%253D121%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "8.48",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC1F-0-1cm%257CPANGAEA.950139.tab%2523row%253D121%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "301.90",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC1F-0-1cm%257CPANGAEA.950139.tab%2523row%253D121%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-1F-MC",
+      "latitude": "16.0000",
+      "location": "Arabian Sea",
+      "longitude": "61.5000",
+      "review_id": "pangaea-arabian-sea-sediment-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-MC1F-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=121",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-MC1F-0-1cm%7CPANGAEA.950139.tab%23row%3D121",
+      "water_depth_m": "-3989"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "0.99",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC3A-1-2cm%257CPANGAEA.950139.tab%2523row%253D122%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "35.46",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC3A-1-2cm%257CPANGAEA.950139.tab%2523row%253D122%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "19.98",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC3A-1-2cm%257CPANGAEA.950139.tab%2523row%253D122%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "34.25",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC3A-1-2cm%257CPANGAEA.950139.tab%2523row%253D122%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "4.60",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC3A-1-2cm%257CPANGAEA.950139.tab%2523row%253D122%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "40.72",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC3A-1-2cm%257CPANGAEA.950139.tab%2523row%253D122%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-3A-MC",
+      "latitude": "16.6138",
+      "location": "Arabian Sea",
+      "longitude": "59.8060",
+      "review_id": "pangaea-arabian-sea-sediment-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-MC3A-1-2cm",
+      "sediment_depth_m": "0.015",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=122",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-MC3A-1-2cm%7CPANGAEA.950139.tab%23row%3D122",
+      "water_depth_m": "-1980"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.67",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC24A-0-1cm%257CPANGAEA.950139.tab%2523row%253D123%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "103.83",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC24A-0-1cm%257CPANGAEA.950139.tab%2523row%253D123%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "30.19",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC24A-0-1cm%257CPANGAEA.950139.tab%2523row%253D123%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "82.24",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC24A-0-1cm%257CPANGAEA.950139.tab%2523row%253D123%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "4.77",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC24A-0-1cm%257CPANGAEA.950139.tab%2523row%253D123%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "54.21",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC24A-0-1cm%257CPANGAEA.950139.tab%2523row%253D123%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-24A-MC",
+      "latitude": "19.2662",
+      "location": "Arabian Sea",
+      "longitude": "58.4532",
+      "review_id": "pangaea-arabian-sea-sediment-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-MC24A-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=123",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-MC24A-0-1cm%7CPANGAEA.950139.tab%23row%3D123",
+      "water_depth_m": "-923"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.58",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC18A-0-1cm%257CPANGAEA.950139.tab%2523row%253D124%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "172.65",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC18A-0-1cm%257CPANGAEA.950139.tab%2523row%253D124%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "26.63",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC18A-0-1cm%257CPANGAEA.950139.tab%2523row%253D124%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "58.67",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC18A-0-1cm%257CPANGAEA.950139.tab%2523row%253D124%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.80",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC18A-0-1cm%257CPANGAEA.950139.tab%2523row%253D124%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "65.06",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC18A-0-1cm%257CPANGAEA.950139.tab%2523row%253D124%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-18A-MC",
+      "latitude": "17.8242",
+      "location": "Arabian Sea",
+      "longitude": "57.3555",
+      "review_id": "pangaea-arabian-sea-sediment-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-MC18A-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=124",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-MC18A-0-1cm%7CPANGAEA.950139.tab%23row%3D124",
+      "water_depth_m": "294"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.38",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC9A-0-1cm%257CPANGAEA.950139.tab%2523row%253D125%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "56.50",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC9A-0-1cm%257CPANGAEA.950139.tab%2523row%253D125%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "23.39",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC9A-0-1cm%257CPANGAEA.950139.tab%2523row%253D125%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "47.54",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC9A-0-1cm%257CPANGAEA.950139.tab%2523row%253D125%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "4.55",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC9A-0-1cm%257CPANGAEA.950139.tab%2523row%253D125%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "48.70",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC9A-0-1cm%257CPANGAEA.950139.tab%2523row%253D125%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-9A-MC",
+      "latitude": "17.6963",
+      "location": "Arabian Sea",
+      "longitude": "57.8635",
+      "review_id": "pangaea-arabian-sea-sediment-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-MC9A-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=125",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-MC9A-0-1cm%7CPANGAEA.950139.tab%23row%3D125",
+      "water_depth_m": "-1468"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.22",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC13H-0-1cm%257CPANGAEA.950139.tab%2523row%253D126%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "113.05",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC13H-0-1cm%257CPANGAEA.950139.tab%2523row%253D126%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "41.65",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC13H-0-1cm%257CPANGAEA.950139.tab%2523row%253D126%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "91.75",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC13H-0-1cm%257CPANGAEA.950139.tab%2523row%253D126%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "4.37",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC13H-0-1cm%257CPANGAEA.950139.tab%2523row%253D126%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "83.00",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN047-MC13H-0-1cm%257CPANGAEA.950139.tab%2523row%253D126%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN047-13H-MC",
+      "latitude": "17.7578",
+      "location": "Arabian Sea",
+      "longitude": "57.5913",
+      "review_id": "pangaea-arabian-sea-sediment-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN047-MC13H-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=126",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN047-MC13H-0-1cm%7CPANGAEA.950139.tab%23row%3D126",
+      "water_depth_m": "-903"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.05",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-MC11A-0-1cm%257CPANGAEA.950139.tab%2523row%253D127%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "99.48",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-MC11A-0-1cm%257CPANGAEA.950139.tab%2523row%253D127%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "46.78",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-MC11A-0-1cm%257CPANGAEA.950139.tab%2523row%253D127%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "123.15",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-MC11A-0-1cm%257CPANGAEA.950139.tab%2523row%253D127%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "7.75",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-MC11A-0-1cm%257CPANGAEA.950139.tab%2523row%253D127%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "96.85",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-MC11A-0-1cm%257CPANGAEA.950139.tab%2523row%253D127%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN041-11A-MC",
+      "latitude": "17.4347",
+      "location": "Arabian Sea",
+      "longitude": "58.8118",
+      "review_id": "pangaea-arabian-sea-sediment-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN041-MC11A-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=127",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN041-MC11A-0-1cm%7CPANGAEA.950139.tab%23row%3D127",
+      "water_depth_m": "-3618"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "1.76",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-8PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D128%7CAs%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "85.21",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-8PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D128%7CCr%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cu [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "36.44",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-8PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D128%7CCu%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Ni [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "80.12",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-8PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D128%7CNi%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Pb [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.47",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-8PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D128%7CPb%7C",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Zn [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "62.49",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTN041-8PC-0-1cm%257CPANGAEA.950139.tab%2523row%253D128%7CZn%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TN041-8-PC",
+      "latitude": "17.8127",
+      "location": "Arabian Sea",
+      "longitude": "57.5057",
+      "review_id": "pangaea-arabian-sea-sediment-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TN041-8PC-0-1cm",
+      "sediment_depth_m": "0.005",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=128",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTN041-8PC-0-1cm%7CPANGAEA.950139.tab%23row%3D128",
+      "water_depth_m": "-761"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "2.04",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17A%257CPANGAEA.950139.tab%2523row%253D102%7CAs%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-17A-MC",
+      "latitude": "15.9900",
+      "location": "Arabian Sea",
+      "longitude": "61.5300",
+      "review_id": "pangaea-arabian-sea-sediment-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-17A",
+      "sediment_depth_m": "0.025",
+      "selection_reasons": [
+        "observation_mapping_supplement"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=102",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-17A%7CPANGAEA.950139.tab%23row%3D102",
+      "water_depth_m": "-3985"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "Cr",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "Cr [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "73.09",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-17E%257CPANGAEA.950139.tab%2523row%253D103%7CCr%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-17E-MC",
+      "latitude": "15.9945",
+      "location": "Arabian Sea",
+      "longitude": "61.5333",
+      "review_id": "pangaea-arabian-sea-sediment-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-17E",
+      "sediment_depth_m": "0.025",
+      "selection_reasons": [
+        "observation_mapping_supplement"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=103",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-17E%7CPANGAEA.950139.tab%23row%3D103",
+      "water_depth_m": "-3985"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "Geochemical analysis on bulk sediment",
+          "field": "As [mg/kg]",
+          "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+          "raw_value": "3.46",
+          "record_id": "rec-observation-v2%7Cpangaea-arabian-sea-sediment%7Csrc-source-record-v2%257Cpangaea-arabian-sea-sediment%257CTOM41-1-22E%257CPANGAEA.950139.tab%2523row%253D104%7CAs%7C",
+          "unit": "mg/kg"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "event": "TOM41-22E-MC",
+      "latitude": "10.0345",
+      "location": "Arabian Sea",
+      "longitude": "65.0842",
+      "review_id": "pangaea-arabian-sea-sediment-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "TOM41-1-22E",
+      "sediment_depth_m": "0.023",
+      "selection_reasons": [
+        "observation_mapping_supplement"
+      ],
+      "source_locator": "PANGAEA.950139.tab#row=104",
+      "source_record_id": "src-source-record-v2%7Cpangaea-arabian-sea-sediment%7CTOM41-1-22E%7CPANGAEA.950139.tab%23row%3D104",
+      "water_depth_m": "-4426"
+    }
+  ],
+  "review_unit": "source_record_or_explicit_observation_mapping",
+  "source_id": "pangaea-arabian-sea-sediment",
+  "status": "prepared"
+}

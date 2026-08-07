@@ -22,12 +22,11 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["filename", "source_url", "bytes", "sha256", "retrieved_at"],
+        "required": ["filename", "source_url", "bytes", "retrieved_at"],
         "properties": {
           "filename": {"type": "string", "minLength": 1},
           "source_url": {"type": "string", "pattern": "^https://"},
           "bytes": {"type": "integer", "minimum": 1},
-          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
           "retrieved_at": {"type": ["string", "null"]}
         },
         "additionalProperties": false
@@ -39,11 +38,10 @@
       "minItems": 2,
       "items": {
         "type": "object",
-        "required": ["path", "bytes", "sha256"],
+        "required": ["path", "bytes"],
         "properties": {
           "path": {"enum": ["demo_input.csv", "sources.jsonl"]},
-          "bytes": {"type": "integer", "minimum": 1},
-          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          "bytes": {"type": "integer", "minimum": 1}
         },
         "additionalProperties": false
       }

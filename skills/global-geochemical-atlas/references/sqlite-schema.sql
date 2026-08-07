@@ -26,11 +26,11 @@ CREATE TABLE dataset_files (
   filename TEXT NOT NULL,
   source_url TEXT NOT NULL,
   bytes INTEGER NOT NULL CHECK (bytes >= 0),
-  sha256 TEXT NOT NULL CHECK (length(sha256) = 64),
+  file_identity TEXT NOT NULL,
   PRIMARY KEY (dataset_id, file_id)
 );
 
-CREATE INDEX idx_dataset_files_sha256 ON dataset_files(sha256);
+CREATE INDEX idx_dataset_files_identity ON dataset_files(file_identity);
 
 CREATE TABLE publications (
   publication_id TEXT PRIMARY KEY,
@@ -120,11 +120,14 @@ CREATE TABLE samples (
   tectonic_setting_raw TEXT,
   matched_geologic_unit TEXT,
   geology_map_source TEXT,
+  geology_map_source_id TEXT,
   geology_map_version TEXT,
   match_method TEXT,
   match_scale TEXT,
   boundary_distance_m REAL,
   match_uncertainty TEXT,
+  match_status TEXT NOT NULL,
+  match_candidates_json TEXT NOT NULL,
   soil_horizon_raw TEXT,
   soil_horizon TEXT,
   sediment_environment TEXT,
@@ -138,6 +141,11 @@ CREATE TABLE samples (
 CREATE INDEX idx_samples_medium ON samples(medium_raw);
 CREATE INDEX idx_samples_type ON samples(sample_type);
 CREATE INDEX idx_samples_geology ON samples(geologic_unit_raw, matched_geologic_unit);
+CREATE INDEX idx_samples_geology_status ON samples(match_status);
+CREATE INDEX idx_samples_lithology ON samples(lithology, lithology_raw);
+CREATE INDEX idx_samples_soil_horizon ON samples(soil_horizon);
+CREATE INDEX idx_samples_sediment_environment ON samples(sediment_environment);
+CREATE INDEX idx_samples_water ON samples(water_body_type, water_fraction);
 CREATE INDEX idx_samples_igsn ON samples(igsn);
 CREATE INDEX idx_samples_event ON samples(sampling_event_id);
 
@@ -159,6 +167,7 @@ CREATE TABLE analytical_methods (
 );
 
 CREATE INDEX idx_methods_technique ON analytical_methods(technique_raw);
+CREATE INDEX idx_methods_scope ON analytical_methods(method_scope);
 
 CREATE TABLE method_publications (
   method_id TEXT NOT NULL REFERENCES analytical_methods(method_id),
@@ -191,7 +200,7 @@ CREATE TABLE provenance (
   source_sheet TEXT,
   source_row INTEGER,
   source_column TEXT,
-  input_sha256 TEXT NOT NULL,
+  input_file_id TEXT NOT NULL,
   adapter_name TEXT NOT NULL,
   adapter_version TEXT NOT NULL,
   processing_steps_json TEXT NOT NULL
@@ -222,6 +231,8 @@ CREATE INDEX idx_observations_analyte ON observations(analyte_reported);
 CREATE INDEX idx_observations_sample_analyte ON observations(sample_id, analyte_reported);
 CREATE INDEX idx_observations_method ON observations(method_id);
 CREATE INDEX idx_observations_provenance ON observations(provenance_id);
+CREATE INDEX idx_observations_basis ON observations(measurement_basis_raw);
+CREATE INDEX idx_observations_qualifier ON observations(value_qualifier);
 
 CREATE VIRTUAL TABLE archive_fts USING fts5(entity_type, entity_id UNINDEXED, searchable_text);
 
@@ -257,11 +268,14 @@ SELECT
   s.tectonic_setting_raw,
   s.matched_geologic_unit,
   s.geology_map_source,
+  s.geology_map_source_id,
   s.geology_map_version,
   s.match_method,
   s.match_scale,
   s.boundary_distance_m,
   s.match_uncertainty,
+  s.match_status,
+  s.match_candidates_json,
   s.soil_horizon_raw,
   s.soil_horizon,
   s.sediment_environment,
@@ -289,7 +303,7 @@ SELECT
   p.source_locator,
   p.source_file,
   p.source_row,
-  p.input_sha256,
+  p.input_file_id,
   d.dataset_id,
   d.dataset_version,
   d.dataset_doi,
@@ -315,6 +329,7 @@ SELECT
   s.lithology,
   s.geologic_unit_raw,
   s.matched_geologic_unit,
+  s.match_status,
   s.soil_horizon,
   s.sediment_environment,
   s.water_body_type,
@@ -358,7 +373,7 @@ SELECT
   p.source_sheet,
   p.source_row,
   p.source_column,
-  p.input_sha256,
+  p.input_file_id,
   p.adapter_name,
   p.adapter_version,
   p.acquisition_run_id,

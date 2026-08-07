@@ -4,11 +4,11 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
 import shutil
 import sys
+import urllib.parse
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
@@ -21,12 +21,12 @@ class CacheControlError(ValueError):
 
 
 def stable_request_cache_key(source_id: str, dataset_version: str, request: Mapping[str, Any]) -> str:
-    """Hash source, immutable version and canonical request parameters."""
+    """Build a reversible key from source, version and canonical request parameters."""
 
     if not source_id.strip() or not dataset_version.strip():
         raise CacheControlError("source_id and dataset_version are required")
     payload = {
-        "cache_key_version": "d1-request-cache-key-v1",
+        "cache_key_version": "d1-request-cache-key-v2",
         "dataset_version": dataset_version,
         "request": request,
         "source_id": source_id,
@@ -35,15 +35,7 @@ def stable_request_cache_key(source_id: str, dataset_version: str, request: Mapp
         canonical = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     except (TypeError, ValueError) as exc:
         raise CacheControlError(f"request is not canonical JSON: {exc}") from exc
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+    return urllib.parse.quote(canonical, safe="-._~")
 
 
 def _target(cache_dir: Path, source_id: str, dataset_version: str) -> Path:
@@ -80,17 +72,20 @@ def inspect_cache(
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
             output_name = manifest.get("output_filename")
             data_path = manifest_path.parent / output_name if isinstance(output_name, str) else None
-            if not data_path or not data_path.is_file() or not manifest.get("sha256"):
-                raise CacheControlError("manifest lacks a present output file or SHA-256")
+            if not data_path or not data_path.is_file():
+                raise CacheControlError("manifest lacks a present output file")
             if manifest.get("dataset_version") != dataset_version:
                 raise CacheControlError("manifest dataset version does not match the requested version")
-            observed = _sha256(data_path)
+            recorded_bytes = manifest.get("bytes")
+            observed_bytes = data_path.stat().st_size
+            if not isinstance(recorded_bytes, int):
+                raise CacheControlError("manifest lacks the recorded byte count")
             state.update(
                 {
                     "output_filename": output_name,
-                    "recorded_sha256": manifest["sha256"],
-                    "observed_sha256": observed,
-                    "status": "verified" if observed == manifest["sha256"] else "invalid",
+                    "recorded_bytes": recorded_bytes,
+                    "observed_bytes": observed_bytes,
+                    "status": "verified" if observed_bytes == recorded_bytes else "invalid",
                 }
             )
         except (OSError, json.JSONDecodeError, CacheControlError) as exc:
@@ -101,7 +96,7 @@ def inspect_cache(
             invalid += 1
         manifests.append(state)
     return {
-        "cache_control_version": "d1-cache-control-v1",
+        "cache_control_version": "d1-cache-control-v2",
         "status": (
             "missing"
             if not target.exists()
@@ -134,7 +129,7 @@ def delete_cache(cache_dir: Path, source_id: str, dataset_version: str, confirma
     byte_count = sum(path.stat().st_size for path in target.rglob("*") if path.is_file())
     shutil.rmtree(target)
     return {
-        "cache_control_version": "d1-cache-control-v1",
+        "cache_control_version": "d1-cache-control-v2",
         "status": "deleted",
         "source_id": source_id,
         "dataset_version": dataset_version,

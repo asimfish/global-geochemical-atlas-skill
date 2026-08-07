@@ -161,7 +161,7 @@ def _georoc_review(
                 }
             )
         checks = {
-            "registered_member_hash_matches": downloaded.sha256 == demos.sha256_file(downloaded.path),
+            "registered_member_bytes_match": downloaded.bytes == downloaded.path.stat().st_size,
             "sample_id_preserved": bool(sample_id),
             "exact_point_coordinates_preserved": bool(latitude and longitude),
             "whole_rock_material_preserved": demos._strip_citation_suffix(record.fields.get("MATERIAL")).upper() == "WR",
@@ -264,7 +264,7 @@ def _usgs_review(
                 }
             )
         checks = {
-            "registered_file_hash_matches": downloaded.sha256 == demos.sha256_file(downloaded.path),
+            "registered_file_bytes_match": downloaded.bytes == downloaded.path.stat().st_size,
             "sample_id_preserved": bool(sample_id),
             "coordinates_preserved": all(
                 demos._reported_float(record.fields.get(field)) is not None for field in ("Latitude", "Longitude")
@@ -406,7 +406,7 @@ def _geotraces_review(
                 }
             )
         checks = {
-            "registered_member_hash_matches": downloaded.sha256 == demos.sha256_file(downloaded.path),
+            "registered_member_bytes_match": downloaded.bytes == downloaded.path.stat().st_size,
             "sample_identity_preserved": bool(cruise and station and depth),
             "coordinates_preserved": all(
                 demos._reported_float(record.fields.get(field)) is not None
@@ -464,7 +464,7 @@ def prepare(source_id: str, cache_dir: Path) -> dict[str, Any]:
             "Thirty target-bearing seawater rows spanning Cu/Ni/Zn, SeaDataNet QC edge flags, "
             "geographic/depth boundaries and evenly spaced source order."
         )
-        snapshot_id = f"doi:{candidate.dataset_doi}@{candidate.version}#sha256:{downloaded[0].sha256}"
+        snapshot_id = f"doi:{candidate.dataset_doi}@{candidate.version}"
     else:
         raise ReviewPreparationError(f"unsupported source: {source_id}")
     pass_count = sum(record["automated_status"] == "PASS" for record in review_records)

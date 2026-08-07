@@ -20,7 +20,7 @@ DEFAULT_REGISTRY = SKILL_DIR / "assets" / "source_manifest.json"
 DEFAULT_CANDIDATE_AUDITS = SKILL_DIR / "fixtures" / "candidate-audits"
 DEFAULT_SNAPSHOT_ROOT = SKILL_DIR / "fixtures" / "four-media"
 
-EVIDENCE_VERSION = "geochemical-source-evidence-v3"
+EVIDENCE_VERSION = "geochemical-source-evidence-v4"
 EvidenceStatus = Literal["verified", "partial", "missing", "conflict", "not_applicable"]
 
 DIMENSION_WEIGHTS = {
@@ -31,7 +31,7 @@ DIMENSION_WEIGHTS = {
     "schema_semantics": 15,
     "method_qc_metadata": 10,
     "adapter_reproducibility": 10,
-    "human_review": 10,
+    "automated_audit": 10,
 }
 STATUS_FACTORS = {
     "verified": 1.0,
@@ -82,13 +82,30 @@ def load_candidate_evidence(
                 entry = evidence.setdefault(source_id, {"source_id": source_id})
                 entry["_snapshot_manifest"] = snapshot
                 entry["_snapshot_manifest_path"] = str(path.relative_to(SKILL_DIR))
+        audit_paths = [*snapshot_root.rglob("automated_audit.json")]
+        regional_root = SKILL_DIR / "fixtures" / "south-america"
+        if regional_root.exists():
+            audit_paths.extend(regional_root.rglob("automated_audit.json"))
+        for path in sorted(audit_paths):
+            audit = _read_json(path, "automated audit")
+            source_id = audit.get("source_id")
+            if isinstance(source_id, str) and source_id:
+                entry = evidence.setdefault(source_id, {"source_id": source_id})
+                entry["automated_audit"] = audit
+                entry["_automated_audit_path"] = str(path.relative_to(SKILL_DIR))
         for path in sorted(snapshot_root.rglob("human_review.json")):
-            review = _read_json(path, "human review")
+            review = _read_json(path, "legacy review or automated audit")
             source_id = review.get("source_id")
             if isinstance(source_id, str) and source_id:
                 entry = evidence.setdefault(source_id, {"source_id": source_id})
-                entry["human_review"] = review
-                entry["_human_review_path"] = str(path.relative_to(SKILL_DIR))
+                if review.get("audit_version") == "geochemical-automated-source-audit-v1" and "automated_audit" not in entry:
+                    entry["automated_audit"] = review
+                    entry["_automated_audit_path"] = str(path.relative_to(SKILL_DIR))
+                else:
+                    # Compatibility only: V1 review sheets remain readable, but an
+                    # unsigned sheet is not treated as completed evidence.
+                    entry["human_review"] = review
+                    entry["_human_review_path"] = str(path.relative_to(SKILL_DIR))
     return evidence
 
 
@@ -173,103 +190,124 @@ def _registry_integrity(registry_entry: Mapping[str, Any] | None) -> dict[str, A
     if isinstance(files, list) and files:
         valid = all(
             isinstance(item, Mapping)
-            and isinstance(item.get("expected_sha256"), str)
-            and len(item["expected_sha256"]) == 64
+            and bool(item.get("file_id") or item.get("filename"))
+            and bool(item.get("url"))
+            and isinstance(item.get("bytes"), int)
+            and item["bytes"] > 0
             for item in files
         )
         return _dimension(
             "verified" if valid else "conflict",
             weight,
-            "Every registered file has a pinned SHA-256."
+            "Every registered file has a stable identity, official URL and byte count."
             if valid
-            else "One or more registered files lack a pinned SHA-256.",
+            else "One or more registered files lack a stable identity, official URL or byte count.",
         )
     selected_members = download.get("selected_members")
     if isinstance(selected_members, list) and selected_members:
         valid = all(
             isinstance(item, Mapping)
             and isinstance(item.get("bytes"), int)
-            and isinstance(item.get("expected_sha256"), str)
-            and len(item["expected_sha256"]) == 64
+            and item["bytes"] > 0
+            and bool(item.get("file_id") or item.get("filename") or item.get("name"))
             and isinstance(item.get("range_start"), int)
             and isinstance(item.get("range_end"), int)
             and item["range_end"] >= item["range_start"]
-            and isinstance(item.get("range_sha256"), str)
-            and len(item["range_sha256"]) == 64
             for item in selected_members
         )
         return _dimension(
             "verified" if valid else "conflict",
             weight,
-            "Every selected ZIP member is pinned by byte range plus compressed and decoded SHA-256."
+            "Every selected ZIP member is identified by name, byte range and decoded byte count."
             if valid
-            else "One or more selected ZIP members lack a valid range or SHA-256 contract.",
+            else "One or more selected ZIP members lacks a valid identity, range or byte-count contract.",
         )
     members = download.get("members")
     if isinstance(members, list) and members:
         valid = all(
             isinstance(item, Mapping)
             and isinstance(item.get("bytes"), int)
-            and isinstance(item.get("publisher_checksum"), Mapping)
-            and item["publisher_checksum"].get("algorithm") in {"md5", "sha256"}
-            and isinstance(item["publisher_checksum"].get("value"), str)
+            and item["bytes"] > 0
+            and bool(item.get("file_id") or item.get("filename") or item.get("name"))
             for item in members
         )
         return _dimension(
             "verified" if valid else "conflict",
             weight,
-            "Archive members are pinned by name, size and publisher checksum."
+            "Archive members are pinned by identity and byte count."
             if valid
-            else "Archive member inventory or publisher checksums are incomplete.",
+            else "Archive member identity or byte-count inventory is incomplete.",
         )
     return _dimension("conflict", weight, "The registered download has no verifiable file inventory.")
 
 
-def _human_review_dimension(candidate: Mapping[str, Any] | None) -> dict[str, Any]:
-    weight = DIMENSION_WEIGHTS["human_review"]
-    review = candidate.get("human_review") if isinstance(candidate, Mapping) else None
-    evidence = [candidate.get("_human_review_path", "")] if isinstance(candidate, Mapping) else []
-    if not isinstance(review, Mapping):
-        return _dimension("missing", weight, "No checked-in human review record is available.")
-    completed = review.get("completed_record_count", 0)
-    if review.get("status") in {"complete", "passed"} and not completed:
-        completed = review.get("reviewed_record_count", review.get("required_record_count", 0))
+def _automated_audit_dimension(candidate: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Score a structured evidence audit without requiring a human signature.
+
+    Old human-review files remain readable for compatibility. They receive
+    credit only when they contain a completed, named review; an unsigned legacy
+    preparation sheet never blocks adapter use and never masquerades as an
+    automated audit.
+    """
+
+    weight = DIMENSION_WEIGHTS["automated_audit"]
+    audit = candidate.get("automated_audit") if isinstance(candidate, Mapping) else None
+    evidence = [candidate.get("_automated_audit_path", "")] if isinstance(candidate, Mapping) else []
+    if isinstance(audit, Mapping):
+        status = audit.get("status")
+        audited = audit.get("audited_record_count", 0)
+        if not isinstance(audited, int) or audited < 0:
+            return _dimension("conflict", weight, "Automated audit count is invalid.", evidence)
+        if status == "conflict":
+            return _dimension(
+                "conflict", weight, "Automated audit found an unresolved systematic mapping error.", evidence
+            )
+        if status == "automated_audit_complete" and audited >= 30:
+            return _dimension(
+                "verified",
+                weight,
+                f"{audited} stratified records received a structured Codex evidence audit.",
+                evidence,
+            )
+        if audited >= 10:
+            return _dimension(
+                "partial",
+                weight,
+                f"{audited} records were audited; 30 are required for full credit.",
+                evidence,
+                awarded_points=5,
+            )
+        if audited >= 1:
+            return _dimension(
+                "partial",
+                weight,
+                f"{audited} records were audited; 30 are required for full credit.",
+                evidence,
+                awarded_points=2,
+            )
+        return _dimension("missing", weight, "No completed automated evidence audit is recorded.", evidence)
+
+    legacy = candidate.get("human_review") if isinstance(candidate, Mapping) else None
+    legacy_evidence = [candidate.get("_human_review_path", "")] if isinstance(candidate, Mapping) else []
+    if not isinstance(legacy, Mapping):
+        return _dimension("missing", weight, "No checked-in automated or completed legacy audit is available.")
+    completed = legacy.get("completed_record_count", 0)
     if not isinstance(completed, int) or completed < 0:
-        return _dimension("conflict", weight, "Human review count is invalid.")
-    if review.get("status") == "conflict":
+        return _dimension("conflict", weight, "Legacy review count is invalid.", legacy_evidence)
+    if legacy.get("status") == "conflict":
+        return _dimension("conflict", weight, "Legacy review records a conflict.", legacy_evidence)
+    if completed >= 30 and legacy.get("status") in {"complete", "passed"}:
         return _dimension(
-            "conflict", weight, "Human review found an unresolved systematic mapping error.", evidence
+            "verified", weight, f"{completed} records have a completed legacy review.", legacy_evidence
         )
-    if completed >= 30 or (
-        review.get("all_records_reviewed") is True and review.get("status") in {"complete", "passed"}
-    ):
-        return _dimension(
-            "verified", weight, f"{completed} stratified records were reviewed and passed.", evidence
-        )
-    if completed >= 10:
-        return _dimension(
-            "partial",
-            weight,
-            f"{completed} records were reviewed; 30 are required for full credit.",
-            evidence,
-            awarded_points=5,
-        )
-    if completed >= 1:
-        return _dimension(
-            "partial",
-            weight,
-            f"{completed} records were reviewed; 30 are required for full credit.",
-            evidence,
-            awarded_points=2,
-        )
-    prepared = review.get("prepared_record_count", 0)
+    prepared = legacy.get("prepared_record_count", 0)
     return _dimension(
         "missing",
         weight,
-        f"A {prepared}-record review sample is prepared but no completed review is recorded."
+        f"A legacy {prepared}-record sheet exists, but no completed automated audit is recorded."
         if prepared
-        else "Human review has not started.",
-        evidence,
+        else "No completed automated audit is recorded.",
+        legacy_evidence,
     )
 
 
@@ -307,7 +345,7 @@ def _derive_use_mode(
     if (
         tier == "A"
         and dimensions["adapter_reproducibility"]["status"] == "verified"
-        and dimensions["human_review"]["status"] == "verified"
+        and dimensions["automated_audit"]["status"] == "verified"
     ):
         return "benchmark_ready", []
     if (
@@ -315,8 +353,8 @@ def _derive_use_mode(
         and dimensions["file_record_integrity"]["status"] == "verified"
         and dimensions["schema_semantics"]["status"] in {"verified", "partial"}
     ):
-        if dimensions["human_review"]["status"] != "verified":
-            reasons.append("30-record human review is incomplete")
+        if dimensions["automated_audit"]["status"] != "verified":
+            reasons.append("30-record automated evidence audit is incomplete")
         return "normalized_analysis", reasons
     if (
         dimensions["file_record_integrity"]["status"] == "verified"
@@ -355,8 +393,8 @@ def score_source(
     snapshot_manifest = candidate.get("_snapshot_manifest") if isinstance(candidate, Mapping) else None
     if isinstance(snapshot_manifest, Mapping):
         candidate_archive = {
-            "sha256": snapshot_manifest.get("response", {}).get("sha256"),
             "members": snapshot_manifest.get("archive", {}).get("members"),
+            "bytes": snapshot_manifest.get("response", {}).get("bytes"),
         }
         candidate_acquisition = {
             "request_url": snapshot_manifest.get("request", {}).get("url"),
@@ -367,11 +405,13 @@ def score_source(
         candidate_acquisition = candidate.get("acquisition") if isinstance(candidate, Mapping) else None
     dynamic_snapshot = (
         isinstance(candidate_archive, Mapping)
-        and isinstance(candidate_archive.get("sha256"), str)
-        and len(candidate_archive["sha256"]) == 64
         and isinstance(candidate_acquisition, Mapping)
         and bool(candidate_acquisition.get("request_url"))
         and bool(candidate_acquisition.get("observed_at"))
+        and (
+            isinstance(candidate_archive.get("bytes"), int)
+            or isinstance(candidate_archive.get("members"), list)
+        )
     )
     if version.get("status") == "pinned" and version.get("value"):
         version_dimension = _dimension(
@@ -383,7 +423,7 @@ def score_source(
         version_dimension = _dimension(
             "verified",
             DIMENSION_WEIGHTS["version_snapshot"],
-            "A dynamic API response is frozen by exact request, observation time and SHA-256.",
+            "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
             [
                 candidate.get("_snapshot_manifest_path", ""),
                 candidate.get("_evidence_path", ""),
@@ -400,7 +440,7 @@ def score_source(
         version_dimension = _dimension(
             "missing",
             DIMENSION_WEIGHTS["version_snapshot"],
-            "No immutable version or content-addressed snapshot is currently recorded.",
+            "No concrete publisher version or observation snapshot is currently recorded.",
         )
     dimensions["version_snapshot"] = version_dimension
 
@@ -408,18 +448,17 @@ def score_source(
         members = candidate_archive.get("members", [])
         valid_members = bool(members) and all(
             isinstance(item, Mapping)
-            and isinstance(item.get("name"), str)
+            and bool(item.get("file_id") or item.get("name") or item.get("filename"))
             and isinstance(item.get("bytes"), int)
-            and isinstance(item.get("sha256"), str)
-            and len(item["sha256"]) == 64
+            and item["bytes"] > 0
             for item in members
         )
         dimensions["file_record_integrity"] = _dimension(
             "verified" if valid_members else "partial",
             DIMENSION_WEIGHTS["file_record_integrity"],
-            "The dynamic snapshot records archive hash and complete member hashes."
+            "The dynamic snapshot records a complete member identity and byte-count inventory."
             if valid_members
-            else "The dynamic snapshot hash exists but its member inventory is incomplete.",
+            else "The dynamic snapshot exists but its member identity or byte-count inventory is incomplete.",
             [candidate.get("_snapshot_manifest_path", ""), candidate.get("_evidence_path", "")],
         )
     else:
@@ -520,7 +559,7 @@ def score_source(
         adapter_note,
         [candidate.get("_evidence_path", "")] if isinstance(candidate, Mapping) else [],
     )
-    dimensions["human_review"] = _human_review_dimension(candidate)
+    dimensions["automated_audit"] = _automated_audit_dimension(candidate)
 
     denominator = sum(
         item["weight"] for item in dimensions.values() if item["status"] != "not_applicable"

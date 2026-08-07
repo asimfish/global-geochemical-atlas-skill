@@ -1,0 +1,75 @@
+{
+  "archive": {
+    "members": [
+      {
+        "bytes": 577715,
+        "file_id": "soil-dataset",
+        "name": "Soil dataset.xlsx",
+        "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      },
+      {
+        "bytes": 33386,
+        "file_id": "bulk-density-supplement",
+        "name": "Soil bulk density.xlsx",
+        "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      },
+      {
+        "bytes": 1246886,
+        "file_id": "dataset-description",
+        "name": "Description of the dataset.docx",
+        "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      }
+    ]
+  },
+  "claim_boundary": "This evidence binds tpdc-china-mountain-soil to its DOI/PID, version, file identity, byte count, schema and registered row statistics. It does not claim continuous spatial coverage or cross-method comparability.",
+  "counts": {
+    "distinct_mountains": 30,
+    "distinct_profiles": 485,
+    "distinct_sites": 166,
+    "horizon_counts": {
+      "A": 481,
+      "C": 452,
+      "O": 381
+    },
+    "physical_rows": 1314,
+    "target_observations": 6570,
+    "target_value_counts": {
+      "Cr": 1314,
+      "Cu": 1314,
+      "Ni": 1314,
+      "Pb": 1314,
+      "Zn": 1314
+    }
+  },
+  "observed_at": "2026-08-07T10:20:00Z",
+  "request": {
+    "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+  },
+  "response": {
+    "bytes": 1828683
+  },
+  "schema": {
+    "required_field_count": 16,
+    "required_fields": [
+      "Climaticzones",
+      "Mountain",
+      "site",
+      "Sam.No",
+      "Horizons",
+      "Latitude",
+      "Longitude",
+      "Rock Class",
+      "Rock Group",
+      "Soil Order",
+      "Great Soil Group",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ]
+  },
+  "snapshot_id": "tpdc-china-mountain-soil:tpdc-file-2025-07-23:2026-08-07T10:20:00Z:01",
+  "snapshot_version": "geochemical-source-snapshot-v2-no-content-hash",
+  "source_id": "tpdc-china-mountain-soil"
+}

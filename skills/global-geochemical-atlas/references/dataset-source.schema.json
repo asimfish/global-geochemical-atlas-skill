@@ -23,13 +23,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["file_id", "filename", "source_url", "bytes", "sha256"],
+        "required": ["file_id", "filename", "source_url", "bytes"],
         "properties": {
           "file_id": {"type": "string", "minLength": 1},
           "filename": {"type": "string", "minLength": 1},
           "source_url": {"type": "string", "minLength": 1},
           "bytes": {"type": "integer", "minimum": 1},
-          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          "file_identity": {"type": "string", "minLength": 1}
         }
       }
     }

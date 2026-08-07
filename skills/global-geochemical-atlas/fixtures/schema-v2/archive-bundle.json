@@ -20,7 +20,7 @@
           "filename": "fixture-v2.csv",
           "source_url": "https://example.org/fixture-v2.csv",
           "bytes": 234,
-          "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          "file_identity": "synthetic-v4-source:2026-08-05:synthetic-v4.csv"
         }
       ]
     }
@@ -85,11 +85,14 @@
       "tectonic_setting_raw": null,
       "matched_geologic_unit": null,
       "geology_map_source": null,
+      "geology_map_source_id": null,
       "geology_map_version": null,
       "match_method": null,
       "match_scale": null,
       "boundary_distance_m": null,
       "match_uncertainty": null,
+      "match_status": "unmatched",
+      "match_candidates": [],
       "soil_horizon_raw": "A horizon",
       "soil_horizon": "A",
       "sediment_environment": null,
@@ -104,6 +107,7 @@
         "tectonic_setting_raw": "not_reported",
         "matched_geologic_unit": "not_available",
         "geology_map_source": "not_available",
+        "geology_map_source_id": "not_available",
         "geology_map_version": "not_available",
         "match_method": "not_available",
         "match_scale": "not_available",
@@ -151,7 +155,7 @@
       "source_sheet": null,
       "source_row": 2,
       "source_column": "As",
-      "input_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "input_file_id": "synthetic-v4-source:2026-08-05:synthetic-v4.csv",
       "adapter_name": "fixture_v2_adapter",
       "adapter_version": "2.0.0",
       "processing_steps": [{"name": "preserve_v4_semantics", "version": "1.0.0", "parameters": {"infer": false}}]
@@ -201,7 +205,7 @@
       "status": "success",
       "cache_status": "not_applicable",
       "counts": {"source_records": 1, "observations": 1, "rejected_records": 0, "failed_records": 0},
-      "outputs": [{"path": "archive-bundle.json", "sha256": "1111111111111111111111111111111111111111111111111111111111111111", "bytes": 0}]
+      "outputs": [{"path": "archive-bundle.json", "bytes": 0}]
     }
   ]
 }

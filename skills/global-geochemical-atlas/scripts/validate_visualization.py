@@ -122,20 +122,20 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         }
         if report.get("outputs") != expected_outputs:
             errors.append("visualization_report.json outputs do not match the D3 contract")
-        for name, expected_hash in report.get("inputs", {}).items():
+        for name, expected_identity in report.get("inputs", {}).items():
             if name not in renderer.REQUIRED_INPUTS:
-                errors.append(f"visualization_report.json contains an unknown input hash: {name}")
-            elif expected_hash != workflow_validator.sha256_file(paths[name]):
-                errors.append(f"visualization_report.json input hash differs for {name}")
+                errors.append(f"visualization_report.json contains an unknown input identity: {name}")
+            elif expected_identity != renderer.file_identity(paths[name]):
+                errors.append(f"visualization_report.json input identity differs for {name}")
         if set(report.get("inputs", {})) != set(renderer.REQUIRED_INPUTS):
-            errors.append("visualization_report.json does not hash every required D1/D2 input")
-        output_hashes = report.get("output_sha256")
-        if not isinstance(output_hashes, dict):
-            errors.append("visualization_report.json output_sha256 must be an object")
+            errors.append("visualization_report.json does not identify every required D1/D2 input")
+        output_identities = report.get("output_artifacts")
+        if not isinstance(output_identities, dict):
+            errors.append("visualization_report.json output_artifacts must be an object")
         else:
             for name in expected_outputs.values():
-                if output_hashes.get(name) != workflow_validator.sha256_file(paths[name]):
-                    errors.append(f"visualization_report.json output hash differs for {name}")
+                if output_identities.get(name) != renderer.file_identity(paths[name]):
+                    errors.append(f"visualization_report.json output identity differs for {name}")
         map_report = report.get("map_report")
         if not isinstance(map_report, dict):
             errors.append("visualization_report.json map_report must be an object")

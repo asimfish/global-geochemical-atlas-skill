@@ -11,206 +11,353 @@
       "bytes": 479724,
       "cache_status": "cache_hit",
       "file_id": "0LBXI0",
-      "filename": "2026-06-1KRR1P_ZIMBABWE_CRATON_ARCHEAN.csv",
-      "sha256": "0a57dc6ad45fbfeec7f2fee395b0b43dd96d21c109718267058657e59a7701f2"
+      "filename": "2026-06-1KRR1P_ZIMBABWE_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 950780,
       "cache_status": "cache_hit",
       "file_id": "0YSJJR",
-      "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv",
-      "sha256": "2123a1cba47aa354555582fecdfff7540a9aa8b1527e0ee0a705db8f11d30b57"
+      "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv"
     },
     {
       "bytes": 362845,
       "cache_status": "cache_hit",
       "file_id": "4PATTX",
-      "filename": "2026-06-1KRR1P_CONGO_CRATON.csv",
-      "sha256": "1880b2971baa9e3c44e312f711a9d6a8da785739b6ec9504bc3d37c3d2d7efc2"
+      "filename": "2026-06-1KRR1P_CONGO_CRATON.csv"
     },
     {
       "bytes": 94925,
       "cache_status": "cache_hit",
       "file_id": "7U8BWC",
-      "filename": "2026-06-1KRR1P_BASTAR_CRATON.csv",
-      "sha256": "0fd5dca7583c256a35e91ab81ef120e38bc1fe283dbc16407f9ae2fe73ed5d19"
+      "filename": "2026-06-1KRR1P_BASTAR_CRATON.csv"
     },
     {
       "bytes": 4953001,
       "cache_status": "cache_hit",
       "file_id": "ATBQZH",
-      "filename": "2026-06-1KRR1P_WEST_AUSTRALIAN_CRATON.csv",
-      "sha256": "b7c774985e0cc5a27e24733ee89f908fa7792aed86a6390ae0637c0bca103da8"
+      "filename": "2026-06-1KRR1P_WEST_AUSTRALIAN_CRATON.csv"
     },
     {
       "bytes": 5874,
       "cache_status": "cache_hit",
       "file_id": "AUMPQZ",
-      "filename": "2026-06-1KRR1P_RAE_CRATON.csv",
-      "sha256": "4daf6e0e7e2bdd72e7d4962b85be630db268f8cde23359182e8648dfbcd9f6bb"
+      "filename": "2026-06-1KRR1P_RAE_CRATON.csv"
     },
     {
       "bytes": 2407194,
       "cache_status": "cache_hit",
       "file_id": "AVUWEP",
-      "filename": "2026-06-1KRR1P_DHARWAR_CRATON_ARCHEAN.csv",
-      "sha256": "43a5bd01d590f11313af717d6063dd60d83d110bf905c759737cedafb3e58f6f"
+      "filename": "2026-06-1KRR1P_DHARWAR_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 45706,
       "cache_status": "cache_hit",
       "file_id": "BFQKPU",
-      "filename": "2026-06-1KRR1P_LIMPOPO_BELT.csv",
-      "sha256": "6bb6ca5ee6f8890e69116ebd15bcab8fcbe7e52bd615182c425bd6afbd08e99e"
+      "filename": "2026-06-1KRR1P_LIMPOPO_BELT.csv"
     },
     {
       "bytes": 120031,
       "cache_status": "cache_hit",
       "file_id": "GKVOQ9",
-      "filename": "2026-06-1KRR1P_SARMATIAN_CRATON.csv",
-      "sha256": "c514561947a98942151f3f5f2a61aee1dd8b88f8036f7f62c334e0d0f62a4e3f"
+      "filename": "2026-06-1KRR1P_SARMATIAN_CRATON.csv"
     },
     {
       "bytes": 200350,
       "cache_status": "cache_hit",
       "file_id": "IN53QT",
-      "filename": "2026-06-1KRR1P_YANGTZE_BLOCK.csv",
-      "sha256": "d91ef95f5f051901c9eb52294de4b6cf3c8aedeef8aa61473eff55b4c8e6c35c"
+      "filename": "2026-06-1KRR1P_YANGTZE_BLOCK.csv"
     },
     {
       "bytes": 348082,
       "cache_status": "cache_hit",
       "file_id": "JC6ARO",
-      "filename": "2026-06-1KRR1P_TANZANIA_CRATON_ARCHEAN.csv",
-      "sha256": "222db38a0846b9e4a5e8749f4569aeb009d116190c554d052ea9b4061a6e5f77"
+      "filename": "2026-06-1KRR1P_TANZANIA_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 2407458,
       "cache_status": "cache_hit",
       "file_id": "LDWEK2",
-      "filename": "2026-06-1KRR1P_NORTH_ATLANTIC_CRATON_ARCHEAN.csv",
-      "sha256": "c07811dd5f6133fccb531ce7932b17f171822270a750e0a84086d245ec476a0a"
+      "filename": "2026-06-1KRR1P_NORTH_ATLANTIC_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 309858,
       "cache_status": "cache_hit",
       "file_id": "NT9GC8",
-      "filename": "2026-06-1KRR1P_BUNDELKHAND_CRATON.csv",
-      "sha256": "013262ec45286f1aed276355e9a34b09159a0694dce6ddcd638ed8f1107c1679"
+      "filename": "2026-06-1KRR1P_BUNDELKHAND_CRATON.csv"
     },
     {
       "bytes": 3346850,
       "cache_status": "cache_hit",
       "file_id": "NXSCT8",
-      "filename": "2026-06-1KRR1P_KAAPVAAL_CRATON_ARCHEAN.csv",
-      "sha256": "d3c433c1d82bd80417bd70bd5e8cbaf81ab3428fe14eb6a9113ee0ebbc2cb45d"
+      "filename": "2026-06-1KRR1P_KAAPVAAL_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 321067,
       "cache_status": "cache_hit",
       "file_id": "OHZY0O",
-      "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
-      "sha256": "6959b5f1d1ce74ba6608d11847cf12e6427535040bc10b5854ec5ef336fcf6aa"
+      "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv"
     },
     {
       "bytes": 6215,
       "cache_status": "cache_hit",
       "file_id": "PMFEC6",
-      "filename": "2026-06-1KRR1P_OKHOTSK-OMOLON_CRATON.csv",
-      "sha256": "ce00f2a717de68801851a0df36bf17e2f1396d7f05e9925d81dd3f1bfdd545e8"
+      "filename": "2026-06-1KRR1P_OKHOTSK-OMOLON_CRATON.csv"
     },
     {
       "bytes": 768400,
       "cache_status": "cache_hit",
       "file_id": "PQ361E",
-      "filename": "2026-06-1KRR1P_SAO_FRANCISCO_CRATON_ARCHEAN.csv",
-      "sha256": "e5b7b7e6bca5c6a3be58891ac44c534616dc46de9f57a48acec8b97d811de676"
+      "filename": "2026-06-1KRR1P_SAO_FRANCISCO_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 4209880,
       "cache_status": "cache_hit",
       "file_id": "Q8QGOY",
-      "filename": "2026-06-1KRR1P_BALTIC_SHIELD_ARCHEAN.csv",
-      "sha256": "4469526c02cbb473fae14e1f69525bf865bb0197387b6368bf99aefdcc055f98"
+      "filename": "2026-06-1KRR1P_BALTIC_SHIELD_ARCHEAN.csv"
     },
     {
       "bytes": 727334,
       "cache_status": "cache_hit",
       "file_id": "RM6V7B",
-      "filename": "2026-06-1KRR1P_SINGHBHUM_CRATON_ARCHEAN.csv",
-      "sha256": "89406a328f89dc4e2f7796a059cf8d542ea31ca54664e35d466245fb20d5b331"
+      "filename": "2026-06-1KRR1P_SINGHBHUM_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 93085,
       "cache_status": "cache_hit",
       "file_id": "SSDC2V",
-      "filename": "2026-06-1KRR1P_EAST_EUROPEAN_CRATON.csv",
-      "sha256": "d6df9261119b85e9a3941ea8cc5d144eb82651ea687792a6d377afb59d5177e6"
+      "filename": "2026-06-1KRR1P_EAST_EUROPEAN_CRATON.csv"
     },
     {
       "bytes": 110489,
       "cache_status": "cache_hit",
       "file_id": "TG6QW9",
-      "filename": "2026-06-1KRR1P_SIBERIAN_CRATON_ARCHEAN.csv",
-      "sha256": "6a4d2dbdfc5a097b8f07ff0d73d2df106a98edfe9a4b82f0afbe663d1c3e8534"
+      "filename": "2026-06-1KRR1P_SIBERIAN_CRATON_ARCHEAN.csv"
     },
     {
       "bytes": 350444,
       "cache_status": "cache_hit",
       "file_id": "TS527Q",
-      "filename": "2026-06-1KRR1P_SLAVE_PROVINCE_ARCHEAN.csv",
-      "sha256": "b600a633281da3c4847944642856842b4c322165664ac443a642d00a4d9ca90a"
+      "filename": "2026-06-1KRR1P_SLAVE_PROVINCE_ARCHEAN.csv"
     },
     {
       "bytes": 263824,
       "cache_status": "cache_hit",
       "file_id": "WGALT3",
-      "filename": "2026-06-1KRR1P_CHURCHILL_PROVINCE_ARCHEAN.csv",
-      "sha256": "fb3557f619a82676b2cc72fdc992180e2b233e3cad968aab95c65bb590d49df5"
+      "filename": "2026-06-1KRR1P_CHURCHILL_PROVINCE_ARCHEAN.csv"
     },
     {
       "bytes": 259241,
       "cache_status": "cache_hit",
       "file_id": "XKVOOV",
-      "filename": "2026-06-1KRR1P_WYOMING_PROVINCE.csv",
-      "sha256": "9488675e5d00b5070a850e96ced7aea4dafea6497b55aa7f9d7d92ff412c7e7a"
+      "filename": "2026-06-1KRR1P_WYOMING_PROVINCE.csv"
     },
     {
       "bytes": 5921367,
       "cache_status": "cache_hit",
       "file_id": "YCYFNY",
-      "filename": "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv",
-      "sha256": "5bed283ed7a20e2d8c0b411e801c07df18fd50d2424f5127e074fff9faee6865"
+      "filename": "2026-06-1KRR1P_SUPERIOR_PROVINCE_ARCHEAN.csv"
     },
     {
       "bytes": 72890,
       "cache_status": "cache_hit",
       "file_id": "YJOPAF",
-      "filename": "2026-06-1KRR1P_GAWLER_CRATON.csv",
-      "sha256": "88bee7dd6ee4ddafaaa918ab985ff56dcef2044ea900e7ae14cc9821dd318de4"
+      "filename": "2026-06-1KRR1P_GAWLER_CRATON.csv"
     },
     {
       "bytes": 2505963,
       "cache_status": "cache_hit",
       "file_id": "YKDG9C",
-      "filename": "2026-06-1KRR1P_NORTH_CHINA_CRATON.csv",
-      "sha256": "62961707fa44760fa930564c1a0128d8f7570912d6bbf9bcc7a92fec1832f350"
+      "filename": "2026-06-1KRR1P_NORTH_CHINA_CRATON.csv"
     },
     {
       "bytes": 53291,
       "cache_status": "cache_hit",
       "file_id": "ZJ0HM6",
-      "filename": "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv",
-      "sha256": "2197377ae969c9e0245898d16e6c745dbeaef1f28313c19822f9059dec6a96ab"
+      "filename": "2026-06-1KRR1P_WEST_AFRICAN_CRATON.csv"
     }
   ],
-  "last_successful_fetch_at": "2026-08-06T13:34:27Z",
+  "last_successful_fetch_at": null,
   "last_successful_parse_at": "2026-08-06T10:05:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",
   "parsed_source_record_count": 33745,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "raw_schema_fingerprint": "7f8e4d908083e06801a60eebccff028782386ac75e726571b2d1e102b160421e",
+  "raw_schema_field_count": 173,
+  "raw_schema_fields": [
+    "AG(PPM)",
+    "AGE",
+    "AL(PPM)",
+    "AL2O3(WT%)",
+    "ALTERATION",
+    "AR40_K40",
+    "AS(PPM)",
+    "AU(PPM)",
+    "B(PPM)",
+    "B2O3(WT%)",
+    "BA(PPM)",
+    "BE(PPM)",
+    "BI(PPM)",
+    "BR(PPM)",
+    "C(PPM)",
+    "CA(PPM)",
+    "CAO(WT%)",
+    "CD(PPM)",
+    "CE(PPM)",
+    "CH4(WT%)",
+    "CITATIONS",
+    "CL(PPM)",
+    "CL(WT%)",
+    "CL2(WT%)",
+    "CO(PPM)",
+    "CO1(WT%)",
+    "CO2(PPM)",
+    "CO2(WT%)",
+    "CR(PPM)",
+    "CR2O3(WT%)",
+    "CS(PPM)",
+    "CU(PPM)",
+    "DRILL DEPTH MIN",
+    "DRILL DEPTHAX",
+    "DY(PPM)",
+    "ELEVATION MAX",
+    "ELEVATION MIN",
+    "EPSILON_ND",
+    "ER(PPM)",
+    "ERUPTION DAY",
+    "ERUPTION MONTH",
+    "ERUPTION YEAR",
+    "EU(PPM)",
+    "F(PPM)",
+    "F(WT%)",
+    "FE(PPM)",
+    "FE2O3(WT%)",
+    "FEO(WT%)",
+    "FEOT(WT%)",
+    "GA(PPM)",
+    "GD(PPM)",
+    "GE(PPM)",
+    "GEOL.",
+    "H2O(WT%)",
+    "H2OM(WT%)",
+    "H2OP(WT%)",
+    "H2OT(WT%)",
+    "HE(CCM/G)",
+    "HE(CCMSTP/G)",
+    "HE(NCC/G)",
+    "HE3(AT/G)",
+    "HE3(CCMSTP/G)",
+    "HE3_HE4",
+    "HE3_HE4(R/R(A))",
+    "HE4(AT/G)",
+    "HE4(CCM/G)",
+    "HE4(CCMSTP/G)",
+    "HE4(MOLE/G)",
+    "HE4(NCC/G)",
+    "HE4_HE3",
+    "HE4_HE3(R/R(A))",
+    "HF(PPM)",
+    "HF176_HF177",
+    "HG(PPM)",
+    "HO(PPM)",
+    "I(PPM)",
+    "IN(PPM)",
+    "IR(PPM)",
+    "K(PPM)",
+    "K2O(WT%)",
+    "K40_AR40",
+    "LA(PPM)",
+    "LAND OR SEA",
+    "LATITUDE MAX",
+    "LATITUDE MIN",
+    "LI(PPM)",
+    "LOCATION",
+    "LOCATION COMMENT",
+    "LOI(WT%)",
+    "LONGITUDE MAX",
+    "LONGITUDE MIN",
+    "LU(PPM)",
+    "MATERIAL",
+    "MAX. AGE (YRS.)",
+    "MG(PPM)",
+    "MGO(WT%)",
+    "MIN. AGE (YRS.)",
+    "MINERAL",
+    "MN(PPM)",
+    "MNO(WT%)",
+    "MO(PPM)",
+    "NA(PPM)",
+    "NA2O(WT%)",
+    "NB(PPM)",
+    "ND(PPM)",
+    "ND143_ND144",
+    "ND143_ND144_INI",
+    "NI(PPM)",
+    "NIO(WT%)",
+    "O(WT%)",
+    "OH(WT%)",
+    "OS(PPM)",
+    "OS184_OS188",
+    "OS186_OS188",
+    "OS187_OS186",
+    "OS187_OS188",
+    "OTHERS(WT%)",
+    "P(PPM)",
+    "P2O5(WT%)",
+    "PB(PPM)",
+    "PB206_PB204",
+    "PB206_PB204_INI",
+    "PB207_PB204",
+    "PB207_PB204_INI",
+    "PB208_PB204",
+    "PB208_PB204_INI",
+    "PD(PPM)",
+    "PR(PPM)",
+    "PT(PPM)",
+    "RB(PPM)",
+    "RE(PPM)",
+    "RE187_OS186",
+    "RE187_OS188",
+    "RH(PPM)",
+    "ROCK NAME",
+    "ROCK TEXTURE",
+    "ROCK TYPE",
+    "RU(PPM)",
+    "S(PPM)",
+    "S(WT%)",
+    "SAMPLE NAME",
+    "SB(PPM)",
+    "SC(PPM)",
+    "SE(PPM)",
+    "SIO2(WT%)",
+    "SM(PPM)",
+    "SN(PPM)",
+    "SO2(WT%)",
+    "SO3(WT%)",
+    "SO4(WT%)",
+    "SR(PPM)",
+    "SR87_SR86",
+    "SR87_SR86_INI",
+    "TA(PPM)",
+    "TB(PPM)",
+    "TE(PPM)",
+    "TECTONIC SETTING",
+    "TH(PPM)",
+    "TI(PPM)",
+    "TIO2(WT%)",
+    "TL(PPM)",
+    "TM(PPM)",
+    "U(PPM)",
+    "UNIQUE_ID",
+    "V(PPM)",
+    "VOLATILES(WT%)",
+    "W(PPM)",
+    "Y(PPM)",
+    "YB(PPM)",
+    "ZN(PPM)",
+    "ZR(PPM)",
+    "_dataset_version",
+    "_source_file"
+  ],
   "retry_health": "not_measured_in_offline_profile",
   "row_count_drift_status": "baseline_recorded_no_registered_count",
   "schema_drift_detection": "checked-in profile exact comparison",

@@ -49,17 +49,12 @@
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "filename", "sha256", "record_count", "synthetic_demo", "data_mode",
-        "not_for_scientific_interpretation"
-      ],
+      "required": ["filename", "bytes", "record_count", "synthetic_demo"],
       "properties": {
         "filename": {"type": "string"},
-        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 1},
         "record_count": {"type": "integer", "minimum": 0},
-        "synthetic_demo": {"type": "boolean"},
-        "data_mode": {"enum": ["fixture", "online", "cached", "input", "synthetic_fixture", "not_evaluated"]},
-        "not_for_scientific_interpretation": {"type": "boolean"}
+        "synthetic_demo": {"type": "boolean"}
       }
     },
     "outputs": {
@@ -107,135 +102,15 @@
     },
     "limitations": {"type": "array", "items": {"type": "string"}},
     "next_actions": {"type": "array", "items": {"type": "string"}},
-    "artifact_transaction": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "transaction_version", "state", "commit_marker", "input_sha256",
-        "artifacts", "mutation_rule"
-      ],
-      "properties": {
-        "transaction_version": {"const": "geochemical-workflow-artifact-transaction-v1"},
-        "state": {"const": "committed"},
-        "commit_marker": {"const": "run_summary.json"},
-        "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "artifacts": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["filename", "bytes", "sha256"],
-            "properties": {
-              "filename": {"type": "string", "minLength": 1},
-              "bytes": {"type": "integer", "minimum": 1},
-              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
-            }
-          }
-        },
-        "mutation_rule": {"type": "string", "minLength": 1}
-      }
-    },
     "map_report": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
         "map_version": {"type": "string"},
         "mapped_record_count": {"type": "integer", "minimum": 0},
-        "source_mappable_record_count": {"type": "integer", "minimum": 0},
-        "scope_excluded_mappable_record_count": {"type": "integer", "minimum": 0},
-        "display_sample_count": {"type": "integer", "minimum": 0},
-        "unmappable_record_count": {"type": "integer", "minimum": 0},
         "candidate_record_count": {"type": "integer", "minimum": 0},
-        "candidate_anomaly_region_count": {"type": "integer", "minimum": 0},
-        "default_view": {"enum": ["all_data_sample_deduplicated", "profile_driven_task_view", "regional_scope_task_view"]},
-        "embedded_payload_schema": {"const": "d3-compact-payload-v1"},
-        "anomaly_region_render_mode": {"const": "zoom-adaptive-anomaly-bubbles-v1"},
-        "visualization_profile": {
-          "type": "object",
-          "required": ["schema_version", "story", "spatial_scope", "default_region", "filters", "comparison", "display"],
-          "properties": {
-            "schema_version": {"const": "d3-visualization-profile-v2"},
-            "story": {"enum": ["overview", "coverage", "anomaly", "comparison", "database", "evidence"]},
-            "spatial_scope": {"enum": ["global", "regional"]},
-            "default_region": {"type": "string"},
-            "filters": {"type": "object"},
-            "comparison": {"type": "object"},
-            "display": {"type": "object"}
-          },
-          "additionalProperties": true
-        },
-        "visualization_profile_warnings": {
-          "type": "array",
-          "items": {"type": "string"}
-        },
-        "spatial_scope": {
-          "type": "object",
-          "required": ["mode", "region_key", "region_label", "bounds", "output_clipped"],
-          "properties": {
-            "mode": {"enum": ["global", "regional"]},
-            "region_key": {"type": "string"},
-            "region_label": {"type": "string"},
-            "bounds": {
-              "type": "object",
-              "required": ["w", "s", "e", "n"]
-            },
-            "output_clipped": {"type": "boolean"},
-            "clip_method": {"type": "string", "enum": ["bbox", "country_polygon_and_bbox"]},
-            "country_code": {"type": ["string", "null"]}
-          },
-          "additionalProperties": false
-        },
-        "visualization_modes": {
-          "type": "array",
-          "items": {
-            "enum": [
-              "distribution_points",
-              "sample_density_heatmap",
-              "element_pair_comparison",
-              "candidate_anomaly_region_aggregation",
-              "fdr_screened_candidate_anomaly_regions"
-            ]
-          },
-          "uniqueItems": true
-        },
-        "region_presets": {
-          "type": "array",
-          "items": {"type": "string"},
-          "uniqueItems": true
-        },
-        "region_coverage": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "required": ["label", "bounds", "record_count", "sample_count", "elements", "media", "administrative_clip", "clip_method"],
-            "properties": {
-              "label": {"type": "string"},
-              "bounds": {"type": "object"},
-              "record_count": {"type": "integer", "minimum": 0},
-              "sample_count": {"type": "integer", "minimum": 0},
-              "elements": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-              "media": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-              "administrative_clip": {"type": "boolean"},
-              "clip_method": {"type": "string", "enum": ["bbox", "country_polygon_and_bbox"]}
-            },
-            "additionalProperties": false
-          }
-        },
         "external_assets": {"const": 0},
-        "interpolation": {"const": false},
-        "html_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000},
-        "samples_geojson_bytes": {"type": "integer", "minimum": 1, "maximum": 100000000},
-        "basemap": {
-          "type": "object",
-          "required": ["asset_version", "scale", "license", "embedded"],
-          "properties": {
-            "asset_version": {"const": "ai4s-natural-earth-land-v1"},
-            "scale": {"const": "1:110m"},
-            "license": {"const": "public domain"},
-            "embedded": {"const": true}
-          },
-          "additionalProperties": true
-        }
+        "interpolation": {"const": false}
       }
     }
   }

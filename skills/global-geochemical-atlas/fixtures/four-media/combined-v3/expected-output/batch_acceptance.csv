@@ -1,1 +1,3 @@
 batch_id,crm_recovery_percent,crm_pass,blank_value,blank_pass,duplicate_rpd_percent,duplicate_pass,batch_pass,disposition
+LAB-A,105,true,2,true,9.52380952381,true,true,accept_for_scientific_analysis
+LAB-B,135,false,8,false,40,false,false,exclude_batch_and_investigate

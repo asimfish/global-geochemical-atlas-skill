@@ -50,7 +50,7 @@
 
 以上是固定十五项核心产物；未提供批次 QC 时仍生成带 `not_supplied` 状态的空批次契约。`anomaly_regions.geojson` 是统计筛查产物；D3 的缩放圆环仍是 `visual_aggregation_only`，二者不得混称。
 
-使用 `run_atlas_request.py` 时还生成 `request_evidence/`，保存冻结的 `request.json`、请求特定 `source_route.json`、`coverage.json/.md` 和符合 [request-execution.schema.json](request-execution.schema.json) 的 `execution.json`。实际用于验证的请求过滤 manifest、父 manifest 与在线逐源 manifest 原字节保存在 `request_evidence/acquisition/`，并由 `execution.json.acquisition_manifests` 的相对路径和 SHA-256 绑定，避免临时目录退出后只剩不可复核的孤立哈希。这些是十五项核心产物之外的请求执行证据；其中实时路由状态与本地 fixture/hash 解析状态分开记录，不能互相覆盖。`--online-source auto` 会按确定性预算逐个获取全部兼容来源、验证各自 manifest，再合并长表和逐记录证据；`execution.json.source_outcomes` 保留每源记录数、manifest hash 与失败。默认允许已验证子集以 `partial_success` 继续；`--require-all-sources` 改为任一来源失败即关闭。
+使用 `run_atlas_request.py` 时还生成 `request_evidence/`，保存冻结的 `request.json`、请求特定 `source_route.json`、`coverage.json/.md` 和符合 [request-execution.schema.json](request-execution.schema.json) 的 `execution.json`。实际用于验证的请求过滤 manifest、父 manifest 与在线逐源 manifest 原字节保存在 `request_evidence/acquisition/`，并由 `execution.json.acquisition_manifests` 的相对路径、文件名、字节数、schema 和行数等可读身份绑定。这些是十五项核心产物之外的请求执行证据；其中实时路由状态与本地 fixture 解析状态分开记录，不能互相覆盖。`--online-source auto` 会按确定性预算逐个获取兼容来源、验证各自 manifest，再合并长表和逐记录证据；`execution.json.source_outcomes` 保留每源记录数、manifest 身份与失败。默认允许已验证子集以 `partial_success` 继续；`--require-all-sources` 改为任一来源失败即关闭。
 
 ## 证据链
 
@@ -78,7 +78,7 @@
 不删除或合并 `geochemistry.csv`/`samples.geojson` 记录。浓度色阶的启用条件固定为单一元素、
 介质、measurement basis、已知方法组和标准单位，否则使用介质分类色。
 
-证据等级分三层：只有 CSV 声明时为 `source_declared_in_input`；sidecar 通过字段与 record ID 校验时为 `validated_record_evidence`；`run_manifest.json` 同时绑定 CSV 与 sidecar SHA-256 时才是 `verified_record_evidence`。哈希和定位证明可追溯性，不证明测量真实、方法可比或异常成因。
+证据等级分三层：只有 CSV 声明时为 `source_declared_in_input`；sidecar 通过字段与 record ID 校验时为 `validated_record_evidence`；`run_manifest.json` 以文件名、字节数、schema、行数和关键统计同时绑定 CSV 与 sidecar 时为 `verified_record_evidence`。身份绑定和记录定位证明可追溯性，不证明测量真实、方法可比或异常成因。
 
 ## 失败状态
 

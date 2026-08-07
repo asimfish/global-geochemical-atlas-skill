@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import http.cookiejar
 import json
 import os
@@ -46,22 +45,6 @@ REQUIRED_COLUMNS = (
 
 class AcquisitionError(RuntimeError):
     """Raised when the official export cannot be acquired or validated safely."""
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def sha256_zip_member(archive: zipfile.ZipFile, member: zipfile.ZipInfo) -> str:
-    digest = hashlib.sha256()
-    with archive.open(member) as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def opener() -> urllib.request.OpenerDirector:
@@ -216,7 +199,6 @@ def validate_archive(path: Path) -> list[dict[str, Any]]:
             {
                 "name": info.filename,
                 "bytes": info.file_size,
-                "sha256": sha256_zip_member(archive, info),
             }
             for info in members
         ]
@@ -282,7 +264,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "official_session_output_url": output_url,
                 "filename": args.output.name,
                 "bytes": args.output.stat().st_size,
-                "sha256": sha256_file(args.output),
             },
             "archive": {"member_count": len(members), "members": members},
             "next_action": (
@@ -290,7 +271,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
         }
         atomic_json(args.manifest, manifest)
-        print(json.dumps({"status": "PASS", "sha256": manifest["response"]["sha256"]}, sort_keys=True))
+        print(json.dumps({"status": "PASS", "bytes": manifest["response"]["bytes"]}, sort_keys=True))
         return 0
     except (AcquisitionError, OSError, urllib.error.URLError) as exc:
         print(f"acquire_geotraces_idp2025: {exc}", file=sys.stderr)

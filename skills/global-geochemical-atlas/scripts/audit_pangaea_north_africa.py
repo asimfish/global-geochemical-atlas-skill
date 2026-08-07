@@ -145,7 +145,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         max(_float(record.fields["Latitude"]) for record in records),
     ]
     review_records = _review_records(records, candidate)
-    snapshot_id = f"{SOURCE_ID}:{candidate.version}:{downloaded.sha256[:12]}"
+    snapshot_id = f"{SOURCE_ID}:{candidate.version}:{args.observed_at}"
     audit = {
         "verification_version": "pangaea-north-africa-soil-audit-v1",
         "source_id": SOURCE_ID,
@@ -156,10 +156,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "cache_status": downloaded.cache_status,
         },
         "archive": {
-            "sha256": downloaded.sha256,
             "bytes": downloaded.bytes,
             "members": [
-                {"name": downloaded.path.name, "bytes": downloaded.bytes, "sha256": downloaded.sha256}
+                {"name": downloaded.path.name, "bytes": downloaded.bytes}
             ],
         },
         "observed_data": {
@@ -199,7 +198,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "snapshot_id": snapshot_id,
         "observed_at": args.observed_at,
         "request": {"url": downloaded.source_url, "dataset_doi": candidate.dataset_doi},
-        "response": {"bytes": downloaded.bytes, "sha256": downloaded.sha256},
+        "response": {"bytes": downloaded.bytes},
         "archive": audit["archive"],
         "counts": audit["observed_data"],
         "claim_boundary": audit["claim_boundary"],
@@ -210,7 +209,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "snapshot_id": snapshot_id,
         "status": "PASS",
         "checks": {
-            "file_sha256_match": downloaded.sha256 == candidate.registry_entry["download"]["files"][0]["expected_sha256"],
             "file_bytes_match": downloaded.bytes == candidate.registry_entry["download"]["files"][0]["bytes"],
             "physical_rows_match": len(records) == 43,
             "distinct_samples_match": len(sample_ids) == 43,

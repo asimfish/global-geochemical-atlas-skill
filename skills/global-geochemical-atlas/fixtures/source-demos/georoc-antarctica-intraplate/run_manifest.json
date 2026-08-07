@@ -1,0 +1,61 @@
+{
+  "content_hashing_used": false,
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T10:20:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 58990,
+      "path": "demo_input.csv"
+    },
+    {
+      "bytes": 66962,
+      "path": "sources.jsonl"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 424,
+    "selected_source_rows": 27
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.25625/RZZ9VM",
+    "dataset_version": "12.0",
+    "license": "CC-BY-SA-4.0",
+    "source_id": "georoc-antarctica-intraplate",
+    "title": "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member"
+  },
+  "source_files": [
+    {
+      "bytes": 367799,
+      "filename": "2026-06-RZZ9VM_ANTARCTICA.csv",
+      "retrieved_at": "2026-08-07T10:30:42Z",
+      "source_url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "This GEOROC member is a literature compilation and is not uniform Antarctica coverage.",
+    "Only exact coordinate pairs enter the point fixture; coordinate ranges remain areas.",
+    "The selected row-level analytical method is absent from the precompiled member and is not inferred."
+  ]
+}

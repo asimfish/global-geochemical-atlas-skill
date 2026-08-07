@@ -1,0 +1,1503 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 23,
+      "record_ids": [
+        "gemstat-open-archive-review-01",
+        "gemstat-open-archive-review-03",
+        "gemstat-open-archive-review-04",
+        "gemstat-open-archive-review-06",
+        "gemstat-open-archive-review-07",
+        "gemstat-open-archive-review-08",
+        "gemstat-open-archive-review-11",
+        "gemstat-open-archive-review-12",
+        "gemstat-open-archive-review-13",
+        "gemstat-open-archive-review-15",
+        "gemstat-open-archive-review-18",
+        "gemstat-open-archive-review-19",
+        "gemstat-open-archive-review-20",
+        "gemstat-open-archive-review-21",
+        "gemstat-open-archive-review-22",
+        "gemstat-open-archive-review-23",
+        "gemstat-open-archive-review-24",
+        "gemstat-open-archive-review-25",
+        "gemstat-open-archive-review-26",
+        "gemstat-open-archive-review-27",
+        "gemstat-open-archive-review-28",
+        "gemstat-open-archive-review-29",
+        "gemstat-open-archive-review-30"
+      ]
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "gemstat-open-archive-review-13",
+        "gemstat-open-archive-review-21",
+        "gemstat-open-archive-review-29"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "gemstat-open-archive-review-01",
+        "gemstat-open-archive-review-02",
+        "gemstat-open-archive-review-03",
+        "gemstat-open-archive-review-04",
+        "gemstat-open-archive-review-05",
+        "gemstat-open-archive-review-06",
+        "gemstat-open-archive-review-07",
+        "gemstat-open-archive-review-08",
+        "gemstat-open-archive-review-09",
+        "gemstat-open-archive-review-10",
+        "gemstat-open-archive-review-11",
+        "gemstat-open-archive-review-12",
+        "gemstat-open-archive-review-13",
+        "gemstat-open-archive-review-14",
+        "gemstat-open-archive-review-15",
+        "gemstat-open-archive-review-16",
+        "gemstat-open-archive-review-17",
+        "gemstat-open-archive-review-18",
+        "gemstat-open-archive-review-19",
+        "gemstat-open-archive-review-20",
+        "gemstat-open-archive-review-21",
+        "gemstat-open-archive-review-22",
+        "gemstat-open-archive-review-23",
+        "gemstat-open-archive-review-24",
+        "gemstat-open-archive-review-25",
+        "gemstat-open-archive-review-26",
+        "gemstat-open-archive-review-27",
+        "gemstat-open-archive-review-28",
+        "gemstat-open-archive-review-29",
+        "gemstat-open-archive-review-30"
+      ]
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "gemstat-open-archive-review-01",
+        "gemstat-open-archive-review-02",
+        "gemstat-open-archive-review-03",
+        "gemstat-open-archive-review-04",
+        "gemstat-open-archive-review-05",
+        "gemstat-open-archive-review-06",
+        "gemstat-open-archive-review-07",
+        "gemstat-open-archive-review-08",
+        "gemstat-open-archive-review-09",
+        "gemstat-open-archive-review-10",
+        "gemstat-open-archive-review-11",
+        "gemstat-open-archive-review-12",
+        "gemstat-open-archive-review-13",
+        "gemstat-open-archive-review-14",
+        "gemstat-open-archive-review-15",
+        "gemstat-open-archive-review-16",
+        "gemstat-open-archive-review-17",
+        "gemstat-open-archive-review-18",
+        "gemstat-open-archive-review-19",
+        "gemstat-open-archive-review-20",
+        "gemstat-open-archive-review-21",
+        "gemstat-open-archive-review-22",
+        "gemstat-open-archive-review-23",
+        "gemstat-open-archive-review-24",
+        "gemstat-open-archive-review-25",
+        "gemstat-open-archive-review-26",
+        "gemstat-open-archive-review-27",
+        "gemstat-open-archive-review-28",
+        "gemstat-open-archive-review-29",
+        "gemstat-open-archive-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "v3",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Arsenic.csv#row=2",
+          "src-7a9833564f092efcc75eb81406b02b258affca2d5d265c536f4e6f7aec9784a4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "0.003",
+          "record_id": "rec-8af0384bfe1d9925f6efc20d0230ee20719e0802ba13c15201126516a8d291ae",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.003"
+      },
+      "review_id": "gemstat-open-archive-review-01",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "method=undefined",
+        "parameter=As-Dis"
+      ],
+      "source_locator": "Arsenic.csv#row=2",
+      "source_record_id": "src-7a9833564f092efcc75eb81406b02b258affca2d5d265c536f4e6f7aec9784a4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Arsenic.csv#row=26261",
+          "src-3cfad3f8b83318aafff4794294362c55127ac029534a84fc1d0a3f4a4b80785b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "0.02",
+          "record_id": "rec-69dca43172f30904b599d3c948ba0565377baea3af0b23ffa5289ef0b5360f94",
+          "unit": "µg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.02"
+      },
+      "review_id": "gemstat-open-archive-review-02",
+      "sample_id": "CAN00022|2003-03-26|10:50|0.3",
+      "selection_reasons": [
+        "parameter=As-Sus"
+      ],
+      "source_locator": "Arsenic.csv#row=26261",
+      "source_record_id": "src-3cfad3f8b83318aafff4794294362c55127ac029534a84fc1d0a3f4a4b80785b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Arsenic.csv#row=3",
+          "src-d01b4ab71896a4f66b9d6df1a8d0662065db2ae0fa02f55ebff72878909ae2d7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "0.011",
+          "record_id": "rec-7cba7c44685668a92992ee5fb53dc16b85dfa1ff55ca3a381d675e4e48430676",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.011"
+      },
+      "review_id": "gemstat-open-archive-review-03",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=As-Tot"
+      ],
+      "source_locator": "Arsenic.csv#row=3",
+      "source_record_id": "src-d01b4ab71896a4f66b9d6df1a8d0662065db2ae0fa02f55ebff72878909ae2d7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Arsenic.csv#row=25632",
+          "src-e7917ad63107ef781cbd66ae9dd126028ae34310b93178616cc20b1db7eed23c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "0.0005",
+          "record_id": "rec-b66c0ee94ee5fbfc914b019e645c1d792810ed6eeeb57ad9c54e8c60020bc785",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.0005"
+      },
+      "review_id": "gemstat-open-archive-review-04",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "method=defined"
+      ],
+      "source_locator": "Arsenic.csv#row=25632",
+      "source_record_id": "src-e7917ad63107ef781cbd66ae9dd126028ae34310b93178616cc20b1db7eed23c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Arsenic.csv#row=22",
+          "src-72ffd3f7fa77813de09fb213acbcc93e639d4f210f556dc39a8116df34afa3c3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "raw_value": "0.025",
+          "record_id": "rec-3215f777f40e21f2043d6d52735a9416e62d900387a59a0d509ad501b8ed1414",
+          "unit": "mg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.025"
+      },
+      "review_id": "gemstat-open-archive-review-05",
+      "sample_id": "ARG00014|2018-06-10|12:00|0.3",
+      "selection_reasons": [
+        "qualifier=<"
+      ],
+      "source_locator": "Arsenic.csv#row=22",
+      "source_record_id": "src-72ffd3f7fa77813de09fb213acbcc93e639d4f210f556dc39a8116df34afa3c3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Chromium.csv#row=2",
+          "src-7b3322db585659ad0913560083b24c3c7fb6d8886f556a54e8022c728bb1f49e"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "raw_value": "0.001",
+          "record_id": "rec-feca9d22dfb37a59373f7c721ba9f3a09bde7753ab12b9274d842a81dedf8452",
+          "unit": "mg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "0.001"
+      },
+      "review_id": "gemstat-open-archive-review-06",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "method=undefined",
+        "parameter=Cr-Dis",
+        "qualifier=<"
+      ],
+      "source_locator": "Chromium.csv#row=2",
+      "source_record_id": "src-7b3322db585659ad0913560083b24c3c7fb6d8886f556a54e8022c728bb1f49e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Chromium.csv#row=27730",
+          "src-9472843a1685f2d83e8852bab88bae368da7567b7fdbbbb0e2d1e8ce9a7e424c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "raw_value": "2.73",
+          "record_id": "rec-3e9156adc17960bb41045cfea48f7e0063b90e4fe1be702f470af03dceb73df1",
+          "unit": "µg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "2.73"
+      },
+      "review_id": "gemstat-open-archive-review-07",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "method=defined",
+        "parameter=Cr-Ext"
+      ],
+      "source_locator": "Chromium.csv#row=27730",
+      "source_record_id": "src-9472843a1685f2d83e8852bab88bae368da7567b7fdbbbb0e2d1e8ce9a7e424c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Chromium.csv#row=3",
+          "src-0517758735f8c4f42b5efe50392b791d9e2361498c5b52ff88222e6e02190a38"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "raw_value": "0.025",
+          "record_id": "rec-74ef6bc6200dd3de5983566748c585efa6ff9bcb3b671608f2386097241f8ee1",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "0.025"
+      },
+      "review_id": "gemstat-open-archive-review-08",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Cr-Tot"
+      ],
+      "source_locator": "Chromium.csv#row=3",
+      "source_record_id": "src-0517758735f8c4f42b5efe50392b791d9e2361498c5b52ff88222e6e02190a38"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Chromium.csv#row=14819",
+          "src-7826947e517e03e0b7ae78288aabe6a81022cc2e54da7dbf1095acd7923b6a9a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "raw_value": "0.00015",
+          "record_id": "rec-9100b3233d4ac1639c74433eae34081fbff420dca16f265afe160afd8e1ed8d8",
+          "unit": "mg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "0.00015"
+      },
+      "review_id": "gemstat-open-archive-review-09",
+      "sample_id": "BEL00071|2009-02-04|12:00|0.0",
+      "selection_reasons": [
+        "quality=Pending review"
+      ],
+      "source_locator": "Chromium.csv#row=14819",
+      "source_record_id": "src-7826947e517e03e0b7ae78288aabe6a81022cc2e54da7dbf1095acd7923b6a9a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Chromium.csv#row=24361",
+          "src-952d556a2900c436beff9054255ed2111ff647f33801b0793891b0501c2b1ea3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cr",
+          "raw_value": "0.0",
+          "record_id": "rec-55f3c0efee486c211a127148f4b34a5817a61e3b833fb19adba6d6885634f70e",
+          "unit": "mg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "Cr": "0.0"
+      },
+      "review_id": "gemstat-open-archive-review-10",
+      "sample_id": "BGR00001|2007-02-28|12:00|0.3",
+      "selection_reasons": [
+        "quality=Suspect"
+      ],
+      "source_locator": "Chromium.csv#row=24361",
+      "source_record_id": "src-952d556a2900c436beff9054255ed2111ff647f33801b0793891b0501c2b1ea3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Copper.csv#row=2",
+          "src-cc87479fa32ab227fda681f5e8a40a0b2615e01e188993ef0be375c43d26a843"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "0.016",
+          "record_id": "rec-77852f11e0b6a1aeaad2731912d75f43e2bd06893d708ce2f0ccb0633200ef4f",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Cu": "0.016"
+      },
+      "review_id": "gemstat-open-archive-review-11",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Cu-Dis"
+      ],
+      "source_locator": "Copper.csv#row=2",
+      "source_record_id": "src-cc87479fa32ab227fda681f5e8a40a0b2615e01e188993ef0be375c43d26a843"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Copper.csv#row=40644",
+          "src-320c5a3ed8aa393cc56aaf06ca581bdb84390da94169bc6cbb66cf8424addeef"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "3.4",
+          "record_id": "rec-a52a4b560e0d3e1a68223009d353501a46401e3638d5d611bfb25d58d0a9d2cb",
+          "unit": "µg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Cu": "3.4"
+      },
+      "review_id": "gemstat-open-archive-review-12",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "parameter=Cu-Ext"
+      ],
+      "source_locator": "Copper.csv#row=40644",
+      "source_record_id": "src-320c5a3ed8aa393cc56aaf06ca581bdb84390da94169bc6cbb66cf8424addeef"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Copper.csv#row=83282",
+          "src-7c798767f505f18f9030422a1f3833f0477be3d3b816810039cc797ea25b671a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "32.73",
+          "record_id": "rec-1732062052a73972227202202f117e589fe1856d0eb9a9a586ef59451c655a96",
+          "unit": "µg/g",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Cu": "32.73"
+      },
+      "review_id": "gemstat-open-archive-review-13",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
+      "selection_reasons": [
+        "parameter=Cu-Sus"
+      ],
+      "source_locator": "Copper.csv#row=83282",
+      "source_record_id": "src-7c798767f505f18f9030422a1f3833f0477be3d3b816810039cc797ea25b671a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Copper.csv#row=27",
+          "src-810c91ff2e821bd08b9d6525846f0d1c76237be6972cb2f7ca299d84427465d1"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Cu",
+          "raw_value": "0.002",
+          "record_id": "rec-abb62d3e1d74ca271750fcc1930e96e5bd269d71e7974b0cac5b388bba189685",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Cu": "0.002"
+      },
+      "review_id": "gemstat-open-archive-review-14",
+      "sample_id": "AUT00007|1996-06-12|12:00|0.3",
+      "selection_reasons": [
+        "parameter=Cu-Tot"
+      ],
+      "source_locator": "Copper.csv#row=27",
+      "source_record_id": "src-810c91ff2e821bd08b9d6525846f0d1c76237be6972cb2f7ca299d84427465d1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Mercury.csv#row=2",
+          "src-8936fbad2e6a4c2a99c812a6b420dd6d7f20f8a21c24b247a929f62122710c3e"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "raw_value": "0.04",
+          "record_id": "rec-b4d35656031a70df00ae919dc3353728aece27f0933845abe4ff6eab018d6fb7",
+          "unit": "µg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.04"
+      },
+      "review_id": "gemstat-open-archive-review-15",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Dis"
+      ],
+      "source_locator": "Mercury.csv#row=2",
+      "source_record_id": "src-8936fbad2e6a4c2a99c812a6b420dd6d7f20f8a21c24b247a929f62122710c3e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Mercury.csv#row=37380",
+          "src-fcd3467244ddd3f49b8d338076e8402936b19c666958ab8003b45028121d1c3e"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "raw_value": "0.02",
+          "record_id": "rec-f61fa9e6328ef8d9d4f17ceca2bdaa1e3bf8fbbb6cb8e2a1800a477f2f9a280d",
+          "unit": "µg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.02"
+      },
+      "review_id": "gemstat-open-archive-review-16",
+      "sample_id": "CAN00055|2003-03-24|13:35|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Ext"
+      ],
+      "source_locator": "Mercury.csv#row=37380",
+      "source_record_id": "src-fcd3467244ddd3f49b8d338076e8402936b19c666958ab8003b45028121d1c3e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Mercury.csv#row=37381",
+          "src-88fc9464a42ed0d6e85a82b078636cd5c6e215062ce2768a3f798f417b106bc8"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "raw_value": "4.1",
+          "record_id": "rec-7b99e33609f27433d87e9ed267bd7053da9c033002383f43509eeeea90b766c1",
+          "unit": "ng/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "4.1"
+      },
+      "review_id": "gemstat-open-archive-review-17",
+      "sample_id": "CAN00055|2005-09-29|12:00|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Sus"
+      ],
+      "source_locator": "Mercury.csv#row=37381",
+      "source_record_id": "src-88fc9464a42ed0d6e85a82b078636cd5c6e215062ce2768a3f798f417b106bc8"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Mercury.csv#row=3",
+          "src-7fbb24ce6e82d1fa1537b48b5100c88248775aa3f1db2b0667733ac4d132c433"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "raw_value": "0.04",
+          "record_id": "rec-cd0fe64a89ef95aa0fdcb79d1f5cffe7f8ef579677e23dfba9ce20dc7d5d4572",
+          "unit": "µg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.04"
+      },
+      "review_id": "gemstat-open-archive-review-18",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Tot"
+      ],
+      "source_locator": "Mercury.csv#row=3",
+      "source_record_id": "src-7fbb24ce6e82d1fa1537b48b5100c88248775aa3f1db2b0667733ac4d132c433"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Nickel.csv#row=2",
+          "src-d32928194a8ec3ab4fc16f5b9c326b9488a63a806d646edbb2f3505171248cb5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "0.003",
+          "record_id": "rec-66655c8e651fcda273c689b13cf8ed29e3e875f1022b4818d5cecc15424143b9",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "0.003"
+      },
+      "review_id": "gemstat-open-archive-review-19",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Ni-Dis"
+      ],
+      "source_locator": "Nickel.csv#row=2",
+      "source_record_id": "src-d32928194a8ec3ab4fc16f5b9c326b9488a63a806d646edbb2f3505171248cb5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Nickel.csv#row=40244",
+          "src-ece65ea3569e01d2b718a2e06263361a8840821db7406b7afb8754f1af99e689"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "2.99",
+          "record_id": "rec-a91d2a40a26c3d8c227fa01db3a84157eb5855b193c45ae47f5a313325d48697",
+          "unit": "µg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "2.99"
+      },
+      "review_id": "gemstat-open-archive-review-20",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "parameter=Ni-Ext"
+      ],
+      "source_locator": "Nickel.csv#row=40244",
+      "source_record_id": "src-ece65ea3569e01d2b718a2e06263361a8840821db7406b7afb8754f1af99e689"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Nickel.csv#row=83970",
+          "src-b7bbf27f66c8d66eef362b366442214f9be3e441e979a4f373013bb0ac614926"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "53.33",
+          "record_id": "rec-835371913a5173b23dc3ab3c4e6c59a1c1e7fd098033e1c00aec1d08d4158ee9",
+          "unit": "µg/g",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "53.33"
+      },
+      "review_id": "gemstat-open-archive-review-21",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
+      "selection_reasons": [
+        "parameter=Ni-Sus"
+      ],
+      "source_locator": "Nickel.csv#row=83970",
+      "source_record_id": "src-b7bbf27f66c8d66eef362b366442214f9be3e441e979a4f373013bb0ac614926"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Nickel.csv#row=3",
+          "src-b4687363fc37e89d166aaeee16ff39de140ddccc09f18eff6a696a03db641877"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Ni",
+          "raw_value": "0.014",
+          "record_id": "rec-d89df7e1080a97546a8a1a8970769878ca962ddb6ff86b5691cfb8d10a53a732",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Ni": "0.014"
+      },
+      "review_id": "gemstat-open-archive-review-22",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Ni-Tot"
+      ],
+      "source_locator": "Nickel.csv#row=3",
+      "source_record_id": "src-b4687363fc37e89d166aaeee16ff39de140ddccc09f18eff6a696a03db641877"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Lead.csv#row=2",
+          "src-f1801f833d33f0f1942061166fc56d0719f2e03189d7bd2be79359c46dded7e4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "raw_value": "0.001",
+          "record_id": "rec-33eae08270d9c3fd193815d654ff82aa91705e70d476d0c72ef9e75822a8172c",
+          "unit": "mg/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "Pb": "0.001"
+      },
+      "review_id": "gemstat-open-archive-review-23",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Pb-Dis"
+      ],
+      "source_locator": "Lead.csv#row=2",
+      "source_record_id": "src-f1801f833d33f0f1942061166fc56d0719f2e03189d7bd2be79359c46dded7e4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Lead.csv#row=46459",
+          "src-fb8978437320cb5e03ac9561d4c598a769e1d8d2f60291428d4866a720f58e2c"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "raw_value": "0.664",
+          "record_id": "rec-b83822aa924e2caadc0c8eec67f2982be6b075fc47dac06621ac962bd5fad1c9",
+          "unit": "µg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Pb": "0.664"
+      },
+      "review_id": "gemstat-open-archive-review-24",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "parameter=Pb-Ext"
+      ],
+      "source_locator": "Lead.csv#row=46459",
+      "source_record_id": "src-fb8978437320cb5e03ac9561d4c598a769e1d8d2f60291428d4866a720f58e2c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Lead.csv#row=90065",
+          "src-3a88164c9263fc2efda4279c3d6e49ed1c5323453c5ea950768d9e9b67f72db4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "raw_value": "30.7",
+          "record_id": "rec-b67fa681e07fadf2c546537efc05944bf5c001867c485c029fe9a4152a03bf5f",
+          "unit": "µg/g",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Pb": "30.7"
+      },
+      "review_id": "gemstat-open-archive-review-25",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
+      "selection_reasons": [
+        "parameter=Pb-Sus"
+      ],
+      "source_locator": "Lead.csv#row=90065",
+      "source_record_id": "src-3a88164c9263fc2efda4279c3d6e49ed1c5323453c5ea950768d9e9b67f72db4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Lead.csv#row=3",
+          "src-c929f34627b3c392e79a3d9ee94bd8107154e79e313916adbc678dfb45388aaf"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Pb",
+          "raw_value": "0.017",
+          "record_id": "rec-6095c8f86a28bc6f7ddacff3c8aa7a0c7e28ce6e39cce0d95b9c915778dc81dd",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Pb": "0.017"
+      },
+      "review_id": "gemstat-open-archive-review-26",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Pb-Tot"
+      ],
+      "source_locator": "Lead.csv#row=3",
+      "source_record_id": "src-c929f34627b3c392e79a3d9ee94bd8107154e79e313916adbc678dfb45388aaf"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Zinc.csv#row=2",
+          "src-deaf7e27c1a85c012d2ba1755a40b9feb623ea30dc50fffe6799601280806689"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "raw_value": "0.002",
+          "record_id": "rec-f08a81b685d3d7f0d19574444d525794fe31dfa7e7d867968358580cc39b0f4c",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Zn": "0.002"
+      },
+      "review_id": "gemstat-open-archive-review-27",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Zn-Dis"
+      ],
+      "source_locator": "Zinc.csv#row=2",
+      "source_record_id": "src-deaf7e27c1a85c012d2ba1755a40b9feb623ea30dc50fffe6799601280806689"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Zinc.csv#row=39904",
+          "src-cd8b4d33c14034d33e12eafb8f84d2a1be0f77347b8dc2f375a2598a4286a676"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "raw_value": "7.28",
+          "record_id": "rec-d980c2ef777c0347dedb81a8240cf702d50614944fb833a441b0eee3abfd0003",
+          "unit": "µg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Zn": "7.28"
+      },
+      "review_id": "gemstat-open-archive-review-28",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "parameter=Zn-Ext"
+      ],
+      "source_locator": "Zinc.csv#row=39904",
+      "source_record_id": "src-cd8b4d33c14034d33e12eafb8f84d2a1be0f77347b8dc2f375a2598a4286a676"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Zinc.csv#row=83219",
+          "src-b7634711d8879fa8f9cb181d326060656f65dd943d59021c48e2536e6c035620"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "raw_value": "191.98",
+          "record_id": "rec-41412833a3cb420a55308769aaaf4963bb2558de73117ef3844451fd4a70ff46",
+          "unit": "µg/g",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Zn": "191.98"
+      },
+      "review_id": "gemstat-open-archive-review-29",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
+      "selection_reasons": [
+        "parameter=Zn-Sus"
+      ],
+      "source_locator": "Zinc.csv#row=83219",
+      "source_record_id": "src-b7634711d8879fa8f9cb181d326060656f65dd943d59021c48e2536e6c035620"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "Zinc.csv#row=3",
+          "src-2d883d516ed904bd025bc67ce940a247775dd7785c40ba6e6c98f0ecb33c2169"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Zn",
+          "raw_value": "0.055",
+          "record_id": "rec-73a52beba4734772552c5e95ca24004b06b642ff09c3d69f06bfdbd60a559b19",
+          "unit": "mg/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "Zn": "0.055"
+      },
+      "review_id": "gemstat-open-archive-review-30",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Zn-Tot"
+      ],
+      "source_locator": "Zinc.csv#row=3",
+      "source_record_id": "src-2d883d516ed904bd025bc67ce940a247775dd7785c40ba6e6c98f0ecb33c2169"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "gemstat-open-archive",
+  "status": "automated_audit_complete"
+}

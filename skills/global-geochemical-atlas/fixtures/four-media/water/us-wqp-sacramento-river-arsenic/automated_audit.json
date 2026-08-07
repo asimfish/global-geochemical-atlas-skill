@@ -1,0 +1,1481 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "us-wqp-sacramento-river-arsenic-review-03",
+        "us-wqp-sacramento-river-arsenic-review-15",
+        "us-wqp-sacramento-river-arsenic-review-16"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 30,
+      "record_ids": [
+        "us-wqp-sacramento-river-arsenic-review-01",
+        "us-wqp-sacramento-river-arsenic-review-02",
+        "us-wqp-sacramento-river-arsenic-review-03",
+        "us-wqp-sacramento-river-arsenic-review-04",
+        "us-wqp-sacramento-river-arsenic-review-05",
+        "us-wqp-sacramento-river-arsenic-review-06",
+        "us-wqp-sacramento-river-arsenic-review-07",
+        "us-wqp-sacramento-river-arsenic-review-08",
+        "us-wqp-sacramento-river-arsenic-review-09",
+        "us-wqp-sacramento-river-arsenic-review-10",
+        "us-wqp-sacramento-river-arsenic-review-11",
+        "us-wqp-sacramento-river-arsenic-review-12",
+        "us-wqp-sacramento-river-arsenic-review-13",
+        "us-wqp-sacramento-river-arsenic-review-14",
+        "us-wqp-sacramento-river-arsenic-review-15",
+        "us-wqp-sacramento-river-arsenic-review-16",
+        "us-wqp-sacramento-river-arsenic-review-17",
+        "us-wqp-sacramento-river-arsenic-review-18",
+        "us-wqp-sacramento-river-arsenic-review-19",
+        "us-wqp-sacramento-river-arsenic-review-20",
+        "us-wqp-sacramento-river-arsenic-review-21",
+        "us-wqp-sacramento-river-arsenic-review-22",
+        "us-wqp-sacramento-river-arsenic-review-23",
+        "us-wqp-sacramento-river-arsenic-review-24",
+        "us-wqp-sacramento-river-arsenic-review-25",
+        "us-wqp-sacramento-river-arsenic-review-26",
+        "us-wqp-sacramento-river-arsenic-review-27",
+        "us-wqp-sacramento-river-arsenic-review-28",
+        "us-wqp-sacramento-river-arsenic-review-29",
+        "us-wqp-sacramento-river-arsenic-review-30"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "content-snapshot-2026-08-06",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": false,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "results.csv#row=76",
+          "src-8ba6787d96516c377696ef6354ff323d2e7b376a1c0ed1856a7a36cd4c4f6782"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "0.10",
+          "record_id": "rec-fdbf9d1e9f0bc813c136ff0c51520dcf8c37e55ce1319d8daca6339b2a2b703c",
+          "unit": "ug/l",
+          "value_qualifier": "<"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": null
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-01",
+      "sample_id": "nwisca.01.01503736",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=<"
+      ],
+      "source_locator": "results.csv#row=76",
+      "source_record_id": "src-8ba6787d96516c377696ef6354ff323d2e7b376a1c0ed1856a7a36cd4c4f6782"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=4",
+          "src-4d934f1c70dec54b8f75eae2f289c5baaa0559b8e9107d38f3ed843eeb47ca17"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.9",
+          "record_id": "rec-cbcb2169d20af4807d2e5a8b2d9a7ce9c400921331df49512ddb4299410c930d",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.9"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-02",
+      "sample_id": "nwisca.01.01000415",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=4",
+      "source_record_id": "src-4d934f1c70dec54b8f75eae2f289c5baaa0559b8e9107d38f3ed843eeb47ca17"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=55",
+          "src-81b38a6bc7df39bb6fec549c84c47936dcf6578a5ea6cb54195c630a0f7ce9a3"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "2.4",
+          "record_id": "rec-df3526a737ced7328d0b72ea833f85c2c0c7d052b65e1e68032cff89e86391f5",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.4"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-03",
+      "sample_id": "nwisca.01.01402175",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=55",
+      "source_record_id": "src-81b38a6bc7df39bb6fec549c84c47936dcf6578a5ea6cb54195c630a0f7ce9a3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=84",
+          "src-f8608a372d92528d03c129afc10e3d5508048de1a1b1aedae5ff8559a5122a8b"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.1",
+          "record_id": "rec-fc11f36fa496995e33a1c342744cc2c166f6a3008509701ca8ea734459e5a722",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-04",
+      "sample_id": "nwisca.01.01604135",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=84",
+      "source_record_id": "src-f8608a372d92528d03c129afc10e3d5508048de1a1b1aedae5ff8559a5122a8b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=110",
+          "src-01b22d2d769c30b4ce89cf0afd02c71cd97a71bab2d0c3e76767dcf02d7f7c70"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.3",
+          "record_id": "rec-fbb1bea4cc3768840f0b4fe70cca1ee554ea9a76988bfbb62fe2e58ebb320bc2",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-05",
+      "sample_id": "nwisca.01.01802017",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=110",
+      "source_record_id": "src-01b22d2d769c30b4ce89cf0afd02c71cd97a71bab2d0c3e76767dcf02d7f7c70"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=119",
+          "src-c3c5119f8e7b4a8366471d26feccf9aaa7af958c17c39f9c78d474eb1617eaad"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.3",
+          "record_id": "rec-eedd5454e7cdb0fd771ed6ad76b8a27c56aba5136be79f51aabaab3db3f8c0ba",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-06",
+      "sample_id": "nwisca.01.01802496",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=119",
+      "source_record_id": "src-c3c5119f8e7b4a8366471d26feccf9aaa7af958c17c39f9c78d474eb1617eaad"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=124",
+          "src-4fbbae0d7cf5304d8843d4e5a4292ea3bda9874f5303e3fe235216218867c2c9"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "0.99",
+          "record_id": "rec-81d67f34cf19df7b49334d2759ca3f2720d27b451667c8387024ce903c9128c6",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.99"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-07",
+      "sample_id": "nwisca.01.01904258",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=124",
+      "source_record_id": "src-4fbbae0d7cf5304d8843d4e5a4292ea3bda9874f5303e3fe235216218867c2c9"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=144",
+          "src-0cbe740c07606be3efa30e7f837ea6e20c7aceef067d2164fef2fe032df939e3"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.3",
+          "record_id": "rec-df729185ab4e6cb4c33b3f529c975d97b4a8426b7bab61d29162168ba4f68980",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-08",
+      "sample_id": "nwisca.01.02004378",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=144",
+      "source_record_id": "src-0cbe740c07606be3efa30e7f837ea6e20c7aceef067d2164fef2fe032df939e3"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=157",
+          "src-c600a0346f30b90aec5410668b3a7d9f73680a02192aaff189ba259d4c3603c4"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.9",
+          "record_id": "rec-a8e03abb576e29af7fd61dc30e6ff9d22d55f9b5ffc4bf0549ad59d534f6ef00",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.9"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-09",
+      "sample_id": "nwisca.01.02102978",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=157",
+      "source_record_id": "src-c600a0346f30b90aec5410668b3a7d9f73680a02192aaff189ba259d4c3603c4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=174",
+          "src-ff392e2ec0acb70c6dda7dc72e7f6b34186bbe8effa5331e044202067edd4f87"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.8",
+          "record_id": "rec-d545b2df4130e0c5e94baf02b6f0979f3caf9b96028c1dcf8730a6d472c11bc3",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.8"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-10",
+      "sample_id": "nwisca.01.02202614",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=174",
+      "source_record_id": "src-ff392e2ec0acb70c6dda7dc72e7f6b34186bbe8effa5331e044202067edd4f87"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=183",
+          "src-72e10d6d841628900fd4b390f584440424521c9c76395117a1f22f004fc45a33"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.1",
+          "record_id": "rec-dba0a42b02e37a564f48c536d8109e1d4c716096a39ea6546128313420fa52af",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-11",
+      "sample_id": "nwisca.01.02304264",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Quality Control Sample-Field Replicate",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=183",
+      "source_record_id": "src-72e10d6d841628900fd4b390f584440424521c9c76395117a1f22f004fc45a33"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=129",
+          "src-d87b9a97142127f058e5bd1de2dbca662333ff28a7b378a7326106c27dc76efb"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.0",
+          "record_id": "rec-1e30101c6b86207780edbfc4df2a8a6ed03b644d1fcc9d40fe73b55e38f40f10",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.0"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-12",
+      "sample_id": "nwisca.01.02000150",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=129",
+      "source_record_id": "src-d87b9a97142127f058e5bd1de2dbca662333ff28a7b378a7326106c27dc76efb"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=140",
+          "src-a57bf507c1669dbc73dcac5c217e4caa9aadbd806090c944658b6a3b07752bf6"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.8",
+          "record_id": "rec-37d5e0490ff5db4ecb2b94628b847be611acbf4a29882428656b041a0066d47c",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.8"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-13",
+      "sample_id": "nwisca.01.02002747",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=140",
+      "source_record_id": "src-a57bf507c1669dbc73dcac5c217e4caa9aadbd806090c944658b6a3b07752bf6"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=146",
+          "src-09be66269c47d62717bc89f20b106d2603b90fc94f6effedf763655c26ae5793"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.6",
+          "record_id": "rec-04ab81f30c5d1799b8bfa2d4c3a9cdd0b40c67179d60a11e5d03ee255119bdbe",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.6"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-14",
+      "sample_id": "nwisca.01.02001804",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=146",
+      "source_record_id": "src-09be66269c47d62717bc89f20b106d2603b90fc94f6effedf763655c26ae5793"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=153",
+          "src-913d1bd21095c944d56a7a7842eaee5dfc79e49419701d49cf0000f5cd9b2ff9"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "2.1",
+          "record_id": "rec-9f830c54e4b0716bd6991c11e7965ea2c0fce25ceb7bee32f459c9cca8fb7606",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-15",
+      "sample_id": "nwisca.01.02100975",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=153",
+      "source_record_id": "src-913d1bd21095c944d56a7a7842eaee5dfc79e49419701d49cf0000f5cd9b2ff9"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=159",
+          "src-56873699108c467c9498f7de35663407f98e8306c4eef888553d30f1fc2fed7a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "2.1",
+          "record_id": "rec-21591300e3ad80c4e9af26c7b174fb576589aa6418f86ebe7a76e704b9b44cf2",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-16",
+      "sample_id": "nwisca.01.02103093",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=159",
+      "source_record_id": "src-56873699108c467c9498f7de35663407f98e8306c4eef888553d30f1fc2fed7a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=165",
+          "src-4a8d5e27dbfed92df9f5d504a653e9f5fb3887510d7ddfc87307c777fbdf92d0"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.2",
+          "record_id": "rec-1f590b6dfd734e0eebaf352bd27a74b5dd6e7a1ae51f3d75b656cf1fb9867f9e",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.2"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-17",
+      "sample_id": "nwisca.01.02204666",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=165",
+      "source_record_id": "src-4a8d5e27dbfed92df9f5d504a653e9f5fb3887510d7ddfc87307c777fbdf92d0"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=171",
+          "src-cd6ab66d0ae97c1df54f73cb85548af270b4dd2ddae2a9afc13f16ef01cbcf2c"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.6",
+          "record_id": "rec-1719974eae6bcfb7316f76817a7fd81e0a3f3683ffc8df98f587e0397e29d241",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.6"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-18",
+      "sample_id": "nwisca.01.02201984",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=171",
+      "source_record_id": "src-cd6ab66d0ae97c1df54f73cb85548af270b4dd2ddae2a9afc13f16ef01cbcf2c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=178",
+          "src-465067d3857b3fd2917ec3957236a7d0defbe43b58abed87c5e4701c83962656"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.4",
+          "record_id": "rec-02a8888d2ce767047296e10f3d2488fe7e1f2ba0d46a24d10ea991050a15fc5a",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.4"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-19",
+      "sample_id": "nwisca.01.02301410",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=178",
+      "source_record_id": "src-465067d3857b3fd2917ec3957236a7d0defbe43b58abed87c5e4701c83962656"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=184",
+          "src-78b1f068d6d3b44555b44aa46a806b25b88421df9c8d9a4be3f02c35877ec70c"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.0",
+          "record_id": "rec-5d3c37a55a8b24bff821394eb8ba0f8333e18746914743c86eb538f39cac8205",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.0"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-20",
+      "sample_id": "nwisca.01.02303554",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=184",
+      "source_record_id": "src-78b1f068d6d3b44555b44aa46a806b25b88421df9c8d9a4be3f02c35877ec70c"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=190",
+          "src-854bc91065f64fff9131ada21fa6e17feb0455c6eb9d00dc3d974792035a0376"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.1",
+          "record_id": "rec-14961653fb6d9bf89b4c00fa406ba9e9b4af280a33189a720ec77474a8339b29",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-21",
+      "sample_id": "nwisca.01.02400087",
+      "selection_reasons": [
+        "status=Preliminary",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=190",
+      "source_record_id": "src-854bc91065f64fff9131ada21fa6e17feb0455c6eb9d00dc3d974792035a0376"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=2",
+          "src-029af1bce0c1f3305ca6b4b3a3708e06b3a5650b66bda136bff18eca3a6d0935"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.1",
+          "record_id": "rec-c2ca8253bab5a3a8f1ce9a551c6ea7e391e2361b6b69c3d66c8f008b664915aa",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.1"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-22",
+      "sample_id": "nwisca.01.01100588",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=2",
+      "source_record_id": "src-029af1bce0c1f3305ca6b4b3a3708e06b3a5650b66bda136bff18eca3a6d0935"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=17",
+          "src-e50e6b224f095ac39683ca15196a0a027ab2a406f69877d5cb2bee3a4859ef3e"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "0.97",
+          "record_id": "rec-d2806612fa3f1a99a7cbbdd4f798ae3d6fbc15368181bb0917e5e6713058ea4e",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.97"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-23",
+      "sample_id": "nwisca.01.01102809",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=17",
+      "source_record_id": "src-e50e6b224f095ac39683ca15196a0a027ab2a406f69877d5cb2bee3a4859ef3e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=31",
+          "src-5deaa7d9750c52236a1a776c1d269d512fbfd945081fdb1c6c2cf52111cb1320"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.3",
+          "record_id": "rec-520056d468d538f33f108092acb10d5c3d28653ad869ba6619e818ea200843a4",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.3"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-24",
+      "sample_id": "nwisca.01.01300096",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=31",
+      "source_record_id": "src-5deaa7d9750c52236a1a776c1d269d512fbfd945081fdb1c6c2cf52111cb1320"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=46",
+          "src-58f24b27db43b702dbe71ac06a4ceb36eb85c1847a163a05fe0a9f441a9b4551"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.5",
+          "record_id": "rec-e6bf0faa37ea18e059db864c6d81fd5f73065022b457d43d7c60bcacb70cbd67",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.5"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-25",
+      "sample_id": "nwisca.01.01302426",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=46",
+      "source_record_id": "src-58f24b27db43b702dbe71ac06a4ceb36eb85c1847a163a05fe0a9f441a9b4551"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=60",
+          "src-ed5a59a1307022d08eb36f2c79908d2887d235d6fedc5999db6c816fe17d86ff"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.7",
+          "record_id": "rec-1868d1dc3458bb0183c1dbc40f74d8867771dfd67d4e46ed10c4da79ad53e524",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.7"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-26",
+      "sample_id": "nwisca.01.01404172",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=60",
+      "source_record_id": "src-ed5a59a1307022d08eb36f2c79908d2887d235d6fedc5999db6c816fe17d86ff"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=75",
+          "src-7a915752f89bd9691a11a709a53244cfc6d788e63ee15b5ca628bbd9a3d0868a"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.7",
+          "record_id": "rec-2b711db568a8ea0b5df950f632481d428e18f118fcc54e830f7d38b7975ef1ba",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.7"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-27",
+      "sample_id": "nwisca.01.01501814",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=75",
+      "source_record_id": "src-7a915752f89bd9691a11a709a53244cfc6d788e63ee15b5ca628bbd9a3d0868a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=89",
+          "src-03f620d3c340db95eeed00521c7226b8a050ef7494403c712d1b78eea5dea7c1"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.7",
+          "record_id": "rec-92639adad0e12a1f9778a9afd142b782142efce772285751c2546a11da3c4742",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.7"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-28",
+      "sample_id": "nwisca.01.01700683",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=89",
+      "source_record_id": "src-03f620d3c340db95eeed00521c7226b8a050ef7494403c712d1b78eea5dea7c1"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=104",
+          "src-9115772e350cbd9411837e7b566bc08bc441ad49de203cfa793ceab884450a3b"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "0.61",
+          "record_id": "rec-f99ced05d4de96de10a57438e7401e4e4a11fbb566bf6ccec8ddd93509201f0e",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.61"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-29",
+      "sample_id": "nwisca.01.01705363",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=104",
+      "source_record_id": "src-9115772e350cbd9411837e7b566bc08bc441ad49de203cfa793ceab884450a3b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "results.csv#row=118",
+          "src-8736ff59b9403a11ffa5ba1f4aff40a5648344425131ed419199c1994b622f4e"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "USGS:PLM10: Elements, wf, cICP-MS (USGS TMR 5-B1)",
+          "raw_value": "1.8",
+          "record_id": "rec-45fdb0cf10b2284bbc8de09668a61958149752ff9ddc7ebac9aabbf11efaf9ba",
+          "unit": "ug/l",
+          "value_qualifier": ""
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "1.8"
+      },
+      "review_id": "us-wqp-sacramento-river-arsenic-review-30",
+      "sample_id": "nwisca.01.01801106",
+      "selection_reasons": [
+        "status=Accepted",
+        "activity_type=Sample-Routine",
+        "qualifier=reported"
+      ],
+      "source_locator": "results.csv#row=118",
+      "source_record_id": "src-8736ff59b9403a11ffa5ba1f4aff40a5648344425131ed419199c1994b622f4e"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "us-wqp-sacramento-river-arsenic",
+  "status": "automated_audit_complete"
+}

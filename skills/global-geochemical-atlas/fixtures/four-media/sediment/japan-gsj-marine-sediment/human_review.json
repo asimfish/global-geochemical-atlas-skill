@@ -1,0 +1,2824 @@
+{
+  "all_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "Automated PASS verifies byte and mapping correspondence only. Named human decisions remain null; unsigned review lowers confidence but is not a hard research-use gate.",
+  "completed_record_count": 0,
+  "dataset_version": "content-snapshot-2026-08-06",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.5",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820044%257Cocean-noudo.csv%2523row%253D1640%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "51.216",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820044%257Cocean-noudo.csv%2523row%253D1640%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "7.352",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820044%257Cocean-noudo.csv%2523row%253D1640%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-2.912",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820044%257Cocean-noudo.csv%2523row%253D1640%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.473",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820044%257Cocean-noudo.csv%2523row%253D1640%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.811",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820044%257Cocean-noudo.csv%2523row%253D1640%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "85.908",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820044%257Cocean-noudo.csv%2523row%253D1640%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH82-3",
+      "latitude": "41.26067",
+      "longitude": "141.46783",
+      "region": "下北半島沖",
+      "review_id": "japan-gsj-marine-sediment-review-01",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "820044",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1640",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C820044%7Cocean-noudo.csv%23row%3D1640",
+      "water_depth_m": "57"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820084%257Cocean-noudo.csv%2523row%253D1673%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "19.029",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820084%257Cocean-noudo.csv%2523row%253D1673%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.507",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820084%257Cocean-noudo.csv%2523row%253D1673%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-1.977",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820084%257Cocean-noudo.csv%2523row%253D1673%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.03",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820084%257Cocean-noudo.csv%2523row%253D1673%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.655",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820084%257Cocean-noudo.csv%2523row%253D1673%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "95.027",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820084%257Cocean-noudo.csv%2523row%253D1673%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH82-3",
+      "latitude": "41.6",
+      "longitude": "141.37267",
+      "region": "下北半島沖",
+      "review_id": "japan-gsj-marine-sediment-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "820084",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1673",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C820084%7Cocean-noudo.csv%23row%3D1673",
+      "water_depth_m": "308"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.6",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810123%257Cocean-noudo.csv%2523row%253D1875%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "34.05",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810123%257Cocean-noudo.csv%2523row%253D1875%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.468",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810123%257Cocean-noudo.csv%2523row%253D1875%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-30.639",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810123%257Cocean-noudo.csv%2523row%253D1875%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.805",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810123%257Cocean-noudo.csv%2523row%253D1875%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.595",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810123%257Cocean-noudo.csv%2523row%253D1875%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "68.481",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810123%257Cocean-noudo.csv%2523row%253D1875%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH81-1",
+      "latitude": "38.56667",
+      "longitude": "141.75",
+      "region": "釜石沖",
+      "review_id": "japan-gsj-marine-sediment-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "810123",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1875",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C810123%7Cocean-noudo.csv%23row%3D1875",
+      "water_depth_m": "167"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "18",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813077%257Cocean-noudo.csv%2523row%253D2098%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.938",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813077%257Cocean-noudo.csv%2523row%253D2098%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.67",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813077%257Cocean-noudo.csv%2523row%253D2098%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.401",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813077%257Cocean-noudo.csv%2523row%253D2098%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.076",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813077%257Cocean-noudo.csv%2523row%253D2098%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.899",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813077%257Cocean-noudo.csv%2523row%253D2098%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "34.167",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813077%257Cocean-noudo.csv%2523row%253D2098%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH81-3",
+      "latitude": "38.067",
+      "longitude": "141.16583",
+      "region": "仙台〜日立沖",
+      "review_id": "japan-gsj-marine-sediment-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "813077",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2098",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C813077%7Cocean-noudo.csv%23row%3D2098",
+      "water_depth_m": "36"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.7",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813079%257Cocean-noudo.csv%2523row%253D2099%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.145",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813079%257Cocean-noudo.csv%2523row%253D2099%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "3.638",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813079%257Cocean-noudo.csv%2523row%253D2099%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.508",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813079%257Cocean-noudo.csv%2523row%253D2099%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.812",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813079%257Cocean-noudo.csv%2523row%253D2099%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.292",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813079%257Cocean-noudo.csv%2523row%253D2099%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "26.021",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813079%257Cocean-noudo.csv%2523row%253D2099%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH81-3",
+      "latitude": "38.03083",
+      "longitude": "141.08",
+      "region": "仙台〜日立沖",
+      "review_id": "japan-gsj-marine-sediment-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "813079",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2099",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C813079%7Cocean-noudo.csv%23row%3D2099",
+      "water_depth_m": "31"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.6",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813080%257Cocean-noudo.csv%2523row%253D2100%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.668",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813080%257Cocean-noudo.csv%2523row%253D2100%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.454",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813080%257Cocean-noudo.csv%2523row%253D2100%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-4.286",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813080%257Cocean-noudo.csv%2523row%253D2100%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.229",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813080%257Cocean-noudo.csv%2523row%253D2100%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.15",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813080%257Cocean-noudo.csv%2523row%253D2100%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "53.138",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C813080%257Cocean-noudo.csv%2523row%253D2100%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH81-3",
+      "latitude": "38.032",
+      "longitude": "141.25233",
+      "region": "仙台〜日立沖",
+      "review_id": "japan-gsj-marine-sediment-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "813080",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2100",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C813080%7Cocean-noudo.csv%23row%3D2100",
+      "water_depth_m": "42"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.4",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832396%257Cocean-noudo.csv%2523row%253D3185%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.85",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832396%257Cocean-noudo.csv%2523row%253D3185%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.551",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832396%257Cocean-noudo.csv%2523row%253D3185%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.482",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832396%257Cocean-noudo.csv%2523row%253D3185%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.433",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832396%257Cocean-noudo.csv%2523row%253D3185%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.334",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832396%257Cocean-noudo.csv%2523row%253D3185%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "39.716",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832396%257Cocean-noudo.csv%2523row%253D3185%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH83-2",
+      "latitude": "33.00133",
+      "longitude": "132.31667",
+      "region": "土佐湾〜日向灘",
+      "review_id": "japan-gsj-marine-sediment-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832396",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3185",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C832396%7Cocean-noudo.csv%23row%3D3185",
+      "water_depth_m": "92"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.5",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832401%257Cocean-noudo.csv%2523row%253D3190%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "21.198",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832401%257Cocean-noudo.csv%2523row%253D3190%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.188",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832401%257Cocean-noudo.csv%2523row%253D3190%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-0.531",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832401%257Cocean-noudo.csv%2523row%253D3190%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.095",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832401%257Cocean-noudo.csv%2523row%253D3190%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.539",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832401%257Cocean-noudo.csv%2523row%253D3190%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "46.694",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832401%257Cocean-noudo.csv%2523row%253D3190%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH83-2",
+      "latitude": "33.005",
+      "longitude": "132.275",
+      "region": "土佐湾〜日向灘",
+      "review_id": "japan-gsj-marine-sediment-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832401",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3190",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C832401%7Cocean-noudo.csv%23row%3D3190",
+      "water_depth_m": "89"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.1",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852103%257Cocean-noudo.csv%2523row%253D3760%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.681",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852103%257Cocean-noudo.csv%2523row%253D3760%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.543",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852103%257Cocean-noudo.csv%2523row%253D3760%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-4.911",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852103%257Cocean-noudo.csv%2523row%253D3760%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.163",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852103%257Cocean-noudo.csv%2523row%253D3760%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.303",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852103%257Cocean-noudo.csv%2523row%253D3760%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.735",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852103%257Cocean-noudo.csv%2523row%253D3760%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH85-2",
+      "latitude": "33.90917",
+      "longitude": "130.59433",
+      "region": "北九州・山陰",
+      "review_id": "japan-gsj-marine-sediment-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "852103",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3760",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C852103%7Cocean-noudo.csv%23row%3D3760",
+      "water_depth_m": ""
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.6",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852217%257Cocean-noudo.csv%2523row%253D3874%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "49.577",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852217%257Cocean-noudo.csv%2523row%253D3874%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "3.949",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852217%257Cocean-noudo.csv%2523row%253D3874%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "-3.393",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852217%257Cocean-noudo.csv%2523row%253D3874%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.745",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852217%257Cocean-noudo.csv%2523row%253D3874%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.834",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852217%257Cocean-noudo.csv%2523row%253D3874%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "25.434",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C852217%257Cocean-noudo.csv%2523row%253D3874%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH85-2",
+      "latitude": "34.803",
+      "longitude": "131.2695",
+      "region": "北九州・山陰",
+      "review_id": "japan-gsj-marine-sediment-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "852217",
+      "selection_reasons": [
+        "negative_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3874",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C852217%7Cocean-noudo.csv%23row%3D3874",
+      "water_depth_m": ""
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.3",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812161%257Cocean-noudo.csv%2523row%253D2006%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "50.809",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812161%257Cocean-noudo.csv%2523row%253D2006%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.993",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812161%257Cocean-noudo.csv%2523row%253D2006%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.183",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812161%257Cocean-noudo.csv%2523row%253D2006%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.583",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812161%257Cocean-noudo.csv%2523row%253D2006%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "73.223",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812161%257Cocean-noudo.csv%2523row%253D2006%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH81-2",
+      "latitude": "37.46667",
+      "longitude": "141.655",
+      "region": "仙台〜日立沖",
+      "review_id": "japan-gsj-marine-sediment-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "812161",
+      "selection_reasons": [
+        "missing_hg_source_value"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2006",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C812161%7Cocean-noudo.csv%23row%3D2006",
+      "water_depth_m": "265"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.3",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.469",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.293",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.194",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.707",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "64.418",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880001%257Cocean-noudo.csv%2523row%253D2%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH88",
+      "latitude": "36.6977",
+      "longitude": "136.5527",
+      "region": "能登〜富山湾",
+      "review_id": "japan-gsj-marine-sediment-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "880001",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C880001%7Cocean-noudo.csv%23row%3D2",
+      "water_depth_m": "45"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.2",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880178%257Cocean-noudo.csv%2523row%253D171%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "61.563",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880178%257Cocean-noudo.csv%2523row%253D171%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "19.502",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880178%257Cocean-noudo.csv%2523row%253D171%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "60",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880178%257Cocean-noudo.csv%2523row%253D171%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "23.316",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880178%257Cocean-noudo.csv%2523row%253D171%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.206",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880178%257Cocean-noudo.csv%2523row%253D171%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "83.079",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C880178%257Cocean-noudo.csv%2523row%253D171%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH88",
+      "latitude": "37.2895",
+      "longitude": "137.3552",
+      "region": "能登〜富山湾",
+      "review_id": "japan-gsj-marine-sediment-review-13",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "880178",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=171",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C880178%7Cocean-noudo.csv%23row%3D171",
+      "water_depth_m": "474"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.9",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C900097%257Cocean-noudo.csv%2523row%253D340%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "32.324",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C900097%257Cocean-noudo.csv%2523row%253D340%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.568",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C900097%257Cocean-noudo.csv%2523row%253D340%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "60",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C900097%257Cocean-noudo.csv%2523row%253D340%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.618",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C900097%257Cocean-noudo.csv%2523row%253D340%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "25.367",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C900097%257Cocean-noudo.csv%2523row%253D340%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "36.303",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C900097%257Cocean-noudo.csv%2523row%253D340%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH90",
+      "latitude": "38.0952",
+      "longitude": "138.7108",
+      "region": "新潟湾",
+      "review_id": "japan-gsj-marine-sediment-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "900097",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=340",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C900097%7Cocean-noudo.csv%23row%3D340",
+      "water_depth_m": "231"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.1",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C910270%257Cocean-noudo.csv%2523row%253D509%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "66.027",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C910270%257Cocean-noudo.csv%2523row%253D509%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "24.856",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C910270%257Cocean-noudo.csv%2523row%253D509%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "30",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C910270%257Cocean-noudo.csv%2523row%253D509%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "29.311",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C910270%257Cocean-noudo.csv%2523row%253D509%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "42.292",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C910270%257Cocean-noudo.csv%2523row%253D509%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "92.084",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C910270%257Cocean-noudo.csv%2523row%253D509%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH91",
+      "latitude": "38.9073",
+      "longitude": "139.5065",
+      "region": "秋田沖",
+      "review_id": "japan-gsj-marine-sediment-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "910270",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=509",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C910270%7Cocean-noudo.csv%23row%3D509",
+      "water_depth_m": "370"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.3",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C940039%257Cocean-noudo.csv%2523row%253D678%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "184.632",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C940039%257Cocean-noudo.csv%2523row%253D678%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "51.992",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C940039%257Cocean-noudo.csv%2523row%253D678%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "40",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C940039%257Cocean-noudo.csv%2523row%253D678%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "77.792",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C940039%257Cocean-noudo.csv%2523row%253D678%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "19.461",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C940039%257Cocean-noudo.csv%2523row%253D678%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "81.019",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C940039%257Cocean-noudo.csv%2523row%253D678%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH94",
+      "latitude": "41.6",
+      "longitude": "139.3282",
+      "region": "北海道西方海域",
+      "review_id": "japan-gsj-marine-sediment-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "940039",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=678",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C940039%7Cocean-noudo.csv%23row%3D678",
+      "water_depth_m": "1526"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.4",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C960262%257Cocean-noudo.csv%2523row%253D848%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "45.762",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C960262%257Cocean-noudo.csv%2523row%253D848%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.382",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C960262%257Cocean-noudo.csv%2523row%253D848%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "30",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C960262%257Cocean-noudo.csv%2523row%253D848%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.986",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C960262%257Cocean-noudo.csv%2523row%253D848%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "49.519",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C960262%257Cocean-noudo.csv%2523row%253D848%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "97.4",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C960262%257Cocean-noudo.csv%2523row%253D848%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH96",
+      "latitude": "43.79983",
+      "longitude": "139.75267",
+      "region": "北海道西方海域３",
+      "review_id": "japan-gsj-marine-sediment-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "960262",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=848",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C960262%7Cocean-noudo.csv%23row%3D848",
+      "water_depth_m": "1804"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.9",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C980447%257Cocean-noudo.csv%2523row%253D1017%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "69.838",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C980447%257Cocean-noudo.csv%2523row%253D1017%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.423",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C980447%257Cocean-noudo.csv%2523row%253D1017%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "80",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C980447%257Cocean-noudo.csv%2523row%253D1017%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "35.613",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C980447%257Cocean-noudo.csv%2523row%253D1017%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "21.977",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C980447%257Cocean-noudo.csv%2523row%253D1017%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "73.341",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C980447%257Cocean-noudo.csv%2523row%253D1017%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH98",
+      "latitude": "44.82366",
+      "longitude": "141.64464",
+      "region": "北海道西方海域４",
+      "review_id": "japan-gsj-marine-sediment-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "980447",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1017",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C980447%7Cocean-noudo.csv%23row%3D1017",
+      "water_depth_m": "53"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.9",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1000094%257Cocean-noudo.csv%2523row%253D1186%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "59.788",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1000094%257Cocean-noudo.csv%2523row%253D1186%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.119",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1000094%257Cocean-noudo.csv%2523row%253D1186%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1000094%257Cocean-noudo.csv%2523row%253D1186%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "26.445",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1000094%257Cocean-noudo.csv%2523row%253D1186%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.484",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1000094%257Cocean-noudo.csv%2523row%253D1186%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "72.118",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1000094%257Cocean-noudo.csv%2523row%253D1186%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH00",
+      "latitude": "45.30097",
+      "longitude": "143.36758",
+      "region": "オホーツク海１",
+      "review_id": "japan-gsj-marine-sediment-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1000094",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1186",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C1000094%7Cocean-noudo.csv%23row%3D1186",
+      "water_depth_m": "147"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1010266%257Cocean-noudo.csv%2523row%253D1355%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "46.971",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1010266%257Cocean-noudo.csv%2523row%253D1355%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "8.253",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1010266%257Cocean-noudo.csv%2523row%253D1355%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "60",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1010266%257Cocean-noudo.csv%2523row%253D1355%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.399",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1010266%257Cocean-noudo.csv%2523row%253D1355%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.983",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1010266%257Cocean-noudo.csv%2523row%253D1355%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "56.175",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1010266%257Cocean-noudo.csv%2523row%253D1355%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH01",
+      "latitude": "44.034",
+      "longitude": "144.43451",
+      "region": "オホーツク海２",
+      "review_id": "japan-gsj-marine-sediment-review-20",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1010266",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1355",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C1010266%7Cocean-noudo.csv%23row%3D1355",
+      "water_depth_m": "64"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "7.3",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1030078%257Cocean-noudo.csv%2523row%253D1524%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "32.036",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1030078%257Cocean-noudo.csv%2523row%253D1524%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "20.244",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1030078%257Cocean-noudo.csv%2523row%253D1524%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "26.344",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1030078%257Cocean-noudo.csv%2523row%253D1524%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "11.907",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1030078%257Cocean-noudo.csv%2523row%253D1524%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "11.348",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1030078%257Cocean-noudo.csv%2523row%253D1524%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.499",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1030078%257Cocean-noudo.csv%2523row%253D1524%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH03",
+      "latitude": "42.86672",
+      "longitude": "144.73059",
+      "region": "釧路・日高沖",
+      "review_id": "japan-gsj-marine-sediment-review-21",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1030078",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1524",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C1030078%7Cocean-noudo.csv%23row%3D1524",
+      "water_depth_m": "76"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "7.9",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820109%257Cocean-noudo.csv%2523row%253D1693%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "31.253",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820109%257Cocean-noudo.csv%2523row%253D1693%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.969",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820109%257Cocean-noudo.csv%2523row%253D1693%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "99.203",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820109%257Cocean-noudo.csv%2523row%253D1693%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.558",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820109%257Cocean-noudo.csv%2523row%253D1693%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.864",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820109%257Cocean-noudo.csv%2523row%253D1693%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.63",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C820109%257Cocean-noudo.csv%2523row%253D1693%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH82-3",
+      "latitude": "41.751",
+      "longitude": "141.28467",
+      "region": "下北半島沖",
+      "review_id": "japan-gsj-marine-sediment-review-22",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "820109",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1693",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C820109%7Cocean-noudo.csv%23row%3D1693",
+      "water_depth_m": "241"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810109%257Cocean-noudo.csv%2523row%253D1862%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "49.679",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810109%257Cocean-noudo.csv%2523row%253D1862%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.31",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810109%257Cocean-noudo.csv%2523row%253D1862%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "51.178",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810109%257Cocean-noudo.csv%2523row%253D1862%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.924",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810109%257Cocean-noudo.csv%2523row%253D1862%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.553",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810109%257Cocean-noudo.csv%2523row%253D1862%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "88.236",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C810109%257Cocean-noudo.csv%2523row%253D1862%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH81-1",
+      "latitude": "38.63",
+      "longitude": "142.255",
+      "region": "釜石沖",
+      "review_id": "japan-gsj-marine-sediment-review-23",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "810109",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=1862",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C810109%7Cocean-noudo.csv%23row%3D1862",
+      "water_depth_m": "683"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.4",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812199%257Cocean-noudo.csv%2523row%253D2031%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "41.599",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812199%257Cocean-noudo.csv%2523row%253D2031%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "9.728",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812199%257Cocean-noudo.csv%2523row%253D2031%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "45.632",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812199%257Cocean-noudo.csv%2523row%253D2031%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "35.246",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812199%257Cocean-noudo.csv%2523row%253D2031%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "14.654",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812199%257Cocean-noudo.csv%2523row%253D2031%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "83.076",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C812199%257Cocean-noudo.csv%2523row%253D2031%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH81-2",
+      "latitude": "37.2",
+      "longitude": "141.335",
+      "region": "仙台〜日立沖",
+      "review_id": "japan-gsj-marine-sediment-review-24",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "812199",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2031",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C812199%7Cocean-noudo.csv%23row%3D2031",
+      "water_depth_m": "139"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "6.1",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C800037%257Cocean-noudo.csv%2523row%253D2200%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "41.891",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C800037%257Cocean-noudo.csv%2523row%253D2200%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.809",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C800037%257Cocean-noudo.csv%2523row%253D2200%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "78.155",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C800037%257Cocean-noudo.csv%2523row%253D2200%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "18.242",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C800037%257Cocean-noudo.csv%2523row%253D2200%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "12.349",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C800037%257Cocean-noudo.csv%2523row%253D2200%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "98.759",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C800037%257Cocean-noudo.csv%2523row%253D2200%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH80-2",
+      "latitude": "35.17167",
+      "longitude": "140.743",
+      "region": "房総沖",
+      "review_id": "japan-gsj-marine-sediment-review-25",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "800037",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2200",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C800037%7Cocean-noudo.csv%23row%3D2200",
+      "water_depth_m": "190"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.5",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C970187%257Cocean-noudo.csv%2523row%253D2369%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "73.203",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C970187%257Cocean-noudo.csv%2523row%253D2369%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "32.871",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C970187%257Cocean-noudo.csv%2523row%253D2369%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "200.024",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C970187%257Cocean-noudo.csv%2523row%253D2369%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "38.14",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C970187%257Cocean-noudo.csv%2523row%253D2369%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "22.404",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C970187%257Cocean-noudo.csv%2523row%253D2369%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "82.684",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C970187%257Cocean-noudo.csv%2523row%253D2369%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH97",
+      "latitude": "34.36453",
+      "longitude": "137.77655",
+      "region": "東海沖",
+      "review_id": "japan-gsj-marine-sediment-review-26",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "970187",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2369",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C970187%7Cocean-noudo.csv%23row%3D2369",
+      "water_depth_m": "1000"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.5",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1042008%257Cocean-noudo.csv%2523row%253D2539%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "118.766",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1042008%257Cocean-noudo.csv%2523row%253D2539%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "96.377",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1042008%257Cocean-noudo.csv%2523row%253D2539%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "630.993",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1042008%257Cocean-noudo.csv%2523row%253D2539%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "47.58",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1042008%257Cocean-noudo.csv%2523row%253D2539%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "66.742",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1042008%257Cocean-noudo.csv%2523row%253D2539%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "424.881",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C1042008%257Cocean-noudo.csv%2523row%253D2539%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GC04-3",
+      "latitude": "35.55432",
+      "longitude": "139.88538",
+      "region": "東京湾",
+      "review_id": "japan-gsj-marine-sediment-review-27",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "1042008",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2539",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C1042008%7Cocean-noudo.csv%23row%3D2539",
+      "water_depth_m": "18"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.5",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C821030%257Cocean-noudo.csv%2523row%253D2708%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "58.998",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C821030%257Cocean-noudo.csv%2523row%253D2708%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.606",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C821030%257Cocean-noudo.csv%2523row%253D2708%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "109.234",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C821030%257Cocean-noudo.csv%2523row%253D2708%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "23.211",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C821030%257Cocean-noudo.csv%2523row%253D2708%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "16.582",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C821030%257Cocean-noudo.csv%2523row%253D2708%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.886",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C821030%257Cocean-noudo.csv%2523row%253D2708%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH82-1",
+      "latitude": "32.92167",
+      "longitude": "134.41333",
+      "region": "室戸岬",
+      "review_id": "japan-gsj-marine-sediment-review-28",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "821030",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2708",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C821030%7Cocean-noudo.csv%23row%3D2708",
+      "water_depth_m": "945"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "4.9",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832063%257Cocean-noudo.csv%2523row%253D2877%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "59.948",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832063%257Cocean-noudo.csv%2523row%253D2877%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "11.124",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832063%257Cocean-noudo.csv%2523row%253D2877%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "95.275",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832063%257Cocean-noudo.csv%2523row%253D2877%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "27.485",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832063%257Cocean-noudo.csv%2523row%253D2877%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "13.475",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832063%257Cocean-noudo.csv%2523row%253D2877%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "70.194",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832063%257Cocean-noudo.csv%2523row%253D2877%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH83-2",
+      "latitude": "33.1925",
+      "longitude": "133.49533",
+      "region": "土佐湾〜日向灘",
+      "review_id": "japan-gsj-marine-sediment-review-29",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832063",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=2877",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C832063%7Cocean-noudo.csv%23row%3D2877",
+      "water_depth_m": "133"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analyte": "As",
+          "analytical_method": "",
+          "field": "As",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "5.2",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832244%257Cocean-noudo.csv%2523row%253D3046%7CAs%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "",
+          "field": "Cr",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "33.842",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832244%257Cocean-noudo.csv%2523row%253D3046%7CCr%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "",
+          "field": "Cu",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "10.461",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832244%257Cocean-noudo.csv%2523row%253D3046%7CCu%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Hg",
+          "analytical_method": "",
+          "field": "Hg",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "52.213",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832244%257Cocean-noudo.csv%2523row%253D3046%7CHg%7C",
+          "unit": "ppb"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "",
+          "field": "Ni",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "15.007",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832244%257Cocean-noudo.csv%2523row%253D3046%7CNi%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "",
+          "field": "Pb",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "17.463",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832244%257Cocean-noudo.csv%2523row%253D3046%7CPb%7C",
+          "unit": "ppm"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "",
+          "field": "Zn",
+          "measurement_basis": "published_marine_sediment_concentration",
+          "raw_value": "69.801",
+          "record_id": "rec-observation-v2%7Cjapan-gsj-marine-sediment%7Csrc-source-record-v2%257Cjapan-gsj-marine-sediment%257C832244%257Cocean-noudo.csv%2523row%253D3046%7CZn%7C",
+          "unit": "ppm"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "method_not_inferred_beyond_registered_evidence": true,
+        "registered_file_identity_and_bytes_match": true,
+        "source_identity_preserved": true,
+        "stable_observation_ids_unique": true,
+        "target_values_and_units_preserved": true
+      },
+      "automated_status": "PASS",
+      "cruise": "GH83-2",
+      "latitude": "32.5905",
+      "longitude": "131.98633",
+      "region": "土佐湾〜日向灘",
+      "review_id": "japan-gsj-marine-sediment-review-30",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "832244",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_locator": "ocean-noudo.csv#row=3046",
+      "source_record_id": "src-source-record-v2%7Cjapan-gsj-marine-sediment%7C832244%7Cocean-noudo.csv%23row%3D3046",
+      "water_depth_m": "274"
+    }
+  ],
+  "review_unit": "source_record_or_explicit_observation_mapping",
+  "source_id": "japan-gsj-marine-sediment",
+  "status": "prepared"
+}

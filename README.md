@@ -9,7 +9,7 @@
   <img src="skills/global-geochemical-atlas/assets/readme-atlas-overview.png" alt="全球地球化学元素图谱交互界面，展示四介质样点、候选异常与覆盖情况" width="100%">
 </p>
 
-<p align="center"><sub>真实工作流截图：14 个公开来源的最小复现切片，796 条观测。它验证工程链路，不代表全球空间覆盖。</sub></p>
+<p align="center"><sub>真实工作流截图：26 个公开数据集的最小复现切片，1,271 条观测。它验证工程链路，不代表全球空间覆盖。</sub></p>
 
 `Python 3.11+` · `运行时零第三方依赖` · `真实数据生产阈值 demo` · `MIT`
 
@@ -29,9 +29,9 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-两个命令应分别返回 `"status": "partial_success"` 和 `"status": "valid"`。前者是刻意的科学状态：hash 固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十五项产物契约全部有效。随后打开 `/tmp/geochemical-production-demo/interactive_map.html`；无需网络、密钥、GPU 或 Python 第三方包。
+两个命令应分别返回 `"status": "partial_success"` 和 `"status": "valid"`。前者是刻意的科学状态：版本固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十五项产物契约全部有效。随后打开 `/tmp/geochemical-production-demo/interactive_map.html`；无需网络、密钥、GPU 或 Python 第三方包。
 
-这条回归使用 996 条 hash 固定的 USGS 真实土壤测定和固定版本 GLiM 岩性图。在生产阈值 `n≥20` 下，预期 996/996 完成地质匹配、12 个可比背景组完成分析、识别 6 个 high/low 候选异常，输出校验 0 错误/0 警告。它证明工程和科学规则可执行，不代表美国土壤的统计分布；完整证据见[生产演示说明](skills/global-geochemical-atlas/references/production-demo.md)。
+这条回归使用 996 条版本固定的 USGS 真实土壤测定和固定版本 GLiM 岩性图。在生产阈值 `n≥20` 下，预期 996/996 完成地质匹配、12 个可比背景组完成分析、识别 6 个 high/low 候选异常，输出校验 0 错误/0 警告。它证明工程和科学规则可执行，不代表美国土壤的统计分布；完整证据见[生产演示说明](skills/global-geochemical-atlas/references/production-demo.md)。
 
 ## 你会得到什么
 
@@ -39,7 +39,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 |---|---|---|
 | **可交互元素分布地图** | `interactive_map.html`、`samples.geojson` | 按元素、介质、区域、方法与置信度筛选；查看样点、热力和异常候选 |
 | **标准化地球化学数据库** | `geochemistry.csv`、`batch_acceptance.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法、分析批次与 QC 字段 |
-| **数据来源与置信度说明** | `source_manifest.json`、`record_evidence.jsonl`、`confidence_report.json` | URL/DOI、许可、版本、哈希、源记录定位和五分量置信度可追溯 |
+| **数据来源与置信度说明** | `source_manifest.json`、`record_evidence.jsonl`、`confidence_report.json` | URL/DOI、许可、版本、文件身份、源记录定位和五分量置信度可追溯 |
 | **异常区域识别结果** | `anomalies.geojson`、`anomaly_report.json`、`anomaly_regions.geojson`、`spatial_anomaly_report.json` | 记录级 robust-MAD 候选 + 精确超几何富集/BH-FDR 空间筛查；完整报告失败边界 |
 | **可复用 Skill 文档** | [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) | 明确请求契约、工具路由、科学规则、接口和失败状态 |
 
@@ -56,7 +56,9 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
   --output-dir /tmp/geochemical-output
 ```
 
-D2 最低分析字段是 `element_or_analyte,value,unit,medium`；完整证据工作流还要求 `source_id,source_locator,license`。非标准列名必须通过显式 schema map 映射，不能靠语义猜测。正式科学运行还应提供样品标识、measurement basis、WGS84/原 CRS、分析与消解方法、检出限、来源层级及文件 SHA-256。
+D2 最低分析字段是 `element_or_analyte,value,unit,medium`；完整证据工作流还要求 `source_id,source_locator,license`。非标准列名必须通过显式 schema map 映射，不能靠语义猜测。正式科学运行还应提供样品标识、measurement basis、WGS84/原 CRS、分析与消解方法、检出限、来源层级及可读文件身份。
+
+D1 当前登记 26 个可执行来源、4,096,615 条目标元素观测；四介质独立血缘为 rock 2、soil 7、sediment 8、water 5。它们代表尽可能全面但仍不连续的全球公开观测，普通使用走请求路由和仓库内 fixture，不要求先下载或构建全量数据库。
 
 ## 工作流
 
@@ -68,7 +70,7 @@ flowchart LR
     D3 --> O[数据库<br/>证据与置信度<br/>异常结果<br/>交互地图]
 ```
 
-- **D1** 保存许可、版本、下载请求、文件哈希和记录级定位；来源目录中的候选不等于本次请求可用。
+- **D1** 保存许可、版本、下载请求、可读文件身份和记录级定位；来源目录中的候选不等于本次请求可用。
 - **D2** 保守处理单位、删失值、坐标、方法、实验室批次和可选地质匹配；先用稳健 MAD z-score 筛记录级高/低值，再用精确超几何检验 + BH-FDR 筛空间聚集。
 - **D3** 只消费公共产物，通过版本化 profile 生成全球、国家或 WGS84 bbox 研究视图；不重算 D2 科学结果。
 
@@ -78,14 +80,14 @@ flowchart LR
 - 固体质量比可统一为 `mg/kg`，水体质量/体积可统一为 `ug/L`；`nmol/L` 只对冻结原子量表中的明确元素换算，没有摩尔质量或密度证据时失败关闭。
 - `<LOD`、`<LOQ`、`BDL`、`ND` 不替换为 0 或 LOD/2。
 - CRM、空白、重复样按显式 policy 重新计算；失败批次保留在数据库，但不进入异常背景。
-- 不静默交换经纬度，不把未知 CRS 冒充 WGS84；允许 DOI、字段名、URL 与内容哈希同时匹配的版本化平台坐标政策，空间匹配记录数据源、版本、方法和边界距离。
+- 不静默交换经纬度，不把未知 CRS 冒充 WGS84；平台坐标政策必须匹配 DOI/PID、字段名、URL 和版本，空间匹配记录数据源、版本、方法和边界距离。
 - 异常点和 FDR 网格都只表示筛查候选；网格不是地质/行政/污染边界，不等于污染、矿床或成因结论。
 - demo 与真实来源切片只用于工程复现，不支持全球或区域代表性科学结论。
 
 ## 复现上图
 
 <details>
-<summary>运行 14 来源、四介质、796 条观测的离线样例</summary>
+<summary>运行 26 数据集、四介质、1,271 条观测的离线样例</summary>
 
 ```bash
 python skills/global-geochemical-atlas/scripts/build_four_media_demo.py \

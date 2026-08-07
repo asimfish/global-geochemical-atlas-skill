@@ -1,0 +1,22 @@
+{
+  "access_status_counts": {
+    "public_download": 1447
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "attribution_required_counts": {
+    "true": 1447
+  },
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2026-02-09",
+  "license_id": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "redistribution_is_not_a_research_use_gate": true,
+  "redistribution_status_counts": {
+    "not_evaluated_for_project_output": 1447
+  },
+  "research_use_status_counts": {
+    "permitted_research": 1447
+  },
+  "source_id": "usgs-utah-volcanic-whole-rock"
+}

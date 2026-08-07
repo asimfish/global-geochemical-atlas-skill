@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
@@ -14,6 +13,7 @@ from collections import Counter
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 SCHEMA_VERSION = "geochemistry-iteration-backlog-v2"
 FIELDS = (
@@ -58,10 +58,8 @@ def json_value(value: str, expected: type) -> Any:
 
 def item_id(record_id: str, issue_code: str, field: str, observed: str = "") -> str:
     normalized_observed = " ".join(str(observed).split())
-    digest = hashlib.sha256(
-        f"{record_id}\0{issue_code}\0{field}\0{normalized_observed}".encode()
-    ).hexdigest()[:16]
-    return f"ITER-{digest}"
+    components = (record_id.strip(), issue_code.strip(), field.strip(), normalized_observed)
+    return "ITER|" + "|".join(quote(value, safe="-._~") for value in components)
 
 
 def issue(
@@ -179,7 +177,9 @@ def issues_for_row(row: Mapping[str, str]) -> list[dict[str, str]]:
 
 def build(database: Path, output: Path) -> dict[str, Any]:
     with database.open("r", encoding="utf-8-sig", newline="") as handle:
-        rows = list(csv.DictReader(handle))
+        reader = csv.DictReader(handle)
+        columns = list(reader.fieldnames or [])
+        rows = list(reader)
     items = [entry for row in rows for entry in issues_for_row(row)]
     items.sort(
         key=lambda value: (
@@ -196,8 +196,18 @@ def build(database: Path, output: Path) -> dict[str, Any]:
     os.replace(temporary, output)
     return {
         "schema_version": SCHEMA_VERSION,
-        "input_database_sha256": hashlib.sha256(database.read_bytes()).hexdigest(),
-        "output_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+        "input_database_identity": {
+            "filename": database.name,
+            "bytes": database.stat().st_size,
+            "row_count": len(rows),
+            "columns": columns,
+        },
+        "output_identity": {
+            "filename": output.name,
+            "bytes": output.stat().st_size,
+            "row_count": len(items),
+            "columns": list(FIELDS),
+        },
         "record_count": len(rows),
         "item_count": len(items),
         "status_counts": dict(sorted(Counter(item["status"] for item in items).items())),

@@ -15,7 +15,7 @@
     "started_at": {"type": "string", "format": "date-time"},
     "finished_at": {"type": "string", "format": "date-time"},
     "status": {"type": "string", "enum": ["success", "partial_success", "invalid_input", "network_unavailable", "source_not_accessible", "incomplete_retrieval", "needs_human_review"]},
-    "cache_status": {"type": "string", "enum": ["downloaded", "cache_hit", "mixed", "not_applicable"]},
+    "cache_status": {"type": "string", "enum": ["downloaded", "cache_hit", "mixed", "not_applicable", "fixture"]},
     "counts": {
       "type": "object",
       "additionalProperties": false,
@@ -32,10 +32,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["path", "sha256", "bytes"],
+        "required": ["path", "bytes"],
         "properties": {
           "path": {"type": "string", "minLength": 1},
-          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "file_identity": {"type": "string", "minLength": 1},
           "bytes": {"type": "integer", "minimum": 0}
         }
       }

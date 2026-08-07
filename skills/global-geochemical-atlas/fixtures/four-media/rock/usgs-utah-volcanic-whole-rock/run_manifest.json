@@ -1,0 +1,132 @@
+{
+  "content_hashes_used": false,
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-usgs-utah-rock-fixture-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T12:35:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "mode": "online",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 70691,
+      "path": "demo_input.csv"
+    },
+    {
+      "bytes": 80165,
+      "path": "sources.jsonl"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 246,
+    "selected_source_rows": 30
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.5066/P1NZXUZF",
+    "dataset_version": "2026-02-09",
+    "license": "CC0-1.0",
+    "source_id": "usgs-utah-volcanic-whole-rock",
+    "title": "Whole-rock geochemical data for volcanic rocks sampled in northwestern Utah and adjacent states"
+  },
+  "source_files": [
+    {
+      "bytes": 3354,
+      "file_id": "usu-data",
+      "filename": "UTVolcRocks_USU_Data.csv",
+      "retrieved_at": "2026-08-07T12:46:14Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f95664d4be022c3e84f3a9?f=__disk__63%2F41%2F2e%2F63412e7c84fadfe014e8314f20f469908a43423d"
+    },
+    {
+      "bytes": 5527,
+      "file_id": "usu-dictionary",
+      "filename": "UTVolcRocks_USU_DataDictionary.csv",
+      "retrieved_at": "2026-08-07T12:46:15Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f95664d4be022c3e84f3a9?f=__disk__fd%2Ff8%2F8f%2Ffdf88fd055fb641b29b99ba1579f30b62f996283"
+    },
+    {
+      "bytes": 33112,
+      "file_id": "ugs-als-data",
+      "filename": "UTVolcRocks_UGS-ALS_Data.csv",
+      "retrieved_at": "2026-08-07T12:46:16Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__a8%2F71%2Fda%2Fa871daab3b75e0022ca8514e12d8348f40d287ba"
+    },
+    {
+      "bytes": 26898,
+      "file_id": "ugs-als-dictionary",
+      "filename": "UTVolcRocks_UGS-ALS_DataDictionary.csv",
+      "retrieved_at": "2026-08-07T12:46:17Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__bd%2Fac%2Fa7%2Fbdaca77567ab726ab222d29037200121ddc7e8d0"
+    },
+    {
+      "bytes": 1942,
+      "file_id": "ugs-als-methods",
+      "filename": "UTVolcRocks_UGS-ALS_AnalyticalMethods.csv",
+      "retrieved_at": "2026-08-07T12:46:17Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__2a%2Fbd%2F29%2F2abd296da3004de5c3b1108d27e55c9478e151ee"
+    },
+    {
+      "bytes": 52366,
+      "file_id": "contract-data",
+      "filename": "UTVolcRocks_USGS_ContractLabs_Data.csv",
+      "retrieved_at": "2026-08-07T12:46:19Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__be%2F10%2F4a%2Fbe104aa01baf963832fab6434f9def6e5715fa67"
+    },
+    {
+      "bytes": 92496,
+      "file_id": "contract-dictionary",
+      "filename": "UTVolcRocks_USGS_ContractLabs_DataDictionary.csv",
+      "retrieved_at": "2026-08-07T12:46:20Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__01%2F25%2F18%2F012518853c051ff81773aee2a4ed20f7379d052c"
+    },
+    {
+      "bytes": 6493,
+      "file_id": "contract-methods",
+      "filename": "USGS_ContractLabs_AnalyticalMethods.csv",
+      "retrieved_at": "2026-08-07T12:46:21Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__62%2F11%2Ffb%2F6211fb1c6ea548c25ba17ecebeebc80a2b06f103"
+    },
+    {
+      "bytes": 51662,
+      "file_id": "contract-limits",
+      "filename": "USGS_ContractLabs_DetectionLimits.csv",
+      "retrieved_at": "2026-08-07T12:46:22Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__ae%2Fe6%2Fea%2Faee6ea39ea3ac0214b4ee9472a83aa16327b77bc"
+    },
+    {
+      "bytes": 37541,
+      "file_id": "usgs-alabs-data",
+      "filename": "UTVolcRocks_USGS-ALabs_Data.csv",
+      "retrieved_at": "2026-08-07T12:46:23Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__c6%2Fa8%2F81%2Fc6a881e369a2101825cefe184ee0f39ee0b29300"
+    },
+    {
+      "bytes": 12723,
+      "file_id": "usgs-alabs-dictionary",
+      "filename": "UTVolcRocks_USGS_ALabs_DataDictionary.csv",
+      "retrieved_at": "2026-08-07T12:46:24Z",
+      "source_url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__25%2F54%2F67%2F255467a4b87c59c73d90553dbb20ea04b6a40228"
+    }
+  ],
+  "warnings": [
+    "The release is a regional volcanic-rock compilation, not nationwide or globally representative rock coverage.",
+    "It includes newly published analyses and records also available through NGD-Rock; DOI and original sample identifiers must participate in cross-platform duplicate detection.",
+    "The USGS Analytical Laboratories CSV contains 91 rows although the child-page summary says 90 samples; the adapter reports the file count and preserves this discrepancy.",
+    "The USGS Analytical Laboratories LATITUDE column contains west-longitude values and LONGITUDE contains north-latitude values. Both raw fields are retained and the explicit coordinate assignment note records the value-based swap.",
+    "Negative target values encode less-than limits. The adapter preserves the signed reported value and separately emits qualifier '<' and the positive censor limit.",
+    "Four UGS-ALS analytes can come from either ME-MS81 or ME-4ACD81 when both methods are listed; these 176 results retain both candidates instead of inventing a winning method.",
+    "No target Hg measurement occurs in the four child CSV files."
+  ]
+}

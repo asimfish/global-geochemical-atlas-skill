@@ -1,0 +1,9 @@
+SortOrder,Tblname,AttributeLabel,AttributeDescription,AttributeUnit
+1,UTVolcRocks_USU_Data,StationID,The identifier originally assigned to a sample by collecting party or sample submitter.  Values may not be unique in this database.,
+6,UTVolcRocks_USU_Data,Lat_WGS84,"Latitude coordinate of sample site, reported in decimal degrees; converted, if necessary, to WGS84 datum.",Decimal degrees
+7,UTVolcRocks_USU_Data,Long_WGS84,"Longitude coordinate of sample site, reported in decimal degrees; converted, if necessary, to WGS84 datum.",Decimal degrees
+11,UTVolcRocks_USU_Data,LocationConfidenceMeters,Radius (in meters) of positional-uncertainty envelope of the sample location.,
+12,UTVolcRocks_USU_Data,RockType,The general rock classification.,
+13,UTVolcRocks_USU_Data,RockName,The specific rock name assigned by the collector based on initial field observations.,
+14,UTVolcRocks_USU_Data,GeoAge,Geologic age or age range for a rock sample.,
+18,UTVolcRocks_USU_Data,AnalyticalMethods,Laboratory codes for the analytical methods used to analyze the sample. Multiple laboratory codes separated by semicolons.,

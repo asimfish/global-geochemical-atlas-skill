@@ -3,27 +3,25 @@
   "claim_boundary": "Higher scores mean that more source, version, integrity, provenance, schema, method, adapter and review evidence is documented. They do not express the probability that every measurement is true or that coverage is complete.",
   "dimension_weights": {
     "adapter_reproducibility": 10,
+    "automated_audit": 10,
     "file_record_integrity": 15,
-    "human_review": 10,
     "identity_publisher": 10,
     "method_qc_metadata": 10,
     "provenance": 15,
     "schema_semantics": 15,
     "version_snapshot": 15
   },
-  "evidence_version": "geochemical-source-evidence-v3",
+  "evidence_version": "geochemical-source-evidence-v4",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-06T10:35:00Z",
-  "source_count": 49,
+  "scored_at": "2026-08-07T12:00:00Z",
+  "source_count": 59,
   "sources": {
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
       "attribution_note": "Version 2.0 terms specify CC BY 4.0; retain dataset and article citations.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -37,23 +35,23 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/afsis-phase-i-wet-chemistry/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/afsis-phase-i-wet-chemistry-20260806T100500Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/soil/afsis-phase-i-wet-chemistry/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -104,12 +102,10 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "afsis-phase-i-wet-chemistry",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "alaska-dggs-webgeochem": {
       "access_status": "open",
@@ -121,7 +117,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -134,19 +130,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -187,7 +183,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -209,7 +205,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -222,19 +218,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -275,7 +271,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -297,7 +293,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -310,19 +306,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -375,6 +371,100 @@
         "research_use_status=unknown"
       ]
     },
+    "australia-ngsa-mercury": {
+      "access_status": "open",
+      "attribution_note": "The publisher file states CC BY 4.0 Australia; retain dataset DOI and Geoscience Australia attribution.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/australia-ngsa-mercury/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/australia-ngsa-mercury/snapshot_manifest.json",
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://pid.geoscience.gov.au/dataset/ga/150328",
+            "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+            "https://doi.org/10.26186/150328",
+            "https://doi.org/10.1021/acs.est.5c11189"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://pid.geoscience.gov.au/dataset/ga/150328",
+            "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+            "https://doi.org/10.26186/150328",
+            "https://doi.org/10.1021/acs.est.5c11189",
+            "doi:10.26186/150328"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-mercury-20260806T163000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2025-03-31",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "australia-ngsa-mercury",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
     "australia-ozchem": {
       "access_status": "unavailable",
       "attribution_note": "Current product-specific licensing and any contributed state data exceptions need confirmation.",
@@ -386,7 +476,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -399,19 +489,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -450,7 +540,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -473,7 +563,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -486,19 +576,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -549,6 +639,178 @@
         "research_use_status=permission_required"
       ]
     },
+    "brazil-sgb-florianopolis-soil": {
+      "access_status": "open",
+      "attribution_note": "RIGeo item metadata states open and permits research access; redistribution remains unevaluated.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-soil-20260807T173500Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/south-america/brazil-sgb-florianopolis-soil/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://rigeo.sgb.gov.br/handle/doc/23413",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-soil-20260807T173500Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://rigeo.sgb.gov.br/handle/doc/23413",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-soil-20260807T173500Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "brazil-sgb-florianopolis-soil",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
+    "brazil-sgb-florianopolis-stream-sediment": {
+      "access_status": "open",
+      "attribution_note": "RIGeo item metadata states open and permits research access; no explicit redistribution licence was located, so redistribution remains unevaluated.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-stream-sediment-20260807T165500Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/south-america/brazil-sgb-florianopolis-stream-sediment/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://rigeo.sgb.gov.br/handle/doc/23413",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-stream-sediment-20260807T165500Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://rigeo.sgb.gov.br/handle/doc/23413",
+            "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/brazil-sgb-florianopolis-stream-sediment-20260807T165500Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "brazil-sgb-florianopolis-stream-sediment",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
     "brazil-sgb-geochemistry": {
       "access_status": "open",
       "attribution_note": "Open access is stated for repository items, but reuse/redistribution terms for the integrated service need verification.",
@@ -559,7 +821,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -572,19 +834,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -627,7 +889,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -649,7 +911,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -662,19 +924,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -715,7 +977,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -737,7 +999,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -750,19 +1012,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -813,6 +1075,166 @@
         "record integrity or schema semantics are not sufficiently evidenced"
       ]
     },
+    "cdogs-210102-lake-sediment": {
+      "access_status": "open",
+      "attribution_note": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/cdogs-210102-lake-sediment/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: cdogs-svy210102-page-2025-05-18",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "cdogs-210102-lake-sediment",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
+    "cdogs-210102-lake-water": {
+      "access_status": "open",
+      "attribution_note": "Research use follows Government of Canada website terms; retain CDoGS and Open File citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/water/cdogs-210102-lake-water/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+            "https://www.canada.ca/en/transparency/terms.html"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: cdogs-svy210102-page-2025-05-18",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "cdogs-210102-lake-water",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
     "chile-sernageomin-geochemistry": {
       "access_status": "open",
       "attribution_note": "Public viewers and product pages are available, but access price, research-use terms, attribution and downloadable-file rights must be checked for each map-sheet database.",
@@ -823,7 +1245,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -836,19 +1258,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -889,7 +1311,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -911,7 +1333,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -924,6 +1346,13 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
@@ -931,18 +1360,11 @@
           "status": "missing",
           "weight": 15
         },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
-        },
         "identity_publisher": {
           "awarded_points": 10.0,
           "evidence": [
             "https://ecl.earthchem.org/home.php",
-            "https://earthchem.org/ecl/policies"
+            "https://www.earthchem.org/page_category/submit-data/"
           ],
           "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
           "status": "verified",
@@ -959,7 +1381,7 @@
           "awarded_points": 7.5,
           "evidence": [
             "https://ecl.earthchem.org/home.php",
-            "https://earthchem.org/ecl/policies"
+            "https://www.earthchem.org/page_category/submit-data/"
           ],
           "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
           "status": "partial",
@@ -975,7 +1397,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -998,7 +1420,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -1011,6 +1433,13 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
@@ -1018,17 +1447,10 @@
           "status": "missing",
           "weight": 15
         },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
-        },
         "identity_publisher": {
           "awarded_points": 10.0,
           "evidence": [
-            "https://earthchem.org/data-access/overview",
+            "https://earthchem.org/portal",
             "https://earthchem.org/ecl/templates",
             "https://earthchem.org/ecl/vocabularies"
           ],
@@ -1046,7 +1468,7 @@
         "provenance": {
           "awarded_points": 7.5,
           "evidence": [
-            "https://earthchem.org/data-access/overview",
+            "https://earthchem.org/portal",
             "https://earthchem.org/ecl/templates",
             "https://earthchem.org/ecl/vocabularies"
           ],
@@ -1064,7 +1486,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1086,7 +1508,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -1099,19 +1521,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1150,7 +1572,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1173,7 +1595,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -1186,19 +1608,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1237,7 +1659,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1259,7 +1681,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -1272,19 +1694,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1323,7 +1745,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -1345,7 +1767,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -1358,19 +1780,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1426,9 +1848,7 @@
       "attribution_note": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -1442,23 +1862,23 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/foregs-floodplain-sediment/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/foregs-floodplain-sediment-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/sediment/foregs-floodplain-sediment/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1508,21 +1928,17 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-floodplain-sediment",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "foregs-humus": {
       "access_status": "open",
       "attribution_note": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -1536,23 +1952,23 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/foregs-humus/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/foregs-humus-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/soil/foregs-humus/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1602,21 +2018,17 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-humus",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "foregs-stream-sediment": {
       "access_status": "open",
       "attribution_note": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -1630,23 +2042,23 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/foregs-stream-sediment/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/foregs-stream-sediment-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/sediment/foregs-stream-sediment/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1696,21 +2108,17 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-stream-sediment",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "foregs-stream-water": {
       "access_status": "open",
       "attribution_note": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -1724,23 +2132,23 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/water/foregs-stream-water/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/foregs-stream-water-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/water/foregs-stream-water/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1790,21 +2198,17 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-stream-water",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "foregs-subsoil": {
       "access_status": "open",
       "attribution_note": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -1818,23 +2222,23 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/foregs-subsoil/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/foregs-subsoil-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/soil/foregs-subsoil/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1884,21 +2288,17 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-subsoil",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "foregs-topsoil": {
       "access_status": "open",
       "attribution_note": "Research use with Salminen et al. (2005) citation and the published EuroGeoSurveys/GTK copyright notice; no broad redistribution license is inferred.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -1912,23 +2312,23 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/foregs-topsoil/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/candidate-audits/foregs-topsoil-20260806T080000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/soil/foregs-topsoil/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -1978,108 +2378,17 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "foregs-topsoil",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "gemas-europe": {
       "access_status": "open",
-      "attribution_note": "Numeric data redistribution and dataset-level license require verification.",
-      "conflicts": [],
-      "evidence_tier": "D",
-      "missing_dimensions": [
-        "version_snapshot",
-        "file_record_integrity",
-        "schema_semantics",
-        "method_qc_metadata",
-        "adapter_reproducibility",
-        "human_review"
-      ],
-      "research_use_status": "unknown",
-      "score_denominator": 100,
-      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
-      "source_evidence_dimensions": {
-        "adapter_reproducibility": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No callable adapter and frozen parsing contract are registered.",
-          "status": "missing",
-          "weight": 10
-        },
-        "file_record_integrity": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No frozen file or archive inventory is registered.",
-          "status": "missing",
-          "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
-        },
-        "identity_publisher": {
-          "awarded_points": 10.0,
-          "evidence": [
-            "https://gemas.eurogeosurveys.org/",
-            "https://gemas.eurogeosurveys.org/Links_GEMAS.htm"
-          ],
-          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
-          "status": "verified",
-          "weight": 10
-        },
-        "method_qc_metadata": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified record-level method or QC inventory is available.",
-          "status": "missing",
-          "weight": 10
-        },
-        "provenance": {
-          "awarded_points": 7.5,
-          "evidence": [
-            "https://gemas.eurogeosurveys.org/",
-            "https://gemas.eurogeosurveys.org/Links_GEMAS.htm"
-          ],
-          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
-          "status": "partial",
-          "weight": 15
-        },
-        "schema_semantics": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified field mapping to the canonical schema is recorded.",
-          "status": "missing",
-          "weight": 15
-        },
-        "version_snapshot": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
-          "status": "missing",
-          "weight": 15
-        }
-      },
-      "source_evidence_score": 17.5,
-      "source_id": "gemas-europe",
-      "use_mode": "discovery",
-      "use_mode_limitations": [
-        "research_use_status=unknown"
-      ]
-    },
-    "gemstat-open-archive": {
-      "access_status": "open",
-      "attribution_note": "The v3 Zenodo record and included README identify CC BY 4.0; retain archive citation and record DOI.",
+      "attribution_note": "GSI catalogue terms are CC BY 4.0; retain GSI distribution and upstream GEMAS attribution.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -2087,27 +2396,118 @@
         "adapter_reproducibility": {
           "awarded_points": 10.0,
           "evidence": [
-            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+            "fixtures/candidate-audits/gemas-europe-20260807T102000Z.json"
           ],
           "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/gemas-europe/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/soil/gemas-europe/snapshot_manifest.json",
+            "fixtures/candidate-audits/gemas-europe-20260807T102000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
+            "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer",
+            "https://gemas.eurogeosurveys.org/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/gemas-europe-20260807T102000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
+            "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer",
+            "https://gemas.eurogeosurveys.org/"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/gemas-europe-20260807T102000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: GSI-ArcGIS-Enterprise-republication-2024",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "gemas-europe",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
+    "gemstat-open-archive": {
+      "access_status": "open",
+      "attribution_note": "The v3 Zenodo record and included README identify CC BY 4.0; retain archive citation and record DOI.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/gemstat-open-archive-20260806T143000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/water/gemstat-open-archive/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
           "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [],
-          "note": "Every selected ZIP member is pinned by byte range plus compressed and decoded SHA-256.",
+          "note": "Every selected ZIP member is identified by name, byte range and decoded byte count.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/water/gemstat-open-archive/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2124,7 +2524,7 @@
         "method_qc_metadata": {
           "awarded_points": 5.0,
           "evidence": [
-            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+            "fixtures/candidate-audits/gemstat-open-archive-20260806T143000Z.json"
           ],
           "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
           "status": "partial",
@@ -2146,7 +2546,7 @@
         "schema_semantics": {
           "awarded_points": 15.0,
           "evidence": [
-            "fixtures/candidate-audits/gemstat-arsenic-20260805T144120Z.json"
+            "fixtures/candidate-audits/gemstat-open-archive-20260806T143000Z.json"
           ],
           "note": "The production registry freezes required source fields and a parsed output contract.",
           "status": "verified",
@@ -2160,47 +2560,141 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "gemstat-open-archive",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
-    "georoc-archaean": {
+    "georoc-antarctica-intraplate": {
       "access_status": "open",
-      "attribution_note": "Retain GEOROC and original publication citations.",
+      "attribution_note": "Retain GEOROC and original-publication citations.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
       "source_evidence_dimensions": {
         "adapter_reproducibility": {
           "awarded_points": 10.0,
-          "evidence": [],
+          "evidence": [
+            "fixtures/candidate-audits/georoc-antarctica-intraplate-20260807T102000Z.json"
+          ],
           "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/rock/georoc-antarctica-intraplate/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
           "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
           "awarded_points": 15.0,
-          "evidence": [],
-          "note": "Archive members are pinned by name, size and publisher checksum.",
+          "evidence": [
+            "fixtures/four-media/rock/georoc-antarctica-intraplate/snapshot_manifest.json",
+            "fixtures/candidate-audits/georoc-antarctica-intraplate-20260807T102000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
-        "human_review": {
-          "awarded_points": 0.0,
+        "identity_publisher": {
+          "awarded_points": 10.0,
           "evidence": [
-            "fixtures/four-media/rock/georoc-archaean/human_review.json"
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://doi.org/10.25625/RZZ9VM",
+            "https://doi.org/10.25625/RZZ9VM/UYO5XO"
           ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
           "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-antarctica-intraplate-20260807T102000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://doi.org/10.25625/RZZ9VM",
+            "https://doi.org/10.25625/RZZ9VM/UYO5XO",
+            "doi:10.25625/RZZ9VM"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-antarctica-intraplate-20260807T102000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 12.0",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "georoc-antarctica-intraplate",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
+    "georoc-archaean": {
+      "access_status": "open",
+      "attribution_note": "Retain GEOROC and original publication citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-archaean-20260807T120000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/rock/georoc-archaean/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-archaean-20260807T120000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2215,7 +2709,9 @@
         },
         "method_qc_metadata": {
           "awarded_points": 5.0,
-          "evidence": [],
+          "evidence": [
+            "fixtures/candidate-audits/georoc-archaean-20260807T120000Z.json"
+          ],
           "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
           "status": "partial",
           "weight": 10
@@ -2234,7 +2730,9 @@
         },
         "schema_semantics": {
           "awarded_points": 15.0,
-          "evidence": [],
+          "evidence": [
+            "fixtures/candidate-audits/georoc-archaean-20260807T120000Z.json"
+          ],
           "note": "The production registry freezes required source fields and a parsed output contract.",
           "status": "verified",
           "weight": 15
@@ -2247,12 +2745,10 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "georoc-archaean",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "georoc-database": {
       "access_status": "open",
@@ -2265,7 +2761,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -2278,19 +2774,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2333,7 +2829,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -2350,9 +2846,7 @@
       "attribution_note": "Fair Use Agreement requires IDP and original data-contributor citations.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -2366,24 +2860,24 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/water/geotraces-idp2025/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/four-media/water/geotraces-idp2025/snapshot_manifest.json",
             "fixtures/candidate-audits/geotraces-idp2025-seawater-20260805T134155Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/water/geotraces-idp2025/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2434,12 +2928,10 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "geotraces-idp2025",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "glorich": {
       "access_status": "open",
@@ -2450,7 +2942,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -2463,19 +2955,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2536,7 +3028,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -2549,19 +3041,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2602,7 +3094,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -2623,7 +3115,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -2636,19 +3128,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2709,7 +3201,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -2722,19 +3214,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2796,7 +3288,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -2809,19 +3301,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2860,7 +3352,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -2877,9 +3369,7 @@
       "attribution_note": "GSJ states that research products published on its website follow Japan Government Standard Terms of Use 2.0 and may be reused with attribution; third-party content remains excluded.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -2893,24 +3383,24 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/japan-gsj-geochemical-map/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/four-media/sediment/japan-gsj-geochemical-map/snapshot_manifest.json",
             "fixtures/candidate-audits/gsj-japan-river-sediment-20260806T034823Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/sediment/japan-gsj-geochemical-map/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -2962,12 +3452,107 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "japan-gsj-geochemical-map",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
+    "japan-gsj-marine-sediment": {
+      "access_status": "open",
+      "attribution_note": "GSJ website research products follow Japan Government Standard Terms of Use 2.0 with attribution; third-party material remains excluded.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/japan-gsj-marine-sediment/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/japan-gsj-marine-sediment/snapshot_manifest.json",
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+            "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+            "https://doi.org/10.5571/synth.3.281",
+            "https://www.gsj.jp/license/index.html"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+            "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+            "https://doi.org/10.5571/synth.3.281",
+            "https://www.gsj.jp/license/index.html"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/japan-gsj-marine-sediment/snapshot_manifest.json",
+            "fixtures/candidate-audits/japan-gsj-marine-sediment-20260806T163000Z.json",
+            "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+          ],
+          "note": "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "japan-gsj-marine-sediment",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "mexico-sgm-geochemical-cartography": {
       "access_status": "open",
@@ -2979,7 +3564,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -2992,19 +3577,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3043,7 +3628,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3066,7 +3651,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -3079,19 +3664,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3131,7 +3716,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3148,9 +3733,7 @@
       "attribution_note": "The service states CC BY 4.0 and Norwegian Licence for Open Government Data; dataset landing-page citations and acknowledgements still apply.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -3164,24 +3747,24 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/norway-marchem/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/four-media/sediment/norway-marchem/snapshot_manifest.json",
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/sediment/norway-marchem/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3228,17 +3811,15 @@
             "fixtures/candidate-audits/marchem-inorganic-20260805T102709Z.json",
             "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false"
           ],
-          "note": "A dynamic API response is frozen by exact request, observation time and SHA-256.",
+          "note": "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
           "status": "verified",
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "norway-marchem",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "norway-ngu-lito": {
       "access_status": "open",
@@ -3250,7 +3831,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -3263,19 +3844,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3337,7 +3918,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -3350,19 +3931,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3400,7 +3981,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3412,14 +3993,104 @@
         "research_use_status=unknown"
       ]
     },
+    "pangaea-arabian-sea-sediment": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA records CC BY 4.0; retain dataset and bundled-publication citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/sediment/pangaea-arabian-sea-sediment/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/sediment/pangaea-arabian-sea-sediment/snapshot_manifest.json",
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950153"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950139",
+            "https://doi.org/10.1594/PANGAEA.950153",
+            "doi:10.1594/PANGAEA.950139"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/pangaea-arabian-sea-sediment-20260806T163000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2022-11-02",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "pangaea-arabian-sea-sediment",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
     "pangaea-north-africa-soil": {
       "access_status": "open",
       "attribution_note": "Dataset-level CC BY 4.0 permits research use with attribution to the named authors, DOI and repository.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
@@ -3433,24 +4104,24 @@
           "status": "verified",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/pangaea-north-africa-soil/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
             "fixtures/four-media/soil/pangaea-north-africa-soil/snapshot_manifest.json",
             "fixtures/candidate-audits/pangaea-north-africa-soil-20260806T031354Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [
-            "fixtures/four-media/soil/pangaea-north-africa-soil/human_review.json"
-          ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3499,12 +4170,10 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "pangaea-north-africa-soil",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "pangaea-repository": {
       "access_status": "open",
@@ -3515,7 +4184,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -3528,19 +4197,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3604,7 +4273,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -3617,19 +4286,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3668,7 +4337,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3690,7 +4359,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -3703,19 +4372,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3781,7 +4450,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
@@ -3794,19 +4463,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3847,7 +4516,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -3869,7 +4538,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "unknown",
       "score_denominator": 100,
@@ -3882,19 +4551,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3947,38 +4616,39 @@
       "access_status": "open",
       "attribution_note": "The dataset metadata records licence code 1, which the TPDC interface maps to CC BY 4.0. Retain the dataset DOI, authors and TPDC attribution.",
       "conflicts": [],
-      "evidence_tier": "C",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
       "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
       "source_evidence_dimensions": {
         "adapter_reproducibility": {
-          "awarded_points": 5.0,
+          "awarded_points": 10.0,
           "evidence": [
-            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260807T102000Z.json"
           ],
-          "note": "A reproducible candidate verifier exists, but no canonical production adapter is implemented.",
-          "status": "partial",
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/tpdc-china-mountain-soil/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
           "awarded_points": 15.0,
           "evidence": [
-            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+            "fixtures/four-media/soil/tpdc-china-mountain-soil/snapshot_manifest.json",
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260807T102000Z.json"
           ],
-          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "Human review has not started.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -3995,14 +4665,14 @@
         "method_qc_metadata": {
           "awarded_points": 5.0,
           "evidence": [
-            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260807T102000Z.json"
           ],
-          "note": "Method limitations are disclosed, but record-level method/QC mapping is not verified.",
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
           "status": "partial",
           "weight": 10
         },
         "provenance": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [
             "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
             "https://doi.org/10.11888/Terre.tpdc.302620",
@@ -4010,17 +4680,17 @@
             "https://data.tpdc.ac.cn/en/about?type=3",
             "doi:10.11888/Terre.tpdc.302620"
           ],
-          "note": "Dataset and API snapshot provenance are recorded; adapter-level row locators are still pending.",
-          "status": "partial",
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
           "weight": 15
         },
         "schema_semantics": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [
-            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260806T103500Z.json"
+            "fixtures/candidate-audits/tpdc-china-mountain-soil-20260807T102000Z.json"
           ],
-          "note": "Core analyte, value, unit and coordinate fields were inspected; canonical adapter mapping is pending.",
-          "status": "partial",
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
           "weight": 15
         },
         "version_snapshot": {
@@ -4031,12 +4701,10 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 65.0,
+      "source_evidence_score": 95.0,
       "source_id": "tpdc-china-mountain-soil",
-      "use_mode": "raw_observation",
-      "use_mode_limitations": [
-        "a production adapter is not yet verified"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "us-water-quality-portal": {
       "access_status": "open",
@@ -4048,7 +4716,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -4061,19 +4729,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -4114,7 +4782,7 @@
         "version_snapshot": {
           "awarded_points": 0.0,
           "evidence": [],
-          "note": "No immutable version or content-addressed snapshot is currently recorded.",
+          "note": "No concrete publisher version or observation snapshot is currently recorded.",
           "status": "missing",
           "weight": 15
         }
@@ -4126,40 +4794,137 @@
         "research_use_status=permission_required"
       ]
     },
-    "usgs-conus-soil": {
+    "us-wqp-sacramento-river-arsenic": {
       "access_status": "open",
-      "attribution_note": "USGS-produced data are public domain; credit and dataset citation are retained.",
+      "attribution_note": "The pinned records are USGS/NWIS data. Retain USGS, WQP, station, query, access time and result identifiers.",
       "conflicts": [],
       "evidence_tier": "A",
-      "missing_dimensions": [
-        "human_review"
-      ],
+      "missing_dimensions": [],
       "research_use_status": "open_research",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
       "source_evidence_dimensions": {
         "adapter_reproducibility": {
           "awarded_points": 10.0,
-          "evidence": [],
+          "evidence": [
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
           "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
           "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
           "awarded_points": 15.0,
-          "evidence": [],
-          "note": "Every registered file has a pinned SHA-256.",
+          "evidence": [
+            "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/snapshot_manifest.json",
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
           "status": "verified",
           "weight": 15
         },
-        "human_review": {
-          "awarded_points": 0.0,
+        "identity_publisher": {
+          "awarded_points": 10.0,
           "evidence": [
-            "fixtures/four-media/soil/usgs-conus-soil/human_review.json"
+            "https://www.waterqualitydata.us/",
+            "https://www.waterqualitydata.us/webservices_documentation/",
+            "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
           ],
-          "note": "A 30-record review sample is prepared but no completed review is recorded.",
-          "status": "missing",
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
           "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://www.waterqualitydata.us/",
+            "https://www.waterqualitydata.us/webservices_documentation/",
+            "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 7.5,
+          "evidence": [
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json"
+          ],
+          "note": "Core analyte, value, unit and coordinate fields were inspected; canonical adapter mapping is pending.",
+          "status": "partial",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/snapshot_manifest.json",
+            "fixtures/candidate-audits/us-wqp-sacramento-river-arsenic-20260806T145000Z.json",
+            "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+          ],
+          "note": "A dynamic API response is frozen by exact request, observation time, member inventory and byte counts.",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 87.5,
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
+    "usgs-conus-soil": {
+      "access_status": "open",
+      "attribution_note": "USGS-produced data are public domain; credit and dataset citation are retained.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "open_research",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-conus-soil-20260807T120000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/soil/usgs-conus-soil/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-conus-soil-20260807T120000Z.json"
+          ],
+          "note": "The dynamic snapshot records a complete member identity and byte-count inventory.",
+          "status": "verified",
+          "weight": 15
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -4172,7 +4937,9 @@
         },
         "method_qc_metadata": {
           "awarded_points": 5.0,
-          "evidence": [],
+          "evidence": [
+            "fixtures/candidate-audits/usgs-conus-soil-20260807T120000Z.json"
+          ],
           "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
           "status": "partial",
           "weight": 10
@@ -4189,7 +4956,9 @@
         },
         "schema_semantics": {
           "awarded_points": 15.0,
-          "evidence": [],
+          "evidence": [
+            "fixtures/candidate-audits/usgs-conus-soil-20260807T120000Z.json"
+          ],
           "note": "The production registry freezes required source fields and a parsed output contract.",
           "status": "verified",
           "weight": 15
@@ -4202,12 +4971,10 @@
           "weight": 15
         }
       },
-      "source_evidence_score": 85.0,
+      "source_evidence_score": 95.0,
       "source_id": "usgs-conus-soil",
-      "use_mode": "normalized_analysis",
-      "use_mode_limitations": [
-        "30-record human review is incomplete"
-      ]
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
     },
     "usgs-ngdb": {
       "access_status": "open",
@@ -4218,7 +4985,7 @@
         "file_record_integrity",
         "schema_semantics",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "open_research",
       "score_denominator": 100,
@@ -4231,19 +4998,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -4294,6 +5061,95 @@
         "record integrity or schema semantics are not sufficiently evidenced"
       ]
     },
+    "usgs-utah-volcanic-whole-rock": {
+      "access_status": "open",
+      "attribution_note": "The data release identifies CC0 1.0; retain the USGS dataset citation and record-level source locators.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "open_research",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "automated_audit": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/four-media/rock/usgs-utah-volcanic-whole-rock/automated_audit.json"
+          ],
+          "note": "30 stratified records received a structured Codex evidence audit.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a stable identity, official URL and byte count.",
+          "status": "verified",
+          "weight": 15
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+            "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+            "https://doi.org/10.5066/P1NZXUZF"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+            "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+            "https://doi.org/10.5066/P1NZXUZF",
+            "doi:10.5066/P1NZXUZF"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/usgs-utah-volcanic-whole-rock-20260807T123500Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2026-02-09",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 95.0,
+      "source_id": "usgs-utah-volcanic-whole-rock",
+      "use_mode": "benchmark_ready",
+      "use_mode_limitations": []
+    },
     "wosis": {
       "access_status": "open",
       "attribution_note": "Public records can include CC BY and CC BY-NC; license must be retained and filtered at record level.",
@@ -4304,7 +5160,7 @@
         "schema_semantics",
         "method_qc_metadata",
         "adapter_reproducibility",
-        "human_review"
+        "automated_audit"
       ],
       "research_use_status": "permission_required",
       "score_denominator": 100,
@@ -4317,19 +5173,19 @@
           "status": "missing",
           "weight": 10
         },
+        "automated_audit": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in automated or completed legacy audit is available.",
+          "status": "missing",
+          "weight": 10
+        },
         "file_record_integrity": {
           "awarded_points": 0.0,
           "evidence": [],
           "note": "No frozen file or archive inventory is registered.",
           "status": "missing",
           "weight": 15
-        },
-        "human_review": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No checked-in human review record is available.",
-          "status": "missing",
-          "weight": 10
         },
         "identity_publisher": {
           "awarded_points": 10.0,
@@ -4386,17 +5242,17 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 14,
+      "A": 26,
       "B": 0,
-      "C": 1,
-      "D": 34,
+      "C": 0,
+      "D": 33,
       "U": 0
     },
     "use_modes": {
-      "benchmark_ready": 0,
-      "discovery": 34,
-      "normalized_analysis": 14,
-      "raw_observation": 1
+      "benchmark_ready": 26,
+      "discovery": 33,
+      "normalized_analysis": 0,
+      "raw_observation": 0
     }
   }
 }

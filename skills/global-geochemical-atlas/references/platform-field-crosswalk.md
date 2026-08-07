@@ -134,7 +134,7 @@ Crosswalk 不会为了看起来“全覆盖”而制造虚假对应。当前 118
 1. 先阅读数据集自身 metadata/data dictionary，不能只按相似列名匹配。
 2. 在 `schema-map` 中写“实际源列 → canonical 字段”；crosswalk 中的 external path 是专业语义参照，
    不保证每个版本的下载文件都使用同名列。
-3. 对 `transformed` 和 `composite` 映射，保留参与转换的全部源列、数据字典 URL、版本、许可与文件 SHA-256。
+3. 对 `transformed` 和 `composite` 映射，保留参与转换的全部源列、数据字典 URL、版本、许可与可读文件身份。
 4. `no_direct_equivalent` 字段保持 null，不用语言模型根据上下文补造。
 
 ### D2 标准化

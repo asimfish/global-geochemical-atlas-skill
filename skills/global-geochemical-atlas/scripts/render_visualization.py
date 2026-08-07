@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
+import csv
 import json
 import os
 import shutil
@@ -45,12 +45,26 @@ class VisualizationError(RuntimeError):
         self.status = status
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def file_identity(path: Path) -> dict[str, Any]:
+    identity: dict[str, Any] = {"filename": path.name, "bytes": path.stat().st_size}
+    if path.suffix == ".csv":
+        with path.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.reader(handle)
+            identity["columns"] = next(reader, [])
+            identity["row_count"] = sum(1 for _ in reader)
+    elif path.suffix in {".json", ".geojson"}:
+        value = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(value, dict):
+            identity["top_level_keys"] = sorted(value)
+            for key in ("schema_version", "interface_version", "map_version"):
+                if key in value:
+                    identity[key] = value[key]
+            if isinstance(value.get("features"), list):
+                identity["feature_count"] = len(value["features"])
+    elif path.suffix == ".jsonl":
+        with path.open("r", encoding="utf-8") as handle:
+            identity["row_count"] = sum(bool(line.strip()) for line in handle)
+    return identity
 
 
 def atomic_json(path: Path, value: Any) -> None:
@@ -146,9 +160,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             copy_if_needed(source, args.output_dir / name)
     atomic_json(args.output_dir / "visualization_profile.json", profile)
 
-    input_hashes = {name: sha256_file(path) for name, path in inputs.items()}
-    output_hashes = {
-        name: sha256_file(args.output_dir / name)
+    input_identities = {name: file_identity(path) for name, path in inputs.items()}
+    output_identities = {
+        name: file_identity(args.output_dir / name)
         for name in (
             "interactive_map.html", "samples.geojson", "visualization_profile.json",
             "iteration_backlog.csv",
@@ -158,11 +172,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "interface_version": INTERFACE_VERSION,
         "status": "success",
         "input_contract": "D1/D2 standard output directory",
-        "inputs": input_hashes,
-        "profile_input": {
-            "filename": args.profile.name,
-            "sha256": sha256_file(args.profile),
-        },
+        "inputs": input_identities,
+        "profile_input": file_identity(args.profile),
         "profile": profile,
         "profile_warnings": map_report.get("visualization_profile_warnings", []),
         "outputs": {
@@ -171,7 +182,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "profile": "visualization_profile.json",
             "iteration_backlog": "iteration_backlog.csv",
         },
-        "output_sha256": output_hashes,
+        "output_artifacts": output_identities,
         "map_report": map_report,
         "iteration_backlog": backlog_report,
         "limitations": [

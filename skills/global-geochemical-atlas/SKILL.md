@@ -69,9 +69,9 @@ python scripts/run_atlas_request.py \
 python scripts/validate_outputs.py --output-dir /tmp/geochemical-atlas
 ```
 
-该 fixture 是 hash 固定的 USGS 真实切片，默认使用仓库内固定 GLiM 岩性图；它验证生产 `n≥20` 异常流程，不是代表性抽样。固定指标和许可见 [references/production-demo.md](references/production-demo.md)。
+该 fixture 是版本固定的 USGS 真实切片，默认使用仓库内固定 GLiM 岩性图；它验证生产 `n≥20` 异常流程，不是代表性抽样。固定指标和许可见 [references/production-demo.md](references/production-demo.md)。
 
-需要证明岩石、土壤、沉积物、水体可以走通同一接口时，另跑十四来源、796 条真实来源最小观测的四介质演示：
+需要证明岩石、土壤、沉积物、水体可以走通同一接口时，另跑 26 数据集、1,271 条真实来源最小观测的四介质演示：
 
 ```bash
 python scripts/build_four_media_demo.py \
@@ -84,6 +84,8 @@ python scripts/run_workflow.py \
 ```
 
 两个演示都只验证能力，不代表全球覆盖，也不允许跨介质共享异常背景。遇到“全球/完整/跨介质覆盖”，不得用 fixture 作分母；先运行 `python scripts/build_v4_full_profiles.py --check` 和 `python scripts/reconcile_v4_coordinate_claims.py --check`，再分别报告观测、样品、来源链、reported/canonical 坐标、可比观测和已观测网格。数值坐标不等于 CRS 已验证，已观测网格不等于插值覆盖。
+
+D1 当前登记 26 个可执行来源和 4,096,615 条目标元素观测，独立血缘为 rock 2、soil 7、sediment 8、water 5。全球覆盖仍是离散且不均匀的 `partial`。普通请求必须优先路由相关来源或使用固定 fixture；只有维护、全量覆盖审计或明确要求离线总库时才构建完整数据库，不能把下载全量数据作为正常使用前置条件。
 
 处理用户 CSV：
 
@@ -108,7 +110,7 @@ python scripts/run_atlas_request.py \
   --output-dir OUTPUT_DIR
 ```
 
-`auto` 对所有兼容来源确定性分配 `max_records`，逐源验证 manifest/hash，命名空间化源文件，再合并长表与逐记录证据；绝不静默选择第一项。每源结果写入 `request_evidence/execution.json.source_outcomes`，实际参与验证的请求、父级和逐源 manifest 原字节保留在 `request_evidence/acquisition/` 并由 `acquisition_manifests` 绑定。默认单源失败时以已验证子集继续并返回 `partial_success`；任务要求全源完整时加 `--require-all-sources` 失败关闭。也可把 `auto` 换为一个已路由 `SOURCE_ID`。下载时间不属于工作流运行预算，但仍须限制大小、类型、超时和 hash。
+`auto` 对所有兼容来源确定性分配 `max_records`，逐源验证 DOI/PID、版本、文件 ID/名称、发布日期、字节数、schema、行数和关键统计，命名空间化源文件，再合并长表与逐记录证据；绝不静默选择第一项。每源结果写入 `request_evidence/execution.json.source_outcomes`，实际参与验证的请求、父级和逐源 manifest 原字节保留在 `request_evidence/acquisition/` 并由 `acquisition_manifests` 绑定。默认单源失败时以已验证子集继续并返回 `partial_success`；任务要求全源完整时加 `--require-all-sources` 失败关闭。也可把 `auto` 换为一个已路由 `SOURCE_ID`。下载时间不属于工作流运行预算，但仍须限制大小、类型和超时。
 
 ### 独立阶段入口
 
@@ -141,11 +143,11 @@ python scripts/coverage_report.py \
 
 按目标区域、介质、岩性/环境和方法语义选择来源；发现型聚合站只有追溯到原始记录后才能作测量证据。按 [references/source-acceptance-standard.md](references/source-acceptance-standard.md) 区分可访问、科研可用和可再分发：许可未知时不得写“开放”；若禁止再分发，只输出元数据、引用和原始链接，不复制记录。
 
-用 [references/source-evidence-standard-v3.md](references/source-evidence-standard-v3.md) 解释八维评分，用 [references/source-interface-cards.md](references/source-interface-cards.md) 判断逐源边界。区分 `source_declared_in_input`、`validated_record_evidence`、`verified_record_evidence`；hash 只证明链路一致，标识符对账只验证书目信息，两者都不证明测量值真实。证据分数不是正确概率；旧 `approved`/`production_eligible` 不覆盖当前路由。
+用 [references/source-evidence-standard-v3.md](references/source-evidence-standard-v3.md) 解释八维评分，用 [references/source-interface-cards.md](references/source-interface-cards.md) 判断逐源边界。区分 `source_declared_in_input`、`validated_record_evidence`、`verified_record_evidence`；标识符与结构对账验证来源身份和工程漂移，但不单独证明测量值真实。证据分数不是正确概率；旧 `approved`/`production_eligible` 不覆盖当前路由。
 
-每个来源至少保存：标题、机构、DOI/稳定 ID、版本、许可与科研使用条件、精确 URL/参数、获取时间、服务端及本地过滤、响应字节/记录数/SHA-256、字段映射、失败和未覆盖范围。逐记录 sidecar 必须以 `record_id` 绑定 `source_id + source_locator + source_record_id + source_file_sha256`；run manifest 再绑定输入和 sidecar hash。标准见 [references/record-evidence.schema.json](references/record-evidence.schema.json) 与 [references/acquisition-run-manifest.schema.json](references/acquisition-run-manifest.schema.json)。
+每个来源至少保存：标题、机构、DOI/稳定 ID、版本、许可与科研使用条件、精确 URL/参数、获取时间、服务端及本地过滤、响应字节数、成员清单、schema、记录数、关键统计、字段映射、失败和未覆盖范围。逐记录 sidecar 必须以 `record_id` 绑定 `source_id + source_locator + source_record_id + file_id/name`；run manifest 再绑定输入、sidecar 和来源身份。标准见 [references/record-evidence.schema.json](references/record-evidence.schema.json) 与 [references/acquisition-run-manifest.schema.json](references/acquisition-run-manifest.schema.json)。
 
-只访问公开科研来源。搜索摘要只能发现数据集，不能充当测量证据。需要登录、人工同意或科研使用条件不清时返回 `source_not_accessible`/`needs_human_review`，不得绕过。动态 API 按 [references/dynamic-snapshot-policy.md](references/dynamic-snapshot-policy.md) 固定请求、UTC、成员清单和响应 hash；新快照不覆盖旧快照。
+只访问公开科研来源。搜索摘要只能发现数据集，不能充当测量证据。需要登录、人工同意或科研使用条件不清时返回 `source_not_accessible`/`needs_human_review`，不得绕过。动态 API 按 [references/dynamic-snapshot-policy.md](references/dynamic-snapshot-policy.md) 固定请求、UTC、成员清单、schema、字节数、行数和关键统计；新快照不覆盖旧快照。
 
 下载公开文件时用：
 
@@ -155,11 +157,10 @@ python scripts/download_data.py \
   --output .cache/data/source.dat \
   --manifest .cache/data/source.download.json \
   --license SPDX_OR_SOURCE_LICENSE \
-  --expected-sha256 EXPECTED_SHA256 \
   --max-bytes 50000000
 ```
 
-`offline=true` 只接受已验证缓存。路由器无法验证调用方外部缓存时保持 `offline_cache_not_verified`；执行器验证 fixture/manifest/hash 后可单独记录 `offline_fixture_hash_verified`，但不能改写实时路由事实。
+`offline=true` 只接受来源身份、版本、文件清单、字节数、schema、行数和关键统计均符合登记契约的缓存。路由器无法验证调用方外部缓存时保持 `offline_cache_not_verified`；执行器验证 fixture/manifest 后可记录离线重放状态，但不能改写实时路由事实。V4 不计算、读取、更新或校验 MD5/SHA 内容哈希，也不把哈希用于准入、缓存、评分或测试。
 
 离线检索依次使用 `validate_acquisition.py`、`build_index.py`、`query_source.py`；SQLite 仅是 D1 派生索引。
 
@@ -177,11 +178,11 @@ python scripts/download_data.py \
 - GeoJSON 遵循 RFC 7946 `[lon,lat]` 且不写旧式 `crs`；跨日期变更线 bbox 允许 `west>east`；可能经纬度交换、零岛、越界或同一样品坐标冲突时保留原记录、暂停映射并回溯来源人工确认，不静默纠正或挑选一个值；
 - 未经证实或未重投影的非 WGS84 坐标不写入 canonical 经纬度；PANGAEA 只有在 DOI、原始
   `LATITUDE/LONGITUDE` 字段和固定 `pangaea-geocode-wgs84-v1` 同时匹配时，才可依据可审计的平台政策
-  写为 EPSG:4326，且必须保留政策 URL、版本与哈希；该规则不得外推到其他仓库或任意经纬度列；
+  写为 EPSG:4326，且必须保留政策 URL、版本、字段契约与适用范围；该规则不得外推到其他仓库或任意经纬度列；
 - 只有完全重复导入可去重；现场/实验重复、不同方法复测及同坐标不同样品均保留。疑似重复标记且不进入异常背景；
 - 来源特有负数/特殊编码只按该数据集元数据解码，通用负浓度失败关闭。
 
-USGS DS801 可按元数据使用 WGS84；PANGAEA 可按上述版本化平台政策使用 WGS84；GEOROC datum 未证实时只保留原坐标，不做 WGS84 bbox 筛选。水体 `nmol/L` 仅对冻结原子量表中的明确元素换算为 `µg/L`，`nmol/kg` 缺密度时保持原单位。地质匹配使用上游 `geology_unit/method/confidence/distance_to_boundary` 或固定 raster/polygon join。GLiM 0.5° 只作岩石、土壤和非海洋沉积物的广域筛查；水体不附会陆地岩性，它也不是点位地层或因果证据。记录数据集版本/hash、方法、分辨率/边界距离及未匹配原因；不得混合匹配与未匹配背景。
+USGS DS801 可按元数据使用 WGS84；PANGAEA 可按上述版本化平台政策使用 WGS84；GEOROC datum 未证实时只保留原坐标，不做 WGS84 bbox 筛选。水体 `nmol/L` 仅对冻结原子量表中的明确元素换算为 `µg/L`，`nmol/kg` 缺密度时保持原单位。地质匹配使用上游 `geology_unit/method/confidence/distance_to_boundary` 或固定 raster/polygon join。GLiM 0.5° 只作岩石、土壤和非海洋沉积物的广域筛查；水体不附会陆地岩性，它也不是点位地层或因果证据。记录数据集版本、方法、分辨率/边界距离及未匹配原因；不得混合匹配与未匹配背景。
 
 请求给出 CRM、空白和重复样批规则时必须逐条原样计算，全部通过才让该批进入异常背景；重复样 `RPD=|x1-x2|/((x1+x2)/2)*100%`。失败批次保留在数据库与 QC，不静默删除。
 
@@ -239,7 +240,7 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 
 GeoJSON 必须是确定性排序的 RFC 7946 `[lon,lat]`。热力图只表示 `sample_count` 密度；删失记录计入密度与 censored fraction，但不计入浓度中位数，且禁止空间插值。数据库视图只允许输出非破坏性 `geochemistry-research-patch-v1`，不得覆盖 canonical 数据或证据。
 
-元素组合只在同一物理样品和可比层内计算 log10 配对、Spearman ρ、四象限与共测覆盖；正式结论须导出 profile 及输入/profile/输出 hash，瞬时 UI 状态不算复现。REE spider 仅在明确归一化参考与元素集时启用；ternary/CLR 仅在闭合组成和删失条件成立时启用。关联不等于因果。迭代项按 [references/iteration-backlog.schema.json](references/iteration-backlog.schema.json) 标 `scientific_limit`、`action_required` 或 `review_required`。完整规则见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
+元素组合只在同一物理样品和可比层内计算 log10 配对、Spearman ρ、四象限与共测覆盖；正式结论须导出 profile，并记录输入身份、profile 版本、行数和关键统计，瞬时 UI 状态不算复现。REE spider 仅在明确归一化参考与元素集时启用；ternary/CLR 仅在闭合组成和删失条件成立时启用。关联不等于因果。迭代项按 [references/iteration-backlog.schema.json](references/iteration-backlog.schema.json) 标 `scientific_limit`、`action_required` 或 `review_required`。完整规则见 [references/d3-visualization-contract.md](references/d3-visualization-contract.md)。
 
 ## 7. 验证五项交付
 
@@ -259,23 +260,23 @@ GeoJSON 必须是确定性排序的 RFC 7946 `[lon,lat]`。热力图只表示 `s
 python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 ```
 
-该命令核验十五文件核心契约；第 6 节的 `validate_visualization.py` 独立核验 profile 驱动的 D3 区域裁剪、交互和 hash。验证失败不得交付“部分看起来正常”的地图。`run_summary.json` 报告输入数、标准化率、坐标/地质/批次覆盖、记录级与空间异常候选、置信度、排除项和 hash。每个关键结论绑定来源定位；事实、计算、推断、假设和未验证项分开。
+该命令核验十五文件核心契约；第 6 节的 `validate_visualization.py` 独立核验 profile 驱动的 D3 区域裁剪、交互和可重放身份。验证失败不得交付“部分看起来正常”的地图。`run_summary.json` 报告输入数、标准化率、坐标/地质/批次覆盖、记录级与空间异常候选、置信度、排除项、输入身份和关键统计。每个关键结论绑定来源定位；事实、计算、推断、假设和未验证项分开。
 
 十五文件是完整工作流默认契约。若冻结任务显式规定更窄的物理文件数、stdout JSON/逻辑 CSV schema 或禁止额外文件，则严格服从该任务合同，只调用相应阶段脚本；不要为了凑齐完整包而产生未要求文件。
 
-## 8. 失败关闭与人工门禁
+## 8. 失败关闭与自动审计
 
 全部必需范围和验证通过才用 `success`；若冻结任务要求的来源、批次、空间记录或背景组被门禁排除，但已验证子集仍可交付，则用 `partial_success` 并列出缺口。阶段码使用 `invalid_input`、`unsupported_scope`、`network_unavailable`、`source_not_accessible`、`incomplete_retrieval`、`conflicting_evidence`、`insufficient_background`、`needs_human_review`。保留事实、失败阶段和下一步；“未检索到”不等于“不存在”。完整矩阵见 [references/failures.md](references/failures.md)。
 
-来源达到 A 级且适配器通过，仍不自动成为 `benchmark_ready`。30 条准备记录必须由具名人员逐条检查源定位、原值、单位、qualifier、方法和 canonical 映射：
+来源达到 A 级且适配器通过，仍须完成 30 条分层结构化审计，覆盖源定位、原值、单位、qualifier、方法、坐标、极值、缺失和 canonical 映射。审计由 Codex 执行并记录逐条判断与原因，不要求人工签署：
 
 ```bash
-python scripts/validate_human_review.py \
-  --input HUMAN_REVIEW.json \
-  --require-complete
+python scripts/migrate_automated_audits.py \
+  --root fixtures/four-media \
+  --check
 ```
 
-脚本只验证签署、计数和状态一致性，绝不代填 reviewer。未完成时保持 `normalized_analysis`。
+完成时写 `automated_audit_complete`；证据不足时写 `evidence_incomplete` 并降低证据完整度或限制用途。来源身份不明、文件损坏、表间数量无法解释、获取方式违反来源声明条件或结果无法回到原始记录时才失败关闭。
 
 ## 9. 最终回复
 

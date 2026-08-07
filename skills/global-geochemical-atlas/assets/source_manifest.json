@@ -1,6 +1,14 @@
 {
   "registry_version": "geochemical-source-registry-v1",
   "verified_at": "2026-08-06T10:05:00Z",
+  "integrity_policy": {
+    "version": "d1-no-content-hash-v1",
+    "effective_at": "2026-08-07T08:46:00Z",
+    "content_hashes_used": false,
+    "identity_fields": ["source_id", "dataset_doi_or_pid", "dataset_version", "file_id_or_name", "release_date", "accessed_at"],
+    "drift_fields": ["http_status", "bytes", "member_inventory", "schema", "row_count", "target_counts", "key_category_counts"],
+    "legacy_hash_fields": "compatibility_only_not_read_compared_or_updated"
+  },
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -505,8 +513,8 @@
       ]
     },
     "gemstat-open-archive": {
-      "adapter": "gemstat_v3_arsenic_range",
-      "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 arsenic subset",
+      "adapter": "gemstat_v3_seven_element_ranges",
+      "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 seven-element subset",
       "publisher": "UNEP GEMS/Water Programme, GEMS/Water Data Centre and German Federal Institute of Hydrology",
       "dataset_doi": "10.5281/zenodo.18459694",
       "concept_doi": "10.5281/zenodo.13881899",
@@ -538,6 +546,60 @@
             "range_sha256": "64d67a154816b58c06569c38d74c5d1c1cf3fe4a265a7127f6248a0a06b2386f",
             "bytes": 30585144,
             "expected_sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+          },
+          {
+            "file_id": "chromium-observations",
+            "filename": "Chromium.csv",
+            "range_start": 21099972,
+            "range_end": 23395931,
+            "range_sha256": "362df9fd528b7eab5cff03aadceffa330b83eed0d94b71b6e129b89adea4cc97",
+            "bytes": 34359149,
+            "expected_sha256": "164294931268c7427cb7c768f23e20484db9c4130044d99c766483fb881cc62c"
+          },
+          {
+            "file_id": "copper-observations",
+            "filename": "Copper.csv",
+            "range_start": 24122334,
+            "range_end": 26169314,
+            "range_sha256": "cfb499687474fcb4575fd1eaecb33f40be7e4f528ca86430623661d9d6a709cd",
+            "bytes": 28448872,
+            "expected_sha256": "82fb42ce1bba413a197825017727c8b2c04aa7042f92b07466f81fab3e93c451"
+          },
+          {
+            "file_id": "mercury-observations",
+            "filename": "Mercury.csv",
+            "range_start": 54591798,
+            "range_end": 56488526,
+            "range_sha256": "76c512c12cdcfdd3bf3d0edec0c4f83d5ba88f7176c9b96e313fb1a2039371bc",
+            "bytes": 31175171,
+            "expected_sha256": "13805529f39c9ff6c90a84b341491af9739c72c43d3ec0eba07165957058906f"
+          },
+          {
+            "file_id": "nickel-observations",
+            "filename": "Nickel.csv",
+            "range_start": 57019516,
+            "range_end": 59767178,
+            "range_sha256": "e26717aeed36f3ba7781a670170954ad40e877ea1f2f9cbbf784041938f746a0",
+            "bytes": 39456553,
+            "expected_sha256": "fef4cc062e06ea4e3eafd8257b6849ed1d7ece2ac6522c5f9bfdef73ea206b8f"
+          },
+          {
+            "file_id": "lead-observations",
+            "filename": "Lead.csv",
+            "range_start": 47619799,
+            "range_end": 50275481,
+            "range_sha256": "f2d7044ecc01d887429fb989f9b4d3e2f311d2100cf95157af4976b90dd9c683",
+            "bytes": 40765015,
+            "expected_sha256": "6c7edbf736a32985394967ff30c175e4618c6914b7c8a77b38d40c255af7b9f0"
+          },
+          {
+            "file_id": "zinc-observations",
+            "filename": "Zinc.csv",
+            "range_start": 199286587,
+            "range_end": 201270727,
+            "range_sha256": "12e36f17cab48a074abd284dde218df739f4fec27b6db22dc5301b3b8e72b786",
+            "bytes": 26785044,
+            "expected_sha256": "0d77884198cdb0c01fa9f0ad8e101e086c709bdbc36ca80dc955a1c6172a192d"
           },
           {
             "file_id": "methods",
@@ -576,7 +638,7 @@
             "expected_sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d"
           }
         ],
-        "acquisition_script": "scripts/acquire_gemstat_arsenic.py",
+        "acquisition_script": "scripts/acquire_gemstat_multielement.py",
         "snapshot_manifest": "fixtures/four-media/water/gemstat-open-archive/snapshot_manifest.json"
       },
       "required_fields": [
@@ -614,9 +676,66 @@
           "As-Dis",
           "As-Sus",
           "As-Tot"
+        ],
+        "Cr": [
+          "Cr-Dis",
+          "Cr-Ext",
+          "Cr-Tot"
+        ],
+        "Cu": [
+          "Cu-Dis",
+          "Cu-Ext",
+          "Cu-Sus",
+          "Cu-Tot"
+        ],
+        "Hg": [
+          "Hg-Dis",
+          "Hg-Ext",
+          "Hg-Sus",
+          "Hg-Tot"
+        ],
+        "Ni": [
+          "Ni-Dis",
+          "Ni-Ext",
+          "Ni-Sus",
+          "Ni-Tot"
+        ],
+        "Pb": [
+          "Pb-Dis",
+          "Pb-Ext",
+          "Pb-Sus",
+          "Pb-Tot"
+        ],
+        "Zn": [
+          "Zn-Dis",
+          "Zn-Ext",
+          "Zn-Sus",
+          "Zn-Tot"
         ]
       },
       "expected_counts": {
+        "target_observations": 3739180,
+        "target_value_counts": {
+          "As": 492999,
+          "Cr": 537761,
+          "Cu": 460529,
+          "Hg": 517471,
+          "Ni": 638547,
+          "Pb": 654669,
+          "Zn": 437204
+        },
+        "source_file_rows": {
+          "Arsenic.csv": 492999,
+          "Chromium.csv": 553616,
+          "Copper.csv": 460529,
+          "Mercury.csv": 517471,
+          "Nickel.csv": 638547,
+          "Lead.csv": 654669,
+          "Zinc.csv": 437204
+        },
+        "excluded_parameter_counts": {
+          "Cr-VI": 15855
+        },
         "arsenic_observations": 492999,
         "arsenic_station_count": 15621,
         "arsenic_country_count": 33,
@@ -669,15 +788,16 @@
         "url": "https://creativecommons.org/licenses/by/4.0/"
       },
       "citation": "Heinle, M., Lisniak, D., and Saile, P. (2026). UNEP GEMS/Water Global Freshwater Quality Archive, v3. Zenodo. https://doi.org/10.5281/zenodo.18459694",
-      "redistribution": "Use for attributed research analysis. The complete third-party archive remains outside Git; this project materializes only a verified arsenic and metadata subset.",
+      "redistribution": "Use for attributed research analysis. The complete third-party archive remains outside Git; this project materializes only seven verified element members and the required metadata subset.",
       "scientific_notes": [
-        "As-Dis, As-Sus and As-Tot are distinct dissolved, suspended and total fractions and must not be merged silently.",
-        "The arsenic subset contains both mg/l and µg/l and preserves less-than and greater-than censoring flags.",
-        "Most arsenic rows use undefined analysis method code 0; method completeness therefore remains a material comparison limitation.",
+        "Dissolved, suspended, extractable and total fractions remain separate comparison bases and must not be merged silently.",
+        "The seven element files contain mg/l, µg/l, ng/l and suspended-particle µg/g values; units and fractions remain coupled.",
+        "Cr-VI is retained in Chromium.csv but excluded from elemental Cr output because a species-specific measurement is not interchangeable with total chromium.",
+        "Most rows use undefined analysis method code 0; method completeness therefore remains a material comparison limitation.",
         "Three -999.999 and 78 values at or above 1000 mg/l are marked Pending review and must not enter normalized demos or anomaly claims.",
         "Station metadata contain 35 exact duplicate rows across 35 IDs; the adapter preserves both source locators but uses one identical station fact set.",
         "The v3 description claims 22,982 stations and 622 parameters, while the selected metadata files contain 22,981 station rows and 621 parameter rows; the one-record differences remain explicit.",
-        "GEMStat is voluntarily contributed and geographically uneven; the arsenic subset covers 33 countries and is not uniform global freshwater coverage."
+        "GEMStat is voluntarily contributed and geographically uneven; the seven-element subset is not uniform global freshwater coverage."
       ]
     },
     "geotraces-idp2025": {
@@ -791,6 +911,21 @@
           "B": "nominal value",
           "Q": "value below limit of quantification"
         }
+      },
+      "method_metadata": {
+        "scope": "cruise_analyte_candidate_set",
+        "assignment_basis": "Cruise and target analyte joined to exported WebODV info HTML",
+        "html_member_count": 241,
+        "html_uncompressed_bytes": 288142,
+        "html_inventory_sha256": "a1af8be2f33b70637efeacf35274e8cadbb6decd2bd832ab79bdf8b8e6506890",
+        "cruise_analyte_groups": 96,
+        "originator_count": 89,
+        "unique_bodc_method_record_count": 71,
+        "observations_with_method_metadata_candidates": 39327,
+        "observations_with_single_method_record": 22254,
+        "observations_with_multiple_method_records": 17073,
+        "observations_without_method_metadata": 0,
+        "scientific_boundary": "A single linked record may be assigned at cruise-analyte scope. Multiple exported records remain an unresolved candidate set and are not promoted to one observation-level analytical method."
       },
       "expected_counts": {
         "collection_station_count": 4094,
@@ -2080,6 +2215,834 @@
         "The registered files and related article do not state a coordinate reference system; latitude and longitude are preserved but source_crs remains missing.",
         "The variable workbook labels field As.75 as Arsenic-78 and gives sampling years 2009-2013, while the related article reports 2009-2012; both conflicts remain explicit."
       ]
+    },
+    "us-wqp-sacramento-river-arsenic": {
+      "adapter": "wqp_pinned_usgs_station_results",
+      "title": "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal",
+      "publisher": "U.S. Geological Survey California Water Science Center via the Water Quality Portal",
+      "dataset_doi": null,
+      "dataset_version": "content-snapshot-2026-08-06",
+      "release_date": null,
+      "landing_page": "https://www.waterqualitydata.us/",
+      "metadata_url": "https://www.waterqualitydata.us/webservices_documentation/",
+      "media": [
+        "water"
+      ],
+      "geographic_scope": "single-usgs-river-station-california-2010-2023",
+      "download": {
+        "mode": "content-addressed-wqp-query-pair",
+        "observed_at": "2026-08-06T14:50:00Z",
+        "max_bytes_per_file": 500000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "results",
+            "filename": "results.csv",
+            "url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem",
+            "request_interpretation": "The service response contained only Arsenic rows. The exact multi-valued query and observed response are retained rather than claiming the other requested characteristics were returned.",
+            "bytes": 123432,
+            "expected_sha256": "916f17a851b0597c55b4dfd78ace1ad65c13d2c30935b05b2e74b18910d28fcd"
+          },
+          {
+            "file_id": "station",
+            "filename": "station.csv",
+            "url": "https://www.waterqualitydata.us/data/Station/search?siteid=USGS-11447650&providers=NWIS&mimeType=csv&zip=no",
+            "bytes": 1241,
+            "expected_sha256": "74e51e3081133eedf1598127cd942c35353d397b9129fba711f1540e61af5c17"
+          }
+        ],
+        "snapshot_manifest": "fixtures/four-media/water/us-wqp-sacramento-river-arsenic/snapshot_manifest.json"
+      },
+      "required_result_fields": [
+        "OrganizationIdentifier",
+        "ActivityIdentifier",
+        "ActivityTypeCode",
+        "ActivityMediaName",
+        "ActivityMediaSubdivisionName",
+        "ActivityStartDate",
+        "MonitoringLocationIdentifier",
+        "ResultIdentifier",
+        "ResultDetectionConditionText",
+        "CharacteristicName",
+        "ResultSampleFractionText",
+        "ResultMeasureValue",
+        "ResultMeasure/MeasureUnitCode",
+        "ResultStatusIdentifier",
+        "ResultAnalyticalMethod/MethodIdentifier",
+        "ResultAnalyticalMethod/MethodIdentifierContext",
+        "ResultAnalyticalMethod/MethodName",
+        "ResultAnalyticalMethod/MethodDescriptionText",
+        "LaboratoryName",
+        "DetectionQuantitationLimitTypeName",
+        "DetectionQuantitationLimitMeasure/MeasureValue",
+        "DetectionQuantitationLimitMeasure/MeasureUnitCode",
+        "ProviderName"
+      ],
+      "required_station_fields": [
+        "OrganizationIdentifier",
+        "MonitoringLocationIdentifier",
+        "MonitoringLocationName",
+        "MonitoringLocationTypeName",
+        "LatitudeMeasure",
+        "LongitudeMeasure",
+        "HorizontalAccuracyMeasure/MeasureValue",
+        "HorizontalAccuracyMeasure/MeasureUnitCode",
+        "HorizontalCollectionMethodName",
+        "HorizontalCoordinateReferenceSystemDatumName",
+        "ProviderName"
+      ],
+      "target_analytes": {
+        "As": "ResultMeasureValue"
+      },
+      "expected_counts": {
+        "physical_rows": 189,
+        "target_observations": 189,
+        "numeric_results": 188,
+        "not_detected_results": 1,
+        "unique_activity_ids": 189,
+        "unique_result_ids": 189,
+        "accepted_results": 132,
+        "preliminary_results": 57,
+        "routine_samples": 179,
+        "field_replicates": 10,
+        "analytical_method_ids": {
+          "USGS:PLM10": 189
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-USGS-Public-Domain",
+        "name": "USGS-authored NWIS records are public-domain U.S. Government data; retain source acknowledgement",
+        "url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits"
+      },
+      "citation": "U.S. Geological Survey and National Water Quality Monitoring Council. Water Quality Portal result and station services, USGS-11447650, accessed 2026-08-06.",
+      "redistribution": "Research analysis of this USGS/NWIS snapshot is permitted. Retain USGS, WQP, station, query, access time, file hashes and result identifiers.",
+      "scientific_notes": [
+        "This is a method-rich single-station time series, not national or global river coverage.",
+        "The response contains dissolved arsenic only even though the exact request repeated four characteristicName parameters; unreturned elements are not claimed.",
+        "All rows are linked to USGS method PLM10 (Elements, wf, cICP-MS), laboratory, result status and a reported detection/quantitation limit.",
+        "The one Not Detected row is represented as a censored value at its 0.10 ug/l detection limit; no zero is invented.",
+        "Ten field-replicate quality-control samples remain distinguishable from 179 routine samples and are not counted as independent routine evidence."
+      ]
+    },
+    "australia-ngsa-mercury": {
+      "adapter": "australia_ngsa_mercury",
+      "title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset",
+      "publisher": "Geoscience Australia",
+      "dataset_doi": "10.26186/150328",
+      "publication_doi": "10.1021/acs.est.5c11189",
+      "dataset_version": "2025-03-31",
+      "release_date": "2025-03-31",
+      "landing_page": "https://pid.geoscience.gov.au/dataset/ga/150328",
+      "metadata_url": "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "australia-national-outlet-sediment-survey-partial",
+      "download": {
+        "mode": "pinned-official-csv",
+        "max_bytes": 500000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "observed_at": "2026-08-06T16:07:00Z",
+        "encoding": "Windows-1252",
+        "files": [
+          {
+            "file_id": "mercury-csv",
+            "filename": "150328_00_1.CSV",
+            "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV",
+            "bytes": 208089
+          }
+        ]
+      },
+      "required_fields": [
+        "SITEID",
+        "DATE_SAMPLED",
+        "LATITUDE_GDA94",
+        "LONGITUDE_GDA94",
+        "STATE",
+        "DUPLICATE_CODE",
+        "DUPLICATE_SITEID",
+        "SAMPLEID",
+        "GRAIN_SIZE",
+        "DEPTH",
+        "Hg_DMA_ng/g_0.01"
+      ],
+      "target_analytes": {
+        "Hg": "Hg_DMA_ng/g_0.01"
+      },
+      "expected_counts": {
+        "physical_rows": 2396,
+        "distinct_samples": 2396,
+        "distinct_sites": 1247,
+        "target_observations": 2396,
+        "depth_counts": {
+          "BOS": 1182,
+          "TOS": 1214
+        },
+        "state_counts": {
+          "NSW": 298,
+          "NT": 453,
+          "QLD": 607,
+          "SA": 314,
+          "TAS": 39,
+          "VIC": 118,
+          "WA": 567
+        },
+        "duplicate_code_counts": {
+          "": 1959,
+          "Duplicate 1": 222,
+          "Duplicate 2": 215
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Schneider, L.; Taylor, J.R.; de Caritat, P. (2025). National Geochemical Survey of Australia: The Mercury Concentrations Dataset. Geoscience Australia. https://doi.org/10.26186/150328",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher CSV remains outside Git; derived fixtures retain DOI, hash and row locators.",
+      "scientific_notes": [
+        "The product reports total Hg in dry-weight ng/g for less-than-75-micrometre top and bottom outlet sediment; it is not a regular national grid.",
+        "Total mercury was measured directly on about 100 mg by Milestone tri-cell DMA-80 without acid digestion, following USEPA Method 7473.",
+        "The header reports a 0.01 ng Hg mass detection limit, not a concentration detection limit; the adapter does not incorrectly store 0.01 ng/g as a row threshold.",
+        "TOS and BOS horizons and all duplicate codes remain explicit. QA/QC duplicates are not counted as independent sites.",
+        "Coordinates use GDA94 geographic coordinates (EPSG:4283); the values are retained without an unrecorded transformation."
+      ]
+    },
+    "japan-gsj-marine-sediment": {
+      "adapter": "gsj_japan_marine_sediment",
+      "title": "Geochemical Map of Sea and Land of Japan: marine sediment concentrations",
+      "publisher": "Geological Survey of Japan, AIST",
+      "dataset_doi": null,
+      "publication_doi": "10.5571/synth.3.281",
+      "dataset_version": "content-snapshot-2026-08-06",
+      "release_date": null,
+      "landing_page": "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+      "metadata_url": "https://www.gsj.jp/en/research/overview/geochemical-map.html",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "japan-coastal-marine-surveys-partial",
+      "download": {
+        "mode": "content-addressed-official-csv",
+        "max_bytes": 3000000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "observed_at": "2026-08-06T16:07:00Z",
+        "encoding": "Shift_JIS",
+        "files": [
+          {
+            "file_id": "marine-concentrations",
+            "filename": "ocean-noudo.csv",
+            "url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv",
+            "bytes": 1825190
+          }
+        ]
+      },
+      "required_fields": [
+        "試料番号",
+        "航海",
+        "地域",
+        "経度",
+        "緯度",
+        "深度_m_",
+        "As",
+        "Cr",
+        "Cu",
+        "Hg",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "target_analytes": {
+        "As": "As",
+        "Cr": "Cr",
+        "Cu": "Cu",
+        "Hg": "Hg",
+        "Ni": "Ni",
+        "Pb": "Pb",
+        "Zn": "Zn"
+      },
+      "target_units": {
+        "As": "ppm",
+        "Cr": "ppm",
+        "Cu": "ppm",
+        "Hg": "ppb",
+        "Ni": "ppm",
+        "Pb": "ppm",
+        "Zn": "ppm"
+      },
+      "expected_counts": {
+        "physical_rows": 4905,
+        "distinct_samples": 4905,
+        "distinct_cruises": 37,
+        "distinct_regions": 37,
+        "missing_water_depth_rows": 1081,
+        "negative_hg_values": 10,
+        "target_observations": 34334,
+        "target_value_counts": {
+          "As": 4905,
+          "Cr": 4905,
+          "Cu": 4905,
+          "Hg": 4904,
+          "Ni": 4905,
+          "Pb": 4905,
+          "Zn": 4905
+        }
+      },
+      "license": {
+        "spdx": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+        "name": "GSJ website terms aligned with Japan Government Standard Terms of Use 2.0",
+        "url": "https://www.gsj.jp/license/index.html"
+      },
+      "citation": "Imai, N. et al. (2010). Geochemical Map of Sea and Land of Japan. Synthesiology 3, 281-291. https://doi.org/10.5571/synth.3.281; official marine concentration CSV.",
+      "redistribution": "Use for attributed research analysis under GSJ website terms. The complete publisher CSV remains outside Git.",
+      "scientific_notes": [
+        "This is a separate 4,905-sample marine product and must not be merged with the GSJ river-sediment table as one sample type.",
+        "The source CSV reports Hg in ppb and the other registered trace elements in ppm.",
+        "The concentration CSV does not contain row-level method, detection-limit or quality-control fields; the adapter leaves them missing rather than inferring them.",
+        "Ten negative Hg values and one missing Hg value are preserved as source states; negative values are excluded from positive demonstration slices but not erased from the full profile.",
+        "Survey tracks and coastal regions are discrete and do not form a regular grid of all Japanese waters."
+      ]
+    },
+    "pangaea-arabian-sea-sediment": {
+      "adapter": "pangaea_arabian_sea_sediment",
+      "title": "Geochemistry of modern sediments and the glacial Arabian Sea",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.950139",
+      "parent_dataset_doi": "10.1594/PANGAEA.950153",
+      "dataset_version": "2022-11-02",
+      "release_date": "2022-11-02",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "arabian-sea-discrete-core-samples",
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 100000,
+        "accepted_content_types": [
+          "text/tab-separated-values",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-06T16:12:00Z",
+        "files": [
+          {
+            "file_id": "dataset-table",
+            "filename": "PANGAEA.950139.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile",
+            "bytes": 24152
+          }
+        ]
+      },
+      "required_fields": [
+        "Event",
+        "Latitude",
+        "Longitude",
+        "Elevation [m]",
+        "Location",
+        "Sample label",
+        "Depth sed [m]",
+        "As [mg/kg]",
+        "Cr [mg/kg]",
+        "Cu [mg/kg]",
+        "Ni [mg/kg]",
+        "Pb [mg/kg]",
+        "Zn [mg/kg]"
+      ],
+      "target_analytes": {
+        "As": "As [mg/kg]",
+        "Cr": "Cr [mg/kg]",
+        "Cu": "Cu [mg/kg]",
+        "Ni": "Ni [mg/kg]",
+        "Pb": "Pb [mg/kg]",
+        "Zn": "Zn [mg/kg]"
+      },
+      "expected_counts": {
+        "physical_rows": 27,
+        "distinct_sample_labels": 26,
+        "distinct_events": 26,
+        "mgkg_fields": 47,
+        "target_observations": 162,
+        "target_value_counts": {
+          "As": 27,
+          "Cr": 27,
+          "Cu": 27,
+          "Ni": 27,
+          "Pb": 27,
+          "Zn": 27
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Lu, W.; Wang, Y.; Oppo, D.W.; Nielsen, S.G.; Costa, K.M. (2022). Geochemistry of modern sediments and the glacial Arabian Sea. PANGAEA. https://doi.org/10.1594/PANGAEA.950139",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic rows retain DOI, hash and source locators.",
+      "scientific_notes": [
+        "The table contains 27 rows from 26 named events and is not continuous Arabian Sea coverage.",
+        "As, Cr, Cu, Ni, Pb and Zn are reported in mg/kg on bulk marine sediment.",
+        "The publisher parameter metadata names the method only as 'Geochemical analysis on bulk sediment'; the adapter preserves that wording and does not invent an instrument or digestion.",
+        "One sample label occurs twice as separate analytical rows; source row identity is retained so the replicate is not overwritten.",
+        "Core type, water depth and sediment depth are retained independently from elemental values."
+      ]
+    },
+    "georoc-antarctica-intraplate": {
+      "adapter": "georoc_dataverse_member",
+      "title": "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member",
+      "publisher": "DIGIS Team, Göttingen University",
+      "dataset_doi": "10.25625/RZZ9VM",
+      "dataset_version": "12.0",
+      "release_date": "2026-06-11",
+      "data_generated_at": "2026-06-01",
+      "landing_page": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
+      "metadata_url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/RZZ9VM&version=12.0",
+      "media": ["rock"],
+      "geographic_scope": "antarctica-intraplate-volcanics-partial",
+      "download": {
+        "mode": "versioned-dataverse-member",
+        "max_bytes": 1000000,
+        "accepted_content_types": ["text/csv", "application/octet-stream"],
+        "encoding": "Windows-1252",
+        "files": [{
+          "file_id": "UYO5XO",
+          "dataverse_file_id": 173608,
+          "file_doi": "10.25625/RZZ9VM/UYO5XO",
+          "filename": "2026-06-RZZ9VM_ANTARCTICA.csv",
+          "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original",
+          "bytes": 367799
+        }]
+      },
+      "required_fields": ["CITATIONS", "TECTONIC SETTING", "LOCATION", "LATITUDE MIN", "LATITUDE MAX", "LONGITUDE MIN", "LONGITUDE MAX", "SAMPLE NAME", "ROCK NAME", "AGE", "ROCK TYPE", "MATERIAL", "AS(PPM)", "CR(PPM)", "CU(PPM)", "HG(PPM)", "NI(PPM)", "PB(PPM)", "ZN(PPM)", "UNIQUE_ID"],
+      "target_analytes": {"As": "AS(PPM)", "Cr": "CR(PPM)", "Cu": "CU(PPM)", "Hg": "HG(PPM)", "Ni": "NI(PPM)", "Pb": "PB(PPM)", "Zn": "ZN(PPM)"},
+      "expected_counts": {
+        "source_rows": 424,
+        "unique_ids": 424,
+        "distinct_sample_names": 407,
+        "rows_with_any_target": 313,
+        "rows_without_targets": 111,
+        "target_observations": 1183,
+        "complete_coordinate_rows": 424,
+        "exact_point_rows": 423,
+        "exact_point_target_observations": 1181,
+        "citation_ids": 18,
+        "references_with_doi": 15,
+        "age_rows": 396,
+        "rock_types": {"MET": 175, "PER": 9, "PLU": 161, "VOL": 79},
+        "target_observations_by_analyte": {"As": 15, "Cr": 241, "Cu": 187, "Hg": 0, "Ni": 267, "Pb": 276, "Zn": 197}
+      },
+      "license": {"spdx": "CC-BY-SA-4.0", "name": "Creative Commons Attribution-ShareAlike 4.0 International", "url": "https://creativecommons.org/licenses/by-sa/4.0/"},
+      "citation": "DIGIS Team (2026). GEOROC Compilation: Intraplate Volcanic Rocks, Version 12.0. GRO.data. https://doi.org/10.25625/RZZ9VM",
+      "redistribution": "Research analysis with attribution under CC BY-SA 4.0; the full publisher member remains outside Git.",
+      "scientific_notes": [
+        "The member contains discrete published Antarctica samples, not a regular continental grid.",
+        "Only 423 rows are exact points; the remaining coordinate range is retained as an area and is not converted to an invented midpoint.",
+        "The precompiled member does not encode the winning row-level analytical method, so method_missing_reason remains explicit.",
+        "Numeric zero is retained as reported because the member has no qualifier or detection-limit fields."
+      ]
+    },
+    "tpdc-china-mountain-soil": {
+      "adapter": "tpdc_china_mountain_soil",
+      "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains",
+      "publisher": "National Tibetan Plateau / Third Pole Environment Data Center",
+      "dataset_doi": "10.11888/Terre.tpdc.302620",
+      "publication_doi": "10.5194/essd-17-4779-2025",
+      "dataset_pid": "18406.11.Terre.tpdc.302620",
+      "dataset_version": "tpdc-file-2025-07-23",
+      "release_date": "2025-07-23",
+      "landing_page": "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+      "metadata_url": "https://data.tpdc.ac.cn/view/metadataView/detail/",
+      "media": ["soil"],
+      "geographic_scope": "china-30-mountain-ecosystems-partial",
+      "download": {
+        "mode": "official-post-bundle-extracted-members",
+        "bundle_file_id": "d4c22475-e614-42d2-b8ec-d768f1c26426",
+        "bundle_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426",
+        "bundle_bytes": 1828683,
+        "files": [
+          {"file_id": "soil-dataset", "filename": "Soil dataset.xlsx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 577715},
+          {"file_id": "bulk-density-supplement", "filename": "Soil bulk density.xlsx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 33386},
+          {"file_id": "dataset-description", "filename": "Description of the dataset.docx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 1246886}
+        ]
+      },
+      "required_fields": ["Climaticzones", "Mountain", "site", "Sam.No", "Horizons", "Latitude", "Longitude", "Rock Class", "Rock Group", "Soil Order", "Great Soil Group", "Cr", "Cu", "Ni", "Pb", "Zn"],
+      "target_analytes": {"Cr": "Cr", "Cu": "Cu", "Ni": "Ni", "Pb": "Pb", "Zn": "Zn"},
+      "expected_counts": {
+        "physical_rows": 1314,
+        "distinct_profiles": 485,
+        "distinct_sites": 166,
+        "distinct_mountains": 30,
+        "horizon_counts": {"A": 481, "C": 452, "O": 381},
+        "target_observations": 6570,
+        "target_value_counts": {"Cr": 1314, "Cu": 1314, "Ni": 1314, "Pb": 1314, "Zn": 1314}
+      },
+      "license": {"spdx": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0 International", "url": "https://creativecommons.org/licenses/by/4.0/"},
+      "citation": "Zhang et al. (2025). A multi-element dataset of soil profiles across climatic zones in China's mountains. ESSD 17, 4779–4797. https://doi.org/10.5194/essd-17-4779-2025; dataset https://doi.org/10.11888/Terre.tpdc.302620",
+      "redistribution": "Research analysis with attribution under CC BY 4.0; full workbooks remain outside Git.",
+      "scientific_notes": [
+        "The 166 sites in 30 mountain ecosystems are not uniform nationwide coverage.",
+        "O, A and C horizons remain separate comparison groups.",
+        "Rock Group is retained as lithology_raw and is not silently promoted to a mapped geologic unit.",
+        "The source CRS is not declared; coordinates are preserved without an inferred EPSG code.",
+        "The bulk-density supplement has conflicts and never silently overwrites the main workbook."
+      ]
+    },
+    "usgs-utah-volcanic-whole-rock": {
+      "adapter": "usgs_sciencebase_child_csvs",
+      "title": "Whole-rock geochemical data for volcanic rocks sampled in northwestern Utah and adjacent states",
+      "publisher": "U.S. Geological Survey",
+      "dataset_doi": "10.5066/P1NZXUZF",
+      "dataset_pid": "USGS:672d2e6dd34ea9e45088e967",
+      "dataset_version": "2026-02-09",
+      "release_date": "2026-02-16",
+      "landing_page": "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+      "metadata_url": "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+      "media": ["rock"],
+      "geographic_scope": "northwestern-utah-and-adjacent-idaho-nevada",
+      "upstream_lineage_id": "usgs-ngd-rock-and-new-usgs-analyses",
+      "primary_candidate_audit": {
+        "dataset_doi": "10.5066/P1FXE9GK",
+        "sciencebase_item_id": "63a107a0d34e0de3a1f2795f",
+        "title": "Geochemical data for rock, sediment, soil, and mineral samples, United States and territories, 1962 to 2023",
+        "parquet_file_id": "cmi6freth002j0upm7cs35yz0",
+        "parquet_filename": "Geochem_DataRelease_2025_11_18.parquet.zip",
+        "parquet_bytes": 297251708,
+        "audit_status": "official_metadata_verified_file_not_publicly_downloadable_without_sciencebase_session",
+        "fallback_reason": "The public ScienceBase item identifies the Parquet file, but its published flag is false and its download URI resolves to the JavaScript file manager rather than file bytes for an anonymous client. No production adapter is claimed until a stable public child-file URL exists."
+      },
+      "download": {
+        "mode": "fixed-official-sciencebase-child-csvs",
+        "observed_at": "2026-08-07T12:35:00Z",
+        "max_bytes_per_file": 200000,
+        "accepted_content_types": ["text/csv", "text/plain", "application/octet-stream"],
+        "files": [
+          {
+            "file_id": "usu-data",
+            "child_item_id": "67f95664d4be022c3e84f3a9",
+            "child_dataset": "Utah State University (USU) data",
+            "kind": "data",
+            "filename": "UTVolcRocks_USU_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95664d4be022c3e84f3a9?f=__disk__63%2F41%2F2e%2F63412e7c84fadfe014e8314f20f469908a43423d",
+            "bytes": 3354,
+            "expected_rows": 10,
+            "required_fields": ["StationID", "Lat_WGS84", "Long_WGS84", "RockType", "RockName", "GeoAge", "AnalyticalMethods"]
+          },
+          {
+            "file_id": "usu-dictionary",
+            "child_item_id": "67f95664d4be022c3e84f3a9",
+            "child_dataset": "Utah State University (USU) data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_USU_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95664d4be022c3e84f3a9?f=__disk__fd%2Ff8%2F8f%2Ffdf88fd055fb641b29b99ba1579f30b62f996283",
+            "bytes": 5527,
+            "required_fields": ["AttributeLabel", "AttributeDescription"]
+          },
+          {
+            "file_id": "ugs-als-data",
+            "child_item_id": "67f954e4d4be022c3e84f384",
+            "child_dataset": "Utah Geological Survey contract ALS data",
+            "kind": "data",
+            "filename": "UTVolcRocks_UGS-ALS_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__a8%2F71%2Fda%2Fa871daab3b75e0022ca8514e12d8348f40d287ba",
+            "bytes": 33112,
+            "expected_rows": 60,
+            "required_fields": ["StationID", "Lat_WGS84", "Long_WGS84", "RockType", "RockName", "GeoAge", "AnalyticalMethods", "As", "Cr", "Cu", "Ni", "Pb", "Zn"]
+          },
+          {
+            "file_id": "ugs-als-dictionary",
+            "child_item_id": "67f954e4d4be022c3e84f384",
+            "child_dataset": "Utah Geological Survey contract ALS data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_UGS-ALS_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__bd%2Fac%2Fa7%2Fbdaca77567ab726ab222d29037200121ddc7e8d0",
+            "bytes": 26898,
+            "required_fields": ["AttributeLabel", "AttributeDescription", "AttributeUnit"]
+          },
+          {
+            "file_id": "ugs-als-methods",
+            "child_item_id": "67f954e4d4be022c3e84f384",
+            "child_dataset": "Utah Geological Survey contract ALS data",
+            "kind": "methods",
+            "filename": "UTVolcRocks_UGS-ALS_AnalyticalMethods.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__2a%2Fbd%2F29%2F2abd296da3004de5c3b1108d27e55c9478e151ee",
+            "bytes": 1942,
+            "required_fields": ["AnalyticalMethods", "MethodDescription", "Unit"]
+          },
+          {
+            "file_id": "contract-data",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "data",
+            "filename": "UTVolcRocks_USGS_ContractLabs_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__be%2F10%2F4a%2Fbe104aa01baf963832fab6434f9def6e5715fa67",
+            "bytes": 52366,
+            "expected_rows": 85,
+            "required_fields": ["StationID", "LabID", "Lat_WGS84", "Long_WGS84", "RockType", "RockName", "GeoAge", "AnalyticalMethods", "As", "Cr", "Cu", "Ni", "Pb", "Zn"]
+          },
+          {
+            "file_id": "contract-dictionary",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_USGS_ContractLabs_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__01%2F25%2F18%2F012518853c051ff81773aee2a4ed20f7379d052c",
+            "bytes": 92496,
+            "required_fields": ["AttributeLabel", "AttributeDescription", "AttributeUnit"]
+          },
+          {
+            "file_id": "contract-methods",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "methods",
+            "filename": "USGS_ContractLabs_AnalyticalMethods.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__62%2F11%2Ffb%2F6211fb1c6ea548c25ba17ecebeebc80a2b06f103",
+            "bytes": 6493,
+            "required_fields": ["AnalyticalMethod", "Lab", "MethodDescription", "Unit"]
+          },
+          {
+            "file_id": "contract-limits",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "limits",
+            "filename": "USGS_ContractLabs_DetectionLimits.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__ae%2Fe6%2Fea%2Faee6ea39ea3ac0214b4ee9472a83aa16327b77bc",
+            "bytes": 51662,
+            "required_fields": ["Analytic_Mthds", "Element", "LowerDetectLimit", "UpperDetectLimit", "Unit", "Instrument"]
+          },
+          {
+            "file_id": "usgs-alabs-data",
+            "child_item_id": "67f95691d4be022c3e84f3af",
+            "child_dataset": "USGS analytical laboratory data",
+            "kind": "data",
+            "filename": "UTVolcRocks_USGS-ALabs_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__c6%2Fa8%2F81%2Fc6a881e369a2101825cefe184ee0f39ee0b29300",
+            "bytes": 37541,
+            "expected_rows": 91,
+            "required_fields": ["LAB_ID", "DATUM", "LATITUDE", "LONGITUDE", "SAMPLE_SRC", "XNDRYCLASS", "SPEC_NAME", "GEOL_AGE", "ASPPM_NA", "CRPPM_XRF", "CRPPM_NA", "CUPPM_XRF", "NIPPM_XRF", "NIPPM_NA", "ZNPPM_XRF", "ZNPPM_NA"]
+          },
+          {
+            "file_id": "usgs-alabs-dictionary",
+            "child_item_id": "67f95691d4be022c3e84f3af",
+            "child_dataset": "USGS analytical laboratory data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_USGS_ALabs_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__25%2F54%2F67%2F255467a4b87c59c73d90553dbb20ea04b6a40228",
+            "bytes": 12723,
+            "required_fields": ["AttributeLabel", "AttributeDescription"]
+          }
+        ]
+      },
+      "required_fields": ["sample identity", "coordinates", "rock description", "analytical result", "method evidence"],
+      "target_analytes": ["As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"],
+      "expected_counts": {
+        "physical_rows": 246,
+        "rows_with_any_target": 231,
+        "valid_coordinate_rows": 246,
+        "target_observations": 1447,
+        "censored_target_observations": 454,
+        "method_exact_observations": 1271,
+        "method_ambiguous_observations": 176,
+        "child_rows": {"usu-data": 10, "ugs-als-data": 60, "contract-data": 85, "usgs-alabs-data": 91},
+        "target_value_counts": {"As": 188, "Cr": 284, "Cu": 226, "Hg": 0, "Ni": 295, "Pb": 145, "Zn": 309}
+      },
+      "license": {"spdx": "CC0-1.0", "name": "CC0 1.0 Universal", "url": "https://creativecommons.org/publicdomain/zero/1.0/"},
+      "citation": "Felger, T.J., Miller, D.M., Clark, D.C., and Fiesinger, D., 2026, Whole-rock geochemical data for volcanic rocks sampled in northwestern Utah and adjacent states: U.S. Geological Survey data release, https://doi.org/10.5066/P1NZXUZF.",
+      "redistribution": "Public-domain USGS data; project use remains scientific analysis and traceable fixture excerpts.",
+      "scientific_notes": [
+        "The release is a regional volcanic-rock compilation, not nationwide or globally representative rock coverage.",
+        "It includes newly published analyses and records also available through NGD-Rock; DOI and original sample identifiers must participate in cross-platform duplicate detection.",
+        "The USGS Analytical Laboratories CSV contains 91 rows although the child-page summary says 90 samples; the adapter reports the file count and preserves this discrepancy.",
+        "The USGS Analytical Laboratories LATITUDE column contains west-longitude values and LONGITUDE contains north-latitude values. Both raw fields are retained and the explicit coordinate assignment note records the value-based swap.",
+        "Negative target values encode less-than limits. The adapter preserves the signed reported value and separately emits qualifier '<' and the positive censor limit.",
+        "Four UGS-ALS analytes can come from either ME-MS81 or ME-4ACD81 when both methods are listed; these 176 results retain both candidates instead of inventing a winning method.",
+        "No target Hg measurement occurs in the four child CSV files."
+      ]
+    },
+    "gemas-europe": {
+      "adapter": "gemas_gsi_dbf",
+      "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)",
+      "publisher": "Geological Survey Ireland distribution of the EuroGeoSurveys GEMAS project",
+      "dataset_doi": null,
+      "dataset_pid": "data.gov.ie:0c6c5bbc-20a7-4011-8585-7befb511a4b4",
+      "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+      "release_date": "2024-04-02",
+      "landing_page": "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
+      "metadata_url": "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer",
+      "media": ["soil"],
+      "geographic_scope": "europe-low-density-agricultural-and-grazing-soil",
+      "download": {
+        "mode": "pinned-official-zip-dbf-members",
+        "max_bytes": 10000000,
+        "accepted_content_types": ["application/zip", "application/octet-stream"],
+        "files": [{
+          "file_id": "1725dd24-1b2f-46d5-bf24-ad2db5ee176e",
+          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+          "bytes": 4307359,
+          "required_members": ["IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf", "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf"],
+          "member_contracts": [
+            {"filename": "IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf", "sample_type": "Ap", "record_count": 2113, "field_count": 138},
+            {"filename": "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf", "sample_type": "Gr", "record_count": 2024, "field_count": 130}
+          ]
+        }]
+      },
+      "required_fields": ["ID", "COUNTRY", "TYPE_", "TYPE2", "XCOO", "YCOO", "AS_", "CR", "CU", "HG", "NI", "PB", "ZN", "AS_XRF", "CR_XRF", "CU_XRF", "NI_XRF", "PB_XRF", "ZN_XRF"],
+      "target_analytes": {
+        "As": ["AS_", "AS_XRF"],
+        "Cr": ["CR", "CR_XRF"],
+        "Cu": ["CU", "CU_XRF"],
+        "Hg": ["HG"],
+        "Ni": ["NI", "NI_XRF"],
+        "Pb": ["PB", "PB_XRF"],
+        "Zn": ["ZN", "ZN_XRF"]
+      },
+      "analysis_groups": {
+        "AR": {
+          "target_analytes": {"As": "AS_", "Cr": "CR", "Cu": "CU", "Hg": "HG", "Ni": "NI", "Pb": "PB", "Zn": "ZN"},
+          "detection_limits": {"As": 0.1, "Cr": 0.5, "Cu": 0.01, "Hg": 0.005, "Ni": 0.1, "Pb": 0.01, "Zn": 0.1},
+          "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
+          "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
+          "digestion_or_extraction": "15 g soil; 90 mL aqua regia; 95 C for one hour; diluted to 300 mL with 5% HCl",
+          "grain_fraction": "<2 mm"
+        },
+        "XRF": {
+          "target_analytes": {"As": "AS_XRF", "Cr": "CR_XRF", "Cu": "CU_XRF", "Ni": "NI_XRF", "Pb": "PB_XRF", "Zn": "ZN_XRF"},
+          "detection_limits": {"As": 3, "Cr": 4, "Cu": 5, "Ni": 3, "Pb": 3, "Zn": 3},
+          "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
+          "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
+          "digestion_or_extraction": "fused bead preparation after milling",
+          "grain_fraction": "<63 um"
+        }
+      },
+      "expected_counts": {
+        "physical_samples": 4131,
+        "analysis_records": 8262,
+        "country_labels": 33,
+        "target_observations": 53703,
+        "analysis_group_observations": {"AR": 28917, "XRF": 24786},
+        "target_value_counts": {"As": 8262, "Cr": 8262, "Cu": 8262, "Hg": 4131, "Ni": 8262, "Pb": 8262, "Zn": 8262}
+      },
+      "license": {"spdx": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0 International", "url": "https://creativecommons.org/licenses/by/4.0/"},
+      "citation": "Geological Survey Ireland (2024), GSI GEMAS European Geochemical Data; EuroGeoSurveys GEMAS project.",
+      "redistribution": "Research analysis with attribution under CC BY 4.0; full source ZIP remains outside Git.",
+      "scientific_notes": [
+        "Ap and Gr are low-density coordinated European sampling campaigns, not continuous soil coverage.",
+        "Modified aqua-regia and XRF values are separate measurement bases and comparison partitions.",
+        "Six blank DBF placeholders are excluded by TYPE_, country and coordinate validation.",
+        "XRF half-detection-limit substitutions are flagged because original qualifiers cannot be recovered.",
+        "GSI is the distribution publisher and GEMAS is the upstream sampling lineage."
+      ]
+    },
+    "cdogs-210102-lake-sediment": {
+      "adapter": "cdogs_210102_xlsx",
+      "title": "CDoGS survey 21:0102 lake-sediment geochemistry",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "dataset_doi": null,
+      "dataset_pid": "CDoGS:survey:21:0102:lake-sediment",
+      "dataset_version": "cdogs-svy210102-page-2025-05-18",
+      "release_date": "1984",
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "media": ["sediment"],
+      "upstream_lineage_id": "cdogs-survey-210102",
+      "download": {
+        "mode": "fixed-official-xlsx-package-files",
+        "files": [
+          {"file_id": "pkg-0134c", "filename": "svy210102_pkg_0134c.xlsx", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx", "bytes": 3447178},
+          {"file_id": "pkg-0383c", "filename": "svy210102_pkg_0383c.xlsx", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0383c.xlsx", "bytes": 568509}
+        ]
+      },
+      "required_fields": ["Survey_Key", "Field_Key", "Site_Key", "Latitude_NAD83", "Longitude_NAD83", "Sample_Type_Name_en"],
+      "target_analytes": {"As": "As_Col", "Cr": "Cr_XRF", "Cu": "Cu_AAS", "Hg": "Hg_AAS", "Ni": "Ni_AAS", "Pb": "Pb_AAS", "Zn": "Zn_AAS"},
+      "expected_counts": {"physical_samples": 684, "sites": 580, "target_observations": 4411},
+      "license": {"spdx": "LicenseRef-Government-of-Canada-Terms", "name": "Government of Canada website terms", "url": "https://www.canada.ca/en/transparency/terms.html"},
+      "citation": "Geological Survey of Canada Open Files 405 and 899; CDoGS survey 21:0102.",
+      "scientific_notes": ["Rows are selected only where the authoritative Survey_Key is 21:0102.", "Coordinates remain source-native NAD83 until the coordinate transformation layer runs.", "Lake sediment and lake water share one upstream survey lineage and are not counted as two independent provenances."]
+    },
+    "cdogs-210102-lake-water": {
+      "adapter": "cdogs_210102_xlsx",
+      "title": "CDoGS survey 21:0102 lake-water uranium",
+      "publisher": "Natural Resources Canada, Geological Survey of Canada",
+      "dataset_doi": null,
+      "dataset_pid": "CDoGS:survey:21:0102:lake-water",
+      "dataset_version": "cdogs-svy210102-page-2025-05-18",
+      "release_date": "1984",
+      "landing_page": "https://geochem.nrcan.gc.ca/cdogs/content/svy_ext/svy210102_e.ext.htm",
+      "media": ["water"],
+      "upstream_lineage_id": "cdogs-survey-210102",
+      "download": {
+        "mode": "fixed-official-xlsx-package-files",
+        "files": [
+          {"file_id": "pkg-0136c", "filename": "svy210102_pkg_0136c.xlsx", "url": "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx", "bytes": 563410}
+        ]
+      },
+      "required_fields": ["Survey_Key", "Field_Key", "Site_Key", "Latitude_NAD83", "Longitude_NAD83", "Sample_Type_Name_en", "U_FT"],
+      "target_analytes": {"U": "U_FT"},
+      "expected_counts": {"physical_samples": 655, "sites": 580, "target_observations": 655},
+      "license": {"spdx": "LicenseRef-Government-of-Canada-Terms", "name": "Government of Canada website terms", "url": "https://www.canada.ca/en/transparency/terms.html"},
+      "citation": "Geological Survey of Canada Open File 899; CDoGS survey 21:0102.",
+      "scientific_notes": ["Rows are selected only where the authoritative Survey_Key is 21:0102.", "Coordinates remain source-native NAD83 until the coordinate transformation layer runs.", "The official bundle identifier and survey narrative disagree on the water sampling year; sampled_year_raw remains unresolved."]
+    },
+    "brazil-sgb-florianopolis-soil": {
+      "adapter": "brazil_sgb_rigeo_soil_xlsx_arcgis_join",
+      "title": "SGB Florianopolis soil geochemistry",
+      "publisher": "Servico Geologico do Brasil (SGB-CPRM)",
+      "dataset_doi": null,
+      "dataset_pid": "SGB-RIGeo:doc/23413:bitstream:4ac11c55-2d10-4aac-9dce-5266b442c500:soil",
+      "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil",
+      "release_date": "2022",
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+      "media": ["soil"],
+      "upstream_lineage_id": "sgb-florianopolis-geochemical-survey-soil",
+      "download": {
+        "mode": "fixed-rigeo-bitstream-plus-record-coordinate-api",
+        "files": [
+          {"file_id": "4ac11c55-2d10-4aac-9dce-5266b442c500", "filename": "geoquimica_florianopolis_1985.zip", "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content", "bytes": 841480},
+          {"file_id": "sgb-arcgis-layer-5-soil-coordinates", "filename": "arcgis-soil-sample-coordinates.geojson", "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5/query", "bytes": 15195}
+        ]
+      },
+      "required_fields": ["num_campo", "num_lab", "classe", "abertura", "leitura", "As_ppm", "Cr_ppm", "Cu_ppm", "Ni_ppm", "Pb_ppm", "Zn_ppm"],
+      "target_analytes": {"As": "As_ppm", "Cr": "Cr_ppm", "Cu": "Cu_ppm", "Ni": "Ni_ppm", "Pb": "Pb_ppm", "Zn": "Zn_ppm"},
+      "expected_counts": {"physical_samples": 32, "analysis_rows": 32, "target_observations": 192},
+      "license": {"spdx": "LicenseRef-SGB-RIGEO-open-item-metadata", "name": "SGB RIGeo open item metadata", "url": "https://rigeo.sgb.gov.br/handle/doc/23413"},
+      "citation": "Servico Geologico do Brasil - CPRM (2022), Resultados Analiticos de Amostras Geoquimicas e Produtos Associados, RIGeo doc/23413.",
+      "scientific_notes": ["Regional 32-sample Florianopolis soil survey, not continuous Brazilian or South American coverage.", "Coordinates join on NUM_CAMPO plus NUM_LAB to official soil layer 5.", "The source reports no identifiable soil horizon; canonical horizon remains empty with an explicit reason.", "As and Zn are ND for all source rows and remain non-numeric."]
+    },
+    "brazil-sgb-florianopolis-stream-sediment": {
+      "adapter": "brazil_sgb_rigeo_xlsx_arcgis_join",
+      "title": "SGB Florianopolis stream-sediment geochemistry",
+      "publisher": "Servico Geologico do Brasil (SGB-CPRM)",
+      "dataset_doi": null,
+      "dataset_pid": "SGB-RIGeo:doc/23413:bitstream:4ac11c55-2d10-4aac-9dce-5266b442c500",
+      "dataset_version": "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55",
+      "release_date": "2022",
+      "landing_page": "https://rigeo.sgb.gov.br/handle/doc/23413",
+      "media": ["sediment"],
+      "upstream_lineage_id": "sgb-florianopolis-geochemical-survey",
+      "download": {
+        "mode": "fixed-rigeo-bitstream-plus-record-coordinate-api",
+        "files": [
+          {"file_id": "4ac11c55-2d10-4aac-9dce-5266b442c500", "filename": "geoquimica_florianopolis_1985.zip", "url": "https://rigeo.sgb.gov.br/server/api/core/bitstreams/4ac11c55-2d10-4aac-9dce-5266b442c500/content", "bytes": 841480},
+          {"file_id": "sgb-arcgis-layer-2-sample-coordinates", "filename": "arcgis-sample-coordinates.geojson", "url": "https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2/query", "bytes": 263151}
+        ]
+      },
+      "required_fields": ["num_campo", "num_lab", "classe", "abertura", "leitura", "As_ppm", "Cr_ppm", "Cu_ppm", "Ni_ppm", "Pb_ppm", "Zn_ppm"],
+      "target_analytes": {"As": "As_ppm", "Cr": "Cr_ppm", "Cu": "Cu_ppm", "Ni": "Ni_ppm", "Pb": "Pb_ppm", "Zn": "Zn_ppm"},
+      "expected_counts": {"physical_samples": 520, "analysis_rows": 527, "target_observations": 3132},
+      "license": {"spdx": "LicenseRef-SGB-RIGEO-open-item-metadata", "name": "SGB RIGeo open item metadata", "url": "https://rigeo.sgb.gov.br/handle/doc/23413"},
+      "citation": "Servico Geologico do Brasil - CPRM (2022), Resultados Analiticos de Amostras Geoquimicas e Produtos Associados, RIGeo doc/23413.",
+      "scientific_notes": ["Regional Florianopolis stream-sediment survey, not continuous Brazilian or South American coverage.", "Coordinates join on NUM_CAMPO plus NUM_LAB because NUM_CAMPO alone is not unique.", "ND remains non-numeric unless a recoverable detection limit is present.", "Repository item metadata says open; explicit redistribution licensing was not located and is not required for research analysis."]
     }
   }
 }

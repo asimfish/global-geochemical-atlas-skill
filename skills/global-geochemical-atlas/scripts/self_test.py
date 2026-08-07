@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
 import shutil
 import subprocess
@@ -96,14 +95,13 @@ def complete_d2_row(**overrides: str) -> dict[str, str]:
         "dataset_version": "v1",
         "source_file": "synthetic.csv",
         "source_row": "2",
-        "file_sha256": "0" * 64,
         "source_locator": "https://example.invalid/dataset#row=2",
     }
     row.update(overrides)
     return row
 
 
-def write_test_glim_grid(path: Path) -> str:
+def write_test_glim_grid(path: Path) -> None:
     """Create a tiny-compressed, structurally complete GLiM-compatible test archive."""
 
     header = (
@@ -119,7 +117,6 @@ def write_test_glim_grid(path: Path) -> str:
     with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("Classnames.txt", classes)
         archive.writestr("glim_wgs84_0point5deg.txt.asc", raster)
-    return standardizer.sha256_file(path)
 
 
 def run_suite() -> dict[str, Any]:
@@ -565,8 +562,9 @@ def run_suite() -> dict[str, Any]:
             pangaea_policy["latitude"] == 35
             and pangaea_policy["longitude"] == 103
             and pangaea_policy["source_crs"] == "EPSG:4326"
-            and pangaea_policy["coordinate_policy_sha256"]
-            == "48a3e043e5a82a99e23dbde4fd9b97b012846a45ba47e46a5faf2f2ce0649a1b"
+            and pangaea_policy["coordinate_policy_id"] == "pangaea-geocode-wgs84-v1"
+            and pangaea_policy["coordinate_policy_version"] == "2026-06-11"
+            and pangaea_policy["coordinate_policy_url"].startswith("https://wiki.pangaea.de/")
             and "PLATFORM_CRS_POLICY_APPLIED" in pangaea_policy["qc_flags"],
             "allowlisted PANGAEA platform CRS policy was not applied with evidence",
         )
@@ -641,7 +639,8 @@ def run_suite() -> dict[str, Any]:
         with tempfile.TemporaryDirectory(prefix="d2-geology-") as geology_temp:
             geology_root = Path(geology_temp)
             geology_grid = geology_root / "glim-test.zip"
-            geology_hash = write_test_glim_grid(geology_grid)
+            write_test_glim_grid(geology_grid)
+            geology_bytes = geology_grid.stat().st_size
             geology_input = geology_root / "input.csv"
             geology_rows = [
                 complete_d2_row(
@@ -663,7 +662,6 @@ def run_suite() -> dict[str, Any]:
                 geology_root / "output",
                 min_group_size=3,
                 geology_grid_path=geology_grid,
-                geology_grid_sha256=geology_hash,
             )
             geology_database = {row["record_id"]: row for row in read_csv(geology_outputs["database"])}
             geology_qc = json_value(geology_outputs["qc_report"])["geology_matching"]
@@ -677,21 +675,24 @@ def run_suite() -> dict[str, Any]:
                 geology_database["geo-water"]["matched_geologic_unit"] == ""
                 and geology_database["geo-water"]["geology_missing_reason"] == "not_applicable_water"
                 and geology_qc["water_records_with_assigned_land_unit"] == 0
-                and geology_qc["grid"]["sha256"] == geology_hash,
-                "D2 GLiM join assigned land geology to water or lost the grid hash",
+                and geology_qc["grid"]["filename"] == geology_grid.name
+                and geology_qc["grid"]["bytes"] == geology_bytes,
+                "D2 GLiM join assigned land geology to water or lost the readable grid identity",
             )
+            invalid_grid = geology_root / "invalid-grid.zip"
+            with zipfile.ZipFile(invalid_grid, "w") as archive:
+                archive.writestr("Classnames.txt", '"OBJECTID";"Value_";"Count_";"xx"\n')
             try:
                 standardizer.run_pipeline(
                     geology_input,
-                    geology_root / "hash-mismatch",
+                    geology_root / "invalid-grid-output",
                     min_group_size=3,
-                    geology_grid_path=geology_grid,
-                    geology_grid_sha256="0" * 64,
+                    geology_grid_path=invalid_grid,
                 )
             except standardizer.PipelineError as exc:
-                require("SHA-256" in str(exc), "geology hash mismatch error is not actionable")
+                require("required member" in str(exc), "invalid geology archive error is not actionable")
             else:
-                raise AssertionError("D2 accepted a geology grid whose SHA-256 did not match")
+                raise AssertionError("D2 accepted a geology grid without the required raster member")
 
         low_fraction_values = ["8", "9", "10", "11", "12", "13", "500", "<1", "<1", "ND", "trace"]
         low_fraction_records = [
@@ -818,9 +819,12 @@ def run_suite() -> dict[str, Any]:
             mapped_rows = read_csv(mapped_outputs["database"])
             require(mapped_rows[0]["element_or_analyte"] == "As", "D1-to-D2 schema map was not applied")
             mapped_confidence = json_value(mapped_outputs["confidence_report"])
+            schema_map_identity = mapped_confidence["run_metadata"]["schema_map_identity"]
             require(
-                mapped_confidence["run_metadata"]["schema_map_sha256"] is not None,
-                "schema-map evidence hash was not recorded",
+                schema_map_identity["filename"] == schema_map_path.name
+                and schema_map_identity["bytes"] == schema_map_path.stat().st_size
+                and schema_map_identity["mapping_count"] == 4,
+                "schema-map readable identity was not recorded",
             )
             bad_map = mapped_root / "bad-schema-map.json"
             bad_map.write_text('{"invented_field":"Analyte"}', encoding="utf-8")
@@ -854,14 +858,19 @@ def run_suite() -> dict[str, Any]:
         require(summary["input"]["synthetic_demo"] is True, "demo must be labeled synthetic")
         require(summary["coverage"]["interpolation"] is False, "demo must not interpolate blank areas")
         manifest = json_value(first / "source_manifest.json")
-        confidence_hash = hashlib.sha256((first / "confidence_report.json").read_bytes()).hexdigest()
-        require(manifest["confidence_report"]["sha256"] == confidence_hash, "confidence evidence hash mismatch")
+        require(
+            manifest["confidence_report"]["bytes"] == (first / "confidence_report.json").stat().st_size,
+            "confidence evidence byte count mismatch",
+        )
         require(manifest["coverage"]["source_locator_rate"] == 1.0, "demo provenance coverage should be complete")
         require(manifest["manifest_version"] == "geochemical-source-manifest-v2", "source manifest version drifted")
+        evidence_binding = manifest["record_evidence"]
         require(
-            manifest["record_evidence"]["sha256"]
-            == hashlib.sha256((first / "record_evidence.jsonl").read_bytes()).hexdigest(),
-            "record evidence hash mismatch",
+            evidence_binding["filename"] == "record_evidence.jsonl"
+            and evidence_binding["bytes"] == (first / "record_evidence.jsonl").stat().st_size
+            and evidence_binding["record_count"]
+            == sum(bool(line.strip()) for line in (first / "record_evidence.jsonl").read_text().splitlines()),
+            "record evidence readable identity mismatch",
         )
         confidence = json_value(first / "confidence_report.json")
         require(

@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "adapter_parse_nonempty": true,
+    "registered_file_identity_and_bytes_match": true,
+    "registered_schema_present": true,
+    "review_sample_prepared": true,
+    "target_count_matches_registry": true
+  },
+  "claim_boundary": "This evidence binds tpdc-china-mountain-soil to its DOI/PID, version, file identity, byte count, schema and registered row statistics. It does not claim continuous spatial coverage or cross-method comparability.",
+  "counts": {
+    "distinct_mountains": 30,
+    "distinct_profiles": 485,
+    "distinct_sites": 166,
+    "horizon_counts": {
+      "A": 481,
+      "C": 452,
+      "O": 381
+    },
+    "physical_rows": 1314,
+    "target_observations": 6570,
+    "target_value_counts": {
+      "Cr": 1314,
+      "Cu": 1314,
+      "Ni": 1314,
+      "Pb": 1314,
+      "Zn": 1314
+    }
+  },
+  "reconciliation_version": "v4-m6-source-audit-v1-no-content-hash",
+  "snapshot_id": "tpdc-china-mountain-soil:tpdc-file-2025-07-23:2026-08-07T10:20:00Z:01",
+  "source_id": "tpdc-china-mountain-soil",
+  "status": "PASS"
+}

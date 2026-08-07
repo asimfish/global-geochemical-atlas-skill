@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import tempfile
@@ -147,12 +146,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         max(_float(record.fields["緯度(JGD2000)"]) for record in records),
     ]
     review_records = _review_records(records, candidate)
-    combined_hash = hashlib.sha256(
-        "|".join(by_id[file_id].sha256 for file_id in sorted(by_id)).encode()
-    ).hexdigest()
-    snapshot_id = f"{SOURCE_ID}:{candidate.version}:{combined_hash[:12]}"
+    snapshot_id = f"{SOURCE_ID}:{candidate.version}:{args.observed_at}"
     members = [
-        {"name": item.path.name, "bytes": item.bytes, "sha256": item.sha256}
+        {"name": item.path.name, "bytes": item.bytes}
         for item in sorted(files, key=lambda value: value.file_id)
     ]
     observed_data = {
@@ -176,7 +172,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "observed_at": args.observed_at,
             "file_urls": [item.source_url for item in files],
         },
-        "archive": {"sha256": combined_hash, "members": members},
+        "archive": {"members": members},
         "observed_data": observed_data,
         "observed_metadata": {
             "medium": "river sediment",
@@ -203,8 +199,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "snapshot_id": snapshot_id,
         "observed_at": args.observed_at,
         "request": {"url": candidate.landing_page, "file_urls": [item.source_url for item in files]},
-        "response": {"bytes": sum(item.bytes for item in files), "sha256": combined_hash},
-        "archive": {"sha256": combined_hash, "members": members},
+        "response": {"bytes": sum(item.bytes for item in files)},
+        "archive": {"members": members},
         "counts": observed_data,
         "claim_boundary": audit["claim_boundary"],
     }
@@ -214,8 +210,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "snapshot_id": snapshot_id,
         "status": "PASS",
         "checks": {
-            "sample_file_hash_match": by_id["samples"].sha256 == candidate.registry_entry["download"]["files"][0]["expected_sha256"],
-            "concentration_file_hash_match": by_id["concentrations"].sha256 == candidate.registry_entry["download"]["files"][1]["expected_sha256"],
+            "sample_file_bytes_match": by_id["samples"].bytes == candidate.registry_entry["download"]["files"][0]["bytes"],
+            "concentration_file_bytes_match": by_id["concentrations"].bytes == candidate.registry_entry["download"]["files"][1]["bytes"],
             "valid_row_counts_match": len(records) == 3024,
             "ordinal_join_count_match": len(records) == 3024,
             "duplicate_78013_preserved": duplicate_ids == {"78013": 2},

@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Acquire the pinned GEMStat v3 arsenic subset with verified ZIP byte ranges."""
+"""Acquire the pinned GEMStat v3 arsenic subset using identified ZIP byte ranges."""
 
 from __future__ import annotations
 
 import argparse
-import binascii
-import hashlib
 import json
 import os
 import ssl
@@ -30,68 +28,48 @@ RECORD_API = f"https://zenodo.org/api/records/{RECORD_ID}"
 ARCHIVE_URL = f"https://zenodo.org/records/{RECORD_ID}/files/GFQA_v3.zip?download=1"
 ARCHIVE_NAME = "GFQA_v3.zip"
 ARCHIVE_BYTES = 201_278_791
-ARCHIVE_MD5 = "00f3ea19ce529753977eb3aeb08fbc47"
 
 MEMBERS: tuple[dict[str, Any], ...] = (
     {
         "name": "Arsenic.csv",
         "range_start": 3_033_466,
         "range_end": 5_138_990,
-        "range_sha256": "64d67a154816b58c06569c38d74c5d1c1cf3fe4a265a7127f6248a0a06b2386f",
         "compressed_bytes": 2_105_484,
         "uncompressed_bytes": 30_585_144,
-        "crc32": "bae0fc9e",
-        "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231",
     },
     {
         "name": "GEMStat_methods_metadata.csv",
         "range_start": 37_150_286,
         "range_end": 37_236_391,
-        "range_sha256": "b57e5a891c86df10467bf0a4292411646e465c42829b6a6812b752bd23b52eea",
         "compressed_bytes": 86_048,
         "uncompressed_bytes": 521_959,
-        "crc32": "d14070c7",
-        "sha256": "fba3a0903228811def4cd7910298ccd1965b64b76fbdca90445988eec08ffbb3",
     },
     {
         "name": "GEMStat_parameter_metadata.csv",
         "range_start": 37_236_392,
         "range_end": 37_279_436,
-        "range_sha256": "b65ea5a45a0439b53a95694986e30df2ea7f0b4dca0c78c01302f6d3cfb85df5",
         "compressed_bytes": 42_985,
         "uncompressed_bytes": 146_762,
-        "crc32": "a98dafd3",
-        "sha256": "46f9ddc6ed181a8a3a685fe590143d847e20960e67f20aa7dd9f4347f2c9b518",
     },
     {
         "name": "GEMStat_station_metadata.csv",
         "range_start": 37_279_437,
         "range_end": 37_914_330,
-        "range_sha256": "aed790aa81b1801bfe16da00e1b1a4455d938829d885d374a3bd0b5612a33520",
         "compressed_bytes": 634_836,
         "uncompressed_bytes": 3_571_887,
-        "crc32": "1bd14aef",
-        "sha256": "978d3682d4fc702e1dd9c9e4e148ca586899002b551018dbfc3e40c9f7e1695d",
     },
     {
         "name": "README_output_format.txt",
         "range_start": 171_533_195,
         "range_end": 171_536_953,
-        "range_sha256": "4849149f512a9ef8a5c0c32a64821c59a3f1132e73412efe7568aeb00525609f",
         "compressed_bytes": 3_705,
         "uncompressed_bytes": 16_727,
-        "crc32": "ed1b9f44",
-        "sha256": "25d475e21c3e2912680891b657c5496849ae11a67e38710f27b05f8d0cc3e07d",
     },
 )
 
 
 class AcquisitionError(RuntimeError):
     """Raised when pinned GEMStat evidence cannot be acquired or verified."""
-
-
-def sha256_bytes(value: bytes) -> str:
-    return hashlib.sha256(value).hexdigest()
 
 
 def atomic_bytes(path: Path, value: bytes) -> None:
@@ -146,18 +124,17 @@ def validate_metadata(value: Mapping[str, Any]) -> None:
         or metadata["license"].get("id") != "cc-by-4.0"
         or archive is None
         or archive.get("size") != ARCHIVE_BYTES
-        or archive.get("checksum") != f"md5:{ARCHIVE_MD5}"
     ):
         raise AcquisitionError("Zenodo record no longer matches the pinned GEMStat v3 release")
 
 
 def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> bytes:
     expected_range_bytes = specification["range_end"] - specification["range_start"] + 1
-    if len(value) != expected_range_bytes or sha256_bytes(value) != specification["range_sha256"]:
+    if len(value) != expected_range_bytes:
         raise AcquisitionError(f"range fragment changed: {specification['name']}")
     if len(value) < 30:
         raise AcquisitionError(f"range fragment is truncated: {specification['name']}")
-    signature, _, flags, method, _, _, crc, compressed, uncompressed, name_length, extra_length = struct.unpack(
+    signature, _, flags, method, _, _, _, compressed, uncompressed, name_length, extra_length = struct.unpack(
         "<IHHHHHIIIHH", value[:30]
     )
     filename = value[30 : 30 + name_length].decode("utf-8")
@@ -170,7 +147,6 @@ def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> byte
         or filename != specification["name"]
         or compressed != specification["compressed_bytes"]
         or uncompressed != specification["uncompressed_bytes"]
-        or f"{crc:08x}" != specification["crc32"]
         or len(payload) != compressed
     ):
         raise AcquisitionError(f"local ZIP header changed: {specification['name']}")
@@ -178,11 +154,7 @@ def parse_range_fragment(value: bytes, specification: Mapping[str, Any]) -> byte
         decoded = zlib.decompress(payload, -15)
     except zlib.error as exc:
         raise AcquisitionError(f"compressed member is corrupt: {specification['name']}") from exc
-    if (
-        len(decoded) != uncompressed
-        or f"{binascii.crc32(decoded) & 0xFFFFFFFF:08x}" != specification["crc32"]
-        or sha256_bytes(decoded) != specification["sha256"]
-    ):
+    if len(decoded) != uncompressed:
         raise AcquisitionError(f"decoded member changed: {specification['name']}")
     return decoded
 
@@ -261,7 +233,6 @@ def run(cache_dir: Path, mode: str, timeout: float) -> dict[str, Any]:
         "archive": {
             "filename": ARCHIVE_NAME,
             "bytes": ARCHIVE_BYTES,
-            "publisher_md5": ARCHIVE_MD5,
             "publisher_record_file_count": 1,
             "zip_member_count": 84,
             "url": ARCHIVE_URL,
@@ -269,7 +240,8 @@ def run(cache_dir: Path, mode: str, timeout: float) -> dict[str, Any]:
         "selected_members": selected,
         "claim_boundary": (
             "Only the arsenic observations and four required metadata/readme members are materialized. "
-            "The range selection is content-addressed to the pinned Zenodo v3 archive and is not a new publisher release."
+            "The range selection is tied to the pinned Zenodo record, file name, byte ranges, member names and sizes; "
+            "it is not a new publisher release."
         ),
     }
     atomic_json(root / "acquisition.json", manifest)

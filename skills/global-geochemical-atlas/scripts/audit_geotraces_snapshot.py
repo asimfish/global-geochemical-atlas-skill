@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import math
 import os
@@ -24,14 +23,6 @@ TARGETS = ("Cu", "Ni", "Zn")
 
 class AuditError(RuntimeError):
     """Raised when the frozen export cannot be reconciled exactly."""
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def atomic_json(path: Path, value: Any) -> None:
@@ -84,7 +75,7 @@ def collection_audit(path: Path | None) -> dict[str, Any]:
         name for name in names if re.search(r"(^|_)As(_|$)|Arsenic", str(name), flags=re.IGNORECASE)
     ]
     return {
-        "source_file_sha256": sha256_file(path),
+        "source_file_bytes": path.stat().st_size,
         "collection_name": value.get("name"),
         "description": value.get("description"),
         "station_count": value.get("station_count"),
@@ -180,12 +171,11 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
         {
             "name": str(path.relative_to(data_file.path.parent)),
             "bytes": path.stat().st_size,
-            "sha256": sha256_file(path),
         }
         for path in sorted(data_file.path.parent.rglob("*"))
         if path.is_file()
     ]
-    snapshot_id = f"geotraces-idp2025:{candidate.version}:{sha256_file(archive_path)[:12]}"
+    snapshot_id = f"geotraces-idp2025:{candidate.version}:{candidate.registry_entry['download']['observed_at']}"
     snapshot = {
         "snapshot_version": "geochemical-source-snapshot-v1",
         "source_id": candidate.source_id,
@@ -198,7 +188,6 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
         "response": {
             "filename": archive_path.name,
             "bytes": archive_path.stat().st_size,
-            "sha256": sha256_file(archive_path),
         },
         "archive": {
             "member_count": len(archive_members),
@@ -210,8 +199,8 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
             "dataset_version": candidate.version,
             "license": candidate.license_id,
             "primary_member": data_file.path.name,
-            "primary_member_sha256": data_file.sha256,
-            "collection_metadata_sha256": parameter_audit["source_file_sha256"],
+            "primary_member_bytes": data_file.bytes,
+            "collection_metadata_bytes": parameter_audit["source_file_bytes"],
         },
         "claim_boundary": (
             "This snapshot pins one official webODV export selection. It is not the complete IDP2025, "
@@ -253,7 +242,6 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
         "archive": {
             "filename": archive_path.name,
             "bytes": archive_path.stat().st_size,
-            "sha256": sha256_file(archive_path),
             "members": archive_members,
         },
         "observed_data": {
@@ -266,7 +254,7 @@ def audit(cache_dir: Path, collection_info: Path | None) -> tuple[dict[str, Any]
             "quality_schemas": parameter_audit["quality_schemas"],
             "source_fraction": "dissolved seawater",
             "source_unit": "nmol/kg",
-            "collection_metadata_sha256": parameter_audit["source_file_sha256"],
+            "collection_metadata_bytes": parameter_audit["source_file_bytes"],
         },
         "status": "verified_frozen_export",
         "claim_boundary": snapshot["claim_boundary"],

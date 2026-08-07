@@ -1,8 +1,8 @@
 {
   "band_counts": {
-    "high": 0,
-    "low": 96,
-    "medium": 700
+    "high": 79,
+    "low": 180,
+    "medium": 1012
   },
   "band_thresholds": {
     "high": ">=0.80",
@@ -14,23 +14,24 @@
     "method": "Fraction present among measurement basis, analytical method, method family and digestion/extraction.",
     "overall": "Weighted sum of source, completeness, method, spatial and QC, subject to declared gates.",
     "qc": "Deterministic deduction from error, warning and information QC flags.",
-    "source": "Registry tier score minus explicit penalties for missing source ID, locator, license, or invalid file hash.",
+    "source": "Registry tier score minus explicit penalties for missing source ID, locator, or license.",
     "spatial": "Canonical coordinate availability plus declared CRS and coordinate uncertainty; original-only coordinates score zero."
   },
   "component_means": {
-    "completeness": 0.960981,
-    "method": 0.879397,
-    "overall": 0.764308,
-    "qc": 0.879623,
-    "source": 0.983166,
-    "spatial": 0.715578
+    "completeness": 0.92109,
+    "method": 0.819827,
+    "overall": 0.762157,
+    "qc": 0.701652,
+    "source": 0.976593,
+    "spatial": 0.753423
   },
   "confidence_version": "d2-confidence-v3",
   "gate_counts": {
-    "incomplete_method_context_medium_cap": 144,
-    "missing_canonical_coordinate_low_cap": 96,
-    "missing_coordinate_uncertainty_medium_cap": 652,
-    "missing_geologic_context_medium_cap": 492
+    "error_qc_low_cap": 44,
+    "incomplete_method_context_medium_cap": 403,
+    "missing_canonical_coordinate_low_cap": 136,
+    "missing_coordinate_uncertainty_medium_cap": 887,
+    "missing_geologic_context_medium_cap": 641
   },
   "gates": {
     "error_qc_low_cap": "Any error-level QC flag caps overall at 0.59 (low).",
@@ -44,7 +45,15 @@
   "not_a_probability": true,
   "run_metadata": {
     "configuration": {
-      "batch_qc_gate_applied": false,
+      "batch_qc_gate_applied": true,
+      "batch_qc_input_identity": {
+        "bytes": 336,
+        "filename": "batch_qc.csv"
+      },
+      "batch_qc_policy_identity": {
+        "bytes": 269,
+        "filename": "qc_policy.json"
+      },
       "group_by": [
         "element_or_analyte",
         "medium",
@@ -55,6 +64,7 @@
         "water_fraction",
         "grain_fraction",
         "measurement_basis",
+        "tectonic_setting_raw",
         "geologic_unit_raw",
         "matched_geologic_unit",
         "analytical_method",
@@ -72,19 +82,22 @@
       "spatial_fdr_alpha": 0.1,
       "spatial_grid_degrees": 2.0
     },
-    "input_row_count": 796,
-    "input_sha256": "b01771910ead702e6275a7f3c997a03346c48e413a68ef4289446269e0100337",
+    "input_identity": {
+      "bytes": 1654534,
+      "filename": "demo_input.csv",
+      "record_count": 1271
+    },
+    "input_row_count": 1271,
     "missing_recommended_input_columns": [],
-    "run_id": "1f53e6970d34ebba",
-    "schema_map_sha256": null
+    "run_id": "run-v2%7Cdemo_input.csv%7C1654534%7C1271%7C%7B%22batch_qc_gate_applied%22%3Atrue%2C%22batch_qc_input_identity%22%3A%7B%22bytes%22%3A336%2C%22filename%22%3A%22batch_qc.csv%22%7D%2C%22batch_qc_policy_identity%22%3A%7B%22bytes%22%3A269%2C%22filename%22%3A%22qc_policy.json%22%7D%2C%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22material%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22tectonic_setting_raw%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_family%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22minimum_quantified_fraction%22%3A0.7%2C%22minimum_spatial_candidates%22%3A2%2C%22minimum_spatial_samples%22%3A5%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%2C%22schema_map%22%3A%7B%7D%2C%22spatial_fdr_alpha%22%3A0.1%2C%22spatial_grid_degrees%22%3A2.0%7D",
+    "schema_map_identity": null
   },
   "source_scoring": {
-    "evidence_boundary": "D2 scores declared fields and hash syntax. D1 separately validates record-ID equality and, when an acquisition manifest is supplied, binds the input and record-evidence hashes.",
+    "evidence_boundary": "D2 scores declared scientific and provenance fields. D1 separately validates exact record-ID equality and readable file, row, source, and dataset identities.",
     "penalties": {
       "missing_license": 0.1,
       "missing_source_id": 0.15,
-      "missing_source_locator": 0.25,
-      "source_file_without_valid_sha256": 0.05
+      "missing_source_locator": 0.25
     },
     "tier_scores": {
       "aggregator": 0.55,

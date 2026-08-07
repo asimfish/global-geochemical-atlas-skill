@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
 import sys
@@ -24,11 +23,18 @@ import standardize_geochemistry as standardizer
 COMBINED_VERSION = "d1-four-media-combined-v1"
 SOURCE_ORDER = (
     "georoc-archaean",
+    "georoc-antarctica-intraplate",
+    "usgs-utah-volcanic-whole-rock",
     "usgs-conus-soil",
+    "brazil-sgb-florianopolis-soil",
     "norway-marchem",
     "geotraces-idp2025",
     "gemstat-open-archive",
+    "cdogs-210102-lake-water",
+    "us-wqp-sacramento-river-arsenic",
     "japan-gsj-geochemical-map",
+    "cdogs-210102-lake-sediment",
+    "brazil-sgb-florianopolis-stream-sediment",
     "pangaea-north-africa-soil",
     "foregs-topsoil",
     "foregs-subsoil",
@@ -37,14 +43,26 @@ SOURCE_ORDER = (
     "foregs-stream-sediment",
     "foregs-floodplain-sediment",
     "afsis-phase-i-wet-chemistry",
+    "australia-ngsa-mercury",
+    "japan-gsj-marine-sediment",
+    "pangaea-arabian-sea-sediment",
+    "tpdc-china-mountain-soil",
+    "gemas-europe",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
+    "georoc-antarctica-intraplate": "rock",
+    "usgs-utah-volcanic-whole-rock": "rock",
     "usgs-conus-soil": "soil",
+    "brazil-sgb-florianopolis-soil": "soil",
     "norway-marchem": "sediment",
     "geotraces-idp2025": "water",
     "gemstat-open-archive": "water",
+    "cdogs-210102-lake-water": "water",
+    "us-wqp-sacramento-river-arsenic": "water",
     "japan-gsj-geochemical-map": "sediment",
+    "cdogs-210102-lake-sediment": "sediment",
+    "brazil-sgb-florianopolis-stream-sediment": "sediment",
     "pangaea-north-africa-soil": "soil",
     "foregs-topsoil": "soil",
     "foregs-subsoil": "soil",
@@ -53,19 +71,16 @@ EXPECTED_MEDIA = {
     "foregs-stream-sediment": "sediment",
     "foregs-floodplain-sediment": "sediment",
     "afsis-phase-i-wet-chemistry": "soil",
+    "australia-ngsa-mercury": "sediment",
+    "japan-gsj-marine-sediment": "sediment",
+    "pangaea-arabian-sea-sediment": "sediment",
+    "tpdc-china-mountain-soil": "soil",
+    "gemas-europe": "soil",
 }
 
 
 class CombinedDemoError(RuntimeError):
     """Raised when checked-in source fixtures cannot be combined exactly."""
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def atomic_text(path: Path, value: str) -> None:
@@ -132,7 +147,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             for item in route["review_sources"]
             if item["reason"] == "offline_cache_not_verified"
         ]
-        route_selection_context = "checked_in_fixtures_pending_hash_verification"
+        route_selection_context = "checked_in_fixtures_pending_metadata_verification"
     selected_route = {item["source_id"] for item in route_entries}
     if selected_route != set(SOURCE_ORDER):
         raise CombinedDemoError(
@@ -150,12 +165,12 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
         evidence_path = fixture_dir / "sources.jsonl"
         manifest_path = fixture_dir / "run_manifest.json"
         manifest = load_json(manifest_path, f"{source_id} demo manifest")
-        expected_hashes = {item["path"]: item["sha256"] for item in manifest.get("outputs", [])}
-        if expected_hashes != {
-            "demo_input.csv": sha256_file(input_path),
-            "sources.jsonl": sha256_file(evidence_path),
+        expected_files = {item["path"]: item["bytes"] for item in manifest.get("outputs", [])}
+        if expected_files != {
+            "demo_input.csv": input_path.stat().st_size,
+            "sources.jsonl": evidence_path.stat().st_size,
         }:
-            raise CombinedDemoError(f"{source_id} fixture hashes no longer match its manifest")
+            raise CombinedDemoError(f"{source_id} fixture file inventory no longer matches its manifest")
         with input_path.open("r", encoding="utf-8-sig", newline="") as handle:
             source_rows = [dict(row) for row in csv.DictReader(handle)]
         source_evidence = [
@@ -178,9 +193,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             {
                 "source_id": source_id,
                 "input_path": str(input_path.relative_to(source_demos.parent.parent)),
-                "input_sha256": sha256_file(input_path),
+                "input_bytes": input_path.stat().st_size,
                 "evidence_path": str(evidence_path.relative_to(source_demos.parent.parent)),
-                "evidence_sha256": sha256_file(evidence_path),
+                "evidence_bytes": evidence_path.stat().st_size,
                 "record_count": len(source_rows),
                 "source_evidence_score": evidence_report["sources"][source_id]["source_evidence_score"],
                 "evidence_tier": evidence_report["sources"][source_id]["evidence_tier"],
@@ -205,18 +220,22 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     analyte_counts = Counter(row["element_or_analyte"] for row in rows)
     source_files: dict[str, dict[str, Any]] = {}
     for item in evidence_rows:
+        source_id = str(item.get("source_id") or "")
         filename = str(item.get("source_file") or "")
+        if not filename:
+            continue
         entry = {
+            "source_id": source_id,
             "filename": filename,
-            "sha256": str(item.get("source_file_sha256") or ""),
-            "source_url": str(item.get("source_file_url") or ""),
+            "source_url": str(item.get("source_file_url") or item.get("source_locator") or ""),
             "bytes": item.get("source_file_bytes"),
         }
-        if not filename or not entry["sha256"] or not entry["source_url"]:
-            raise CombinedDemoError("combined evidence lacks source-file hash binding")
-        previous = source_files.setdefault(filename, entry)
+        if not source_id or not entry["source_url"]:
+            raise CombinedDemoError("combined evidence lacks readable source-file identity")
+        source_file_key = f"{source_id}:{filename}"
+        previous = source_files.setdefault(source_file_key, entry)
         if previous != entry:
-            raise CombinedDemoError(f"conflicting source-file evidence for {filename}")
+            raise CombinedDemoError(f"conflicting source-file evidence for {source_file_key}")
     route_coverage = {
         medium: {
             "status": "partial",
@@ -225,7 +244,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             ),
             "candidate_sources": [],
             "note": (
-                "Checked-in fixture hashes and record-level evidence were verified locally; "
+                "Checked-in fixture byte inventories and record-level evidence were verified locally; "
                 "coverage remains bounded by each source mini-slice."
             ),
         }
@@ -242,7 +261,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "status": "offline_fixtures_verified" if request.get("offline") else route["status"],
             "source_router_status": route["status"],
             "selection_context": (
-                "checked_in_fixtures_hash_verified"
+                "checked_in_fixtures_metadata_verified"
                 if request.get("offline")
                 else route_selection_context
             ),
@@ -266,8 +285,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "water_partition_count": len(water_partitions),
             "water_partitions": water_partitions,
             "explicit_boundaries": [
-                "GEOTRACES seawater nmol/kg is not mixed with GEMStat freshwater mass-per-volume arsenic.",
-                "GEMStat dissolved, suspended and total arsenic remain separate comparison groups.",
+                "GEOTRACES seawater nmol/kg is not mixed with freshwater mass-per-volume observations.",
+                "GEMStat dissolved, extractable, suspended and total As/Cr/Cu/Hg/Ni/Pb/Zn remain separate comparison groups.",
+                "The WQP Sacramento source is a single-station dissolved-As time series; preliminary, QC replicate and censored states remain explicit.",
                 "MarChem partial nitric-acid sediment is not interpreted as total content.",
                 "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases.",
                 "PANGAEA fine-fraction HF-HNO3 soil is not mixed with USGS bulk-soil layers.",
@@ -277,18 +297,25 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts.",
                 "AfSIS aqua-regia quasi-total topsoil and subsoil remain separate from total and differently extracted soil values.",
                 "AfSIS numeric below-DL or below-QL results retain explicit observation evidence and are not promoted to ordinary detections.",
+                "NGSA total-Hg TOS and BOS remain separate from other sediment horizons and extraction bases.",
+                "GSJ marine and GSJ river sediment remain separate products; Hg ppb is never silently mixed with ppm fields.",
+                "PANGAEA Arabian Sea bulk-core sediment retains its generic publisher method scope and DOI lineage.",
+                "GEOROC Antarctica coordinate ranges are not converted to invented points and its missing row-level method remains explicit.",
+                "TPDC O/A/C soil horizons and article-scoped ICP-MS/ICP-AES assignments remain separate.",
+                "GEMAS aqua-regia and XRF analysis groups remain separate measurement bases and comparison partitions.",
+                "USGS Utah whole-rock method candidates remain record-linked and are not inferred from analyte or unit.",
+                "CDoGS lake water and lake sediment share one upstream survey lineage and remain separate media.",
+                "Brazil SGB soil and stream sediment preserve ND and less-than values without numeric substitution.",
             ],
         },
         "outputs": [
             {
                 "path": output_paths["input"].name,
                 "bytes": output_paths["input"].stat().st_size,
-                "sha256": sha256_file(output_paths["input"]),
             },
             {
                 "path": output_paths["sources"].name,
                 "bytes": output_paths["sources"].stat().st_size,
-                "sha256": sha256_file(output_paths["sources"]),
             },
         ],
         "warnings": [

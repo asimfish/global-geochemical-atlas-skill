@@ -1,0 +1,2122 @@
+{
+  "audit_coverage": {
+    "censored_or_negative_value": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "duplicate_sample_identifier": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 28,
+      "record_ids": [
+        "foregs-floodplain-sediment-review-01",
+        "foregs-floodplain-sediment-review-02",
+        "foregs-floodplain-sediment-review-03",
+        "foregs-floodplain-sediment-review-05",
+        "foregs-floodplain-sediment-review-06",
+        "foregs-floodplain-sediment-review-07",
+        "foregs-floodplain-sediment-review-08",
+        "foregs-floodplain-sediment-review-09",
+        "foregs-floodplain-sediment-review-10",
+        "foregs-floodplain-sediment-review-11",
+        "foregs-floodplain-sediment-review-12",
+        "foregs-floodplain-sediment-review-13",
+        "foregs-floodplain-sediment-review-14",
+        "foregs-floodplain-sediment-review-15",
+        "foregs-floodplain-sediment-review-16",
+        "foregs-floodplain-sediment-review-17",
+        "foregs-floodplain-sediment-review-18",
+        "foregs-floodplain-sediment-review-19",
+        "foregs-floodplain-sediment-review-20",
+        "foregs-floodplain-sediment-review-21",
+        "foregs-floodplain-sediment-review-22",
+        "foregs-floodplain-sediment-review-23",
+        "foregs-floodplain-sediment-review-24",
+        "foregs-floodplain-sediment-review-25",
+        "foregs-floodplain-sediment-review-26",
+        "foregs-floodplain-sediment-review-28",
+        "foregs-floodplain-sediment-review-29",
+        "foregs-floodplain-sediment-review-30"
+      ]
+    },
+    "extreme_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 3,
+      "record_ids": [
+        "foregs-floodplain-sediment-review-13",
+        "foregs-floodplain-sediment-review-17",
+        "foregs-floodplain-sediment-review-21"
+      ]
+    },
+    "method_missing_or_multiple_candidates": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 7,
+      "record_ids": [
+        "foregs-floodplain-sediment-review-06",
+        "foregs-floodplain-sediment-review-10",
+        "foregs-floodplain-sediment-review-14",
+        "foregs-floodplain-sediment-review-18",
+        "foregs-floodplain-sediment-review-22",
+        "foregs-floodplain-sediment-review-26",
+        "foregs-floodplain-sediment-review-30"
+      ]
+    },
+    "missing_coordinate": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    },
+    "ordinary_valid_value": {
+      "considered": true,
+      "outcome": "cases_found",
+      "record_count": 23,
+      "record_ids": [
+        "foregs-floodplain-sediment-review-01",
+        "foregs-floodplain-sediment-review-02",
+        "foregs-floodplain-sediment-review-03",
+        "foregs-floodplain-sediment-review-04",
+        "foregs-floodplain-sediment-review-05",
+        "foregs-floodplain-sediment-review-07",
+        "foregs-floodplain-sediment-review-08",
+        "foregs-floodplain-sediment-review-09",
+        "foregs-floodplain-sediment-review-11",
+        "foregs-floodplain-sediment-review-12",
+        "foregs-floodplain-sediment-review-13",
+        "foregs-floodplain-sediment-review-15",
+        "foregs-floodplain-sediment-review-16",
+        "foregs-floodplain-sediment-review-17",
+        "foregs-floodplain-sediment-review-19",
+        "foregs-floodplain-sediment-review-20",
+        "foregs-floodplain-sediment-review-21",
+        "foregs-floodplain-sediment-review-23",
+        "foregs-floodplain-sediment-review-24",
+        "foregs-floodplain-sediment-review-25",
+        "foregs-floodplain-sediment-review-27",
+        "foregs-floodplain-sediment-review-28",
+        "foregs-floodplain-sediment-review-29"
+      ]
+    },
+    "source_or_mapping_conflict": {
+      "considered": true,
+      "outcome": "no_case_in_stratified_sample",
+      "record_count": 0,
+      "record_ids": []
+    }
+  },
+  "audit_version": "geochemical-automated-source-audit-v1",
+  "audited_record_count": 30,
+  "auditor": {
+    "audited_at": "2026-08-07T12:00:00Z",
+    "auditor_id": "codex-d1-evidence-audit",
+    "reviewer_type": "codex"
+  },
+  "automated_pass_count": 30,
+  "claim_boundary": "A structured Codex audit checked 30 stratified records for traceability, raw-value correspondence, edge cases and disclosed evidence gaps. It is evidence review, not a claim of spatial completeness, cross-method comparability or measurement truth. Human signatures are not required.",
+  "dataset_version": "FOREGS-Atlas-2005-publisher-files-2026-03-03",
+  "legacy_review_file": "human_review.json",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=4",
+          "src-9599d8fdf1bd51304b1e91e5a97622a3d46e0ccae798c7af6a0b02f55a391d6b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "2.5",
+          "record_id": "rec-1776b5f5091a37c3bf9a4e6a217dd7032c195e282a293df83a240ed0ab6000be",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "68",
+          "record_id": "rec-9fd1bb611ff46dbcded5928dc0415617f01a6f41368fe377a8e1ee9d22014d7b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "21",
+          "record_id": "rec-0f62c5cac467f834875f55c6decccb3508f08c099842dbf1918831146e2b2594",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "56",
+          "record_id": "rec-d06ba581d1d1ebf2b154d44d500b392384ce08d36f2f49f19fdceada9ee7300c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "7",
+          "record_id": "rec-2ddd3cf19c2cf295a22c52ddaf8e413b25ae299cdaebdd9852cc2c79e8a22172",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "109",
+          "record_id": "rec-948093ea0159b919cb970d297cf92018fdc6d7c35bcaec20dbfecc9b082c8ae3",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.5",
+        "Cr": "68",
+        "Cu": "21",
+        "Ni": "56",
+        "Pb": "7",
+        "Zn": "109"
+      },
+      "review_id": "foregs-floodplain-sediment-review-01",
+      "sample_id": "N19W10F1",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=4",
+      "source_record_id": "src-9599d8fdf1bd51304b1e91e5a97622a3d46e0ccae798c7af6a0b02f55a391d6b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=5",
+          "src-bfa0a090e31cb5dbe9ba87635307ac9551e7353ea5b8bf218af63773af84edfe"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "5",
+          "record_id": "rec-c5e9aa10f6f6084771cabe7086bc72230f3bca11ffae95781491499c4ea8406f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "16",
+          "record_id": "rec-0d16721febbebffd5c033ddad2fd95efb288656f08582be080b6970cbe47c587",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "21",
+          "record_id": "rec-5a3f430ca9c10c7930c2569f6e96256c9a09d6b73a0d30a76b5f93a948cb551d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "19",
+          "record_id": "rec-9e9f3c640aded1f339c812184150e6fd8e6e695537bc021ea0617b70548625bb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "9",
+          "record_id": "rec-58137e8bc8a5f173dbb57068427ba71252de880a4b912160113ee0c0fcfe9fab",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "35",
+          "record_id": "rec-52130efb2ce0e02611c2dbb1093f12458428fa081e5b1a811b8b4f3d8e9183fd",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "5",
+        "Cr": "16",
+        "Cu": "21",
+        "Ni": "19",
+        "Pb": "9",
+        "Zn": "35"
+      },
+      "review_id": "foregs-floodplain-sediment-review-02",
+      "sample_id": "N24E14F1",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=5",
+      "source_record_id": "src-bfa0a090e31cb5dbe9ba87635307ac9551e7353ea5b8bf218af63773af84edfe"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_Hg_data_2v3_7Aug2007.csv#row=4",
+          "src-7eec9ecec9556c564e658cb6bc8bef928be6d23c7b5fa12b398f7d031ffb4f0a"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+          "raw_value": "0.01171",
+          "record_id": "rec-0e09e0cd69d0fed3f1bca31d58a1dc7cf7dcdeead54e7f10d530b2fb991e0943",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.01171"
+      },
+      "review_id": "foregs-floodplain-sediment-review-03",
+      "sample_id": "N19W10F1",
+      "selection_reasons": [
+        "member=F_Hg_data_2v3_7Aug2007.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "F_Hg_data_2v3_7Aug2007.csv#row=4",
+      "source_record_id": "src-7eec9ecec9556c564e658cb6bc8bef928be6d23c7b5fa12b398f7d031ffb4f0a"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=91",
+          "src-23aac8b63d8a338f59cf2ad4a999febdbc6e09f87edee6d58b409b2ef11c897b"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "0.5",
+          "record_id": "rec-6415da3a9c60fb212e056b3629c5d8c293f37b1d20d3569feea3a03f1984f4fd",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "12",
+          "record_id": "rec-2cdf0892b96d9584dc795eb2a24da71342ba90d1aaca78af3a48bfd6da262837",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "12",
+          "record_id": "rec-46e757d4ca3598e3ccee2484bb4fa6dc54d99d7d6a190e6394fbe5363179c325",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "8",
+          "record_id": "rec-0a5e857e799950ec4bcbc893b13f32658de272a4b5c6086c5a26b872fec33b51",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "7",
+          "record_id": "rec-f5ae513dc573952ba1c14409287241f6ad7574bf8b6b55e5fe7a709bc1a96361",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "20",
+          "record_id": "rec-92d0a9c4787292000c78b456b7682c3ac862a91da52501136cac18e81e925532",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "0.5",
+        "Cr": "12",
+        "Cu": "12",
+        "Ni": "8",
+        "Pb": "7",
+        "Zn": "20"
+      },
+      "review_id": "foregs-floodplain-sediment-review-04",
+      "sample_id": "N27W02F1",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;possible_upstream_dl_over_2_substitution"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=91",
+      "source_record_id": "src-23aac8b63d8a338f59cf2ad4a999febdbc6e09f87edee6d58b409b2ef11c897b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=4",
+          "src-2dcdd25b7f5baea23390ef4715148952998abf760c3606b238e343c9efb3713d"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "3",
+          "record_id": "rec-6196175d2336e788d52a21ca65e190eb059410a31d5f3b0c556fa19ffbc9bf6b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "140",
+          "record_id": "rec-e94ba17fcdddc7b0500766b78f39c007bcdfebc0d4c27b24505de0675f69f45c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "28",
+          "record_id": "rec-6bde1699f1544cb3e934fa466b655687be707b8fc57d1f32e736332ad3f4fc79",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "68",
+          "record_id": "rec-840cbfdc35336f88adf43742cfdad848126a04ef56f9a99a361d1d0475258e88",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "10",
+          "record_id": "rec-ce7e7f9f667234d47b2a3cece0b9db579b930328447b389b6b659a4c72c102c7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "139",
+          "record_id": "rec-2352e4dad4e96685374c9b40581b9396d3a064b1cef4cf02ead3c282d03ed4d9",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "3",
+        "Cr": "140",
+        "Cu": "28",
+        "Ni": "68",
+        "Pb": "10",
+        "Zn": "139"
+      },
+      "review_id": "foregs-floodplain-sediment-review-05",
+      "sample_id": "N19W10F1",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=4",
+      "source_record_id": "src-2dcdd25b7f5baea23390ef4715148952998abf760c3606b238e343c9efb3713d"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_ICP_data_2v6_7Aug07.csv#row=4",
+          "src-777128e8959e4727e2582f5b76a528648c79e5effe9e9c29debf297e03cac9d7"
+        ],
+        "findings": [
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {},
+      "review_id": "foregs-floodplain-sediment-review-06",
+      "sample_id": "N19W10F1",
+      "selection_reasons": [
+        "member=F_ICP_data_2v6_7Aug07.csv;ordinary_numeric_row"
+      ],
+      "source_locator": "F_ICP_data_2v6_7Aug07.csv#row=4",
+      "source_record_id": "src-777128e8959e4727e2582f5b76a528648c79e5effe9e9c29debf297e03cac9d7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=6",
+          "src-225a79cfb41aa9c23782f45386eb4a73c81aeaceaca7d9fab118ae816c8f812b"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "18",
+          "record_id": "rec-6860ecd89db2196dd81fb604e6d029543986720c2c97c9d7f09bceeca483c9c4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "98",
+          "record_id": "rec-66dc6d7bd73c40499ddfc4343988fef182024d5b219bfc5371431ac84caaffd4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "38",
+          "record_id": "rec-795f5ea94afc5c5421a22e78f5bb00f9ad5a28c24e749344d0adf5c5ce9f2006",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "119",
+          "record_id": "rec-43b55d5e1e60431d1b300990eef16f89347c9dc35222baeee359672941351d57",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "23",
+          "record_id": "rec-512e5806d1df60654d1b472622af1921fc67656b13fbabc8964ef1080b910deb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "75",
+          "record_id": "rec-dc3b93625e624994521faa392e0348839be1880eff32d0ccccc840411a5a942a",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "18",
+        "Cr": "98",
+        "Cu": "38",
+        "Ni": "119",
+        "Pb": "23",
+        "Zn": "75"
+      },
+      "review_id": "foregs-floodplain-sediment-review-07",
+      "sample_id": "N24E15F2",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=6",
+      "source_record_id": "src-225a79cfb41aa9c23782f45386eb4a73c81aeaceaca7d9fab118ae816c8f812b"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_Hg_data_2v3_7Aug2007.csv#row=5",
+          "src-f385b06d035745df7f5da12badd77c06c3a8bd3310bfc39ce8470f5173bc4511"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+          "raw_value": "0.01674",
+          "record_id": "rec-8196d94d110cfcaef2047b2b4f720c2f854f1b7cf111a197d9fc1b8131fdc22e",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.01674"
+      },
+      "review_id": "foregs-floodplain-sediment-review-08",
+      "sample_id": "N24E14F1",
+      "selection_reasons": [
+        "member=F_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_locator": "F_Hg_data_2v3_7Aug2007.csv#row=5",
+      "source_record_id": "src-f385b06d035745df7f5da12badd77c06c3a8bd3310bfc39ce8470f5173bc4511"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=5",
+          "src-78008b538431fc4e723a29ff61095d6d124d96239a86deb73431444829471520"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "6",
+          "record_id": "rec-a807a79805b098901d6538ed150bd00f92c6bb793a1148b1aea252f2e26c5df5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "53",
+          "record_id": "rec-171210459284ae485f0210cf9c459edb47912e5a17f303d3a6bdc03bd20fbce4",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "19",
+          "record_id": "rec-87546a9568fe1c45d73bc6660b8bfba667b880978fcbf88242be6b44b7875ea6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "23",
+          "record_id": "rec-5dfc937b62e02759dfb1b3cb76a65b98beeb94bbbacb76137f44bdc8ffc7af7d",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "11",
+          "record_id": "rec-aced906bda8accaa53829022bea234ae3504162a2d62d0376d4e97932332da4f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "44",
+          "record_id": "rec-0fe4434b9adfeff21512bf3da646c852e47f73c6f80869e1210c9116c62aafa0",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "6",
+        "Cr": "53",
+        "Cu": "19",
+        "Ni": "23",
+        "Pb": "11",
+        "Zn": "44"
+      },
+      "review_id": "foregs-floodplain-sediment-review-09",
+      "sample_id": "N24E14F1",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=5",
+      "source_record_id": "src-78008b538431fc4e723a29ff61095d6d124d96239a86deb73431444829471520"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_ICP_data_2v6_7Aug07.csv#row=5",
+          "src-ae3b9eb55be511fef439c1cd68e2b1f7b753ed5fa5d9f83b8f445751c363ba3e"
+        ],
+        "findings": [
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {},
+      "review_id": "foregs-floodplain-sediment-review-10",
+      "sample_id": "N24E14F1",
+      "selection_reasons": [
+        "member=F_ICP_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_ICP_data_2v6_7Aug07.csv#row=5",
+      "source_record_id": "src-ae3b9eb55be511fef439c1cd68e2b1f7b753ed5fa5d9f83b8f445751c363ba3e"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=7",
+          "src-722119fae26f02a09d1ff75ab9b7c7e79230cb3fd7d30b67c37fed110b46a046"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "5",
+          "record_id": "rec-50fc4c9dd9e02c0b72298b8273a8c6433abe217ff9b32909945b073f6c0eaed7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "99",
+          "record_id": "rec-cd60029a6be84650b39ce73bb4b0fe2de15143ae892fe81575ba980ddaa3733e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "27",
+          "record_id": "rec-b80ac84c049007013409ea1ff39a3c133e293ba58bd0aa607d5d8849d6393f38",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "109",
+          "record_id": "rec-27e79d6b2836343ed1a4cd1b930e02b90cc376c8d2606e81368bd35544787404",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "9",
+          "record_id": "rec-5b3e2002c87e9a52224960f7bce9dbf68cd23026c48bb3316250c50095932297",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "49",
+          "record_id": "rec-e7ee1459ee7a08b4ae43fdf9d6e74dbde4410d6b648029d23074168edf0f1ee9",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "5",
+        "Cr": "99",
+        "Cu": "27",
+        "Ni": "109",
+        "Pb": "9",
+        "Zn": "49"
+      },
+      "review_id": "foregs-floodplain-sediment-review-11",
+      "sample_id": "N24E15F4",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=7",
+      "source_record_id": "src-722119fae26f02a09d1ff75ab9b7c7e79230cb3fd7d30b67c37fed110b46a046"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_Hg_data_2v3_7Aug2007.csv#row=6",
+          "src-58b39f918525ae1581e43c83a51921093fe8e3ff483c650427950c23ce178b89"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+          "raw_value": "0.1272",
+          "record_id": "rec-3ac52737c8165ee8f90835a98f18a7ac32f69e3246c453ac694104266381d5f6",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.1272"
+      },
+      "review_id": "foregs-floodplain-sediment-review-12",
+      "sample_id": "N24E15F2",
+      "selection_reasons": [
+        "member=F_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_locator": "F_Hg_data_2v3_7Aug2007.csv#row=6",
+      "source_record_id": "src-58b39f918525ae1581e43c83a51921093fe8e3ff483c650427950c23ce178b89"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=6",
+          "src-59d2054baa909192d93c1710761e8fde2a4880bd036a03520f8561c815bea883"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "16",
+          "record_id": "rec-6e35b5779d791697891d314bfa72bb5041b8757809e1172f4b052908a89be544",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "226",
+          "record_id": "rec-687c3821944c88b23eeac1ab13377b9c8310a66de026b3d4b6175a44bc798eb6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "39",
+          "record_id": "rec-6e30862b567e3441f4bc732aa1ad57970faaaa1340e40291ba5a32922f89953c",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "143",
+          "record_id": "rec-709a85e01ec8be60701e319ef693204d99b2f5f24956bb5cdacaeefec4f060ad",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "25",
+          "record_id": "rec-5a07f5f0d9f16e3e4a3505afbebc4f5df9efbb45b4fb3fea23fca00d96c946fe",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "82",
+          "record_id": "rec-b2db0deb4cc1d0e8eee44fe3d1fc8f180300d8c9783aa5bdb616fedd43166463",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "16",
+        "Cr": "226",
+        "Cu": "39",
+        "Ni": "143",
+        "Pb": "25",
+        "Zn": "82"
+      },
+      "review_id": "foregs-floodplain-sediment-review-13",
+      "sample_id": "N24E15F2",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=6",
+      "source_record_id": "src-59d2054baa909192d93c1710761e8fde2a4880bd036a03520f8561c815bea883"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_ICP_data_2v6_7Aug07.csv#row=6",
+          "src-c262af76c4b56d524f4b12c6efab0033e744c0050dece37d21f1bb3756a1b119"
+        ],
+        "findings": [
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {},
+      "review_id": "foregs-floodplain-sediment-review-14",
+      "sample_id": "N24E15F2",
+      "selection_reasons": [
+        "member=F_ICP_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_ICP_data_2v6_7Aug07.csv#row=6",
+      "source_record_id": "src-c262af76c4b56d524f4b12c6efab0033e744c0050dece37d21f1bb3756a1b119"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=8",
+          "src-9413f5ca5264027eeca212ea6e58522551eff953f13eaf52fd2264448ce211a4"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "2.5",
+          "record_id": "rec-679793427baeb383e18abb80770dacb8297ad4f6c7a523f7a2e2edc4cb712735",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "39",
+          "record_id": "rec-ace9909675020d4ae7ebc25f34edd4712347e0797aecaeaf49921a6cc53ac1f9",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "15",
+          "record_id": "rec-67c44ed1e04fec1b066a098464b65756df215de0768cf1004a2e58e2477418e2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "50",
+          "record_id": "rec-5fabd78c0fbf892d3c1a6528d8e724e703a280530c1a31b9e036961ac01aa4f6",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "5",
+          "record_id": "rec-c52c7708a077a07263957cfb2a3b6cd18ecf3f6a126ca425e4d1cfce2b16dc02",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "25",
+          "record_id": "rec-ac10812edf1a36d1b22b33cf6aa20c85270d7de1de6179c51baf288dcd13d67e",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "2.5",
+        "Cr": "39",
+        "Cu": "15",
+        "Ni": "50",
+        "Pb": "5",
+        "Zn": "25"
+      },
+      "review_id": "foregs-floodplain-sediment-review-15",
+      "sample_id": "N24E15F5",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=8",
+      "source_record_id": "src-9413f5ca5264027eeca212ea6e58522551eff953f13eaf52fd2264448ce211a4"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_Hg_data_2v3_7Aug2007.csv#row=7",
+          "src-d00107af54882b7a07821faa1f86063744a318dae159464b98d2168dd96bc8e5"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+          "raw_value": "0.01592",
+          "record_id": "rec-e5200f6ec9ea371d756ffdc1ba4cc79f1e21a77c0a9dba8dc308d42396203e05",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.01592"
+      },
+      "review_id": "foregs-floodplain-sediment-review-16",
+      "sample_id": "N24E15F4",
+      "selection_reasons": [
+        "member=F_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_locator": "F_Hg_data_2v3_7Aug2007.csv#row=7",
+      "source_record_id": "src-d00107af54882b7a07821faa1f86063744a318dae159464b98d2168dd96bc8e5"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=7",
+          "src-1dfaf5b1682dd4ecd940f53fe8ea19193915565bd2f8e3046ddb115de73d8397"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "5",
+          "record_id": "rec-c80b598a753c9402a39d0f3b4f1d98a94f3b4d9bc2331caee567f4731434c395",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "508",
+          "record_id": "rec-03d3d4618992cf169d2615ff1283ef07af61a50425ffac9f4f3c52f5de437854",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "24",
+          "record_id": "rec-962c18d06df33b0550bdae4f949ebcb846e94fadbdec8585ecf1ebcc97a35c54",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "113",
+          "record_id": "rec-49c5f568c8c80c6c7ab760eb6e085b4b4120ea82fe313ca6107bdc2c960c2936",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "10",
+          "record_id": "rec-cd9c4307b036fabf1978fcd6686c7441aee42f54fb357417a56ab72c1476b9ac",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "49",
+          "record_id": "rec-b2f300b08bf95b6bf1967c1006dd20a967e127edecce1c91c6aad9304e70bb15",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "5",
+        "Cr": "508",
+        "Cu": "24",
+        "Ni": "113",
+        "Pb": "10",
+        "Zn": "49"
+      },
+      "review_id": "foregs-floodplain-sediment-review-17",
+      "sample_id": "N24E15F4",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=7",
+      "source_record_id": "src-1dfaf5b1682dd4ecd940f53fe8ea19193915565bd2f8e3046ddb115de73d8397"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_ICP_data_2v6_7Aug07.csv#row=7",
+          "src-5b5d90307c6765aa5361ad6ca2dcf83db6d8f6a508a8601ccc145f580d16e934"
+        ],
+        "findings": [
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {},
+      "review_id": "foregs-floodplain-sediment-review-18",
+      "sample_id": "N24E15F4",
+      "selection_reasons": [
+        "member=F_ICP_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_ICP_data_2v6_7Aug07.csv#row=7",
+      "source_record_id": "src-5b5d90307c6765aa5361ad6ca2dcf83db6d8f6a508a8601ccc145f580d16e934"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=9",
+          "src-342ceb6905c7d5492430d5b6f39ef9fe82d2736919575ce9d029df6c6537c59d"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "8",
+          "record_id": "rec-ef5d2001c28ee2766de86dd63c6f7e3467d0b12068f99864302eec432a733749",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "26",
+          "record_id": "rec-a5c46333f3c07c1363a7b1979932ade045fc2e09e819ddec6a71ffd6c355a089",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "27",
+          "record_id": "rec-185c7cfe39713d96b418d2f57e249810a7c2fc766facccc6848e15f54ae4e1bb",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "33",
+          "record_id": "rec-eff287a4742cc2091e1ea49f69e2c4276e25d3cc3c8fcffae2261c14418d78d8",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "11",
+          "record_id": "rec-fcdeecc01516284f842abeb00d2108506e51d5980b2532d42183810ab1c3ba1e",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "49",
+          "record_id": "rec-4417dd0277b798adc9d0068baa07003538b152c1a20701e388f4cb32e5ff4850",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "8",
+        "Cr": "26",
+        "Cu": "27",
+        "Ni": "33",
+        "Pb": "11",
+        "Zn": "49"
+      },
+      "review_id": "foregs-floodplain-sediment-review-19",
+      "sample_id": "N24E16F3",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=9",
+      "source_record_id": "src-342ceb6905c7d5492430d5b6f39ef9fe82d2736919575ce9d029df6c6537c59d"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_Hg_data_2v3_7Aug2007.csv#row=8",
+          "src-28667e8e9611a5f953260d5ce7dfb409a387108fadb3cb60ba18af7c3c871649"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+          "raw_value": "0.01131",
+          "record_id": "rec-680373ae40fb00c83d149c680bd4991c722fde093d3103adbc4bf00aa35ecca2",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.01131"
+      },
+      "review_id": "foregs-floodplain-sediment-review-20",
+      "sample_id": "N24E15F5",
+      "selection_reasons": [
+        "member=F_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_locator": "F_Hg_data_2v3_7Aug2007.csv#row=8",
+      "source_record_id": "src-28667e8e9611a5f953260d5ce7dfb409a387108fadb3cb60ba18af7c3c871649"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=8",
+          "src-599ba4c6cb9f8d30d8ae3baa2a53adc3c2f5f93586612efe00a407638ded3a2f"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "extreme_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "5",
+          "record_id": "rec-42f25d0bc0bf1f3677f62f0ea0dad4433cc7af2c269478ac69ab21d29fea4cc2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "181",
+          "record_id": "rec-13fa5c0f51696c9789fadd3c0ebdfc8f8a8f862b8f9d91298e81b0aa237655c0",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "14",
+          "record_id": "rec-9da620b1cd6f031eb50f757d5d6d4e737c87b34e3dc05ad3da6908d6f7637c2f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "51",
+          "record_id": "rec-68f5b979061c503d91d01a7a4dfa21346b6f4ad35341f17c78e37c0e8643e49a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "7",
+          "record_id": "rec-0a478cebe3c5f50b5d25e148ee744da1342436873eef500e68b65d419fcbc7c2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "28",
+          "record_id": "rec-4a90d4a6ff7b2cb7f50059a992a7f6339e1a958458e93f1e542c8cd4c23602f0",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "5",
+        "Cr": "181",
+        "Cu": "14",
+        "Ni": "51",
+        "Pb": "7",
+        "Zn": "28"
+      },
+      "review_id": "foregs-floodplain-sediment-review-21",
+      "sample_id": "N24E15F5",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=8",
+      "source_record_id": "src-599ba4c6cb9f8d30d8ae3baa2a53adc3c2f5f93586612efe00a407638ded3a2f"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_ICP_data_2v6_7Aug07.csv#row=8",
+          "src-2de37a1f3d825c5cac175c3761ee169d569ce8ea2fa30c9cfbba6f306390b852"
+        ],
+        "findings": [
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {},
+      "review_id": "foregs-floodplain-sediment-review-22",
+      "sample_id": "N24E15F5",
+      "selection_reasons": [
+        "member=F_ICP_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_ICP_data_2v6_7Aug07.csv#row=8",
+      "source_record_id": "src-2de37a1f3d825c5cac175c3761ee169d569ce8ea2fa30c9cfbba6f306390b852"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=10",
+          "src-c2d759fc5bd1ccea1bbd35947dc9ef1a07b71e818e2a712a39418d008760e56f"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "7",
+          "record_id": "rec-f34bd0bb0dcd595581b1183002b787e1283b056149def93fa167d457678863d3",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "25",
+          "record_id": "rec-c347c8faa9b661a4c35d5fad94d821bb69514e296da5009e1dd05a1273367ab7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "17",
+          "record_id": "rec-bd45372f7427bcbaf146c393a17d09af012e7ecf9e0e3d582d8f21be541a99a7",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "23",
+          "record_id": "rec-fcabc73e2f38db2607c218981ebcbcf8eebde08a37c0e61f1b30f183f0647e84",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "10",
+          "record_id": "rec-de98cb16f8d9afba6b902dd4dffdae244f8091e8d84c7a7a036db091c2d28101",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "50",
+          "record_id": "rec-f4da43d67718ca14206589374a6076428d12081f6397214dea17b27a454a0d28",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "7",
+        "Cr": "25",
+        "Cu": "17",
+        "Ni": "23",
+        "Pb": "10",
+        "Zn": "50"
+      },
+      "review_id": "foregs-floodplain-sediment-review-23",
+      "sample_id": "N25E08F1",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=10",
+      "source_record_id": "src-c2d759fc5bd1ccea1bbd35947dc9ef1a07b71e818e2a712a39418d008760e56f"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_Hg_data_2v3_7Aug2007.csv#row=9",
+          "src-47ad0b7737ed9b0c63832ac1c378aada8f996f9dd9ae10c7e2cc131eac2c4d20"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+          "raw_value": "0.02315",
+          "record_id": "rec-e37691de5f41fdee8f7893cf6f319939d2e1b26d4678209d216da40027745466",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.02315"
+      },
+      "review_id": "foregs-floodplain-sediment-review-24",
+      "sample_id": "N24E16F3",
+      "selection_reasons": [
+        "member=F_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_locator": "F_Hg_data_2v3_7Aug2007.csv#row=9",
+      "source_record_id": "src-47ad0b7737ed9b0c63832ac1c378aada8f996f9dd9ae10c7e2cc131eac2c4d20"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=9",
+          "src-dcb82fc51347163134fdc388feb82006d5c1ad6f4cc833ac0fd822fff5e2f4b7"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "10",
+          "record_id": "rec-1969cd78c2545308111e4cc7624519172d87d14f1691082337ee3caf8d4562e1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "60",
+          "record_id": "rec-3f281a608d2d7e1b8811ce319d6a1eccbaf8673a53e39c067ee486fe6943fa15",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "28",
+          "record_id": "rec-3ab4d3c800dea1c72044ad3b8ef8804cc90af1667959847e19739bead66a6470",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "37",
+          "record_id": "rec-bbcfa0efe40fd17ed885e1a5daf6b668f1180546ead3d77072b740e2493fc3f1",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "14",
+          "record_id": "rec-5892ca26bfe1c870c9408a43b4ffdc4d29f64564098645aa4341470bd13360aa",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "56",
+          "record_id": "rec-ed895ba54bd373299c53224574a768e5772b594db16920bc02eb70eda363082d",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "10",
+        "Cr": "60",
+        "Cu": "28",
+        "Ni": "37",
+        "Pb": "14",
+        "Zn": "56"
+      },
+      "review_id": "foregs-floodplain-sediment-review-25",
+      "sample_id": "N24E16F3",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=9",
+      "source_record_id": "src-dcb82fc51347163134fdc388feb82006d5c1ad6f4cc833ac0fd822fff5e2f4b7"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_ICP_data_2v6_7Aug07.csv#row=9",
+          "src-ca4ee974d6f7595a187bfa9b6d1fa74f554db5398074f89cc92ef83742b7128d"
+        ],
+        "findings": [
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {},
+      "review_id": "foregs-floodplain-sediment-review-26",
+      "sample_id": "N24E16F3",
+      "selection_reasons": [
+        "member=F_ICP_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_ICP_data_2v6_7Aug07.csv#row=9",
+      "source_record_id": "src-ca4ee974d6f7595a187bfa9b6d1fa74f554db5398074f89cc92ef83742b7128d"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "pass",
+        "evidence_locators": [
+          "F_AR_data_2v6_7Aug07.csv#row=11",
+          "src-a5f6177d76477218f736deb002d1ae988ccf3732665f95880b81f66a1642c4e8"
+        ],
+        "findings": [
+          "ordinary_valid_value"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "5",
+          "record_id": "rec-d9a2f57943248978991160a8e0e1f0eb01670e9f05421553f8aca58955604e62",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "28",
+          "record_id": "rec-110863101cd8d0023a706bb9ce9ac5353fcced60250c1ca31f59363621791838",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "18",
+          "record_id": "rec-b38786d950a15ac2b63912668dd76af17ccfbcefa80bfe1820ed0f655d1be7fe",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "24",
+          "record_id": "rec-57e00be7529ac75ff7c39fde5ccda602ef80231eb2dcb46d116ff6a0c3a815f2",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "9",
+          "record_id": "rec-11b2bc48ceb7df527dc30c84c0e1e0e6049002a3e057a06ac04d39f535ef1a3b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "ICP-AES",
+          "measurement_basis": "aqua_regia_leachable_<2mm_floodplain_sediment",
+          "raw_value": "49",
+          "record_id": "rec-78322d72005f1d10206c06359f0d33c9ea8dc221c367aa82abbfd39dd739fa56",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "5",
+        "Cr": "28",
+        "Cu": "18",
+        "Ni": "24",
+        "Pb": "9",
+        "Zn": "49"
+      },
+      "review_id": "foregs-floodplain-sediment-review-27",
+      "sample_id": "N25E09F1",
+      "selection_reasons": [
+        "member=F_AR_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_AR_data_2v6_7Aug07.csv#row=11",
+      "source_record_id": "src-a5f6177d76477218f736deb002d1ae988ccf3732665f95880b81f66a1642c4e8"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_Hg_data_2v3_7Aug2007.csv#row=10",
+          "src-d7b3c4b49e0093b8ab70734a56788efc65231f577415ea0efa2546ef44291738"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "Hg",
+          "analytical_method": "cold-vapour AAS after gold amalgam preconcentration",
+          "measurement_basis": "total_Hg_direct_solid_<2mm_floodplain_sediment",
+          "raw_value": "0.01602",
+          "record_id": "rec-1faef73a7ba58e9d6d0547311f55f32bf2d52f788bae191aae2ae56dda1461a0",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "Hg": "0.01602"
+      },
+      "review_id": "foregs-floodplain-sediment-review-28",
+      "sample_id": "N25E08F1",
+      "selection_reasons": [
+        "member=F_Hg_data_2v3_7Aug2007.csv;round_robin_fill"
+      ],
+      "source_locator": "F_Hg_data_2v3_7Aug2007.csv#row=10",
+      "source_record_id": "src-d7b3c4b49e0093b8ab70734a56788efc65231f577415ea0efa2546ef44291738"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": true,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_XRF_data_2v6_7Aug07.csv#row=10",
+          "src-0ae84f175f5c014d76bca0c60040115c7bcff565f4b2e25e905298e651a87ec8"
+        ],
+        "findings": [
+          "ordinary_valid_value",
+          "duplicate_sample_identifier"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [
+        {
+          "analyte": "As",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "8",
+          "record_id": "rec-c3c8e414eaaff7b5a021c9fa97e6a8c90cc6ff8fb3af2649189a4777a7c703ad",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cr",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "45",
+          "record_id": "rec-bf2f763e131ae87e7c43844d0bf959dec6e4edca67eea98260f0d447a669953f",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Cu",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "16",
+          "record_id": "rec-b954a7d9800b2c939e74a13924494c9759c2c59d579c856f4c8c4eafe8d1f13a",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Ni",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "25",
+          "record_id": "rec-b2428acf207a8ea8bb0555cc9430023630298d5849ce7530158a65d5ebef2c2b",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Pb",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "15",
+          "record_id": "rec-15717879789a5fcc3656ffcb71d945bd3895be4c2091972b30aa597e968bb4d5",
+          "unit": "mg/kg"
+        },
+        {
+          "analyte": "Zn",
+          "analytical_method": "WD-XRF and ED(P)-XRF selected by element",
+          "measurement_basis": "total_selected_<2mm_floodplain_sediment",
+          "raw_value": "54",
+          "record_id": "rec-c82fe61a8723879887743d299970cfe160dfaf422fbf38190e82c401074af328",
+          "unit": "mg/kg"
+        }
+      ],
+      "raw_field_evidence": {
+        "As": "8",
+        "Cr": "45",
+        "Cu": "16",
+        "Ni": "25",
+        "Pb": "15",
+        "Zn": "54"
+      },
+      "review_id": "foregs-floodplain-sediment-review-29",
+      "sample_id": "N25E08F1",
+      "selection_reasons": [
+        "member=F_XRF_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_XRF_data_2v6_7Aug07.csv#row=10",
+      "source_record_id": "src-0ae84f175f5c014d76bca0c60040115c7bcff565f4b2e25e905298e651a87ec8"
+    },
+    {
+      "codex_audit": {
+        "audited_at": "2026-08-07T12:00:00Z",
+        "auditor_id": "codex-d1-evidence-audit",
+        "checks": {
+          "published_values_match_adapter_payload": true,
+          "raw_observation_payload_present": false,
+          "sample_identity_present": true,
+          "source_locator_present": true,
+          "source_record_identifier_present": true
+        },
+        "decision": "warning",
+        "evidence_locators": [
+          "F_ICP_data_2v6_7Aug07.csv#row=10",
+          "src-66fa89715da21f6c19c5b35da19766af61214620ae6a3011e07bddc00e643e68"
+        ],
+        "findings": [
+          "duplicate_sample_identifier",
+          "method_missing_or_multiple_candidates"
+        ],
+        "notes": "Missing evidence and edge cases are retained as warnings; only traceability or mapping conflicts fail the audit.",
+        "reviewer_type": "codex"
+      },
+      "legacy_review_file": "human_review.json",
+      "parsed_result_evidence": [],
+      "raw_field_evidence": {},
+      "review_id": "foregs-floodplain-sediment-review-30",
+      "sample_id": "N25E08F1",
+      "selection_reasons": [
+        "member=F_ICP_data_2v6_7Aug07.csv;round_robin_fill"
+      ],
+      "source_locator": "F_ICP_data_2v6_7Aug07.csv#row=10",
+      "source_record_id": "src-66fa89715da21f6c19c5b35da19766af61214620ae6a3011e07bddc00e643e68"
+    }
+  ],
+  "required_record_count": 30,
+  "source_id": "foregs-floodplain-sediment",
+  "status": "automated_audit_complete"
+}

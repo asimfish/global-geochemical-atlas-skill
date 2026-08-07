@@ -1,5 +1,5 @@
 {
-  "elements": ["As", "Cu", "Ni", "Zn"],
+  "elements": ["As", "Cr", "Cu", "Hg", "Ni", "Pb", "U", "Zn"],
   "region": "global",
   "media": ["rock", "soil", "sediment", "water"],
   "sources": "auto",

@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import io
 import json
 import os
@@ -211,7 +210,19 @@ def _balance_output(
             "reported_covered_spatial_cells",
             "covered_spatial_cells",
         ):
-            if int(metrics[field]) < 0:
+            if int(metrics[field]) >= 0:
+                continue
+            if field in {
+                "valid_coordinate_sample_count",
+                "comparable_observation_count",
+                "covered_spatial_cells",
+            }:
+                # Older balance files did not retain source-by-element cell
+                # membership. Subtracting a source-wide count from a mixed
+                # cell can therefore overshoot. Zero is the only defensible
+                # lower bound; do not publish a negative or invent coverage.
+                metrics[field] = 0
+            else:
                 raise ReconciliationError(f"coverage balance contains negative {field}")
     balance["claim_boundary"] = (
         "More observations do not imply broader coverage. Reported source coordinates and canonical EPSG:4326 "
@@ -273,7 +284,7 @@ def _report(manifest: Mapping[str, Any]) -> str:
             "- 来源坐标只证明数值完整且在经纬度范围内；datum/CRS 未证实时不会进入 canonical 地图。",
             "- `comparable_observation_count` 要求数值、单位、样品类型、canonical 坐标、measurement basis、方法与 method scope 同时存在。",
             "- 不同来源的样品 ID 不跨来源合并；1°格网只表示有实测点，不表示连续覆盖。",
-            "- MarChem 外层 ZIP 漂移但数据表和方法表 hash 一致；该边界在自动化健康文件中单列。",
+            "- MarChem 外层 ZIP 漂移但数据表和方法表的行数及关键统计一致；该边界在自动化健康文件中单列。",
             "",
             "机器可读结果位于 `assets/v4-full-profiles/` 和 `assets/v4-coverage-cube.csv`。",
         ]
@@ -321,13 +332,22 @@ def expected_outputs() -> dict[Path, str]:
         content = outputs.get(path)
         if content is None:
             content = path.read_text(encoding="utf-8")
-        manifest["artifacts"].append(
-            {
-                "path": str(path.relative_to(SKILL_DIR)),
-                "bytes": len(content.encode("utf-8")),
-                "sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
-            }
-        )
+        identity: dict[str, Any] = {
+            "path": str(path.relative_to(SKILL_DIR)),
+            "bytes": len(content.encode("utf-8")),
+        }
+        if path.suffix == ".csv":
+            rows = list(csv.reader(io.StringIO(content)))
+            identity["row_count"] = max(0, len(rows) - 1)
+            identity["columns"] = rows[0] if rows else []
+        elif path.suffix == ".json":
+            value = json.loads(content)
+            identity["top_level_keys"] = sorted(value) if isinstance(value, dict) else []
+            if isinstance(value, dict):
+                for key in ("schema_version", "profile_version", "coverage_balance_version"):
+                    if key in value:
+                        identity[key] = value[key]
+        manifest["artifacts"].append(identity)
     outputs[MANIFEST_PATH] = _json_text(manifest)
     return outputs
 

@@ -4,9 +4,9 @@
 
 该演示证明请求路由、真实来源证据、D2 标准化与地质匹配、生产阈值异常筛查、D3 地图及十五项产物能够在一个命令中闭环。它不是美国土壤的统计代表性抽样，也不支持污染、矿化或成因结论。
 
-输入是 USGS Data Series 801 的确定性切片：249 个源行、三个土层、As/Cu/Ni/Zn 四个分析物，共 996 条测定。`fixtures/production-usgs/run_manifest.json` 固定三个官方源文件的 URL、版本、字节数和 SHA-256；`sources.jsonl` 逐记录绑定源行定位。
+输入是 USGS Data Series 801 的确定性切片：249 个源行、三个土层、As/Cu/Ni/Zn 四个分析物，共 996 条测定。`fixtures/production-usgs/run_manifest.json` 固定三个官方源文件的 URL、版本、文件名、字节数和结构统计；`sources.jsonl` 逐记录绑定源行定位。
 
-地质背景使用 Hartmann & Moosdorf 全球岩性图 0.5° raster（PANGAEA DOI `10.1594/PANGAEA.788537`，CC BY 3.0）。仓库内固定压缩包的 SHA-256 是 `43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e`，下载证据见 `assets/geology/pangaea-788537.download.json`。
+地质背景使用 Hartmann & Moosdorf 全球岩性图 0.5° raster（PANGAEA DOI `10.1594/PANGAEA.788537`，CC BY 3.0）。仓库以 DOI、版本、文件名、字节数、成员清单和结构统计固定该输入，下载证据见 `assets/geology/pangaea-788537.download.json`。
 
 ## 一键运行
 
@@ -24,7 +24,7 @@ python scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-请求、D1 路由、覆盖矩阵和执行解释写入 `/tmp/geochemical-production-demo/request_evidence/`；`execution.json` 遵循 [request-execution.schema.json](request-execution.schema.json)。fixture 请求设置 `offline=true`，所以实时路由会诚实保留 `offline_cache_not_verified`；`execution.json.route_resolution=offline_fixture_hash_verified` 表示本次执行使用的本地输入、逐记录证据及上游文件清单已通过哈希链验证，不代表实时网络状态。
+请求、D1 路由、覆盖矩阵和执行解释写入 `/tmp/geochemical-production-demo/request_evidence/`；`execution.json` 遵循 [request-execution.schema.json](request-execution.schema.json)。fixture 请求设置 `offline=true`，所以实时路由会诚实保留 `offline_cache_not_verified`；`execution.json.route_resolution=offline_fixture_manifest_verified` 表示本次执行使用的本地输入、逐记录证据及上游文件清单已通过可读 manifest 身份验证，不代表实时网络状态。
 
 请求执行预期为 `partial_success`，因为 fixture 只能证明固定子集闭环，不能证明冻结请求的全量覆盖；`validate_outputs.py` 仍应返回 `valid`。没有传实验室 controls/policy 时，批次报告明确写 `not_supplied`，不是“默认通过”。
 

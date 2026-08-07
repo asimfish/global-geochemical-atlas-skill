@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "cdogs-svy210102-page-2025-05-18",
+  "media": {
+    "sediment": 4411
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "sediment_lake": 4411
+  },
+  "sediment_environments": {
+    "lake": 4411
+  },
+  "source_id": "cdogs-210102-lake-sediment",
+  "water_body_types": {
+    "not_applicable": 4411
+  },
+  "water_fractions": {
+    "not_applicable": 4411
+  }
+}

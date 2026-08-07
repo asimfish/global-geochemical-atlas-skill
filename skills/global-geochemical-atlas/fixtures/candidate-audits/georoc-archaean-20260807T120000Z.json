@@ -1,0 +1,54 @@
+{
+  "acquisition": {
+    "mode": "versioned-dataverse-archive",
+    "observed_at": "2026-08-07T12:00:00Z",
+    "request_url": "https://data.goettingen-research-online.de/api/access/dataset/:persistentId/?persistentId=doi:10.25625/1KRR1P&format=original"
+  },
+  "archive": {
+    "bytes": 31696168,
+    "member_count": 28,
+    "members": [
+      {
+        "bytes": 31696168,
+        "file_id": "doi:10.25625/1KRR1P",
+        "name": "GEOROC-Archaean-Cratons-v12-member-set",
+        "source_url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/1KRR1P&version=12.0"
+      }
+    ]
+  },
+  "automated_audit": {
+    "audited_record_count": 30,
+    "required_record_count": 30,
+    "reviewer_type": "codex",
+    "status": "automated_audit_complete"
+  },
+  "claim_boundary": "The audit binds the Archaean compilation to the official DOI, version, 28-member identity inventory, byte counts, parsed schema and full adapter statistics. It does not imply uniform rock coverage or record-level analytical-method completeness.",
+  "observed_data": {
+    "counts": {
+      "complete_coordinate_target_observations": 54494,
+      "distinct_samples": 25659,
+      "missing_coordinate_target_observations": 11494,
+      "physical_rows": 33745,
+      "target_observations": 65988
+    },
+    "target_analytes": {
+      "As": "AS(PPM)",
+      "Cu": "CU(PPM)",
+      "Ni": "NI(PPM)",
+      "Zn": "ZN(PPM)"
+    }
+  },
+  "observed_metadata": {
+    "citation_scope": "original_publication_ids_resolved_through_member_reference_tables",
+    "coordinate_reference_system": "EPSG:4326",
+    "dataset_doi": "10.25625/1KRR1P",
+    "dataset_version": "12.0",
+    "method_missing_reason": "The selected precompiled members do not expose the winning row-level analytical method.",
+    "method_scope": "missing",
+    "release_date": "2026-06-11",
+    "research_use_status": "permitted_with_attribution_and_sharealike"
+  },
+  "source_id": "georoc-archaean",
+  "status": "verified_official_or_doi_dataset",
+  "verification_version": "d1-v4-candidate-audit-v1"
+}
