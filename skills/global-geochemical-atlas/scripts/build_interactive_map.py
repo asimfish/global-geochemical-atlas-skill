@@ -1152,8 +1152,6 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="anomalyInspector"',
         'id="exportComparisonProfile"',
         "comparisonProfile",
-        'id="iterationTableBody"',
-        'href="iteration_backlog.csv"',
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:

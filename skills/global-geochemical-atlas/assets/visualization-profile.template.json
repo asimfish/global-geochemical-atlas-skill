@@ -1,7 +1,7 @@
 {
   "schema_version": "d3-visualization-profile-v2",
   "title": "全球地球化学元素图谱",
-  "subtitle": "从标准化记录进入分布、覆盖、元素组合和候选异常证据；空白表示当前数据覆盖缺口。",
+  "subtitle": "基于公开地球化学调查汇编的标准化测定数据；覆盖岩石、土壤、水系沉积物与水体四类介质。",
   "story": "overview",
   "theme": "evidence-dark",
   "spatial_scope": "global",

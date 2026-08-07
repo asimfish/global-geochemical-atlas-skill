@@ -3094,7 +3094,6 @@ def check_d3(output_dir: Path) -> list[str]:
                 "元素组合对比",
                 "数据来源与置信度说明",
                 "异常区域识别结果",
-                "质量控制与数据复核",
                 'id="zoomIn"',
                 "comboQuadrants",
                 "d3-visualization-profile-v2",
@@ -3169,11 +3168,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 'id="anomalyInspector"',
                 "anomaly-contrast",
                 "comboConclusion",
-                'id="iterationTableBody"',
-                'href="iteration_backlog.csv"',
             )
         ),
-        "D3 exposes recoverable navigation and research-grade database, evidence, anomaly, combination and iteration workbenches",
+        "D3 exposes recoverable navigation and research-grade database, evidence, anomaly and combination workbenches",
         checks,
     )
     iteration_rows = csv_rows(output_dir / "iteration_backlog.csv")

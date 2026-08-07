@@ -918,7 +918,6 @@ def run_suite() -> dict[str, Any]:
                     "元素组合对比",
                     "数据来源与置信度说明",
                     "异常区域识别结果",
-                    "质量控制与数据复核",
                     'id="zoomIn"',
                     "comboQuadrants",
                     'id="databaseView"',

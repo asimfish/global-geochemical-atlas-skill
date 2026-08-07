@@ -454,7 +454,6 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "元素组合对比",
         "数据来源与置信度说明",
         "异常区域识别结果",
-        "质量控制与数据复核",
         'id="databaseView"',
         'id="databaseDistributionCanvas"',
         'id="databaseCoverageMatrix"',
@@ -479,8 +478,6 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="anomalyInspector"',
         "anomaly-contrast",
         "comboConclusion",
-        'id="iterationTableBody"',
-        'href="iteration_backlog.csv"',
     ):
         if marker not in text:
             errors.append(f"interactive_map.html omits required D3 v3 capability: {marker}")

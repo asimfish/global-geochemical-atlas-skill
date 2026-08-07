@@ -1,7 +1,7 @@
 {
   "schema_version": "d3-visualization-profile-v2",
   "title": "上海区域地球化学元素图谱",
-  "subtitle": "区域产物仅嵌入上海 WGS84 bbox 内的可上图记录；空白表示当前数据覆盖缺口。",
+  "subtitle": "区域产物仅嵌入上海范围内的可上图记录；未采样区域按数据缺口如实留白。",
   "story": "overview",
   "theme": "evidence-dark",
   "spatial_scope": "regional",

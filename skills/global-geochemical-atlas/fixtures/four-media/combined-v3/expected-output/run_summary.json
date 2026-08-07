@@ -37,9 +37,9 @@
         "sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db"
       },
       "interactive_map": {
-        "bytes": 1190086,
+        "bytes": 1202470,
         "filename": "interactive_map.html",
-        "sha256": "177abb627a285cb90e0a88a8ece0e26cab8144e7e90f25ca8dbe4bd2cf217cdf"
+        "sha256": "97d9fcf4d34b66c6e210e577b2f5d7d78d553f8493cc7ca9bdd4d88706496978"
       },
       "iteration_backlog": {
         "bytes": 739091,
@@ -126,7 +126,7 @@
     "artifact_bindings": {
       "anomalies_sha256": "f7717d49b0f7cd8af8bf612d6a45eef4727bebe58f8b44286f6a02b8524c0da7",
       "database_sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db",
-      "interactive_map_sha256": "177abb627a285cb90e0a88a8ece0e26cab8144e7e90f25ca8dbe4bd2cf217cdf",
+      "interactive_map_sha256": "97d9fcf4d34b66c6e210e577b2f5d7d78d553f8493cc7ca9bdd4d88706496978",
       "samples_geojson_sha256": "3364437bffa5db21b4174701ce5c1810fdb7812121983c420ec5680507d89d89"
     },
     "basemap": {
@@ -248,7 +248,7 @@
     "display_sample_count": 226,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1190086,
+    "html_bytes": 1202470,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 808,
@@ -429,7 +429,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-dual-scope-atlas-v4",
-    "template_sha256": "8c1b69ec5599d8ababc4c90b1957b0b104609ca72692abb31339186a326700b0",
+    "template_sha256": "abe911bb4e280e15b3da8cf2cf8a4f56fd8584f1c60b07992db90bce8ffeec3b",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "task-first-progressive-disclosure-v2",
@@ -538,7 +538,7 @@
       "schema_version": "d3-visualization-profile-v2",
       "spatial_scope": "global",
       "story": "overview",
-      "subtitle": "从标准化记录进入分布、覆盖、元素组合和候选异常证据；空白表示当前数据覆盖缺口。",
+      "subtitle": "基于公开地球化学调查汇编的标准化测定数据；覆盖岩石、土壤、水系沉积物与水体四类介质。",
       "theme": "evidence-dark",
       "title": "全球地球化学元素图谱"
     },
