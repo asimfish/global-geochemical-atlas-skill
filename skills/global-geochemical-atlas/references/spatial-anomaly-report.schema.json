@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:spatial-anomaly-report:v1",
+  "title": "Spatial candidate anomaly screening report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interface_version", "method_version", "status", "scientific_status",
+    "point_candidate_method_version", "grid_degrees", "minimum_spatial_samples",
+    "minimum_spatial_candidates", "multiple_testing_method", "fdr_alpha", "null_model",
+    "hypothesis_count", "candidate_region_count", "groups", "nonzero_candidate_cell_tests",
+    "caveat", "run_metadata"
+  ],
+  "properties": {
+    "interface_version": {"const": "d2-interface-v2"},
+    "method_version": {"const": "d2-spatial-hypergeometric-fdr-v1"},
+    "status": {"type": "string", "enum": ["screened", "insufficient_spatial_background"]},
+    "scientific_status": {"const": "screening_candidate_regions_only"},
+    "point_candidate_method_version": {"const": "d2-robust-mad-v2"},
+    "grid_degrees": {"type": "number", "exclusiveMinimum": 0, "maximum": 30},
+    "minimum_spatial_samples": {"type": "integer", "minimum": 3},
+    "minimum_spatial_candidates": {"type": "integer", "minimum": 1},
+    "multiple_testing_method": {"const": "Benjamini-Hochberg FDR"},
+    "fdr_alpha": {"type": "number", "exclusiveMinimum": 0, "maximum": 0.25},
+    "null_model": {"type": "string", "minLength": 1},
+    "hypothesis_count": {"type": "integer", "minimum": 0},
+    "candidate_region_count": {"type": "integer", "minimum": 0},
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "group_id", "mapped_usable_record_count", "mapped_cell_count",
+          "high_candidate_count", "low_candidate_count", "eligible_hypothesis_count"
+        ],
+        "properties": {
+          "group_id": {"type": "string", "minLength": 1},
+          "mapped_usable_record_count": {"type": "integer", "minimum": 0},
+          "mapped_cell_count": {"type": "integer", "minimum": 0},
+          "high_candidate_count": {"type": "integer", "minimum": 0},
+          "low_candidate_count": {"type": "integer", "minimum": 0},
+          "eligible_hypothesis_count": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "nonzero_candidate_cell_tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "group_id", "direction", "cell_key", "sample_count", "candidate_count",
+          "outside_sample_count", "outside_candidate_count", "outside_candidate_rate",
+          "p_value", "fdr_q_value"
+        ],
+        "properties": {
+          "group_id": {"type": "string", "minLength": 1},
+          "direction": {"type": "string", "enum": ["high", "low"]},
+          "cell_key": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer"}},
+          "sample_count": {"type": "integer", "minimum": 0},
+          "candidate_count": {"type": "integer", "minimum": 1},
+          "outside_sample_count": {"type": "integer", "minimum": 0},
+          "outside_candidate_count": {"type": "integer", "minimum": 0},
+          "outside_candidate_rate": {"type": "number", "minimum": 0, "maximum": 1},
+          "p_value": {"type": "number", "minimum": 0, "maximum": 1},
+          "fdr_q_value": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "caveat": {"type": "string", "minLength": 1},
+    "run_metadata": {"type": "object"}
+  }
+}

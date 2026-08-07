@@ -26,7 +26,8 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "citation_scope": "observation",
     },
     "usgs-conus-soil": {
-        "method_missing_reason": "not_available",
+        "method_scope": "dataset",
+        "method_assignment_basis": "registered_dataset_method_by_analyte",
         "citation_scope": "dataset",
     },
     "norway-marchem": {
@@ -179,6 +180,7 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "citation_scope": "dataset",
     },
     "cdogs-210102-lake-sediment": {
+        "source_tier": "government",
         "sample_type_raw": "NGR lake sediment grab sample",
         "sample_type": "sediment_lake",
         "sample_type_mapping_status": "exact",
@@ -188,6 +190,7 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "citation_scope": "dataset",
     },
     "cdogs-210102-lake-water": {
+        "source_tier": "government",
         "sample_type_raw": "Fluid (lake)",
         "sample_type": "water_lake",
         "sample_type_mapping_status": "exact",
@@ -198,6 +201,7 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "citation_scope": "dataset",
     },
     "brazil-sgb-florianopolis-stream-sediment": {
+        "source_tier": "government",
         "sample_type_raw": "sedimento de corrente",
         "sample_type": "sediment_stream",
         "sample_type_mapping_status": "mapped",
@@ -207,6 +211,7 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "citation_scope": "dataset",
     },
     "brazil-sgb-florianopolis-soil": {
+        "source_tier": "government",
         "sample_type": "soil_unspecified_horizon",
         "sample_type_mapping_status": "mapped",
         "soil_horizon": "",
@@ -445,6 +450,39 @@ def enrich_row(
     if contract is None:
         raise SemanticError(f"no V4 semantic contract for source: {source_id}")
     result = {key: _text(value) for key, value in row.items()}
+    result.update(
+        analyte_reported=_text(row.get("analyte_reported")) or _text(evidence.get("analyte_reported")),
+        dataset_title=_text(row.get("dataset_title")) or _text(evidence.get("dataset_title")),
+        dataset_doi=(
+            _text(row.get("dataset_doi"))
+            or _text(evidence.get("dataset_doi"))
+            or _text(registry_entry.get("dataset_doi"))
+        ),
+        dataset_version=_text(row.get("dataset_version")) or _text(evidence.get("dataset_version")),
+        source_tier=_text(row.get("source_tier")) or _text(contract.get("source_tier")),
+        source_file=_text(row.get("source_file")) or _text(evidence.get("source_file")),
+        source_row=_text(row.get("source_row")) or _text(evidence.get("source_row")),
+    )
+    if source_id == "georoc-archaean":
+        coordinate_evidence = evidence.get("coordinate_evidence")
+        coordinate_evidence = coordinate_evidence if isinstance(coordinate_evidence, Mapping) else {}
+        result.update(
+            original_latitude_raw=(
+                _text(row.get("original_latitude_raw"))
+                or _text(coordinate_evidence.get("reported_latitude"))
+                or _text(row.get("latitude"))
+            ),
+            original_longitude_raw=(
+                _text(row.get("original_longitude_raw"))
+                or _text(coordinate_evidence.get("reported_longitude"))
+                or _text(row.get("longitude"))
+            ),
+            latitude="",
+            longitude="",
+            source_crs="",
+            coordinate_transform_method="",
+            coordinate_uncertainty_m="",
+        )
     result.update(_sample_semantics(source_id, evidence, contract))
     result.update(_geographic_semantics(source_id, row, evidence))
 

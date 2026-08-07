@@ -35,6 +35,7 @@
         "required": ["path", "bytes"],
         "properties": {
           "path": {"type": "string", "minLength": 1},
+          "file_identity": {"type": "string", "minLength": 1},
           "bytes": {"type": "integer", "minimum": 0}
         }
       }

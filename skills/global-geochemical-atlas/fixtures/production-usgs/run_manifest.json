@@ -1,0 +1,75 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v2",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T00:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 996
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 1488089,
+      "path": "demo_input.csv",
+      "sha256": "02122d1a5ae7250a806bea8c0c9807b659ccbe70217b27947716490730a0f00f"
+    },
+    {
+      "bytes": 2120533,
+      "path": "sources.jsonl",
+      "sha256": "6b159ef34e06a6f1fd02f80e06fad54d1c52cf9203a9a8af0ef85479c20e7e6d"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 996,
+    "raw_source_rows": 14571,
+    "selected_source_rows": 249
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.3133/ds801",
+    "dataset_version": "Data Series 801, 2013 release",
+    "license": "LicenseRef-USGS-Public-Domain",
+    "source_id": "usgs-conus-soil",
+    "title": "Geochemical and mineralogical data for soils of the conterminous United States"
+  },
+  "source_files": [
+    {
+      "bytes": 1450062,
+      "filename": "Appendix_2b_Top5_18Sept2013.txt",
+      "retrieved_at": "2026-08-06T22:17:06Z",
+      "sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894",
+      "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt"
+    },
+    {
+      "bytes": 1987189,
+      "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
+      "retrieved_at": "2026-08-06T22:17:08Z",
+      "sha256": "462821c1164b5b4c27905a3ea62a22fa3f6172da09125d8f80ec5b2f6a69a202",
+      "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt"
+    },
+    {
+      "bytes": 1996147,
+      "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
+      "retrieved_at": "2026-08-06T22:17:10Z",
+      "sha256": "4aa8080f81f690587f762300bada16e33e376eea0003243d5333b47c78b4c90c",
+      "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "USGS methods, WGS 84 CRS and qualifiers are decoded from Appendix 5 metadata."
+  ]
+}

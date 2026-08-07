@@ -164,7 +164,7 @@ def _populate(connection: sqlite3.Connection, bundle: Mapping[str, Any]) -> None
                 sample.get("match_scale"),
                 sample.get("boundary_distance_m"),
                 sample.get("match_uncertainty"),
-                sample.get("match_status"),
+                sample.get("match_status") or "legacy_not_available",
                 json.dumps(sample.get("match_candidates", []), ensure_ascii=False, sort_keys=True),
                 sample["soil_horizon_raw"],
                 sample.get("soil_horizon"),

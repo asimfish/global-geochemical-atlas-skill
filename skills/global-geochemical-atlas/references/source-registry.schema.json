@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemistry-source-registry:d1-v1",
+  "title": "Checked-in D1 source registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["registry_version", "verified_at", "sources"],
+  "properties": {
+    "registry_version": {"const": "geochemical-source-registry-v1"},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "sources": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "adapter", "title", "dataset_version", "landing_page", "media", "download",
+          "required_fields", "license", "citation", "redistribution", "scientific_notes"
+        ],
+        "properties": {
+          "adapter": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
+          "dataset_version": {"type": "string", "minLength": 1},
+          "landing_page": {"type": "string", "pattern": "^https://"},
+          "media": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "download": {"type": "object"},
+          "required_fields": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "license": {
+            "type": "object",
+            "required": ["spdx", "name", "url"],
+            "properties": {
+              "spdx": {"type": "string", "minLength": 1},
+              "name": {"type": "string", "minLength": 1},
+              "url": {"type": "string", "pattern": "^https://"}
+            }
+          },
+          "citation": {"type": "string", "minLength": 1},
+          "redistribution": {"type": "string", "minLength": 1},
+          "scientific_notes": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

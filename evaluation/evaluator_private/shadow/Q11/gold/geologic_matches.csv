@@ -1,0 +1,6 @@
+point_id,unit_id,match_status,distance_to_boundary_deg,coordinate_precision_m,match_confidence,qc_flags
+G01,UNIT-A,matched,5,100,high,
+G02,UNIT-A,matched,0.001,100,low,near_unit_boundary
+G03,UNIT-B,matched,5,2000,low,coordinate_precision_coarse
+G04,,no_match,,100,none,outside_all_units
+G05,,ambiguous_boundary,0,100,low,shared_unit_boundary

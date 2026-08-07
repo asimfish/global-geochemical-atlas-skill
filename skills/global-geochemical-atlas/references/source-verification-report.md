@@ -316,7 +316,7 @@ GTK 旧站当前的 HTTPS 证书链不能通过标准 TLS 校验，而官方文�
 | 介质/来源 | 观测数 |
 |---|---:|
 | rock / GEOROC | 48 |
-| soil / USGS | 48 |
+| soil / USGS | 108 |
 | soil / PANGAEA North Africa | 48 |
 | sediment / MarChem | 112 |
 | sediment / GSJ Japan | 48 |
@@ -329,11 +329,11 @@ GTK 旧站当前的 HTTPS 证书链不能通过标准 TLS 校验，而官方文�
 | sediment / FOREGS stream sediment | 48 |
 | sediment / FOREGS floodplain sediment | 48 |
 | water / FOREGS stream water | 48 |
-| 合计 | 736 |
+| 合计 | 796 |
 
-联合流程得到 736/736 标准化、736/736 有效坐标、20 条已确认删失记录和完整九文件输出。D2 的默认背景键形成 89 个组，其中水体 17 个：`element + medium + measurement_basis + geologic_unit + analytical_method + digestion_or_extraction`。测试确认当前每组只来自一个兼容来源；FOREGS 的总量、王水、温和硝酸和溶解态边界以及 AfSIS 的王水准全量与 ICP-MS/ICP-OES 方法也没有与既有来源静默混合。FOREGS 中可能的 `DL/2` 数值和 AfSIS 的低于 DL/QL 数值只保留证据边界，不计入 20 条“已确认删失”。
+联合流程得到 796/796 标准化、700/796 有效 canonical 坐标、23 条已确认删失记录、93 个比较组（水体 18 个）和完整十五文件输出；GEOROC 与 AfSIS 的 96 条 reported coordinates 因 datum/CRS 未证实而失败关闭。D2 按元素、介质、material、样品类型、层位/环境/分相/粒级、measurement basis、地质语义、分析方法/方法族/method scope 和消解/提取方法隔离比较；AfSIS 王水准全量不与总量或其他提取静默混合。FOREGS 中可能的 `DL/2` 数值和 AfSIS 的低于 DL/QL 数值只保留证据边界，不冒充普通检出或已确认删失。
 
-筛查产生 16 个 fixture 候选异常，仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和九文件输出均可从十四个来源 fixture 字节级重建。
+16 个 fixture 候选异常仅证明算法和地图可运行；联合 manifest 和结果都声明它们不支持污染、富集或亏损的科学结论。联合输入、证据、manifest 和十五文件输出均可从十四个来源 fixture 字节级重建。
 
 ## 复核边界
 

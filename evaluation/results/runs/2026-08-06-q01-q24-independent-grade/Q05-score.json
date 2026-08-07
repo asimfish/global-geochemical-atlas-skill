@@ -1,0 +1,292 @@
+{
+  "candidate_status": "success",
+  "checks_path": "objective_report.json",
+  "computed_at": "2026-08-06T15:05:19.752519Z",
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.record_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.060240963855
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 10.0,
+          "metric_id": "objective.valid_safe",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 10.0,
+          "weight": 0.120481927711
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 10.0,
+          "metric_id": "objective.html_unsafe",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 10.0,
+          "weight": 0.120481927711
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 10.0,
+          "metric_id": "objective.tampered_unsafe",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 10.0,
+          "weight": 0.120481927711
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "objective.valid_hash_status",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 8.0,
+          "weight": 0.096385542169
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "objective.html_media_status",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 8.0,
+          "weight": 0.096385542169
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "objective.tampered_hash_status",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 8.0,
+          "weight": 0.096385542169
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "objective.valid_digest",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 8.0,
+          "weight": 0.096385542169
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "objective.tampered_digest",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 8.0,
+          "weight": 0.096385542169
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 8.0,
+          "metric_id": "llm.integrity",
+          "normalized_score": 50.0,
+          "passed": false,
+          "reason": "Records demonstrate byte-level verification against the frozen manifest (match for valid_data.csv, mismatch for tampered.csv), but no explicit statement exists in the evidence paths that hash matching verifies fixed byte content rather than scientific correctness itself; partial credit for behavioral demonstration only.",
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.096385542169
+        }
+      ],
+      "score": 95.180723,
+      "weight": 0.25
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.output_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.5
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "llm.failure_behavior",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Both failed assets are explicitly flagged unsafe with retained machine-readable reasons and only the verified CSV is marked safe_to_use=true; no failed download is claimed successful, matching checker html_unsafe and tampered_unsafe passes.",
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.5
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.3
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "platform_reusability.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.14
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 7.0,
+          "metric_id": "llm.media",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "html_as_csv.csv carries a .csv extension and even a matching hash, yet is identified as HTML and marked safe_to_use=false, concretely showing the extension does not prove content type and HTML error pages halt processing; consistent with checker html_media_status and html_unsafe passes.",
+          "status": "scored",
+          "value": 7.0,
+          "weight": 1.0
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.15
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "innovation_ecosystem.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.1
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "open_source_potential.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.06
+    }
+  ],
+  "eval_version": "1.0.0",
+  "evidence": [
+    "llm_grader_report.json",
+    "objective_report.json"
+  ],
+  "hard_gate_passed": true,
+  "rubric_sha256": "53c79ce590e8352bf27ef6f3673f21ea7a1209ed71d3914ae1f72b5e9fd30d14",
+  "run_id": "regression-q05-independent-review",
+  "schema_version": "1.0.0",
+  "score_status": "partial",
+  "scorer_version": "6.0.0",
+  "total_score": 68.795181
+}

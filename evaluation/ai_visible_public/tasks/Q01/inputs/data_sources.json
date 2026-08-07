@@ -1,0 +1,39 @@
+{
+  "snapshot_date": "2026-08-05",
+  "catalog_version": "q01-sources-1",
+  "sources": [
+    {
+      "source_id": "georoc_precompiled",
+      "name": "GEOROC Precompiled Files",
+      "url": "https://georoc.eu/georoc/precompiled/",
+      "scope": ["igneous_rock", "metamorphic_rock", "mineral", "volcanic_glass"],
+      "coverage": "global",
+      "metadata": ["coordinates", "analytical_method", "laboratory", "reference_material", "original_source"],
+      "example_compilation_doi": "10.25625/2JETOA",
+      "versioned_files": true,
+      "role_hint": "candidate_primary"
+    },
+    {
+      "source_id": "earthchem_portal",
+      "name": "EarthChem Portal",
+      "url": "https://earthchem.org/about/about-overview",
+      "scope": ["federated_geochemical_discovery", "petdb", "georoc", "usgs_ngdb"],
+      "coverage": "global",
+      "metadata": ["location", "reference", "chemical_data", "controlled_vocabulary"],
+      "versioned_files": false,
+      "role_hint": "candidate_discovery"
+    },
+    {
+      "source_id": "random_web_table",
+      "name": "World Rocks Ni Blog Table",
+      "url": "https://invalid.example/world-ni-table",
+      "scope": ["unspecified_rocks"],
+      "coverage": "claimed_global",
+      "metadata": [],
+      "doi": null,
+      "versioned_files": false,
+      "license": null,
+      "role_hint": "adversarial"
+    }
+  ]
+}

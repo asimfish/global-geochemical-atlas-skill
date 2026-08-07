@@ -1,26 +1,67 @@
 {
-  "censored_record_count": 57,
+  "batch_qc": {
+    "accepted_batch_ids": [
+      "LAB-A"
+    ],
+    "decision_count": 2,
+    "excluded_batch_ids": [
+      "LAB-B"
+    ],
+    "failed_or_incomplete_batch_count": 1,
+    "gate_applied": true,
+    "passed_batch_count": 1,
+    "record_status_counts": {
+      "incomplete": 1271
+    },
+    "report_status": "evaluated"
+  },
+  "censored_record_count": 106,
   "definitions": {
     "coordinate_valid": "both canonical latitude and longitude are present and range-valid",
     "records_are_not_dropped": true,
     "standardized_record": "normalized_value or normalized_censoring_limit is available"
   },
   "flag_counts": {
-    "AMBIGUOUS_AQUEOUS_RATIO_UNIT": 8,
-    "CENSORED_VALUE": 57,
-    "MISSING_ANALYTICAL_METHOD": 248,
-    "MISSING_COORDINATE_UNCERTAINTY": 884,
-    "MISSING_DIGESTION_OR_EXTRACTION": 248,
-    "MISSING_SOURCE_CRS": 88
+    "AMBIGUOUS_AQUEOUS_RATIO_UNIT": 38,
+    "BATCH_QC_NOT_EVALUATED": 1271,
+    "CENSORED_VALUE": 106,
+    "COORDINATE_NOT_CANONICALIZED": 136,
+    "INVALID_NUMERIC_VALUE": 14,
+    "MISSING_ANALYSIS_BATCH_ID": 1271,
+    "MISSING_ANALYTICAL_METHOD": 265,
+    "MISSING_COORDINATE_UNCERTAINTY": 1023,
+    "MISSING_DIGESTION_OR_EXTRACTION": 386,
+    "MISSING_SOURCE_CRS": 136
   },
-  "pipeline_version": "d2-pipeline-v1",
-  "record_count": 1084,
-  "records_with_numeric_value_or_limit": 1084,
+  "missing_reason_counts": {
+    "invalid_value": 14
+  },
+  "pipeline_version": "d2-pipeline-v2",
+  "record_count": 1271,
+  "record_counts": {
+    "error_flagged": 44,
+    "flagged": 1271,
+    "parsed": 1271,
+    "raw": 1271,
+    "rejected": 0,
+    "standardized_or_censoring_limit": 1205
+  },
+  "records_with_numeric_value_or_limit": 1249,
   "run_metadata": {
     "configuration": {
+      "batch_qc_gate_applied": true,
+      "batch_qc_input_identity": {
+        "bytes": 336,
+        "filename": "batch_qc.csv"
+      },
+      "batch_qc_policy_identity": {
+        "bytes": 269,
+        "filename": "qc_policy.json"
+      },
       "group_by": [
         "element_or_analyte",
         "medium",
+        "material",
         "sample_type",
         "soil_horizon",
         "sediment_environment",
@@ -31,28 +72,36 @@
         "geologic_unit_raw",
         "matched_geologic_unit",
         "analytical_method",
+        "method_family",
         "method_scope",
         "digestion_or_extraction"
       ],
       "minimum_group_size": 8,
+      "minimum_quantified_fraction": 0.7,
+      "minimum_spatial_candidates": 2,
+      "minimum_spatial_samples": 5,
       "region_bbox": null,
-      "robust_z_threshold": 3.5
+      "robust_z_threshold": 3.5,
+      "schema_map": {},
+      "spatial_fdr_alpha": 0.1,
+      "spatial_grid_degrees": 2.0
     },
     "input_identity": {
-      "bytes": 1209831,
+      "bytes": 1654534,
       "filename": "demo_input.csv",
-      "record_count": 1084
+      "record_count": 1271
     },
-    "input_row_count": 1084,
+    "input_row_count": 1271,
     "missing_recommended_input_columns": [],
-    "run_id": "run-v2%7Cdemo_input.csv%7C1209831%7C1084%7C%7B%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22tectonic_setting_raw%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%7D"
+    "run_id": "run-v2%7Cdemo_input.csv%7C1654534%7C1271%7C%7B%22batch_qc_gate_applied%22%3Atrue%2C%22batch_qc_input_identity%22%3A%7B%22bytes%22%3A336%2C%22filename%22%3A%22batch_qc.csv%22%7D%2C%22batch_qc_policy_identity%22%3A%7B%22bytes%22%3A269%2C%22filename%22%3A%22qc_policy.json%22%7D%2C%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22material%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22tectonic_setting_raw%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_family%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22minimum_quantified_fraction%22%3A0.7%2C%22minimum_spatial_candidates%22%3A2%2C%22minimum_spatial_samples%22%3A5%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%2C%22schema_map%22%3A%7B%7D%2C%22spatial_fdr_alpha%22%3A0.1%2C%22spatial_grid_degrees%22%3A2.0%7D",
+    "schema_map_identity": null
   },
   "severity_counts": {
-    "error": 8,
-    "info": 57,
-    "warning": 1468
+    "error": 52,
+    "info": 106,
+    "warning": 4488
   },
-  "standardization_rate": 0.99262,
-  "standardized_record_count": 1076,
-  "valid_coordinate_count": 1084
+  "standardization_rate": 0.948072,
+  "standardized_record_count": 1205,
+  "valid_coordinate_count": 1135
 }

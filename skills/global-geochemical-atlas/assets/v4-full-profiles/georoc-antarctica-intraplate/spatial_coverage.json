@@ -6,7 +6,9 @@
     166.6256,
     -66.2453
   ],
-  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_status": "source_crs_declared_epsg4326",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
   "coordinate_uncertainty_m_observation_counts": {
     "not_reported": 1183
   },
@@ -29,6 +31,29 @@
     "ANTARCTICA / EASTERN ANTARCTICA / WESTERN DRONNING MAUD LAND / VIKENEGGA SUITE": 15,
     "ANTARCTICA / TRANSANTARCTIC MOUNTAINS / NORTHERN VICTORIA LAND": 250
   },
+  "reported_coordinate_sample_count": 312,
+  "reported_covered_spatial_cells": 18,
+  "reported_spatial_cell_ids": [
+    "-67:+100",
+    "-68:+050",
+    "-69:+077",
+    "-70:-080",
+    "-72:+004",
+    "-73:+000",
+    "-73:+062",
+    "-73:+064",
+    "-73:+065",
+    "-73:+066",
+    "-73:+165",
+    "-73:-001",
+    "-74:+062",
+    "-74:+065",
+    "-74:+066",
+    "-74:+068",
+    "-74:+166",
+    "-75:-010"
+  ],
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
   "source_crs_observation_counts": {
     "EPSG:4326": 1183
   },
@@ -53,6 +78,6 @@
     "-74:+166",
     "-75:-010"
   ],
-  "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
   "valid_coordinate_sample_count": 312
 }

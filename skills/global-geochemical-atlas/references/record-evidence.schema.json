@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:geochemistry-record-evidence:v1",
+  "title": "One JSONL row in record_evidence.jsonl",
+  "description": "Source-specific evidence may add fields; the required core is stable and record-linked.",
+  "type": "object",
+  "required": [
+    "record_id", "source_id", "source_locator", "license", "analyte_reported"
+  ],
+  "properties": {
+    "record_id": {"type": "string", "minLength": 1},
+    "source_record_id": {"type": ["string", "null"]},
+    "source_id": {"type": "string", "minLength": 1},
+    "source_locator": {"type": "string", "minLength": 1},
+    "license": {"type": "string", "minLength": 1},
+    "analyte_reported": {"type": "string", "minLength": 1},
+    "dataset_title": {"type": ["string", "null"]},
+    "dataset_doi": {"type": ["string", "null"]},
+    "dataset_version": {"type": ["string", "null"]},
+    "source_file": {
+      "type": ["string", "null"],
+      "pattern": "^(?!.*[/\\\\])(?!\\.{1,2}$).+$"
+    },
+    "source_row": {"type": ["integer", "string", "null"]},
+    "source_file_url": {
+      "type": ["string", "null"],
+      "pattern": "^https?://",
+      "description": "HTTPS is preferred. The legacy FOREGS HTTP publisher is accepted only for its explicitly registered source URL."
+    },
+    "evidence_version": {"type": ["string", "null"]},
+    "evidence_status": {"type": ["string", "null"]}
+  },
+  "additionalProperties": true
+}

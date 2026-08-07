@@ -230,7 +230,7 @@ def verify(
             re.compile(r"MetaData/MarChem_Inorganic_LabParameter_\d{8}T\d{6}Z\.csv"),
             "metadata",
         )
-        info_name = one_member(
+        one_member(
             names,
             re.compile(r"MarChem_Info_\d{8}T\d{6}Z"),
             "information",

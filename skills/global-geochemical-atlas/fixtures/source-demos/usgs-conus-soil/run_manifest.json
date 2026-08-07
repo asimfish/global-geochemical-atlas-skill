@@ -18,11 +18,11 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 46089,
+      "bytes": 54766,
       "path": "demo_input.csv"
     },
     {
-      "bytes": 61392,
+      "bytes": 102205,
       "path": "sources.jsonl"
     }
   ],

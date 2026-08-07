@@ -1,0 +1,11 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+H01,H01,,10,mg/kg,,,,q16-fixture,
+H02,H02,,20,mg/kg,,,,q16-fixture,
+H03,H03,,,mg/kg,,,,q16-fixture,censored
+H04,H04,,30,mg/kg,,,,q16-fixture,
+H05,H05,,100,mg/kg,,,,q16-fixture,
+H06,H06,,200,mg/kg,,,,q16-fixture,
+H07,H07,,300,mg/kg,,,,q16-fixture,
+H08,H08,,,mg/kg,,,,q16-fixture,censored
+H09,H09,,,mg/kg,,,,q16-fixture,censored
+H10,H10,,5,mg/kg,,,,q16-fixture,

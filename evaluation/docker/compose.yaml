@@ -1,0 +1,35 @@
+services:
+  proxy:
+    image: ${EVAL_IMAGE:-global-geochemical-eval:local}
+    command: ["python", "/opt/evaluation/container/allowlist_proxy.py"]
+    environment:
+      EVAL_ALLOWED_HOSTS: ${EVAL_ALLOWED_HOSTS:?set EVAL_ALLOWED_HOSTS}
+    networks: [candidate_internal, egress]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+
+  candidate:
+    image: ${EVAL_IMAGE:-global-geochemical-eval:local}
+    profiles: [manual]
+    depends_on: [proxy]
+    environment:
+      EVAL_API_KEY: ${EVAL_API_KEY:?set EVAL_API_KEY}
+      EVAL_PROVIDER_BASE_URL: ${EVAL_PROVIDER_BASE_URL:?set EVAL_PROVIDER_BASE_URL}
+      EVAL_PROVIDER_MODEL_ID: ${EVAL_PROVIDER_MODEL_ID:?set EVAL_PROVIDER_MODEL_ID}
+      HTTPS_PROXY: http://proxy:8080
+      HTTP_PROXY: http://proxy:8080
+    networks: [candidate_internal]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    pids_limit: 256
+    cpus: 2
+    mem_limit: 4g
+
+networks:
+  candidate_internal:
+    internal: true
+  egress: {}

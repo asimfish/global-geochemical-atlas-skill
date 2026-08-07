@@ -1,0 +1,29 @@
+{
+  "aggregation": "unweighted mean of five evidence-completeness components",
+  "band": "medium",
+  "components": {
+    "normalization": {
+      "evidence": "reported and normalized values remain linked in observations.csv",
+      "score": 1.0
+    },
+    "provenance": {
+      "evidence": "record_id and source_id are retained in database, map and anomaly outputs",
+      "score": 1.0
+    },
+    "quality_control": {
+      "evidence": "censoring, invalid coordinates and batch status are explicit",
+      "score": 1.0
+    },
+    "source_integrity": {
+      "evidence": "one of two source files failed SHA-256 verification and was excluded",
+      "score": 0.5
+    },
+    "spatial": {
+      "evidence": "valid coordinates are mapped; no external geologic-unit join was supplied",
+      "score": 0.5
+    }
+  },
+  "interpretation": "Workflow confidence summarizes auditable evidence completeness; it is not a probability that a measurement or anomaly is scientifically true.",
+  "overall_score": 0.8,
+  "schema_version": "q24.workflow-confidence.v1"
+}

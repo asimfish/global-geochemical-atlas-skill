@@ -1,0 +1,3 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+P01,S01,,,,,35,-117,q07-fixture,
+P08,S08,,,,,-33,151,q07-fixture,

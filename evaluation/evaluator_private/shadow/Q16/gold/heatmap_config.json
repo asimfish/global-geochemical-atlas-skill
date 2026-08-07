@@ -1,0 +1,1 @@
+{"task_id":"GGA-MAP-002","policy_version":"q16-vis-1","aggregation":"precomputed_cell_median","radius_pixels":30,"color_domain_mg_kg":[0,300],"layers":["median_value","sample_count","censored_fraction"],"interpretation":"Exploratory aggregated concentration view; sample_count is sampling density, not concentration."}

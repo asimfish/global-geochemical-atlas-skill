@@ -1,0 +1,124 @@
+{
+  "schema_version": "ai4s-provider-profile-registry-v1",
+  "updated_at": "2026-08-07",
+  "claim_boundary": "The competition page identifies the preferred model by display name, but does not publish a frozen API endpoint, API model identifier, temperature, or thinking parameter. Runnable profiles below are therefore explicit local evaluation policies unless an entry says otherwise.",
+  "profiles": {
+    "openai-compatible": {
+      "description": "Generic OpenAI-compatible HTTPS transport for development and supplemental runs.",
+      "runnable": true,
+      "verification_status": "generic_transport",
+      "official_claim": false,
+      "transport": "openai-compatible",
+      "endpoint_policy": {
+        "kind": "absolute_https"
+      },
+      "model_policy": {
+        "kind": "safe_id"
+      },
+      "temperature_policy": {
+        "kind": "range",
+        "minimum": 0.0,
+        "maximum": 2.0
+      },
+      "thinking_policy": {
+        "kind": "exact",
+        "value": "not_configured",
+        "semantics": "The runner sends no provider-specific thinking option and makes no claim about the upstream default."
+      },
+      "evidence": [
+        {
+          "id": "opencode-provider-docs-2026-08-07",
+          "kind": "official_documentation",
+          "title": "OpenCode provider documentation",
+          "locator": "https://opencode.ai/docs/providers/",
+          "accessed_at": "2026-08-07",
+          "supports": [
+            "openai_compatible_transport"
+          ]
+        }
+      ]
+    },
+    "local-qwen38-openai-v1": {
+      "description": "Team-frozen primary uplift profile using the Qwen3.8-Max API identifier configured in this repository.",
+      "runnable": true,
+      "verification_status": "local_frozen_policy",
+      "official_claim": false,
+      "transport": "openai-compatible",
+      "endpoint_policy": {
+        "kind": "absolute_https"
+      },
+      "model_policy": {
+        "kind": "exact",
+        "value": "qwen3.8-max"
+      },
+      "temperature_policy": {
+        "kind": "exact",
+        "value": 0.0
+      },
+      "thinking_policy": {
+        "kind": "exact",
+        "value": "not_configured",
+        "semantics": "The runner sends no provider-specific thinking option and makes no claim about the upstream default."
+      },
+      "evidence": [
+        {
+          "id": "competition-primary-display-name-2026-08-07",
+          "kind": "competition_page",
+          "title": "AI4S Future ScienceSkills Hackathon competition page",
+          "locator": "https://synmatai.cn/hackathon/?sessionid=",
+          "accessed_at": "2026-08-07",
+          "supports": [
+            "primary_model_display_name"
+          ]
+        },
+        {
+          "id": "team-uplift-policy-v1",
+          "kind": "repository_contract",
+          "title": "Frozen team uplift experiment configuration",
+          "locator": "repo:evaluation_lyf/agent_uplift/experiment_config.json",
+          "accessed_at": "2026-08-07",
+          "sha256": "8edd825def69d47c5fe0b09b9a986594e349bf1616aac5b18524c6c94342946f",
+          "supports": [
+            "api_model_id",
+            "temperature",
+            "thinking_not_configured"
+          ]
+        }
+      ]
+    },
+    "competition-qwen-primary-unresolved": {
+      "description": "Audit placeholder for the organizer-named primary model until all runtime parameters are officially frozen.",
+      "runnable": false,
+      "verification_status": "official_partial_unresolved",
+      "official_claim": true,
+      "transport": "unknown",
+      "endpoint_policy": {
+        "kind": "unknown"
+      },
+      "model_policy": {
+        "kind": "unknown",
+        "display_name": "Qwen3.8-Max"
+      },
+      "temperature_policy": {
+        "kind": "unknown"
+      },
+      "thinking_policy": {
+        "kind": "unknown",
+        "value": "unknown",
+        "semantics": "No organizer-published thinking parameter was available at the recorded access date."
+      },
+      "evidence": [
+        {
+          "id": "competition-primary-display-name-2026-08-07",
+          "kind": "competition_page",
+          "title": "AI4S Future ScienceSkills Hackathon competition page",
+          "locator": "https://synmatai.cn/hackathon/?sessionid=",
+          "accessed_at": "2026-08-07",
+          "supports": [
+            "primary_model_display_name"
+          ]
+        }
+      ]
+    }
+  }
+}

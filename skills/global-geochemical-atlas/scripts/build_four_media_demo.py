@@ -139,7 +139,16 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     catalog = source_router.load_catalog()
     registry = source_adapters.load_source_registry()
     route = source_router.route_sources(request, catalog, registry)
-    selected_route = {item["source_id"] for item in route["selected_sources"]}
+    route_entries = list(route["selected_sources"])
+    route_selection_context = "source_router_selected"
+    if request.get("offline") is True:
+        route_entries = [
+            item
+            for item in route["review_sources"]
+            if item["reason"] == "offline_cache_not_verified"
+        ]
+        route_selection_context = "checked_in_fixtures_pending_metadata_verification"
+    selected_route = {item["source_id"] for item in route_entries}
     if selected_route != set(SOURCE_ORDER):
         raise CombinedDemoError(
             f"combined request no longer selects the frozen source route: {sorted(selected_route)}"
@@ -198,7 +207,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     evidence_text = jsonl_text(evidence_rows)
     atomic_text(output_paths["input"], input_text)
     atomic_text(output_paths["sources"], evidence_text)
-    partitions = Counter(comparison_key(row) for row in rows)
+    raw_input_partitions = Counter(comparison_key(row) for row in rows)
+    normalized_records = standardizer.process_rows(rows)
+    partitions = Counter(comparison_key(row) for row in normalized_records)
     water_partitions = {
         json.dumps(key, ensure_ascii=False): count
         for key, count in sorted(partitions.items())
@@ -207,6 +218,38 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     source_counts = Counter(row["source_id"] for row in rows)
     medium_counts = Counter(row["medium"] for row in rows)
     analyte_counts = Counter(row["element_or_analyte"] for row in rows)
+    source_files: dict[str, dict[str, Any]] = {}
+    for item in evidence_rows:
+        source_id = str(item.get("source_id") or "")
+        filename = str(item.get("source_file") or "")
+        if not filename:
+            continue
+        entry = {
+            "source_id": source_id,
+            "filename": filename,
+            "source_url": str(item.get("source_file_url") or item.get("source_locator") or ""),
+            "bytes": item.get("source_file_bytes"),
+        }
+        if not source_id or not entry["source_url"]:
+            raise CombinedDemoError("combined evidence lacks readable source-file identity")
+        source_file_key = f"{source_id}:{filename}"
+        previous = source_files.setdefault(source_file_key, entry)
+        if previous != entry:
+            raise CombinedDemoError(f"conflicting source-file evidence for {source_file_key}")
+    route_coverage = {
+        medium: {
+            "status": "partial",
+            "selected_sources": sorted(
+                item["source_id"] for item in route_entries if medium in item["matching_media"]
+            ),
+            "candidate_sources": [],
+            "note": (
+                "Checked-in fixture byte inventories and record-level evidence were verified locally; "
+                "coverage remains bounded by each source mini-slice."
+            ),
+        }
+        for medium in request["media"]
+    }
     manifest = {
         "combined_demo_version": COMBINED_VERSION,
         "generated_at": generated_at,
@@ -215,11 +258,18 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
         "not_for_scientific_interpretation": True,
         "request": request,
         "route": {
-            "status": route["status"],
-            "selected_sources": [item["source_id"] for item in route["selected_sources"]],
-            "coverage": route["coverage"],
+            "status": "offline_fixtures_verified" if request.get("offline") else route["status"],
+            "source_router_status": route["status"],
+            "selection_context": (
+                "checked_in_fixtures_metadata_verified"
+                if request.get("offline")
+                else route_selection_context
+            ),
+            "selected_sources": [item["source_id"] for item in route_entries],
+            "coverage": route_coverage if request.get("offline") else route["coverage"],
         },
         "fixture_inputs": fixture_inputs,
+        "source_files": [source_files[name] for name in sorted(source_files)],
         "record_counts": {
             "total": len(rows),
             "by_source": dict(sorted(source_counts.items())),
@@ -230,6 +280,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "group_fields": [
                 *standardizer.DEFAULT_GROUP_BY,
             ],
+            "raw_input_partition_count": len(raw_input_partitions),
             "partition_count": len(partitions),
             "water_partition_count": len(water_partitions),
             "water_partitions": water_partitions,
@@ -272,6 +323,7 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "A common CSV and map do not make different media, fractions, methods, units or extraction bases scientifically comparable.",
             "Anomalies produced from fixture groups are pipeline candidates only and cannot support pollution or depletion claims.",
         ],
+        "failures": [],
         "claim_boundary": (
             f"The combined package binds {len(SOURCE_ORDER)} already verified mini-slices to one request and evidence chain. "
             "It does not increase their geographic representativeness or create independent replication."

@@ -18,7 +18,7 @@ import re
 import sqlite3
 import tempfile
 import zipfile
-from collections import Counter, defaultdict
+from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -90,6 +90,7 @@ CUBE_COLUMNS = (
     "observation_count",
     "distinct_sample_count",
     "independent_lineage_count",
+    "reported_coordinate_sample_count",
     "valid_coordinate_sample_count",
     "comparable_observation_count",
     "covered_spatial_cells",
@@ -108,6 +109,7 @@ class Observation:
     region: str
     comparable: bool
     spatial_cell: str
+    reported_spatial_cell: str
 
 
 def _text(value: Any) -> str:
@@ -163,7 +165,7 @@ def _sample_and_place(source_id: str, fields: Mapping[str, Any]) -> tuple[str, s
             _text(fields.get("LOCATION")),
             _exact_midpoint(fields, "LATITUDE MIN", "LATITUDE MAX"),
             _exact_midpoint(fields, "LONGITUDE MIN", "LONGITUDE MAX"),
-            "EPSG:4326",
+            "",
         )
     if source_id == "usgs-conus-soil":
         layer = _text(fields.get("_soil_layer"))
@@ -493,7 +495,8 @@ def _observation(
     ordinal: int,
 ) -> Observation:
     sample_id, region, latitude, longitude, source_crs = _sample_and_place(source_id, raw.fields)
-    latitude, longitude, spatial_cell = _coordinate(latitude, longitude)
+    latitude, longitude, reported_spatial_cell = _coordinate(latitude, longitude)
+    spatial_cell = reported_spatial_cell if source_crs == "EPSG:4326" else ""
     record_id = f"profile:{raw.source_record_id}:{analyte}:{ordinal}"
     method, method_locator = _method(source_id, raw.fields, field_name, values)
     evidence = _semantic_evidence(source_id, raw.fields, record_id)
@@ -564,7 +567,14 @@ def _observation(
         and row.get("analytical_method")
         and row.get("method_scope")
     )
-    return Observation(row=row, sample_id=sample_id, region=region or "not_reported", comparable=comparable, spatial_cell=spatial_cell)
+    return Observation(
+        row=row,
+        sample_id=sample_id,
+        region=region or "not_reported",
+        comparable=comparable,
+        spatial_cell=spatial_cell,
+        reported_spatial_cell=reported_spatial_cell,
+    )
 
 
 def _marchem_payload_equivalent_files(cache_root: Path, registry_entry: Mapping[str, Any]) -> list[source_adapters.DownloadedFile]:
@@ -634,7 +644,7 @@ def _field_profile(observations: Sequence[Observation]) -> dict[str, Any]:
     fields: dict[str, Any] = {}
     for field in PROFILE_FIELDS:
         if field == "coordinate_pair":
-            non_empty = sum(bool(item.spatial_cell) for item in observations)
+            non_empty = sum(bool(item.reported_spatial_cell) for item in observations)
         elif field == "method_or_missing_reason":
             non_empty = sum(
                 bool(_text(item.row.get("analytical_method")) or _text(item.row.get("method_missing_reason")))
@@ -689,7 +699,9 @@ def _profile_one(
     publication_doi_count = 0
     upstream_primary_source_count = 0
     spatial_cells: set[str] = set()
+    reported_spatial_cells: set[str] = set()
     element_cells: dict[str, set[str]] = defaultdict(set)
+    element_reported_cells: dict[str, set[str]] = defaultdict(set)
     element_comparable: Counter[str] = Counter()
     bbox: list[float] | None = None
     cube: dict[tuple[str, ...], dict[str, Any]] = {}
@@ -702,40 +714,49 @@ def _profile_one(
         PRAGMA journal_mode=OFF;
         PRAGMA synchronous=OFF;
         PRAGMA temp_store=MEMORY;
-        CREATE TABLE samples(sample_id TEXT PRIMARY KEY, has_coordinate INTEGER NOT NULL) WITHOUT ROWID;
+        CREATE TABLE samples(
+            sample_id TEXT PRIMARY KEY,
+            has_reported_coordinate INTEGER NOT NULL,
+            has_coordinate INTEGER NOT NULL
+        ) WITHOUT ROWID;
         CREATE TABLE element_samples(
             element TEXT NOT NULL,
             sample_id TEXT NOT NULL,
+            has_reported_coordinate INTEGER NOT NULL,
             has_coordinate INTEGER NOT NULL,
             PRIMARY KEY(element, sample_id)
         ) WITHOUT ROWID;
         CREATE TABLE cube_samples(
             cube_id INTEGER NOT NULL,
             sample_id TEXT NOT NULL,
+            has_reported_coordinate INTEGER NOT NULL,
             has_coordinate INTEGER NOT NULL,
             PRIMARY KEY(cube_id, sample_id)
         ) WITHOUT ROWID;
         """
     )
-    sample_batch: list[tuple[str, int]] = []
-    element_sample_batch: list[tuple[str, str, int]] = []
-    cube_sample_batch: list[tuple[int, str, int]] = []
+    sample_batch: list[tuple[str, int, int]] = []
+    element_sample_batch: list[tuple[str, str, int, int]] = []
+    cube_sample_batch: list[tuple[int, str, int, int]] = []
 
     def flush_distinct_batches() -> None:
         if not sample_batch:
             return
         distinct_db.executemany(
-            "INSERT INTO samples VALUES (?, ?) ON CONFLICT(sample_id) DO UPDATE SET "
+            "INSERT INTO samples VALUES (?, ?, ?) ON CONFLICT(sample_id) DO UPDATE SET "
+            "has_reported_coordinate=MAX(has_reported_coordinate, excluded.has_reported_coordinate), "
             "has_coordinate=MAX(has_coordinate, excluded.has_coordinate)",
             sample_batch,
         )
         distinct_db.executemany(
-            "INSERT INTO element_samples VALUES (?, ?, ?) ON CONFLICT(element, sample_id) DO UPDATE SET "
+            "INSERT INTO element_samples VALUES (?, ?, ?, ?) ON CONFLICT(element, sample_id) DO UPDATE SET "
+            "has_reported_coordinate=MAX(has_reported_coordinate, excluded.has_reported_coordinate), "
             "has_coordinate=MAX(has_coordinate, excluded.has_coordinate)",
             element_sample_batch,
         )
         distinct_db.executemany(
-            "INSERT INTO cube_samples VALUES (?, ?, ?) ON CONFLICT(cube_id, sample_id) DO UPDATE SET "
+            "INSERT INTO cube_samples VALUES (?, ?, ?, ?) ON CONFLICT(cube_id, sample_id) DO UPDATE SET "
+            "has_reported_coordinate=MAX(has_reported_coordinate, excluded.has_reported_coordinate), "
             "has_coordinate=MAX(has_coordinate, excluded.has_coordinate)",
             cube_sample_batch,
         )
@@ -764,7 +785,7 @@ def _profile_one(
             row = item.row
             for field in PROFILE_FIELDS:
                 if field == "coordinate_pair":
-                    present = bool(item.spatial_cell)
+                    present = bool(item.reported_spatial_cell)
                 elif field == "method_or_missing_reason":
                     present = bool(_text(row.get("analytical_method")) or _text(row.get("method_missing_reason")))
                 else:
@@ -817,6 +838,9 @@ def _profile_one(
                             max(bbox[2], longitude),
                             max(bbox[3], latitude),
                         ]
+            if item.reported_spatial_cell:
+                reported_spatial_cells.add(item.reported_spatial_cell)
+                element_reported_cells[element].add(item.reported_spatial_cell)
 
             cube_key = (
                 source_id,
@@ -833,6 +857,7 @@ def _profile_one(
                     "cube_id": len(cube),
                     "observation_count": 0,
                     "comparable": 0,
+                    "reported_cells": set(),
                     "cells": set(),
                 }
                 cube[cube_key] = cube_cell
@@ -840,11 +865,14 @@ def _profile_one(
             cube_cell["comparable"] += item.comparable
             if item.spatial_cell:
                 cube_cell["cells"].add(item.spatial_cell)
+            if item.reported_spatial_cell:
+                cube_cell["reported_cells"].add(item.reported_spatial_cell)
             if item.sample_id:
+                has_reported_coordinate = int(bool(item.reported_spatial_cell))
                 has_coordinate = int(bool(item.spatial_cell))
-                sample_batch.append((item.sample_id, has_coordinate))
-                element_sample_batch.append((element, item.sample_id, has_coordinate))
-                cube_sample_batch.append((cube_cell["cube_id"], item.sample_id, has_coordinate))
+                sample_batch.append((item.sample_id, has_reported_coordinate, has_coordinate))
+                element_sample_batch.append((element, item.sample_id, has_reported_coordinate, has_coordinate))
+                cube_sample_batch.append((cube_cell["cube_id"], item.sample_id, has_reported_coordinate, has_coordinate))
                 if len(sample_batch) >= 25_000:
                     flush_distinct_batches()
     flush_distinct_batches()
@@ -866,36 +894,41 @@ def _profile_one(
             for field in PROFILE_FIELDS
         },
     }
-    distinct_sample_count, coordinate_sample_count = distinct_db.execute(
-        "SELECT COUNT(*), COALESCE(SUM(has_coordinate), 0) FROM samples"
+    distinct_sample_count, reported_coordinate_sample_count, coordinate_sample_count = distinct_db.execute(
+        "SELECT COUNT(*), COALESCE(SUM(has_reported_coordinate), 0), COALESCE(SUM(has_coordinate), 0) FROM samples"
     ).fetchone()
     element_sample_counts = {
-        element: (count, coordinates)
-        for element, count, coordinates in distinct_db.execute(
-            "SELECT element, COUNT(*), COALESCE(SUM(has_coordinate), 0) FROM element_samples GROUP BY element"
+        element: (count, reported_coordinates, coordinates)
+        for element, count, reported_coordinates, coordinates in distinct_db.execute(
+            "SELECT element, COUNT(*), COALESCE(SUM(has_reported_coordinate), 0), "
+            "COALESCE(SUM(has_coordinate), 0) FROM element_samples GROUP BY element"
         )
     }
     cube_sample_counts = {
-        cube_id: (count, coordinates)
-        for cube_id, count, coordinates in distinct_db.execute(
-            "SELECT cube_id, COUNT(*), COALESCE(SUM(has_coordinate), 0) FROM cube_samples GROUP BY cube_id"
+        cube_id: (count, reported_coordinates, coordinates)
+        for cube_id, count, reported_coordinates, coordinates in distinct_db.execute(
+            "SELECT cube_id, COUNT(*), COALESCE(SUM(has_reported_coordinate), 0), "
+            "COALESCE(SUM(has_coordinate), 0) FROM cube_samples GROUP BY cube_id"
         )
     }
     element_details: dict[str, dict[str, Any]] = {}
     for element in sorted(elements):
-        sample_count, coordinate_count = element_sample_counts.get(element, (0, 0))
+        sample_count, reported_coordinate_count, coordinate_count = element_sample_counts.get(element, (0, 0, 0))
         element_details[element] = {
             "observation_count": elements[element],
             "distinct_sample_count": sample_count,
+            "reported_coordinate_sample_count": reported_coordinate_count,
             "valid_coordinate_sample_count": coordinate_count,
             "comparable_observation_count": element_comparable[element],
             "covered_spatial_cells": len(element_cells[element]),
             "spatial_cell_ids": sorted(element_cells[element]),
+            "reported_spatial_cell_ids": sorted(element_reported_cells[element]),
         }
-
     cube_rows = []
     for key, value in sorted(cube.items()):
-        cube_sample_count, cube_coordinate_count = cube_sample_counts.get(value["cube_id"], (0, 0))
+        cube_sample_count, cube_reported_coordinate_count, cube_coordinate_count = cube_sample_counts.get(
+            value["cube_id"], (0, 0, 0)
+        )
         cube_rows.append(
             {
                 "cube_version": CUBE_VERSION,
@@ -909,10 +942,11 @@ def _profile_one(
                 "observation_count": value["observation_count"],
                 "distinct_sample_count": cube_sample_count,
                 "independent_lineage_count": 1,
+                "reported_coordinate_sample_count": cube_reported_coordinate_count,
                 "valid_coordinate_sample_count": cube_coordinate_count,
                 "comparable_observation_count": value["comparable"],
                 "covered_spatial_cells": len(value["cells"]),
-                "spatial_grid": "WGS84-like 1-degree floor cell; observation coverage only",
+                "spatial_grid": "canonical EPSG:4326 1-degree floor cell; observation coverage only",
             }
         )
     distinct_db.close()
@@ -959,11 +993,19 @@ def _profile_one(
         },
         "spatial_coverage": {
             "distinct_sample_count": distinct_sample_count,
+            "reported_coordinate_sample_count": reported_coordinate_sample_count,
             "valid_coordinate_sample_count": coordinate_sample_count,
+            "coordinate_count_definition": (
+                "reported_coordinate_sample_count is numeric and range-valid in source coordinates; "
+                "valid_coordinate_sample_count additionally requires canonical EPSG:4326"
+            ),
+            "reported_covered_spatial_cells": len(reported_spatial_cells),
             "covered_spatial_cells": len(spatial_cells),
-            "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+            "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
+            "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
             "spatial_cell_ids": sorted(spatial_cells),
             "bbox": bbox,
+            "reported_spatial_cell_ids": sorted(reported_spatial_cells),
             "region_count": len(region_counts),
             "region_observation_counts": dict(sorted(region_counts.items())),
             "source_crs_observation_counts": dict(sorted(source_crs_counts.items())),
@@ -1032,6 +1074,7 @@ def _profile_one(
             "observation_count": observation_count,
             "distinct_sample_count": distinct_sample_count,
             "independent_lineage_count": 1,
+            "reported_coordinate_sample_count": reported_coordinate_sample_count,
             "valid_coordinate_sample_count": coordinate_sample_count,
             "comparable_observation_count": comparable_count,
             "covered_spatial_cells": len(spatial_cells),
@@ -1039,8 +1082,9 @@ def _profile_one(
             "by_element": element_details,
         },
         "claim_boundary": (
-            "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, "
-            "not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present."
+            "Counts describe target observations in one verified source snapshot. Reported coordinates are kept "
+            "separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. "
+            "Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present."
         ),
     }
     return profile, cube_rows
@@ -1086,20 +1130,22 @@ def _markdown(summary: Mapping[str, Any]) -> str:
         f"- 全量 profile 来源：{summary['source_count']}/{summary['registered_source_count']}",
         f"- 目标元素测定：{summary['observation_count']:,}",
         f"- 不同样品（逐来源去重后相加）：{summary['distinct_sample_count']:,}",
-        f"- 有效坐标样品：{summary['valid_coordinate_sample_count']:,}",
+        f"- 来源报告坐标样品：{summary['reported_coordinate_sample_count']:,}",
+        f"- canonical EPSG:4326 坐标样品：{summary['valid_coordinate_sample_count']:,}",
         f"- 可比较测定：{summary['comparable_observation_count']:,}",
         f"- 来源内 1° 观测格网数之和：{summary['covered_spatial_cells_source_sum']:,}",
         f"- 覆盖立方体行：{summary['coverage_cube_rows']:,}",
         "",
         "## 介质平衡",
         "",
-        "| 介质 | 测定 | 样品 | 独立血缘 | 坐标样品 | 可比较测定 | 1°格网 |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+        "| 介质 | 测定 | 样品 | 独立血缘 | 来源坐标样品 | canonical 坐标样品 | 可比较测定 | canonical 1°格网 |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for medium, metrics in summary["media"].items():
         lines.append(
             f"| {medium} | {metrics['observation_count']:,} | {metrics['distinct_sample_count']:,} | "
-            f"{metrics['independent_lineage_count']:,} | {metrics['valid_coordinate_sample_count']:,} | "
+            f"{metrics['independent_lineage_count']:,} | {metrics['reported_coordinate_sample_count']:,} | "
+            f"{metrics['valid_coordinate_sample_count']:,} | "
             f"{metrics['comparable_observation_count']:,} | {metrics['covered_spatial_cells']:,} |"
         )
     lines.extend(
@@ -1107,14 +1153,15 @@ def _markdown(summary: Mapping[str, Any]) -> str:
         "",
         "## 分来源",
         "",
-        "| 来源 | 介质 | 测定 | 样品 | 坐标样品 | 可比较测定 | 1°格网 | 方法完整率 |",
-        "|---|---|---:|---:|---:|---:|---:|---:|",
+        "| 来源 | 介质 | 测定 | 样品 | 来源坐标样品 | canonical 坐标样品 | 可比较测定 | canonical 1°格网 | 方法完整率 |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for source in summary["sources"]:
         lines.append(
             f"| `{source['source_id']}` | {source['medium']} | {source['observation_count']:,} | "
-            f"{source['distinct_sample_count']:,} | {source['valid_coordinate_sample_count']:,} | "
+            f"{source['distinct_sample_count']:,} | {source['reported_coordinate_sample_count']:,} | "
+            f"{source['valid_coordinate_sample_count']:,} | "
             f"{source['comparable_observation_count']:,} | {source['covered_spatial_cells']:,} | "
             f"{source['method_rate']:.1%} |"
         )
@@ -1123,7 +1170,8 @@ def _markdown(summary: Mapping[str, Any]) -> str:
             "",
             "## 解释边界",
             "",
-            "- `comparable_observation_count` 要求数值、单位、样品类型、坐标、measurement basis、方法与 method scope 同时存在。",
+            "- `reported_coordinate_sample_count` 只表示来源坐标数值完整且范围合法；`valid_coordinate_sample_count` 还要求已规范到 EPSG:4326。",
+            "- `comparable_observation_count` 要求数值、单位、样品类型、canonical 坐标、measurement basis、方法与 method scope 同时存在。",
             "- 不同来源的样品 ID 不跨来源合并，因此总样品数是逐来源去重后的加总。",
             "- 1°格网仅表示有实测点；它不表示格网内每个位置都被测量。",
             "- MarChem 当前外层 ZIP 与注册快照不同，但数据表和方法表逐字节相同；该非科学成员漂移在自动化健康文件中单独记录。",
@@ -1150,8 +1198,10 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
                 "distinct_sample_count": 0,
                 "lineages": set(),
                 "source_ids": set(),
+                "reported_coordinate_sample_count": 0,
                 "valid_coordinate_sample_count": 0,
                 "comparable_observation_count": 0,
+                "reported_cells": set(),
                 "cells": set(),
             },
         )
@@ -1160,8 +1210,10 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
         lineage_id = source_adapters.source_lineage_id(source_id)
         target["lineages"].add(lineage_id)
         target["source_ids"].add(source_id)
+        target["reported_coordinate_sample_count"] += metrics["reported_coordinate_sample_count"]
         target["valid_coordinate_sample_count"] += metrics["valid_coordinate_sample_count"]
         target["comparable_observation_count"] += metrics["comparable_observation_count"]
+        target["reported_cells"].update(profile["spatial_coverage"]["reported_spatial_cell_ids"])
         target["cells"].update(profile["spatial_coverage"]["spatial_cell_ids"])
         for element, values in metrics["by_element"].items():
             cell = medium_elements.setdefault(
@@ -1171,8 +1223,10 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
                     "distinct_sample_count": 0,
                     "lineages": set(),
                     "source_ids": set(),
+                    "reported_coordinate_sample_count": 0,
                     "valid_coordinate_sample_count": 0,
                     "comparable_observation_count": 0,
+                    "reported_cells": set(),
                     "cells": set(),
                 },
             )
@@ -1180,8 +1234,10 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
             cell["distinct_sample_count"] += values["distinct_sample_count"]
             cell["lineages"].add(lineage_id)
             cell["source_ids"].add(source_id)
+            cell["reported_coordinate_sample_count"] += values["reported_coordinate_sample_count"]
             cell["valid_coordinate_sample_count"] += values["valid_coordinate_sample_count"]
             cell["comparable_observation_count"] += values["comparable_observation_count"]
+            cell["reported_cells"].update(values["reported_spatial_cell_ids"])
             cell["cells"].update(values["spatial_cell_ids"])
 
     def publish(value: Mapping[str, Any]) -> dict[str, Any]:
@@ -1191,10 +1247,12 @@ def _coverage_balance(profiles: Mapping[str, Mapping[str, Any]]) -> dict[str, An
             "independent_lineage_count": len(value["lineages"]),
             "source_ids": sorted(value["source_ids"]),
             "lineage_ids": sorted(value["lineages"]),
+            "reported_coordinate_sample_count": value["reported_coordinate_sample_count"],
             "valid_coordinate_sample_count": value["valid_coordinate_sample_count"],
             "comparable_observation_count": value["comparable_observation_count"],
             "covered_spatial_cells": len(value["cells"]),
-            "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+            "reported_covered_spatial_cells": len(value["reported_cells"]),
+            "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
         }
 
     return {
@@ -1243,6 +1301,7 @@ def build(
                 **{key: metrics[key] for key in (
                     "observation_count",
                     "distinct_sample_count",
+                    "reported_coordinate_sample_count",
                     "valid_coordinate_sample_count",
                     "comparable_observation_count",
                     "covered_spatial_cells",
@@ -1259,6 +1318,9 @@ def build(
         "source_count": len(profiles),
         "observation_count": sum(item["observation_count"] for item in source_summaries),
         "distinct_sample_count": sum(item["distinct_sample_count"] for item in source_summaries),
+        "reported_coordinate_sample_count": sum(
+            item["reported_coordinate_sample_count"] for item in source_summaries
+        ),
         "valid_coordinate_sample_count": sum(item["valid_coordinate_sample_count"] for item in source_summaries),
         "comparable_observation_count": sum(item["comparable_observation_count"] for item in source_summaries),
         "covered_spatial_cells_source_sum": sum(item["covered_spatial_cells"] for item in source_summaries),

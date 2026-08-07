@@ -1,0 +1,2 @@
+record_id,source_id,group_id,anomaly_type,robust_z,center_log10,scale_log10,n
+E21,SRC-A,soil|dry|total|Cu|ICP-MS,statistical_relative_enrichment,10.4080919691,1.4771212547,0.1173941154,21

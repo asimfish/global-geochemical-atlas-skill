@@ -65,7 +65,7 @@
         },
         "production_eligible": {
           "type": "boolean",
-          "description": "Legacy V1 flag; V3 routing uses independently computed research-use, evidence-tier and use-mode states."
+          "description": "Legacy V1 flag; V4 routing uses independently computed research-use, evidence-tier, use-mode and automated-audit states."
         },
         "media": {
           "type": "array",
@@ -104,7 +104,25 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "dataset_doi": {"type": "string", "minLength": 1}
+            "concept_doi": {"type": "string", "minLength": 1},
+            "cstr": {"type": "string", "minLength": 1},
+            "dataset_doi": {"type": "string", "minLength": 1},
+            "file_id": {"type": "string", "minLength": 1},
+            "metadata_uuid": {"type": "string", "minLength": 1},
+            "parent_atlas": {"type": "string", "minLength": 1},
+            "parent_dataset_doi": {"type": "string", "minLength": 1},
+            "project_doi": {"type": "string", "minLength": 1},
+            "publication_doi": {"type": "string", "minLength": 1}
+            ,"arcgis_item_id": {"type": "string", "minLength": 1}
+            ,"bitstream_id": {"type": "string", "minLength": 1}
+            ,"catalog_uuid": {"type": "string", "minLength": 1}
+            ,"dataset_pid": {"type": "string", "minLength": 1}
+            ,"dataverse_file_id": {"type": "string", "minLength": 1}
+            ,"file_doi": {"type": "string", "minLength": 1}
+            ,"monitoring_location_identifier": {"type": "string", "minLength": 1}
+            ,"resource_id": {"type": "string", "minLength": 1}
+            ,"sciencebase_item_id": {"type": "string", "minLength": 1}
+            ,"survey_key": {"type": "string", "minLength": 1}
           }
         },
         "landing_page": {"type": "string", "format": "uri", "pattern": "^https://"},
@@ -118,6 +136,7 @@
             "properties": {
               "kind": {"type": "string", "minLength": 1},
               "url": {"type": "string", "minLength": 1},
+              "method": {"type": "string", "enum": ["GET", "POST"]},
               "format": {"type": "string", "minLength": 1},
               "access": {"type": "string", "minLength": 1},
               "server_filters": {"$ref": "#/$defs/uniqueStrings"}

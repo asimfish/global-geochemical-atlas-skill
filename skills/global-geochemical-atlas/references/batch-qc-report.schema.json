@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:batch-qc-report:v1",
+  "title": "Laboratory batch QC report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "batch_count",
+    "passed_batch_count",
+    "failed_or_incomplete_batch_count",
+    "scientific_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "geochemical-batch-qc-report-v1"},
+    "status": {"type": "string", "enum": ["not_supplied", "evaluated"]},
+    "input_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "bytes", "row_count", "columns"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "row_count": {"type": "integer", "minimum": 1},
+        "columns": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "policy_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "bytes", "schema_version", "rule_count"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "schema_version": {"type": "string", "minLength": 1},
+        "rule_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "crm_recovery_percent", "blank_maximum",
+        "duplicate_rpd_maximum_percent", "batch_rule", "unit"
+      ],
+      "properties": {
+        "schema_version": {"type": "string", "minLength": 1},
+        "crm_recovery_percent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimum", "maximum", "inclusive"],
+          "properties": {
+            "minimum": {"type": "number", "minimum": 0},
+            "maximum": {"type": "number", "minimum": 0},
+            "inclusive": {"type": "boolean"}
+          }
+        },
+        "blank_maximum": {"type": "number", "minimum": 0},
+        "duplicate_rpd_maximum_percent": {"type": "number", "minimum": 0},
+        "batch_rule": {"const": "all_checks_must_pass"},
+        "unit": {"type": ["string", "null"]}
+      }
+    },
+    "formulae": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "crm_recovery_percent", "duplicate_rpd_percent", "crm_summary",
+        "blank_summary", "duplicate_summary"
+      ],
+      "properties": {
+        "crm_recovery_percent": {"type": "string", "minLength": 1},
+        "duplicate_rpd_percent": {"type": "string", "minLength": 1},
+        "crm_summary": {"type": "string", "minLength": 1},
+        "blank_summary": {"type": "string", "minLength": 1},
+        "duplicate_summary": {"type": "string", "minLength": 1}
+      }
+    },
+    "batch_rule": {"type": "string", "minLength": 1},
+    "batch_count": {"type": "integer", "minimum": 0},
+    "passed_batch_count": {"type": "integer", "minimum": 0},
+    "failed_or_incomplete_batch_count": {"type": "integer", "minimum": 0},
+    "batch_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "batch_id", "status", "incomplete_reasons", "malformed_duplicate_pair_ids",
+          "crm_checks", "blank_checks", "duplicate_checks", "batch_pass", "disposition"
+        ],
+        "properties": {
+          "batch_id": {"type": "string", "minLength": 1},
+          "status": {"type": "string", "enum": ["pass", "fail", "incomplete"]},
+          "incomplete_reasons": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "malformed_duplicate_pair_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "crm_checks": {"type": "array", "items": {"$ref": "#/$defs/crm_check"}},
+          "blank_checks": {"type": "array", "items": {"$ref": "#/$defs/blank_check"}},
+          "duplicate_checks": {"type": "array", "items": {"$ref": "#/$defs/duplicate_check"}},
+          "batch_pass": {"type": "boolean"},
+          "disposition": {
+            "type": "string",
+            "enum": ["accept_for_scientific_analysis", "exclude_batch_and_investigate"]
+          }
+        }
+      }
+    },
+    "scientific_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "crm_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qc_id", "observed_value", "certified_value", "recovery_percent", "pass"],
+      "properties": {
+        "qc_id": {"type": "string", "minLength": 1},
+        "observed_value": {"type": "number", "minimum": 0},
+        "certified_value": {"type": "number", "exclusiveMinimum": 0},
+        "recovery_percent": {"type": "number", "minimum": 0},
+        "pass": {"type": "boolean"}
+      }
+    },
+    "blank_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qc_id", "value", "pass"],
+      "properties": {
+        "qc_id": {"type": "string", "minLength": 1},
+        "value": {"type": "number", "minimum": 0},
+        "pass": {"type": "boolean"}
+      }
+    },
+    "duplicate_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pair_id", "qc_ids", "values", "rpd_percent", "pass"],
+      "properties": {
+        "pair_id": {"type": "string", "minLength": 1},
+        "qc_ids": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"}},
+        "values": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "minimum": 0}},
+        "rpd_percent": {"type": "number", "minimum": 0},
+        "pass": {"type": "boolean"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "evaluated"}}},
+      "then": {
+        "required": ["input_identity", "policy_identity", "policy", "formulae", "batch_rule", "batch_results"]
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "not_supplied"}}},
+      "then": {
+        "properties": {
+          "batch_count": {"const": 0},
+          "passed_batch_count": {"const": 0},
+          "failed_or_incomplete_batch_count": {"const": 0}
+        }
+      }
+    }
+  ]
+}

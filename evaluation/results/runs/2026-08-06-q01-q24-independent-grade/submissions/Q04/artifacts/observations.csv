@@ -1,0 +1,5 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+R01,R01,Fe,69943.07614270416,mg/kg,rock,,,q04-fixture,
+R02,R02,Fe,48960.15329989292,mg/kg,rock,,,q04-fixture,
+R03,R03,Fe,50000,mg/kg,rock,,,q04-fixture,
+R04,R04,Fe,,mg/kg,rock,,,q04-fixture,not_requested

@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
+import re
 import sys
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -31,6 +33,120 @@ V2_ENTITY_OVERRIDES = {
 MISSING_REASONS = {"not_reported", "not_applicable", "not_available", "redacted", "parse_failed"}
 
 
+def _matches_json_type(value: Any, expected: str) -> bool:
+    if expected == "null":
+        return value is None
+    if expected == "boolean":
+        return isinstance(value, bool)
+    if expected == "integer":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if expected == "number":
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
+    if expected == "string":
+        return isinstance(value, str)
+    if expected == "array":
+        return isinstance(value, list)
+    if expected == "object":
+        return isinstance(value, dict)
+    return False
+
+
+def _validate_schema_value(
+    value: Any,
+    schema: Mapping[str, Any],
+    root_schema: Mapping[str, Any],
+    path: str,
+    errors: list[str],
+) -> None:
+    """Validate the deterministic JSON Schema subset used by D1 entity contracts."""
+
+    reference = schema.get("$ref")
+    if reference is not None:
+        prefix = "#/$defs/"
+        if not isinstance(reference, str) or not reference.startswith(prefix):
+            errors.append(f"{path} uses unsupported schema reference: {reference}")
+            return
+        definition = root_schema.get("$defs", {}).get(reference[len(prefix) :])
+        if not isinstance(definition, dict):
+            errors.append(f"{path} references missing schema definition: {reference}")
+            return
+        _validate_schema_value(value, definition, root_schema, path, errors)
+        return
+
+    expected = schema.get("type")
+    if expected is not None:
+        expected_types = [expected] if isinstance(expected, str) else expected
+        if not isinstance(expected_types, list) or not all(isinstance(item, str) for item in expected_types):
+            errors.append(f"{path} has an invalid schema type declaration")
+            return
+        if not any(_matches_json_type(value, item) for item in expected_types):
+            errors.append(f"{path} must have JSON type {' or '.join(expected_types)}")
+            return
+
+    if "const" in schema and value != schema["const"]:
+        errors.append(f"{path} must equal {schema['const']!r}")
+    if "enum" in schema and value not in schema["enum"]:
+        errors.append(f"{path} is outside the allowed enum")
+
+    if isinstance(value, str):
+        minimum_length = schema.get("minLength")
+        if isinstance(minimum_length, int) and len(value) < minimum_length:
+            errors.append(f"{path} is shorter than minLength={minimum_length}")
+        pattern = schema.get("pattern")
+        if isinstance(pattern, str) and re.search(pattern, value) is None:
+            errors.append(f"{path} does not match pattern {pattern}")
+        if schema.get("format") == "date-time":
+            try:
+                parsed = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+            except ValueError:
+                errors.append(f"{path} is not an ISO 8601 date-time")
+            else:
+                if parsed.tzinfo is None:
+                    errors.append(f"{path} date-time must include a timezone")
+
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if "minimum" in schema and value < schema["minimum"]:
+            errors.append(f"{path} is below minimum={schema['minimum']}")
+        if "maximum" in schema and value > schema["maximum"]:
+            errors.append(f"{path} is above maximum={schema['maximum']}")
+
+    if isinstance(value, list):
+        minimum_items = schema.get("minItems")
+        if isinstance(minimum_items, int) and len(value) < minimum_items:
+            errors.append(f"{path} has fewer than minItems={minimum_items} entries")
+        if schema.get("uniqueItems") is True:
+            encoded = [json.dumps(item, ensure_ascii=False, separators=(",", ":"), sort_keys=True) for item in value]
+            if len(encoded) != len(set(encoded)):
+                errors.append(f"{path} contains duplicate entries")
+        item_schema = schema.get("items")
+        if isinstance(item_schema, dict):
+            for position, item in enumerate(value):
+                _validate_schema_value(item, item_schema, root_schema, f"{path}[{position}]", errors)
+
+    if isinstance(value, dict):
+        minimum_properties = schema.get("minProperties")
+        if isinstance(minimum_properties, int) and len(value) < minimum_properties:
+            errors.append(f"{path} has fewer than minProperties={minimum_properties} fields")
+        required = schema.get("required", [])
+        if isinstance(required, list):
+            for field in required:
+                if field not in value:
+                    errors.append(f"{path} is missing required field: {field}")
+        properties = schema.get("properties", {})
+        if not isinstance(properties, dict):
+            properties = {}
+        for field, field_schema in properties.items():
+            if field in value and isinstance(field_schema, dict):
+                _validate_schema_value(value[field], field_schema, root_schema, f"{path}.{field}", errors)
+        extras = sorted(set(value) - set(properties))
+        additional = schema.get("additionalProperties", True)
+        if additional is False and extras:
+            errors.append(f"{path} contains unsupported fields: {', '.join(extras)}")
+        elif isinstance(additional, dict):
+            for field in extras:
+                _validate_schema_value(value[field], additional, root_schema, f"{path}.{field}", errors)
+
+
 def _load(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -50,8 +166,14 @@ def _index_entities(bundle: Mapping[str, Any], errors: list[str]) -> dict[str, d
         contracts.update(V2_ENTITY_OVERRIDES)
     for collection, (id_field, expected_version, schema_name) in contracts.items():
         schema_path = SKILL_DIR / "references" / schema_name
-        if not schema_path.is_file():
+        try:
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
             errors.append(f"missing schema file: {schema_name}")
+            schema = None
+        except (UnicodeError, json.JSONDecodeError) as exc:
+            errors.append(f"invalid schema file {schema_name}: {exc}")
+            schema = None
         values = bundle.get(collection)
         if not isinstance(values, list) or not values:
             errors.append(f"{collection} must be a non-empty array")
@@ -62,6 +184,8 @@ def _index_entities(bundle: Mapping[str, Any], errors: list[str]) -> dict[str, d
             if not isinstance(entity, dict):
                 errors.append(f"{collection}[{position}] is not an object")
                 continue
+            if isinstance(schema, dict):
+                _validate_schema_value(entity, schema, schema, f"{collection}[{position}]", errors)
             entity_id = entity.get(id_field)
             if not isinstance(entity_id, str) or not entity_id:
                 errors.append(f"{collection}[{position}] has no {id_field}")

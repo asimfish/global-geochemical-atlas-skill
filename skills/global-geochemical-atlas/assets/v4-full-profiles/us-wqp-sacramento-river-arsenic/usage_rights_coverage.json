@@ -6,7 +6,7 @@
   "attribution_required_counts": {
     "false": 189
   },
-  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "content-snapshot-2026-08-06",
   "license_id": "LicenseRef-USGS-Public-Domain",
   "license_url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",

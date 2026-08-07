@@ -180,6 +180,7 @@
         "alaska-dggs-webgeochem",
         "argentina-segemar-geochemistry",
         "australia-ngsa",
+        "australia-ngsa-mercury",
         "australia-ozchem",
         "bgs-gbase",
         "brazil-sgb-geochemistry",
@@ -205,9 +206,8 @@
         "us-water-quality-portal",
         "usgs-ngdb"
       ],
-      "independent_lineage_count": 8,
+      "independent_lineage_count": 7,
       "lineage_ids": [
-        "australia-ngsa-mercury",
         "brazil-sgb-florianopolis-stream-sediment",
         "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
@@ -226,7 +226,6 @@
         "Zn"
       ],
       "selected_sources": [
-        "australia-ngsa-mercury",
         "brazil-sgb-florianopolis-stream-sediment",
         "cdogs-210102-lake-sediment",
         "foregs-floodplain-sediment",
@@ -314,9 +313,6 @@
         "usgs-ngdb": "national_partial"
       },
       "source_target_analytes": {
-        "australia-ngsa-mercury": [
-          "Hg"
-        ],
         "brazil-sgb-florianopolis-stream-sediment": [
           "As",
           "Cr",
@@ -660,7 +656,6 @@
         "Hg",
         "Ni",
         "Pb",
-        "U",
         "Zn"
       ],
       "candidate_sources": [
@@ -668,6 +663,7 @@
         "brazil-sgb-geochemistry",
         "canada-bc-rgs",
         "canada-cdogs",
+        "cdogs-210102-lake-water",
         "earthchem-library",
         "eea-waterbase",
         "emodnet-chemistry",
@@ -678,9 +674,8 @@
         "pangaea-repository",
         "us-water-quality-portal"
       ],
-      "independent_lineage_count": 5,
+      "independent_lineage_count": 4,
       "lineage_ids": [
-        "cdogs-survey-210102",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
         "geotraces-idp2025",
@@ -696,7 +691,6 @@
         "Zn"
       ],
       "selected_sources": [
-        "cdogs-210102-lake-water",
         "foregs-stream-water",
         "gemstat-open-archive",
         "geotraces-idp2025",
@@ -744,9 +738,6 @@
         "us-wqp-sacramento-river-arsenic": "single_station_time_series"
       },
       "source_target_analytes": {
-        "cdogs-210102-lake-water": [
-          "U"
-        ],
         "foregs-stream-water": [
           "As",
           "Cr",
@@ -828,8 +819,9 @@
     "status": "in_progress"
   },
   "limitations": [
-    "Catalog routing identifies possible sources; evidence tier is not a truth probability, and analyte availability plus record-level comparability still require source queries and D2 review.",
+    "Catalog routing applies frozen analyte, region, measurement-basis and temporal evidence; record-level availability and comparability still require acquisition plus D2 review.",
     "A partial route must not be presented as complete global coverage.",
+    "max_records is an acquisition/output ceiling enforced by the downstream runner, not evidence that the selected records are representative.",
     "Source discovery is still in progress; absence from this route is not proof that no source exists.",
     "Analyte coverage is credited only for explicit target mappings in the production registry; method, time and spatial-density coverage still require separate audits.",
     "Record count alone is not evidence of representative global coverage."
@@ -844,6 +836,7 @@
     ],
     "license_policy": "open_only",
     "max_records": 50000,
+    "measurement_basis": null,
     "media": [
       "rock",
       "soil",
@@ -853,9 +846,17 @@
     "minimum_evidence_tier": "D",
     "minimum_use_mode": "normalized_analysis",
     "offline": false,
+    "output_formats": [
+      "csv",
+      "json",
+      "geojson",
+      "html_map"
+    ],
     "region": "global",
     "research_use_policy": "permitted_research",
-    "sources": "auto"
+    "sources": "auto",
+    "target_crs": "EPSG:4326",
+    "time_range": null
   },
   "route_status": "partial"
 }

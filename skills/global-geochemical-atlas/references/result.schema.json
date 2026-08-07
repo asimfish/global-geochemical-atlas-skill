@@ -69,14 +69,22 @@
         "standardized_record_count",
         "valid_coordinate_count",
         "censored_record_count",
-        "candidate_anomaly_count"
+        "candidate_anomaly_count",
+        "batch_qc_failed_or_incomplete_count",
+        "candidate_anomaly_region_count",
+        "iteration_action_required_count",
+        "iteration_review_required_count"
       ],
       "properties": {
         "record_count": {"type": "integer", "minimum": 0},
         "standardized_record_count": {"type": "integer", "minimum": 0},
         "valid_coordinate_count": {"type": "integer", "minimum": 0},
         "censored_record_count": {"type": "integer", "minimum": 0},
-        "candidate_anomaly_count": {"type": "integer", "minimum": 0}
+        "candidate_anomaly_count": {"type": "integer", "minimum": 0},
+        "batch_qc_failed_or_incomplete_count": {"type": "integer", "minimum": 0},
+        "candidate_anomaly_region_count": {"type": "integer", "minimum": 0},
+        "iteration_action_required_count": {"type": "integer", "minimum": 0},
+        "iteration_review_required_count": {"type": "integer", "minimum": 0}
       }
     },
     "coverage": {

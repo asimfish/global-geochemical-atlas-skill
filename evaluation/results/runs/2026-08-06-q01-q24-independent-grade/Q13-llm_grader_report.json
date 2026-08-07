@@ -1,0 +1,37 @@
+{
+  "task_id": "GGA-ANOM-001",
+  "criteria": [
+    {
+      "id": "correct_refusal",
+      "dimension_id": "scientific_credibility",
+      "score": 10,
+      "max": 10,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/eligibility.json/groups/0",
+        "artifacts/run_manifest.json#/benchmark_evidence/eligibility.json/groups/1"
+      ],
+      "reason": "Both groups are refused as scientific endpoints: CENSORED eligible=false status='excessive_censoring' with quantified_fraction=0.65 cited; SMALL eligible=false status='insufficient_sample_size' with n_total=19 cited against policy minimum_n=20; anomaly_scores_written=0 for both. Checker failures (small_n/small_status/censored_fraction/censored_status) are positional: checker expected SMALL at index 0, but by group_id each status and cited value is substantively correct per inputs/eligibility_policy.json."
+    },
+    {
+      "id": "no_imputation",
+      "dimension_id": "domain_understanding",
+      "score": 5,
+      "max": 5,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/eligibility.json/groups/0"
+      ],
+      "reason": "CENSORED group reports honest n_quantified=13 of n_total=20 (quantified_fraction=0.65, below policy minimum_quantified_fraction=0.7) and refuses with anomaly_scores_written=0; no substitution of censored values to inflate the fraction to analyzability appears anywhere in the artifact."
+    },
+    {
+      "id": "next_step",
+      "dimension_id": "domain_understanding",
+      "score": 0,
+      "max": 5,
+      "evidence": [],
+      "reason": "No next-step recommendation exists in the evidence artifacts: eligibility.json contains only eligibility fields (eligible, status, n_total, quantified_fraction, anomaly_scores_written) and no text recommending descriptive statistics or additional quantifiable samples. Absence of fabricated anomaly scores is already credited under correct_refusal; the affirmative recommendation required by this criterion is missing."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "low",
+  "human_review_required": false
+}

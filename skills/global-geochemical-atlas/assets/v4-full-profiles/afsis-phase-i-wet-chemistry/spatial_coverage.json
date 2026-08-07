@@ -1,16 +1,13 @@
 {
   "as_of": "2026-08-06T10:05:00Z",
-  "bbox": [
-    -23.07762,
-    -29.9813,
-    48.7638,
-    14.87954
-  ],
-  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "bbox": null,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_status": "withheld_source_crs_not_reported",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
   "coordinate_uncertainty_m_observation_counts": {
     "not_reported": 12012
   },
-  "covered_spatial_cells": 53,
+  "covered_spatial_cells": 0,
   "dataset_version": "2.0",
   "distinct_sample_count": 2002,
   "profile_version": "d1-v4-full-population-profile-v1",
@@ -35,11 +32,9 @@
     "Zambia": 138,
     "Zimbabwe": 84
   },
-  "source_crs_observation_counts": {
-    "not_reported": 12012
-  },
-  "source_id": "afsis-phase-i-wet-chemistry",
-  "spatial_cell_ids": [
+  "reported_coordinate_sample_count": 1876,
+  "reported_covered_spatial_cells": 53,
+  "reported_spatial_cell_ids": [
     "+00:+032",
     "+01:+031",
     "+04:+038",
@@ -94,6 +89,12 @@
     "-30:+022",
     "-30:+023"
   ],
-  "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-  "valid_coordinate_sample_count": 1876
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
+  "source_crs_observation_counts": {
+    "not_reported": 12012
+  },
+  "source_id": "afsis-phase-i-wet-chemistry",
+  "spatial_cell_ids": [],
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
+  "valid_coordinate_sample_count": 0
 }

@@ -6,7 +6,9 @@
     -112.2247197,
     42.900442
   ],
-  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_status": "source_crs_declared_epsg4326",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
   "coordinate_uncertainty_m_observation_counts": {
     "10": 30,
     "100": 7,
@@ -64,6 +66,18 @@
     "W of Twin Peaks": 6,
     "not_reported": 593
   },
+  "reported_coordinate_sample_count": 231,
+  "reported_covered_spatial_cells": 7,
+  "reported_spatial_cell_ids": [
+    "+40:-114",
+    "+40:-115",
+    "+41:-113",
+    "+41:-114",
+    "+41:-115",
+    "+42:-113",
+    "+42:-114"
+  ],
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
   "source_crs_observation_counts": {
     "EPSG:4269": 593,
     "EPSG:4326": 854
@@ -78,6 +92,6 @@
     "+42:-113",
     "+42:-114"
   ],
-  "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
   "valid_coordinate_sample_count": 231
 }

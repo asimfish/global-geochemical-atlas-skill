@@ -6,8 +6,8 @@
 
 | 角色 | 主要路径 | 负责的稳定接口 | 不直接决定 |
 |---|---|---|---|
-| D1 数据源、证据链与数据工程 | `download_data.py`、`build_evidence_bundle.py`、`fixtures/`、`references/data-sources.md`、`references/source-manifest.schema.json` | 下载清单、缓存与降级、demo 切片、`source_manifest.json`；校验并原样打包 D2 的 `confidence_report.json` | 异常阈值、置信度公式、最终 `SKILL.md` |
-| D2 地球化学标准化与分析 | `standardize_geochemistry.py`、`references/scientific-rules.md`、`references/geochemistry-record.schema.json`、`references/confidence-report.schema.json` | `geochemistry.csv`、`qc_report.json`、`confidence_report.json`、`anomalies.geojson`、`anomaly_report.json` | 最终 `SKILL.md`、地图表现和数据源许可判断 |
+| D1 数据源、证据链与数据工程 | `score_source_evidence.py`、`snapshot_source.py`、`source_router.py`、`source_audit.py`、`coverage_report.py`、`download_data.py`、`build_evidence_bundle.py`、`validate_acquisition.py`、`build_index.py`、`query_source.py`、`assets/source_catalog.json`、`fixtures/`、D1 来源与归档 Schema | 候选发现、证据分级、科研使用门、动态快照、保守路由与覆盖、下载缓存与降级、原值归档和派生索引、demo 切片、`source_manifest.json`；校验并原样打包 D2 的 `confidence_report.json` | 异常阈值、置信度公式、最终 `SKILL.md` |
+| D2 地球化学标准化与分析 | `standardize_geochemistry.py`、`references/scientific-rules.md`、`references/geochemistry-record.schema.json`、`references/confidence-report.schema.json`、`references/schema-map.schema.json`、`references/platform-field-crosswalk.*` | `geochemistry.csv`、`qc_report.json`、`confidence_report.json`、`anomalies.geojson`、`anomaly_report.json`；专业平台语义映射与信息损失说明 | 最终 `SKILL.md`、地图表现和数据源许可判断 |
 | D3 Skill 架构、地图与 demo 总集成 | `SKILL.md`、`run_workflow.py`、`build_interactive_map.py`、`validate_outputs.py`、README、请求/结果 Schema、demo 指南 | `interactive_map.html`、`samples.geojson`、`run_summary.json`、稳定 CLI、唯一生产 Skill 和演示流程 | D2 的科学算法、D1 的来源许可结论 |
 | 共享契约测试 | `component_test.py`、`self_test.py`、`.github/workflows/ci.yml` | 防止任一角色破坏其他角色的输入输出 | 不承载新的科学业务逻辑 |
 
@@ -16,24 +16,26 @@
 ## 稳定数据流
 
 ```text
-D1 公开来源/缓存/demo CSV
-          │ 原值、来源、许可、坐标、方法
+D1 候选目录 ──证据评分/科研使用门/保守路由──► 本次请求可执行来源
+          │
+          └──► 缓存/原值归档/demo CSV + record evidence + acquisition manifest
+          │ 原值、来源、许可、坐标、方法、逐记录证据
           ▼
 D2 标准化 + QC + 置信度算法 + 候选异常
           │ geochemistry / qc / confidence / anomalies
           ├──────────────► D1 证据打包与哈希绑定 ──► source_manifest
           ▼
-D3 工作流编排 + 地图 + 输出校验 ──► 九个稳定交付文件
+D3 工作流编排 + 地图 + 输出校验 ──► 十一个稳定交付文件
 ```
 
 `run_workflow.py` 只负责调用顺序和最终状态，不复制 D1/D2 算法。D1 的证据模块只验证 D2 置信度报告的版本、输入哈希和文件哈希，不重新计算置信度。
 
 ## 接口冻结规则
 
-- D1 → D2：CSV 至少提供 `element_or_analyte,value,unit,medium`；正式数据还应携带样品、basis、坐标、方法、来源定位与许可。
-- D2 → D1/D3：固定生成五个分析产物，记录结构以 `geochemistry-record.schema.json` 为准，置信度版本当前为 `d2-confidence-v1`。
-- D1 → D3：固定生成 `source_manifest.json`，其中输入 SHA-256 必须与 D2 run metadata 相同，并绑定 `confidence_report.json` 的 SHA-256。
-- D3 → 用户：固定生成 README 所列九个文件；更名、删减或改变语义属于破坏性接口变更。
+- D1 → D2：CSV 至少提供 `element_or_analyte,value,unit,medium`；正式数据还应携带样品、basis、坐标、方法、来源定位与许可。分层归档先按 `validate_acquisition.py` 校验，再依 `schema-mapping.md` 展开为一行一个 observation；派生 SQLite 只用于 D1 原值检索。
+- D2 → D1/D3：固定生成五个分析产物，记录结构以 `geochemistry-record.schema.json` 为准，置信度版本当前为 `d2-confidence-v3`；D1 非 canonical 列名可按 `schema-map.schema.json` 显式映射。
+- D1 → D3：固定生成 `source_manifest.json` 和 `record_evidence.jsonl`；输入 SHA-256 必须与 D2 run metadata 相同，sidecar 的 record ID 必须与 canonical database 完全一致，并绑定 acquisition manifest 与 `confidence_report.json` 的 SHA-256。
+- D3 → 用户：固定生成 README 所列十一个文件（含 `iteration_backlog.csv`）；更名、删减或改变语义属于破坏性接口变更。
 - 任何 Schema、版本号、输出文件名或 CLI 参数变更，都要在同一 PR 中更新文档、组件测试和完整回归测试。
 
 ## 分支与 PR

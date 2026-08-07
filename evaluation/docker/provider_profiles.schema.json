@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI4S auditable provider profile registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "updated_at",
+    "claim_boundary",
+    "profiles"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ai4s-provider-profile-registry-v1"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "claim_boundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profiles": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/profile"
+      }
+    }
+  },
+  "$defs": {
+    "endpointPolicy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {"kind": {"const": "absolute_https"}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {"kind": {"const": "unknown"}}
+        }
+      ]
+    },
+    "modelPolicy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {"const": "exact"},
+            "value": {"type": "string", "pattern": "^[A-Za-z0-9._:/-]+$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": {"const": "safe_id"},
+            "display_name": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": {"const": "unknown"},
+            "display_name": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "temperaturePolicy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {"const": "exact"},
+            "value": {"type": "number"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "minimum", "maximum"],
+          "properties": {
+            "kind": {"const": "range"},
+            "minimum": {"type": "number"},
+            "maximum": {"type": "number"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {"kind": {"const": "unknown"}}
+        }
+      ]
+    },
+    "thinkingPolicy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value", "semantics"],
+          "properties": {
+            "kind": {"const": "exact"},
+            "value": {"enum": ["not_configured", "provider_default", "enabled", "disabled"]},
+            "semantics": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value", "semantics"],
+          "properties": {
+            "kind": {"const": "unknown"},
+            "value": {"const": "unknown"},
+            "semantics": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "locator",
+        "accessed_at",
+        "supports"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accessed_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "supports": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "runnable",
+        "verification_status",
+        "official_claim",
+        "transport",
+        "endpoint_policy",
+        "model_policy",
+        "temperature_policy",
+        "thinking_policy",
+        "evidence"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runnable": {
+          "type": "boolean"
+        },
+        "verification_status": {
+          "enum": [
+            "generic_transport",
+            "local_frozen_policy",
+            "official_partial_unresolved"
+          ]
+        },
+        "official_claim": {
+          "type": "boolean"
+        },
+        "transport": {
+          "enum": [
+            "openai-compatible",
+            "unknown"
+          ]
+        },
+        "endpoint_policy": {
+          "$ref": "#/$defs/endpointPolicy"
+        },
+        "model_policy": {
+          "$ref": "#/$defs/modelPolicy"
+        },
+        "temperature_policy": {
+          "$ref": "#/$defs/temperaturePolicy"
+        },
+        "thinking_policy": {
+          "$ref": "#/$defs/thinkingPolicy"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"source_id": "q14-fixture", "file": "inputs/anomaly_policy.json", "computed_sha256": "2f96d01e77dcf37c8452a204d177ecbcd2b990722f06a0f37596f2a9f5f3376d", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}
+{"source_id": "q14-fixture", "file": "inputs/values.csv", "computed_sha256": "eb1476a81f8600b080df7791e9e3ca4465ef9ac0b149db714140e037b84d47ce", "license": null, "note": "benchmark frozen fixture input; no external source claimed"}

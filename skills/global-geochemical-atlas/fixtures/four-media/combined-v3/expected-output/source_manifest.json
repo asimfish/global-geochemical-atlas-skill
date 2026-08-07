@@ -1,36 +1,70 @@
 {
-  "claim_boundary": "Source fields are preserved from the input. A locator is not independently verified unless a download manifest or source-specific audit says so. Declared licenses still require source-specific review.",
+  "claim_boundary": "Record evidence is matched by exact record ID and readable source/file/row identity. A verified chain proves provenance linkage, not measurement truth or method comparability. Declared licenses still require source-specific review.",
   "confidence_report": {
-    "bytes": 2045,
-    "confidence_version": "d2-confidence-v1",
+    "bytes": 5139,
+    "confidence_version": "d2-confidence-v3",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
     "input_identity": {
-      "bytes": 1209831,
+      "bytes": 1654534,
       "filename": "demo_input.csv",
-      "record_count": 1084
+      "record_count": 1271
     },
     "not_a_probability": true,
-    "run_id": "run-v2%7Cdemo_input.csv%7C1209831%7C1084%7C%7B%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22tectonic_setting_raw%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%7D"
+    "run_id": "run-v2%7Cdemo_input.csv%7C1654534%7C1271%7C%7B%22batch_qc_gate_applied%22%3Atrue%2C%22batch_qc_input_identity%22%3A%7B%22bytes%22%3A336%2C%22filename%22%3A%22batch_qc.csv%22%7D%2C%22batch_qc_policy_identity%22%3A%7B%22bytes%22%3A269%2C%22filename%22%3A%22qc_policy.json%22%7D%2C%22group_by%22%3A%5B%22element_or_analyte%22%2C%22medium%22%2C%22material%22%2C%22sample_type%22%2C%22soil_horizon%22%2C%22sediment_environment%22%2C%22water_fraction%22%2C%22grain_fraction%22%2C%22measurement_basis%22%2C%22tectonic_setting_raw%22%2C%22geologic_unit_raw%22%2C%22matched_geologic_unit%22%2C%22analytical_method%22%2C%22method_family%22%2C%22method_scope%22%2C%22digestion_or_extraction%22%5D%2C%22minimum_group_size%22%3A8%2C%22minimum_quantified_fraction%22%3A0.7%2C%22minimum_spatial_candidates%22%3A2%2C%22minimum_spatial_samples%22%3A5%2C%22region_bbox%22%3Anull%2C%22robust_z_threshold%22%3A3.5%2C%22schema_map%22%3A%7B%7D%2C%22spatial_fdr_alpha%22%3A0.1%2C%22spatial_grid_degrees%22%3A2.0%7D"
   },
   "coverage": {
     "declared_license_rate": 1.0,
-    "records_with_declared_license": 1084,
-    "records_with_source_locator": 1084,
-    "source_locator_rate": 1.0
+    "records_with_declared_license": 1271,
+    "records_with_source_locator": 1271,
+    "records_with_verified_evidence": 1271,
+    "source_locator_rate": 1.0,
+    "verified_evidence_rate": 1.0
   },
+  "data_mode": "fixture",
   "input": {
-    "bytes": 1209831,
+    "bytes": 1654534,
     "filename": "demo_input.csv",
-    "record_count": 1084
+    "record_count": 1271
   },
   "manifest_version": "geochemical-source-manifest-v2",
-  "source_count": 21,
+  "not_for_scientific_interpretation": true,
+  "record_evidence": {
+    "acquisition_manifest": {
+      "bytes": 46436,
+      "data_mode": "fixture",
+      "filename": "run_manifest.json",
+      "generation_version": null,
+      "not_for_scientific_interpretation": true
+    },
+    "bytes": 2153765,
+    "evidence_level": "verified_record_evidence",
+    "exact_record_id_match": true,
+    "filename": "record_evidence.jsonl",
+    "record_count": 1271,
+    "schema_version": "geochemical-record-evidence-v1"
+  },
+  "source_count": 26,
   "sources": [
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "von Fromm, S. F. et al. (2021). Continental-scale controls on soil organic carbon across sub-Saharan Africa. SOIL 7, 305-332. doi:10.5194/soil-7-305-2021. Dataset version 2.0: doi:10.34725/DVN/66BFOB."
+      ],
+      "article_dois": [
+        "10.5194/soil-7-305-2021"
+      ],
+      "dataset_dois": [
+        "10.34725/DVN/66BFOB"
+      ],
+      "dataset_titles": [
+        "AfSIS Phase I archived soil samples: wet chemistry data"
+      ],
+      "dataset_versions": [
+        "2.0"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1131",
         "AfSIS_Phase_I_wet_chemistry_v2.csv#row=1154",
@@ -45,15 +79,37 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+          "url": "https://data.worldagroforestry.org/api/access/datafile/11218?format=original"
+        }
+      ],
       "source_id": "afsis-phase-i-wet-chemistry",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Schneider, L.; Taylor, J.R.; de Caritat, P. (2025). National Geochemical Survey of Australia: The Mercury Concentrations Dataset. Geoscience Australia. https://doi.org/10.26186/150328"
+      ],
+      "article_dois": [
+        "10.1021/acs.est.5c11189"
+      ],
+      "dataset_dois": [
+        "10.26186/150328"
+      ],
+      "dataset_titles": [
+        "National Geochemical Survey of Australia: Mercury Concentrations Dataset"
+      ],
+      "dataset_versions": [
+        "2025-03-31"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "150328_00_1.CSV#row=1044",
         "150328_00_1.CSV#row=129",
@@ -68,15 +124,169 @@
       "located_record_count": 48,
       "locator_count": 48,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "150328_00_1.CSV",
+          "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+        }
+      ],
       "source_id": "australia-ngsa-mercury",
       "source_tiers": [
         "government"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Servico Geologico do Brasil - CPRM (2022), Resultados Analiticos de Amostras Geoquimicas e Produtos Associados, RIGeo doc/23413."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [
+        "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55-soil"
+      ],
+      "evidence_type": "verified_record_evidence",
+      "example_locators": [
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=23;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87987",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=29;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87993",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=2;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87954",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=33;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87997",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Solo.xlsx#row=8;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/5#OBJECTID=87966"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-SGB-RIGEO-open-item-metadata"
+      ],
+      "located_record_count": 30,
+      "locator_count": 5,
+      "record_count": 30,
+      "source_files": [],
+      "source_id": "brazil-sgb-florianopolis-soil",
+      "source_tiers": [
+        "government"
+      ],
+      "verified_record_count": 30
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [
+        "Servico Geologico do Brasil - CPRM (2022), Resultados Analiticos de Amostras Geoquimicas e Produtos Associados, RIGeo doc/23413."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [
+        "SGB-RIGEO-doc-23413-2022-bitstream-4ac11c55"
+      ],
+      "evidence_type": "verified_record_evidence",
+      "example_locators": [
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=175;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2#OBJECTID=87932",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=189;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2#OBJECTID=87939",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=373;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2#OBJECTID=87245",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=571;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2#OBJECTID=87496",
+        "geoquimica_florianopolis_1985.zip/Florianopolis_Geoquimica_Sedimento_de_Corrente.xlsx#row=573;https://geoportal.sgb.gov.br/server/rest/services/geoquimica/geoquimica_integrada/FeatureServer/2#OBJECTID=87496"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-SGB-RIGEO-open-item-metadata"
+      ],
+      "located_record_count": 31,
+      "locator_count": 6,
+      "record_count": 31,
+      "source_files": [],
+      "source_id": "brazil-sgb-florianopolis-stream-sediment",
+      "source_tiers": [
+        "government"
+      ],
+      "verified_record_count": 31
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [
+        "Geological Survey of Canada Open Files 405 and 899; CDoGS survey 21:0102."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [
+        "cdogs-svy210102-page-2025-05-18"
+      ],
+      "evidence_type": "verified_record_evidence",
+      "example_locators": [
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx#sheet=1&row=9761&column=As_Col",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx#sheet=1&row=9761&column=Cu_AAS",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx#sheet=1&row=9761&column=Hg_AAS",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx#sheet=1&row=9761&column=Ni_AAS",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0134c.xlsx#sheet=1&row=9761&column=Pb_AAS"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-Government-of-Canada-Terms"
+      ],
+      "located_record_count": 48,
+      "locator_count": 48,
+      "record_count": 48,
+      "source_files": [],
+      "source_id": "cdogs-210102-lake-sediment",
+      "source_tiers": [
+        "government"
+      ],
+      "verified_record_count": 48
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [
+        "Geological Survey of Canada Open File 899; CDoGS survey 21:0102."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [],
+      "dataset_versions": [
+        "cdogs-svy210102-page-2025-05-18"
+      ],
+      "evidence_type": "verified_record_evidence",
+      "example_locators": [
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx#sheet=1&row=101&column=U_FT",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx#sheet=1&row=103&column=U_FT",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx#sheet=1&row=104&column=U_FT",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx#sheet=1&row=11&column=U_FT",
+        "https://geochem.nrcan.gc.ca/ftp/data/raw_data/svy/svy210102_pkg_0136c.xlsx#sheet=1&row=114&column=U_FT"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "LicenseRef-Government-of-Canada-Terms"
+      ],
+      "located_record_count": 30,
+      "locator_count": 30,
+      "record_count": 30,
+      "source_files": [],
+      "source_id": "cdogs-210102-lake-water",
+      "source_tiers": [
+        "government"
+      ],
+      "verified_record_count": 30
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [
+        "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: floodplain sediment"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "F_AR_data_2v6_7Aug07.csv#row=4",
         "F_AR_data_2v6_7Aug07.csv#row=5",
@@ -91,15 +301,37 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "F_AR_data_2v6_7Aug07.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_AR_data_2v6_7Aug07.csv"
+        },
+        {
+          "filename": "F_XRF_data_2v6_7Aug07.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_XRF_data_2v6_7Aug07.csv"
+        }
+      ],
       "source_id": "foregs-floodplain-sediment",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: humus"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "H_icp_data_2v2_11Mar04.csv#row=10",
         "H_icp_data_2v2_11Mar04.csv#row=11",
@@ -114,15 +346,33 @@
       "located_record_count": 48,
       "locator_count": 16,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "H_icp_data_2v2_11Mar04.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip#member=H_icp_data_2v2_11Mar04.csv"
+        }
+      ],
       "source_id": "foregs-humus",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: stream sediment"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "S_AR_data_2v5_30Nov2006.csv#row=4",
         "S_AR_data_2v5_30Nov2006.csv#row=5",
@@ -137,15 +387,37 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "S_AR_data_2v5_30Nov2006.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_AR_data_2v5_30Nov2006.csv"
+        },
+        {
+          "filename": "S_XRF_data_2v9_30Nov06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_XRF_data_2v9_30Nov06.csv"
+        }
+      ],
       "source_id": "foregs-stream-sediment",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: stream water"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "W_all_data_2v8_17Sep07.csv#row=10",
         "W_all_data_2v8_17Sep07.csv#row=11",
@@ -160,15 +432,33 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "W_all_data_2v8_17Sep07.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip#member=W_all_data_2v8_17Sep07.csv"
+        }
+      ],
       "source_id": "foregs-stream-water",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: subsoil"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "C_AR_data_2v5_8Feb06.csv#row=4",
         "C_AR_data_2v5_8Feb06.csv#row=5",
@@ -183,15 +473,45 @@
       "located_record_count": 48,
       "locator_count": 24,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "C_AR_data_2v5_8Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_AR_data_2v5_8Feb06.csv"
+        },
+        {
+          "filename": "C_XRF_data_2v6_8Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_XRF_data_2v6_8Feb06.csv"
+        },
+        {
+          "filename": "C_icp_data_2v6_9Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icp_data_2v6_9Feb06.csv"
+        },
+        {
+          "filename": "C_icpadd_data_2v5_9Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icpadd_data_2v5_9Feb06.csv"
+        }
+      ],
       "source_id": "foregs-subsoil",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Salminen, R. et al. (2005). Geochemical Atlas of Europe, Part 1. Geological Survey of Finland, Espoo."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: topsoil"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "T_AR_data_2v4_8Feb06.csv#row=4",
         "T_AR_data_2v4_8Feb06.csv#row=5",
@@ -206,15 +526,45 @@
       "located_record_count": 48,
       "locator_count": 24,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "T_AR_data_2v4_8Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_AR_data_2v4_8Feb06.csv"
+        },
+        {
+          "filename": "T_XRF_data_2v6_8Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_XRF_data_2v6_8Feb06.csv"
+        },
+        {
+          "filename": "T_icp_data_2v3_8Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icp_data_2v3_8Feb06.csv"
+        },
+        {
+          "filename": "T_icpadd_data_2v3_8Feb06.csv",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icpadd_data_2v3_8Feb06.csv"
+        }
+      ],
       "source_id": "foregs-topsoil",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Geological Survey Ireland (2024), GSI GEMAS European Geochemical Data; EuroGeoSurveys GEMAS project."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)"
+      ],
+      "dataset_versions": [
+        "GSI-ArcGIS-Enterprise-republication-2024"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
         "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
@@ -228,15 +578,49 @@
       "located_record_count": 52,
       "locator_count": 4,
       "record_count": 52,
+      "source_files": [
+        {
+          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+        },
+        {
+          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=2",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+        },
+        {
+          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=3",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+        },
+        {
+          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=4",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+        }
+      ],
       "source_id": "gemas-europe",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 52
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Heinle, M., Lisniak, D., and Saile, P. (2026). UNEP GEMS/Water Global Freshwater Quality Archive, v3. Zenodo. https://doi.org/10.5281/zenodo.18459694"
+      ],
+      "article_dois": [
+        "10.5281/zenodo.18459694"
+      ],
+      "dataset_dois": [
+        "10.5281/zenodo.18459694"
+      ],
+      "dataset_titles": [
+        "UNEP GEMS/Water Global Freshwater Quality Archive: v3 seven-element subset"
+      ],
+      "dataset_versions": [
+        "v3"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "Arsenic.csv#row=26008",
         "Arsenic.csv#row=26052",
@@ -251,15 +635,61 @@
       "located_record_count": 56,
       "locator_count": 56,
       "record_count": 56,
+      "source_files": [
+        {
+          "filename": "Arsenic.csv",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        },
+        {
+          "filename": "Chromium.csv",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        },
+        {
+          "filename": "Copper.csv",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        },
+        {
+          "filename": "Lead.csv",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        },
+        {
+          "filename": "Mercury.csv",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        },
+        {
+          "filename": "Nickel.csv",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        },
+        {
+          "filename": "Zinc.csv",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        }
+      ],
       "source_id": "gemstat-open-archive",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 56
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "DIGIS Team (2026). GEOROC Compilation: Intraplate Volcanic Rocks, Version 12.0. GRO.data. https://doi.org/10.25625/RZZ9VM"
+      ],
+      "article_dois": [
+        "10.25625/RZZ9VM"
+      ],
+      "dataset_dois": [
+        "10.25625/RZZ9VM"
+      ],
+      "dataset_titles": [
+        "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member"
+      ],
+      "dataset_versions": [
+        "12.0"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "2026-06-RZZ9VM_ANTARCTICA.csv#row=135",
         "2026-06-RZZ9VM_ANTARCTICA.csv#row=136",
@@ -274,15 +704,43 @@
       "located_record_count": 48,
       "locator_count": 27,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "2026-06-RZZ9VM_ANTARCTICA.csv",
+          "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+        }
+      ],
       "source_id": "georoc-antarctica-intraplate",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "[20057] SIEPIERSKI L., FERREIRA FILHO C. F.:    SPINIFEX-TEXTURED KOMATIITES IN THE SOUTH BORDER OF THE CARAJAS RIDGE, SELVA GREENSTONE BELT, CARAJÁS PROVINCE, BRAZIL  J. S. AMER. EARTH SCI. 66   [2016] 41-55    doi: 10.1016/j.jsames.2015.12.011",
+        "[26368] TRAN T. D., WANG KUO-LUNG, KOVACH V. P., SHANKS P. W. C., VELIKOSLAVINSKY S. D., POPOV N. V., DRIL S. I., CHU ZHUYIN, LEE DER-CHUEN, KUO LI-WIE, IIZUKA Y., LEE HAO-YANG:    PLATE TECTONICS IN ACTION IN THE MESOARCHEAN: IMPLICATION FROM THE OLONDO GREENSTONE BELT ON THE ALDAN SHIELD OF SIBERIAN CRATON  EARTH PLANET. SCI. LETT. 603 (117975)  [2023]    doi: 10.1016/j.epsl.2022.117975",
+        "[6004] ZHURAVLEV D. Z., PUCHTEL I. S., SAMSONOV A. V.:    SM-ND AGE AND GEOCHEMISTRY OF METAVOLCANICS FROM THE OLODINSKII GREENSTONE BELT (ALDAN SHIELD)  [1989] 39-49",
+        "[7221] PUCHTEL I. S., ZHURAVLEV D. Z.:    PETROLOGY OF MAFIC-ULTRAMAFIC METAVOLCANICS AND RELATED ROCKS FROM THE OLONDO GREENSTONE BELT, ALDAN SHIELD  PETROLOGY 1   [1993] 263-299",
+        "[9427] PUCHTEL I. S.:    3.0 GA OLONDO GREENSTONE BELT IN THE ALDAN SHIELD, E. SIBERIA T. M. KUSKY (ED.) | PRECAMBRIAN OPHIOLITES AND RELATED ROCKS | ELSEVIER, AMSTERDAM [2004] 405-423    doi: 10.1016/S0166-2635(04)13013-2"
+      ],
+      "article_dois": [
+        "10.1016/S0166-2635(04)13013-2",
+        "10.1016/j.epsl.2022.117975",
+        "10.1016/j.jsames.2015.12.011"
+      ],
+      "dataset_dois": [
+        "10.25625/1KRR1P"
+      ],
+      "dataset_titles": [
+        "GEOROC Compilation: Archaean Cratons"
+      ],
+      "dataset_versions": [
+        "12.0"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=10",
         "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv#row=11",
@@ -297,15 +755,41 @@
       "located_record_count": 48,
       "locator_count": 36,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
+          "url": "https://doi.org/10.25625/1KRR1P/OHZY0O"
+        },
+        {
+          "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv",
+          "url": "https://doi.org/10.25625/1KRR1P/0YSJJR"
+        }
+      ],
       "source_id": "georoc-archaean",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "GEOTRACES Intermediate Data Product Group (2025). The GEOTRACES Intermediate Data Product 2025 (IDP2025). NERC EDS British Oceanographic Data Centre NOC. https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+      ],
+      "article_dois": [
+        "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+      ],
+      "dataset_dois": [
+        "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+      ],
+      "dataset_titles": [
+        "GEOTRACES Intermediate Data Product 2025: discrete seawater"
+      ],
+      "dataset_versions": [
+        "IDP2025"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=125",
         "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt#row=144",
@@ -320,15 +804,33 @@
       "located_record_count": 48,
       "locator_count": 33,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+          "url": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+        }
+      ],
       "source_id": "geotraces-idp2025",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Imai, N. et al. (2004). Geochemical Map of Japan. Geological Survey of Japan, AIST, 209 p.; official online sample and concentration tables."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "Geochemical Map of Japan: national river-sediment sample and concentration tables"
+      ],
+      "dataset_versions": [
+        "sample-2024-02-20_concentration-2007-01-10"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "samplejoho.csv#row=10;noudo.csv#row=10",
         "samplejoho.csv#row=11;noudo.csv#row=11",
@@ -343,15 +845,35 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "samplejoho.csv",
+          "url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
+        }
+      ],
       "source_id": "japan-gsj-geochemical-map",
       "source_tiers": [
         "government"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Imai, N. et al. (2010). Geochemical Map of Sea and Land of Japan. Synthesiology 3, 281-291. https://doi.org/10.5571/synth.3.281; official marine concentration CSV."
+      ],
+      "article_dois": [
+        "10.5571/synth.3.281"
+      ],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "Geochemical Map of Sea and Land of Japan: marine sediment concentrations"
+      ],
+      "dataset_versions": [
+        "content-snapshot-2026-08-06"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "ocean-noudo.csv#row=2",
         "ocean-noudo.csv#row=3",
@@ -366,15 +888,33 @@
       "located_record_count": 56,
       "locator_count": 8,
       "record_count": 56,
+      "source_files": [
+        {
+          "filename": "ocean-noudo.csv",
+          "url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+        }
+      ],
       "source_id": "japan-gsj-marine-sediment",
       "source_tiers": [
         "government"
-      ]
+      ],
+      "verified_record_count": 56
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Institute of Marine Research and Geological Survey of Norway. MarChem marine chemistry database, content-addressed API snapshot observed 2026-08-05T10:27:11Z."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "MarChem marine chemistry database for Norwegian waters"
+      ],
+      "dataset_versions": [
+        "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1006",
         "MarChem_Inorganic_Data_20260805T102709Z.csv#row=1014",
@@ -389,15 +929,37 @@
       "located_record_count": 112,
       "locator_count": 28,
       "record_count": 112,
+      "source_files": [
+        {
+          "filename": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+          "url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MarChem_Inorganic_Data_20260805T102709Z.csv"
+        }
+      ],
       "source_id": "norway-marchem",
       "source_tiers": [
         "government"
-      ]
+      ],
+      "verified_record_count": 112
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Lu, W.; Wang, Y.; Oppo, D.W.; Nielsen, S.G.; Costa, K.M. (2022). Geochemistry of modern sediments and the glacial Arabian Sea. PANGAEA. https://doi.org/10.1594/PANGAEA.950139"
+      ],
+      "article_dois": [
+        "10.1594/PANGAEA.950139"
+      ],
+      "dataset_dois": [
+        "10.1594/PANGAEA.950139"
+      ],
+      "dataset_titles": [
+        "Geochemistry of modern sediments and the glacial Arabian Sea"
+      ],
+      "dataset_versions": [
+        "2022-11-02"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "PANGAEA.950139.tab#row=102",
         "PANGAEA.950139.tab#row=103",
@@ -412,15 +974,37 @@
       "located_record_count": 48,
       "locator_count": 8,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "PANGAEA.950139.tab",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+        }
+      ],
       "source_id": "pangaea-arabian-sea-sediment",
       "source_tiers": [
         "peer_reviewed"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Guinoiseau, D. et al. (2022). Chemical compositions of deflatable soil fractions from North Africa. PANGAEA. https://doi.org/10.1594/PANGAEA.949903"
+      ],
+      "article_dois": [
+        "10.1016/j.quascirev.2022.107729"
+      ],
+      "dataset_dois": [
+        "10.1594/PANGAEA.949903"
+      ],
+      "dataset_titles": [
+        "Chemical compositions of deflatable soil fractions from North Africa"
+      ],
+      "dataset_versions": [
+        "2022-10-25"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "Table_S5.tab#row=115",
         "Table_S5.tab#row=116",
@@ -435,15 +1019,37 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "Table_S5.tab",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
+        }
+      ],
       "source_id": "pangaea-north-africa-soil",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Zhang et al. (2025). A multi-element dataset of soil profiles across climatic zones in China's mountains. ESSD 17, 4779–4797. https://doi.org/10.5194/essd-17-4779-2025; dataset https://doi.org/10.11888/Terre.tpdc.302620"
+      ],
+      "article_dois": [
+        "10.5194/essd-17-4779-2025"
+      ],
+      "dataset_dois": [
+        "10.11888/Terre.tpdc.302620"
+      ],
+      "dataset_titles": [
+        "Multi-element dataset of soil profiles across climatic zones in China's mountains"
+      ],
+      "dataset_versions": [
+        "tpdc-file-2025-07-23"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "Soil dataset.xlsx#sheet1-row=2",
         "Soil dataset.xlsx#sheet1-row=3",
@@ -458,15 +1064,61 @@
       "located_record_count": 40,
       "locator_count": 8,
       "record_count": 40,
+      "source_files": [
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=2",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=3",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=4",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=5",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=6",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=7",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=8",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "filename": "Soil dataset.xlsx#sheet1-row=9",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        }
+      ],
       "source_id": "tpdc-china-mountain-soil",
       "source_tiers": [
         "official_curated"
-      ]
+      ],
+      "verified_record_count": 40
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "U.S. Geological Survey and National Water Quality Monitoring Council. Water Quality Portal result and station services, USGS-11447650, accessed 2026-08-06."
+      ],
+      "article_dois": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal"
+      ],
+      "dataset_versions": [
+        "content-snapshot-2026-08-06"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "results.csv#row=10",
         "results.csv#row=102",
@@ -481,15 +1133,37 @@
       "located_record_count": 48,
       "locator_count": 48,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "results.csv",
+          "url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+        }
+      ],
       "source_id": "us-wqp-sacramento-river-arsenic",
       "source_tiers": [
         "government"
-      ]
+      ],
+      "verified_record_count": 48
     },
     {
       "all_records_license_declared": true,
       "all_records_located": true,
-      "evidence_type": "source_declared_in_input",
+      "article_citations": [
+        "Smith, D.B., Cannon, W.F., Woodruff, L.G., Solano, F., Kilburn, J.E., and Fey, D.L. (2013). Geochemical and mineralogical data for soils of the conterminous United States. U.S. Geological Survey Data Series 801. https://doi.org/10.3133/ds801"
+      ],
+      "article_dois": [
+        "10.3133/ds801"
+      ],
+      "dataset_dois": [
+        "10.3133/ds801"
+      ],
+      "dataset_titles": [
+        "Geochemical and mineralogical data for soils of the conterminous United States"
+      ],
+      "dataset_versions": [
+        "Data Series 801, 2013 release"
+      ],
+      "evidence_type": "verified_record_evidence",
       "example_locators": [
         "Appendix_2b_Top5_18Sept2013.txt#row=15",
         "Appendix_2b_Top5_18Sept2013.txt#row=16",
@@ -504,10 +1178,72 @@
       "located_record_count": 48,
       "locator_count": 12,
       "record_count": 48,
+      "source_files": [
+        {
+          "filename": "Appendix_2b_Top5_18Sept2013.txt",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt"
+        },
+        {
+          "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt"
+        },
+        {
+          "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+        }
+      ],
       "source_id": "usgs-conus-soil",
       "source_tiers": [
         "government"
-      ]
+      ],
+      "verified_record_count": 48
+    },
+    {
+      "all_records_license_declared": true,
+      "all_records_located": true,
+      "article_citations": [],
+      "article_dois": [],
+      "dataset_dois": [
+        "10.5066/P1NZXUZF"
+      ],
+      "dataset_titles": [],
+      "dataset_versions": [
+        "2026-02-09"
+      ],
+      "evidence_type": "verified_record_evidence",
+      "example_locators": [
+        "UTVolcRocks_UGS-ALS_Data.csv#row=10",
+        "UTVolcRocks_UGS-ALS_Data.csv#row=11",
+        "UTVolcRocks_UGS-ALS_Data.csv#row=12",
+        "UTVolcRocks_UGS-ALS_Data.csv#row=15",
+        "UTVolcRocks_UGS-ALS_Data.csv#row=16"
+      ],
+      "license_review": "verify_source_terms",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "located_record_count": 48,
+      "locator_count": 30,
+      "record_count": 48,
+      "source_files": [
+        {
+          "filename": "UTVolcRocks_UGS-ALS_Data.csv",
+          "url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__a8%2F71%2Fda%2Fa871daab3b75e0022ca8514e12d8348f40d287ba"
+        },
+        {
+          "filename": "UTVolcRocks_USGS-ALabs_Data.csv",
+          "url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__c6%2Fa8%2F81%2Fc6a881e369a2101825cefe184ee0f39ee0b29300"
+        },
+        {
+          "filename": "UTVolcRocks_USGS_ContractLabs_Data.csv",
+          "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__be%2F10%2F4a%2Fbe104aa01baf963832fab6434f9def6e5715fa67"
+        }
+      ],
+      "source_id": "usgs-utah-volcanic-whole-rock",
+      "source_tiers": [
+        "official_curated"
+      ],
+      "verified_record_count": 48
     }
   ],
   "synthetic_data_present": false

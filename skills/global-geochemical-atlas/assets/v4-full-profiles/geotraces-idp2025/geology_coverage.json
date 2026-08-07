@@ -1,6 +1,6 @@
 {
   "as_of": "2026-08-06T10:05:00Z",
-  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "IDP2025",
   "geographic_context_is_not_counted_as_geologic_unit": true,
   "geologic_age_raw": 0,

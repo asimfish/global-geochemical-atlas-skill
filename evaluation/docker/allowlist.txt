@@ -1,0 +1,17 @@
+# One hostname per line. A leading dot allows that domain and its subdomains.
+# The model gateway hostname is added at runtime and recorded separately.
+.data.usgs.gov
+.doi.org
+.earthchem.org
+.georoc.eu
+.geotraces.org
+.gemstat.org
+.githubusercontent.com
+.mendeley.com
+.naturalearthdata.com
+.noaa.gov
+.pangaea.de
+.sciencebase.gov
+.usgs.gov
+.waterqualitydata.us
+.zenodo.org

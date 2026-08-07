@@ -1,0 +1,7 @@
+record_id,sample_id,element,value,unit,medium,latitude,longitude,source_id,qc_flags
+S01,S01,Ni,42,mg/kg,soil,,,q03-fixture,
+S02,S02,Pb,18,mg/kg,soil,,,q03-fixture,
+S03,S03,Zn,120,mg/kg,soil,,,q03-fixture,
+S04,S04,Cu,35,mg/kg,soil,,,q03-fixture,
+S05,S05,Co,8,mg/kg,soil,,,q03-fixture,
+S06,S06,As,400,mg/kg,soil,,,q03-fixture,

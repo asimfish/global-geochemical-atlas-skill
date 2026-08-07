@@ -1,0 +1,7 @@
+sample_id,element,original_value,original_unit,normalized_value,normalized_unit,conversion_rule
+S01,Ni,42,ppm,42,mg/kg,ppm_mass_mass_to_mg_per_kg
+S02,Pb,18,mg/kg,18,mg/kg,identity_mg_per_kg
+S03,Zn,0.012,wt%,120,mg/kg,wt_percent_times_10000
+S04,Cu,35,ug/g,35,mg/kg,ug_per_g_to_mg_per_kg
+S05,Co,8000,ppb,8,mg/kg,ppb_mass_mass_times_0.001
+S06,As,0.4,g/kg,400,mg/kg,g_per_kg_times_1000

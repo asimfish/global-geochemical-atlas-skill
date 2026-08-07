@@ -6,7 +6,9 @@
     129.6451,
     53.4528
   ],
-  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_status": "source_crs_declared_epsg4326",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
   "coordinate_uncertainty_m_observation_counts": {
     "not_reported": 6570
   },
@@ -47,6 +49,53 @@
     "WZS": 120,
     "XX": 390
   },
+  "reported_coordinate_sample_count": 1314,
+  "reported_covered_spatial_cells": 42,
+  "reported_spatial_cell_ids": [
+    "+18:+109",
+    "+21:+107",
+    "+23:+112",
+    "+24:+100",
+    "+24:+101",
+    "+24:+112",
+    "+24:+113",
+    "+25:+118",
+    "+26:+108",
+    "+26:+114",
+    "+27:+102",
+    "+27:+108",
+    "+27:+114",
+    "+29:+101",
+    "+29:+102",
+    "+29:+114",
+    "+30:+119",
+    "+31:+110",
+    "+31:+115",
+    "+33:+105",
+    "+33:+107",
+    "+34:+107",
+    "+37:+111",
+    "+38:+105",
+    "+38:+113",
+    "+40:+117",
+    "+42:+117",
+    "+42:+127",
+    "+42:+128",
+    "+44:+118",
+    "+45:+127",
+    "+46:+128",
+    "+47:+129",
+    "+48:+128",
+    "+49:+123",
+    "+50:+122",
+    "+50:+123",
+    "+50:+124",
+    "+51:+123",
+    "+51:+124",
+    "+52:+122",
+    "+53:+122"
+  ],
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
   "source_crs_observation_counts": {
     "not_reported": 6570
   },
@@ -95,6 +144,6 @@
     "+52:+122",
     "+53:+122"
   ],
-  "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
   "valid_coordinate_sample_count": 1314
 }

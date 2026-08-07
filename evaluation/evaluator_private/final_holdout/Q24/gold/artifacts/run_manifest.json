@@ -1,0 +1,1189 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "observations",
+      "sha256": "7fa97e342e7d19d4c9188c478c62cd5782c1a33df961652158031e6b7a9751ac"
+    },
+    {
+      "artifact_id": "database",
+      "logical_sha256": "dec2793574151e2d319509a6f60cd15cd2127f9db452a96acdf462826ac6bcc4",
+      "sha256": "bf07470ad906de81e45439fd60a016a665be028bba84c647a7fdafdf462b906d"
+    },
+    {
+      "artifact_id": "sources",
+      "sha256": "8e745a71cee3bb99780151edc9a3e093525e84f01bf78d93f441dc088cd1efae"
+    },
+    {
+      "artifact_id": "qc",
+      "sha256": "9e898ac577ee7178ae4c2452cd3fc3af3231d6f244ba9c5862f49eb0f3b303c4"
+    },
+    {
+      "artifact_id": "anomaly_table",
+      "sha256": "093c5c772a44630789f2e37a34f624c414d6abed19183ae04a9ef7a6ece210b0"
+    },
+    {
+      "artifact_id": "anomaly_geojson",
+      "sha256": "4d57361d66c08769154d9d01391899b9027f7ca396fb8bfdbf65c15ac0fdf6f2"
+    },
+    {
+      "artifact_id": "h3_cells",
+      "sha256": "c325b14e31ac6db62b0b0ee50044218b9813ceb81b0da830576aa62d6e5694ce"
+    },
+    {
+      "artifact_id": "static_map",
+      "sha256": "550e33c888208480f79b410727ee03f83fde93e19bde83165f7bc0bfef8780a1"
+    },
+    {
+      "artifact_id": "interactive_map",
+      "sha256": "32c58d28f857c33583f8824fc75302bcaa815920148abc64ed4751e0c44308fb"
+    }
+  ],
+  "benchmark_contract": {
+    "benchmark_version": "6.0.0-draft.3",
+    "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+    "question_id": "Q24",
+    "schema_version": "e2.e1-alignment.v1",
+    "split": "final_holdout",
+    "task_id": "GGA-E2E-001"
+  },
+  "benchmark_evidence": {
+    "anomalies.geojson": {
+      "format": "json",
+      "value": {
+        "features": [
+          {
+            "geometry": {
+              "coordinates": [
+                -100.21,
+                30.21
+              ],
+              "type": "Point"
+            },
+            "id": "E21",
+            "properties": {
+              "anomaly_type": "statistical_relative_enrichment",
+              "center_log10": 1.4771212547,
+              "group_id": "soil|dry|total|Cu|ICP-MS",
+              "n": 21,
+              "record_id": "E21",
+              "robust_z": 10.4080919691,
+              "scale_log10": 0.1173941154,
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          }
+        ],
+        "type": "FeatureCollection"
+      }
+    },
+    "confidence_report.json": {
+      "format": "json",
+      "value": {
+        "aggregation": "unweighted mean of five evidence-completeness components",
+        "band": "medium",
+        "components": {
+          "normalization": {
+            "evidence": "reported and normalized values remain linked in observations.csv",
+            "score": 1.0
+          },
+          "provenance": {
+            "evidence": "record_id and source_id are retained in database, map and anomaly outputs",
+            "score": 1.0
+          },
+          "quality_control": {
+            "evidence": "censoring, invalid coordinates and batch status are explicit",
+            "score": 1.0
+          },
+          "source_integrity": {
+            "evidence": "one of two source files failed SHA-256 verification and was excluded",
+            "score": 0.5
+          },
+          "spatial": {
+            "evidence": "valid coordinates are mapped; no external geologic-unit join was supplied",
+            "score": 0.5
+          }
+        },
+        "interpretation": "Workflow confidence summarizes auditable evidence completeness; it is not a probability that a measurement or anomaly is scientifically true.",
+        "overall_score": 0.8,
+        "schema_version": "q24.workflow-confidence.v1"
+      }
+    },
+    "map.geojson": {
+      "format": "json",
+      "value": {
+        "features": [
+          {
+            "geometry": {
+              "coordinates": [
+                -100.01,
+                30.01
+              ],
+              "type": "Point"
+            },
+            "id": "E01",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 20,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E01",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.02,
+                30.02
+              ],
+              "type": "Point"
+            },
+            "id": "E02",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 21,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E02",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.03,
+                30.03
+              ],
+              "type": "Point"
+            },
+            "id": "E03",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 22,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E03",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.04,
+                30.04
+              ],
+              "type": "Point"
+            },
+            "id": "E04",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 23,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E04",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.05,
+                30.05
+              ],
+              "type": "Point"
+            },
+            "id": "E05",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 24,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E05",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.06,
+                30.06
+              ],
+              "type": "Point"
+            },
+            "id": "E06",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 25,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E06",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.07,
+                30.07
+              ],
+              "type": "Point"
+            },
+            "id": "E07",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 26,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E07",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.08,
+                30.08
+              ],
+              "type": "Point"
+            },
+            "id": "E08",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 27,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E08",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.09,
+                30.09
+              ],
+              "type": "Point"
+            },
+            "id": "E09",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 28,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E09",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.1,
+                30.1
+              ],
+              "type": "Point"
+            },
+            "id": "E10",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 29,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E10",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.11,
+                30.11
+              ],
+              "type": "Point"
+            },
+            "id": "E11",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 30,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E11",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.12,
+                30.12
+              ],
+              "type": "Point"
+            },
+            "id": "E12",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 31,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E12",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.13,
+                30.13
+              ],
+              "type": "Point"
+            },
+            "id": "E13",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 32,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E13",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.14,
+                30.14
+              ],
+              "type": "Point"
+            },
+            "id": "E14",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 33,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E14",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.15,
+                30.15
+              ],
+              "type": "Point"
+            },
+            "id": "E15",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 34,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E15",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.16,
+                30.16
+              ],
+              "type": "Point"
+            },
+            "id": "E16",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 35,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E16",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.17,
+                30.17
+              ],
+              "type": "Point"
+            },
+            "id": "E17",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 36,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E17",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.18,
+                30.18
+              ],
+              "type": "Point"
+            },
+            "id": "E18",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 37,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E18",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.19,
+                30.19
+              ],
+              "type": "Point"
+            },
+            "id": "E19",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 38,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E19",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.2,
+                30.2
+              ],
+              "type": "Point"
+            },
+            "id": "E20",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 39,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E20",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -100.21,
+                30.21
+              ],
+              "type": "Point"
+            },
+            "id": "E21",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": 500,
+              "qc_flags": [],
+              "qualifier": "=",
+              "record_id": "E21",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -101,
+                31
+              ],
+              "type": "Point"
+            },
+            "id": "E22",
+            "properties": {
+              "element": "Cu",
+              "normalized_unit": "mg/kg",
+              "normalized_value": null,
+              "qc_flags": [
+                "left_censored"
+              ],
+              "qualifier": "<",
+              "record_id": "E22",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                -104,
+                33
+              ],
+              "type": "Point"
+            },
+            "id": "E25",
+            "properties": {
+              "element": "Pb",
+              "normalized_unit": "ug/L",
+              "normalized_value": 20,
+              "qc_flags": [
+                "insufficient_group_size"
+              ],
+              "qualifier": "=",
+              "record_id": "E25",
+              "source_id": "SRC-A"
+            },
+            "type": "Feature"
+          }
+        ],
+        "type": "FeatureCollection"
+      }
+    },
+    "observations.csv": {
+      "columns": [
+        "record_id",
+        "source_id",
+        "batch_id",
+        "medium",
+        "basis",
+        "phase",
+        "element",
+        "reported_value",
+        "reported_unit",
+        "qualifier",
+        "censored",
+        "normalized_value",
+        "normalized_unit",
+        "latitude",
+        "longitude",
+        "eligible_map",
+        "eligible_anomaly",
+        "qc_flags"
+      ],
+      "format": "csv",
+      "rows": [
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.01",
+          "longitude": "-100.01",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "20",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E01",
+          "reported_unit": "ppm",
+          "reported_value": "20",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.02",
+          "longitude": "-100.02",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "21",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E02",
+          "reported_unit": "ppm",
+          "reported_value": "21",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.03",
+          "longitude": "-100.03",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "22",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E03",
+          "reported_unit": "ppm",
+          "reported_value": "22",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.04",
+          "longitude": "-100.04",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "23",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E04",
+          "reported_unit": "ppm",
+          "reported_value": "23",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.05",
+          "longitude": "-100.05",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "24",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E05",
+          "reported_unit": "ppm",
+          "reported_value": "24",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.06",
+          "longitude": "-100.06",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "25",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E06",
+          "reported_unit": "ppm",
+          "reported_value": "25",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.07",
+          "longitude": "-100.07",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "26",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E07",
+          "reported_unit": "ppm",
+          "reported_value": "26",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.08",
+          "longitude": "-100.08",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "27",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E08",
+          "reported_unit": "ppm",
+          "reported_value": "27",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.09",
+          "longitude": "-100.09",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "28",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E09",
+          "reported_unit": "ppm",
+          "reported_value": "28",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.10",
+          "longitude": "-100.10",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "29",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E10",
+          "reported_unit": "ppm",
+          "reported_value": "29",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.11",
+          "longitude": "-100.11",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "30",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E11",
+          "reported_unit": "ppm",
+          "reported_value": "30",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.12",
+          "longitude": "-100.12",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "31",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E12",
+          "reported_unit": "ppm",
+          "reported_value": "31",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.13",
+          "longitude": "-100.13",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "32",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E13",
+          "reported_unit": "ppm",
+          "reported_value": "32",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.14",
+          "longitude": "-100.14",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "33",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E14",
+          "reported_unit": "ppm",
+          "reported_value": "33",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.15",
+          "longitude": "-100.15",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "34",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E15",
+          "reported_unit": "ppm",
+          "reported_value": "34",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.16",
+          "longitude": "-100.16",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "35",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E16",
+          "reported_unit": "ppm",
+          "reported_value": "35",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.17",
+          "longitude": "-100.17",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "36",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E17",
+          "reported_unit": "ppm",
+          "reported_value": "36",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.18",
+          "longitude": "-100.18",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "37",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E18",
+          "reported_unit": "ppm",
+          "reported_value": "37",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.19",
+          "longitude": "-100.19",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "38",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E19",
+          "reported_unit": "ppm",
+          "reported_value": "38",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.20",
+          "longitude": "-100.20",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "39",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E20",
+          "reported_unit": "ppm",
+          "reported_value": "39",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "true",
+          "eligible_map": "true",
+          "latitude": "30.21",
+          "longitude": "-100.21",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "500",
+          "phase": "total",
+          "qc_flags": "",
+          "qualifier": "=",
+          "record_id": "E21",
+          "reported_unit": "ppm",
+          "reported_value": "500",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "true",
+          "element": "Cu",
+          "eligible_anomaly": "false",
+          "eligible_map": "true",
+          "latitude": "31",
+          "longitude": "-101",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "",
+          "phase": "total",
+          "qc_flags": "left_censored",
+          "qualifier": "<",
+          "record_id": "E22",
+          "reported_unit": "ppm",
+          "reported_value": "<0.5",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "dry",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Cu",
+          "eligible_anomaly": "false",
+          "eligible_map": "false",
+          "latitude": "95",
+          "longitude": "-102",
+          "medium": "soil",
+          "normalized_unit": "mg/kg",
+          "normalized_value": "40",
+          "phase": "total",
+          "qc_flags": "latitude_out_of_range",
+          "qualifier": "=",
+          "record_id": "E23",
+          "reported_unit": "ppm",
+          "reported_value": "40",
+          "source_id": "SRC-A"
+        },
+        {
+          "basis": "aqueous",
+          "batch_id": "BATCH-A",
+          "censored": "false",
+          "element": "Pb",
+          "eligible_anomaly": "false",
+          "eligible_map": "true",
+          "latitude": "33",
+          "longitude": "-104",
+          "medium": "water",
+          "normalized_unit": "ug/L",
+          "normalized_value": "20",
+          "phase": "dissolved",
+          "qc_flags": "insufficient_group_size",
+          "qualifier": "=",
+          "record_id": "E25",
+          "reported_unit": "mg/L",
+          "reported_value": "0.02",
+          "source_id": "SRC-A"
+        }
+      ]
+    },
+    "qc_report.json": {
+      "format": "json",
+      "value": {
+        "accepted_database_rows": 24,
+        "anomaly_eligible_rows": 21,
+        "anomaly_features": 1,
+        "censored_rows": 1,
+        "excluded_integrity_rows": 1,
+        "groups_not_scored": [
+          "water|aqueous|dissolved|Pb|ICP-MS"
+        ],
+        "invalid_coordinate_rows": 1,
+        "mapped_features": 23,
+        "policy_version": "q24-policy-1",
+        "raw_input_rows": 25,
+        "task_id": "GGA-E2E-001"
+      }
+    },
+    "run_manifest.json": {
+      "format": "json",
+      "value": {
+        "batch_status_version": "q24-batches-1",
+        "exit_code": 2,
+        "outputs": [
+          "observations.csv",
+          "qc_report.json",
+          "sources.jsonl",
+          "map.geojson",
+          "anomalies.geojson",
+          "run_manifest.json",
+          "summary.md"
+        ],
+        "policy_version": "q24-policy-1",
+        "source_manifest_version": "q24-sources-1",
+        "status": "partial_success",
+        "task_id": "GGA-E2E-001",
+        "warnings": [
+          "source_integrity_failure:SRC-B",
+          "invalid_coordinate:E23",
+          "anomaly_not_run:water|aqueous|dissolved|Pb|ICP-MS"
+        ]
+      }
+    },
+    "sources.jsonl": {
+      "format": "jsonl",
+      "rows": [
+        {
+          "computed_sha256": "03116fbcedab6f5d0dee9b551c5647195b9fd9eae3c5197dad99bcce35d0caae",
+          "dataset_version": "A-1",
+          "downstream_used": true,
+          "expected_sha256": "03116fbcedab6f5d0dee9b551c5647195b9fd9eae3c5197dad99bcce35d0caae",
+          "file": "source_a.csv",
+          "integrity_status": "verified",
+          "license": "CC-BY-4.0",
+          "source_id": "SRC-A"
+        },
+        {
+          "computed_sha256": "82b9be48047a72bf7be07b61a59a89541b41fb319adcdd6ff9ae128af611263e",
+          "dataset_version": "B-1",
+          "downstream_used": false,
+          "expected_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "file": "source_b.csv",
+          "integrity_status": "checksum_mismatch",
+          "license": "CC-BY-4.0",
+          "source_id": "SRC-B"
+        }
+      ]
+    },
+    "summary.md": {
+      "format": "text",
+      "value": "# End-to-end scientific summary\n\nThe run is a partial success. Source integrity verification excluded SRC-B after a checksum mismatch; it was not used downstream. One censored Cu record was retained with a null numeric value and a qualifier, and one invalid coordinate remained in the database but was excluded from the map. The water Pb record stayed in a separate unit and comparison group and did not meet the anomaly sample-size rule.\n\nOne Cu record is a statistical relative enrichment against the frozen soil/dry/total/Cu/ICP-MS background. This statistical flag does not establish a mineral deposit, contamination source, or causal mechanism. Record-level source identity, units, QC flags, and map linkage must be retained for review.\n"
+    }
+  },
+  "config_sha256": "435b9858860af4a7724c13bbdf94bbe5ccce4616ff51438252293f5ab7c1b1e2",
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "physical_artifact_profile": {
+    "interactive_map_requirements": [
+      "zoom_or_pan",
+      "anomaly_toggle",
+      "record_source_drilldown"
+    ],
+    "profile_version": "q24-physical-product-v1",
+    "source": "benchmark_evidence"
+  },
+  "provenance": {
+    "generated_at": "2026-08-05T00:00:01Z",
+    "generated_by": "eval/tests/scorer/build_fixtures.py"
+  },
+  "run_id": "good-run",
+  "schema_version": "p05.run-manifest.v1",
+  "skill": {
+    "commit": "synthetic-fixture-not-production",
+    "tree_sha256": "091030002a9c00321147a12c42fbb8323fe5769974db8dbddb88db46c6fb8fde"
+  },
+  "sources": [
+    {
+      "dataset_version": "2026.1",
+      "sha256": "c6cf356fd7e41882637468055b63231e5afca7f92009734663024c8f3a4ce084",
+      "source_id": "src-001"
+    }
+  ]
+}

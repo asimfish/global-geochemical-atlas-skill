@@ -1,50 +1,66 @@
-# D1 Demo 生成与证据链测试记录
+# D1–D3 demo 生成、证据链与可视化测试记录
 
-## 2026-08-05 14:31 CST
+> 历史回归记录：本文保留 V3/早期 V4 的旧 fixture 数量和当时记录的哈希值，仅用于审计历史。当前 V4 不计算、读取、更新或校验任何 MD5/SHA 内容哈希；现行状态以 `v4-source-completeness.md`、`v4-full-population-profile.md` 和 `component_test.py` 为准。
 
-### 已提交 fixture
+核验日期：2026-08-05。fixture 仅用于流水线演示，均声明 `not_for_scientific_interpretation: true`。
+
+## 已提交 fixture
 
 | 来源 | 观测数 | As/Cu/Ni/Zn | `demo_input.csv` SHA-256 | `sources.jsonl` SHA-256 |
 |---|---:|---|---|---|
-| GEOROC Archaean Cratons 12.0 | 48 | 各 12 条 | `75e76082fa18af6f3f1b79ed05d4984f34545d202873afed611b68b45e06b8cb` | `c73f495a50c1790d55320f0f3bd75118a44ac27afc470431a34ea18d7968aa45` |
-| USGS Data Series 801 | 48 | 各 12 条 | `1a2334a32c25792b0dfc136221fc071dc486b1246ddfa0709cc13b7ad24e3763` | `df5b803264403256371eeabdbb9f005df3182e63a8ef2b51a3d360f555409e72` |
-| MarChem snapshot | 112 | 各 28 条 | `7ae5180c7167946d01ae48e4ff980c6531ad8aaafb54a655cb2d0d4ebb150b3b` | `65938d4f927a4739a3ff00aa506558532fcf414f2234a7c81184d1d240cfcf93` |
+| GEOROC Archaean Cratons 12.0 | 48 | 各 12 条 | `cf6f105867c0f5d3f031b0b95cc703df89b196f06b604de331b05e46b9309446` | `45d279d0b6fb0b9f9ab4a4840015556e6ce6736f6c3aa3178c5525746d19ef64` |
+| USGS Data Series 801 | 108 | 各 27 条 | `75da16e1c262a7e5b4c97929c5085467d3b5cdb653f1bd7579de15e9c54f1cda` | `4766e7cf9f42b74881b56a6e66681eda24994c29fd8c9c052a4d1c0c63c45031` |
+| MarChem snapshot | 112 | 各 28 条 | `243b51d529fc1c79e093fb59ec920c8ef22f7d1066f086e66c55729b6aaaeea3` | `65938d4f927a4739a3ff00aa506558532fcf414f2234a7c81184d1d240cfcf93` |
 
-三个 `run_manifest.json` 均包含：
+十四个 `run_manifest.json` 均绑定 CSV 与 JSONL 哈希、源文件 URL/SHA-256、生成参数、生成器契约版本和记录数；相同注册表、验证缓存、筛选参数及固定 `--generated-at` 可确定性重建。各 fixture 保留其生成时的 `d1-demo-slice-v1` 或 `v2` 契约，不伪造升级历史。
 
-```json
-{
-  "data_mode": "fixture",
-  "scientific_scope": "pipeline demonstration only",
-  "not_for_scientific_interpretation": true
-}
+## 科学证据检查
+
+- GEOROC demo 的 CSV/JSONL 均为 48 条，USGS 均为 108 条；各自的 `record_id` 集合完全相等，最终 `record_evidence.jsonl` 与 canonical database 也完全相等。
+- GEOROC 保留数据集 DOI/版本、成员 DOI/hash/源行、citation ID 和原始文献；reported coordinates 有值，但因 datum 未证实，48 条 canonical 坐标全部留空并标记 `COORDINATE_NOT_CANONICALIZED`。
+- USGS 保留三个官方文件 URL/hash/源行/土层；As 映射 HG-AAS + fusion，Cu/Ni/Zn 映射 ICP-AES + near-total four-acid digestion；3 条 `<0.6 mg/kg` As 记录保留 qualifier 与 detection limit；三个 horizon 各有 9 个样品并通过 `material` 独立分组。
+- 使用 sidecar + acquisition manifest 运行时，最终 source manifest 的 `verified_evidence_rate` 为 1.0；该值表示证据关联完整，不表示测量正确率。
+
+## 完整工作流验证
+
+| 来源 | 标准化 | 有效 canonical 坐标 | 删失记录 | 输出校验 |
+|---|---:|---:|---:|---|
+| GEOROC | 48/48 | 0/48（datum 未证实，预期失败关闭） | 0 | `valid`，0 errors |
+| USGS | 108/108 | 108/108 | 3 | `valid`，0 errors |
+
+离线回归入口：
+
+```bash
+python scripts/component_test.py --component all
+python scripts/self_test.py
 ```
+
+不要在文档中固化会随契约增加而过期的测试总数；以 `component_test.py --component all` 和 `self_test.py` 的机器输出为准。D2 生成 `d2-confidence-v3`、五个分量和逐记录关键字段门控；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常输出接口和算法版本，并保留 `source_qualifier_raw` 与 canonical `value_qualifier`。D1 只验证来源 sidecar、acquisition manifest、输入和报告哈希，不重新计算置信度。D3 回归先用 `create_visualization_profile.py` 为 overview、coverage、anomaly、comparison、database、evidence 六类问题生成配置，再调用 `render_visualization.py`，检查全球、任意自定义 bbox 与严格国家区域产物、区域元素组合 profile、筛选、空结果、默认首屏、接口版本和独立 D3 验证器。页面导出的探索配置与脚本生成配置使用同一 `d3-visualization-profile-v2`，正式结论必须通过重渲染和输入/profile/输出哈希闭环；该矩阵验证的是可复用问题契约，不把某份真实数据、国家、元素或 HTML 当作标准答案。
 
 ### 确定性复现
 
-使用相同验证缓存、注册表版本、48 条观测和固定 `--generated-at 2026-08-05T06:25:00Z`，分别在新的 `/tmp` 目录重新生成。
-
-结果：三个来源的 `demo_input.csv`、`sources.jsonl`、`run_manifest.json` 均可按固定参数字节级重建。
+十四个来源均通过输出哈希、记录数及一对一证据关联检查；联合 fixture 还会在新的临时目录重建输入与完整十五文件输出，并逐字节比较。
 
 ### 证据链
 
 - 每个 demo 的 CSV 观测和 JSONL 证据一一对应，`record_id` 集合完全一致；
-- GEOROC 证据包含数据集 DOI/版本、成员文件 DOI、文件 SHA-256、源行、citation ID、原始参考文献文本及可解析 DOI；
-- USGS 证据包含数据集 DOI/版本、三个官方文件 URL/hash、源行、土层和建议引用；
+- GEOROC 证据包含数据集 DOI/版本、成员文件 DOI、文件 SHA-256、源行、citation ID、原始参考文献文本及可解析 DOI；datum 未证实时 canonical 坐标失败关闭；
+- USGS 证据包含数据集 DOI/版本、三个官方文件 URL/hash、源行、土层、分析方法和建议引用；
 - MarChem 证据包含动态快照 ID、响应成员 hash、数据行、方法元数据行、批次、LLQ、干湿重基础、部分消解和认可状态；
-- 来源、许可和定位覆盖率均为 100%。
+- 其余来源保留水体分相/深度/QC、粒级、消解方法、坐标参考系和重复样品次序等来源特有语义；
+- `verified_evidence_rate=1.0` 仅代表可定位记录的证据关联完整，不代表测量正确率。
 
 ### 完整工作流验证
 
-三个 demo 分别运行 `run_workflow.py` 和 `validate_outputs.py`：
+基础 demo 分别运行 `run_workflow.py` 和 `validate_outputs.py`：
 
 | 来源 | 输入记录 | 成功标准化 | 有效坐标 | 输出校验 |
 |---|---:|---:|---:|---|
-| GEOROC | 48 | 48 | 48 | `valid`，0 errors |
-| USGS | 48 | 48 | 48 | `valid`，0 errors |
+| GEOROC | 48 | 48 | 0（datum 未证实） | `valid`，0 errors |
+| USGS | 108 | 108 | 108 | `valid`，0 errors；3 条删失观测未被填补 |
 | MarChem | 112 | 112 | 112 | `valid`，0 errors；8 条 fixture 删失观测未被填补 |
 
-D2 生成 `d2-confidence-v1` 报告，D1 证据打包器验证输入 SHA-256 后原样绑定其报告 SHA-256。D1 不重新计算置信度公式或数值。
+D2 生成 `d2-confidence-v3`、分量定义、门控原因和门控计数；`d2-interface-v2` 与 `d2-robust-mad-v2` 分别锁定异常接口和算法版本。D1 证据打包器验证输入和报告 SHA-256，但不重新计算置信度。D3 从完整 D1/D2 输出目录读取任务配置，并由专用验证器检查可视化包。
 
 ## 2026-08-06 16:00 CST：FOREGS 六介质扩展
 
@@ -52,12 +68,12 @@ D2 生成 `d2-confidence-v1` 报告，D1 证据打包器验证输入 SHA-256 后
 
 | 来源 | 全量 CSV 行 | 小样观测 | `demo_input.csv` SHA-256 | `sources.jsonl` SHA-256 |
 |---|---:|---:|---|---|
-| `foregs-topsoil` | 4,195 | 48 | `e45f573db608634a65453acaf2a724a46b7291e6a0ae11ad93af50878cf8dee1` | `d2fb99230b6ad0b3243ec43a5271836b21d45e9ca231c1f10aa1fad5749cd08c` |
-| `foregs-subsoil` | 3,922 | 48 | `196c056e57c26303df2fc270245bb344a2b53abc34992bde0c6909e6ee8d1286` | `41292d6dfe213e99ae4487c2ac657fb217b694e9c8c8cd2477309337371fcdbb` |
-| `foregs-humus` | 1,111 | 48 | `38886457c87bcc27878c1c8581f1a38ea95dcdac91475229f2c66ab41b2bdfb5` | `00739879086c5e3bb3d70624e97f6ca084d60507da7b03ca9a3d8642e3968d64` |
-| `foregs-stream-water` | 808 | 48 | `bb7a887e7688ff02b76a0c1988df2c7f86164a70143b1164a903c79373ae3554` | `d7010d0d74ea551a3d82316b530cfae033e410e48c4c9cb932b38ca243aefa5b` |
-| `foregs-stream-sediment` | 3,393 | 48 | `59fd2c203464e751547da9bdc3a08ad7bfd3d4acdb46758d0f44665252f87097` | `8a0f97953f2ff8ab6d0538e0c25b663ae6d793487fef89462b8ccc072abd4c91` |
-| `foregs-floodplain-sediment` | 2,935 | 48 | `82e767778a5e8fb0faf2e5241427866f18ee457d315400aa70ef3fe42625dad2` | `da77e2ec474f6a22b9465ed059eee07812dbf7723c7a83de8041ce7fc45b3284` |
+| `foregs-topsoil` | 4,195 | 48 | `0d0b870b578852b7b090665a3878eee2ab01dfd26cb830a92e3aa213af77f740` | `d2fb99230b6ad0b3243ec43a5271836b21d45e9ca231c1f10aa1fad5749cd08c` |
+| `foregs-subsoil` | 3,922 | 48 | `1bb134e661d0731c5b7ca16cbe3058b15b9760711492fdc0ae0051cf9c9eae83` | `41292d6dfe213e99ae4487c2ac657fb217b694e9c8c8cd2477309337371fcdbb` |
+| `foregs-humus` | 1,111 | 48 | `cf5cef52177eb0d3b75d47270ebda2228f883590256f830bb4e746f67bd32eb1` | `00739879086c5e3bb3d70624e97f6ca084d60507da7b03ca9a3d8642e3968d64` |
+| `foregs-stream-water` | 808 | 48 | `a5e5c23eeed54ab1f686637738fb86defc6251b6fc2f486e93ccd98d1a7aed11` | `d7010d0d74ea551a3d82316b530cfae033e410e48c4c9cb932b38ca243aefa5b` |
+| `foregs-stream-sediment` | 3,393 | 48 | `2f6810d81624a26d901b1c9487c556ba9a5c7c7d2dd5d900eb119f3956650490` | `8a0f97953f2ff8ab6d0538e0c25b663ae6d793487fef89462b8ccc072abd4c91` |
+| `foregs-floodplain-sediment` | 2,935 | 48 | `6011bfcad51ec4ac488fd76958a317a09ca1efbac1e196fc7671991a6aa900d3` | `da77e2ec474f6a22b9465ed059eee07812dbf7723c7a83de8041ce7fc45b3284` |
 
 ### FOREGS 复现与边界检查
 
@@ -71,18 +87,10 @@ D2 生成 `d2-confidence-v1` 报告，D1 证据打包器验证输入 SHA-256 后
 
 | 来源 | 原始样品行 | fixture 观测 | `demo_input.csv` SHA-256 | `sources.jsonl` SHA-256 |
 |---|---:|---:|---|---|
-| `afsis-phase-i-wet-chemistry` | 2,002 | 48 | `563f4e461892913088cbc6f65e74f31126210c4375dcf070596fd5c2ff974fe8` | `0d241dfca9acedd34d2e898d9355f529f01b7ce872962319ea8ed267094600af` |
+| `afsis-phase-i-wet-chemistry` | 2,002 | 48 | `28927291305197ccfa75bd92c3e2f6c9fe366d10bfb04347c52b20918405c376` | `0d241dfca9acedd34d2e898d9355f529f01b7ce872962319ea8ed267094600af` |
 
 全量对账固定三份 original 文件和 publisher MD5/SHA-256，核实 2,002 个唯一 SSN/RES.ID、18 个国家标签、51 个国家-站点对、1,876 个完整坐标对和六目标元素各 2,002 个数值。30 条 review 覆盖所有国家标签、上下层、缺坐标、负数、低于 DL、DL–QL 和高于 QL 类别，自动检查 30/30 PASS、人工字段保持空白。fixture 只选 12 个国家标签的正值完整坐标行，原国家名和独立规范名同时保留。
 
 ### 十四来源联合回归
 
-联合四介质 fixture 扩为 736 条观测、89 个比较分区，其中水体仍为 17 个分区：
-
-- `demo_input.csv`：`e6fc39def68699f5c71eb413ce15c06f1014c02456ccf5c7634f1b26f80b88fc`
-- `sources.jsonl`：`adf4a1f0e675055dfbd90e11d573a74d86fb7afb48b12e02be1944c64432df89`
-- `run_manifest.json`：`8e9af80bebca6334f95078cac7e131271dbab85d54c9757336930c50c9b9911d`
-- `sources.jsonl`：`925dd4489d18b63ffb1d44c86ada895c64038d90feeeafce71bb29f2f02738a1`
-- `run_manifest.json`：`f70f773fdb51e2d63cf11fd1a1cbfa689e193e44177d8d2c5f69d96825d8d523`
-
-完整工作流成功标准化并验证 736/736 条坐标，保留 20 条已确认删失观测，输出 16 条工程异常候选。联合输入、证据和九文件输出包均通过字节级重建。
+联合四介质 fixture 在保留主线 108 条 USGS 三土层样本并加入 AfSIS 后共有 796 条观测，标准化前后均为 93 个比较分区，其中水体 18 个。完整工作流成功标准化 796/796 条记录；700/796 条具有有效 canonical 坐标，GEOROC 与 AfSIS 共 96 条 reported coordinates 因 datum/CRS 未证实而失败关闭。流程保留 23 条已确认删失观测、输出 16 条工程异常候选并生成十五文件输出包（含批次、统计空间和独立迭代清单）；异常仅是相对已声明背景组的工程筛查候选，不构成污染、矿化或成因结论。

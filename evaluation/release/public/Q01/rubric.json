@@ -1,0 +1,32 @@
+{
+  "automatic_zero": [
+    "引用目录不存在的 DOI 或声称随机网页表具有已核验科学来源"
+  ],
+  "criteria": [
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "明确把全球玄武岩 Ni 与岩石介质、全球覆盖和分析元数据对应起来。",
+      "id": "scope_reasoning",
+      "points": 8
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "区分 GEOROC 可冻结主数据资产与 EarthChem 联合发现角色，不重复计算成两个独立来源。",
+      "id": "source_roles",
+      "points": 6
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "说明目录快照不等于实时下载成功，并给出 provenance 缺失时的排除或降级。",
+      "id": "limitations",
+      "points": 6
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/source_selection.json/decisions",
+    "artifacts/run_manifest.json#/benchmark_evidence/provenance_plan.json/record_fields"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-DATA-001"
+}

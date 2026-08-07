@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Build a resumable full D1 raw-observation database from registered adapters.
+"""Build selected D1 source partitions or an explicitly requested full database.
 
 The command writes one immutable-by-metadata source partition at a time, then
 publishes a combined CSV, observation-level evidence JSONL, run manifest,
 coverage summary, and an optional read-only SQLite query index.  Source reuse is
 decided by DOI/PID, version, file identity, byte count, schema and row metadata;
 content hashes are deliberately not used.
+
+Normal requests should pass one or more ``--source-id`` values.  Building every
+registered source is a release/acceptance operation and requires the explicit
+``--all-sources`` opt-in.
 """
 
 from __future__ import annotations
@@ -540,7 +544,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
     parser.add_argument("--cache-root", type=Path, default=DEFAULT_CACHE)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--source-id", action="append", dest="source_ids")
+    selection = parser.add_mutually_exclusive_group(required=True)
+    selection.add_argument(
+        "--source-id",
+        action="append",
+        dest="source_ids",
+        help="Build only this source; repeat to select more than one source",
+    )
+    selection.add_argument(
+        "--all-sources",
+        action="store_true",
+        help="Explicitly opt in to the release-scale build of every registered source",
+    )
     parser.add_argument("--force-source", action="append", dest="forced_sources")
     parser.add_argument("--with-index", action="store_true")
     parser.add_argument(

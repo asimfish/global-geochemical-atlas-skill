@@ -10,7 +10,7 @@ import os
 import sys
 import tempfile
 from collections import OrderedDict
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 

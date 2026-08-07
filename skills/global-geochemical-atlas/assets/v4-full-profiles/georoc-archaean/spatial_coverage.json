@@ -1,16 +1,13 @@
 {
   "as_of": "2026-08-06T10:05:00Z",
-  "bbox": [
-    -117.481,
-    -86.7911001366,
-    137.0,
-    76.7311
-  ],
-  "claim_boundary": "Counts describe target observations in one verified source snapshot. Spatial cells are observed cells, not interpolated global coverage; comparable means the minimum declared V4 grouping fields are present.",
+  "bbox": null,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_status": "withheld_pending_datum_verification",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
   "coordinate_uncertainty_m_observation_counts": {
     "not_reported": 65988
   },
-  "covered_spatial_cells": 395,
+  "covered_spatial_cells": 0,
   "dataset_version": "12.0",
   "distinct_sample_count": 25659,
   "profile_version": "d1-v4-full-population-profile-v1",
@@ -964,11 +961,9 @@
     "ZIMBABWE CRATON_ARCHEAN / MANICA GREENSTONE BELT / MACEQUECE FORMATION": 59,
     "ZIMBABWE CRATON_ARCHEAN / MASHABA SUITE": 21
   },
-  "source_crs_observation_counts": {
-    "EPSG:4326": 65988
-  },
-  "source_id": "georoc-archaean",
-  "spatial_cell_ids": [
+  "reported_coordinate_sample_count": 20866,
+  "reported_covered_spatial_cells": 395,
+  "reported_spatial_cell_ids": [
     "+01:+026",
     "+01:+027",
     "+01:+028",
@@ -1365,6 +1360,12 @@
     "-87:-010",
     "-87:-031"
   ],
-  "spatial_grid": "WGS84-like 1-degree floor cell; no interpolation",
-  "valid_coordinate_sample_count": 20866
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
+  "source_crs_observation_counts": {
+    "not_reported": 65988
+  },
+  "source_id": "georoc-archaean",
+  "spatial_cell_ids": [],
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
+  "valid_coordinate_sample_count": 0
 }

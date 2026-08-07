@@ -1,0 +1,3 @@
+record_id,unit_id,value_mg_kg,robust_z,anomaly_type,background_version
+CTX1,UNIT-A,50,5.2287874528,relative_enrichment,q23-background-1
+CTX2,UNIT-B,50,-4.7712125472,relative_depletion,q23-background-1

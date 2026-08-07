@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ai4s:global-geochemical-atlas:d3-visualization-report-v1",
+  "title": "D3 visualization report",
+  "type": "object",
+  "required": ["interface_version", "status", "outputs", "limitations", "next_actions"],
+  "properties": {
+    "interface_version": {"const": "d3-visualization-interface-v1"},
+    "status": {"enum": ["success", "invalid_input", "unsupported_scope", "incomplete_retrieval", "needs_human_review"]},
+    "input_contract": {"type": "string"},
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/fileIdentity"}
+    },
+    "profile_input": {
+      "$ref": "#/$defs/fileIdentity"
+    },
+    "profile": {"$ref": "urn:ai4s:global-geochemical-atlas:d3-visualization-profile-v2"},
+    "profile_warnings": {"type": "array", "items": {"type": "string"}},
+    "outputs": {"type": "object", "additionalProperties": {"type": "string"}},
+    "output_artifacts": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/fileIdentity"}
+    },
+    "map_report": {
+      "type": "object",
+      "required": ["map_version", "ui_hierarchy_version", "terminology_contract", "visual_question_contract", "capability_matrix"],
+      "properties": {
+        "map_version": {"const": "d3-interactive-atlas-v3"},
+        "ui_hierarchy_version": {"const": "task-first-progressive-disclosure-v2"},
+        "terminology_contract": {"const": "competition-geochemistry-v1"},
+        "visual_question_contract": {
+          "type": "object",
+          "required": ["schema_version", "views"],
+          "properties": {
+            "schema_version": {"const": "d3-visual-question-contract-v1"},
+            "views": {
+              "type": "object",
+              "required": ["map", "database", "combination", "sources", "anomalies", "quality"],
+              "properties": {
+                "map": {"$ref": "#/$defs/visualQuestion"},
+                "database": {"$ref": "#/$defs/visualQuestion"},
+                "combination": {"$ref": "#/$defs/visualQuestion"},
+                "sources": {"$ref": "#/$defs/visualQuestion"},
+                "anomalies": {"$ref": "#/$defs/visualQuestion"},
+                "quality": {"$ref": "#/$defs/visualQuestion"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "capability_matrix": {
+          "type": "object",
+          "required": ["interaction_design"],
+          "properties": {
+            "interaction_design": {
+              "type": "object",
+              "required": [
+                "professional_navigation_labels",
+                "combination_region_selector",
+                "combination_custom_bbox",
+                "regional_combination_scope_lock_supported",
+                "comparison_profile_export",
+                "formal_comparison_requires_profile_rerender"
+              ],
+              "properties": {
+                "professional_navigation_labels": {"const": true},
+                "combination_region_selector": {"const": true},
+                "combination_custom_bbox": {"const": true},
+                "regional_combination_scope_lock_supported": {"const": true},
+                "comparison_profile_export": {"const": true},
+                "formal_comparison_requires_profile_rerender": {"const": true}
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "iteration_backlog": {
+      "type": "object",
+      "required": ["schema_version", "item_count", "status_counts", "owner_counts", "issue_counts"],
+      "properties": {
+        "schema_version": {"const": "geochemistry-iteration-backlog-v2"},
+        "record_count": {"type": "integer", "minimum": 0},
+        "item_count": {"type": "integer", "minimum": 0},
+        "status_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "owner_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "issue_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "next_actions": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "success"}}},
+      "then": {
+        "required": [
+          "input_contract",
+          "inputs",
+          "profile_input",
+          "profile",
+          "profile_warnings",
+          "output_artifacts",
+          "map_report",
+          "iteration_backlog"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "fileIdentity": {
+      "type": "object",
+      "required": ["filename", "bytes"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "columns": {"type": "array", "items": {"type": "string"}},
+        "row_count": {"type": "integer", "minimum": 0},
+        "top_level_keys": {"type": "array", "items": {"type": "string"}},
+        "schema_version": {"type": "string"},
+        "interface_version": {"type": "string"},
+        "map_version": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "visualQuestion": {
+      "type": "object",
+      "required": ["question", "comparison_baseline", "encoding", "boundary"],
+      "properties": {
+        "question": {"type": "string", "minLength": 1},
+        "comparison_baseline": {"type": "string", "minLength": 1},
+        "encoding": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "boundary": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

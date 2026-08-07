@@ -1,0 +1,6 @@
+{
+  "registry_version": "q17-registry-1",
+  "entries": [
+    {"doi": "10.25625/2JETOA", "dataset_title": "GEOROC Compilation: Rock Types", "authority_url_prefix": "https://georoc.eu/", "allowed_medium": "rock"}
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "固体质量分数与水体质量浓度保持独立单位空间。",
+      "id": "media",
+      "points": 8
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "湿基记录在无含水率时不伪装成干基。",
+      "id": "basis",
+      "points": 6
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "dissolved family 与 total 不混合，并保留原 phase。",
+      "id": "phase",
+      "points": 6
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/normalized_observations.csv",
+    "artifacts/run_manifest.json#/benchmark_evidence/group_summary.csv"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-NORM-003"
+}

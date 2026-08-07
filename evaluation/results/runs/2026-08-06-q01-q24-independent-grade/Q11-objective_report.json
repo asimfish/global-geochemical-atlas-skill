@@ -1,0 +1,170 @@
+{
+  "task_id": "GGA-SPATIAL-002",
+  "scoring_contract": "e1-six-dimension-v1",
+  "score_status": "evidence_only",
+  "hard_gate_passed": true,
+  "evidence_points_awarded": 80,
+  "evidence_points_possible": 80,
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "weight": 0.25,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "weight": 0.3,
+      "evidence_points_awarded": 5,
+      "evidence_points_possible": 5,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "weight": 0.14,
+      "evidence_points_awarded": 8,
+      "evidence_points_possible": 8,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "weight": 0.15,
+      "evidence_points_awarded": 67,
+      "evidence_points_possible": 67,
+      "evidence_score": 100.0,
+      "status": "scored"
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "weight": 0.1,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "weight": 0.06,
+      "evidence_points_awarded": 0,
+      "evidence_points_possible": 0,
+      "evidence_score": null,
+      "status": "not_scored"
+    }
+  ],
+  "checks": [
+    {
+      "id": "output_exists",
+      "type": "file_exists",
+      "dimension_id": "engineering_quality",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "geologic_matches.csv: file"
+    },
+    {
+      "id": "columns",
+      "type": "csv_columns",
+      "dimension_id": "platform_reusability",
+      "passed": true,
+      "points_awarded": 8,
+      "points_possible": 8,
+      "evidence": "geologic_matches.csv: missing columns=[]"
+    },
+    {
+      "id": "row_count",
+      "type": "csv_row_count",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "geologic_matches.csv: rows=5; expected=5"
+    },
+    {
+      "id": "g01_unit",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 8,
+      "points_possible": 8,
+      "evidence": "geologic_matches.csv key={'point_id': 'G01'} column=unit_id actual='UNIT-A' expected='UNIT-A' tol=0.0"
+    },
+    {
+      "id": "g01_confidence",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "geologic_matches.csv key={'point_id': 'G01'} column=match_confidence actual='high' expected='high' tol=0.0"
+    },
+    {
+      "id": "g02_boundary",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 9,
+      "points_possible": 9,
+      "evidence": "geologic_matches.csv key={'point_id': 'G02'} column=qc_flags actual='near_unit_boundary' expected='near_unit_boundary' tol=0.0"
+    },
+    {
+      "id": "g02_confidence",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 7,
+      "points_possible": 7,
+      "evidence": "geologic_matches.csv key={'point_id': 'G02'} column=match_confidence actual='low' expected='low' tol=0.0"
+    },
+    {
+      "id": "g03_coarse",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 8,
+      "points_possible": 8,
+      "evidence": "geologic_matches.csv key={'point_id': 'G03'} column=qc_flags actual='coordinate_precision_coarse' expected='coordinate_precision_coarse' tol=0.0"
+    },
+    {
+      "id": "g04_no_match",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 8,
+      "points_possible": 8,
+      "evidence": "geologic_matches.csv key={'point_id': 'G04'} column=match_status actual='no_match' expected='no_match' tol=0.0"
+    },
+    {
+      "id": "g04_unit_empty",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 5,
+      "points_possible": 5,
+      "evidence": "geologic_matches.csv key={'point_id': 'G04'} column=unit_id actual='' expected=None tol=0.0"
+    },
+    {
+      "id": "g05_ambiguous",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 6,
+      "points_possible": 6,
+      "evidence": "geologic_matches.csv key={'point_id': 'G05'} column=match_status actual='ambiguous_boundary' expected='ambiguous_boundary' tol=0.0"
+    },
+    {
+      "id": "g05_unit_empty",
+      "type": "csv_cell",
+      "dimension_id": "domain_understanding",
+      "passed": true,
+      "points_awarded": 4,
+      "points_possible": 4,
+      "evidence": "geologic_matches.csv key={'point_id': 'G05'} column=unit_id actual='' expected=None tol=0.0"
+    }
+  ],
+  "redline_events": [],
+  "grader_version": "6.0.0-draft.2"
+}

@@ -1,0 +1,530 @@
+{
+  "candidate_status": "success",
+  "checks_path": "objective_report.json",
+  "computed_at": "2026-08-06T15:05:22.480722Z",
+  "contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
+  "dimensions": [
+    {
+      "dimension_id": "scientific_credibility",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 3.0,
+          "metric_id": "objective.source_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.25
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 3.0,
+          "metric_id": "objective.qc_integrity_excluded",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.25
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 6.0,
+          "metric_id": "llm.evidence_chain",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Forward/backward links verified: sources.jsonl -> observations.csv source_id -> map/anomaly feature record_id+source_id; E21 value 500 mg/kg identical across observations.csv and map.geojson; censored E22 shown with null value and '<' qualifier in map; checker map_traceability and anomaly_id passed; no SRC-B record entered observations.",
+          "status": "scored",
+          "value": 6.0,
+          "weight": 0.5
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.25
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 1.0,
+          "metric_id": "objective.observations_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 1.0,
+          "weight": 0.015873015873
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 1.0,
+          "metric_id": "objective.qc_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 1.0,
+          "weight": 0.015873015873
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 1.0,
+          "metric_id": "objective.sources_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 1.0,
+          "weight": 0.015873015873
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 1.0,
+          "metric_id": "objective.map_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 1.0,
+          "weight": 0.015873015873
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 1.0,
+          "metric_id": "objective.anomalies_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 1.0,
+          "weight": 0.015873015873
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 1.0,
+          "metric_id": "objective.manifest_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 1.0,
+          "weight": 0.015873015873
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 1.0,
+          "metric_id": "objective.summary_exists",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 1.0,
+          "weight": 0.015873015873
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.observation_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.063492063492
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.map_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.079365079365
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.anomaly_count",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.063492063492
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.e21_value",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.063492063492
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.e22_censored",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.063492063492
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.e23_not_mapped",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.063492063492
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.e25_unit",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.063492063492
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 3.0,
+          "metric_id": "objective.qc_raw",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.047619047619
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 3.0,
+          "metric_id": "objective.qc_accepted",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.047619047619
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 3.0,
+          "metric_id": "objective.qc_mapped",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.047619047619
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 3.0,
+          "metric_id": "objective.qc_anomaly",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.047619047619
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 3.0,
+          "metric_id": "objective.anomaly_id",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 3.0,
+          "weight": 0.047619047619
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.anomaly_type",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.079365079365
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.anomaly_z",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.079365079365
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 2.0,
+          "metric_id": "objective.summary_evidence",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 2.0,
+          "weight": 0.031746031746
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.3
+    },
+    {
+      "dimension_id": "platform_reusability",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "objective.manifest_status",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.363636363636
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 2.0,
+          "metric_id": "objective.manifest_exit",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 2.0,
+          "weight": 0.181818181818
+        },
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "objective.map_traceability",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": null,
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.454545454545
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.14
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "llm.scientific_degradation",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "All four degradations are separately reported and numerically consistent across qc_report, manifest warnings, observations flags and map exclusion, with partial_success/exit_code 2 instead of hidden success.",
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.357142857143
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 4.0,
+          "metric_id": "llm.unit_grouping",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Solid Cu uses ppm->mg/kg and water Pb uses mg/L->ug/L (0.02->20 is the correct x1000 conversion, checker e25_unit passed); the two media form distinct medium|basis|phase|element|method groups and are never merged in scoring or mapping.",
+          "status": "scored",
+          "value": 4.0,
+          "weight": 0.285714285714
+        },
+        {
+          "direction": "higher_better",
+          "evidence": [
+            "llm_grader_report.json"
+          ],
+          "expected": 5.0,
+          "metric_id": "llm.anomaly_scope",
+          "normalized_score": 100.0,
+          "passed": true,
+          "reason": "Algorithm parameters are explicit and internally consistent (median log10=1.47712, 1.4826*MAD=0.117394, z=(log10 500-center)/scale=10.4081, n=21>=20; checker anomaly_z/anomaly_type passed), censored and invalid-coordinate rows excluded, and the anomaly is framed strictly as statistical relative enrichment with an explicit no-causality disclaimer.",
+          "status": "scored",
+          "value": 5.0,
+          "weight": 0.357142857143
+        }
+      ],
+      "score": 100.0,
+      "weight": 0.15
+    },
+    {
+      "dimension_id": "innovation_ecosystem",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "innovation_ecosystem.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.1
+    },
+    {
+      "dimension_id": "open_source_potential",
+      "direction": "higher_better",
+      "metrics": [
+        {
+          "direction": "pass_fail",
+          "evidence": [
+            "objective_report.json"
+          ],
+          "expected": true,
+          "metric_id": "open_source_potential.missing_evidence",
+          "normalized_score": null,
+          "passed": null,
+          "reason": "No frozen metric evidence was supplied for this E1 dimension.",
+          "status": "not_scored",
+          "value": null,
+          "weight": 1.0
+        }
+      ],
+      "score": 0.0,
+      "weight": 0.06
+    }
+  ],
+  "eval_version": "1.0.0",
+  "evidence": [
+    "llm_grader_report.json",
+    "objective_report.json"
+  ],
+  "hard_gate_passed": true,
+  "rubric_sha256": "ac5b9f4159b1e7d3b5a6c095954b0525a458556847475c1083389fd9a40f061c",
+  "run_id": "regression-q24-independent-review",
+  "schema_version": "1.0.0",
+  "score_status": "partial",
+  "scorer_version": "6.0.0",
+  "total_score": 84.0
+}

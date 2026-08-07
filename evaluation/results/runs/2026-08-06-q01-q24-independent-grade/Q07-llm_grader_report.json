@@ -1,0 +1,39 @@
+{
+  "task_id": "GGA-SPATIAL-001",
+  "criteria": [
+    {
+      "id": "non_destructive",
+      "dimension_id": "domain_understanding",
+      "score": 7,
+      "max": 8,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/coordinate_qc.csv: row P02 (original_latitude=95, original_longitude=10 retained; suggested_latitude=10, suggested_longitude=95; eligible_map=False)",
+        "artifacts/run_manifest.json#/benchmark_evidence/coordinate_qc.csv: row P05 (original_latitude=120, original_longitude=35 retained; suggested_latitude=35, suggested_longitude=120; eligible_map=False)"
+      ],
+      "reason": "Originals are preserved in original_latitude/original_longitude for all rows; swap values appear only in suggested_* columns with flagged rows gated eligible_map=False, so swaps are suggestion-only and held from mapping. 1 point withheld because no artifact explicitly documents routing to human confirmation, and deterministic check p02_lat reports P02's swap flag string as deviating from the expected key."
+    },
+    {
+      "id": "placeholder",
+      "dimension_id": "domain_understanding",
+      "score": 5,
+      "max": 5,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/coordinate_qc.csv: row P04 (original_latitude=0, original_longitude=0; qc_flags=possible_zero_zero_placeholder; suggested fields empty; eligible_map=False)"
+      ],
+      "reason": "The 0,0 record is retained (not dropped) with the frozen flag possible_zero_zero_placeholder and eligible_map=False (not auto-accepted); deterministic check p04_placeholder passed, consistent with the artifact row."
+    },
+    {
+      "id": "conflict",
+      "dimension_id": "scientific_credibility",
+      "score": 5,
+      "max": 7,
+      "evidence": [
+        "artifacts/run_manifest.json#/benchmark_evidence/coordinate_qc.csv: rows P07A and P07B (both sample_id=S07 with coordinates 40,-105 and 40,-90; both qc_flags=sample_coordinate_conflict; both eligible_map=False)"
+      ],
+      "reason": "Both conflicting S07 records are kept, both flagged sample_coordinate_conflict, and both suspended from mapping (eligible_map=False), so no silent single-record pick (checks p07a_conflict, p07b_conflict passed). 2 points withheld because no artifact text states the need to trace back to the source; the CSV contains no explanation field."
+    }
+  ],
+  "redline_candidates": [],
+  "grader_uncertainty": "low",
+  "human_review_required": false
+}

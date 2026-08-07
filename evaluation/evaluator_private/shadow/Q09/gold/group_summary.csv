@@ -1,0 +1,4 @@
+comparison_group,element,normalized_unit,n,median_value
+soil|dry|total,Pb,mg/kg,3,25
+soil|wet|total,Pb,mg/kg,1,30
+water|aqueous|dissolved,Pb,ug/L,2,20

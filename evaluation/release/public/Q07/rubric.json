@@ -1,0 +1,28 @@
+{
+  "criteria": [
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "原坐标始终保留，possible swap 只是建议并进入人工确认。",
+      "id": "non_destructive",
+      "points": 8
+    },
+    {
+      "dimension_id": "domain_understanding",
+      "full_credit": "0,0 被视为疑似占位而非自动删除或自动接受。",
+      "id": "placeholder",
+      "points": 5
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "同 sample_id 冲突不静默选一条，并说明需回查来源。",
+      "id": "conflict",
+      "points": 7
+    }
+  ],
+  "evidence_paths": [
+    "artifacts/run_manifest.json#/benchmark_evidence/coordinate_qc.csv"
+  ],
+  "evidence_points": 20,
+  "scoring_contract": "e1-six-dimension-v1",
+  "task_id": "GGA-SPATIAL-001"
+}

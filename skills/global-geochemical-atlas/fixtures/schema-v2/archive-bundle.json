@@ -203,7 +203,7 @@
       "started_at": "2026-08-06T11:00:00Z",
       "finished_at": "2026-08-06T11:00:01Z",
       "status": "success",
-      "cache_status": "fixture",
+      "cache_status": "not_applicable",
       "counts": {"source_records": 1, "observations": 1, "rejected_records": 0, "failed_records": 0},
       "outputs": [{"path": "archive-bundle.json", "bytes": 0}]
     }

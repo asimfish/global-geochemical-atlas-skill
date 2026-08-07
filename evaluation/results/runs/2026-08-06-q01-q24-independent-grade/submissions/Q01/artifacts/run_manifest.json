@@ -1,0 +1,78 @@
+{
+  "task_id": "GGA-DATA-001",
+  "question_id": "Q01",
+  "title": "全球玄武岩 Ni 数据源选择",
+  "benchmark_contract": "e2.e1-alignment.v1",
+  "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "schema_version": "e2.candidate-visible.v1",
+  "benchmark_version": "6.0.0-draft.2",
+  "status": "success",
+  "exit_code": 0,
+  "outputs": [
+    "artifacts/observations.csv",
+    "artifacts/geochemical.sqlite",
+    "artifacts/sources.jsonl",
+    "artifacts/qc_report.json",
+    "artifacts/anomaly_results.csv",
+    "artifacts/anomalies.geojson",
+    "artifacts/h3_cells.csv",
+    "artifacts/map.png",
+    "artifacts/map.html",
+    "artifacts/run_manifest.json"
+  ],
+  "warnings": [],
+  "benchmark_evidence": {
+    "source_selection.json": {
+      "format": "json",
+      "value": {
+        "task_id": "GGA-DATA-001",
+        "target": {
+          "medium": "rock",
+          "lithology": "basalt",
+          "element": "Ni",
+          "coverage": "global"
+        },
+        "primary_source_id": "georoc_precompiled",
+        "discovery_source_id": "earthchem_portal",
+        "decisions": [
+          {
+            "source_id": "georoc_precompiled",
+            "status": "primary",
+            "reason": "Global compilation whose scope explicitly covers igneous rock (basalt); versioned files, record-level coordinates/method metadata and a frozen example compilation DOI (10.25625/2JETOA) make it the primary data source."
+          },
+          {
+            "source_id": "earthchem_portal",
+            "status": "discovery",
+            "reason": "Federated geochemical discovery service aggregating PETDB/GEOROC/USGS NGDB; used as joint discovery service for cross-searching, not as the primary data store."
+          },
+          {
+            "source_id": "random_web_table",
+            "status": "reject",
+            "reason": "Web aggregation with unspecified rock scope, claimed-global coverage, no DOI, no versioned files, no license and no metadata; no stable source or provenance, rejected."
+          }
+        ]
+      }
+    },
+    "provenance_plan.json": {
+      "format": "json",
+      "value": {
+        "task_id": "GGA-DATA-001",
+        "record_fields": [
+          "source_id",
+          "source_record_id",
+          "dataset_title",
+          "dataset_version",
+          "dataset_doi",
+          "source_url",
+          "accessed_at",
+          "license",
+          "sha256",
+          "citation"
+        ],
+        "download_sha256_required": true,
+        "allowed_example_doi": "10.25625/2JETOA",
+        "on_missing_provenance": "exclude_from_scientific_primary_dataset"
+      }
+    }
+  }
+}

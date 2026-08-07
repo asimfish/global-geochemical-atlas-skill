@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:anomaly-regions:v1",
+  "title": "FDR-screened candidate anomaly regions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "name", "interface_version", "method_version", "features"],
+  "properties": {
+    "type": {"const": "FeatureCollection"},
+    "name": {"const": "geochemical_candidate_anomaly_regions"},
+    "interface_version": {"const": "d2-interface-v2"},
+    "method_version": {"const": "d2-spatial-hypergeometric-fdr-v1"},
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "geometry", "properties"],
+        "properties": {
+          "type": {"const": "Feature"},
+          "geometry": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "coordinates"],
+            "properties": {
+              "type": {"const": "Polygon"},
+              "coordinates": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "prefixItems": [
+                      {"type": "number", "minimum": -180, "maximum": 180},
+                      {"type": "number", "minimum": -90, "maximum": 90}
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "region_id", "status", "scientific_status", "direction", "group_id", "group",
+              "grid_degrees", "sample_count", "candidate_count", "candidate_record_ids",
+              "observed_candidate_rate", "outside_candidate_rate", "enrichment_ratio",
+              "p_value", "fdr_q_value", "method_version", "boundary_model", "interpretation_limit"
+            ],
+            "properties": {
+              "region_id": {"type": "string", "pattern": "^region-[0-9a-f]{16}$"},
+              "status": {"const": "candidate_anomaly_region"},
+              "scientific_status": {"const": "screening_candidate_only"},
+              "direction": {"type": "string", "enum": ["high", "low"]},
+              "group_id": {"type": "string", "minLength": 1},
+              "group": {"type": "object"},
+              "grid_degrees": {"type": "number", "exclusiveMinimum": 0, "maximum": 30},
+              "sample_count": {"type": "integer", "minimum": 1},
+              "candidate_count": {"type": "integer", "minimum": 1},
+              "candidate_record_ids": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": {"type": "string", "minLength": 1}
+              },
+              "observed_candidate_rate": {"type": "number", "minimum": 0, "maximum": 1},
+              "outside_candidate_rate": {"type": "number", "minimum": 0, "maximum": 1},
+              "enrichment_ratio": {"type": ["number", "null"], "exclusiveMinimum": 0},
+              "p_value": {"type": "number", "minimum": 0, "maximum": 1},
+              "fdr_q_value": {"type": "number", "minimum": 0, "maximum": 1},
+              "method_version": {"const": "d2-spatial-hypergeometric-fdr-v1"},
+              "boundary_model": {"const": "fixed_wgs84_grid_cell_not_geologic_boundary"},
+              "interpretation_limit": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}
