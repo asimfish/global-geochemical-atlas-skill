@@ -13,15 +13,22 @@
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-在你的-ai-agent-中使用)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+[🌐 在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
 [🚀 快速开始](#-90-秒快速开始) ·
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
 [🧭 数据来源](#-数据来源21-个已冻结来源) ·
 [📦 输出产物](#-十五个输出产物) ·
 [❓ FAQ](#-faq)
 
-<img src="skills/global-geochemical-atlas/assets/readme-atlas-overview.png" alt="全球地球化学元素图谱交互界面，展示四介质样点、候选异常与覆盖情况" width="100%">
+<img src="skills/global-geochemical-atlas/assets/readme-atlas-map.png" alt="全球地球化学元素图谱交互界面：44,510 条测定的全球分布、采样密度热力、候选异常标记与四介质覆盖侧栏" width="100%">
 
-<sub>真实工作流截图：21 个公开来源的最小复现切片，1,144 条观测。它验证工程链路，不代表全球空间覆盖。</sub>
+<sub>真实在线采集运行：15 个公开来源 · 44,510 条测定 · 11,548 个物理采样点 · 7 元素 × 4 介质 · 535 个候选异常（robust-z 筛查候选，非成因结论）。空白区域如实显示数据缺口。<b><a href="https://asimfish.github.io/global-geochemical-atlas-demo/">在线演示与评委讲解页 ↗</a></b></sub>
+
+<br><br>
+
+<img src="skills/global-geochemical-atlas/assets/readme-atlas-globe.png" alt="同一份自包含产物内置的可旋转三维地球仪视图，样点立柱颜色与二维地图一致" width="88%">
+
+<sub>同一个自包含 HTML 内置二维世界地图与可拖动旋转的三维地球仪，一键切换；无 CDN、无服务器，断网照常交互。</sub>
 
 </div>
 
@@ -122,7 +129,7 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
 
 `auto` 会对所有与请求兼容的已路由来源确定性分配记录配额，逐源验证 manifest 与 SHA-256 后合并；单源失败不阻塞整体，以已验证子集继续并返回 `partial_success`。下载均有超时、限量、有限重试与缓存，`--offline` 模式只接受已验证缓存。
 
-### ③ 复现四介质离线样例（首页截图）
+### ③ 复现四介质离线样例（21 来源 · 1,144 条观测）
 
 <details>
 <summary>运行 21 来源、四介质、1,144 条观测的离线样例</summary>
@@ -200,6 +207,7 @@ flowchart LR
 
 | 如果你想…… | 从这里开始 |
 |---|---|
+| 在浏览器里体验完整交互图谱与评委讲解页 | [在线演示站](https://asimfish.github.io/global-geochemical-atlas-demo/) |
 | 让 Agent 执行完整任务 | [Skill 入口](skills/global-geochemical-atlas/SKILL.md) |
 | 为单阶段或完整任务生成最小命令计划 | [任务合同 schema](skills/global-geochemical-atlas/references/task-contract.schema.json) |
 | 对接输入或消费 15 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
