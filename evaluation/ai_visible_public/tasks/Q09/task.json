@@ -46,7 +46,7 @@
     "DISSOLVED_TOTAL_COLLAPSED"
   ],
   "fixture_type": "synthetic_adversarial_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "mixed_media.csv"
   ],

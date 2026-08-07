@@ -25,18 +25,33 @@ MANIFEST_PATH = PROFILE_ROOT / "manifest.json"
 
 NON_CANONICAL = {
     "georoc-archaean": "withheld_pending_datum_verification",
+    "georoc-antarctica-intraplate": "withheld_pending_datum_verification",
     "afsis-phase-i-wet-chemistry": "withheld_source_crs_not_reported",
     "japan-gsj-geochemical-map": "withheld_no_full_profile_coordinate_transform",
+    "japan-gsj-marine-sediment": "withheld_source_crs_not_reported",
+    "australia-ngsa-mercury": "withheld_no_full_profile_coordinate_transform",
+    "tpdc-china-mountain-soil": "withheld_source_crs_not_reported",
+    "us-wqp-sacramento-river-arsenic": "withheld_non_wgs84_source_datum",
 }
 SOURCE_MEDIA = {
     "georoc-archaean": "rock",
+    "georoc-antarctica-intraplate": "rock",
     "afsis-phase-i-wet-chemistry": "soil",
     "japan-gsj-geochemical-map": "sediment",
+    "japan-gsj-marine-sediment": "sediment",
+    "australia-ngsa-mercury": "sediment",
+    "tpdc-china-mountain-soil": "soil",
+    "us-wqp-sacramento-river-arsenic": "water",
 }
 SOURCE_ELEMENTS = {
     "georoc-archaean": {"As", "Cu", "Ni", "Zn"},
+    "georoc-antarctica-intraplate": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
     "afsis-phase-i-wet-chemistry": {"As", "Cr", "Cu", "Ni", "Pb", "Zn"},
     "japan-gsj-geochemical-map": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
+    "japan-gsj-marine-sediment": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
+    "australia-ngsa-mercury": {"Hg"},
+    "tpdc-china-mountain-soil": {"Cr", "Cu", "Ni", "Pb", "Zn"},
+    "us-wqp-sacramento-river-arsenic": {"As"},
 }
 CLAIM_BOUNDARY = (
     "Counts describe target observations in one verified source snapshot. Reported coordinates are kept "

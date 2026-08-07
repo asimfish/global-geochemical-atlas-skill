@@ -9,7 +9,7 @@
   <img src="skills/global-geochemical-atlas/assets/readme-atlas-overview.png" alt="全球地球化学元素图谱交互界面，展示四介质样点、候选异常与覆盖情况" width="100%">
 </p>
 
-<p align="center"><sub>真实工作流截图：14 个公开来源的最小复现切片，796 条观测。它验证工程链路，不代表全球空间覆盖。</sub></p>
+<p align="center"><sub>真实工作流截图：21 个公开来源的最小复现切片，1,144 条观测。它验证工程链路，不代表全球空间覆盖。</sub></p>
 
 `Python 3.11+` · `运行时零第三方依赖` · `真实数据生产阈值 demo` · `MIT`
 
@@ -85,7 +85,7 @@ flowchart LR
 ## 复现上图
 
 <details>
-<summary>运行 14 来源、四介质、796 条观测的离线样例</summary>
+<summary>运行 21 来源、四介质、1,144 条观测的离线样例</summary>
 
 ```bash
 python skills/global-geochemical-atlas/scripts/build_four_media_demo.py \

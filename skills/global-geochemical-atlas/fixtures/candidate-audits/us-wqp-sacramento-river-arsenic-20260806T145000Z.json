@@ -1,0 +1,92 @@
+{
+  "acquisition": {
+    "mode": "content-addressed-wqp-query-pair",
+    "observed_at": "2026-08-06T14:50:00Z",
+    "request_url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+  },
+  "archive": {
+    "members": [
+      {
+        "bytes": 123432,
+        "file_id": "results",
+        "name": "results.csv",
+        "sha256": "916f17a851b0597c55b4dfd78ace1ad65c13d2c30935b05b2e74b18910d28fcd",
+        "source_url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+      },
+      {
+        "bytes": 1241,
+        "file_id": "station",
+        "name": "station.csv",
+        "sha256": "74e51e3081133eedf1598127cd942c35353d397b9129fba711f1540e61af5c17",
+        "source_url": "https://www.waterqualitydata.us/data/Station/search?siteid=USGS-11447650&providers=NWIS&mimeType=csv&zip=no"
+      }
+    ],
+    "sha256": "e4c8487141adb38e42e3f16b1bce2e5da0425b732c1520a1264358681ced904e"
+  },
+  "claim_boundary": "The content-addressed pair verifies 189 USGS/NWIS dissolved-arsenic results at one Sacramento River station. It validates row-level method, limit, status and QC handling, but makes no national or global coverage claim.",
+  "limitations": [
+    "A single station is not a spatial freshwater atlas.",
+    "The exact repeated-parameter query returned arsenic only; Cu, Ni and Zn are not claimed.",
+    "Preliminary results and field-replicate QC samples remain labeled and are not silently promoted to accepted routine evidence.",
+    "The Not Detected result remains left-censored at its reported limit rather than being converted to zero.",
+    "WQP is the delivery route; the upstream USGS/NWIS record is the evidence source and is not double-counted."
+  ],
+  "observed_data": {
+    "counts": {
+      "accepted_results": 132,
+      "analytical_method_ids": {
+        "USGS:PLM10": 189
+      },
+      "field_replicates": 10,
+      "not_detected_results": 1,
+      "numeric_results": 188,
+      "physical_rows": 189,
+      "preliminary_results": 57,
+      "routine_samples": 179,
+      "target_observations": 189,
+      "unique_activity_ids": 189,
+      "unique_result_ids": 189
+    },
+    "coverage": {
+      "bbox": [
+        -121.5016167,
+        38.45566389,
+        -121.5016167,
+        38.45566389
+      ],
+      "monitoring_location_identifier": "USGS-11447650",
+      "monitoring_location_name": "SACRAMENTO R A FREEPORT CA",
+      "monitoring_location_type": "Stream",
+      "reported_horizontal_accuracy": {
+        "collection_method": "Interpolated from MAP.",
+        "unit": "seconds",
+        "value": ".5"
+      },
+      "sample_date_range": [
+        "2010-01-14",
+        "2023-10-18"
+      ],
+      "source_crs": "NAD83",
+      "station_count": 1
+    },
+    "target_analytes": {
+      "As": "ResultMeasureValue"
+    }
+  },
+  "observed_metadata": {
+    "activity_type_counts": {
+      "Quality Control Sample-Field Replicate": 10,
+      "Sample-Routine": 179
+    },
+    "detection_limit_rows": 189,
+    "method_id": "USGS:PLM10",
+    "method_rows": 189,
+    "result_status_counts": {
+      "Accepted": 132,
+      "Preliminary": 57
+    }
+  },
+  "source_id": "us-wqp-sacramento-river-arsenic",
+  "status": "verified_content_addressed_official_query_pair",
+  "verification_version": "wqp-sacramento-dissolved-as-audit-v1"
+}

@@ -3,31 +3,37 @@
   "demo_generation_version": "d1-demo-slice-v1",
   "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
-  "generated_at": "2026-08-05T14:41:20Z",
+  "generated_at": "2026-08-06T14:30:00Z",
   "generation_request": {
     "analytes": [
-      "As"
+      "As",
+      "Cr",
+      "Cu",
+      "Hg",
+      "Ni",
+      "Pb",
+      "Zn"
     ],
     "mode": "cached",
-    "observations": 48
+    "observations": 56
   },
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 62525,
+      "bytes": 74428,
       "path": "demo_input.csv",
-      "sha256": "abf59925fd43b14ae5a641fd5e858e4c98414ab5e6b813558749970c73744178"
+      "sha256": "b8f9641b06e0abd84c0717881708c6a7ec30274581830137e747efaed5424c92"
     },
     {
-      "bytes": 87785,
+      "bytes": 106255,
       "path": "sources.jsonl",
-      "sha256": "7aa963e5e6dcef44a4fae0f7e45b82d23039cd192717746c8c0da9facd294d49"
+      "sha256": "7db23ba951a16709a833ac9414a319704fc49fe69f537b55fa87ebd2dfbc94ca"
     }
   ],
   "record_counts": {
-    "emitted_observations": 48,
-    "raw_source_rows": 492999,
-    "selected_source_rows": 48
+    "emitted_observations": 56,
+    "raw_source_rows": 3739180,
+    "selected_source_rows": 56
   },
   "scientific_scope": "pipeline demonstration only",
   "source": {
@@ -35,7 +41,7 @@
     "dataset_version": "v3",
     "license": "CC-BY-4.0",
     "source_id": "gemstat-open-archive",
-    "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 arsenic subset"
+    "title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 seven-element subset"
   },
   "source_files": [
     {
@@ -43,6 +49,48 @@
       "filename": "Arsenic.csv",
       "retrieved_at": "2026-08-05T14:41:20Z",
       "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231",
+      "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+    },
+    {
+      "bytes": 34359149,
+      "filename": "Chromium.csv",
+      "retrieved_at": "2026-08-05T14:41:20Z",
+      "sha256": "164294931268c7427cb7c768f23e20484db9c4130044d99c766483fb881cc62c",
+      "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+    },
+    {
+      "bytes": 28448872,
+      "filename": "Copper.csv",
+      "retrieved_at": "2026-08-05T14:41:20Z",
+      "sha256": "82fb42ce1bba413a197825017727c8b2c04aa7042f92b07466f81fab3e93c451",
+      "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+    },
+    {
+      "bytes": 31175171,
+      "filename": "Mercury.csv",
+      "retrieved_at": "2026-08-05T14:41:20Z",
+      "sha256": "13805529f39c9ff6c90a84b341491af9739c72c43d3ec0eba07165957058906f",
+      "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+    },
+    {
+      "bytes": 39456553,
+      "filename": "Nickel.csv",
+      "retrieved_at": "2026-08-05T14:41:20Z",
+      "sha256": "fef4cc062e06ea4e3eafd8257b6849ed1d7ece2ac6522c5f9bfdef73ea206b8f",
+      "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+    },
+    {
+      "bytes": 40765015,
+      "filename": "Lead.csv",
+      "retrieved_at": "2026-08-05T14:41:20Z",
+      "sha256": "6c7edbf736a32985394967ff30c175e4618c6914b7c8a77b38d40c255af7b9f0",
+      "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+    },
+    {
+      "bytes": 26785044,
+      "filename": "Zinc.csv",
+      "retrieved_at": "2026-08-05T14:41:20Z",
+      "sha256": "0d77884198cdb0c01fa9f0ad8e101e086c709bdbc36ca80dc955a1c6172a192d",
       "source_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
     },
     {
@@ -78,8 +126,10 @@
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
-    "GEMStat v3 arsenic covers 33 contributing countries unevenly and is not a uniform global freshwater grid.",
-    "Dissolved, suspended and total arsenic fractions remain separate; this demo uses only rows with a defined method and Good/Fair source quality.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "GEMStat v3 seven-element observations come from voluntary contributors and do not form a uniform global freshwater grid.",
+    "Dissolved, extractable, suspended and total operational fractions remain separate; this demo uses only rows with a defined method and Good/Fair source quality.",
+    "Cr-VI is a chemical species rather than interchangeable elemental chromium and is excluded from the Cr target count.",
     "Censored observations retain their source limits; Pending review, Suspect, negative sentinel and extreme mg/l rows are excluded."
   ]
 }

@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 
-GRADER_VERSION = "6.0.0-draft.2"
+GRADER_VERSION = "6.0.0-draft.3"
 ALIGNMENT_PATH = Path(__file__).resolve().parents[1] / "contracts" / "benchmark-execution-contract.json"
 
 
@@ -192,6 +192,22 @@ def _find_csv_row(rows: list[dict[str, str]], key: dict[str, Any]) -> dict[str, 
     return matches[0]
 
 
+def _find_json_array_item(items: Any, key: dict[str, Any]) -> dict[str, Any]:
+    """Resolve one JSON array item by semantic identity instead of array position."""
+
+    if not isinstance(items, list):
+        raise TypeError("selected JSON value is not an array")
+    matches = [
+        item
+        for item in items
+        if isinstance(item, dict)
+        and all(_equivalent(item.get(field), expected) for field, expected in key.items())
+    ]
+    if len(matches) != 1:
+        raise LookupError(f"expected exactly one JSON item for key {key}, found {len(matches)}")
+    return matches[0]
+
+
 def _result(check: dict[str, Any], passed: bool, evidence: str) -> dict[str, Any]:
     points = int(check.get("points", 0))
     return {
@@ -263,6 +279,28 @@ def evaluate_check(root: Path, check: dict[str, Any]) -> dict[str, Any]:
                 check,
                 passed,
                 f"{relative} path={check['json_path']} actual={actual!r} expected={expected!r}",
+            )
+
+        if check_type == "json_array_item_value":
+            document = _resource_json(root, relative)
+            items = _json_path(document, check["array_path"])
+            item = _find_json_array_item(items, check["key"])
+            actual = _json_path(item, check["value_path"])
+            expected = check.get("expected")
+            tolerance = float(check.get("tolerance", 0.0))
+            passed = _equivalent(
+                actual,
+                expected,
+                tolerance=tolerance,
+                unordered=bool(check.get("unordered")),
+            )
+            return _result(
+                check,
+                passed,
+                (
+                    f"{relative} array={check['array_path']} key={check['key']} "
+                    f"value_path={check['value_path']} actual={actual!r} expected={expected!r}"
+                ),
             )
 
         if check_type == "json_length":

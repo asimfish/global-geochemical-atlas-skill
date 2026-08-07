@@ -125,7 +125,7 @@
     "INVALID_LONGITUDE_MAPPED"
   ],
   "fixture_type": "synthetic_antimeridian_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "island_points.csv"
   ],

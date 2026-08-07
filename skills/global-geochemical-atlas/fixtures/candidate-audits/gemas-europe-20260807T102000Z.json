@@ -1,0 +1,112 @@
+{
+  "acquisition": {
+    "mode": "pinned-official-zip-dbf-members",
+    "observed_at": "2026-08-07T10:20:00Z",
+    "request_url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+  },
+  "archive": {
+    "bytes": 4307359,
+    "members": [
+      {
+        "bytes": 4307359,
+        "file_id": "1725dd24-1b2f-46d5-bf24-ad2db5ee176e",
+        "name": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+        "sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4",
+        "source_url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+      }
+    ],
+    "sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4"
+  },
+  "claim_boundary": "This evidence binds gemas-europe to its DOI/PID, version, file identity, byte count, schema and registered row statistics. It does not claim continuous spatial coverage or cross-method comparability.",
+  "human_review": {
+    "completed_record_count": 0,
+    "prepared_record_count": 30,
+    "required_record_count": 30,
+    "status": "prepared_unsigned"
+  },
+  "observed_data": {
+    "counts": {
+      "analysis_group_observations": {
+        "AR": 28917,
+        "XRF": 24786
+      },
+      "analysis_records": 8262,
+      "country_labels": 33,
+      "physical_samples": 4131,
+      "target_observations": 53703,
+      "target_value_counts": {
+        "As": 8262,
+        "Cr": 8262,
+        "Cu": 8262,
+        "Hg": 4131,
+        "Ni": 8262,
+        "Pb": 8262,
+        "Zn": 8262
+      }
+    },
+    "target_analytes": {
+      "As": [
+        "AS_",
+        "AS_XRF"
+      ],
+      "Cr": [
+        "CR",
+        "CR_XRF"
+      ],
+      "Cu": [
+        "CU",
+        "CU_XRF"
+      ],
+      "Hg": [
+        "HG"
+      ],
+      "Ni": [
+        "NI",
+        "NI_XRF"
+      ],
+      "Pb": [
+        "PB",
+        "PB_XRF"
+      ],
+      "Zn": [
+        "ZN",
+        "ZN_XRF"
+      ]
+    }
+  },
+  "observed_metadata": {
+    "dataset_doi": null,
+    "dataset_pid": "data.gov.ie:0c6c5bbc-20a7-4011-8585-7befb511a4b4",
+    "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+    "license": {
+      "name": "Creative Commons Attribution 4.0 International",
+      "spdx": "CC-BY-4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "release_date": "2024-04-02",
+    "required_fields": [
+      "ID",
+      "COUNTRY",
+      "TYPE_",
+      "TYPE2",
+      "XCOO",
+      "YCOO",
+      "AS_",
+      "CR",
+      "CU",
+      "HG",
+      "NI",
+      "PB",
+      "ZN",
+      "AS_XRF",
+      "CR_XRF",
+      "CU_XRF",
+      "NI_XRF",
+      "PB_XRF",
+      "ZN_XRF"
+    ]
+  },
+  "source_id": "gemas-europe",
+  "status": "verified_official_or_doi_dataset",
+  "verification_version": "v4-m6-source-audit-v2-content-addressed"
+}

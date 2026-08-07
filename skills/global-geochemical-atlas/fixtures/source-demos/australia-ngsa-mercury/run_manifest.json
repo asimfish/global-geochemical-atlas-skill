@@ -1,0 +1,59 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T10:20:00Z",
+  "generation_request": {
+    "analytes": [
+      "Hg"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 68053,
+      "path": "demo_input.csv",
+      "sha256": "d5191ed1fc917d482b746a7e851b3a676130836f0036b98aa60081a294e95159"
+    },
+    {
+      "bytes": 79804,
+      "path": "sources.jsonl",
+      "sha256": "2a975227887f48325738ce4d9a32a9ee9847eab8b3fdfd82eb855b733b4fb9b7"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 2396,
+    "selected_source_rows": 48
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.26186/150328",
+    "dataset_version": "2025-03-31",
+    "license": "CC-BY-4.0",
+    "source_id": "australia-ngsa-mercury",
+    "title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset"
+  },
+  "source_files": [
+    {
+      "bytes": 208089,
+      "filename": "150328_00_1.CSV",
+      "retrieved_at": "2026-08-07T15:42:52Z",
+      "sha256": "3089b02331e8aff7e78ec8b972fa6ff9acfe85c9b49ae67462605cef3fbb247c",
+      "source_url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "NGSA provides total Hg only; it does not supply the other target elements.",
+    "TOS, BOS and QA/QC duplicates remain distinguishable and are not treated as independent sites."
+  ]
+}

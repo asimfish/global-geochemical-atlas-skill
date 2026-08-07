@@ -1,14 +1,14 @@
 {
   "artifacts": [
     {
-      "bytes": 18825,
+      "bytes": 27084,
       "path": "assets/v4-coverage-balance.json",
-      "sha256": "55c7cb1ac028b320d346ecf9471b69ad98bae83f660cad9ec705e35c1f0843de"
+      "sha256": "62055fbf9f992c3757f6e7ad61b13ae0364af06039fe8cefc35be91402d9a1ed"
     },
     {
-      "bytes": 1330366,
+      "bytes": 1887043,
       "path": "assets/v4-coverage-cube.csv",
-      "sha256": "8d73263e3e10a9138983642b0fa092c6962953aa66e32dfd2adc93f5245a3c73"
+      "sha256": "1df5671cd87259167345ecfb7ae7d68deb3bf20d760ebc65ee5e708269518316"
     },
     {
       "bytes": 2162,
@@ -49,6 +49,46 @@
       "bytes": 929,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/usage_rights_coverage.json",
       "sha256": "b0c43003cccc3887f4692c427a38643b1340f29fb5a972b215779ff8ad29bcdd"
+    },
+    {
+      "bytes": 1933,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/automation_health.json",
+      "sha256": "3800ce3e8184b4895d8b566955253165bbcdd46556aad5f419a39a165d549908"
+    },
+    {
+      "bytes": 785,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/citation_coverage.json",
+      "sha256": "0a20b3a70aa8c740e19fc10734ebbab50710dfaac8a825f845c94411e7facc94"
+    },
+    {
+      "bytes": 4869,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/field_completeness.json",
+      "sha256": "70d3d1ce6cdd4a593fef98ebbb6dde639608ee4b9d3b52aec8f4615325093e0b"
+    },
+    {
+      "bytes": 735,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/geology_coverage.json",
+      "sha256": "fe3b8b0607fa45f7ae5836013d31b2f4ebfa4b2cb1d4d1cf28f10039ff255c7c"
+    },
+    {
+      "bytes": 705,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/method_completeness.json",
+      "sha256": "21b7917898f9807c34eb611cd65d03740cf653bb2a6d90d96ca77d6acb9615f2"
+    },
+    {
+      "bytes": 812,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/sample_type_coverage.json",
+      "sha256": "b50751388db47bb53c64368fb407d8705ac2e753e5226db2279f6a70b5d8a4de"
+    },
+    {
+      "bytes": 10258,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/spatial_coverage.json",
+      "sha256": "f485b93e61905bb259c208b16c794f95461e465013c65ee26e477e0edec453a9"
+    },
+    {
+      "bytes": 927,
+      "path": "assets/v4-full-profiles/australia-ngsa-mercury/usage_rights_coverage.json",
+      "sha256": "18c73dcb97eacfa66a1b9fc7b9531ebcbd0aa9b9140e184f72aa95740547694e"
     },
     {
       "bytes": 2343,
@@ -291,44 +331,124 @@
       "sha256": "ad95d460b9e7e340c5b633975ff206849ac6e2c0706edb09a54a2007a1edb0fa"
     },
     {
-      "bytes": 2584,
+      "bytes": 3565,
+      "path": "assets/v4-full-profiles/gemas-europe/automation_health.json",
+      "sha256": "4da5d1718d8de19af5951d6d80acd13c71298b640c3acb49c1c24c277277cc97"
+    },
+    {
+      "bytes": 796,
+      "path": "assets/v4-full-profiles/gemas-europe/citation_coverage.json",
+      "sha256": "da2bcb54e617904fb0f4b49c6cd0581ec52d62ebd182506e2795ece87320cf2e"
+    },
+    {
+      "bytes": 4958,
+      "path": "assets/v4-full-profiles/gemas-europe/field_completeness.json",
+      "sha256": "6a039f663bf5e68226d1757765eabaae95819735e8feadaca6e7c17893b9dfd3"
+    },
+    {
+      "bytes": 756,
+      "path": "assets/v4-full-profiles/gemas-europe/geology_coverage.json",
+      "sha256": "44dd637fcd7200919430fecfcd94b310af9d4c0e4b155fb722cbccbae6d1c6bd"
+    },
+    {
+      "bytes": 812,
+      "path": "assets/v4-full-profiles/gemas-europe/method_completeness.json",
+      "sha256": "190781f7961ede36113fe92fcf72efeb72423afefca71e7e68615ca66c3d8545"
+    },
+    {
+      "bytes": 834,
+      "path": "assets/v4-full-profiles/gemas-europe/sample_type_coverage.json",
+      "sha256": "dd52a3909a055a07e1f57d102e4bf45402a987849345e4e868585445b383e730"
+    },
+    {
+      "bytes": 28563,
+      "path": "assets/v4-full-profiles/gemas-europe/spatial_coverage.json",
+      "sha256": "8faac0b0a7c213664e9660fcc8e0e8995a846ab9f01638cff9cbaa2acbb16062"
+    },
+    {
+      "bytes": 951,
+      "path": "assets/v4-full-profiles/gemas-europe/usage_rights_coverage.json",
+      "sha256": "0cd9af91d1eab9909ae048e9db4391ba1716d599fa81d44c69f12e66ac0faaa0"
+    },
+    {
+      "bytes": 4336,
       "path": "assets/v4-full-profiles/gemstat-open-archive/automation_health.json",
-      "sha256": "e10b3df2ebe139d1da594a06bd6545b91c222617687567de173d2b2a487cf2b8"
+      "sha256": "e47a1ab86ce049a880be3c5a960639ca15d30b65372014e9bf7b436742c14bfc"
+    },
+    {
+      "bytes": 792,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/citation_coverage.json",
+      "sha256": "a73a40334b573948c963f4564caff9dbeb1050d83592819af8baef4fcdcd3eca"
+    },
+    {
+      "bytes": 5096,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/field_completeness.json",
+      "sha256": "cda5a26a43b26e769f195840ac2c7ed1d068d9c31f784a88054496794f72cb62"
+    },
+    {
+      "bytes": 728,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/geology_coverage.json",
+      "sha256": "27395df1516ed8d7349713361d6e82fb59d60ba61691ac4dde79d9394a3c5d61"
+    },
+    {
+      "bytes": 5015,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/method_completeness.json",
+      "sha256": "676985a782d77aec9005210fc83ed54b81aee4949ddc9976924daac69f24790c"
+    },
+    {
+      "bytes": 1035,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/sample_type_coverage.json",
+      "sha256": "6488b6908ee15ef03a1743498dea48bf6e8d2fc2d994d507b45b93911acae2b1"
+    },
+    {
+      "bytes": 39232,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/spatial_coverage.json",
+      "sha256": "26b922c8904f041c07c9d00fb71dca51bb4b578f8e2fdf6c29c611540afbcc25"
+    },
+    {
+      "bytes": 929,
+      "path": "assets/v4-full-profiles/gemstat-open-archive/usage_rights_coverage.json",
+      "sha256": "9ada8c99da75f7a9bfeefb9c752319a8d060516d7061f7b97adf28a53bc0afe5"
+    },
+    {
+      "bytes": 4518,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/automation_health.json",
+      "sha256": "e68dac313775985a770f9aaf6048721fac4cc92dffef2ef522f9c16842ae3e44"
     },
     {
       "bytes": 789,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/citation_coverage.json",
-      "sha256": "c7ca6e30c0a958984cfed14a530a8036a9a40099e9330ad9d70f91afd18bcd4b"
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/citation_coverage.json",
+      "sha256": "67b297c355a69d9d9063970a8c04858fedbb9e6f1af3aa863838874ab61cc358"
     },
     {
-      "bytes": 5024,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/field_completeness.json",
-      "sha256": "9b133beed5288cfa770801310352a852cf48f22449bd8c63e6ad82f06d75a640"
+      "bytes": 4874,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/field_completeness.json",
+      "sha256": "4388d76959559232ba53a5eedd1dc48ec9d4065f4791a3dadc89acb63b79454a"
     },
     {
-      "bytes": 727,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/geology_coverage.json",
-      "sha256": "fa768f1fdde381ed7f60cc8cfffe7d6c3d4c409952794c8c2801735da383556b"
+      "bytes": 744,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/geology_coverage.json",
+      "sha256": "8f79a2d8dc4bb1d0d4f1de89860e5a9b60ace89930cf7575163da9e9eef417d5"
     },
     {
-      "bytes": 2625,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/method_completeness.json",
-      "sha256": "29f0342ea9ca14d8fbc4e26515c4d302580ab5ff22bf8bb679afcae3eebc0c45"
+      "bytes": 644,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/method_completeness.json",
+      "sha256": "ad447c535a30d45cb529124a1d07efad76f5e126405908ac117be5c4a0deb3a4"
     },
     {
-      "bytes": 997,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/sample_type_coverage.json",
-      "sha256": "c96050155fc8d41d8ffa9a429dba17df28cc1ec9a31e6c278961565ea1e2fc40"
+      "bytes": 766,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/sample_type_coverage.json",
+      "sha256": "79e266b832f804ef916600fa9d692bac9652ed4bee8a8ced49df07bcbd14f024"
     },
     {
-      "bytes": 36496,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/spatial_coverage.json",
-      "sha256": "4ade109ea8576e72ee76191dcdd46f8cd31b414e966f6d03e1e27e1fa568b7ec"
+      "bytes": 2574,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/spatial_coverage.json",
+      "sha256": "ec9040e162537a8973cc8394939b92de5ea1fd615889a37559b9b52532a19165"
     },
     {
-      "bytes": 925,
-      "path": "assets/v4-full-profiles/gemstat-open-archive/usage_rights_coverage.json",
-      "sha256": "6adae6a4cb8923ae6cc092c12a48d7f8dbd9f4fbaf8d62f950ca879172497828"
+      "bytes": 933,
+      "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/usage_rights_coverage.json",
+      "sha256": "4e12c0b2b3ce7c26a55ac0999710ddf90d3d2515f152c881f04866c79b3407e0"
     },
     {
       "bytes": 8158,
@@ -451,6 +571,46 @@
       "sha256": "fb49e0e7639ef79c1cd620904f1ce6c863318795a3d42c200ba1d1156d90db01"
     },
     {
+      "bytes": 2373,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/automation_health.json",
+      "sha256": "e006758fb39d2de01e8fb2a437cbd8ed5e603cd5348fe4b5ec2d3a12163473a1"
+    },
+    {
+      "bytes": 796,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/citation_coverage.json",
+      "sha256": "6a21c81a2e06ad46efb520e40cec27ad0bdd651e5407c63d714640b922981e31"
+    },
+    {
+      "bytes": 4958,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/field_completeness.json",
+      "sha256": "6225f1ac1c2982d436fe587f0db5f218471d04354ba88f895c7aa71636baf545"
+    },
+    {
+      "bytes": 756,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/geology_coverage.json",
+      "sha256": "d94e928994197dd411354b12fc0ba28559d8bca0640bcc1f2d2d4acf5c37eb92"
+    },
+    {
+      "bytes": 667,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/method_completeness.json",
+      "sha256": "f4179604260f71f6f46bef433b4ccf3571aaff02cbc91c8832f038cb48fd4c76"
+    },
+    {
+      "bytes": 787,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/sample_type_coverage.json",
+      "sha256": "a325cc3e5c0c5b386cd0d85072f0e74bd47ce1f87720eb5d352dfaec2451804a"
+    },
+    {
+      "bytes": 4254,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/spatial_coverage.json",
+      "sha256": "ddb346ae50e4d0c5da1dbb2f5ce67a7605fd3aed76d7cfd635870d588f9c3d39"
+    },
+    {
+      "bytes": 979,
+      "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/usage_rights_coverage.json",
+      "sha256": "d7d6342f68e9588c20920a57ba7348805484906189ca4e9ba84bd41811dbae46"
+    },
+    {
       "bytes": 2544,
       "path": "assets/v4-full-profiles/norway-marchem/automation_health.json",
       "sha256": "953a0bbac2688623e7956e379f8cb9677bdd25b3c4fc9dcf6777f4cd469487c5"
@@ -489,6 +649,46 @@
       "bytes": 957,
       "path": "assets/v4-full-profiles/norway-marchem/usage_rights_coverage.json",
       "sha256": "099bcd122d0e6a314a5582eca8235fd95520ff07ea23410b154c2af6cdb59f25"
+    },
+    {
+      "bytes": 2816,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/automation_health.json",
+      "sha256": "e9d5804dfbb3ba9005e6c9e8aaa25918eec21937dd006c871a5f4c80a665c331"
+    },
+    {
+      "bytes": 795,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/citation_coverage.json",
+      "sha256": "f5d9265081a9e806ec4cedf3727f31efd8d90ce0517ad2d7112936c66dc9cd34"
+    },
+    {
+      "bytes": 4806,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/field_completeness.json",
+      "sha256": "fcfdc2649a7d8494913827f19da88fd0599267de04c7eb8b02abe215f79a21d4"
+    },
+    {
+      "bytes": 740,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/geology_coverage.json",
+      "sha256": "58864dfb9a107a70b4c32164efd2ad3f2783d208eb3b25247b99743e0c38384b"
+    },
+    {
+      "bytes": 679,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/method_completeness.json",
+      "sha256": "617572932a94fbe1fb5eb1152f64ba554104d9197ba45f97bf785aa15a202c2a"
+    },
+    {
+      "bytes": 768,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/sample_type_coverage.json",
+      "sha256": "870625b9936e3e9e7782a09dd595ba75a7588ecdb68180a287ab0e6b4668b6ea"
+    },
+    {
+      "bytes": 1812,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/spatial_coverage.json",
+      "sha256": "d5f0b5d876386eb14cc3e76d4947bc04ed25f91be10692aac924c4e1f3763b53"
+    },
+    {
+      "bytes": 929,
+      "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/usage_rights_coverage.json",
+      "sha256": "4f186ffe0d6268be482aafa00c0c68ca802952d687e0c0823896c26bccb54c68"
     },
     {
       "bytes": 1617,
@@ -531,6 +731,86 @@
       "sha256": "0a586ee429fd2711060d57e4bb00f71ac51d697f799c10cb3f202f26e9068d67"
     },
     {
+      "bytes": 2830,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/automation_health.json",
+      "sha256": "98e0db0bfe353afe3b53c52d684856a0e959436f4c33f39f7a75c52ba4190c50"
+    },
+    {
+      "bytes": 808,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/citation_coverage.json",
+      "sha256": "acadf4a07b4420528be82b3c658b9f7fcd03f05424b630d8bcf43790547d6361"
+    },
+    {
+      "bytes": 4881,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/field_completeness.json",
+      "sha256": "e7a9c335c41ece134cb96df8701504d5c99e162707a9f0fb6ae867673ea81f84"
+    },
+    {
+      "bytes": 750,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/geology_coverage.json",
+      "sha256": "b17c35b9d342a30d0a535299ea739413986c1a1dac2b964743c813466091c485"
+    },
+    {
+      "bytes": 722,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/method_completeness.json",
+      "sha256": "50008abc100c3b1d4cb97a01b0e4f312d71bc4b2a444367e07be4a055c4dcd3d"
+    },
+    {
+      "bytes": 839,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/sample_type_coverage.json",
+      "sha256": "85571a65de12b74bbfab48be2e61c6842637d748e6255e09e19b61d8a6af2fea"
+    },
+    {
+      "bytes": 2562,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/spatial_coverage.json",
+      "sha256": "5071e4841400670af221c781da2729ae94e217d24b9eab2d8b9dcfbbe74d4747"
+    },
+    {
+      "bytes": 939,
+      "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/usage_rights_coverage.json",
+      "sha256": "1b7fa0487fdbe15fe168f1c833346afb421e1ad10782364aabacdaac9720445c"
+    },
+    {
+      "bytes": 4771,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/automation_health.json",
+      "sha256": "d42f5c27ef1357b0adbf60fff17e7f71a287209fbcaf9dd8f7b6e63de0893863"
+    },
+    {
+      "bytes": 800,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/citation_coverage.json",
+      "sha256": "df00bd75fdb03b8e2c463618a8f64c2ff339a3a627d6fba077dcb65b73dcc31b"
+    },
+    {
+      "bytes": 4826,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/field_completeness.json",
+      "sha256": "714b197c7f28619b7e271ffebfb5698418f0cf6b32fb9644a7ea55a7c84ba386"
+    },
+    {
+      "bytes": 760,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/geology_coverage.json",
+      "sha256": "236709f7789e4b2802db3d91f9b4a695f98f9f4f610ab530af0162fe85633879"
+    },
+    {
+      "bytes": 713,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/method_completeness.json",
+      "sha256": "4e14b1373867860e3457cc54097245d0dc20c197dd6923b64304b395b32ff186"
+    },
+    {
+      "bytes": 772,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/sample_type_coverage.json",
+      "sha256": "e34632ccda5c0df91946608742a537e9ebd3b20441561e9e2da5b414ebf702dd"
+    },
+    {
+      "bytes": 1492,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/spatial_coverage.json",
+      "sha256": "986194ca93549287d7ade47d0218960a4dd5e7516fd455e7bf10ac87ffe9b380"
+    },
+    {
+      "bytes": 1007,
+      "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/usage_rights_coverage.json",
+      "sha256": "0e8563bf8e90bccd2caa228e01912605e76af0b1bc3c1dc3129e9cdeb666043f"
+    },
+    {
       "bytes": 2142,
       "path": "assets/v4-full-profiles/usgs-conus-soil/automation_health.json",
       "sha256": "c25e716f63d9990c9dd8d84af1786223bf6541ad34c11ca294ad80b608c943ea"
@@ -571,95 +851,127 @@
       "sha256": "1a45b790f5e659e8d13ebec0e0a1e32a2c16251c9000ce19a6331ffc239503e7"
     },
     {
-      "bytes": 2935,
+      "bytes": 3538,
       "path": "references/v4-full-population-profile.md",
-      "sha256": "11bb89db9e074d4679db7d793d4aa90dd83447ff40ccfec39b005cfecf0f8cd4"
+      "sha256": "b2add7046365a1fd69fd0bcca60548531404d57afe1e9cced51c4f38584d16f9"
     }
   ],
   "as_of": "2026-08-06T10:05:00Z",
-  "comparable_observation_count": 94023,
-  "coverage_cube_rows": 5773,
+  "comparable_observation_count": 383828,
+  "coverage_cube_rows": 8268,
   "coverage_cube_version": "d1-v4-coverage-cube-v1",
-  "covered_spatial_cells_source_sum": 5954,
+  "covered_spatial_cells_source_sum": 6875,
   "denominator_definition": "all non-empty registered target observations parsed from verified full caches",
-  "distinct_sample_count": 554429,
+  "distinct_sample_count": 771322,
   "media": {
     "rock": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 25659,
+      "distinct_sample_count": 25972,
       "independent_lineage_count": 1,
-      "observation_count": 65988,
+      "lineage_ids": [
+        "georoc-compilation"
+      ],
+      "observation_count": 67171,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 20866,
-      "reported_covered_spatial_cells": 395,
+      "reported_coordinate_sample_count": 21178,
+      "reported_covered_spatial_cells": 413,
       "source_ids": [
+        "georoc-antarctica-intraplate",
         "georoc-archaean"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
     },
     "sediment": {
-      "comparable_observation_count": 22678,
+      "comparable_observation_count": 22840,
       "covered_spatial_cells": 641,
-      "distinct_sample_count": 5504,
-      "independent_lineage_count": 4,
-      "observation_count": 45390,
-      "reported_comparable_observation_count": 22678,
-      "reported_coordinate_sample_count": 5504,
-      "reported_covered_spatial_cells": 720,
+      "distinct_sample_count": 12831,
+      "independent_lineage_count": 6,
+      "lineage_ids": [
+        "australia-ngsa-mercury",
+        "foregs-geochemical-atlas-europe-2005",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
+      ],
+      "observation_count": 82282,
+      "reported_comparable_observation_count": 22840,
+      "reported_coordinate_sample_count": 12831,
+      "reported_covered_spatial_cells": 1313,
       "source_ids": [
+        "australia-ngsa-mercury",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
-        "norway-marchem"
+        "japan-gsj-marine-sediment",
+        "norway-marchem",
+        "pangaea-arabian-sea-sediment"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 2481
+      "valid_coordinate_sample_count": 2507
     },
     "soil": {
-      "comparable_observation_count": 23212,
+      "comparable_observation_count": 76915,
       "covered_spatial_cells": 1419,
-      "distinct_sample_count": 18469,
+      "distinct_sample_count": 23914,
       "independent_lineage_count": 6,
-      "observation_count": 93508,
-      "reported_comparable_observation_count": 34468,
-      "reported_coordinate_sample_count": 18343,
-      "reported_covered_spatial_cells": 1472,
+      "lineage_ids": [
+        "afsis-phase-i-wet-chemistry",
+        "foregs-geochemical-atlas-europe-2005",
+        "gemas-europe",
+        "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
+        "usgs-conus-soil"
+      ],
+      "observation_count": 153781,
+      "reported_comparable_observation_count": 76915,
+      "reported_coordinate_sample_count": 23788,
+      "reported_covered_spatial_cells": 1851,
       "source_ids": [
         "afsis-phase-i-wet-chemistry",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
+        "gemas-europe",
         "pangaea-north-africa-soil",
+        "tpdc-china-mountain-soil",
         "usgs-conus-soil"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 16467
+      "valid_coordinate_sample_count": 20598
     },
     "water": {
-      "comparable_observation_count": 48133,
-      "covered_spatial_cells": 2370,
-      "distinct_sample_count": 504797,
-      "independent_lineage_count": 3,
-      "observation_count": 537174,
-      "reported_comparable_observation_count": 48133,
-      "reported_coordinate_sample_count": 504797,
-      "reported_covered_spatial_cells": 2370,
+      "comparable_observation_count": 284073,
+      "covered_spatial_cells": 2440,
+      "distinct_sample_count": 708605,
+      "independent_lineage_count": 4,
+      "lineage_ids": [
+        "foregs-geochemical-atlas-europe-2005",
+        "gemstat-open-archive",
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
+      ],
+      "observation_count": 3783544,
+      "reported_comparable_observation_count": 284073,
+      "reported_coordinate_sample_count": 708605,
+      "reported_covered_spatial_cells": 2440,
       "source_ids": [
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
-      "valid_coordinate_sample_count": 504797
+      "valid_coordinate_sample_count": 708416
     }
   },
-  "observation_count": 742060,
+  "observation_count": 4086778,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "registered_source_count": 14,
-  "reported_coordinate_sample_count": 549510,
-  "source_count": 14,
+  "registered_source_count": 21,
+  "reported_coordinate_sample_count": 766402,
+  "source_count": 21,
   "sources": [
     {
       "comparable_observation_count": 0,
@@ -670,6 +982,17 @@
       "observation_count": 12012,
       "reported_coordinate_sample_count": 1876,
       "source_id": "afsis-phase-i-wet-chemistry",
+      "valid_coordinate_sample_count": 0
+    },
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 2396,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 2396,
+      "reported_coordinate_sample_count": 2396,
+      "source_id": "australia-ngsa-mercury",
       "valid_coordinate_sample_count": 0
     },
     {
@@ -739,15 +1062,37 @@
       "valid_coordinate_sample_count": 862
     },
     {
-      "comparable_observation_count": 43285,
-      "covered_spatial_cells": 1071,
-      "distinct_sample_count": 485672,
+      "comparable_observation_count": 53703,
+      "covered_spatial_cells": 829,
+      "distinct_sample_count": 4131,
+      "medium": "soil",
+      "method_rate": 1.0,
+      "observation_count": 53703,
+      "reported_coordinate_sample_count": 4131,
+      "source_id": "gemas-europe",
+      "valid_coordinate_sample_count": 4131
+    },
+    {
+      "comparable_observation_count": 279225,
+      "covered_spatial_cells": 1153,
+      "distinct_sample_count": 689291,
       "medium": "water",
-      "method_rate": 0.087799,
-      "observation_count": 492999,
-      "reported_coordinate_sample_count": 485672,
+      "method_rate": 0.074675,
+      "observation_count": 3739180,
+      "reported_coordinate_sample_count": 689291,
       "source_id": "gemstat-open-archive",
-      "valid_coordinate_sample_count": 485672
+      "valid_coordinate_sample_count": 689291
+    },
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 313,
+      "medium": "rock",
+      "method_rate": 0.0,
+      "observation_count": 1183,
+      "reported_coordinate_sample_count": 312,
+      "source_id": "georoc-antarctica-intraplate",
+      "valid_coordinate_sample_count": 0
     },
     {
       "comparable_observation_count": 0,
@@ -783,6 +1128,17 @@
       "valid_coordinate_sample_count": 0
     },
     {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 4905,
+      "medium": "sediment",
+      "method_rate": 0.0,
+      "observation_count": 34334,
+      "reported_coordinate_sample_count": 4905,
+      "source_id": "japan-gsj-marine-sediment",
+      "valid_coordinate_sample_count": 0
+    },
+    {
       "comparable_observation_count": 3520,
       "covered_spatial_cells": 76,
       "distinct_sample_count": 880,
@@ -792,6 +1148,17 @@
       "reported_coordinate_sample_count": 880,
       "source_id": "norway-marchem",
       "valid_coordinate_sample_count": 880
+    },
+    {
+      "comparable_observation_count": 162,
+      "covered_spatial_cells": 10,
+      "distinct_sample_count": 26,
+      "medium": "sediment",
+      "method_rate": 1.0,
+      "observation_count": 162,
+      "reported_coordinate_sample_count": 26,
+      "source_id": "pangaea-arabian-sea-sediment",
+      "valid_coordinate_sample_count": 26
     },
     {
       "comparable_observation_count": 258,
@@ -806,6 +1173,28 @@
     },
     {
       "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 1314,
+      "medium": "soil",
+      "method_rate": 1.0,
+      "observation_count": 6570,
+      "reported_coordinate_sample_count": 1314,
+      "source_id": "tpdc-china-mountain-soil",
+      "valid_coordinate_sample_count": 0
+    },
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 189,
+      "medium": "water",
+      "method_rate": 1.0,
+      "observation_count": 189,
+      "reported_coordinate_sample_count": 189,
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "valid_coordinate_sample_count": 0
+    },
+    {
+      "comparable_observation_count": 0,
       "covered_spatial_cells": 884,
       "distinct_sample_count": 14380,
       "medium": "soil",
@@ -816,5 +1205,5 @@
       "valid_coordinate_sample_count": 14380
     }
   ],
-  "valid_coordinate_sample_count": 523745
+  "valid_coordinate_sample_count": 731521
 }

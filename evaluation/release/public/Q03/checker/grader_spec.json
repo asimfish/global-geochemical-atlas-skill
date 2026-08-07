@@ -157,17 +157,73 @@
       "type": "csv_cell"
     },
     {
+      "column": "original_value",
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
-      "id": "original_values",
+      "expected": 42,
+      "id": "s01_original_value",
+      "key": {"sample_id": "S01"},
       "path": "normalized_elements.csv",
-      "points": 10,
-      "terms": [
-        "S01,Ni,42,ppm",
-        "S03,Zn,0.012,wt%",
-        "S05,Co,8000,ppb"
-      ],
-      "type": "text_contains_all"
+      "points": 2,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "original_unit",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "ppm",
+      "id": "s01_original_unit",
+      "key": {"sample_id": "S01"},
+      "path": "normalized_elements.csv",
+      "points": 2,
+      "type": "csv_cell"
+    },
+    {
+      "column": "original_value",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 0.012,
+      "id": "s03_original_value",
+      "key": {"sample_id": "S03"},
+      "path": "normalized_elements.csv",
+      "points": 2,
+      "tolerance": 1e-09,
+      "type": "csv_cell"
+    },
+    {
+      "column": "original_unit",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "wt%",
+      "id": "s03_original_unit",
+      "key": {"sample_id": "S03"},
+      "path": "normalized_elements.csv",
+      "points": 1,
+      "type": "csv_cell"
+    },
+    {
+      "column": "original_value",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": 8000,
+      "id": "s05_original_value",
+      "key": {"sample_id": "S05"},
+      "path": "normalized_elements.csv",
+      "points": 2,
+      "tolerance": 1e-06,
+      "type": "csv_cell"
+    },
+    {
+      "column": "original_unit",
+      "dimension_id": "domain_understanding",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "expected": "ppb",
+      "id": "s05_original_unit",
+      "key": {"sample_id": "S05"},
+      "path": "normalized_elements.csv",
+      "points": 1,
+      "type": "csv_cell"
     },
     {
       "dimension_id": "domain_understanding",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evidence-bound V4 semantic mappings for the fourteen executable sources."""
+"""Evidence-bound V4 semantic mappings for the twenty-one executable sources."""
 
 from __future__ import annotations
 
@@ -16,6 +16,13 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "sample_type": "rock_whole_rock",
         "sample_type_mapping_status": "dataset_constant",
         "method_missing_reason": "not_reported",
+        "citation_scope": "observation",
+    },
+    "georoc-antarctica-intraplate": {
+        "sample_type_raw": "WR",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_missing_reason": "winning_method_not_encoded_in_precompiled_member",
         "citation_scope": "observation",
     },
     "usgs-conus-soil": {
@@ -38,7 +45,9 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "sample_type_mapping_status": "dataset_constant",
         "water_body_type": "seawater",
         "water_fraction": "dissolved",
-        "method_missing_reason": "not_available",
+        "method_scope": "cruise_analyte",
+        "method_assignment_basis": "cruise_and_analyte_to_exported_originator_method_record",
+        "method_missing_reason": "multiple_linked_method_records_unresolved_to_observation",
         "citation_scope": "dataset",
     },
     "gemstat-open-archive": {
@@ -116,6 +125,50 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
     "afsis-phase-i-wet-chemistry": {
         "method_scope": "dataset",
         "method_assignment_basis": "dataset_variable_and_threshold_metadata",
+        "citation_scope": "dataset",
+    },
+    "us-wqp-sacramento-river-arsenic": {
+        "sample_type_raw": "Water / Surface Water / Stream",
+        "sample_type": "water_stream",
+        "sample_type_mapping_status": "exact",
+        "water_body_type": "stream",
+        "water_fraction": "dissolved",
+        "filtered_state": "filtered_water_method",
+        "method_scope": "observation",
+        "method_assignment_basis": "result_row_analytical_method_fields",
+        "citation_scope": "observation",
+    },
+    "australia-ngsa-mercury": {
+        "sediment_environment": "outlet_catchment",
+        "method_scope": "dataset",
+        "method_assignment_basis": "official_file_metadata_preamble",
+        "citation_scope": "dataset",
+    },
+    "japan-gsj-marine-sediment": {
+        "sample_type_raw": "marine sediment",
+        "sample_type": "sediment_marine",
+        "sample_type_mapping_status": "dataset_constant",
+        "sediment_environment": "marine",
+        "method_missing_reason": "not_reported_in_concentration_csv",
+        "citation_scope": "dataset",
+    },
+    "pangaea-arabian-sea-sediment": {
+        "sample_type_raw": "marine core sediment",
+        "sample_type": "sediment_marine_core",
+        "sample_type_mapping_status": "dataset_constant",
+        "sediment_environment": "marine",
+        "method_scope": "parameter",
+        "method_assignment_basis": "pangaea_parameter_method_metadata",
+        "citation_scope": "dataset",
+    },
+    "tpdc-china-mountain-soil": {
+        "method_scope": "publication",
+        "method_assignment_basis": "article_element_method_mapping",
+        "citation_scope": "dataset",
+    },
+    "gemas-europe": {
+        "method_scope": "dataset_analysis_group",
+        "method_assignment_basis": "registered_AR_or_XRF_method_contract",
         "citation_scope": "dataset",
     },
 }
@@ -203,6 +256,33 @@ def _sample_semantics(source_id: str, evidence: Mapping[str, Any], contract: Map
             water_body_type=canonical.removeprefix("water_"),
             water_fraction=_text(evidence.get("water_fraction")),
         )
+    elif source_id == "australia-ngsa-mercury":
+        raw = _text(evidence.get("reported_depth"))
+        mapped = {
+            "TOS": "sediment_outlet_top",
+            "BOS": "sediment_outlet_bottom",
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped NGSA outlet-sediment depth: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped,
+            sample_type_mapping_status="exact",
+        )
+    elif source_id == "tpdc-china-mountain-soil":
+        raw = _text(evidence.get("reported_horizon"))
+        mapped = {"O": "soil_organic_horizon", "A": "soil_a_horizon", "C": "soil_c_horizon"}.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped TPDC soil horizon: {raw}")
+        result.update(sample_type_raw=raw, sample_type=mapped, sample_type_mapping_status="exact",
+                      soil_horizon_raw=raw, soil_horizon=raw)
+    elif source_id == "gemas-europe":
+        raw = _text(evidence.get("sample_type"))
+        mapped = {"Ap": ("soil_agricultural_ploughed", "Ap"), "Gr": ("soil_grazing_land", "Gr")}.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped GEMAS soil type: {raw}")
+        result.update(sample_type_raw=raw, sample_type=mapped[0], sample_type_mapping_status="exact",
+                      soil_horizon_raw=raw, soil_horizon=mapped[1])
     return result
 
 
@@ -218,7 +298,7 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
         "map_sheet": _text(row.get("map_sheet")),
         "cruise_track": _text(row.get("cruise_track")),
     }
-    if source_id == "georoc-archaean":
+    if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
         result["geographic_context_raw"] = result["geographic_context_raw"] or legacy
     elif source_id == "geotraces-idp2025":
         result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
@@ -241,6 +321,31 @@ def _geographic_semantics(source_id: str, row: Mapping[str, Any], evidence: Mapp
         result["geographic_context_raw"] = (
             _text(evidence.get("reported_location")) or result["geographic_context_raw"]
         )
+    elif source_id == "australia-ngsa-mercury":
+        result["survey_area"] = _text(evidence.get("state")) or result["survey_area"]
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (_text(evidence.get("state")), _text(evidence.get("site_id"))) if part
+        )
+    elif source_id == "japan-gsj-marine-sediment":
+        result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
+        result["survey_area"] = _text(evidence.get("region")) or result["survey_area"]
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], result["cruise_track"]) if part
+        )
+    elif source_id == "pangaea-arabian-sea-sediment":
+        result["cruise_track"] = _text(evidence.get("event")) or result["cruise_track"]
+        result["survey_area"] = _text(evidence.get("location")) or result["survey_area"]
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], result["cruise_track"]) if part
+        )
+    elif source_id == "tpdc-china-mountain-soil":
+        result["survey_area"] = _text(evidence.get("mountain"))
+        result["geographic_context_raw"] = " / ".join(
+            part for part in (result["survey_area"], _text(evidence.get("site"))) if part
+        )
+    elif source_id == "gemas-europe":
+        result["survey_area"] = _text(evidence.get("country_raw"))
+        result["geographic_context_raw"] = result["survey_area"]
     return result
 
 

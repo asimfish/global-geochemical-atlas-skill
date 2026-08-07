@@ -24,10 +24,12 @@ import standardize_geochemistry as standardizer
 COMBINED_VERSION = "d1-four-media-combined-v1"
 SOURCE_ORDER = (
     "georoc-archaean",
+    "georoc-antarctica-intraplate",
     "usgs-conus-soil",
     "norway-marchem",
     "geotraces-idp2025",
     "gemstat-open-archive",
+    "us-wqp-sacramento-river-arsenic",
     "japan-gsj-geochemical-map",
     "pangaea-north-africa-soil",
     "foregs-topsoil",
@@ -37,13 +39,20 @@ SOURCE_ORDER = (
     "foregs-stream-sediment",
     "foregs-floodplain-sediment",
     "afsis-phase-i-wet-chemistry",
+    "australia-ngsa-mercury",
+    "japan-gsj-marine-sediment",
+    "pangaea-arabian-sea-sediment",
+    "tpdc-china-mountain-soil",
+    "gemas-europe",
 )
 EXPECTED_MEDIA = {
     "georoc-archaean": "rock",
+    "georoc-antarctica-intraplate": "rock",
     "usgs-conus-soil": "soil",
     "norway-marchem": "sediment",
     "geotraces-idp2025": "water",
     "gemstat-open-archive": "water",
+    "us-wqp-sacramento-river-arsenic": "water",
     "japan-gsj-geochemical-map": "sediment",
     "pangaea-north-africa-soil": "soil",
     "foregs-topsoil": "soil",
@@ -53,6 +62,11 @@ EXPECTED_MEDIA = {
     "foregs-stream-sediment": "sediment",
     "foregs-floodplain-sediment": "sediment",
     "afsis-phase-i-wet-chemistry": "soil",
+    "australia-ngsa-mercury": "sediment",
+    "japan-gsj-marine-sediment": "sediment",
+    "pangaea-arabian-sea-sediment": "sediment",
+    "tpdc-china-mountain-soil": "soil",
+    "gemas-europe": "soil",
 }
 
 
@@ -129,10 +143,10 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
     if request.get("offline") is True:
         route_entries = [
             item
-            for item in route["review_sources"]
-            if item["reason"] == "offline_cache_not_verified"
+            for item in [*route["selected_sources"], *route["review_sources"]]
+            if item["source_id"] in SOURCE_ORDER
         ]
-        route_selection_context = "checked_in_fixtures_pending_hash_verification"
+        route_selection_context = "checked_in_fixtures_pending_sha256_verification"
     selected_route = {item["source_id"] for item in route_entries}
     if selected_route != set(SOURCE_ORDER):
         raise CombinedDemoError(
@@ -266,8 +280,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
             "water_partition_count": len(water_partitions),
             "water_partitions": water_partitions,
             "explicit_boundaries": [
-                "GEOTRACES seawater nmol/kg is not mixed with GEMStat freshwater mass-per-volume arsenic.",
-                "GEMStat dissolved, suspended and total arsenic remain separate comparison groups.",
+                "GEOTRACES seawater nmol/kg is not mixed with freshwater mass-per-volume observations.",
+                "GEMStat dissolved, extractable, suspended and total fractions remain separate comparison groups.",
+                "The WQP Sacramento source remains a single-station dissolved-As time series with explicit preliminary, replicate and censored states.",
                 "MarChem partial nitric-acid sediment is not interpreted as total content.",
                 "USGS soil layers and GEOROC precompiled selected rock values retain their measurement bases.",
                 "PANGAEA fine-fraction HF-HNO3 soil is not mixed with USGS bulk-soil layers.",
@@ -277,6 +292,9 @@ def build(request_path: Path, source_demos: Path, output_dir: Path, generated_at
                 "FOREGS stream and floodplain sediment remain distinct sampling media and grain-fraction contexts.",
                 "AfSIS aqua-regia quasi-total topsoil and subsoil remain separate from total and differently extracted soil values.",
                 "AfSIS numeric below-DL or below-QL results retain explicit observation evidence and are not promoted to ordinary detections.",
+                "NGSA TOS/BOS total-Hg, GSJ marine sediment and PANGAEA Arabian Sea cores remain separate sediment contexts.",
+                "GEOROC Antarctica coordinate ranges are not converted to invented points.",
+                "TPDC O/A/C horizons and GEMAS aqua-regia/XRF groups remain separate comparison partitions.",
             ],
         },
         "outputs": [

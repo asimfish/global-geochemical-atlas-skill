@@ -1,0 +1,15 @@
+{
+  "analytical_method_counts": {
+    "ICP-AES (PerkinElmer Optima 2000)": 1314,
+    "ICP-MS (Agilent 7700x)": 5256
+  },
+  "as_of": "2026-08-06T10:05:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "tpdc-file-2025-07-23",
+  "method_scope_counts": {
+    "publication": 6570
+  },
+  "observation_count": 6570,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "tpdc-china-mountain-soil"
+}

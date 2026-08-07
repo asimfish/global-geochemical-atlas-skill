@@ -8,7 +8,7 @@ temperature=0，`runtime_mode=host`，`skill_used=true`。
 其他 Skill 或另一臂产物；唯一 Skill 必须是 `.agents/skills/global-geochemical-atlas/SKILL.md`。禁止访问父目录、
 克隆仓库或寻找评分器。若隔离不符，写明失败并停止；不要自行清理后继续。
 
-完整读取 SKILL.md，并按其路由只读取本任务需要的 references/scripts/assets，记录实际使用文件和 SHA-256。再
+完整读取 SKILL.md，并按其路由只读取本任务需要的 references/scripts/assets，记录实际使用文件和 SHA-256；对适用脚本必须实际调用并记录命令，不能只复述 Skill 或重新实现已有能力。不适用时记录输入/接口不匹配的具体原因。再
 完整读取 `TASK.md`、`public_case/sources.json`、`public_case/discovery_contract.json`、
 `public_case/benchmark_export_crosswalk.json` 和 `public_case/prepare_case.py`，记录哈希且禁止修改。
 

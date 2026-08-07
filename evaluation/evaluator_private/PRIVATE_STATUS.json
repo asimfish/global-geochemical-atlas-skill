@@ -1,6 +1,6 @@
 {
   "schema_version": "e2.private-assets.v1",
-  "benchmark_version": "6.0.0-draft.2",
+  "benchmark_version": "6.0.0-draft.3",
   "storage": "repo_local_evaluator_only",
   "candidate_projection": "../ai_visible_public/tasks/Q09-Q24",
   "status": "REPO_LOCAL_REGRESSION_ONLY",

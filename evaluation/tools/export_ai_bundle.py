@@ -13,6 +13,7 @@ from pathlib import Path, PurePosixPath
 
 VISIBLE_QUESTIONS = tuple(f"Q{number:02d}" for number in range(1, 25))
 ANSWERING_PROMPT_PATH = Path("prompts/answering_agent_prompt.md")
+CONTRACT_VALIDATOR_PATH = Path("tools/validate_submission_contract.py")
 FORBIDDEN_PATH_PARTS = {
     "checker",
     "evaluator_private",
@@ -117,9 +118,11 @@ def populate_bundle(source_root: Path, bundle_root: Path) -> None:
     version_path = source_root / "VERSION"
     interface_path = source_root / "docs" / "public_interface.md"
     answering_prompt_path = source_root / ANSWERING_PROMPT_PATH
+    contract_validator_path = source_root / CONTRACT_VALIDATOR_PATH
     _copy_regular_file(version_path, bundle_root / "VERSION")
     _copy_regular_file(interface_path, bundle_root / "public_interface.md")
     _copy_regular_file(answering_prompt_path, bundle_root / "AGENT_PROMPT.md")
+    _copy_regular_file(contract_validator_path, bundle_root / "validate_submission_contract.py")
     (bundle_root / "README.md").write_text(BUNDLE_README, encoding="utf-8")
 
     for question in VISIBLE_QUESTIONS:

@@ -59,6 +59,33 @@
     {
       "dimension_id": "engineering_quality",
       "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "confidence_exists",
+      "path": "confidence_report.json",
+      "points": 1,
+      "type": "file_exists"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "confidence_components",
+      "json_path": "components",
+      "path": "confidence_report.json",
+      "points": 2,
+      "required": ["source_integrity", "normalization", "spatial", "quality_control", "provenance"],
+      "type": "json_object_has_keys"
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "evidence_location": "run_manifest.benchmark_evidence",
+      "id": "confidence_boundary",
+      "path": "confidence_report.json",
+      "points": 2,
+      "terms": ["not a probability", "source_integrity", "normalization", "spatial", "quality_control", "provenance"],
+      "type": "text_contains_all"
+    },
+    {
+      "dimension_id": "engineering_quality",
+      "evidence_location": "run_manifest.benchmark_evidence",
       "expected": 24,
       "id": "observation_count",
       "path": "observations.csv",
@@ -81,7 +108,7 @@
       "id": "map_count",
       "json_path": "features",
       "path": "map.geojson",
-      "points": 5,
+      "points": 3,
       "type": "json_length"
     },
     {
@@ -222,7 +249,7 @@
       "id": "map_traceability",
       "json_path": "features.0.properties",
       "path": "map.geojson",
-      "points": 5,
+      "points": 4,
       "required": [
         "record_id",
         "source_id",
@@ -261,7 +288,7 @@
       "id": "anomaly_z",
       "json_path": "features.0.properties.robust_z",
       "path": "anomalies.geojson",
-      "points": 5,
+      "points": 4,
       "tolerance": 1e-06,
       "type": "json_value"
     },
@@ -270,7 +297,7 @@
       "evidence_location": "run_manifest.benchmark_evidence",
       "id": "summary_evidence",
       "path": "summary.md",
-      "points": 2,
+      "points": 1,
       "terms": [
         "partial success",
         "Source integrity",

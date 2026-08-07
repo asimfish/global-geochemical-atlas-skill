@@ -3,6 +3,15 @@
   "claim_boundary": "Automated PASS verifies source-to-adapter preservation only. Human decisions remain unsigned and add confidence when completed; they are not a binary permission gate for research use.",
   "completed_record_count": 0,
   "dataset_version": "v3",
+  "element_quotas": {
+    "As": 5,
+    "Cr": 5,
+    "Cu": 4,
+    "Hg": 4,
+    "Ni": 4,
+    "Pb": 4,
+    "Zn": 4
+  },
   "prepared_record_count": 30,
   "records": [
     {
@@ -32,12 +41,12 @@
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
@@ -52,612 +61,13 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "ARG00014",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
       "selection_reasons": [
-        "data_quality=Fair",
-        "evenly_spaced_source_order",
-        "fraction=dissolved",
         "method=undefined",
-        "unit=mg/l",
-        "value_flag=reported",
-        "water_type=River station"
+        "parameter=As-Dis"
       ],
       "source_locator": "Arsenic.csv#row=2",
       "source_record_id": "src-7a9833564f092efcc75eb81406b02b258affca2d5d265c536f4e6f7aec9784a4"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Argentina",
-          "data_quality": "Fair",
-          "latitude": "-22.3775",
-          "longitude": "-62.523611",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.011",
-          "record_id": "rec-7cba7c44685668a92992ee5fb53dc16b85dfa1ff55ca3a381d675e4e48430676",
-          "sample_depth_m": "0.3",
-          "sample_time": "11:30",
-          "sampled_at": "2011-09-06",
-          "station_id": "ARG00014",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.011"
-      },
-      "review_id": "gemstat-open-archive-review-02",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "ARG00014",
-      "selection_reasons": [
-        "fraction=total"
-      ],
-      "source_locator": "Arsenic.csv#row=3",
-      "source_record_id": "src-d01b4ab71896a4f66b9d6df1a8d0662065db2ae0fa02f55ebff72878909ae2d7"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Argentina",
-          "data_quality": "Fair",
-          "latitude": "-22.3775",
-          "longitude": "-62.523611",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.025",
-          "record_id": "rec-3215f777f40e21f2043d6d52735a9416e62d900387a59a0d509ad501b8ed1414",
-          "sample_depth_m": "0.3",
-          "sample_time": "12:00",
-          "sampled_at": "2018-06-10",
-          "station_id": "ARG00014",
-          "unit": "mg/l",
-          "value_qualifier": "<",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.025"
-      },
-      "review_id": "gemstat-open-archive-review-03",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "ARG00014",
-      "selection_reasons": [
-        "value_flag=<"
-      ],
-      "source_locator": "Arsenic.csv#row=22",
-      "source_record_id": "src-72ffd3f7fa77813de09fb213acbcc93e639d4f210f556dc39a8116df34afa3c3"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Belgium",
-          "data_quality": "Fair",
-          "latitude": "51.12143889",
-          "longitude": "2.748241667",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.002",
-          "record_id": "rec-4aab6c6858f72ff0434200e33a18d9e2e306002b75cfb85f84b1ed40e964ee0d",
-          "sample_depth_m": "0.0",
-          "sample_time": "12:00",
-          "sampled_at": "2006-01-16",
-          "station_id": "BEL00071",
-          "unit": "mg/l",
-          "value_qualifier": "<",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.002"
-      },
-      "review_id": "gemstat-open-archive-review-04",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "BEL00071",
-      "selection_reasons": [
-        "adjacent_exact_duplicate_observation"
-      ],
-      "source_locator": "Arsenic.csv#row=13508",
-      "source_record_id": "src-89ba226ef51681d36bc5d0ca67eedf9612cdff1db4170ef81f3fb5a143e2d293"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Belgium",
-          "data_quality": "Fair",
-          "latitude": "50.51473",
-          "longitude": "5.6175",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0003",
-          "record_id": "rec-2d9f608e3051138574d3167cc99303ddf94705480ae4d5d49d27d884fb00c95a",
-          "sample_depth_m": "0.3",
-          "sample_time": "12:00",
-          "sampled_at": "2008-09-30",
-          "station_id": "BEL00080",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "Groundwater station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.0003"
-      },
-      "review_id": "gemstat-open-archive-review-05",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "BEL00080",
-      "selection_reasons": [
-        "water_type=Groundwater station"
-      ],
-      "source_locator": "Arsenic.csv#row=14101",
-      "source_record_id": "src-c2b6cba7e8d829e06de380dd87caf8289386faf05fc2ad8e08114d06672a54a1"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Belgium",
-          "data_quality": "Fair",
-          "latitude": "51.14584",
-          "longitude": "5.8413",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.00199",
-          "record_id": "rec-c305071ba31dda1f52bda3623bb26bc6c9d18a1dedf81ce0ff022bd1e77695b1",
-          "sample_depth_m": "0.3",
-          "sample_time": "12:00",
-          "sampled_at": "2009-02-17",
-          "station_id": "BEL00153",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "Lake station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.00199"
-      },
-      "review_id": "gemstat-open-archive-review-06",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "BEL00153",
-      "selection_reasons": [
-        "water_type=Lake station"
-      ],
-      "source_locator": "Arsenic.csv#row=22120",
-      "source_record_id": "src-565edc430d9679bd3a0b8ecc36db450500c1a77f9f98317ccc5b71f09f3444b9"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Bulgaria",
-          "data_quality": "Pending review",
-          "latitude": "43.7092",
-          "longitude": "23.8511",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.00109",
-          "record_id": "rec-07e0ec330cdd86d804c0d611c2225bf1453fbd863e3c3efdf271ec0f67437a3c",
-          "sample_depth_m": "0.0",
-          "sample_time": "12:00",
-          "sampled_at": "2015-01-14",
-          "station_id": "BGR00021",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "dissolved",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.00109"
-      },
-      "review_id": "gemstat-open-archive-review-07",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "BGR00021",
-      "selection_reasons": [
-        "data_quality=Pending review"
-      ],
-      "source_locator": "Arsenic.csv#row=23143",
-      "source_record_id": "src-14ee9d130145adfff2e0bca50d5d0cf965107008ae5842870d0d407ecdc31aff"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Bulgaria",
-          "data_quality": "Fair",
-          "latitude": "43.3971",
-          "longitude": "23.1994",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.0218",
-          "record_id": "rec-940c9c592d19dda562dcdb5385c3db2d22cb975ec35289d43a0dc7c3ea0cceb5",
-          "sample_depth_m": "0.3",
-          "sample_time": "12:00",
-          "sampled_at": "2010-03-01",
-          "station_id": "BGR00023",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "dissolved",
-          "water_type": "Reservoir station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.0218"
-      },
-      "review_id": "gemstat-open-archive-review-08",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "BGR00023",
-      "selection_reasons": [
-        "water_type=Reservoir station"
-      ],
-      "source_locator": "Arsenic.csv#row=23186",
-      "source_record_id": "src-1a1ce8830160ef4387e5795c056f10ffce3027d9ebe7e15fafd1b05199d85a2d"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Bosnia and Herzegovina",
-          "data_quality": "Suspect",
-          "latitude": "43.092",
-          "longitude": "17.6947",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0",
-          "record_id": "rec-de202fbc2495f1b092b0ec8f753a1f3c55f4659abdcb6f2a6d2eb45eafafbcf8",
-          "sample_depth_m": "0.0",
-          "sample_time": "12:00",
-          "sampled_at": "2010-06-30",
-          "station_id": "BIH00001",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.0"
-      },
-      "review_id": "gemstat-open-archive-review-09",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "BIH00001",
-      "selection_reasons": [
-        "data_quality=Suspect"
-      ],
-      "source_locator": "Arsenic.csv#row=25258",
-      "source_record_id": "src-6700d2e69f968512dec17e0133dd2cb689ae36d8d5947068dcf8da103b937946"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "ICP-AES-AsH-PS",
-          "analysis_method_name": "Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion",
-          "analyte": "As",
-          "country": "Canada",
-          "data_quality": "Fair",
-          "latitude": "60.12",
-          "longitude": "-137.97",
-          "medium": "water",
-          "method_description": "A sample is preserved in the field at 4°C. From the sample aliquot, all organoarsenides are decomposed with acidic persulphate. After reduction to arsenite with HCl, the metal is converted to its hydride form with sodium borohydride in an automated system and passed though an argon plasma torch where it is decomposed to its arsenic atoms, measured by emission spectrometry at 193.7 nm and compared to identically-prepared standard and blank solutions.",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0005",
-          "record_id": "rec-b66c0ee94ee5fbfc914b019e645c1d792810ed6eeeb57ad9c54e8c60020bc785",
-          "sample_depth_m": "0.3",
-          "sample_time": "13:45",
-          "sampled_at": "2001-09-25",
-          "station_id": "CAN00018",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.0005"
-      },
-      "review_id": "gemstat-open-archive-review-10",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "CAN00018",
-      "selection_reasons": [
-        "method=defined"
-      ],
-      "source_locator": "Arsenic.csv#row=25632",
-      "source_record_id": "src-e7917ad63107ef781cbd66ae9dd126028ae34310b93178616cc20b1db7eed23c"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "VMV_2640",
-          "analysis_method_name": "Determination of total arsenic, antimony and selenium by inductively coupled argon plasma",
-          "analyte": "As",
-          "country": "Canada",
-          "data_quality": "Good",
-          "latitude": "60.12",
-          "longitude": "-137.97",
-          "medium": "water",
-          "method_description": "",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0005",
-          "record_id": "rec-14c2096bbe24e7214422a068cde15e03de5683623af109ae8f27c4769d46ba32",
-          "sample_depth_m": "0.3",
-          "sample_time": "13:45",
-          "sampled_at": "2001-09-25",
-          "station_id": "CAN00018",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.0005"
-      },
-      "review_id": "gemstat-open-archive-review-11",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "CAN00018",
-      "selection_reasons": [
-        "data_quality=Good"
-      ],
-      "source_locator": "Arsenic.csv#row=25633",
-      "source_record_id": "src-f96245c6a6c221585883f90d199147ca1628c0e2a7ce920a716cca2de9fe10a2"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "VMV_1919",
-          "analysis_method_name": "Total metals with in-bottle digestion and inductively coupled plasma-sector field mass spectrometer",
-          "analyte": "As",
-          "country": "Canada",
-          "data_quality": "Good",
-          "latitude": "60.12",
-          "longitude": "-137.97",
-          "medium": "water",
-          "method_description": "",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.73",
-          "record_id": "rec-e4d2b92ac4d6fe936c7ee0a75cd868bc045d6a47d033cd2202ffe1da834928a4",
-          "sample_depth_m": "0.3",
-          "sample_time": "11:00",
-          "sampled_at": "2003-04-09",
-          "station_id": "CAN00018",
-          "unit": "µg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.73"
-      },
-      "review_id": "gemstat-open-archive-review-12",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "CAN00018",
-      "selection_reasons": [
-        "unit=µg/l"
-      ],
-      "source_locator": "Arsenic.csv#row=25638",
-      "source_record_id": "src-d97941f8b2dbfc48096d26374a0f96263a7ff9811e299e1bc7bbd4a87a8cc1e8"
     },
     {
       "adapter_observations": [
@@ -686,18 +96,615 @@
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
         "As": "0.02"
+      },
+      "review_id": "gemstat-open-archive-review-02",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "CAN00022|2003-03-26|10:50|0.3",
+      "selection_reasons": [
+        "parameter=As-Sus"
+      ],
+      "source_locator": "Arsenic.csv#row=26261",
+      "source_record_id": "src-3cfad3f8b83318aafff4794294362c55127ac029534a84fc1d0a3f4a4b80785b"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "As",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "As-Tot",
+          "raw_value": "0.011",
+          "record_id": "rec-7cba7c44685668a92992ee5fb53dc16b85dfa1ff55ca3a381d675e4e48430676",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "mg/l",
+          "value_qualifier": "",
+          "water_fraction": "total",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "0.011"
+      },
+      "review_id": "gemstat-open-archive-review-03",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=As-Tot"
+      ],
+      "source_locator": "Arsenic.csv#row=3",
+      "source_record_id": "src-d01b4ab71896a4f66b9d6df1a8d0662065db2ae0fa02f55ebff72878909ae2d7"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "ICP-AES-AsH-PS",
+          "analysis_method_name": "Inductively Coupled Plasma (ICP) Method with AsH3 Generation and S2O8 Digestion",
+          "analyte": "As",
+          "country": "Canada",
+          "data_quality": "Fair",
+          "latitude": "60.12",
+          "longitude": "-137.97",
+          "medium": "water",
+          "method_description": "A sample is preserved in the field at 4°C. From the sample aliquot, all organoarsenides are decomposed with acidic persulphate. After reduction to arsenite with HCl, the metal is converted to its hydride form with sodium borohydride in an automated system and passed though an argon plasma torch where it is decomposed to its arsenic atoms, measured by emission spectrometry at 193.7 nm and compared to identically-prepared standard and blank solutions.",
+          "parameter_code": "As-Tot",
+          "raw_value": "0.0005",
+          "record_id": "rec-b66c0ee94ee5fbfc914b019e645c1d792810ed6eeeb57ad9c54e8c60020bc785",
+          "sample_depth_m": "0.3",
+          "sample_time": "13:45",
+          "sampled_at": "2001-09-25",
+          "station_id": "CAN00018",
+          "unit": "mg/l",
+          "value_qualifier": "",
+          "water_fraction": "total",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "0.0005"
+      },
+      "review_id": "gemstat-open-archive-review-04",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "method=defined"
+      ],
+      "source_locator": "Arsenic.csv#row=25632",
+      "source_record_id": "src-e7917ad63107ef781cbd66ae9dd126028ae34310b93178616cc20b1db7eed23c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "As",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "As-Tot",
+          "raw_value": "0.025",
+          "record_id": "rec-3215f777f40e21f2043d6d52735a9416e62d900387a59a0d509ad501b8ed1414",
+          "sample_depth_m": "0.3",
+          "sample_time": "12:00",
+          "sampled_at": "2018-06-10",
+          "station_id": "ARG00014",
+          "unit": "mg/l",
+          "value_qualifier": "<",
+          "water_fraction": "total",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "As": "0.025"
+      },
+      "review_id": "gemstat-open-archive-review-05",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2018-06-10|12:00|0.3",
+      "selection_reasons": [
+        "qualifier=<"
+      ],
+      "source_locator": "Arsenic.csv#row=22",
+      "source_record_id": "src-72ffd3f7fa77813de09fb213acbcc93e639d4f210f556dc39a8116df34afa3c3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Cr",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Cr-Dis",
+          "raw_value": "0.001",
+          "record_id": "rec-feca9d22dfb37a59373f7c721ba9f3a09bde7753ab12b9274d842a81dedf8452",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "mg/l",
+          "value_qualifier": "<",
+          "water_fraction": "dissolved",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cr": "0.001"
+      },
+      "review_id": "gemstat-open-archive-review-06",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "method=undefined",
+        "parameter=Cr-Dis",
+        "qualifier=<"
+      ],
+      "source_locator": "Chromium.csv#row=2",
+      "source_record_id": "src-7b3322db585659ad0913560083b24c3c7fb6d8886f556a54e8022c728bb1f49e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "VMV_2817",
+          "analysis_method_name": "Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization",
+          "analyte": "Cr",
+          "country": "Canada",
+          "data_quality": "Good",
+          "latitude": "60.12",
+          "longitude": "-137.97",
+          "medium": "water",
+          "method_description": "",
+          "parameter_code": "Cr-Ext",
+          "raw_value": "2.73",
+          "record_id": "rec-3e9156adc17960bb41045cfea48f7e0063b90e4fe1be702f470af03dceb73df1",
+          "sample_depth_m": "0.3",
+          "sample_time": "13:45",
+          "sampled_at": "2001-09-25",
+          "station_id": "CAN00018",
+          "unit": "µg/l",
+          "value_qualifier": "",
+          "water_fraction": "extractable",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cr": "2.73"
+      },
+      "review_id": "gemstat-open-archive-review-07",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "method=defined",
+        "parameter=Cr-Ext"
+      ],
+      "source_locator": "Chromium.csv#row=27730",
+      "source_record_id": "src-9472843a1685f2d83e8852bab88bae368da7567b7fdbbbb0e2d1e8ce9a7e424c"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Cr",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Cr-Tot",
+          "raw_value": "0.025",
+          "record_id": "rec-74ef6bc6200dd3de5983566748c585efa6ff9bcb3b671608f2386097241f8ee1",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "mg/l",
+          "value_qualifier": "",
+          "water_fraction": "total",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cr": "0.025"
+      },
+      "review_id": "gemstat-open-archive-review-08",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Cr-Tot"
+      ],
+      "source_locator": "Chromium.csv#row=3",
+      "source_record_id": "src-0517758735f8c4f42b5efe50392b791d9e2361498c5b52ff88222e6e02190a38"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Cr",
+          "country": "Belgium",
+          "data_quality": "Pending review",
+          "latitude": "51.12143889",
+          "longitude": "2.748241667",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Cr-Tot",
+          "raw_value": "0.00015",
+          "record_id": "rec-9100b3233d4ac1639c74433eae34081fbff420dca16f265afe160afd8e1ed8d8",
+          "sample_depth_m": "0.0",
+          "sample_time": "12:00",
+          "sampled_at": "2009-02-04",
+          "station_id": "BEL00071",
+          "unit": "mg/l",
+          "value_qualifier": "<",
+          "water_fraction": "total",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cr": "0.00015"
+      },
+      "review_id": "gemstat-open-archive-review-09",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "BEL00071|2009-02-04|12:00|0.0",
+      "selection_reasons": [
+        "quality=Pending review"
+      ],
+      "source_locator": "Chromium.csv#row=14819",
+      "source_record_id": "src-7826947e517e03e0b7ae78288aabe6a81022cc2e54da7dbf1095acd7923b6a9a"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Cr",
+          "country": "Bulgaria",
+          "data_quality": "Suspect",
+          "latitude": "43.7864",
+          "longitude": "25.9132",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Cr-Dis",
+          "raw_value": "0.0",
+          "record_id": "rec-55f3c0efee486c211a127148f4b34a5817a61e3b833fb19adba6d6885634f70e",
+          "sample_depth_m": "0.3",
+          "sample_time": "12:00",
+          "sampled_at": "2007-02-28",
+          "station_id": "BGR00001",
+          "unit": "mg/l",
+          "value_qualifier": "<",
+          "water_fraction": "dissolved",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cr": "0.0"
+      },
+      "review_id": "gemstat-open-archive-review-10",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "BGR00001|2007-02-28|12:00|0.3",
+      "selection_reasons": [
+        "quality=Suspect"
+      ],
+      "source_locator": "Chromium.csv#row=24361",
+      "source_record_id": "src-952d556a2900c436beff9054255ed2111ff647f33801b0793891b0501c2b1ea3"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Cu",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Cu-Dis",
+          "raw_value": "0.016",
+          "record_id": "rec-77852f11e0b6a1aeaad2731912d75f43e2bd06893d708ce2f0ccb0633200ef4f",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "mg/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "0.016"
+      },
+      "review_id": "gemstat-open-archive-review-11",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Cu-Dis"
+      ],
+      "source_locator": "Copper.csv#row=2",
+      "source_record_id": "src-cc87479fa32ab227fda681f5e8a40a0b2615e01e188993ef0be375c43d26a843"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "VMV_2817",
+          "analysis_method_name": "Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization",
+          "analyte": "Cu",
+          "country": "Canada",
+          "data_quality": "Good",
+          "latitude": "60.12",
+          "longitude": "-137.97",
+          "medium": "water",
+          "method_description": "",
+          "parameter_code": "Cu-Ext",
+          "raw_value": "3.4",
+          "record_id": "rec-a52a4b560e0d3e1a68223009d353501a46401e3638d5d611bfb25d58d0a9d2cb",
+          "sample_depth_m": "0.3",
+          "sample_time": "13:45",
+          "sampled_at": "2001-09-25",
+          "station_id": "CAN00018",
+          "unit": "µg/l",
+          "value_qualifier": "",
+          "water_fraction": "extractable",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "3.4"
+      },
+      "review_id": "gemstat-open-archive-review-12",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
+      "selection_reasons": [
+        "parameter=Cu-Ext"
+      ],
+      "source_locator": "Copper.csv#row=40644",
+      "source_record_id": "src-320c5a3ed8aa393cc56aaf06ca581bdb84390da94169bc6cbb66cf8424addeef"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "VMV_3020",
+          "analysis_method_name": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+          "analyte": "Cu",
+          "country": "Canada",
+          "data_quality": "Fair",
+          "latitude": "45.5676",
+          "longitude": "-74.3799",
+          "medium": "water",
+          "method_description": "",
+          "parameter_code": "Cu-Sus",
+          "raw_value": "32.73",
+          "record_id": "rec-1732062052a73972227202202f117e589fe1856d0eb9a9a586ef59451c655a96",
+          "sample_depth_m": "0.3",
+          "sample_time": "00:00",
+          "sampled_at": "2012-04-11",
+          "station_id": "CAN00364",
+          "unit": "µg/g",
+          "value_qualifier": "",
+          "water_fraction": "suspended",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Cu": "32.73"
       },
       "review_id": "gemstat-open-archive-review-13",
       "reviewer": {
@@ -706,355 +713,31 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "CAN00022",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
       "selection_reasons": [
-        "fraction=suspended"
+        "parameter=Cu-Sus"
       ],
-      "source_locator": "Arsenic.csv#row=26261",
-      "source_record_id": "src-3cfad3f8b83318aafff4794294362c55127ac029534a84fc1d0a3f4a4b80785b"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "VMV_1917",
-          "analysis_method_name": "Extractable metals with inductively coupled argon plasma-sector field mass spectrometer (ICP-SFMS)",
-          "analyte": "As",
-          "country": "Canada",
-          "data_quality": "Pending review",
-          "latitude": "49.02",
-          "longitude": "-117.6",
-          "medium": "water",
-          "method_description": "",
-          "parameter_code": "As-Sus",
-          "raw_value": "-999.999",
-          "record_id": "rec-6f1658f9dd983b42c558e57b67bd8160dd218084ba03a58244eb72a758c70c45",
-          "sample_depth_m": "0.3",
-          "sample_time": "14:30",
-          "sampled_at": "2007-03-21",
-          "station_id": "CAN00023",
-          "unit": "µg/l",
-          "value_qualifier": "",
-          "water_fraction": "suspended",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "-999.999"
-      },
-      "review_id": "gemstat-open-archive-review-14",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "CAN00023",
-      "selection_reasons": [
-        "pending_review_negative_sentinel"
-      ],
-      "source_locator": "Arsenic.csv#row=27376",
-      "source_record_id": "src-15b953d1cc55049503aa097d9aa87cda35094964341062388cfc07b6bab91425"
+      "source_locator": "Copper.csv#row=83282",
+      "source_record_id": "src-7c798767f505f18f9030422a1f3833f0477be3d3b816810039cc797ea25b671a"
     },
     {
       "adapter_observations": [
         {
           "analysis_method_code": "0",
           "analysis_method_name": "",
-          "analyte": "As",
-          "country": "India",
-          "data_quality": "Unknown",
-          "latitude": "9.927433",
-          "longitude": "78.121013",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.01",
-          "record_id": "rec-4a9ac6374c6ed12f6ce6e0ed517af4d7faae1741654cfa567d2c2e8d914a6045",
-          "sample_depth_m": "0.3",
-          "sample_time": "00:00",
-          "sampled_at": "2020-09-08",
-          "station_id": "IND00112",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "dissolved",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.01"
-      },
-      "review_id": "gemstat-open-archive-review-15",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "IND00112",
-      "selection_reasons": [
-        "data_quality=Unknown"
-      ],
-      "source_locator": "Arsenic.csv#row=196592",
-      "source_record_id": "src-540783e4e22550798a4bc7a2abfe4ac26aa3c85a63fdb4470d149ec97627eadf"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Italy",
-          "data_quality": "Pending review",
-          "latitude": "42.12776",
-          "longitude": "13.28396",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "5000.0",
-          "record_id": "rec-1fd83483a3ed2d81c14618aaa0c5e50a352e898205338a82f1592283e268414b",
-          "sample_depth_m": "0.0",
-          "sample_time": "12:00",
-          "sampled_at": "2015-03-03",
-          "station_id": "ITA02221",
-          "unit": "mg/l",
-          "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "5000.0"
-      },
-      "review_id": "gemstat-open-archive-review-16",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "ITA02221",
-      "selection_reasons": [
-        "pending_review_extreme_mg_l"
-      ],
-      "source_locator": "Arsenic.csv#row=296715",
-      "source_record_id": "src-d5c983906d502b2165d477b235d94b2584b6b1b5e90f5d431f946d17b6dd77de"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Mexico",
-          "data_quality": "Fair",
-          "latitude": "21.89964",
-          "longitude": "-105.46201",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.00139",
-          "record_id": "rec-5a2a3e9a631b2529c75523be0cc3f5788aa1260c51fb09d7bfbfcabdd65da71b",
-          "sample_depth_m": "0.5",
-          "sample_time": "12:00",
-          "sampled_at": "2013-10-10",
-          "station_id": "MEX01521",
-          "unit": "mg/l",
-          "value_qualifier": "<",
-          "water_fraction": "total",
-          "water_type": "Wetland station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.00139"
-      },
-      "review_id": "gemstat-open-archive-review-17",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "MEX01521",
-      "selection_reasons": [
-        "water_type=Wetland station"
-      ],
-      "source_locator": "Arsenic.csv#row=347721",
-      "source_record_id": "src-61c75fdc41ddc4f49d70b6208aab6f4a969babb74b7cc68f7e298afda5817242"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "AAS-AsH-HAg-APHA1975",
-          "analysis_method_name": "Det. of As and Se by Conversion to their Hydrides and Aspiration of the Gas into the Ag-H Flame",
-          "analyte": "As",
-          "country": "United States of America (the)",
-          "data_quality": "Fair",
-          "latitude": "38.92944444",
-          "longitude": "-77.11722222",
-          "medium": "water",
-          "method_description": "A sample is filtered in the field through a 0.45 µm membrane filter and preserved at 4°C. The sample aliquot is digested with sulphuric acid, nitric acid and potassium permanganate until a white fume of sulphuric acid is generated. Dissolve the residue with HCl and transfer into reactor vessel generator. Add KI, SnCl2 and ferric solutions (10 mg/L Fe), mix and let stand 15 minutes. Connect generator to Atomic Absorption Analyser, replace air with argon, quickly add one gram of zinc powder. Pass arsenic hydride into hydrogen-argon flame and the absorbance of the resultant ground state atoms is measured at 193.7 nm and is compared to identically-prepared standard and blank solutions.",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.001",
-          "record_id": "rec-b34b99ddfcafb28e1acd77eddbb5a80022bb5f1e16a554ce68a107b41f02c410",
-          "sample_depth_m": "0.3",
-          "sample_time": "11:21",
-          "sampled_at": "1986-03-05",
-          "station_id": "USA00007",
-          "unit": "mg/l",
-          "value_qualifier": ">",
-          "water_fraction": "dissolved",
-          "water_type": "River station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.001"
-      },
-      "review_id": "gemstat-open-archive-review-18",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "USA00007",
-      "selection_reasons": [
-        "value_flag=>"
-      ],
-      "source_locator": "Arsenic.csv#row=492540",
-      "source_record_id": "src-207e8adc6167651dd1e565b7d1c77f270d29c2704ad8a1791e828c5b0c705fda"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Poland",
-          "data_quality": "Fair",
-          "latitude": "53.52445",
-          "longitude": "18.45802",
-          "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.005",
-          "record_id": "rec-8a23f10ba3e0f16adb9a900a86eecf1d95363f87b6ec66a6260a604d2b232f9d",
-          "sample_depth_m": "500.0",
-          "sample_time": "12:00",
-          "sampled_at": "2020-08-04",
-          "station_id": "POL00607",
-          "unit": "mg/l",
-          "value_qualifier": "<",
-          "water_fraction": "dissolved",
-          "water_type": "Lake station"
-        }
-      ],
-      "automated_checks": {
-        "coordinates_preserved": true,
-        "fraction_preserved": true,
-        "method_join_preserved": true,
-        "raw_value_qualifier_and_unit_preserved": true,
-        "registered_member_hash_matches": true,
-        "sample_depth_preserved": true,
-        "source_quality_preserved": true,
-        "stable_observation_id_present": true,
-        "station_join_preserved": true
-      },
-      "automated_status": "PASS",
-      "published_target_raw_values": {
-        "As": "0.005"
-      },
-      "review_id": "gemstat-open-archive-review-19",
-      "reviewer": {
-        "decision": null,
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null
-      },
-      "sample_id": "POL00607",
-      "selection_reasons": [
-        "depth_max_boundary"
-      ],
-      "source_locator": "Arsenic.csv#row=452476",
-      "source_record_id": "src-005f44e5847046a70ceed30a5be0da8cd049e53f4d3738dce4a66a881d77ce12"
-    },
-    {
-      "adapter_observations": [
-        {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
+          "analyte": "Cu",
           "country": "Austria",
           "data_quality": "Fair",
           "latitude": "46.9905",
           "longitude": "16.2124",
           "medium": "water",
           "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0011",
-          "record_id": "rec-1146155773449601e1396801f8237659e69115fcc0e1e1a9d07082828333c22e",
-          "sample_depth_m": "0.0",
+          "parameter_code": "Cu-Tot",
+          "raw_value": "0.002",
+          "record_id": "rec-abb62d3e1d74ca271750fcc1930e96e5bd269d71e7974b0cac5b388bba189685",
+          "sample_depth_m": "0.3",
           "sample_time": "12:00",
-          "sampled_at": "2006-01-24",
+          "sampled_at": "1996-06-12",
           "station_id": "AUT00007",
           "unit": "mg/l",
           "value_qualifier": "",
@@ -1064,18 +747,342 @@
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.0011"
+        "Cu": "0.002"
+      },
+      "review_id": "gemstat-open-archive-review-14",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "AUT00007|1996-06-12|12:00|0.3",
+      "selection_reasons": [
+        "parameter=Cu-Tot"
+      ],
+      "source_locator": "Copper.csv#row=27",
+      "source_record_id": "src-810c91ff2e821bd08b9d6525846f0d1c76237be6972cb2f7ca299d84427465d1"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Hg",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Hg-Dis",
+          "raw_value": "0.04",
+          "record_id": "rec-b4d35656031a70df00ae919dc3353728aece27f0933845abe4ff6eab018d6fb7",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "µg/l",
+          "value_qualifier": "<",
+          "water_fraction": "dissolved",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Hg": "0.04"
+      },
+      "review_id": "gemstat-open-archive-review-15",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Dis"
+      ],
+      "source_locator": "Mercury.csv#row=2",
+      "source_record_id": "src-8936fbad2e6a4c2a99c812a6b420dd6d7f20f8a21c24b247a929f62122710c3e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "VMV_1611",
+          "analysis_method_name": "Mercury by flameless atomic absorption on autoanalyzer",
+          "analyte": "Hg",
+          "country": "Canada",
+          "data_quality": "Fair",
+          "latitude": "53.534",
+          "longitude": "-57.495",
+          "medium": "water",
+          "method_description": "",
+          "parameter_code": "Hg-Ext",
+          "raw_value": "0.02",
+          "record_id": "rec-f61fa9e6328ef8d9d4f17ceca2bdaa1e3bf8fbbb6cb8e2a1800a477f2f9a280d",
+          "sample_depth_m": "0.3",
+          "sample_time": "13:35",
+          "sampled_at": "2003-03-24",
+          "station_id": "CAN00055",
+          "unit": "µg/l",
+          "value_qualifier": "<",
+          "water_fraction": "extractable",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Hg": "0.02"
+      },
+      "review_id": "gemstat-open-archive-review-16",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "CAN00055|2003-03-24|13:35|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Ext"
+      ],
+      "source_locator": "Mercury.csv#row=37380",
+      "source_record_id": "src-fcd3467244ddd3f49b8d338076e8402936b19c666958ab8003b45028121d1c3e"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "VMV_4054",
+          "analysis_method_name": "Low level mercury in water is analyzed by atomic fluorescence using a gold trap.",
+          "analyte": "Hg",
+          "country": "Canada",
+          "data_quality": "Fair",
+          "latitude": "53.534",
+          "longitude": "-57.495",
+          "medium": "water",
+          "method_description": "",
+          "parameter_code": "Hg-Sus",
+          "raw_value": "4.1",
+          "record_id": "rec-7b99e33609f27433d87e9ed267bd7053da9c033002383f43509eeeea90b766c1",
+          "sample_depth_m": "0.3",
+          "sample_time": "12:00",
+          "sampled_at": "2005-09-29",
+          "station_id": "CAN00055",
+          "unit": "ng/l",
+          "value_qualifier": "",
+          "water_fraction": "suspended",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Hg": "4.1"
+      },
+      "review_id": "gemstat-open-archive-review-17",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "CAN00055|2005-09-29|12:00|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Sus"
+      ],
+      "source_locator": "Mercury.csv#row=37381",
+      "source_record_id": "src-88fc9464a42ed0d6e85a82b078636cd5c6e215062ce2768a3f798f417b106bc8"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Hg",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Hg-Tot",
+          "raw_value": "0.04",
+          "record_id": "rec-cd0fe64a89ef95aa0fdcb79d1f5cffe7f8ef579677e23dfba9ce20dc7d5d4572",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "µg/l",
+          "value_qualifier": "<",
+          "water_fraction": "total",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Hg": "0.04"
+      },
+      "review_id": "gemstat-open-archive-review-18",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Hg-Tot"
+      ],
+      "source_locator": "Mercury.csv#row=3",
+      "source_record_id": "src-7fbb24ce6e82d1fa1537b48b5100c88248775aa3f1db2b0667733ac4d132c433"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Ni",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
+          "medium": "water",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Ni-Dis",
+          "raw_value": "0.003",
+          "record_id": "rec-66655c8e651fcda273c689b13cf8ed29e3e875f1022b4818d5cecc15424143b9",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "mg/l",
+          "value_qualifier": "",
+          "water_fraction": "dissolved",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "0.003"
+      },
+      "review_id": "gemstat-open-archive-review-19",
+      "reviewer": {
+        "decision": null,
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null
+      },
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
+      "selection_reasons": [
+        "parameter=Ni-Dis"
+      ],
+      "source_locator": "Nickel.csv#row=2",
+      "source_record_id": "src-d32928194a8ec3ab4fc16f5b9c326b9488a63a806d646edbb2f3505171248cb5"
+    },
+    {
+      "adapter_observations": [
+        {
+          "analysis_method_code": "VMV_2817",
+          "analysis_method_name": "Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization",
+          "analyte": "Ni",
+          "country": "Canada",
+          "data_quality": "Good",
+          "latitude": "60.12",
+          "longitude": "-137.97",
+          "medium": "water",
+          "method_description": "",
+          "parameter_code": "Ni-Ext",
+          "raw_value": "2.99",
+          "record_id": "rec-a91d2a40a26c3d8c227fa01db3a84157eb5855b193c45ae47f5a313325d48697",
+          "sample_depth_m": "0.3",
+          "sample_time": "13:45",
+          "sampled_at": "2001-09-25",
+          "station_id": "CAN00018",
+          "unit": "µg/l",
+          "value_qualifier": "",
+          "water_fraction": "extractable",
+          "water_type": "River station"
+        }
+      ],
+      "automated_checks": {
+        "coordinates_preserved": true,
+        "element_mapping_preserved": true,
+        "fraction_preserved": true,
+        "method_join_preserved": true,
+        "raw_value_qualifier_and_unit_preserved": true,
+        "registered_member_hash_matches": true,
+        "sample_depth_preserved": true,
+        "stable_observation_id_present": true,
+        "station_join_preserved": true
+      },
+      "automated_status": "PASS",
+      "published_target_raw_values": {
+        "Ni": "2.99"
       },
       "review_id": "gemstat-open-archive-review-20",
       "reviewer": {
@@ -1084,52 +1091,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "AUT00007",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
       "selection_reasons": [
-        "depth_min_boundary"
+        "parameter=Ni-Ext"
       ],
-      "source_locator": "Arsenic.csv#row=51",
-      "source_record_id": "src-f833846918f26434c4b395283a6c3a77e6a114c6e579207fc9975671d7217478"
+      "source_locator": "Nickel.csv#row=40244",
+      "source_record_id": "src-ece65ea3569e01d2b718a2e06263361a8840821db7406b7afb8754f1af99e689"
     },
     {
       "adapter_observations": [
         {
-          "analysis_method_code": "VMV_2641",
-          "analysis_method_name": "Determination of dissolved arsenic, antimony and selenium by inductively coupled argon plasma",
-          "analyte": "As",
+          "analysis_method_code": "VMV_3020",
+          "analysis_method_name": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+          "analyte": "Ni",
           "country": "Canada",
           "data_quality": "Fair",
-          "latitude": "81.9356",
-          "longitude": "-68.86446",
+          "latitude": "45.5676",
+          "longitude": "-74.3799",
           "medium": "water",
           "method_description": "",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.0003",
-          "record_id": "rec-a19b15ae8457088c7cde57a69bbf5030ac48364cc4497efce6445077ccb60fd1",
+          "parameter_code": "Ni-Sus",
+          "raw_value": "53.33",
+          "record_id": "rec-835371913a5173b23dc3ab3c4e6c59a1c1e7fd098033e1c00aec1d08d4158ee9",
           "sample_depth_m": "0.3",
-          "sample_time": "10:34",
-          "sampled_at": "2001-07-23",
-          "station_id": "CAN00350",
-          "unit": "mg/l",
+          "sample_time": "00:00",
+          "sampled_at": "2012-04-11",
+          "station_id": "CAN00364",
+          "unit": "µg/g",
           "value_qualifier": "",
-          "water_fraction": "dissolved",
+          "water_fraction": "suspended",
           "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.0003"
+        "Ni": "53.33"
       },
       "review_id": "gemstat-open-archive-review-21",
       "reviewer": {
@@ -1138,32 +1145,32 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "CAN00350",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
       "selection_reasons": [
-        "latitude_max_boundary"
+        "parameter=Ni-Sus"
       ],
-      "source_locator": "Arsenic.csv#row=64095",
-      "source_record_id": "src-c686a5a8eb8edef4f5bb08abc507daaf666488e627bc0cae91054150001c9b83"
+      "source_locator": "Nickel.csv#row=83970",
+      "source_record_id": "src-b7bbf27f66c8d66eef362b366442214f9be3e441e979a4f373013bb0ac614926"
     },
     {
       "adapter_observations": [
         {
           "analysis_method_code": "0",
           "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Uruguay",
+          "analyte": "Ni",
+          "country": "Argentina",
           "data_quality": "Fair",
-          "latitude": "-34.252553",
-          "longitude": "-57.966981",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
           "medium": "water",
           "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.007",
-          "record_id": "rec-98f6dff4cd68988d934510cf97b7020f9dd098be0768525ff8781038163e3714",
+          "parameter_code": "Ni-Tot",
+          "raw_value": "0.014",
+          "record_id": "rec-d89df7e1080a97546a8a1a8970769878ca962ddb6ff86b5691cfb8d10a53a732",
           "sample_depth_m": "0.3",
-          "sample_time": "00:00",
-          "sampled_at": "2016-04-14",
-          "station_id": "URY00154",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
           "unit": "mg/l",
           "value_qualifier": "",
           "water_fraction": "total",
@@ -1172,18 +1179,18 @@
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.007"
+        "Ni": "0.014"
       },
       "review_id": "gemstat-open-archive-review-22",
       "reviewer": {
@@ -1192,52 +1199,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "URY00154",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
       "selection_reasons": [
-        "latitude_min_boundary"
+        "parameter=Ni-Tot"
       ],
-      "source_locator": "Arsenic.csv#row=492305",
-      "source_record_id": "src-4b8ba39d3e5a82170005e505b0e105e6caf24753bac4558d77cb61cf17f3ef00"
+      "source_locator": "Nickel.csv#row=3",
+      "source_record_id": "src-b4687363fc37e89d166aaeee16ff39de140ddccc09f18eff6a696a03db641877"
     },
     {
       "adapter_observations": [
         {
           "analysis_method_code": "0",
           "analysis_method_name": "",
-          "analyte": "As",
-          "country": "India",
-          "data_quality": "Unknown",
-          "latitude": "24.64805556",
-          "longitude": "92.60805556",
+          "analyte": "Pb",
+          "country": "Argentina",
+          "data_quality": "Fair",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
           "medium": "water",
           "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.0",
-          "record_id": "rec-814febb61f82c39d96412d616362d335294f26383fd2239a9c0d166be991bfab",
+          "parameter_code": "Pb-Dis",
+          "raw_value": "0.001",
+          "record_id": "rec-33eae08270d9c3fd193815d654ff82aa91705e70d476d0c72ef9e75822a8172c",
           "sample_depth_m": "0.3",
-          "sample_time": "00:00",
-          "sampled_at": "2016-08-01",
-          "station_id": "IND02145",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
           "unit": "mg/l",
-          "value_qualifier": "",
+          "value_qualifier": "<",
           "water_fraction": "dissolved",
           "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.0"
+        "Pb": "0.001"
       },
       "review_id": "gemstat-open-archive-review-23",
       "reviewer": {
@@ -1246,52 +1253,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "IND02145",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
       "selection_reasons": [
-        "longitude_max_boundary"
+        "parameter=Pb-Dis"
       ],
-      "source_locator": "Arsenic.csv#row=197503",
-      "source_record_id": "src-50eec9e3707ae269bd4bcb393d5ac586c3fa63111bc09caf5a9ad1f1a04e7853"
+      "source_locator": "Lead.csv#row=2",
+      "source_record_id": "src-f1801f833d33f0f1942061166fc56d0719f2e03189d7bd2be79359c46dded7e4"
     },
     {
       "adapter_observations": [
         {
-          "analysis_method_code": "VMV_2640",
-          "analysis_method_name": "Determination of total arsenic, antimony and selenium by inductively coupled argon plasma",
-          "analyte": "As",
+          "analysis_method_code": "VMV_2817",
+          "analysis_method_name": "Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization",
+          "analyte": "Pb",
           "country": "Canada",
-          "data_quality": "Fair",
-          "latitude": "67.58",
-          "longitude": "-139.78",
+          "data_quality": "Good",
+          "latitude": "60.12",
+          "longitude": "-137.97",
           "medium": "water",
           "method_description": "",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0005",
-          "record_id": "rec-567917e10f230a9d450370f69b3a7266598440282500600519c219483f7cb5dd",
+          "parameter_code": "Pb-Ext",
+          "raw_value": "0.664",
+          "record_id": "rec-b83822aa924e2caadc0c8eec67f2982be6b075fc47dac06621ac962bd5fad1c9",
           "sample_depth_m": "0.3",
-          "sample_time": "12:30",
-          "sampled_at": "2001-09-03",
-          "station_id": "CAN00020",
-          "unit": "mg/l",
+          "sample_time": "13:45",
+          "sampled_at": "2001-09-25",
+          "station_id": "CAN00018",
+          "unit": "µg/l",
           "value_qualifier": "",
-          "water_fraction": "total",
+          "water_fraction": "extractable",
           "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.0005"
+        "Pb": "0.664"
       },
       "review_id": "gemstat-open-archive-review-24",
       "reviewer": {
@@ -1300,52 +1307,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "CAN00020",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
       "selection_reasons": [
-        "longitude_min_boundary"
+        "parameter=Pb-Ext"
       ],
-      "source_locator": "Arsenic.csv#row=25950",
-      "source_record_id": "src-b752ea17f45a4a71351e9a773796a9988e91b79eb096b96854dce7b5d6f2b945"
+      "source_locator": "Lead.csv#row=46459",
+      "source_record_id": "src-fb8978437320cb5e03ac9561d4c598a769e1d8d2f60291428d4866a720f58e2c"
     },
     {
       "adapter_observations": [
         {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Belgium",
+          "analysis_method_code": "VMV_3020",
+          "analysis_method_name": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+          "analyte": "Pb",
+          "country": "Canada",
           "data_quality": "Fair",
-          "latitude": "50.96047",
-          "longitude": "4.45574",
+          "latitude": "45.5676",
+          "longitude": "-74.3799",
           "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Dis",
-          "raw_value": "0.0041",
-          "record_id": "rec-53201fbd200b896f4fbf4dcc33df99d515c161cf7eeb1e5114cc8e38e846f475",
-          "sample_depth_m": "0.0",
-          "sample_time": "12:00",
-          "sampled_at": "2011-12-13",
-          "station_id": "BEL00099",
-          "unit": "mg/l",
+          "method_description": "",
+          "parameter_code": "Pb-Sus",
+          "raw_value": "30.7",
+          "record_id": "rec-b67fa681e07fadf2c546537efc05944bf5c001867c485c029fe9a4152a03bf5f",
+          "sample_depth_m": "0.3",
+          "sample_time": "00:00",
+          "sampled_at": "2012-04-11",
+          "station_id": "CAN00364",
+          "unit": "µg/g",
           "value_qualifier": "",
-          "water_fraction": "dissolved",
+          "water_fraction": "suspended",
           "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.0041"
+        "Pb": "30.7"
       },
       "review_id": "gemstat-open-archive-review-25",
       "reviewer": {
@@ -1354,52 +1361,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "BEL00099",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
       "selection_reasons": [
-        "evenly_spaced_source_order"
+        "parameter=Pb-Sus"
       ],
-      "source_locator": "Arsenic.csv#row=17002",
-      "source_record_id": "src-af9c96da03ba188f7d06378d9cc282564733dcdb7e74945477fc48a3ae2b2499"
+      "source_locator": "Lead.csv#row=90065",
+      "source_record_id": "src-3a88164c9263fc2efda4279c3d6e49ed1c5323453c5ea950768d9e9b67f72db4"
     },
     {
       "adapter_observations": [
         {
-          "analysis_method_code": "VMV_1920",
-          "analysis_method_name": "Dissolved metals with in-bottle digestion using inductively coupled plasma-sector field MS",
-          "analyte": "As",
-          "country": "Canada",
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Pb",
+          "country": "Argentina",
           "data_quality": "Fair",
-          "latitude": "52.9403",
-          "longitude": "-109.8733",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
           "medium": "water",
-          "method_description": "",
-          "parameter_code": "As-Dis",
-          "raw_value": "1.01",
-          "record_id": "rec-420a765bbd9f60fb49a53b08d826ea72f0874c833c53ce59571c732cc921a62e",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Pb-Tot",
+          "raw_value": "0.017",
+          "record_id": "rec-6095c8f86a28bc6f7ddacff3c8aa7a0c7e28ce6e39cce0d95b9c915778dc81dd",
           "sample_depth_m": "0.3",
-          "sample_time": "08:05",
-          "sampled_at": "2003-05-14",
-          "station_id": "CAN00065",
-          "unit": "µg/l",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
+          "unit": "mg/l",
           "value_qualifier": "",
-          "water_fraction": "dissolved",
+          "water_fraction": "total",
           "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "1.01"
+        "Pb": "0.017"
       },
       "review_id": "gemstat-open-archive-review-26",
       "reviewer": {
@@ -1408,52 +1415,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "CAN00065",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
       "selection_reasons": [
-        "evenly_spaced_source_order"
+        "parameter=Pb-Tot"
       ],
-      "source_locator": "Arsenic.csv#row=34002",
-      "source_record_id": "src-798078ee439b1bd1c05e650e3247fb655b6682a824de69ad02c6101b65eb35ef"
+      "source_locator": "Lead.csv#row=3",
+      "source_record_id": "src-c929f34627b3c392e79a3d9ee94bd8107154e79e313916adbc678dfb45388aaf"
     },
     {
       "adapter_observations": [
         {
-          "analysis_method_code": "VMV_2640",
-          "analysis_method_name": "Determination of total arsenic, antimony and selenium by inductively coupled argon plasma",
-          "analyte": "As",
-          "country": "Canada",
+          "analysis_method_code": "0",
+          "analysis_method_name": "",
+          "analyte": "Zn",
+          "country": "Argentina",
           "data_quality": "Fair",
-          "latitude": "53.9272",
-          "longitude": "-122.765",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
           "medium": "water",
-          "method_description": "",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0003",
-          "record_id": "rec-774b3ed876df597d6eb14785143a36e98b92f2b67a4acb7d85acbed72708484c",
+          "method_description": "Undefined Analysis Method",
+          "parameter_code": "Zn-Dis",
+          "raw_value": "0.002",
+          "record_id": "rec-f08a81b685d3d7f0d19574444d525794fe31dfa7e7d867968358580cc39b0f4c",
           "sample_depth_m": "0.3",
-          "sample_time": "14:45",
-          "sampled_at": "2000-07-26",
-          "station_id": "CAN00247",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
           "unit": "mg/l",
           "value_qualifier": "",
-          "water_fraction": "total",
+          "water_fraction": "dissolved",
           "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.0003"
+        "Zn": "0.002"
       },
       "review_id": "gemstat-open-archive-review-27",
       "reviewer": {
@@ -1462,52 +1469,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "CAN00247",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
       "selection_reasons": [
-        "evenly_spaced_source_order"
+        "parameter=Zn-Dis"
       ],
-      "source_locator": "Arsenic.csv#row=51002",
-      "source_record_id": "src-6693279c8c807fa036e732163264cac0a7fa983ebe0e721600f59b674ffebf3b"
+      "source_locator": "Zinc.csv#row=2",
+      "source_record_id": "src-deaf7e27c1a85c012d2ba1755a40b9feb623ea30dc50fffe6799601280806689"
     },
     {
       "adapter_observations": [
         {
-          "analysis_method_code": "VMV_3528",
-          "analysis_method_name": "Total metals by CRC-ICP-MS with in-bottle digestion and discrete sampling pneumatic nebulization",
-          "analyte": "As",
+          "analysis_method_code": "VMV_2817",
+          "analysis_method_name": "Extractable metals by inductively coupled argon plasma-mass spectrometry with pneumatic nebulization",
+          "analyte": "Zn",
           "country": "Canada",
-          "data_quality": "Fair",
-          "latitude": "54.3953",
-          "longitude": "-61.7858",
+          "data_quality": "Good",
+          "latitude": "60.12",
+          "longitude": "-137.97",
           "medium": "water",
           "method_description": "",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.13",
-          "record_id": "rec-4a1c6562df7d90f2913feac429bd326e4190d0d2ed610844464d9725d58170a0",
+          "parameter_code": "Zn-Ext",
+          "raw_value": "7.28",
+          "record_id": "rec-d980c2ef777c0347dedb81a8240cf702d50614944fb833a441b0eee3abfd0003",
           "sample_depth_m": "0.3",
-          "sample_time": "10:30",
-          "sampled_at": "2011-08-16",
-          "station_id": "CAN00387",
+          "sample_time": "13:45",
+          "sampled_at": "2001-09-25",
+          "station_id": "CAN00018",
           "unit": "µg/l",
           "value_qualifier": "",
-          "water_fraction": "total",
-          "water_type": "Lake station"
+          "water_fraction": "extractable",
+          "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.13"
+        "Zn": "7.28"
       },
       "review_id": "gemstat-open-archive-review-28",
       "reviewer": {
@@ -1516,52 +1523,52 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "CAN00387",
+      "sample_id": "CAN00018|2001-09-25|13:45|0.3",
       "selection_reasons": [
-        "evenly_spaced_source_order"
+        "parameter=Zn-Ext"
       ],
-      "source_locator": "Arsenic.csv#row=68002",
-      "source_record_id": "src-57f50f5d19d814f97dafb86bc74dd0edbe40bf4f6f77eba2f9e8d8c80fc1eaf5"
+      "source_locator": "Zinc.csv#row=39904",
+      "source_record_id": "src-cd8b4d33c14034d33e12eafb8f84d2a1be0f77347b8dc2f375a2598a4286a676"
     },
     {
       "adapter_observations": [
         {
-          "analysis_method_code": "0",
-          "analysis_method_name": "",
-          "analyte": "As",
-          "country": "Finland",
+          "analysis_method_code": "VMV_3020",
+          "analysis_method_name": "Analysis of major, minor and trace metal elements in the particulate phase of natural waters VMV3020",
+          "analyte": "Zn",
+          "country": "Canada",
           "data_quality": "Fair",
-          "latitude": "65.17971",
-          "longitude": "25.35646",
+          "latitude": "45.5676",
+          "longitude": "-74.3799",
           "medium": "water",
-          "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.00038",
-          "record_id": "rec-56b54f3728585c7c5a54548755807d59409bb3b813bc793a689a6cbc600d1205",
-          "sample_depth_m": "1.0",
-          "sample_time": "12:00",
-          "sampled_at": "2014-08-11",
-          "station_id": "FIN00068",
-          "unit": "mg/l",
+          "method_description": "",
+          "parameter_code": "Zn-Sus",
+          "raw_value": "191.98",
+          "record_id": "rec-41412833a3cb420a55308769aaaf4963bb2558de73117ef3844451fd4a70ff46",
+          "sample_depth_m": "0.3",
+          "sample_time": "00:00",
+          "sampled_at": "2012-04-11",
+          "station_id": "CAN00364",
+          "unit": "µg/g",
           "value_qualifier": "",
-          "water_fraction": "total",
+          "water_fraction": "suspended",
           "water_type": "River station"
         }
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.00038"
+        "Zn": "191.98"
       },
       "review_id": "gemstat-open-archive-review-29",
       "reviewer": {
@@ -1570,32 +1577,32 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "FIN00068",
+      "sample_id": "CAN00364|2012-04-11|00:00|0.3",
       "selection_reasons": [
-        "evenly_spaced_source_order"
+        "parameter=Zn-Sus"
       ],
-      "source_locator": "Arsenic.csv#row=85002",
-      "source_record_id": "src-60de2318b9c8cad62caf336dbf5530f2a11462b2b3615da6d3f42810c9bd851b"
+      "source_locator": "Zinc.csv#row=83219",
+      "source_record_id": "src-b7634711d8879fa8f9cb181d326060656f65dd943d59021c48e2536e6c035620"
     },
     {
       "adapter_observations": [
         {
           "analysis_method_code": "0",
           "analysis_method_name": "",
-          "analyte": "As",
-          "country": "France",
+          "analyte": "Zn",
+          "country": "Argentina",
           "data_quality": "Fair",
-          "latitude": "48.7183",
-          "longitude": "2.41491",
+          "latitude": "-22.3775",
+          "longitude": "-62.523611",
           "medium": "water",
           "method_description": "Undefined Analysis Method",
-          "parameter_code": "As-Tot",
-          "raw_value": "0.0007",
-          "record_id": "rec-fc06c8597a9f42ed113b483df2524b5ea4f20acd6fdf033da54b4d705ef5dec9",
-          "sample_depth_m": "0.0",
-          "sample_time": "12:00",
-          "sampled_at": "2015-11-05",
-          "station_id": "FRA00093",
+          "parameter_code": "Zn-Tot",
+          "raw_value": "0.055",
+          "record_id": "rec-73a52beba4734772552c5e95ca24004b06b642ff09c3d69f06bfdbd60a559b19",
+          "sample_depth_m": "0.3",
+          "sample_time": "11:30",
+          "sampled_at": "2011-09-06",
+          "station_id": "ARG00014",
           "unit": "mg/l",
           "value_qualifier": "",
           "water_fraction": "total",
@@ -1604,18 +1611,18 @@
       ],
       "automated_checks": {
         "coordinates_preserved": true,
+        "element_mapping_preserved": true,
         "fraction_preserved": true,
         "method_join_preserved": true,
         "raw_value_qualifier_and_unit_preserved": true,
         "registered_member_hash_matches": true,
         "sample_depth_preserved": true,
-        "source_quality_preserved": true,
         "stable_observation_id_present": true,
         "station_join_preserved": true
       },
       "automated_status": "PASS",
       "published_target_raw_values": {
-        "As": "0.0007"
+        "Zn": "0.055"
       },
       "review_id": "gemstat-open-archive-review-30",
       "reviewer": {
@@ -1624,18 +1631,18 @@
         "reviewed_at": null,
         "reviewer": null
       },
-      "sample_id": "FRA00093",
+      "sample_id": "ARG00014|2011-09-06|11:30|0.3",
       "selection_reasons": [
-        "evenly_spaced_source_order"
+        "parameter=Zn-Tot"
       ],
-      "source_locator": "Arsenic.csv#row=102002",
-      "source_record_id": "src-6160f3ecb303110808d28eb14917ef001678c315ad1dc31d3ce0ccbe973a5609"
+      "source_locator": "Zinc.csv#row=3",
+      "source_record_id": "src-2d883d516ed904bd025bc67ce940a247775dd7785c40ba6e6c98f0ecb33c2169"
     }
   ],
   "required_record_count": 30,
   "review_version": "geochemical-human-review-v1",
-  "selection_strategy": "Thirty arsenic rows spanning three fractions, qualifiers, source quality labels, units, five water types, defined/undefined methods, spatial/depth boundaries, source-order coverage, duplicates and flagged extremes.",
-  "snapshot_id": "gemstat-open-archive:v3:11605175ed99",
+  "selection_strategy": "Thirty source rows cover all registered fraction codes for seven elements, plus defined/undefined method, qualifier, quality, unit and water-type edge cases where quota permits.",
+  "snapshot_id": "gemstat-open-archive:v3-seven-elements:46f9ddc6ed18",
   "source_id": "gemstat-open-archive",
   "status": "prepared"
 }

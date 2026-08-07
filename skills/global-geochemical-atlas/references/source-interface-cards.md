@@ -1,5 +1,7 @@
 # D1 数据源接口卡片
 
+> V4 内容寻址规则覆盖本文中早期接口卡的 checksum/hash 表述：当前同时使用 DOI/PID、版本、文件 ID/名称、发布/访问时间、字节数、SHA-256、schema、行数和关键统计；哈希证明字节一致性，不替代科学可信性审查。
+
 核对日期：2026-08-06。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
 
 ## V1 兼容状态说明
@@ -12,9 +14,9 @@
 | `needs_human_review` | 已发现相关数据，但版本、许可、接口、字段或适配器仍需复核 |
 | `rejected` | 已有证据表明不适合当前用途；仍保留排除理由 |
 
-## V3 A 级样板来源
+## 当前可执行样板来源
 
-V3 当前把十四项来源评为 A 级 `normalized_analysis`：岩石一项、土壤六项、沉积物四项、水体三项。30 条人工复核尚未完成，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
+V3 当前登记二十一项 `normalized_analysis` 来源：岩石二项、土壤八项、沉积物七项、水体四项；其中二十项为 A 级、一项为 B 级。30 条人工复核样本均只完成机器准备，尚未由具名人员签署，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
 
 ### `georoc-archaean`
 
@@ -99,7 +101,7 @@ V3 当前把十四项来源评为 A 级 `normalized_analysis`：岩石一项、�
 - 对账：主表 1,314 行，Cr/Cu/Ni/Pb/Zn 各 1,314 条，共 6,570 条目标观测；As/Hg 不在源表；坐标、母岩类别、土纲和土类逐行完整；
 - 方法：风干、<2 mm、HNO3-HF-HClO4 消解；Cr/Cu/Ni/Pb 为 ICP-MS，Zn 为 ICP-AES。方法和 QC 来自关联论文，只能标成 publication scope；
 - 质量边界：来源未声明 CRS；SN5/SN6/SN7 各有多个坐标对；独立 bulk-density 表可补部分缺失，但存在六个非空值冲突和五个坐标冲突，不能静默覆盖主表；
-- 剩余：V4 schema 接入、canonical adapter、30 条分层复核和完整率 profile；在此之前为已冻结文件契约的候选，不计入十四个可执行来源。
+- 当前状态：已接入 V4 schema、canonical adapter、30 条待签署分层复核和完整率 profile；因来源 CRS 未声明，canonical EPSG:4326 坐标继续失败关闭。剩余工作是具名人工签署与 CRS 证据补充。
 
 ### `georoc-database`
 

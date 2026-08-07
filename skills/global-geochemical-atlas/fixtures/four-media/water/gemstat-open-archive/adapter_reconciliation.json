@@ -1,100 +1,131 @@
 {
   "checks": {
-    "arsenic_country_count_match": true,
-    "arsenic_observations_match": true,
-    "arsenic_parameter_counts_match": true,
-    "arsenic_station_count_match": true,
-    "data_quality_counts_match": true,
-    "exact_duplicate_extra_observations_match": true,
-    "exact_duplicate_groups_match": true,
-    "maximum_exact_duplicate_multiplicity_match": true,
-    "method_combinations_used_match": true,
-    "pending_review_extreme_mg_l_match": true,
-    "pending_review_negative_sentinels_match": true,
-    "undefined_method_observations_match": true,
-    "unit_counts_match": true,
-    "unmatched_method_rows_match": true,
-    "unmatched_station_rows_match": true,
-    "value_flag_counts_match": true,
-    "water_type_counts_match": true
+    "all_joined_rows_have_method_metadata": true,
+    "all_joined_rows_have_station_metadata": true,
+    "excluded_parameter_counts_registered": true,
+    "target_observations_match": true,
+    "target_value_counts_match": true
   },
   "counts": {
-    "arsenic_country_count": 33,
-    "arsenic_observations": 492999,
-    "arsenic_parameter_counts": {
+    "country_count": 35,
+    "data_quality_counts": {
+      "Fair": 3541736,
+      "Good": 30917,
+      "Pending review": 30378,
+      "Suspect": 23766,
+      "Unknown": 112383
+    },
+    "defined_method_observations": 279225,
+    "distinct_physical_samples": 689291,
+    "excluded_parameter_counts": {
+      "Cr-VI": 15855
+    },
+    "method_combinations_used": 192,
+    "parameter_counts": {
       "As-Dis": 188961,
       "As-Sus": 5439,
-      "As-Tot": 298599
+      "As-Tot": 298599,
+      "Cr-Dis": 213249,
+      "Cr-Ext": 6449,
+      "Cr-Tot": 318063,
+      "Cu-Dis": 218039,
+      "Cu-Ext": 6760,
+      "Cu-Sus": 162,
+      "Cu-Tot": 235568,
+      "Hg-Dis": 222301,
+      "Hg-Ext": 24,
+      "Hg-Sus": 38,
+      "Hg-Tot": 295108,
+      "Ni-Dis": 291236,
+      "Ni-Ext": 6702,
+      "Ni-Sus": 144,
+      "Ni-Tot": 340465,
+      "Pb-Dis": 295427,
+      "Pb-Ext": 6745,
+      "Pb-Sus": 164,
+      "Pb-Tot": 352333,
+      "Zn-Dis": 184715,
+      "Zn-Ext": 6727,
+      "Zn-Sus": 159,
+      "Zn-Tot": 245603
     },
-    "arsenic_station_count": 15621,
-    "data_quality_counts": {
-      "Fair": 466710,
-      "Good": 4557,
-      "Pending review": 1649,
-      "Suspect": 294,
-      "Unknown": 19789
+    "station_count": 17248,
+    "target_observations": 3739180,
+    "target_value_counts": {
+      "As": 492999,
+      "Cr": 537761,
+      "Cu": 460529,
+      "Hg": 517471,
+      "Ni": 638547,
+      "Pb": 654669,
+      "Zn": 437204
     },
-    "exact_duplicate_extra_observations": 5655,
-    "exact_duplicate_groups": 5513,
-    "maximum_exact_duplicate_multiplicity": 6,
-    "method_combinations_used": 24,
-    "pending_review_extreme_mg_l": 78,
-    "pending_review_negative_sentinels": 3,
-    "undefined_method_observations": 449714,
+    "undefined_method_observations": {
+      "As": 449714,
+      "Cr": 491113,
+      "Cu": 414269,
+      "Hg": 515242,
+      "Ni": 591196,
+      "Pb": 607566,
+      "Zn": 390855
+    },
     "unit_counts": {
-      "mg/l": 453413,
-      "µg/l": 39586
+      "mg/l": 2974113,
+      "ng/l": 1386,
+      "µg/g": 629,
+      "µg/l": 763052
     },
     "unmatched_method_rows": 0,
     "unmatched_station_rows": 0,
     "value_flag_counts": {
-      "": 289636,
-      "<": 203344,
-      ">": 19
+      "": 1902804,
+      "<": 1836306,
+      ">": 70
     },
     "water_type_counts": {
-      "Groundwater station": 30671,
-      "Lake station": 43253,
-      "Reservoir station": 13886,
-      "River station": 402080,
-      "Wetland station": 3109
+      "Groundwater station": 192410,
+      "Lake station": 340952,
+      "Reservoir station": 85544,
+      "River station": 3103732,
+      "Wetland station": 16542
     }
   },
   "coverage": {
     "bbox": [
       -139.78,
-      -34.252553,
-      92.60805556,
+      -34.415567,
+      94.636585,
       81.9356
     ],
-    "country_count": 33,
+    "country_count": 35,
+    "distinct_physical_samples": 689291,
     "sample_date_range": [
-      "1975-04-28",
+      "1968-05-09",
       "2023-12-29"
     ],
     "sample_depth_range_m": [
       0.0,
-      500.0
+      999.0
     ],
+    "station_count": 17248,
     "water_types": {
-      "Groundwater station": 30671,
-      "Lake station": 43253,
-      "Reservoir station": 13886,
-      "River station": 402080,
-      "Wetland station": 3109
+      "Groundwater station": 192410,
+      "Lake station": 340952,
+      "Reservoir station": 85544,
+      "River station": 3103732,
+      "Wetland station": 16542
     }
   },
   "limitations": [
-    "The arsenic observations cover 33 contributing countries unevenly; this is not a uniform global freshwater grid.",
-    "Dissolved, suspended and total arsenic fractions remain separate and are not interchangeable.",
-    "449,714 observations use undefined method code 0, limiting method comparability.",
-    "Censored values and all source quality labels are preserved; Pending review and Suspect rows are excluded from demos.",
-    "5,655 extra exact duplicate observations are retained and flagged rather than silently removed.",
-    "Three negative sentinel values and 78 extreme mg/l values are Pending review and cannot support anomaly claims.",
-    "The publisher page and metadata files differ by one station and one parameter; both claims are recorded."
+    "Coverage is spatially and temporally uneven and does not form a global grid.",
+    "Rows sharing station, date, time and depth are one physical sampling event across elements and fractions.",
+    "Dissolved, extractable, suspended and total fractions are not interchangeable.",
+    "Most observations use undefined method code 0 and therefore remain in method-unknown comparison groups.",
+    "Censored values and all source quality labels remain traceable; production filtering is use-case dependent.",
+    "The complete publisher ZIP MD5 is recorded, while this workflow independently verifies only selected ranges."
   ],
-  "reconciliation_version": "gemstat-v3-arsenic-audit-v1",
-  "snapshot_id": "gemstat-open-archive:v3:11605175ed99",
+  "reconciliation_version": "gemstat-v3-seven-element-audit-v1",
+  "snapshot_id": "gemstat-open-archive:v3-seven-elements:62f1fbedc6a1",
   "source_id": "gemstat-open-archive",
   "status": "PASS"
 }

@@ -56,7 +56,18 @@ def _atomic_json(path: Path, value: Any) -> None:
     _atomic_bytes(path, (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode())
 
 
-def expected_fixture(source_id: str, fixture_dir: Path, registry: Mapping[str, Any]) -> tuple[bytes, dict[str, Any]]:
+def _jsonl_bytes(rows: Sequence[Mapping[str, Any]]) -> bytes:
+    return "".join(
+        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+        for row in rows
+    ).encode("utf-8")
+
+
+def expected_fixture(
+    source_id: str,
+    fixture_dir: Path,
+    registry: Mapping[str, Any],
+) -> tuple[bytes, bytes, dict[str, Any]]:
     input_path = fixture_dir / "demo_input.csv"
     evidence_path = fixture_dir / "sources.jsonl"
     manifest_path = fixture_dir / "run_manifest.json"
@@ -68,11 +79,36 @@ def expected_fixture(source_id: str, fixture_dir: Path, registry: Mapping[str, A
     registry_sources = registry.get("sources")
     if not isinstance(registry_sources, Mapping) or source_id not in registry_sources:
         raise MigrationError(f"{source_id} is absent from source registry")
+    source_entry = registry_sources[source_id]
+    hash_by_filename = {
+        str(item.get("filename")): str(item.get("expected_sha256"))
+        for item in (source_entry.get("download", {}).get("files", []))
+        if isinstance(item, Mapping) and item.get("filename") and item.get("expected_sha256")
+    }
+    normalized_evidence: list[dict[str, Any]] = []
+    for item in evidence:
+        normalized = dict(item)
+        if normalized.get("source_file"):
+            normalized["source_file"] = str(normalized["source_file"]).split("#", 1)[0]
+        if not normalized.get("source_file_sha256"):
+            filename = str(normalized.get("source_file") or "")
+            expected_hash = hash_by_filename.get(filename)
+            if expected_hash:
+                normalized["source_file"] = filename
+                normalized["source_file_sha256"] = expected_hash
+        normalized_evidence.append(normalized)
+    normalized_rows: list[dict[str, str]] = []
+    for row in rows:
+        normalized = dict(row)
+        if normalized.get("source_file"):
+            normalized["source_file"] = normalized["source_file"].split("#", 1)[0]
+        normalized_rows.append(normalized)
     enriched = [
-        v4_semantics.enrich_row(row, item, registry_sources[source_id], str(registry.get("verified_at") or ""))
-        for row, item in zip(rows, evidence, strict=True)
+        v4_semantics.enrich_row(row, item, source_entry, str(registry.get("verified_at") or ""))
+        for row, item in zip(normalized_rows, normalized_evidence, strict=True)
     ]
     content = _csv_bytes(enriched)
+    evidence_content = _jsonl_bytes(normalized_evidence)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest["exchange_schema"] = "d1-v4-exchange-v1"
     manifest["v4_semantics_version"] = v4_semantics.SEMANTICS_VERSION
@@ -82,7 +118,12 @@ def expected_fixture(source_id: str, fixture_dir: Path, registry: Mapping[str, A
         raise MigrationError(f"{source_id} manifest has no demo_input.csv output")
     demo_output["bytes"] = len(content)
     demo_output["sha256"] = _sha256_bytes(content)
-    return content, manifest
+    evidence_output = outputs.get("sources.jsonl")
+    if not isinstance(evidence_output, dict):
+        raise MigrationError(f"{source_id} manifest has no sources.jsonl output")
+    evidence_output["bytes"] = len(evidence_content)
+    evidence_output["sha256"] = _sha256_bytes(evidence_content)
+    return content, evidence_content, manifest
 
 
 def migrate(demo_root: Path, *, check: bool) -> dict[str, Any]:
@@ -91,17 +132,21 @@ def migrate(demo_root: Path, *, check: bool) -> dict[str, Any]:
     migrated: list[str] = []
     for source_id in source_ids:
         fixture_dir = demo_root / source_id
-        content, manifest = expected_fixture(source_id, fixture_dir, registry)
+        content, evidence_content, manifest = expected_fixture(source_id, fixture_dir, registry)
         input_path = fixture_dir / "demo_input.csv"
+        evidence_path = fixture_dir / "sources.jsonl"
         manifest_path = fixture_dir / "run_manifest.json"
         manifest_bytes = (json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
         if check:
             if input_path.read_bytes() != content:
                 raise MigrationError(f"stale V4 demo CSV: {source_id}")
+            if evidence_path.read_bytes() != evidence_content:
+                raise MigrationError(f"stale V4 evidence JSONL: {source_id}")
             if manifest_path.read_bytes() != manifest_bytes:
                 raise MigrationError(f"stale V4 demo manifest: {source_id}")
         else:
             _atomic_bytes(input_path, content)
+            _atomic_bytes(evidence_path, evidence_content)
             _atomic_json(manifest_path, manifest)
         migrated.append(source_id)
     return {"status": "PASS", "source_count": len(migrated), "sources": migrated, "mode": "check" if check else "write"}

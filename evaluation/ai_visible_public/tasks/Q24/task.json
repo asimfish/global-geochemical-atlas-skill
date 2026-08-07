@@ -1,6 +1,9 @@
 {
   "benchmark_contract": "e2.e1-alignment.v1",
   "benchmark_evidence_container": "artifacts/run_manifest.json",
+  "candidate_contract_constraints": {
+    "sources.jsonl": {"row_count": 2}
+  },
   "candidate_visible_contract": {
     "container": "artifacts/run_manifest.json",
     "field": "benchmark_evidence",
@@ -94,6 +97,31 @@
             "features",
             "type"
           ],
+          "type": "object"
+        }
+      },
+      "confidence_report.json": {
+        "format": "json",
+        "json_shape": {
+          "properties": {
+            "aggregation": {"type": "string"},
+            "band": {"type": "string"},
+            "components": {
+              "properties": {
+                "normalization": {"properties": {"evidence": {"type": "string"}, "score": {"type": "number"}}, "required": ["evidence", "score"], "type": "object"},
+                "provenance": {"properties": {"evidence": {"type": "string"}, "score": {"type": "number"}}, "required": ["evidence", "score"], "type": "object"},
+                "quality_control": {"properties": {"evidence": {"type": "string"}, "score": {"type": "number"}}, "required": ["evidence", "score"], "type": "object"},
+                "source_integrity": {"properties": {"evidence": {"type": "string"}, "score": {"type": "number"}}, "required": ["evidence", "score"], "type": "object"},
+                "spatial": {"properties": {"evidence": {"type": "string"}, "score": {"type": "number"}}, "required": ["evidence", "score"], "type": "object"}
+              },
+              "required": ["normalization", "provenance", "quality_control", "source_integrity", "spatial"],
+              "type": "object"
+            },
+            "interpretation": {"type": "string"},
+            "overall_score": {"type": "number"},
+            "schema_version": {"type": "string"}
+          },
+          "required": ["aggregation", "band", "components", "interpretation", "overall_score", "schema_version"],
           "type": "object"
         }
       },
@@ -332,6 +360,7 @@
       },
       "sources.jsonl": {
         "format": "jsonl",
+        "row_count": 2,
         "row_shape": {
           "properties": {
             "computed_sha256": {
@@ -391,7 +420,7 @@
     "ANOMALY_CAUSAL_OVERCLAIM"
   ],
   "fixture_type": "synthetic_end_to_end_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "source_a.csv",
     "source_b.csv",
@@ -403,6 +432,7 @@
     "observations.csv",
     "qc_report.json",
     "sources.jsonl",
+    "confidence_report.json",
     "map.geojson",
     "anomalies.geojson",
     "run_manifest.json",

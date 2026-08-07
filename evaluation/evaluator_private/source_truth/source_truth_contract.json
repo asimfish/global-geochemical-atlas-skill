@@ -3,6 +3,7 @@
   "verified_at": "2026-08-07",
   "verification_basis": "Maintainer-curated authority metadata plus frozen source-file and row evidence. Online resolution is a separate, non-blocking freshness check.",
   "claim_boundary": "Passing proves consistency with this independently maintained snapshot and the cited raw rows. It does not prove that a publisher made no error, that the sample represents a region, or that an anomaly has a geological cause.",
+  "required_source_count": 21,
   "required_media": ["rock", "soil", "sediment", "water"],
   "sources": [
     {
@@ -280,7 +281,7 @@
     },
     {
       "source_id": "gemstat-open-archive",
-      "dataset_title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 arsenic subset",
+      "dataset_title": "UNEP GEMS/Water Global Freshwater Quality Archive: v3 seven-element subset",
       "dataset_doi": "10.5281/zenodo.18459694",
       "dataset_version": "v3",
       "license": "CC-BY-4.0",
@@ -290,13 +291,160 @@
       "source_file": "Arsenic.csv",
       "source_file_sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231",
       "spot_record": {
-        "source_record_id": "src-e7917ad63107ef781cbd66ae9dd126028ae34310b93178616cc20b1db7eed23c",
+        "source_record_id": "src-b273d4795c356d2fff303419b2454e141c9f9270ce6de22f570319535fcddc50",
         "element_or_analyte": "As",
-        "value": "0.0005",
-        "unit": "mg/l",
-        "latitude": "60.12",
-        "longitude": "-137.97",
-        "source_locator": "Arsenic.csv#row=25632"
+        "value": "0.01",
+        "unit": "µg/l",
+        "latitude": "51.21",
+        "longitude": "-117.7",
+        "source_locator": "Arsenic.csv#row=26008"
+      }
+    },
+    {
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "dataset_title": "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal",
+      "dataset_doi": null,
+      "dataset_version": "content-snapshot-2026-08-06",
+      "license": "LicenseRef-USGS-Public-Domain",
+      "authority_url": "https://www.waterqualitydata.us/",
+      "allowed_resolution_hosts": ["www.waterqualitydata.us"],
+      "medium": "water",
+      "source_file": "results.csv",
+      "source_file_sha256": "916f17a851b0597c55b4dfd78ace1ad65c13d2c30935b05b2e74b18910d28fcd",
+      "spot_record": {
+        "source_record_id": "src-f83f296c6f39a25a80da3b7b115f3d2d3a7d6f1cfa292aaa8d22962107918e09",
+        "element_or_analyte": "As",
+        "value": "2.3",
+        "unit": "ug/l",
+        "latitude": "",
+        "longitude": "",
+        "source_locator": "results.csv#row=6"
+      }
+    },
+    {
+      "source_id": "australia-ngsa-mercury",
+      "dataset_title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset",
+      "dataset_doi": "10.26186/150328",
+      "dataset_version": "2025-03-31",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://pid.geoscience.gov.au/dataset/ga/150328",
+      "allowed_resolution_hosts": ["pid.geoscience.gov.au", "ecat.ga.gov.au"],
+      "medium": "sediment",
+      "source_file": "150328_00_1.CSV",
+      "source_file_sha256": "3089b02331e8aff7e78ec8b972fa6ff9acfe85c9b49ae67462605cef3fbb247c",
+      "spot_record": {
+        "source_record_id": "src-d0b06a3c1612f6ea12f0ab5ddbe0afc80cb4f41d51a0fca9811bca2ebedcb7ee",
+        "element_or_analyte": "Hg",
+        "value": "15.31",
+        "unit": "ng/g",
+        "latitude": "",
+        "longitude": "",
+        "source_locator": "150328_00_1.CSV#row=24"
+      }
+    },
+    {
+      "source_id": "japan-gsj-marine-sediment",
+      "dataset_title": "Geochemical Map of Sea and Land of Japan: marine sediment concentrations",
+      "dataset_doi": null,
+      "dataset_version": "content-snapshot-2026-08-06",
+      "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+      "authority_url": "https://gbank.gsj.jp/geochemmap/ocean/data/seadata.htm",
+      "allowed_resolution_hosts": ["gbank.gsj.jp"],
+      "medium": "sediment",
+      "source_file": "ocean-noudo.csv",
+      "source_file_sha256": "e81046209e381a727de856eec14ee4a67ace37751c66d1d74467c3d8214bad49",
+      "spot_record": {
+        "source_record_id": "src-758550ec220aa1ef22f64e0c593424c88f8ed1b2a3925631bae4a2c46aa251ef",
+        "element_or_analyte": "As",
+        "value": "24.3",
+        "unit": "ppm",
+        "latitude": "",
+        "longitude": "",
+        "source_locator": "ocean-noudo.csv#row=2"
+      }
+    },
+    {
+      "source_id": "pangaea-arabian-sea-sediment",
+      "dataset_title": "Geochemistry of modern sediments and the glacial Arabian Sea",
+      "dataset_doi": "10.1594/PANGAEA.950139",
+      "dataset_version": "2022-11-02",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://doi.pangaea.de/10.1594/PANGAEA.950139",
+      "allowed_resolution_hosts": ["doi.pangaea.de", "www.pangaea.de"],
+      "medium": "sediment",
+      "source_file": "PANGAEA.950139.tab",
+      "source_file_sha256": "d5c2b65e6a839bd3e45eaaa5593da37af7ebae83cec1725b678817c30405c990",
+      "spot_record": {
+        "source_record_id": "src-febfe8ed50e5a140633ef3bdefd0639ad8c5ab6c8611234b0fb3c245ec5f7fa3",
+        "element_or_analyte": "As",
+        "value": "2.04",
+        "unit": "mg/kg",
+        "latitude": "15.9900",
+        "longitude": "61.5300",
+        "source_locator": "PANGAEA.950139.tab#row=102"
+      }
+    },
+    {
+      "source_id": "georoc-antarctica-intraplate",
+      "dataset_title": "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member",
+      "dataset_doi": "10.25625/RZZ9VM",
+      "dataset_version": "12.0",
+      "license": "CC-BY-SA-4.0",
+      "authority_url": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
+      "allowed_resolution_hosts": ["georoc.eu", "www.georoc.eu"],
+      "medium": "rock",
+      "source_file": "2026-06-RZZ9VM_ANTARCTICA.csv",
+      "source_file_sha256": "cdcc0d010f65d1a5d6ba357411a4d6a98d2f9ea3911de22a70bb26cc602b0492",
+      "spot_record": {
+        "source_record_id": "src-6216c8e218230ec4b2b036aa7bb67bd4a2bce051e0e801a8ad602ff98dc00d5a",
+        "element_or_analyte": "Cu",
+        "value": "6.12",
+        "unit": "ppm",
+        "latitude": "",
+        "longitude": "",
+        "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=2"
+      }
+    },
+    {
+      "source_id": "tpdc-china-mountain-soil",
+      "dataset_title": "Multi-element dataset of soil profiles across climatic zones in China's mountains",
+      "dataset_doi": "10.11888/Terre.tpdc.302620",
+      "dataset_version": "tpdc-file-2025-07-23",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
+      "allowed_resolution_hosts": ["data.tpdc.ac.cn"],
+      "medium": "soil",
+      "source_file": "Soil dataset.xlsx",
+      "source_file_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "spot_record": {
+        "source_record_id": "src-f179d95c3463f98ce1788d31a8e9038f13f89e24087b585958bbc3c5fb7e790e",
+        "element_or_analyte": "Cr",
+        "value": "18.9559163",
+        "unit": "mg/kg",
+        "latitude": "",
+        "longitude": "",
+        "source_locator": "Soil dataset.xlsx#sheet1-row=2"
+      }
+    },
+    {
+      "source_id": "gemas-europe",
+      "dataset_title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)",
+      "dataset_doi": null,
+      "dataset_version": "GSI-ArcGIS-Enterprise-republication-2024",
+      "license": "CC-BY-4.0",
+      "authority_url": "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
+      "allowed_resolution_hosts": ["data.gov.ie"],
+      "medium": "soil",
+      "source_file": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf",
+      "source_file_sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4",
+      "spot_record": {
+        "source_record_id": "src-bd14bdd3fad923530903a7bcd931cdcd7ed7ecde09317245a127f05d792bfb4d",
+        "element_or_analyte": "As",
+        "value": "9.77978099",
+        "unit": "mg/kg",
+        "latitude": "38.56670000",
+        "longitude": "24.12220000",
+        "source_locator": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf#record=1"
       }
     }
   ]

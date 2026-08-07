@@ -21,4 +21,17 @@ Write every relative file listed in `task.json.required_outputs` under the appli
 
 You may use local code to process the supplied inputs. Do not invent sources, identifiers, downloads, measurements, geological interpretations, or causal claims. When evidence is insufficient, state the limitation or reject the unsupported operation as required by the task.
 
-Complete the supplied tasks independently. At the end, verify that all required outputs exist, every structured file parses successfully, and every `benchmark_evidence` entry conforms to `candidate_visible_contract`. Report generated paths and any genuine environment failures. Do not attempt to grade or repair the submission against hidden expectations.
+Complete the supplied tasks independently. Before handoff, run the public, value-free contract validator supplied in the bundle:
+
+```bash
+python3 validate_submission_contract.py --bundle-root .
+```
+
+For an isolated task, run:
+
+```bash
+python3 /task/validate_submission_contract.py \
+  --task-root /task --submission-root /submission
+```
+
+If it reports `FAIL`, repair only the declared structure and rerun it. The tool checks required files, parseability and `candidate_visible_contract`; it contains no gold answers, scores, rubrics or hidden checker logic. Report generated paths and genuine environment failures. Do not attempt to grade or repair the submission against hidden expectations.

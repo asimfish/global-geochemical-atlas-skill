@@ -33,7 +33,7 @@
     "ANOMALY_CAUSAL_OVERCLAIM"
   ],
   "fixture_type": "synthetic_context_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "backgrounds.json",
     "candidates.csv"

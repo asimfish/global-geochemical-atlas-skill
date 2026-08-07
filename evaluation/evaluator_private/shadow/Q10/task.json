@@ -35,7 +35,7 @@
     "SOURCE_ID_LOST"
   ],
   "fixture_type": "synthetic_schema_variants",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "source_a.csv",
     "source_b.csv",

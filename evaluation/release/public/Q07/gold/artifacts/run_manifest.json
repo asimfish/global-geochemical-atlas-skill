@@ -38,7 +38,7 @@
     }
   ],
   "benchmark_contract": {
-    "benchmark_version": "6.0.0-draft.2",
+    "benchmark_version": "6.0.0-draft.3",
     "e1_contract_sha256": "b113743f47bbea4f3df8e13c93961071d1a1787243c1a857b4226b79c8acc4ee",
     "question_id": "Q07",
     "schema_version": "e2.e1-alignment.v1",

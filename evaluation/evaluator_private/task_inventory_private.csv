@@ -1,17 +1,17 @@
 question_id,task_id,split,title,fixture_type,input_count,required_output_count,status,gold_version,evidence_points,llm_evidence_points,scoring_contract
-Q09,GGA-NORM-003,shadow,介质、相态和干湿基准隔离,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q10,GGA-INGEST-001,shadow,双来源 Schema 漂移适配,synthetic_schema_variants,3,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q11,GGA-SPATIAL-002,shadow,地质单元匹配与边界置信度,synthetic_geojson_fixture,3,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q12,GGA-CONF-001,shadow,可解释置信度组件评分,synthetic_policy_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q13,GGA-ANOM-001,shadow,异常分析准入门槛,synthetic_adversarial_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q14,GGA-ANOM-002,shadow,稳健对数 MAD 异常与零尺度回退,synthetic_adversarial_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q15,GGA-MAP-001,shadow,可追溯观测点 GeoJSON,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q16,GGA-MAP-002,shadow,预聚合热力图与采样密度披露,synthetic_cell_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q17,GGA-PROV-002,final_holdout,来源标识符与元数据一致性,curated_adversarial_metadata_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q18,GGA-QC-003,final_holdout,来源特定限定值编码解析,synthetic_source_encoding_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q19,GGA-NORM-004,final_holdout,NiO 到 Ni 的未见化学计量换算,synthetic_adversarial_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q20,GGA-SPATIAL-003,final_holdout,反经线 GeoJSON 与最小跨度 bbox,synthetic_antimeridian_fixture,1,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q21,GGA-QC-004,final_holdout,批次 CRM、空白和重复样 QA/QC 验收,synthetic_lab_qc_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q22,GGA-LICENSE-001,final_holdout,许可与再分发决策,synthetic_policy_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q23,GGA-ANOM-003,final_holdout,地质背景条件化异常与解释红线,synthetic_context_fixture,2,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
-Q24,GGA-E2E-001,final_holdout,端到端小型地球化学图谱验收,synthetic_end_to_end_fixture,5,10,ALIGNED_E1,6.0.0-draft.2,80,20,e1-six-dimension-v1
+Q09,GGA-NORM-003,shadow,介质、相态和干湿基准隔离,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q10,GGA-INGEST-001,shadow,双来源 Schema 漂移适配,synthetic_schema_variants,3,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q11,GGA-SPATIAL-002,shadow,地质单元匹配与边界置信度,synthetic_geojson_fixture,3,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q12,GGA-CONF-001,shadow,可解释置信度组件评分,synthetic_policy_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q13,GGA-ANOM-001,shadow,异常分析准入门槛,synthetic_adversarial_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q14,GGA-ANOM-002,shadow,稳健对数 MAD 异常与零尺度回退,synthetic_adversarial_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q15,GGA-MAP-001,shadow,可追溯观测点 GeoJSON,synthetic_adversarial_fixture,1,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q16,GGA-MAP-002,shadow,预聚合热力图与采样密度披露,synthetic_cell_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q17,GGA-PROV-002,final_holdout,来源标识符与元数据一致性,curated_adversarial_metadata_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q18,GGA-QC-003,final_holdout,来源特定限定值编码解析,synthetic_source_encoding_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q19,GGA-NORM-004,final_holdout,NiO 到 Ni 的未见化学计量换算,synthetic_adversarial_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q20,GGA-SPATIAL-003,final_holdout,反经线 GeoJSON 与最小跨度 bbox,synthetic_antimeridian_fixture,1,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q21,GGA-QC-004,final_holdout,批次 CRM、空白和重复样 QA/QC 验收,synthetic_lab_qc_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q22,GGA-LICENSE-001,final_holdout,许可与再分发决策,synthetic_policy_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q23,GGA-ANOM-003,final_holdout,地质背景条件化异常与解释红线,synthetic_context_fixture,2,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1
+Q24,GGA-E2E-001,final_holdout,端到端小型地球化学图谱验收,synthetic_end_to_end_fixture,5,10,ALIGNED_E1,6.0.0-draft.3,80,20,e1-six-dimension-v1

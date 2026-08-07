@@ -1,0 +1,65 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T10:20:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Hg",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 56
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 64025,
+      "path": "demo_input.csv",
+      "sha256": "cc65ecb9be4f7c803288af55020a87d3f2db837d6a3d64ea1b83a078b59ea5ea"
+    },
+    {
+      "bytes": 87773,
+      "path": "sources.jsonl",
+      "sha256": "0b49942016ae12ea1ea0e5f40121d3d850595338a92ec67766450c9610ac4410"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 56,
+    "raw_source_rows": 4905,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": null,
+    "dataset_version": "content-snapshot-2026-08-06",
+    "license": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
+    "source_id": "japan-gsj-marine-sediment",
+    "title": "Geochemical Map of Sea and Land of Japan: marine sediment concentrations"
+  },
+  "source_files": [
+    {
+      "bytes": 1825190,
+      "filename": "ocean-noudo.csv",
+      "retrieved_at": "2026-08-07T15:42:53Z",
+      "sha256": "e81046209e381a727de856eec14ee4a67ace37751c66d1d74467c3d8214bad49",
+      "source_url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "GSJ marine sediment is a separate product from the national river-sediment table.",
+    "Hg uses ppb while other targets use ppm; absent method and QC fields are not inferred."
+  ]
+}

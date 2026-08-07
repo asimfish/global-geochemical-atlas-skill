@@ -75,6 +75,68 @@
       "type": "Feature"
     },
     {
+      "geometry": null,
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "As",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-32e539c86501",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "dissolved_surface_freshwater_mass_per_volume",
+        "medium": "water",
+        "method_family": "icp_ms",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "ug/L",
+        "normalized_value": 0.21,
+        "operational_confidence_band": "low",
+        "record_id": "rec-9a486fb72f66adf0f1507096724a8db49cd682b75243583b397cdc307f360dde",
+        "robust_z": -5.942914,
+        "sample_id": "nwisca.01.01401191",
+        "sample_type": "water_stream",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "source_id": "us-wqp-sacramento-river-arsenic",
+        "source_locator": "results.csv#row=62",
+        "status": "candidate_anomaly",
+        "water_fraction": "dissolved"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Cr",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-b36f93a11f8b",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock",
+        "method_family": null,
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 57.0,
+        "operational_confidence_band": "low",
+        "record_id": "rec-1975361d48f5e69a253ebc8c9aaed00e23c7bedf47c5c50ef8bb342d85832d9c",
+        "robust_z": -3.587132,
+        "sample_id": "s_57496-11             [23103]",
+        "sample_type": "rock_whole_rock",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "source_id": "georoc-antarctica-intraplate",
+        "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=38",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
       "geometry": {
         "coordinates": [
           6.25,
@@ -188,6 +250,117 @@
     {
       "geometry": {
         "coordinates": [
+          61.53,
+          15.99
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-41af7784ed4e",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_family": "other_geochemical_analysis_on_bulk_sediment",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 71.02,
+        "operational_confidence_band": "medium",
+        "record_id": "rec-044ff636938f7cd45e288a4bc05469f5f79d56a1636b811ac4548036e4493458",
+        "robust_z": 5.892097,
+        "sample_id": "TOM41-1-17A",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "source_id": "pangaea-arabian-sea-sediment",
+        "source_locator": "PANGAEA.950139.tab#row=102",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          61.5333,
+          15.9945
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-41af7784ed4e",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_family": "other_geochemical_analysis_on_bulk_sediment",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 71.94,
+        "operational_confidence_band": "medium",
+        "record_id": "rec-3d7d2fed1eeb211e3246122b7be318d5bcf58243875da653225c3424e3dacccd",
+        "robust_z": 5.954085,
+        "sample_id": "TOM41-1-17E",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "source_id": "pangaea-arabian-sea-sediment",
+        "source_locator": "PANGAEA.950139.tab#row=103",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          65.0842,
+          10.0345
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Cu",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-41af7784ed4e",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_family": "other_geochemical_analysis_on_bulk_sediment",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 93.12,
+        "operational_confidence_band": "medium",
+        "record_id": "rec-b60a42668e4a9223e52ab2958f1c61aea4c06d722abc2bea43ec53c558af8ae6",
+        "robust_z": 7.196911,
+        "sample_id": "TOM41-1-22E",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "source_id": "pangaea-arabian-sea-sediment",
+        "source_locator": "PANGAEA.950139.tab#row=104",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
           127.7467,
           26.3626
         ],
@@ -254,6 +427,68 @@
         "soil_horizon": "C",
         "source_id": "usgs-conus-soil",
         "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=35",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Hg",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-fe71bedfd281",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "published_marine_sediment_concentration",
+        "medium": "sediment",
+        "method_family": null,
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 0.01,
+        "operational_confidence_band": "low",
+        "record_id": "rec-2267ccc05903fb8438fbc5f46cc8834cb3ad369b356825a79058cd9ea9b6a06e",
+        "robust_z": -5.151539,
+        "sample_id": "880001",
+        "sample_type": "sediment_marine",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "source_id": "japan-gsj-marine-sediment",
+        "source_locator": "ocean-noudo.csv#row=2",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Hg",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "<75 µm",
+        "group_id": "grp-014dbbdf2005",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "total_mercury_dry_weight_<75um_outlet_sediment",
+        "medium": "sediment",
+        "method_family": "other_usepa_method_7473_milestone_tri_cell_dma_80_direct_mercury_analyser",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 0.18308,
+        "operational_confidence_band": "low",
+        "record_id": "rec-8a8818da62e396cb7294f1d75432fb426ab5121c5094460b19d8e31339bd6202",
+        "robust_z": 4.088116,
+        "sample_id": "2007190032001 Fine",
+        "sample_type": "sediment_outlet_top",
+        "sediment_environment": "outlet_catchment",
+        "soil_horizon": null,
+        "source_id": "australia-ngsa-mercury",
+        "source_locator": "150328_00_1.CSV#row=62",
         "status": "candidate_anomaly",
         "water_fraction": null
       },
@@ -373,6 +608,80 @@
     {
       "geometry": {
         "coordinates": [
+          61.53,
+          15.99
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-fa875178b657",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_family": "other_geochemical_analysis_on_bulk_sediment",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 255.17,
+        "operational_confidence_band": "medium",
+        "record_id": "rec-5a7735103332f92f0608696355ca01022c54c99d4ebd19d805b438714b8687ab",
+        "robust_z": 3.877662,
+        "sample_id": "TOM41-1-17A",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "source_id": "pangaea-arabian-sea-sediment",
+        "source_locator": "PANGAEA.950139.tab#row=102",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          61.5333,
+          15.9945
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Ni",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": "bulk sediment",
+        "group_id": "grp-fa875178b657",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "bulk_marine_sediment_geochemical_analysis",
+        "medium": "sediment",
+        "method_family": "other_geochemical_analysis_on_bulk_sediment",
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 247.89,
+        "operational_confidence_band": "medium",
+        "record_id": "rec-9a5b3ecb16bdc982229c31b3d6a306fbffedd953fa41adc59051041c41daebc3",
+        "robust_z": 3.788384,
+        "sample_id": "TOM41-1-17E",
+        "sample_type": "sediment_marine_core",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "source_id": "pangaea-arabian-sea-sediment",
+        "source_locator": "PANGAEA.950139.tab#row=103",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
           -88.0869,
           30.8919
         ],
@@ -402,6 +711,68 @@
         "soil_horizon": "C",
         "source_id": "usgs-conus-soil",
         "source_locator": "Appendix_4b_Chorizon_18Sept2013.txt#row=35",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "properties": {
+        "direction": "high",
+        "element_or_analyte": "Pb",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-bbfac3999576",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "published_marine_sediment_concentration",
+        "medium": "sediment",
+        "method_family": null,
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 37.701,
+        "operational_confidence_band": "low",
+        "record_id": "rec-3390391487f858a7a72cd11bcc5ad18a50db44c9a45c3164c106541f61b4ac78",
+        "robust_z": 3.983653,
+        "sample_id": "880007",
+        "sample_type": "sediment_marine",
+        "sediment_environment": "marine",
+        "soil_horizon": null,
+        "source_id": "japan-gsj-marine-sediment",
+        "source_locator": "ocean-noudo.csv#row=8",
+        "status": "candidate_anomaly",
+        "water_fraction": null
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "properties": {
+        "direction": "low",
+        "element_or_analyte": "Zn",
+        "geologic_unit": null,
+        "geologic_unit_raw": null,
+        "grain_fraction": null,
+        "group_id": "grp-9996e5a01ab8",
+        "interpretation_limit": "Candidate relative to the declared background group; no causal claim.",
+        "matched_geologic_unit": null,
+        "measurement_basis": "GEOROC_precompiled_selected_value",
+        "medium": "rock",
+        "method_family": null,
+        "method_version": "d2-robust-mad-v2",
+        "normalized_unit": "mg/kg",
+        "normalized_value": 16.5,
+        "operational_confidence_band": "low",
+        "record_id": "rec-354c838b00457ee0be1cf37b8e8e26ef88f77e87c9134ebdbab85a70e2ee791a",
+        "robust_z": -4.806195,
+        "sample_id": "s_ST254 [21659]",
+        "sample_type": "rock_whole_rock",
+        "sediment_environment": null,
+        "soil_horizon": null,
+        "source_id": "georoc-antarctica-intraplate",
+        "source_locator": "2026-06-RZZ9VM_ANTARCTICA.csv#row=5",
         "status": "candidate_anomaly",
         "water_fraction": null
       },

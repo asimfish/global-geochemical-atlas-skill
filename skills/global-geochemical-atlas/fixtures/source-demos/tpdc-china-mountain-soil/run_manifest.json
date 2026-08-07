@@ -1,0 +1,77 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-07T10:20:00Z",
+  "generation_request": {
+    "analytes": [
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 40
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 53601,
+      "path": "demo_input.csv",
+      "sha256": "f1e7c0a840deef0f5e306f3bff2e96337ee71564a0f521faa0a4632bec03975c"
+    },
+    {
+      "bytes": 60600,
+      "path": "sources.jsonl",
+      "sha256": "e49b7b13df4de066fa781792f44900c105e3730d18566f43e36e228658fb21a8"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 40,
+    "raw_source_rows": 1314,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.11888/Terre.tpdc.302620",
+    "dataset_version": "tpdc-file-2025-07-23",
+    "license": "CC-BY-4.0",
+    "source_id": "tpdc-china-mountain-soil",
+    "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains"
+  },
+  "source_files": [
+    {
+      "bytes": 577715,
+      "filename": "Soil dataset.xlsx",
+      "retrieved_at": null,
+      "sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+    },
+    {
+      "bytes": 33386,
+      "filename": "Soil bulk density.xlsx",
+      "retrieved_at": null,
+      "sha256": "bb03ed1ac9f2db514ca740c8a9c8eabe5965da871e9b77ca510942ba5159b682",
+      "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+    },
+    {
+      "bytes": 1246886,
+      "filename": "Description of the dataset.docx",
+      "retrieved_at": null,
+      "sha256": "e923ea91a29793cb224c29c1ff0693e92783c96889fbedb0100c10d48784999b",
+      "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "TPDC samples cover selected mountain ecosystems rather than a uniform China soil grid.",
+    "O, A and C horizons remain separate; an undeclared source CRS remains unverified."
+  ]
+}

@@ -33,81 +33,97 @@
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": 19,
       "id": "small_n",
-      "json_path": "groups.0.n_total",
+      "array_path": "groups",
+      "key": {"group_id": "SMALL"},
+      "value_path": "n_total",
       "path": "eligibility.json",
       "points": 8,
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": false,
       "id": "small_ineligible",
-      "json_path": "groups.0.eligible",
+      "array_path": "groups",
+      "key": {"group_id": "SMALL"},
+      "value_path": "eligible",
       "path": "eligibility.json",
       "points": 10,
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": "insufficient_sample_size",
       "id": "small_status",
-      "json_path": "groups.0.status",
+      "array_path": "groups",
+      "key": {"group_id": "SMALL"},
+      "value_path": "status",
       "path": "eligibility.json",
       "points": 10,
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": 0,
       "id": "small_no_scores",
-      "json_path": "groups.0.anomaly_scores_written",
+      "array_path": "groups",
+      "key": {"group_id": "SMALL"},
+      "value_path": "anomaly_scores_written",
       "path": "eligibility.json",
       "points": 7,
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": 0.65,
       "id": "censored_fraction",
-      "json_path": "groups.1.quantified_fraction",
+      "array_path": "groups",
+      "key": {"group_id": "CENSORED"},
+      "value_path": "quantified_fraction",
       "path": "eligibility.json",
       "points": 8,
       "tolerance": 1e-06,
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": false,
       "id": "censored_ineligible",
-      "json_path": "groups.1.eligible",
+      "array_path": "groups",
+      "key": {"group_id": "CENSORED"},
+      "value_path": "eligible",
       "path": "eligibility.json",
       "points": 8,
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": "excessive_censoring",
       "id": "censored_status",
-      "json_path": "groups.1.status",
+      "array_path": "groups",
+      "key": {"group_id": "CENSORED"},
+      "value_path": "status",
       "path": "eligibility.json",
       "points": 8,
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "dimension_id": "domain_understanding",
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": 0,
       "id": "censored_no_scores",
-      "json_path": "groups.1.anomaly_scores_written",
+      "array_path": "groups",
+      "key": {"group_id": "CENSORED"},
+      "value_path": "anomaly_scores_written",
       "path": "eligibility.json",
       "points": 6,
-      "type": "json_value"
+      "type": "json_array_item_value"
     }
   ],
   "evidence_points": 80,
@@ -118,9 +134,11 @@
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": false,
       "id": "RL-09-small-n",
-      "json_path": "groups.0.eligible",
+      "array_path": "groups",
+      "key": {"group_id": "SMALL"},
+      "value_path": "eligible",
       "path": "eligibility.json",
-      "type": "json_value"
+      "type": "json_array_item_value"
     },
     {
       "consequence": "task_cap_20",
@@ -128,9 +146,11 @@
       "evidence_location": "run_manifest.benchmark_evidence",
       "expected": false,
       "id": "RL-09-censoring",
-      "json_path": "groups.1.eligible",
+      "array_path": "groups",
+      "key": {"group_id": "CENSORED"},
+      "value_path": "eligible",
       "path": "eligibility.json",
-      "type": "json_value"
+      "type": "json_array_item_value"
     }
   ],
   "scoring_contract": "e1-six-dimension-v1",

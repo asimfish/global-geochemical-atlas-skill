@@ -46,6 +46,14 @@ JSONL 使用 `{"format":"jsonl","rows":[...]}`；普通文本使用
 `{"format":"text","value":"..."}`。空 CSV 单元格可以编码为空字符串或 `null`，
 但 `rows` 仍必须是对象数组。这让旧题 checker 可复算，同时保持 E1 的物理交卷接口不变。
 
+候选 bundle 随附一个不含 gold、分值、rubric 或隐藏 checker 的公开契约校验器。它只检查必需物理文件、文件可解析性和上面的候选可见结构：
+
+```bash
+python3 validate_submission_contract.py --bundle-root .
+```
+
+单题隔离运行使用 `--task-root` 与 `--submission-root`。返回码 `2` 表示公开契约不合格，应修正结构后重跑；这不是分数。
+
 ## 条件、分数和退出码
 
 - 裸模型为 `B0`，挂载 Skill 为 `S0`；每题每侧三次；

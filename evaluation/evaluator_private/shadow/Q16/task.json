@@ -77,7 +77,7 @@
     "CLIENT_AGGREGATION_DRIFT"
   ],
   "fixture_type": "synthetic_cell_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "cell_observations.csv",
     "visualization_policy.json"
