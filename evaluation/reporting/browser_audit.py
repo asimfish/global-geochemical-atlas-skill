@@ -295,7 +295,8 @@ def run_audit(html: Path, output: Path, screenshots: Path) -> dict[str, Any]:
                 database_tab
                 and database_distribution["width"] > 100
                 and database_distribution["opaque"] > 50
-                and database_box["width"] > 100 and database_box["opaque"] > 50
+                and database_box["width"] > 100
+                and database_box["opaque"] > 50
                 and database["coverage_rows"] > 0
                 and database["preview_rows"] > 0
             ),
