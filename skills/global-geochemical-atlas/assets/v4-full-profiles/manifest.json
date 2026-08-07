@@ -692,6 +692,34 @@
   "covered_spatial_cells_source_sum": 8116,
   "denominator_definition": "all non-empty registered target observations parsed from verified full caches",
   "distinct_sample_count": 771322,
+  "incremental_build": {
+    "changed_sources": [],
+    "executed_source_count": 0,
+    "plan_version": "d1-incremental-profile-plan-v1",
+    "reused_sources": [
+      "afsis-phase-i-wet-chemistry",
+      "australia-ngsa-mercury",
+      "foregs-floodplain-sediment",
+      "foregs-humus",
+      "foregs-stream-sediment",
+      "foregs-stream-water",
+      "foregs-subsoil",
+      "foregs-topsoil",
+      "gemas-europe",
+      "gemstat-open-archive",
+      "georoc-antarctica-intraplate",
+      "georoc-archaean",
+      "geotraces-idp2025",
+      "japan-gsj-geochemical-map",
+      "japan-gsj-marine-sediment",
+      "norway-marchem",
+      "pangaea-arabian-sea-sediment",
+      "pangaea-north-africa-soil",
+      "tpdc-china-mountain-soil",
+      "us-wqp-sacramento-river-arsenic",
+      "usgs-conus-soil"
+    ]
+  },
   "media": {
     "rock": {
       "comparable_observation_count": 0,

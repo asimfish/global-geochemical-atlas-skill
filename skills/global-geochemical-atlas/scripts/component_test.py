@@ -25,6 +25,8 @@ import build_evidence_bundle as evidence_builder
 import acquire_gemstat_arsenic as gemstat_acquisition
 import build_four_media_demo
 import build_index as index_builder
+import build_incremental_profiles
+import build_full_d1_database
 import benchmark_index
 import cache_control
 import coverage_report
@@ -1123,16 +1125,101 @@ def check_d1(output_dir: Path) -> list[str]:
         v4_query = query_source.query_index(
             v4_index,
             sample_types=["soil_topsoil"],
+            lithologies=["granite"],
             soil_horizons=["A"],
             geologic_units=["Synthetic Granite"],
-            methods=["ICP-MS"],
+            analytical_techniques=["ICP-MS"],
             method_scopes=["observation"],
+            measurement_bases=["dry weight total digest"],
+            value_qualifiers=["reported"],
         )
         require(
             v4_build["status"] == "PASS"
             and v4_query["record_count"] == 1
             and v4_query["records"][0]["geographic_context_raw"] == "Synthetic survey block",
-            "D1 V4 SQLite query filters sample type, horizon, source geology and method scope",
+            "D1 V4 SQLite query filters sample type, lithology, horizon, source geology, method, basis and qualifier",
+            checks,
+        )
+        flat_csv = index_root / "flat-v4.csv"
+        with flat_csv.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=build_full_d1_database.FULL_COLUMNS, lineterminator="\n")
+            writer.writeheader()
+            flat_row = {field: v4_exchange[0].get(field, "") for field in build_full_d1_database.FULL_COLUMNS}
+            flat_row.update(
+                {
+                    "dataset_doi": "10.0000/synthetic.v2",
+                    "dataset_pid": "fixture-v2",
+                    "dataset_version": "2.0.0",
+                }
+            )
+            writer.writerow(flat_row)
+        flat_index = index_root / "flat-v4.sqlite"
+        flat_report = build_full_d1_database.build_flat_index(flat_csv, flat_index)
+        flat_query = query_source.query_index(
+            flat_index,
+            source_ids=["fixture-source-v2"],
+            lithologies=["granite"],
+            analytical_techniques=["ICP-MS"],
+        )
+        require(
+            flat_report["integrity"] == "ok"
+            and flat_report["observation_count"] == 1
+            and flat_query["record_count"] == 1,
+            "D1 full raw-observation CSV builds a query-compatible flat SQLite index",
+            checks,
+        )
+        identity_registry = {
+            "sources": {
+                "fixture-source-v2": {
+                    "dataset_doi": "10.0000/synthetic.v2",
+                    "dataset_version": "2.0.0",
+                    "release_date": "2026-08-06",
+                    "adapter": "fixture_v2_adapter",
+                    "media": ["soil"],
+                    "target_analytes": {"As": "As"},
+                    "download": {
+                        "observed_at": "2026-08-06T11:00:00Z",
+                        "files": [
+                            {
+                                "file_id": "fixture-v2-csv",
+                                "filename": "fixture-v2.csv",
+                                "bytes": 234,
+                                "row_count": 1,
+                                "schema_fields": ["As"],
+                            }
+                        ],
+                    },
+                }
+            }
+        }
+        incremental_state = index_root / "incremental-state"
+        initial_plan = build_incremental_profiles.plan_sources(identity_registry, incremental_state)
+        identity = build_incremental_profiles.source_identity(
+            "fixture-source-v2", identity_registry["sources"]["fixture-source-v2"]
+        )
+        state_path = incremental_state / "sources" / "fixture-source-v2.json"
+        state_path.parent.mkdir(parents=True)
+        state_path.write_text(
+            json.dumps(
+                {
+                    "state_version": build_incremental_profiles.STATE_VERSION,
+                    "source_id": "fixture-source-v2",
+                    "source_identity": identity,
+                    "profile": {"complete": True},
+                    "cube_rows": [],
+                }
+            ),
+            encoding="utf-8",
+        )
+        reuse_plan = build_incremental_profiles.plan_sources(identity_registry, incremental_state)
+        changed_registry = copy.deepcopy(identity_registry)
+        changed_registry["sources"]["fixture-source-v2"]["download"]["files"][0]["row_count"] = 2
+        changed_plan = build_incremental_profiles.plan_sources(changed_registry, incremental_state)
+        require(
+            initial_plan["changed_sources"] == ["fixture-source-v2"]
+            and reuse_plan["reused_sources"] == ["fixture-source-v2"]
+            and changed_plan["changed_sources"] == ["fixture-source-v2"],
+            "D1 incremental profile planning reuses readable source identity and rebuilds only drifted sources",
             checks,
         )
         with sqlite3.connect(first_index) as connection:

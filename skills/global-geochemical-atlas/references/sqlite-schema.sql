@@ -138,6 +138,10 @@ CREATE TABLE samples (
 CREATE INDEX idx_samples_medium ON samples(medium_raw);
 CREATE INDEX idx_samples_type ON samples(sample_type);
 CREATE INDEX idx_samples_geology ON samples(geologic_unit_raw, matched_geologic_unit);
+CREATE INDEX idx_samples_lithology ON samples(lithology, lithology_raw);
+CREATE INDEX idx_samples_soil_horizon ON samples(soil_horizon);
+CREATE INDEX idx_samples_sediment_environment ON samples(sediment_environment);
+CREATE INDEX idx_samples_water ON samples(water_body_type, water_fraction);
 CREATE INDEX idx_samples_igsn ON samples(igsn);
 CREATE INDEX idx_samples_event ON samples(sampling_event_id);
 
@@ -159,6 +163,7 @@ CREATE TABLE analytical_methods (
 );
 
 CREATE INDEX idx_methods_technique ON analytical_methods(technique_raw);
+CREATE INDEX idx_methods_scope ON analytical_methods(method_scope);
 
 CREATE TABLE method_publications (
   method_id TEXT NOT NULL REFERENCES analytical_methods(method_id),
@@ -222,6 +227,8 @@ CREATE INDEX idx_observations_analyte ON observations(analyte_reported);
 CREATE INDEX idx_observations_sample_analyte ON observations(sample_id, analyte_reported);
 CREATE INDEX idx_observations_method ON observations(method_id);
 CREATE INDEX idx_observations_provenance ON observations(provenance_id);
+CREATE INDEX idx_observations_basis ON observations(measurement_basis_raw);
+CREATE INDEX idx_observations_qualifier ON observations(value_qualifier);
 
 CREATE VIRTUAL TABLE archive_fts USING fts5(entity_type, entity_id UNINDEXED, searchable_text);
 
