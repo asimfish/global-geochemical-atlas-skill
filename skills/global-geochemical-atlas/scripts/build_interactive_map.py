@@ -9,6 +9,7 @@ import hashlib
 import json
 import math
 import os
+import re
 import tempfile
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -23,6 +24,7 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 import build_iteration_backlog as backlog_builder
+import spatial_scope
 
 
 MAP_VERSION = "d3-interactive-atlas-v3"
@@ -148,9 +150,10 @@ def parse_bool_cell(value: Any) -> bool:
 
 
 def coordinate_in_bounds(longitude: float, latitude: float, bounds: Mapping[str, float]) -> bool:
-    return (
-        bounds["w"] <= longitude <= bounds["e"]
-        and bounds["s"] <= latitude <= bounds["n"]
+    return spatial_scope.coordinate_in_bbox(
+        longitude,
+        latitude,
+        [bounds["w"], bounds["s"], bounds["e"], bounds["n"]],
     )
 
 
@@ -505,7 +508,15 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
     if custom_region is not None:
         if not isinstance(custom_region, dict):
             raise MapBuildError("visualization profile custom_region must be null or an object")
-        require_exact_keys(custom_region, {"label", "bounds"}, "custom_region")
+        missing = sorted({"label", "bounds"} - set(custom_region))
+        unknown = sorted(set(custom_region) - {"label", "bounds", "country_code"})
+        if missing or unknown:
+            details = []
+            if missing:
+                details.append("missing " + ", ".join(missing))
+            if unknown:
+                details.append("unknown " + ", ".join(unknown))
+            raise MapBuildError(f"custom_region fields are invalid: {'; '.join(details)}")
         bounds = custom_region.get("bounds")
         if not isinstance(bounds, dict):
             raise MapBuildError("visualization profile custom_region.bounds must be an object")
@@ -524,13 +535,23 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
                 )
             numbers[key] = value
         if not (
-            -180 <= numbers["w"] < numbers["e"] <= 180
+            -180 <= numbers["w"] <= 180
+            and -180 <= numbers["e"] <= 180
             and -90 <= numbers["s"] < numbers["n"] <= 90
         ):
-            raise MapBuildError("visualization profile custom bounds must satisfy W<E and S<N")
+            raise MapBuildError(
+                "visualization profile custom bounds must be WGS84 with S<N; W>E denotes antimeridian crossing"
+            )
+        country_code = custom_region.get("country_code")
+        if country_code is not None and (
+            not isinstance(country_code, str)
+            or not re.fullmatch(r"[A-Z]{3}", country_code)
+        ):
+            raise MapBuildError("visualization profile custom_region.country_code must be null or ISO-3")
         custom_region = {
             "label": profile_text(custom_region.get("label"), "custom_region.label", 80),
             "bounds": numbers,
+            "country_code": country_code,
         }
     if default_region == "custom" and custom_region is None:
         raise MapBuildError("default_region=custom requires custom_region")

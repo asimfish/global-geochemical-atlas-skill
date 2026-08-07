@@ -15,6 +15,8 @@ from pathlib import Path
 from typing import Any
 
 import build_interactive_map as map_builder
+import build_element_comparison as comparison_builder
+import build_concentration_grid as concentration_grid_builder
 import build_iteration_backlog as backlog_builder
 
 
@@ -39,6 +41,7 @@ GENERATED_OUTPUTS = (
     "visualization_report.json",
     "iteration_backlog.csv",
 )
+OPTIONAL_GENERATED_OUTPUTS = ("element_comparison.json", "concentration_grid.geojson")
 
 
 class VisualizationError(RuntimeError):
@@ -100,7 +103,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         )
     if not args.profile.is_file():
         raise VisualizationError("invalid_input", f"visualization profile does not exist: {args.profile}")
-    existing = [name for name in GENERATED_OUTPUTS if (args.output_dir / name).exists()]
+    existing = [
+        name
+        for name in (*GENERATED_OUTPUTS, *OPTIONAL_GENERATED_OUTPUTS)
+        if (args.output_dir / name).exists()
+    ]
     for name in (*REQUIRED_INPUTS, *OPTIONAL_INPUTS):
         source = args.input_dir / name
         destination = args.output_dir / name
@@ -155,14 +162,57 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         if source.is_file():
             copy_if_needed(source, args.output_dir / name)
     atomic_json(args.output_dir / "visualization_profile.json", profile)
+    comparison_report = None
+    if profile["story"] == "comparison":
+        try:
+            comparison_report = comparison_builder.build_comparison(
+                inputs["geochemistry.csv"], profile
+            )
+        except comparison_builder.ComparisonError as exc:
+            raise VisualizationError("invalid_input", f"element comparison failed: {exc}") from exc
+        atomic_json(args.output_dir / "element_comparison.json", comparison_report)
+        if (args.output_dir / "element_comparison.json").stat().st_size > map_builder.MAX_OUTPUT_BYTES:
+            raise VisualizationError(
+                "unsupported_scope",
+                "element comparison output exceeds the 100 MB runtime safety limit",
+            )
+    concentration_grid_summary = None
+    if profile["filters"].get("element"):
+        try:
+            concentration_grid, concentration_grid_summary = concentration_grid_builder.build_grid(
+                inputs["geochemistry.csv"], profile
+            )
+        except concentration_grid_builder.ConcentrationGridError as exc:
+            raise VisualizationError("invalid_input", f"concentration grid failed: {exc}") from exc
+        atomic_json(args.output_dir / "concentration_grid.geojson", concentration_grid)
+        if (args.output_dir / "concentration_grid.geojson").stat().st_size > map_builder.MAX_OUTPUT_BYTES:
+            raise VisualizationError(
+                "unsupported_scope",
+                "concentration grid output exceeds the 100 MB runtime safety limit",
+            )
+    if args.force:
+        expected_optional: set[str] = set()
+        if comparison_report is not None:
+            expected_optional.add("element_comparison.json")
+        if concentration_grid_summary is not None:
+            expected_optional.add("concentration_grid.geojson")
+        for name in OPTIONAL_GENERATED_OUTPUTS:
+            path = args.output_dir / name
+            if name not in expected_optional and path.is_file():
+                path.unlink()
 
     input_hashes = {name: sha256_file(path) for name, path in inputs.items()}
+    generated_hash_names = [
+        "interactive_map.html", "samples.geojson", "visualization_profile.json",
+        "iteration_backlog.csv",
+    ]
+    if comparison_report is not None:
+        generated_hash_names.append("element_comparison.json")
+    if concentration_grid_summary is not None:
+        generated_hash_names.append("concentration_grid.geojson")
     output_hashes = {
         name: sha256_file(args.output_dir / name)
-        for name in (
-            "interactive_map.html", "samples.geojson", "visualization_profile.json",
-            "iteration_backlog.csv",
-        )
+        for name in generated_hash_names
     }
     report = {
         "interface_version": INTERFACE_VERSION,
@@ -180,10 +230,26 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "samples": "samples.geojson",
             "profile": "visualization_profile.json",
             "iteration_backlog": "iteration_backlog.csv",
+            **(
+                {"element_comparison": "element_comparison.json"}
+                if comparison_report is not None
+                else {}
+            ),
+            **(
+                {"concentration_grid": "concentration_grid.geojson"}
+                if concentration_grid_summary is not None
+                else {}
+            ),
         },
         "output_sha256": output_hashes,
         "map_report": map_report,
         "iteration_backlog": backlog_report,
+        **({"element_comparison": comparison_report} if comparison_report is not None else {}),
+        **(
+            {"concentration_grid_summary": concentration_grid_summary}
+            if concentration_grid_summary is not None
+            else {}
+        ),
         "limitations": [
             "D3 renders existing D1/D2 evidence and candidate anomalies; it does not recompute them.",
             "Blank areas indicate no included observations, not element absence or zero concentration.",
