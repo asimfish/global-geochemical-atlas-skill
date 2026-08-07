@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 import acquire_gemstat_arsenic as gemstat_acquisition
+import benchmark_workflow
 import build_evidence_bundle as evidence_builder
 import build_four_media_demo
 import build_interactive_map as map_builder
@@ -3888,6 +3889,19 @@ def check_d2(output_dir: Path) -> list[str]:
 
 def check_d3(output_dir: Path) -> list[str]:
     checks: list[str] = []
+    benchmark = benchmark_workflow.run_benchmark(warmups=0, runs=2)
+    require(
+        benchmark["schema_version"] == "geochemical-workflow-benchmark-v1"
+        and benchmark["protocol"]["measured_runs"] == 2
+        and len(benchmark["timing_seconds"]["samples"]) == 2
+        and benchmark["result_consistency"]["distinct_result_signatures"] == 1
+        and benchmark["result_consistency"]["runner_status_counts"]
+        == {"partial_success": 2}
+        and benchmark["result_consistency"]["validation_metrics"]["record_count"]
+        == 996,
+        "D3 repeated workflow benchmark validates every run and reports stable statistics",
+        checks,
+    )
     source_plan = task_router.plan_task(
         {
             "contract_version": "atlas-task-contract-v1",
