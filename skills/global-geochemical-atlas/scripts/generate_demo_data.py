@@ -1657,6 +1657,116 @@ def pangaea_arabian_demo(
     return rows, evidence_rows, len(selected)
 
 
+def v4_m6_demo(
+    records: Sequence[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    """Build deterministic balanced slices for the three V4 M6 adapters."""
+
+    source_id = candidate.source_id
+    analytes = (
+        ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
+        if source_id == "georoc-antarctica-intraplate"
+        else ("Cr", "Cu", "Ni", "Pb", "Zn")
+        if source_id == "tpdc-china-mountain-soil"
+        else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
+    )
+    keys = (
+        tuple(f"{group}|{analyte}" for group in ("AR", "XRF") for analyte in analytes if not (group == "XRF" and analyte == "Hg"))
+        if source_id == "gemas-europe"
+        else analytes
+    )
+    if observation_limit % len(keys) != 0:
+        raise DemoError(f"{source_id} observation limit must be divisible by {len(keys)}")
+    per_key = observation_limit // len(keys)
+    selected = Counter()
+    selected_source_rows: set[str] = set()
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    for record in records:
+        if all(selected[key] >= per_key for key in keys):
+            break
+        observations = record.fields.get("_target_observations")
+        if not isinstance(observations, Mapping):
+            continue
+        if source_id == "georoc-antarctica-intraplate":
+            latitude = _exact_georoc_coordinate(record, "LATITUDE MIN", "LATITUDE MAX")
+            longitude = _exact_georoc_coordinate(record, "LONGITUDE MIN", "LONGITUDE MAX")
+            sample_id = str(record.fields.get("SAMPLE NAME") or record.fields.get("UNIQUE_ID") or "").strip()
+            medium = "rock"; sample_depth_min = sample_depth_max = ""; grain = ""
+        elif source_id == "tpdc-china-mountain-soil":
+            latitude = str(record.fields.get("Latitude") or ""); longitude = str(record.fields.get("Longitude") or "")
+            sample_id = f"{record.fields.get('Sam.No','')}|{record.fields.get('Horizons','')}"
+            medium = "soil"; sample_depth_min = sample_depth_max = ""; grain = str(record.fields.get("_grain_fraction") or "")
+        else:
+            latitude = str(record.fields.get("YCOO") or ""); longitude = str(record.fields.get("XCOO") or "")
+            sample_id = str(record.fields.get("_physical_sample_id") or "")
+            medium = "soil"
+            sample_depth_min, sample_depth_max = (("0", "0.20") if record.fields.get("TYPE_") == "Ap" else ("0", "0.10"))
+            grain = str(record.fields.get("_grain_fraction") or "")
+        if not sample_id or not latitude or not longitude:
+            continue
+        downloaded = files.get(str(record.fields.get("_source_file")))
+        if downloaded is None:
+            raise DemoError(f"{source_id} record references an unknown source file")
+        group = str(record.fields.get("_analysis_group") or "")
+        for analyte in analytes:
+            values = observations.get(analyte)
+            if not isinstance(values, Mapping):
+                continue
+            key = f"{group}|{analyte}" if source_id == "gemas-europe" else analyte
+            if selected[key] >= per_key:
+                continue
+            raw_value = str(values.get("value") or "")
+            if _reported_float(raw_value) is None:
+                continue
+            unit = str(values.get("unit") or "")
+            record_id = stable_record_id(record.source_id, record.source_record_id, analyte, raw_value, unit)
+            rows.append({
+                "record_id": record_id, "source_record_id": record.source_record_id,
+                "sample_id": sample_id, "element_or_analyte": analyte,
+                "value": raw_value, "unit": unit, "medium": medium,
+                "measurement_basis": str(values.get("measurement_basis") or ""),
+                "value_qualifier": "", "detection_limit": str(values.get("detection_limit") or ""),
+                "detection_limit_unit": unit if values.get("detection_limit") else "",
+                "latitude": latitude, "longitude": longitude,
+                "source_crs": str(record.fields.get("_source_crs") or ("EPSG:4326" if source_id != "tpdc-china-mountain-soil" else "")),
+                "coordinate_uncertainty_m": "", "geologic_unit": str(record.fields.get("LOCATION") or "") if medium == "rock" else "",
+                "analytical_method": str(values.get("analytical_method") or ""),
+                "digestion_or_extraction": str(values.get("digestion_or_extraction") or ""),
+                "laboratory": "", "license": candidate.license_id, "source_tier": "official_curated",
+                "source_id": record.source_id, "source_locator": record.source_locator,
+                "sampled_at": "", "sample_depth_min_m": sample_depth_min,
+                "sample_depth_max_m": sample_depth_max, "grain_fraction": grain,
+                "lithology_raw": str(record.fields.get("ROCK NAME") or record.fields.get("Rock Group") or ""),
+                "geologic_age_raw": str(record.fields.get("AGE") or ""),
+                "tectonic_setting_raw": str(record.fields.get("TECTONIC SETTING") or ""),
+            })
+            entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+            entry.update({
+                "article_citations": [candidate.registry_entry["citation"]],
+                "article_dois": [candidate.registry_entry.get("publication_doi") or candidate.dataset_doi] if (candidate.registry_entry.get("publication_doi") or candidate.dataset_doi) else [],
+                "selection_rule": f"balanced deterministic M6 slice by {key}",
+                "reported_horizon": str(record.fields.get("Horizons") or ""),
+                "mountain": str(record.fields.get("Mountain") or ""),
+                "site": str(record.fields.get("site") or ""),
+                "sample_type": str(record.fields.get("TYPE_") or ""),
+                "country_raw": str(record.fields.get("COUNTRY") or ""),
+                "analysis_group": group,
+                "method_source_locator": str(values.get("variable_metadata_locator") or record.source_locator),
+                "below_laboratory_dl": bool(values.get("below_laboratory_dl")),
+                "upstream_half_dl_substitution": bool(values.get("upstream_half_dl_substitution")),
+            })
+            evidence_rows.append(entry)
+            selected[key] += 1
+            selected_source_rows.add(record.source_record_id)
+    if len(rows) != observation_limit:
+        raise DemoError(f"{source_id} produced {len(rows)} observations, expected {observation_limit}")
+    return rows, evidence_rows, len(selected_source_rows)
+
+
 @contextmanager
 def acquired_source(args: argparse.Namespace) -> Iterator[tuple[Any, list[DownloadedFile]]]:
     adapter = get_adapter(args.source)
@@ -1750,6 +1860,10 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             )
         elif args.source == "pangaea-arabian-sea-sediment":
             rows, evidence, selected_source_rows = pangaea_arabian_demo(
+                raw_records, files, candidate, args.observations
+            )
+        elif args.source in {"georoc-antarctica-intraplate", "tpdc-china-mountain-soil", "gemas-europe"}:
+            rows, evidence, selected_source_rows = v4_m6_demo(
                 raw_records, files, candidate, args.observations
             )
         else:
@@ -1958,6 +2072,9 @@ def build_parser() -> argparse.ArgumentParser:
             "australia-ngsa-mercury",
             "japan-gsj-marine-sediment",
             "pangaea-arabian-sea-sediment",
+            "georoc-antarctica-intraplate",
+            "tpdc-china-mountain-soil",
+            "gemas-europe",
         ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)
