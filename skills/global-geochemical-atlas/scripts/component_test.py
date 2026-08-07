@@ -3030,6 +3030,8 @@ def check_d3(output_dir: Path) -> list[str]:
                 "d3-database-visual-summary-v1",
                 'id="anomalyDensityCanvas"',
                 "drawAnomalyDensity",
+                "gridLocations",
+                'section.style.display=statisticalRegionFeatures.length?"block":"none"',
                 "样点密度热力图",
                 "showAnomalyRegion",
                 "focusAnomalyRegion",
