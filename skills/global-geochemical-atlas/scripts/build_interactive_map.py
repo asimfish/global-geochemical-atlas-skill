@@ -39,6 +39,11 @@ BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
 MISSING_METHOD_LABEL = "D2 未提供分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
+COORDINATE_MODES = ("canonical", "reported")
+COORDINATE_BASIS_CANONICAL = "canonical_wgs84"
+COORDINATE_BASIS_REPORTED = "reported_unverified"
+REPORTED_BANNER_ID = "coordinate-mode-banner"
+REPORTED_BANNER_PHRASE = "报告坐标，datum 未验证，仅供示意浏览"
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
 DEFAULT_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
@@ -236,18 +241,63 @@ def coordinate_in_region(
     return point_in_country(longitude, latitude, country)
 
 
+def parse_row_coordinates(
+    row: Mapping[str, Any], coordinate_mode: str
+) -> tuple[float, float, str] | str:
+    """Resolve one row's plotting coordinates without reinterpreting evidence.
+
+    Returns (latitude, longitude, coordinate_basis) when the row is plottable
+    under the requested mode, otherwise a rejection category string:
+    "reported_only" (canonical mode refuses an unverified-datum row) or
+    "no_plottable_coordinates" (neither canonical nor parsable reported pair).
+    """
+    latitude = optional_float(row.get("latitude"))
+    longitude = optional_float(row.get("longitude"))
+    if (
+        latitude is not None
+        and longitude is not None
+        and -90 <= latitude <= 90
+        and -180 <= longitude <= 180
+    ):
+        return latitude, longitude, COORDINATE_BASIS_CANONICAL
+    reported_latitude = optional_float(row.get("original_latitude_raw"))
+    reported_longitude = optional_float(row.get("original_longitude_raw"))
+    reported_plottable = (
+        reported_latitude is not None
+        and reported_longitude is not None
+        and -90 <= reported_latitude <= 90
+        and -180 <= reported_longitude <= 180
+    )
+    if not reported_plottable:
+        return "no_plottable_coordinates"
+    if coordinate_mode != "reported":
+        return "reported_only"
+    assert reported_latitude is not None and reported_longitude is not None
+    return reported_latitude, reported_longitude, COORDINATE_BASIS_REPORTED
+
+
 def load_records(
     path: Path,
     max_points: int,
     scope_region: Mapping[str, Any],
     countries_by_code: Mapping[str, Mapping[str, Any]],
-) -> tuple[list[dict[str, Any]], int, int]:
+    coordinate_mode: str = "canonical",
+) -> tuple[list[dict[str, Any]], dict[str, int]]:
     """Consume, but never reinterpret, the public D2 canonical CSV."""
     if not path.is_file():
         raise MapBuildError(f"database does not exist: {path}")
+    if coordinate_mode not in COORDINATE_MODES:
+        raise MapBuildError(
+            f"--coordinate-mode must be one of {', '.join(COORDINATE_MODES)}"
+        )
     records: list[dict[str, Any]] = []
-    total_records = 0
-    source_mappable_records = 0
+    counts = {
+        "total_records": 0,
+        "canonical_coordinate_records": 0,
+        "reported_fallback_records": 0,
+        "reported_only_records": 0,
+        "records_without_plottable_coordinates": 0,
+    }
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         required = {
@@ -267,14 +317,21 @@ def load_records(
             missing = sorted(required - set(reader.fieldnames or []))
             raise MapBuildError(f"database missing map columns: {', '.join(missing)}")
         for row in reader:
-            total_records += 1
-            latitude = optional_float(row.get("latitude"))
-            longitude = optional_float(row.get("longitude"))
-            if latitude is None or longitude is None:
+            counts["total_records"] += 1
+            resolved = parse_row_coordinates(row, coordinate_mode)
+            if resolved == "reported_only":
+                counts["reported_only_records"] += 1
                 continue
-            if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+            if resolved == "no_plottable_coordinates":
+                counts["records_without_plottable_coordinates"] += 1
                 continue
-            source_mappable_records += 1
+            assert not isinstance(resolved, str)
+            latitude, longitude, coordinate_basis = resolved
+            if coordinate_basis == COORDINATE_BASIS_CANONICAL:
+                counts["canonical_coordinate_records"] += 1
+            else:
+                counts["reported_fallback_records"] += 1
+                counts["reported_only_records"] += 1
             if not coordinate_in_region(
                 longitude, latitude, scope_region, countries_by_code
             ):
@@ -311,6 +368,7 @@ def load_records(
                     "unit": row.get("normalized_unit") or None,
                     "latitude": latitude,
                     "longitude": longitude,
+                    "coordinate_basis": coordinate_basis,
                     "lithology": row.get("lithology") or None,
                     "geologic_unit": row.get("matched_geologic_unit")
                     or row.get("geologic_unit")
@@ -342,7 +400,7 @@ def load_records(
                     f"valid map points within the configured scope exceed --max-points "
                     f"({max_points}); filter the input first"
                 )
-    return records, total_records, source_mappable_records
+    return records, counts
 
 
 def database_visual_summary(path: Path) -> dict[str, Any]:
@@ -1067,6 +1125,7 @@ def samples_geojson(
     anomaly_ids: set[str],
     profile: Mapping[str, Any],
     scope_region: Mapping[str, Any],
+    coordinate_mode: str = "canonical",
 ) -> dict[str, Any]:
     features = []
     for record in records:
@@ -1090,6 +1149,7 @@ def samples_geojson(
         "type": "FeatureCollection",
         "name": "standardized_geochemical_samples",
         "map_version": MAP_VERSION,
+        "coordinate_mode": coordinate_mode,
         "spatial_scope": {
             "mode": profile["spatial_scope"],
             "region_key": profile["default_region"],
@@ -1143,6 +1203,7 @@ PACKED_FIELDS = (
     "confidence_qc",
     "qc_flags",
     "candidate_anomaly",
+    "coordinate_basis",
 )
 
 
@@ -1206,6 +1267,7 @@ def compact_map_payload(
                 confidence.get("qc"),
                 [string_index(flag) for flag in record.get("qc_flags", [])],
                 1 if str(record.get("record_id")) in anomaly_ids else 0,
+                string_index(record.get("coordinate_basis")),
             ]
         )
     return {
@@ -1236,6 +1298,35 @@ def safe_embedded_json(value: Any) -> str:
         .replace("\u2028", "\\u2028")
         .replace("\u2029", "\\u2029")
     )
+
+
+def inject_reported_coordinate_banner(html: str, statistics: Mapping[str, Any]) -> str:
+    """Insert a prominent unverified-datum warning strip right below <body>."""
+    fallback = int(statistics["mapped_reported_fallback_records"])
+    canonical = int(statistics["mapped_canonical_records"])
+    unplottable = int(statistics["records_without_plottable_coordinates"])
+    banner = (
+        f'<div id="{REPORTED_BANNER_ID}" role="alert" style="position:sticky;'
+        "top:0;z-index:99999;background:#7a5b00;color:#fff7df;"
+        "padding:10px 16px;font:14px/1.5 system-ui,sans-serif;"
+        'border-bottom:2px solid #ffd54d;">'
+        f"⚠️ 报告坐标模式：{fallback} 条记录按来源报告坐标绘制"
+        f"（{REPORTED_BANNER_PHRASE}），不作为 WGS84 精确位置依据"
+        + (f"；{canonical} 条记录仍使用已验证的 WGS84 坐标" if canonical else "")
+        + (
+            f"；另有 {unplottable} 条记录无任何可用坐标，未上图并计入统计"
+            if unplottable
+            else ""
+        )
+        + "。Reported coordinates with an unverified datum are for indicative "
+        "browsing only.</div>"
+    )
+    match = re.search(r"<body[^>]*>", html)
+    if match is None:
+        raise MapBuildError(
+            "interactive map template lacks a <body> tag for the coordinate banner"
+        )
+    return html[: match.end()] + banner + html[match.end() :]
 
 
 def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
@@ -1297,6 +1388,7 @@ def build_map(
     basemap_path: Path = DEFAULT_BASEMAP,
     visualization_profile_path: Path | None = None,
     boundaries_path: Path = DEFAULT_BOUNDARIES,
+    coordinate_mode: str = "canonical",
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
@@ -1307,9 +1399,49 @@ def build_map(
     countries_by_code = {
         str(country["iso_a3"]): country for country in boundaries["countries"]
     }
-    records, total_records, source_mappable_records = load_records(
-        database, max_points, scope_region, countries_by_code
+    records, coordinate_counts = load_records(
+        database, max_points, scope_region, countries_by_code, coordinate_mode
     )
+    total_records = coordinate_counts["total_records"]
+    source_mappable_records = (
+        coordinate_counts["canonical_coordinate_records"]
+        + coordinate_counts["reported_fallback_records"]
+    )
+    scope_excludes_all_records = False
+    if not records:
+        if (
+            coordinate_mode == "canonical"
+            and coordinate_counts["reported_only_records"]
+        ):
+            raise MapBuildError(
+                "0 records carry canonical WGS84 coordinates, but "
+                f"{coordinate_counts['reported_only_records']} records carry "
+                "reported-only coordinates whose datum is unverified. Do not "
+                "hand-write map HTML. Rerun with --coordinate-mode reported to "
+                "draw an explicitly-flagged indicative map, or register datum "
+                "evidence in references/coordinate-policy-registry.json"
+            )
+        if not source_mappable_records:
+            raise MapBuildError(
+                "no record carries plottable coordinates (canonical or "
+                "reported); an empty interactive map must not be delivered - "
+                "report the coverage gap instead"
+            )
+        # An explicitly requested scope may legitimately contain zero records;
+        # the map still renders the basemap, boundaries and scope frame, and
+        # the emptiness is declared as a warning instead of a hard failure.
+        scope_excludes_all_records = True
+    mapped_reported_fallback = sum(
+        record["coordinate_basis"] == COORDINATE_BASIS_REPORTED for record in records
+    )
+    coordinate_statistics = {
+        "coordinate_mode": coordinate_mode,
+        **coordinate_counts,
+        "mapped_record_count": len(records),
+        "mapped_canonical_records": len(records) - mapped_reported_fallback,
+        "mapped_reported_fallback_records": mapped_reported_fallback,
+    }
+    reported_banner = mapped_reported_fallback > 0
     anomalies = load_anomalies(anomalies_path)
     anomaly_regions = (
         load_anomalies(anomaly_regions_path)
@@ -1334,7 +1466,15 @@ def build_map(
     profile_warnings = visualization_profile_warnings(
         profile, records, anomaly_ids, countries_by_code
     )
-    geojson = samples_geojson(records, anomaly_ids, profile, scope_region)
+    if scope_excludes_all_records:
+        profile_warnings.append(
+            "选定区域范围内没有可绘制记录"
+            f"（0/{source_mappable_records} 条可绘源数据落入范围）；"
+            "主画布仅显示底图与区域框架，请核对 bbox 或扩大范围。"
+        )
+    geojson = samples_geojson(
+        records, anomaly_ids, profile, scope_region, coordinate_mode
+    )
     map_payload = compact_map_payload(records, anomaly_ids)
     spatial_scope = {
         "mode": profile["spatial_scope"],
@@ -1430,6 +1570,8 @@ def build_map(
         "total_record_count": total_records,
         "source_mappable_record_count": source_mappable_records,
         "mappable_record_count": len(records),
+        "coordinate_mode": coordinate_mode,
+        "coordinate_statistics": coordinate_statistics,
         "database_visual_summary": database_summary,
         "region_presets": REGION_PRESETS,
         "qc_report": load_json_object(qc_report_path, "QC report"),
@@ -1453,6 +1595,8 @@ def build_map(
         .replace("__BOUNDARIES_JSON__", safe_embedded_json(boundaries))
         .replace("__CONTEXT_JSON__", safe_embedded_json(context))
     )
+    if reported_banner:
+        html = inject_reported_coordinate_banner(html, coordinate_statistics)
     geojson_text = (
         json.dumps(geojson, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         + "\n"
@@ -1480,6 +1624,9 @@ def build_map(
         "template_variant": template_variant,
         "terminology_contract": TERMINOLOGY_CONTRACT,
         "mapped_record_count": len(records),
+        "coordinate_mode": coordinate_mode,
+        "coordinate_statistics": coordinate_statistics,
+        "reported_coordinate_banner": reported_banner,
         "source_mappable_record_count": source_mappable_records,
         "scope_excluded_mappable_record_count": source_mappable_records - len(records),
         "display_sample_count": len(sample_keys),
@@ -1622,6 +1769,16 @@ def build_parser() -> argparse.ArgumentParser:
         default=50_000,
         help="Fail if valid coordinate points exceed this",
     )
+    parser.add_argument(
+        "--coordinate-mode",
+        choices=COORDINATE_MODES,
+        default="canonical",
+        help=(
+            "canonical (default) plots only verified WGS84 coordinates; reported "
+            "additionally plots reported-only coordinates with an unverified datum "
+            "and injects a prominent warning banner into the HTML"
+        ),
+    )
     return parser
 
 
@@ -1645,6 +1802,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             basemap_path=args.basemap,
             visualization_profile_path=args.profile,
             boundaries_path=args.boundaries,
+            coordinate_mode=args.coordinate_mode,
         )
     except (MapBuildError, OSError) as exc:
         parser.error(str(exc))

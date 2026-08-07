@@ -1,0 +1,198 @@
+{
+  "claim_boundary": "The combined package binds two verified slices (6,570 TPDC soil observations and 558 Zenodo river-sediment observations) to one request and evidence chain. It does not increase their geographic representativeness.",
+  "combined_demo_version": "d1-china-combined-v1",
+  "comparison_isolation": {
+    "explicit_boundaries": [
+      "TPDC O, A and C soil horizons remain separate comparison groups.",
+      "Zenodo HCl-residual and AC-residual leach schemes remain separate comparison groups.",
+      "Zenodo size fractions remain separate through grain_fraction and are never averaged.",
+      "TPDC reported GPS coordinates carry no declared datum; canonical coordinates stay empty.",
+      "Zenodo river-sediment records carry no coordinates and never reach a map layer."
+    ],
+    "group_fields": [
+      "element_or_analyte",
+      "medium",
+      "material",
+      "sample_type",
+      "soil_horizon",
+      "sediment_environment",
+      "water_fraction",
+      "grain_fraction",
+      "measurement_basis",
+      "geologic_unit_raw",
+      "matched_geologic_unit",
+      "analytical_method",
+      "method_family",
+      "method_scope",
+      "digestion_or_extraction"
+    ],
+    "partition_count": 63,
+    "raw_input_partition_count": 63
+  },
+  "coordinate_policy": {
+    "tpdc-china-mountain-soil": "GPS coordinates are reported without a declared datum; canonical WGS84 stays empty and mapping requires --coordinate-mode reported with the injected warning banner.",
+    "zenodo-yangtze-yellow-river-sediment": "No sampling coordinates are published; records stay database-only and are excluded from every map layer."
+  },
+  "data_mode": "fixture",
+  "failures": [],
+  "fixture_inputs": [
+    {
+      "evidence_sha256": "993413a26b963c1a82b08a5b4e106bcaedf438fd8ec85e90658980a663c0be74",
+      "generation_manifest": {
+        "demo_generation_version": "d1-demo-slice-v1",
+        "generated_at": "2026-08-08T00:00:00Z",
+        "generation_request": {
+          "analytes": [
+            "Cr",
+            "Cu",
+            "Ni",
+            "Pb",
+            "Zn"
+          ],
+          "bbox": null,
+          "filter_execution": "local deterministic filtering after verified source parsing",
+          "mode": "cached",
+          "observations": 6570
+        },
+        "source": {
+          "dataset_doi": "10.11888/Terre.tpdc.302620",
+          "dataset_version": "tpdc-file-2025-07-23",
+          "license": "CC-BY-4.0",
+          "source_id": "tpdc-china-mountain-soil",
+          "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains"
+        }
+      },
+      "input_sha256": "132daac4ab9a17045aded87609ffd660f080319e056210e382dd09d266ba214e",
+      "record_count": 6570,
+      "source_id": "tpdc-china-mountain-soil"
+    },
+    {
+      "evidence_sha256": "4f810761a59af3b831f7662cf266231f399dbeef55827ba847c31922e18e8e5a",
+      "generation_manifest": {
+        "demo_generation_version": "d1-china-zenodo-s2-v1",
+        "generated_at": "2026-08-08T00:00:00Z",
+        "generation_request": {
+          "analytes": [
+            "As",
+            "Cr",
+            "Cu",
+            "Ni",
+            "Pb",
+            "Zn"
+          ],
+          "bbox": null,
+          "filter_execution": "full verified sample slice after structural QC gates",
+          "mode": "cached",
+          "observations": 558
+        },
+        "source": {
+          "dataset_doi": "10.5281/zenodo.7098563",
+          "dataset_version": "zenodo-record-7098563-rev2-2022-09-21",
+          "license": "CC-BY-4.0",
+          "source_id": "zenodo-yangtze-yellow-river-sediment",
+          "title": "Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments"
+        }
+      },
+      "input_sha256": "201ad05a57aadfe1d5d933e8ef8709e5972af916133f3074346b94d49c976b13",
+      "record_count": 558,
+      "source_id": "zenodo-yangtze-yellow-river-sediment"
+    }
+  ],
+  "generated_at": "2026-08-08T00:00:00Z",
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 9368518,
+      "path": "demo_input.csv",
+      "sha256": "545a3dafa8b6de51a32789c872cd5cb63a5c8d18992aafa1e20abd91b7df5709"
+    },
+    {
+      "bytes": 11166942,
+      "path": "sources.jsonl",
+      "sha256": "885971cab35df53b6e266813dc8cba3fe4e50182eb8920c25680f9d6136cc5fb"
+    }
+  ],
+  "record_counts": {
+    "by_analyte": {
+      "As": 93,
+      "Cr": 1407,
+      "Cu": 1407,
+      "Ni": 1407,
+      "Pb": 1407,
+      "Zn": 1407
+    },
+    "by_medium": {
+      "sediment": 558,
+      "soil": 6570
+    },
+    "by_source": {
+      "tpdc-china-mountain-soil": 6570,
+      "zenodo-yangtze-yellow-river-sediment": 558
+    },
+    "total": 7128
+  },
+  "request": {
+    "elements": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "license_policy": "open_only",
+    "max_records": 50000,
+    "media": [
+      "soil",
+      "sediment"
+    ],
+    "minimum_evidence_tier": "D",
+    "minimum_use_mode": "normalized_analysis",
+    "offline": true,
+    "output_formats": [
+      "csv",
+      "json",
+      "geojson",
+      "html_map"
+    ],
+    "region": {
+      "bbox": [
+        73.0,
+        18.0,
+        135.0,
+        54.0
+      ]
+    },
+    "research_use_policy": "permitted_research",
+    "sources": "auto"
+  },
+  "route": {
+    "notes": "The route is pinned to the two verified China sources instead of the online source router: TPDC is catalogued as needs_human_review (undeclared datum) and the Zenodo deposit is registered only for this fixture. Live re-download remains an optional verification path via the registered URLs.",
+    "selected_sources": [
+      "tpdc-china-mountain-soil",
+      "zenodo-yangtze-yellow-river-sediment"
+    ],
+    "selection_context": "pinned_china_regional_fixture_route",
+    "status": "offline_fixtures_verified"
+  },
+  "scientific_scope": "two verified China-region source slices combined to exercise one soil+sediment regional workflow inside the execution budget",
+  "source_files": [
+    {
+      "bytes": 76596,
+      "filename": "Data Set S2.xlsx",
+      "sha256": "413f54f6544967d1d96b9eacfbeae41ba410a8c4b0375bdfaabc1293fd6fadd2",
+      "source_url": "https://zenodo.org/api/records/7098563/files/Data%20Set%20S2.xlsx/content"
+    },
+    {
+      "bytes": 577715,
+      "filename": "Soil dataset.xlsx",
+      "sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d",
+      "source_url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+    }
+  ],
+  "warnings": [
+    "This combined fixture proves interface compatibility and budget compliance, not representative China-wide coverage.",
+    "TPDC covers 30 mountain ecosystems and the Zenodo slice covers two river systems; neither is a national grid.",
+    "Anomalies produced from fixture groups are pipeline candidates only and cannot support pollution or depletion claims."
+  ]
+}

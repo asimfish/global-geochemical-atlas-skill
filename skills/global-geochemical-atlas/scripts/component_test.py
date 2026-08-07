@@ -10,6 +10,7 @@ import csv
 import hashlib
 import io
 import json
+import os
 import sqlite3
 import struct
 import subprocess
@@ -107,6 +108,17 @@ def csv_rows(path: Path) -> list[dict[str, str]]:
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def visualization_status_ok(report: dict[str, Any]) -> bool:
+    """Accept a valid bundle; tolerate only an explicit no-browser render skip."""
+
+    if report.get("status") == "valid":
+        return True
+    return (
+        report.get("status") == "needs_render_confirmation"
+        and report.get("render_smoke", {}).get("status") == "skipped_no_browser"
+    )
 
 
 def run_command(
@@ -3207,6 +3219,127 @@ def check_d1(output_dir: Path) -> list[str]:
             "D1 GEOROC adapter handles CR-delimited CSV and stops before reference text",
             checks,
         )
+    china_fixture = SKILL_DIR / "fixtures" / "china" / "combined-v1"
+    china_manifest = json_value(china_fixture / "run_manifest.json")
+    china_rows = csv_rows(china_fixture / "demo_input.csv")
+    china_evidence = [
+        json.loads(line)
+        for line in (china_fixture / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+        if line.strip()
+    ]
+    require(
+        {item["path"]: item["sha256"] for item in china_manifest["outputs"]}
+        == {
+            "demo_input.csv": sha256_file(china_fixture / "demo_input.csv"),
+            "sources.jsonl": sha256_file(china_fixture / "sources.jsonl"),
+        }
+        and china_manifest["record_counts"]["total"] == 7128
+        and china_manifest["record_counts"]["by_source"]
+        == {
+            "tpdc-china-mountain-soil": 6570,
+            "zenodo-yangtze-yellow-river-sediment": 558,
+        }
+        and len(china_rows) == 7128
+        and len(china_evidence) == 7128
+        and {row["record_id"] for row in china_rows}
+        == {str(row.get("record_id") or "") for row in china_evidence},
+        "D1 China combined fixture matches its pinned hashes with one-to-one evidence",
+        checks,
+    )
+    china_zenodo = [
+        row
+        for row in china_rows
+        if row["source_id"] == "zenodo-yangtze-yellow-river-sediment"
+    ]
+    china_tpdc = [
+        row for row in china_rows if row["source_id"] == "tpdc-china-mountain-soil"
+    ]
+    require(
+        len(china_zenodo) == 558
+        and {row["unit"] for row in china_zenodo} == {"ug/g"}
+        and {row["medium"] for row in china_zenodo} == {"sediment"}
+        and {row["license"] for row in china_zenodo} == {"CC-BY-4.0"}
+        and {row["dataset_doi"] for row in china_zenodo} == {"10.5281/zenodo.7098563"}
+        and {row["file_sha256"] for row in china_zenodo}
+        == {"413f54f6544967d1d96b9eacfbeae41ba410a8c4b0375bdfaabc1293fd6fadd2"}
+        and not any(
+            row["latitude"]
+            or row["longitude"]
+            or row["original_latitude_raw"]
+            or row["original_longitude_raw"]
+            for row in china_zenodo
+        )
+        and {row["method_missing_reason"] for row in china_zenodo}
+        == {"workbook_reports_no_analytical_method"}
+        and {row["sample_type"] for row in china_zenodo} == {"sediment_river_fraction"}
+        and {row["measurement_basis"] for row in china_zenodo}
+        == {"HCl_residual_size_fraction", "AC_residual_size_fraction"},
+        "D1 Zenodo river-sediment slice stays database-only with dataset-scoped provenance",
+        checks,
+    )
+    require(
+        len(china_tpdc) == 6570
+        and all(
+            row["original_latitude_raw"] and row["original_longitude_raw"]
+            for row in china_tpdc
+        )
+        and not any(row["latitude"] or row["longitude"] for row in china_tpdc)
+        and {row["file_sha256"] for row in china_tpdc}
+        == {"923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d"},
+        "D1 TPDC full slice keeps reported-only coordinates fail-closed at fixture scope",
+        checks,
+    )
+    require(
+        request_runner.planned_slice_observations("gemstat-open-archive", 4, 50000)
+        == 56
+        and request_runner.planned_slice_observations(
+            "us-wqp-sacramento-river-arsenic", 1, 50000
+        )
+        == 48
+        and request_runner.planned_slice_observations(
+            "afsis-phase-i-wet-chemistry", 4, 50000
+        )
+        == 48
+        and request_runner.planned_slice_observations(
+            "australia-ngsa-mercury", 1, 50000
+        )
+        == 48
+        and request_runner.planned_slice_observations("foregs-topsoil", 4, 50000) == 48
+        and request_runner.planned_slice_observations("usgs-conus-soil", 4, 50000)
+        == 996
+        and request_runner.planned_slice_observations("georoc-archaean", 4, 50000)
+        == 384
+        and request_runner.planned_slice_observations(
+            "tpdc-china-mountain-soil", 4, 50000
+        )
+        == 480
+        and request_runner.planned_slice_observations(
+            "pangaea-arabian-sea-sediment", 4, 50000
+        )
+        == 162
+        and request_runner.planned_slice_observations("gemas-europe", 4, 50000) == 988
+        and request_runner.planned_slice_observations(
+            "japan-gsj-marine-sediment", 4, 50000
+        )
+        % 7
+        == 0
+        and request_runner.planned_slice_observations("usgs-conus-soil", 4, 100) == 96
+        and all(
+            request_runner.planned_slice_observations(source_id, 4, 50000)
+            <= request_runner.GENERATOR_MAX_OBSERVATIONS
+            for source_id in (
+                *request_runner.SLICE_DIVISORS,
+                *request_runner.FIXED_SLICE_OBSERVATIONS,
+                "usgs-conus-soil",
+                "georoc-archaean",
+                "foregs-topsoil",
+            )
+        ),
+        "D1 online slice planner scales with registered capacity while honoring frozen slice contracts",
+        checks,
+    )
     return checks
 
 
@@ -4515,8 +4648,9 @@ def check_d3(output_dir: Path) -> list[str]:
             require(
                 generated_profile.get("story") == expected_story
                 and generated_report.get("profile") == generated_profile
-                and visualization_validator.validate_dir(bundle).get("status")
-                == "valid",
+                and visualization_status_ok(
+                    visualization_validator.validate_dir(bundle)
+                ),
                 f"D3 question profile reproduces the {case_name} task without HTML edits",
                 checks,
             )
@@ -4609,8 +4743,9 @@ def check_d3(output_dir: Path) -> list[str]:
         require(
             not (stale_bundle / "element_comparison.json").exists()
             and not (stale_bundle / "concentration_grid.geojson").exists()
-            and visualization_validator.validate_dir(stale_bundle).get("status")
-            == "valid",
+            and visualization_status_ok(
+                visualization_validator.validate_dir(stale_bundle)
+            ),
             "D3 force rerender removes structured artifacts not triggered by the new profile",
             checks,
         )
@@ -4816,7 +4951,7 @@ def check_d3(output_dir: Path) -> list[str]:
         )
         require(
             all(
-                visualization_validator.validate_dir(path).get("status") == "valid"
+                visualization_status_ok(visualization_validator.validate_dir(path))
                 for path in (visualization_output, city_output)
             ),
             "D3 global and regional standalone bundles pass the dedicated public validator",
@@ -4873,6 +5008,117 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 public runner completes a named-country plus matched-geology request with consistent outputs",
             checks,
         )
+    with tempfile.TemporaryDirectory(prefix="china-request-") as china_temp:
+        china_root = Path(china_temp)
+        china_fixture = SKILL_DIR / "fixtures" / "china" / "combined-v1"
+        china_output = china_root / "output"
+        run_command(
+            [
+                sys.executable,
+                str(REQUEST_RUNNER),
+                "--request",
+                str(china_fixture / "request.json"),
+                "--demo",
+                "china",
+                "--coordinate-mode",
+                "reported",
+                "--analysis-profile",
+                "production",
+                "--generated-at",
+                "2026-08-08T00:00:00Z",
+                "--output-dir",
+                str(china_output),
+            ]
+        )
+        china_summary = json_value(china_output / "run_summary.json")
+        china_statistics = china_summary["map_report"]["coordinate_statistics"]
+        china_html = (china_output / "interactive_map.html").read_text(encoding="utf-8")
+        require(
+            china_summary["status"] == "partial_success"
+            and china_statistics["mapped_reported_fallback_records"] == 6570
+            and china_statistics["mapped_canonical_records"] == 0
+            and china_statistics["records_without_plottable_coordinates"] == 558
+            and map_builder.REPORTED_BANNER_PHRASE in china_html
+            and any("unverified datum" in item for item in china_summary["limitations"])
+            and output_validator.validate_dir(china_output)["status"] == "valid",
+            "D3 China fixture request maps reported coordinates with the warning banner and full artifacts",
+            checks,
+        )
+        validator_script = SCRIPT_DIR / "validate_visualization.py"
+        no_browser_environment = {**os.environ, "GGA_HEADLESS_BROWSER": ""}
+        no_browser = subprocess.run(
+            [
+                sys.executable,
+                str(validator_script),
+                "--html",
+                str(china_output / "interactive_map.html"),
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+            env=no_browser_environment,
+        )
+        no_browser_report = json.loads(no_browser.stdout)
+        require(
+            no_browser.returncode == 3
+            and no_browser_report["status"] == "needs_render_confirmation"
+            and no_browser_report["render_smoke"]["status"] == "skipped_no_browser",
+            "D3 render smoke reports an explicit skip and exit code 3 without a browser",
+            checks,
+        )
+        if visualization_validator.find_headless_browser():
+            reported_gate = subprocess.run(
+                [
+                    sys.executable,
+                    str(validator_script),
+                    "--html",
+                    str(china_output / "interactive_map.html"),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            reported_report = json.loads(reported_gate.stdout)
+            reported_smoke = reported_report["render_smoke"]
+            require(
+                reported_gate.returncode == 0
+                and reported_smoke["status"] == "pass"
+                and reported_smoke["dom"]["banner_present"] is True
+                and not reported_smoke["console_uncaught_errors"]
+                and (
+                    reported_smoke["dom"]["svg_graphic_elements"] > 0
+                    or (
+                        reported_smoke["dom"]["canvas_elements"] > 0
+                        and reported_smoke["dom"]["render_attest"].get("symbols", 0) > 0
+                    )
+                ),
+                "D3 render smoke passes on the China reported-mode map in a real headless browser",
+                checks,
+            )
+            broken_html = china_root / "broken.html"
+            broken_html.write_text(
+                "<!doctype html><html><head><script>throw new TypeError("
+                "\"Cannot read properties of undefined (reading 'type')\");"
+                "</script></head><body><svg></svg></body></html>",
+                encoding="utf-8",
+            )
+            broken_gate = subprocess.run(
+                [
+                    sys.executable,
+                    str(validator_script),
+                    "--html",
+                    str(broken_html),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            require(
+                broken_gate.returncode == 1
+                and json.loads(broken_gate.stdout)["render_smoke"]["status"] == "fail",
+                "D3 render smoke fails closed on a blank map with an uncaught console error",
+                checks,
+            )
     return checks
 
 

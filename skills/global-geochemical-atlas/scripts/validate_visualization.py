@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
-"""Validate a standalone profile-driven D3 visualization bundle."""
+"""Validate a standalone D3 visualization bundle, including a real render smoke test."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
+import shutil
+import struct
+import subprocess
+import tempfile
+import zlib
+from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any, cast
@@ -15,6 +23,278 @@ import validate_outputs as workflow_validator
 
 
 MAX_OUTPUT_BYTES = 100_000_000
+
+# --- headless render smoke -------------------------------------------------
+BROWSER_ENV = "GGA_HEADLESS_BROWSER"
+BROWSER_CANDIDATES = (
+    "google-chrome",
+    "google-chrome-stable",
+    "chromium",
+    "chromium-browser",
+    "headless_shell",
+    "msedge",
+)
+RENDER_ATTEST_MARKER = "data-gca-render-attest"
+BANNER_MARKER = f'id="{map_builder.REPORTED_BANNER_ID}"'
+REPORTED_MODE_MARKER = '"coordinate_mode":"reported"'
+SVG_GRAPHIC_PATTERN = re.compile(
+    r"<(?:circle|path|polygon|polyline|rect|ellipse|line)\b", re.IGNORECASE
+)
+CANVAS_PATTERN = re.compile(r"<canvas\b", re.IGNORECASE)
+ATTEST_PATTERN = re.compile(r'data-gca-render-attest="([^"]*)"')
+RENDER_TIMEOUT_SECONDS = 60.0
+VIRTUAL_TIME_BUDGET_MS = 10_000
+MIN_PAINTED_FRACTION = 0.02
+MIN_DISTINCT_COLORS = 16
+
+
+def find_headless_browser() -> str | None:
+    """Locate a Chromium-family browser; GGA_HEADLESS_BROWSER overrides discovery."""
+    override = os.environ.get(BROWSER_ENV)
+    if override is not None:
+        if override.strip() == "":
+            return None
+        return override if shutil.which(override) else None
+    for candidate in BROWSER_CANDIDATES:
+        found = shutil.which(candidate)
+        if found:
+            return found
+    return None
+
+
+def _browser_run(
+    browser: str, extra_args: Sequence[str], target: str
+) -> tuple[int, str, str]:
+    command = [
+        browser,
+        "--headless=new",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--hide-scrollbars",
+        "--window-size=1280,860",
+        f"--virtual-time-budget={VIRTUAL_TIME_BUDGET_MS}",
+        "--enable-logging=stderr",
+        *extra_args,
+        target,
+    ]
+    result = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=RENDER_TIMEOUT_SECONDS,
+    )
+    return result.returncode, result.stdout, result.stderr
+
+
+def _console_uncaught_lines(stderr: str) -> list[str]:
+    """Keep page console lines reporting uncaught errors; drop network/OS noise."""
+    lines = []
+    for line in stderr.splitlines():
+        if "CONSOLE" in line and "uncaught" in line.casefold():
+            lines.append(line.strip())
+    return lines
+
+
+def _png_unfilter(width: int, height: int, bpp: int, raw: bytes) -> bytes:
+    stride = width * bpp
+    out = bytearray()
+    prev = bytearray(stride)
+    pos = 0
+    for _ in range(height):
+        if pos >= len(raw):
+            raise ValueError("PNG scanline data is truncated")
+        filter_type = raw[pos]
+        pos += 1
+        line = bytearray(raw[pos : pos + stride])
+        if len(line) < stride:
+            raise ValueError("PNG scanline data is truncated")
+        pos += stride
+        if filter_type == 1:
+            for i in range(bpp, stride):
+                line[i] = (line[i] + line[i - bpp]) & 0xFF
+        elif filter_type == 2:
+            for i in range(stride):
+                line[i] = (line[i] + prev[i]) & 0xFF
+        elif filter_type == 3:
+            for i in range(stride):
+                left = line[i - bpp] if i >= bpp else 0
+                line[i] = (line[i] + ((left + prev[i]) >> 1)) & 0xFF
+        elif filter_type == 4:
+            for i in range(stride):
+                a = line[i - bpp] if i >= bpp else 0
+                b = prev[i]
+                c = prev[i - bpp] if i >= bpp else 0
+                p = a + b - c
+                pa, pb, pc = abs(p - a), abs(p - b), abs(p - c)
+                predictor = a if pa <= pb and pa <= pc else (b if pb <= pc else c)
+                line[i] = (line[i] + predictor) & 0xFF
+        elif filter_type != 0:
+            raise ValueError(f"unsupported PNG filter type {filter_type}")
+        out += line
+        prev = line
+    return bytes(out)
+
+
+def png_paint_statistics(data: bytes) -> dict[str, Any]:
+    """Decode a non-interlaced 8-bit RGB/RGBA PNG and measure painted coverage."""
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError("not a PNG file")
+    pos = 8
+    width = height = 0
+    bpp = 0
+    idat = bytearray()
+    while pos + 8 <= len(data):
+        (length,) = struct.unpack(">I", data[pos : pos + 4])
+        chunk_type = data[pos + 4 : pos + 8]
+        chunk = data[pos + 8 : pos + 8 + length]
+        pos += 12 + length
+        if chunk_type == b"IHDR":
+            width, height, bit_depth, color_type, _, _, interlace = struct.unpack(
+                ">IIBBBBB", chunk
+            )
+            if bit_depth != 8 or color_type not in (2, 6) or interlace != 0:
+                raise ValueError(
+                    "render smoke expects an 8-bit non-interlaced RGB/RGBA screenshot"
+                )
+            bpp = 3 if color_type == 2 else 4
+        elif chunk_type == b"IDAT":
+            idat += chunk
+        elif chunk_type == b"IEND":
+            break
+    if not width or not height or not idat:
+        raise ValueError("PNG lacks IHDR/IDAT data")
+    pixels = _png_unfilter(width, height, bpp, zlib.decompress(bytes(idat)))
+    counts: Counter[tuple[int, int, int]] = Counter()
+    stride = width * bpp
+    step = 2
+    for y in range(0, height, step):
+        row = y * stride
+        for x in range(0, width, step):
+            offset = row + x * bpp
+            counts[
+                (
+                    pixels[offset] >> 4,
+                    pixels[offset + 1] >> 4,
+                    pixels[offset + 2] >> 4,
+                )
+            ] += 1
+    sampled = sum(counts.values())
+    top_share = counts.most_common(1)[0][1] / sampled if sampled else 1.0
+    return {
+        "width": width,
+        "height": height,
+        "sampled_pixels": sampled,
+        "non_background_fraction": round(1.0 - top_share, 6),
+        "distinct_quantized_colors": len(counts),
+    }
+
+
+def render_smoke(html_path: Path) -> dict[str, Any]:
+    """Load the map in a headless browser and verify it actually draws.
+
+    Returns status "pass", "fail", or "skipped_no_browser". A skipped result
+    means no Chromium-family browser was found; the map then REQUIRES manual
+    visual confirmation before delivery and must not be treated as validated.
+    """
+    html_source = html_path.read_text(encoding="utf-8", errors="replace")
+    banner_required = REPORTED_MODE_MARKER in html_source
+    report: dict[str, Any] = {
+        "html": str(html_path),
+        "banner_required": banner_required,
+        "banner_in_source": BANNER_MARKER in html_source,
+    }
+    browser = find_headless_browser()
+    if browser is None:
+        report.update(
+            {
+                "status": "skipped_no_browser",
+                "browser": None,
+                "action_required": (
+                    "no headless Chromium-family browser was found; open the map "
+                    "manually, confirm visible sample graphics and the absence of "
+                    "console errors, and record that confirmation - do not deliver "
+                    "an unreviewed map"
+                ),
+            }
+        )
+        return report
+    report["browser"] = browser
+    target = html_path.resolve().as_uri()
+    reasons: list[str] = []
+    try:
+        dom_rc, dom, dom_stderr = _browser_run(browser, ["--dump-dom"], target)
+        with tempfile.TemporaryDirectory() as tmp:
+            shot = Path(tmp) / "render.png"
+            shot_rc, _, shot_stderr = _browser_run(
+                browser, [f"--screenshot={shot}"], target
+            )
+            screenshot: dict[str, Any]
+            if shot_rc == 0 and shot.is_file():
+                try:
+                    screenshot = png_paint_statistics(shot.read_bytes())
+                except (ValueError, zlib.error) as exc:
+                    screenshot = {"error": f"screenshot decode failed: {exc}"}
+            else:
+                screenshot = {"error": f"screenshot capture failed (rc={shot_rc})"}
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        report.update(
+            {"status": "fail", "reasons": [f"headless browser did not complete: {exc}"]}
+        )
+        return report
+    uncaught = _console_uncaught_lines(dom_stderr) + _console_uncaught_lines(
+        shot_stderr
+    )
+    svg_graphics = len(SVG_GRAPHIC_PATTERN.findall(dom))
+    canvas_elements = len(CANVAS_PATTERN.findall(dom))
+    attest_match = ATTEST_PATTERN.search(dom)
+    attest: dict[str, Any] | None = None
+    if attest_match:
+        try:
+            attest = json.loads(
+                attest_match.group(1).replace("&quot;", '"').replace("&amp;", "&")
+            )
+        except json.JSONDecodeError:
+            attest = None
+    painted = bool(
+        not screenshot.get("error")
+        and screenshot.get("non_background_fraction", 0.0) >= MIN_PAINTED_FRACTION
+        and screenshot.get("distinct_quantized_colors", 0) >= MIN_DISTINCT_COLORS
+    )
+    attest_symbols = int(attest.get("symbols", 0)) if isinstance(attest, dict) else 0
+    banner_present = BANNER_MARKER in dom
+    if dom_rc != 0:
+        reasons.append(f"headless DOM dump failed (rc={dom_rc})")
+    if uncaught:
+        reasons.append("console reported uncaught errors")
+    visible_graphics = (
+        svg_graphics > 0 or attest_symbols > 0 or (canvas_elements > 0 and painted)
+    )
+    if not visible_graphics:
+        reasons.append(
+            "no visible graphic elements: 0 SVG shapes, no render attestation, "
+            "and the canvas screenshot shows no painted content"
+        )
+    if banner_required and not banner_present:
+        reasons.append(
+            "reported-coordinate map is missing its unverified-datum warning banner"
+        )
+    report.update(
+        {
+            "status": "pass" if not reasons else "fail",
+            "dom": {
+                "svg_graphic_elements": svg_graphics,
+                "canvas_elements": canvas_elements,
+                "render_attest": attest,
+                "banner_present": banner_present,
+            },
+            "screenshot": screenshot,
+            "console_uncaught_errors": uncaught[:5],
+            "reasons": reasons,
+        }
+    )
+    return report
 
 
 def validate_dir(output_dir: Path) -> dict[str, Any]:
@@ -458,10 +738,44 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             "record_evidence.jsonl was not present in the D1/D2 input and was not carried into D3"
         )
 
+    if isinstance(report, dict):
+        map_report = report.get("map_report")
+        if (
+            isinstance(map_report, dict)
+            and map_report.get("coordinate_mode") == "reported"
+            and map_report.get("reported_coordinate_banner")
+        ):
+            html_source = paths["interactive_map.html"].read_text(
+                encoding="utf-8", errors="replace"
+            )
+            if BANNER_MARKER not in html_source:
+                errors.append(
+                    "reported-coordinate map lost its unverified-datum warning banner"
+                )
+
+    smoke = render_smoke(paths["interactive_map.html"])
+    if smoke["status"] == "fail":
+        errors.append(
+            "interactive_map.html failed the headless render smoke test: "
+            + "; ".join(smoke.get("reasons", []))
+        )
+    elif smoke["status"] == "skipped_no_browser":
+        warnings.append(
+            "render smoke test skipped: no headless browser found; the map "
+            "REQUIRES manual visual confirmation before delivery"
+        )
+
+    if errors:
+        status = "invalid"
+    elif smoke["status"] == "skipped_no_browser":
+        status = "needs_render_confirmation"
+    else:
+        status = "valid"
     return {
-        "status": "valid" if not errors else "invalid",
+        "status": status,
         "errors": errors,
         "warnings": warnings,
+        "render_smoke": smoke,
         "metrics": {
             **database_metrics,
             "record_evidence_count": evidence_count,
@@ -475,8 +789,14 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--output-dir", required=True, type=Path, help="Standalone D3 bundle"
+    target = parser.add_mutually_exclusive_group(required=True)
+    target.add_argument(
+        "--output-dir", type=Path, help="Standalone D3 bundle to validate in full"
+    )
+    target.add_argument(
+        "--html",
+        type=Path,
+        help="Single interactive_map.html to render-smoke-test in isolation",
     )
     return parser
 
@@ -484,7 +804,26 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
-        report = validate_dir(args.output_dir)
+        if args.html is not None:
+            smoke = render_smoke(args.html)
+            status = {
+                "pass": "valid",
+                "fail": "invalid",
+                "skipped_no_browser": "needs_render_confirmation",
+            }[smoke["status"]]
+            report: dict[str, Any] = {
+                "status": status,
+                "errors": smoke.get("reasons", []) if status == "invalid" else [],
+                "warnings": (
+                    [smoke["action_required"]]
+                    if status == "needs_render_confirmation"
+                    else []
+                ),
+                "render_smoke": smoke,
+                "metrics": {},
+            }
+        else:
+            report = validate_dir(args.output_dir)
     except OSError as exc:
         report = {
             "status": "invalid",
@@ -493,7 +832,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             "metrics": {},
         }
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
-    return 0 if report["status"] == "valid" else 1
+    if report["status"] == "valid":
+        return 0
+    if report["status"] == "needs_render_confirmation":
+        return 3
+    return 1
 
 
 if __name__ == "__main__":

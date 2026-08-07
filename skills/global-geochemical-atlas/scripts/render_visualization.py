@@ -157,6 +157,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             ),
             iteration_backlog_path=backlog_path,
             visualization_profile_path=args.profile,
+            coordinate_mode=args.coordinate_mode,
         )
     except map_builder.MapBuildError as exc:
         message = str(exc)
@@ -330,6 +331,16 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=50_000,
         help="Fail closed above this mappable record count",
+    )
+    parser.add_argument(
+        "--coordinate-mode",
+        choices=map_builder.COORDINATE_MODES,
+        default="canonical",
+        help=(
+            "canonical (default) plots only verified WGS84 coordinates; reported "
+            "additionally plots reported-only coordinates with an unverified datum "
+            "and injects a prominent warning banner"
+        ),
     )
     parser.add_argument(
         "--force", action="store_true", help="Replace generated D3 files"

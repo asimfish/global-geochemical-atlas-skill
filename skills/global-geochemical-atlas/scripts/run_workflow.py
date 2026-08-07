@@ -300,6 +300,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             spatial_anomaly_report_path=outputs["spatial_anomaly_report"],
             iteration_backlog_path=backlog_path,
             visualization_profile_path=args.visualization_profile,
+            coordinate_mode=args.coordinate_mode,
         )
     except (map_builder.MapBuildError, OSError) as exc:
         raise WorkflowError(
@@ -321,6 +322,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "Candidate anomalies are screening results relative to declared background groups, not causal conclusions.",
         "Map density uses observed points only; no interpolation is performed across unsampled areas.",
     ]
+    reported_fallback_mapped = int(
+        map_report.get("coordinate_statistics", {}).get(
+            "mapped_reported_fallback_records", 0
+        )
+    )
+    if reported_fallback_mapped:
+        limitations.append(
+            f"{reported_fallback_mapped} mapped record(s) use source-reported "
+            "coordinates with an unverified datum (reported coordinate mode); "
+            "positions are indicative for browsing, not verified WGS84."
+        )
     if synthetic_present:
         limitations.insert(
             0,
@@ -503,6 +515,16 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=50_000,
         help="Fail closed above this input count",
+    )
+    parser.add_argument(
+        "--coordinate-mode",
+        choices=map_builder.COORDINATE_MODES,
+        default="canonical",
+        help=(
+            "canonical (default) maps only verified WGS84 coordinates; reported "
+            "additionally maps reported-only coordinates with an unverified datum "
+            "and injects a prominent warning banner into interactive_map.html"
+        ),
     )
     parser.add_argument(
         "--group-by",
