@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:task-contract:v1",
+  "title": "Deterministic atlas task contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "task_type", "output_dir"],
+  "properties": {
+    "contract_version": {"const": "atlas-task-contract-v1"},
+    "task_type": {
+      "enum": [
+        "source_discovery",
+        "normalize_qc",
+        "spatial_geology",
+        "anomaly_screening",
+        "visualization",
+        "element_comparison",
+        "full_atlas"
+      ]
+    },
+    "request": {"type": ["string", "null"], "minLength": 1, "maxLength": 4096},
+    "input": {"type": ["string", "null"], "minLength": 1, "maxLength": 4096},
+    "evidence_jsonl": {"type": ["string", "null"], "minLength": 1, "maxLength": 4096},
+    "acquisition_manifest": {"type": ["string", "null"], "minLength": 1, "maxLength": 4096},
+    "input_dir": {"type": ["string", "null"], "minLength": 1, "maxLength": 4096},
+    "profile": {"type": ["string", "null"], "minLength": 1, "maxLength": 4096},
+    "output_dir": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "acquisition_mode": {
+      "enum": ["provided_input", "online_auto", "production_demo", "four_media_demo"],
+      "default": "provided_input"
+    },
+    "required_outputs": {
+      "type": ["array", "null"],
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "source_route.json", "coverage.json", "coverage.md", "geochemistry.csv",
+          "source_manifest.json", "record_evidence.jsonl", "qc_report.json",
+          "confidence_report.json", "batch_acceptance.csv", "batch_qc_report.json",
+          "anomalies.geojson", "anomaly_report.json", "anomaly_regions.geojson",
+          "spatial_anomaly_report.json", "samples.geojson", "interactive_map.html",
+          "iteration_backlog.csv", "run_summary.json", "visualization_report.json",
+          "element_comparison.json"
+        ]
+      }
+    },
+    "deadline_seconds": {"type": "number", "minimum": 1, "maximum": 840, "default": 840}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"task_type": {"enum": ["source_discovery", "full_atlas"]}}},
+      "then": {
+        "required": ["request"],
+        "properties": {"request": {"type": "string", "minLength": 1}}
+      }
+    },
+    {
+      "if": {"properties": {"task_type": {"enum": ["normalize_qc", "spatial_geology", "anomaly_screening"]}}},
+      "then": {
+        "required": ["input"],
+        "properties": {"input": {"type": "string", "minLength": 1}}
+      }
+    },
+    {
+      "if": {"properties": {"task_type": {"enum": ["visualization", "element_comparison"]}}},
+      "then": {
+        "required": ["input_dir", "profile"],
+        "properties": {
+          "input_dir": {"type": "string", "minLength": 1},
+          "profile": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "task_type": {"const": "full_atlas"},
+          "acquisition_mode": {"enum": ["online_auto", "production_demo", "four_media_demo"]}
+        },
+        "required": ["acquisition_mode"]
+      },
+      "else": {
+        "if": {"properties": {"task_type": {"const": "full_atlas"}}},
+        "then": {
+          "required": ["input"],
+          "properties": {"input": {"type": "string", "minLength": 1}}
+        }
+      }
+    }
+  ]
+}
