@@ -1,34 +1,35 @@
-# Qwen3.8-Max 无 Skill 组：主机版（不使用 Docker）
+# Qwen3.8-Max 无 Skill 组：主机正式运行入口
 
-把 Qwen Agent 启动在一个新的空目录中，原样粘贴下面 Prompt。该版本直接使用主机环境，不检查、不构建也不调用 Docker。
+不要把完整仓库交给候选 Agent。本文件是外部实验控制器说明；候选实际只读取导出后的 `AGENT_PROMPT.md`。
 
-````text
-你正在执行全球地球化学图谱 Skill uplift 的无 Skill 主机对照实验。请直接完成任务，不要只给方案，不要询问确认。当前目录应为空；禁止读取、安装、搜索或使用任何 Agent Skill，也禁止复用其他会话的代码或结论。
-
-固定参数：repository=https://github.com/asimfish/global-geochemical-atlas-skill.git；commit=c59f2ab424480e5dc700d0628833c7cae9323bdf；model=Qwen3.8-Max；temperature=0；公开 scorer 最多三轮。只把锚点与新增来源的网络传输耗时单列；来源规划、解析和处理仍计入执行耗时。本实验禁止调用 Docker；`runtime_mode` 必须记录为 `host`。
-
-若当前目录非空，不要删除现有文件，创建 `qwen_no_skill_host_uplift/` 并进入。执行等价操作：
+固定参数：repository=`https://github.com/asimfish/global-geochemical-atlas-skill.git`；
+commit=`c59f2ab424480e5dc700d0628833c7cae9323bdf`；model=`Qwen3.8-Max`；temperature=0；
+`runtime_mode=host`；`skill_used=false`。主机版不使用 Docker，禁止候选调用 Docker。
 
 ```bash
 git clone --filter=blob:none --no-checkout \
-  https://github.com/asimfish/global-geochemical-atlas-skill.git bootstrap_repo
-git -C bootstrap_repo checkout --detach c59f2ab424480e5dc700d0628833c7cae9323bdf
-test "$(git -C bootstrap_repo rev-parse HEAD)" = "c59f2ab424480e5dc700d0628833c7cae9323bdf"
-mkdir work
-git -C bootstrap_repo archive c59f2ab424480e5dc700d0628833c7cae9323bdf \
-  evaluation_lyf/agent_uplift | tar -x -C work
-rm -rf bootstrap_repo
+  https://github.com/asimfish/global-geochemical-atlas-skill.git controller_repo
+git -C controller_repo checkout --detach c59f2ab424480e5dc700d0628833c7cae9323bdf
+
+python3 controller_repo/evaluation_lyf/agent_uplift/export_candidate_bundle.py \
+  --repo-root controller_repo \
+  --condition B0 \
+  --mode formal \
+  --prompt controller_repo/evaluation_lyf/agent_uplift/candidate_prompts/HOST_B0.md \
+  --output candidate_B0_host
 ```
 
-不要扩展 archive。`work/` 中不得存在 `.git` 或 `skills/`；不得读取 `stage_benchmark/`、`reference_implementation/`、gold、私有评分资料或历史运行。只在 `work/evaluation_lyf/agent_uplift/` 工作。
+然后在全新 Qwen3.8-Max 会话中把工作目录设为 `candidate_B0_host/`，原样提供 `AGENT_PROMPT.md`。候选不得看
+controller_repo、公开 scorer、隐藏 checker、rubric、gold、Skill 或另一实验臂。正式 bundle 从第一秒完成隔离；
+不再使用“候选先 checkout 再删除”的做法。
 
-完整读取 `TASK.md`、`public_case/sources.json`、`public_case/discovery_contract.json`、`public_case/prepare_case.py` 和 `public_case/score_submission.py`，分别记录这五个任务文件的 SHA-256，之后不得修改任何一个。使用主机 Python 准备 `experiment/no_skill_host/case_data/`：下载固定锚点，再按冻结 global 请求执行有界多平台发现，把新增真实文件与 `discovered_manifest.json` 冻结进 `case_data/`；只处理四个固定地球化学锚点属于未完成 D1。冻结采集输入后断网处理，再现场实现 TASK 要求的 D1、D2、D3、来源置信度、异常结果、交互地图、报告和 `run.sh`。
+候选退出后，由控制器在候选不可见目录运行来源真实性门禁、`evaluation/reporting/browser_audit.py`、带
+`--browser-audit` 的 `score_submission.py` 和 `evaluation/reporting/generate_report.py`。正式实验创建三个全新
+B0 会话；公开 scorer 最多三轮只适用于另行导出的 development bundle。用控制器侧
+`evaluation/reporting/build_experiment_manifest.py` 生成而非接受候选写入的 `experiment_manifest.json`；保存
+`case_data/discovered_manifest.json`、clean rebuild、浏览器截图、统一报告和所有 SHA-256。
+三个 B0 与三个 S0 报告最终统一交给 `evaluation/reporting/aggregate_uplift.py`。
 
-最多三轮“实现→公开 scorer→修正”，每轮必须用 `python public_case/score_submission.py --case-dir experiment/no_skill_host/case_data --submission-dir <本轮目录> --output <本轮score.json>` 评分，并分别保存原始 score、stdout、stderr、退出码和耗时，不得覆盖失败证据。检查 score 中 `source_truth.anchors.source_truth_score`、`source_truth.discovered.source_truth_score` 和 `source_truth.overall.source_truth_score`，不得用近似 DOI、空许可证、合成点或未绑定本地文件的哈希骗过来源核验。最终 `agent_report.json` 必须含字面字段 `"skill_used": false`。保留冻结的 `case_data/`，在新的 `clean_rebuild/` 从空 submission 实际运行 `run.sh` 并再次评分，不能复制最终产物冒充重建。
-
-写出 `experiment/no_skill_host/experiment_manifest.json`，记录固定参数、`skill_used=false`、`runtime_mode=host`、Python/OS/依赖、scorer 与数据哈希、anchor/discovered 下载传输耗时、包含来源规划和处理的 execution_seconds、各轮分数、clean rebuild 结果以及产物路径和 SHA-256。
-
-未报告的方法、地质背景和坐标精度必须为 unknown；删失值不能变成精确值或零；水体和海洋沉积物不能赋陆地岩性；异常只能称候选高/低值，不能宣称污染、矿化或成因。失败也必须保留证据。
-
-最终回复列出 commit、`skill_used=false`、`runtime_mode=host`、下载/执行耗时、每轮和重建分数、失败项，以及 manifest、最终 score、agent_report 和 interactive_map 的绝对路径与字节数。
-````
+只处理四个固定地球化学锚点属于未完成 D1；TASK 要求有界多平台发现。检查最终 score 中
+`source_truth.anchors.source_truth_score`、`source_truth.discovered.source_truth_score` 和
+`source_truth.overall.source_truth_score`。下载传输耗时单列，来源规划、解析和处理属于 execution_seconds。

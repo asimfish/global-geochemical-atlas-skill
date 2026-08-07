@@ -56,6 +56,11 @@ REQUIRED_DATABASE_COLUMNS = {
     "normalized_unit",
     "latitude",
     "longitude",
+    "coordinate_evidence_scope",
+    "coordinate_policy_id",
+    "coordinate_policy_version",
+    "coordinate_policy_url",
+    "coordinate_policy_sha256",
     "analytical_method",
     "method_scope",
     "digestion_or_extraction",
@@ -480,6 +485,14 @@ def validate_html(path: Path, errors: list[str]) -> None:
             errors.append(f"interactive_map.html uses an informal primary navigation label: {informal_label}")
 
 
+def summary_outputs_for_validation(paths: Mapping[str, Path]) -> dict[str, str]:
+    return {
+        logical_name: path.name
+        for logical_name, path in paths.items()
+        if logical_name != "run_summary"
+    }
+
+
 def validate_dir(output_dir: Path) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -548,6 +561,32 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors.append("run_summary candidate count does not match anomalies.geojson")
         if metrics.get("candidate_anomaly_region_count") != anomaly_region_count:
             errors.append("run_summary candidate-region count does not match anomaly_regions.geojson")
+        transaction = summary.get("artifact_transaction")
+        if (
+            not isinstance(transaction, dict)
+            or transaction.get("transaction_version")
+            != "geochemical-workflow-artifact-transaction-v1"
+            or transaction.get("state") != "committed"
+            or transaction.get("commit_marker") != "run_summary.json"
+        ):
+            errors.append("run_summary artifact transaction is missing or uncommitted")
+        else:
+            transaction_artifacts = transaction.get("artifacts")
+            if not isinstance(transaction_artifacts, dict):
+                errors.append("run_summary artifact transaction has no artifact index")
+            else:
+                for logical_name, filename in summary_outputs_for_validation(paths).items():
+                    binding = transaction_artifacts.get(logical_name)
+                    path = paths[logical_name]
+                    if (
+                        not isinstance(binding, dict)
+                        or binding.get("filename") != filename
+                        or binding.get("bytes") != path.stat().st_size
+                        or binding.get("sha256") != sha256_file(path)
+                    ):
+                        errors.append(
+                            f"run_summary artifact transaction mismatch for {filename}"
+                        )
     else:
         errors.append("run_summary.json must contain an object")
 

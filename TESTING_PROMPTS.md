@@ -89,9 +89,19 @@ Docker 隔离：
 - [Docker B0：无 Skill](evaluation_lyf/agent_uplift/QWEN_NO_SKILL_DOCKER_PROMPT.md)
 - [Docker S0：有 Skill](evaluation_lyf/agent_uplift/QWEN_WITH_SKILL_DOCKER_PROMPT.md)
 
-四份 Prompt 都包含仓库克隆、固定 commit、Skill 隔离、公开数据下载、最多三轮 scorer、`run.sh` 干净重建和结果回收；Docker 版额外准备镜像与资源隔离。不要再追加实现建议。正式实验每个 runtime profile 内每组独立运行三次并比较中位数；主机结果和 Docker 结果不得混算。
+四份是控制器 Prompt：控制器 checkout 固定 commit，并在 Agent 启动前用白名单生成 formal bundle。候选从第一秒起
+看不到完整仓库、scorer、gold、历史结果或另一实验臂；S0 只比 B0 多一个冻结 Skill。候选负责公开锚点下载、
+有界多平台来源发现、D1/D2/D3、`run.sh` 干净重建和结果回收；正式 scorer 与浏览器验收只在候选退出后运行。
+Docker 版额外准备镜像与资源隔离。正式实验每个 runtime profile 内每组独立运行三次并比较中位数；主机结果和
+Docker 结果不得混算。
 
 新版 scorer 必须同时接收 `--case-dir <对应的 case_data>`，并在 score 中分别输出 `source_truth.anchors.source_truth_score`、`source_truth.discovered.source_truth_score` 和 `source_truth.overall.source_truth_score`。固定资源只是 hash 锚点，不是采集上限；两组还必须按相同冻结请求发现额外公开来源，并把本地文件与 `discovered_manifest.json` 冻结后离线处理。scorer 逐记录核对 SHA-256、精确 DOI、标题、版本、许可证、介质和可下钻 locator；仅出现 DOI 片段或非空来源字段不再得分。
+
+三种评测入口统一由 [`evaluation/reporting/generate_report.py`](evaluation/reporting/generate_report.py) 生成
+`evaluation_report.json/md`；D3 必须先通过 [`evaluation/reporting/browser_audit.py`](evaluation/reporting/browser_audit.py)
+的 Chromium 实测和截图哈希门禁。B0/S0 六次报告再交给
+[`evaluation/reporting/aggregate_uplift.py`](evaluation/reporting/aggregate_uplift.py)，单次 Agent 会话或公开分数
+天花板饱和都不能作为正式 uplift 证据。
 
 ## 3. `evaluation/docker/`：Docker 自动注入 Prompt
 

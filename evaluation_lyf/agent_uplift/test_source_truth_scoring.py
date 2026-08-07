@@ -87,6 +87,16 @@ class SourceTruthScoringTest(unittest.TestCase):
             hashlib.sha256(contract.read_bytes()).hexdigest(),
         )
 
+    def test_benchmark_crosswalk_is_pinned_and_keeps_canonical_fields_primary(self) -> None:
+        path = SCORER_PATH.with_name("benchmark_export_crosswalk.json")
+        self.assertEqual(
+            SCORER.BENCHMARK_CROSSWALK_SHA256,
+            hashlib.sha256(path.read_bytes()).hexdigest(),
+        )
+        value = SCORER.load_benchmark_crosswalk(path)
+        self.assertEqual("matched_geologic_unit", value["canonical_contract"]["matched_unit"])
+        self.assertIn("never write", value["legacy_read_only_aliases"]["spatial_geology_version"]["rule"])
+
     def test_exact_record_scores_one_hundred(self) -> None:
         metrics = SCORER.source_truth_metrics([valid_row()], {"a" * 64: RESOURCE})
         self.assertEqual(100.0, metrics["source_truth_score"])
@@ -157,6 +167,64 @@ class SourceTruthScoringTest(unittest.TestCase):
         self.assertFalse(SCORER.explicit_unit_disposition(guessed))
         self.assertTrue(SCORER.explicit_unit_disposition(rejected))
         self.assertTrue(SCORER.explicit_unit_disposition(censored))
+
+    def test_browser_audit_is_external_hash_bound_and_interactive(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            html = root / "interactive_map.html"
+            html.write_text("<html>submitted map bytes</html>", encoding="utf-8")
+            audit_path = root / "browser_audit.json"
+            screenshot_root = root / "screenshots"
+            screenshot_root.mkdir()
+            screenshots = []
+            for index in range(1, 6):
+                screenshot = screenshot_root / f"shot-{index}.png"
+                screenshot.write_bytes(f"screen-{index}".encode())
+                screenshots.append({
+                    "file": screenshot.name,
+                    "bytes": screenshot.stat().st_size,
+                    "sha256": hashlib.sha256(screenshot.read_bytes()).hexdigest(),
+                })
+            interactions = {
+                name: {"passed": True}
+                for name in (
+                    "filter_changes_result", "heatmap", "element_combination",
+                    "source_drilldown", "anomaly_view",
+                )
+            }
+            audit = {
+                "schema_version": "geochemical-browser-audit-v1",
+                "status": "pass",
+                "generated_by": "external_evaluation_controller",
+                "loaded": True,
+                "rendered_product": True,
+                "javascript_errors": [],
+                "html": {
+                    "bytes": html.stat().st_size,
+                    "sha256": hashlib.sha256(html.read_bytes()).hexdigest(),
+                },
+                "metrics": {
+                    "embedded_measurements": 5, "visible_symbols": 5,
+                    "basemap_shapes": 128, "country_boundaries": 177,
+                },
+                "interactions": interactions,
+                "screenshot_directory": "screenshots",
+                "screenshots": screenshots,
+            }
+            audit_path.write_text(json.dumps(audit), encoding="utf-8")
+            passed, metrics = SCORER.browser_audit_metrics(audit_path, html)
+            self.assertTrue(passed)
+            self.assertTrue(metrics["hash_bound"])
+            self.assertTrue(metrics["screenshots_hash_verified"])
+            screenshot_root.joinpath("shot-1.png").write_bytes(b"tampered")
+            passed, metrics = SCORER.browser_audit_metrics(audit_path, html)
+            self.assertFalse(passed)
+            self.assertFalse(metrics["screenshots_hash_verified"])
+            screenshot_root.joinpath("shot-1.png").write_bytes(b"screen-1")
+            html.write_text("<html>tampered</html>", encoding="utf-8")
+            passed, metrics = SCORER.browser_audit_metrics(audit_path, html)
+            self.assertFalse(passed)
+            self.assertFalse(metrics["hash_bound"])
 
     def test_discovery_report_proves_bounded_continuation_not_five_file_stop(self) -> None:
         contract = json.loads(SCORER_PATH.with_name("discovery_contract.json").read_text(encoding="utf-8"))

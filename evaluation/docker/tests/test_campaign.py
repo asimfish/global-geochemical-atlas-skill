@@ -93,6 +93,18 @@ class CampaignTests(unittest.TestCase):
                 docker.assert_not_called()
             self.assertFalse(output.exists())
 
+    def test_formal_pair_fails_closed_when_repeats_are_not_three(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            args = parser().parse_args([
+                "run", "--agent", "mock", "--network", "offline",
+                "--conditions", "B0,S0", "--repeats", "1",
+                "--output-dir", str(Path(temporary) / "campaign"),
+            ])
+            with patch("campaign.docker_available") as docker:
+                with self.assertRaisesRegex(Exception, "exactly --repeats 3"):
+                    run_campaign(args)
+                docker.assert_not_called()
+
     def test_selection_and_candidate_status(self) -> None:
         self.assertEqual(parse_tasks("q01,Q01,q24"), ["Q01", "Q24"])
         self.assertEqual(parse_conditions("s0,b0,s0"), ["S0", "B0"])

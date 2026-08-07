@@ -16,6 +16,7 @@ from typing import Any
 
 import standardize_geochemistry as standardizer
 import evaluate_batch_qc as batch_qc
+import build_iteration_backlog as backlog_builder
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -165,6 +166,15 @@ def run_suite() -> dict[str, Any]:
         require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", f"bad {schema_name}")
 
     record_schema = json_value(SKILL_DIR / "references" / "geochemistry-record.schema.json")
+    coordinate_registry = json_value(
+        SKILL_DIR / "references" / "coordinate-policy-registry.json"
+    )
+    require(
+        coordinate_registry.get("schema_version")
+        == "geochemical-coordinate-policy-registry-v1"
+        and len(coordinate_registry.get("policies", [])) == 1,
+        "coordinate policy registry is not frozen and auditable",
+    )
     crosswalk = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.json")
     mapped_fields = [item["canonical_field"] for item in crosswalk["field_mappings"]]
     non_core_fields = [field for group in crosswalk["non_core_fields"] for field in group["fields"]]
@@ -236,6 +246,23 @@ def run_suite() -> dict[str, Any]:
         validation = run_command([sys.executable, str(VALIDATOR), "--output-dir", str(first)])
         validation_report = json.loads(validation.stdout)
         require(validation_report["status"] == "valid", "output validator did not return valid")
+        tampered_transaction = first / "tampered-transaction"
+        tampered_transaction.mkdir()
+        for filename in EXPECTED_OUTPUTS:
+            shutil.copy2(first / filename, tampered_transaction / filename)
+        database_path = tampered_transaction / "geochemistry.csv"
+        database_path.write_text(
+            database_path.read_text(encoding="utf-8") + "\n", encoding="utf-8"
+        )
+        transaction_validation = run_command(
+            [sys.executable, str(VALIDATOR), "--output-dir", str(tampered_transaction)],
+            expected_code=1,
+        )
+        require(
+            "artifact transaction mismatch for geochemistry.csv"
+            in transaction_validation.stdout,
+            "workflow validator accepted a post-commit D2 mutation",
+        )
         tampered_interface = first / "tampered-interface"
         tampered_interface.mkdir()
         for filename in EXPECTED_OUTPUTS:
@@ -325,6 +352,43 @@ def run_suite() -> dict[str, Any]:
             "wt. % alias conversion failed",
         )
         require(float(by_id(rows, "water-pb-001")["normalized_value"]) == 20, "water mg/L conversion failed")
+        molar_ni = standardizer.normalize_row(
+            complete_d2_row(
+                element_or_analyte="Ni", value="20.814", unit="nmol/L",
+                medium="water", measurement_basis="dissolved",
+            ),
+            2,
+        )
+        require(
+            abs(molar_ni["normalized_value"] - 1.2216444276) < 1e-12
+            and molar_ni["normalized_unit"] == "ug/L"
+            and "d2-ciaaw-abridged-2024-v1" in molar_ni["conversion_formula"],
+            "audited nmol/L elemental conversion failed",
+        )
+        molar_unknown = standardizer.normalize_row(
+            complete_d2_row(
+                element_or_analyte="U", value="2", unit="nmol/L",
+                medium="water", measurement_basis="dissolved",
+            ),
+            2,
+        )
+        require(
+            molar_unknown["normalized_value"] is None
+            and "UNSUPPORTED_MOLAR_MASS" in molar_unknown["qc_flags"],
+            "unknown nmol/L atomic mass did not fail closed",
+        )
+        molar_per_mass = standardizer.normalize_row(
+            complete_d2_row(
+                element_or_analyte="Ni", value="2", unit="nmol/kg",
+                medium="water", measurement_basis="dissolved",
+            ),
+            2,
+        )
+        require(
+            molar_per_mass["normalized_value"] == 2
+            and molar_per_mass["normalized_unit"] == "nmol/kg",
+            "nmol/kg must remain a same-unit canonical value without density inference",
+        )
         ambiguous = by_id(rows, "water-as-ambiguous")
         require(ambiguous["normalized_value"] == "", "ambiguous water ppm must not be converted")
         require("AMBIGUOUS_AQUEOUS_RATIO_UNIT" in ambiguous["qc_flags"], "ambiguous water flag missing")
@@ -486,6 +550,55 @@ def run_suite() -> dict[str, Any]:
             and "MISSING_SOURCE_CRS" in missing_crs["qc_flags"]
             and "COORDINATE_NOT_CANONICALIZED" in missing_crs["qc_flags"],
             "numeric coordinates without CRS evidence are withheld from canonical map fields",
+        )
+        pangaea_policy = standardizer.normalize_row(
+            complete_d2_row(
+                source_crs="", dataset_doi="10.1594/PANGAEA.947275",
+                coordinate_evidence_scope="platform_policy_declared",
+                coordinate_policy_id="pangaea-geocode-wgs84-v1",
+                coordinate_latitude_field="LATITUDE",
+                coordinate_longitude_field="LONGITUDE",
+            ),
+            13,
+        )
+        require(
+            pangaea_policy["latitude"] == 35
+            and pangaea_policy["longitude"] == 103
+            and pangaea_policy["source_crs"] == "EPSG:4326"
+            and pangaea_policy["coordinate_policy_sha256"]
+            == "48a3e043e5a82a99e23dbde4fd9b97b012846a45ba47e46a5faf2f2ce0649a1b"
+            and "PLATFORM_CRS_POLICY_APPLIED" in pangaea_policy["qc_flags"],
+            "allowlisted PANGAEA platform CRS policy was not applied with evidence",
+        )
+        non_pangaea_policy = standardizer.normalize_row(
+            complete_d2_row(
+                source_crs="", dataset_doi="10.17632/example.1",
+                coordinate_evidence_scope="platform_policy_declared",
+                coordinate_policy_id="pangaea-geocode-wgs84-v1",
+                coordinate_latitude_field="LATITUDE",
+                coordinate_longitude_field="LONGITUDE",
+            ),
+            14,
+        )
+        require(
+            non_pangaea_policy["latitude"] is None
+            and "INVALID_COORDINATE_POLICY" in non_pangaea_policy["qc_flags"],
+            "PANGAEA CRS policy leaked to a non-PANGAEA repository",
+        )
+
+        backlog_ids = {
+            backlog_builder.item_id("record-1", "QC_ERROR_REVIEW", "qc_flags", observed)
+            for observed in ("INVALID_COORDINATE", "UNSUPPORTED_UNIT")
+        }
+        require(
+            len(backlog_ids) == 2
+            and backlog_builder.item_id(
+                "record-1", "QC_ERROR_REVIEW", "qc_flags", " INVALID_COORDINATE "
+            )
+            == backlog_builder.item_id(
+                "record-1", "QC_ERROR_REVIEW", "qc_flags", "INVALID_COORDINATE"
+            ),
+            "iteration backlog IDs collide or are not deterministically normalized",
         )
 
         duplicate_records = standardizer.process_rows([

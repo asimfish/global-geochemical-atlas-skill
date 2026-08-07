@@ -35,7 +35,8 @@
 `record_id`、`source_record_id`、`sample_id`、`analysis_batch_id`、`igsn`、`analyte_reported`、`species_or_oxide`、
 `measurement_basis`、`value_qualifier`、`source_qualifier_raw`、`missing_reason`、`detection_limit`、`detection_limit_unit`、
 `original_latitude_raw`、`original_longitude_raw`、`latitude`、`longitude`、`source_crs`、
-`coordinate_transform_method`、`coordinate_uncertainty_m`、
+`coordinate_transform_method`、`coordinate_evidence_scope`、`coordinate_policy_id`、
+`coordinate_latitude_field`、`coordinate_longitude_field`、`coordinate_uncertainty_m`、
 `geologic_unit`、`lithology`、`analytical_method`、`method_family`、`digestion_or_extraction`、
 `laboratory`、`reference_material`、`license`、`source_tier`、`sampled_at`、`sample_depth_min_m`、
 `sample_depth_max_m`、`grain_fraction`、`dataset_title`、`dataset_doi`、`dataset_version`、
@@ -90,7 +91,24 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 
 水体中的 ppm、ppb、wt% 或质量比单位没有密度与 basis 时保持未转换，并加 `AMBIGUOUS_AQUEOUS_RATIO_UNIT`。
 
-`nmol/kg` 等摩尔/质量浓度不是 `µg/L` 的同义单位。若没有明确分析物原子量和适用的水体密度，不做隐式换算；允许保留原单位作为 canonical same-unit 结果，并按单位与 measurement basis 隔离比较组。
+元素分析物的 `nmol/L` 仅在元素位于冻结原子量表时按
+`µg/L = nmol/L × atomic_weight / 1000` 转换，并在 `conversion_formula` 记录元素、原子量和
+`d2-ciaaw-abridged-2024-v1`。当前审计表覆盖 As、Cu、Fe、Ni、Pb、Zn；化合物、氧化物或未知元素
+失败关闭，分别标记 `UNSUPPORTED_MOLAR_SPECIES` 或 `UNSUPPORTED_MOLAR_MASS`。
+
+`nmol/kg` 是摩尔/质量浓度，不是 `µg/L` 的同义单位；即使元素原子量已知，缺少适用水体密度时也不
+转换为质量/体积浓度。它原样作为 canonical same-unit 结果，并按单位与 measurement basis 隔离比较组。
+
+### 坐标证据层级
+
+`source_crs` 可来自文件、数据集元数据或版本化平台政策，输出分别标记
+`file_declared`、`dataset_metadata_declared`、`platform_policy_declared`。平台政策不是按数值形态猜 CRS：
+必须同时命中政策 ID、平台 DOI 规则和原始经纬度字段白名单，政策 URL、版本与页面 SHA-256 写入记录。
+
+当前 `pangaea-geocode-wgs84-v1` 仅适用于带 `10.1594/PANGAEA.<id>` DOI 的 PANGAEA
+`LATITUDE`/`LONGITUDE` geocode；依据固定版本的 PANGAEA Geocode 官方说明。字段被重命名、派生、投影，
+或 DOI/字段证据不匹配时标记 `INVALID_COORDINATE_POLICY` 并停止 canonical 映射。该政策不扩展到
+Mendeley 或普通用户 CSV。
 
 ### 删失值
 
@@ -108,9 +126,9 @@ source manifest 保存来源查询、许可、下载哈希和源列映射。
 
 关键 flags：
 
-- 值与单位：`MISSING_VALUE`、`INVALID_NUMERIC_VALUE`、`INVALID_MISSING_REASON`、`INVALID_DETECTION_LIMIT`、`INVALID_QUANTITATION_LIMIT`、`NEGATIVE_CONCENTRATION`、`UNSUPPORTED_UNIT`、`AMBIGUOUS_AQUEOUS_RATIO_UNIT`、`UNSUPPORTED_SPECIES_CONVERSION`、`OXIDE_ELEMENT_MISMATCH`、`CENSORED_VALUE`、`NONDETECT_WITHOUT_LIMIT`、`UNQUANTIFIED_TRACE`。
+- 值与单位：`MISSING_VALUE`、`INVALID_NUMERIC_VALUE`、`INVALID_MISSING_REASON`、`INVALID_DETECTION_LIMIT`、`INVALID_QUANTITATION_LIMIT`、`NEGATIVE_CONCENTRATION`、`UNSUPPORTED_UNIT`、`UNSUPPORTED_MOLAR_MASS`、`UNSUPPORTED_MOLAR_SPECIES`、`AMBIGUOUS_AQUEOUS_RATIO_UNIT`、`UNSUPPORTED_SPECIES_CONVERSION`、`OXIDE_ELEMENT_MISMATCH`、`CENSORED_VALUE`、`NONDETECT_WITHOUT_LIMIT`、`UNQUANTIFIED_TRACE`。
 - 语义：`MISSING_MEASUREMENT_BASIS`、`MISSING_ANALYTICAL_METHOD`、`MISSING_DIGESTION_OR_EXTRACTION`、`UNRECOGNIZED_ANALYTE`。
-- 坐标：`INVALID_COORDINATE`、`INCOMPLETE_COORDINATE`、`COORDINATE_NOT_CANONICALIZED`、`POSSIBLE_COORDINATE_SWAP`、`ZERO_ISLAND_COORDINATE`、`OUTSIDE_REQUEST_REGION`、`MISSING_SOURCE_CRS`、`UNSUPPORTED_SOURCE_CRS`、`MISSING_COORDINATE_UNCERTAINTY`、`INVALID_COORDINATE_UNCERTAINTY`。
+- 坐标：`INVALID_COORDINATE`、`INCOMPLETE_COORDINATE`、`COORDINATE_NOT_CANONICALIZED`、`POSSIBLE_COORDINATE_SWAP`、`ZERO_ISLAND_COORDINATE`、`OUTSIDE_REQUEST_REGION`、`MISSING_SOURCE_CRS`、`UNSUPPORTED_SOURCE_CRS`、`INVALID_COORDINATE_POLICY`、`PLATFORM_CRS_POLICY_APPLIED`、`MISSING_COORDINATE_UNCERTAINTY`、`INVALID_COORDINATE_UNCERTAINTY`。
 - 地质匹配：`GEOLOGY_MATCH_NO_COVERAGE`、`GEOLOGY_BOUNDARY_UNCERTAIN`、`INVALID_GEOLOGIC_DISTANCE`、`INVALID_GEOLOGIC_MATCH_CONFIDENCE`。
 - 来源：`MISSING_SOURCE_ID`、`MISSING_SOURCE_LOCATOR`、`MISSING_LICENSE`、`UNKNOWN_SOURCE_TIER`。
 - 样品与批次：`MISSING_SAMPLE_ID`、`DEPTH_RANGE_INVALID`、`DUPLICATE_CANDIDATE`、`MISSING_ANALYSIS_BATCH_ID`、`BATCH_QC_NOT_EVALUATED`、`BATCH_QC_FAILED`。
@@ -205,6 +223,11 @@ GLiM 只表示 0.5° 主导表层岩性筛查背景，不是场地级地层或�
 
 ## 8. 科学依据与边界
 
+- [PANGAEA Geocode 官方说明](https://wiki.pangaea.de/w/handler?title=Geocode&oldid=17007) 声明平台
+  `LATITUDE`/`LONGITUDE` geocode 为 WGS84 十进制度；`pangaea-geocode-wgs84-v1` 固定该页面版本、访问日和
+  SHA-256，并只对 PANGAEA DOI 与精确字段白名单生效。
+- [CIAAW 标准/简表原子量](https://www.ciaaw.org/abridged-atomic-weights.htm) 是
+  `d2-ciaaw-abridged-2024-v1` 的权威依据；实现冻结常规元素值，在线页面更新不会静默改变已发布结果。
 - [USGS QA/QC primer](https://pubs.usgs.gov/publication/ofr20111187) 强调从采样设计、实验分析到最终解释均需 QA/QC：DOI `10.3133/ofr20111187`。
 - [USGS Alaska Geochemical Database 元数据](https://pubs.usgs.gov/ds/759/contents/AGDB2_DS759_metadata/AGDB2_MD.faq.html) 显示历史地球化学数据会用 qualifier、负数或尾数编码检测限。编码因数据集而异，因此 D1 必须保留并按来源元数据解码；D2 不从负数擅自推断 qualifier。
 - [NIST Atomic Weights and Isotopic Compositions](https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses) 说明其标准原子量数据来自 *Atomic Weights of the Elements 2013*；`d2-atomic-weights-v1` 固定使用该表中的代表值，避免在线表更新造成结果漂移。天然材料的同位素组成可能变化，因此这些换算是常规化学计量换算，不是样品特异的同位素质量模型。

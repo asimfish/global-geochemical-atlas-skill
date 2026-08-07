@@ -75,10 +75,10 @@ flowchart LR
 ## 科学护栏
 
 - 原值、原单位、qualifier、来源坐标表达和转换记录始终保留；不能证明的转换会失败关闭。
-- 固体质量比可统一为 `mg/kg`，水体质量/体积可统一为 `ug/L`；没有密度时不跨量纲换算。
+- 固体质量比可统一为 `mg/kg`，水体质量/体积可统一为 `ug/L`；`nmol/L` 只对冻结原子量表中的明确元素换算，没有摩尔质量或密度证据时失败关闭。
 - `<LOD`、`<LOQ`、`BDL`、`ND` 不替换为 0 或 LOD/2。
 - CRM、空白、重复样按显式 policy 重新计算；失败批次保留在数据库，但不进入异常背景。
-- 不静默交换经纬度，不把未知 CRS 冒充 WGS84；空间匹配记录数据源、版本、方法和边界距离。
+- 不静默交换经纬度，不把未知 CRS 冒充 WGS84；允许 DOI、字段名、URL 与内容哈希同时匹配的版本化平台坐标政策，空间匹配记录数据源、版本、方法和边界距离。
 - 异常点和 FDR 网格都只表示筛查候选；网格不是地质/行政/污染边界，不等于污染、矿床或成因结论。
 - demo 与真实来源切片只用于工程复现，不支持全球或区域代表性科学结论。
 
@@ -142,6 +142,9 @@ python -m unittest discover -s evaluation/tools/tests -v
 # Docker 控制器与两份 Qwen Prompt 契约
 python -m unittest discover -s evaluation/docker/tests -v
 python evaluation_lyf/agent_uplift/test_prompt_contract.py
+
+# 统一报告、三次独立运行聚合和浏览器证据契约
+python -m unittest discover -s evaluation/reporting -p 'test_*.py' -v
 ```
 
 也可以把 `all` 换成 `d1`、`d2` 或 `d3`，单独验证责任域。Docker 的标准构建和 smoke 命令见 [`evaluation/docs/docker_usage.md`](evaluation/docs/docker_usage.md)；主机版与 Docker 版的有/无 Skill Prompt 见 [`evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md`](evaluation_lyf/agent_uplift/DOCKER_UPLIFT.md)。路径归属、接口变更规则和完成定义见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。

@@ -1,0 +1,26 @@
+{
+  "schema_version": "geochemical-coordinate-policy-registry-v1",
+  "registry_version": "2026-08-07",
+  "policies": [
+    {
+      "policy_id": "pangaea-geocode-wgs84-v1",
+      "platform": "PANGAEA",
+      "version": "2026-06-11",
+      "target_crs": "EPSG:4326",
+      "evidence_scope": "platform_policy_declared",
+      "dataset_doi_pattern": "^10\\.1594/PANGAEA\\.[0-9]+$",
+      "latitude_fields": ["LATITUDE"],
+      "longitude_fields": ["LONGITUDE"],
+      "authority_url": "https://wiki.pangaea.de/w/handler?title=Geocode&oldid=17007",
+      "authority_page_sha256": "48a3e043e5a82a99e23dbde4fd9b97b012846a45ba47e46a5faf2f2ce0649a1b",
+      "authority_page_bytes": 29422,
+      "accessed_at": "2026-08-07",
+      "claim": "PANGAEA LATITUDE and LONGITUDE geocodes are decimal degrees referenced to WGS84.",
+      "limitations": [
+        "Applies only to exact PANGAEA geocode fields and a PANGAEA dataset DOI.",
+        "Does not validate whether a depositor placed values in the correct columns.",
+        "Does not apply to renamed, derived, projected, or user-supplied coordinate columns."
+      ]
+    }
+  ]
+}

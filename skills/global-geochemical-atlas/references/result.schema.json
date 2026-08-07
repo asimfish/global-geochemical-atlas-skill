@@ -107,6 +107,34 @@
     },
     "limitations": {"type": "array", "items": {"type": "string"}},
     "next_actions": {"type": "array", "items": {"type": "string"}},
+    "artifact_transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transaction_version", "state", "commit_marker", "input_sha256",
+        "artifacts", "mutation_rule"
+      ],
+      "properties": {
+        "transaction_version": {"const": "geochemical-workflow-artifact-transaction-v1"},
+        "state": {"const": "committed"},
+        "commit_marker": {"const": "run_summary.json"},
+        "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["filename", "bytes", "sha256"],
+            "properties": {
+              "filename": {"type": "string", "minLength": 1},
+              "bytes": {"type": "integer", "minimum": 1},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+          }
+        },
+        "mutation_rule": {"type": "string", "minLength": 1}
+      }
+    },
     "map_report": {
       "type": "object",
       "additionalProperties": true,

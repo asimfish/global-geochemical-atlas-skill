@@ -21,6 +21,7 @@ import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
 
 SUMMARY_VERSION = "global-geochemical-atlas-result-v1"
+TRANSACTION_VERSION = "geochemical-workflow-artifact-transaction-v1"
 MAX_INPUT_BYTES = 200_000_000
 
 
@@ -123,6 +124,32 @@ def summary_outputs() -> dict[str, str]:
         "samples": "samples.geojson",
         "interactive_map": "interactive_map.html",
         "iteration_backlog": "iteration_backlog.csv",
+    }
+
+
+def artifact_transaction(output_dir: Path, input_sha256: str) -> dict[str, Any]:
+    """Build the final commit marker after every non-summary artifact exists."""
+
+    artifacts: dict[str, dict[str, Any]] = {}
+    for logical_name, filename in summary_outputs().items():
+        path = output_dir / filename
+        if not path.is_file():
+            raise WorkflowError("incomplete_retrieval", f"transaction artifact is missing: {filename}")
+        artifacts[logical_name] = {
+            "filename": filename,
+            "bytes": path.stat().st_size,
+            "sha256": evidence_builder.sha256_file(path),
+        }
+    return {
+        "transaction_version": TRANSACTION_VERSION,
+        "state": "committed",
+        "commit_marker": "run_summary.json",
+        "input_sha256": input_sha256,
+        "artifacts": artifacts,
+        "mutation_rule": (
+            "Any change to D1, D2, confidence, evidence, backlog, anomaly or D3 artifacts "
+            "requires regenerating every dependent artifact and writing a new commit marker."
+        ),
     }
 
 
@@ -343,6 +370,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "Add source-specific field mappings rather than guessing legacy qualifier semantics.",
         ],
         "map_report": map_report,
+        "artifact_transaction": artifact_transaction(args.output_dir, input_hash),
     }
     if partial_reasons:
         summary["limitations"].append(

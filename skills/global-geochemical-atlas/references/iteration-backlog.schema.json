@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:global-geochemical-atlas:iteration-backlog-row-v1",
-  "title": "Iteration backlog CSV row",
+  "$id": "urn:ai4s:global-geochemical-atlas:iteration-backlog-row-v2",
+  "title": "Iteration backlog CSV row with observed-value-disambiguated stable ID",
   "type": "object",
   "required": [
     "item_id", "record_id", "source_id", "stage_owner", "severity", "status",

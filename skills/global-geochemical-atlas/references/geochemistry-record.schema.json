@@ -39,6 +39,13 @@
     "longitude",
     "source_crs",
     "coordinate_transform_method",
+    "coordinate_evidence_scope",
+    "coordinate_policy_id",
+    "coordinate_policy_version",
+    "coordinate_policy_url",
+    "coordinate_policy_sha256",
+    "coordinate_latitude_field",
+    "coordinate_longitude_field",
     "coordinate_uncertainty_m",
     "sampled_at",
     "sample_depth_min_m",
@@ -168,7 +175,7 @@
       "enum": ["not_reported", "not_analyzed", "insufficient_sample", "invalid_value", "unknown", null]
     },
     "normalized_value": {"type": ["number", "null"]},
-    "normalized_unit": {"type": ["string", "null"], "enum": ["mg/kg", "ug/L", null]},
+    "normalized_unit": {"type": ["string", "null"], "enum": ["mg/kg", "ug/L", "nmol/kg", null]},
     "normalized_censoring_limit": {"type": ["number", "null"], "minimum": 0},
     "conversion_factor": {"type": ["number", "null"], "minimum": 0},
     "conversion_formula": {"type": ["string", "null"]},
@@ -178,6 +185,19 @@
     "longitude": {"type": ["number", "null"], "minimum": -180, "maximum": 180},
     "source_crs": {"type": ["string", "null"]},
     "coordinate_transform_method": {"type": ["string", "null"]},
+    "coordinate_evidence_scope": {
+      "type": ["string", "null"],
+      "enum": ["file_declared", "dataset_metadata_declared", "platform_policy_declared", null]
+    },
+    "coordinate_policy_id": {"type": ["string", "null"]},
+    "coordinate_policy_version": {"type": ["string", "null"]},
+    "coordinate_policy_url": {"type": ["string", "null"], "format": "uri"},
+    "coordinate_policy_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "coordinate_latitude_field": {"type": ["string", "null"]},
+    "coordinate_longitude_field": {"type": ["string", "null"]},
     "coordinate_uncertainty_m": {"type": ["number", "null"], "minimum": 0},
     "sampled_at": {"type": ["string", "null"]},
     "sample_depth_min_m": {"type": ["number", "null"], "minimum": 0},

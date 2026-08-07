@@ -1,10 +1,14 @@
 {
-  "protocol_version": "qwen-uplift-global-discovery-v3",
+  "protocol_version": "qwen-uplift-blind-browser-v4",
   "repository": "https://github.com/asimfish/global-geochemical-atlas-skill.git",
   "commit": "c59f2ab424480e5dc700d0628833c7cae9323bdf",
   "model": "Qwen3.8-Max",
+  "api_model": "qwen3.8-max",
+  "provider_profile": "local-qwen38-openai-v1",
   "temperature": 0,
-  "maximum_scorer_rounds": 3,
+  "thinking": "not_configured",
+  "independent_repeats_per_arm": 3,
+  "candidate_scorer_rounds": 0,
   "task_request": {
     "region": "global",
     "elements": ["As", "Cu", "Fe", "Ni", "Pb", "Zn"],
@@ -22,6 +26,22 @@
     "host_with_skill": "QWEN_WITH_SKILL_PROMPT.md",
     "docker_no_skill": "QWEN_NO_SKILL_DOCKER_PROMPT.md",
     "docker_with_skill": "QWEN_WITH_SKILL_DOCKER_PROMPT.md"
+  },
+  "candidate_prompt_files": {
+    "host_no_skill": "candidate_prompts/HOST_B0.md",
+    "host_with_skill": "candidate_prompts/HOST_S0.md",
+    "docker_no_skill": "candidate_prompts/DOCKER_B0.md",
+    "docker_with_skill": "candidate_prompts/DOCKER_S0.md"
+  },
+  "formal_evidence": {
+    "candidate_bundle_schema": "qwen-uplift-candidate-bundle-v1",
+    "candidate_bundle_mode": "formal",
+    "candidate_visible_scorer": false,
+    "browser_audit_schema": "geochemical-browser-audit-v1",
+    "report_schema": "global-geochemical-evaluation-report-v1",
+    "aggregate_schema": "global-geochemical-uplift-aggregate-v1",
+    "score_aggregation": "median_of_three_independent_agent_sessions",
+    "ceiling_rule": "B0 median >= 90 is regression-only, not valid uplift evidence"
   },
   "docker": {
     "preferred_image": "global-geochemical-eval:local",

@@ -15,7 +15,7 @@ Library（ECL）、USGS Alaska Geochemical Database 2.0（AGDB2）、ODM2，以�
 交换标准。IGSN/DataCite 主要描述实体样品和持久标识符，不负责承载逐项分析结果。
 
 机器可读版本见 `platform-field-crosswalk.json`；其结构由
-`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 118 个 canonical 字段
+`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 125 个 canonical 字段
 完全分区，防止 Schema 改动后文档悄悄过期。
 
 ## 2. 映射类型
@@ -61,6 +61,8 @@ OneGeochemistry 被作为全球地球化学标准化工作的背景方向引用�
 | `latitude` | Sample Metadata.Latitude | `LATITUDE` + datum | `Sites.Latitude` + SpatialReference | `geoLocationPoint.pointLatitude` |
 | `longitude` | Sample Metadata.Longitude | `LONGITUDE` + datum | `Sites.Longitude` + SpatialReference | `geoLocationPoint.pointLongitude` |
 | `source_crs` | 仅接受显式声明 | `DATUM` + `SPHEROID` | `SpatialReferences.SRSCode/SRSName` | — |
+| `coordinate_evidence_scope` | 本地审计扩展 | 元数据/字段说明的证据层级 | provenance extension | — |
+| `coordinate_policy_id/version/url/sha256` | 本地审计扩展 | 本地审计扩展 | provenance extension | — |
 | `sample_depth_min_m` | 显式扩展深度 | `DEPTH` 在值、单位和基准明确时解析 | 有定义的 extension/property | — |
 | `sample_depth_max_m` | 显式扩展区间深度 | 只有显式区间才提取上界 | 有定义的 interval-depth extension | — |
 | `lithology` | Sample Metadata.Lithology | 明确的样品描述字段，不能只用 `PRIMARY_CLASS` | SamplingFeature extension property | `subject`/title 中的显式岩性词 |
@@ -68,6 +70,10 @@ OneGeochemistry 被作为全球地球化学标准化工作的背景方向引用�
 坐标转换必须特别保守。AGDB2 明确记录了历史坐标常见 NAD27/Clarke 1866 且精度不一，因此不能把其
 经纬度直接改标签为 WGS84。只有 source datum 可解析、转换方法可记录时才写 canonical
 `latitude`/`longitude`；否则保留原始坐标并输出 QC flag。
+
+PANGAEA 不作为通用字段交换标准加入上述四平台矩阵，但其官方 Geocode 政策可作为受限 CRS 证据来源。
+`pangaea-geocode-wgs84-v1` 只有在 PANGAEA DOI 与精确 `LATITUDE`/`LONGITUDE` 字段同时命中时才生效；
+输出的 policy ID、版本、URL 和页面 hash 是本地审计扩展，不冒充 PANGAEA 原生列。
 
 ### 4.2 分析结果与方法
 

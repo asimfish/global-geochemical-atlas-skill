@@ -18,7 +18,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     OPENCODE_DISABLE_SHARE=1
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates git nodejs npm ripgrep tini \
+    && apt-get install -y --no-install-recommends ca-certificates chromium chromium-driver git nodejs npm ripgrep tini \
     && rm -rf /var/lib/apt/lists/*
 
 RUN npm install --global "opencode-ai@${OPENCODE_VERSION}" \
@@ -27,6 +27,8 @@ RUN npm install --global "opencode-ai@${OPENCODE_VERSION}" \
 
 COPY requirements-sandbox.txt /opt/evaluation/requirements-sandbox.txt
 RUN python -m pip install --no-cache-dir -r /opt/evaluation/requirements-sandbox.txt
+
+RUN chromium --version && chromedriver --version
 
 COPY container/ /opt/evaluation/container/
 COPY provider_profiles.json provider_profiles.schema.json provider_profiles.py /opt/evaluation/

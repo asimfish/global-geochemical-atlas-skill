@@ -1776,8 +1776,15 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"<20 µm fine silt-clay fraction"}
         and {row["digestion_or_extraction"] for row in pangaea_demo_rows}
         == {"HF-HNO3 acid digestion"}
+        and {row["source_crs"] for row in pangaea_demo_rows} == {""}
+        and {row["coordinate_evidence_scope"] for row in pangaea_demo_rows}
+        == {"platform_policy_declared"}
+        and {row["coordinate_policy_id"] for row in pangaea_demo_rows}
+        == {"pangaea-geocode-wgs84-v1"}
+        and {row["coordinate_latitude_field"] for row in pangaea_demo_rows} == {"Latitude"}
+        and {row["coordinate_longitude_field"] for row in pangaea_demo_rows} == {"Longitude"}
         and all(item["reported_location"] for item in pangaea_evidence),
-        "D1 PANGAEA fixture retains fine-fraction, digestion and publisher location semantics",
+        "D1 PANGAEA fixture retains fine-fraction, digestion, location and platform-policy coordinate evidence",
         checks,
     )
     gsj_demo_rows = csv_rows(SOURCE_DEMOS / "japan-gsj-geochemical-map" / "demo_input.csv")
@@ -1929,6 +1936,9 @@ def check_d1(output_dir: Path) -> list[str]:
     combined_qc = json_value(combined_output / "qc_report.json")
     combined_anomaly = json_value(combined_output / "anomaly_report.json")
     combined_database = csv_rows(combined_output / "geochemistry.csv")
+    combined_pangaea = [
+        row for row in combined_database if row["source_id"] == "pangaea-north-africa-soil"
+    ]
     grouped_sources: dict[tuple[str, ...], set[str]] = {}
     for row in combined_database:
         key = tuple(str(row.get(field) or "") for field in standardizer.DEFAULT_GROUP_BY)
@@ -1947,6 +1957,18 @@ def check_d1(output_dir: Path) -> list[str]:
         == combined_manifest["comparison_isolation"]["partition_count"]
         and all(len(sources) == 1 for sources in grouped_sources.values()),
         "D1 combined workflow standardizes and maps all records without crossing incompatible source groups",
+        checks,
+    )
+    require(
+        len(combined_pangaea) == 48
+        and {row["source_crs"] for row in combined_pangaea} == {"EPSG:4326"}
+        and {row["coordinate_evidence_scope"] for row in combined_pangaea}
+        == {"platform_policy_declared"}
+        and {row["coordinate_policy_id"] for row in combined_pangaea}
+        == {"pangaea-geocode-wgs84-v1"}
+        and {row["coordinate_policy_sha256"] for row in combined_pangaea}
+        == {"48a3e043e5a82a99e23dbde4fd9b97b012846a45ba47e46a5faf2f2ce0649a1b"},
+        "D2 applies the DOI-and-field-scoped PANGAEA CRS policy with its pinned evidence hash",
         checks,
     )
     with tempfile.TemporaryDirectory() as combined_temp:
@@ -2481,6 +2503,32 @@ def check_d2(output_dir: Path) -> list[str]:
         standardizer.conversion_for("water", "nmol/kg", molar_flags) == (1.0, "nmol/kg")
         and not molar_flags,
         "D2 preserves seawater molar-per-mass values without an unstated density conversion",
+        checks,
+    )
+    molar_volume = standardizer.normalize_row(
+        {
+            "record_id": "molar-ni", "sample_id": "molar-ni",
+            "element_or_analyte": "Ni", "value": "20.814", "unit": "nmol/L",
+            "medium": "water",
+        },
+        2,
+    )
+    unknown_molar = standardizer.normalize_row(
+        {
+            "record_id": "molar-unknown", "sample_id": "molar-unknown",
+            "element_or_analyte": "Xx", "value": "20.814", "unit": "nmol/L",
+            "medium": "water",
+        },
+        3,
+    )
+    require(
+        abs(float(molar_volume["normalized_value"]) - 1.2216444276) < 1e-12
+        and molar_volume["normalized_unit"] == "ug/L"
+        and "atomic_weight(Ni)/1000" in molar_volume["conversion_formula"]
+        and "d2-ciaaw-abridged-2024-v1" in molar_volume["conversion_formula"]
+        and unknown_molar["normalized_value"] is None
+        and "UNSUPPORTED_MOLAR_MASS" in unknown_molar["qc_flags"],
+        "D2 converts evidence-supported nmol/L with frozen atomic weights and fails closed otherwise",
         checks,
     )
     require(indexed["soil-as-013"]["normalized_value"] == "", "D2 censored values are not imputed", checks)

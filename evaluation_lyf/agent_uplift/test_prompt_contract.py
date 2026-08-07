@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import json
-import re
 import unittest
 from pathlib import Path
 
@@ -21,6 +20,12 @@ class PromptContractTests(unittest.TestCase):
             key: (UPLIFT / filename).read_text(encoding="utf-8")
             for key, filename in cls.config["prompt_files"].items()
         }
+        cls.candidate_prompts = {
+            "host_no_skill": (UPLIFT / "candidate_prompts/HOST_B0.md").read_text(encoding="utf-8"),
+            "host_with_skill": (UPLIFT / "candidate_prompts/HOST_S0.md").read_text(encoding="utf-8"),
+            "docker_no_skill": (UPLIFT / "candidate_prompts/DOCKER_B0.md").read_text(encoding="utf-8"),
+            "docker_with_skill": (UPLIFT / "candidate_prompts/DOCKER_S0.md").read_text(encoding="utf-8"),
+        }
         cls.evaluation_prompts = {
             "b0": (ROOT / "evaluation/prompts/QWEN_B0_NO_SKILL_PROMPT.md").read_text(encoding="utf-8"),
             "s0": (ROOT / "evaluation/prompts/QWEN_S0_WITH_SKILL_PROMPT.md").read_text(encoding="utf-8"),
@@ -36,52 +41,53 @@ class PromptContractTests(unittest.TestCase):
                 self.assertIn(commit, prompt)
                 self.assertIn(self.config["model"], prompt)
                 self.assertIn("temperature=0", prompt)
-                self.assertIn("最多三轮", prompt)
-                self.assertIn("experiment_manifest.json", prompt)
-                self.assertIn("public_case", prompt)
-                self.assertIn("score_submission.py", prompt)
-                self.assertIn("--case-dir", prompt)
-                self.assertIn("source_truth.anchors.source_truth_score", prompt)
-                self.assertIn("source_truth.discovered.source_truth_score", prompt)
-                self.assertIn("source_truth.overall.source_truth_score", prompt)
-                self.assertIn("五个任务文件的 SHA-256", prompt)
-                self.assertIn("discovery_contract.json", prompt)
-                self.assertIn("discovered_manifest.json", prompt)
+                self.assertIn("export_candidate_bundle.py", prompt)
+                self.assertIn("--mode formal", prompt)
+                self.assertIn("browser", prompt.casefold())
+                self.assertIn("aggregate_uplift.py", prompt)
+                self.assertIn("build_experiment_manifest.py", prompt)
                 self.assertIn("只处理四个固定地球化学锚点属于未完成 D1", prompt)
-                self.assertIn("冻结", prompt)
-                self.assertTrue("断网" in prompt or "--network none" in prompt)
-                self.assertIn("clean_rebuild", prompt)
+        for name, prompt in self.candidate_prompts.items():
+            with self.subTest(candidate_prompt=name):
+                self.assertIn(commit, prompt)
+                self.assertIn(self.config["model"], prompt)
+                self.assertIn("temperature=0", prompt)
+                self.assertIn("TASK.md", prompt)
+                self.assertIn("discovery_contract.json", prompt)
+                self.assertIn("benchmark_export_crosswalk.json", prompt)
                 self.assertIn("run.sh", prompt)
+                self.assertNotIn("git clone", prompt)
+                self.assertNotIn("score_submission.py", prompt)
+                self.assertIn("不要写", prompt)
+                self.assertIn("experiment_manifest.json", prompt)
 
     def test_host_and_docker_profiles_are_both_explicit(self) -> None:
         for name in ("host_no_skill", "host_with_skill"):
             prompt = self.prompts[name]
             with self.subTest(prompt=name):
                 self.assertIn("不使用 Docker", prompt)
-                self.assertIn("禁止调用 Docker", prompt)
+                self.assertIn("禁止候选调用 Docker", prompt)
                 self.assertIn("runtime_mode=host", prompt)
-                self.assertNotIn("evaluation/docker/Dockerfile", prompt)
         for name in ("docker_no_skill", "docker_with_skill"):
             prompt = self.prompts[name]
             with self.subTest(prompt=name):
                 self.assertIn("evaluation/docker/Dockerfile", prompt)
-                self.assertIn("--cpus 2", prompt)
-                self.assertIn("--memory 4g", prompt)
+                self.assertIn("CPU 2", prompt)
+                self.assertIn("memory 4g", prompt)
                 self.assertIn("runtime_mode=docker", prompt)
 
     def test_only_with_skill_arm_archives_the_skill_in_each_profile(self) -> None:
         for profile in ("host", "docker"):
             with_prompt = self.prompts[f"{profile}_with_skill"]
             no_prompt = self.prompts[f"{profile}_no_skill"]
-            archive_with = re.search(r"git -C bootstrap_repo archive[\s\S]+?\| tar", with_prompt)
-            archive_no = re.search(r"git -C bootstrap_repo archive[\s\S]+?\| tar", no_prompt)
-            self.assertIsNotNone(archive_with)
-            self.assertIsNotNone(archive_no)
-            self.assertIn("skills/global-geochemical-atlas", archive_with.group(0))
-            self.assertNotIn("skills/global-geochemical-atlas", archive_no.group(0))
-            self.assertIn(".agents/skills/global-geochemical-atlas/SKILL.md", with_prompt)
-            self.assertIn('"skill_used": true', with_prompt)
-            self.assertIn('"skill_used": false', no_prompt)
+            self.assertIn("--condition S0", with_prompt)
+            self.assertIn("--condition B0", no_prompt)
+            self.assertIn("skill_used=true", with_prompt)
+            self.assertIn("skill_used=false", no_prompt)
+            self.assertIn("只额外", with_prompt)
+            self.assertNotIn("git -C bootstrap_repo archive", with_prompt + no_prompt)
+            self.assertIn("skill_used=true", self.candidate_prompts[f"{profile}_with_skill"])
+            self.assertIn("skill_used=false", self.candidate_prompts[f"{profile}_no_skill"])
 
     def test_evaluation_has_explicit_b0_and_s0_launch_prompts(self) -> None:
         common = (

@@ -90,7 +90,7 @@
       "type": "object",
       "required": ["schema_version", "item_count", "status_counts", "owner_counts", "issue_counts"],
       "properties": {
-        "schema_version": {"const": "geochemistry-iteration-backlog-v1"},
+        "schema_version": {"const": "geochemistry-iteration-backlog-v2"},
         "record_count": {"type": "integer", "minimum": 0},
         "item_count": {"type": "integer", "minimum": 0},
         "status_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},

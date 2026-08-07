@@ -1,4 +1,83 @@
 {
+  "artifact_transaction": {
+    "artifacts": {
+      "anomalies": {
+        "bytes": 21050,
+        "filename": "anomalies.geojson",
+        "sha256": "cb665d07ea297a1434abf3939da4326a40842604f0453f9e29a2e31bb68d6a0e"
+      },
+      "anomaly_regions": {
+        "bytes": 201,
+        "filename": "anomaly_regions.geojson",
+        "sha256": "e51900125cd8860cc27fcd9482d954c161b5a121abc256c1ee0dcb1fd6af0d1c"
+      },
+      "anomaly_report": {
+        "bytes": 101626,
+        "filename": "anomaly_report.json",
+        "sha256": "5cc5541c1725878b5f49ced0259f585875428b4814aac53ee9768d841d524528"
+      },
+      "batch_acceptance": {
+        "bytes": 122,
+        "filename": "batch_acceptance.csv",
+        "sha256": "efda6c42a615afaba5cc1dad328e529bd71ec29d86f8677ceae241cf90c0a319"
+      },
+      "batch_qc_report": {
+        "bytes": 292,
+        "filename": "batch_qc_report.json",
+        "sha256": "f55e30230eb432ce0802585db727a140d9fad209bde8786449571594248727b0"
+      },
+      "confidence_report": {
+        "bytes": 3950,
+        "filename": "confidence_report.json",
+        "sha256": "b61225088125a11896823f929778e7eab6109b795a0583c4ddc4085adb1cb5e8"
+      },
+      "database": {
+        "bytes": 1385995,
+        "filename": "geochemistry.csv",
+        "sha256": "cea0ab6aa67d3f5eb12c5b89094d193e17209fdf9884f5ab33afca2d2cdb0dbe"
+      },
+      "interactive_map": {
+        "bytes": 1058264,
+        "filename": "interactive_map.html",
+        "sha256": "65728e24c72de113710afb61ef3266b23a1072d8acd5f15447d84148c4fd30b4"
+      },
+      "iteration_backlog": {
+        "bytes": 413747,
+        "filename": "iteration_backlog.csv",
+        "sha256": "994dcbb3e250352ef321bb861954a9f9d4c1ea80a03b4091409e9854fd535f8e"
+      },
+      "qc_report": {
+        "bytes": 2381,
+        "filename": "qc_report.json",
+        "sha256": "f80e90d41c947fa268423618ff2ab1165fef8e7a2f33782399b1f81543ba68f6"
+      },
+      "record_evidence": {
+        "bytes": 585000,
+        "filename": "record_evidence.jsonl",
+        "sha256": "c37f021f8b19fa3e4a5be5a831f082503259313e83d6ca5763fe3b85b498dbb9"
+      },
+      "samples": {
+        "bytes": 1011676,
+        "filename": "samples.geojson",
+        "sha256": "392590e55204e6f802c1a30493573b4fd8641cafb7cdb7f95a83f3d778bcb9fe"
+      },
+      "source_manifest": {
+        "bytes": 21297,
+        "filename": "source_manifest.json",
+        "sha256": "7ae404f3f16875022667bb7f5847d5c541c6086bab1464c0bcbabbf3bcf11e89"
+      },
+      "spatial_anomaly_report": {
+        "bytes": 10389,
+        "filename": "spatial_anomaly_report.json",
+        "sha256": "421861fc65ffd844effe616e05ea753bd3aee555db33ec6d8678603720b4ff27"
+      }
+    },
+    "commit_marker": "run_summary.json",
+    "input_sha256": "b01771910ead702e6275a7f3c997a03346c48e413a68ef4289446269e0100337",
+    "mutation_rule": "Any change to D1, D2, confidence, evidence, backlog, anomaly or D3 artifacts requires regenerating every dependent artifact and writing a new commit marker.",
+    "state": "committed",
+    "transaction_version": "geochemical-workflow-artifact-transaction-v1"
+  },
   "coverage": {
     "bbox": [
       -137.97,
@@ -28,7 +107,7 @@
     "filename": "demo_input.csv",
     "not_for_scientific_interpretation": false,
     "record_count": 796,
-    "sha256": "2ef900b0cd577998362f772703a3fbbc96237b8ab251cec0c95f2f057baa4720",
+    "sha256": "b01771910ead702e6275a7f3c997a03346c48e413a68ef4289446269e0100337",
     "synthetic_demo": false
   },
   "limitations": [
@@ -39,6 +118,12 @@
   ],
   "map_report": {
     "anomaly_region_render_mode": "zoom-adaptive-anomaly-bubbles-v1",
+    "artifact_bindings": {
+      "anomalies_sha256": "cb665d07ea297a1434abf3939da4326a40842604f0453f9e29a2e31bb68d6a0e",
+      "database_sha256": "cea0ab6aa67d3f5eb12c5b89094d193e17209fdf9884f5ab33afca2d2cdb0dbe",
+      "interactive_map_sha256": "65728e24c72de113710afb61ef3266b23a1072d8acd5f15447d84148c4fd30b4",
+      "samples_geojson_sha256": "392590e55204e6f802c1a30493573b4fd8641cafb7cdb7f95a83f3d778bcb9fe"
+    },
     "basemap": {
       "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
       "asset_version": "ai4s-natural-earth-land-v1",
@@ -149,7 +234,7 @@
     "display_sample_count": 215,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1058009,
+    "html_bytes": 1058264,
     "interpolation": false,
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 700,
@@ -302,7 +387,7 @@
       "australia",
       "custom_bbox"
     ],
-    "samples_geojson_bytes": 1010284,
+    "samples_geojson_bytes": 1011676,
     "scope_excluded_mappable_record_count": 0,
     "source_mappable_record_count": 700,
     "spatial_scope": {

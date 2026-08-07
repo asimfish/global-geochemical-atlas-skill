@@ -23,6 +23,8 @@ jobs:
         run: python skills/global-geochemical-atlas/scripts/self_test.py
       - name: Test Docker evaluation controller
         run: python -m unittest discover -s evaluation/docker/tests -v
+      - name: Test unified evaluation reporting
+        run: python -m unittest discover -s evaluation/reporting -p 'test_*.py' -v
       - name: Check autonomous Qwen uplift contracts and source scoring
         run: python -m unittest discover -s evaluation_lyf/agent_uplift -p 'test_*.py' -v
       - name: Verify independent source truth snapshot

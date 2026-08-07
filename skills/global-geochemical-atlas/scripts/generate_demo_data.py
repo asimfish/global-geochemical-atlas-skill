@@ -117,6 +117,10 @@ LEGACY_INPUT_COLUMNS = (
 # always emit these headers so information extracted by adapters is not lost at
 # the D1 -> D2 boundary.
 V4_INPUT_COLUMNS = (
+    "coordinate_evidence_scope",
+    "coordinate_policy_id",
+    "coordinate_latitude_field",
+    "coordinate_longitude_field",
     "sample_type_raw",
     "sample_type",
     "sample_type_mapping_status",
@@ -1106,7 +1110,11 @@ def pangaea_north_africa_demo(
                     "detection_limit_unit": "",
                     "latitude": latitude,
                     "longitude": longitude,
-                    "source_crs": "EPSG:4326",
+                    "source_crs": "",
+                    "coordinate_evidence_scope": "platform_policy_declared",
+                    "coordinate_policy_id": "pangaea-geocode-wgs84-v1",
+                    "coordinate_latitude_field": "Latitude",
+                    "coordinate_longitude_field": "Longitude",
                     "coordinate_uncertainty_m": "",
                     "geologic_unit": str(record.fields.get("Area") or "").strip(),
                     "analytical_method": str(record.fields.get("_analytical_method") or ""),

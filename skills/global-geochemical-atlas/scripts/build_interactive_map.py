@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import os
@@ -12,6 +13,14 @@ import tempfile
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 import build_iteration_backlog as backlog_builder
 
@@ -1249,6 +1258,12 @@ def build_map(
         "interpolation": False,
         "html_bytes": html_bytes,
         "samples_geojson_bytes": geojson_bytes,
+        "artifact_bindings": {
+            "database_sha256": sha256_file(database),
+            "anomalies_sha256": sha256_file(anomalies_path),
+            "interactive_map_sha256": sha256_file(output_html),
+            "samples_geojson_sha256": sha256_file(output_geojson),
+        },
         "basemap": {
             "asset_version": basemap["asset_version"],
             "title": basemap["title"],

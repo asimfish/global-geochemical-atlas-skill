@@ -31,6 +31,10 @@ CONFIDENCE_VERSION = "d2-confidence-v3"
 ANOMALY_VERSION = "d2-robust-mad-v2"
 SPATIAL_ANOMALY_VERSION = "d2-spatial-hypergeometric-fdr-v1"
 ATOMIC_WEIGHT_VERSION = "d2-atomic-weights-v1"
+MOLAR_MASS_VERSION = "d2-ciaaw-abridged-2024-v1"
+COORDINATE_POLICY_REGISTRY = (
+    Path(__file__).resolve().parent.parent / "references" / "coordinate-policy-registry.json"
+)
 GEOLOGY_JOIN_VERSION = "d2-glim-05deg-cell-join-v1"
 GLIM_SOURCE = "https://doi.org/10.1594/PANGAEA.788537"
 GLIM_VERSION = "PANGAEA.788537; 2012 publication; 0.5 degree dominant surface lithology raster"
@@ -114,6 +118,13 @@ SCHEMA_COLUMNS = (
     "longitude",
     "source_crs",
     "coordinate_transform_method",
+    "coordinate_evidence_scope",
+    "coordinate_policy_id",
+    "coordinate_policy_version",
+    "coordinate_policy_url",
+    "coordinate_policy_sha256",
+    "coordinate_latitude_field",
+    "coordinate_longitude_field",
     "coordinate_uncertainty_m",
     "sampled_at",
     "sample_depth_min_m",
@@ -208,7 +219,9 @@ INPUT_FIELDS = {
     "source_qualifier_raw",
     "missing_reason", "medium", "material", "measurement_basis", "original_latitude_raw",
     "original_longitude_raw", "latitude", "longitude", "source_crs",
-    "coordinate_transform_method", "coordinate_uncertainty_m", "sampled_at", "sample_depth_min_m",
+    "coordinate_transform_method", "coordinate_evidence_scope", "coordinate_policy_id",
+    "coordinate_latitude_field", "coordinate_longitude_field", "coordinate_uncertainty_m",
+    "sampled_at", "sample_depth_min_m",
     "sample_depth_max_m", "grain_fraction", "lithology", "geologic_unit", "geologic_unit_id",
     "geologic_context_source", "geologic_context_version", "geologic_match_method",
     "distance_to_geologic_boundary_m", "geologic_match_confidence", "analytical_method", "method_family",
@@ -230,11 +243,14 @@ FLAG_SEVERITY = {
     "INVALID_DETECTION_LIMIT": "error",
     "NEGATIVE_CONCENTRATION": "error",
     "UNSUPPORTED_UNIT": "error",
+    "UNSUPPORTED_MOLAR_MASS": "error",
+    "UNSUPPORTED_MOLAR_SPECIES": "error",
     "UNSUPPORTED_SPECIES_CONVERSION": "error",
     "OXIDE_ELEMENT_MISMATCH": "error",
     "AMBIGUOUS_AQUEOUS_RATIO_UNIT": "error",
     "INVALID_COORDINATE": "error",
     "UNSUPPORTED_SOURCE_CRS": "error",
+    "INVALID_COORDINATE_POLICY": "error",
     "DEPTH_RANGE_INVALID": "error",
     "INVALID_GEOLOGIC_DISTANCE": "error",
     "INVALID_QUANTITATION_LIMIT": "error",
@@ -255,6 +271,7 @@ FLAG_SEVERITY = {
     "ZERO_ISLAND_COORDINATE": "warning",
     "OUTSIDE_REQUEST_REGION": "warning",
     "MISSING_SOURCE_CRS": "warning",
+    "PLATFORM_CRS_POLICY_APPLIED": "info",
     "MISSING_COORDINATE_UNCERTAINTY": "warning",
     "INVALID_COORDINATE_UNCERTAINTY": "warning",
     "MISSING_SOURCE_ID": "warning",
@@ -359,6 +376,16 @@ SOLID_FACTORS = {
     "g/kg": 1_000.0, "mg/g": 1_000.0,
 }
 WATER_FACTORS = {"ug/l": 1.0, "mg/l": 1_000.0, "ng/l": 0.001, "g/l": 1_000_000.0}
+# Frozen conventional/abridged atomic weights used only for explicit elemental
+# nmol/L -> ug/L conversion.  Do not use this table for compounds or nmol/kg.
+AQUEOUS_MOLAR_MASSES = {
+    "As": 74.921595,
+    "Cu": 63.546,
+    "Fe": 55.845,
+    "Ni": 58.6934,
+    "Pb": 207.2,
+    "Zn": 65.38,
+}
 AQUEOUS_AMBIGUOUS_UNITS = {
     "ppm", "ppb", "wt%", "%", "percent", "mg/kg", "ug/kg", "g/kg", "ug/g", "ng/g", "mg/g",
 }
@@ -663,12 +690,28 @@ def parse_measurement(
     return number, qualifier, censoring_limit, detection_limit, quantitation_limit, missing_reason
 
 
-def conversion_for(medium: str, original_unit: Any, flags: list[str]) -> tuple[float | None, str | None]:
+def conversion_for(
+    medium: str,
+    original_unit: Any,
+    flags: list[str],
+    analyte: str | None = None,
+    species_or_oxide: str | None = None,
+) -> tuple[float | None, str | None]:
     unit = canonicalize_unit(original_unit)
     if medium in SOLID_MEDIA and unit in SOLID_FACTORS:
         return SOLID_FACTORS[unit], "mg/kg"
     if medium == "water" and unit == "nmol/kg":
         return 1.0, "nmol/kg"
+    if medium == "water" and unit == "nmol/l":
+        if species_or_oxide not in (None, "", analyte):
+            add_flag(flags, "UNSUPPORTED_MOLAR_SPECIES")
+            return None, None
+        molar_mass = AQUEOUS_MOLAR_MASSES.get(analyte or "")
+        if molar_mass is None:
+            add_flag(flags, "UNSUPPORTED_MOLAR_MASS")
+            return None, None
+        # nmol/L * g/mol * 1e-3 = ug/L.
+        return molar_mass / 1_000.0, "ug/L"
     if medium == "water" and unit in WATER_FACTORS:
         return WATER_FACTORS[unit], "ug/L"
     if medium == "water" and unit in AQUEOUS_AMBIGUOUS_UNITS:
@@ -676,6 +719,80 @@ def conversion_for(medium: str, original_unit: Any, flags: list[str]) -> tuple[f
         return None, None
     flags.append("UNSUPPORTED_UNIT")
     return None, None
+
+
+def load_coordinate_policies() -> dict[str, dict[str, Any]]:
+    try:
+        registry = json.loads(COORDINATE_POLICY_REGISTRY.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise PipelineError("coordinate policy registry is unavailable or invalid") from exc
+    if registry.get("schema_version") != "geochemical-coordinate-policy-registry-v1":
+        raise PipelineError("coordinate policy registry has an unsupported schema version")
+    policies = registry.get("policies")
+    if not isinstance(policies, list):
+        raise PipelineError("coordinate policy registry policies must be an array")
+    indexed: dict[str, dict[str, Any]] = {}
+    for policy in policies:
+        if not isinstance(policy, dict) or not isinstance(policy.get("policy_id"), str):
+            raise PipelineError("coordinate policy registry contains an invalid policy")
+        if policy["policy_id"] in indexed:
+            raise PipelineError("coordinate policy registry contains duplicate policy IDs")
+        indexed[policy["policy_id"]] = policy
+    return indexed
+
+
+def coordinate_evidence(
+    row: Mapping[str, Any], flags: list[str]
+) -> tuple[str | None, str | None, dict[str, str | None]]:
+    """Resolve coordinate CRS from explicit row evidence or an allowlisted platform policy."""
+
+    source_crs = blank_to_none(row.get("source_crs"))
+    method = blank_to_none(row.get("coordinate_transform_method"))
+    requested_scope = blank_to_none(row.get("coordinate_evidence_scope"))
+    metadata: dict[str, str | None] = {
+        "coordinate_evidence_scope": requested_scope or ("file_declared" if source_crs else None),
+        "coordinate_policy_id": None,
+        "coordinate_policy_version": None,
+        "coordinate_policy_url": None,
+        "coordinate_policy_sha256": None,
+        "coordinate_latitude_field": blank_to_none(row.get("coordinate_latitude_field")),
+        "coordinate_longitude_field": blank_to_none(row.get("coordinate_longitude_field")),
+    }
+    if source_crs is not None:
+        if requested_scope == "platform_policy_declared":
+            add_flag(flags, "INVALID_COORDINATE_POLICY")
+        return source_crs, method, metadata
+    if requested_scope != "platform_policy_declared":
+        return None, method, metadata
+
+    policy_id = blank_to_none(row.get("coordinate_policy_id"))
+    policy = load_coordinate_policies().get(policy_id or "")
+    doi = blank_to_none(row.get("dataset_doi")) or ""
+    latitude_field = metadata["coordinate_latitude_field"] or ""
+    longitude_field = metadata["coordinate_longitude_field"] or ""
+    valid = bool(
+        policy
+        and re.fullmatch(str(policy.get("dataset_doi_pattern") or "(?!)"), doi, re.IGNORECASE)
+        and latitude_field.casefold()
+        in {str(value).casefold() for value in policy.get("latitude_fields", [])}
+        and longitude_field.casefold()
+        in {str(value).casefold() for value in policy.get("longitude_fields", [])}
+        and policy.get("target_crs") == "EPSG:4326"
+        and re.fullmatch(r"[0-9a-f]{64}", str(policy.get("authority_page_sha256") or ""))
+    )
+    if not valid:
+        add_flag(flags, "INVALID_COORDINATE_POLICY")
+        return None, method, metadata
+    metadata.update(
+        {
+            "coordinate_policy_id": str(policy["policy_id"]),
+            "coordinate_policy_version": str(policy["version"]),
+            "coordinate_policy_url": str(policy["authority_url"]),
+            "coordinate_policy_sha256": str(policy["authority_page_sha256"]),
+        }
+    )
+    add_flag(flags, "PLATFORM_CRS_POLICY_APPLIED")
+    return "EPSG:4326", f"identity:{policy['policy_id']}", metadata
 
 
 def add_flag(flags: list[str], flag: str) -> None:
@@ -917,12 +1034,19 @@ def normalize_row(
         quantitation_limit,
         missing_reason,
     ) = parse_measurement(row, flags)
-    unit_factor, normalized_unit = conversion_for(medium, row.get("unit"), flags)
+    unit_factor, normalized_unit = conversion_for(
+        medium, row.get("unit"), flags, analyte, species_or_oxide
+    )
     species_factor, species_formula = species_conversion_factor(species_or_oxide, analyte, flags)
     factor = unit_factor * species_factor if unit_factor is not None and species_factor is not None else None
     conversion_formula = None
     if factor is not None:
         conversion_formula = f"normalized = original * {unit_factor:g}"
+        if canonicalize_unit(row.get("unit")) == "nmol/l":
+            conversion_formula += (
+                f"; nmol/L * atomic_weight({analyte})/1000; "
+                f"atomic_weight={AQUEOUS_MOLAR_MASSES[analyte]:.12g}; {MOLAR_MASS_VERSION}"
+            )
         if species_formula is not None:
             conversion_formula += f" * {species_factor:.12g}; {species_formula}"
     normalized_value: float | None = None
@@ -936,7 +1060,9 @@ def normalize_row(
                 limit_unit = blank_to_none(row.get("quantitation_limit_unit"))
             if qualifier in {"bdl", "loq", "nd"} and limit_unit is not None:
                 limit_flags: list[str] = []
-                limit_factor, limit_target = conversion_for(medium, limit_unit, limit_flags)
+                limit_factor, limit_target = conversion_for(
+                    medium, limit_unit, limit_flags, analyte, species_or_oxide
+                )
                 if limit_factor is not None and limit_target == normalized_unit and species_factor is not None:
                     normalized_censoring_limit = censoring_limit * limit_factor * species_factor
                 else:
@@ -946,8 +1072,7 @@ def normalize_row(
                 normalized_censoring_limit = censoring_limit * factor
 
     lat_raw, lon_raw, latitude, longitude = normalize_coordinates(row, flags, region_bbox)
-    source_crs = blank_to_none(row.get("source_crs"))
-    coordinate_transform_method = blank_to_none(row.get("coordinate_transform_method"))
+    source_crs, coordinate_transform_method, coordinate_metadata = coordinate_evidence(row, flags)
     if source_crs is None:
         add_flag(flags, "MISSING_SOURCE_CRS")
         if latitude is not None or longitude is not None:
@@ -1025,6 +1150,7 @@ def normalize_row(
         "longitude": longitude,
         "source_crs": source_crs,
         "coordinate_transform_method": coordinate_transform_method,
+        **coordinate_metadata,
         "coordinate_uncertainty_m": coordinate_uncertainty,
         "sampled_at": blank_to_none(row.get("sampled_at")),
         "sample_depth_min_m": depth_min,

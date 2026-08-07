@@ -1,4 +1,4 @@
-# Qwen3.8-Max Skill uplift public case v3
+# Qwen3.8-Max Skill uplift blind-browser public case v4
 
 本任务评估 `global-geochemical-atlas` Skill 是否能让 Agent 更完整、可信地完成全球地球化学图谱工作流。
 不得读取仓库中的 `evaluation_lyf/stage_benchmark/scripts`、`evaluation_lyf/reference_implementation`、
@@ -25,6 +25,8 @@ max_records: 50000
 ## 2. 固定真值锚点不是数据全集
 
 先运行：
+
+开发 bundle 中可用以下命令作冒烟反馈；formal bundle 从启动前就不包含 scorer，候选不得寻找、还原或代写评分器：
 
 ```bash
 python public_case/prepare_case.py --output-dir case_data
@@ -91,8 +93,12 @@ python public_case/prepare_case.py --output-dir case_data
 
 固体质量比统一为 `mg/kg`，水体质量/体积统一为 `µg/L`；只有元素身份和量纲证据充分时才做摩尔质量换算。
 未知或不兼容单位必须显式失败关闭，不能为追求 `UNSUPPORTED_UNIT=0` 猜测单位。保留删失语义；未经证明的 CRS
-不得写入 canonical WGS84。对适用陆地固体执行版本化地质匹配；水体和明确海洋沉积物不得赋陆地岩性。
+不得写入 canonical WGS84；可使用版本化、URL/hash 可追溯且精确限定 DOI/字段范围的平台坐标政策，不得仅凭
+经纬度数值形态推断。对适用陆地固体执行版本化地质匹配；水体和明确海洋沉积物不得赋陆地岩性。
 异常只能称相对已声明可比背景的候选 high/low，不得声明污染、矿化或成因。
+
+canonical 地质字段以 `public_case/benchmark_export_crosswalk.json` 为准。旧版 `spatial_geology_*` 只作只读兼容，
+不得为了 scorer 把 benchmark alias 写回或污染标准化数据库。
 
 ### D3：研究型交互产品
 
@@ -127,5 +133,8 @@ python public_case/score_submission.py \
 ```
 
 总分 100：D1 来源/覆盖/证据链 30、D2 科学处理 35、D3 产品交付 20、可复现性 15。公开 scorer 检查最低
-锚点和不变量；正式结论还必须结合不可见来源目录、浏览器交互测试和三次独立 B0/S0 运行。两组必须使用相同
+锚点和不变量；上面不带 `--browser-audit` 的调用只用于候选开发反馈，因此不能取得完整 D3 证据或正式满分。
+候选退出后，外部控制器必须运行 `evaluation/reporting/browser_audit.py`，再把控制器目录中的审计文件通过
+`--browser-audit` 传给 scorer，并用 `evaluation/reporting/generate_report.py` 生成统一 JSON/Markdown 报告。
+正式结论还必须结合不可见来源目录、浏览器交互测试和三次独立 B0/S0 运行。两组必须使用相同
 commit、冻结请求、资源、网络策略、时限和 scorer，唯一自变量是 Skill 可见性。

@@ -21,6 +21,7 @@ from urllib.parse import urlsplit
 
 PUBLIC_SOURCE_CONTRACT_SHA256 = "46cb65053353694fcfddd4aba7447bf2b966cf996a3cf0c80fb4e72eed88c005"
 DISCOVERY_CONTRACT_SHA256 = "12494afbcd05526169dcfbb5c0a2eb1f4ff5c2e31f0313607df2ec53ca66a484"
+BENCHMARK_CROSSWALK_SHA256 = "eb891eb0ac7ecf7871260549d57fa40a0caecd02343ede4a75c9d1682861eb89"
 HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_SOURCE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 LOCATOR_TOKENS = ("row=", "event=", "field=", "element=", "page=", "table=")
@@ -36,6 +37,15 @@ def file_sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def load_benchmark_crosswalk(path: Path) -> dict[str, Any]:
+    if file_sha256(path) != BENCHMARK_CROSSWALK_SHA256:
+        raise ValueError("benchmark export crosswalk hash mismatch")
+    value = load_json(path)
+    if value.get("schema_version") != "qwen-uplift-benchmark-export-crosswalk-v1":
+        raise ValueError("benchmark export crosswalk schema mismatch")
+    return value
 
 
 def nonblank(row: dict[str, str], field: str) -> bool:
@@ -382,11 +392,90 @@ def valid_samples_geojson(value: Any) -> tuple[bool, int, int]:
     return True, len(features), len(coordinates)
 
 
+def browser_audit_metrics(path: Path | None, html: Path) -> tuple[bool, dict[str, Any]]:
+    if path is None or not path.is_file():
+        return False, {"status": "not_supplied"}
+    try:
+        audit = load_json(path)
+    except (OSError, json.JSONDecodeError) as exc:
+        return False, {"status": "invalid", "error": str(exc)}
+    interactions = audit.get("interactions") if isinstance(audit, dict) else None
+    required = {
+        "filter_changes_result", "heatmap", "element_combination",
+        "source_drilldown", "anomaly_view",
+    }
+    interaction_pass = (
+        isinstance(interactions, dict)
+        and required <= set(interactions)
+        and all(interactions[name].get("passed") is True for name in required)
+    )
+    metrics = audit.get("metrics") if isinstance(audit, dict) else {}
+    screenshots = audit.get("screenshots") if isinstance(audit, dict) else []
+    screenshot_directory = audit.get("screenshot_directory") if isinstance(audit, dict) else None
+    screenshot_files_ok = False
+    if (
+        isinstance(screenshot_directory, str)
+        and screenshot_directory
+        and Path(screenshot_directory).name == screenshot_directory
+        and isinstance(screenshots, list)
+    ):
+        screenshot_root = path.parent / screenshot_directory
+        screenshot_files_ok = len(screenshots) >= 5
+        for item in screenshots:
+            filename = item.get("file") if isinstance(item, dict) else None
+            candidate = screenshot_root / str(filename or "")
+            if (
+                not isinstance(filename, str)
+                or Path(filename).name != filename
+                or not candidate.is_file()
+                or candidate.stat().st_size != item.get("bytes")
+                or file_sha256(candidate) != item.get("sha256")
+            ):
+                screenshot_files_ok = False
+                break
+    bound = (
+        isinstance(audit, dict)
+        and audit.get("schema_version") == "geochemical-browser-audit-v1"
+        and audit.get("generated_by") == "external_evaluation_controller"
+        and audit.get("html", {}).get("sha256") == file_sha256(html)
+        and audit.get("html", {}).get("bytes") == html.stat().st_size
+    )
+    browser_ok = bool(
+        bound
+        and audit.get("status") == "pass"
+        and audit.get("loaded") is True
+        and audit.get("rendered_product") is True
+        and audit.get("javascript_errors") == []
+        and isinstance(metrics, dict)
+        and (metrics.get("embedded_measurements") or 0) > 0
+        and (metrics.get("visible_symbols") or 0) > 0
+        and (metrics.get("basemap_shapes") or 0) > 0
+        and (metrics.get("country_boundaries") or 0) > 0
+        and isinstance(screenshots, list)
+        and len(screenshots) >= 5
+        and all(HEX_SHA256.fullmatch(str(item.get("sha256") or "")) for item in screenshots)
+        and screenshot_files_ok
+    )
+    return browser_ok and interaction_pass, {
+        "status": audit.get("status") if isinstance(audit, dict) else "invalid",
+        "hash_bound": bound,
+        "browser_ok": browser_ok,
+        "interaction_pass": interaction_pass,
+        "metrics": metrics,
+        "screenshot_count": len(screenshots) if isinstance(screenshots, list) else 0,
+        "screenshots_hash_verified": screenshot_files_ok,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--submission-dir", type=Path, required=True)
     parser.add_argument("--case-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--browser-audit", type=Path,
+        help="Controller-generated browser_audit.json outside the candidate submission",
+    )
     args = parser.parse_args()
     root = args.submission_dir
     checks: list[dict[str, Any]] = []
@@ -408,6 +497,14 @@ def main() -> int:
         return 1
 
     public_case = Path(__file__).parent
+    try:
+        benchmark_crosswalk = load_benchmark_crosswalk(
+            public_case / "benchmark_export_crosswalk.json"
+        )
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        report = {"score": 0, "maximum": 100, "checks": checks, "status": "invalid_evaluator", "error": str(exc)}
+        args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return 1
     discovery_contract_path = public_case / "discovery_contract.json"
     discovery_contract = load_json(discovery_contract_path)
     with (root / "d1_raw.csv").open(encoding="utf-8-sig", newline="") as handle:
@@ -511,8 +608,11 @@ def main() -> int:
     d2_headers = set(d2[0]) if d2 else set()
     core_d2 = {"original_value_raw", "original_unit", "normalized_value", "normalized_unit", "value_qualifier", "qc_flags", "operational_confidence"}
     geology_field_sets = (
-        {"spatial_geology_status", "spatial_geology_version"},
-        {"matched_geologic_unit", "geology_map_source", "geology_map_version", "match_method"},
+        set(benchmark_crosswalk["legacy_read_only_aliases"]),
+        {
+            benchmark_crosswalk["canonical_contract"][field]
+            for field in ("matched_unit", "map_source", "map_version", "match_method")
+        },
     )
     schema_ok = core_d2 <= d2_headers and any(fields <= d2_headers for fields in geology_field_sets)
     check("d2_schema", 5, schema_ok, {"missing_core": sorted(core_d2 - d2_headers), "geology_contract_present": schema_ok})
@@ -537,10 +637,24 @@ def main() -> int:
 
     html = (root / "interactive_map.html").read_text(encoding="utf-8", errors="replace")
     remote_assets = bool(re.search(r"<(?:script|link)[^>]+(?:src|href)=[\"']https?://", html, re.I))
-    check("d3_offline_map", 4, not remote_assets and len(html) > 10_000, {"bytes": len(html), "remote_assets": remote_assets})
+    browser_ok, browser_metrics = browser_audit_metrics(
+        args.browser_audit, root / "interactive_map.html"
+    )
+    check(
+        "d3_offline_map", 4,
+        not remote_assets and len(html) > 10_000 and browser_metrics.get("browser_ok") is True,
+        {"bytes": len(html), "remote_assets": remote_assets, "browser": browser_metrics},
+        "Full credit requires an external hash-bound Chromium render; static HTML tokens are insufficient.",
+    )
     folded = html.casefold()
     concepts = ["element", "medium", "geolog", "source", "confidence", "region", "sample", "heat", "comparison"]
-    check("d3_research_controls", 4, all(token in folded for token in concepts), [token for token in concepts if token in folded])
+    check(
+        "d3_research_controls", 4,
+        all(token in folded for token in concepts)
+        and browser_metrics.get("interaction_pass") is True,
+        {"static_concepts": [token for token in concepts if token in folded], "browser": browser_metrics},
+        "Filters, heatmap, combination, source drilldown and anomaly view must change or render state in Chromium.",
+    )
     source_confidence = load_json(root / "source_confidence.json")
     sc_text = json.dumps(source_confidence).casefold()
     check("d3_source_confidence", 3, "not_a_probability" in sc_text or "非概率" in sc_text, None)
@@ -549,7 +663,13 @@ def main() -> int:
     directions = {str(item.get("properties", {}).get("direction") or "").casefold() for item in anomaly_features if isinstance(item, dict)}
     check("d3_anomaly_geojson", 3, anomaly_geo.get("type") == "FeatureCollection" and bool(anomaly_features) and bool(directions & {"high", "low"}), {"features": len(anomaly_features), "directions": sorted(directions)})
     samples_ok, sample_features, unique_sites = valid_samples_geojson(load_json(root / "samples.geojson"))
-    check("d3_mappable_observations", 3, samples_ok, {"features": sample_features, "unique_sites": unique_sites})
+    browser_observations = browser_metrics.get("metrics", {}).get("embedded_measurements")
+    check(
+        "d3_mappable_observations", 3,
+        samples_ok and browser_ok and browser_observations == sample_features,
+        {"features": sample_features, "unique_sites": unique_sites,
+         "browser_embedded_measurements": browser_observations},
+    )
     disclosure_ok = any(token in folded for token in ("coverage gap", "unsampled", "未覆盖", "覆盖空白", "空白不"))
     check("d3_coverage_disclosure", 3, disclosure_ok and str(unique_sites) in html, {"unique_sites": unique_sites, "boundary": disclosure_ok})
 
@@ -572,6 +692,7 @@ def main() -> int:
             "overall": overall_truth,
         },
         "discovery": {**discovery_metrics, **breadth_actual},
+        "browser_audit": browser_metrics,
         "source_truth_claim_boundary": (
             "Anchor truth is exact against the hash-pinned public authority contract. Discovered-source truth is exact "
             "against candidate-frozen local bytes and metadata; formal authority and breadth claims still require the "

@@ -15,7 +15,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = "geochemistry-iteration-backlog-v1"
+SCHEMA_VERSION = "geochemistry-iteration-backlog-v2"
 FIELDS = (
     "item_id",
     "record_id",
@@ -56,8 +56,11 @@ def json_value(value: str, expected: type) -> Any:
     return parsed if isinstance(parsed, expected) else expected()
 
 
-def item_id(record_id: str, issue_code: str, field: str) -> str:
-    digest = hashlib.sha256(f"{record_id}\0{issue_code}\0{field}".encode()).hexdigest()[:16]
+def item_id(record_id: str, issue_code: str, field: str, observed: str = "") -> str:
+    normalized_observed = " ".join(str(observed).split())
+    digest = hashlib.sha256(
+        f"{record_id}\0{issue_code}\0{field}\0{normalized_observed}".encode()
+    ).hexdigest()[:16]
     return f"ITER-{digest}"
 
 
@@ -76,7 +79,7 @@ def issue(
 ) -> dict[str, str]:
     record_id = text(row, "record_id") or text(row, "source_record_id") or "unknown-record"
     return {
-        "item_id": item_id(record_id, code, field),
+        "item_id": item_id(record_id, code, field, observed),
         "record_id": record_id,
         "source_id": text(row, "source_id") or "unknown",
         "stage_owner": owner,
@@ -178,16 +181,23 @@ def build(database: Path, output: Path) -> dict[str, Any]:
     with database.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
     items = [entry for row in rows for entry in issues_for_row(row)]
-    items.sort(key=lambda value: (value["record_id"], value["issue_code"], value["field"]))
+    items.sort(
+        key=lambda value: (
+            value["record_id"], value["issue_code"], value["field"],
+            value["observed_value"], value["item_id"],
+        )
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="", dir=output.parent, delete=False) as handle:
-        writer = csv.DictWriter(handle, fieldnames=FIELDS)
+        writer = csv.DictWriter(handle, fieldnames=FIELDS, lineterminator="\n")
         writer.writeheader()
         writer.writerows(items)
         temporary = Path(handle.name)
     os.replace(temporary, output)
     return {
         "schema_version": SCHEMA_VERSION,
+        "input_database_sha256": hashlib.sha256(database.read_bytes()).hexdigest(),
+        "output_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
         "record_count": len(rows),
         "item_count": len(items),
         "status_counts": dict(sorted(Counter(item["status"] for item in items).items())),

@@ -11,20 +11,22 @@
       "Ni",
       "Zn"
     ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
     "mode": "cached",
     "observations": 48
   },
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 65298,
+      "bytes": 68278,
       "path": "demo_input.csv",
-      "sha256": "dd39cb736869bbc25b903fd6a0912f827be2d054e74b7be331d864a1ecc8b026"
+      "sha256": "3ac93cf3d3f2c5246623af1215ba64c494690bb53305ee0489f4ea0b44553a9d"
     },
     {
-      "bytes": 68328,
+      "bytes": 73176,
       "path": "sources.jsonl",
-      "sha256": "15cbc81ae87ba4e73311c30609d13b1855f3fa4f61de1dd0c0c709b52798c47c"
+      "sha256": "00ccb800fc025d5aeceba817806d91b1f9f4a3f2e130ebc44666e07667d36391"
     }
   ],
   "record_counts": {
@@ -44,7 +46,7 @@
     {
       "bytes": 30336,
       "filename": "Table_S5.tab",
-      "retrieved_at": "2026-08-06T03:30:49Z",
+      "retrieved_at": "2026-08-07T11:38:57Z",
       "sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485",
       "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
     }
@@ -53,6 +55,7 @@
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
     "This DOI contains 43 discrete North African samples, not continuous regional coverage.",
     "Values are HF-HNO3-digested deflatable soil fractions and must remain separate from differently prepared bulk-soil surveys.",
     "Publisher location text is preserved; border samples are not assigned to a country by coordinate inference."

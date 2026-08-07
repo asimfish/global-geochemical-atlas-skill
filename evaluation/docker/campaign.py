@@ -947,17 +947,21 @@ def run_campaign(args: argparse.Namespace) -> int:
             thinking_mode=args.supplemental_thinking_mode,
             require_endpoint=args.agent == "opencode",
         )
-    docker_available()
     alignment = load_json(ALIGNMENT_PATH)
     required_paths = [item["path"] for item in alignment["submission"]["required_artifacts"]]
     tasks = parse_tasks(args.tasks)
     conditions = parse_conditions(args.conditions)
     if not 1 <= args.repeats <= 3:
         raise CampaignError("--repeats must be between 1 and 3")
+    if set(conditions) == {"B0", "S0"} and args.repeats != 3 and not args.development_run:
+        raise CampaignError(
+            "formal paired uplift requires exactly --repeats 3; use --development-run only for diagnostics"
+        )
     if args.static_review:
         validate_review(args.static_review, "static review")
     if args.llm_report_dir and not args.llm_report_dir.is_dir():
         raise CampaignError(f"--llm-report-dir is not a directory: {args.llm_report_dir}")
+    docker_available()
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
         raise CampaignError("--output-dir must be new or empty")
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -983,6 +987,7 @@ def run_campaign(args: argparse.Namespace) -> int:
         "tasks": tasks,
         "conditions": conditions,
         "repeats": args.repeats,
+        "protocol_mode": "development" if args.development_run else "formal",
         "model": args.model,
         "model_variant": args.model_variant or None,
         "temperature": args.temperature,
@@ -1159,6 +1164,10 @@ def parser() -> argparse.ArgumentParser:
     campaign.add_argument("--tasks", default="Q01")
     campaign.add_argument("--conditions", default="B0,S0")
     campaign.add_argument("--repeats", type=int, default=3)
+    campaign.add_argument(
+        "--development-run", action="store_true",
+        help="allow an incomplete diagnostic pair; output is not valid uplift evidence",
+    )
     campaign.add_argument("--model", default="qwen3.8-max")
     campaign.add_argument("--model-variant", default="")
     campaign.add_argument("--temperature", type=float, default=0.0)

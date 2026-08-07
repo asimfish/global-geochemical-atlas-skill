@@ -1,4 +1,4 @@
-# Qwen Skill uplift：零准备 Docker 测试
+# Qwen Skill uplift：控制器预构建的 Docker 测试
 
 这不是第三套评分体系。仓库只有两类评测内容，Docker 是它们共用的执行底座：
 
@@ -12,12 +12,17 @@
 
 ## 你实际要做的事
 
-1. 创建两个空目录，并分别把 Qwen Agent 启动在目录中；
-2. 无 Skill 目录原样粘贴 [`QWEN_NO_SKILL_DOCKER_PROMPT.md`](QWEN_NO_SKILL_DOCKER_PROMPT.md)；
-3. 有 Skill 目录原样粘贴 [`QWEN_WITH_SKILL_DOCKER_PROMPT.md`](QWEN_WITH_SKILL_DOCKER_PROMPT.md)；
-4. 回收两个目录的 `experiment_manifest.json`、`score.json` 和 submission。
+1. 外部控制器 checkout `experiment_config.json` 的冻结 commit 并构建 Docker 镜像；
+2. 按 [`QWEN_NO_SKILL_DOCKER_PROMPT.md`](QWEN_NO_SKILL_DOCKER_PROMPT.md) 和
+   [`QWEN_WITH_SKILL_DOCKER_PROMPT.md`](QWEN_WITH_SKILL_DOCKER_PROMPT.md) 分别导出 formal B0/S0 bundle；
+3. 分别把 bundle 挂载进两个新的 Qwen Agent 容器，只把 bundle 中的 `AGENT_PROMPT.md` 交给模型；
+4. 候选退出后，在控制器侧运行来源门禁、Chromium 审计、隐藏评分与统一报告；
+5. 每臂重复三个全新会话，再运行 `evaluation/reporting/aggregate_uplift.py`。
 
-Prompt 会自行克隆固定 commit、构建或复用评测镜像、准备五个真实性锚点并执行有界多平台来源发现，冻结采集输入后断网完成任务，最多运行三轮公开 scorer，最后执行一次干净重建。五个资源是 B0/S0 共享的最低锚点，不是采集上限；具体发现合约见 [`public_case/discovery_contract.json`](public_case/discovery_contract.json)。用户无需预先下载仓库或 Skill。固定实验参数见 [`experiment_config.json`](experiment_config.json)。
+候选不能自行克隆仓库。`export_candidate_bundle.py` 在 Agent 启动前以白名单导出任务；formal bundle 不含公开
+scorer，避免候选迎合断言。五个资源是 B0/S0 共享的最低锚点，不是采集上限；具体发现合约见
+[`public_case/discovery_contract.json`](public_case/discovery_contract.json)。固定实验参数见
+[`experiment_config.json`](experiment_config.json)。
 
 如果要保留原来的主机直跑方式，使用 [`QWEN_NO_SKILL_PROMPT.md`](QWEN_NO_SKILL_PROMPT.md) 和 [`QWEN_WITH_SKILL_PROMPT.md`](QWEN_WITH_SKILL_PROMPT.md)。主机结果与 Docker 结果属于不同 runtime profile，不能混在同一个三次中位数中。
 
@@ -44,13 +49,13 @@ Docker runner 的标准构建、mock smoke、D1/D2/D3 stage 和正式 OpenCode c
 
 ## 公平性与失败关闭
 
-- 无 Skill 组通过 `git archive` 只导出公开 uplift 任务，不把 `.git` 或 `skills/` 带进工作目录；
+- 无 Skill 组由外部控制器白名单导出公开任务，不把 `.git`、scorer 或 `skills/` 带进工作目录；
 - 有 Skill 组只额外导出一个 Skill，并映射到 `.agents/skills/global-geochemical-atlas/`；
 - `stage_benchmark/`、`reference_implementation/`、gold、历史运行和另一实验臂的产物都不可见；
 - 只把网络传输耗时与任务执行耗时分开记录；来源规划、解析和处理仍计入执行时间；Docker 不可用时允许主机诊断回退，但必须在 manifest 中记为环境偏差，不能与 Docker 正式结果混算；
 - 新增来源及其 `discovered_manifest.json` 必须在处理前冻结；D2、D3、scorer 和 clean rebuild 使用 `--network none`；
 - 公开 scorer 对新增来源做本地 bytes/hash 和元数据一致性检查，正式评测再用不可见来源目录与在线审计验证权威性和广度；
-- scorer 最多运行三轮，每轮分数原样留存，不得修改 scorer；
+- development scorer 最多运行三轮；formal scorer、浏览器审计和统一报告始终在候选退出后运行；
 - `run.sh` 必须从保留的 `case_data/` 在新目录中重建全部产物，重建失败仍保留证据。
 
 CI 中的 `test_prompt_contract.py` 检查主机版与 Docker 版四份 Prompt 的固定参数、隔离命令和文件入口没有漂移，不替代真实 Qwen 调用。

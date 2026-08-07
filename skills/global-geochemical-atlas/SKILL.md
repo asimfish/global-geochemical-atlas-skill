@@ -175,11 +175,13 @@ python scripts/download_data.py \
 - `<LOD`、`<LOQ`、`ND`、`BDL`、`trace` 等删失值不插补为 0 或 LOD/2；保留 qualifier/limit，标准浓度为空且不进入 log 异常计算；若任务确需替代，必须另行冻结删失模型并报告敏感性分析；
 - 非标准列只接受显式 schema map；`source_record_id` 不得用导入行号代替；技术性生成的 `record_id` 必须绑定 `source_id/source_record_id`，缺原生标识时只作低证据代理，不能伪装成来源身份；
 - GeoJSON 遵循 RFC 7946 `[lon,lat]` 且不写旧式 `crs`；跨日期变更线 bbox 允许 `west>east`；可能经纬度交换、零岛、越界或同一样品坐标冲突时保留原记录、暂停映射并回溯来源人工确认，不静默纠正或挑选一个值；
-- 未经证实或未重投影的非 WGS84 坐标不写入 canonical 经纬度；
+- 未经证实或未重投影的非 WGS84 坐标不写入 canonical 经纬度；PANGAEA 只有在 DOI、原始
+  `LATITUDE/LONGITUDE` 字段和固定 `pangaea-geocode-wgs84-v1` 同时匹配时，才可依据可审计的平台政策
+  写为 EPSG:4326，且必须保留政策 URL、版本与哈希；该规则不得外推到其他仓库或任意经纬度列；
 - 只有完全重复导入可去重；现场/实验重复、不同方法复测及同坐标不同样品均保留。疑似重复标记且不进入异常背景；
 - 来源特有负数/特殊编码只按该数据集元数据解码，通用负浓度失败关闭。
 
-USGS DS801 可按元数据使用 WGS84；GEOROC datum 未证实时只保留原坐标，不做 WGS84 bbox 筛选。地质匹配使用上游 `geology_unit/method/confidence/distance_to_boundary` 或固定 raster/polygon join。GLiM 0.5° 只作岩石、土壤和非海洋沉积物的广域筛查；水体不附会陆地岩性，它也不是点位地层或因果证据。记录数据集版本/hash、方法、分辨率/边界距离及未匹配原因；不得混合匹配与未匹配背景。
+USGS DS801 可按元数据使用 WGS84；PANGAEA 可按上述版本化平台政策使用 WGS84；GEOROC datum 未证实时只保留原坐标，不做 WGS84 bbox 筛选。水体 `nmol/L` 仅对冻结原子量表中的明确元素换算为 `µg/L`，`nmol/kg` 缺密度时保持原单位。地质匹配使用上游 `geology_unit/method/confidence/distance_to_boundary` 或固定 raster/polygon join。GLiM 0.5° 只作岩石、土壤和非海洋沉积物的广域筛查；水体不附会陆地岩性，它也不是点位地层或因果证据。记录数据集版本/hash、方法、分辨率/边界距离及未匹配原因；不得混合匹配与未匹配背景。
 
 请求给出 CRM、空白和重复样批规则时必须逐条原样计算，全部通过才让该批进入异常背景；重复样 `RPD=|x1-x2|/((x1+x2)/2)*100%`。失败批次保留在数据库与 QC，不静默删除。
 
