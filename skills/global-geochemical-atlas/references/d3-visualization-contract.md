@@ -275,7 +275,7 @@ MAD 与相对中位数倍数，并明确不是与附近空间点平均值比较�
 渲染器从完整 `geochemistry.csv` 确定性生成 `iteration_backlog.csv`，HTML 只内嵌有限预览以控制性能。
 清单完整文件必须保留。D1 来源定位、许可、原始坐标/CRS、样品类型与方法证据缺口，D2 标准化、
 方法 scope、地质匹配、QC 和低置信度问题分别路由；删失值使用 `scientific_limit`。最多两轮自动复查，
-无改善或需推测时停止转人工。详细状态机见 [iteration-loop.md](iteration-loop.md)。
+无改善或需推测时停止转人工。详细状态机由 Skill 直接路由到 `iteration-loop.md`。
 
 ## 9. 失败状态
 
