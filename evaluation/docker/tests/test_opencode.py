@@ -21,6 +21,26 @@ class OpenCodeConfigTests(unittest.TestCase):
         self.assertEqual(config["agent"]["build"]["temperature"], 0.0)
         self.assertIn("openai-compatible", provider["name"])
 
+    def test_manual_compose_supplies_frozen_fields_and_isolated_b0_s0_mounts(self) -> None:
+        compose = (CONTAINER_ROOT.parent / "compose.yaml").read_text(encoding="utf-8")
+        for name in (
+            "EVAL_PROVIDER_MODEL_ID",
+            "EVAL_TEMPERATURE",
+            "EVAL_THINKING_MODE",
+            "EVAL_PROVIDER_PROFILE_ID",
+            "EVAL_PROVIDER_PROFILE_SHA256",
+            "EVAL_PROVIDER_REGISTRY_SHA256",
+        ):
+            self.assertGreaterEqual(compose.count(name), 1, name)
+        self.assertIn("candidate-b0:", compose)
+        self.assertIn("candidate-s0:", compose)
+        self.assertGreaterEqual(compose.count(":/task:ro"), 2)
+        self.assertGreaterEqual(compose.count(":/workspace:rw"), 2)
+        self.assertGreaterEqual(compose.count(":/submission:rw"), 2)
+        self.assertEqual(
+            compose.count(":/workspace/.opencode/skills/global-geochemical-atlas:ro"), 1
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
