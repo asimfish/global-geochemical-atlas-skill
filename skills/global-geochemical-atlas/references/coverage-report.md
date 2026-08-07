@@ -43,6 +43,7 @@
 ## 限制
 
 - Catalog routing applies frozen analyte, region, measurement-basis and temporal evidence; record-level availability and comparability still require acquisition plus D2 review.
+- Requested geological units are enforced after source-reported geology and optional frozen spatial matching; unmatched records remain explicit coverage gaps.
 - A partial route must not be presented as complete global coverage.
 - max_records is an acquisition/output ceiling enforced by the downstream runner, not evidence that the selected records are representative.
 - Source discovery is still in progress; absence from this route is not proof that no source exists.

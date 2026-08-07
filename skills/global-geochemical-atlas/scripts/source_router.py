@@ -13,6 +13,7 @@ from typing import Any
 
 import source_adapters
 import score_source_evidence
+import spatial_scope
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -20,7 +21,7 @@ DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
 FULL_PROFILE_ROOT = SKILL_DIR / "assets" / "v4-full-profiles"
 
 CATALOG_VERSION = "geochemical-source-catalog-v1"
-ROUTE_VERSION = "geochemical-source-route-v3"
+ROUTE_VERSION = "geochemical-source-route-v4"
 VALID_MEDIA = {"rock", "soil", "sediment", "water", "mineral", "concentrate"}
 VALID_OUTPUT_FORMATS = {"csv", "json", "geojson", "html_map"}
 VALID_SOURCE_STATUS = {"approved", "conditional", "metadata_only", "needs_human_review", "rejected"}
@@ -29,6 +30,8 @@ ALLOWED_REQUEST_KEYS = {
     "region",
     "media",
     "measurement_basis",
+    "geology_units",
+    "geology_match",
     "time_range",
     "sources",
     "output_formats",
@@ -132,11 +135,10 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
     if isinstance(region, dict):
         if set(region) != {"bbox"} or not isinstance(region["bbox"], list) or len(region["bbox"]) != 4:
             raise SourceRoutingError("request region object must contain exactly bbox=[west,south,east,north]")
-        west, south, east, north = region["bbox"]
-        if not all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in region["bbox"]):
-            raise SourceRoutingError("bbox coordinates must be numbers")
-        if not (-180 <= west <= 180 and -180 <= east <= 180 and -90 <= south <= north <= 90):
-            raise SourceRoutingError("bbox coordinates are outside WGS84 bounds or latitude order is invalid")
+        try:
+            spatial_scope.resolve_region(region)
+        except spatial_scope.SpatialScopeError as exc:
+            raise SourceRoutingError(str(exc)) from exc
     sources = request.get("sources", "auto")
     if sources != "auto":
         if (
@@ -157,6 +159,18 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
         or len(measurement_basis) != len(set(measurement_basis))
     ):
         raise SourceRoutingError("measurement_basis must be null or a unique string array")
+    geology_units = request.get("geology_units")
+    if geology_units is not None and (
+        not isinstance(geology_units, list)
+        or not geology_units
+        or len(geology_units) > 50
+        or not all(isinstance(item, str) and 0 < len(item.strip()) <= 160 for item in geology_units)
+        or len(geology_units) != len(set(geology_units))
+    ):
+        raise SourceRoutingError("geology_units must be null or a unique array of 1-50 non-empty labels")
+    geology_match = request.get("geology_match", "reported_or_matched")
+    if geology_match not in {"reported_or_matched", "reported", "matched"}:
+        raise SourceRoutingError("geology_match must be reported_or_matched, reported, or matched")
     time_range = request.get("time_range")
     if time_range is not None and (
         not isinstance(time_range, list)
@@ -196,6 +210,8 @@ def validate_request(request: Mapping[str, Any], catalog: Mapping[str, Any]) -> 
         raise SourceRoutingError("offline must be a boolean")
     normalized = dict(request)
     normalized.setdefault("measurement_basis", None)
+    normalized.setdefault("geology_units", None)
+    normalized.setdefault("geology_match", "reported_or_matched")
     normalized.setdefault("time_range", None)
     normalized.setdefault("sources", "auto")
     normalized.setdefault("output_formats", ["csv", "json", "geojson", "html_map"])
@@ -258,20 +274,6 @@ def _year(value: str) -> int:
     return int(match.group(1))
 
 
-def _bbox_intersects(first: Sequence[float], second: Sequence[float]) -> bool:
-    def longitude_ranges(bbox: Sequence[float]) -> list[tuple[float, float]]:
-        west, _, east, _ = bbox
-        return [(west, east)] if west <= east else [(west, 180.0), (-180.0, east)]
-
-    if first[3] < second[1] or second[3] < first[1]:
-        return False
-    return any(
-        left_a <= right_b and left_b <= right_a
-        for left_a, right_a in longitude_ranges(first)
-        for left_b, right_b in longitude_ranges(second)
-    )
-
-
 def _source_bbox(source_id: str) -> list[float] | None:
     path = FULL_PROFILE_ROOT / source_id / "spatial_coverage.json"
     if not path.is_file():
@@ -324,30 +326,38 @@ def request_compatibility(
     if region == "global":
         region_status = "not_applicable"
         region_note = "global request; source coverage remains partial as declared"
-    elif isinstance(region, dict):
+    else:
+        try:
+            resolved_region = spatial_scope.resolve_region(region)
+        except spatial_scope.SpatialScopeError as exc:
+            resolved_region = None
+            region_status = "unverified"
+            region_note = str(exc)
+    if region != "global" and resolved_region is not None:
         if source_bbox is None:
             region_status = "unverified"
             region_note = "canonical source bbox unavailable; WGS84 filtering cannot be verified"
-        elif _bbox_intersects(region["bbox"], source_bbox):
+        elif spatial_scope.bbox_intersects(resolved_region["bbox"], source_bbox):
             region_status = "compatible"
-            region_note = f"requested bbox intersects frozen canonical source bbox {source_bbox}"
+            region_note = (
+                f"resolved request scope {resolved_region['key']} intersects frozen canonical "
+                f"source bbox {source_bbox}"
+            )
         else:
             region_status = "incompatible"
-            region_note = f"requested bbox does not intersect frozen canonical source bbox {source_bbox}"
-    else:
-        requested_region = _normalized_scope(region)
-        declared_regions = [_normalized_scope(item) for item in entry["coverage"].get("regions", [])]
-        if any(
-            requested_region == item
-            or requested_region in item.split("_")
-            or item in requested_region
-            for item in declared_regions
-        ):
-            region_status = "compatible"
-            region_note = "named region matches a declared catalog scope"
-        else:
-            region_status = "unverified"
-            region_note = "named region has no frozen polygon/equivalence mapping for this source"
+            region_note = (
+                f"resolved request scope {resolved_region['key']} does not intersect frozen "
+                f"canonical source bbox {source_bbox}"
+            )
+
+    requested_geology = request.get("geology_units")
+    geology_status = "enforced_downstream" if requested_geology else "not_applicable"
+    geology_note = (
+        "exact normalized geological-unit filtering runs after source-reported fields and optional "
+        "frozen spatial geology matching"
+        if requested_geology
+        else "no geological-unit filter requested"
+    )
 
     requested_basis = request.get("measurement_basis")
     declared_basis = sorted(
@@ -399,6 +409,12 @@ def request_compatibility(
             "declared_regions": list(entry["coverage"].get("regions", [])),
             "canonical_bbox": source_bbox,
             "note": region_note,
+        },
+        "geology": {
+            "status": geology_status,
+            "requested": requested_geology,
+            "match_policy": request.get("geology_match", "reported_or_matched"),
+            "note": geology_note,
         },
         "measurement_basis": {
             "status": basis_status,
@@ -551,6 +567,7 @@ def route_sources(
         status = "unsupported_scope"
     limitations = [
         "Catalog routing applies frozen analyte, region, measurement-basis and temporal evidence; record-level availability and comparability still require acquisition plus D2 review.",
+        "Requested geological units are enforced after source-reported geology and optional frozen spatial matching; unmatched records remain explicit coverage gaps.",
         "A partial route must not be presented as complete global coverage.",
         "max_records is an acquisition/output ceiling enforced by the downstream runner, not evidence that the selected records are representative.",
     ]
