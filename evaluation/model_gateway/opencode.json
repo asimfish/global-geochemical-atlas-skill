@@ -1,0 +1,58 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "alibaba-token-plan-cn/qwen3.8-max",
+  "default_agent": "gateway-smoke",
+  "enabled_providers": [
+    "alibaba-token-plan-cn"
+  ],
+  "autoupdate": false,
+  "share": "disabled",
+  "snapshot": false,
+  "agent": {
+    "gateway-smoke": {
+      "description": "Competition gateway smoke with frozen sampling settings",
+      "mode": "primary",
+      "model": "alibaba-token-plan-cn/qwen3.8-max",
+      "temperature": 0.6,
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "provider": {
+    "alibaba-token-plan-cn": {
+      "name": "Qwen Token Plan (Anthropic compatible)",
+      "npm": "@ai-sdk/anthropic",
+      "options": {
+        "baseURL": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+        "apiKey": "{env:ALIBABA_TOKEN_PLAN_API_KEY}"
+      },
+      "models": {
+        "qwen3.8-max": {
+          "name": "Qwen3.8-Max (primary)",
+          "options": {
+            "thinking": {
+              "type": "disabled"
+            }
+          }
+        },
+        "qwen3-vl-plus": {
+          "name": "Qwen3-vl-Plus (multimodal fallback)",
+          "options": {
+            "thinking": {
+              "type": "disabled"
+            }
+          }
+        },
+        "glm-5.2": {
+          "name": "GLM 5.2 (text fallback)",
+          "options": {
+            "thinking": {
+              "type": "disabled"
+            }
+          }
+        }
+      }
+    }
+  }
+}

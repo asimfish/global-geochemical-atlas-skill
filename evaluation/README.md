@@ -55,6 +55,10 @@ evaluation/
 从 `evaluation/` 目录执行：
 
 ```bash
+# 推荐：按公开评审资源规格在 Docker 中运行 Public Q01-Q08
+bash tools/run_docker_validation.sh
+
+# 宿主机验证完整版本化评测包和 AI 可见投影
 python3 tools/validate_package.py . \
   --report results/validation/package_validation.json
 python3 tools/export_ai_bundle.py --validate-only ai_visible_public
@@ -70,6 +74,10 @@ python3 tools/finalize_score.py \
 ```
 
 `grade_task.py` 的点数只是证据覆盖量，不是独立总分。只有符合 E1 schema 的六维 `score.json` 才是单次运行分数。完整执行步骤见 [`RUNBOOK.md`](RUNBOOK.md)。
+
+Docker runner 固定使用 2 CPU、4 GiB、无 GPU、最长 12 小时（43200 秒）、无网络和只读根文件系统，并生成容器 inspect、运行日志、验证报告和 `SHA256SUMS`。详细说明见 [`docs/docker_usage.md`](docs/docker_usage.md)。
+
+赛事 Gateway、Qwen Anthropic Base URL、OpenCode 首选/备用模型和白名单代理的独立 Docker smoke 见 [`model_gateway/README.md`](model_gateway/README.md)。它不会放宽上述 Public 校验的 `--network none` 合同。
 
 ## 重新答题前清空结果
 

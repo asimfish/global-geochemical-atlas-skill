@@ -1,0 +1,12 @@
+FROM python:3.12-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates squid \
+    && rm -rf /var/lib/apt/lists/* \
+    && chown -R proxy:proxy /var/spool/squid /var/log/squid
+
+COPY squid.conf /etc/squid/squid.conf
+
+EXPOSE 3128
+USER proxy
+ENTRYPOINT ["squid", "-NYCd", "1"]
