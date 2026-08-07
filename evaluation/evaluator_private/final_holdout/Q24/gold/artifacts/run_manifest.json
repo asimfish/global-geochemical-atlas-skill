@@ -6,6 +6,7 @@
     },
     {
       "artifact_id": "database",
+      "logical_sha256": "dec2793574151e2d319509a6f60cd15cd2127f9db452a96acdf462826ac6bcc4",
       "sha256": "bf07470ad906de81e45439fd60a016a665be028bba84c647a7fdafdf462b906d"
     },
     {

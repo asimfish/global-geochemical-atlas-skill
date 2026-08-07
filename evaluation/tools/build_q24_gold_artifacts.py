@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Deterministically materialize Q24 physical gold artifacts from its logical evidence."""
+"""Materialize Q24 physical gold artifacts from its logical evidence.
+
+Text and image artifacts are byte deterministic. SQLite records the writer
+library version in its file header, so database reproducibility is additionally
+bound by a canonical logical hash that is stable across SQLite versions.
+"""
 
 from __future__ import annotations
 
@@ -34,6 +39,33 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def logical_sqlite_sha256(path: Path) -> str:
+    """Hash schema and typed rows without SQLite's writer-version header."""
+
+    connection = sqlite3.connect(f"file:{path.resolve()}?mode=ro", uri=True)
+    try:
+        schema = connection.execute(
+            "SELECT type, name, tbl_name, sql FROM sqlite_schema "
+            "WHERE name NOT LIKE 'sqlite_%' ORDER BY type, name"
+        ).fetchall()
+        tables: dict[str, Any] = {}
+        for table_name, in connection.execute(
+            "SELECT name FROM sqlite_schema WHERE type='table' "
+            "AND name NOT LIKE 'sqlite_%' ORDER BY name"
+        ):
+            quoted = '"' + table_name.replace('"', '""') + '"'
+            columns = [row[1] for row in connection.execute(f"PRAGMA table_info({quoted})")]
+            rows = connection.execute(f"SELECT * FROM {quoted}").fetchall()
+            rows.sort(key=lambda row: json.dumps(row, ensure_ascii=False, separators=(",", ":")))
+            tables[table_name] = {"columns": columns, "rows": rows}
+        payload = {"schema": schema, "tables": tables}
+        return hashlib.sha256(
+            json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+    finally:
+        connection.close()
 
 
 def _logical(manifest: dict[str, Any], key: str) -> Any:
@@ -195,10 +227,12 @@ def build(manifest_path: Path, output: Path) -> dict[str, Any]:
     _write_png(output / "map.png", map_geojson, anomaly_geojson)
     (output / "map.html").write_text(_map_html(map_geojson, anomaly_geojson), encoding="utf-8")
 
-    manifest["artifacts"] = [
-        {"artifact_id": ARTIFACT_IDS[name], "sha256": sha256_file(output / name)}
-        for name in ARTIFACT_IDS
-    ]
+    manifest["artifacts"] = []
+    for name, artifact_id in ARTIFACT_IDS.items():
+        artifact = {"artifact_id": artifact_id, "sha256": sha256_file(output / name)}
+        if name == "geochemical.sqlite":
+            artifact["logical_sha256"] = logical_sqlite_sha256(output / name)
+        manifest["artifacts"].append(artifact)
     manifest["physical_artifact_profile"] = {
         "profile_version": "q24-physical-product-v1",
         "source": "benchmark_evidence",
