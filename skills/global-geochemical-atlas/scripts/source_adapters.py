@@ -3008,6 +3008,430 @@ class GemasEuropeAdapter(RegistryAdapter):
             raise SourceAdapterError(f"GEMAS reconciliation changed: {observed!r} != {expected!r}")
 
 
+class UsgsUtahVolcanicRockAdapter(RegistryAdapter):
+    """Four fixed ScienceBase child tables from the USGS Utah whole-rock release."""
+
+    source_id = "usgs-utah-volcanic-whole-rock"
+    DATA_FILE_IDS = ("usu-data", "ugs-als-data", "contract-data", "usgs-alabs-data")
+    TARGETS = ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
+    TARGET_FIELDS: Mapping[str, Mapping[str, str]] = {
+        "usu-data": {},
+        "ugs-als-data": {"As": "As", "Cr": "Cr", "Cu": "Cu", "Ni": "Ni", "Pb": "Pb", "Zn": "Zn"},
+        "contract-data": {"As": "As", "Cr": "Cr", "Cu": "Cu", "Ni": "Ni", "Pb": "Pb", "Zn": "Zn"},
+        "usgs-alabs-data": {
+            "As:INAA": "ASPPM_NA",
+            "Cr:XRF": "CRPPM_XRF",
+            "Cr:INAA": "CRPPM_NA",
+            "Cu:XRF": "CUPPM_XRF",
+            "Ni:XRF": "NIPPM_XRF",
+            "Ni:INAA": "NIPPM_NA",
+            "Zn:XRF": "ZNPPM_XRF",
+            "Zn:INAA": "ZNPPM_NA",
+        },
+    }
+    SUPPORT_IDS: Mapping[str, Mapping[str, str]] = {
+        "usu-data": {"dictionary": "usu-dictionary"},
+        "ugs-als-data": {"dictionary": "ugs-als-dictionary", "methods": "ugs-als-methods"},
+        "contract-data": {
+            "dictionary": "contract-dictionary",
+            "methods": "contract-methods",
+            "limits": "contract-limits",
+        },
+        "usgs-alabs-data": {"dictionary": "usgs-alabs-dictionary"},
+    }
+
+    @staticmethod
+    def _csv_rows(path: Path) -> tuple[list[str], list[tuple[int, dict[str, str]]]]:
+        try:
+            handle = path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(f"USGS Utah CSV is unreadable: {path.name}") from exc
+        with handle:
+            reader = csv.DictReader(handle)
+            fields = [str(value or "").strip() for value in (reader.fieldnames or [])]
+            if not fields:
+                raise SourceAdapterError(f"USGS Utah CSV has no header: {path.name}")
+            rows: list[tuple[int, dict[str, str]]] = []
+            for row in reader:
+                values = {str(key): str(value or "").strip() for key, value in row.items() if key}
+                if any(values.values()):
+                    rows.append((reader.line_num, values))
+            return fields, rows
+
+    @staticmethod
+    def _method_key(value: str) -> str:
+        return re.sub(r"[^A-Za-z0-9]+", "", value).casefold()
+
+    @staticmethod
+    def _technique(description: str) -> str:
+        labels = []
+        lowered = description.casefold()
+        for needle, label in (
+            ("x-ray fluorescence", "XRF"),
+            ("xrf", "XRF"),
+            ("mass spectrometry", "ICP-MS"),
+            ("atomic emission", "ICP-AES"),
+            ("optical emission", "ICP-OES"),
+            ("neutron activation", "INAA"),
+        ):
+            if needle in lowered and label not in labels:
+                labels.append(label)
+        return "; ".join(labels)
+
+    @staticmethod
+    def _preparation(method: str, description: str) -> str:
+        normalized = method.casefold()
+        lowered = description.casefold()
+        if "4acd" in normalized or "four-acid" in lowered:
+            return "four-acid digestion"
+        if "sodium peroxide" in lowered:
+            return "sodium peroxide fusion"
+        if "lithium metaborate" in lowered or "lithium borate" in lowered:
+            return "lithium borate fusion"
+        if "xrf" in normalized:
+            return "XRF preparation not fully encoded in the historical table"
+        return "not reported"
+
+    def _file_entries(self) -> dict[str, Mapping[str, Any]]:
+        return {entry["file_id"]: entry for entry in self.candidate.registry_entry["download"]["files"]}
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("USGS Utah adapter received another source")
+        entries = candidate.registry_entry["download"]["files"]
+        if mode == "fixture":
+            fixture_root = SKILL_DIR / "fixtures" / "source-native" / self.source_id
+            result = []
+            for entry in entries:
+                path = fixture_root / entry["filename"]
+                if not path.is_file():
+                    raise SourceAdapterError(f"USGS Utah source-native fixture is missing: {path.name}")
+                fields, _ = self._csv_rows(path)
+                missing = sorted(set(entry["required_fields"]) - set(fields))
+                if missing:
+                    raise SourceAdapterError(f"USGS Utah fixture {path.name} lacks fields: {missing}")
+                result.append(DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=entry["file_id"],
+                    path=path,
+                    source_url=f"fixture://{self.source_id}/{path.name}",
+                    bytes=path.stat().st_size,
+                    cache_status="fixture",
+                    retrieved_at=None,
+                ))
+            return result
+
+        root = self._cache_root(cache_dir)
+        accepted = set(candidate.registry_entry["download"]["accepted_content_types"])
+        result: list[DownloadedFile] = []
+        for entry in entries:
+            output = root / entry["filename"]
+            args = _download_args(
+                url=entry["url"],
+                output=output,
+                manifest=root / f"{entry['file_id']}.download.json",
+                license_id=candidate.license_id,
+                expected_sha256=None,
+                max_bytes=int(candidate.registry_entry["download"]["max_bytes_per_file"]),
+                dataset_doi=candidate.dataset_doi,
+                dataset_version=candidate.version,
+                offline=mode == "cached",
+                required_fields=entry["required_fields"],
+            )
+            try:
+                acquisition = downloader.run(args)
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(f"USGS Utah download failed for {entry['file_id']}: {exc}") from exc
+            content_type = str(acquisition.get("content_type") or "").split(";", 1)[0]
+            if content_type and content_type not in accepted:
+                raise SourceAdapterError(f"USGS Utah {entry['file_id']} returned {content_type}")
+            if output.stat().st_size != int(entry["bytes"]):
+                raise SourceAdapterError(f"USGS Utah byte count changed for {entry['file_id']}")
+            fields, _ = self._csv_rows(output)
+            missing = sorted(set(entry["required_fields"]) - set(fields))
+            if missing:
+                raise SourceAdapterError(f"USGS Utah {entry['file_id']} lacks fields: {missing}")
+            result.append(DownloadedFile(
+                source_id=self.source_id,
+                file_id=entry["file_id"],
+                path=output,
+                source_url=entry["url"],
+                bytes=output.stat().st_size,
+                cache_status=acquisition["status"],
+                retrieved_at=acquisition.get("accessed_at") or acquisition.get("cache_verified_at"),
+            ))
+        return result
+
+    def _dictionary(self, downloaded: DownloadedFile) -> dict[str, dict[str, str]]:
+        _, rows = self._csv_rows(downloaded.path)
+        result = {}
+        for line_number, values in rows:
+            label = values.get("AttributeLabel", "")
+            if label:
+                result[label] = {**values, "_source_locator": f"{downloaded.path.name}#row={line_number}"}
+        return result
+
+    def _methods(self, downloaded: DownloadedFile) -> dict[str, dict[str, str]]:
+        _, rows = self._csv_rows(downloaded.path)
+        result = {}
+        for line_number, values in rows:
+            code = values.get("AnalyticalMethods") or values.get("AnalyticalMethod") or ""
+            if code:
+                result[self._method_key(code)] = {
+                    **values,
+                    "_code": code,
+                    "_source_locator": f"{downloaded.path.name}#row={line_number}",
+                }
+        return result
+
+    def _limits(self, downloaded: DownloadedFile) -> dict[tuple[str, str], dict[str, str]]:
+        _, rows = self._csv_rows(downloaded.path)
+        result = {}
+        for line_number, values in rows:
+            method = self._method_key(values.get("Analytic_Mthds", ""))
+            element = values.get("Element", "")
+            unit = values.get("Unit", "")
+            if method and element and unit.casefold() in {"ppm", "parts per million by weight (ppm)"}:
+                result[(method, element)] = {
+                    **values,
+                    "_source_locator": f"{downloaded.path.name}#row={line_number}",
+                }
+        return result
+
+    @staticmethod
+    def _censored(raw_value: str) -> tuple[str, str, str]:
+        try:
+            number = float(raw_value)
+        except ValueError as exc:
+            raise SourceAdapterError(f"USGS Utah target value is not numeric: {raw_value!r}") from exc
+        if number < 0:
+            limit = format(abs(number), ".15g")
+            return limit, "<", limit
+        return raw_value, "", ""
+
+    def _observation(
+        self,
+        *,
+        analyte: str,
+        field_name: str,
+        raw_value: str,
+        dictionary: Mapping[str, Mapping[str, str]],
+        active_methods: Sequence[str],
+        methods: Mapping[str, Mapping[str, str]],
+        limits: Mapping[tuple[str, str], Mapping[str, str]],
+        explicit_method: str | None = None,
+    ) -> dict[str, Any]:
+        description_entry = dictionary.get(field_name, {})
+        description = str(description_entry.get("AttributeDescription") or "")
+        if explicit_method:
+            candidates = [explicit_method]
+        else:
+            normalized_description = self._method_key(description)
+            candidates = [method for method in active_methods if self._method_key(method) in normalized_description]
+        candidates = list(dict.fromkeys(candidates))
+        winning = candidates[0] if len(candidates) == 1 else ""
+        method_entry = methods.get(self._method_key(winning), {}) if winning else {}
+        method_description = str(method_entry.get("MethodDescription") or description)
+        limit_entry = limits.get((self._method_key(winning), analyte), {}) if winning else {}
+        value, qualifier, censor_limit = self._censored(raw_value)
+        detection_limit = censor_limit or str(limit_entry.get("LowerDetectLimit") or "")
+        return {
+            "analyte": analyte,
+            "field": field_name,
+            "reported_value": raw_value,
+            "value": value,
+            "unit": "ppm",
+            "value_qualifier": qualifier,
+            "detection_limit": detection_limit,
+            "detection_limit_unit": "ppm" if detection_limit else "",
+            "measurement_basis": "whole_rock_trace_element_concentration",
+            "analytical_method": winning,
+            "method_candidates": candidates,
+            "method_scope": "observation" if winning else "candidate_set",
+            "method_assignment_basis": (
+                "published_field_suffix_and_dictionary" if explicit_method else "row_method_list_intersected_with_field_dictionary"
+            ),
+            "method_missing_reason": "" if winning else "multiple_active_methods_cover_analyte",
+            "method_description": method_description,
+            "analytical_technique": self._technique(method_description),
+            "preparation": self._preparation(winning, method_description),
+            "laboratory": str(method_entry.get("Lab") or ""),
+            "method_source_locator": str(method_entry.get("_source_locator") or description_entry.get("_source_locator") or ""),
+            "limit_source_locator": str(limit_entry.get("_source_locator") or description_entry.get("_source_locator") or ""),
+            "below_laboratory_dl": bool(qualifier),
+        }
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        registered = self._file_entries()
+        if set(by_id) != set(registered):
+            raise SourceAdapterError(
+                f"USGS Utah adapter file set changed; missing={sorted(set(registered) - set(by_id))}, "
+                f"unexpected={sorted(set(by_id) - set(registered))}"
+            )
+        fixture_mode = all(item.cache_status == "fixture" for item in files)
+        records: list[RawRecord] = []
+        counts: Counter[str] = Counter()
+        target_counts: Counter[str] = Counter()
+        child_counts: Counter[str] = Counter()
+
+        for data_id in self.DATA_FILE_IDS:
+            downloaded = by_id[data_id]
+            entry = registered[data_id]
+            support = self.SUPPORT_IDS[data_id]
+            dictionary = self._dictionary(by_id[support["dictionary"]])
+            methods = self._methods(by_id[support["methods"]]) if support.get("methods") else {}
+            limits = self._limits(by_id[support["limits"]]) if support.get("limits") else {}
+            _, rows = self._csv_rows(downloaded.path)
+            if not fixture_mode and len(rows) != int(entry["expected_rows"]):
+                raise SourceAdapterError(f"USGS Utah row count changed for {data_id}: {len(rows)}")
+            for line_number, values in rows:
+                child_counts[data_id] += 1
+                counts["physical_rows"] += 1
+                active_methods = [value.strip() for value in values.get("AnalyticalMethods", "").split(";") if value.strip()]
+                target_observations: dict[str, dict[str, Any]] = {}
+                for observation_key, field_name in self.TARGET_FIELDS[data_id].items():
+                    raw_value = values.get(field_name, "")
+                    if not raw_value:
+                        continue
+                    analyte = observation_key.split(":", 1)[0]
+                    explicit_method = None
+                    if data_id == "usgs-alabs-data":
+                        explicit_method = "USGS-INAA" if field_name.endswith("_NA") else "USGS-XRF"
+                    observation = self._observation(
+                        analyte=analyte,
+                        field_name=field_name,
+                        raw_value=raw_value,
+                        dictionary=dictionary,
+                        active_methods=active_methods,
+                        methods=methods,
+                        limits=limits,
+                        explicit_method=explicit_method,
+                    )
+                    if data_id == "usgs-alabs-data":
+                        observation["analytical_method"] = (
+                            "instrumental neutron activation analysis" if field_name.endswith("_NA")
+                            else "X-ray fluorescence spectrometry"
+                        )
+                        observation["method_candidates"] = [observation["analytical_method"]]
+                        observation["method_description"] = str(dictionary[field_name].get("AttributeDescription") or "")
+                        observation["analytical_technique"] = "INAA" if field_name.endswith("_NA") else "XRF"
+                        observation["laboratory"] = "U.S. Geological Survey Analytical Laboratories"
+                        observation["method_scope"] = "observation"
+                        observation["method_missing_reason"] = ""
+                    target_observations[observation_key] = observation
+                    target_counts[analyte] += 1
+                    counts["target_observations"] += 1
+                    counts["censored_target_observations"] += int(observation["below_laboratory_dl"])
+                    counts["method_exact_observations"] += int(bool(observation["analytical_method"]))
+                    counts["method_ambiguous_observations"] += int(len(observation["method_candidates"]) > 1)
+                counts["rows_with_any_target"] += int(bool(target_observations))
+
+                if data_id == "usgs-alabs-data":
+                    native_id = values.get("LAB_ID", "")
+                    raw_latitude = values.get("LATITUDE", "")
+                    raw_longitude = values.get("LONGITUDE", "")
+                    latitude = raw_longitude
+                    longitude = raw_latitude
+                    source_crs = "EPSG:4269"
+                    coordinate_note = (
+                        "Published LATITUDE values are west-longitudes and LONGITUDE values are north-latitudes; "
+                        "raw columns are retained and mapped by valid geographic ranges."
+                    )
+                    lithology = values.get("SPEC_NAME", "")
+                    rock_type = values.get("XNDRYCLASS", "")
+                    geologic_age = values.get("GEOL_AGE", "")
+                    location_uncertainty = values.get("LocationConfidenceMeters", "")
+                    reported_methods = "USGS historical analytical field suffixes"
+                    laboratory = "U.S. Geological Survey Analytical Laboratories"
+                    collection_date = ""
+                else:
+                    native_id = values.get("LabID") or values.get("StationID", "")
+                    raw_latitude = values.get("Lat_WGS84", "")
+                    raw_longitude = values.get("Long_WGS84", "")
+                    latitude = raw_latitude
+                    longitude = raw_longitude
+                    source_crs = "EPSG:4326"
+                    coordinate_note = "Publisher-labelled WGS84 latitude and longitude columns."
+                    lithology = values.get("RockName", "")
+                    rock_type = values.get("RockType", "")
+                    geologic_age = values.get("GeoAge", "")
+                    location_uncertainty = values.get("LocationConfidenceMeters", "")
+                    reported_methods = values.get("AnalyticalMethods", "")
+                    laboratory = (
+                        "ALS Minerals / ALS Chemex under Utah Geological Survey contract"
+                        if data_id == "ugs-als-data"
+                        else values.get("AnalysisSourceID", "")
+                    )
+                    collection_date = values.get("CollectionDate", "")
+                try:
+                    latitude_number = float(latitude)
+                    longitude_number = float(longitude)
+                except ValueError as exc:
+                    raise SourceAdapterError(f"USGS Utah coordinate is not numeric at {data_id} row {line_number}") from exc
+                if not (-90 <= latitude_number <= 90 and -180 <= longitude_number <= 180):
+                    raise SourceAdapterError(f"USGS Utah coordinate is outside geographic bounds at {data_id} row {line_number}")
+                counts["valid_coordinate_rows"] += 1
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                record_id = stable_source_record_id(self.source_id, native_id, source_locator)
+                records.append(RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=record_id,
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_child_item_id": entry["child_item_id"],
+                        "_child_dataset": entry["child_dataset"],
+                        "_source_file": downloaded.path.name,
+                        "_source_file_bytes": downloaded.bytes,
+                        "_source_file_url": downloaded.source_url,
+                        "_dataset_doi": self.candidate.dataset_doi,
+                        "_dataset_version": self.candidate.version,
+                        "_medium": "rock",
+                        "_sample_type": "whole rock",
+                        "_rock_type_raw": rock_type,
+                        "_lithology_raw": lithology,
+                        "_geologic_age_raw": geologic_age,
+                        "_reported_analytical_methods": reported_methods,
+                        "_laboratory_raw": laboratory,
+                        "_collection_date_raw": collection_date,
+                        "_latitude_raw": raw_latitude,
+                        "_longitude_raw": raw_longitude,
+                        "_latitude": latitude,
+                        "_longitude": longitude,
+                        "_source_crs": source_crs,
+                        "_coordinate_uncertainty_m": location_uncertainty,
+                        "_coordinate_assignment_note": coordinate_note,
+                        "_target_observations": target_observations,
+                        "_citation": self.candidate.registry_entry["citation"],
+                        "_upstream_lineage_id": self.candidate.registry_entry["upstream_lineage_id"],
+                    },
+                ))
+
+        if not fixture_mode:
+            observed = {
+                "physical_rows": counts["physical_rows"],
+                "rows_with_any_target": counts["rows_with_any_target"],
+                "valid_coordinate_rows": counts["valid_coordinate_rows"],
+                "target_observations": counts["target_observations"],
+                "censored_target_observations": counts["censored_target_observations"],
+                "method_exact_observations": counts["method_exact_observations"],
+                "method_ambiguous_observations": counts["method_ambiguous_observations"],
+                "child_rows": dict(child_counts),
+                "target_value_counts": {target: target_counts[target] for target in self.TARGETS},
+            }
+            if observed != self.candidate.registry_entry["expected_counts"]:
+                raise SourceAdapterError(
+                    f"USGS Utah reconciliation changed: {observed!r} != {self.candidate.registry_entry['expected_counts']!r}"
+                )
+        return records
+
+
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
@@ -3030,6 +3454,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocAntarcticaIntraplateAdapter.source_id: GeorocAntarcticaIntraplateAdapter,
     TpdcChinaMountainSoilAdapter.source_id: TpdcChinaMountainSoilAdapter,
     GemasEuropeAdapter.source_id: GemasEuropeAdapter,
+    UsgsUtahVolcanicRockAdapter.source_id: UsgsUtahVolcanicRockAdapter,
 }
 
 

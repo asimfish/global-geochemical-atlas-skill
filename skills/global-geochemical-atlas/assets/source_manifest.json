@@ -2677,6 +2677,177 @@
         "The bulk-density supplement has conflicts and never silently overwrites the main workbook."
       ]
     },
+    "usgs-utah-volcanic-whole-rock": {
+      "adapter": "usgs_sciencebase_child_csvs",
+      "title": "Whole-rock geochemical data for volcanic rocks sampled in northwestern Utah and adjacent states",
+      "publisher": "U.S. Geological Survey",
+      "dataset_doi": "10.5066/P1NZXUZF",
+      "dataset_pid": "USGS:672d2e6dd34ea9e45088e967",
+      "dataset_version": "2026-02-09",
+      "release_date": "2026-02-16",
+      "landing_page": "https://www.usgs.gov/data/whole-rock-geochemical-data-volcanic-rocks-sampled-northwestern-utah-and-adjacent-states",
+      "metadata_url": "https://www.sciencebase.gov/catalog/item/672d2e6dd34ea9e45088e967?format=json",
+      "media": ["rock"],
+      "geographic_scope": "northwestern-utah-and-adjacent-idaho-nevada",
+      "upstream_lineage_id": "usgs-ngd-rock-and-new-usgs-analyses",
+      "primary_candidate_audit": {
+        "dataset_doi": "10.5066/P1FXE9GK",
+        "sciencebase_item_id": "63a107a0d34e0de3a1f2795f",
+        "title": "Geochemical data for rock, sediment, soil, and mineral samples, United States and territories, 1962 to 2023",
+        "parquet_file_id": "cmi6freth002j0upm7cs35yz0",
+        "parquet_filename": "Geochem_DataRelease_2025_11_18.parquet.zip",
+        "parquet_bytes": 297251708,
+        "audit_status": "official_metadata_verified_file_not_publicly_downloadable_without_sciencebase_session",
+        "fallback_reason": "The public ScienceBase item identifies the Parquet file, but its published flag is false and its download URI resolves to the JavaScript file manager rather than file bytes for an anonymous client. No production adapter is claimed until a stable public child-file URL exists."
+      },
+      "download": {
+        "mode": "fixed-official-sciencebase-child-csvs",
+        "observed_at": "2026-08-07T12:35:00Z",
+        "max_bytes_per_file": 200000,
+        "accepted_content_types": ["text/csv", "text/plain", "application/octet-stream"],
+        "files": [
+          {
+            "file_id": "usu-data",
+            "child_item_id": "67f95664d4be022c3e84f3a9",
+            "child_dataset": "Utah State University (USU) data",
+            "kind": "data",
+            "filename": "UTVolcRocks_USU_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95664d4be022c3e84f3a9?f=__disk__63%2F41%2F2e%2F63412e7c84fadfe014e8314f20f469908a43423d",
+            "bytes": 3354,
+            "expected_rows": 10,
+            "required_fields": ["StationID", "Lat_WGS84", "Long_WGS84", "RockType", "RockName", "GeoAge", "AnalyticalMethods"]
+          },
+          {
+            "file_id": "usu-dictionary",
+            "child_item_id": "67f95664d4be022c3e84f3a9",
+            "child_dataset": "Utah State University (USU) data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_USU_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95664d4be022c3e84f3a9?f=__disk__fd%2Ff8%2F8f%2Ffdf88fd055fb641b29b99ba1579f30b62f996283",
+            "bytes": 5527,
+            "required_fields": ["AttributeLabel", "AttributeDescription"]
+          },
+          {
+            "file_id": "ugs-als-data",
+            "child_item_id": "67f954e4d4be022c3e84f384",
+            "child_dataset": "Utah Geological Survey contract ALS data",
+            "kind": "data",
+            "filename": "UTVolcRocks_UGS-ALS_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__a8%2F71%2Fda%2Fa871daab3b75e0022ca8514e12d8348f40d287ba",
+            "bytes": 33112,
+            "expected_rows": 60,
+            "required_fields": ["StationID", "Lat_WGS84", "Long_WGS84", "RockType", "RockName", "GeoAge", "AnalyticalMethods", "As", "Cr", "Cu", "Ni", "Pb", "Zn"]
+          },
+          {
+            "file_id": "ugs-als-dictionary",
+            "child_item_id": "67f954e4d4be022c3e84f384",
+            "child_dataset": "Utah Geological Survey contract ALS data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_UGS-ALS_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__bd%2Fac%2Fa7%2Fbdaca77567ab726ab222d29037200121ddc7e8d0",
+            "bytes": 26898,
+            "required_fields": ["AttributeLabel", "AttributeDescription", "AttributeUnit"]
+          },
+          {
+            "file_id": "ugs-als-methods",
+            "child_item_id": "67f954e4d4be022c3e84f384",
+            "child_dataset": "Utah Geological Survey contract ALS data",
+            "kind": "methods",
+            "filename": "UTVolcRocks_UGS-ALS_AnalyticalMethods.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f954e4d4be022c3e84f384?f=__disk__2a%2Fbd%2F29%2F2abd296da3004de5c3b1108d27e55c9478e151ee",
+            "bytes": 1942,
+            "required_fields": ["AnalyticalMethods", "MethodDescription", "Unit"]
+          },
+          {
+            "file_id": "contract-data",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "data",
+            "filename": "UTVolcRocks_USGS_ContractLabs_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__be%2F10%2F4a%2Fbe104aa01baf963832fab6434f9def6e5715fa67",
+            "bytes": 52366,
+            "expected_rows": 85,
+            "required_fields": ["StationID", "LabID", "Lat_WGS84", "Long_WGS84", "RockType", "RockName", "GeoAge", "AnalyticalMethods", "As", "Cr", "Cu", "Ni", "Pb", "Zn"]
+          },
+          {
+            "file_id": "contract-dictionary",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_USGS_ContractLabs_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__01%2F25%2F18%2F012518853c051ff81773aee2a4ed20f7379d052c",
+            "bytes": 92496,
+            "required_fields": ["AttributeLabel", "AttributeDescription", "AttributeUnit"]
+          },
+          {
+            "file_id": "contract-methods",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "methods",
+            "filename": "USGS_ContractLabs_AnalyticalMethods.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__62%2F11%2Ffb%2F6211fb1c6ea548c25ba17ecebeebc80a2b06f103",
+            "bytes": 6493,
+            "required_fields": ["AnalyticalMethod", "Lab", "MethodDescription", "Unit"]
+          },
+          {
+            "file_id": "contract-limits",
+            "child_item_id": "67f953c9d4be022c3e84f374",
+            "child_dataset": "USGS contract analytical laboratory data",
+            "kind": "limits",
+            "filename": "USGS_ContractLabs_DetectionLimits.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f953c9d4be022c3e84f374?f=__disk__ae%2Fe6%2Fea%2Faee6ea39ea3ac0214b4ee9472a83aa16327b77bc",
+            "bytes": 51662,
+            "required_fields": ["Analytic_Mthds", "Element", "LowerDetectLimit", "UpperDetectLimit", "Unit", "Instrument"]
+          },
+          {
+            "file_id": "usgs-alabs-data",
+            "child_item_id": "67f95691d4be022c3e84f3af",
+            "child_dataset": "USGS analytical laboratory data",
+            "kind": "data",
+            "filename": "UTVolcRocks_USGS-ALabs_Data.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__c6%2Fa8%2F81%2Fc6a881e369a2101825cefe184ee0f39ee0b29300",
+            "bytes": 37541,
+            "expected_rows": 91,
+            "required_fields": ["LAB_ID", "DATUM", "LATITUDE", "LONGITUDE", "SAMPLE_SRC", "XNDRYCLASS", "SPEC_NAME", "GEOL_AGE", "ASPPM_NA", "CRPPM_XRF", "CRPPM_NA", "CUPPM_XRF", "NIPPM_XRF", "NIPPM_NA", "ZNPPM_XRF", "ZNPPM_NA"]
+          },
+          {
+            "file_id": "usgs-alabs-dictionary",
+            "child_item_id": "67f95691d4be022c3e84f3af",
+            "child_dataset": "USGS analytical laboratory data",
+            "kind": "dictionary",
+            "filename": "UTVolcRocks_USGS_ALabs_DataDictionary.csv",
+            "url": "https://www.sciencebase.gov/catalog/file/get/67f95691d4be022c3e84f3af?f=__disk__25%2F54%2F67%2F255467a4b87c59c73d90553dbb20ea04b6a40228",
+            "bytes": 12723,
+            "required_fields": ["AttributeLabel", "AttributeDescription"]
+          }
+        ]
+      },
+      "required_fields": ["sample identity", "coordinates", "rock description", "analytical result", "method evidence"],
+      "target_analytes": ["As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"],
+      "expected_counts": {
+        "physical_rows": 246,
+        "rows_with_any_target": 231,
+        "valid_coordinate_rows": 246,
+        "target_observations": 1447,
+        "censored_target_observations": 454,
+        "method_exact_observations": 1271,
+        "method_ambiguous_observations": 176,
+        "child_rows": {"usu-data": 10, "ugs-als-data": 60, "contract-data": 85, "usgs-alabs-data": 91},
+        "target_value_counts": {"As": 188, "Cr": 284, "Cu": 226, "Hg": 0, "Ni": 295, "Pb": 145, "Zn": 309}
+      },
+      "license": {"spdx": "CC0-1.0", "name": "CC0 1.0 Universal", "url": "https://creativecommons.org/publicdomain/zero/1.0/"},
+      "citation": "Felger, T.J., Miller, D.M., Clark, D.C., and Fiesinger, D., 2026, Whole-rock geochemical data for volcanic rocks sampled in northwestern Utah and adjacent states: U.S. Geological Survey data release, https://doi.org/10.5066/P1NZXUZF.",
+      "redistribution": "Public-domain USGS data; project use remains scientific analysis and traceable fixture excerpts.",
+      "scientific_notes": [
+        "The release is a regional volcanic-rock compilation, not nationwide or globally representative rock coverage.",
+        "It includes newly published analyses and records also available through NGD-Rock; DOI and original sample identifiers must participate in cross-platform duplicate detection.",
+        "The USGS Analytical Laboratories CSV contains 91 rows although the child-page summary says 90 samples; the adapter reports the file count and preserves this discrepancy.",
+        "The USGS Analytical Laboratories LATITUDE column contains west-longitude values and LONGITUDE contains north-latitude values. Both raw fields are retained and the explicit coordinate assignment note records the value-based swap.",
+        "Negative target values encode less-than limits. The adapter preserves the signed reported value and separately emits qualifier '<' and the positive censor limit.",
+        "Four UGS-ALS analytes can come from either ME-MS81 or ME-4ACD81 when both methods are listed; these 176 results retain both candidates instead of inventing a winning method.",
+        "No target Hg measurement occurs in the four child CSV files."
+      ]
+    },
     "gemas-europe": {
       "adapter": "gemas_gsi_dbf",
       "title": "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)",

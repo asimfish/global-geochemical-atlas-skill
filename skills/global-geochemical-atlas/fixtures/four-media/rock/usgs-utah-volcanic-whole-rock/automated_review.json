@@ -1,0 +1,1074 @@
+{
+  "all_required_records_reviewed": true,
+  "all_source_records_reviewed": false,
+  "automated_pass_count": 30,
+  "claim_boundary": "The review verifies traceable parsing and explicit uncertainty; it does not prove representativeness or geological truth.",
+  "completed_record_count": 30,
+  "dataset_version": "2026-02-09",
+  "prepared_record_count": 30,
+  "records": [
+    {
+      "analyte": "Cr",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "190",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF10_150GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D2%7CCr%7C",
+      "reported_value_signed": "190",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-01",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F10_150GC",
+      "selection_reasons": [
+        "child_dataset=Utah Geological Survey contract ALS data"
+      ],
+      "source_field": "Cr",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF10_150GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D2",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "As",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f953c9d4be022c3e84f374",
+      "decision": "approved_mapping",
+      "method": "C_ICPAES_MS-55",
+      "method_candidates": [
+        "C_ICPAES_MS-55"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "30",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CC-397070%257CUTVolcRocks_USGS_ContractLabs_Data.csv%2523row%253D2%7CAs%7C",
+      "reported_value_signed": "-30",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-02",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "C-397070",
+      "selection_reasons": [
+        "child_dataset=USGS contract analytical laboratory data"
+      ],
+      "source_field": "As",
+      "source_locator": "UTVolcRocks_USGS_ContractLabs_Data.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CC-397070%7CUTVolcRocks_USGS_ContractLabs_Data.csv%23row%3D2",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Cr",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f95691d4be022c3e84f3af",
+      "decision": "approved_mapping",
+      "method": "X-ray fluorescence spectrometry",
+      "method_candidates": [
+        "X-ray fluorescence spectrometry"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "20",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CM163270%257CUTVolcRocks_USGS-ALabs_Data.csv%2523row%253D2%7CCr%7C",
+      "reported_value_signed": "-20",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-03",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "M163270",
+      "selection_reasons": [
+        "child_dataset=USGS analytical laboratory data"
+      ],
+      "source_field": "CRPPM_XRF",
+      "source_locator": "UTVolcRocks_USGS-ALabs_Data.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CM163270%7CUTVolcRocks_USGS-ALabs_Data.csv%23row%3D2",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "As",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-4ACD81",
+      "method_candidates": [
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "12",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_149GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D18%7CAs%7C",
+      "reported_value_signed": "12",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-04",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_149GC",
+      "selection_reasons": [
+        "analyte=As"
+      ],
+      "source_field": "As",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=18",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_149GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D18",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Cu",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "30",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF10_150GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D2%7CCu%7C",
+      "reported_value_signed": "30",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-05",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F10_150GC",
+      "selection_reasons": [
+        "analyte=Cu"
+      ],
+      "source_field": "Cu",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF10_150GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D2",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Ni",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "106",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF10_150GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D2%7CNi%7C",
+      "reported_value_signed": "106",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-06",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F10_150GC",
+      "selection_reasons": [
+        "analyte=Ni"
+      ],
+      "source_field": "Ni",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF10_150GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D2",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "7",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF10_150GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D2%7CPb%7C",
+      "reported_value_signed": "7",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-07",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F10_150GC",
+      "selection_reasons": [
+        "analyte=Pb"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF10_150GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D2",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Zn",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "95",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF10_150GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D2%7CZn%7C",
+      "reported_value_signed": "95",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-08",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F10_150GC",
+      "selection_reasons": [
+        "analyte=Zn"
+      ],
+      "source_field": "Zn",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=2",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF10_150GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D2",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF10_274GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D3%7CPb%7C",
+      "reported_value_signed": "-5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-09",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F10_274GC",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=3",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF10_274GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D3",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF10_281GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D5%7CPb%7C",
+      "reported_value_signed": "-5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-10",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F10_281GC",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=5",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF10_281GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D5",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF06_437CV%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D6%7CPb%7C",
+      "reported_value_signed": "-5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-11",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F06_437CV",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=6",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF06_437CV%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D6",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Cr",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "10",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF08_050CV%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D8%7CCr%7C",
+      "reported_value_signed": "-10",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-12",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F08_050CV",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Cr",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=8",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF08_050CV%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D8",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Ni",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF08_050CV%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D8%7CNi%7C",
+      "reported_value_signed": "-5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-13",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F08_050CV",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Ni",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=8",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF08_050CV%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D8",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF09_067GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D10%7CPb%7C",
+      "reported_value_signed": "-5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-14",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F09_067GC",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=10",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF09_067GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D10",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF09_070GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D11%7CPb%7C",
+      "reported_value_signed": "-5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-15",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F09_070GC",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=11",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF09_070GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D11",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF09_135GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D12%7CPb%7C",
+      "reported_value_signed": "-5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-16",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F09_135GC",
+      "selection_reasons": [
+        "publisher_negative_less_than_encoding"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=12",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF09_135GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D12",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Cu",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "37",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_149GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D18%7CCu%7C",
+      "reported_value_signed": "37",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-17",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_149GC",
+      "selection_reasons": [
+        "multiple_active_methods_no_invented_winner"
+      ],
+      "source_field": "Cu",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=18",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_149GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D18",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Ni",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "75",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_149GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D18%7CNi%7C",
+      "reported_value_signed": "75",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-18",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_149GC",
+      "selection_reasons": [
+        "multiple_active_methods_no_invented_winner"
+      ],
+      "source_field": "Ni",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=18",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_149GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D18",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "8",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_149GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D18%7CPb%7C",
+      "reported_value_signed": "8",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-19",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_149GC",
+      "selection_reasons": [
+        "multiple_active_methods_no_invented_winner"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=18",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_149GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D18",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Zn",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "122",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_149GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D18%7CZn%7C",
+      "reported_value_signed": "122",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-20",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_149GC",
+      "selection_reasons": [
+        "multiple_active_methods_no_invented_winner"
+      ],
+      "source_field": "Zn",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=18",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_149GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D18",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Cu",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "2",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_138GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D19%7CCu%7C",
+      "reported_value_signed": "2",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-21",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_138GC",
+      "selection_reasons": [
+        "multiple_active_methods_no_invented_winner"
+      ],
+      "source_field": "Cu",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=19",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_138GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D19",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Ni",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "1",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_138GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D19%7CNi%7C",
+      "reported_value_signed": "-1",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-22",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_138GC",
+      "selection_reasons": [
+        "multiple_active_methods_no_invented_winner"
+      ],
+      "source_field": "Ni",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=19",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_138GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D19",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Ni",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f95691d4be022c3e84f3af",
+      "decision": "approved_mapping",
+      "method": "instrumental neutron activation analysis",
+      "method_candidates": [
+        "instrumental neutron activation analysis"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "22",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CD539430%257CUTVolcRocks_USGS-ALabs_Data.csv%2523row%253D3%7CNi%7C1",
+      "reported_value_signed": "22",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-23",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "D539430",
+      "selection_reasons": [
+        "same_sample_analyte_multiple_methods"
+      ],
+      "source_field": "NIPPM_NA",
+      "source_locator": "UTVolcRocks_USGS-ALabs_Data.csv#row=3",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CD539430%7CUTVolcRocks_USGS-ALabs_Data.csv%23row%3D3",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Zn",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f95691d4be022c3e84f3af",
+      "decision": "approved_mapping",
+      "method": "instrumental neutron activation analysis",
+      "method_candidates": [
+        "instrumental neutron activation analysis"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "46",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CD539430%257CUTVolcRocks_USGS-ALabs_Data.csv%2523row%253D3%7CZn%7C1",
+      "reported_value_signed": "46",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-24",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "D539430",
+      "selection_reasons": [
+        "same_sample_analyte_multiple_methods"
+      ],
+      "source_field": "ZNPPM_NA",
+      "source_locator": "UTVolcRocks_USGS-ALabs_Data.csv#row=3",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CD539430%7CUTVolcRocks_USGS-ALabs_Data.csv%23row%3D3",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Cr",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f95691d4be022c3e84f3af",
+      "decision": "approved_mapping",
+      "method": "instrumental neutron activation analysis",
+      "method_candidates": [
+        "instrumental neutron activation analysis"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "2.5",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CM163704%257CUTVolcRocks_USGS-ALabs_Data.csv%2523row%253D4%7CCr%7C1",
+      "reported_value_signed": "2.5",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-25",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "M163704",
+      "selection_reasons": [
+        "same_sample_analyte_multiple_methods"
+      ],
+      "source_field": "CRPPM_NA",
+      "source_locator": "UTVolcRocks_USGS-ALabs_Data.csv#row=4",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CM163704%7CUTVolcRocks_USGS-ALabs_Data.csv%23row%3D4",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Ni",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f95691d4be022c3e84f3af",
+      "decision": "approved_mapping",
+      "method": "instrumental neutron activation analysis",
+      "method_candidates": [
+        "instrumental neutron activation analysis"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "9",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CM163704%257CUTVolcRocks_USGS-ALabs_Data.csv%2523row%253D4%7CNi%7C1",
+      "reported_value_signed": "-9",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-26",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "M163704",
+      "selection_reasons": [
+        "same_sample_analyte_multiple_methods"
+      ],
+      "source_field": "NIPPM_NA",
+      "source_locator": "UTVolcRocks_USGS-ALabs_Data.csv#row=4",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CM163704%7CUTVolcRocks_USGS-ALabs_Data.csv%23row%3D4",
+      "unit": "ppm",
+      "value_qualifier": "<"
+    },
+    {
+      "analyte": "Cr",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "ME-MS81",
+      "method_candidates": [
+        "ME-MS81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "80",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF09_135GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D12%7CCr%7C",
+      "reported_value_signed": "80",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-27",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F09_135GC",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_field": "Cr",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=12",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF09_135GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D12",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Cu",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "1",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CF11_182GC%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D21%7CCu%7C",
+      "reported_value_signed": "1",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-28",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "F11_182GC",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_field": "Cu",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=21",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CF11_182GC%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D21",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Pb",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "24",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CGCDC-1%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D29%7CPb%7C",
+      "reported_value_signed": "24",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-29",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "GCDC-1",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_field": "Pb",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=29",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CGCDC-1%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D29",
+      "unit": "ppm",
+      "value_qualifier": ""
+    },
+    {
+      "analyte": "Zn",
+      "automated_checks": {
+        "coordinate_raw_and_assignment_preserved": true,
+        "method_not_inferred_beyond_publisher_evidence": true,
+        "negative_value_semantics_preserved": true,
+        "signed_source_value_preserved": true,
+        "source_locator_resolves": true,
+        "stable_observation_identity_unique": true
+      },
+      "automated_status": "PASS",
+      "child_item_id": "67f954e4d4be022c3e84f384",
+      "decision": "approved_mapping",
+      "method": "",
+      "method_candidates": [
+        "ME-MS81",
+        "ME-4ACD81"
+      ],
+      "notes": "Automated structured source-to-adapter evidence review; not a scientific accuracy guarantee.",
+      "parsed_value_or_limit": "27",
+      "record_id": "rec-observation-v2%7Cusgs-utah-volcanic-whole-rock%7Csrc-source-record-v2%257Cusgs-utah-volcanic-whole-rock%257CGCDC-14%257CUTVolcRocks_UGS-ALS_Data.csv%2523row%253D37%7CZn%7C",
+      "reported_value_signed": "27",
+      "review_id": "usgs-utah-volcanic-whole-rock-codex-review-30",
+      "reviewed_at": "2026-08-07T12:35:00Z",
+      "reviewer": "Codex",
+      "reviewer_type": "codex",
+      "sample_id": "GCDC-14",
+      "selection_reasons": [
+        "source_order_quantile"
+      ],
+      "source_field": "Zn",
+      "source_locator": "UTVolcRocks_UGS-ALS_Data.csv#row=37",
+      "source_record_id": "src-source-record-v2%7Cusgs-utah-volcanic-whole-rock%7CGCDC-14%7CUTVolcRocks_UGS-ALS_Data.csv%23row%3D37",
+      "unit": "ppm",
+      "value_qualifier": ""
+    }
+  ],
+  "review_version": "geochemical-codex-automated-audit-v1",
+  "reviewer_type": "codex",
+  "source_id": "usgs-utah-volcanic-whole-rock",
+  "status": "automated_audit_complete"
+}

@@ -1,0 +1,48 @@
+{
+  "checks": {
+    "codex_review_complete": true,
+    "content_hashes_unused": true,
+    "fixture_observations_emitted": true,
+    "registered_file_set_parsed": true,
+    "six_target_analytes_present_and_hg_explicitly_absent": true,
+    "source_rows_reconcile": true,
+    "target_observations_reconcile": true
+  },
+  "counts": {
+    "censored_target_observations": 454,
+    "child_rows": {
+      "contract-data": 85,
+      "ugs-als-data": 60,
+      "usgs-alabs-data": 91,
+      "usu-data": 10
+    },
+    "method_ambiguous_observations": 176,
+    "method_exact_observations": 1271,
+    "physical_rows": 246,
+    "rows_with_any_target": 231,
+    "target_observations": 1447,
+    "target_value_counts": {
+      "As": 188,
+      "Cr": 284,
+      "Cu": 226,
+      "Hg": 0,
+      "Ni": 295,
+      "Pb": 145,
+      "Zn": 309
+    },
+    "valid_coordinate_rows": 246
+  },
+  "limitations": [
+    "The release is a regional volcanic-rock compilation, not nationwide or globally representative rock coverage.",
+    "It includes newly published analyses and records also available through NGD-Rock; DOI and original sample identifiers must participate in cross-platform duplicate detection.",
+    "The USGS Analytical Laboratories CSV contains 91 rows although the child-page summary says 90 samples; the adapter reports the file count and preserves this discrepancy.",
+    "The USGS Analytical Laboratories LATITUDE column contains west-longitude values and LONGITUDE contains north-latitude values. Both raw fields are retained and the explicit coordinate assignment note records the value-based swap.",
+    "Negative target values encode less-than limits. The adapter preserves the signed reported value and separately emits qualifier '<' and the positive censor limit.",
+    "Four UGS-ALS analytes can come from either ME-MS81 or ME-4ACD81 when both methods are listed; these 176 results retain both candidates instead of inventing a winning method.",
+    "No target Hg measurement occurs in the four child CSV files."
+  ],
+  "reconciliation_version": "usgs-utah-volcanic-rock-audit-v1-no-content-hash",
+  "snapshot_id": "usgs-utah-volcanic-whole-rock:2026-02-09:2026-08-07T12:35:00Z",
+  "source_id": "usgs-utah-volcanic-whole-rock",
+  "status": "PASS"
+}
