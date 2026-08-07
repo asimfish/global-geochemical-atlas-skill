@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import csv
 import hashlib
 import json
 import math
@@ -219,7 +218,6 @@ def build(args: Any) -> dict[str, Any]:
 
     media = Counter(str(row.get("medium") or "unknown").casefold() for row in observations if isinstance(row, dict))
     elements = {str(row.get("element")) for row in observations if isinstance(row, dict) and row.get("element")}
-    source_ids = {str(row.get("source_id")) for row in observations if isinstance(row, dict) and row.get("source_id")}
     locations: set[tuple[float, float]] = set()
     for row in observations:
         try:
