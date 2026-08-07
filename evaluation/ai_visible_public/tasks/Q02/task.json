@@ -65,7 +65,7 @@
     "SOURCE_SCOPE_OVERCLAIM"
   ],
   "fixture_type": "curated_offline_catalog_of_real_sources",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "source_catalog.json"
   ],

@@ -33,7 +33,7 @@
     "UNREQUESTED_SPECIES_CONVERTED"
   ],
   "fixture_type": "synthetic_adversarial_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "nickel_species.csv",
     "constants.json"

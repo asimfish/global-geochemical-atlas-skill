@@ -1,7 +1,7 @@
 ---
 title: "Global Geochemical Atlas Benchmark v6 执行指南"
 audience: "首次运行评测的执行人员与独立复核人员"
-version: "6.0.0-draft.2"
+version: "6.0.0-draft.3"
 exports: ["md"]
 ---
 
@@ -111,7 +111,7 @@ python3 tools/verify_isolation.py --evaluation-root .
 仅在一次运行结束后检查已经填写的候选包时显式增加 `--allow-submissions`；开始下一轮前必须使用
 `reset_ai_submissions.py` 清空。
 
-预期版本为 `6.0.0-draft.2`，共 24 题。每题 gold smoke 和候选可见契约检查必须通过，错误列表必须为空；答题 bundle 也必须包含 Q01–Q24 且不含任何评分侧路径。
+预期版本为 `6.0.0-draft.3`，共 24 题。每题 gold smoke 和候选可见契约检查必须通过，错误列表必须为空；答题 bundle 也必须包含 Q01–Q24 且不含任何评分侧路径。
 
 答题 AI 包只能白名单导出：
 

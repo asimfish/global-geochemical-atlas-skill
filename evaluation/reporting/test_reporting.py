@@ -12,9 +12,56 @@ from pathlib import Path
 import aggregate_uplift
 import build_experiment_manifest
 import generate_report
+import q01_report
 
 
 class ReportingTests(unittest.TestCase):
+    def test_q01_adapter_uses_same_report_and_marks_partial_scores_nonformal(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            submissions = root / "submissions"
+            results = root / "results"
+            source_q24 = (
+                Path(__file__).resolve().parents[1]
+                / "evaluator_private/final_holdout/Q24/gold/artifacts"
+            )
+            import shutil
+
+            shutil.copytree(source_q24, submissions / "Q24" / "artifacts")
+            for number in range(1, 25):
+                question = f"Q{number:02d}"
+                task = results / question
+                task.mkdir(parents=True)
+                (task / "score.json").write_text(json.dumps({
+                    "candidate_status": "success", "score_status": "partial",
+                    "hard_gate_passed": True, "total_score": 60.0,
+                }), encoding="utf-8")
+                (task / "objective_report.json").write_text(json.dumps({
+                    "task_id": f"TASK-{question}", "evidence_points_awarded": 80,
+                    "evidence_points_possible": 80, "checks": [], "redline_events": [],
+                }), encoding="utf-8")
+                (task / "llm_grader_report.json").write_text(json.dumps({
+                    "criteria": [{"score": 20, "max": 20}],
+                    "human_review_required": False, "grader_uncertainty": "low",
+                }), encoding="utf-8")
+            args = argparse.Namespace(
+                submission_dir=submissions, results_dir=results, runtime="q01-q24",
+                condition="S0", run_id="s0-q01-1", independent_session=True,
+                blind_bundle=True, browser_audit=None, experiment_manifest=None,
+                skill_document=None,
+            )
+            report = q01_report.build(args)
+            self.assertEqual(report["schema_version"], "global-geochemical-evaluation-report-v1")
+            self.assertEqual(report["benchmark"]["task_report_count"], 24)
+            self.assertEqual(report["benchmark"]["stage_summaries"]["D1"]["question_count"], 6)
+            self.assertIsNone(report["score"]["observed"])
+            self.assertEqual(report["score"]["descriptive_partial_mean"], 60.0)
+            self.assertFalse(report["fairness"]["eligible_run_component"])
+            self.assertTrue(report["deliverables"]["sources_and_confidence"]["valid"])
+            markdown = generate_report.render(report)
+            self.assertIn("Q01–Q24 基准概览", markdown)
+            self.assertIn("Q24", markdown)
+
     def test_controller_manifest_binds_pair_and_only_allows_skill_visibility_difference(self) -> None:
         config = json.loads(
             (Path(__file__).resolve().parents[2]
@@ -147,6 +194,27 @@ class ReportingTests(unittest.TestCase):
         self.assertFalse(result["valid_uplift_evidence"])
         result = aggregate_uplift.aggregate(reports[:-1])
         self.assertEqual(result["status"], "not_eligible")
+
+    def test_aggregate_keeps_partial_two_arm_comparison_explicitly_diagnostic(self) -> None:
+        reports = []
+        for condition, partial, task_score in (("B0", 65.0, 60.0), ("S0", 67.0, 70.0)):
+            reports.append({
+                "schema_version": "global-geochemical-evaluation-report-v1",
+                "experiment": {"condition": condition, "run_id": condition, "manifest": {}},
+                "fairness": {"eligible_run_component": False},
+                "score": {"observed": None, "descriptive_partial_mean": partial},
+                "benchmark": {
+                    "task_results": [{"question_id": "Q01", "descriptive_total_score": task_score}],
+                    "stage_summaries": {"D1": {"descriptive_partial_mean": task_score}},
+                },
+                "deliverables": {"interactive_map": {"usable": condition == "S0"}},
+            })
+        result = aggregate_uplift.aggregate(reports)
+        self.assertEqual(result["status"], "not_eligible")
+        self.assertIsNone(result["median_uplift_s0_minus_b0"])
+        diagnostic = result["diagnostic_comparison"]
+        self.assertEqual(diagnostic["task_win_tie_loss"], {"S0_win": 1, "tie": 0, "S0_loss": 0})
+        self.assertEqual(diagnostic["stage_partial_delta_s0_minus_b0"]["D1"], 10.0)
 
 
 if __name__ == "__main__":

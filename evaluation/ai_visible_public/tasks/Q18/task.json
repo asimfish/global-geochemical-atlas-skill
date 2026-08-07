@@ -32,7 +32,7 @@
     "UPPER_LIMIT_AS_EXACT"
   ],
   "fixture_type": "synthetic_source_encoding_fixture",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "encoded_values.csv",
     "encoding_rules.json"

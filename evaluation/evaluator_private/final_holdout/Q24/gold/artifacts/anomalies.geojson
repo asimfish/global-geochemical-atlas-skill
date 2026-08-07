@@ -3,14 +3,21 @@
     {
       "geometry": {
         "coordinates": [
-          110.06,
-          30.06
+          -100.21,
+          30.21
         ],
         "type": "Point"
       },
+      "id": "E21",
       "properties": {
-        "observation_id": "obs-006",
-        "score": "2.191041864462"
+        "anomaly_type": "statistical_relative_enrichment",
+        "center_log10": 1.4771212547,
+        "group_id": "soil|dry|total|Cu|ICP-MS",
+        "n": 21,
+        "record_id": "E21",
+        "robust_z": 10.4080919691,
+        "scale_log10": 0.1173941154,
+        "source_id": "SRC-A"
       },
       "type": "Feature"
     }

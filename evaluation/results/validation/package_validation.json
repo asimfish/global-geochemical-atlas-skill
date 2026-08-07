@@ -1,5 +1,5 @@
 {
-  "benchmark_version": "6.0.0-draft.2",
+  "benchmark_version": "6.0.0-draft.3",
   "tasks_found": 24,
   "alignment_contract": "e2.e1-alignment.v1",
   "e1_eval_version": "1.0.0",
@@ -1355,24 +1355,24 @@
         {
           "dimension_id": "scientific_credibility",
           "weight": 0.25,
-          "evidence_points_awarded": 6,
-          "evidence_points_possible": 6,
+          "evidence_points_awarded": 10,
+          "evidence_points_possible": 10,
           "evidence_score": 100.0,
           "status": "scored"
         },
         {
           "dimension_id": "engineering_quality",
           "weight": 0.3,
-          "evidence_points_awarded": 63,
-          "evidence_points_possible": 63,
+          "evidence_points_awarded": 60,
+          "evidence_points_possible": 60,
           "evidence_score": 100.0,
           "status": "scored"
         },
         {
           "dimension_id": "platform_reusability",
           "weight": 0.14,
-          "evidence_points_awarded": 11,
-          "evidence_points_possible": 11,
+          "evidence_points_awarded": 10,
+          "evidence_points_possible": 10,
           "evidence_score": 100.0,
           "status": "scored"
         },

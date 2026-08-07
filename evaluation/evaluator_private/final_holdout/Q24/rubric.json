@@ -9,13 +9,19 @@
       "dimension_id": "scientific_credibility",
       "full_credit": "来源、record、标准化观测、地图 feature 和异常 feature 可双向回链。",
       "id": "evidence_chain",
-      "points": 6
+      "points": 5
     },
     {
       "dimension_id": "domain_understanding",
       "full_credit": "完整性失败、无效坐标、删失和小组样本不足分别降级，不隐藏为 success。",
       "id": "scientific_degradation",
-      "points": 5
+      "points": 4
+    },
+    {
+      "dimension_id": "scientific_credibility",
+      "full_credit": "置信度明确包含来源完整性、标准化、空间、质量控制和来源追溯五个证据分量、聚合方法与适用边界，并明确不是科学真实性概率。",
+      "id": "confidence_evidence",
+      "points": 2
     },
     {
       "dimension_id": "domain_understanding",
@@ -34,6 +40,7 @@
     "artifacts/run_manifest.json#/benchmark_evidence/observations.csv",
     "artifacts/run_manifest.json#/benchmark_evidence/qc_report.json",
     "artifacts/run_manifest.json#/benchmark_evidence/sources.jsonl",
+    "artifacts/run_manifest.json#/benchmark_evidence/confidence_report.json",
     "artifacts/run_manifest.json#/benchmark_evidence/map.geojson",
     "artifacts/run_manifest.json#/benchmark_evidence/anomalies.geojson",
     "artifacts/run_manifest.json#/benchmark_evidence/run_manifest.json",

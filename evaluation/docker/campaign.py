@@ -28,6 +28,7 @@ REPO_ROOT = EVALUATION_ROOT.parent
 DOCKER_ROOT = Path(__file__).resolve().parent
 ALIGNMENT_PATH = EVALUATION_ROOT / "contracts" / "benchmark-execution-contract.json"
 PUBLIC_INTERFACE = EVALUATION_ROOT / "ai_visible_public" / "public_interface.md"
+PUBLIC_CONTRACT_VALIDATOR = EVALUATION_ROOT / "ai_visible_public" / "validate_submission_contract.py"
 SKILL_DIR = REPO_ROOT / "skills" / "global-geochemical-atlas"
 SAFE_NAME = re.compile(r"[^a-z0-9_.-]+")
 E1_STATUS = {
@@ -85,6 +86,43 @@ def docker_available() -> dict[str, Any]:
 
 def image_identity(image: str) -> str:
     return run_checked(["docker", "image", "inspect", image, "--format", "{{.Id}}"]).stdout.strip()
+
+
+def docker_build_proxy_options(environment: dict[str, str]) -> tuple[list[str], str, list[str]]:
+    """Translate a safe host proxy environment into Docker build options.
+
+    A proxy bound to host loopback is unreachable from BuildKit's bridge
+    network, so use the host network for that build.  Proxy URLs containing
+    credentials are rejected because command-line build arguments are visible
+    to local process inspection even though Docker excludes predefined proxy
+    arguments from image history.
+    """
+
+    options: list[str] = []
+    forwarded: list[str] = []
+    loopback_proxy = False
+    for canonical, fallback in (
+        ("HTTP_PROXY", "http_proxy"),
+        ("HTTPS_PROXY", "https_proxy"),
+        ("NO_PROXY", "no_proxy"),
+    ):
+        value = environment.get(canonical) or environment.get(fallback)
+        if not value:
+            continue
+        if canonical != "NO_PROXY":
+            parsed = urlsplit(value)
+            if parsed.username is not None or parsed.password is not None:
+                raise CampaignError(
+                    f"{canonical} contains credentials; configure a credential-free local proxy "
+                    "or Docker daemon proxy instead of exposing credentials as build arguments"
+                )
+            loopback_proxy = loopback_proxy or parsed.hostname in {"localhost", "127.0.0.1", "::1"}
+        options.extend(["--build-arg", f"{canonical}={value}"])
+        forwarded.append(canonical)
+    network = "host" if loopback_proxy else "default"
+    if loopback_proxy:
+        options[0:0] = ["--network", "host"]
+    return options, network, forwarded
 
 
 def task_source(question: str) -> tuple[Path, str]:
@@ -204,6 +242,7 @@ def prepare_task_bundle(question: str, destination: Path) -> tuple[Path, str, st
         raise CampaignError(f"task source is missing for {question}")
     destination.mkdir(parents=True, exist_ok=False)
     shutil.copy2(PUBLIC_INTERFACE, destination / "public_interface.md")
+    shutil.copy2(PUBLIC_CONTRACT_VALIDATOR, destination / "validate_submission_contract.py")
     for name in ("task.md", "task.json"):
         shutil.copy2(public_task / name, destination / name)
     shutil.copytree(public_task / "inputs", destination / "inputs")
@@ -214,10 +253,13 @@ def prepare_task_bundle(question: str, destination: Path) -> tuple[Path, str, st
 工作目录：/workspace
 
 先读取 /task/public_interface.md、/task/task.md、/task/task.json 和 /task/inputs/。
-如环境中发现与任务相关的 Agent Skill，应按其 description 判断并按需加载；若没有可用 Skill，则依靠当前模型完成同一任务。
+如环境中发现与任务相关的 Agent Skill，应先读取其 SKILL.md，按路由只加载本题所需 reference/script/asset；存在适用脚本时应实际调用并记录，不能只复述 Skill 文档。若没有可用 Skill，则依靠当前模型完成同一任务。
 严格生成 task.json.required_outputs 声明的十个 artifacts/ 文件。题目专用逻辑证据写入
 /submission/artifacts/run_manifest.json 的 benchmark_evidence，不创建额外交卷文件。
 不得读取其他任务、评分器、gold、rubric、历史结果或 /task 之外的外部目录；不得编造来源未报告的科学事实。
+提交前必须运行：
+python /task/validate_submission_contract.py --task-root /task --submission-root /submission
+如果返回 FAIL，按公开契约修正后重新运行；该工具不包含 gold、分值或隐藏 checker。
 """
     (destination / "prompt.md").write_text(prompt, encoding="utf-8")
     return source, split, hash_tree(destination)
@@ -294,6 +336,48 @@ def artifact_inventory(submission: Path, required_paths: list[str]) -> tuple[lis
         else:
             artifacts.append({"path": relative, "bytes": path.stat().st_size, "sha256": sha256_file(path)})
     return artifacts, missing
+
+
+def audit_q24_map(image: str, run_dir: Path, submission: Path) -> dict[str, Any]:
+    """Run the Q24 browser gate outside the candidate container and bind its bytes."""
+
+    controller = run_dir / "controller"
+    screenshots = controller / "q24_screenshots"
+    controller.mkdir(parents=True, exist_ok=True)
+    output = controller / "q24_browser_audit.json"
+    stdout = controller / "q24_browser_audit.stdout"
+    stderr = controller / "q24_browser_audit.stderr"
+    name = f"gga-q24-audit-{uuid.uuid4().hex[:8]}"
+    command = [
+        "docker", "run", "--rm", "--name", name,
+        "--user", f"{os.getuid()}:{os.getgid()}",
+        "--cpus", "1", "--memory", "2g", "--memory-swap", "2g",
+        "--pids-limit", "128", "--network", "none", "--read-only",
+        "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
+        "--tmpfs", "/tmp:rw,nosuid,nodev,size=512m",
+        "--volume", f"{REPO_ROOT.resolve()}:/repo:ro",
+        "--volume", f"{submission.resolve()}:/submission:ro",
+        "--volume", f"{controller.resolve()}:/controller:rw",
+        image, "python", "/repo/evaluation/reporting/q24_browser_audit.py",
+        "--html", "/submission/artifacts/map.html",
+        "--output", "/controller/q24_browser_audit.json",
+        "--screenshots", "/controller/q24_screenshots",
+    ]
+    try:
+        completed = subprocess.run(command, check=False, capture_output=True, text=True, timeout=120)
+        stdout.write_text(completed.stdout, encoding="utf-8")
+        stderr.write_text(completed.stderr, encoding="utf-8")
+    except subprocess.TimeoutExpired as exc:
+        subprocess.run(["docker", "rm", "--force", name], check=False, capture_output=True)
+        stdout.write_text(exc.stdout or "", encoding="utf-8")
+        stderr.write_text((exc.stderr or "") + "\ncontroller timeout\n", encoding="utf-8")
+    report = load_json(output) if output.is_file() else {
+        "schema_version": "geochemical-q24-browser-audit-v1",
+        "status": "error",
+        "generated_by": "external_evaluation_controller",
+        "error": "browser audit did not produce its JSON result",
+    }
+    return report
 
 
 def redact_file(path: Path, secrets: Sequence[str]) -> bool:
@@ -436,6 +520,26 @@ def candidate_status(raw_exit: int, timed_out: bool, missing: list[str]) -> tupl
     if missing:
         return 74, "failed"
     return 0, "success"
+
+
+def apply_q24_browser_gate(
+    question: str,
+    report: dict[str, Any] | None,
+    exit_code: int,
+    status: str,
+) -> tuple[int, str]:
+    """Make the externally rendered Q24 product an acceptance gate.
+
+    Preserve a more specific pre-existing failure (timeout, resource limit,
+    missing artifact, etc.).  A candidate that otherwise succeeded is not
+    eligible for scoring unless the controller-side Chromium audit passed.
+    """
+
+    if question != "Q24" or status != "success":
+        return exit_code, status
+    if not isinstance(report, dict) or report.get("status") != "pass":
+        return 70, "failed"
+    return exit_code, status
 
 
 def ineligible_score(run_id: str, status: str, rubric: Path, reason_path: str) -> dict[str, Any]:
@@ -659,9 +763,17 @@ def run_one(
     )
     secret_redaction_files = redact_tree(submission, host_environment.values())
     artifacts, missing = artifact_inventory(submission, required_paths)
+    q24_browser = (
+        audit_q24_map(image, run_dir, submission)
+        if question == "Q24" and "artifacts/map.html" not in missing
+        else None
+    )
     exit_code, status = candidate_status(raw_exit, timed_out, missing)
     if secret_redaction_files:
         exit_code, status = 74, "failed"
+    exit_code, status = apply_q24_browser_gate(
+        question, q24_browser, exit_code, status
+    )
     metadata = {
         "schema_version": "ai4s-docker-runner-metadata-v1",
         "run_id": run_id,
@@ -691,6 +803,14 @@ def run_one(
         "status": status,
         "artifacts": artifacts,
         "missing_artifacts": missing,
+        "q24_browser_audit": (
+            {
+                "path": "controller/q24_browser_audit.json",
+                "status": q24_browser.get("status"),
+                "html_sha256": q24_browser.get("html", {}).get("sha256"),
+            }
+            if isinstance(q24_browser, dict) else None
+        ),
         "secret_redaction_files": secret_redaction_files,
         "log_secret_redacted": log_secret_redacted,
         "stdout": stdout_path.name,
@@ -719,6 +839,17 @@ def run_one(
     metadata["exit_code"] = effective_exit_code
     metadata["status"] = effective_status
     atomic_json(run_dir / "runner_metadata.json", metadata)
+    redline_events = []
+    if secret_redaction_files:
+        redline_events.append(
+            {"id": "secret_material_in_submission", "consequence": "acceptance_fail"}
+        )
+    if question == "Q24" and (
+        not isinstance(q24_browser, dict) or q24_browser.get("status") != "pass"
+    ):
+        redline_events.append(
+            {"id": "q24_browser_interaction_gate", "consequence": "acceptance_fail"}
+        )
     record = {
         "run_id": run_id,
         "task_id": question,
@@ -756,22 +887,25 @@ def run_one(
         ),
         "score_path": str(score_path.relative_to(campaign_root)),
         "score": score,
-        "redline_events": (
-            [{"id": "secret_material_in_submission", "consequence": "acceptance_fail"}]
-            if secret_redaction_files
-            else []
-        ),
+        "redline_events": redline_events,
         "notes": ["local competition-proxy task; current Q01-Q24 are not a strict hidden set"],
     }
+    if question == "Q24" and isinstance(q24_browser, dict) and q24_browser.get("status") != "pass":
+        record["notes"].append("Q24 physical map failed the external Chromium interaction gate")
     atomic_json(run_dir / "run_record.json", record)
     return record
 
 
 def build_image(args: argparse.Namespace) -> int:
     docker_available()
-    command = [
-        "docker",
-        "build",
+    proxy_options, build_network, forwarded_proxy_variables = docker_build_proxy_options(os.environ)
+    command = ["docker", "build"]
+    if not args.no_pull:
+        command.append("--pull")
+    if args.no_cache:
+        command.append("--no-cache")
+    command.extend(proxy_options)
+    command.extend([
         "--build-arg",
         f"OPENCODE_VERSION={args.opencode_version}",
         "--build-arg",
@@ -779,15 +913,17 @@ def build_image(args: argparse.Namespace) -> int:
         "--tag",
         args.image,
         str(DOCKER_ROOT),
-    ]
-    if not args.no_pull:
-        command.insert(2, "--pull")
-    if args.no_cache:
-        command.insert(2, "--no-cache")
+    ])
     completed = subprocess.run(command, check=False)
     if completed.returncode != 0:
         return 73
-    print(json.dumps({"status": "PASS", "image": args.image, "image_id": image_identity(args.image)}))
+    print(json.dumps({
+        "status": "PASS",
+        "image": args.image,
+        "image_id": image_identity(args.image),
+        "build_network": build_network,
+        "forwarded_proxy_variables": forwarded_proxy_variables,
+    }))
     return 0
 
 

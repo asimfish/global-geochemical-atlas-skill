@@ -73,7 +73,7 @@
     "UNSAFE_DOWNSTREAM_USE"
   ],
   "fixture_type": "synthetic_local_download_responses",
-  "gold_version": "6.0.0-draft.2",
+  "gold_version": "6.0.0-draft.3",
   "input_assets": [
     "download_manifest.json",
     "valid_data.csv",

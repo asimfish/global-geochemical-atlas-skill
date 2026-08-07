@@ -20,7 +20,7 @@ from candidate_visible_contract import (
 )
 
 
-VERSION = "6.0.0-draft.2"
+VERSION = "6.0.0-draft.3"
 ALIGNMENT_FILE = "contracts/benchmark-execution-contract.json"
 MARKER = "<!-- e1-alignment-v1 -->"
 
@@ -157,6 +157,7 @@ def _align_task(task_dir: Path, contract: dict[str, Any], template: Path) -> dic
         task_dir,
         legacy_outputs,
         contract["submission"]["benchmark_evidence"]["container"],
+        metadata.get("candidate_contract_constraints"),
     )
     metadata.update(
         {

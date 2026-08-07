@@ -51,6 +51,26 @@ class CandidateVisibleContractTests(unittest.TestCase):
         errors = MODULE.validate_candidate_visible_contract(task_dir, metadata, grader)
         self.assertTrue(any("record_fields" in error for error in errors))
 
+    def test_json_array_selector_must_use_declared_item_key(self) -> None:
+        task_dir = self.evaluation_root / "evaluator_private" / "shadow" / "Q13"
+        metadata = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
+        grader = json.loads((task_dir / "checker" / "grader_spec.json").read_text(encoding="utf-8"))
+        keyed_check = next(item for item in grader["checks"] if item["type"] == "json_array_item_value")
+        keyed_check["key"] = {"undeclared_identity": "SMALL"}
+        errors = MODULE.validate_candidate_visible_contract(task_dir, metadata, grader)
+        self.assertTrue(any("undeclared JSON keys" in error for error in errors))
+
+    def test_declared_row_count_constraint_survives_contract_rebuild(self) -> None:
+        task_dir = self.evaluation_root / "evaluator_private" / "final_holdout" / "Q24"
+        metadata = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
+        contract = MODULE.build_candidate_visible_contract(
+            task_dir,
+            metadata["legacy_logical_outputs"],
+            metadata["benchmark_evidence_container"],
+            metadata["candidate_contract_constraints"],
+        )
+        self.assertEqual(contract["logical_outputs"]["sources.jsonl"]["row_count"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

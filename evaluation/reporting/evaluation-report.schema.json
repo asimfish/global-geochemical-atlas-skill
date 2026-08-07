@@ -81,8 +81,15 @@
         "observed": {"type": ["number", "null"]},
         "maximum": {"type": "number"},
         "ceiling_saturated": {"type": "boolean"},
-        "source": {"type": ["string", "null"]}
+        "source": {"type": ["string", "null"]},
+        "descriptive_partial_mean": {"type": ["number", "null"]},
+        "complete_score_count": {"type": "integer", "minimum": 0},
+        "task_report_count": {"type": "integer", "minimum": 0}
       }
+    },
+    "benchmark": {
+      "type": "object",
+      "required": ["scope", "question_count", "task_report_count", "complete_score_count", "stage_summaries", "task_results", "claim_boundary"]
     },
     "scientific_red_lines": {
       "type": "array",
